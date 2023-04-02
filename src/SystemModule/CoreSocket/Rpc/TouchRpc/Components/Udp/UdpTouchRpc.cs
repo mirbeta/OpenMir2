@@ -360,7 +360,7 @@ namespace TouchSocket.Rpc.TouchRpc
         {
             if (!m_udpRpcActors.TryGetValue(endPoint, out UdpRpcActor udpRpcActor))
             {
-                udpRpcActor = new UdpRpcActor(this, endPoint, Container.Resolve<ILog>())
+                udpRpcActor = new UdpRpcActor(this, endPoint)
                 {
                     Caller = new UdpCaller(this, endPoint),
                     RpcStore = m_rpcStore,

@@ -24,10 +24,5 @@ namespace TouchSocket.Sockets
         /// 数据交互缓存池限制
         /// </summary>
         int BufferLength { get; }
-
-        /// <summary>
-        /// 日志记录器
-        /// </summary>
-        ILog Logger { get; }
     }
 }

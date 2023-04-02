@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
+using NLog;
 using TouchSocket.Core;
 using TouchSocket.Resources;
 
@@ -39,6 +40,7 @@ namespace TouchSocket.Sockets
 
         #region 变量
 
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SocketClientCollection m_socketClients;
         private int m_backlog;
         private TouchSocketConfig m_config;
@@ -503,7 +505,6 @@ namespace TouchSocket.Sockets
             BufferLength = config.GetValue(TouchSocketConfigExtension.BufferLengthProperty);
             m_receiveType = config.GetValue(TouchSocketConfigExtension.ReceiveTypeProperty);
 
-            Logger ??= Container.Resolve<ILog>();
             if (config.GetValue(TouchSocketConfigExtension.SslOptionProperty) != null)
             {
                 m_useSsl = true;
@@ -600,7 +601,7 @@ namespace TouchSocket.Sockets
                     else
                     {
                         socket.SafeDispose();
-                        Logger.Warning(this, "连接客户端数量已达到设定最大值");
+                        _logger.Warn("连接客户端数量已达到设定最大值");
                     }
                 }
                 e.AcceptSocket = null;
@@ -625,7 +626,6 @@ namespace TouchSocket.Sockets
             client.m_usePlugin = m_usePlugin;
             client.Config = m_config;
             client.m_service = this;
-            client.Logger = Container.Resolve<ILog>();
             client.m_receiveType = m_receiveType;
             client.BufferLength = BufferLength;
             if (client.CanSetDataHandlingAdapter)
@@ -692,7 +692,7 @@ namespace TouchSocket.Sockets
             catch (Exception ex)
             {
                 socket.SafeDispose();
-                Logger.Log(LogType.Error, this, "接收新连接错误", ex);
+                _logger.Error("接收新连接错误 {0}", ex);
             }
         }
     }

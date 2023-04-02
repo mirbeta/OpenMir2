@@ -15,6 +15,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using NLog;
 using TouchSocket.Core;
 
 namespace TouchSocket.Sockets
@@ -97,7 +98,6 @@ namespace TouchSocket.Sockets
         private readonly Timer m_timer;
         private int m_count;
         private int m_length;
-
         private int m_mtu;
 
         /// <summary>
@@ -207,6 +207,7 @@ namespace TouchSocket.Sockets
     /// </summary>
     public class UdpPackageAdapter : UdpDataHandlingAdapter
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SnowflakeIDGenerator m_iDGenerator;
         private readonly ConcurrentDictionary<long, UdpPackage> revStore;
         private int m_mtu = 1472;
@@ -259,7 +260,7 @@ namespace TouchSocket.Sockets
                 if (udpPackage.Length > MaxPackageSize)
                 {
                     revStore.TryRemove(udpPackage.ID, out _);
-                    m_owner?.Logger.Error("数据长度大于设定的最大值。");
+                    _logger.Error("数据长度大于设定的最大值。");
                     return;
                 }
                 if (udpPackage.IsComplated)

@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using System.Threading.Tasks;
+using NLog;
 using TouchSocket.Core;
 
 namespace TouchSocket.Sockets
@@ -30,7 +31,7 @@ namespace TouchSocket.Sockets
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ILog Logger { get; set; }
+        public Logger Logger { get; set; }
 
         /// <summary>
         /// <inheritdoc/>

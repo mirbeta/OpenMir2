@@ -417,7 +417,6 @@ namespace TouchSocket.Rpc.TouchRpc
             base.LoadConfig(config);
             RootPath = config.GetValue(TouchRpcConfigExtensions.RootPathProperty);
             m_rpcActor.SerializationSelector = config.GetValue(TouchRpcConfigExtensions.SerializationSelectorProperty);
-            m_rpcActor.Logger = Container.Resolve<ILog>();
             m_rpcActor.FileController = Container.GetFileResourceController();
 
             if (config.GetValue(RpcConfigExtensions.RpcStoreProperty) is RpcStore rpcStore)

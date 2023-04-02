@@ -24,12 +24,11 @@ namespace TouchSocket.Rpc.TouchRpc
 
         public int Tick;
 
-        public UdpRpcActor(UdpSessionBase udpSession, EndPoint endPoint, ILog logger) : base(false)
+        public UdpRpcActor(UdpSessionBase udpSession, EndPoint endPoint) : base(false)
         {
             OutputSend = RpcActorSend;
             m_udpSession = udpSession;
             m_endPoint = endPoint;
-            Logger = logger;
         }
 
         private void RpcActorSend(RpcActor actor, ArraySegment<byte>[] transferBytes)

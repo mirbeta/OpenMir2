@@ -318,7 +318,6 @@ namespace TouchSocket.Rpc.TouchRpc
         protected override void LoadConfig(TouchSocketConfig config)
         {
             base.LoadConfig(config);
-            m_rpcActor.Logger = Container.Resolve<ILog>();
             m_rpcActor.FileController = Container.GetFileResourceController();
             RootPath = Config.GetValue(TouchRpcConfigExtensions.RootPathProperty);
             m_rpcActor.SerializationSelector = Config.GetValue<SerializationSelector>(TouchRpcConfigExtensions.SerializationSelectorProperty);

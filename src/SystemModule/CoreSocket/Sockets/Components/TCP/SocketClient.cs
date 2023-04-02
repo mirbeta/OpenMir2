@@ -17,6 +17,7 @@ using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using NLog;
 using TouchSocket.Core;
 using TouchSocket.Resources;
 
@@ -38,6 +39,7 @@ namespace TouchSocket.Sockets
 
         #region 变量
 
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         internal string m_id;
         internal ReceiveType m_receiveType;
         internal TcpServiceBase m_service;
@@ -169,9 +171,10 @@ namespace TouchSocket.Sockets
             }
             catch (Exception ex)
             {
-                Logger.Log(LogType.Error, this, $"在事件{nameof(Disconnecting)}中发生错误。", ex);
+                _logger.Error($"在事件{nameof(Disconnecting)}中发生错误。{0}", ex);
             }
         }
+        
         /// <summary>
         /// 当客户端完整建立TCP连接，如果覆盖父类方法，则不会触发插件。
         /// </summary>
@@ -195,7 +198,7 @@ namespace TouchSocket.Sockets
         /// <param name="ex"></param>
         protected virtual void OnDelaySenderError(Exception ex)
         {
-            Logger.Log(LogType.Error, this, "发送错误", ex);
+            _logger.Error("发送错误 {0}", ex);
         }
 
         /// <summary>
@@ -662,14 +665,14 @@ namespace TouchSocket.Sockets
                 }
                 if (m_adapter == null)
                 {
-                    Logger.Error(this, TouchSocketStatus.NullDataAdapter.GetDescription());
+                    _logger.Error(TouchSocketStatus.NullDataAdapter.GetDescription());
                     return;
                 }
                 m_adapter.ReceivedInput(byteBlock);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
-                Logger.Log(LogType.Error, this, "在处理数据时发生错误", ex);
+                _logger.Error("在处理数据时发生错误 {0}", ex);
             }
             finally
             {

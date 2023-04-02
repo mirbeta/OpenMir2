@@ -138,10 +138,6 @@ namespace TouchSocket.Sockets
             {
                 Reset();
             }
-            if (log && m_owner != null && m_owner.Logger != null)
-            {
-                m_owner.Logger.Error(error);
-            }
         }
 
         /// <summary>

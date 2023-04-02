@@ -191,10 +191,6 @@ namespace TouchSocket.Sockets
             {
                 Reset();
             }
-            if (log && m_client != null && m_client.Logger != null)
-            {
-                m_client.Logger.Error(error);
-            }
         }
 
         /// <summary>

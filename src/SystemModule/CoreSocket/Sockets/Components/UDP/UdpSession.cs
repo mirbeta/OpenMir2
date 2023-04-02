@@ -14,9 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using TouchSocket.Core;
 using TouchSocket.Resources;
 
@@ -56,6 +55,7 @@ namespace TouchSocket.Sockets
         private IPHost m_remoteIPHost;
         private ServerState m_serverState;
         private bool m_usePlugin;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// 构造函数
@@ -393,7 +393,6 @@ namespace TouchSocket.Sockets
             {
                 throw new Exception("配置文件为空");
             }
-            Logger = Container.Resolve<ILog>();
             m_remoteIPHost = config.GetValue(TouchSocketConfigExtension.RemoteIPHostProperty);
             BufferLength = config.GetValue(TouchSocketConfigExtension.BufferLengthProperty);
             m_usePlugin = config.IsUsePlugin;
@@ -528,7 +527,7 @@ namespace TouchSocket.Sockets
                 catch (Exception ex)
                 {
                     byteBlock.Dispose();
-                    Logger.Log(LogType.Error, this, ex.Message, ex);
+                    _logger.Error(ex);
                     break;
                 }
             }
@@ -549,14 +548,14 @@ namespace TouchSocket.Sockets
                 }
                 if (m_adapter == null)
                 {
-                    Logger.Error(this, TouchSocketStatus.NullDataAdapter.GetDescription());
+                    _logger.Error(TouchSocketStatus.NullDataAdapter.GetDescription());
                     return;
                 }
                 m_adapter.ReceivedInput(endPoint, byteBlock);
             }
             catch (Exception ex)
             {
-                Logger.Log(LogType.Error, this, "在处理数据时发生错误", ex);
+                _logger.Error("在处理数据时发生错误 {0}", ex);
             }
             finally
             {
@@ -726,9 +725,9 @@ namespace TouchSocket.Sockets
                         ProcessReceive(socket, e);
                     }
                 }
-                catch (System.Exception ex)
+                catch (Exception ex)
                 {
-                    Logger.Log(LogType.Error, this, ex.Message, ex);
+                    _logger.Error(ex);
                 }
             }
         }

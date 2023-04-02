@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NLog;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -25,7 +26,7 @@ namespace TouchSocket.Http.WebSockets
     public abstract class WSCommandLinePlugin : WebSocketPluginBase
     {
         private readonly Dictionary<string, Method> pairs = new Dictionary<string, Method>();
-        private readonly ILog m_logger;
+        private readonly Logger m_logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// 字符串转换器，默认支持基础类型和Json。可以自定义。
@@ -52,9 +53,8 @@ namespace TouchSocket.Http.WebSockets
         /// </summary>
         /// <param name="logger"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        protected WSCommandLinePlugin(ILog logger)
+        protected WSCommandLinePlugin()
         {
-            m_logger = logger ?? throw new ArgumentNullException(nameof(logger));
             Converter = new StringConverter();
             var ms = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(a => a.Name.EndsWith("Command"));
             foreach (var item in ms)
@@ -128,7 +128,7 @@ namespace TouchSocket.Http.WebSockets
                 }
                 catch (Exception ex)
                 {
-                    m_logger.Exception(this, ex);
+                    m_logger.Error(ex);
                 }
             }
 

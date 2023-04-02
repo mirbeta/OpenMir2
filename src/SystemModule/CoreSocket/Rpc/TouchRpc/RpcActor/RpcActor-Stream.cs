@@ -182,7 +182,7 @@ namespace TouchSocket.Rpc.TouchRpc
                     waitStream.Status = 3;
                     waitStream.Message = ex.Message;
 
-                    Logger.Log(LogType.Error, this, $"在{nameof(RequestStreamToClient)}中发生错误。", ex);
+                    Logger.Error($"在{nameof(RequestStreamToClient)}中发生错误。", ex);
                 }
 
                 waitStream.Metadata = null;
@@ -244,7 +244,7 @@ namespace TouchSocket.Rpc.TouchRpc
                     waitStream.Status = 3;
                     waitStream.Message = ex.Message;
 
-                    Logger.Log(LogType.Error, this, $"在{nameof(RequestStreamToSocketClient)}中发生错误。", ex);
+                    Logger.Error($"在{nameof(RequestStreamToSocketClient)}中发生错误。", ex);
                 }
 
                 waitStream.Metadata = null;

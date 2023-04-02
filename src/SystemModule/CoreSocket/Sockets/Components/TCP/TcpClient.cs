@@ -18,6 +18,7 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using NLog;
 using TouchSocket.Core;
 using TouchSocket.Resources;
 
@@ -61,6 +62,7 @@ namespace TouchSocket.Sockets
 
         #region 变量
 
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private DelaySender m_delaySender;
         private bool m_useDelaySender;
         private Stream m_workStream;
@@ -114,7 +116,7 @@ namespace TouchSocket.Sockets
             }
             catch (System.Exception ex)
             {
-                this.Logger.Log(LogType.Error, this, $"在事件{nameof(this.Connected)}中发生错误。", ex);
+                this._logger.Error( $"在事件{nameof(this.Connected)}中发生错误。{0}", ex);
             }
         }
 
@@ -149,7 +151,7 @@ namespace TouchSocket.Sockets
             }
             catch (Exception ex)
             {
-                this.Logger.Log(LogType.Error, this, $"在事件{nameof(this.OnConnecting)}中发生错误。", ex);
+                this._logger.Error($"在事件{nameof(this.OnConnecting)}中发生错误。{0}", ex);
             }
         }
 
@@ -174,7 +176,7 @@ namespace TouchSocket.Sockets
             }
             catch (Exception ex)
             {
-                this.Logger.Log(LogType.Error, this, $"在事件{nameof(this.Disconnected)}中发生错误。", ex);
+                this._logger.Error($"在事件{nameof(this.Disconnected)}中发生错误。{0}", ex);
             }
         }
 
@@ -202,7 +204,7 @@ namespace TouchSocket.Sockets
             }
             catch (Exception ex)
             {
-                this.Logger.Log(LogType.Error, this, $"在事件{nameof(this.Disconnecting)}中发生错误。", ex);
+                this._logger.Error($"在事件{nameof(this.Disconnecting)}中发生错误。{0}", ex);
             }
         }
         #endregion 事件
@@ -629,8 +631,6 @@ namespace TouchSocket.Sockets
             this.BufferLength = config.GetValue(TouchSocketConfigExtension.BufferLengthProperty);
             this.ReceiveType = config.GetValue(TouchSocketConfigExtension.ReceiveTypeProperty);
             this.UsePlugin = config.IsUsePlugin;
-            this.Logger = this.Container.Resolve<ILog>();
-
             if (config.GetValue(TouchSocketConfigExtension.SslOptionProperty) != null)
             {
                 this.UseSsl = true;
@@ -643,7 +643,7 @@ namespace TouchSocket.Sockets
         /// <param name="ex"></param>
         protected virtual void OnDelaySenderError(Exception ex)
         {
-            this.Logger.Log(LogType.Error, this, "发送错误", ex);
+            this._logger.Error("发送错误{0}", ex);
         }
 
         /// <summary>
@@ -818,14 +818,14 @@ namespace TouchSocket.Sockets
                 }
                 if (this.DataHandlingAdapter == null)
                 {
-                    this.Logger.Error(this, TouchSocketStatus.NullDataAdapter.GetDescription());
+                    this._logger.Error(TouchSocketStatus.NullDataAdapter.GetDescription());
                     return;
                 }
                 this.DataHandlingAdapter.ReceivedInput(byteBlock);
             }
             catch (Exception ex)
             {
-                this.Logger.Log(LogType.Error, this, "在处理数据时发生错误", ex);
+                this._logger.Error("在处理数据时发生错误 {0}", ex);
             }
             finally
             {

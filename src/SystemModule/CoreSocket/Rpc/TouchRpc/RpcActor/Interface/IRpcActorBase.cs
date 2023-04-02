@@ -21,11 +21,6 @@ namespace TouchSocket.Rpc.TouchRpc
     public interface IRpcActorBase:IRpcActorSender
     {
         /// <summary>
-        /// 日志记录器
-        /// </summary>
-        ILog Logger { get; }
-
-        /// <summary>
         /// 序列化选择器
         /// </summary>
         SerializationSelector SerializationSelector { get; }

@@ -14,6 +14,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using NLog;
 using TouchSocket.Core;
 
 namespace TouchSocket.Sockets
@@ -24,16 +25,15 @@ namespace TouchSocket.Sockets
     public abstract class TcpCommandLinePlugin : TcpPluginBase
     {
         private readonly Dictionary<string, Method> m_pairs = new Dictionary<string, TouchSocket.Core.Method>();
-        private ILog m_logger;
+        private Logger m_logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// TCP命令行插件。
         /// </summary>
         /// <param name="logger"></param>
         /// <exception cref="ArgumentNullException"></exception>
-        protected TcpCommandLinePlugin(ILog logger)
+        protected TcpCommandLinePlugin()
         {
-            m_logger = logger ?? throw new ArgumentNullException(nameof(logger));
             Converter = new StringConverter();
             var ms = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(a => a.Name.EndsWith("Command"));
             foreach (var item in ms)
@@ -110,7 +110,7 @@ namespace TouchSocket.Sockets
             }
             catch (Exception ex)
             {
-                m_logger.Log(LogType.Error, this, ex.Message, ex);
+                m_logger.Error(ex);
             }
             base.OnReceivedData(client, e);
         }

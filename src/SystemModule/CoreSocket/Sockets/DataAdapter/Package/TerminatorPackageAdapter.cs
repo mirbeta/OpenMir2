@@ -13,6 +13,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using NLog;
 using TouchSocket.Core;
 
 namespace TouchSocket.Sockets
@@ -22,12 +23,10 @@ namespace TouchSocket.Sockets
     /// </summary>
     public class TerminatorPackageAdapter : DataHandlingAdapter
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int m_minSize = 0;
-
         private bool m_reserveTerminatorCode;
-
         private ByteBlock m_tempByteBlock;
-
         private readonly byte[] m_terminatorCode;
 
         /// <summary>
@@ -112,7 +111,7 @@ namespace TouchSocket.Sockets
                 if (r > MaxPackageSize)
                 {
                     Reset();
-                    Client?.Logger.Error("在已接收数据大于设定值的情况下未找到终止因子，已放弃接收");
+                    _logger.Error("在已接收数据大于设定值的情况下未找到终止因子，已放弃接收");
                 }
                 else if (m_tempByteBlock == null)
                 {

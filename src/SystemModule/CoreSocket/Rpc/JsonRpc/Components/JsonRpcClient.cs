@@ -119,11 +119,6 @@ namespace TouchSocket.Rpc.JsonRpc
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public ILog Logger => Client.Logger;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public Socket MainSocket => Client.MainSocket;
 
         /// <summary>

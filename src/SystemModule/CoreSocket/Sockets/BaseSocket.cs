@@ -10,6 +10,8 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
+
+using NLog;
 using TouchSocket.Core;
 
 namespace TouchSocket.Sockets
@@ -49,10 +51,5 @@ namespace TouchSocket.Sockets
         /// 同步根。
         /// </summary>
         protected object SyncRoot;
-
-        /// <summary>
-        /// 日志记录器
-        /// </summary>
-        public ILog Logger { get; set; }
     }
 }

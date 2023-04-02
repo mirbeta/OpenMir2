@@ -15,6 +15,7 @@ using System.IO;
 using System.Net.WebSockets;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -89,7 +90,7 @@ namespace TouchSocket.Rpc.TouchRpc
         public DateTime LastActiveTime { get; private set; }
 
         /// <inheritdoc/>
-        public ILog Logger => m_rpcActor.Logger;
+        public Logger Logger => m_rpcActor.Logger;
 
         /// <inheritdoc/>
         public IPluginsManager PluginsManager { get; private set; }
@@ -281,7 +282,6 @@ namespace TouchSocket.Rpc.TouchRpc
             UsePlugin = config.IsUsePlugin;
             PluginsManager = config.PluginsManager;
 
-            m_rpcActor.Logger = Container.Resolve<ILog>();
             m_rpcActor.FileController = Container.GetFileResourceController();
             RootPath = Config.GetValue<string>(TouchRpcConfigExtensions.RootPathProperty);
             m_rpcActor.SerializationSelector = Config.GetValue(TouchRpcConfigExtensions.SerializationSelectorProperty);

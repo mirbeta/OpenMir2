@@ -185,7 +185,7 @@ namespace TouchSocket.Core
                             }
                             catch (Exception ex)
                             {
-                                Container.Resolve<ILog>()?.Exception(ex);
+                                //Container.Resolve<ILog>()?.Exception(ex);
                             }
 
                             try
@@ -194,7 +194,7 @@ namespace TouchSocket.Core
                             }
                             catch (Exception ex)
                             {
-                                Container.Resolve<ILog>()?.Exception(ex);
+                               // Container.Resolve<ILog>()?.Exception(ex);
                             }
                         }
                     }

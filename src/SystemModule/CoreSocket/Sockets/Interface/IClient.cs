@@ -11,6 +11,7 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 using System;
+using NLog;
 using TouchSocket.Core;
 
 namespace TouchSocket.Sockets
@@ -29,11 +30,6 @@ namespace TouchSocket.Sockets
         /// 处理经过适配器后的数据。返回值表示是否继续向下传递。
         /// </summary>
         Func<ByteBlock, IRequestInfo, bool> OnHandleReceivedData { get; set; }
-
-        /// <summary>
-        /// 日志记录器
-        /// </summary>
-        ILog Logger { get; }
 
         /// <summary>
         /// 终端协议

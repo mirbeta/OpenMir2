@@ -15,6 +15,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using NLog;
 using TouchSocket.Core;
 using TouchSocket.Resources;
 
@@ -124,7 +125,7 @@ namespace TouchSocket.Rpc.TouchRpc
         /// <summary>
         /// 日志
         /// </summary>
-        public ILog Logger { get; set; }
+        public Logger Logger { get; set; }
 
         /// <summary>
         ///  获取可用于同步对<see cref="RpcActor"/>的访问的对象。
@@ -346,7 +347,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -359,7 +360,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (System.Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -404,7 +405,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -430,7 +431,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -498,7 +499,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -525,7 +526,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -562,7 +563,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -615,7 +616,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -641,7 +642,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (System.Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -670,7 +671,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -688,7 +689,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -702,7 +703,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (System.Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -715,7 +716,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -765,7 +766,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (System.Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -791,7 +792,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
 
                         return;
@@ -828,7 +829,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -854,7 +855,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -899,7 +900,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -925,7 +926,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
 
                         return;
@@ -957,7 +958,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (System.Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -1001,7 +1002,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -1027,7 +1028,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -1071,7 +1072,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -1098,7 +1099,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         return;
                     }
@@ -1113,7 +1114,7 @@ namespace TouchSocket.Rpc.TouchRpc
                         }
                         catch (Exception ex)
                         {
-                            Logger.Error(this, $"在protocol={protocol}中发生错误。信息:{ex.Message}");
+                            Logger.Error($"在protocol={protocol}中发生错误。信息:{ex.Message}");
                         }
                         break;
                     }

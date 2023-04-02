@@ -104,7 +104,6 @@ namespace TouchSocket.Rpc.TouchRpc
             RpcActor rpcActor = new RpcActor(true)
             {
                 FileController = this.Config.Container.GetFileResourceController(),
-                Logger = Config.Container.Resolve<ILog>(),
                 Caller = caller,
                 RpcStore = RpcStore,
                 OnHandshaking = OnHandshaking,
