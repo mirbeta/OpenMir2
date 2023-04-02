@@ -1,27 +1,22 @@
 using System;
-using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using GameGate.Conf;
 using NLog;
 using SystemModule;
+using SystemModule.CoreSocket;
+using SystemModule.CoreSocket.Common;
 using SystemModule.DataHandlingAdapters;
-using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets.Event;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
 using NetworkMonitor = SystemModule.NetworkMonitor;
-using TcpClient = TouchSocket.Sockets.TcpClient;
+using TcpClient = SystemModule.CoreSocket.TcpClient;
 
 namespace GameGate.Services
 {
-
     /// <summary>
     /// 网关客户端(GameGate-GameSrv)
     /// </summary>
