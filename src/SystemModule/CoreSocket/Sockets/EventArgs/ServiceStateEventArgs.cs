@@ -1,30 +1,31 @@
 ﻿using System;
 
-namespace TouchSocket.Sockets;
-
-/// <summary>
-/// 服务器状态事件参数
-/// </summary>
-public class ServiceStateEventArgs : MsgEventArgs
+namespace TouchSocket.Sockets
 {
     /// <summary>
     /// 服务器状态事件参数
     /// </summary>
-    /// <param name="serverState"></param>
-    /// <param name="exception"></param>
-    public ServiceStateEventArgs(ServerState serverState, Exception exception)
+    public class ServiceStateEventArgs : MsgEventArgs
     {
-        ServerState = serverState;
-        Exception = exception;
+        /// <summary>
+        /// 服务器状态事件参数
+        /// </summary>
+        /// <param name="serverState"></param>
+        /// <param name="exception"></param>
+        public ServiceStateEventArgs(ServerState serverState, Exception exception)
+        {
+            ServerState = serverState;
+            Exception = exception;
+        }
+
+        /// <summary>
+        /// 服务器状态
+        /// </summary>
+        public ServerState ServerState { get; }
+
+        /// <summary>
+        /// 异常类
+        /// </summary>
+        public Exception Exception { get; }
     }
-
-    /// <summary>
-    /// 服务器状态
-    /// </summary>
-    public ServerState ServerState { get; }
-
-    /// <summary>
-    /// 异常类
-    /// </summary>
-    public Exception Exception { get; }
 }
