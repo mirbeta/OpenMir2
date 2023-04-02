@@ -1,6 +1,4 @@
-using TouchSocket.Core;
-
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 通讯基类

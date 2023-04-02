@@ -2,9 +2,8 @@ using System;
 using System.Net.Sockets;
 using System.Threading;
 using SystemModule.Extensions;
-using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.Common
 {
     /// <summary>
     /// 延迟发送器

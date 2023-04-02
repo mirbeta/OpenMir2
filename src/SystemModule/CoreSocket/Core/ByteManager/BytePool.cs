@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace TouchSocket.Core
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 内存池

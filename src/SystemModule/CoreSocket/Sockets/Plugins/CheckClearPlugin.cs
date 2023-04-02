@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 检查清理连接插件。服务器适用。

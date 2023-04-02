@@ -1,4 +1,4 @@
-﻿namespace TouchSocket.Core;
+﻿namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 用于表达式树的成员

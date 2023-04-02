@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// FileStorageStream。非线程安全。

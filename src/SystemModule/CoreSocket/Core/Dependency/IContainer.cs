@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 注入容器接口

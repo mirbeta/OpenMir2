@@ -2,7 +2,7 @@ using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 表示属性的设置器

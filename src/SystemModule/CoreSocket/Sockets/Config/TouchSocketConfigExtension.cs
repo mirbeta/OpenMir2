@@ -1,8 +1,10 @@
 using System;
 using System.Threading;
-using TouchSocket.Core;
+using SystemModule.CoreSocket.Common;
+using SystemModule.CoreSocket.Common.Options;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// TouchSocketConfigBuilder配置扩展
@@ -240,7 +242,7 @@ namespace TouchSocket.Sockets
 
         /// <summary>
         /// Ssl配置，为Null时则不启用
-        /// 所需类型<see cref="TouchSocket.Sockets.SslOption"/>
+        /// 所需类型<see cref="SslOption"/>
         /// </summary>
         public static readonly DependencyProperty<SslOption> SslOptionProperty = DependencyProperty<SslOption>.Register("SslOption", typeof(TouchSocketConfigExtension), null);
 

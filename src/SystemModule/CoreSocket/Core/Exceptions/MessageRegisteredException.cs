@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 消息已注册

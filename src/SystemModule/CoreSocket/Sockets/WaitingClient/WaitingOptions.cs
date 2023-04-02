@@ -1,4 +1,6 @@
-namespace TouchSocket.Sockets
+using SystemModule.CoreSocket.Common;
+
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 适配器筛选

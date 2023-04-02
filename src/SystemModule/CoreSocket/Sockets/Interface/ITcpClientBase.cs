@@ -2,9 +2,9 @@
 using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// TCP终端基础接口。

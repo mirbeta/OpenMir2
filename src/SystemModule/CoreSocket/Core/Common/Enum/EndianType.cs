@@ -1,4 +1,4 @@
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 大小端类型

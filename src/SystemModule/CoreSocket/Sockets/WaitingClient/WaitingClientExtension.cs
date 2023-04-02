@@ -1,4 +1,4 @@
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// WaitingClientExtensions

@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 具有区域效应的容器。

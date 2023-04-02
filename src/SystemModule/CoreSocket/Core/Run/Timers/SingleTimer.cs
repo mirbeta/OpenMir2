@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 不可重入的Timer

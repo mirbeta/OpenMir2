@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 依赖属性数据验证

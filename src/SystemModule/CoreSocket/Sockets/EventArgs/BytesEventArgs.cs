@@ -1,6 +1,6 @@
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 字节事件

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
 
     /// <summary>

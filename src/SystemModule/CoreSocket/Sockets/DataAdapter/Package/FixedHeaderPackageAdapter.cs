@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
-using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.DataAdapter.Package
 {
     /// <summary>
     /// 固定包头数据包处理适配器，支持Byte、UShort、Int三种类型作为包头。使用<see cref="TouchSocketBitConverter.DefaultEndianType"/>大小端设置。

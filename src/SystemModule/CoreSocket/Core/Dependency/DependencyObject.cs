@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 依赖对象接口

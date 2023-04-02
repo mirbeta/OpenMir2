@@ -1,7 +1,7 @@
 using System.Net;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// UdpKcpPackageAdapter

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 具有断开连接的插件接口

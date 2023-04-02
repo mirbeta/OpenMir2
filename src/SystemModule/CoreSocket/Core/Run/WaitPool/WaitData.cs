@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 等待数据对象

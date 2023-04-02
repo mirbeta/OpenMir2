@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 插件管理器接口

@@ -1,4 +1,4 @@
-namespace TouchSocket.Core
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 配置文件基类

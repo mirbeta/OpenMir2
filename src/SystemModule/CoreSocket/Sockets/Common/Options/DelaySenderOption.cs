@@ -1,4 +1,4 @@
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.Common.Options
 {
     /// <summary>
     /// DelaySenderOption

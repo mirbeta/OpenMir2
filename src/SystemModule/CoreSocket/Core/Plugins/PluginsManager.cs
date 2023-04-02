@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 表示插件管理器。

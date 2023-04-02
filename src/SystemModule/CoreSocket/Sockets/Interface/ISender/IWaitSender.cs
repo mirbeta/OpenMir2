@@ -1,11 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
-
     /// <summary>
     /// 发送等待接口
     /// </summary>

@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 通过ID发送

@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.CoreSocket.Sockets.Common;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Extensions;
 using SystemModule.Logger;

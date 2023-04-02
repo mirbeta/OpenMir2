@@ -1,8 +1,7 @@
 using System;
 using System.Threading;
-using TouchSocket.Sockets;
 
-namespace TouchSocket.Core
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// IPluginsManagerExtension

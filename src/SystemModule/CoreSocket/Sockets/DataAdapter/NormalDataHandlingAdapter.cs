@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 普通TCP数据处理器，该适配器不对数据做任何处理。

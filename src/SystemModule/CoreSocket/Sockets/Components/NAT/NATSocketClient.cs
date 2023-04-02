@@ -1,9 +1,9 @@
 using System;
 using System.Threading.Tasks;
 using SystemModule.Extensions;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 端口转发辅助

@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace TouchSocket.Core
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 常量

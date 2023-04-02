@@ -1,7 +1,7 @@
 using System;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// String类型数据转换器

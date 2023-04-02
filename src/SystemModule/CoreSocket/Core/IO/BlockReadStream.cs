@@ -3,7 +3,7 @@ using System.IO;
 using System.Threading;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 阻塞式单项读取流。

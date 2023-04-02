@@ -2,9 +2,9 @@ using System;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// SenderExtension

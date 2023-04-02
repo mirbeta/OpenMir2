@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 数据处理适配器

@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// MD5相关操作类

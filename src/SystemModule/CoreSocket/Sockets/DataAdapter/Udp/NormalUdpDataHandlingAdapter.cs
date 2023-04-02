@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Net;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 常规UDP数据处理适配器

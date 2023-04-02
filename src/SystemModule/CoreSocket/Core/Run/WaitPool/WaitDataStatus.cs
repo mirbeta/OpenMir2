@@ -1,4 +1,4 @@
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 等待数据状态

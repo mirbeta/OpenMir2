@@ -5,7 +5,7 @@
 //using System.Text;
 //using System.Threading.Tasks;
 
-//namespace TouchSocket.Core
+//namespace SystemModule.CoreSocket
 //{
 //    /// <summary>
 //    /// 异常助手

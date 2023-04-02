@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// AppMessengerExtensions

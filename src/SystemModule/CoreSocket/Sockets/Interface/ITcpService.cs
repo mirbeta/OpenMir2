@@ -1,9 +1,8 @@
 using System;
-using TouchSocket.Core;
+using SystemModule.CoreSocket.Common;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
-
     /// <summary>
     /// TCP系列服务器接口
     /// </summary>
@@ -56,7 +55,7 @@ namespace TouchSocket.Sockets
         /// <summary>
         /// 网络监听集合
         /// </summary>
-        NetworkMonitor[] Monitors { get; }
+        Common.NetworkMonitor[] Monitors { get; }
 
         /// <summary>
         /// 获取当前连接的所有客户端

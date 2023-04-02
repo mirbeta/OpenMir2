@@ -3,16 +3,15 @@ using System.Collections.Generic;
 using System.Text;
 using NLog;
 using SystemModule.Extensions;
-using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.DataAdapter.Package
 {
     /// <summary>
     /// 终止字符数据包处理适配器，支持以任意字符、字节数组结尾的数据包。
     /// </summary>
     public class TerminatorPackageAdapter : DataHandlingAdapter
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly NLog.Logger _logger = LogManager.GetCurrentClassLogger();
         private int m_minSize = 0;
         private bool m_reserveTerminatorCode;
         private ByteBlock m_tempByteBlock;

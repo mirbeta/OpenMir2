@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// Socket基接口

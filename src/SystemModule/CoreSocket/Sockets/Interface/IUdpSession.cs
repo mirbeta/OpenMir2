@@ -1,6 +1,4 @@
-using TouchSocket.Core;
-
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// UDP会话

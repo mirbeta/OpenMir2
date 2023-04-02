@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 三元组合

@@ -1,4 +1,4 @@
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 具有目标id和源id的路由包

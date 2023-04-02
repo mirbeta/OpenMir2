@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 未找到消息异常类

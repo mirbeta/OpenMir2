@@ -1,4 +1,4 @@
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 可等待的路由包。

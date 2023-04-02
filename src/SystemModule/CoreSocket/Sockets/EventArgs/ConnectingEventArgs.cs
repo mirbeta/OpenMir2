@@ -1,6 +1,6 @@
 using System.Net.Sockets;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 客户端连接事件。

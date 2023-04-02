@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 具有释放的对象。

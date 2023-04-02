@@ -1,7 +1,7 @@
 using SystemModule.Extensions;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 区间数据包处理适配器，支持以任意字符、字节数组起始与结尾的数据包。

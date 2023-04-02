@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.Common
 {
     /// <summary>
     /// 保活机制

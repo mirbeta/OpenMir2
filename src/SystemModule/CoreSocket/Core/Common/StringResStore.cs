@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.ComponentModel;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 字符串资源字典

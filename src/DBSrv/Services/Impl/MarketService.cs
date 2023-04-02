@@ -5,6 +5,7 @@ using System;
 using System.Linq;
 using System.Net;
 using SystemModule;
+using SystemModule.CoreSocket.Sockets.Common;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Extensions;
 using SystemModule.Packets.ServerPackets;

@@ -1,7 +1,7 @@
 using System.IO;
 using System.IO.Compression;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// Gzip操作类

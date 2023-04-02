@@ -1,4 +1,4 @@
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 具有发送动作的基类。

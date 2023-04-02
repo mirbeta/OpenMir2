@@ -2,7 +2,7 @@ using System;
 using System.Text.RegularExpressions;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.Common
 {
     /// <summary>
     /// TouchSocketUtility

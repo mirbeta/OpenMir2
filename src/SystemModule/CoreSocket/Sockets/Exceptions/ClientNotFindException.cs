@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 没有找到ID对应的客户端

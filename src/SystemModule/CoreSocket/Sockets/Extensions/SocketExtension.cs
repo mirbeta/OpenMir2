@@ -1,7 +1,7 @@
 using System;
 using System.Net.Sockets;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// SocketExtension

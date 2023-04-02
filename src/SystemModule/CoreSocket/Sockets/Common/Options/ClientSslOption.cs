@@ -1,6 +1,6 @@
 using System.Security.Cryptography.X509Certificates;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.Common.Options
 {
     /// <summary>
     /// 客户端Ssl验证

@@ -5,9 +5,8 @@ using System.Net;
 using System.Threading;
 using NLog;
 using SystemModule.Extensions;
-using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// UDP数据帧
@@ -181,7 +180,7 @@ namespace TouchSocket.Sockets
             {
                 return false;
             }
-            byte[] crc = TouchSocket.Core.Crc.Crc16(byteBlock.Buffer, 0, byteBlock.Len);
+            byte[] crc = SystemModule.CoreSocket.Crc.Crc16(byteBlock.Buffer, 0, byteBlock.Len);
             if (crc[0] != Crc[0] || crc[1] != Crc[1])
             {
                 return false;

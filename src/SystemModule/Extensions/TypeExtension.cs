@@ -1,7 +1,7 @@
 using System;
 using System.Linq;
 using System.Reflection;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
 namespace SystemModule.Extensions
 {
@@ -70,9 +70,7 @@ namespace SystemModule.Extensions
         /// <returns></returns>
         public static bool IsNullableType(this Type theType)
         {
-            return (theType.IsGenericType && theType.
-                GetGenericTypeDefinition().Equals
-                    (TouchSocketCoreUtility.nullableType));
+            return (theType.IsGenericType && theType.GetGenericTypeDefinition().Equals(TouchSocketCoreUtility.nullableType));
         }
 
         /// <summary>
@@ -87,10 +85,7 @@ namespace SystemModule.Extensions
             {
                 return true;
             }
-
-            return (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.
-                GetGenericTypeDefinition().Equals
-                    (TouchSocketCoreUtility.nullableType));
+            return (propertyInfo.PropertyType.IsGenericType && propertyInfo.PropertyType.GetGenericTypeDefinition().Equals(TouchSocketCoreUtility.nullableType));
         }
 
         /// <summary>
@@ -105,10 +100,7 @@ namespace SystemModule.Extensions
             {
                 return true;
             }
-
-            return (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.
-                GetGenericTypeDefinition().Equals
-                    (TouchSocketCoreUtility.nullableType));
+            return (fieldInfo.FieldType.IsGenericType && fieldInfo.FieldType.GetGenericTypeDefinition().Equals(TouchSocketCoreUtility.nullableType));
         }
 
         /// <summary>

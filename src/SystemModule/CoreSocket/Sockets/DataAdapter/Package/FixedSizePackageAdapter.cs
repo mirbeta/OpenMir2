@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
 using SystemModule.Extensions;
-using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.DataAdapter.Package
 {
     /// <summary>
     /// 固定长度数据包处理适配器。

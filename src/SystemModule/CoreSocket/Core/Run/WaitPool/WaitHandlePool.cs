@@ -2,7 +2,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 等待处理数据

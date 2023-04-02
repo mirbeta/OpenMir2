@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using TouchSocket.Core;
+using SystemModule.CoreSocket.Common;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// TCP客户端终端接口

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.Common
 {
     /// <summary>
     /// IP解析映射

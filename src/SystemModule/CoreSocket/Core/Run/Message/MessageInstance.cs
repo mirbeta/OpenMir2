@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// MessageInstance

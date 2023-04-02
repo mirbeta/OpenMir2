@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using SystemModule.Extensions;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 触发器队列

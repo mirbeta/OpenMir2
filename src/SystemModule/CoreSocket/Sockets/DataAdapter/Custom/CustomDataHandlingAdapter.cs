@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using SystemModule.Extensions;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
 
     /// <summary>

@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using TouchSocket.Core;
+using SystemModule.CoreSocket;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 具有预备连接的插件接口

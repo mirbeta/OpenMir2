@@ -1,4 +1,4 @@
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 固定包头类型

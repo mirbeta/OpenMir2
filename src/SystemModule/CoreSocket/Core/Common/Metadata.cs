@@ -1,6 +1,6 @@
 using System.Collections.Specialized;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 元数据键值对。

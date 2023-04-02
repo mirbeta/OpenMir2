@@ -1,7 +1,7 @@
 using System;
 using System.Net.Sockets;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket.Common
 {
     /// <summary>
     /// 网络监听器

@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// IDependencyProperty

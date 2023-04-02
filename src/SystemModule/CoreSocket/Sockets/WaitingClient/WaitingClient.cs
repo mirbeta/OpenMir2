@@ -1,11 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule.CoreSocket.Resources;
 using SystemModule.Extensions;
-using TouchSocket.Core;
-using TouchSocket.Resources;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     internal class WaitingClient<TClient> : DisposableObject, IWaitingClient<TClient> where TClient : IClient, IDefaultSender, ISender
     {

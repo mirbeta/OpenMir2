@@ -1,8 +1,5 @@
-using TouchSocket.Core;
-
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
-
     /// <summary>
     /// TCP端口转发服务器
     /// </summary>

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 转换器

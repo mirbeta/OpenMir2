@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 缓存键值

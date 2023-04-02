@@ -1,5 +1,5 @@
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 断开连接事件参数

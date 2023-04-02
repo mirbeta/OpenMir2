@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// DirectoryUtility

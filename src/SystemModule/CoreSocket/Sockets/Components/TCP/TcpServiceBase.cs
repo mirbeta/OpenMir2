@@ -2,10 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using TouchSocket.Core;
-using TouchSocket.Resources;
+using SystemModule.CoreSocket.Resources;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// Tcp服务器基类
@@ -30,7 +29,7 @@ namespace TouchSocket.Sockets
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public abstract NetworkMonitor[] Monitors { get; }
+        public abstract SystemModule.CoreSocket.Common.NetworkMonitor[] Monitors { get; }
 
         /// <summary>
         /// 插件管理器

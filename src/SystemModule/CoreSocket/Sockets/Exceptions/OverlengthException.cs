@@ -1,6 +1,6 @@
 using System;
 
-namespace TouchSocket.Sockets
+namespace SystemModule.CoreSocket
 {
     /// <summary>
     /// 超长异常

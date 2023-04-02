@@ -1,7 +1,7 @@
 using System;
-using TouchSocket.Resources;
+using SystemModule.CoreSocket.Resources;
 
-namespace TouchSocket.Core;
+namespace SystemModule.CoreSocket;
 
 /// <summary>
 /// 结果返回
