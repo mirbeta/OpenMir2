@@ -53,7 +53,7 @@ namespace TouchSocket.Core
             }
             try
             {
-                File.WriteAllText(m_fullPath, this.ToJson());
+                //File.WriteAllText(m_fullPath, this.ToJson());
                 msg = null;
                 return true;
             }
@@ -77,13 +77,12 @@ namespace TouchSocket.Core
                 {
                     Save(false, out _);
                 }
-                var obj = File.ReadAllText(m_fullPath).FromJson(GetType());
+                /*var obj = File.ReadAllText(m_fullPath).FromJson(GetType());
                 var ps = GetType().GetProperties();
-
                 foreach (var item in ps)
                 {
                     item.SetValue(this, item.GetValue(obj));
-                }
+                }*/
                 msg = null;
                 return true;
             }

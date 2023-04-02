@@ -17,7 +17,6 @@ namespace TouchSocket.Core
     /// <summary>
     /// 元数据键值对。
     /// </summary>
-    [FastConverter(typeof(MetadataFastBinaryConverter))]
     public class Metadata : NameValueCollection, IPackage
     {
         /// <summary>
