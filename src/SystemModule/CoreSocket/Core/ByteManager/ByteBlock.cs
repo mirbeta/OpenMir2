@@ -258,6 +258,11 @@ namespace TouchSocket.Core
         /// <returns></returns>
         public int Read(out byte[] buffer, int length)
         {
+            if (length == 0)
+            {
+                buffer = null;
+                return 0;
+            }
             buffer = new byte[length];
             return Read(buffer, 0, buffer.Length);
         }

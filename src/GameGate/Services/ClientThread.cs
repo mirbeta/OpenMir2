@@ -3,18 +3,21 @@ using System.Buffers;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 using GameGate.Conf;
 using NLog;
 using SystemModule;
+using SystemModule.DataHandlingAdapters;
+using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.AsyncSocketClient;
 using SystemModule.Sockets.Event;
 using TouchSocket.Core;
+using TouchSocket.Sockets;
 using NetworkMonitor = SystemModule.NetworkMonitor;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace GameGate.Services
 {
@@ -24,7 +27,7 @@ namespace GameGate.Services
     /// </summary>
     public class ClientThread
     {
-        private readonly AsyncClientSocket ClientSocket;
+        private readonly TcpClient ClientSocket;
         private readonly GameGateInfo GateInfo;
         private readonly IPEndPoint LocalEndPoint;
         /// <summary>
@@ -79,11 +82,11 @@ namespace GameGate.Services
             CheckServerTick = HUtil32.GetTickCount();
             _networkMonitor = networkMonitor;
             _messageChannel = Channel.CreateUnbounded<ServerSessionMessage>();
-            ClientSocket = new AsyncClientSocket(GateInfo.ServerAdress, GateInfo.ServerPort, 2048);
-            ClientSocket.OnConnected += ClientSocketConnect;
-            ClientSocket.OnDisconnected += ClientSocketDisconnect;
-            ClientSocket.OnReceivedData += ClientSocketRead;
-            ClientSocket.OnError += ClientSocketError;
+            ClientSocket = new TcpClient();
+            ClientSocket.Connected += ClientSocketConnect;
+            ClientSocket.Disconnected += ClientSocketDisconnect;
+            ClientSocket.Received += ClientSocketRead;
+            //ClientSocket.OnError += ClientSocketError;
         }
 
         public bool IsConnected => Connected;
@@ -101,11 +104,11 @@ namespace GameGate.Services
 
         public void Initialize()
         {
-            //var config = new TouchSocketConfig();
-            //config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort))
-            //    .SetBufferLength(1024);
-            //config.SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
-            //ClientSocket.Setup(config);
+            var config = new TouchSocketConfig();
+            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort))
+                .SetBufferLength(1024);
+            config.SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
+            ClientSocket.Setup(config);
         }
 
         public void Start()
@@ -123,7 +126,7 @@ namespace GameGate.Services
 
         public void Stop()
         {
-            ClientSocket.CloseSocket();
+            ClientSocket.Close();
         }
 
         public string GetSessionCount()
@@ -143,25 +146,27 @@ namespace GameGate.Services
             return sessionCount + "/" + OnlineCount;
         }
 
-        private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private void ClientSocketConnect(object sender, MsgEventArgs e)
         {
+            var client = sender as TcpClient;
             GateReady = true;
             CheckServerTick = HUtil32.GetTickCount();
             Connected = true;
             RunningState = RunningState.Runing;
             RestSessionArray();
-            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{e.RemoteEndPoint}]链接成功.");
-            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]链接成功.");
+            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {client.MainSocket.RemoteEndPoint} 成功...");
         }
 
-        private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private void ClientSocketDisconnect(object sender, DisconnectEventArgs e)
         {
+            var client = sender as TcpClient;
             for (var i = 0; i < GateShare.MaxSession; i++)
             {
                 var userSession = SessionArray[i];
                 if (userSession != null)
                 {
-                    if (userSession.Socket != null && userSession.Socket == e.Socket)
+                    if (userSession.Socket != null && userSession.Socket == client.MainSocket)
                     {
                         userSession.Socket.Close();
                         userSession.Socket = null;
@@ -171,47 +176,28 @@ namespace GameGate.Services
             }
             RestSessionArray();
             GateReady = false;
-            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{e.RemoteEndPoint}]断开链接.");
+            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]断开链接.");
             Connected = false;
             CheckServerFail = true;
         }
 
-        private bool beCached = false;
-        private readonly ByteBlock buffBlock = new ByteBlock();
-        private int bodyLength = 0;
-
         /// <summary>
         /// 接收GameSvr发来的封包消息
         /// </summary>
-        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void ClientSocketRead(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
             try
             {
-                if (beCached)
+                if (requestInfo is DataMessageFixedHeaderRequestInfo myRequestInfo)
                 {
-                    beCached = false;
-                    buffBlock.Write(e.Buff, 0, e.BuffLen);
-                    var bodyData = new byte[(int)buffBlock.Position];
-                    buffBlock.Pos = 0;
-                    buffBlock.Read(bodyData, 0, bodyData.Length);
-                    ProcessPacket(bodyData, bodyData.Length);
-                    buffBlock.Reset();
-                }
-                else
-                {
-                    ProcessPacket(e.Buff, e.BuffLen);
+                    ProcessServerPacket(myRequestInfo.Header, myRequestInfo.Message);
+                    _networkMonitor.Receive(myRequestInfo.BodyLength);
                 }
             }
             catch (Exception exception)
             {
                 _logger.Error(exception);
             }
-            finally
-            {
-                bodyLength = 0;
-                //ClientSocket.ReturnBuffer(e.Buff);
-            }
-            _networkMonitor.Receive(e.BuffLen);
         }
 
         private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
@@ -233,58 +219,6 @@ namespace GameGate.Services
             }
             GateReady = false;
             CheckServerFail = true;
-        }
-
-        private void ProcessPacket(byte[] data, int dataLen)
-        {
-            var dataSpan = new ReadOnlySequence<byte>(data, 0, dataLen);
-            var dataSeq = new SequenceReader<byte>(dataSpan);
-            while (dataSeq.Remaining >= ServerMessage.PacketSize)
-            {
-                var sourceSpan = dataSeq.CurrentSpan.Slice((int)dataSeq.Consumed, ServerMessage.PacketSize);
-                if (!MemoryMarshal.TryRead(sourceSpan, out ServerMessage message))
-                {
-                    _logger.Debug("解析GameSrv消息封包头错误");
-                    return;
-                }
-                if (message.PacketCode != Grobal2.PacketCode)
-                {
-                    _logger.Debug("解析GameSrv消息封包错误");
-                    return;
-                }
-                bodyLength = message.PackLength < 0 ? -message.PackLength : message.PackLength;
-                if ((int)dataSeq.Remaining < bodyLength)//body不满足解析，开始缓存，然后保存对象
-                {
-                    buffBlock.Reset();
-                    beCached = true;
-                    buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
-                    return;
-                }
-                dataSeq.Advance(20);
-                if (bodyLength == 0)
-                {
-                    ProcessServerPacket(message, Array.Empty<byte>());
-                }
-                else
-                {
-                    var serverPacket = dataSeq.CurrentSpan.Slice(ServerMessage.PacketSize, bodyLength);
-                    ProcessServerPacket(message, serverPacket);
-                    dataSeq.Advance(bodyLength);
-                }
-                if (dataSeq.Remaining > 0 && dataSeq.Remaining < ServerMessage.PacketSize) //消息封包长度不够,需缓存
-                {
-                    _logger.Debug($"{dataSeq.Remaining}   {dataSeq.CurrentSpan.Length}");
-                    buffBlock.Reset();
-                    beCached = true;
-                    buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
-                }
-            }
-            if (dataSeq.Remaining > 0)
-            {
-                buffBlock.Reset();
-                beCached = true;
-                buffBlock.Write(data, (int)dataSeq.Consumed, (int)dataSeq.Remaining);
-            }
         }
 
         private void ProcessServerPacket(ServerMessage packetHeader, ReadOnlySpan<byte> data)
@@ -431,7 +365,7 @@ namespace GameGate.Services
         /// <param name="sendBuffer"></param>
         internal void Send(byte[] sendBuffer)
         {
-            if (ClientSocket.IsConnected)
+            if (ClientSocket.Online)
             {
                 ClientSocket.Send(sendBuffer);
                 _networkMonitor.Send(sendBuffer.Length);
