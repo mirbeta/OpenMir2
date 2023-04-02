@@ -17,373 +17,372 @@ using System.Net;
 using System.Threading;
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// 数据处理适配器测试
+/// </summary>
+public class DataAdapterTester : IDisposable
 {
-    /// <summary>
-    /// 数据处理适配器测试
-    /// </summary>
-    public class DataAdapterTester : IDisposable
+    private readonly IntelligentDataQueue<QueueDataBytes> asyncBytes;
+    private readonly Thread sendThread;
+    private DataHandlingAdapter adapter;
+    private int bufferLength;
+    private int count;
+    private bool dispose;
+    private int expectedCount;
+    private Action<ByteBlock, IRequestInfo> receivedCallBack;
+    private Stopwatch stopwatch;
+    private int timeout;
+
+    private DataAdapterTester()
     {
-        private readonly IntelligentDataQueue<QueueDataBytes> asyncBytes;
-        private readonly Thread sendThread;
-        private DataHandlingAdapter adapter;
-        private int bufferLength;
-        private int count;
-        private bool dispose;
-        private int expectedCount;
-        private Action<ByteBlock, IRequestInfo> receivedCallBack;
-        private Stopwatch stopwatch;
-        private int timeout;
+        asyncBytes = new IntelligentDataQueue<QueueDataBytes>(1024 * 1024 * 10);
+        sendThread = new Thread(BeginSend);
+        sendThread.IsBackground = true;
+        sendThread.Name = "DataAdapterTesterThread";
+        sendThread.Start();
+    }
 
-        private DataAdapterTester()
-        {
-            asyncBytes = new IntelligentDataQueue<QueueDataBytes>(1024 * 1024 * 10);
-            sendThread = new Thread(BeginSend);
-            sendThread.IsBackground = true;
-            sendThread.Name = "DataAdapterTesterThread";
-            sendThread.Start();
-        }
+    /// <summary>
+    /// 获取测试器
+    /// </summary>
+    /// <param name="adapter">待测试适配器</param>
+    /// <param name="receivedCallBack">收到数据回调</param>
+    /// <param name="bufferLength">缓存数据长度</param>
+    /// <returns></returns>
+    public static DataAdapterTester CreateTester(DataHandlingAdapter adapter, int bufferLength = 1024, Action<ByteBlock, IRequestInfo> receivedCallBack = default)
+    {
+        DataAdapterTester tester = new DataAdapterTester();
+        tester.adapter = adapter;
+        tester.bufferLength = bufferLength;
+        adapter.SendCallBack = tester.SendCallback;
+        adapter.ReceivedCallBack = tester.OnReceived;
+        tester.receivedCallBack = receivedCallBack;
+        return tester;
+    }
 
-        /// <summary>
-        /// 获取测试器
-        /// </summary>
-        /// <param name="adapter">待测试适配器</param>
-        /// <param name="receivedCallBack">收到数据回调</param>
-        /// <param name="bufferLength">缓存数据长度</param>
-        /// <returns></returns>
-        public static DataAdapterTester CreateTester(DataHandlingAdapter adapter, int bufferLength = 1024, Action<ByteBlock, IRequestInfo> receivedCallBack = default)
-        {
-            DataAdapterTester tester = new DataAdapterTester();
-            tester.adapter = adapter;
-            tester.bufferLength = bufferLength;
-            adapter.SendCallBack = tester.SendCallback;
-            adapter.ReceivedCallBack = tester.OnReceived;
-            tester.receivedCallBack = receivedCallBack;
-            return tester;
-        }
+    /// <summary>
+    /// 释放
+    /// </summary>
+    public void Dispose()
+    {
+        dispose = true;
+    }
 
-        /// <summary>
-        /// 释放
-        /// </summary>
-        public void Dispose()
+    /// <summary>
+    /// 模拟测试运行发送
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <param name="offset"></param>
+    /// <param name="length"></param>
+    /// <param name="testCount">测试次数</param>
+    /// <param name="expectedCount">期待测试次数</param>
+    /// <param name="timeout">超时</param>
+    /// <returns></returns>
+    public TimeSpan Run(byte[] buffer, int offset, int length, int testCount, int expectedCount, int timeout)
+    {
+        count = 0;
+        this.expectedCount = expectedCount;
+        this.timeout = timeout;
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
+        EasyTask.Run(() =>
         {
-            dispose = true;
-        }
-
-        /// <summary>
-        /// 模拟测试运行发送
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="length"></param>
-        /// <param name="testCount">测试次数</param>
-        /// <param name="expectedCount">期待测试次数</param>
-        /// <param name="timeout">超时</param>
-        /// <returns></returns>
-        public TimeSpan Run(byte[] buffer, int offset, int length, int testCount, int expectedCount, int timeout)
-        {
-            count = 0;
-            this.expectedCount = expectedCount;
-            this.timeout = timeout;
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
-            EasyTask.Run(() =>
+            for (int i = 0; i < testCount; i++)
             {
-                for (int i = 0; i < testCount; i++)
-                {
-                    adapter.SendInput(buffer, offset, length);
-                }
-            });
-
-            if (SpinWait.SpinUntil(() => count == this.expectedCount, this.timeout))
-            {
-                stopwatch.Stop();
-                return stopwatch.Elapsed;
+                adapter.SendInput(buffer, offset, length);
             }
-            throw new TimeoutException();
-        }
+        });
 
-        /// <summary>
-        /// 模拟发送
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="testCount">测试次数</param>
-        /// <param name="expectedCount">期待测试次数</param>
-        /// <param name="timeout">超时</param>
-        public TimeSpan Run(byte[] buffer, int testCount, int expectedCount, int timeout)
+        if (SpinWait.SpinUntil(() => count == this.expectedCount, this.timeout))
         {
-            return Run(buffer, 0, buffer.Length, testCount, expectedCount, timeout);
+            stopwatch.Stop();
+            return stopwatch.Elapsed;
         }
+        throw new TimeoutException();
+    }
 
-        private void BeginSend()
+    /// <summary>
+    /// 模拟发送
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <param name="testCount">测试次数</param>
+    /// <param name="expectedCount">期待测试次数</param>
+    /// <param name="timeout">超时</param>
+    public TimeSpan Run(byte[] buffer, int testCount, int expectedCount, int timeout)
+    {
+        return Run(buffer, 0, buffer.Length, testCount, expectedCount, timeout);
+    }
+
+    private void BeginSend()
+    {
+        while (!dispose)
         {
-            while (!dispose)
+            if (tryGet(out List<ByteBlock> byteBlocks))
             {
-                if (tryGet(out List<ByteBlock> byteBlocks))
+                foreach (ByteBlock block in byteBlocks)
                 {
-                    foreach (var block in byteBlocks)
+                    try
                     {
-                        try
-                        {
-                            adapter.ReceivedInput(block);
-                        }
-                        finally
-                        {
-                            block.Dispose();
-                        }
+                        adapter.ReceivedInput(block);
                     }
-                }
-                else
-                {
-                    Thread.Sleep(1);
-                }
-            }
-        }
-
-        private void OnReceived(ByteBlock byteBlock, IRequestInfo requestInfo)
-        {
-            count++;
-            receivedCallBack?.Invoke(byteBlock, requestInfo);
-        }
-
-        private void SendCallback(byte[] buffer, int offset, int length)
-        {
-            QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
-            //Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
-            asyncBytes.Enqueue(asyncByte);
-        }
-
-        private void SendCallback(ReadOnlyMemory<byte> buffer, int offset, int length)
-        {
-            QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
-            unsafe
-            {
-                fixed (byte* src = &buffer.Span[offset])
-                {
-                    fixed (byte* dest = &asyncByte.Buffer.Span[0])
+                    finally
                     {
-                        Buffer.MemoryCopy(
-                            source: src, //要复制的字节的地址
-                            destination: dest, //目标地址
-                            destinationSizeInBytes: count, //目标内存块中可用的字节数
-                            sourceBytesToCopy: count //要复制的字节数
-                        );
+                        block.Dispose();
                     }
                 }
             }
-            asyncBytes.Enqueue(asyncByte);
-        }
-
-        private bool tryGet(out List<ByteBlock> byteBlocks)
-        {
-            byteBlocks = new List<ByteBlock>();
-            ByteBlock block = null;
-            while (true)
+            else
             {
-                if (asyncBytes.TryDequeue(out QueueDataBytes asyncByte))
+                Thread.Sleep(1);
+            }
+        }
+    }
+
+    private void OnReceived(ByteBlock byteBlock, IRequestInfo requestInfo)
+    {
+        count++;
+        receivedCallBack?.Invoke(byteBlock, requestInfo);
+    }
+
+    private void SendCallback(byte[] buffer, int offset, int length)
+    {
+        QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
+        //Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
+        asyncBytes.Enqueue(asyncByte);
+    }
+
+    private void SendCallback(ReadOnlyMemory<byte> buffer, int offset, int length)
+    {
+        QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
+        unsafe
+        {
+            fixed (byte* src = &buffer.Span[offset])
+            {
+                fixed (byte* dest = &asyncByte.Buffer.Span[0])
                 {
-                    if (block == null)
+                    Buffer.MemoryCopy(
+                        source: src, //要复制的字节的地址
+                        destination: dest, //目标地址
+                        destinationSizeInBytes: count, //目标内存块中可用的字节数
+                        sourceBytesToCopy: count //要复制的字节数
+                    );
+                }
+            }
+        }
+        asyncBytes.Enqueue(asyncByte);
+    }
+
+    private bool tryGet(out List<ByteBlock> byteBlocks)
+    {
+        byteBlocks = new List<ByteBlock>();
+        ByteBlock block = null;
+        while (true)
+        {
+            if (asyncBytes.TryDequeue(out QueueDataBytes asyncByte))
+            {
+                if (block == null)
+                {
+                    block = BytePool.Default.GetByteBlock(bufferLength);
+                    byteBlocks.Add(block);
+                }
+                int surLen = bufferLength - block.Pos;
+                if (surLen < asyncByte.Length)//不能完成写入
+                {
+                    block.Write(asyncByte.Buffer, asyncByte.Offset, surLen);
+                    int offset = surLen;
+                    while (offset < asyncByte.Length)
                     {
-                        block = BytePool.Default.GetByteBlock(bufferLength);
+                        block = Write(asyncByte, ref offset);
                         byteBlocks.Add(block);
                     }
-                    int surLen = bufferLength - block.Pos;
-                    if (surLen < asyncByte.Length)//不能完成写入
-                    {
-                        block.Write(asyncByte.Buffer, asyncByte.Offset, surLen);
-                        int offset = surLen;
-                        while (offset < asyncByte.Length)
-                        {
-                            block = Write(asyncByte, ref offset);
-                            byteBlocks.Add(block);
-                        }
 
-                        if (byteBlocks.Count > 10)
-                        {
-                            break;
-                        }
-                    }
-                    else//本次能完成写入
-                    {
-                        block.Write(asyncByte.Buffer, asyncByte.Offset, asyncByte.Length);
-                        if (byteBlocks.Count > 10)
-                        {
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    if (byteBlocks.Count > 0)
+                    if (byteBlocks.Count > 10)
                     {
                         break;
                     }
-                    else
+                }
+                else//本次能完成写入
+                {
+                    block.Write(asyncByte.Buffer, asyncByte.Offset, asyncByte.Length);
+                    if (byteBlocks.Count > 10)
                     {
-                        return false;
+                        break;
                     }
                 }
             }
-            return true;
+            else
+            {
+                if (byteBlocks.Count > 0)
+                {
+                    break;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
+        return true;
+    }
 
-        private ByteBlock Write(QueueDataBytes transferByte, ref int offset)
+    private ByteBlock Write(QueueDataBytes transferByte, ref int offset)
+    {
+        ByteBlock block = BytePool.Default.GetByteBlock(bufferLength, true);
+        int len = Math.Min(transferByte.Length - offset, bufferLength);
+        block.Write(transferByte.Buffer, offset, len);
+        offset += len;
+
+        return block;
+    }
+}
+
+/// <summary>
+/// Udp数据处理适配器测试
+/// </summary>
+public class UdpDataAdapterTester : IDisposable
+{
+    private readonly IntelligentDataQueue<QueueDataBytes> asyncBytes;
+    private UdpDataHandlingAdapter adapter;
+    private int count;
+    private bool dispose;
+    private int expectedCount;
+    private Action<ByteBlock, IRequestInfo> receivedCallBack;
+    private Stopwatch stopwatch;
+    private int timeout;
+
+    private UdpDataAdapterTester(int multiThread)
+    {
+        asyncBytes = new IntelligentDataQueue<QueueDataBytes>(1024 * 1024 * 10);
+        for (int i = 0; i < multiThread; i++)
         {
-            ByteBlock block = BytePool.Default.GetByteBlock(bufferLength, true);
-            int len = Math.Min(transferByte.Length - offset, bufferLength);
-            block.Write(transferByte.Buffer, offset, len);
-            offset += len;
-
-            return block;
+            EasyTask.Run(BeginSend);
         }
     }
 
     /// <summary>
-    /// Udp数据处理适配器测试
+    /// 获取测试器
     /// </summary>
-    public class UdpDataAdapterTester : IDisposable
+    /// <param name="adapter">待测试适配器</param>
+    /// <param name="multiThread">并发多线程数量</param>
+    /// <param name="receivedCallBack">收到数据回调</param>
+    /// <returns></returns>
+    public static UdpDataAdapterTester CreateTester(UdpDataHandlingAdapter adapter, int multiThread, Action<ByteBlock, IRequestInfo> receivedCallBack = default)
     {
-        private readonly IntelligentDataQueue<QueueDataBytes> asyncBytes;
-        private UdpDataHandlingAdapter adapter;
-        private int count;
-        private bool dispose;
-        private int expectedCount;
-        private Action<ByteBlock, IRequestInfo> receivedCallBack;
-        private Stopwatch stopwatch;
-        private int timeout;
+        UdpDataAdapterTester tester = new UdpDataAdapterTester(multiThread);
+        tester.adapter = adapter;
+        adapter.SendCallBack = tester.SendCallback;
+        adapter.ReceivedCallBack = tester.OnReceived;
+        tester.receivedCallBack = receivedCallBack;
+        return tester;
+    }
 
-        private UdpDataAdapterTester(int multiThread)
+    /// <summary>
+    /// 释放
+    /// </summary>
+    public void Dispose()
+    {
+        dispose = true;
+    }
+
+    /// <summary>
+    /// 模拟测试运行发送
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <param name="offset"></param>
+    /// <param name="length"></param>
+    /// <param name="testCount">测试次数</param>
+    /// <param name="expectedCount">期待测试次数</param>
+    /// <param name="timeout">超时</param>
+    /// <returns></returns>
+    public TimeSpan Run(byte[] buffer, int offset, int length, int testCount, int expectedCount, int timeout)
+    {
+        count = 0;
+        this.expectedCount = expectedCount;
+        this.timeout = timeout;
+        stopwatch = new Stopwatch();
+        stopwatch.Start();
+        EasyTask.Run(() =>
         {
-            asyncBytes = new IntelligentDataQueue<QueueDataBytes>(1024 * 1024 * 10);
-            for (int i = 0; i < multiThread; i++)
+            for (int i = 0; i < testCount; i++)
             {
-                EasyTask.Run(BeginSend);
+                adapter.SendInput(null, buffer, offset, length);
             }
+        });
+        if (SpinWait.SpinUntil(() => count == this.expectedCount, this.timeout))
+        {
+            stopwatch.Stop();
+            return stopwatch.Elapsed;
         }
 
-        /// <summary>
-        /// 获取测试器
-        /// </summary>
-        /// <param name="adapter">待测试适配器</param>
-        /// <param name="multiThread">并发多线程数量</param>
-        /// <param name="receivedCallBack">收到数据回调</param>
-        /// <returns></returns>
-        public static UdpDataAdapterTester CreateTester(UdpDataHandlingAdapter adapter, int multiThread, Action<ByteBlock, IRequestInfo> receivedCallBack = default)
-        {
-            UdpDataAdapterTester tester = new UdpDataAdapterTester(multiThread);
-            tester.adapter = adapter;
-            adapter.SendCallBack = tester.SendCallback;
-            adapter.ReceivedCallBack = tester.OnReceived;
-            tester.receivedCallBack = receivedCallBack;
-            return tester;
-        }
+        throw new TimeoutException();
+    }
 
-        /// <summary>
-        /// 释放
-        /// </summary>
-        public void Dispose()
-        {
-            dispose = true;
-        }
+    /// <summary>
+    /// 模拟发送
+    /// </summary>
+    /// <param name="buffer"></param>
+    /// <param name="testCount">测试次数</param>
+    /// <param name="expectedCount">期待测试次数</param>
+    /// <param name="timeout">超时</param>
+    public TimeSpan Run(byte[] buffer, int testCount, int expectedCount, int timeout)
+    {
+        return Run(buffer, 0, buffer.Length, testCount, expectedCount, timeout);
+    }
 
-        /// <summary>
-        /// 模拟测试运行发送
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="length"></param>
-        /// <param name="testCount">测试次数</param>
-        /// <param name="expectedCount">期待测试次数</param>
-        /// <param name="timeout">超时</param>
-        /// <returns></returns>
-        public TimeSpan Run(byte[] buffer, int offset, int length, int testCount, int expectedCount, int timeout)
+    private void BeginSend()
+    {
+        while (!dispose)
         {
-            count = 0;
-            this.expectedCount = expectedCount;
-            this.timeout = timeout;
-            stopwatch = new Stopwatch();
-            stopwatch.Start();
-            EasyTask.Run(() =>
+            if (tryGet(out List<ByteBlock> byteBlocks))
             {
-                for (int i = 0; i < testCount; i++)
+                foreach (ByteBlock block in byteBlocks)
                 {
-                    adapter.SendInput(null, buffer, offset, length);
-                }
-            });
-            if (SpinWait.SpinUntil(() => count == this.expectedCount, this.timeout))
-            {
-                stopwatch.Stop();
-                return stopwatch.Elapsed;
-            }
-
-            throw new TimeoutException();
-        }
-
-        /// <summary>
-        /// 模拟发送
-        /// </summary>
-        /// <param name="buffer"></param>
-        /// <param name="testCount">测试次数</param>
-        /// <param name="expectedCount">期待测试次数</param>
-        /// <param name="timeout">超时</param>
-        public TimeSpan Run(byte[] buffer, int testCount, int expectedCount, int timeout)
-        {
-            return Run(buffer, 0, buffer.Length, testCount, expectedCount, timeout);
-        }
-
-        private void BeginSend()
-        {
-            while (!dispose)
-            {
-                if (tryGet(out List<ByteBlock> byteBlocks))
-                {
-                    foreach (var block in byteBlocks)
+                    try
                     {
-                        try
-                        {
-                            adapter.ReceivedInput(null, block);
-                        }
-                        finally
-                        {
-                            block.Dispose();
-                        }
+                        adapter.ReceivedInput(null, block);
+                    }
+                    finally
+                    {
+                        block.Dispose();
                     }
                 }
-                else
-                {
-                    Thread.Sleep(1);
-                }
             }
-        }
-
-        private void OnReceived(EndPoint endPoint, ByteBlock byteBlock, IRequestInfo requestInfo)
-        {
-            receivedCallBack?.Invoke(byteBlock, requestInfo);
-            Interlocked.Increment(ref count);
-        }
-
-        private void SendCallback(EndPoint endPoint, byte[] buffer, int offset, int length)
-        {
-            QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
-            //Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
-            asyncBytes.Enqueue(asyncByte);
-        }
-
-        private bool tryGet(out List<ByteBlock> byteBlocks)
-        {
-            byteBlocks = new List<ByteBlock>();
-
-            while (asyncBytes.TryDequeue(out QueueDataBytes asyncByte))
+            else
             {
-                ByteBlock block = new ByteBlock(asyncByte.Length);
-                block.Write(asyncByte.Buffer, asyncByte.Offset, asyncByte.Length);
-                byteBlocks.Add(block);
+                Thread.Sleep(1);
             }
-            if (byteBlocks.Count > 0)
-            {
-                return true;
-            }
-            return false;
         }
+    }
+
+    private void OnReceived(EndPoint endPoint, ByteBlock byteBlock, IRequestInfo requestInfo)
+    {
+        receivedCallBack?.Invoke(byteBlock, requestInfo);
+        Interlocked.Increment(ref count);
+    }
+
+    private void SendCallback(EndPoint endPoint, byte[] buffer, int offset, int length)
+    {
+        QueueDataBytes asyncByte = new QueueDataBytes(new byte[length], 0, length);
+        //Array.Copy(buffer, offset, asyncByte.Buffer, 0, length);
+        asyncBytes.Enqueue(asyncByte);
+    }
+
+    private bool tryGet(out List<ByteBlock> byteBlocks)
+    {
+        byteBlocks = new List<ByteBlock>();
+
+        while (asyncBytes.TryDequeue(out QueueDataBytes asyncByte))
+        {
+            ByteBlock block = new ByteBlock(asyncByte.Length);
+            block.Write(asyncByte.Buffer, asyncByte.Offset, asyncByte.Length);
+            byteBlocks.Add(block);
+        }
+        if (byteBlocks.Count > 0)
+        {
+            return true;
+        }
+        return false;
     }
 }

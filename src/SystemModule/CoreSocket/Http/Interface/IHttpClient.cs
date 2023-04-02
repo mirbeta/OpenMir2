@@ -13,45 +13,44 @@
 using System.Threading;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// Http终端基础接口
+/// </summary>
+public interface IHttpClientBase : ITcpClientBase
+{
+}
+
+/// <summary>
+/// Http服务器终端接口
+/// </summary>
+public interface IHttpSocketClient : IHttpClientBase
+{
+}
+
+/// <summary>
+/// Http终端接口
+/// </summary>
+public interface IHttpClient : ITcpClient, IHttpClientBase
 {
     /// <summary>
-    /// Http终端基础接口
+    /// 发起请求
     /// </summary>
-    public interface IHttpClientBase : ITcpClientBase
-    {
-    }
+    /// <param name="request">请求体</param>
+    /// <param name="onlyRequest">仅仅请求，而不等待结果</param>
+    /// <param name="timeout">等待超时时间</param>
+    /// <param name="token">结束等待令箭</param>
+    /// <returns></returns>
+    HttpResponse Request(HttpRequest request, bool onlyRequest = false, int timeout = 10 * 1000, CancellationToken token = default);
 
     /// <summary>
-    /// Http服务器终端接口
+    /// 发起请求，并获取数据体
     /// </summary>
-    public interface IHttpSocketClient : IHttpClientBase
-    {
-    }
-
-    /// <summary>
-    /// Http终端接口
-    /// </summary>
-    public interface IHttpClient : ITcpClient, IHttpClientBase
-    {
-        /// <summary>
-        /// 发起请求
-        /// </summary>
-        /// <param name="request">请求体</param>
-        /// <param name="onlyRequest">仅仅请求，而不等待结果</param>
-        /// <param name="timeout">等待超时时间</param>
-        /// <param name="token">结束等待令箭</param>
-        /// <returns></returns>
-        HttpResponse Request(HttpRequest request, bool onlyRequest = false, int timeout = 10 * 1000, CancellationToken token = default);
-
-        /// <summary>
-        /// 发起请求，并获取数据体
-        /// </summary>
-        /// <param name="request">请求体</param>
-        /// <param name="onlyRequest">仅仅请求，而不等待结果</param>
-        /// <param name="timeout">等待超时时间</param>
-        /// <param name="token">结束等待令箭</param>
-        /// <returns></returns>
-        public HttpResponse RequestContent(HttpRequest request, bool onlyRequest = false, int timeout = 10 * 1000, CancellationToken token = default);
-    }
+    /// <param name="request">请求体</param>
+    /// <param name="onlyRequest">仅仅请求，而不等待结果</param>
+    /// <param name="timeout">等待超时时间</param>
+    /// <param name="token">结束等待令箭</param>
+    /// <returns></returns>
+    public HttpResponse RequestContent(HttpRequest request, bool onlyRequest = false, int timeout = 10 * 1000, CancellationToken token = default);
 }

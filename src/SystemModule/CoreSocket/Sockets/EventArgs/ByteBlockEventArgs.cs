@@ -12,24 +12,23 @@
 //------------------------------------------------------------------------------
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// 字节事件
+/// </summary>
+public class ByteBlockEventArgs : TouchSocketEventArgs
 {
     /// <summary>
-    /// 字节事件
+    /// 构造函数
     /// </summary>
-    public class ByteBlockEventArgs : TouchSocketEventArgs
+    public ByteBlockEventArgs(ByteBlock byteBlock)
     {
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public ByteBlockEventArgs(ByteBlock byteBlock)
-        {
-            ByteBlock = byteBlock;
-        }
-
-        /// <summary>
-        /// 数据块
-        /// </summary>
-        public ByteBlock ByteBlock { get; private set; }
+        ByteBlock = byteBlock;
     }
+
+    /// <summary>
+    /// 数据块
+    /// </summary>
+    public ByteBlock ByteBlock { get; private set; }
 }

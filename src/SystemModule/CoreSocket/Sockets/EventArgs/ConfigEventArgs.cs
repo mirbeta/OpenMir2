@@ -12,25 +12,24 @@
 //------------------------------------------------------------------------------
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// ConfigEventArgs
+/// </summary>
+public class ConfigEventArgs : TouchSocketEventArgs
 {
     /// <summary>
-    /// ConfigEventArgs
+    /// 实例化2ConfigEventArgs
     /// </summary>
-    public class ConfigEventArgs : TouchSocketEventArgs
+    /// <param name="config"></param>
+    public ConfigEventArgs(TouchSocketConfig config)
     {
-        /// <summary>
-        /// 实例化2ConfigEventArgs
-        /// </summary>
-        /// <param name="config"></param>
-        public ConfigEventArgs(TouchSocketConfig config)
-        {
-            Config = config;
-        }
-
-        /// <summary>
-        /// 具体配置
-        /// </summary>
-        public TouchSocketConfig Config { get; }
+        Config = config;
     }
+
+    /// <summary>
+    /// 具体配置
+    /// </summary>
+    public TouchSocketConfig Config { get; }
 }

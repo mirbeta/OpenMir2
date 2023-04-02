@@ -12,7 +12,7 @@ namespace SystemModule.Extensions
 
         public static string GetString(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1)
             {
                 return Convert.ToString(dr[idx]);
@@ -22,7 +22,7 @@ namespace SystemModule.Extensions
 
         public static DateTime GetDateTime(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1)
             {
                 return Convert.ToDateTime(dr[idx]);
@@ -32,7 +32,7 @@ namespace SystemModule.Extensions
 
         public static int GetInt32(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1)
             {
                 if (dr.IsDBNull(idx))
@@ -46,7 +46,7 @@ namespace SystemModule.Extensions
 
         public static long GetInt64(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1)
             {
                 if (dr.IsDBNull(idx))
@@ -60,7 +60,7 @@ namespace SystemModule.Extensions
 
         public static byte GetByte(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1 && !(dr.IsDBNull(idx)))
             {
                 byte result = 0;
@@ -77,7 +77,7 @@ namespace SystemModule.Extensions
 
         public static sbyte GetSByte(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1)
             {
                 return Convert.ToSByte(dr[idx]);
@@ -87,7 +87,7 @@ namespace SystemModule.Extensions
 
         public static ushort GetUInt16(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1)
             {
                 ushort result = 0;
@@ -103,7 +103,7 @@ namespace SystemModule.Extensions
 
         public static short GetInt16(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1 && !(dr.IsDBNull(idx)))
             {
                 return Convert.ToInt16(dr[idx]);
@@ -113,7 +113,7 @@ namespace SystemModule.Extensions
 
         public static double GetDouble(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1 && !(dr.IsDBNull(idx)))
             {
                 return Convert.ToDouble(dr[idx]);
@@ -123,7 +123,7 @@ namespace SystemModule.Extensions
 
         public static UInt32 GetUInt32(this IDataReader dr, string name)
         {
-            var idx = GetOrdinal(dr, name);
+            int idx = GetOrdinal(dr, name);
             if (idx > -1)
             {
                 return Convert.ToUInt32(dr[idx]);

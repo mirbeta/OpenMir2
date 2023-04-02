@@ -12,70 +12,70 @@
 //------------------------------------------------------------------------------
 using System;
 using System.Threading;
+using SystemModule.Extensions;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// WebSocketHeartbeatPlugin
+/// </summary>
+[SingletonPlugin]
+public class WebSocketHeartbeatPlugin : WebSocketPluginBase
 {
+    private TimeSpan m_timeTick = TimeSpan.FromSeconds(5);
+
     /// <summary>
-    /// WebSocketHeartbeatPlugin
+    /// 初始化一个适用于WebSocket的心跳插件
     /// </summary>
-    [SingletonPlugin]
-    public class WebSocketHeartbeatPlugin : WebSocketPluginBase
+    public WebSocketHeartbeatPlugin()
     {
-        private TimeSpan m_timeTick=TimeSpan.FromSeconds(5);
 
-        /// <summary>
-        /// 初始化一个适用于WebSocket的心跳插件
-        /// </summary>
-        public WebSocketHeartbeatPlugin()
-        {
-           
-        }
+    }
 
-        /// <summary>
-        /// 设置心跳间隔，默认5秒。
-        /// </summary>
-        /// <param name="timeSpan"></param>
-        public void Tick(TimeSpan timeSpan)
-        {
-            this.m_timeTick = timeSpan;
-        }
+    /// <summary>
+    /// 设置心跳间隔，默认5秒。
+    /// </summary>
+    /// <param name="timeSpan"></param>
+    public void Tick(TimeSpan timeSpan)
+    {
+        this.m_timeTick = timeSpan;
+    }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected override void OnHandshaked(ITcpClientBase client, HttpContextEventArgs e)
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected override void OnHandshaked(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        if (client is HttpClientBase httpClientBase)
         {
-            if (client is HttpClientBase httpClientBase)
+            if (client.GetValue<Timer>(WebSocketExtensions.HeartbeatTimerProperty) is Timer timer)
             {
-                if (client.GetValue<Timer>(WebSocketExtensions.HeartbeatTimerProperty) is Timer timer)
-                {
-                    timer.Dispose();
-                }
-                client.SetValue(WebSocketExtensions.HeartbeatTimerProperty, new Timer((o) =>
-                {
-                    httpClientBase.PingWS();
-                }, null, m_timeTick, m_timeTick));
+                timer.Dispose();
             }
-            base.OnHandshaked(client, e);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected override void OnDisconnected(ITcpClientBase client, DisconnectEventArgs e)
-        {
-            base.OnDisconnected(client, e);
-            if (client.GetValue(WebSocketExtensions.HeartbeatTimerProperty) is Timer timer)
+            client.SetValue(WebSocketExtensions.HeartbeatTimerProperty, new Timer((o) =>
             {
-                timer.SafeDispose();
-                client.SetValue(WebSocketExtensions.HeartbeatTimerProperty, null);
-            }
+                httpClientBase.PingWS();
+            }, null, m_timeTick, m_timeTick));
+        }
+        base.OnHandshaked(client, e);
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected override void OnDisconnected(ITcpClientBase client, DisconnectEventArgs e)
+    {
+        base.OnDisconnected(client, e);
+        if (client.GetValue(WebSocketExtensions.HeartbeatTimerProperty) is Timer timer)
+        {
+            timer.SafeDispose();
+            client.SetValue(WebSocketExtensions.HeartbeatTimerProperty, null);
         }
     }
 }

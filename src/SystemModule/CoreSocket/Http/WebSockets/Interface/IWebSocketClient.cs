@@ -15,27 +15,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// 用户终端接口
+/// </summary>
+public interface IWebSocketClient : IHttpClient
 {
     /// <summary>
-    /// 用户终端接口
+    /// 连接到ws服务器
     /// </summary>
-    public interface IWebSocketClient : IHttpClient
-    {
-        /// <summary>
-        /// 连接到ws服务器
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        ITcpClient Connect(CancellationToken token, int timeout = 5000);
+    /// <param name="token"></param>
+    /// <param name="timeout"></param>
+    /// <returns></returns>
+    ITcpClient Connect(CancellationToken token, int timeout = 5000);
 
-        /// <summary>
-        /// 异步连接到ws服务器
-        /// </summary>
-        /// <param name="token"></param>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        Task<ITcpClient> ConnectAsync(CancellationToken token, int timeout = 5000);
-    }
+    /// <summary>
+    /// 异步连接到ws服务器
+    /// </summary>
+    /// <param name="token"></param>
+    /// <param name="timeout"></param>
+    /// <returns></returns>
+    Task<ITcpClient> ConnectAsync(CancellationToken token, int timeout = 5000);
 }

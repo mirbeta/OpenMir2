@@ -12,55 +12,54 @@
 //------------------------------------------------------------------------------
 using System;
 
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// Http上下文
+/// </summary>
+public class HttpContext
 {
+    private HttpResponse m_response;
+
     /// <summary>
-    /// Http上下文
+    /// 构造函数
     /// </summary>
-    public class HttpContext
+    /// <param name="request"></param>
+    public HttpContext(HttpRequest request)
     {
-        private HttpResponse m_response;
+        Request = request ?? throw new ArgumentNullException(nameof(request));
+    }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="request"></param>
-        public HttpContext(HttpRequest request)
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="request"></param>
+    /// <param name="response"></param>
+    public HttpContext(HttpRequest request, HttpResponse response)
+    {
+        Request = request ?? throw new ArgumentNullException(nameof(request));
+        m_response = response ?? throw new ArgumentNullException(nameof(response));
+    }
+
+    /// <summary>
+    /// Http请求
+    /// </summary>
+    public HttpRequest Request { get; }
+
+    /// <summary>
+    /// Http响应
+    /// </summary>
+    public HttpResponse Response
+    {
+        get
         {
-            Request = request ?? throw new ArgumentNullException(nameof(request));
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="response"></param>
-        public HttpContext(HttpRequest request, HttpResponse response)
-        {
-            Request = request ?? throw new ArgumentNullException(nameof(request));
-            m_response = response ?? throw new ArgumentNullException(nameof(response));
-        }
-
-        /// <summary>
-        /// Http请求
-        /// </summary>
-        public HttpRequest Request { get; }
-
-        /// <summary>
-        /// Http响应
-        /// </summary>
-        public HttpResponse Response
-        {
-            get
+            lock (this)
             {
-                lock (this)
+                if (m_response == null)
                 {
-                    if (m_response == null)
-                    {
-                        m_response = new HttpResponse(Request.Client, true);
-                    }
-                    return m_response;
+                    m_response = new HttpResponse(Request.Client, true);
                 }
+                return m_response;
             }
         }
     }

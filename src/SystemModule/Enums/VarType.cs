@@ -1,9 +1,8 @@
-﻿namespace SystemModule.Enums
+﻿namespace SystemModule.Enums;
+
+public enum VarType
 {
-    public enum VarType
-    {
-        None,
-        Integer,
-        String
-    }
+    None,
+    Integer,
+    String
 }

@@ -13,32 +13,31 @@
 
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// 消息事件
+/// </summary>
+public class MsgEventArgs : TouchSocketEventArgs
 {
     /// <summary>
-    /// 消息事件
+    ///  构造函数
     /// </summary>
-    public class MsgEventArgs : TouchSocketEventArgs
+    /// <param name="mes"></param>
+    public MsgEventArgs(string mes)
     {
-        /// <summary>
-        ///  构造函数
-        /// </summary>
-        /// <param name="mes"></param>
-        public MsgEventArgs(string mes)
-        {
-            Message = mes;
-        }
-
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public MsgEventArgs()
-        {
-        }
-
-        /// <summary>
-        /// 消息
-        /// </summary>
-        public string Message { get; set; }
+        Message = mes;
     }
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    public MsgEventArgs()
+    {
+    }
+
+    /// <summary>
+    /// 消息
+    /// </summary>
+    public string Message { get; set; }
 }

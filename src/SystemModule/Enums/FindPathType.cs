@@ -1,14 +1,13 @@
-﻿namespace SystemModule.Enums
+﻿namespace SystemModule.Enums;
+
+public enum FindPathType
 {
-    public enum FindPathType
-    {
-        /// <summary>
-        /// 动态
-        /// </summary>
-        Dynamic,
-        /// <summary>
-        /// 固定
-        /// </summary>
-        Fixed
-    }
+    /// <summary>
+    /// 动态
+    /// </summary>
+    Dynamic,
+    /// <summary>
+    /// 固定
+    /// </summary>
+    Fixed
 }

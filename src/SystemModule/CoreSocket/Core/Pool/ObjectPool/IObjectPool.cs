@@ -12,21 +12,20 @@
 //------------------------------------------------------------------------------
 using System;
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 对象池接口
+/// </summary>
+public interface IObjectPool : IDisposable
 {
     /// <summary>
-    /// 对象池接口
+    /// 可使用数量
     /// </summary>
-    public interface IObjectPool : IDisposable
-    {
-        /// <summary>
-        /// 可使用数量
-        /// </summary>
-        int FreeSize { get; }
+    int FreeSize { get; }
 
-        /// <summary>
-        /// 清空池中对象
-        /// </summary>
-        void Clear();
-    }
+    /// <summary>
+    /// 清空池中对象
+    /// </summary>
+    void Clear();
 }

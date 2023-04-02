@@ -17,102 +17,101 @@ using System.Reflection;
 using NLog;
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// TCP命令行插件。
+/// </summary>
+public abstract class TcpCommandLinePlugin : TcpPluginBase
 {
+    private readonly Dictionary<string, Method> m_pairs = new Dictionary<string, TouchSocket.Core.Method>();
+    private readonly Logger m_logger = LogManager.GetCurrentClassLogger();
+
     /// <summary>
     /// TCP命令行插件。
     /// </summary>
-    public abstract class TcpCommandLinePlugin : TcpPluginBase
+    /// <param name="logger"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    protected TcpCommandLinePlugin()
     {
-        private readonly Dictionary<string, Method> m_pairs = new Dictionary<string, TouchSocket.Core.Method>();
-        private Logger m_logger = LogManager.GetCurrentClassLogger();
-
-        /// <summary>
-        /// TCP命令行插件。
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        protected TcpCommandLinePlugin()
+        Converter = new StringConverter();
+        IEnumerable<MethodInfo> ms = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(a => a.Name.EndsWith("Command"));
+        foreach (MethodInfo item in ms)
         {
-            Converter = new StringConverter();
-            var ms = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(a => a.Name.EndsWith("Command"));
-            foreach (var item in ms)
-            {
-                m_pairs.Add(item.Name.Replace("Command", string.Empty), new Method(item));
-            }
+            m_pairs.Add(item.Name.Replace("Command", string.Empty), new Method(item));
         }
+    }
 
-        /// <summary>
-        /// 字符串转换器，默认支持基础类型和Json。可以自定义。
-        /// </summary>
-        public StringConverter Converter { get; }
+    /// <summary>
+    /// 字符串转换器，默认支持基础类型和Json。可以自定义。
+    /// </summary>
+    public StringConverter Converter { get; }
 
-        /// <summary>
-        /// 是否返回执行异常。
-        /// </summary>
-        public bool ReturnException { get; set; } = true;
+    /// <summary>
+    /// 是否返回执行异常。
+    /// </summary>
+    public bool ReturnException { get; set; } = true;
 
-        /// <summary>
-        /// 当有执行异常时，不返回异常。
-        /// </summary>
-        /// <returns></returns>
-        public TcpCommandLinePlugin NoReturnException()
+    /// <summary>
+    /// 当有执行异常时，不返回异常。
+    /// </summary>
+    /// <returns></returns>
+    public TcpCommandLinePlugin NoReturnException()
+    {
+        ReturnException = false;
+        return this;
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected override void OnReceivedData(ITcpClientBase client, ReceivedDataEventArgs e)
+    {
+        try
         {
-            ReturnException = false;
-            return this;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected override void OnReceivedData(ITcpClientBase client, ReceivedDataEventArgs e)
-        {
-            try
+            string[] strs = e.ByteBlock.ToString().Split(' ');
+            if (strs.Length > 0 && m_pairs.TryGetValue(strs[0], out Method method))
             {
-                string[] strs = e.ByteBlock.ToString().Split(' ');
-                if (strs.Length > 0 && m_pairs.TryGetValue(strs[0], out Method method))
+                ParameterInfo[] ps = method.Info.GetParameters();
+                object[] os = new object[ps.Length];
+                int index = 0;
+                for (int i = 0; i < ps.Length; i++)
                 {
-                    var ps = method.Info.GetParameters();
-                    object[] os = new object[ps.Length];
-                    int index = 0;
-                    for (int i = 0; i < ps.Length; i++)
+                    if (ps[i].ParameterType.IsInterface && typeof(ITcpClientBase).IsAssignableFrom(ps[i].ParameterType))
                     {
-                        if (ps[i].ParameterType.IsInterface && typeof(ITcpClientBase).IsAssignableFrom(ps[i].ParameterType))
-                        {
-                            os[i] = client;
-                        }
-                        else
-                        {
-                            os[i] = Converter.ConvertFrom(strs[index + 1], ps[i].ParameterType);
-                            index++;
-                        }
+                        os[i] = client;
                     }
-                    e.Handled = true;
+                    else
+                    {
+                        os[i] = Converter.ConvertFrom(strs[index + 1], ps[i].ParameterType);
+                        index++;
+                    }
+                }
+                e.Handled = true;
 
-                    try
+                try
+                {
+                    object result = method.Invoke(this, os);
+                    if (method.HasReturn)
                     {
-                        object result = method.Invoke(this, os);
-                        if (method.HasReturn)
-                        {
-                            client.Send(Converter.ConvertTo(result));
-                        }
+                        client.Send(Converter.ConvertTo(result));
                     }
-                    catch (Exception ex)
+                }
+                catch (Exception ex)
+                {
+                    if (ReturnException)
                     {
-                        if (ReturnException)
-                        {
-                            client.Send(ex.Message);
-                        }
+                        client.Send(ex.Message);
                     }
                 }
             }
-            catch (Exception ex)
-            {
-                m_logger.Error(ex);
-            }
-            base.OnReceivedData(client, e);
         }
+        catch (Exception ex)
+        {
+            m_logger.Error(ex);
+        }
+        base.OnReceivedData(client, e);
     }
 }

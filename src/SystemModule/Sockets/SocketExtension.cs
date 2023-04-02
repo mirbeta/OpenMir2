@@ -2,55 +2,54 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace SystemModule.Sockets
+namespace SystemModule.Sockets;
+
+public static class SocketExtension
 {
-    public static class SocketExtension
+    public static bool Send(this Socket socket, string str)
     {
-        public static bool Send(this Socket socket, string str)
+        if (str.Length <= 0)
         {
-            if (str.Length <= 0)
-            {
-                return false;
-            }
-            if (socket.Connected)
-            {
-                socket.Send(HUtil32.GetBytes(str));
-                return true;
-            }
             return false;
         }
-
-        public static bool SendText(this Socket socket, string str)
+        if (socket.Connected)
         {
-            if (str.Length <= 0)
-            {
-                return false;
-            }
-            if (socket.Connected)
-            {
-                socket.Send(HUtil32.GetBytes(str));
-                return true;
-            }
+            socket.Send(HUtil32.GetBytes(str));
+            return true;
+        }
+        return false;
+    }
+
+    public static bool SendText(this Socket socket, string str)
+    {
+        if (str.Length <= 0)
+        {
             return false;
         }
-
-        public static string GetIPAddress(this EndPoint endPoint)
+        if (socket.Connected)
         {
-            if (endPoint == null)
-            {
-                throw new Exception("endPoint is null");
-            }
-            return ((IPEndPoint)endPoint).Address.ToString();
+            socket.Send(HUtil32.GetBytes(str));
+            return true;
         }
+        return false;
+    }
 
-        public static int GetPort(this EndPoint endPoint)
+    public static string GetIPAddress(this EndPoint endPoint)
+    {
+        if (endPoint == null)
         {
-            if (endPoint == null)
-            {
-                throw new Exception("endPoint is null");
-            }
-            var ipEndPoint = ((IPEndPoint)endPoint);
-            return ipEndPoint.Port;
+            throw new Exception("endPoint is null");
         }
+        return ((IPEndPoint)endPoint).Address.ToString();
+    }
+
+    public static int GetPort(this EndPoint endPoint)
+    {
+        if (endPoint == null)
+        {
+            throw new Exception("endPoint is null");
+        }
+        IPEndPoint ipEndPoint = ((IPEndPoint)endPoint);
+        return ipEndPoint.Port;
     }
 }

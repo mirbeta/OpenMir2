@@ -1,9 +1,8 @@
-﻿namespace SystemModule.Enums
+﻿namespace SystemModule.Enums;
+
+public enum MessageLevel
 {
-    public enum MessageLevel
-    {
-        Hihg = 3,
-        Low = 2,
-        None = 1
-    }
+    Hihg = 3,
+    Low = 2,
+    None = 1
 }

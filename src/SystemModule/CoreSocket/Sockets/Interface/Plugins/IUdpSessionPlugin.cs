@@ -13,27 +13,26 @@
 using System.Threading.Tasks;
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// Udp会话插件
+/// </summary>
+public interface IUdpSessionPlugin : IPlugin
 {
     /// <summary>
-    /// Udp会话插件
+    /// 在收到数据时触发
     /// </summary>
-    public interface IUdpSessionPlugin : IPlugin
-    {
-        /// <summary>
-        /// 在收到数据时触发
-        /// </summary>
-        /// <param name="client">客户端</param>
-        /// <param name="e">参数</param>
-        [AsyncRaiser]
-        void OnReceivedData(IUdpSession client, UdpReceivedDataEventArgs e);
+    /// <param name="client">客户端</param>
+    /// <param name="e">参数</param>
+    [AsyncRaiser]
+    void OnReceivedData(IUdpSession client, UdpReceivedDataEventArgs e);
 
-        /// <summary>
-        /// 在收到数据时触发
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        Task OnReceivedDataAsync(IUdpSession client, UdpReceivedDataEventArgs e);
-    }
+    /// <summary>
+    /// 在收到数据时触发
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    Task OnReceivedDataAsync(IUdpSession client, UdpReceivedDataEventArgs e);
 }

@@ -14,17 +14,16 @@
 using System.Threading;
 using TouchSocket.Core;
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// WebSocketExtensions
+/// </summary>
+public static class WebSocketExtensions
 {
     /// <summary>
-    /// WebSocketExtensions
+    /// 心跳Timer
     /// </summary>
-    public static class WebSocketExtensions
-    {
-        /// <summary>
-        /// 心跳Timer
-        /// </summary>
-        public static readonly DependencyProperty<Timer> HeartbeatTimerProperty =
-       DependencyProperty<Timer>.Register("HeartbeatTimer", typeof(WebSocketExtensions), null);
-    }
+    public static readonly DependencyProperty<Timer> HeartbeatTimerProperty =
+        DependencyProperty<Timer>.Register("HeartbeatTimer", typeof(WebSocketExtensions), null);
 }

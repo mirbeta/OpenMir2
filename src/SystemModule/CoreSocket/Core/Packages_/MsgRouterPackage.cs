@@ -11,28 +11,27 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 可承载消息的路由包
+/// </summary>
+public class MsgRouterPackage : RouterPackage
 {
     /// <summary>
-    /// 可承载消息的路由包
+    /// 消息
     /// </summary>
-    public class MsgRouterPackage : RouterPackage
+    public string Message { get; set; }
+
+    /// <inheritdoc/>
+    public override void PackageBody(ByteBlock byteBlock)
     {
-        /// <summary>
-        /// 消息
-        /// </summary>
-        public string Message { get; set; }
+        byteBlock.Write(Message);
+    }
 
-        /// <inheritdoc/>
-        public override void PackageBody(ByteBlock byteBlock)
-        {
-            byteBlock.Write(Message);
-        }
-
-        /// <inheritdoc/>
-        public override void UnpackageBody(ByteBlock byteBlock)
-        {
-            this.Message = byteBlock.ReadString();
-        }
+    /// <inheritdoc/>
+    public override void UnpackageBody(ByteBlock byteBlock)
+    {
+        this.Message = byteBlock.ReadString();
     }
 }

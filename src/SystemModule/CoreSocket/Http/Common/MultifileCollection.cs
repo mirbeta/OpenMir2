@@ -15,83 +15,82 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text;
-using TouchSocket.Core;
+using SystemModule.Extensions;
 
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// 多文件集合
+/// </summary>
+public class MultifileCollection : IEnumerable<IFormFile>
 {
+    private readonly HttpRequest m_httpRequest;
+
     /// <summary>
     /// 多文件集合
     /// </summary>
-    public class MultifileCollection : IEnumerable<IFormFile>
+    /// <param name="httpRequest"></param>
+    public MultifileCollection(HttpRequest httpRequest)
     {
-        private readonly HttpRequest m_httpRequest;
+        m_httpRequest = httpRequest;
+    }
 
-        /// <summary>
-        /// 多文件集合
-        /// </summary>
-        /// <param name="httpRequest"></param>
-        public MultifileCollection(HttpRequest httpRequest)
+    /// <summary>
+    /// 获取一个迭代器。
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator<IFormFile> GetEnumerator()
+    {
+        if (m_httpRequest.ContentComplated == null || m_httpRequest.ContentComplated == true)
         {
-            m_httpRequest = httpRequest;
-        }
-
-        /// <summary>
-        /// 获取一个迭代器。
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<IFormFile> GetEnumerator()
-        {
-            if (m_httpRequest.ContentComplated == null || m_httpRequest.ContentComplated == true)
+            if (m_httpRequest.TryGetContent(out byte[] context))
             {
-                if (m_httpRequest.TryGetContent(out byte[] context))
+                byte[] boundary = $"--{m_httpRequest.GetBoundary()}".ToUTF8Bytes();
+                List<int> indexs = context.IndexOfInclude(0, context.Length, boundary);
+                if (indexs.Count <= 0)
                 {
-                    byte[] boundary = $"--{m_httpRequest.GetBoundary()}".ToUTF8Bytes();
-                    var indexs = context.IndexOfInclude(0, context.Length, boundary);
-                    if (indexs.Count <= 0)
-                    {
-                        throw new Exception("没有发现由Boundary包裹的数据。");
-                    }
-                    List<IFormFile> files = new List<IFormFile>();
-                    for (int i = 0; i < indexs.Count; i++)
-                    {
-                        if (i + 1 < indexs.Count)
-                        {
-                            InternalFormFile internalFormFile = new InternalFormFile();
-                            files.Add(internalFormFile);
-                            int index = context.IndexOfFirst(indexs[i] + 3, indexs[i + 1], Encoding.UTF8.GetBytes("\r\n\r\n"));
-                            string line = Encoding.UTF8.GetString(context, indexs[i] + 3, index - indexs[i] - 6);
-                            string[] lines = line.Split(new string[] { ";", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
-                            internalFormFile.DataPair = new NameValueCollection();
-                            foreach (var item in lines)
-                            {
-                                string[] kv = item.Split(new char[] { ':', '=' });
-                                if (kv.Length == 2)
-                                {
-                                    internalFormFile.DataPair.Add(kv[0].Trim(), kv[1].Replace("\"", String.Empty).Trim());
-                                }
-                            }
-
-                            int length = indexs[i + 1] - (index + 2) - boundary.Length;
-                            byte[] data = new byte[length];
-                            Array.Copy(context, index + 1, data, 0, length);
-                            //string ssss = Encoding.UTF8.GetString(data);
-                            internalFormFile.Data = data;
-                        }
-                    }
-
-                    return files.GetEnumerator();
+                    throw new Exception("没有发现由Boundary包裹的数据。");
                 }
-                throw new Exception("管道状态异常");
-            }
-            else
-            {
-                throw new Exception("管道状态异常");
-            }
-        }
+                List<IFormFile> files = new List<IFormFile>();
+                for (int i = 0; i < indexs.Count; i++)
+                {
+                    if (i + 1 < indexs.Count)
+                    {
+                        InternalFormFile internalFormFile = new InternalFormFile();
+                        files.Add(internalFormFile);
+                        int index = context.IndexOfFirst(indexs[i] + 3, indexs[i + 1], Encoding.UTF8.GetBytes("\r\n\r\n"));
+                        string line = Encoding.UTF8.GetString(context, indexs[i] + 3, index - indexs[i] - 6);
+                        string[] lines = line.Split(new string[] { ";", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
+                        internalFormFile.DataPair = new NameValueCollection();
+                        foreach (string item in lines)
+                        {
+                            string[] kv = item.Split(new char[] { ':', '=' });
+                            if (kv.Length == 2)
+                            {
+                                internalFormFile.DataPair.Add(kv[0].Trim(), kv[1].Replace("\"", String.Empty).Trim());
+                            }
+                        }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
+                        int length = indexs[i + 1] - (index + 2) - boundary.Length;
+                        byte[] data = new byte[length];
+                        Array.Copy(context, index + 1, data, 0, length);
+                        //string ssss = Encoding.UTF8.GetString(data);
+                        internalFormFile.Data = data;
+                    }
+                }
+
+                return files.GetEnumerator();
+            }
+            throw new Exception("管道状态异常");
         }
+        else
+        {
+            throw new Exception("管道状态异常");
+        }
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
     }
 }

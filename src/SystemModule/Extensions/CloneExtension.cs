@@ -13,7 +13,7 @@ namespace SystemModule.Extensions
         public static T Clone<T>(this object obj)
         {
             IFormatter formatter = new BinaryFormatter();
-            using (var stream = new MemoryStream())
+            using (MemoryStream stream = new MemoryStream())
             {
                 /*formatter.Serialize(stream, obj);
                 stream.Seek(0, SeekOrigin.Begin);

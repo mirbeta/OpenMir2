@@ -14,76 +14,75 @@ using System;
 using System.IO;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// Http静态内容插件
+/// </summary>
+public class HttpStaticPagePlugin : HttpPluginBase
 {
+    private readonly FileCachePool fileCache;
+
     /// <summary>
-    /// Http静态内容插件
+    /// 构造函数
     /// </summary>
-    public class HttpStaticPagePlugin : HttpPluginBase
+    public HttpStaticPagePlugin()
     {
-        private readonly FileCachePool fileCache;
+        fileCache = new FileCachePool();
+    }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public HttpStaticPagePlugin()
+    /// <summary>
+    /// 静态文件缓存。
+    /// </summary>
+    public FileCachePool FileCache => fileCache;
+
+    /// <summary>
+    /// 添加静态
+    /// </summary>
+    /// <param name="path">Static content path</param>
+    /// <param name="prefix">Cache prefix (default is "/")</param>
+    /// <param name="filter">Cache filter (default is "*.*")</param>
+    /// <param name="timeout">Refresh cache timeout (default is 1 hour)</param>
+    public void AddFolder(string path, string prefix = "/", string filter = "*.*", TimeSpan? timeout = null)
+    {
+        timeout ??= TimeSpan.FromHours(1);
+
+        fileCache.InsertPath(path, prefix, filter, timeout.Value, null);
+    }
+
+    /// <summary>
+    /// Clear static content cache
+    /// </summary>
+    public void ClearFolder()
+    {
+        fileCache.Clear();
+    }
+
+    /// <summary>
+    /// Remove static content cache
+    /// </summary>
+    /// <param name="path">Static content path</param>
+    public void RemoveFolder(string path)
+    {
+        fileCache.RemovePath(path);
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected override void OnGet(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        if (fileCache.Find(e.Context.Request.RelativeURL, out byte[] data))
         {
-            fileCache = new FileCachePool();
+            e.Context.Response
+                .SetStatus()
+                .SetContentTypeByExtension(Path.GetExtension(e.Context.Request.RelativeURL))
+                .SetContentLength(data.Length)
+                .WriteContent(data);
+            e.Handled = true;
         }
-
-        /// <summary>
-        /// 静态文件缓存。
-        /// </summary>
-        public FileCachePool FileCache => fileCache;
-
-        /// <summary>
-        /// 添加静态
-        /// </summary>
-        /// <param name="path">Static content path</param>
-        /// <param name="prefix">Cache prefix (default is "/")</param>
-        /// <param name="filter">Cache filter (default is "*.*")</param>
-        /// <param name="timeout">Refresh cache timeout (default is 1 hour)</param>
-        public void AddFolder(string path, string prefix = "/", string filter = "*.*", TimeSpan? timeout = null)
-        {
-            timeout ??= TimeSpan.FromHours(1);
-
-            fileCache.InsertPath(path, prefix, filter, timeout.Value, null);
-        }
-
-        /// <summary>
-        /// Clear static content cache
-        /// </summary>
-        public void ClearFolder()
-        {
-            fileCache.Clear();
-        }
-
-        /// <summary>
-        /// Remove static content cache
-        /// </summary>
-        /// <param name="path">Static content path</param>
-        public void RemoveFolder(string path)
-        {
-            fileCache.RemovePath(path);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected override void OnGet(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            if (fileCache.Find(e.Context.Request.RelativeURL, out byte[] data))
-            {
-                e.Context.Response
-                    .SetStatus()
-                    .SetContentTypeByExtension(Path.GetExtension(e.Context.Request.RelativeURL))
-                    .SetContentLength(data.Length)
-                    .WriteContent(data);
-                e.Handled = true;
-            }
-            base.OnGet(client, e);
-        }
+        base.OnGet(client, e);
     }
 }

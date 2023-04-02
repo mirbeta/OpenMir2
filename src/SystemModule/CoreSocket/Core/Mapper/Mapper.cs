@@ -15,175 +15,174 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 映射数据
+/// </summary>
+[IntelligentCoder.AsyncMethodPoster(Flags = IntelligentCoder.MemberFlags.Public)]
+public static partial class Mapper
 {
+    private static readonly ConcurrentDictionary<Type, Dictionary<string, Property>> m_typeToProperty = new ConcurrentDictionary<Type, Dictionary<string, Property>>();
+
     /// <summary>
-    /// 映射数据
+    /// 简单映射
     /// </summary>
-    [IntelligentCoder.AsyncMethodPoster(Flags = IntelligentCoder.MemberFlags.Public)]
-    public static partial class Mapper
+    /// <typeparam name="TTarget"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
+    public static TTarget Map<TTarget>(this object source, MapperOption option = default) where TTarget : class, new()
     {
-        private static readonly ConcurrentDictionary<Type, Dictionary<string, Property>> m_typeToProperty = new ConcurrentDictionary<Type, Dictionary<string, Property>>();
+        return (TTarget)Map(source, typeof(TTarget), option);
+    }
 
-        /// <summary>
-        /// 简单映射
-        /// </summary>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        public static TTarget Map<TTarget>(this object source, MapperOption option = default) where TTarget : class, new()
+    /// <summary>
+    /// 简单映射
+    /// </summary>
+    /// <typeparam name="TTarget"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
+    public static TTarget Map<TTarget>(this TTarget source, MapperOption option = default) where TTarget : class, new()
+    {
+        return (TTarget)Map(source, typeof(TTarget), option);
+    }
+
+    /// <summary>
+    /// 简单映射
+    /// </summary>
+    /// <typeparam name="TSource"></typeparam>
+    /// <typeparam name="TTarget"></typeparam>
+    /// <param name="source"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
+    public static TTarget Map<TSource, TTarget>(this TSource source, MapperOption option = default) where TTarget : class, new()
+    {
+        return (TTarget)Map(source, typeof(TTarget), option);
+    }
+
+    /// <summary>
+    /// 简单对象映射
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="targetType"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
+    public static object Map(this object source, Type targetType, MapperOption option = default)
+    {
+        return Map(source, Activator.CreateInstance(targetType), option);
+    }
+
+    /// <summary>
+    /// 简单对象映射
+    /// </summary>
+    /// <param name="source"></param>
+    /// <param name="target"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
+    public static object Map(this object source, object target, MapperOption option = default)
+    {
+        if (source is null)
         {
-            return (TTarget)Map(source, typeof(TTarget), option);
+            return default;
         }
-
-        /// <summary>
-        /// 简单映射
-        /// </summary>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        public static TTarget Map<TTarget>(this TTarget source, MapperOption option = default) where TTarget : class, new()
+        Type sourceType = source.GetType();
+        if (sourceType.IsPrimitive || sourceType.IsEnum || sourceType == TouchSocketCoreUtility.stringType)
         {
-            return (TTarget)Map(source, typeof(TTarget), option);
+            return source;
         }
-
-        /// <summary>
-        /// 简单映射
-        /// </summary>
-        /// <typeparam name="TSource"></typeparam>
-        /// <typeparam name="TTarget"></typeparam>
-        /// <param name="source"></param>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        public static TTarget Map<TSource, TTarget>(this TSource source, MapperOption option = default) where TTarget : class, new()
+        Dictionary<string, Property> sourcePairs = m_typeToProperty.GetOrAdd(sourceType, (k) =>
         {
-            return (TTarget)Map(source, typeof(TTarget), option);
-        }
-
-        /// <summary>
-        /// 简单对象映射
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="targetType"></param>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        public static object Map(this object source, Type targetType, MapperOption option = default)
-        {
-            return Map(source, Activator.CreateInstance(targetType), option);
-        }
-
-        /// <summary>
-        /// 简单对象映射
-        /// </summary>
-        /// <param name="source"></param>
-        /// <param name="target"></param>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        public static object Map(this object source, object target, MapperOption option = default)
-        {
-            if (source is null)
+            Dictionary<string, Property> pairs = new Dictionary<string, Property>();
+            PropertyInfo[] ps = k.GetProperties(BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (PropertyInfo item in ps)
             {
-                return default;
+                pairs.Add(item.Name, new Property(item));
             }
-            var sourceType = source.GetType();
-            if (sourceType.IsPrimitive || sourceType.IsEnum || sourceType == TouchSocketCoreUtility.stringType)
-            {
-                return source;
-            }
-            var sourcePairs = m_typeToProperty.GetOrAdd(sourceType, (k) =>
-               {
-                   Dictionary<string, Property> pairs = new Dictionary<string, Property>();
-                   var ps = k.GetProperties(BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                   foreach (var item in ps)
-                   {
-                       pairs.Add(item.Name, new Property(item));
-                   }
-                   return pairs;
-               });
+            return pairs;
+        });
 
-            var targetPairs = m_typeToProperty.GetOrAdd(target.GetType(), (k) =>
+        Dictionary<string, Property> targetPairs = m_typeToProperty.GetOrAdd(target.GetType(), (k) =>
+        {
+            Dictionary<string, Property> pairs = new Dictionary<string, Property>();
+            PropertyInfo[] ps = k.GetProperties(BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            foreach (PropertyInfo item in ps)
             {
-                Dictionary<string, Property> pairs = new Dictionary<string, Property>();
-                var ps = k.GetProperties(BindingFlags.Default | BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-                foreach (var item in ps)
+                pairs.Add(item.Name, new Property(item));
+            }
+            return pairs;
+        });
+
+        foreach (KeyValuePair<string, Property> item in sourcePairs)
+        {
+            if (item.Value.CanRead)
+            {
+                string pkey = item.Key;
+                if (option != null && option.MapperProperties != null && option.MapperProperties.ContainsKey(pkey))
                 {
-                    pairs.Add(item.Name, new Property(item));
+                    pkey = option.MapperProperties[pkey];
                 }
-                return pairs;
-            });
 
-            foreach (var item in sourcePairs)
-            {
-                if (item.Value.CanRead)
+                if (option?.IgnoreProperties?.Contains(pkey) == true)
                 {
-                    string pkey = item.Key;
-                    if (option != null && option.MapperProperties != null && option.MapperProperties.ContainsKey(pkey))
+                    continue;
+                }
+                if (targetPairs.TryGetValue(pkey, out Property property))
+                {
+                    if (property.CanWrite)
                     {
-                        pkey = option.MapperProperties[pkey];
-                    }
-
-                    if (option?.IgnoreProperties?.Contains(pkey) == true)
-                    {
-                        continue;
-                    }
-                    if (targetPairs.TryGetValue(pkey, out Property property))
-                    {
-                        if (property.CanWrite)
-                        {
-                            property.SetValue(target, item.Value.GetValue(source));
-                        }
+                        property.SetValue(target, item.Value.GetValue(source));
                     }
                 }
             }
-            return target;
         }
+        return target;
+    }
 
-        /// <summary>
-        /// 映射List
-        /// </summary>
-        /// <typeparam name="T"></typeparam>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        public static IEnumerable<T1> MapList<T, T1>(this IEnumerable<T> list, MapperOption option = default) where T : class where T1 : class, new()
+    /// <summary>
+    /// 映射List
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <typeparam name="T1"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
+    public static IEnumerable<T1> MapList<T, T1>(this IEnumerable<T> list, MapperOption option = default) where T : class where T1 : class, new()
+    {
+        if (list is null)
         {
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-
-            List<T1> result = new List<T1>();
-            foreach (var item in list)
-            {
-                result.Add(Map<T, T1>(item, option));
-            }
-            return result;
+            throw new ArgumentNullException(nameof(list));
         }
 
-        /// <summary>
-        /// 映射List
-        /// </summary>
-        /// <typeparam name="T1"></typeparam>
-        /// <param name="list"></param>
-        /// <param name="option"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentNullException"></exception>
-        public static IEnumerable<T1> MapList<T1>(this IEnumerable<object> list, MapperOption option = default) where T1 : class, new()
+        List<T1> result = new List<T1>();
+        foreach (T item in list)
         {
-            if (list is null)
-            {
-                throw new ArgumentNullException(nameof(list));
-            }
-
-            List<T1> result = new List<T1>();
-            foreach (var item in list)
-            {
-                result.Add(Map<T1>(item, option));
-            }
-            return result;
+            result.Add(Map<T, T1>(item, option));
         }
+        return result;
+    }
+
+    /// <summary>
+    /// 映射List
+    /// </summary>
+    /// <typeparam name="T1"></typeparam>
+    /// <param name="list"></param>
+    /// <param name="option"></param>
+    /// <returns></returns>
+    /// <exception cref="ArgumentNullException"></exception>
+    public static IEnumerable<T1> MapList<T1>(this IEnumerable<object> list, MapperOption option = default) where T1 : class, new()
+    {
+        if (list is null)
+        {
+            throw new ArgumentNullException(nameof(list));
+        }
+
+        List<T1> result = new List<T1>();
+        foreach (object item in list)
+        {
+            result.Add(Map<T1>(item, option));
+        }
+        return result;
     }
 }

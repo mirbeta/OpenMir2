@@ -1,12 +1,11 @@
 ﻿using SystemModule.Enums;
 
-namespace SystemModule.Data
+namespace SystemModule.Data;
+
+public class MonsterSayMsg
 {
-    public class MonsterSayMsg
-    {
-        public MonStatus State;
-        public MsgColor Color;
-        public int nRate;
-        public string sSayMsg;
-    }
+    public MonStatus State;
+    public MsgColor Color;
+    public int nRate;
+    public string sSayMsg;
 }

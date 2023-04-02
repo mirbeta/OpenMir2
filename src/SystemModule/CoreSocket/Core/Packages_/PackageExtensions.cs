@@ -10,25 +10,24 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// PackageExtensions
+/// </summary>
+public static class PackageExtensions
 {
     /// <summary>
-    /// PackageExtensions
+    /// 打包为字节
     /// </summary>
-    public static class PackageExtensions
+    /// <param name="packageBase"></param>
+    /// <returns></returns>
+    public static byte[] PackageAsBytes(this PackageBase packageBase)
     {
-        /// <summary>
-        /// 打包为字节
-        /// </summary>
-        /// <param name="packageBase"></param>
-        /// <returns></returns>
-        public static byte[] PackageAsBytes(this PackageBase packageBase)
+        using (ByteBlock byteBlock = new ByteBlock())
         {
-            using (ByteBlock byteBlock = new ByteBlock())
-            {
-                packageBase.Package(byteBlock);
-                return byteBlock.ToArray();
-            }
+            packageBase.Package(byteBlock);
+            return byteBlock.ToArray();
         }
     }
 }

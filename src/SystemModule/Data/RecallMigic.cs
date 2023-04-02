@@ -1,10 +1,9 @@
-﻿namespace SystemModule.Data
+﻿namespace SystemModule.Data;
+
+public struct RecallMigic
 {
-    public struct RecallMigic
-    {
-        public int nHumLevel;
-        public string sMonName;
-        public int nCount;
-        public int nLevel;
-    }
+    public int nHumLevel;
+    public string sMonName;
+    public int nCount;
+    public int nLevel;
 }

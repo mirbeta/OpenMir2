@@ -1,9 +1,8 @@
-﻿namespace SystemModule.Enums
+﻿namespace SystemModule.Enums;
+
+public enum MessageColor
 {
-    public enum MessageColor
-    {
-        Red = 0,
-        Black = 1,
-        Green = 2
-    }
+    Red = 0,
+    Black = 1,
+    Green = 2
 }

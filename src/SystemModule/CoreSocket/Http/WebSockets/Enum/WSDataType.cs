@@ -11,41 +11,40 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// WebSocket数据类型
+/// </summary>
+public enum WSDataType : ushort
 {
     /// <summary>
-    /// WebSocket数据类型
+    /// 表示一个中间数据包，denotes a continuation frame
     /// </summary>
-    public enum WSDataType : ushort
-    {
-        /// <summary>
-        /// 表示一个中间数据包，denotes a continuation frame
-        /// </summary>
-        Cont = 0,
+    Cont = 0,
 
-        /// <summary>
-        /// 表示一个text类型数据包
-        /// </summary>
-        Text = 1,
+    /// <summary>
+    /// 表示一个text类型数据包
+    /// </summary>
+    Text = 1,
 
-        /// <summary>
-        /// 表示一个binary类型数据包
-        /// </summary>
-        Binary = 2,
+    /// <summary>
+    /// 表示一个binary类型数据包
+    /// </summary>
+    Binary = 2,
 
-        /// <summary>
-        /// 表示一个断开连接类型数据包
-        /// </summary>
-        Close = 8,
+    /// <summary>
+    /// 表示一个断开连接类型数据包
+    /// </summary>
+    Close = 8,
 
-        /// <summary>
-        /// 表示一个ping类型数据包
-        /// </summary>
-        Ping = 9,
+    /// <summary>
+    /// 表示一个ping类型数据包
+    /// </summary>
+    Ping = 9,
 
-        /// <summary>
-        /// 表示一个pong类型数据包
-        /// </summary>
-        Pong = 10
-    }
+    /// <summary>
+    /// 表示一个pong类型数据包
+    /// </summary>
+    Pong = 10
 }

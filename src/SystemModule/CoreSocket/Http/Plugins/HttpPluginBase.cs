@@ -14,172 +14,171 @@ using System.Threading.Tasks;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// Http扩展基类
+/// </summary>
+public class HttpPluginBase : HttpPluginBase<ITcpClientBase>
 {
+}
+
+/// <summary>
+/// Http扩展基类
+/// </summary>
+public abstract class HttpPluginBase<TClient> : TcpPluginBase<TClient>, IHttpPlugin
+{
+    void IHttpPlugin.OnDelete(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        OnDelete((TClient)client, e);
+    }
+
+    Task IHttpPlugin.OnDeleteAsync(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        return OnDeleteAsync((TClient)client, e);
+    }
+
+    void IHttpPlugin.OnGet(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        OnGet((TClient)client, e);
+    }
+
+    Task IHttpPlugin.OnGetAsync(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        return OnGetAsync((TClient)client, e);
+    }
+
+    void IHttpPlugin.OnPost(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        OnPost((TClient)client, e);
+    }
+
+    Task IHttpPlugin.OnPostAsync(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        return OnPostAsync((TClient)client, e);
+    }
+
+    void IHttpPlugin.OnPut(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        OnPut((TClient)client, e);
+    }
+
+    Task IHttpPlugin.OnPutAsync(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        return OnPutAsync((TClient)client, e);
+    }
+
+    void IHttpPlugin.OnReceivedOtherHttpRequest(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        OnReceivedOtherHttpRequest((TClient)client, e);
+    }
+
+    Task IHttpPlugin.OnReceivedOtherHttpRequestAsync(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        return OnReceivedOtherHttpRequestAsync((TClient)client, e);
+    }
+
+    #region 虚函数
+
     /// <summary>
-    /// Http扩展基类
+    /// <inheritdoc cref="IHttpPlugin.OnDelete(ITcpClientBase, HttpContextEventArgs)"/>
     /// </summary>
-    public class HttpPluginBase : HttpPluginBase<ITcpClientBase>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnDelete(TClient client, HttpContextEventArgs e)
     {
     }
 
     /// <summary>
-    /// Http扩展基类
+    /// 在收到Delete时
     /// </summary>
-    public abstract class HttpPluginBase<TClient> : TcpPluginBase<TClient>, IHttpPlugin
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnDeleteAsync(TClient client, HttpContextEventArgs e)
     {
-        void IHttpPlugin.OnDelete(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            OnDelete((TClient)client, e);
-        }
-
-        Task IHttpPlugin.OnDeleteAsync(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            return OnDeleteAsync((TClient)client, e);
-        }
-
-        void IHttpPlugin.OnGet(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            OnGet((TClient)client, e);
-        }
-
-        Task IHttpPlugin.OnGetAsync(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            return OnGetAsync((TClient)client, e);
-        }
-
-        void IHttpPlugin.OnPost(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            OnPost((TClient)client, e);
-        }
-
-        Task IHttpPlugin.OnPostAsync(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            return OnPostAsync((TClient)client, e);
-        }
-
-        void IHttpPlugin.OnPut(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            OnPut((TClient)client, e);
-        }
-
-        Task IHttpPlugin.OnPutAsync(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            return OnPutAsync((TClient)client, e);
-        }
-
-        void IHttpPlugin.OnReceivedOtherHttpRequest(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            OnReceivedOtherHttpRequest((TClient)client, e);
-        }
-
-        Task IHttpPlugin.OnReceivedOtherHttpRequestAsync(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            return OnReceivedOtherHttpRequestAsync((TClient)client, e);
-        }
-
-        #region 虚函数
-
-        /// <summary>
-        /// <inheritdoc cref="IHttpPlugin.OnDelete(ITcpClientBase, HttpContextEventArgs)"/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnDelete(TClient client, HttpContextEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// 在收到Delete时
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnDeleteAsync(TClient client, HttpContextEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="IHttpPlugin.OnGet(ITcpClientBase, HttpContextEventArgs)"/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnGet(TClient client, HttpContextEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// 在收到Get时
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnGetAsync(TClient client, HttpContextEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="IHttpPlugin.OnPost(ITcpClientBase, HttpContextEventArgs)"/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnPost(TClient client, HttpContextEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// 在收到Post时
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnPostAsync(TClient client, HttpContextEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="IHttpPlugin.OnPut(ITcpClientBase, HttpContextEventArgs)"/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnPut(TClient client, HttpContextEventArgs e)
-        {
-        }
-
-        /// <summary>
-        ///  在收到Put时
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnPutAsync(TClient client, HttpContextEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
-
-        /// <summary>
-        /// <inheritdoc cref="IHttpPlugin.OnReceivedOtherHttpRequest(ITcpClientBase, HttpContextEventArgs)"/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnReceivedOtherHttpRequest(TClient client, HttpContextEventArgs e)
-        {
-        }
-
-        /// <summary>
-        /// 在收到其他Http请求时
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnReceivedOtherHttpRequestAsync(TClient client, HttpContextEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
-
-        #endregion 虚函数
+        return EasyTask.CompletedTask;
     }
+
+    /// <summary>
+    /// <inheritdoc cref="IHttpPlugin.OnGet(ITcpClientBase, HttpContextEventArgs)"/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnGet(TClient client, HttpContextEventArgs e)
+    {
+    }
+
+    /// <summary>
+    /// 在收到Get时
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnGetAsync(TClient client, HttpContextEventArgs e)
+    {
+        return EasyTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="IHttpPlugin.OnPost(ITcpClientBase, HttpContextEventArgs)"/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnPost(TClient client, HttpContextEventArgs e)
+    {
+    }
+
+    /// <summary>
+    /// 在收到Post时
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnPostAsync(TClient client, HttpContextEventArgs e)
+    {
+        return EasyTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="IHttpPlugin.OnPut(ITcpClientBase, HttpContextEventArgs)"/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnPut(TClient client, HttpContextEventArgs e)
+    {
+    }
+
+    /// <summary>
+    ///  在收到Put时
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnPutAsync(TClient client, HttpContextEventArgs e)
+    {
+        return EasyTask.CompletedTask;
+    }
+
+    /// <summary>
+    /// <inheritdoc cref="IHttpPlugin.OnReceivedOtherHttpRequest(ITcpClientBase, HttpContextEventArgs)"/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnReceivedOtherHttpRequest(TClient client, HttpContextEventArgs e)
+    {
+    }
+
+    /// <summary>
+    /// 在收到其他Http请求时
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnReceivedOtherHttpRequestAsync(TClient client, HttpContextEventArgs e)
+    {
+        return EasyTask.CompletedTask;
+    }
+
+    #endregion 虚函数
 }

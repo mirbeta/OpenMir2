@@ -11,21 +11,20 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 大小端类型
+/// </summary>
+public enum EndianType
 {
     /// <summary>
-    /// 大小端类型
+    /// 小端模式
     /// </summary>
-    public enum EndianType
-    {
-        /// <summary>
-        /// 小端模式
-        /// </summary>
-        Little,
+    Little,
 
-        /// <summary>
-        /// 大端模式
-        /// </summary>
-        Big
-    }
+    /// <summary>
+    /// 大端模式
+    /// </summary>
+    Big
 }

@@ -1,8 +1,7 @@
-﻿namespace SystemModule.Data
+﻿namespace SystemModule.Data;
+
+public struct TIPaddr
 {
-    public struct TIPaddr
-    {
-        public string sIpaddr;
-        public string dIPaddr;
-    }
+    public string sIpaddr;
+    public string dIPaddr;
 }

@@ -3,74 +3,73 @@ using System.Diagnostics;
 using SystemModule.NativeList.Helpers;
 using SystemModule.NativeList.Interfaces.Entities;
 
-namespace SystemModule.NativeList.Abstracts
+namespace SystemModule.NativeList.Abstracts;
+
+/// <summary>
+/// Object that represents external application in this application.
+/// </summary>
+/// <remarks>
+/// By default this object has to be used as a wrapper, it cannot start or kill the process. 
+/// </remarks>
+public abstract class ProcessKeeperBase : CriticalDisposableBase, IProcessKeeper
 {
+    private String _exitApplicationError;
+
+    /// <inheritdoc/>
+    public Process AssociatedProcess { get; private set; }
+
     /// <summary>
-    /// Object that represents external application in this application.
+    /// Associates the process with this object.
     /// </summary>
     /// <remarks>
-    /// By default this object has to be used as a wrapper, it cannot start or kill the process. 
+    /// If object has associated process it will be removed from this object.
     /// </remarks>
-    public abstract class ProcessKeeperBase : CriticalDisposableBase, IProcessKeeper
+    /// <exception cref="ArgumentNullException">If process is null.</exception>
+    /// <exception cref="ArgumentException">If process is exited.</exception>
+    protected virtual void Associate(Process process)
     {
-        private String _exitApplicationError;
+        ArgumentsGuard.ThrowIfNull(process, nameof(process));
 
-        /// <inheritdoc/>
-        public Process AssociatedProcess { get; private set; }
+        if (process.HasExited)
+            throw new ArgumentException("Process is already exited.");
 
-        /// <summary>
-        /// Associates the process with this object.
-        /// </summary>
-        /// <remarks>
-        /// If object has associated process it will be removed from this object.
-        /// </remarks>
-        /// <exception cref="ArgumentNullException">If process is null.</exception>
-        /// <exception cref="ArgumentException">If process is exited.</exception>
-        protected virtual void Associate(Process process)
-        {
-            ArgumentsGuard.ThrowIfNull(process, nameof(process));
+        if (AssociatedProcess != process)
+            return;
 
-            if (process.HasExited)
-                throw new ArgumentException("Process is already exited.");
-
-            if (AssociatedProcess != process)
-                return;
-
-            if (AssociatedProcess != null)
-                AssociatedProcess.Exited -= OnAssociatedProcessExited;
-
-            AssociatedProcess = process;
-            AssociatedProcess.EnableRaisingEvents = true;
-            AssociatedProcess.Exited += OnAssociatedProcessExited;
-        }
-
-        private void OnAssociatedProcessExited(Object sender, EventArgs arguments)
-        {
+        if (AssociatedProcess != null)
             AssociatedProcess.Exited -= OnAssociatedProcessExited;
 
-            if (AssociatedProcess.ExitCode != 0)
-                _exitApplicationError = $"The application is failed with error: 0x{AssociatedProcess.ExitCode.ToString("X8")}";
-            else
-                _exitApplicationError = $"The application is exited without error, it was ended without disposing from this application.";
+        AssociatedProcess = process;
+        AssociatedProcess.EnableRaisingEvents = true;
+        AssociatedProcess.Exited += OnAssociatedProcessExited;
+    }
 
-            Dispose();
-        }
+    private void OnAssociatedProcessExited(Object sender, EventArgs arguments)
+    {
+        AssociatedProcess.Exited -= OnAssociatedProcessExited;
 
-        protected override void InternalDispose(bool manual)
+        if (AssociatedProcess.ExitCode != 0)
+            _exitApplicationError = $"The application is failed with error: 0x{AssociatedProcess.ExitCode:X8}";
+        else
+            _exitApplicationError = $"The application is exited without error, it was ended without disposing from this application.";
+
+        Dispose();
+    }
+
+    protected override void InternalDispose(bool manual)
+    {
+        if (AssociatedProcess != null)
         {
-            if (AssociatedProcess != null)
-            {
-                AssociatedProcess.Exited -= OnAssociatedProcessExited;
-                AssociatedProcess = null;
-            }
-
-            base.InternalDispose(manual);
+            AssociatedProcess.Exited -= OnAssociatedProcessExited;
+            AssociatedProcess = null;
         }
 
-        protected override void ThrowIfDisposed()
-        {
-            if (IsDisposed)
-                throw new ObjectDisposedException(nameof(IDisposable), _exitApplicationError ?? DisposableBase.ObjectDisposedError);
-        }
+        base.InternalDispose(manual);
+    }
+
+    protected override void ThrowIfDisposed()
+    {
+        if (IsDisposed)
+            throw new ObjectDisposedException(nameof(IDisposable), _exitApplicationError ?? DisposableBase.ObjectDisposedError);
     }
 }

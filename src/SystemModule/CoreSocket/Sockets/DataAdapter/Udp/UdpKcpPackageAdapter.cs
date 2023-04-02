@@ -13,17 +13,16 @@
 using System.Net;
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// UdpKcpPackageAdapter
+/// </summary>
+public class UdpKcpPackageAdapter : NormalUdpDataHandlingAdapter
 {
-    /// <summary>
-    /// UdpKcpPackageAdapter
-    /// </summary>
-    public class UdpKcpPackageAdapter : NormalUdpDataHandlingAdapter
+    /// <inheritdoc/>
+    protected override void PreviewReceived(EndPoint remoteEndPoint, ByteBlock byteBlock)
     {
-        /// <inheritdoc/>
-        protected override void PreviewReceived(EndPoint remoteEndPoint, ByteBlock byteBlock)
-        {
-            base.PreviewReceived(remoteEndPoint, byteBlock);
-        }
+        base.PreviewReceived(remoteEndPoint, byteBlock);
     }
 }

@@ -14,144 +14,143 @@ using System.Threading.Tasks;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// WS插件基类
+/// </summary>
+public class WebSocketPluginBase : WebSocketPluginBase<ITcpClientBase>
 {
+}
+
+/// <summary>
+/// WS插件基类
+/// </summary>
+public class WebSocketPluginBase<TClient> : HttpPluginBase<TClient>, IWebSocketPlugin
+{
+    #region 虚函数
+
     /// <summary>
-    /// WS插件基类
+    /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
     /// </summary>
-    public class WebSocketPluginBase : WebSocketPluginBase<ITcpClientBase>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnClosing(ITcpClientBase client, MsgEventArgs e)
     {
     }
 
     /// <summary>
-    /// WS插件基类
+    /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
     /// </summary>
-    public class WebSocketPluginBase<TClient> : HttpPluginBase<TClient>, IWebSocketPlugin
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnClosingAsync(ITcpClientBase client, MsgEventArgs e)
     {
-        #region 虚函数
+        return EasyTask.CompletedTask;
+    }
 
-        /// <summary>
-        /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnClosing(ITcpClientBase client, MsgEventArgs e)
-        {
-        }
+    /// <summary>
+    /// 处理WS数据帧。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnHandleWSDataFrame(TClient client, WSDataFrameEventArgs e)
+    {
+    }
 
-        /// <summary>
-        /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnClosingAsync(ITcpClientBase client, MsgEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
+    /// <summary>
+    /// 处理WS数据帧。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnHandleWSDataFrameAsync(TClient client, WSDataFrameEventArgs e)
+    {
+        return EasyTask.CompletedTask;
+    }
 
-        /// <summary>
-        /// 处理WS数据帧。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnHandleWSDataFrame(TClient client, WSDataFrameEventArgs e)
-        {
-        }
+    /// <summary>
+    /// 表示完成握手后。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnHandshaked(TClient client, HttpContextEventArgs e)
+    {
+    }
 
-        /// <summary>
-        /// 处理WS数据帧。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnHandleWSDataFrameAsync(TClient client, WSDataFrameEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
+    /// <summary>
+    /// 表示完成握手后。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnHandshakedAsync(TClient client, HttpContextEventArgs e)
+    {
+        return EasyTask.CompletedTask;
+    }
 
-        /// <summary>
-        /// 表示完成握手后。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnHandshaked(TClient client, HttpContextEventArgs e)
-        {
-        }
+    /// <summary>
+    /// 表示在即将握手连接时。
+    /// <para>在此处拒绝操作，则会返回403 Forbidden。</para>
+    /// <para>也可以向<see cref="HttpContextEventArgs.Context"/>注入更多信息。</para>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected virtual void OnHandshaking(TClient client, HttpContextEventArgs e)
+    {
+    }
 
-        /// <summary>
-        /// 表示完成握手后。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnHandshakedAsync(TClient client, HttpContextEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
+    /// <summary>
+    /// 表示在即将握手连接时。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    protected virtual Task OnHandshakingAsync(TClient client, HttpContextEventArgs e)
+    {
+        return EasyTask.CompletedTask;
+    }
 
-        /// <summary>
-        /// 表示在即将握手连接时。
-        /// <para>在此处拒绝操作，则会返回403 Forbidden。</para>
-        /// <para>也可以向<see cref="HttpContextEventArgs.Context"/>注入更多信息。</para>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected virtual void OnHandshaking(TClient client, HttpContextEventArgs e)
-        {
-        }
+    #endregion 虚函数
 
-        /// <summary>
-        /// 表示在即将握手连接时。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        protected virtual Task OnHandshakingAsync(TClient client, HttpContextEventArgs e)
-        {
-            return EasyTask.CompletedTask;
-        }
+    void IWebSocketPlugin.OnClosing(ITcpClientBase client, MsgEventArgs e)
+    {
+        OnClosing(client, e);
+    }
 
-        #endregion 虚函数
+    Task IWebSocketPlugin.OnClosingAsync(ITcpClientBase client, MsgEventArgs e)
+    {
+        return OnClosingAsync(client, e);
+    }
 
-        void IWebSocketPlugin.OnClosing(ITcpClientBase client, MsgEventArgs e)
-        {
-            OnClosing(client, e);
-        }
+    void IWebSocketPlugin.OnHandleWSDataFrame(ITcpClientBase client, WSDataFrameEventArgs e)
+    {
+        OnHandleWSDataFrame((TClient)client, e);
+    }
 
-        Task IWebSocketPlugin.OnClosingAsync(ITcpClientBase client, MsgEventArgs e)
-        {
-            return OnClosingAsync(client, e);
-        }
+    Task IWebSocketPlugin.OnHandleWSDataFrameAsync(ITcpClientBase client, WSDataFrameEventArgs e)
+    {
+        return OnHandleWSDataFrameAsync((TClient)client, e);
+    }
 
-        void IWebSocketPlugin.OnHandleWSDataFrame(ITcpClientBase client, WSDataFrameEventArgs e)
-        {
-            OnHandleWSDataFrame((TClient)client, e);
-        }
+    void IWebSocketPlugin.OnHandshaked(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        OnHandshaked((TClient)client, e);
+    }
 
-        Task IWebSocketPlugin.OnHandleWSDataFrameAsync(ITcpClientBase client, WSDataFrameEventArgs e)
-        {
-            return OnHandleWSDataFrameAsync((TClient)client, e);
-        }
+    Task IWebSocketPlugin.OnHandshakedAsync(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        return OnHandshakedAsync((TClient)client, e);
+    }
 
-        void IWebSocketPlugin.OnHandshaked(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            OnHandshaked((TClient)client, e);
-        }
+    void IWebSocketPlugin.OnHandshaking(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        OnHandshaking((TClient)client, e);
+    }
 
-        Task IWebSocketPlugin.OnHandshakedAsync(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            return OnHandshakedAsync((TClient)client, e);
-        }
-
-        void IWebSocketPlugin.OnHandshaking(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            OnHandshaking((TClient)client, e);
-        }
-
-        Task IWebSocketPlugin.OnHandshakingAsync(ITcpClientBase client, HttpContextEventArgs e)
-        {
-            return OnHandshakingAsync((TClient)client, e);
-        }
+    Task IWebSocketPlugin.OnHandshakingAsync(ITcpClientBase client, HttpContextEventArgs e)
+    {
+        return OnHandshakingAsync((TClient)client, e);
     }
 }

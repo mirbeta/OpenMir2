@@ -1,9 +1,8 @@
-﻿namespace SystemModule.Data
+﻿namespace SystemModule.Data;
+
+public class ItemBind
 {
-    public class ItemBind
-    {
-        public int nMakeIdex;
-        public int nItemIdx;
-        public string sBindName;
-    }
+    public int nMakeIdex;
+    public int nItemIdx;
+    public string sBindName;
 }

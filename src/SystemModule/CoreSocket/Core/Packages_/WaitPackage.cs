@@ -11,42 +11,41 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// WaitPackage
+/// </summary>
+public class WaitPackage : PackageBase, IWaitResult
 {
     /// <summary>
-    /// WaitPackage
+    /// <inheritdoc/>
     /// </summary>
-    public class WaitPackage : PackageBase, IWaitResult
+    public string Message { get; set; }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    public long Sign { get; set; }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    public byte Status { get; set; }
+
+    /// <inheritdoc/>
+    public override void Package(ByteBlock byteBlock)
     {
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public string Message { get; set; }
+        byteBlock.Write(Sign);
+        byteBlock.Write(Status);
+        byteBlock.Write(Message);
+    }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public long Sign { get; set; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public byte Status { get; set; }
-
-        /// <inheritdoc/>
-        public override void Package(ByteBlock byteBlock)
-        {
-            byteBlock.Write(Sign);
-            byteBlock.Write(Status);
-            byteBlock.Write(Message);
-        }
-
-        /// <inheritdoc/>
-        public override void Unpackage(ByteBlock byteBlock)
-        {
-            Sign = byteBlock.ReadInt64();
-            Status = (byte)byteBlock.ReadByte();
-            Message = byteBlock.ReadString();
-        }
+    /// <inheritdoc/>
+    public override void Unpackage(ByteBlock byteBlock)
+    {
+        Sign = byteBlock.ReadInt64();
+        Status = (byte)byteBlock.ReadByte();
+        Message = byteBlock.ReadString();
     }
 }

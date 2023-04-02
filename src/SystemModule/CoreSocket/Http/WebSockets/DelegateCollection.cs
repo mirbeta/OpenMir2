@@ -11,12 +11,11 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Http.WebSockets
-{
-    /// <summary>
-    /// 收到WebSocket数据
-    /// </summary>
-    /// <param name="client"></param>
-    /// <param name="dataFrame"></param>
-    public delegate void WSDataFrameEventHandler<TClient>(TClient client, WSDataFrame dataFrame);
-}
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// 收到WebSocket数据
+/// </summary>
+/// <param name="client"></param>
+/// <param name="dataFrame"></param>
+public delegate void WSDataFrameEventHandler<TClient>(TClient client, WSDataFrame dataFrame);

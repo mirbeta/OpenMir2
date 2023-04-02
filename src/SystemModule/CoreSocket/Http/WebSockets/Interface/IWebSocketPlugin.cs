@@ -14,74 +14,73 @@ using System.Threading.Tasks;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// WebSocket插件
+/// </summary>
+public interface IWebSocketPlugin : IPlugin
 {
     /// <summary>
-    /// WebSocket插件
+    /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
     /// </summary>
-    public interface IWebSocketPlugin : IPlugin
-    {
-        /// <summary>
-        /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        [AsyncRaiser]
-        void OnClosing(ITcpClientBase client, MsgEventArgs e);
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    [AsyncRaiser]
+    void OnClosing(ITcpClientBase client, MsgEventArgs e);
 
-        /// <summary>
-        /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        Task OnClosingAsync(ITcpClientBase client, MsgEventArgs e);
+    /// <summary>
+    /// 表示收到断开连接报文。如果对方直接断开连接，此方法则不会触发。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    Task OnClosingAsync(ITcpClientBase client, MsgEventArgs e);
 
-        /// <summary>
-        /// 当收到WS数据时。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        [AsyncRaiser]
-        void OnHandleWSDataFrame(ITcpClientBase client, WSDataFrameEventArgs e);
+    /// <summary>
+    /// 当收到WS数据时。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    [AsyncRaiser]
+    void OnHandleWSDataFrame(ITcpClientBase client, WSDataFrameEventArgs e);
 
-        /// <summary>
-        /// 当收到WS数据时。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        Task OnHandleWSDataFrameAsync(ITcpClientBase client, WSDataFrameEventArgs e);
+    /// <summary>
+    /// 当收到WS数据时。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    Task OnHandleWSDataFrameAsync(ITcpClientBase client, WSDataFrameEventArgs e);
 
-        /// <summary>
-        /// 表示完成握手后。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        [AsyncRaiser]
-        void OnHandshaked(ITcpClientBase client, HttpContextEventArgs e);
+    /// <summary>
+    /// 表示完成握手后。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    [AsyncRaiser]
+    void OnHandshaked(ITcpClientBase client, HttpContextEventArgs e);
 
-        /// <summary>
-        /// 表示完成握手后。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        Task OnHandshakedAsync(ITcpClientBase client, HttpContextEventArgs e);
+    /// <summary>
+    /// 表示完成握手后。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    Task OnHandshakedAsync(ITcpClientBase client, HttpContextEventArgs e);
 
-        /// <summary>
-        /// 表示在即将握手连接时。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        [AsyncRaiser]
-        void OnHandshaking(ITcpClientBase client, HttpContextEventArgs e);
+    /// <summary>
+    /// 表示在即将握手连接时。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    [AsyncRaiser]
+    void OnHandshaking(ITcpClientBase client, HttpContextEventArgs e);
 
-        /// <summary>
-        /// 表示在即将握手连接时。
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        /// <returns></returns>
-        Task OnHandshakingAsync(ITcpClientBase client, HttpContextEventArgs e);
-    }
+    /// <summary>
+    /// 表示在即将握手连接时。
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    /// <returns></returns>
+    Task OnHandshakingAsync(ITcpClientBase client, HttpContextEventArgs e);
 }

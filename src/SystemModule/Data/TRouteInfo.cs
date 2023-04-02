@@ -1,17 +1,16 @@
-﻿namespace SystemModule.Data
-{
-    public class TRouteInfo
-    {
-        public int ServerIdx;
-        public int GateCount;
-        public string SelGateIP;
-        public string[] GameGateIP;
-        public int[] GameGatePort;
+﻿namespace SystemModule.Data;
 
-        public TRouteInfo()
-        {
-            GameGateIP = new string[16];
-            GameGatePort = new int[16];
-        }
+public class TRouteInfo
+{
+    public int ServerIdx;
+    public int GateCount;
+    public string SelGateIP;
+    public string[] GameGateIP;
+    public int[] GameGatePort;
+
+    public TRouteInfo()
+    {
+        GameGateIP = new string[16];
+        GameGatePort = new int[16];
     }
 }

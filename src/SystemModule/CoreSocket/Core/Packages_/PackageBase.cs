@@ -10,18 +10,17 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-namespace TouchSocket.Core
-{
-    /// <summary>
-    /// PackageBase包结构数据。
-    /// </summary>
-    [IntelligentCoder.AsyncMethodPoster(Flags = IntelligentCoder.MemberFlags.Public)]
-    public abstract partial class PackageBase : IPackage
-    {
-        /// <inheritdoc/>
-        public abstract void Package(ByteBlock byteBlock);
+namespace TouchSocket.Core;
 
-        /// <inheritdoc/>
-        public abstract void Unpackage(ByteBlock byteBlock);
-    }
+/// <summary>
+/// PackageBase包结构数据。
+/// </summary>
+[IntelligentCoder.AsyncMethodPoster(Flags = IntelligentCoder.MemberFlags.Public)]
+public abstract partial class PackageBase : IPackage
+{
+    /// <inheritdoc/>
+    public abstract void Package(ByteBlock byteBlock);
+
+    /// <inheritdoc/>
+    public abstract void Unpackage(ByteBlock byteBlock);
 }

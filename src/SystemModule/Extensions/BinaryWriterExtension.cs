@@ -26,8 +26,8 @@ namespace SystemModule.Extensions
                 buffer = HUtil32.StringToByte(value);
             }
 
-            var reSize = buffer.Length + 1;
-            var tempSize = defaultSize;
+            int reSize = buffer.Length + 1;
+            int tempSize = defaultSize;
             if (reSize < tempSize)
             {
                 reSize = tempSize;

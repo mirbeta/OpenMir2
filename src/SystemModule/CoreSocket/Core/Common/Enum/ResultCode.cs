@@ -11,46 +11,45 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 结果类型
+/// </summary>
+public enum ResultCode
 {
     /// <summary>
-    /// 结果类型
+    /// 默认
     /// </summary>
-    public enum ResultCode
-    {
-        /// <summary>
-        /// 默认
-        /// </summary>
-        Default,
+    Default,
 
-        /// <summary>
-        /// 错误
-        /// </summary>
-        Error,
+    /// <summary>
+    /// 错误
+    /// </summary>
+    Error,
 
-        /// <summary>
-        /// 异常
-        /// </summary>
-        Exception,
+    /// <summary>
+    /// 异常
+    /// </summary>
+    Exception,
 
-        /// <summary>
-        /// 成功
-        /// </summary>
-        Success,
+    /// <summary>
+    /// 成功
+    /// </summary>
+    Success,
 
-        /// <summary>
-        /// 失败
-        /// </summary>
-        Fail,
+    /// <summary>
+    /// 失败
+    /// </summary>
+    Fail,
 
-        /// <summary>
-        /// 操作超时
-        /// </summary>
-        Overtime,
+    /// <summary>
+    /// 操作超时
+    /// </summary>
+    Overtime,
 
-        /// <summary>
-        /// 操作取消
-        /// </summary>
-        Canceled
-    }
+    /// <summary>
+    /// 操作取消
+    /// </summary>
+    Canceled
 }

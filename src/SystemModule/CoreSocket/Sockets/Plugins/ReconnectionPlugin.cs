@@ -13,58 +13,57 @@
 using System;
 using TouchSocket.Core;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// 重连插件
+/// </summary>
+[SingletonPlugin]
+public sealed class ReconnectionPlugin<TClient> : TcpPluginBase where TClient : class, ITcpClient
 {
+    private readonly Func<TClient, bool> m_tryCon;
+
     /// <summary>
-    /// 重连插件
+    /// 初始化一个重连插件
     /// </summary>
-    [SingletonPlugin]
-    public sealed class ReconnectionPlugin<TClient> : TcpPluginBase where TClient : class, ITcpClient
+    /// <param name="tryCon">无论如何，只要返回True，则结束本轮尝试</param>
+    public ReconnectionPlugin(Func<TClient, bool> tryCon)
     {
-        private readonly Func<TClient, bool> m_tryCon;
+        Order = int.MinValue;
+        m_tryCon = tryCon;
+    }
 
-        /// <summary>
-        /// 初始化一个重连插件
-        /// </summary>
-        /// <param name="tryCon">无论如何，只要返回True，则结束本轮尝试</param>
-        public ReconnectionPlugin(Func<TClient, bool> tryCon)
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected override void OnDisconnected(ITcpClientBase client, DisconnectEventArgs e)
+    {
+        base.OnDisconnected(client, e);
+
+        if (client is ITcpClient tcpClient)
         {
-            Order = int.MinValue;
-            m_tryCon = tryCon;
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected override void OnDisconnected(ITcpClientBase client, DisconnectEventArgs e)
-        {
-            base.OnDisconnected(client, e);
-
-            if (client is ITcpClient tcpClient)
+            if (e.Manual)
             {
-                if (e.Manual)
+                return;
+            }
+            EasyTask.Run(() =>
+            {
+                while (true)
                 {
-                    return;
-                }
-                EasyTask.Run(() =>
-                {
-                    while (true)
+                    try
                     {
-                        try
+                        if (m_tryCon.Invoke((TClient)tcpClient))
                         {
-                            if (m_tryCon.Invoke((TClient)tcpClient))
-                            {
-                                break;
-                            }
-                        }
-                        catch
-                        {
+                            break;
                         }
                     }
-                });
-            }
+                    catch
+                    {
+                    }
+                }
+            });
         }
     }
 }

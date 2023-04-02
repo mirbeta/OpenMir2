@@ -10,172 +10,171 @@
 //  感谢您的下载和使用
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// Http工具
+/// </summary>
+public static class HttpTools
 {
     /// <summary>
-    /// Http工具
+    /// 从扩展名获取ContentType
     /// </summary>
-    public static class HttpTools
+    /// <param name="extension"></param>
+    /// <returns></returns>
+    public static string GetContentTypeFromExtension(string extension)
     {
-        /// <summary>
-        /// 从扩展名获取ContentType
-        /// </summary>
-        /// <param name="extension"></param>
-        /// <returns></returns>
-        public static string GetContentTypeFromExtension(string extension)
+        switch (extension.ToLower())
         {
-            switch (extension.ToLower())
-            {
-                case ".html":
-                    return "text/html";
+            case ".html":
+                return "text/html";
 
-                case ".css":
-                    return "text/css";
+            case ".css":
+                return "text/css";
 
-                case ".js":
-                    return "text/javascript";
+            case ".js":
+                return "text/javascript";
 
-                case ".xml":
-                    return "text/xml";
+            case ".xml":
+                return "text/xml";
 
-                case ".gzip":
-                    return "application/gzip";
+            case ".gzip":
+                return "application/gzip";
 
-                case ".json":
-                    return "application/json";
+            case ".json":
+                return "application/json";
 
-                case ".map":
-                    return "application/json";
+            case ".map":
+                return "application/json";
 
-                case ".pdf":
-                    return "application/pdf";
+            case ".pdf":
+                return "application/pdf";
 
-                case ".zip":
-                    return "application/zip";
+            case ".zip":
+                return "application/zip";
 
-                case ".mp3":
-                    return "audio/mpeg";
+            case ".mp3":
+                return "audio/mpeg";
 
-                case ".jpg":
-                    return "image/jpeg";
+            case ".jpg":
+                return "image/jpeg";
 
-                case ".gif":
-                    return "image/gif";
+            case ".gif":
+                return "image/gif";
 
-                case ".png":
-                    return "image/png";
+            case ".png":
+                return "image/png";
 
-                case ".svg":
-                    return "image/svg+xml";
+            case ".svg":
+                return "image/svg+xml";
 
-                case ".mp4":
-                    return "video/mp4";
+            case ".mp4":
+                return "video/mp4";
 
-                case ".atom":
-                    return "application/atom+xml";
+            case ".atom":
+                return "application/atom+xml";
 
-                case ".fastsoap":
-                    return "application/fastsoap";
+            case ".fastsoap":
+                return "application/fastsoap";
 
-                case ".ps":
-                    return "application/postscript";
+            case ".ps":
+                return "application/postscript";
 
-                case ".soap":
-                    return "application/soap+xml";
+            case ".soap":
+                return "application/soap+xml";
 
-                case ".sql":
-                    return "application/sql";
+            case ".sql":
+                return "application/sql";
 
-                case ".xslt":
-                    return "application/xslt+xml";
+            case ".xslt":
+                return "application/xslt+xml";
 
-                case ".zlib":
-                    return "application/zlib";
+            case ".zlib":
+                return "application/zlib";
 
-                case ".aac":
-                    return "audio/aac";
+            case ".aac":
+                return "audio/aac";
 
-                case ".ac3":
-                    return "audio/ac3";
+            case ".ac3":
+                return "audio/ac3";
 
-                case ".ogg":
-                    return "audio/ogg";
+            case ".ogg":
+                return "audio/ogg";
 
-                case ".ttf":
-                    return "font/ttf";
+            case ".ttf":
+                return "font/ttf";
 
-                case ".bmp":
-                    return "image/bmp";
+            case ".bmp":
+                return "image/bmp";
 
-                case ".jpm":
-                    return "image/jpm";
+            case ".jpm":
+                return "image/jpm";
 
-                case ".jpx":
-                    return "image/jpx";
+            case ".jpx":
+                return "image/jpx";
 
-                case ".jrx":
-                    return "image/jrx";
+            case ".jrx":
+                return "image/jrx";
 
-                case ".tiff":
-                    return "image/tiff";
+            case ".tiff":
+                return "image/tiff";
 
-                case ".emf":
-                    return "image/emf";
+            case ".emf":
+                return "image/emf";
 
-                case ".wmf":
-                    return "image/wmf";
+            case ".wmf":
+                return "image/wmf";
 
-                case ".http":
-                    return "message/http";
+            case ".http":
+                return "message/http";
 
-                case ".s-http":
-                    return "message/s-http";
+            case ".s-http":
+                return "message/s-http";
 
-                case ".mesh":
-                    return "model/mesh";
+            case ".mesh":
+                return "model/mesh";
 
-                case ".vrml":
-                    return "model/vrml";
+            case ".vrml":
+                return "model/vrml";
 
-                case ".csv":
-                    return "text/csv";
+            case ".csv":
+                return "text/csv";
 
-                case ".plain":
-                    return "text/plain";
+            case ".plain":
+                return "text/plain";
 
-                case ".richtext":
-                    return "text/richtext";
+            case ".richtext":
+                return "text/richtext";
 
-                case ".rtf":
-                    return "text/rtf";
+            case ".rtf":
+                return "text/rtf";
 
-                case ".rtx":
-                    return "text/rtx";
+            case ".rtx":
+                return "text/rtx";
 
-                case ".sgml":
-                    return "text/sgml";
+            case ".sgml":
+                return "text/sgml";
 
-                case ".strings":
-                    return "text/strings";
+            case ".strings":
+                return "text/strings";
 
-                case ".url":
-                    return "text/uri-list";
+            case ".url":
+                return "text/uri-list";
 
-                case ".H264":
-                    return "video/H264";
+            case ".H264":
+                return "video/H264";
 
-                case ".H265":
-                    return "video/H265";
+            case ".H265":
+                return "video/H265";
 
-                case ".mpeg":
-                    return "video/mpeg";
+            case ".mpeg":
+                return "video/mpeg";
 
-                case ".raw":
-                    return "video/raw";
+            case ".raw":
+                return "video/raw";
 
-                default:
-                    return "application/octet-stream";
-            }
+            default:
+                return "application/octet-stream";
         }
     }
 }

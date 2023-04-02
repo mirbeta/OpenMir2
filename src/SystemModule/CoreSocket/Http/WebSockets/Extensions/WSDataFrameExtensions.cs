@@ -14,145 +14,144 @@ using System.Text;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// WSDataFrame辅助扩展类
+/// </summary>
+public static class WSDataFrameExtensions
 {
     /// <summary>
-    /// WSDataFrame辅助扩展类
+    /// 追加文本
     /// </summary>
-    public static class WSDataFrameExtensions
+    /// <param name="dataFrame"></param>
+    /// <param name="text"></param>
+    /// <param name="encoding"></param>
+    /// <returns></returns>
+    public static WSDataFrame AppendText(this WSDataFrame dataFrame, string text, Encoding encoding = default)
     {
-        /// <summary>
-        /// 追加文本
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <param name="text"></param>
-        /// <param name="encoding"></param>
-        /// <returns></returns>
-        public static WSDataFrame AppendText(this WSDataFrame dataFrame, string text, Encoding encoding = default)
+        dataFrame.Opcode = WSDataType.Text;
+        byte[] data = (encoding == default ? Encoding.UTF8 : encoding).GetBytes(text);
+        if (dataFrame.PayloadData == null)
         {
-            dataFrame.Opcode = WSDataType.Text;
-            byte[] data = (encoding == default ? Encoding.UTF8 : encoding).GetBytes(text);
-            if (dataFrame.PayloadData == null)
-            {
-                dataFrame.PayloadData = new ByteBlock();
-            }
-            dataFrame.PayloadData.Write(data);
-            return dataFrame;
+            dataFrame.PayloadData = new ByteBlock();
         }
+        dataFrame.PayloadData.Write(data);
+        return dataFrame;
+    }
 
-        /// <summary>
-        /// 追加二进制流
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <param name="buffer"></param>
-        /// <param name="offset"></param>
-        /// <param name="length"></param>
-        /// <returns></returns>
-        public static WSDataFrame AppendBinary(this WSDataFrame dataFrame, byte[] buffer, int offset, int length)
+    /// <summary>
+    /// 追加二进制流
+    /// </summary>
+    /// <param name="dataFrame"></param>
+    /// <param name="buffer"></param>
+    /// <param name="offset"></param>
+    /// <param name="length"></param>
+    /// <returns></returns>
+    public static WSDataFrame AppendBinary(this WSDataFrame dataFrame, byte[] buffer, int offset, int length)
+    {
+        dataFrame.Opcode = WSDataType.Binary;
+        if (dataFrame.PayloadData == null)
         {
-            dataFrame.Opcode = WSDataType.Binary;
-            if (dataFrame.PayloadData == null)
-            {
-                dataFrame.PayloadData = new ByteBlock();
-            }
-            dataFrame.PayloadData.Write(buffer, offset, length);
-            return dataFrame;
+            dataFrame.PayloadData = new ByteBlock();
         }
+        dataFrame.PayloadData.Write(buffer, offset, length);
+        return dataFrame;
+    }
 
-        /// <summary>
-        /// 构建请求数据（含Make）
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <param name="byteBlock"></param>
-        /// <returns></returns>
-        public static bool BuildRequest(this WSDataFrame dataFrame, ByteBlock byteBlock)
+    /// <summary>
+    /// 构建请求数据（含Make）
+    /// </summary>
+    /// <param name="dataFrame"></param>
+    /// <param name="byteBlock"></param>
+    /// <returns></returns>
+    public static bool BuildRequest(this WSDataFrame dataFrame, ByteBlock byteBlock)
+    {
+        dataFrame.FIN = true;
+        dataFrame.Mask = true;
+        if (dataFrame.MaskingKey == null)
         {
-            dataFrame.FIN = true;
-            dataFrame.Mask = true;
-            if (dataFrame.MaskingKey == null)
-            {
-                dataFrame.SetMaskString("RRQM");
-            }
-            return dataFrame.Build(byteBlock, true);
+            dataFrame.SetMaskString("RRQM");
         }
+        return dataFrame.Build(byteBlock, true);
+    }
 
-        /// <summary>
-        /// 构建请求数据（含Make）
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <returns></returns>
-        public static byte[] BuildRequestToBytes(this WSDataFrame dataFrame)
+    /// <summary>
+    /// 构建请求数据（含Make）
+    /// </summary>
+    /// <param name="dataFrame"></param>
+    /// <returns></returns>
+    public static byte[] BuildRequestToBytes(this WSDataFrame dataFrame)
+    {
+        dataFrame.FIN = true;
+        dataFrame.Mask = true;
+        if (dataFrame.MaskingKey == null)
         {
-            dataFrame.FIN = true;
-            dataFrame.Mask = true;
-            if (dataFrame.MaskingKey == null)
-            {
-                dataFrame.SetMaskString("RRQM");
-            }
-            using (ByteBlock byteBlock = new ByteBlock())
-            {
-                dataFrame.Build(byteBlock, true);
-                byte[] data = byteBlock.ToArray();
-                return data;
-            }
+            dataFrame.SetMaskString("RRQM");
         }
-
-        /// <summary>
-        /// 构建响应数据（无Make）
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <param name="byteBlock"></param>
-        /// <returns></returns>
-        public static bool BuildResponse(this WSDataFrame dataFrame, ByteBlock byteBlock)
+        using (ByteBlock byteBlock = new ByteBlock())
         {
-            dataFrame.FIN = true;
-
-            return dataFrame.Build(byteBlock, false);
+            dataFrame.Build(byteBlock, true);
+            byte[] data = byteBlock.ToArray();
+            return data;
         }
+    }
 
-        /// <summary>
-        /// 构建响应数据（无Make）
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <returns></returns>
-        public static byte[] BuildResponseToBytes(this WSDataFrame dataFrame)
+    /// <summary>
+    /// 构建响应数据（无Make）
+    /// </summary>
+    /// <param name="dataFrame"></param>
+    /// <param name="byteBlock"></param>
+    /// <returns></returns>
+    public static bool BuildResponse(this WSDataFrame dataFrame, ByteBlock byteBlock)
+    {
+        dataFrame.FIN = true;
+
+        return dataFrame.Build(byteBlock, false);
+    }
+
+    /// <summary>
+    /// 构建响应数据（无Make）
+    /// </summary>
+    /// <param name="dataFrame"></param>
+    /// <returns></returns>
+    public static byte[] BuildResponseToBytes(this WSDataFrame dataFrame)
+    {
+        dataFrame.FIN = true;
+
+        using (ByteBlock byteBlock = new ByteBlock())
         {
-            dataFrame.FIN = true;
-
-            using (ByteBlock byteBlock = new ByteBlock())
-            {
-                dataFrame.Build(byteBlock, false);
-                byte[] data = byteBlock.ToArray();
-                return data;
-            }
+            dataFrame.Build(byteBlock, false);
+            byte[] data = byteBlock.ToArray();
+            return data;
         }
+    }
 
-        /// <summary>
-        /// 设置Mask。
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <param name="mask"></param>
-        /// <returns></returns>
-        public static WSDataFrame SetMaskString(this WSDataFrame dataFrame, string mask)
+    /// <summary>
+    /// 设置Mask。
+    /// </summary>
+    /// <param name="dataFrame"></param>
+    /// <param name="mask"></param>
+    /// <returns></returns>
+    public static WSDataFrame SetMaskString(this WSDataFrame dataFrame, string mask)
+    {
+        byte[] masks = Encoding.UTF8.GetBytes(mask);
+        if (masks.Length != 4)
         {
-            byte[] masks = Encoding.UTF8.GetBytes(mask);
-            if (masks.Length != 4)
-            {
-                throw new OverlengthException("Mask只能为ASCII，且只能为四位。");
-            }
-            dataFrame.MaskingKey = masks;
-            return dataFrame;
+            throw new OverlengthException("Mask只能为ASCII，且只能为四位。");
         }
+        dataFrame.MaskingKey = masks;
+        return dataFrame;
+    }
 
-        /// <summary>
-        /// 当<see cref="WSDataType.Text"/>时，转换为Text消息。
-        /// </summary>
-        /// <param name="dataFrame"></param>
-        /// <param name="encoding"></param>
-        /// <returns></returns>
-        public static string ToText(this WSDataFrame dataFrame, Encoding encoding = default)
-        {
-            return (encoding == default ? Encoding.UTF8 : encoding).GetString(dataFrame.PayloadData.Buffer, 0, dataFrame.PayloadLength);
-        }
+    /// <summary>
+    /// 当<see cref="WSDataType.Text"/>时，转换为Text消息。
+    /// </summary>
+    /// <param name="dataFrame"></param>
+    /// <param name="encoding"></param>
+    /// <returns></returns>
+    public static string ToText(this WSDataFrame dataFrame, Encoding encoding = default)
+    {
+        return (encoding == default ? Encoding.UTF8 : encoding).GetString(dataFrame.PayloadData.Buffer, 0, dataFrame.PayloadLength);
     }
 }

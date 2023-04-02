@@ -15,131 +15,130 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 对象池
+/// </summary>
+/// <typeparam name="T"></typeparam>
+public class ObjectPool<T> : IObjectPool where T : IPoolObject
 {
+    private readonly ConcurrentQueue<T> m_queue = new ConcurrentQueue<T>();
+
+    private bool m_autoCreate = true;
+
+    private int m_freeSize;
+
     /// <summary>
-    /// 对象池
+    /// 构造函数
     /// </summary>
-    /// <typeparam name="T"></typeparam>
-    public class ObjectPool<T> : IObjectPool where T : IPoolObject
+    /// <param name="capacity"></param>
+    public ObjectPool(int capacity)
     {
-        private readonly ConcurrentQueue<T> m_queue = new ConcurrentQueue<T>();
+        Capacity = capacity;
+    }
 
-        private bool m_autoCreate = true;
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    public ObjectPool()
+    {
+    }
 
-        private int m_freeSize;
+    /// <summary>
+    /// 是否自动生成
+    /// </summary>
+    public bool AutoCreate
+    {
+        get => m_autoCreate;
+        set => m_autoCreate = value;
+    }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        /// <param name="capacity"></param>
-        public ObjectPool(int capacity)
+    /// <summary>
+    /// 对象池容量
+    /// </summary>
+    public int Capacity { get; set; }
+
+    /// <summary>
+    /// 可使用（创建）数量
+    /// </summary>
+    public int FreeSize => m_freeSize;
+
+    /// <summary>
+    /// 清除池中所有对象
+    /// </summary>
+    public void Clear()
+    {
+        while (m_queue.TryDequeue(out _))
         {
-            Capacity = capacity;
         }
+    }
 
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public ObjectPool()
+    /// <summary>
+    /// 注销对象
+    /// </summary>
+    /// <param name="t"></param>
+    public void DestroyObject(T t)
+    {
+        t.Destroy();
+        if (m_freeSize < Capacity)
         {
+            Interlocked.Increment(ref m_freeSize);
+            m_queue.Enqueue(t);
         }
+    }
 
-        /// <summary>
-        /// 是否自动生成
-        /// </summary>
-        public bool AutoCreate
+    /// <summary>
+    /// 释放对象
+    /// </summary>
+    public void Dispose()
+    {
+        Clear();
+    }
+
+    /// <summary>
+    /// 获取所有对象
+    /// </summary>
+    /// <returns></returns>
+    public T[] GetAllObject()
+    {
+        List<T> ts = new List<T>();
+        while (m_queue.TryDequeue(out T t))
         {
-            get => m_autoCreate;
-            set => m_autoCreate = value;
+            ts.Add(t);
         }
+        return ts.ToArray();
+    }
 
-        /// <summary>
-        /// 对象池容量
-        /// </summary>
-        public int Capacity { get; set; }
-
-        /// <summary>
-        /// 可使用（创建）数量
-        /// </summary>
-        public int FreeSize => m_freeSize;
-
-        /// <summary>
-        /// 清除池中所有对象
-        /// </summary>
-        public void Clear()
+    /// <summary>
+    /// 获取对象T
+    /// </summary>
+    /// <returns></returns>
+    public T GetObject()
+    {
+        if (m_queue.TryDequeue(out T t))
         {
-            while (m_queue.TryDequeue(out _))
-            {
-            }
-        }
-
-        /// <summary>
-        /// 注销对象
-        /// </summary>
-        /// <param name="t"></param>
-        public void DestroyObject(T t)
-        {
-            t.Destroy();
-            if (m_freeSize < Capacity)
-            {
-                Interlocked.Increment(ref m_freeSize);
-                m_queue.Enqueue(t);
-            }
-        }
-
-        /// <summary>
-        /// 释放对象
-        /// </summary>
-        public void Dispose()
-        {
-            Clear();
-        }
-
-        /// <summary>
-        /// 获取所有对象
-        /// </summary>
-        /// <returns></returns>
-        public T[] GetAllObject()
-        {
-            List<T> ts = new List<T>();
-            while (m_queue.TryDequeue(out T t))
-            {
-                ts.Add(t);
-            }
-            return ts.ToArray();
-        }
-
-        /// <summary>
-        /// 获取对象T
-        /// </summary>
-        /// <returns></returns>
-        public T GetObject()
-        {
-            if (m_queue.TryDequeue(out T t))
-            {
-                t.Recreate();
-                t.NewCreate = false;
-                Interlocked.Decrement(ref m_freeSize);
-                return t;
-            }
-            if (m_autoCreate)
-            {
-                t = (T)Activator.CreateInstance(typeof(T));
-                t.Create();
-                t.NewCreate = true;
-            }
+            t.Recreate();
+            t.NewCreate = false;
+            Interlocked.Decrement(ref m_freeSize);
             return t;
         }
-
-        /// <summary>
-        /// 预获取
-        /// </summary>
-        /// <returns></returns>
-        public T PreviewGetObject()
+        if (m_autoCreate)
         {
-            m_queue.TryPeek(out T t);
-            return t;
+            t = (T)Activator.CreateInstance(typeof(T));
+            t.Create();
+            t.NewCreate = true;
         }
+        return t;
+    }
+
+    /// <summary>
+    /// 预获取
+    /// </summary>
+    /// <returns></returns>
+    public T PreviewGetObject()
+    {
+        m_queue.TryPeek(out T t);
+        return t;
     }
 }

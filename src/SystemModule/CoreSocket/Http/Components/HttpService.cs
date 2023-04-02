@@ -13,19 +13,18 @@
 
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http
-{
-    /// <summary>
-    /// HTTP/HTTPS服务器
-    /// </summary>
-    public class HttpService<TClient> : TcpService<TClient>, IHttpService where TClient : HttpSocketClient
-    {
-    }
+namespace TouchSocket.Http;
 
-    /// <summary>
-    /// HTTP/HTTPS服务器
-    /// </summary>
-    public class HttpService : HttpService<HttpSocketClient>
-    {
-    }
+/// <summary>
+/// HTTP/HTTPS服务器
+/// </summary>
+public class HttpService<TClient> : TcpService<TClient>, IHttpService where TClient : HttpSocketClient
+{
+}
+
+/// <summary>
+/// HTTP/HTTPS服务器
+/// </summary>
+public class HttpService : HttpService<HttpSocketClient>
+{
 }

@@ -1,53 +1,52 @@
 ﻿using System;
 using System.Buffers;
 
-namespace SystemModule.MemoryPool
+namespace SystemModule.MemoryPool;
+
+public sealed partial class FixedLengthOwner<T> : IMemoryOwner<T>
 {
-    public sealed partial class FixedLengthOwner<T> : IMemoryOwner<T>
+    private T[] _array;
+    private readonly int _size;
+    private readonly Memory<T> memory;
+
+    public FixedLengthOwner(int size)
     {
-        private T[] _array;
-        private readonly int _size;
-        private Memory<T> memory;
+        _array = ArrayPool<T>.Shared.Rent(size);
+        _size = size;
+        memory = new Memory<T>(_array, 0, size);
+    }
 
-        public FixedLengthOwner(int size)
+    public T[] Buffer
+    {
+        get
         {
-            _array = ArrayPool<T>.Shared.Rent(size);
-            _size = size;
-            memory = new Memory<T>(_array, 0, size);
+            return _array;
         }
+    }
 
-        public T[] Buffer
+    public Memory<T> Memory
+    {
+        get
         {
-            get
-            {
-                return _array;
-            }
+            return memory;
+            //var array = _array;
+            //if (array == null)
+            //{
+            //    throw new ObjectDisposedException(nameof(FixedLengthOwner<T>));
+            //}
+
+            //return new Memory<T>(array, 0, _size);
         }
+    }
 
-        public Memory<T> Memory
-        {
-            get
-            {
-                return memory;
-                //var array = _array;
-                //if (array == null)
-                //{
-                //    throw new ObjectDisposedException(nameof(FixedLengthOwner<T>));
-                //}
+    public IMemoryOwner<T> GetUnderlyingBuffer(bool own = false) => new UnderlyingOwner(this, own);
 
-                //return new Memory<T>(array, 0, _size);
-            }
-        }
+    public void Dispose()
+    {
+        T[] array = _array;
+        if (array == null) return;
 
-        public IMemoryOwner<T> GetUnderlyingBuffer(bool own = false) => new UnderlyingOwner(this, own);
-
-        public void Dispose()
-        {
-            var array = _array;
-            if (array == null) return;
-
-            _array = null;
-            ArrayPool<T>.Shared.Return(array);
-        }
+        _array = null;
+        ArrayPool<T>.Shared.Return(array);
     }
 }

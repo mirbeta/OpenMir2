@@ -13,35 +13,34 @@
 using TouchSocket.Core;
 using TouchSocket.Http.WebSockets;
 
-namespace TouchSocket.Sockets
+namespace TouchSocket.Sockets;
+
+/// <summary>
+/// WebSocketConfigExtensions
+/// </summary>
+public static class WebSocketConfigExtensions
 {
     /// <summary>
-    /// WebSocketConfigExtensions
+    /// 构建WebSocketClient类客户端，并连接
     /// </summary>
-    public static class WebSocketConfigExtensions
+    /// <typeparam name="TClient"></typeparam>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    public static TClient BuildWithWebSocketClient<TClient>(this TouchSocketConfig config) where TClient : IWebSocketClient
     {
-        /// <summary>
-        /// 构建WebSocketClient类客户端，并连接
-        /// </summary>
-        /// <typeparam name="TClient"></typeparam>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public static TClient BuildWithWebSocketClient<TClient>(this TouchSocketConfig config) where TClient : IWebSocketClient
-        {
-            TClient client = config.Container.Resolve<TClient>();
-            client.Setup(config);
-            client.Connect();
-            return client;
-        }
+        TClient client = config.Container.Resolve<TClient>();
+        client.Setup(config);
+        client.Connect();
+        return client;
+    }
 
-        /// <summary>
-        /// 构建WebSocketClient类客户端，并连接
-        /// </summary>
-        /// <param name="config"></param>
-        /// <returns></returns>
-        public static WebSocketClient BuildWithWebSocketClient(this TouchSocketConfig config)
-        {
-            return BuildWithWebSocketClient<WebSocketClient>(config);
-        }
+    /// <summary>
+    /// 构建WebSocketClient类客户端，并连接
+    /// </summary>
+    /// <param name="config"></param>
+    /// <returns></returns>
+    public static WebSocketClient BuildWithWebSocketClient(this TouchSocketConfig config)
+    {
+        return BuildWithWebSocketClient<WebSocketClient>(config);
     }
 }

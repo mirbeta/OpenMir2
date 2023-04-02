@@ -11,19 +11,19 @@ namespace SystemModule.Extensions
 
         public static byte[] ReadDeCodeBytes(this BinaryReader binaryReader, int size)
         {
-            var buffLen = 0;
-            var data = binaryReader.ReadBytes(size);
+            int buffLen = 0;
+            byte[] data = binaryReader.ReadBytes(size);
             return EncryptUtil.Decode(data, data.Length, ref buffLen);
         }
 
         public static string ReadPascalString(this BinaryReader binaryReader, int size)
         {
-            var packegeLen = binaryReader.ReadByte();
+            byte packegeLen = binaryReader.ReadByte();
             if (size < packegeLen)
             {
                 size = packegeLen;
             }
-            var strbuff = binaryReader.ReadBytes(size);
+            byte[] strbuff = binaryReader.ReadBytes(size);
             return HUtil32.GetString(strbuff, 0, packegeLen);
         }
     }

@@ -13,77 +13,76 @@
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// http辅助类
+/// </summary>
+public class HttpSocketClient : SocketClient, IHttpSocketClient
 {
     /// <summary>
-    /// http辅助类
+    /// 构造函数
     /// </summary>
-    public class HttpSocketClient : SocketClient, IHttpSocketClient
+    public HttpSocketClient()
     {
-        /// <summary>
-        /// 构造函数
-        /// </summary>
-        public HttpSocketClient()
+        Protocol = Protocol.Http;
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="e"></param>
+    protected override void OnConnecting(OperationEventArgs e)
+    {
+        SetDataHandlingAdapter(new HttpServerDataHandlingAdapter());
+        base.OnConnecting(e);
+    }
+
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="byteBlock"></param>
+    /// <param name="requestInfo"></param>
+    protected override void HandleReceivedData(ByteBlock byteBlock, IRequestInfo requestInfo)
+    {
+        if (requestInfo is HttpRequest request)
         {
-            Protocol = Protocol.Http;
+            OnReceivedHttpRequest(request);
         }
+    }
 
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="e"></param>
-        protected override void OnConnecting(OperationEventArgs e)
+    /// <summary>
+    /// 当收到到Http请求时。覆盖父类方法将不会触发插件。
+    /// </summary>
+    protected virtual void OnReceivedHttpRequest(HttpRequest request)
+    {
+        HttpContextEventArgs args = new HttpContextEventArgs(new HttpContext(request));
+
+        switch (request.Method)
         {
-            SetDataHandlingAdapter(new HttpServerDataHandlingAdapter());
-            base.OnConnecting(e);
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="byteBlock"></param>
-        /// <param name="requestInfo"></param>
-        protected override void HandleReceivedData(ByteBlock byteBlock, IRequestInfo requestInfo)
-        {
-            if (requestInfo is HttpRequest request)
-            {
-                OnReceivedHttpRequest(request);
-            }
-        }
-
-        /// <summary>
-        /// 当收到到Http请求时。覆盖父类方法将不会触发插件。
-        /// </summary>
-        protected virtual void OnReceivedHttpRequest(HttpRequest request)
-        {
-            HttpContextEventArgs args = new HttpContextEventArgs(new HttpContext(request));
-
-            switch (request.Method)
-            {
-                case TouchSocketHttpUtility.Get:
-                    {
-                        PluginsManager.Raise<IHttpPlugin>("OnGet", this, args);
-                        break;
-                    }
-                case TouchSocketHttpUtility.Post:
-                    {
-                        PluginsManager.Raise<IHttpPlugin>("OnPost", this, args);
-                        break;
-                    }
-                case TouchSocketHttpUtility.Put:
-                    {
-                        PluginsManager.Raise<IHttpPlugin>("OnPut", this, args);
-                        break;
-                    }
-                case TouchSocketHttpUtility.Delete:
-                    {
-                        PluginsManager.Raise<IHttpPlugin>("OnDelete", this, args);
-                        break;
-                    }
-                default:
-                    PluginsManager.Raise<IHttpPlugin>("OnReceivedOtherHttpRequest", this, args);
+            case TouchSocketHttpUtility.Get:
+                {
+                    PluginsManager.Raise<IHttpPlugin>("OnGet", this, args);
                     break;
-            }
+                }
+            case TouchSocketHttpUtility.Post:
+                {
+                    PluginsManager.Raise<IHttpPlugin>("OnPost", this, args);
+                    break;
+                }
+            case TouchSocketHttpUtility.Put:
+                {
+                    PluginsManager.Raise<IHttpPlugin>("OnPut", this, args);
+                    break;
+                }
+            case TouchSocketHttpUtility.Delete:
+                {
+                    PluginsManager.Raise<IHttpPlugin>("OnDelete", this, args);
+                    break;
+                }
+            default:
+                PluginsManager.Raise<IHttpPlugin>("OnReceivedOtherHttpRequest", this, args);
+                break;
         }
     }
 }

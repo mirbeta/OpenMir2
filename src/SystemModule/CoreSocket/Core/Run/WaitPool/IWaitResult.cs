@@ -11,26 +11,25 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 等待返回类
+/// </summary>
+public interface IWaitResult
 {
     /// <summary>
-    /// 等待返回类
+    /// 消息
     /// </summary>
-    public interface IWaitResult
-    {
-        /// <summary>
-        /// 消息
-        /// </summary>
-        string Message { get; set; }
+    string Message { get; set; }
 
-        /// <summary>
-        /// 标记
-        /// </summary>
-        long Sign { get; set; }
+    /// <summary>
+    /// 标记
+    /// </summary>
+    long Sign { get; set; }
 
-        /// <summary>
-        /// 状态
-        /// </summary>
-        byte Status { get; set; }
-    }
+    /// <summary>
+    /// 状态
+    /// </summary>
+    byte Status { get; set; }
 }

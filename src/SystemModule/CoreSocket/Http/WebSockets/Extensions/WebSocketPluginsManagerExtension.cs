@@ -12,29 +12,28 @@
 //------------------------------------------------------------------------------
 using TouchSocket.Http.WebSockets;
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// WebSocketPluginsManagerExtension
+/// </summary>
+public static class WebSocketPluginsManagerExtension
 {
     /// <summary>
-    /// WebSocketPluginsManagerExtension
+    /// 使用WebSocket插件
     /// </summary>
-    public static class WebSocketPluginsManagerExtension
+    /// <returns>插件类型实例</returns>
+    public static WebSocketServerPlugin UseWebSocket(this IPluginsManager pluginsManager)
     {
-        /// <summary>
-        /// 使用WebSocket插件
-        /// </summary>
-        /// <returns>插件类型实例</returns>
-        public static WebSocketServerPlugin UseWebSocket(this IPluginsManager pluginsManager)
-        {
-            return pluginsManager.Add<WebSocketServerPlugin>();
-        }
+        return pluginsManager.Add<WebSocketServerPlugin>();
+    }
 
-        /// <summary>
-        /// 使用WebSocket心跳插件（仅客户端生效）
-        /// </summary>
-        /// <returns>插件类型实例</returns>
-        public static WebSocketHeartbeatPlugin UseWebSocketHeartbeat(this IPluginsManager pluginsManager)
-        {
-            return pluginsManager.Add<WebSocketHeartbeatPlugin>();
-        }
+    /// <summary>
+    /// 使用WebSocket心跳插件（仅客户端生效）
+    /// </summary>
+    /// <returns>插件类型实例</returns>
+    public static WebSocketHeartbeatPlugin UseWebSocketHeartbeat(this IPluginsManager pluginsManager)
+    {
+        return pluginsManager.Add<WebSocketHeartbeatPlugin>();
     }
 }

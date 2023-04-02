@@ -11,31 +11,30 @@
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// 对象池单位接口
+/// </summary>
+public interface IPoolObject
 {
     /// <summary>
-    /// 对象池单位接口
+    /// 是否为新建对象
     /// </summary>
-    public interface IPoolObject
-    {
-        /// <summary>
-        /// 是否为新建对象
-        /// </summary>
-        bool NewCreate { get; set; }
+    bool NewCreate { get; set; }
 
-        /// <summary>
-        /// 初创建对象
-        /// </summary>
-        void Create();
+    /// <summary>
+    /// 初创建对象
+    /// </summary>
+    void Create();
 
-        /// <summary>
-        /// 重新创建对象
-        /// </summary>
-        void Recreate();
+    /// <summary>
+    /// 重新创建对象
+    /// </summary>
+    void Recreate();
 
-        /// <summary>
-        /// 销毁对象
-        /// </summary>
-        void Destroy();
-    }
+    /// <summary>
+    /// 销毁对象
+    /// </summary>
+    void Destroy();
 }

@@ -12,12 +12,11 @@
 //------------------------------------------------------------------------------
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http
+namespace TouchSocket.Http;
+
+/// <summary>
+/// HttpService接口
+/// </summary>
+public interface IHttpService : ITcpService
 {
-    /// <summary>
-    /// HttpService接口
-    /// </summary>
-    public interface IHttpService : ITcpService
-    {
-    }
 }

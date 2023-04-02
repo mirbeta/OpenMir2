@@ -1,62 +1,57 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace TouchSocket.Core
+namespace TouchSocket.Core;
+
+/// <summary>
+/// DynamicMethodMemberAccessor
+/// </summary>
+public class DynamicMethodMemberAccessor : IMemberAccessor
 {
+    private static readonly ConcurrentDictionary<Type, IMemberAccessor> classAccessors = new ConcurrentDictionary<Type, IMemberAccessor>();
+
     /// <summary>
-    /// DynamicMethodMemberAccessor
+    /// 获取属性
     /// </summary>
-    public class DynamicMethodMemberAccessor : IMemberAccessor
+    public Func<Type, PropertyInfo[]> OnGetProperties { get; set; }
+
+    /// <summary>
+    /// 获取字段
+    /// </summary>
+    public Func<Type, FieldInfo[]> OnGetFieldInfes { get; set; }
+
+    /// <inheritdoc/>
+    public object GetValue(object instance, string memberName)
     {
-        private static ConcurrentDictionary<Type, IMemberAccessor> classAccessors = new  ConcurrentDictionary<Type, IMemberAccessor>();
+        return FindClassAccessor(instance).GetValue(instance, memberName);
+    }
 
-        /// <summary>
-        /// 获取属性
-        /// </summary>
-        public Func<Type, PropertyInfo[]> OnGetProperties { get; set; }
+    /// <inheritdoc/>
+    public void SetValue(object instance, string memberName, object newValue)
+    {
+        FindClassAccessor(instance).SetValue(instance, memberName, newValue);
+    }
 
-        /// <summary>
-        /// 获取字段
-        /// </summary>
-        public Func<Type, FieldInfo[]> OnGetFieldInfes { get; set; }
-
-        /// <inheritdoc/>
-        public object GetValue(object instance, string memberName)
+    private IMemberAccessor FindClassAccessor(object instance)
+    {
+        Type typekey = instance.GetType();
+        if (!classAccessors.TryGetValue(typekey, out IMemberAccessor classAccessor))
         {
-            return FindClassAccessor(instance).GetValue(instance, memberName);
-        }
-
-        /// <inheritdoc/>
-        public void SetValue(object instance, string memberName, object newValue)
-        {
-            FindClassAccessor(instance).SetValue(instance, memberName, newValue);
-        }
-
-        private IMemberAccessor FindClassAccessor(object instance)
-        {
-            var typekey = instance.GetType();
-            if (!classAccessors.TryGetValue(typekey, out IMemberAccessor classAccessor))
+            MemberAccessor memberAccessor = new MemberAccessor(instance.GetType());
+            if (this.OnGetFieldInfes != null)
             {
-                MemberAccessor memberAccessor = new MemberAccessor(instance.GetType());
-                if (this.OnGetFieldInfes != null)
-                {
-                    memberAccessor.OnGetFieldInfes = this.OnGetFieldInfes;
-                }
-
-                if (this.OnGetProperties != null)
-                {
-                    memberAccessor.OnGetProperties = this.OnGetProperties;
-                }
-                memberAccessor.Build();
-                classAccessor = memberAccessor;
-                classAccessors.TryAdd(typekey, classAccessor);
+                memberAccessor.OnGetFieldInfes = this.OnGetFieldInfes;
             }
-            return classAccessor;
+
+            if (this.OnGetProperties != null)
+            {
+                memberAccessor.OnGetProperties = this.OnGetProperties;
+            }
+            memberAccessor.Build();
+            classAccessor = memberAccessor;
+            classAccessors.TryAdd(typekey, classAccessor);
         }
+        return classAccessor;
     }
 }

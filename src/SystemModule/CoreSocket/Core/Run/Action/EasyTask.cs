@@ -15,138 +15,137 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace TouchSocket.Core
-{
-    /// <summary>
-    /// 易用组件
-    /// </summary>
-    public class EasyTask
-    {
-        static EasyTask()
-        {
-            InitCompletedTask();
-        }
+namespace TouchSocket.Core;
 
-        private static readonly ConcurrentDictionary<object, Timer> timers = new ConcurrentDictionary<object, Timer>();
+/// <summary>
+/// 易用组件
+/// </summary>
+public class EasyTask
+{
+    static EasyTask()
+    {
+        InitCompletedTask();
+    }
+
+    private static readonly ConcurrentDictionary<object, Timer> timers = new ConcurrentDictionary<object, Timer>();
 
 #if DEBUG
 
-        /// <summary>
-        /// Timers
-        /// </summary>
-        public static ConcurrentDictionary<object, Timer> Timers => timers;
+    /// <summary>
+    /// Timers
+    /// </summary>
+    public static ConcurrentDictionary<object, Timer> Timers => timers;
 
 #endif
 
-        /// <summary>
-        /// 延迟执行
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="delayTimeSpan"></param>
-        public static void DelayRun(TimeSpan delayTimeSpan, Action action)
-        {
-            DelayRun(delayTimeSpan.Milliseconds, action);
-        }
+    /// <summary>
+    /// 延迟执行
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="delayTimeSpan"></param>
+    public static void DelayRun(TimeSpan delayTimeSpan, Action action)
+    {
+        DelayRun(delayTimeSpan.Milliseconds, action);
+    }
 
-        /// <summary>
-        /// 延迟执行
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="delayTimeSpan"></param>
-        /// <param name="status"></param>
-        public static void DelayRun<T>(TimeSpan delayTimeSpan, T status, Action<T> action)
-        {
-            DelayRun(delayTimeSpan.Milliseconds, status, action);
-        }
+    /// <summary>
+    /// 延迟执行
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="delayTimeSpan"></param>
+    /// <param name="status"></param>
+    public static void DelayRun<T>(TimeSpan delayTimeSpan, T status, Action<T> action)
+    {
+        DelayRun(delayTimeSpan.Milliseconds, status, action);
+    }
 
-        /// <summary>
-        /// 延迟执行
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="delay"></param>
-        public static void DelayRun(int delay, Action action)
+    /// <summary>
+    /// 延迟执行
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="delay"></param>
+    public static void DelayRun(int delay, Action action)
+    {
+        object obj = new object();
+        Timer timer = new Timer((o) =>
         {
-            object obj = new object();
-            Timer timer = new Timer((o) =>
+            if (timers.TryRemove(o, out Timer timer1))
             {
-                if (timers.TryRemove(o, out Timer timer1))
-                {
-                    timer1.Dispose();
-                }
-                action?.Invoke();
-            }, obj, delay, Timeout.Infinite);
-            timers.TryAdd(obj, timer);
-        }
+                timer1.Dispose();
+            }
+            action?.Invoke();
+        }, obj, delay, Timeout.Infinite);
+        timers.TryAdd(obj, timer);
+    }
 
-        /// <summary>
-        /// 延迟执行
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="delay"></param>
-        /// <param name="status"></param>
-        public static void DelayRun<T>(int delay, T status, Action<T> action)
+    /// <summary>
+    /// 延迟执行
+    /// </summary>
+    /// <param name="action"></param>
+    /// <param name="delay"></param>
+    /// <param name="status"></param>
+    public static void DelayRun<T>(int delay, T status, Action<T> action)
+    {
+        object obj = new object();
+        Timer timer = new Timer((o) =>
         {
-            object obj = new object();
-            Timer timer = new Timer((o) =>
+            if (timers.TryRemove(o, out Timer timer1))
             {
-                if (timers.TryRemove(o, out Timer timer1))
-                {
-                    timer1.Dispose();
-                }
-                action?.Invoke(status);
-            }, obj, delay, Timeout.Infinite);
-            timers.TryAdd(obj, timer);
-        }
+                timer1.Dispose();
+            }
+            action?.Invoke(status);
+        }, obj, delay, Timeout.Infinite);
+        timers.TryAdd(obj, timer);
+    }
 
-        /// <summary>
-        /// Task异步
-        /// </summary>
-        /// <param name="statu"></param>
-        /// <param name="action"></param>
-        public static Task Run<T>(T statu, Action<T> action)
+    /// <summary>
+    /// Task异步
+    /// </summary>
+    /// <param name="statu"></param>
+    /// <param name="action"></param>
+    public static Task Run<T>(T statu, Action<T> action)
+    {
+        return Task.Factory.StartNew(() =>
         {
-            return Task.Factory.StartNew(() =>
-            {
-                action.Invoke(statu);
-            });
-        }
+            action.Invoke(statu);
+        });
+    }
 
-        /// <summary>
-        /// Task异步
-        /// </summary>
-        /// <typeparam name="TResult"></typeparam>
-        /// <param name="function"></param>
-        /// <returns></returns>
-        public static Task<TResult> Run<TResult>(Func<TResult> function)
-        {
-            return Task.Factory.StartNew(function);
-        }
+    /// <summary>
+    /// Task异步
+    /// </summary>
+    /// <typeparam name="TResult"></typeparam>
+    /// <param name="function"></param>
+    /// <returns></returns>
+    public static Task<TResult> Run<TResult>(Func<TResult> function)
+    {
+        return Task.Factory.StartNew(function);
+    }
 
-        /// <summary>
-        /// Task异步
-        /// </summary>
-        /// <param name="action"></param>
-        /// <returns></returns>
-        public static Task Run(Action action)
-        {
-            return Task.Factory.StartNew(action);
-        }
+    /// <summary>
+    /// Task异步
+    /// </summary>
+    /// <param name="action"></param>
+    /// <returns></returns>
+    public static Task Run(Action action)
+    {
+        return Task.Factory.StartNew(action);
+    }
 
-        /// <summary>
-        /// 已完成的Task
-        /// </summary>
-        public static Task CompletedTask { get; private set; }
+    /// <summary>
+    /// 已完成的Task
+    /// </summary>
+    public static Task CompletedTask { get; private set; }
 
-        private static void InitCompletedTask()
-        {
+    private static void InitCompletedTask()
+    {
 #if NET45_OR_GREATER
             Task task = new Task(() => { });
             task.Start();
             task.Wait();
             CompletedTask = task;
 #else
-            CompletedTask = Task.CompletedTask;
+        CompletedTask = Task.CompletedTask;
 #endif
-        }
     }
 }

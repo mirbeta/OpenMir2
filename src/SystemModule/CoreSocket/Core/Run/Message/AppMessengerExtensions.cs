@@ -1,18 +1,7 @@
-//------------------------------------------------------------------------------
-//  此代码版权（除特别声明或在XREF结尾的命名空间的代码）归作者本人若汝棋茗所有
-//  源代码使用协议遵循本仓库的开源协议及附加协议，若本仓库没有设置，则按MIT开源协议授权
-//  CSDN博客：https://blog.csdn.net/qq_40374647
-//  哔哩哔哩视频：https://space.bilibili.com/94253567
-//  Gitee源代码仓库：https://gitee.com/RRQM_Home
-//  Github源代码仓库：https://github.com/RRQM
-//  API首页：https://www.yuque.com/rrqm/touchsocket/index
-//  交流QQ群：234762506
-//  感谢您的下载和使用
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using SystemModule.Extensions;
 
 namespace TouchSocket.Core
 {
@@ -40,10 +29,10 @@ namespace TouchSocket.Core
         public static void Register(this AppMessenger appMessenger, Type type)
         {
             MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Default);
-            foreach (var method in methods)
+            foreach (MethodInfo method in methods)
             {
                 IEnumerable<Attribute> attributes = method.GetCustomAttributes();
-                foreach (var attribute in attributes)
+                foreach (Attribute attribute in attributes)
                 {
                     if (attribute is AppMessageAttribute att)
                     {
@@ -68,10 +57,10 @@ namespace TouchSocket.Core
         public static void Register(this AppMessenger appMessenger, IMessageObject messageObject)
         {
             MethodInfo[] methods = messageObject.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Default);
-            foreach (var method in methods)
+            foreach (MethodInfo method in methods)
             {
                 IEnumerable<Attribute> attributes = method.GetCustomAttributes();
-                foreach (var attribute in attributes)
+                foreach (Attribute attribute in attributes)
                 {
                     if (attribute is AppMessageAttribute att)
                     {
@@ -297,7 +286,7 @@ namespace TouchSocket.Core
         private static void RegisterDelegate(this AppMessenger appMessenger, string token, Delegate dele)
         {
             IEnumerable<Attribute> attributes = dele.Method.GetCustomAttributes();
-            foreach (var attribute in attributes)
+            foreach (Attribute attribute in attributes)
             {
                 if (attribute is AppMessageAttribute att)
                 {

@@ -1,13 +1,12 @@
-﻿namespace SystemModule.Sockets
+﻿namespace SystemModule.Sockets;
+
+/// <summary>
+/// 异步Socket错误码
+/// </summary>
+public enum AsyncSocketErrorCode
 {
-    /// <summary>
-    /// 异步Socket错误码
-    /// </summary>
-    public enum AsyncSocketErrorCode
-    {
-        ServerStartFailure,
-        ServerAcceptFailure,
-        ClientSocketNoExist,
-        ThrowSocketException
-    };
-}
+    ServerStartFailure,
+    ServerAcceptFailure,
+    ClientSocketNoExist,
+    ThrowSocketException
+};

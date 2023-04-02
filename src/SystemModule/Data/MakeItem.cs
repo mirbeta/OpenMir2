@@ -1,8 +1,7 @@
-﻿namespace SystemModule.Data
+﻿namespace SystemModule.Data;
+
+public class MakeItem
 {
-    public class MakeItem
-    {
-        public string ItemName;
-        public int ItemCount;
-    }
+    public string ItemName;
+    public int ItemCount;
 }

@@ -18,121 +18,120 @@ using NLog;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
-namespace TouchSocket.Http.WebSockets
+namespace TouchSocket.Http.WebSockets;
+
+/// <summary>
+/// WS命令行插件。
+/// </summary>
+public abstract class WSCommandLinePlugin : WebSocketPluginBase
 {
+    private readonly Dictionary<string, Method> pairs = new Dictionary<string, Method>();
+    private readonly Logger m_logger = LogManager.GetCurrentClassLogger();
+
     /// <summary>
-    /// WS命令行插件。
+    /// 字符串转换器，默认支持基础类型和Json。可以自定义。
     /// </summary>
-    public abstract class WSCommandLinePlugin : WebSocketPluginBase
+    public StringConverter Converter { get; }
+
+    /// <summary>
+    /// 是否返回执行异常。
+    /// </summary>
+    public bool ReturnException { get; set; } = true;
+
+    /// <summary>
+    /// 当有执行异常时，不返回异常。
+    /// </summary>
+    /// <returns></returns>
+    public WSCommandLinePlugin NoReturnException()
     {
-        private readonly Dictionary<string, Method> pairs = new Dictionary<string, Method>();
-        private readonly Logger m_logger = LogManager.GetCurrentClassLogger();
+        ReturnException = false;
+        return this;
+    }
 
-        /// <summary>
-        /// 字符串转换器，默认支持基础类型和Json。可以自定义。
-        /// </summary>
-        public StringConverter Converter { get; }
-
-        /// <summary>
-        /// 是否返回执行异常。
-        /// </summary>
-        public bool ReturnException { get; set; } = true;
-
-        /// <summary>
-        /// 当有执行异常时，不返回异常。
-        /// </summary>
-        /// <returns></returns>
-        public WSCommandLinePlugin NoReturnException()
+    /// <summary>
+    /// WSCommandLinePlugin
+    /// </summary>
+    /// <param name="logger"></param>
+    /// <exception cref="ArgumentNullException"></exception>
+    protected WSCommandLinePlugin()
+    {
+        Converter = new StringConverter();
+        IEnumerable<MethodInfo> ms = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(a => a.Name.EndsWith("Command"));
+        foreach (MethodInfo item in ms)
         {
-            ReturnException = false;
-            return this;
+            pairs.Add(item.Name.Replace("Command", string.Empty), new Method(item));
         }
+    }
 
-        /// <summary>
-        /// WSCommandLinePlugin
-        /// </summary>
-        /// <param name="logger"></param>
-        /// <exception cref="ArgumentNullException"></exception>
-        protected WSCommandLinePlugin()
+    /// <summary>
+    /// <inheritdoc/>
+    /// </summary>
+    /// <param name="client"></param>
+    /// <param name="e"></param>
+    protected override void OnHandleWSDataFrame(ITcpClientBase client, WSDataFrameEventArgs e)
+    {
+        if (e.DataFrame.Opcode == WSDataType.Text)
         {
-            Converter = new StringConverter();
-            var ms = GetType().GetMethods(BindingFlags.Public | BindingFlags.Instance).Where(a => a.Name.EndsWith("Command"));
-            foreach (var item in ms)
+            try
             {
-                pairs.Add(item.Name.Replace("Command", string.Empty), new Method(item));
-            }
-        }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        /// <param name="client"></param>
-        /// <param name="e"></param>
-        protected override void OnHandleWSDataFrame(ITcpClientBase client, WSDataFrameEventArgs e)
-        {
-            if (e.DataFrame.Opcode == WSDataType.Text)
-            {
-                try
+                string[] strs = e.DataFrame.ToText().Split(' ');
+                if (strs.Length > 0 && pairs.TryGetValue(strs[0], out Method method))
                 {
-                    string[] strs = e.DataFrame.ToText().Split(' ');
-                    if (strs.Length > 0 && pairs.TryGetValue(strs[0], out Method method))
+                    ParameterInfo[] ps = method.Info.GetParameters();
+                    object[] os = new object[ps.Length];
+                    int index = 0;
+                    for (int i = 0; i < ps.Length; i++)
                     {
-                        var ps = method.Info.GetParameters();
-                        object[] os = new object[ps.Length];
-                        int index = 0;
-                        for (int i = 0; i < ps.Length; i++)
+                        if (ps[i].ParameterType.IsInterface && typeof(ITcpClientBase).IsAssignableFrom(ps[i].ParameterType))
                         {
-                            if (ps[i].ParameterType.IsInterface && typeof(ITcpClientBase).IsAssignableFrom(ps[i].ParameterType))
+                            os[i] = client;
+                        }
+                        else
+                        {
+                            os[i] = Converter.ConvertFrom(strs[index + 1], ps[i].ParameterType);
+                            index++;
+                        }
+                    }
+
+                    e.Handled = true;
+
+                    try
+                    {
+                        object result = method.Invoke(this, os);
+                        if (method.HasReturn)
+                        {
+                            if (client is HttpClient httpClient)
                             {
-                                os[i] = client;
+                                httpClient.SendWithWS(Converter.ConvertTo(result));
                             }
-                            else
+                            else if (client is HttpSocketClient httpSocketClient)
                             {
-                                os[i] = Converter.ConvertFrom(strs[index + 1], ps[i].ParameterType);
-                                index++;
+                                httpSocketClient.SendWithWS(Converter.ConvertTo(result));
                             }
                         }
-
-                        e.Handled = true;
-
-                        try
+                    }
+                    catch (Exception ex)
+                    {
+                        if (ReturnException)
                         {
-                            object result = method.Invoke(this, os);
-                            if (method.HasReturn)
+                            if (client is HttpClient httpClient)
                             {
-                                if (client is HttpClient httpClient)
-                                {
-                                    httpClient.SendWithWS(Converter.ConvertTo(result));
-                                }
-                                else if (client is HttpSocketClient httpSocketClient)
-                                {
-                                    httpSocketClient.SendWithWS(Converter.ConvertTo(result));
-                                }
+                                httpClient.SendWithWS(Converter.ConvertTo(ex.Message));
                             }
-                        }
-                        catch (Exception ex)
-                        {
-                            if (ReturnException)
+                            else if (client is HttpSocketClient httpSocketClient)
                             {
-                                if (client is HttpClient httpClient)
-                                {
-                                    httpClient.SendWithWS(Converter.ConvertTo(ex.Message));
-                                }
-                                else if (client is HttpSocketClient httpSocketClient)
-                                {
-                                    httpSocketClient.SendWithWS(Converter.ConvertTo(ex.Message));
-                                }
+                                httpSocketClient.SendWithWS(Converter.ConvertTo(ex.Message));
                             }
                         }
                     }
                 }
-                catch (Exception ex)
-                {
-                    m_logger.Error(ex);
-                }
             }
-
-            base.OnHandleWSDataFrame(client, e);
+            catch (Exception ex)
+            {
+                m_logger.Error(ex);
+            }
         }
+
+        base.OnHandleWSDataFrame(client, e);
     }
 }
