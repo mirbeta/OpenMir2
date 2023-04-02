@@ -1,4 +1,6 @@
-namespace SystemModule.CoreSocket;
+using SystemModule.CoreSocket;
+
+namespace SystemModule.Plugins;
 
 /// <summary>
 /// 具有插件功能的对象

@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket;
+namespace SystemModule.Plugins;
 
 /// <summary>
 /// 标识该接口应当还会触发异步接口。

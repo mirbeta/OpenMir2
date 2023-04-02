@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket;
+namespace SystemModule.Plugins;
 
 /// <summary>
 /// 插件接口

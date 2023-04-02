@@ -2,7 +2,7 @@
 using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
-using SystemModule.CoreSocket;
+using SystemModule.Plugins;
 
 namespace SystemModule.CoreSocket;
 
