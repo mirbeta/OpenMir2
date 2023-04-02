@@ -18,37 +18,8 @@ namespace TouchSocket.Core
     /// </summary>
     public class TouchSocketConfig : DependencyObject
     {
-        //private bool built;
         private IContainer m_container;
-
         private IPluginsManager m_pluginsManager;
-
-        //ConcurrentQueue<Tuple<Delegate, object[]>> actions = new ConcurrentQueue<Tuple<Delegate, object[]>>();
-
-        ///// <summary>
-        ///// 添加构建委托，该委托会在<see cref="Build"/>时调用。
-        ///// </summary>
-        ///// <param name="action"></param>
-        ///// <param name="ps"></param>
-        //public void AddBuildAction(Delegate action,params object[] ps)
-        //{
-        //    actions.Enqueue(Tuple.Create(action,ps)) ;
-        //}
-
-        ///// <summary>
-        ///// 构建配置
-        ///// </summary>
-        //public void Build()
-        //{
-        //    if (!built)
-        //    {
-        //        built = true;
-        //        while (actions.TryDequeue(out var action))
-        //        {
-        //            action.Item1.DynamicInvoke(action.Item2);
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// 构造函数
