@@ -521,21 +521,6 @@ namespace SystemModule.Sockets.AsyncSocketServer
                 writeEventArgs.UserToken = token;
                 if (buffLen <= _bufferSize)
                 {
-                    //unsafe
-                    //{
-                    //    fixed (byte* src = &buffer[0])
-                    //    {
-                    //        fixed (byte* dest = &writeEventArgs.Buffer[writeEventArgs.Offset])
-                    //        {
-                    //            Buffer.MemoryCopy(
-                    //                source: src,//要复制的字节的地址
-                    //                destination: dest,//目标地址
-                    //                destinationSizeInBytes: buffLen,//目标内存块中可用的字节数
-                    //                sourceBytesToCopy: buffLen//要复制的字节数
-                    //            );
-                    //        }
-                    //    }
-                    //}
                     Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
                     writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffer.Length);
                 }
@@ -550,10 +535,6 @@ namespace SystemModule.Sockets.AsyncSocketServer
                     {
                         _bufferManager.FreeBuffer(writeEventArgs);
                     }
-                    //Array.Copy(buffer, 0, writeEventArgs.Buffer, writeEventArgs.Offset, buffLen);
-                    //writeEventArgs.SetBuffer(writeEventArgs.Buffer, writeEventArgs.Offset, buffLen);
-                    //writeEventArgs.SetBuffer(buffer, 0, buffLen);
-
                     writeEventArgs.SetBuffer(buffer, 0, buffLen);
                 }
                 // 异步发送数据

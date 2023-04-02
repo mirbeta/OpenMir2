@@ -53,10 +53,7 @@ namespace GameGate
                         }
                         finally
                         {
-                            unsafe
-                            {
-                                //NativeMemory.Free(sendPacket.Buffer.ToPointer());
-                            }
+                            GateShare.BytePool.Return(sendPacket.Buffer);
                             GateShare.PacketMessagePool.Return(sendPacket);
                         }
                     }
