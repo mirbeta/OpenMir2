@@ -274,7 +274,6 @@ namespace GameGate.Services
         {
             return Task.Factory.StartNew(async () =>
                {
-                   
                    while (await _messageChannel.Reader.WaitToReadAsync(stoppingToken))
                    {
                        if (_messageChannel.Reader.TryRead(out var message))

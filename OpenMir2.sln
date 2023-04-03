@@ -53,7 +53,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChatSrv", "src\ChatSrv\Chat
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameGateTests", "src\GameGateTests\GameGateTests.csproj", "{27819BB0-4A08-4B78-B426-F12A10E3EDF1}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PluginsSystem", "PluginsSystem", "{DBA65D0F-20CB-4635-BDBD-09C1AF69D19E}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{DBA65D0F-20CB-4635-BDBD-09C1AF69D19E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginEngine", "src\Plugin\PluginSystem\PluginEngine.csproj", "{9FD34B9F-6391-479A-8495-4DC5ACADDAE6}"
 EndProject
