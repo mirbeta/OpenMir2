@@ -4,7 +4,6 @@ using SystemModule.Core.Common;
 
 namespace SystemModule.Dependency
 {
-
     /// <summary>
     /// 依赖对象接口
     /// </summary>

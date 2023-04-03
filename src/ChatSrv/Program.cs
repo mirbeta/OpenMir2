@@ -26,20 +26,20 @@ namespace GameGate
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
-            ThreadPool.SetMaxThreads(200, 200);
-            ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
-            Console.WriteLine(new StringBuilder()
-                .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
-                .Append($"Minimum work threads: {workThreads}, ")
-                .Append($"Minimum completion port threads: {completionPortThreads})").ToString());
-
-            PrintUsage();
-
             var config = new ConfigurationBuilder().Build();
 
             _logger = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
+            
+            ThreadPool.SetMaxThreads(200, 200);
+            ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
+            _logger.Info(new StringBuilder()
+                .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
+                .Append($"Minimum work threads: {workThreads}, ")
+                .Append($"Minimum completion port threads: {completionPortThreads})").ToString());
+
+            PrintUsage();
 
             var builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
@@ -115,7 +115,7 @@ namespace GameGate
 
         private static Task ReLoadConfig()
         {
-            Console.WriteLine("重新读取配置文件完成...");
+            _logger.Info("重新读取配置文件完成...");
             return Task.CompletedTask;
         }
 
