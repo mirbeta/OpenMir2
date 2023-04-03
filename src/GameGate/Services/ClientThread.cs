@@ -11,9 +11,13 @@ using SystemModule.CoreSocket;
 using SystemModule.CoreSocket.Common;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
+using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Event;
+using SystemModule.Sockets.Extensions;
+using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.SocketEventArgs;
 using NetworkMonitor = SystemModule.NetworkMonitor;
-using TcpClient = SystemModule.CoreSocket.TcpClient;
+using TcpClient = SystemModule.Sockets.Components.TCP.TcpClient;
 
 namespace GameGate.Services
 {

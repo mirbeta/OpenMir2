@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
-using SystemModule.CoreSocket;
 using SystemModule.Packets.ServerPackets;
+using SystemModule.Sockets.DataAdapter.Custom;
 
 namespace SystemModule.DataHandlingAdapters
 {
