@@ -227,12 +227,6 @@ namespace SystemModule.CoreSocket.Resources
         [Description("客户端没有连接。")]
         NotConnected,
 
-        /// <summary>
-        /// 授权密钥无效，程序将在5秒后退出。请检查密钥，或者不使用企业版功能。
-        /// </summary>
-        [Description("授权密钥无效，程序将在5秒后退出。请检查密钥，或者不使用企业版功能。")]
-        LicenceKeyInvalid,
-
         #endregion Client
     }
 }
