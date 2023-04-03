@@ -13,7 +13,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         public ClientNotFindException()
         {
-            
+
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace SystemModule.CoreSocket
         /// <param name="message"></param>
         public ClientNotFindException(string message) : base(message)
         {
-            
+
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SystemModule.CoreSocket
         /// <param name="inner"></param>
         public ClientNotFindException(string message, System.Exception inner) : base(message, inner)
         {
-            
+
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace SystemModule.CoreSocket
         /// <param name="context"></param>
         protected ClientNotFindException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
         {
-            
+
         }
     }
 }

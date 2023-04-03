@@ -9,14 +9,18 @@ public static unsafe class NativeGuard
     public static void ThrowIfNull(IntPtr value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value == IntPtr.Zero)
+        {
             throw new ArgumentNullException(name);
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfNull(void* value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value == null)
+        {
             throw new ArgumentNullException(name);
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

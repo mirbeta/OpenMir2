@@ -1,5 +1,5 @@
-using System.Runtime.InteropServices;
 using MemoryPack;
+using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ClientPackets;
 

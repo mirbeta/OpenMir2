@@ -12,7 +12,11 @@ public static class EDCode
     /// </summary>
     public static CommandMessage DecodePacket(string str)
     {
-        if (string.IsNullOrEmpty(str)) throw new ArgumentNullException(nameof(str));
+        if (string.IsNullOrEmpty(str))
+        {
+            throw new ArgumentNullException(nameof(str));
+        }
+
         byte[] tempBuf = HUtil32.GetBytes(str);
         int buffLen = 0;
         byte[] encBuf = EncryptUtil.Decode(tempBuf, str.Length, ref buffLen);
@@ -24,7 +28,11 @@ public static class EDCode
     /// </summary>
     public static CommandMessage DecodePacket(byte[] data)
     {
-        if (data == null) throw new ArgumentNullException(nameof(data));
+        if (data == null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         int buffLen = 0;
         byte[] encBuf = EncryptUtil.Decode(data, data.Length, ref buffLen);
         return SerializerUtil.Deserialize<CommandMessage>(encBuf);
@@ -38,7 +46,11 @@ public static class EDCode
     /// <exception cref="ArgumentNullException"></exception>
     public static byte[] DecodeBuff(byte[] data)
     {
-        if (data == null) throw new ArgumentNullException(nameof(data));
+        if (data == null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         int buffLen = 0;
         return EncryptUtil.Decode(data, data.Length, ref buffLen);
     }
@@ -48,7 +60,11 @@ public static class EDCode
     /// </summary>
     public static string DeCodeString(string str)
     {
-        if (string.IsNullOrEmpty(str)) throw new ArgumentNullException(nameof(str));
+        if (string.IsNullOrEmpty(str))
+        {
+            throw new ArgumentNullException(nameof(str));
+        }
+
         int nLen = 0;
         byte[] bSrc = HUtil32.GetBytes(str);
         byte[] encBuf = EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
@@ -63,7 +79,11 @@ public static class EDCode
     /// <exception cref="ArgumentNullException"></exception>
     public static string DeCodeString(Span<byte> str)
     {
-        if (str.IsEmpty) throw new ArgumentNullException(nameof(str));
+        if (str.IsEmpty)
+        {
+            throw new ArgumentNullException(nameof(str));
+        }
+
         int nLen = 0;
         byte[] encBuf = EncryptUtil.Decode(str, str.Length, ref nLen);
         return HUtil32.GetString(encBuf);
@@ -71,7 +91,11 @@ public static class EDCode
 
     public static byte[] DecodeBuffer(string strSrc)
     {
-        if (strSrc == null) throw new ArgumentNullException(nameof(strSrc));
+        if (strSrc == null)
+        {
+            throw new ArgumentNullException(nameof(strSrc));
+        }
+
         byte[] bSrc = HUtil32.GetBytes(strSrc);
         int nLen = 0;
         return EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
@@ -79,14 +103,22 @@ public static class EDCode
 
     public static Span<byte> DecodeBuffer(byte[] buffer)
     {
-        if (buffer == null) throw new ArgumentNullException(nameof(buffer));
+        if (buffer == null)
+        {
+            throw new ArgumentNullException(nameof(buffer));
+        }
+
         int nLen = 0;
         return EncryptUtil.Decode(buffer, buffer.Length, ref nLen);
     }
 
     public static Span<byte> DecodeBuffer(string src, int size)
     {
-        if (src == null) throw new ArgumentNullException(nameof(src));
+        if (src == null)
+        {
+            throw new ArgumentNullException(nameof(src));
+        }
+
         byte[] bSrc = HUtil32.GetBytes(src);
         int nLen = 0;
         return EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
@@ -94,7 +126,11 @@ public static class EDCode
 
     public static T DecodeBuffer<T>(string src) where T : new()
     {
-        if (string.IsNullOrEmpty(src)) throw new ArgumentNullException(nameof(src));
+        if (string.IsNullOrEmpty(src))
+        {
+            throw new ArgumentNullException(nameof(src));
+        }
+
         byte[] bSrc = HUtil32.GetBytes(src);
         int nLen = 0;
         byte[] data = EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
@@ -103,7 +139,11 @@ public static class EDCode
 
     public static T DecodeClientBuffer<T>(string src) where T : ClientPacket, new()
     {
-        if (src == null) throw new ArgumentNullException(nameof(src));
+        if (src == null)
+        {
+            throw new ArgumentNullException(nameof(src));
+        }
+
         byte[] bSrc = HUtil32.GetBytes(src);
         int nLen = 0;
         byte[] data = EncryptUtil.Decode(bSrc, bSrc.Length, ref nLen);
@@ -116,7 +156,11 @@ public static class EDCode
     /// <returns></returns>
     public static string EncodeString(string str)
     {
-        if (str == null) throw new ArgumentNullException(nameof(str));
+        if (str == null)
+        {
+            throw new ArgumentNullException(nameof(str));
+        }
+
         byte[] bSrc = HUtil32.GetBytes(str);
         byte[] encBuf = new byte[bSrc.Length * 2];
         int destLen = EncryptUtil.Encode(bSrc, bSrc.Length, encBuf);
@@ -125,11 +169,19 @@ public static class EDCode
 
     public static string EncodeBuffer<T>(T obj) where T : ClientPacket, new()
     {
-        if (obj == null) throw new ArgumentNullException(nameof(obj));
+        if (obj == null)
+        {
+            throw new ArgumentNullException(nameof(obj));
+        }
+
         string result = string.Empty;
         byte[] data = obj.GetBuffer();
         int buffSize = data.Length;
-        if (buffSize <= 0) return result;
+        if (buffSize <= 0)
+        {
+            return result;
+        }
+
         if (buffSize < BufferSize)
         {
             byte[] encBuf = new byte[buffSize * 2];
@@ -143,7 +195,11 @@ public static class EDCode
     {
         byte[] data = SerializerUtil.Serialize(packet);
         int buffSize = data.Length;
-        if (buffSize <= 0) return string.Empty;
+        if (buffSize <= 0)
+        {
+            return string.Empty;
+        }
+
         if (buffSize < BufferSize)
         {
             byte[] encBuf = new byte[buffSize * 2];
@@ -155,9 +211,17 @@ public static class EDCode
 
     public static string EncodePacket(byte[] data)
     {
-        if (data == null) throw new ArgumentNullException(nameof(data));
+        if (data == null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         int buffSize = data.Length;
-        if (buffSize <= 0) return string.Empty;
+        if (buffSize <= 0)
+        {
+            return string.Empty;
+        }
+
         if (buffSize < BufferSize)
         {
             byte[] encBuf = new byte[buffSize * 2];
@@ -173,9 +237,17 @@ public static class EDCode
     /// <returns></returns>
     public static byte[] EncodeBuffer(byte[] data)
     {
-        if (data == null) throw new ArgumentNullException(nameof(data));
+        if (data == null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         int buffSize = data.Length;
-        if (buffSize >= BufferSize) return Array.Empty<byte>();
+        if (buffSize >= BufferSize)
+        {
+            return Array.Empty<byte>();
+        }
+
         byte[] encBuf = new byte[buffSize * 2];
         int destLen = EncryptUtil.Encode(data, buffSize, encBuf);
         return encBuf[..destLen];
@@ -186,7 +258,11 @@ public static class EDCode
     /// </summary>
     public static string EncodeBuffer(byte[] data, int bufsize)
     {
-        if (data == null) throw new ArgumentNullException(nameof(data));
+        if (data == null)
+        {
+            throw new ArgumentNullException(nameof(data));
+        }
+
         if (bufsize < BufferSize)
         {
             byte[] encBuf = new byte[bufsize * 2];
@@ -202,7 +278,11 @@ public static class EDCode
     /// <returns></returns>
     public static int EncodeMessage(byte[] msgBuf, ref byte[] encBuff)
     {
-        if (msgBuf == null) throw new ArgumentNullException(nameof(msgBuf));
+        if (msgBuf == null)
+        {
+            throw new ArgumentNullException(nameof(msgBuf));
+        }
+
         return EncryptUtil.Encode(msgBuf, 12, encBuff);
     }
 

@@ -1,5 +1,5 @@
-﻿using System.Runtime.Serialization;
-using MemoryPack;
+﻿using MemoryPack;
+using System.Runtime.Serialization;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 

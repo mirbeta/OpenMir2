@@ -44,7 +44,10 @@ public sealed partial class FixedLengthOwner<T> : IMemoryOwner<T>
     public void Dispose()
     {
         T[] array = _array;
-        if (array == null) return;
+        if (array == null)
+        {
+            return;
+        }
 
         _array = null;
         ArrayPool<T>.Shared.Return(array);

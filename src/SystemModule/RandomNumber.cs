@@ -49,7 +49,10 @@ public class RandomNumber
     public IList<int> RandomSelect(IList<int> sourceList, int selectCount)
     {
         if (selectCount > sourceList.Count)
+        {
             throw new ArgumentOutOfRangeException("selectCount必需大于sourceList.Count");
+        }
+
         IList<int> resultList = new List<int>();
         for (int i = 0; i < selectCount; i++)
         {

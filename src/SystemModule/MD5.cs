@@ -267,7 +267,11 @@ public static class MD5
     {
         byte[] result = null;
         byte[] digest = new byte[16];
-        if (s.Length != 32) return null;
+        if (s.Length != 32)
+        {
+            return null;
+        }
+
         try
         {
             for (int i = 0; i < 15; i++)

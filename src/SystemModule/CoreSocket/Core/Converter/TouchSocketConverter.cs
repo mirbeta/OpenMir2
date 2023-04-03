@@ -33,9 +33,18 @@ public class TouchSocketConverter<TSource>
 
         m_converters.Sort(delegate (IConverter<TSource> x, IConverter<TSource> y)
         {
-            if (x.Order == y.Order) return 0;
-            else if (x.Order > y.Order) return 1;
-            else return -1;
+            if (x.Order == y.Order)
+            {
+                return 0;
+            }
+            else if (x.Order > y.Order)
+            {
+                return 1;
+            }
+            else
+            {
+                return -1;
+            }
         });
     }
 

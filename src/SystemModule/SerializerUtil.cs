@@ -1,6 +1,6 @@
+using MemoryPack;
 using System;
 using System.Runtime.CompilerServices;
-using MemoryPack;
 
 namespace SystemModule;
 

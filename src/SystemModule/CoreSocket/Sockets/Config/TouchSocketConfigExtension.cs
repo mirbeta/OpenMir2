@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using SystemModule.CoreSocket.Common;
 using SystemModule.CoreSocket.Common.Options;
-using SystemModule.CoreSocket;
 
 namespace SystemModule.CoreSocket
 {

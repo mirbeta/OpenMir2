@@ -27,7 +27,9 @@ public static class RandomizersHelpers
         ArgumentsGuard.ThrowIfNull(randomizer);
 
         if (minValue >= maxValue)
+        {
             throw new ArgumentException("Min value cannot be more or equal to max value.", nameof(minValue));
+        }
 
         int range = maxValue - minValue;
 

@@ -24,7 +24,10 @@ public class IdWorker
     public IdWorker(long workerId)
     {
         if (workerId > maxWorkerId || workerId < 0)
+        {
             throw new Exception($"worker Id can't be greater than {workerId} or less than 0 ");
+        }
+
         IdWorker.workerId = 2;
     }
 

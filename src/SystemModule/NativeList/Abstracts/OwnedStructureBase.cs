@@ -21,9 +21,13 @@ public abstract class OwnedStructureBase : NativeStructureBase
         get
         {
             if (_basicStructure == null)
+            {
                 return base.IsDisposed;
+            }
             else
+            {
                 return base.IsDisposed || _basicStructure.IsDisposed;
+            }
         }
     }
 
@@ -47,7 +51,9 @@ public abstract class OwnedStructureBase : NativeStructureBase
         Initialize(targetPointer, size, makeCopy);
 
         if (!makeCopy)
+        {
             _basicStructure = basic;
+        }
     }
 
     protected override void InternalDispose(bool manual)

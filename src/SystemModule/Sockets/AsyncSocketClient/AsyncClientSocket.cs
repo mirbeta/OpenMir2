@@ -67,9 +67,14 @@ public class AsyncClientSocket
     public AsyncClientSocket(string ipAddress, int port, int bufferSize)
     {
         if (string.IsNullOrEmpty(ipAddress))
+        {
             throw new ArgumentNullException("IPAddress cannot be null");
+        }
+
         if (port < 1 || port > 65535)
+        {
             throw new ArgumentOutOfRangeException("port is out of range");
+        }
 
         //设置用于发送数据的SocketAsyncEventArgs
         byte[] sendBuff = new byte[bufferSize];
@@ -102,7 +107,9 @@ public class AsyncClientSocket
             connectEventArg.RemoteEndPoint = ListerEndPoint;
             bool willRaiseEvent = _connectSocket.ConnectAsync(connectEventArg);
             if (!willRaiseEvent)
+            {
                 ProcessConnect(connectEventArg);
+            }
         }
         catch (Exception ex)
         {
@@ -117,10 +124,14 @@ public class AsyncClientSocket
     public void Send(byte[] buffer)
     {
         if (buffer.Length <= 0)
+        {
             throw new ArgumentNullException(nameof(buffer));
+        }
 
         if (_connectSocket == null)
+        {
             throw new Exception(nameof(_connectSocket));
+        }
 
         sendEventArg.SetBuffer(buffer, 0, buffer.Length);
         if (!_connectSocket.SendAsync(sendEventArg))
@@ -136,7 +147,10 @@ public class AsyncClientSocket
     {
         IsConnected = false;
         if (_connectSocket == null)
+        {
             return;
+        }
+
         try
         {
             //关闭socket时，单独使用socket.close()通常会造成资源提前被释放，应该在关闭socket之前，先使用shutdown进行接受或者发送的禁用，再使用socket进行释放

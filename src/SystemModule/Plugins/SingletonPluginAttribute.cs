@@ -8,6 +8,6 @@ namespace SystemModule.Plugins
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
     public sealed class SingletonPluginAttribute : Attribute
     {
-        
+
     }
 }

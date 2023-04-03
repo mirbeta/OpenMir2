@@ -67,7 +67,9 @@ namespace SystemModule.Extensions
                 vals = string.Join(conj, ToStringArrT(collection));
             }
             else
+            {
                 vals = "(null)";
+            }
 
             return vals;
         }

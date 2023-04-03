@@ -75,6 +75,8 @@ public abstract unsafe class NativeWrapperBase<TStructure> : OwnedStructureBase 
     private void ThrowIfSizeIsLessThanStructure(int value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value < sizeof(TStructure))
+        {
             throw new ArgumentOutOfRangeException(name, SizesAreNotCorrectError);
+        }
     }
 }

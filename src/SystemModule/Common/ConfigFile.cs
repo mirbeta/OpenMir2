@@ -206,7 +206,10 @@ public abstract class ConfigFile
     private static string GetSecString(string str)
     {
         if (str[0] != '[')
+        {
             return string.Empty;
+        }
+
         int pos = str.IndexOf(']');
         return pos > 0 ? str[1..pos].Trim() : string.Empty;
     }

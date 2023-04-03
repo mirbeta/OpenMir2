@@ -44,13 +44,17 @@ public static unsafe class FixedBuffersHelper
         ArgumentsGuard.ThrowIfNull(encoding);
 
         if (span.Length == 0)
+        {
             return String.Empty;
+        }
 
         int realSize = 0;
         int step = encoding.GetByteCount("\0");
 
         if (span.Length % step != 0)
+        {
             throw new ArgumentException("Buffer size does not correspond to the char size.");
+        }
 
         for (; realSize < span.Length; realSize += step)
         {
@@ -59,15 +63,21 @@ public static unsafe class FixedBuffersHelper
             for (int i = realSize; i < realSize + step; i++)
             {
                 if (span[i] == 0)
+                {
                     zerosCount++;
+                }
             }
 
             if (zerosCount == step)
+            {
                 break;
+            }
         }
 
         if (realSize == 0)
+        {
             return string.Empty;
+        }
 
         return encoding.GetString(span[..realSize]);
     }
@@ -110,20 +120,28 @@ public static unsafe class FixedBuffersHelper
         ArgumentsGuard.ThrowIfNull(encoding);
 
         if (span.Length == 0)
+        {
             return;
+        }
 
         span.Fill(0);
 
         if (String.IsNullOrEmpty(value))
+        {
             return;
+        }
 
         int step = encoding.GetByteCount("\0");
         int length = span.Length / step;
 
         if (value.Length > length)
+        {
             encoding.GetBytes(value.AsSpan()[..length], span);
+        }
         else
+        {
             encoding.GetBytes(value.AsSpan(), span);
+        }
     }
 
     /// <summary>
@@ -138,12 +156,16 @@ public static unsafe class FixedBuffersHelper
         ArgumentsGuard.ThrowIfLessZero(length);
 
         if (length == 0)
+        {
             return Array.Empty<TItem>();
+        }
 
         TItem[] result = new TItem[length];
 
         for (int i = 0; i < length; i++)
+        {
             result[i] = pointer[i];
+        }
 
         return result;
     }
@@ -163,12 +185,18 @@ public static unsafe class FixedBuffersHelper
         ArgumentsGuard.ThrowIfNull(array);
 
         if (array.Length != length)
+        {
             throw new ArgumentException(BuffersSizeError, nameof(array));
+        }
 
         if (length == 0)
+        {
             return;
+        }
 
         for (int i = 0; i < array.Length; i++)
+        {
             pointer[i] = array[i];
+        }
     }
 }

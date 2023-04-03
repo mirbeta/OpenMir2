@@ -99,11 +99,17 @@ public class ShrinkableCollection<TItem> : ShrinkableCollectionBase<TItem>, ICol
         ArgumentsGuard.ThrowIfNotInRange(arrayIndex, FlexibleRanges.Create(array));
 
         if (ElementsCount > array.Length - arrayIndex)
+        {
             throw new ArgumentException("Not enough space to copy the collection.", nameof(array));
+        }
 
         for (int i = 0; i < ElementsBuffer.Length && arrayIndex < array.Length; i++)
+        {
             if (ElementsBuffer[i] != null)
+            {
                 array[arrayIndex++] = ElementsBuffer[i];
+            }
+        }
     }
 
     /// <inheritdoc/>

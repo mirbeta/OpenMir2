@@ -24,7 +24,9 @@ public struct FlexibleRange<TItem>
         Comparer = comparer;
 
         if (Comparer.Compare(Left, Right) == Equality.Equal)
+        {
             throw new Exception("Cannot create range when left and right sides are equal.");
+        }
     }
 
     /// <summary>
@@ -79,10 +81,14 @@ public struct FlexibleRange<TItem>
         }
 
         if (IsLeftStrictly)
+        {
             leftResult = leftResult || leftEquality == Equality.Equal;
+        }
 
         if (IsRightStrictly)
+        {
             rightResult = rightResult || rightEquality == Equality.Equal;
+        }
 
         return leftResult && rightResult;
     }
@@ -93,18 +99,26 @@ public struct FlexibleRange<TItem>
         StringBuilder builder = new StringBuilder();
 
         if (IsLeftStrictly)
+        {
             builder.Append('[');
+        }
         else
+        {
             builder.Append('(');
+        }
 
         builder.Append(Left);
         builder.Append("..");
         builder.Append(Right);
 
         if (IsRightStrictly)
+        {
             builder.Append(']');
+        }
         else
+        {
             builder.Append(')');
+        }
 
         return builder.ToString();
     }

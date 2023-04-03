@@ -36,7 +36,11 @@ namespace SystemModule.CoreSocket
                         }
                         else
                         {
-                            if (first) Thread.Sleep(1000);
+                            if (first)
+                            {
+                                Thread.Sleep(1000);
+                            }
+
                             first = false;
                             client.Connect();
                             first = true;
@@ -99,7 +103,11 @@ namespace SystemModule.CoreSocket
                         }
                         else
                         {
-                            if (first) Thread.Sleep(1000);
+                            if (first)
+                            {
+                                Thread.Sleep(1000);
+                            }
+
                             first = false;
                             client.Connect();
                             first = true;

@@ -1,6 +1,4 @@
-using SystemModule.CoreSocket.Resources;
-
-namespace SystemModule.CoreSocket.Resource
+namespace SystemModule.CoreSocket.Resources
 {
     /// <summary>
     /// StatusExtension

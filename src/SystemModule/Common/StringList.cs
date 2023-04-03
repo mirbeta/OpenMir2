@@ -28,7 +28,11 @@ public sealed class StringList : IDisposable
                 return;
             }
 
-            if (value == _strings.Length) return;
+            if (value == _strings.Length)
+            {
+                return;
+            }
+
             if (value < this._size)
             {
                 throw new ArgumentOutOfRangeException();
@@ -99,7 +103,11 @@ public sealed class StringList : IDisposable
     /// </summary>
     private void EnsureCapacity(int min)
     {
-        if (this._strings.Length >= min) return;
+        if (this._strings.Length >= min)
+        {
+            return;
+        }
+
         int num1 = (this._strings.Length == 0) ? 0x10 : (this._strings.Length * 2);
         if (num1 < min)
         {

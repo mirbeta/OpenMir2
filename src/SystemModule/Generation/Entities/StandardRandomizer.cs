@@ -47,7 +47,9 @@ public class StandardRandomizer : IRandomizer
             mk = mj - mk;
 
             if (mk < 0)
+            {
                 mk += MBIG;
+            }
 
             mj = _seedArray[ii];
         }
@@ -59,7 +61,9 @@ public class StandardRandomizer : IRandomizer
                 _seedArray[i] -= _seedArray[1 + (i + 30) % 55];
 
                 if (_seedArray[i] < 0)
+                {
                     _seedArray[i] += MBIG;
+                }
             }
         }
 
@@ -78,18 +82,26 @@ public class StandardRandomizer : IRandomizer
         int locINextp = _inextp;
 
         if (++locINext >= 56)
+        {
             locINext = 1;
+        }
 
         if (++locINextp >= 56)
+        {
             locINextp = 1;
+        }
 
         retVal = _seedArray[locINext] - _seedArray[locINextp];
 
         if (retVal == MBIG)
+        {
             retVal--;
+        }
 
         if (retVal < 0)
+        {
             retVal += MBIG;
+        }
 
         _seedArray[locINext] = retVal;
 

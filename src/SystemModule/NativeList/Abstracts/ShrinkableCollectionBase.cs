@@ -27,7 +27,9 @@ public abstract class ShrinkableCollectionBase<TItem>
     private void FindFirstEmptyPosition()
     {
         while (_firstEmptyPosition < _buffer.Length && _isAlive[_firstEmptyPosition])
+        {
             _firstEmptyPosition++;
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -98,7 +100,9 @@ public abstract class ShrinkableCollectionBase<TItem>
     protected void AddNewItem(TItem item)
     {
         if (_firstEmptyPosition == _buffer.Length)
+        {
             IncreaseBuffer();
+        }
 
         _buffer[_firstEmptyPosition] = item;
         _isAlive[_firstEmptyPosition] = true;
@@ -117,7 +121,9 @@ public abstract class ShrinkableCollectionBase<TItem>
         for (int i = 0; i < _buffer.Length; i++)
         {
             if (!_isAlive[i])
+            {
                 continue;
+            }
 
             if (Object.Equals(_buffer[i], item))
             {
@@ -142,7 +148,9 @@ public abstract class ShrinkableCollectionBase<TItem>
         for (int i = 0; i < _buffer.Length; i++)
         {
             if (!_isAlive[i])
+            {
                 continue;
+            }
 
             if (Object.Equals(_buffer[i], item))
             {
@@ -151,7 +159,9 @@ public abstract class ShrinkableCollectionBase<TItem>
                 _isAlive[i] = false;
 
                 if (newEmptyPosition == -1)
+                {
                     newEmptyPosition = i;
+                }
 
                 _count--;
 
@@ -162,10 +172,14 @@ public abstract class ShrinkableCollectionBase<TItem>
         }
 
         if (newEmptyPosition != -1 && newEmptyPosition < _firstEmptyPosition)
+        {
             _firstEmptyPosition = newEmptyPosition;
+        }
 
         if (result && NeedToDecreaseBuffer())
+        {
             TryDecreaseBuffer();
+        }
 
         return result;
     }

@@ -20,7 +20,9 @@ public static class NativeLinqExtensions
         int index = 0;
 
         foreach (TItem item in items)
+        {
             result[index++] = item;
+        }
 
         return result;
     }

@@ -27,7 +27,10 @@ public class ObjectPool<T>
 
     public void Push(T item)
     {
-        if (item == null) throw new ArgumentNullException("Items added to pool cannot be null");
+        if (item == null)
+        {
+            throw new ArgumentNullException("Items added to pool cannot be null");
+        }
 
         lock (m_pool)
         {

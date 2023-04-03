@@ -1,9 +1,9 @@
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
-using NLog;
 using SystemModule.CoreSocket.Common;
 using SystemModule.CoreSocket.Common.Options;
 using SystemModule.CoreSocket.Resources;

@@ -25,7 +25,10 @@ public partial class HUtil32
         {
             bytes = Guid.NewGuid().ToByteArray();
             sequence = BitConverter.ToInt32(bytes, 0);
-            if (sequence > 0) break;
+            if (sequence > 0)
+            {
+                break;
+            }
         }
         return sequence;
     }
@@ -259,7 +262,11 @@ public partial class HUtil32
     private static unsafe int StringToBytePtr(string str, byte* retby, int startIndex)
     {
         bool bDecode = false;
-        if (string.IsNullOrEmpty(str)) return 0;
+        if (string.IsNullOrEmpty(str))
+        {
+            return 0;
+        }
+
         for (int i = 0; i < str.Length; i++)
         {
             if (str[i] >> 8 != 0)
@@ -270,24 +277,35 @@ public partial class HUtil32
         }
         int nLen = 0;
         if (bDecode)
+        {
             nLen = Encoding.GetEncoding("gb2312").GetByteCount(str);
+        }
         else
+        {
             nLen = str.Length;
+        }
 
         if (retby == null)
+        {
             return nLen;
+        }
 
         if (bDecode)
         {
             byte[] by = Encoding.GetEncoding("gb2312").GetBytes(str);
             byte* pb = retby + startIndex;
             for (int i = 0; i < by.Length; i++)
+            {
                 *pb++ = by[i];
+            }
         }
         else
         {
             byte* pb = retby + startIndex;
-            for (int i = 0; i < str.Length; i++) *pb++ = (byte)str[i];
+            for (int i = 0; i < str.Length; i++)
+            {
+                *pb++ = (byte)str[i];
+            }
         }
 
         return nLen;
@@ -388,7 +406,11 @@ public partial class HUtil32
     public static string GetValidStr3(string source, ref string dest, char[] dividerAry)
     {
         char[] div = new char[dividerAry.Length];
-        for (int i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
+        for (int i = 0; i < dividerAry.Length; i++)
+        {
+            div[i] = dividerAry[i];
+        }
+
         string[] ary = source.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
         dest = ary.Length > 0 ? ary[0] : string.Empty; //目标置为第一个
         return ary.Length > 1 ? ary[1] : string.Empty; //返回第二个
@@ -410,7 +432,11 @@ public partial class HUtil32
     {
         //var ss = Regex.Split(str, Regex.Escape(dividerAry), RegexOptions.IgnorePatternWhitespace);
         char[] div = new char[dividerAry.Length];
-        for (int i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
+        for (int i = 0; i < dividerAry.Length; i++)
+        {
+            div[i] = dividerAry[i];
+        }
+
         string[] ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
         dest = ary.Length > 0 ? ary[0] : "";
         return ary.Length > 1 ? ary[1] : "";
@@ -539,12 +565,28 @@ public partial class HUtil32
     public static bool CompareLStr(string src, string targ)
     {
         int compn = targ.Length;
-        if (compn <= 0) return false;
-        if (src.Length < compn) return false;
-        if (targ.Length < compn) return false;
+        if (compn <= 0)
+        {
+            return false;
+        }
+
+        if (src.Length < compn)
+        {
+            return false;
+        }
+
+        if (targ.Length < compn)
+        {
+            return false;
+        }
+
         for (int i = 0; i < compn; i++)
         {
-            if (char.ToUpper(src[i]) == char.ToUpper(targ[i])) continue;
+            if (char.ToUpper(src[i]) == char.ToUpper(targ[i]))
+            {
+                continue;
+            }
+
             return false;
         }
         return true;
@@ -552,12 +594,28 @@ public partial class HUtil32
 
     public static bool CompareLStr(string src, string targ, int compn)
     {
-        if (compn <= 0) return false;
-        if (src.Length < compn) return false;
-        if (targ.Length < compn) return false;
+        if (compn <= 0)
+        {
+            return false;
+        }
+
+        if (src.Length < compn)
+        {
+            return false;
+        }
+
+        if (targ.Length < compn)
+        {
+            return false;
+        }
+
         for (int i = 0; i < compn; i++)
         {
-            if (char.ToUpper(src[i]) == char.ToUpper(targ[i])) continue;
+            if (char.ToUpper(src[i]) == char.ToUpper(targ[i]))
+            {
+                continue;
+            }
+
             return false;
         }
         return true;
@@ -579,7 +637,10 @@ public partial class HUtil32
         for (int i = 0; i < sEngStr.Length; i++)
         {
             result = IsEnglish(sEngStr[i]);
-            if (result) break;
+            if (result)
+            {
+                break;
+            }
         }
         return result;
     }
@@ -591,8 +652,12 @@ public partial class HUtil32
             int len = src.Length;
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < len; i++)
+            {
                 if (src[i] == srcchr)
+                {
                     sb.Append(repchr);
+                }
+            }
         }
         return src;
     }
@@ -601,8 +666,13 @@ public partial class HUtil32
     {
         int count = 0;
         for (int i = 0; i < source.Length; i++)
+        {
             if (source[i] == tag)
+            {
                 count++;
+            }
+        }
+
         return count;
     }
 
@@ -648,7 +718,11 @@ public partial class HUtil32
 
     public static int GetDayCount(DateTime maxDate, DateTime minDate)
     {
-        if (maxDate < minDate) return 0;
+        if (maxDate < minDate)
+        {
+            return 0;
+        }
+
         int yearMax = maxDate.Year;
         int monthMax = maxDate.Month;
         int dayMax = maxDate.Day;
@@ -684,7 +758,11 @@ public partial class HUtil32
         string ret = new string('\0', len);
         StringBuilder sb = new StringBuilder(ret);
         by += startIndex;
-        for (int i = 0; i < len; i++) sb[i] = (char)*@by++;
+        for (int i = 0; i < len; i++)
+        {
+            sb[i] = (char)*@by++;
+        }
+
         return sb.ToString();
     }
 

@@ -13,7 +13,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         public NotConnectedException()
         {
-            
+
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace SystemModule.CoreSocket
         /// <param name="message"></param>
         public NotConnectedException(string message) : base(message)
         {
-            
+
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SystemModule.CoreSocket
         /// <param name="inner"></param>
         public NotConnectedException(string message, System.Exception inner) : base(message, inner)
         {
-            
+
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace SystemModule.CoreSocket
         /// <param name="context"></param>
         protected NotConnectedException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
         {
-            
+
         }
     }
 }

@@ -68,7 +68,9 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
             ThrowIfDisposed();
 
             if (index < 0 || index >= Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index));
+            }
 
             return GetAt(index);
         }
@@ -77,7 +79,9 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
             ThrowIfDisposed();
 
             if (index < 0 || index >= Count)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index));
+            }
 
             SetAt(index, value);
         }
@@ -114,12 +118,16 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
         ThrowIfDisposed();
 
         if (index < 0 || index >= Count)
+        {
             throw new ArgumentOutOfRangeException(nameof(index));
+        }
 
         TryIncreaseBufferCapacity();
 
         for (int i = Count; i > index; i--)
+        {
             SetAt(i, GetAt(i - 1));
+        }
 
         SetAt(index, item);
 
@@ -140,8 +148,12 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
         ThrowIfDisposed();
 
         for (int i = 0; i < Count; i++)
+        {
             if (GetAt(i).Equals(item))
+            {
                 return i;
+            }
+        }
 
         return -1;
     }
@@ -153,10 +165,14 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
         ThrowIfDisposed();
 
         if (index < 0 || index >= Count)
+        {
             throw new ArgumentOutOfRangeException(nameof(index));
+        }
 
         for (int i = index; i < Count; i++)
+        {
             SetAt(i, GetAt(i + 1));
+        }
 
         Interlocked.Decrement(ref _count);
     }
@@ -168,7 +184,9 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
         int index = IndexOf(item);
 
         if (index == -1)
+        {
             return false;
+        }
 
         RemoveAt(index);
 
@@ -182,7 +200,9 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
         ThrowIfDisposed();
 
         for (int i = 0; i < Count; i++)
+        {
             SetAt(i, default(TItem));
+        }
 
         Interlocked.Exchange(ref _count, 0);
     }
@@ -262,7 +282,9 @@ public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem>
     private static int NearestPowerOfTwo(int size)
     {
         if (size <= 1)
+        {
             return 1;
+        }
 
         int pow = 0;
 

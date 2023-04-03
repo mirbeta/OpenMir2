@@ -28,7 +28,9 @@ public struct FlexibleSet<TItem> : IEnumerable<TItem>
             _sidesEquality = _range.Comparer.Compare(_range.Left, _range.Right);
 
             if (_sidesEquality == Equality.Equal)
+            {
                 throw new Exception("Cannot enumerate range when left and right sides are equal.");
+            }
 
             _started = false;
             _stepping = set._stepping;
@@ -45,9 +47,13 @@ public struct FlexibleSet<TItem> : IEnumerable<TItem>
             if (!_started)
             {
                 if (_range.IsLeftStrictly)
+                {
                     Current = _range.Left;
+                }
                 else
+                {
                     Current = _stepping.Invoke(_range.Left);
+                }
 
                 _started = true;
 
@@ -61,9 +67,13 @@ public struct FlexibleSet<TItem> : IEnumerable<TItem>
             Equality compareResult = _range.Comparer.Compare(Current, _range.Right);
 
             if (_range.IsRightStrictly)
+            {
                 return compareResult == Equality.Equal || compareResult == _sidesEquality;
+            }
             else
+            {
                 return compareResult == _sidesEquality;
+            }
         }
 
         public void Reset()

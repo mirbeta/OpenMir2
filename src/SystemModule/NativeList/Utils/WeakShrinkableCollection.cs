@@ -116,19 +116,27 @@ public class WeakShrinkableCollection<TItem> : WeakShrinkableCollectionBase<TIte
             if (IsAliveBuffer[i])
             {
                 if (ElementsBuffer[i].TryGetTarget(out TItem tempItem))
+                {
                     tempCollection.Add(tempItem);
+                }
                 else
+                {
                     IsAliveBuffer[i] = false;
+                }
             }
         }
 
         TryDecreaseBuffer();
 
         if (tempCollection.Count > array.Length - arrayIndex)
+        {
             throw new ArgumentException("Not enough space to copy the collection.", nameof(array));
+        }
 
         for (int i = 0; i < tempCollection.Count; i++)
+        {
             array[arrayIndex++] = tempCollection[i];
+        }
     }
 
     /// <inheritdoc/>

@@ -28,7 +28,9 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
     private void FindFirstEmptyPosition()
     {
         while (_firstEmptyPosition < _buffer.Length && _isAlive[_firstEmptyPosition])
+        {
             _firstEmptyPosition++;
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -106,15 +108,23 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
     protected void AddNewItem(TItem item)
     {
         if (item == null)
+        {
             throw new ArgumentNullException(nameof(item));
+        }
 
         if (_firstEmptyPosition == _buffer.Length)
+        {
             IncreaseBuffer();
+        }
 
         if (_buffer[_firstEmptyPosition] == null)
+        {
             _buffer[_firstEmptyPosition] = new WeakReference<TItem>(item);
+        }
         else
+        {
             _buffer[_firstEmptyPosition].SetTarget(item);
+        }
 
         _isAlive[_firstEmptyPosition] = true;
         _count++;
@@ -128,7 +138,9 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
     protected bool CheckItemExisted(TItem item)
     {
         if (item == null)
+        {
             throw new ArgumentNullException(nameof(item));
+        }
 
         bool result = false;
 
@@ -138,14 +150,18 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
         for (int i = 0; i < _buffer.Length; i++)
         {
             if (!_isAlive[i])
+            {
                 continue;
+            }
 
             if (!_buffer[i].TryGetTarget(out tempItem))
             {
                 _isAlive[i] = false;
 
                 if (newEmptyPosition == -1)
+                {
                     newEmptyPosition = i;
+                }
 
                 _count--;
             }
@@ -158,7 +174,9 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
         }
 
         if (newEmptyPosition != -1 && newEmptyPosition < _firstEmptyPosition)
+        {
             _firstEmptyPosition = newEmptyPosition;
+        }
 
         return result;
     }
@@ -169,7 +187,9 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
     protected bool RemoveFirstInput(TItem item)
     {
         if (item == null)
+        {
             throw new ArgumentNullException(nameof(item));
+        }
 
         bool result = false;
 
@@ -179,14 +199,18 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
         for (int i = 0; i < _buffer.Length; i++)
         {
             if (!_isAlive[i])
+            {
                 continue;
+            }
 
             if (!_buffer[i].TryGetTarget(out tempItem))
             {
                 _isAlive[i] = false;
 
                 if (newEmptyPosition == -1)
+                {
                     newEmptyPosition = i;
+                }
 
                 _count--;
             }
@@ -195,7 +219,9 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
                 _isAlive[i] = false;
 
                 if (newEmptyPosition == -1)
+                {
                     newEmptyPosition = i;
+                }
 
                 _count--;
 
@@ -206,10 +232,14 @@ public abstract class WeakShrinkableCollectionBase<TItem> where TItem : class
         }
 
         if (newEmptyPosition != -1 && newEmptyPosition < _firstEmptyPosition)
+        {
             _firstEmptyPosition = newEmptyPosition;
+        }
 
         if (result && NeedToDecreaseBuffer())
+        {
             TryDecreaseBuffer();
+        }
 
         return result;
     }

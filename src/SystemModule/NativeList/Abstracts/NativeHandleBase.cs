@@ -22,7 +22,9 @@ public abstract class NativeHandleBase : DisposableBase, INativeHandle
     private void ThrowIfInitialized()
     {
         if (UnsafeHandle != IntPtr.Zero)
+        {
             throw new Exception(AlreadyHasHandleError);
+        }
     }
 
     /// <summary>
@@ -38,7 +40,9 @@ public abstract class NativeHandleBase : DisposableBase, INativeHandle
         ThrowIfInitialized();
 
         if (UnsafeHandle != IntPtr.Zero)
+        {
             throw new Exception(AlreadyHasHandleError);
+        }
 
         NativeGuard.ThrowIfNull(handle);
 
@@ -63,7 +67,9 @@ public abstract class NativeHandleBase : DisposableBase, INativeHandle
         nint handle = CreateHandleInternal();
 
         if (handle == IntPtr.Zero)
+        {
             throw new Exception($"{nameof(CreateHandleInternal)} returns an unexpected result.");
+        }
 
         UnsafeHandle = handle;
 
@@ -84,7 +90,9 @@ public abstract class NativeHandleBase : DisposableBase, INativeHandle
     protected override void InternalDispose(bool manual)
     {
         if (UnsafeHandle != IntPtr.Zero || !IsHandleOwner)
+        {
             FreeHandleInternal(UnsafeHandle);
+        }
 
         UnsafeHandle = IntPtr.Zero;
 

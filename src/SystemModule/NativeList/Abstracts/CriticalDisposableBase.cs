@@ -23,7 +23,9 @@ public abstract class CriticalDisposableBase : CriticalFinalizerObject, IDisposa
     public void Dispose()
     {
         if (IsDisposed)
+        {
             return;
+        }
 
         SafeDisposed(true);
 
@@ -63,6 +65,8 @@ public abstract class CriticalDisposableBase : CriticalFinalizerObject, IDisposa
     protected virtual void ThrowIfDisposed()
     {
         if (IsDisposed)
+        {
             throw new ObjectDisposedException(nameof(IDisposable), DisposableBase.ObjectDisposedError);
+        }
     }
 }

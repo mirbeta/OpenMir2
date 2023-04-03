@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using SystemModule.Extensions;
-using SystemModule.CoreSocket;
 
 namespace SystemModule.CoreSocket
 {

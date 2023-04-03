@@ -42,7 +42,10 @@ public class SnowflakeIDGenerator
     public SnowflakeIDGenerator(long workerId)
     {
         if (workerId > MaxWorkerId || workerId < 0)
+        {
             throw new Exception(string.Format("worker Id can't be greater than {0} or less than 0 ", MaxWorkerId));
+        }
+
         SnowflakeIDGenerator.WorkerId = workerId;
         Twepoch = DateTime.Now.Ticks - 10000;
     }

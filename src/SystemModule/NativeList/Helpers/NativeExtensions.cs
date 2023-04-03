@@ -74,7 +74,9 @@ public static unsafe class NativeExtensions
         ArgumentsGuard.ThrowIfLessZero(length);
 
         if (length * sizeof(TItem) > item.Size)
+        {
             throw new ArgumentOutOfRangeException(nameof(length), "The desired length is more than the buffer size.");
+        }
 
         return new Span<TItem>(item.UnsafeHandle.ToPointer(), length);
     }
@@ -107,7 +109,9 @@ public static unsafe class NativeExtensions
         ArgumentsGuard.ThrowIfDisposed(item);
 
         if (length * sizeof(TItem) > item.Size)
+        {
             throw new ArgumentOutOfRangeException(nameof(length), "The desired length is more than the buffer size.");
+        }
 
         return new NativeBuffer<TItem>(item, length, makeCopy);
     }

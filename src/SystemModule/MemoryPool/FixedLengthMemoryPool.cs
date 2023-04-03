@@ -12,9 +12,13 @@ public sealed class FixedLengthMemoryPool<T> : MemoryPool<T>
     public override IMemoryOwner<T> Rent(int bufferSize = -1)
     {
         if (bufferSize == -1)
+        {
             bufferSize = 4096;
+        }
         else if ((uint)bufferSize > MaxBufferSize)
+        {
             throw new ArgumentOutOfRangeException(nameof(bufferSize));
+        }
 
         return new FixedLengthOwner<T>(bufferSize);
     }

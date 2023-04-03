@@ -24,7 +24,9 @@ public abstract class DisposableBase : IDisposable, IDisposeIndication
     public void Dispose()
     {
         if (IsDisposed)
+        {
             return;
+        }
 
         SafeDisposed(true);
 
@@ -64,6 +66,8 @@ public abstract class DisposableBase : IDisposable, IDisposeIndication
     protected virtual void ThrowIfDisposed()
     {
         if (IsDisposed)
+        {
             throw new ObjectDisposedException(nameof(IDisposable), ObjectDisposedError);
+        }
     }
 }

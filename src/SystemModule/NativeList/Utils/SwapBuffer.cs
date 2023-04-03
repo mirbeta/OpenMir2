@@ -65,7 +65,9 @@ public class SwapBuffer<TITem>
         int result = _currentIndex;
 
         if (lockTaken)
+        {
             _spinlock.Exit(false);
+        }
 
         _semaphore.Release();
 
@@ -81,7 +83,9 @@ public class SwapBuffer<TITem>
     public void Write(TITem item)
     {
         while (!TryWriteValue(item))
+        {
             TryExchangeBuffer();
+        }
     }
 
     /// <summary>
@@ -122,7 +126,9 @@ public class SwapBuffer<TITem>
             //and try to swap buffers.
 
             if (lockTaken)
+            {
                 _spinlock.Exit(false);
+            }
 
             _semaphore.Release();
 
@@ -136,7 +142,9 @@ public class SwapBuffer<TITem>
         }
 
         if (lockTaken)
+        {
             _spinlock.Exit(false);
+        }
 
         //We do not have to lock indexing operation
         //because it works with only one cell of the array
@@ -171,7 +179,9 @@ public class SwapBuffer<TITem>
             //In the case when one of threads
             //have swapped the buffer already
             if (lockTaken)
+            {
                 _spinlock.Exit(false);
+            }
 
             Monitor.Exit(_lock);
 
@@ -179,7 +189,9 @@ public class SwapBuffer<TITem>
         }
 
         if (lockTaken)
+        {
             _spinlock.Exit(false);
+        }
 
         InternalExchangeBuffer();
     }
@@ -192,7 +204,9 @@ public class SwapBuffer<TITem>
         //We have to consume all permissions from the semaphore
         //to prevent using buffers from other threads
         for (int i = 0; i < _concurrentNumber; i++)
+        {
             _semaphore.Wait();
+        }
 
         TITem[] currentBuffer = _frontBuffer;
 
@@ -213,9 +227,13 @@ public class SwapBuffer<TITem>
         //to invoke the callback and after
         //it work release the last one semaphore
         if (_invokeCallbackAsTask)
+        {
             Task.Factory.StartNew(InvokeCallback);
+        }
         else
+        {
             InvokeCallback();
+        }
     }
 
     /// <summary>

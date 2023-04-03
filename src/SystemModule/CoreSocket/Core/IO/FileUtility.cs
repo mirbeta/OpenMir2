@@ -213,8 +213,15 @@ public static partial class FileUtility
     /// <exception cref="ArgumentNullException"></exception>
     public static string GetRelativePath(string relativeTo, string path)
     {
-        if (string.IsNullOrEmpty(relativeTo)) throw new ArgumentNullException(nameof(relativeTo));
-        if (string.IsNullOrEmpty(path)) throw new ArgumentNullException(nameof(path));
+        if (string.IsNullOrEmpty(relativeTo))
+        {
+            throw new ArgumentNullException(nameof(relativeTo));
+        }
+
+        if (string.IsNullOrEmpty(path))
+        {
+            throw new ArgumentNullException(nameof(path));
+        }
 
         Uri fromUri = new Uri(relativeTo);
         Uri toUri = new Uri(path);

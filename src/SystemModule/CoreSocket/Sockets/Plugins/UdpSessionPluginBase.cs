@@ -1,5 +1,5 @@
-using System.Threading.Tasks;
 using NLog;
+using System.Threading.Tasks;
 using SystemModule.Plugins;
 
 namespace SystemModule.CoreSocket
@@ -10,7 +10,7 @@ namespace SystemModule.CoreSocket
     public class UdpSessionPluginBase : UdpSessionPluginBase<IUdpSession>
     {
     }
-    
+
     /// <summary>
     /// Udp插件实现类
     /// </summary>
@@ -20,17 +20,17 @@ namespace SystemModule.CoreSocket
         /// <inheritdoc/>
         /// </summary>
         public Logger Logger { get; set; }
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public int Order { get; set; }
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public IPluginsManager PluginsManager { get; set; }
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -40,12 +40,12 @@ namespace SystemModule.CoreSocket
         {
             OnReceivedData((TSession)client, e);
         }
-    
+
         Task IUdpSessionPlugin.OnReceivedDataAsync(IUdpSession client, UdpReceivedDataEventArgs e)
         {
             return OnReceivedDataAsync((TSession)client, e);
         }
-    
+
         /// <summary>
         /// 收到数据
         /// </summary>
@@ -54,7 +54,7 @@ namespace SystemModule.CoreSocket
         protected virtual void OnReceivedData(TSession client, UdpReceivedDataEventArgs e)
         {
         }
-    
+
         /// <summary>
         /// 在收到数据时触发
         /// </summary>

@@ -131,7 +131,11 @@ public abstract class ClientPacket
         using BinaryReader reader = new BinaryReader(stream);
         try
         {
-            if (packet == null) return null;
+            if (packet == null)
+            {
+                return null;
+            }
+
             packet.ReadPacket(reader);
         }
         catch
@@ -148,7 +152,11 @@ public abstract class ClientPacket
         using BinaryReader reader = new BinaryReader(stream);
         try
         {
-            if (packet == null) return null;
+            if (packet == null)
+            {
+                return null;
+            }
+
             packet.ReadPacket(reader);
         }
         catch

@@ -128,7 +128,9 @@ public unsafe class NativeBuffer<TItem> : OwnedStructureBase, IEnumerable<TItem>
             ThrowIfDisposed();
 
             if (index < 0 || index >= Length)
+            {
                 throw new ArgumentOutOfRangeException(nameof(index));
+            }
 
             return ref *(((TItem*)UnsafeHandle.ToPointer()) + index);
         }

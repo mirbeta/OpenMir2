@@ -64,7 +64,9 @@ public class OpenJDKRandomizer : IRandomizer
     private static bool CompareAndSet(ref long currentValue, long newValue)
     {
         if (currentValue == newValue)
+        {
             return false;
+        }
 
         currentValue = newValue;
 
@@ -81,7 +83,9 @@ public class OpenJDKRandomizer : IRandomizer
             long next = _seedUniquifier * 181783497276652981L;
 
             if (CompareAndSet(ref _seedUniquifier, next))
+            {
                 return next;
+            }
         }
     }
 }

@@ -37,7 +37,10 @@ namespace SystemModule.DataHandlingAdapters
         public bool OnParsingHeader(byte[] header)
         {
             if (!MemoryMarshal.TryRead(header, out _header))
+            {
                 return false;
+            }
+
             if (_header.PackLength < 0)
             {
                 this.bodyLength = -_header.PackLength;

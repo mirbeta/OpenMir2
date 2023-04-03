@@ -31,13 +31,19 @@ public abstract class ProcessKeeperBase : CriticalDisposableBase, IProcessKeeper
         ArgumentsGuard.ThrowIfNull(process, nameof(process));
 
         if (process.HasExited)
+        {
             throw new ArgumentException("Process is already exited.");
+        }
 
         if (AssociatedProcess != process)
+        {
             return;
+        }
 
         if (AssociatedProcess != null)
+        {
             AssociatedProcess.Exited -= OnAssociatedProcessExited;
+        }
 
         AssociatedProcess = process;
         AssociatedProcess.EnableRaisingEvents = true;
@@ -49,9 +55,13 @@ public abstract class ProcessKeeperBase : CriticalDisposableBase, IProcessKeeper
         AssociatedProcess.Exited -= OnAssociatedProcessExited;
 
         if (AssociatedProcess.ExitCode != 0)
+        {
             _exitApplicationError = $"The application is failed with error: 0x{AssociatedProcess.ExitCode:X8}";
+        }
         else
+        {
             _exitApplicationError = $"The application is exited without error, it was ended without disposing from this application.";
+        }
 
         Dispose();
     }
@@ -70,6 +80,8 @@ public abstract class ProcessKeeperBase : CriticalDisposableBase, IProcessKeeper
     protected override void ThrowIfDisposed()
     {
         if (IsDisposed)
+        {
             throw new ObjectDisposedException(nameof(IDisposable), _exitApplicationError ?? DisposableBase.ObjectDisposedError);
+        }
     }
 }

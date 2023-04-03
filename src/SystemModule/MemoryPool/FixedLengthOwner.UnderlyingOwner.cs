@@ -20,7 +20,9 @@ public sealed partial class FixedLengthOwner<T>
         public void Dispose()
         {
             if (_own)
+            {
                 _buffer.Dispose();
+            }
         }
 
         public Memory<T> Memory

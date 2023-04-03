@@ -12,9 +12,14 @@ namespace SystemModule.Extensions
         public static void WriteAsciiString(this BinaryWriter binaryWriter, string value, int defaultSize)
         {
             if (binaryWriter == null)
+            {
                 throw new ArgumentNullException(nameof(binaryWriter));
+            }
+
             if (defaultSize == 0)
+            {
                 throw new ArgumentNullException(nameof(defaultSize));
+            }
 
             byte[] buffer;
             if (string.IsNullOrEmpty(value) && defaultSize > 0)

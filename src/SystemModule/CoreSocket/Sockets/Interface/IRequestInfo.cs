@@ -6,6 +6,6 @@ namespace SystemModule.CoreSocket
     /// </summary>
     public interface IRequestInfo
     {
-        
+
     }
 }

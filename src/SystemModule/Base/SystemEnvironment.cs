@@ -28,7 +28,10 @@ public static class ServerEnvironment
         memoryInfo.Refresh();
         if (IsWindows())
         {
-            if (!NativeMethods.GlobalMemoryStatusEx(ref memoryInfo)) throw new Exception("无法获得内存信息");
+            if (!NativeMethods.GlobalMemoryStatusEx(ref memoryInfo))
+            {
+                throw new Exception("无法获得内存信息");
+            }
         }
         else
         {
@@ -84,34 +87,56 @@ public static class ServerEnvironment
     private static unsafe bool Equals(IPAddress x, IPAddress y)
     {
         if (x == null && y == null)
+        {
             return true;
+        }
+
         if (x.AddressFamily != y.AddressFamily)
+        {
             return false;
+        }
 
         byte[] bx = x.GetAddressBytes();
         byte[] by = y.GetAddressBytes();
         if (bx.Length != by.Length)
+        {
             return false;
+        }
 
         fixed (byte* pinnedX = bx)
         {
             fixed (byte* pinnedY = by)
             {
                 if (bx.Length == 4)
+                {
                     return *(uint*)pinnedX == *(uint*)pinnedY; // 32bit
+                }
                 else if (bx.Length == 8)
+                {
                     return *(ulong*)pinnedX == *(ulong*)pinnedY; // 64bit
+                }
                 else if (bx.Length == 16)
+                {
                     return *(decimal*)pinnedX == *(decimal*)pinnedY; // 128bit
+                }
                 else if (bx.Length == 2)
+                {
                     return *(ushort*)pinnedX == *(ushort*)pinnedY; // 16bit
+                }
                 else if (bx.Length == 1)
+                {
                     return *pinnedX == *pinnedY;
+                }
                 else
                 {
                     for (int i = 0; i < bx.Length; ++i)
+                    {
                         if (pinnedX[i] != pinnedY[i])
+                        {
                             return false;
+                        }
+                    }
+
                     return true;
                 }
             }

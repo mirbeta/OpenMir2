@@ -27,7 +27,9 @@ public abstract unsafe class NativeStructureBase : DisposableBase, INativeStruct
     private void ThrowIfInitialized()
     {
         if (UnsafeHandle != IntPtr.Zero)
+        {
             throw new Exception(AlreadyHasAllocatedError);
+        }
     }
 
     /// <summary>
@@ -50,7 +52,9 @@ public abstract unsafe class NativeStructureBase : DisposableBase, INativeStruct
         UnsafeHandle = Allocate(size);
 
         if (UnsafeHandle == nint.Zero)
+        {
             throw new Exception(AllocateReturnedUnexpectedValueError);
+        }
 
         Size = size;
         IsHandleOwner = true;
@@ -87,7 +91,9 @@ public abstract unsafe class NativeStructureBase : DisposableBase, INativeStruct
             UnsafeHandle = Allocate(size);
 
             if (UnsafeHandle == IntPtr.Zero)
+            {
                 throw new Exception(AllocateReturnedUnexpectedValueError);
+            }
 
             Span<byte> inputSpan = new Span<byte>(pointer.ToPointer(), size);
             Span<byte> destinationSpan = new Span<byte>(UnsafeHandle.ToPointer(), size);
@@ -112,14 +118,18 @@ public abstract unsafe class NativeStructureBase : DisposableBase, INativeStruct
         ThrowIfDisposed();
 
         if (!IsHandleOwner)
+        {
             throw new Exception("This object is not an owner of memory handle.");
+        }
 
         ArgumentsGuard.ThrowIfLessOrEqualZero(newSize);
 
         nint newHandle = Reallocate(UnsafeHandle, newSize);
 
         if (newHandle == IntPtr.Zero)
+        {
             throw new Exception(AllocateReturnedUnexpectedValueError);
+        }
 
         UnsafeHandle = newHandle;
         Size = newSize;
@@ -162,7 +172,9 @@ public abstract unsafe class NativeStructureBase : DisposableBase, INativeStruct
     protected override void InternalDispose(bool manual)
     {
         if (IsHandleOwner)
+        {
             Free(UnsafeHandle);
+        }
 
         UnsafeHandle = IntPtr.Zero;
         Size = 0;

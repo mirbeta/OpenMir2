@@ -5,6 +5,6 @@ namespace SystemModule.CoreSocket
     /// </summary>
     public interface IMessageObject
     {
-        
+
     }
 }

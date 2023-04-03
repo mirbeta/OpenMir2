@@ -30,7 +30,9 @@ public static class ArgumentsGuard
     public static void ThrowIfNull(Object value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value == null)
+        {
             throw new ArgumentNullException(name);
+        }
     }
 
     /// <summary>
@@ -45,7 +47,9 @@ public static class ArgumentsGuard
     public static void ThrowIfDisposed(IDisposeIndication value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value.IsDisposed)
+        {
             throw new ObjectDisposedException(name, $"The object {value.GetType().Name} is already disposed.");
+        }
     }
 
     /// <summary>
@@ -58,7 +62,9 @@ public static class ArgumentsGuard
     public static void ThrowIfNotType<TType>(Object value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (!(value is TType))
+        {
             throw new ArgumentException(WrongObjectType, name);
+        }
     }
 
     /// <summary>
@@ -74,7 +80,9 @@ public static class ArgumentsGuard
         casted = (TType)value;
 
         if (!(value is TType))
+        {
             throw new ArgumentException(WrongObjectType, name);
+        }
     }
 
     //=========================================================================//
@@ -88,7 +96,9 @@ public static class ArgumentsGuard
     public static void ThrowIfEqual(long value, long input, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value == input)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsEqualError, value, input));
+        }
     }
 
     /// <summary>
@@ -99,7 +109,9 @@ public static class ArgumentsGuard
     public static void ThrowIfEqual(ulong value, ulong input, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value == input)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsEqualError, value, input));
+        }
     }
 
     /// <summary>
@@ -110,7 +122,9 @@ public static class ArgumentsGuard
     public static void ThrowIfEqual(double value, double input, [CallerArgumentExpression("value")] String name = "value")
     {
         if (Math.Abs(value - input) < ApproximationValue)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsEqualError, value, input));
+        }
     }
 
     //=========================================================================//
@@ -124,7 +138,9 @@ public static class ArgumentsGuard
     public static void ThrowIfLess(long value, long desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value < desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsLessError, value, desired));
+        }
     }
 
     /// <summary>
@@ -135,7 +151,9 @@ public static class ArgumentsGuard
     public static void ThrowIfLess(ulong value, ulong desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value < desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsLessError, value, desired));
+        }
     }
 
     /// <summary>
@@ -146,7 +164,9 @@ public static class ArgumentsGuard
     public static void ThrowIfLess(double value, double desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value < desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsLessError, value, desired));
+        }
     }
 
     /// <summary>
@@ -157,7 +177,9 @@ public static class ArgumentsGuard
     public static void ThrowIfLessOrEqual(long value, long desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value <= desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsLessOrEqualError, value, desired));
+        }
     }
 
     /// <summary>
@@ -168,7 +190,9 @@ public static class ArgumentsGuard
     public static void ThrowIfLessOrEqual(ulong value, ulong desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value <= desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsLessOrEqualError, value, desired));
+        }
     }
 
     /// <summary>
@@ -182,7 +206,9 @@ public static class ArgumentsGuard
     public static void ThrowIfLessOrEqual(double value, double desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value < desired || Math.Abs(value - desired) < ApproximationValue)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsLessOrEqualError, value, desired));
+        }
     }
 
     //=========================================================================//
@@ -196,7 +222,9 @@ public static class ArgumentsGuard
     public static void ThrowIfGreater(long value, long desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value > desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsGreaterError, value, desired));
+        }
     }
 
     /// <summary>
@@ -207,7 +235,9 @@ public static class ArgumentsGuard
     public static void ThrowIfGreater(ulong value, ulong desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value > desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsGreaterError, value, desired));
+        }
     }
 
     /// <summary>
@@ -218,7 +248,9 @@ public static class ArgumentsGuard
     public static void ThrowIfGreater(double value, double desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value > desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsGreaterError, value, desired));
+        }
     }
 
     /// <summary>
@@ -229,7 +261,9 @@ public static class ArgumentsGuard
     public static void ThrowIfGreaterOrEqual(long value, long desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value >= desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsGreaterOrEqualError, value, desired));
+        }
     }
 
     /// <summary>
@@ -240,7 +274,9 @@ public static class ArgumentsGuard
     public static void ThrowIfGreaterOrEqual(ulong value, ulong desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value >= desired)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsGreaterOrEqualError, value, desired));
+        }
     }
 
     /// <summary>
@@ -254,7 +290,9 @@ public static class ArgumentsGuard
     public static void ThrowIfGreaterOrEqual(double value, double desired, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value > desired || Math.Abs(value - desired) < ApproximationValue)
+        {
             throw new ArgumentOutOfRangeException(name, String.Format(ValueIsGreaterOrEqualError, value, desired));
+        }
     }
 
     //=========================================================================//
@@ -347,7 +385,9 @@ public static class ArgumentsGuard
     public static void ThrowIfNotInRange<TItem>(TItem value, FlexibleRange<TItem> range, [CallerArgumentExpression("value")] String name = "value")
     {
         if (!range.IsInRange(value))
+        {
             throw new ArgumentOutOfRangeException(name);
+        }
     }
 
     //=========================================================================//
@@ -361,13 +401,17 @@ public static class ArgumentsGuard
     public static void ThrowIfNullOrEmpty(String value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (String.IsNullOrEmpty(value))
+        {
             throw new ArgumentException(name, "String cannot be null or empty.");
+        }
     }
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     public static void ThrowIfObjectDisposed(IDisposeIndication value, [CallerArgumentExpression("value")] String name = "value")
     {
         if (value.IsDisposed)
+        {
             throw new ObjectDisposedException(name);
+        }
     }
 }

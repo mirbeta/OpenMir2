@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using SystemModule.CoreSocket;
 
 namespace SystemModule.CoreSocket
 {
@@ -13,12 +12,12 @@ namespace SystemModule.CoreSocket
         /// <inheritdoc/>
         /// </summary>
         public override bool CanSplicingSend => false;
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
         public override bool CanSendRequestInfo => false;
-    
+
         /// <summary>
         /// 当接收到数据时处理数据
         /// </summary>
@@ -27,7 +26,7 @@ namespace SystemModule.CoreSocket
         {
             GoReceived(byteBlock, null);
         }
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -38,12 +37,12 @@ namespace SystemModule.CoreSocket
         {
             GoSend(buffer, offset, length);
         }
-    
+
         protected override void PreviewSend(ReadOnlyMemory<byte> buffer, int offset, int length)
         {
             GoSend(buffer, offset, length);
         }
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -52,7 +51,7 @@ namespace SystemModule.CoreSocket
         {
             throw new System.NotImplementedException();//因为设置了不支持拼接发送，所以该方法可以不实现。
         }
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
@@ -61,7 +60,7 @@ namespace SystemModule.CoreSocket
         {
             throw new System.NotImplementedException();
         }
-    
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

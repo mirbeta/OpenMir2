@@ -1,9 +1,9 @@
+using NLog;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
-using NLog;
 using SystemModule.Extensions;
 
 namespace SystemModule.CoreSocket

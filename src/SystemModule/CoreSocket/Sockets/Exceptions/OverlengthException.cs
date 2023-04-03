@@ -13,7 +13,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         public OverlengthException()
         {
-            
+
         }
 
         /// <summary>
@@ -22,7 +22,7 @@ namespace SystemModule.CoreSocket
         /// <param name="message"></param>
         public OverlengthException(string message) : base(message)
         {
-            
+
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace SystemModule.CoreSocket
         /// <param name="inner"></param>
         public OverlengthException(string message, System.Exception inner) : base(message, inner)
         {
-            
+
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace SystemModule.CoreSocket
         /// <param name="context"></param>
         protected OverlengthException(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) : base(info, context)
         {
-            
+
         }
     }
 }

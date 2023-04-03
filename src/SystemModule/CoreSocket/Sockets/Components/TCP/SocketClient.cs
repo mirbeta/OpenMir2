@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,7 +6,6 @@ using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using NLog;
 using SystemModule.CoreSocket.Common;
 using SystemModule.CoreSocket.Common.Options;
 using SystemModule.CoreSocket.Resources;

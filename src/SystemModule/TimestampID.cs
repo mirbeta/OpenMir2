@@ -26,7 +26,11 @@ public class TimestampID
     /// <returns></returns>
     public static TimestampID GetInstance(DateTime? initialDateTime = null)
     {
-        if (_timestampID == null) Interlocked.CompareExchange(ref _timestampID, new TimestampID(initialDateTime), null);
+        if (_timestampID == null)
+        {
+            Interlocked.CompareExchange(ref _timestampID, new TimestampID(initialDateTime), null);
+        }
+
         return _timestampID;
     }
 
@@ -37,7 +41,11 @@ public class TimestampID
     {
         get
         {
-            if (_initialDateTime == null || _initialDateTime.Value == DateTime.MinValue) return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            if (_initialDateTime == null || _initialDateTime.Value == DateTime.MinValue)
+            {
+                return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+            }
+
             return _initialDateTime.Value;
         }
     }
@@ -89,7 +97,11 @@ public class TimestampID
     /// <returns></returns>
     private long GetTimestamp()
     {
-        if (InitialDateTime >= DateTime.Now) throw new Exception("最初时间比当前时间还大，不合理");
+        if (InitialDateTime >= DateTime.Now)
+        {
+            throw new Exception("最初时间比当前时间还大，不合理");
+        }
+
         TimeSpan ts = DateTime.UtcNow - InitialDateTime;
         return (long)ts.TotalMilliseconds;
     }

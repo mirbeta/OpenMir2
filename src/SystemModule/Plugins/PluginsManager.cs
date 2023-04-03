@@ -104,9 +104,18 @@ namespace SystemModule.Plugins
 
                 m_plugins.Sort(delegate (PluginModel x, PluginModel y)
                 {
-                    if (x.Plugin.Order == y.Plugin.Order) return 0;
-                    else if (x.Plugin.Order < y.Plugin.Order) return 1;
-                    else return -1;
+                    if (x.Plugin.Order == y.Plugin.Order)
+                    {
+                        return 0;
+                    }
+                    else if (x.Plugin.Order < y.Plugin.Order)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return -1;
+                    }
                 });
 
                 Container.RegisterSingleton(plugin);

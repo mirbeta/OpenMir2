@@ -16,10 +16,16 @@ public class DoubleComparer : ComparerBase<double>
     public override Equality Compare(double first, double second)
     {
         if (Math.Abs(first - second) < ApproximationValue)
+        {
             return Equality.Equal;
+        }
         else if (first > second)
+        {
             return Equality.Greater;
+        }
         else
+        {
             return Equality.Less;
+        }
     }
 }

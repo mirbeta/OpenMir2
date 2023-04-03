@@ -4,6 +4,7 @@
         <TargetFramework>net7</TargetFramework>
         <IsPackable>false</IsPackable>
         <LangVersion>11.0</LangVersion>
+		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <RootNamespace>SystemModule</RootNamespace>
     </PropertyGroup>
 
