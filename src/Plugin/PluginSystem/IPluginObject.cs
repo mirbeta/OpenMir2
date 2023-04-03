@@ -1,4 +1,4 @@
-namespace PluginSystem
+namespace PluginEngine
 {
     /// <summary>
     /// 具有插件功能的对象

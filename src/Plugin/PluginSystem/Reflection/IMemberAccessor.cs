@@ -1,4 +1,4 @@
-﻿namespace PluginSystem.Reflection
+﻿namespace PluginEngine.Reflection
 {
 
     /// <summary>

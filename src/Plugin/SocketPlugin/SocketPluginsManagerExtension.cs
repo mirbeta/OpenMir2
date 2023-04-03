@@ -2,9 +2,8 @@ using PluginSystem;
 using SocketPlugin.Impl;
 using System;
 using System.Threading;
-using SystemModule.Sockets.Interface;
 
-namespace SystemModule.Sockets.Extensions
+namespace SocketPlugin
 {
     /// <summary>
     /// IPluginsManagerExtension
@@ -87,8 +86,7 @@ namespace SystemModule.Sockets.Extensions
         /// <param name="failCallback">失败时回调（参数依次为：客户端，本轮尝试重连次数，异常信息）。如果回调为null或者返回false，则终止尝试下次连接。</param>
         /// <param name="successCallback">成功连接时回调。</param>
         /// <returns></returns>
-        public static IPluginsManager UseReconnection(this IPluginsManager pluginsManager, int sleepTime,
-            Func<ITcpClient, int, Exception, bool> failCallback,
+        public static IPluginsManager UseReconnection(this IPluginsManager pluginsManager, int sleepTime, Func<ITcpClient, int, Exception, bool> failCallback,
             Action<ITcpClient> successCallback)
         {
             bool first = true;

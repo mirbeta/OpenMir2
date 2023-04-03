@@ -1,6 +1,5 @@
-﻿using System.Threading.Tasks;
-using SystemModule.CoreSocket;
-using SystemModule.Plugins;
+﻿using PluginSystem;
+using System.Threading.Tasks;
 
 namespace SocketPlugin
 {
@@ -15,7 +14,7 @@ namespace SocketPlugin
         /// <param name="client">客户端</param>
         /// <param name="e">参数</param>
         [AsyncRaiser]
-        void OnConnected(object client, TouchSocketEventArgs e);
+        void OnConnected(object client, PluginEventArgs e);
 
         /// <summary>
         /// 客户端连接成功后触发
@@ -23,6 +22,6 @@ namespace SocketPlugin
         /// <param name="client"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        Task OnConnectedAsync(object client, TouchSocketEventArgs e);
+        Task OnConnectedAsync(object client, PluginEventArgs e);
     }
 }

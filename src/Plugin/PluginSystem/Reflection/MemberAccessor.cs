@@ -1,7 +1,7 @@
 ﻿using System.Linq.Expressions;
 using System.Reflection;
 
-namespace PluginSystem.Reflection
+namespace PluginEngine.Reflection
 {
     /// <summary>
     /// 动态成员访问器

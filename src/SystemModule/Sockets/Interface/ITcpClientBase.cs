@@ -50,6 +50,7 @@ namespace SystemModule.Sockets.Interface
         /// </para>
         /// </summary>
         DisconnectEventHandler<ITcpClientBase> Disconnecting { get; set; }
+        
         /// <summary>
         /// IP地址
         /// </summary>
@@ -93,7 +94,7 @@ namespace SystemModule.Sockets.Interface
         void Close(string msg);
 
         /// <summary>
-        /// 获取流，在正常模式下为<see cref="NetworkStream"/>，在Ssl模式下为<see cref="SslStream"/>。
+        /// 获取流，在正常模式下为<see cref="NetworkStream"/>
         /// </summary>
         /// <returns></returns>
         Stream GetStream();

@@ -1,11 +1,10 @@
 using NLog;
+using PluginEngine.Reflection;
 using System.Collections;
-using System.Reflection;
-using PluginSystem.Reflection;
 using System.ComponentModel;
-using PluginEngine;
+using System.Reflection;
 
-namespace PluginSystem
+namespace PluginEngine
 {
     /// <summary>
     /// 表示插件管理器。

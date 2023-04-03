@@ -1,6 +1,4 @@
-using PluginEngine;
-
-namespace PluginSystem
+namespace PluginEngine
 {
     /// <summary>
     /// 插件管理器接口

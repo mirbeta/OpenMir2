@@ -1,4 +1,4 @@
-namespace PluginSystem
+namespace PluginEngine
 {
     /// <summary>
     /// 插件接口

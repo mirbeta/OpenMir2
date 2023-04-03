@@ -1,3 +1,4 @@
+using PluginEngine;
 using PluginSystem;
 using System.Threading.Tasks;
 
@@ -16,12 +17,12 @@ namespace SocketPlugin.Impl
     /// </summary>
     public abstract class TcpPluginBase<TClient> : PluginBase, ITcpPlugin, IConfigPlugin
     {
-        void IConnectedPlugin.OnConnected(object client, TouchSocketEventArgs e)
+        void IConnectedPlugin.OnConnected(object client, PluginEventArgs e)
         {
             OnConnected((TClient)client, e);
         }
 
-        Task IConnectedPlugin.OnConnectedAsync(object client, TouchSocketEventArgs e)
+        Task IConnectedPlugin.OnConnectedAsync(object client, PluginEventArgs e)
         {
             return OnConnectedAsync((TClient)client, e);
         }
@@ -123,7 +124,7 @@ namespace SocketPlugin.Impl
         /// </summary>
         /// <param name="client"></param>
         /// <param name="e"></param>
-        protected virtual void OnConnected(TClient client, TouchSocketEventArgs e)
+        protected virtual void OnConnected(TClient client, PluginEventArgs e)
         {
         }
 
@@ -133,9 +134,9 @@ namespace SocketPlugin.Impl
         /// <param name="client"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        protected virtual Task OnConnectedAsync(TClient client, TouchSocketEventArgs e)
+        protected virtual Task OnConnectedAsync(TClient client, PluginEventArgs e)
         {
-            return EasyTask.CompletedTask;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -194,7 +195,7 @@ namespace SocketPlugin.Impl
         /// </summary>
         /// <param name="client"></param>
         /// <param name="e"></param>
-        protected virtual void OnIDChanged(TClient client, TouchSocketEventArgs e)
+        protected virtual void OnIDChanged(TClient client, PluginEventArgs e)
         {
         }
 
@@ -204,7 +205,7 @@ namespace SocketPlugin.Impl
         /// <param name="client"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        protected virtual Task OnIDChangedAsync(TClient client, TouchSocketEventArgs e)
+        protected virtual Task OnIDChangedAsync(TClient client, PluginEventArgs e)
         {
             return EasyTask.CompletedTask;
         }

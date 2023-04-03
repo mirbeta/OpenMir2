@@ -11,7 +11,7 @@ namespace SocketPlugin
         /// <summary>
         /// 即将断开连接(仅主动断开时有效)。
         /// <para>
-        /// 当主动调用Close断开时，可通过<see cref="TouchSocketEventArgs.IsPermitOperation"/>终止断开行为。
+        /// 当主动调用Close断开时，可通过<see cref="PluginEventArgs.IsPermitOperation"/>终止断开行为。
         /// </para>
         /// </summary>
         /// <param name="client">客户端</param>
@@ -22,7 +22,7 @@ namespace SocketPlugin
         /// <summary>
         /// 即将断开连接(仅主动断开时有效)。
         /// <para>
-        /// 当主动调用Close断开时，可通过<see cref="TouchSocketEventArgs.IsPermitOperation"/>终止断开行为。
+        /// 当主动调用Close断开时，可通过<see cref="PluginEventArgs.IsPermitOperation"/>终止断开行为。
         /// </para>
         /// </summary>
         /// <param name="client"></param>

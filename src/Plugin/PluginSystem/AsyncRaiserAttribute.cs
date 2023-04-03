@@ -1,4 +1,4 @@
-namespace PluginSystem
+namespace PluginEngine
 {
     /// <summary>
     /// 标识该接口应当还会触发异步接口。

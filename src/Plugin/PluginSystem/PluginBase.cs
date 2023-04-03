@@ -1,4 +1,4 @@
-﻿namespace PluginSystem
+﻿namespace PluginEngine
 {
     /// <summary>
     /// PluginBase

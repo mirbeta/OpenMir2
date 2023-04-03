@@ -1,6 +1,6 @@
 using System.Linq.Expressions;
 
-namespace PluginSystem.Reflection
+namespace PluginEngine.Reflection
 {
 
     /// <summary>

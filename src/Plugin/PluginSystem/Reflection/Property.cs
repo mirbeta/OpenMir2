@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using System.Reflection;
 
-namespace PluginSystem.Reflection
+namespace PluginEngine.Reflection
 {
 
     /// <summary>
