@@ -270,22 +270,27 @@ namespace GameSrv.World {
                                             monster.ProcessRunCount++;
                                         }
                                         else {
-                                            if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime) {
+                                            if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
+                                            {
                                                 monster.SearchTick = HUtil32.GetTickCount();
-                                                if (monster.Death) {
+                                                //todo 需要考虑一下怪物是否需要彻底放弃主动搜索视野范围，因为玩家已经主动搜索了怪物，并且将怪物加入到了怪物视野范围
+                                                if (monster.Death)
+                                                {
                                                     monster.SearchViewRangeDeath();
                                                 }
-                                                else {
+                                                else
+                                                {
                                                     //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升运行处理效率
                                                     //要区分哪些怪物是主动攻击，哪些怪物是被动攻击
                                                     //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
                                                     //其余怪物均为主动攻击
                                                     //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
                                                     //由玩家找出附近的怪物，然后添加到怪物列表
-                                                    if (monster.IsSlave) {
+                                                    if (monster.IsSlave)
+                                                    {
                                                         monster.SearchViewRange();
                                                     }
-                                                    else if ((monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster)) // 守卫和下属主动搜索附近的精灵
+                                                    else if ((monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster))// 守卫和下属主动搜索附近的精灵
                                                     {
                                                         if (monster.VisibleActors.Count > 3)//超过3个目标，优先使用上次的目标
                                                         {
