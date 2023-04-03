@@ -2,23 +2,24 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace SystemModule.Sockets.Event;
-
-public class DSCClientConnectedEventArgs : EventArgs
+namespace SystemModule.Sockets.Event
 {
-    public readonly Socket Socket;
-    public readonly int SocketHandle;
-    public readonly IPEndPoint RemoteEndPoint;
-
-    public DSCClientConnectedEventArgs(Socket soc)
+    public class DSCClientConnectedEventArgs : EventArgs
     {
-        this.Socket = soc;
-        this.SocketHandle = Socket == null ? 0 : (int)Socket.Handle;
-        if (Socket != null && Socket.Connected)
+        public readonly Socket Socket;
+        public readonly int SocketHandle;
+        public readonly IPEndPoint RemoteEndPoint;
+
+        public DSCClientConnectedEventArgs(Socket soc)
         {
-            if (soc?.RemoteEndPoint != null)
+            this.Socket = soc;
+            this.SocketHandle = Socket == null ? 0 : (int)Socket.Handle;
+            if (Socket != null && Socket.Connected)
             {
-                RemoteEndPoint = (IPEndPoint)soc.RemoteEndPoint;
+                if (soc?.RemoteEndPoint != null)
+                {
+                    RemoteEndPoint = (IPEndPoint)soc.RemoteEndPoint;
+                }
             }
         }
     }

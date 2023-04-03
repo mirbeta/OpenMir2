@@ -1,40 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SystemModule;
-
-public class ObjectPool<T>
+namespace SystemModule
 {
-    private readonly Stack<T> m_pool;
-
-    public ObjectPool(int capacity)
+    public class ObjectPool<T>
     {
-        Capacity = capacity;
-        m_pool = new Stack<T>(capacity);
-    }
+        private readonly Stack<T> m_pool;
 
-    public int Capacity { get; }
-
-    public int Count => m_pool.Count;
-
-    public T Pop()
-    {
-        lock (m_pool)
+        public ObjectPool(int capacity)
         {
-            return m_pool.Pop();
-        }
-    }
-
-    public void Push(T item)
-    {
-        if (item == null)
-        {
-            throw new ArgumentNullException("Items added to pool cannot be null");
+            Capacity = capacity;
+            m_pool = new Stack<T>(capacity);
         }
 
-        lock (m_pool)
+        public int Capacity { get; }
+
+        public int Count => m_pool.Count;
+
+        public T Pop()
         {
-            m_pool.Push(item);
+            lock (m_pool)
+            {
+                return m_pool.Pop();
+            }
+        }
+
+        public void Push(T item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException("Items added to pool cannot be null");
+            }
+
+            lock (m_pool)
+            {
+                m_pool.Push(item);
+            }
         }
     }
 }

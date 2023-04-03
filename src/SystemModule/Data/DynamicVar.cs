@@ -1,11 +1,12 @@
 ﻿using SystemModule.Enums;
 
-namespace SystemModule.Data;
-
-public class DynamicVar
+namespace SystemModule.Data
 {
-    public string sName;
-    public VarType VarType;
-    public int nInternet;
-    public string sString;
+    public class DynamicVar
+    {
+        public string sName;
+        public VarType VarType;
+        public int nInternet;
+        public string sString;
+    }
 }

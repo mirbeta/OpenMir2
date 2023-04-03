@@ -1,13 +1,14 @@
-﻿namespace SystemModule.Enums;
-
-public enum MsgType
+﻿namespace SystemModule.Enums
 {
-    System,
-    Notice,
-    Hint,
-    Say,
-    Castle,
-    Cust,
-    GameManger,
-    Mon
+    public enum MsgType
+    {
+        System,
+        Notice,
+        Hint,
+        Say,
+        Castle,
+        Cust,
+        GameManger,
+        Mon
+    }
 }

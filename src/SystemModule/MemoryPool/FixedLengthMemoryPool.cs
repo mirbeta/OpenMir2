@@ -1,27 +1,28 @@
 using System;
 using System.Buffers;
 
-namespace SystemModule.MemoryPool;
-
-public sealed class FixedLengthMemoryPool<T> : MemoryPool<T>
+namespace SystemModule.MemoryPool
 {
-    public static new FixedLengthMemoryPool<T> Shared { get; } = new FixedLengthMemoryPool<T>();
-
-    protected override void Dispose(bool disposing) { }
-
-    public override IMemoryOwner<T> Rent(int bufferSize = -1)
+    public sealed class FixedLengthMemoryPool<T> : MemoryPool<T>
     {
-        if (bufferSize == -1)
+        public static new FixedLengthMemoryPool<T> Shared { get; } = new FixedLengthMemoryPool<T>();
+
+        protected override void Dispose(bool disposing) { }
+
+        public override IMemoryOwner<T> Rent(int bufferSize = -1)
         {
-            bufferSize = 4096;
-        }
-        else if ((uint)bufferSize > MaxBufferSize)
-        {
-            throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            if (bufferSize == -1)
+            {
+                bufferSize = 4096;
+            }
+            else if ((uint)bufferSize > MaxBufferSize)
+            {
+                throw new ArgumentOutOfRangeException(nameof(bufferSize));
+            }
+
+            return new FixedLengthOwner<T>(bufferSize);
         }
 
-        return new FixedLengthOwner<T>(bufferSize);
+        public override int MaxBufferSize { get; } = int.MaxValue;
     }
-
-    public override int MaxBufferSize { get; } = int.MaxValue;
 }

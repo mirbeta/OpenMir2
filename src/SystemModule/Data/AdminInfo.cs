@@ -1,8 +1,9 @@
-﻿namespace SystemModule.Data;
-
-public struct AdminInfo
+﻿namespace SystemModule.Data
 {
-    public byte Level;
-    public string ChrName;
-    public string IPaddr;
+    public struct AdminInfo
+    {
+        public byte Level;
+        public string ChrName;
+        public string IPaddr;
+    }
 }

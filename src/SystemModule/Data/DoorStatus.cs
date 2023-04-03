@@ -1,7 +1,8 @@
-﻿namespace SystemModule.Data;
-
-public class DoorStatus
+﻿namespace SystemModule.Data
 {
-    public bool Opened;
-    public int OpenTick;
+    public class DoorStatus
+    {
+        public bool Opened;
+        public int OpenTick;
+    }
 }

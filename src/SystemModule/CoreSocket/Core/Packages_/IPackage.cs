@@ -1,21 +1,22 @@
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// 包接口规范
-/// </summary>
-public interface IPackage
+namespace SystemModule.CoreSocket
 {
     /// <summary>
-    /// 打包。
-    /// <para>重写的话，约定基类方法必须先执行</para>
+    /// 包接口规范
     /// </summary>
-    /// <param name="byteBlock"></param>
-    void Package(ByteBlock byteBlock);
+    public interface IPackage
+    {
+        /// <summary>
+        /// 打包。
+        /// <para>重写的话，约定基类方法必须先执行</para>
+        /// </summary>
+        /// <param name="byteBlock"></param>
+        void Package(ByteBlock byteBlock);
 
-    /// <summary>
-    /// 解包。
-    /// <para>重写的话，约定基类方法必须先执行</para>
-    /// </summary>
-    /// <param name="byteBlock"></param>
-    void Unpackage(ByteBlock byteBlock);
+        /// <summary>
+        /// 解包。
+        /// <para>重写的话，约定基类方法必须先执行</para>
+        /// </summary>
+        /// <param name="byteBlock"></param>
+        void Unpackage(ByteBlock byteBlock);
+    }
 }

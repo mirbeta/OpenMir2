@@ -1,60 +1,61 @@
 ﻿using System;
 using System.Threading;
 
-namespace SystemModule;
-
-public class ReaderWriterLockWrapper
+namespace SystemModule
 {
-    private readonly ReaderWriterLockSlim lck;
-    private readonly ReaderWrapper reader;
-    private readonly WriterWrapper writer;
-
-    public ReaderWriterLockWrapper()
-    {
-        lck = new ReaderWriterLockSlim();
-        reader = new ReaderWrapper(lck);
-        writer = new WriterWrapper(lck);
-    }
-
-    public IDisposable EnterReadLock()
-    {
-        lck.EnterReadLock();
-        return reader;
-    }
-
-    public IDisposable EnterWriteLock()
-    {
-        lck.EnterWriteLock();
-        return writer;
-    }
-
-    private struct ReaderWrapper : IDisposable
+    public class ReaderWriterLockWrapper
     {
         private readonly ReaderWriterLockSlim lck;
+        private readonly ReaderWrapper reader;
+        private readonly WriterWrapper writer;
 
-        public ReaderWrapper(ReaderWriterLockSlim lck)
+        public ReaderWriterLockWrapper()
         {
-            this.lck = lck;
+            lck = new ReaderWriterLockSlim();
+            reader = new ReaderWrapper(lck);
+            writer = new WriterWrapper(lck);
         }
 
-        public void Dispose()
+        public IDisposable EnterReadLock()
         {
-            lck.ExitReadLock();
-        }
-    }
-
-    private struct WriterWrapper : IDisposable
-    {
-        private readonly ReaderWriterLockSlim lck;
-
-        public WriterWrapper(ReaderWriterLockSlim lck)
-        {
-            this.lck = lck;
+            lck.EnterReadLock();
+            return reader;
         }
 
-        public void Dispose()
+        public IDisposable EnterWriteLock()
         {
-            lck.ExitWriteLock();
+            lck.EnterWriteLock();
+            return writer;
+        }
+
+        private struct ReaderWrapper : IDisposable
+        {
+            private readonly ReaderWriterLockSlim lck;
+
+            public ReaderWrapper(ReaderWriterLockSlim lck)
+            {
+                this.lck = lck;
+            }
+
+            public void Dispose()
+            {
+                lck.ExitReadLock();
+            }
+        }
+
+        private struct WriterWrapper : IDisposable
+        {
+            private readonly ReaderWriterLockSlim lck;
+
+            public WriterWrapper(ReaderWriterLockSlim lck)
+            {
+                this.lck = lck;
+            }
+
+            public void Dispose()
+            {
+                lck.ExitWriteLock();
+            }
         }
     }
 }

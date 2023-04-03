@@ -1,7 +1,8 @@
-﻿namespace SystemModule.Data;
-
-public struct DeleteItem
+﻿namespace SystemModule.Data
 {
-    public string ItemName;
-    public int MakeIndex;
+    public struct DeleteItem
+    {
+        public string ItemName;
+        public int MakeIndex;
+    }
 }

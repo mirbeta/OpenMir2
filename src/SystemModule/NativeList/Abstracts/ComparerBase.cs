@@ -4,52 +4,53 @@ using System.Collections.Generic;
 using SystemModule.NativeList.Enums;
 using SystemModule.NativeList.Helpers;
 
-namespace SystemModule.NativeList.Abstracts;
-
-/// <summary>
-/// Base class for comparing several objects.
-/// </summary>
-/// <typeparam name="TItem"></typeparam>
-public abstract class ComparerBase<TItem> : IComparer<TItem>, IEqualityComparer<TItem>, IComparer, IEqualityComparer
+namespace SystemModule.NativeList.Abstracts
 {
     /// <summary>
-    /// Compares two objects and returns a value indicating whether 
-    /// one is less than, equal to, or greater than the other.
+    /// Base class for comparing several objects.
     /// </summary>
-    public abstract Equality Compare(TItem first, TItem second);
-
-    int IComparer<TItem>.Compare(TItem first, TItem second)
+    /// <typeparam name="TItem"></typeparam>
+    public abstract class ComparerBase<TItem> : IComparer<TItem>, IEqualityComparer<TItem>, IComparer, IEqualityComparer
     {
-        return (int)Compare(first, second);
-    }
+        /// <summary>
+        /// Compares two objects and returns a value indicating whether 
+        /// one is less than, equal to, or greater than the other.
+        /// </summary>
+        public abstract Equality Compare(TItem first, TItem second);
 
-    int IComparer.Compare(Object first, Object second)
-    {
-        return (int)Compare((TItem)first, (TItem)second);
-    }
+        int IComparer<TItem>.Compare(TItem first, TItem second)
+        {
+            return (int)Compare(first, second);
+        }
 
-    bool IEqualityComparer<TItem>.Equals(TItem first, TItem second)
-    {
-        return Compare(first, second) == Equality.Equal;
-    }
+        int IComparer.Compare(Object first, Object second)
+        {
+            return (int)Compare((TItem)first, (TItem)second);
+        }
 
-    bool IEqualityComparer.Equals(Object first, Object second)
-    {
-        return Compare((TItem)first, (TItem)second) == Equality.Equal;
-    }
+        bool IEqualityComparer<TItem>.Equals(TItem first, TItem second)
+        {
+            return Compare(first, second) == Equality.Equal;
+        }
 
-    int IEqualityComparer<TItem>.GetHashCode(TItem obj)
-    {
-        ArgumentsGuard.ThrowIfNull(obj);
+        bool IEqualityComparer.Equals(Object first, Object second)
+        {
+            return Compare((TItem)first, (TItem)second) == Equality.Equal;
+        }
 
-        return obj.GetHashCode();
-    }
+        int IEqualityComparer<TItem>.GetHashCode(TItem obj)
+        {
+            ArgumentsGuard.ThrowIfNull(obj);
 
-    int IEqualityComparer.GetHashCode(Object obj)
-    {
-        ArgumentsGuard.ThrowIfNull(obj);
-        ArgumentsGuard.ThrowIfNotType<TItem>(obj);
+            return obj.GetHashCode();
+        }
 
-        return obj.GetHashCode();
+        int IEqualityComparer.GetHashCode(Object obj)
+        {
+            ArgumentsGuard.ThrowIfNull(obj);
+            ArgumentsGuard.ThrowIfNotType<TItem>(obj);
+
+            return obj.GetHashCode();
+        }
     }
 }

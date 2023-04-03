@@ -1,32 +1,33 @@
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// 运行状态
-/// </summary>
-public enum RunStatus : byte
+namespace SystemModule.CoreSocket
 {
     /// <summary>
-    /// None
+    /// 运行状态
     /// </summary>
-    None,
+    public enum RunStatus : byte
+    {
+        /// <summary>
+        /// None
+        /// </summary>
+        None,
 
-    /// <summary>
-    /// Running
-    /// </summary>
-    Running,
+        /// <summary>
+        /// Running
+        /// </summary>
+        Running,
 
-    /// <summary>
-    /// Completed
-    /// </summary>
-    Completed,
+        /// <summary>
+        /// Completed
+        /// </summary>
+        Completed,
 
-    /// <summary>
-    /// Pause
-    /// </summary>
-    Paused,
+        /// <summary>
+        /// Pause
+        /// </summary>
+        Paused,
 
-    /// <summary>
-    /// Disposed
-    /// </summary>
-    Disposed
+        /// <summary>
+        /// Disposed
+        /// </summary>
+        Disposed
+    }
 }

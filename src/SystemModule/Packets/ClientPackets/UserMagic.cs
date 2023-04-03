@@ -1,35 +1,36 @@
 ﻿using System.IO;
 using SystemModule.Data;
 
-namespace SystemModule.Packets.ClientPackets;
-
-public class UserMagic : ClientPacket
+namespace SystemModule.Packets.ClientPackets
 {
-    public MagicInfo Magic;
-    public ushort MagIdx;
-    public byte Level;
-    public char Key;
-    /// <summary>
-    /// 技能熟练点
-    /// </summary>
-    public int TranPoint;
-
-    public UserMagic()
+    public class UserMagic : ClientPacket
     {
-        Magic = new MagicInfo();
-    }
+        public MagicInfo Magic;
+        public ushort MagIdx;
+        public byte Level;
+        public char Key;
+        /// <summary>
+        /// 技能熟练点
+        /// </summary>
+        public int TranPoint;
 
-    protected override void ReadPacket(BinaryReader reader)
-    {
-        throw new System.NotImplementedException();
-    }
+        public UserMagic()
+        {
+            Magic = new MagicInfo();
+        }
 
-    protected override void WritePacket(BinaryWriter writer)
-    {
-        writer.Write(Magic.GetBuffer());
-        writer.Write(MagIdx);
-        writer.Write(Level);
-        writer.Write(Key);
-        writer.Write(TranPoint);
+        protected override void ReadPacket(BinaryReader reader)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void WritePacket(BinaryWriter writer)
+        {
+            writer.Write(Magic.GetBuffer());
+            writer.Write(MagIdx);
+            writer.Write(Level);
+            writer.Write(Key);
+            writer.Write(TranPoint);
+        }
     }
 }

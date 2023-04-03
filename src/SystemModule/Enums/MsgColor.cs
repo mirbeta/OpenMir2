@@ -1,9 +1,10 @@
-﻿namespace SystemModule.Enums;
-
-public enum MsgColor : byte
+﻿namespace SystemModule.Enums
 {
-    Red,
-    Green,
-    Blue,
-    White
+    public enum MsgColor : byte
+    {
+        Red,
+        Green,
+        Blue,
+        White
+    }
 }

@@ -1,8 +1,9 @@
-﻿namespace SystemModule.Data;
-
-public record struct GoldChangeInfo
+﻿namespace SystemModule.Data
 {
-    public string sGameMasterName;
-    public string sGetGoldUser;
-    public int nGold;
+    public record struct GoldChangeInfo
+    {
+        public string sGameMasterName;
+        public string sGetGoldUser;
+        public int nGold;
+    }
 }

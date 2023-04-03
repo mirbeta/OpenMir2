@@ -2,37 +2,38 @@
 using SystemModule.Generation.Interfaces.Entities;
 using SystemModule.NativeList.Helpers;
 
-namespace SystemModule.Generation.Helpers;
-
-public static class RandomizersHelpers
+namespace SystemModule.Generation.Helpers
 {
-    /// <summary>
-    /// Returns random integer number is limited by the input maxValue parameter.
-    /// </summary>
-    /// <exception cref="ArgumentNullException">If the randomizer is null.</exception>
-    public static int NextInteger(this IRandomizer randomizer, int maxValue)
+    public static class RandomizersHelpers
     {
-        ArgumentsGuard.ThrowIfNull(randomizer);
-
-        return (int)(randomizer.NextNormalized() * maxValue);
-    }
-
-    /// <summary>
-    /// Returns random integer number is in range based on input parameters.
-    /// </summary>
-    /// <exception cref="ArgumentNullException">If the randomizer is null.</exception>
-    /// <exception cref="ArgumentException">If min value is more or equal to max value.</exception>
-    public static int NextInteger(this IRandomizer randomizer, int minValue, int maxValue)
-    {
-        ArgumentsGuard.ThrowIfNull(randomizer);
-
-        if (minValue >= maxValue)
+        /// <summary>
+        /// Returns random integer number is limited by the input maxValue parameter.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">If the randomizer is null.</exception>
+        public static int NextInteger(this IRandomizer randomizer, int maxValue)
         {
-            throw new ArgumentException("Min value cannot be more or equal to max value.", nameof(minValue));
+            ArgumentsGuard.ThrowIfNull(randomizer);
+
+            return (int)(randomizer.NextNormalized() * maxValue);
         }
 
-        int range = maxValue - minValue;
+        /// <summary>
+        /// Returns random integer number is in range based on input parameters.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">If the randomizer is null.</exception>
+        /// <exception cref="ArgumentException">If min value is more or equal to max value.</exception>
+        public static int NextInteger(this IRandomizer randomizer, int minValue, int maxValue)
+        {
+            ArgumentsGuard.ThrowIfNull(randomizer);
 
-        return (int)(randomizer.NextNormalized() * range + minValue);
+            if (minValue >= maxValue)
+            {
+                throw new ArgumentException("Min value cannot be more or equal to max value.", nameof(minValue));
+            }
+
+            int range = maxValue - minValue;
+
+            return (int)(randomizer.NextNormalized() * range + minValue);
+        }
     }
 }

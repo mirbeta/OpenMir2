@@ -1,20 +1,21 @@
 using SystemModule.Packets.ServerPackets;
 
-namespace SystemModule.Data;
-
-public class SavePlayerRcd
+namespace SystemModule.Data
 {
-    public string Account;
-    public string ChrName;
-    public int SessionID;
-    public object PlayObject;
-    public PlayerDataInfo HumanRcd;
-    public int ReTryCount;
-    public bool IsSaveing;
-    public int QueryId;
-
-    public SavePlayerRcd()
+    public class SavePlayerRcd
     {
-        HumanRcd = new PlayerDataInfo();
+        public string Account;
+        public string ChrName;
+        public int SessionID;
+        public object PlayObject;
+        public PlayerDataInfo HumanRcd;
+        public int ReTryCount;
+        public bool IsSaveing;
+        public int QueryId;
+
+        public SavePlayerRcd()
+        {
+            HumanRcd = new PlayerDataInfo();
+        }
     }
 }

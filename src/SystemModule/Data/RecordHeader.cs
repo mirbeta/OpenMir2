@@ -1,20 +1,21 @@
 ﻿using MemoryPack;
 
-namespace SystemModule.Data;
-
-[MemoryPackable]
-public partial struct RecordHeader
+namespace SystemModule.Data
 {
-    public string sAccount { get; set; }
-    public string Name { get; set; }
-    public int SelectID { get; set; }
-    public double dCreateDate { get; set; }
-    public bool Deleted { get; set; }
-    public double UpdateDate { get; set; }
-    public double CreateDate { get; set; }
-
-    public void SetName(string name)
+    [MemoryPackable]
+    public partial struct RecordHeader
     {
-        Name = name;
+        public string sAccount { get; set; }
+        public string Name { get; set; }
+        public int SelectID { get; set; }
+        public double dCreateDate { get; set; }
+        public bool Deleted { get; set; }
+        public double UpdateDate { get; set; }
+        public double CreateDate { get; set; }
+
+        public void SetName(string name)
+        {
+            Name = name;
+        }
     }
 }

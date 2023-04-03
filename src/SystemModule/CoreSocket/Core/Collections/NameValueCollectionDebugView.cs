@@ -2,36 +2,37 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// NameValueCollectionDebugView
-/// </summary>
-public class NameValueCollectionDebugView
+namespace SystemModule.CoreSocket
 {
-    [DebuggerBrowsable(DebuggerBrowsableState.Never)]
-    private readonly NameValueCollection m_nameValue;
-
     /// <summary>
     /// NameValueCollectionDebugView
     /// </summary>
-    /// <param name="nameValue"></param>
-    public NameValueCollectionDebugView(NameValueCollection nameValue)
+    public class NameValueCollectionDebugView
     {
-        m_nameValue = nameValue;
-    }
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        private readonly NameValueCollection m_nameValue;
 
-    [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
-    private Dictionary<string, string> KV
-    {
-        get
+        /// <summary>
+        /// NameValueCollectionDebugView
+        /// </summary>
+        /// <param name="nameValue"></param>
+        public NameValueCollectionDebugView(NameValueCollection nameValue)
         {
-            Dictionary<string, string> dic = new Dictionary<string, string>();
-            foreach (string item in m_nameValue.AllKeys)
+            m_nameValue = nameValue;
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
+        private Dictionary<string, string> KV
+        {
+            get
             {
-                dic.TryAdd(item, m_nameValue[item]);
+                Dictionary<string, string> dic = new Dictionary<string, string>();
+                foreach (string item in m_nameValue.AllKeys)
+                {
+                    dic.TryAdd(item, m_nameValue[item]);
+                }
+                return dic;
             }
-            return dic;
         }
     }
 }

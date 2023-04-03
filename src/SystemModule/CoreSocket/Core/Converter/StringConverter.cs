@@ -1,121 +1,122 @@
 using System;
 using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// String类型数据转换器
-/// </summary>
-public class StringConverter : TouchSocketConverter<string>
+namespace SystemModule.CoreSocket
 {
     /// <summary>
-    /// 构造函数
+    /// String类型数据转换器
     /// </summary>
-    public StringConverter()
+    public class StringConverter : TouchSocketConverter<string>
     {
-        Add(new StringToPrimitiveConverter());
-        Add(new JsonStringToClassConverter());
-    }
-}
-
-/// <summary>
-/// String值转换为基础类型。
-/// </summary>
-public class StringToPrimitiveConverter : IConverter<string>
-{
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    public int Order { get; set; }
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    /// <param name="source"></param>
-    /// <param name="targetType"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
-    public bool TryConvertFrom(string source, Type targetType, out object target)
-    {
-        if (targetType.IsPrimitive || targetType == TouchSocketCoreUtility.stringType)
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        public StringConverter()
         {
-            return StringExtension.TryParseToType(source, targetType, out target);
+            Add(new StringToPrimitiveConverter());
+            Add(new JsonStringToClassConverter());
         }
-        target = default;
-        return false;
     }
 
     /// <summary>
-    /// <inheritdoc/>
+    /// String值转换为基础类型。
     /// </summary>
-    /// <param name="target"></param>
-    /// <param name="source"></param>
-    /// <returns></returns>
-    public bool TryConvertTo(object target, out string source)
+    public class StringToPrimitiveConverter : IConverter<string>
     {
-        if (target != null)
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public int Order { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="targetType"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public bool TryConvertFrom(string source, Type targetType, out object target)
         {
-            Type type = target.GetType();
-            if (type.IsPrimitive || type == TouchSocketCoreUtility.stringType)
+            if (targetType.IsPrimitive || targetType == TouchSocketCoreUtility.stringType)
             {
-                source = target.ToString();
-                return true;
+                return StringExtension.TryParseToType(source, targetType, out target);
             }
-        }
-
-        source = null;
-        return false;
-    }
-}
-
-/// <summary>
-/// Json字符串转到对应类
-/// </summary>
-public class JsonStringToClassConverter : IConverter<string>
-{
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    public int Order { get; set; }
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    /// <param name="source"></param>
-    /// <param name="targetType"></param>
-    /// <param name="target"></param>
-    /// <returns></returns>
-    public bool TryConvertFrom(string source, Type targetType, out object target)
-    {
-        try
-        {
-            target = System.Text.Json.JsonSerializer.Deserialize<Type>(source);
-            return true;
-        }
-        catch
-        {
             target = default;
             return false;
         }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public bool TryConvertTo(object target, out string source)
+        {
+            if (target != null)
+            {
+                Type type = target.GetType();
+                if (type.IsPrimitive || type == TouchSocketCoreUtility.stringType)
+                {
+                    source = target.ToString();
+                    return true;
+                }
+            }
+
+            source = null;
+            return false;
+        }
     }
 
     /// <summary>
-    /// <inheritdoc/>
+    /// Json字符串转到对应类
     /// </summary>
-    /// <param name="target"></param>
-    /// <param name="source"></param>
-    /// <returns></returns>
-    public bool TryConvertTo(object target, out string source)
+    public class JsonStringToClassConverter : IConverter<string>
     {
-        try
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public int Order { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="targetType"></param>
+        /// <param name="target"></param>
+        /// <returns></returns>
+        public bool TryConvertFrom(string source, Type targetType, out object target)
         {
-            source = System.Text.Json.JsonSerializer.Serialize(target);
-            return true;
+            try
+            {
+                target = System.Text.Json.JsonSerializer.Deserialize<Type>(source);
+                return true;
+            }
+            catch
+            {
+                target = default;
+                return false;
+            }
         }
-        catch (Exception)
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="source"></param>
+        /// <returns></returns>
+        public bool TryConvertTo(object target, out string source)
         {
-            source = null;
-            return false;
+            try
+            {
+                source = System.Text.Json.JsonSerializer.Serialize(target);
+                return true;
+            }
+            catch (Exception)
+            {
+                source = null;
+                return false;
+            }
         }
     }
 }

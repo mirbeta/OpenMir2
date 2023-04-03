@@ -3,7 +3,8 @@
     <PropertyGroup>
         <TargetFramework>net7</TargetFramework>
         <IsPackable>false</IsPackable>
-        <LangVersion>11.0</LangVersion>
+        <LangVersion>11</LangVersion>
+        <ImplicitUsings>disable</ImplicitUsings>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
         <RootNamespace>SystemModule</RootNamespace>
     </PropertyGroup>

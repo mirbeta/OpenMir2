@@ -1,12 +1,13 @@
-namespace SystemModule.Data;
-
-public class MarKetReqInfo
+namespace SystemModule.Data
 {
-    public string UserName;
-    public string MarketName;
-    public string SearchWho;
-    public string SearchItem;
-    public short ItemType;
-    public byte ItemSet;
-    public int UserMode;
+    public class MarKetReqInfo
+    {
+        public string UserName;
+        public string MarketName;
+        public string SearchWho;
+        public string SearchItem;
+        public short ItemType;
+        public byte ItemSet;
+        public int UserMode;
+    }
 }

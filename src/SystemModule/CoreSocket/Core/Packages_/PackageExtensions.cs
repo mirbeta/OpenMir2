@@ -1,21 +1,22 @@
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// PackageExtensions
-/// </summary>
-public static class PackageExtensions
+namespace SystemModule.CoreSocket
 {
     /// <summary>
-    /// 打包为字节
+    /// PackageExtensions
     /// </summary>
-    /// <param name="packageBase"></param>
-    /// <returns></returns>
-    public static byte[] PackageAsBytes(this PackageBase packageBase)
+    public static class PackageExtensions
     {
-        using (ByteBlock byteBlock = new ByteBlock())
+        /// <summary>
+        /// 打包为字节
+        /// </summary>
+        /// <param name="packageBase"></param>
+        /// <returns></returns>
+        public static byte[] PackageAsBytes(this PackageBase packageBase)
         {
-            packageBase.Package(byteBlock);
-            return byteBlock.ToArray();
+            using (ByteBlock byteBlock = new ByteBlock())
+            {
+                packageBase.Package(byteBlock);
+                return byteBlock.ToArray();
+            }
         }
     }
 }

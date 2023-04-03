@@ -1,36 +1,37 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace SystemModule.NativeList.Abstracts;
-
-/// <summary>
-/// Improved version of <see cref="ProcessKeeperBase"/>
-/// Will kill process while disposing.
-/// </summary>
-public abstract class ProcessOwnerBase : ProcessKeeperBase
+namespace SystemModule.NativeList.Abstracts
 {
-    protected override void InternalDispose(bool manual)
+    /// <summary>
+    /// Improved version of <see cref="ProcessKeeperBase"/>
+    /// Will kill process while disposing.
+    /// </summary>
+    public abstract class ProcessOwnerBase : ProcessKeeperBase
     {
-        if (AssociatedProcess != null && !AssociatedProcess.HasExited)
+        protected override void InternalDispose(bool manual)
         {
-            try
+            if (AssociatedProcess != null && !AssociatedProcess.HasExited)
             {
-                AssociatedProcess.EnableRaisingEvents = false;
+                try
+                {
+                    AssociatedProcess.EnableRaisingEvents = false;
 
-                KillProcess();
+                    KillProcess();
+                }
+                catch (Exception exception)
+                {
+                    Trace.WriteLine(exception.Message);
+                    Trace.WriteLine(exception.StackTrace);
+                }
             }
-            catch (Exception exception)
-            {
-                Trace.WriteLine(exception.Message);
-                Trace.WriteLine(exception.StackTrace);
-            }
+
+            base.InternalDispose(manual);
         }
 
-        base.InternalDispose(manual);
-    }
-
-    protected virtual void KillProcess()
-    {
-        AssociatedProcess.Kill();
+        protected virtual void KillProcess()
+        {
+            AssociatedProcess.Kill();
+        }
     }
 }

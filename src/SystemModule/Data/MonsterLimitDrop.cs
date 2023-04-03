@@ -1,9 +1,10 @@
-﻿namespace SystemModule.Data;
-
-public class MonsterLimitDrop
+﻿namespace SystemModule.Data
 {
-    public string ItemName;
-    public int DropCount;
-    public int NoDropCount;
-    public int CountLimit;
+    public class MonsterLimitDrop
+    {
+        public string ItemName;
+        public int DropCount;
+        public int NoDropCount;
+        public int CountLimit;
+    }
 }

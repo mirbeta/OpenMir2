@@ -1,38 +1,39 @@
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// WaitPackage
-/// </summary>
-public class WaitPackage : PackageBase, IWaitResult
+namespace SystemModule.CoreSocket
 {
     /// <summary>
-    /// <inheritdoc/>
+    /// WaitPackage
     /// </summary>
-    public string Message { get; set; }
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    public long Sign { get; set; }
-
-    /// <summary>
-    /// <inheritdoc/>
-    /// </summary>
-    public byte Status { get; set; }
-
-    /// <inheritdoc/>
-    public override void Package(ByteBlock byteBlock)
+    public class WaitPackage : PackageBase, IWaitResult
     {
-        byteBlock.Write(Sign);
-        byteBlock.Write(Status);
-        byteBlock.Write(Message);
-    }
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public string Message { get; set; }
 
-    /// <inheritdoc/>
-    public override void Unpackage(ByteBlock byteBlock)
-    {
-        Sign = byteBlock.ReadInt64();
-        Status = (byte)byteBlock.ReadByte();
-        Message = byteBlock.ReadString();
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public long Sign { get; set; }
+
+        /// <summary>
+        /// <inheritdoc/>
+        /// </summary>
+        public byte Status { get; set; }
+
+        /// <inheritdoc/>
+        public override void Package(ByteBlock byteBlock)
+        {
+            byteBlock.Write(Sign);
+            byteBlock.Write(Status);
+            byteBlock.Write(Message);
+        }
+
+        /// <inheritdoc/>
+        public override void Unpackage(ByteBlock byteBlock)
+        {
+            Sign = byteBlock.ReadInt64();
+            Status = (byte)byteBlock.ReadByte();
+            Message = byteBlock.ReadString();
+        }
     }
 }

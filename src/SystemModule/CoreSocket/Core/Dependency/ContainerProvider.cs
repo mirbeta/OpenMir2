@@ -1,23 +1,24 @@
 using System;
 
-namespace SystemModule.CoreSocket;
-
-internal class ContainerProvider : IContainerProvider
+namespace SystemModule.CoreSocket
 {
-    private readonly Container m_container;
-
-    public ContainerProvider(Container container)
+    internal class ContainerProvider : IContainerProvider
     {
-        m_container = container;
-    }
+        private readonly Container m_container;
 
-    public bool IsRegistered(Type fromType, string key = "")
-    {
-        return m_container.IsRegistered(fromType, key);
-    }
+        public ContainerProvider(Container container)
+        {
+            m_container = container;
+        }
 
-    public object Resolve(Type fromType, object[] ps = null, string key = "")
-    {
-        return m_container.Resolve(fromType, ps, key);
+        public bool IsRegistered(Type fromType, string key = "")
+        {
+            return m_container.IsRegistered(fromType, key);
+        }
+
+        public object Resolve(Type fromType, object[] ps = null, string key = "")
+        {
+            return m_container.Resolve(fromType, ps, key);
+        }
     }
 }

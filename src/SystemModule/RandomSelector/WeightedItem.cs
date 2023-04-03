@@ -1,26 +1,27 @@
-namespace SystemModule.RandomSelector;
-
-public class WeightedItem<T>
+namespace SystemModule.RandomSelector
 {
-    /// <summary>
-    /// 权重
-    /// </summary>
-    public int Weight;
-
-    /// <summary>
-    /// 元素
-    /// </summary>
-    public readonly T Value;
-
-    /// <summary>
-    /// 累计权重
-    /// </summary>
-    protected int CumulativeWeight;
-
-    public WeightedItem(T value, int weight)
+    public class WeightedItem<T>
     {
-        Value = value;
-        Weight = weight;
-        CumulativeWeight = 0;
+        /// <summary>
+        /// 权重
+        /// </summary>
+        public int Weight;
+
+        /// <summary>
+        /// 元素
+        /// </summary>
+        public readonly T Value;
+
+        /// <summary>
+        /// 累计权重
+        /// </summary>
+        protected int CumulativeWeight;
+
+        public WeightedItem(T value, int weight)
+        {
+            Value = value;
+            Weight = weight;
+            CumulativeWeight = 0;
+        }
     }
 }

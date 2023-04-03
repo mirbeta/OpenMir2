@@ -1,10 +1,11 @@
 ﻿using MemoryPack;
 
-namespace SystemModule.Packets.ClientPackets;
-
-[MemoryPackable]
-public partial record struct CharDesc
+namespace SystemModule.Packets.ClientPackets
 {
-    public int Feature;
-    public int Status;
+    [MemoryPackable]
+    public partial record struct CharDesc
+    {
+        public int Feature;
+        public int Status;
+    }
 }

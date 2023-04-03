@@ -1,7 +1,8 @@
-﻿namespace SystemModule.Data;
-
-public struct UnbindInfo
+﻿namespace SystemModule.Data
 {
-    public int UnbindCode;
-    public string ItemName;
+    public struct UnbindInfo
+    {
+        public int UnbindCode;
+        public string ItemName;
+    }
 }

@@ -4,123 +4,124 @@ using System.Collections.Generic;
 using SystemModule.NativeList.Enums;
 using SystemModule.NativeList.Helpers;
 
-namespace SystemModule.NativeList.Utils;
-
-/// <summary>
-/// Structure that makes possible to generate a set of values automatically.
-/// </summary>
-public struct FlexibleSet<TItem> : IEnumerable<TItem>
+namespace SystemModule.NativeList.Utils
 {
     /// <summary>
-    /// Just a structure for enumeration to make it as quick as possible. 
+    /// Structure that makes possible to generate a set of values automatically.
     /// </summary>
-    public struct Enumerator : IEnumerator<TItem>
+    public struct FlexibleSet<TItem> : IEnumerable<TItem>
     {
-        private readonly Func<TItem, TItem> _stepping;
-        private FlexibleRange<TItem> _range;
-        private readonly Equality _sidesEquality;
-
-        private bool _started;
-
-        public Enumerator(FlexibleSet<TItem> set)
+        /// <summary>
+        /// Just a structure for enumeration to make it as quick as possible. 
+        /// </summary>
+        public struct Enumerator : IEnumerator<TItem>
         {
-            _range = set.Range;
-            _sidesEquality = _range.Comparer.Compare(_range.Left, _range.Right);
+            private readonly Func<TItem, TItem> _stepping;
+            private FlexibleRange<TItem> _range;
+            private readonly Equality _sidesEquality;
 
-            if (_sidesEquality == Equality.Equal)
+            private bool _started;
+
+            public Enumerator(FlexibleSet<TItem> set)
             {
-                throw new Exception("Cannot enumerate range when left and right sides are equal.");
+                _range = set.Range;
+                _sidesEquality = _range.Comparer.Compare(_range.Left, _range.Right);
+
+                if (_sidesEquality == Equality.Equal)
+                {
+                    throw new Exception("Cannot enumerate range when left and right sides are equal.");
+                }
+
+                _started = false;
+                _stepping = set._stepping;
+
+                Current = default(TItem);
             }
 
-            _started = false;
-            _stepping = set._stepping;
+            public TItem Current { get; private set; }
 
-            Current = default(TItem);
-        }
+            Object IEnumerator.Current => Current;
 
-        public TItem Current { get; private set; }
-
-        Object IEnumerator.Current => Current;
-
-        public bool MoveNext()
-        {
-            if (!_started)
+            public bool MoveNext()
             {
-                if (_range.IsLeftStrictly)
+                if (!_started)
                 {
-                    Current = _range.Left;
+                    if (_range.IsLeftStrictly)
+                    {
+                        Current = _range.Left;
+                    }
+                    else
+                    {
+                        Current = _stepping.Invoke(_range.Left);
+                    }
+
+                    _started = true;
+
+                    return true;
                 }
                 else
                 {
-                    Current = _stepping.Invoke(_range.Left);
+                    Current = _stepping.Invoke(Current);
                 }
 
-                _started = true;
+                Equality compareResult = _range.Comparer.Compare(Current, _range.Right);
 
-                return true;
-            }
-            else
-            {
-                Current = _stepping.Invoke(Current);
+                if (_range.IsRightStrictly)
+                {
+                    return compareResult == Equality.Equal || compareResult == _sidesEquality;
+                }
+                else
+                {
+                    return compareResult == _sidesEquality;
+                }
             }
 
-            Equality compareResult = _range.Comparer.Compare(Current, _range.Right);
-
-            if (_range.IsRightStrictly)
-            {
-                return compareResult == Equality.Equal || compareResult == _sidesEquality;
-            }
-            else
-            {
-                return compareResult == _sidesEquality;
-            }
+            public void Reset()
+            { /*DO NOTHING*/ }
+            public void Dispose()
+            { /*DO NOTHING*/ }
         }
 
-        public void Reset()
-        { /*DO NOTHING*/ }
-        public void Dispose()
-        { /*DO NOTHING*/ }
-    }
+        private readonly Func<TItem, TItem> _stepping;
 
-    private readonly Func<TItem, TItem> _stepping;
+        public FlexibleSet(FlexibleRange<TItem> range, Func<TItem, TItem> stepping)
+        {
+            ArgumentsGuard.ThrowIfNull(stepping);
 
-    public FlexibleSet(FlexibleRange<TItem> range, Func<TItem, TItem> stepping)
-    {
-        ArgumentsGuard.ThrowIfNull(stepping);
+            Range = range;
 
-        Range = range;
+            _stepping = stepping;
+        }
 
-        _stepping = stepping;
-    }
+        /// <summary>
+        /// Range for values generation.
+        /// </summary>
+        public FlexibleRange<TItem> Range { get; private set; }
 
-    /// <summary>
-    /// Range for values generation.
-    /// </summary>
-    public FlexibleRange<TItem> Range { get; private set; }
+        /// <summary>
+        /// Returns structure for items enumeration.
+        /// </summary>
+        public Enumerator GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
 
-    /// <summary>
-    /// Returns structure for items enumeration.
-    /// </summary>
-    public Enumerator GetEnumerator()
-    {
-        return new Enumerator(this);
-    }
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Was made for LINQ compatibility.
+        /// </remarks>
+        IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
 
-    /// <inheritdoc/>
-    /// <remarks>
-    /// Was made for LINQ compatibility.
-    /// </remarks>
-    IEnumerator<TItem> IEnumerable<TItem>.GetEnumerator()
-    {
-        return new Enumerator(this);
-    }
-
-    /// <inheritdoc/>
-    /// <remarks>
-    /// Was made for LINQ compatibility.
-    /// </remarks>
-    IEnumerator IEnumerable.GetEnumerator()
-    {
-        return new Enumerator(this);
+        /// <inheritdoc/>
+        /// <remarks>
+        /// Was made for LINQ compatibility.
+        /// </remarks>
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return new Enumerator(this);
+        }
     }
 }

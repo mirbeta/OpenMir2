@@ -2,30 +2,31 @@
 using SystemModule.NativeList.Abstracts;
 using SystemModule.NativeList.Enums;
 
-namespace SystemModule.NativeList.Utils;
-
-public class DoubleComparer : ComparerBase<double>
+namespace SystemModule.NativeList.Utils
 {
-    public DoubleComparer(double approximationValue)
+    public class DoubleComparer : ComparerBase<double>
     {
-        ApproximationValue = approximationValue;
-    }
-
-    public double ApproximationValue { get; private set; }
-
-    public override Equality Compare(double first, double second)
-    {
-        if (Math.Abs(first - second) < ApproximationValue)
+        public DoubleComparer(double approximationValue)
         {
-            return Equality.Equal;
+            ApproximationValue = approximationValue;
         }
-        else if (first > second)
+
+        public double ApproximationValue { get; private set; }
+
+        public override Equality Compare(double first, double second)
         {
-            return Equality.Greater;
-        }
-        else
-        {
-            return Equality.Less;
+            if (Math.Abs(first - second) < ApproximationValue)
+            {
+                return Equality.Equal;
+            }
+            else if (first > second)
+            {
+                return Equality.Greater;
+            }
+            else
+            {
+                return Equality.Less;
+            }
         }
     }
 }

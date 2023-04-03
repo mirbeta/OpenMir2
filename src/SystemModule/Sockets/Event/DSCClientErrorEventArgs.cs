@@ -2,18 +2,19 @@ using System;
 using System.Net;
 using System.Net.Sockets;
 
-namespace SystemModule.Sockets.Event;
-
-public class DSCClientErrorEventArgs : EventArgs
+namespace SystemModule.Sockets.Event
 {
-    public Exception exception;
-    public IPEndPoint EndPoint;
-    public SocketError ErrorCode;
-
-    public DSCClientErrorEventArgs(EndPoint endPoint, SocketError errorCode, Exception e)
+    public class DSCClientErrorEventArgs : EventArgs
     {
-        this.exception = e;
-        this.EndPoint = (IPEndPoint)endPoint;
-        this.ErrorCode = errorCode;
+        public Exception exception;
+        public IPEndPoint EndPoint;
+        public SocketError ErrorCode;
+
+        public DSCClientErrorEventArgs(EndPoint endPoint, SocketError errorCode, Exception e)
+        {
+            this.exception = e;
+            this.EndPoint = (IPEndPoint)endPoint;
+            this.ErrorCode = errorCode;
+        }
     }
 }

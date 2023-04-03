@@ -1,20 +1,21 @@
-namespace SystemModule.RandomSelector;
-
-public class SelectorOption
+namespace SystemModule.RandomSelector
 {
-    /// <summary>
-    /// 多选时允许重复项
-    /// </summary>
-    public bool AllowDuplicate { get; set; }
-
-    /// <summary>
-    /// 是否移除权重0的元素
-    /// </summary>
-    public bool RemoveZeroWeightItems { get; set; }
-
-    public SelectorOption()
+    public class SelectorOption
     {
-        AllowDuplicate = false;
-        RemoveZeroWeightItems = true;
+        /// <summary>
+        /// 多选时允许重复项
+        /// </summary>
+        public bool AllowDuplicate { get; set; }
+
+        /// <summary>
+        /// 是否移除权重0的元素
+        /// </summary>
+        public bool RemoveZeroWeightItems { get; set; }
+
+        public SelectorOption()
+        {
+            AllowDuplicate = false;
+            RemoveZeroWeightItems = true;
+        }
     }
 }

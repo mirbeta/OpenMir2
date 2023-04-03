@@ -1,17 +1,18 @@
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// 返回通知接口
-/// </summary>
-public interface IResult
+namespace SystemModule.CoreSocket
 {
     /// <summary>
-    /// 是否成功
+    /// 返回通知接口
     /// </summary>
-    ResultCode ResultCode { get; }
+    public interface IResult
+    {
+        /// <summary>
+        /// 是否成功
+        /// </summary>
+        ResultCode ResultCode { get; }
 
-    /// <summary>
-    /// 消息
-    /// </summary>
-    string Message { get; }
+        /// <summary>
+        /// 消息
+        /// </summary>
+        string Message { get; }
+    }
 }

@@ -1,9 +1,10 @@
 using SystemModule.Common;
 
-namespace SystemModule.Data;
-
-public struct NoticeMsg
+namespace SystemModule.Data
 {
-    public string sMsg;
-    public StringList sList;
+    public struct NoticeMsg
+    {
+        public string sMsg;
+        public StringList sList;
+    }
 }

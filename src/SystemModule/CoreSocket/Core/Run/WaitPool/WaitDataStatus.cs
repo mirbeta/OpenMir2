@@ -1,32 +1,33 @@
-namespace SystemModule.CoreSocket;
-
-/// <summary>
-/// 等待数据状态
-/// </summary>
-public enum WaitDataStatus : byte
+namespace SystemModule.CoreSocket
 {
     /// <summary>
-    /// 默认
+    /// 等待数据状态
     /// </summary>
-    Default,
+    public enum WaitDataStatus : byte
+    {
+        /// <summary>
+        /// 默认
+        /// </summary>
+        Default,
 
-    /// <summary>
-    /// 收到信号运行
-    /// </summary>
-    SetRunning,
+        /// <summary>
+        /// 收到信号运行
+        /// </summary>
+        SetRunning,
 
-    /// <summary>
-    /// 超时
-    /// </summary>
-    Overtime,
+        /// <summary>
+        /// 超时
+        /// </summary>
+        Overtime,
 
-    /// <summary>
-    /// 已取消
-    /// </summary>
-    Canceled,
+        /// <summary>
+        /// 已取消
+        /// </summary>
+        Canceled,
 
-    /// <summary>
-    /// 已释放
-    /// </summary>
-    Disposed
+        /// <summary>
+        /// 已释放
+        /// </summary>
+        Disposed
+    }
 }
