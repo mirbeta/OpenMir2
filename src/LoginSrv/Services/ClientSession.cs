@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
+using SystemModule.SocketComponents;
 using SystemModule.Sockets;
 
 namespace LoginSrv.Services

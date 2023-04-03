@@ -1,6 +1,6 @@
 using System;
 using System.Threading;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Config;
 using SystemModule.Dependency;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Common.Options;
@@ -11,7 +11,7 @@ using SystemModule.Sockets.DataAdapter.Udp;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Interface;
 
-namespace SystemModule.Sockets
+namespace SystemModule.Sockets.Config
 {
     /// <summary>
     /// TouchSocketConfigBuilder配置扩展

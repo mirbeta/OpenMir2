@@ -1,4 +1,4 @@
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Run.WaitPool
 {
     /// <summary>
     /// 等待返回类

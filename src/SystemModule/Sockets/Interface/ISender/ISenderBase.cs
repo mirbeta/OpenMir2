@@ -1,4 +1,4 @@
-namespace SystemModule.Sockets.Interface
+namespace SystemModule.Sockets.Interface.ISender
 {
     /// <summary>
     /// 具有发送动作的基类。

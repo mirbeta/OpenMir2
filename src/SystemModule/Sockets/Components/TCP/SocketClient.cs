@@ -6,18 +6,25 @@ using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using SystemModule.ByteManager;
+using SystemModule.Core.Collections.Concurrent;
+using SystemModule.Core.Common;
+using SystemModule.Core.Config;
+using SystemModule.Core.Event;
 using SystemModule.Core.Run.Action;
-using SystemModule.CoreSocket;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Common.Options;
+using SystemModule.Sockets.Config;
 using SystemModule.Sockets.DataAdapter;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Extensions;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
+using BytePool = SystemModule.ByteManager.BytePool;
+using SocketExtension = SystemModule.SocketComponents.SocketExtension;
 
 namespace SystemModule.Sockets.Components.TCP
 {
@@ -423,9 +430,9 @@ namespace SystemModule.Sockets.Components.TCP
         {
             m_mainSocket = mainSocket ?? throw new ArgumentNullException(nameof(mainSocket));
             IP = mainSocket.RemoteEndPoint.GetIP();
-            Port = mainSocket.RemoteEndPoint.GetPort();
+            Port = SocketExtension.GetPort(mainSocket.RemoteEndPoint);
             ServiceIP = mainSocket.LocalEndPoint.GetIP();
-            ServicePort = mainSocket.LocalEndPoint.GetPort();
+            ServicePort = SocketExtension.GetPort(mainSocket.LocalEndPoint);
         }
 
         /// <summary>

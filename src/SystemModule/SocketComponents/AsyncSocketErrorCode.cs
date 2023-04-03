@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Sockets
+﻿namespace SystemModule.SocketComponents
 {
     /// <summary>
     /// 异步Socket错误码

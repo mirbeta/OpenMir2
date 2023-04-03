@@ -1,7 +1,7 @@
 using System;
 using System.Net.Sockets;
 
-namespace SystemModule.Sockets.Event
+namespace SystemModule.SocketComponents.Event
 {
     public class DSCClientSendDataEventArgs : EventArgs
     {

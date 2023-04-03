@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using SystemModule.Sockets.Exceptions;
 
-namespace SystemModule.Sockets.Interface
+namespace SystemModule.Sockets.Interface.ISender
 {
     /// <summary>
     /// 具有直接发送功能

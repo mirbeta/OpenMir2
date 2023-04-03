@@ -2,7 +2,7 @@ using System;
 using System.Collections.Specialized;
 using System.Diagnostics;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Collections
 {
     /// <summary>
     /// IgnoreCaseNameValueCollection

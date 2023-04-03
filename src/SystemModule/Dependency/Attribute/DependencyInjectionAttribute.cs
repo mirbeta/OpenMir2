@@ -1,12 +1,12 @@
 using System;
 
-namespace SystemModule.Dependency
+namespace SystemModule.Dependency.Attribute
 {
     /// <summary>
     /// 指定依赖类型。
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class DependencyTypeAttribute : Attribute
+    public class DependencyTypeAttribute : System.Attribute
     {
         /// <summary>
         /// 初始化一个依赖类型。当确定某个类型仅以某种特定方式注入时，可以过滤不必要的注入操作，以提高效率。
@@ -48,7 +48,7 @@ namespace SystemModule.Dependency
     /// 指定依赖类型，构造函数，可用于构造函数，属性，方法。
     /// </summary>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Constructor | AttributeTargets.Property | AttributeTargets.Method)]
-    public class DependencyInjectAttribute : Attribute
+    public class DependencyInjectAttribute : System.Attribute
     {
         /// <summary>
         /// 初始化一个依赖注入对象。并且指定构造参数。

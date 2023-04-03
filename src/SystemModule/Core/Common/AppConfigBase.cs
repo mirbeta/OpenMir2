@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 运行配置类

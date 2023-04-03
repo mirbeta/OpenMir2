@@ -1,10 +1,11 @@
 using System;
 using System.IO;
 using System.Threading;
+using SystemModule.Core.Common;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Enum;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.IO.FileIO
 {
     /// <summary>
     /// 文件存储器。在该存储器中，读写线程安全。

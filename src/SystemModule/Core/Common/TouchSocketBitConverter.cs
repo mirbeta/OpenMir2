@@ -1,7 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
+using SystemModule.Core.Common.Enum;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 将基数据类型转换为指定端的一个字节数组，

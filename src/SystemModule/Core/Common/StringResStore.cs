@@ -1,16 +1,15 @@
-using System;
 using System.Collections.Concurrent;
 using System.ComponentModel;
 using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 字符串资源字典
     /// </summary>
     public static class StringResStore
     {
-        private static readonly ConcurrentDictionary<Enum, string> m_cache = new ConcurrentDictionary<Enum, string>();
+        private static readonly ConcurrentDictionary<System.Enum, string> m_cache = new ConcurrentDictionary<System.Enum, string>();
 
         /// <summary>
         /// 获取资源字符
@@ -18,7 +17,7 @@ namespace SystemModule.CoreSocket
         /// <param name="enum"></param>
         /// <param name="objs"></param>
         /// <returns></returns>
-        public static string GetDescription(this Enum @enum, params object[] objs)
+        public static string GetDescription(this System.Enum @enum, params object[] objs)
         {
             if (m_cache.TryGetValue(@enum, out string str))
             {

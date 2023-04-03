@@ -1,4 +1,4 @@
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 
 namespace SystemModule.Sockets.Enum
 {

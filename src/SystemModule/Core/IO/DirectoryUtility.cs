@@ -1,7 +1,7 @@
 using System.IO;
 using System.Linq;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.IO
 {
     /// <summary>
     /// DirectoryUtility

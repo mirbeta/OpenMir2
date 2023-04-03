@@ -1,4 +1,4 @@
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common.Enum
 {
     /// <summary>
     /// 大小端类型

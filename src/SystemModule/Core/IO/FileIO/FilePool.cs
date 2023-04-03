@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using SystemModule.Core.Common;
+using SystemModule.Core.Common.Enum;
 using SystemModule.Core.Run.Action;
 using SystemModule.Sockets.Enum;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.IO.FileIO
 {
     /// <summary>
     /// 文件池。

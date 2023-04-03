@@ -1,7 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Config;
 using SystemModule.Sockets.Common;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.Interface
 {

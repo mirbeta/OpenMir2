@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Concurrent;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Common;
 
 namespace SystemModule.Dependency
 {

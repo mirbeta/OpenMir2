@@ -2,9 +2,9 @@ using System;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 using SystemModule.Sockets.Exceptions;
-using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.Extensions
 {

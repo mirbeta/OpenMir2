@@ -7,8 +7,9 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
+using SystemModule.SocketComponents;
+using SystemModule.SocketComponents.AsyncSocketServer;
 using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
 using NetworkMonitor = SystemModule.NetworkMonitor;
 
 namespace GameGate.Services

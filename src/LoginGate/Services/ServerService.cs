@@ -4,8 +4,9 @@ using NLog;
 using System;
 using System.Net;
 using SystemModule;
+using SystemModule.SocketComponents;
+using SystemModule.SocketComponents.AsyncSocketServer;
 using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginGate.Services
 {

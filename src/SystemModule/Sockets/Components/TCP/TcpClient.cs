@@ -7,18 +7,24 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using SystemModule.ByteManager;
+using SystemModule.Core.Collections.Concurrent;
+using SystemModule.Core.Common;
+using SystemModule.Core.Config;
+using SystemModule.Core.Event;
 using SystemModule.Core.Run.Action;
-using SystemModule.CoreSocket;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Common.Options;
+using SystemModule.Sockets.Config;
 using SystemModule.Sockets.DataAdapter;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Extensions;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
+using BytePool = SystemModule.ByteManager.BytePool;
 
 namespace SystemModule.Sockets.Components.TCP
 {

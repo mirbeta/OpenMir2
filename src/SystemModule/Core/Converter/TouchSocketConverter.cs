@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Converter
 {
     /// <summary>
     /// 转换器

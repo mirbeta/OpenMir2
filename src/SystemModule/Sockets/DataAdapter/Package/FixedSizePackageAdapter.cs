@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Interface;

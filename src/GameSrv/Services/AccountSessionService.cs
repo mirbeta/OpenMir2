@@ -4,8 +4,8 @@ using System.Net.Sockets;
 using GameSrv.Conf.Model;
 using NLog;
 using SystemModule.Data;
-using SystemModule.Sockets.AsyncSocketClient;
-using SystemModule.Sockets.Event;
+using SystemModule.SocketComponents.AsyncSocketClient;
+using SystemModule.SocketComponents.Event;
 
 namespace GameSrv.Services {
     public class AccountSessionService {

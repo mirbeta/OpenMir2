@@ -1,9 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.WaitingClient
 {

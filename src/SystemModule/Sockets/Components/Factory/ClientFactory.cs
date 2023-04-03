@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Collections.Concurrent;
+using SystemModule.Core.Common;
+using SystemModule.Core.Config;
 using SystemModule.Sockets.Interface;
 
 namespace SystemModule.Sockets.Components.Factory

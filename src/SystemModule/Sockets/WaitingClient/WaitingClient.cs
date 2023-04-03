@@ -1,12 +1,15 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule.ByteManager;
+using SystemModule.Core.Common;
 using SystemModule.Core.Run.Action;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Run.WaitPool;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.Interface.ISender;
 using SystemModule.Sockets.SocketEventArgs;
 
 namespace SystemModule.Sockets.WaitingClient

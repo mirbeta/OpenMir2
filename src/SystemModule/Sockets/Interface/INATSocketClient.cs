@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Config;
 
 namespace SystemModule.Sockets.Interface
 {
-
     /// <summary>
     /// INATSocketClient
     /// </summary>

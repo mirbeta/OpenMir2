@@ -1,4 +1,4 @@
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 using SystemModule.Sockets.Components.TCP;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;

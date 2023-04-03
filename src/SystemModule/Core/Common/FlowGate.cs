@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 流量控制

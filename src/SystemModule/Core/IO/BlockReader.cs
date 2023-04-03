@@ -1,8 +1,9 @@
 using System;
 using System.Threading;
+using SystemModule.Core.Common;
 using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.IO
 {
     /// <summary>
     /// 阻塞式读取。

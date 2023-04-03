@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Collections.Concurrent
 {
     /// <summary>
     /// 三元组合

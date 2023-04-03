@@ -1,10 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 using SystemModule.Sockets.Exceptions;
 
-namespace SystemModule.Sockets.Interface
+namespace SystemModule.Sockets.Interface.ISender
 {
     /// <summary>
     /// 发送等待接口

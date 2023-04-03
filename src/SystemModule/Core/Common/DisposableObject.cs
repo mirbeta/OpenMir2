@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 具有释放的对象。

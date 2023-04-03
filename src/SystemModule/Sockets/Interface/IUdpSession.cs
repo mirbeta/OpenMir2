@@ -1,4 +1,5 @@
 using SystemModule.Sockets.DataAdapter.Udp;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.Interface
 {

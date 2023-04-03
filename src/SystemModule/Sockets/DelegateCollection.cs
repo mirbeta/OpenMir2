@@ -1,7 +1,10 @@
 using System.Net;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
+using SystemModule.Core.Event;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
+
+namespace SystemModule.Sockets;
 
 /// <summary>
 /// 显示信息

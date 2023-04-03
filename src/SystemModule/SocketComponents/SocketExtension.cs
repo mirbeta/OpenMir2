@@ -2,7 +2,7 @@
 using System.Net;
 using System.Net.Sockets;
 
-namespace SystemModule.Sockets
+namespace SystemModule.SocketComponents
 {
     public static class SocketExtension
     {

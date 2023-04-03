@@ -4,8 +4,8 @@ using System;
 using System.Net;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.AsyncSocketClient;
-using SystemModule.Sockets.Event;
+using SystemModule.SocketComponents.AsyncSocketClient;
+using SystemModule.SocketComponents.Event;
 
 namespace SelGate.Services
 {

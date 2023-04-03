@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading;
+using SystemModule.Core.Common;
 using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Collections.Concurrent
 {
     /// <summary>
     /// 触发器队列

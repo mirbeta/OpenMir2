@@ -1,6 +1,7 @@
 using System;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Exceptions;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.Interface
 {

@@ -3,14 +3,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using SystemModule.Core.Common;
+using SystemModule.Core.Packages_;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.ByteManager
 {
     /// <summary>
     /// 字节块流
     /// </summary>
     [DebuggerDisplay("Len={Len},Pos={Pos},Capacity={Capacity}")]
-    //[IntelligentCoder.AsyncMethodPoster(Flags = IntelligentCoder.MemberFlags.Public)]
     public sealed partial class ByteBlock : Stream, IWrite
     {
         private static float m_ratio = 1.5f;

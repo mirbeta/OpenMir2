@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 读取锁

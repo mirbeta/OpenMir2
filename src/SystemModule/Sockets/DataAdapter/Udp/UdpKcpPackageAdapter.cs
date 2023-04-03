@@ -1,5 +1,5 @@
 using System.Net;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 
 namespace SystemModule.Sockets.DataAdapter.Udp
 {

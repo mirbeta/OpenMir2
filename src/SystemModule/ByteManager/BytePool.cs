@@ -5,7 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.ByteManager
 {
     /// <summary>
     /// 内存池

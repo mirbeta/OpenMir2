@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.IO
 {
     /// <summary>
     /// 文件操作

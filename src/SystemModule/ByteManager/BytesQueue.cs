@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using System.Diagnostics;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.ByteManager
 {
     /// <summary>
     /// 字节块集合

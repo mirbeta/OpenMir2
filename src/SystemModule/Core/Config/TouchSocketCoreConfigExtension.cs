@@ -1,7 +1,7 @@
 using System;
 using SystemModule.Dependency;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Config
 {
     /// <summary>
     /// TouchSocketCoreConfigExtension

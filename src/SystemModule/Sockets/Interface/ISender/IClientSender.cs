@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using SystemModule.Sockets.Exceptions;
 
-namespace SystemModule.Sockets.Interface
+namespace SystemModule.Sockets.Interface.ISender
 {
     /// <summary>
     /// 客户端发送接口

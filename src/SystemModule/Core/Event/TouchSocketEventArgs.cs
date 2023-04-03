@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Event
 {
     /// <summary>
     /// TouchSocketEventArgs

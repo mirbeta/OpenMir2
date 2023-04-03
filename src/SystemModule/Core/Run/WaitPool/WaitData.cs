@@ -1,9 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SystemModule.Core.Common;
 using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Run.WaitPool
 {
     /// <summary>
     /// 等待数据对象

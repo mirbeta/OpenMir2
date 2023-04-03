@@ -2,6 +2,8 @@
 using NLog;
 using System.Net;
 using System.Net.Sockets;
+using SystemModule.ByteManager;
+using SystemModule.Core.Config;
 using SystemModule.CoreSocket;
 using SystemModule.Data;
 using SystemModule.DataHandlingAdapters;
@@ -9,6 +11,7 @@ using SystemModule.Enums;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
 using SystemModule.Sockets.Common;
+using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 using TcpClient = SystemModule.Sockets.Components.TCP.TcpClient;

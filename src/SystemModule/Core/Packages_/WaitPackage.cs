@@ -1,4 +1,7 @@
-namespace SystemModule.CoreSocket
+using SystemModule.ByteManager;
+using SystemModule.Core.Run.WaitPool;
+
+namespace SystemModule.Core.Packages_
 {
     /// <summary>
     /// WaitPackage

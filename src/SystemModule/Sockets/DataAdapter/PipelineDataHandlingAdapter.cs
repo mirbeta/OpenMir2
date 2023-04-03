@@ -1,12 +1,12 @@
 using System.Threading.Tasks;
+using SystemModule.ByteManager;
 using SystemModule.Core.Run.Action;
-using SystemModule.CoreSocket;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Interface;
+using BlockReadStream = SystemModule.Core.IO.BlockReadStream;
 
 namespace SystemModule.Sockets.DataAdapter
 {
-
     /// <summary>
     /// Pipeline读取管道
     /// </summary>

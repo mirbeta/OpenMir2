@@ -1,4 +1,4 @@
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common.Enum
 {
     /// <summary>
     /// 结果类型

@@ -1,10 +1,12 @@
 using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Config;
+using SystemModule.Core.Event;
 using SystemModule.Sockets.Components.TCP;
 using SystemModule.Sockets.DataAdapter;
 using SystemModule.Sockets.Enum;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.Interface
 {
@@ -14,7 +16,7 @@ namespace SystemModule.Sockets.Interface
     /// 注意：该接口并不仅表示客户端。<see cref="SocketClient"/>也实现了该接口。
     /// </para>
     /// </summary>
-    public interface ITcpClientBase : IClient, ISender, IDefaultSender, IRequsetInfoSender
+    public interface ITcpClientBase : IClient, ISender.ISender, IDefaultSender, IRequsetInfoSender
     {
         /// <summary>
         /// 缓存池大小

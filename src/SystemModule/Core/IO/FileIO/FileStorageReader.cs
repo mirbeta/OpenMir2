@@ -1,4 +1,6 @@
-namespace SystemModule.CoreSocket
+using SystemModule.Core.Common;
+
+namespace SystemModule.Core.IO.FileIO
 {
     /// <summary>
     /// 文件读取器

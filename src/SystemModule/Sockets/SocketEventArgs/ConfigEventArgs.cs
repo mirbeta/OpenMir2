@@ -1,4 +1,5 @@
-using SystemModule.CoreSocket;
+using SystemModule.Core.Config;
+using SystemModule.Core.Event;
 
 namespace SystemModule.Sockets.SocketEventArgs
 {

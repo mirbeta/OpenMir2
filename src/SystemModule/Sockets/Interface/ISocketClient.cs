@@ -1,4 +1,5 @@
 using SystemModule.Sockets.Components.TCP;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.Interface
 {

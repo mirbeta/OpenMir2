@@ -1,4 +1,5 @@
 using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.Interface.ISender;
 
 namespace SystemModule.Sockets.WaitingClient
 {

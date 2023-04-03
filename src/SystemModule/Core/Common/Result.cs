@@ -1,7 +1,8 @@
 using System;
+using SystemModule.Core.Common.Enum;
 using SystemModule.Sockets.Enum;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 结果返回

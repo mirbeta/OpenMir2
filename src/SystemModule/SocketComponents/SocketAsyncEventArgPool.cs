@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Net.Sockets;
 
-namespace SystemModule.Sockets
+namespace SystemModule.SocketComponents
 {
     /// <summary>
     /// 呈现一个可重用的SocketAsyncEventArgs对象集合.

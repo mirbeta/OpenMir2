@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.IO.FileIO
 {
     /// <summary>
     /// FileStorageStream。非线程安全。

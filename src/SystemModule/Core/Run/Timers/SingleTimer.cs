@@ -1,8 +1,9 @@
 using System;
 using System.Threading;
+using SystemModule.Core.Common;
 using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Run.Timers
 {
     /// <summary>
     /// 不可重入的Timer
@@ -13,7 +14,7 @@ namespace SystemModule.CoreSocket
         private readonly Action<SingleTimer, object> m_action2;
         private readonly object m_state;
         private readonly Timer m_timer;
-        private readonly Action m_action3;
+        private readonly System.Action m_action3;
         private int m_signal = 1;
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         /// <param name="action"></param>
         /// <param name="period"></param>
-        public SingleTimer(int period, Action action)
+        public SingleTimer(int period, System.Action action)
         {
             m_timer = new Timer(OnTimer, null, 0, period);
             m_action3 = action;
@@ -43,7 +44,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         /// <param name="action"></param>
         /// <param name="period"></param>
-        public SingleTimer(TimeSpan period, Action action)
+        public SingleTimer(TimeSpan period, System.Action action)
         {
             m_timer = new Timer(OnTimer, null, TimeSpan.Zero, period);
             m_action3 = action;

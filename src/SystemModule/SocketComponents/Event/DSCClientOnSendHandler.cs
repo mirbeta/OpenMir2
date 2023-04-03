@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Sockets.Event
+﻿namespace SystemModule.SocketComponents.Event
 {
     public delegate void DSCClientOnSendHandler(object sender, DSCClientSendDataEventArgs e);
 }

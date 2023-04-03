@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Common;
+using SystemModule.Core.Common.Enum;
 using SystemModule.Sockets.Interface;
 
 namespace SystemModule.Sockets.Extensions

@@ -1,9 +1,11 @@
 using System;
 using System.Net.Sockets;
 using System.Threading;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Collections.Concurrent;
+using SystemModule.Core.Common;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Extensions;
+using BytePool = SystemModule.ByteManager.BytePool;
 
 namespace SystemModule.Sockets.Common
 {

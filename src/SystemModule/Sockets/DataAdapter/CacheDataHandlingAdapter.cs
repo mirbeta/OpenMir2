@@ -1,5 +1,5 @@
 using System;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 using SystemModule.Extensions;
 
 namespace SystemModule.Sockets.DataAdapter

@@ -1,4 +1,6 @@
-namespace SystemModule.CoreSocket
+using SystemModule.Core.Common.Enum;
+
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 返回通知接口

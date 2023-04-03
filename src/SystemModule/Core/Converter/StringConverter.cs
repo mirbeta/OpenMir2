@@ -1,7 +1,8 @@
 using System;
+using SystemModule.Core.Common;
 using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Converter
 {
     /// <summary>
     /// String类型数据转换器

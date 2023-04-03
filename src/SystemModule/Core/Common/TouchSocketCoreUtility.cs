@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 常量

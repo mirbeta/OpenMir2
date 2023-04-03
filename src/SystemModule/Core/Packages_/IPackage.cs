@@ -1,4 +1,6 @@
-namespace SystemModule.CoreSocket
+using SystemModule.ByteManager;
+
+namespace SystemModule.Core.Packages_
 {
     /// <summary>
     /// 包接口规范

@@ -7,7 +7,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 
-namespace SystemModule.Sockets.AsyncSocketServer
+namespace SystemModule.SocketComponents.AsyncSocketServer
 {
     /// <summary>
     /// 异步Socket通讯服务器类

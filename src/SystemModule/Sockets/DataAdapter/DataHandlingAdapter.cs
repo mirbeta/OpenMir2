@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
+using SystemModule.Core.Common;
 using SystemModule.Sockets.Interface;
 
 namespace SystemModule.Sockets.DataAdapter

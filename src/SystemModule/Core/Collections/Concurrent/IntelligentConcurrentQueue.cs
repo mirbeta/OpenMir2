@@ -1,7 +1,7 @@
 using System.Collections.Concurrent;
 using System.Threading;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Collections.Concurrent
 {
     /// <summary>
     /// 智能安全队列

@@ -1,5 +1,5 @@
 using System;
-using SystemModule.CoreSocket;
+using SystemModule.Core.Config;
 using SystemModule.Sockets.Enum;
 
 namespace SystemModule.Sockets.Interface

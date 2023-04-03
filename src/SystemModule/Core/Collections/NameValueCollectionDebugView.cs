@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Collections
 {
     /// <summary>
     /// NameValueCollectionDebugView

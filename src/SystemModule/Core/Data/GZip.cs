@@ -1,6 +1,7 @@
 using System.IO;
 using System.IO.Compression;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
+using BytePool = SystemModule.ByteManager.BytePool;
 
 namespace SystemModule.Core.Data
 {

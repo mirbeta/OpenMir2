@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Collections.Concurrent
 {
     /// <summary>
     /// 线程安全的List，其基本操作和List一致。

@@ -2,7 +2,7 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using SystemModule.CoreSocket;
+using SystemModule.ByteManager;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Interface;
 

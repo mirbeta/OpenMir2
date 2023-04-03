@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.IO
 {
     /// <summary>
     /// 包装的流。为避免该流释放时，内部流也会被释放的问题

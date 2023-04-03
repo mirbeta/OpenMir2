@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.Sockets
+namespace SystemModule.SocketComponents
 {
     /// <summary>
     /// 异步Socket错误事件参数类

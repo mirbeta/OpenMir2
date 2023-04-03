@@ -1,6 +1,8 @@
 using System.Collections.Specialized;
+using SystemModule.ByteManager;
+using SystemModule.Core.Packages_;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Common
 {
     /// <summary>
     /// 元数据键值对。

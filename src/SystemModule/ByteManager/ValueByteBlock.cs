@@ -3,8 +3,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using SystemModule.Core.Common;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.ByteManager
 {
     /// <summary>
     /// 字节块流

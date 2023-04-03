@@ -10,8 +10,8 @@ using BotSrv.Scenes.Scene;
 using SystemModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
-using SystemModule.Sockets.AsyncSocketClient;
-using SystemModule.Sockets.Event;
+using SystemModule.SocketComponents.AsyncSocketClient;
+using SystemModule.SocketComponents.Event;
 
 namespace BotSrv.Player
 {

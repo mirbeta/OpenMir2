@@ -1,6 +1,6 @@
 using SystemModule.Dependency;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Config
 {
     /// <summary>
     /// 配置文件基类
