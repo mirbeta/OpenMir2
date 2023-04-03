@@ -1,5 +1,3 @@
-using SystemModule.Dependency;
-
 namespace PluginSystem
 {
     /// <summary>
@@ -7,11 +5,6 @@ namespace PluginSystem
     /// </summary>
     public interface IPluginObject
     {
-        /// <summary>
-        /// 内置IOC容器
-        /// </summary>
-        IContainer Container { get; }
-
         /// <summary>
         /// 插件管理器
         /// </summary>

@@ -1,5 +1,3 @@
-using SystemModule.Dependency;
-
 namespace PluginSystem
 {
     /// <summary>
@@ -14,10 +12,11 @@ namespace PluginSystem
         /// <returns>插件类型实例</returns>
         public static TPlugin AddPlugin<TPlugin>(this IPluginObject plguinObject) where TPlugin : class, IPlugin
         {
-            plguinObject.Container.RegisterSingleton<TPlugin>();
-            TPlugin obj = plguinObject.Container.Resolve<TPlugin>();
-            plguinObject.AddPlugin(obj);
-            return obj;
+            //plguinObject.Container.RegisterSingleton<TPlugin>();
+            //TPlugin obj = plguinObject.Container.Resolve<TPlugin>();
+            //plguinObject.AddPlugin(obj);
+            //return obj;
+            return default(TPlugin);
         }
 
         /// <summary>
@@ -28,8 +27,9 @@ namespace PluginSystem
         /// <exception cref="ArgumentNullException"></exception>
         public static void AddPlugin(this IPluginObject plguinObject, IPlugin plugin)
         {
-            plguinObject.Container.RegisterSingleton(plugin);
-            plguinObject.PluginsManager.Add(plugin);
+            //plguinObject.Container.RegisterSingleton(plugin);
+            //plguinObject.PluginsManager.Add(plugin);
+            return;
         }
 
         /// <summary>

@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
+using System.Threading;
 using System.Threading.Tasks;
 using SystemModule.CoreSocket;
 using SystemModule.Dependency;
@@ -41,7 +43,7 @@ namespace SystemModule.Sockets.Components.UDP
     /// <summary>
     /// UDP基类服务器。
     /// </summary>
-    public class UdpSessionBase : BaseSocket, IUdpSession, IPluginObject
+    public class UdpSessionBase : BaseSocket, IUdpSession
     {
         private readonly ConcurrentList<SocketAsyncEventArgs> m_socketAsyncs;
         private TouchSocketConfig m_config;
@@ -418,22 +420,6 @@ namespace SystemModule.Sockets.Components.UDP
             {
                 case ReceiveType.Auto:
                     {
-#if NET45_OR_GREATER || NET5_0_OR_GREATER
-                        for (int i = 0; i < threadCount; i++)
-                        {
-                            SocketAsyncEventArgs eventArg = new SocketAsyncEventArgs();
-                            m_socketAsyncs.Add(eventArg);
-                            eventArg.Completed += IO_Completed;
-                            ByteBlock byteBlock = new ByteBlock(BufferLength);
-                            eventArg.UserToken = byteBlock;
-                            eventArg.SetBuffer(byteBlock.Buffer, 0, byteBlock.Capacity);
-                            eventArg.RemoteEndPoint = iPHost.EndPoint;
-                            if (!socket.ReceiveFromAsync(eventArg))
-                            {
-                                ProcessReceive(socket, eventArg);
-                            }
-                        }
-#else
                         if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                         {
                             for (int i = 0; i < threadCount; i++)
@@ -457,7 +443,6 @@ namespace SystemModule.Sockets.Components.UDP
                             thread.IsBackground = true;
                             thread.Start();
                         }
-#endif
                         break;
                     }
                 default:

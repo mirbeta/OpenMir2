@@ -1,4 +1,4 @@
-namespace SystemModule.CoreSocket
+namespace PluginEngine.Message
 {
     /// <summary>
     /// 限定消息的接口

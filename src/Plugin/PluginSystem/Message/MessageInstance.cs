@@ -1,8 +1,7 @@
 using PluginSystem.Reflection;
-using System;
 using System.Reflection;
 
-namespace SystemModule.CoreSocket
+namespace PluginEngine.Message
 {
     /// <summary>
     /// MessageInstance

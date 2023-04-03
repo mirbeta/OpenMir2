@@ -1,5 +1,4 @@
-using SystemModule.CoreSocket;
-using SystemModule.Dependency;
+using PluginEngine;
 
 namespace PluginSystem
 {
@@ -12,11 +11,6 @@ namespace PluginSystem
         /// 标识该插件是否可用。当不可用时，仅可以添加和删除插件，但不会触发插件
         /// </summary>
         bool Enable { get; set; }
-
-        /// <summary>
-        /// 内置IOC容器
-        /// </summary>
-        IContainer Container { get; }
 
         /// <summary>
         /// 添加插件
@@ -49,6 +43,6 @@ namespace PluginSystem
         /// <param name="name">触发名称</param>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        bool Raise<TPlugin>(string name, object sender, TouchSocketEventArgs e) where TPlugin : IPlugin;
+        bool Raise<TPlugin>(string name, object sender, PluginEventArgs e) where TPlugin : IPlugin;
     }
 }

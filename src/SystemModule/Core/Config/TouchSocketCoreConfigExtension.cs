@@ -1,6 +1,5 @@
 using System;
 using SystemModule.Dependency;
-using SystemModule.Plugins;
 
 namespace SystemModule.CoreSocket
 {
@@ -17,11 +16,11 @@ namespace SystemModule.CoreSocket
         /// <param name="config"></param>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static TouchSocketConfig ConfigurePlugins(this TouchSocketConfig config, Action<IPluginsManager> action)
-        {
-            action?.Invoke(config.PluginsManager);
-            return config;
-        }
+        //public static TouchSocketConfig ConfigurePlugins(this TouchSocketConfig config, Action<IPluginsManager> action)
+        //{
+        //    action?.Invoke(config.PluginsManager);
+        //    return config;
+        //}
 
         #endregion 插件
 

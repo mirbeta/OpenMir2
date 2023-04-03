@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace PluginEngine.Message
 {
     /// <summary>
     /// 注册为消息

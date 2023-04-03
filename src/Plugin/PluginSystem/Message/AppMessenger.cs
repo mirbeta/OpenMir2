@@ -1,11 +1,4 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using SystemModule.Exceptions;
-using SystemModule.Sockets.Enum;
-
-namespace SystemModule.CoreSocket
+namespace PluginEngine.Message
 {
     /// <summary>
     /// 消息通知类。内部全为弱引用。

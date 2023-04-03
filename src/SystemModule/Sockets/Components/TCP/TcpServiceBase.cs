@@ -70,11 +70,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public abstract bool UsePlugin { get; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public abstract void Clear();
 
         /// <summary>

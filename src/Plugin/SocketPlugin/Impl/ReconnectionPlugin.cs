@@ -1,6 +1,6 @@
+using PluginSystem;
 using System;
 using SystemModule.CoreSocket;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 

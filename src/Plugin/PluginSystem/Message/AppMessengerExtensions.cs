@@ -1,10 +1,6 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using SystemModule.Exceptions;
-using SystemModule.Extensions;
 
-namespace SystemModule.CoreSocket
+namespace PluginEngine.Message
 {
     /// <summary>
     /// AppMessengerExtensions
@@ -18,7 +14,7 @@ namespace SystemModule.CoreSocket
         public static void Register<T>(this AppMessenger appMessenger) where T : IMessageObject
         {
             Type type = typeof(T);
-            Register(appMessenger, type);
+            appMessenger.Register(type);
         }
 
         /// <summary>
@@ -39,11 +35,11 @@ namespace SystemModule.CoreSocket
                     {
                         if (string.IsNullOrEmpty(att.Token))
                         {
-                            Register(appMessenger, null, method.Name, method);
+                            appMessenger.Register(null, method.Name, method);
                         }
                         else
                         {
-                            Register(appMessenger, null, att.Token, method);
+                            appMessenger.Register(null, att.Token, method);
                         }
                     }
                 }
@@ -67,11 +63,11 @@ namespace SystemModule.CoreSocket
                     {
                         if (string.IsNullOrEmpty(att.Token))
                         {
-                            Register(appMessenger, messageObject, method.Name, method);
+                            appMessenger.Register(messageObject, method.Name, method);
                         }
                         else
                         {
-                            Register(appMessenger, messageObject, att.Token, method);
+                            appMessenger.Register(messageObject, att.Token, method);
                         }
                     }
                 }
@@ -99,7 +95,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register(this AppMessenger appMessenger, Action action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -111,7 +107,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T>(this AppMessenger appMessenger, Action<T> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -124,7 +120,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2>(this AppMessenger appMessenger, Action<T1, T2> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -138,7 +134,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2, T3>(this AppMessenger appMessenger, Action<T1, T2, T3> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -153,7 +149,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2, T3, T4>(this AppMessenger appMessenger, Action<T1, T2, T3, T4> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -169,7 +165,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2, T3, T4, T5>(this AppMessenger appMessenger, Action<T1, T2, T3, T4, T5> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -182,7 +178,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T, TReturn>(this AppMessenger appMessenger, Func<T, TReturn> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -196,7 +192,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2, TReturn>(this AppMessenger appMessenger, Func<T1, T2, TReturn> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -211,7 +207,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2, T3, TReturn>(this AppMessenger appMessenger, Func<T1, T2, T3, TReturn> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -227,7 +223,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2, T3, T4, TReturn>(this AppMessenger appMessenger, Func<T1, T2, T3, T4, TReturn> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -244,7 +240,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<T1, T2, T3, T4, T5, TReturn>(this AppMessenger appMessenger, Func<T1, T2, T3, T4, T5, TReturn> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -256,7 +252,7 @@ namespace SystemModule.CoreSocket
         /// <param name="token"></param>
         public static void Register<TReturn>(this AppMessenger appMessenger, Func<TReturn> action, string token = default)
         {
-            RegisterDelegate(appMessenger, token, action);
+            appMessenger.RegisterDelegate(token, action);
         }
 
         /// <summary>
@@ -291,7 +287,7 @@ namespace SystemModule.CoreSocket
             {
                 if (attribute is AppMessageAttribute att)
                 {
-                    if (token.IsNullOrEmpty())
+                    if (string.IsNullOrEmpty(token))
                     {
                         if (string.IsNullOrEmpty(att.Token))
                         {

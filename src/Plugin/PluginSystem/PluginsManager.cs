@@ -3,6 +3,7 @@ using System.Collections;
 using System.Reflection;
 using PluginSystem.Reflection;
 using System.ComponentModel;
+using PluginEngine;
 
 namespace PluginSystem
 {
@@ -67,7 +68,7 @@ namespace PluginSystem
                         MethodInfo[] ms = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly);
                         foreach (MethodInfo item in ms)
                         {
-                            if (item.GetParameters().Length == 2 && typeof(TouchSocketEventArgs).IsAssignableFrom(item.GetParameters()[1].ParameterType))
+                            if (item.GetParameters().Length == 2 && typeof(PluginEventArgs).IsAssignableFrom(item.GetParameters()[1].ParameterType))
                             {
                                 if (pairs.ContainsKey(item.Name))
                                 {
@@ -81,7 +82,7 @@ namespace PluginSystem
                                     {
                                         throw new Exception("当接口标识为异步时，还应当定义其异步方法，以“Async”结尾");
                                     }
-                                    if (asyncMethod.GetParameters().Length != 2 && typeof(TouchSocketEventArgs).IsAssignableFrom(asyncMethod.GetParameters()[1].ParameterType))
+                                    if (asyncMethod.GetParameters().Length != 2 && typeof(PluginEventArgs).IsAssignableFrom(asyncMethod.GetParameters()[1].ParameterType))
                                     {
                                         throw new Exception("异步接口方法不符合设定");
                                     }
@@ -115,7 +116,7 @@ namespace PluginSystem
                     }
                 });
 
-                Container.RegisterSingleton(plugin);
+                //Container.RegisterSingleton(plugin);
             }
         }
 
@@ -128,7 +129,7 @@ namespace PluginSystem
             {
                 foreach (PluginModel item in m_plugins)
                 {
-                    item.Plugin.SafeDispose();
+                    item.Plugin.Dispose();
                 }
                 m_plugins.Clear();
             }
@@ -157,7 +158,7 @@ namespace PluginSystem
         /// <param name="name">触发名称</param>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        bool IPluginsManager.Raise<TPlugin>(string name, object sender, TouchSocketEventArgs e)
+        bool IPluginsManager.Raise<TPlugin>(string name, object sender, PluginEventArgs e)
         {
             if (!Enable)
             {
@@ -216,7 +217,7 @@ namespace PluginSystem
                     {
                         if (m_plugins.Remove(item))
                         {
-                            plugin.SafeDispose();
+                            plugin.Dispose();
                             return;
                         }
                     }
@@ -238,7 +239,7 @@ namespace PluginSystem
                     if (plugin.GetType() == type)
                     {
                         m_plugins.RemoveAt(i);
-                        plugin.SafeDispose();
+                        plugin.Dispose();
                     }
                 }
             }
