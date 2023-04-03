@@ -790,6 +790,11 @@ namespace SystemModule
         public const int RM_MARKET_LIST = 11015;
         public const int RM_MARKET_RESULT = 11016;
 
+        /// <summary>
+        /// 更新自身视野对象
+        /// </summary>
+        public const byte RM_UPDATEVISIBLE = 0x01;
+
         public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series)
         {
             CommandMessage result = new CommandMessage

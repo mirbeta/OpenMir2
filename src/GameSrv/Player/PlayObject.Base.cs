@@ -2612,6 +2612,10 @@ namespace GameSrv.Player {
             }
         }
 
+        /// <summary>
+        /// 更新玩家自身可见的玩家和怪物
+        /// </summary>
+        /// <param name="baseObject"></param>
         protected override void UpdateVisibleGay(BaseObject baseObject) {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
@@ -2657,7 +2661,6 @@ namespace GameSrv.Player {
                 for (short nX = nStartX; nX <= nEndX; nX++) {
                     for (short nY = nStartY; nY <= nEndY; nY++) {
                         if (!Envir.ValidCell(nX, nY)) {
-                            //Console.WriteLine("超出地图范围，跳出搜索范围");
                             break;//已超出地图范围，无需继续搜索
                         }
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
@@ -2677,12 +2680,15 @@ namespace GameSrv.Player {
                                         BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                         if (baseObject != null && !baseObject.Invisible) {
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode) {
-                                                if (Race < ActorRace.Animal || Master != null || CrazyMode || NastyMode || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play) {
-                                                    UpdateVisibleGay(baseObject);
-                                                    if (baseObject.CellType == CellType.Monster && CellType == CellType.Play && !ObMode && !baseObject.FixedHideMode) {
-                                                        //我的视野 进入对方的攻击范围
-                                                        if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange)) {
-                                                            baseObject.UpdateMonsterVisible(this);
+                                                if (Race < ActorRace.Animal || Master != null || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
+                                                {
+                                                    UpdateVisibleGay(baseObject);//更新自己的视野对象
+                                                    if (CellType == CellType.Play && baseObject.CellType == CellType.Monster  && !ObMode && !baseObject.FixedHideMode)
+                                                    {
+                                                        //我的视野 进入对方的攻击视野范围
+                                                        if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange))
+                                                        {
+                                                            baseObject.SendMsg(this, Messages.RM_UPDATEVISIBLE, 0, 0, 0, 0, ""); // 发送消息更新对方的视野
                                                         }
                                                     }
                                                 }

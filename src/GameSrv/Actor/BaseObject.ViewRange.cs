@@ -6,13 +6,14 @@ namespace GameSrv.Actor
     public partial class BaseObject
     {
         /// <summary>
-        /// 更新怪物视野
+        /// 更新自身视野对象（可见对象）
         /// </summary>
-        /// <param name="baseObject"></param>
-        public void UpdateMonsterVisible(BaseObject baseObject)
+        /// <param name="acrotId"></param>
+        private void UpdateMonsterVisible(int acrotId)
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
+            var baseObject = M2Share.ActorMgr.Get(acrotId);
             if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
