@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using SystemModule.CoreSocket;
 using SystemModule.Dependency;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
@@ -37,12 +36,7 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public abstract Common.NetworkMonitor[] Monitors { get; }
-
-        /// <summary>
-        /// 插件管理器
-        /// </summary>
-        public abstract IPluginsManager PluginsManager { get; }
-
+        
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

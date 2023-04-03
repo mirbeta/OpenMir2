@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 using SystemModule.CoreSocket;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.DataAdapter.Udp;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.Interface.Plugins;
 using SystemModule.Sockets.SocketEventArgs;
 
 namespace SystemModule.Sockets.Components.UDP
@@ -51,7 +49,6 @@ namespace SystemModule.Sockets.Components.UDP
         private Common.NetworkMonitor m_monitor;
         private IPHost m_remoteIPHost;
         private ServerState m_serverState;
-        private bool m_usePlugin;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
@@ -120,11 +117,6 @@ namespace SystemModule.Sockets.Components.UDP
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IPluginsManager PluginsManager => m_config?.PluginsManager;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public virtual Protocol Protocol { get; set; }
 
         /// <summary>
@@ -141,11 +133,6 @@ namespace SystemModule.Sockets.Components.UDP
         /// 获取服务器状态
         /// </summary>
         public ServerState ServerState => m_serverState;
-
-        /// <summary>
-        /// 是否已启用插件
-        /// </summary>
-        public bool UsePlugin => m_usePlugin;
 
         /// <summary>
         /// 退出组播
@@ -225,15 +212,7 @@ namespace SystemModule.Sockets.Components.UDP
         public IService Setup(TouchSocketConfig config)
         {
             m_config = config;
-            if (config.IsUsePlugin)
-            {
-                PluginsManager.Raise<IConfigPlugin>(nameof(IConfigPlugin.OnLoadingConfig), this, new ConfigEventArgs(config));
-            }
             LoadConfig(m_config);
-            if (UsePlugin)
-            {
-                PluginsManager.Raise<IConfigPlugin>(nameof(IConfigPlugin.OnLoadedConfig), this, new ConfigEventArgs(config));
-            }
             return this;
         }
 
@@ -287,25 +266,14 @@ namespace SystemModule.Sockets.Components.UDP
                             throw new Exception("无法再次利用已释放对象");
                         }
                 }
-
                 m_serverState = ServerState.Running;
-
-                if (UsePlugin)
-                {
-                    PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStarted), this, new ServiceStateEventArgs(m_serverState, default));
-                }
                 return this;
             }
             catch (Exception ex)
             {
                 m_serverState = ServerState.Exception;
-                if (UsePlugin)
-                {
-                    PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStarted), this, new ServiceStateEventArgs(m_serverState, ex) { Message = ex.Message });
-                }
                 throw;
             }
-
         }
 
         /// <summary>
@@ -321,11 +289,6 @@ namespace SystemModule.Sockets.Components.UDP
                 item.SafeDispose();
             }
             m_socketAsyncs.Clear();
-
-            if (UsePlugin)
-            {
-                PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStarted), this, new ServiceStateEventArgs(m_serverState, default));
-            }
             return this;
         }
 
@@ -347,11 +310,6 @@ namespace SystemModule.Sockets.Components.UDP
                         item.SafeDispose();
                     }
                     m_socketAsyncs.Clear();
-
-                    if (UsePlugin)
-                    {
-                        PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStarted), this, new ServiceStateEventArgs(m_serverState, default));
-                    }
                 }
             }
             base.Dispose(disposing);
@@ -392,8 +350,6 @@ namespace SystemModule.Sockets.Components.UDP
             }
             m_remoteIPHost = config.GetValue(TouchSocketConfigExtension.RemoteIPHostProperty);
             BufferLength = config.GetValue(TouchSocketConfigExtension.BufferLengthProperty);
-            m_usePlugin = config.IsUsePlugin;
-
             if (CanSetDataHandlingAdapter)
             {
                 SetDataHandlingAdapter(Config.GetValue(TouchSocketConfigExtension.UdpDataHandlingAdapterProperty).Invoke());
@@ -570,16 +526,6 @@ namespace SystemModule.Sockets.Components.UDP
             if (OnHandleReceivedData?.Invoke(byteBlock, requestInfo) == false)
             {
                 return;
-            }
-
-            if (m_usePlugin)
-            {
-                UdpReceivedDataEventArgs args = new UdpReceivedDataEventArgs(remoteEndPoint, byteBlock, requestInfo);
-                PluginsManager.Raise<IUdpSessionPlugin>(nameof(IUdpSessionPlugin.OnReceivedData), this, args);
-                if (args.Handled)
-                {
-                    return;
-                }
             }
             HandleReceivedData(remoteEndPoint, byteBlock, requestInfo);
         }

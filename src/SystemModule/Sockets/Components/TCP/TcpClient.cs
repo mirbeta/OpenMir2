@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using SystemModule.CoreSocket;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Common.Options;
 using SystemModule.Sockets.DataAdapter;
@@ -18,7 +17,6 @@ using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Extensions;
 using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.Interface.Plugins;
 using SystemModule.Sockets.SocketEventArgs;
 
 namespace SystemModule.Sockets.Components.TCP
@@ -92,14 +90,6 @@ namespace SystemModule.Sockets.Components.TCP
 
         private void PrivateOnConnected(MsgEventArgs e)
         {
-            if (UsePlugin)
-            {
-                PluginsManager.Raise<IConnectedPlugin>(nameof(IConnectedPlugin.OnConnected), this, e);
-                if (e.Handled)
-                {
-                    return;
-                }
-            }
             OnConnected(e);
         }
 
@@ -127,14 +117,6 @@ namespace SystemModule.Sockets.Components.TCP
             {
                 SetDataHandlingAdapter(Config.GetValue(TouchSocketConfigExtension.DataHandlingAdapterProperty).Invoke());
             }
-            if (UsePlugin)
-            {
-                PluginsManager.Raise<IConnectingPlugin>(nameof(IConnectingPlugin.OnConnecting), this, e);
-                if (e.Handled)
-                {
-                    return;
-                }
-            }
             OnConnecting(e);
         }
 
@@ -156,10 +138,6 @@ namespace SystemModule.Sockets.Components.TCP
 
         private void PrivateOnDisconnected(DisconnectEventArgs e)
         {
-            if (UsePlugin && PluginsManager.Raise<IDisconnectedPlguin>(nameof(IDisconnectedPlguin.OnDisconnected), this, e))
-            {
-                return;
-            }
             OnDisconnected(e);
         }
 
@@ -181,10 +159,6 @@ namespace SystemModule.Sockets.Components.TCP
 
         private void PrivateOnDisconnecting(DisconnectEventArgs e)
         {
-            if (UsePlugin && PluginsManager.Raise<IDisconnectingPlugin>(nameof(IDisconnectingPlugin.OnDisconnecting), this, e))
-            {
-                return;
-            }
             OnDisconnecting(e);
         }
 
@@ -271,11 +245,6 @@ namespace SystemModule.Sockets.Components.TCP
         public bool Online => CanSend;
 
         /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public IPluginsManager PluginsManager { get; private set; }
-
-        /// <summary>
         /// 端口号
         /// </summary>
         public int Port { get; private set; }
@@ -284,11 +253,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public ReceiveType ReceiveType { get; private set; }
-
-        /// <summary>
-        /// 是否已启用插件
-        /// </summary>
-        public bool UsePlugin { get; private set; }
 
         /// <summary>
         /// <inheritdoc/>
@@ -368,7 +332,6 @@ namespace SystemModule.Sockets.Components.TCP
                 DisconnectEventArgs args = new DisconnectEventArgs(true, $"{nameof(Dispose)}主动断开");
                 PrivateOnDisconnecting(args);
             }
-            PluginsManager?.Clear();
             Config = default;
             DataHandlingAdapter.SafeDispose();
             DataHandlingAdapter = default;
@@ -530,17 +493,7 @@ namespace SystemModule.Sockets.Components.TCP
         public ITcpClient Setup(TouchSocketConfig config)
         {
             Config = config;
-            PluginsManager = config.PluginsManager;
-
-            if (config.IsUsePlugin)
-            {
-                PluginsManager.Raise<IConfigPlugin>(nameof(IConfigPlugin.OnLoadingConfig), this, new ConfigEventArgs(config));
-            }
             LoadConfig(Config);
-            if (UsePlugin)
-            {
-                PluginsManager.Raise<IConfigPlugin>(nameof(IConfigPlugin.OnLoadedConfig), this, new ConfigEventArgs(config));
-            }
             return this;
         }
 
@@ -550,16 +503,6 @@ namespace SystemModule.Sockets.Components.TCP
             {
                 return;
             }
-            if (UsePlugin)
-            {
-                ReceivedDataEventArgs args = new ReceivedDataEventArgs(byteBlock, requestInfo);
-                PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnReceivedData), this, args);
-                if (args.Handled)
-                {
-                    return;
-                }
-            }
-
             HandleReceivedData(byteBlock, requestInfo);
         }
 
@@ -581,16 +524,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <returns>返回值表示是否允许发送</returns>
         protected virtual bool HandleSendingData(byte[] buffer, int offset, int length)
         {
-            if (UsePlugin)
-            {
-                SendingEventArgs args = new SendingEventArgs(buffer, offset, length);
-                PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnSendingData), this, args);
-                if (args.IsPermitOperation)
-                {
-                    return true;
-                }
-                return false;
-            }
             return true;
         }
 
@@ -603,16 +536,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <returns>返回值表示是否允许发送</returns>
         protected virtual bool HandleSendingData(ReadOnlyMemory<byte> buffer, int offset, int length)
         {
-            if (UsePlugin)
-            {
-                //SendingEventArgs args = new SendingEventArgs(buffer, offset, length);
-                //this.PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnSendingData), this, args);
-                //if (args.IsPermitOperation)
-                //{
-                //    return true;
-                //}
-                //return false;
-            }
             return true;
         }
 
@@ -629,7 +552,6 @@ namespace SystemModule.Sockets.Components.TCP
             RemoteIPHost = config.GetValue(TouchSocketConfigExtension.RemoteIPHostProperty);
             BufferLength = config.GetValue(TouchSocketConfigExtension.BufferLengthProperty);
             ReceiveType = config.GetValue(TouchSocketConfigExtension.ReceiveTypeProperty);
-            UsePlugin = config.IsUsePlugin;
             if (config.GetValue(TouchSocketConfigExtension.SslOptionProperty) != null)
             {
                 UseSsl = true;
@@ -808,10 +730,6 @@ namespace SystemModule.Sockets.Components.TCP
                     return;
                 }
                 if (DisposedValue)
-                {
-                    return;
-                }
-                if (UsePlugin && PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnReceivingData), this, new ByteBlockEventArgs(byteBlock)))
                 {
                     return;
                 }

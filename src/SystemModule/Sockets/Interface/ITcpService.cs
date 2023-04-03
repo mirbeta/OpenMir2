@@ -1,5 +1,4 @@
 using System;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Exceptions;
 
@@ -37,7 +36,7 @@ namespace SystemModule.Sockets.Interface
     /// <summary>
     /// TCP服务器接口
     /// </summary>
-    public interface ITcpService : IService, IIDSender, IIDRequsetInfoSender, IPluginObject
+    public interface ITcpService : IService, IIDSender, IIDRequsetInfoSender
     {
         /// <summary>
         /// 当前在线客户端数量

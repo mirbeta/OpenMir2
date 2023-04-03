@@ -1,7 +1,4 @@
-﻿using System.Threading.Tasks;
-using SystemModule.CoreSocket;
-using SystemModule.Plugins;
-using SystemModule.Sockets.SocketEventArgs;
+﻿using PluginSystem;
 
 namespace SocketPlugin
 {

@@ -2,7 +2,6 @@ using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using SystemModule.CoreSocket;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Components.TCP;
 using SystemModule.Sockets.DataAdapter;
 using SystemModule.Sockets.Enum;
@@ -15,7 +14,7 @@ namespace SystemModule.Sockets.Interface
     /// 注意：该接口并不仅表示客户端。<see cref="SocketClient"/>也实现了该接口。
     /// </para>
     /// </summary>
-    public interface ITcpClientBase : IClient, ISender, IDefaultSender, IPluginObject, IRequsetInfoSender
+    public interface ITcpClientBase : IClient, ISender, IDefaultSender, IRequsetInfoSender
     {
         /// <summary>
         /// 缓存池大小
@@ -83,7 +82,6 @@ namespace SystemModule.Sockets.Interface
         /// 使用Ssl加密
         /// </summary>
         bool UseSsl { get; }
-
 
         /// <summary>
         /// 中断终端

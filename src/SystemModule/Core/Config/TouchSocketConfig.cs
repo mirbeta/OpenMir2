@@ -30,11 +30,6 @@ namespace SystemModule.CoreSocket
         public bool IsUsePlugin { get; set; }
 
         /// <summary>
-        /// 插件管理器
-        /// </summary>
-        public IPluginsManager PluginsManager => m_pluginsManager;
-
-        /// <summary>
         /// 设置注入容器。
         /// </summary>
         /// <param name="value"></param>

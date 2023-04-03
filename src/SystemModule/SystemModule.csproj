@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7</TargetFramework>
+        <TargetFramework>netstandard2.1</TargetFramework>
         <IsPackable>false</IsPackable>
         <LangVersion>11</LangVersion>
         <ImplicitUsings>disable</ImplicitUsings>
@@ -26,19 +26,12 @@
       <PackageReference Include="NLog.Extensions.Logging" Version="5.2.2" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     </ItemGroup>
-    <ItemGroup>
-      <None Remove="AsyncSocket\" />
-    </ItemGroup>
 
     <ItemGroup>
         <PackageReference Include="IntelligentCoder" Version="1.0.12">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Plugins\" />
     </ItemGroup>
     
 </Project>

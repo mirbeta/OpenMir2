@@ -1,10 +1,8 @@
+using NLog;
 using System.Collections;
 using System.Reflection;
-using NLog;
 using PluginSystem.Reflection;
-using SystemModule.CoreSocket;
-using SystemModule.Dependency;
-using SystemModule.Extensions;
+using System.ComponentModel;
 
 namespace PluginSystem
 {
@@ -83,7 +81,6 @@ namespace PluginSystem
                                     {
                                         throw new Exception("当接口标识为异步时，还应当定义其异步方法，以“Async”结尾");
                                     }
-
                                     if (asyncMethod.GetParameters().Length != 2 && typeof(TouchSocketEventArgs).IsAssignableFrom(asyncMethod.GetParameters()[1].ParameterType))
                                     {
                                         throw new Exception("异步接口方法不符合设定");

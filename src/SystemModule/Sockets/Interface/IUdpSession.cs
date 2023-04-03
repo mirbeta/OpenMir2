@@ -1,4 +1,3 @@
-using SystemModule.Plugins;
 using SystemModule.Sockets.DataAdapter.Udp;
 
 namespace SystemModule.Sockets.Interface
@@ -8,11 +7,6 @@ namespace SystemModule.Sockets.Interface
     /// </summary>
     public interface IUdpSession : IService, IClient, IClientSender, IUdpClientSender, IDefaultSender, IUdpDefaultSender
     {
-        /// <summary>
-        /// 插件管理器
-        /// </summary>
-        IPluginsManager PluginsManager { get; }
-
         /// <summary>
         /// 缓存池大小
         /// </summary>

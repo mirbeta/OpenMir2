@@ -7,13 +7,11 @@ using System.Threading;
 using SystemModule.CoreSocket;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Common.Options;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
 using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.Interface.Plugins;
 using SystemModule.Sockets.SocketEventArgs;
 
 namespace SystemModule.Sockets.Components.TCP
@@ -82,11 +80,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public override IPluginsManager PluginsManager => Config?.PluginsManager;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public override string ServerName => Config?.GetValue(TouchSocketConfigExtension.ServerNameProperty);
 
         /// <summary>
@@ -98,11 +91,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public override SocketClientCollection SocketClients => m_socketClients;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override bool UsePlugin => m_usePlugin;
 
         /// <summary>
         /// <inheritdoc/>
@@ -317,15 +305,7 @@ namespace SystemModule.Sockets.Components.TCP
         public override IService Setup(TouchSocketConfig config)
         {
             m_config = config;
-            if (config.IsUsePlugin)
-            {
-                PluginsManager.Raise<IConfigPlugin>(nameof(IConfigPlugin.OnLoadingConfig), this, new ConfigEventArgs(config));
-            }
             LoadConfig(m_config);
-            if (UsePlugin)
-            {
-                PluginsManager.Raise<IConfigPlugin>(nameof(IConfigPlugin.OnLoadedConfig), this, new ConfigEventArgs(config));
-            }
             Container.RegisterTransient<TClient>();
             return this;
         }
@@ -388,21 +368,11 @@ namespace SystemModule.Sockets.Components.TCP
                         }
                 }
                 m_serverState = ServerState.Running;
-
-                if (UsePlugin)
-                {
-                    PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStarted), this, new ServiceStateEventArgs(m_serverState, default));
-                }
                 return this;
             }
             catch (Exception ex)
             {
                 m_serverState = ServerState.Exception;
-
-                if (UsePlugin)
-                {
-                    PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStarted), this, new ServiceStateEventArgs(m_serverState, ex) { Message = ex.Message });
-                }
                 throw;
             }
         }
@@ -420,14 +390,8 @@ namespace SystemModule.Sockets.Components.TCP
                 }
             }
             m_monitors = null;
-
             Clear();
-
             m_serverState = ServerState.Stopped;
-            if (UsePlugin)
-            {
-                PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStoped), this, new ServiceStateEventArgs(m_serverState, default));
-            }
             return this;
         }
 
@@ -462,11 +426,6 @@ namespace SystemModule.Sockets.Components.TCP
                     }
                     Clear();
                     m_serverState = ServerState.Disposed;
-                    if (UsePlugin)
-                    {
-                        PluginsManager.Raise<IServicePlugin>(nameof(IServicePlugin.OnStoped), this, new ServiceStateEventArgs(m_serverState, default));
-                    }
-                    PluginsManager.Clear();
                 }
             }
 
@@ -620,7 +579,6 @@ namespace SystemModule.Sockets.Components.TCP
 
         private void SetClientConfiguration(SocketClient client)
         {
-            client.m_usePlugin = m_usePlugin;
             client.Config = m_config;
             client.m_service = this;
             client.m_receiveType = m_receiveType;

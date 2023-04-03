@@ -1,9 +1,7 @@
 using NLog;
 using System.Threading.Tasks;
 using SystemModule.CoreSocket;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.Interface.Plugins;
 using SystemModule.Sockets.SocketEventArgs;
 
 namespace SystemModule.Sockets.Plugins

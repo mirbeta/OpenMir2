@@ -1,10 +1,6 @@
+using PluginSystem;
 using System;
 using System.Threading;
-using SystemModule.Plugins;
-using SystemModule.Sockets.Enum;
-using SystemModule.Sockets.Extensions;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
 
 namespace SystemModule.Sockets.Plugins
 {

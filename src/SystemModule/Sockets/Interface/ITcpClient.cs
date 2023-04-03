@@ -1,7 +1,6 @@
 using System;
 using System.Threading.Tasks;
 using SystemModule.CoreSocket;
-using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 
 namespace SystemModule.Sockets.Interface
@@ -9,7 +8,7 @@ namespace SystemModule.Sockets.Interface
     /// <summary>
     /// TCP客户端终端接口
     /// </summary>
-    public interface ITcpClient : ITcpClientBase, IClientSender, IPluginObject
+    public interface ITcpClient : ITcpClientBase, IClientSender
     {
         /// <summary>
         /// 成功连接到服务器
