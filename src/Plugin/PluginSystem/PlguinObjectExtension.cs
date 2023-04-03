@@ -1,7 +1,6 @@
-using System;
 using SystemModule.Dependency;
 
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// PlguinObjectExtension

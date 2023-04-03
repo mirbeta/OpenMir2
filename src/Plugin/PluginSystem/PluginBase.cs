@@ -1,6 +1,6 @@
 ﻿using SystemModule.CoreSocket;
 
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// PluginBase

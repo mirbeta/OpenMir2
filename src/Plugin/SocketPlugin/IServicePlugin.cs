@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using SystemModule.Plugins;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace SystemModule.Sockets.Interface.Plugins
+namespace SocketPlugin
 {
     /// <summary>
     /// IServicePlugin

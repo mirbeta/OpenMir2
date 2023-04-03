@@ -3,7 +3,7 @@ using SystemModule.CoreSocket;
 using SystemModule.Plugins;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace SystemModule.Sockets.Interface.Plugins
+namespace SocketPlugin
 {
     /// <summary>
     /// 具有预断开连接插件接口

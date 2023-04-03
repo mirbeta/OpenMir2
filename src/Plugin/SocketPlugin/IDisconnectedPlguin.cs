@@ -1,28 +1,28 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using SystemModule.Plugins;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace SystemModule.Sockets.Interface.Plugins
+namespace SocketPlugin
 {
     /// <summary>
-    /// Udp会话插件
+    /// 具有断开连接的插件接口
     /// </summary>
-    public interface IUdpSessionPlugin : IPlugin
+    public interface IDisconnectedPlguin : IPlugin
     {
         /// <summary>
-        /// 在收到数据时触发
+        /// 会话断开后触发
         /// </summary>
         /// <param name="client">客户端</param>
         /// <param name="e">参数</param>
         [AsyncRaiser]
-        void OnReceivedData(IUdpSession client, UdpReceivedDataEventArgs e);
+        void OnDisconnected(object client, DisconnectEventArgs e);
 
         /// <summary>
-        /// 在收到数据时触发
+        /// 会话断开后触发
         /// </summary>
         /// <param name="client"></param>
         /// <param name="e"></param>
         /// <returns></returns>
-        Task OnReceivedDataAsync(IUdpSession client, UdpReceivedDataEventArgs e);
+        Task OnDisconnectedAsync(object client, DisconnectEventArgs e);
     }
 }

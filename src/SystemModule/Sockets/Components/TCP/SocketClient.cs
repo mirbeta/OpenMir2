@@ -42,7 +42,6 @@ namespace SystemModule.Sockets.Components.TCP
         internal string m_id;
         internal ReceiveType m_receiveType;
         internal TcpServiceBase m_service;
-        internal bool m_usePlugin;
         private DataHandlingAdapter m_adapter;
         private DelaySender m_delaySender;
         private Socket m_mainSocket;
@@ -108,11 +107,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <summary>
         /// <inheritdoc/>
         /// </summary>
-        public IPluginsManager PluginsManager => Config?.PluginsManager;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
         public int Port { get; private set; }
 
         /// <summary>
@@ -129,11 +123,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public TcpServiceBase Service => m_service;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public bool UsePlugin => m_usePlugin;
 
         /// <summary>
         /// <inheritdoc/>
@@ -218,10 +207,6 @@ namespace SystemModule.Sockets.Components.TCP
 
         private void PrivateOnDisconnected(DisconnectEventArgs e)
         {
-            if (m_usePlugin && PluginsManager.Raise<IDisconnectedPlguin>(nameof(IDisconnectedPlguin.OnDisconnected), this, e))
-            {
-                return;
-            }
             OnDisconnected(e);
             if (!e.Handled)
             {
@@ -231,10 +216,6 @@ namespace SystemModule.Sockets.Components.TCP
 
         private void PrivateOnDisconnecting(DisconnectEventArgs e)
         {
-            if (m_usePlugin && PluginsManager.Raise<IDisconnectingPlugin>(nameof(IDisconnectingPlugin.OnDisconnecting), this, e))
-            {
-                return;
-            }
             OnDisconnecting(e);
             if (!e.Handled)
             {
@@ -330,11 +311,6 @@ namespace SystemModule.Sockets.Components.TCP
                 socketClient.m_id = newId;
                 if (Service.SocketClients.TryAdd(socketClient))
                 {
-                    if (m_usePlugin)
-                    {
-                        IDChangedEventArgs e = new IDChangedEventArgs(oldId, newId);
-                        PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnIDChanged), socketClient, e);
-                    }
                     return;
                 }
                 else
@@ -420,7 +396,6 @@ namespace SystemModule.Sockets.Components.TCP
         internal void InternalConnected(TouchSocketEventArgs e)
         {
             m_online = true;
-
             if (Config.GetValue(TouchSocketConfigExtension.DelaySenderProperty) is DelaySenderOption senderOption)
             {
                 m_useDelaySender = true;
@@ -430,21 +405,11 @@ namespace SystemModule.Sockets.Components.TCP
                     DelayLength = senderOption.DelayLength
                 };
             }
-
-            if (m_usePlugin && PluginsManager.Raise<IConnectedPlugin>(nameof(IConnectedPlugin.OnConnected), this, e))
-            {
-                return;
-            }
-
             OnConnected(e);
         }
 
         internal void InternalConnecting(OperationEventArgs e)
         {
-            if (m_usePlugin && PluginsManager.Raise<IConnectingPlugin>(nameof(IConnectingPlugin.OnConnecting), this, e))
-            {
-                return;
-            }
             OnConnecting(e);
         }
 
@@ -501,16 +466,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <returns>返回值表示是否允许发送</returns>
         protected virtual bool HandleSendingData(byte[] buffer, int offset, int length)
         {
-            if (m_usePlugin)
-            {
-                SendingEventArgs args = new SendingEventArgs(buffer, offset, length);
-                PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnSendingData), this, args);
-                if (args.IsPermitOperation)
-                {
-                    return true;
-                }
-                return false;
-            }
             return true;
         }
 
@@ -523,17 +478,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <returns>返回值表示是否允许发送</returns>
         protected virtual bool HandleSendingData(ReadOnlyMemory<byte> buffer, int offset, int length)
         {
-            if (m_usePlugin)
-            {
-                //todo 待实现
-                //SendingEventArgs args = new SendingEventArgs(buffer, offset, length);
-                //PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnSendingData), this, args);
-                //if (args.IsPermitOperation)
-                //{
-                //    return true;
-                //}
-                //return false;
-            }
             return true;
         }
 
@@ -654,10 +598,6 @@ namespace SystemModule.Sockets.Components.TCP
                 {
                     return;
                 }
-                if (UsePlugin && PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnReceivingData), this, new ByteBlockEventArgs(byteBlock)))
-                {
-                    return;
-                }
                 if (DisposedValue)
                 {
                     return;
@@ -685,22 +625,9 @@ namespace SystemModule.Sockets.Components.TCP
             {
                 return;
             }
-
-            if (m_usePlugin)
-            {
-                ReceivedDataEventArgs args = new ReceivedDataEventArgs(byteBlock, requestInfo);
-                PluginsManager.Raise<ITcpPlugin>(nameof(ITcpPlugin.OnReceivedData), this, args);
-                if (args.Handled)
-                {
-                    return;
-                }
-            }
-
             HandleReceivedData(byteBlock, requestInfo);
-
             m_service.OnInternalReceivedData(this, byteBlock, requestInfo);
         }
-
 
         private void ProcessReceived(SocketAsyncEventArgs e)
         {

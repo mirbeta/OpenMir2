@@ -1,4 +1,4 @@
-﻿namespace SystemModule.CoreSocket
+﻿namespace PluginSystem.Reflection
 {
 
     /// <summary>

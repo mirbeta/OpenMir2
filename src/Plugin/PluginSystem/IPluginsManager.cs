@@ -1,9 +1,7 @@
-using System;
-using System.Collections.Generic;
 using SystemModule.CoreSocket;
 using SystemModule.Dependency;
 
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// 插件管理器接口

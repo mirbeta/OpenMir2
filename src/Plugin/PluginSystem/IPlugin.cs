@@ -1,6 +1,4 @@
-using System;
-
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// 插件接口

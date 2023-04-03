@@ -1,8 +1,7 @@
-using System;
 using System.Linq.Expressions;
 using System.Reflection;
 
-namespace SystemModule.CoreSocket
+namespace PluginSystem.Reflection
 {
 
     /// <summary>

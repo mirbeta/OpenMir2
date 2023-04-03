@@ -1,24 +1,21 @@
-using NLog;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
+using NLog;
+using PluginSystem.Reflection;
 using SystemModule.CoreSocket;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
 
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// 表示插件管理器。
     /// </summary>
     public class PluginsManager : IPluginsManager
     {
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<Type, Dictionary<string, PluginMethod>> m_pluginInfoes = new Dictionary<Type, Dictionary<string, PluginMethod>>();
         private readonly List<PluginModel> m_plugins = new List<PluginModel>();
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// 构造函数

@@ -1,6 +1,4 @@
-using System;
-
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// 标识插件只能注册一次。

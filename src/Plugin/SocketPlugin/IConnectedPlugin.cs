@@ -2,7 +2,7 @@
 using SystemModule.CoreSocket;
 using SystemModule.Plugins;
 
-namespace SystemModule.Sockets.Interface.Plugins
+namespace SocketPlugin
 {
     /// <summary>
     /// 具有完成连接动作的插件接口

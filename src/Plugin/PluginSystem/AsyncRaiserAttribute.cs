@@ -1,6 +1,4 @@
-using System;
-
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// 标识该接口应当还会触发异步接口。

@@ -1,6 +1,6 @@
 using SystemModule.Dependency;
 
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// PluginsManagerExtension

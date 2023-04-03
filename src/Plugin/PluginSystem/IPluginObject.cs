@@ -1,6 +1,6 @@
 using SystemModule.Dependency;
 
-namespace SystemModule.Plugins
+namespace PluginSystem
 {
     /// <summary>
     /// 具有插件功能的对象
