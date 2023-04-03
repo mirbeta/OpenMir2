@@ -1,4 +1,4 @@
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Run.Action
 {
     /// <summary>
     /// 运行状态

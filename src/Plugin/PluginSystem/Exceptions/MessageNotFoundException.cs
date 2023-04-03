@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.Exceptions
+namespace PluginEngine.Exceptions
 {
     /// <summary>
     /// 未找到消息异常类

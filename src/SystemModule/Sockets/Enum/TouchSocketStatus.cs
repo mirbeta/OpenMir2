@@ -197,22 +197,6 @@ namespace SystemModule.Sockets.Enum
 
         #endregion TouchRpc
 
-        #region Core
-
-        /// <summary>
-        /// Token消息为‘{0}’的已注册。
-        /// </summary>
-        [Description("Token消息为‘{0}’的已注册。")]
-        TokenExisted,
-
-        /// <summary>
-        /// Token消息为‘{0}’的未注册。
-        /// </summary>
-        [Description("Token消息为‘{0}’的未注册。")]
-        MessageNotFound,
-
-        #endregion Core
-
         #region Client
 
         /// <summary>

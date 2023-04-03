@@ -1,7 +1,8 @@
 using System.IO;
 using System.IO.Compression;
+using SystemModule.CoreSocket;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Data
 {
     /// <summary>
     /// Gzip操作类

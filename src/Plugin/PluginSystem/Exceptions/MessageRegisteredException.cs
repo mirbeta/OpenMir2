@@ -1,11 +1,10 @@
 using System;
 
-namespace SystemModule.Exceptions
+namespace PluginEngine.Exceptions
 {
     /// <summary>
     /// 消息已注册
     /// </summary>
-    [Serializable]
     public class MessageRegisteredException : Exception
     {
         /// <summary>

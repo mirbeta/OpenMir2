@@ -1,11 +1,30 @@
+using System.ComponentModel;
+using PluginEngine.Exceptions;
+
 namespace PluginEngine.Message
 {
+    public enum MessageStatus: byte
+    {
+        /// <summary>
+        /// Token消息为‘{0}’的已注册。
+        /// </summary>
+        [Description("Token消息为‘{0}’的已注册。")]
+        TokenExisted,
+
+        /// <summary>
+        /// Token消息为‘{0}’的未注册。
+        /// </summary>
+        [Description("Token消息为‘{0}’的未注册。")]
+        MessageNotFound,
+    }
+
     /// <summary>
     /// 消息通知类。内部全为弱引用。
     /// </summary>
     public class AppMessenger
     {
         private static AppMessenger m_instance;
+        private readonly ReaderWriterLockSlim writeLock = new ReaderWriterLockSlim();
         private readonly ReaderWriterLockSlim m_lockSlim = new ReaderWriterLockSlim();
         private readonly Dictionary<string, List<MessageInstance>> m_tokenAndInstance = new Dictionary<string, List<MessageInstance>>();
 
@@ -45,23 +64,20 @@ namespace PluginEngine.Message
         /// <exception cref="MessageRegisteredException"></exception>
         public void Add(string token, MessageInstance messageInstance)
         {
-            using (WriteLock writeLock = new WriteLock(m_lockSlim))
+            if (m_tokenAndInstance.ContainsKey(token))
             {
-                if (m_tokenAndInstance.ContainsKey(token))
+                if (!AllowMultiple)
                 {
-                    if (!AllowMultiple)
-                    {
-                        throw new MessageRegisteredException(TouchSocketStatus.TokenExisted.GetDescription(token));
-                    }
-                    m_tokenAndInstance[token].Add(messageInstance);
+                    throw new MessageRegisteredException($"Token消息为‘{token}’的已注册。");
                 }
-                else
-                {
-                    m_tokenAndInstance.Add(token, new List<MessageInstance>()
+                m_tokenAndInstance[token].Add(messageInstance);
+            }
+            else
+            {
+                m_tokenAndInstance.Add(token, new List<MessageInstance>()
                 {
                     messageInstance
                 });
-                }
             }
         }
 
@@ -72,10 +88,7 @@ namespace PluginEngine.Message
         /// <returns></returns>
         public bool CanSendMessage(string token)
         {
-            using (ReadLock readLock = new ReadLock(m_lockSlim))
-            {
-                return m_tokenAndInstance.ContainsKey(token);
-            }
+            return m_tokenAndInstance.ContainsKey(token);
         }
 
         /// <summary>
@@ -83,10 +96,7 @@ namespace PluginEngine.Message
         /// </summary>
         public void Clear()
         {
-            using (WriteLock writeLock = new WriteLock(m_lockSlim))
-            {
-                m_tokenAndInstance.Clear();
-            }
+            m_tokenAndInstance.Clear();
         }
 
         /// <summary>
@@ -95,10 +105,7 @@ namespace PluginEngine.Message
         /// <returns></returns>
         public string[] GetAllMessage()
         {
-            using (ReadLock readLock = new ReadLock(m_lockSlim))
-            {
-                return m_tokenAndInstance.Keys.ToArray();
-            }
+            return m_tokenAndInstance.Keys.ToArray();
         }
 
         /// <summary>
@@ -107,10 +114,7 @@ namespace PluginEngine.Message
         /// <param name="token"></param>
         public void Remove(string token)
         {
-            using (WriteLock writeLock = new WriteLock(m_lockSlim))
-            {
-                m_tokenAndInstance.Remove(token);
-            }
+            m_tokenAndInstance.Remove(token);
         }
 
         /// <summary>
@@ -119,29 +123,24 @@ namespace PluginEngine.Message
         /// <param name="messageObject"></param>
         public void Remove(IMessageObject messageObject)
         {
-            using (WriteLock writeLock = new WriteLock(m_lockSlim))
+            List<string> key = new List<string>();
+            foreach (string item in m_tokenAndInstance.Keys)
             {
-                List<string> key = new List<string>();
-
-                foreach (string item in m_tokenAndInstance.Keys)
+                foreach (MessageInstance item2 in m_tokenAndInstance[item].ToArray())
                 {
-                    foreach (MessageInstance item2 in m_tokenAndInstance[item].ToArray())
+                    if (messageObject == item2.MessageObject)
                     {
-                        if (messageObject == item2.MessageObject)
+                        m_tokenAndInstance[item].Remove(item2);
+                        if (m_tokenAndInstance[item].Count == 0)
                         {
-                            m_tokenAndInstance[item].Remove(item2);
-                            if (m_tokenAndInstance[item].Count == 0)
-                            {
-                                key.Add(item);
-                            }
+                            key.Add(item);
                         }
                     }
                 }
-
-                foreach (string item in key)
-                {
-                    m_tokenAndInstance.Remove(item);
-                }
+            }
+            foreach (string item in key)
+            {
+                m_tokenAndInstance.Remove(item);
             }
         }
 
@@ -153,39 +152,34 @@ namespace PluginEngine.Message
         /// <exception cref="MessageNotFoundException"></exception>
         public Task SendAsync(string token, params object[] parameters)
         {
-            return EasyTask.Run(() =>
+            return Task.Run(() =>
             {
-                using (ReadLock readLock = new ReadLock(m_lockSlim))
+                if (m_tokenAndInstance.TryGetValue(token, out List<MessageInstance> list))
                 {
-                    if (m_tokenAndInstance.TryGetValue(token, out List<MessageInstance> list))
+                    List<MessageInstance> clear = new List<MessageInstance>();
+                    foreach (MessageInstance item in list)
                     {
-                        List<MessageInstance> clear = new List<MessageInstance>();
-
-                        foreach (MessageInstance item in list)
+                        if (!item.Static && !item.WeakReference.TryGetTarget(out _))
                         {
-                            if (!item.Static && !item.WeakReference.TryGetTarget(out _))
-                            {
-                                clear.Add(item);
-                                continue;
-                            }
-                            try
-                            {
-                                item.Invoke(item.MessageObject, parameters);
-                            }
-                            catch
-                            {
-                            }
+                            clear.Add(item);
+                            continue;
                         }
-
-                        foreach (MessageInstance item in clear)
+                        try
                         {
-                            list.Remove(item);
+                            item.Invoke(item.MessageObject, parameters);
+                        }
+                        catch
+                        {
                         }
                     }
-                    else
+                    foreach (MessageInstance item in clear)
                     {
-                        throw new MessageNotFoundException(TouchSocketStatus.MessageNotFound.GetDescription(token));
+                        list.Remove(item);
                     }
+                }
+                else
+                {
+                    throw new MessageNotFoundException($"Token消息为‘{token}’的未注册。");
                 }
             });
         }
@@ -200,49 +194,45 @@ namespace PluginEngine.Message
         /// <exception cref="MessageNotFoundException"></exception>
         public Task<T> SendAsync<T>(string token, params object[] parameters)
         {
-            return EasyTask.Run(() =>
+            return Task.Run(() =>
             {
-                using (ReadLock readLock = new ReadLock(m_lockSlim))
+                if (m_tokenAndInstance.TryGetValue(token, out List<MessageInstance> list))
                 {
-                    if (m_tokenAndInstance.TryGetValue(token, out List<MessageInstance> list))
+                    T result = default;
+                    List<MessageInstance> clear = new List<MessageInstance>();
+                    for (int i = 0; i < list.Count; i++)
                     {
-                        T result = default;
-                        List<MessageInstance> clear = new List<MessageInstance>();
-                        for (int i = 0; i < list.Count; i++)
+                        MessageInstance item = list[i];
+                        if (!item.Static && !item.WeakReference.TryGetTarget(out _))
                         {
-                            MessageInstance item = list[i];
-                            if (!item.Static && !item.WeakReference.TryGetTarget(out _))
-                            {
-                                clear.Add(item);
-                                continue;
-                            }
-
-                            try
-                            {
-                                if (i == list.Count - 1)
-                                {
-                                    result = (T)item.Invoke(item.MessageObject, parameters);
-                                }
-                                else
-                                {
-                                    item.Invoke(item.MessageObject, parameters);
-                                }
-                            }
-                            catch
-                            {
-                            }
+                            clear.Add(item);
+                            continue;
                         }
 
-                        foreach (MessageInstance item in clear)
+                        try
                         {
-                            list.Remove(item);
+                            if (i == list.Count - 1)
+                            {
+                                result = (T)item.Invoke(item.MessageObject, parameters);
+                            }
+                            else
+                            {
+                                item.Invoke(item.MessageObject, parameters);
+                            }
                         }
-                        return result;
+                        catch
+                        {
+                        }
                     }
-                    else
+                    foreach (MessageInstance item in clear)
                     {
-                        throw new MessageNotFoundException(TouchSocketStatus.MessageNotFound.GetDescription(token));
+                        list.Remove(item);
                     }
+                    return result;
+                }
+                else
+                {
+                    throw new MessageNotFoundException($"Token消息为‘{token}’的未注册。");
                 }
             });
         }

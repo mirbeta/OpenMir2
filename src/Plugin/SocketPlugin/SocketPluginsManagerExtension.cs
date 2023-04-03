@@ -1,8 +1,8 @@
 using PluginSystem;
+using SocketPlugin.Impl;
 using System;
 using System.Threading;
 using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.Plugins;
 
 namespace SystemModule.Sockets.Extensions
 {

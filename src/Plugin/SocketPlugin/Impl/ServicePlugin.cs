@@ -1,11 +1,6 @@
 ﻿using System.Threading.Tasks;
-using SystemModule.CoreSocket;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Components.UDP;
-using SystemModule.Sockets.Interface.Plugins;
-using SystemModule.Sockets.SocketEventArgs;
 
-namespace SystemModule.Sockets.Plugins
+namespace SocketPlugin.Impl
 {
     /// <summary>
     /// ServicePlugin

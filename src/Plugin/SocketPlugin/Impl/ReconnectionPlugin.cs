@@ -1,10 +1,7 @@
 using PluginSystem;
 using System;
-using SystemModule.CoreSocket;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
 
-namespace SystemModule.Sockets.Plugins
+namespace SocketPlugin.Impl
 {
     /// <summary>
     /// 重连插件

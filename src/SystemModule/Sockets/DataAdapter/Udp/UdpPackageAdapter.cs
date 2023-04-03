@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
+using SystemModule.Core.Data;
 using SystemModule.CoreSocket;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Exceptions;
@@ -183,7 +184,7 @@ namespace SystemModule.Sockets.DataAdapter.Udp
             {
                 return false;
             }
-            byte[] crc = CoreSocket.Crc.Crc16(byteBlock.Buffer, 0, byteBlock.Len);
+            byte[] crc = Core.Data.Crc.Crc16(byteBlock.Buffer, 0, byteBlock.Len);
             if (crc[0] != Crc[0] || crc[1] != Crc[1])
             {
                 return false;

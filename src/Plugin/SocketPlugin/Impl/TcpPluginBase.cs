@@ -1,9 +1,7 @@
+using PluginSystem;
 using System.Threading.Tasks;
-using SystemModule.CoreSocket;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
 
-namespace SystemModule.Sockets.Plugins
+namespace SocketPlugin.Impl
 {
     /// <summary>
     /// 插件实现基类

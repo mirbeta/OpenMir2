@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Run.Action
 {
     /// <summary>
     /// 易用组件
@@ -31,7 +31,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         /// <param name="action"></param>
         /// <param name="delayTimeSpan"></param>
-        public static void DelayRun(TimeSpan delayTimeSpan, Action action)
+        public static void DelayRun(TimeSpan delayTimeSpan, System.Action action)
         {
             DelayRun(delayTimeSpan.Milliseconds, action);
         }
@@ -52,7 +52,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         /// <param name="action"></param>
         /// <param name="delay"></param>
-        public static void DelayRun(int delay, Action action)
+        public static void DelayRun(int delay, System.Action action)
         {
             object obj = new object();
             Timer timer = new Timer((o) =>
@@ -115,7 +115,7 @@ namespace SystemModule.CoreSocket
         /// </summary>
         /// <param name="action"></param>
         /// <returns></returns>
-        public static Task Run(Action action)
+        public static Task Run(System.Action action)
         {
             return Task.Factory.StartNew(action);
         }

@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Data
 {
     /// <summary>
     /// Crc相关。

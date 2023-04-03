@@ -2,7 +2,7 @@ using PluginSystem;
 using System;
 using System.Threading;
 
-namespace SystemModule.Sockets.Plugins
+namespace SocketPlugin.Impl
 {
     /// <summary>
     /// 检查清理连接插件。服务器适用。

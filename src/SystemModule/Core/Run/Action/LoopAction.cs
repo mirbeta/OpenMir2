@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Run.Action
 {
     /// <summary>
     /// 循环动作

@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Core.Data
 {
     /// <summary>
     /// MD5相关操作类
