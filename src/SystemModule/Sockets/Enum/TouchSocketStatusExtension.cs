@@ -1,4 +1,4 @@
-namespace SystemModule.CoreSocket.Resources
+namespace SystemModule.Sockets.Enum
 {
     /// <summary>
     /// StatusExtension

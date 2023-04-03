@@ -1,4 +1,4 @@
-using SystemModule.CoreSocket;
+using SystemModule.Dependency;
 using SystemModule.Sockets.Interface;
 
 namespace SystemModule.Sockets

@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     /// <summary>
     /// 指定依赖类型。

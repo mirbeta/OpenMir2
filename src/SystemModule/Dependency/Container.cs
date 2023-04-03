@@ -5,9 +5,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
-
     /// <summary>
     /// IOC容器
     /// </summary>

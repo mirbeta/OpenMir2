@@ -1,18 +1,18 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Exceptions
 {
     /// <summary>
-    /// 未找到消息异常类
+    /// 消息已注册
     /// </summary>
     [Serializable]
-    public class MessageNotFoundException : Exception
+    public class MessageRegisteredException : Exception
     {
         /// <summary>
         ///构造函数
         /// </summary>
         /// <param name="mes"></param>
-        public MessageNotFoundException(string mes) : base(mes)
+        public MessageRegisteredException(string mes) : base(mes)
         {
         }
     }

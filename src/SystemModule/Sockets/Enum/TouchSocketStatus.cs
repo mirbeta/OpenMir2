@@ -1,6 +1,6 @@
 using System.ComponentModel;
 
-namespace SystemModule.CoreSocket.Resources
+namespace SystemModule.Sockets.Enum
 {
     /// <summary>
     /// TouchSocket资源枚举

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Net.Sockets;
 using System.Threading;
 using SystemModule.CoreSocket;
-using SystemModule.CoreSocket.Resources;
+using SystemModule.Dependency;
 using SystemModule.Extensions;
 using SystemModule.Plugins;
 using SystemModule.Sockets.Common;

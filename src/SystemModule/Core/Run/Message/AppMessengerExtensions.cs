@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using SystemModule.Exceptions;
 using SystemModule.Extensions;
 
 namespace SystemModule.CoreSocket

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using SystemModule.CoreSocket;
-using SystemModule.CoreSocket.Resources;
+using SystemModule.Dependency;
 using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Enum;

@@ -1,4 +1,4 @@
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     /// <summary>
     /// 注入项的生命周期。

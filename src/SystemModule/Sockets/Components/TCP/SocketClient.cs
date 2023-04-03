@@ -7,7 +7,7 @@ using System.Net.Security;
 using System.Net.Sockets;
 using System.Threading.Tasks;
 using SystemModule.CoreSocket;
-using SystemModule.CoreSocket.Resources;
+using SystemModule.Dependency;
 using SystemModule.Extensions;
 using SystemModule.Plugins;
 using SystemModule.Sockets.Common;

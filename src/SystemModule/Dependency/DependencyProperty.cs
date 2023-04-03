@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     /// <summary>
     /// IDependencyProperty

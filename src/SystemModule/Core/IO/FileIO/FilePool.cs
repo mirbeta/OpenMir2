@@ -4,11 +4,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using SystemModule.CoreSocket.Resources;
+using SystemModule.Sockets.Enum;
 
 namespace SystemModule.CoreSocket
 {
-
     /// <summary>
     /// 文件池。
     /// </summary>

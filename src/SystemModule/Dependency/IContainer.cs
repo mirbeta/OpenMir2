@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     /// <summary>
     /// 注入容器接口

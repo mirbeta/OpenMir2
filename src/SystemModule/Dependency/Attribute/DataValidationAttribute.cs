@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     /// <summary>
     /// 依赖属性数据验证

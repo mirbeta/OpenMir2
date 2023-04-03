@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     internal class ContainerProvider : IContainerProvider
     {

@@ -1,8 +1,8 @@
 using System;
 using System.IO;
 using System.Threading;
-using SystemModule.CoreSocket.Resources;
 using SystemModule.Extensions;
+using SystemModule.Sockets.Enum;
 
 namespace SystemModule.CoreSocket
 {

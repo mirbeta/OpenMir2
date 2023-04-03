@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using SystemModule.CoreSocket;
+using SystemModule.Dependency;
 using SystemModule.Extensions;
 
 namespace SystemModule.Plugins

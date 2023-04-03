@@ -1,5 +1,6 @@
 using System;
 using SystemModule.CoreSocket;
+using SystemModule.Dependency;
 using SystemModule.Sockets.Common;
 
 namespace SystemModule.Sockets.Interface

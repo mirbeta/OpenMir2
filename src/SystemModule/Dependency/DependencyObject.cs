@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Concurrent;
+using SystemModule.CoreSocket;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
 
     /// <summary>
@@ -44,7 +45,7 @@ namespace SystemModule.CoreSocket
     /// 依赖项对象.
     /// 线程安全。
     /// </summary>
-    public class DependencyObject : DisposableObject, IDependencyObject, System.IDisposable
+    public class DependencyObject : DisposableObject, IDependencyObject, IDisposable
     {
         [System.Diagnostics.DebuggerBrowsable(System.Diagnostics.DebuggerBrowsableState.Never)]
         private readonly ConcurrentDictionary<object, object> m_dp;

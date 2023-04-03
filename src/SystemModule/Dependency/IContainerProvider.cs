@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     /// <summary>
     /// 具有区域效应的容器。

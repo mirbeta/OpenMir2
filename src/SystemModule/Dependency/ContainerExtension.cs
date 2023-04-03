@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.CoreSocket
+namespace SystemModule.Dependency
 {
     /// <summary>
     /// IContainerExtensions
@@ -19,7 +19,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTo : class, TFrom
         {
-            RegisterSingleton(container, typeof(TFrom), instance);
+            container.RegisterSingleton(typeof(TFrom), instance);
             return container;
         }
 
@@ -36,7 +36,7 @@ namespace SystemModule.CoreSocket
                 throw new ArgumentNullException(nameof(instance));
             }
 
-            RegisterSingleton(container, instance.GetType(), instance);
+            container.RegisterSingleton(instance.GetType(), instance);
             return container;
         }
 
@@ -53,7 +53,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTo : class, TFrom
         {
-            RegisterSingleton(container, typeof(TFrom), instance, key);
+            container.RegisterSingleton(typeof(TFrom), instance, key);
             return container;
         }
 
@@ -136,7 +136,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTO : class, TFrom
         {
-            RegisterSingleton(container, typeof(TFrom), typeof(TTO));
+            container.RegisterSingleton(typeof(TFrom), typeof(TTO));
             return container;
         }
 
@@ -152,7 +152,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTO : class, TFrom
         {
-            RegisterSingleton(container, typeof(TFrom), typeof(TTO), key);
+            container.RegisterSingleton(typeof(TFrom), typeof(TTO), key);
             return container;
         }
 
@@ -169,7 +169,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTO : class, TFrom
         {
-            RegisterTransient(container, typeof(TFrom), typeof(TTO));
+            container.RegisterTransient(typeof(TFrom), typeof(TTO));
             return container;
         }
 
@@ -182,7 +182,7 @@ namespace SystemModule.CoreSocket
         public static IContainer RegisterTransient<TFrom>(this IContainer container)
             where TFrom : class
         {
-            RegisterTransient(container, typeof(TFrom), typeof(TFrom));
+            container.RegisterTransient(typeof(TFrom), typeof(TFrom));
             return container;
         }
 
@@ -198,7 +198,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTO : class, TFrom
         {
-            RegisterTransient(container, typeof(TFrom), typeof(TTO), key);
+            container.RegisterTransient(typeof(TFrom), typeof(TTO), key);
             return container;
         }
 
@@ -231,7 +231,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTO : class, TFrom
         {
-            RegisterScoped(container, typeof(TFrom), typeof(TTO));
+            container.RegisterScoped(typeof(TFrom), typeof(TTO));
             return container;
         }
 
@@ -244,7 +244,7 @@ namespace SystemModule.CoreSocket
         public static IContainer RegisterScoped<TFrom>(this IContainer container)
             where TFrom : class
         {
-            RegisterScoped(container, typeof(TFrom), typeof(TFrom));
+            container.RegisterScoped(typeof(TFrom), typeof(TFrom));
             return container;
         }
 
@@ -260,7 +260,7 @@ namespace SystemModule.CoreSocket
             where TFrom : class
             where TTO : class, TFrom
         {
-            RegisterScoped(container, typeof(TFrom), typeof(TTO), key);
+            container.RegisterScoped(typeof(TFrom), typeof(TTO), key);
             return container;
         }
 
@@ -301,7 +301,7 @@ namespace SystemModule.CoreSocket
         /// <returns></returns>
         public static T Resolve<T>(this IContainerProvider container)
         {
-            return Resolve<T>(container, null);
+            return container.Resolve<T>(null);
         }
 
         /// <summary>
@@ -313,7 +313,7 @@ namespace SystemModule.CoreSocket
         /// <returns></returns>
         public static T Resolve<T>(this IContainerProvider container, string key)
         {
-            return Resolve<T>(container, null, key);
+            return container.Resolve<T>(null, key);
         }
 
         #region Unregister

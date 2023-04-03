@@ -127,14 +127,7 @@ namespace SystemModule.CoreSocket
 
         private static void InitCompletedTask()
         {
-#if NET45_OR_GREATER
-            Task task = new Task(() => { });
-            task.Start();
-            task.Wait();
-            CompletedTask = task;
-#else
             CompletedTask = Task.CompletedTask;
-#endif
         }
     }
 }

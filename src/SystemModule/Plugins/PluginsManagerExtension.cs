@@ -1,4 +1,4 @@
-using SystemModule.CoreSocket;
+using SystemModule.Dependency;
 
 namespace SystemModule.Plugins
 {
