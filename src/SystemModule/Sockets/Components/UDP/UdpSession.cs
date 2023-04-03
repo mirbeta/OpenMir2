@@ -67,7 +67,7 @@ namespace SystemModule.Sockets.Components.UDP
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
             socket.ReceiveBufferSize = BufferLength;
             socket.SendBufferSize = BufferLength;
-            m_monitor = new SystemModule.Sockets.Common.NetworkMonitor(null, socket);
+            m_monitor = new Common.NetworkMonitor(null, socket);
         }
 
         /// <summary>
@@ -418,7 +418,7 @@ namespace SystemModule.Sockets.Components.UDP
             PreviewBind(socket);
             socket.Bind(iPHost.EndPoint);
 
-            m_monitor = new SystemModule.Sockets.Common.NetworkMonitor(iPHost, socket);
+            m_monitor = new Common.NetworkMonitor(iPHost, socket);
 
             switch (m_config.GetValue(TouchSocketConfigExtension.ReceiveTypeProperty))
             {

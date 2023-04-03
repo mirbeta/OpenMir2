@@ -513,7 +513,7 @@ namespace SystemModule.Sockets.Components.TCP
                 socket.Bind(iPHost.EndPoint);
                 socket.Listen(m_backlog);
 
-                networkMonitors.Add(new SystemModule.Sockets.Common.NetworkMonitor(iPHost, socket));
+                networkMonitors.Add(new Common.NetworkMonitor(iPHost, socket));
             }
 
             m_monitors = networkMonitors.ToArray();
@@ -551,7 +551,6 @@ namespace SystemModule.Sockets.Components.TCP
                     }
                 }
                 e.AcceptSocket = null;
-
                 try
                 {
                     if (!((Socket)e.UserToken).AcceptAsync(e))

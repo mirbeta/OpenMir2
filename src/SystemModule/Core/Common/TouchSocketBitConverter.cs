@@ -30,7 +30,7 @@ namespace SystemModule.Core.Common
         private static TouchSocketBitConverter m_default;
 
         /// <summary>
-        /// 以默认小端，可通过<see cref="TouchSocketBitConverter.DefaultEndianType"/>重新指定默认端。
+        /// 以默认小端，可通过<see cref="DefaultEndianType"/>重新指定默认端。
         /// </summary>
         public static TouchSocketBitConverter Default => m_default;
 

@@ -14,7 +14,7 @@ namespace SystemModule.Core.Config
         /// </summary>
         public TouchSocketConfig()
         {
-            //SetContainer(new Container());
+            SetContainer(new Container());
         }
 
         /// <summary>
@@ -27,17 +27,17 @@ namespace SystemModule.Core.Config
         /// </summary>
         public bool IsUsePlugin { get; set; }
 
-        ///// <summary>
-        ///// 设置注入容器。
-        ///// </summary>
-        ///// <param name="value"></param>
-        ///// <returns></returns>
-        //public TouchSocketConfig SetContainer(IContainer value)
-        //{
-        //    m_container = value;
-        //    SetPluginsManager(new PluginsManager(m_container));
-        //    return this;
-        //}
+        /// <summary>
+        /// 设置注入容器。
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public TouchSocketConfig SetContainer(IContainer value)
+        {
+            m_container = value;
+            //SetPluginsManager(new PluginsManager(m_container));
+            return this;
+        }
 
         ///// <summary>
         ///// 设置PluginsManager
