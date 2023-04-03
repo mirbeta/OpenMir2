@@ -150,6 +150,10 @@ namespace GameSrv.Actor
                                         {
                                             if (!baseObject.Death && !baseObject.Invisible)
                                             {
+                                                if (baseObject.Race == ActorRace.Merchant)
+                                                {
+                                                    continue;
+                                                }
                                                 if (Race == ActorRace.Guard || Race == ActorRace.ArcherGuard)//守卫和护卫不搜索不主动攻击的怪物
                                                 {
                                                     if (IsPassiveAttack(baseObject))
