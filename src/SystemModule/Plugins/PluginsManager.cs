@@ -1,3 +1,4 @@
+using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,6 +18,7 @@ namespace SystemModule.Plugins
     {
         private readonly Dictionary<Type, Dictionary<string, PluginMethod>> m_pluginInfoes = new Dictionary<Type, Dictionary<string, PluginMethod>>();
         private readonly List<PluginModel> m_plugins = new List<PluginModel>();
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
 
         /// <summary>
         /// 构造函数
@@ -183,18 +185,17 @@ namespace SystemModule.Plugins
                             {
                                 pluginMethod.Method.Invoke(m_plugins[i].Plugin, sender, e);
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-                                //Container.Resolve<ILog>()?.Exception(ex);
+                                logger.Error(ex);
                             }
-
                             try
                             {
                                 pluginMethod.MethodAsync?.InvokeAsync(m_plugins[i].Plugin, sender, e);
                             }
-                            catch (Exception)
+                            catch (Exception ex)
                             {
-                                // Container.Resolve<ILog>()?.Exception(ex);
+                                logger.Error(ex);
                             }
                         }
                     }
