@@ -70,7 +70,7 @@ namespace GameGate.Conf
                 GateConfig.MessageWorkThread = byte.MaxValue;
             }
             GateConfig.LogLevel = ReadWriteByte("GameGate", "LogLevel", GateConfig.LogLevel);
-            GateConfig.DebugLog = ReadWriteBool("GameGate", "DebugLog", GateConfig.DebugLog);
+            GateConfig.Debug = ReadWriteBool("GameGate", "Debug", GateConfig.Debug);
             
             GateConfig.UseCloudGate = ReadWriteBool("Cloud", "UseCloudGate", GateConfig.UseCloudGate);
             if (GateConfig.UseCloudGate)

@@ -52,7 +52,7 @@ namespace LoginSrv.Conf
             Config.DynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.DynamicIPMode);
             Config.ConnctionString = ReadWriteString(sDB, "ConnctionString", Config.ConnctionString);
             Config.ShowLogLevel = ReadWriteInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
-            Config.ShowDebugLog = ReadWriteBool("Server", "ShowDebugLog", Config.ShowDebugLog);
+            Config.ShowDebug = ReadWriteBool("Server", "ShowDebug", Config.ShowDebug);
         }
 
         private string LoadConfigString(string sSection, string sIdent, string sDefault)

@@ -2,7 +2,7 @@
 {
     public class SettingConf
     {
-        public bool ShowDebugLog = false;
+        public bool ShowDebug = false;
         public int ShowLogLevel = 1;
         /// <summary>
         /// 数据库服务端口

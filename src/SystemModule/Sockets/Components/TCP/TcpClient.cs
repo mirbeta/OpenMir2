@@ -13,7 +13,6 @@ using SystemModule.Extensions;
 using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Common.Options;
-using SystemModule.Sockets.Config;
 using SystemModule.Sockets.DataAdapter;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;

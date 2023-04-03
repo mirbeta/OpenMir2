@@ -7,7 +7,7 @@ namespace LoginSrv.Conf
         /// <summary>
         /// 是否显示调试日志
         /// </summary>
-        public bool ShowDebugLog;
+        public bool ShowDebug;
         /// <summary>
         /// 日志等级
         /// </summary>
@@ -58,7 +58,7 @@ namespace LoginSrv.Conf
             DynamicIPMode = false;
             GateRoute = new GateRoute[60];
             ConnctionString = "server=127.0.0.1;uid=root;pwd=;database=mir2_account;";
-            ShowDebugLog = false;
+            ShowDebug = false;
             ShowLogLevel = 1;
         }
     }

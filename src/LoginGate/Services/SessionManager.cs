@@ -1,9 +1,8 @@
 using LoginGate.Conf;
+using NLog;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using NLog;
-using SystemModule.Logger;
 
 namespace LoginGate.Services
 {

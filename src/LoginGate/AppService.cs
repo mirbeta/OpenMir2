@@ -1,10 +1,9 @@
 using LoginGate.Conf;
 using LoginGate.Services;
 using Microsoft.Extensions.Hosting;
+using NLog;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
-using SystemModule.Logger;
 
 namespace LoginGate
 {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
 using SelGate.Conf;
 using SelGate.Services;
@@ -10,9 +11,7 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
 using SystemModule.Hosts;
-using SystemModule.Logger;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace SelGate
@@ -45,7 +44,6 @@ namespace SelGate
         
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MirLogger>();
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
             services.AddSingleton<ServerService>();
             services.AddSingleton<SessionManager>();

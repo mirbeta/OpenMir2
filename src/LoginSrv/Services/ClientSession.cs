@@ -1,13 +1,12 @@
 ﻿using LoginSrv.Conf;
 using LoginSrv.Storage;
+using NLog;
 using System;
-using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Logger;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
@@ -16,7 +15,7 @@ namespace LoginSrv.Services
 {
     public class ClientSession
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configMgr;
         private readonly AccountStorage _accountStorage;
         private readonly SessionServer _sessionService;
@@ -24,9 +23,8 @@ namespace LoginSrv.Services
         private readonly SessionManager _sessionManager;
         private readonly Channel<UserSessionData> _packetQueue;
 
-        public ClientSession(MirLogger logger, AccountStorage accountStorage, ConfigManager configManager, SessionServer sessionServer, ClientManager clientManager, SessionManager sessionManager)
+        public ClientSession(AccountStorage accountStorage, ConfigManager configManager, SessionServer sessionServer, ClientManager clientManager, SessionManager sessionManager)
         {
-            _logger = logger;
             _configMgr = configManager;
             _accountStorage = accountStorage;
             _sessionService = sessionServer;
@@ -89,8 +87,8 @@ namespace LoginSrv.Services
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError("[Exception] LoginService.DecodeUserData");
-                        _logger.LogError(ex);
+                        _logger.Error("[Exception] LoginService.DecodeUserData");
+                        _logger.Error(ex);
                     }
                 }
             }
@@ -132,7 +130,7 @@ namespace LoginSrv.Services
                         }
                         else
                         {
-                            _logger.LogWarning("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
+                            _logger.Warn("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
                         }
                     }
                     else
@@ -152,7 +150,7 @@ namespace LoginSrv.Services
                         }
                         else
                         {
-                            _logger.LogWarning("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
+                            _logger.Warn("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
                         }
                     }
                     else
@@ -168,7 +166,7 @@ namespace LoginSrv.Services
                     }
                     else
                     {
-                        _logger.LogWarning("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
+                        _logger.Warn("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
                     }
                     break;
                 case Messages.CM_GETBACKPASSWORD:
@@ -179,7 +177,7 @@ namespace LoginSrv.Services
                     }
                     else
                     {
-                        _logger.LogWarning("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
+                        _logger.Warn("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
                     }
                     break;
             }
@@ -204,7 +202,7 @@ namespace LoginSrv.Services
                 {
                     if (accountRecord == null)
                     {
-                        _logger.LogError($"获取账号{sLoginId}资料出错");
+                        _logger.Error($"获取账号{sLoginId}资料出错");
                         _accountStorage.Get(accountIndex, ref accountRecord);
                         return;
                     }
@@ -264,7 +262,7 @@ namespace LoginSrv.Services
                         {
                              var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
                         }*/
-                        _logger.DebugLog($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏截止时间:[{FormatSecond(userInfo.Seconds)}]");
+                        _logger.Debug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏截止时间:[{FormatSecond(userInfo.Seconds)}]");
                     }
                     else if (accountRecord.PayModel == 0)
                     {
@@ -283,8 +281,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.LoginUser");
-                _logger.LogError(ex);
+                _logger.Error("[Exception] LoginService.LoginUser");
+                _logger.Error(ex);
             }
         }
 
@@ -357,7 +355,7 @@ namespace LoginSrv.Services
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.LogWarning("[新建账号失败] 数据包为空或数据包长度异常");
+                    _logger.Warn("[新建账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
                 var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
@@ -373,7 +371,7 @@ namespace LoginSrv.Services
                 var userAccount = ClientPacket.ToPacket<UserAccountPacket>(accountBuff);
                 if (userAccount == null || userAccount.UserEntry == null || userAccount.UserEntryAdd == null)
                 {
-                    _logger.LogWarning("[新建账号失败] 解析封包出现异常.");
+                    _logger.Warn("[新建账号失败] 解析封包出现异常.");
                     return;
                 }
                 var nErrCode = -1;
@@ -404,7 +402,7 @@ namespace LoginSrv.Services
                 }
                 else
                 {
-                    _logger.LogWarning(string.Format(sAddNewuserFail, userAccount.UserEntry.Account, userAccount.UserEntryAdd.Quiz2));
+                    _logger.Warn(string.Format(sAddNewuserFail, userAccount.UserEntry.Account, userAccount.UserEntryAdd.Quiz2));
                 }
                 CommandMessage defMsg;
                 if (nErrCode == 1)
@@ -419,8 +417,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginsService.AccountCreate");
-                _logger.LogError(ex);
+                _logger.Error("[Exception] LoginsService.AccountCreate");
+                _logger.Error(ex);
             }
         }
 
@@ -481,8 +479,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.ChangePassword");
-                _logger.LogError(ex);
+                _logger.Error("[Exception] LoginService.ChangePassword");
+                _logger.Error(ex);
             }
         }
 
@@ -505,7 +503,7 @@ namespace LoginSrv.Services
                     {
                         sSelGateIp = userInfo.GateIPaddr;
                     }
-                    _logger.DebugLog(string.Format(sSelServerMsg, sServerName, _configMgr.Config.sGateIPaddr, sSelGateIp, nSelGatePort));
+                    _logger.Debug(string.Format(sSelServerMsg, sServerName, _configMgr.Config.sGateIPaddr, sSelGateIp, nSelGatePort));
                     userInfo.SelServer = true;
                     var nPayMode = userInfo.PayMode;
                     if (_sessionService.IsNotUserFull(sServerName))
@@ -544,7 +542,7 @@ namespace LoginSrv.Services
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.LogWarning("[更新账号失败] 数据包为空或数据包长度异常");
+                    _logger.Warn("[更新账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
                 var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
@@ -589,8 +587,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.UpdateUserInfo");
-                _logger.LogError(ex);
+                _logger.Error("[Exception] LoginService.UpdateUserInfo");
+                _logger.Error(ex);
             }
         }
 
@@ -740,7 +738,7 @@ namespace LoginSrv.Services
             }
             else
             {
-                _logger.LogError("登陆网关链接断开，消息发送失败");
+                _logger.Error("登陆网关链接断开，消息发送失败");
             }
         }
 
@@ -761,7 +759,7 @@ namespace LoginSrv.Services
         private void KickUser(LoginGateInfo gateInfo, ref UserInfo userInfo)
         {
             const string sKickMsg = "Kick: {0}";
-            _logger.DebugLog(string.Format(sKickMsg, userInfo.UserIPaddr));
+            _logger.Debug(string.Format(sKickMsg, userInfo.UserIPaddr));
             SendGateKickMsg(gateInfo.Socket, userInfo.SockIndex);
             gateInfo.UserList.Remove(userInfo);
             userInfo = null;
@@ -833,8 +831,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.GetSelGateInfo");
-                _logger.LogError(ex);
+                _logger.Error("[Exception] LoginService.GetSelGateInfo");
+                _logger.Error(ex);
             }
         }
 
@@ -860,8 +858,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError("[Exception] LoginService.GetServerListInfo");
-                _logger.LogError(ex);
+                _logger.Error("[Exception] LoginService.GetServerListInfo");
+                _logger.Error(ex);
             }
             return result;
         }

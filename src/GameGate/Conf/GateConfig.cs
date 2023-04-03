@@ -20,7 +20,7 @@ namespace GameGate.Conf
         /// <summary>
         /// 是否显示Debug日志
         /// </summary>
-        public bool DebugLog;
+        public bool Debug;
         /// <summary>
         /// 是否使用云网关
         /// </summary>
@@ -300,7 +300,7 @@ namespace GameGate.Conf
             ClientMoveSpeedRate = 0;
             ClientSpellSpeedRate = 0;
             ClientAttackSpeedRate = 0;
-            DebugLog = false;
+            Debug = false;
             MessageWorkThread = 1;
         }
     }

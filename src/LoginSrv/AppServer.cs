@@ -4,6 +4,7 @@ using LoginSrv.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
@@ -12,10 +13,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
 using SystemModule;
 using SystemModule.Hosts;
-using SystemModule.Logger;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace LoginSrv
@@ -49,7 +48,6 @@ namespace LoginSrv
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MirLogger>();
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "logsrv.conf")));
             services.AddSingleton<SessionServer>();
             services.AddSingleton<ClientSession>();

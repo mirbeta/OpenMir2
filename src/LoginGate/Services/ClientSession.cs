@@ -1,11 +1,9 @@
 using LoginGate.Conf;
 using LoginGate.Packet;
+using NLog;
 using System;
 using System.Net.Sockets;
-using NLog;
 using SystemModule;
-using SystemModule.Logger;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 

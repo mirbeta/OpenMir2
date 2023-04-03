@@ -1,4 +1,5 @@
 using LoginSrv.Conf;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -6,13 +7,15 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.CoreSocket.Sockets.Common;
+using SystemModule.CoreSocket;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Extensions;
-using SystemModule.Logger;
 using SystemModule.Packets.ServerPackets;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
+using SystemModule.Sockets;
+using SystemModule.Sockets.Common;
+using SystemModule.Sockets.Components.TCP;
+using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.SocketEventArgs;
 
 namespace LoginSrv.Services
 {
@@ -22,8 +25,8 @@ namespace LoginSrv.Services
     /// </summary>
     public class LoginServer
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpService _serverSocket;
-        private readonly MirLogger _logger;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
@@ -31,9 +34,8 @@ namespace LoginSrv.Services
         private readonly Channel<MessagePacket> _messageQueue;
         private readonly LoginGateInfo[] loginGates = new LoginGateInfo[20];
 
-        public LoginServer(MirLogger logger, ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
+        public LoginServer(ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
         {
-            _logger = logger;
             _clientSession = clientSession;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
@@ -54,7 +56,7 @@ namespace LoginSrv.Services
             }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
             _serverSocket.Start();
-            _logger.LogInformation($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
+            _logger.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
         
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
@@ -83,7 +85,7 @@ namespace LoginSrv.Services
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.KeepAliveTick = HUtil32.GetTickCount();
             _clientManager.AddSession(clientId, gateInfo);
-            _logger.LogInformation($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
+            _logger.Info($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
             loginGates[clientId] = gateInfo;
         }
 
@@ -93,14 +95,14 @@ namespace LoginSrv.Services
             var clientId = int.Parse(client.ID);
             loginGates[clientId] = null;
             _clientManager.Delete(clientId);
-            _logger.LogWarning($"登录网关[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            _logger.Warn($"登录网关[{client.MainSocket.RemoteEndPoint}]断开链接.");
         }
         
         private void ProcessGateData(ServerDataPacket packetHead,byte[] data, int socketId)
         {
             if (packetHead.PacketCode != Grobal2.PacketCode)
             {
-                _logger.DebugLog($"解析登录网关封包出现异常...");
+                _logger.Debug($"解析登录网关封包出现异常...");
                 return;
             }
             var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
@@ -151,7 +153,7 @@ namespace LoginSrv.Services
                         }
                         catch (Exception e)
                         {
-                            _logger.LogError(e);
+                            _logger.Error(e);
                         }
                     }
                 }
@@ -185,7 +187,7 @@ namespace LoginSrv.Services
                 var userInfo = gateInfo.UserList[i];
                 if (userInfo.SockIndex == sSockIndex)
                 {
-                    _logger.DebugLog(string.Format(sCloseMsg, userInfo.UserIPaddr));
+                    _logger.Debug(string.Format(sCloseMsg, userInfo.UserIPaddr));
                     if (!userInfo.SelServer)
                     {
                         SessionDel(userInfo.Account, userInfo.SessionID);
@@ -231,7 +233,7 @@ namespace LoginSrv.Services
             userInfo.LastUpdatePwdTick = HUtil32.GetTickCount();
             userInfo.LastGetBackPwdTick = HUtil32.GetTickCount();
             gateInfo.UserList.Add(userInfo);
-            _logger.DebugLog(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
+            _logger.Debug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
         }
 
         /// <summary>

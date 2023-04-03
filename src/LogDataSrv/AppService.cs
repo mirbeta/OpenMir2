@@ -3,6 +3,7 @@ using Microsoft.Diagnostics.Tracing;
 using Microsoft.Diagnostics.Tracing.Parsers;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -15,28 +16,27 @@ namespace LogDataSrv
 {
     public class AppService : IHostedService, IDisposable
     {
-        private readonly ILogger<AppService> _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IHostApplicationLifetime _appLifetime;
         private Task? _applicationTask;
         private int? _exitCode;
         private CancellationTokenSource? _cancellationTokenSource;
         private PeriodicTimer _timer;
 
-        public AppService(ILogger<AppService> logger, IHostApplicationLifetime lifetime)
+        public AppService(IHostApplicationLifetime lifetime)
         {
-            _logger = logger;
             _appLifetime = lifetime;
         }
 
         public async Task StartAsync(CancellationToken stoppingToken)
         {
-            _logger.LogDebug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
+            _logger.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
 
             _appLifetime.ApplicationStarted.Register(() =>
             {
-                _logger.LogDebug("Application has started");
+                _logger.Debug("Application has started");
                 _applicationTask = Task.Run(async () =>
                 {
                     try
@@ -82,8 +82,8 @@ namespace LogDataSrv
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Unhandled exception!");
-                        _logger.LogError(ex.StackTrace);
+                        _logger.Error(ex, "Unhandled exception!");
+                        _logger.Error(ex.StackTrace);
                         _exitCode = 1;
                     }
                 }, stoppingToken);
@@ -101,7 +101,7 @@ namespace LogDataSrv
                 await _applicationTask;
             }
 
-            _logger.LogDebug($"Exiting with return code: {_exitCode}");
+            _logger.Debug($"Exiting with return code: {_exitCode}");
 
             // Exit code may be null if the user cancelled via Ctrl+C/SIGTERM
             Environment.ExitCode = _exitCode.GetValueOrDefault(-1);
@@ -109,7 +109,7 @@ namespace LogDataSrv
 
         private void OnShutdown()
         {
-            _logger.LogDebug("Application is stopping");
+            _logger.Debug("Application is stopping");
             _cancellationTokenSource?.CancelAfter(3000);
         }
 

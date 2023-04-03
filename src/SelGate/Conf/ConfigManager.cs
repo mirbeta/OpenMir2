@@ -29,7 +29,7 @@ namespace SelGate.Conf
         public void LoadConfig()
         {
             GateConfig.ShowLogLevel = ReadWriteInteger("SelGate", "ShowLogLevel", GateConfig.ShowLogLevel);
-            GateConfig.ShowDebugLog = ReadWriteBool("SelGate", "ShowDebugLog", GateConfig.ShowDebugLog);
+            GateConfig.ShowDebug = ReadWriteBool("SelGate", "ShowDebug", GateConfig.ShowDebug);
             GateConfig.m_nClientTimeOutTime = ReadWriteInteger("Integer", "ClientTimeOutTime", GateConfig.m_nClientTimeOutTime);
             if (GateConfig.m_nClientTimeOutTime < 10 * 1000)
             {

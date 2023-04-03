@@ -1,9 +1,9 @@
+using NLog;
 using SelGate.Conf;
 using SelGate.Package;
 using System;
 using System.Net.Sockets;
 using SystemModule;
-using SystemModule.Logger;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
@@ -17,13 +17,12 @@ namespace SelGate.Services
         private readonly TSessionInfo _session;
         private bool _kickFlag = false;
         private int _clientTimeOutTick = 0;
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ClientThread _lastDbSvr;
         private readonly ConfigManager _configManager;
 
-        public ClientSession(MirLogger logger, ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
+        public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
         {
-            _logger = logger;
             _session = session;
             _lastDbSvr = clientThread;
             _configManager = configManager;
@@ -77,7 +76,7 @@ namespace SelGate.Services
                     _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
                     break;
                 default:
-                    _logger.DebugLog($"错误的数据包索引:[{cltCmd.Ident}]");
+                    _logger.Debug($"错误的数据包索引:[{cltCmd.Ident}]");
                     break;
             }
             if (!success)
@@ -100,7 +99,7 @@ namespace SelGate.Services
                     _kickFlag = true;
                     //BlockUser(this);
                     success = true;
-                    _logger.DebugLog($"Client Connect Time Out: {Session.ClientIP}");
+                    _logger.Trace($"Client Connect Time Out: {Session.ClientIP}");
                 }
             }
             else
@@ -130,12 +129,12 @@ namespace SelGate.Services
                 var sendLen = _session.Socket.Send(sendData);
                 if (sendLen <= 0)
                 {
-                    _logger.LogWarning("发送人物数据包失败.");
+                    _logger.Warn("发送人物数据包失败.");
                 }
             }
             else
             {
-                _logger.DebugLog("Scoket会话失效，无法处理登陆封包");
+                _logger.Debug("Scoket会话失效，无法处理登陆封包");
             }
         }
 
@@ -184,7 +183,7 @@ namespace SelGate.Services
             accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.SocketId;
             _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
-            _logger.DebugLog("[UserEnter] " + sendStr);
+            _logger.Debug("[UserEnter] " + sendStr);
         }
 
         /// <summary>
@@ -205,7 +204,7 @@ namespace SelGate.Services
             accountPacket.SocketId = Session.SocketId;
             _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
             _kickFlag = false;
-            _logger.DebugLog("[UserLeave] " + sendStr);
+            _logger.Debug("[UserLeave] " + sendStr);
         }
 
         public void CloseSession()

@@ -21,7 +21,7 @@ namespace DBSrv.Conf
         {
             _config.ConnctionString = ReadWriteString("DataBase", "ConnctionString", _config.ConnctionString);
             _config.StoreageType = ReadWriteString("DataBase", "Storeage", _config.StoreageType);
-            _config.ShowDebugLog = ReadWriteBool("Setup", "ShowDebugLog", _config.ShowDebugLog);
+            _config.ShowDebug = ReadWriteBool("Setup", "ShowDebug", _config.ShowDebug);
             _config.ServerPort = ReadWriteInteger("Setup", "ServerPort", _config.ServerPort);
             _config.ServerAddr = ReadWriteString("Setup", "ServerAddr", _config.ServerAddr);
             _config.GatePort = ReadWriteInteger("Setup", "GatePort", _config.GatePort);

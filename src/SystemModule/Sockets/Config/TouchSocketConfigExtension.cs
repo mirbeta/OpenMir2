@@ -11,7 +11,7 @@ using SystemModule.Sockets.DataAdapter.Udp;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Interface;
 
-namespace SystemModule.Sockets.Config
+namespace SystemModule.Sockets
 {
     /// <summary>
     /// TouchSocketConfigBuilder配置扩展

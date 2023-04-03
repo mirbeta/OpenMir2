@@ -1,25 +1,24 @@
 ﻿using Microsoft.Extensions.Hosting;
+using NLog;
 using SelGate.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Logger;
 
 namespace SelGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly MirLogger _logQueue;
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private int _processClearSessionTick = 0;
         private int _lastChekSocketTick = 0;
         private int _processDelayTick = 0;
 
-        public TimedService(MirLogger logQueue, ClientManager clientManager, SessionManager sessionManager)
+        public TimedService(ClientManager clientManager, SessionManager sessionManager)
         {
-            _logQueue = logQueue;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
         }
@@ -106,12 +105,12 @@ namespace SelGate
                                 userSession.Socket = null;
                                 _sessionManager.CloseSession(userSession.SocketId);
                                 userSession = null;
-                                _logQueue.DebugLog("清理超时会话,关闭超时Socket.");
+                                logger.Debug("清理超时会话,关闭超时Socket.");
                             }
                         }
                     }
                 }
-                _logQueue.DebugLog("Cleanup timeout session...");
+                logger.Debug("Cleanup timeout session...");
             }
         }
 
@@ -150,13 +149,13 @@ namespace SelGate
                 {
                     clientThread.ReConnected();
                     clientThread.CheckServerFailCount++;
-                    _logQueue.DebugLog($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                    logger.Debug($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;
                 }
                 clientThread.CheckServerFail = true;
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
-                _logQueue.DebugLog($"服务器[{clientThread.GetEndPoint()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
+                logger.Debug($"服务器[{clientThread.GetEndPoint()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
             }
         }
     }

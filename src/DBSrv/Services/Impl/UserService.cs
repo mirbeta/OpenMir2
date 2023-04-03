@@ -9,14 +9,16 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.CoreSocket.Sockets.Common;
+using SystemModule.CoreSocket;
 using SystemModule.Data;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.Sockets;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
+using SystemModule.Sockets.Common;
+using SystemModule.Sockets.Components.TCP;
+using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.SocketEventArgs;
 
 namespace DBSrv.Services.Impl
 {

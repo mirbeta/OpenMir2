@@ -1,18 +1,20 @@
+using LoginSrv.Conf;
+using LoginSrv.Storage;
+using NLog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using LoginSrv.Conf;
-using LoginSrv.Storage;
 using SystemModule;
 using SystemModule.Common;
-using SystemModule.CoreSocket.Sockets.Common;
+using SystemModule.CoreSocket;
 using SystemModule.Extensions;
-using SystemModule.Logger;
 using SystemModule.Sockets;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
+using SystemModule.Sockets.Common;
+using SystemModule.Sockets.Components.TCP;
+using SystemModule.Sockets.Interface;
+using SystemModule.Sockets.SocketEventArgs;
 
 namespace LoginSrv.Services
 {
@@ -21,16 +23,15 @@ namespace LoginSrv.Services
     /// </summary>
     public class SessionServer
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<ServerSessionInfo> _serverList = null;
         private readonly TcpService _serverSocket;
         private readonly AccountStorage _accountStorage;
         private readonly Config _config;
         private static readonly LimitServerUserInfo[] UserLimit = new LimitServerUserInfo[100];
 
-        public SessionServer(MirLogger logger, ConfigManager configManager, AccountStorage accountStorage)
+        public SessionServer(ConfigManager configManager, AccountStorage accountStorage)
         {
-            _logger = logger;
             _config = configManager.Config;
             _accountStorage = accountStorage;
             _serverList = new List<ServerSessionInfo>();
@@ -53,7 +54,7 @@ namespace LoginSrv.Services
             });
             _serverSocket.Setup(touchSocketConfig);
             _serverSocket.Start();
-            _logger.LogInformation($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
+            _logger.Info($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
         
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
@@ -84,11 +85,11 @@ namespace LoginSrv.Services
                 msgServer.EndPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
                 msgServer.SessionList = new List<SessionConnInfo>();
                 _serverList.Add(msgServer);
-                _logger.DebugLog($"{client.MainSocket.RemoteEndPoint}链接成功.");
+                _logger.Debug($"{client.MainSocket.RemoteEndPoint}链接成功.");
             }
             else
             {
-                _logger.LogWarning("非法地址连接:" + remoteEndPoint);
+                _logger.Warn("非法地址连接:" + remoteEndPoint);
                 client.Close();
             }
         }
@@ -103,11 +104,11 @@ namespace LoginSrv.Services
                 {
                     if (msgServer.ServerIndex == 99)
                     {
-                        _logger.LogWarning($"[{msgServer.ServerName}]数据库服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
+                        _logger.Warn($"[{msgServer.ServerName}]数据库服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
                     }
                     else
                     {
-                        _logger.LogWarning($"[{msgServer.ServerName}]游戏服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
+                        _logger.Warn($"[{msgServer.ServerName}]游戏服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
                     }
                     msgServer = null;
                     _serverList.RemoveAt(i);
@@ -216,7 +217,7 @@ namespace LoginSrv.Services
                         if ((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                         {
                             SendServerMsg(Messages.ISM_QUERYPLAYTIME, certUser.ServerName, certUser.LoginID + "/" + seconds);
-                            _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
+                            _logger.Debug($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
                         }
                     }
                 }
@@ -237,10 +238,10 @@ namespace LoginSrv.Services
             {
                 seconds = seconds - 60;//减去一分钟游戏时间
                 _accountStorage.UpdateAccountPlayTime(account, seconds);
-                _logger.DebugLog($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
+                _logger.Debug($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
                 if (seconds < gameTime)
                 {
-                    _logger.DebugLog($"账号[{account}]游戏时间异常.");
+                    _logger.Debug($"账号[{account}]游戏时间异常.");
                 }
                 else
                 {
@@ -267,14 +268,14 @@ namespace LoginSrv.Services
             else
             {
                 SendServerMsg(Messages.ISM_QUERYPLAYTIME, serverName, account + "/" + seconds);
-                _logger.DebugLog($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
+                _logger.Debug($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
             }
         }
 
         private void SendCancelAdmissionUser(string serverName, CertUser certUser)
         {
             SendServerMsg(Messages.SS_CLOSESESSION, serverName, certUser.LoginID + "/" + certUser.Certification);
-            _logger.DebugLog($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
+            _logger.Debug($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
         }
 
         /// <summary>
@@ -472,7 +473,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex);
+                _logger.Error(ex);
             }
         }
 
@@ -498,7 +499,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex);
+                _logger.Error(ex);
             }
         }
 
@@ -548,7 +549,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex);
+                _logger.Error(ex);
             }
             return result;
         }
@@ -569,7 +570,7 @@ namespace LoginSrv.Services
             }
             catch (Exception e)
             {
-                _logger.LogError(e.StackTrace);
+                _logger.Error(e.StackTrace);
             }
         }
 
@@ -618,7 +619,7 @@ namespace LoginSrv.Services
             }
             else
             {
-                _logger.LogError("[Critical Failure] file not found. UserLimit.txt");
+                _logger.Error("[Critical Failure] file not found. UserLimit.txt");
             }
         }
 
@@ -674,7 +675,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex);
+                _logger.Error(ex);
             }
             return status;
         }

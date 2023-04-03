@@ -9,7 +9,6 @@ using SystemModule.Dependency;
 using SystemModule.Extensions;
 using SystemModule.Plugins;
 using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Config;
 using SystemModule.Sockets.DataAdapter.Udp;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;

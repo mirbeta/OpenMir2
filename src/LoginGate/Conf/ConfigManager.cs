@@ -44,7 +44,7 @@ namespace LoginGate.Conf
             GetConfig.m_tBlockIPMethod = Enum.Parse<TBlockIPMethod>(ReadWriteString("Method", "BlockIPMethod", GetConfig.m_tBlockIPMethod.ToString()));
             GetConfig.GateCount = ReadWriteInteger("LoginGate", "Count", GetConfig.GateCount);
             GetConfig.ShowLogLevel = ReadWriteInteger("LoginGate", "ShowLogLevel", GetConfig.ShowLogLevel);
-            GetConfig.ShowDebugLog = ReadWriteBool("LoginGate", "ShowDebugLog", GetConfig.ShowDebugLog);
+            GetConfig.ShowDebug = ReadWriteBool("LoginGate", "ShowDebug", GetConfig.ShowDebug);
             for (var i = 0; i < GetConfig.GateCount; i++)
             {
                 GameGates[i].LoginAdress = ReadWriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginAdress);
@@ -72,7 +72,7 @@ namespace LoginGate.Conf
             WriteInteger("Method", "BlockIPMethod", (int)GetConfig.m_tBlockIPMethod);
             WriteInteger("LoginGate", "Count", GetConfig.GateCount);
             WriteInteger("LoginGate", "ShowLogLevel", GetConfig.ShowLogLevel);
-            WriteBool("LoginGate", "ShowDebugLog", GetConfig.ShowDebugLog);
+            WriteBool("LoginGate", "ShowDebug", GetConfig.ShowDebug);
             for (var i = 0; i < GetConfig.GateCount; i++)
             {
                 WriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginAdress);

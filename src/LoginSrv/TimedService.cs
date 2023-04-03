@@ -1,26 +1,25 @@
 ﻿using LoginSrv.Services;
 using Microsoft.Extensions.Hosting;
+using NLog;
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Logger;
 
 namespace LoginSrv
 {
     public class TimedService : BackgroundService
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly LoginServer _loginService;
         private readonly SessionServer _sessionService;
         private int _processMonSocTick;
         private int _processServerStatusTick;
 
-        public TimedService(MirLogger logger, LoginServer loginService, SessionServer sessionService)
+        public TimedService(LoginServer loginService, SessionServer sessionService)
         {
-            _logger = logger;
             _loginService = loginService;
             _sessionService = sessionService;
         }
@@ -92,7 +91,7 @@ namespace LoginSrv
                 }
                 if (builder.Length > 0)
                 {
-                    _logger.DebugLog(builder.ToString());
+                    _logger.Debug(builder.ToString());
                 }
             }
         }
@@ -120,22 +119,22 @@ namespace LoginSrv
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.LogWarning($"数据库服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
+                                _logger.Warn($"数据库服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logger.LogWarning($"[{sServerName}]数据库服务器响应超时,关闭链接.");
+                                _logger.Warn($"[{sServerName}]数据库服务器响应超时,关闭链接.");
                             }
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.LogWarning($"游戏服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
+                                _logger.Warn($"游戏服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logger.LogWarning($"[{sServerName}]游戏服务器响应超时,关闭链接.");
+                                _logger.Warn($"[{sServerName}]游戏服务器响应超时,关闭链接.");
                             }
                         }
                     }
