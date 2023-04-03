@@ -65,11 +65,6 @@ namespace SystemModule.Sockets.Interface
         SocketClientCollection SocketClients { get; }
 
         /// <summary>
-        /// 使用Ssl加密
-        /// </summary>
-        bool UseSsl { get; }
-
-        /// <summary>
         /// 清理当前已连接的所有客户端
         /// </summary>
         void Clear();

@@ -248,12 +248,6 @@ namespace SystemModule.Sockets.Config
         public static readonly DependencyProperty<IPHost> RemoteIPHostProperty = DependencyProperty<IPHost>.Register("RemoteIPHost", typeof(TouchSocketConfigExtension), null);
 
         /// <summary>
-        /// Ssl配置，为Null时则不启用
-        /// 所需类型<see cref="SslOption"/>
-        /// </summary>
-        public static readonly DependencyProperty<SslOption> SslOptionProperty = DependencyProperty<SslOption>.Register("SslOption", typeof(TouchSocketConfigExtension), null);
-
-        /// <summary>
         /// 是否使用延迟合并发送。默认null。不开启
         /// 所需类型<see cref="DelaySenderOption"/>
         /// </summary>
@@ -319,18 +313,6 @@ namespace SystemModule.Sockets.Config
         }
 
         /// <summary>
-        /// 设置客户端Ssl配置，为Null时则不启用。
-        /// </summary>
-        /// <param name="config"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static TouchSocketConfig SetClientSslOption(this TouchSocketConfig config, ClientSslOption value)
-        {
-            config.SetValue(SslOptionProperty, value);
-            return config;
-        }
-
-        /// <summary>
         /// 在Socket的KeepAlive属性。
         /// <para>注意：这个是操作tcp底层的，如果你对底层不了解，建议不要动。</para>
         /// </summary>
@@ -352,19 +334,6 @@ namespace SystemModule.Sockets.Config
         public static TouchSocketConfig SetRemoteIPHost(this TouchSocketConfig config, IPHost value)
         {
             config.SetValue(RemoteIPHostProperty, value);
-            if (value.IsUri)
-            {
-                if (value.Uri.Scheme.Equals("https", StringComparison.CurrentCultureIgnoreCase)
-                    || value.Uri.Scheme.Equals("wss", StringComparison.CurrentCultureIgnoreCase)
-                    || value.Uri.Scheme.Equals("ssl", StringComparison.CurrentCultureIgnoreCase)
-                    || value.Uri.Scheme.Equals("tls", StringComparison.CurrentCultureIgnoreCase))
-                {
-                    config.SetClientSslOption(new ClientSslOption()
-                    {
-                        TargetHost = value.Host
-                    });
-                }
-            }
             return config;
         }
 
@@ -503,18 +472,6 @@ namespace SystemModule.Sockets.Config
         public static TouchSocketConfig SetMaxCount(this TouchSocketConfig config, int value)
         {
             config.SetValue(MaxCountProperty, value);
-            return config;
-        }
-
-        /// <summary>
-        /// 设置客户端Ssl配置，为Null时则不启用。
-        /// </summary>
-        /// <param name="config"></param>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public static TouchSocketConfig SetServiceSslOption(this TouchSocketConfig config, ServiceSslOption value)
-        {
-            config.SetValue(SslOptionProperty, value);
             return config;
         }
 

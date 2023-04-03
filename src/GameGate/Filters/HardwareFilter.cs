@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using SystemModule;
-using SystemModule.Common;
 
 namespace GameGate.Filters
 {
@@ -63,7 +62,7 @@ namespace GameGate.Filters
 
         public void LoadDenyList()
         {
-            var ls = new StringList();
+            var ls = new SystemModule.Common.StringList();
             if (!File.Exists(_configManager.GateConfig.BlockHWIDFileName))
             {
                 ls.SaveToFile(_configManager.GateConfig.BlockHWIDFileName);

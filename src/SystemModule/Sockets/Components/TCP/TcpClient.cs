@@ -11,7 +11,6 @@ using SystemModule.ByteManager;
 using SystemModule.Core.Collections.Concurrent;
 using SystemModule.Core.Common;
 using SystemModule.Core.Config;
-using SystemModule.Core.Event;
 using SystemModule.Core.Run.Action;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
@@ -260,11 +259,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public ReceiveType ReceiveType { get; private set; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public bool UseSsl { get; private set; }
 
         /// <summary>
         /// <inheritdoc/>
@@ -559,10 +553,6 @@ namespace SystemModule.Sockets.Components.TCP
             RemoteIPHost = config.GetValue(TouchSocketConfigExtension.RemoteIPHostProperty);
             BufferLength = config.GetValue(TouchSocketConfigExtension.BufferLengthProperty);
             ReceiveType = config.GetValue(TouchSocketConfigExtension.ReceiveTypeProperty);
-            if (config.GetValue(TouchSocketConfigExtension.SslOptionProperty) != null)
-            {
-                UseSsl = true;
-            }
         }
 
         /// <summary>
@@ -614,38 +604,17 @@ namespace SystemModule.Sockets.Components.TCP
         private void BeginReceive()
         {
             m_workStream.SafeDispose();
-            if (UseSsl)
+            if (ReceiveType == ReceiveType.Auto)
             {
-                ClientSslOption sslOption = (ClientSslOption)Config.GetValue(TouchSocketConfigExtension.SslOptionProperty);
-                SslStream sslStream = sslOption.CertificateValidationCallback != null ? new SslStream(new NetworkStream(MainSocket, false), false, sslOption.CertificateValidationCallback) : new SslStream(new NetworkStream(MainSocket, false), false);
-                if (sslOption.ClientCertificates == null)
-                {
-                    sslStream.AuthenticateAsClient(sslOption.TargetHost);
-                }
-                else
-                {
-                    sslStream.AuthenticateAsClient(sslOption.TargetHost, sslOption.ClientCertificates, sslOption.SslProtocols, sslOption.CheckCertificateRevocation);
-                }
-                m_workStream = sslStream;
-                if (ReceiveType != ReceiveType.None)
-                {
-                    BeginSsl();
-                }
-            }
-            else
-            {
-                if (ReceiveType == ReceiveType.Auto)
-                {
-                    SocketAsyncEventArgs eventArgs = new SocketAsyncEventArgs();
-                    eventArgs.Completed += EventArgs_Completed;
+                SocketAsyncEventArgs eventArgs = new SocketAsyncEventArgs();
+                eventArgs.Completed += EventArgs_Completed;
 
-                    ByteBlock byteBlock = BytePool.Default.GetByteBlock(BufferLength);
-                    eventArgs.UserToken = byteBlock;
-                    eventArgs.SetBuffer(byteBlock.Buffer, 0, byteBlock.Buffer.Length);
-                    if (!MainSocket.ReceiveAsync(eventArgs))
-                    {
-                        ProcessReceived(eventArgs);
-                    }
+                ByteBlock byteBlock = BytePool.Default.GetByteBlock(BufferLength);
+                eventArgs.UserToken = byteBlock;
+                eventArgs.SetBuffer(byteBlock.Buffer, 0, byteBlock.Buffer.Length);
+                if (!MainSocket.ReceiveAsync(eventArgs))
+                {
+                    ProcessReceived(eventArgs);
                 }
             }
         }
@@ -927,22 +896,14 @@ namespace SystemModule.Sockets.Components.TCP
             }
             if (HandleSendingData(buffer, offset, length))
             {
-                if (UseSsl)
+                if (m_useDelaySender && length < TouchSocketUtility.BigDataBoundary)
                 {
-                    m_workStream.Write(buffer, offset, length);
+                    m_delaySender.Send(new QueueDataBytes(buffer, offset, length));
                 }
                 else
                 {
-                    if (m_useDelaySender && length < TouchSocketUtility.BigDataBoundary)
-                    {
-                        m_delaySender.Send(new QueueDataBytes(buffer, offset, length));
-                    }
-                    else
-                    {
-                        MainSocket.AbsoluteSend(buffer, offset, length);
-                    }
+                    MainSocket.AbsoluteSend(buffer, offset, length);
                 }
-
                 LastSendTime = DateTime.Now;
             }
         }
@@ -964,22 +925,14 @@ namespace SystemModule.Sockets.Components.TCP
             }
             if (HandleSendingData(buffer, offset, length))
             {
-                if (UseSsl)
+                if (m_useDelaySender && length < TouchSocketUtility.BigDataBoundary)
                 {
-                    //this.m_workStream.Write(buffer, offset, length);
+                    m_delaySender.Send(new QueueDataBytes(buffer, offset, length));
                 }
                 else
                 {
-                    if (m_useDelaySender && length < TouchSocketUtility.BigDataBoundary)
-                    {
-                        m_delaySender.Send(new QueueDataBytes(buffer, offset, length));
-                    }
-                    else
-                    {
-                        MainSocket.AbsoluteSend(buffer, offset, length);
-                    }
+                    MainSocket.AbsoluteSend(buffer, offset, length);
                 }
-
                 LastSendTime = DateTime.Now;
             }
         }

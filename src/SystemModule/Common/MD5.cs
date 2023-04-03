@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SystemModule.Core.Data
+namespace SystemModule.Common
 {
     /// <summary>
     /// MD5相关操作类

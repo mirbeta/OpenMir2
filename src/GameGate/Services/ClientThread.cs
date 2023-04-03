@@ -9,11 +9,9 @@ using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
-using SystemModule.CoreSocket;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.SocketComponents.Event;
-using SystemModule.Sockets;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Extensions;
@@ -115,7 +113,14 @@ namespace GameGate.Services
 
         public void Start()
         {
-           ClientSocket.Connect();
+            try
+            {
+                ClientSocket.Connect();
+            }
+            catch (SocketException ex)
+            {
+                ClientSocketError(null, ex.SocketErrorCode);
+            }
         }
 
         private void ReConnected()
@@ -202,9 +207,9 @@ namespace GameGate.Services
             }
         }
 
-        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
+        private void ClientSocketError(object sender, SocketError e)
         {
-            switch (e.ErrorCode)
+            switch (e)
             {
                 case SocketError.ConnectionRefused:
                     _logger.Warn($"游戏网关[{LocalEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...");

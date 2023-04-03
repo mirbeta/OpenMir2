@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.Core.Data
+namespace SystemModule.Common
 {
     /// <summary>
     /// Crc相关。
@@ -47,7 +47,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (byte)((crc >> 1) ^ 0x0C);//0x0C = (reverse 0x03)>>(8-4)
+                        crc = (byte)(crc >> 1 ^ 0x0C);//0x0C = (reverse 0x03)>>(8-4)
                     }
                     else
                     {
@@ -97,7 +97,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 0x80) > 0)
                     {
-                        crc = (byte)((crc << 1) ^ 0x48);// 0x48 = 0x09<<(8-5)
+                        crc = (byte)(crc << 1 ^ 0x48);// 0x48 = 0x09<<(8-5)
                     }
                     else
                     {
@@ -147,7 +147,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (byte)((crc >> 1) ^ 0x15);// 0x15 = (reverse 0x15)>>(8-5)
+                        crc = (byte)(crc >> 1 ^ 0x15);// 0x15 = (reverse 0x15)>>(8-5)
                     }
                     else
                     {
@@ -197,7 +197,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (byte)((crc >> 1) ^ 0x14);// 0x14 = (reverse 0x05)>>(8-5)
+                        crc = (byte)(crc >> 1 ^ 0x14);// 0x14 = (reverse 0x05)>>(8-5)
                     }
                     else
                     {
@@ -247,7 +247,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (byte)((crc >> 1) ^ 0x30);// 0x30 = (reverse 0x03)>>(8-6)
+                        crc = (byte)(crc >> 1 ^ 0x30);// 0x30 = (reverse 0x03)>>(8-6)
                     }
                     else
                     {
@@ -297,7 +297,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 0x80) > 0)
                     {
-                        crc = (byte)((crc << 1) ^ 0x12);// 0x12 = 0x09<<(8-7)
+                        crc = (byte)(crc << 1 ^ 0x12);// 0x12 = 0x09<<(8-7)
                     }
                     else
                     {
@@ -347,7 +347,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 0x80) > 0)
                     {
-                        crc = (byte)((crc << 1) ^ 0x07);
+                        crc = (byte)(crc << 1 ^ 0x07);
                     }
                     else
                     {
@@ -397,7 +397,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 0x80) > 0)
                     {
-                        crc = (byte)((crc << 1) ^ 0x07);
+                        crc = (byte)(crc << 1 ^ 0x07);
                     }
                     else
                     {
@@ -447,7 +447,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (byte)((crc >> 1) ^ 0x8C);// 0x8C = reverse 0x31
+                        crc = (byte)(crc >> 1 ^ 0x8C);// 0x8C = reverse 0x31
                     }
                     else
                     {
@@ -497,7 +497,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (byte)((crc >> 1) ^ 0xE0);// 0xE0 = reverse 0x07
+                        crc = (byte)(crc >> 1 ^ 0xE0);// 0xE0 = reverse 0x07
                     }
                     else
                     {
@@ -572,7 +572,7 @@ namespace SystemModule.Core.Data
             int tableIndex;
             for (i = start; i < length; i++)
             {
-                tableIndex = crc ^ (buffer[i] & 0xFF);
+                tableIndex = crc ^ buffer[i] & 0xFF;
                 crc = table[tableIndex];
             }
             return new byte[] { crc };
@@ -615,7 +615,7 @@ namespace SystemModule.Core.Data
             {
                 // 多项式除法
                 // 如果该位为1
-                if ((buffer[i] & (0x80 >> iR)) > 0)
+                if ((buffer[i] & 0x80 >> iR) > 0)
                 {
                     // 则在余数尾部添1否则添0
                     crc |= 0x01;
@@ -687,7 +687,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (ushort)((crc >> 1) ^ 0x8408);// 0x8408 = reverse 0x1021
+                        crc = (ushort)(crc >> 1 ^ 0x8408);// 0x8408 = reverse 0x1021
                     }
                     else
                     {
@@ -739,7 +739,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 0x8000) > 0)
                     {
-                        crc = (ushort)((crc << 1) ^ 0x1021);
+                        crc = (ushort)(crc << 1 ^ 0x1021);
                     }
                     else
                     {
@@ -791,7 +791,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (ushort)((crc >> 1) ^ 0xA6BC);// 0xA6BC = reverse 0x3D65
+                        crc = (ushort)(crc >> 1 ^ 0xA6BC);// 0xA6BC = reverse 0x3D65
                     }
                     else
                     {
@@ -843,7 +843,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (ushort)((crc >> 1) ^ 0xA001);// 0xA001 = reverse 0x8005
+                        crc = (ushort)(crc >> 1 ^ 0xA001);// 0xA001 = reverse 0x8005
                     }
                     else
                     {
@@ -895,7 +895,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (ushort)((crc >> 1) ^ 0xA001);// 0xA001 = reverse 0x8005
+                        crc = (ushort)(crc >> 1 ^ 0xA001);// 0xA001 = reverse 0x8005
                     }
                     else
                     {
@@ -947,7 +947,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (ushort)((crc >> 1) ^ 0xA001);// 0xA001 = reverse 0x8005
+                        crc = (ushort)(crc >> 1 ^ 0xA001);// 0xA001 = reverse 0x8005
                     }
                     else
                     {
@@ -999,7 +999,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (ushort)((crc >> 1) ^ 0xA001);// 0xA001 = reverse 0x8005
+                        crc = (ushort)(crc >> 1 ^ 0xA001);// 0xA001 = reverse 0x8005
                     }
                     else
                     {
@@ -1051,7 +1051,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (ushort)((crc >> 1) ^ 0x8408);// 0x8408 = reverse 0x1021
+                        crc = (ushort)(crc >> 1 ^ 0x8408);// 0x8408 = reverse 0x1021
                     }
                     else
                     {
@@ -1103,7 +1103,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 0x8000) > 0)
                     {
-                        crc = (ushort)((crc << 1) ^ 0x1021);
+                        crc = (ushort)(crc << 1 ^ 0x1021);
                     }
                     else
                     {
@@ -1155,7 +1155,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 1) > 0)
                     {
-                        crc = (crc >> 1) ^ 0xEDB88320;// 0xEDB88320= reverse 0x04C11DB7
+                        crc = crc >> 1 ^ 0xEDB88320;// 0xEDB88320= reverse 0x04C11DB7
                     }
                     else
                     {
@@ -1207,7 +1207,7 @@ namespace SystemModule.Core.Data
                 {
                     if ((crc & 0x80000000) > 0)
                     {
-                        crc = (crc << 1) ^ 0x04C11DB7;
+                        crc = crc << 1 ^ 0x04C11DB7;
                     }
                     else
                     {

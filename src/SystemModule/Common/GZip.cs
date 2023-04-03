@@ -3,7 +3,7 @@ using System.IO.Compression;
 using SystemModule.ByteManager;
 using BytePool = SystemModule.ByteManager.BytePool;
 
-namespace SystemModule.Core.Data
+namespace SystemModule.Common
 {
     /// <summary>
     /// Gzip操作类

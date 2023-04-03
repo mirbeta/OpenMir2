@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using SystemModule.ByteManager;
 using SystemModule.Core.Common;
 using SystemModule.Core.Config;
-using SystemModule.Core.Event;
 using SystemModule.Dependency;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Enum;
@@ -54,11 +53,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public abstract SocketClientCollection SocketClients { get; }
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public abstract bool UseSsl { get; }
 
         /// <summary>
         /// <inheritdoc/>

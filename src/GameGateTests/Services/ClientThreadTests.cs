@@ -4,7 +4,6 @@ using System.Runtime.InteropServices;
 using System.Text;
 using SystemModule;
 using SystemModule.ByteManager;
-using SystemModule.CoreSocket;
 using SystemModule.Packets.ServerPackets;
 
 namespace GameGate.Services.Tests

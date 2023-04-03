@@ -10,7 +10,6 @@ using SystemModule.ByteManager;
 using SystemModule.Core.Collections.Concurrent;
 using SystemModule.Core.Common;
 using SystemModule.Core.Config;
-using SystemModule.Core.Event;
 using SystemModule.Core.Run.Action;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
@@ -387,18 +386,6 @@ namespace SystemModule.Sockets.Components.TCP
             }
         }
 
-        internal void BeginReceiveSsl(ReceiveType receiveType, ServiceSslOption sslOption)
-        {
-            SslStream sslStream = sslOption.CertificateValidationCallback != null ? new SslStream(new NetworkStream(m_mainSocket, false), false, sslOption.CertificateValidationCallback) : new SslStream(new NetworkStream(m_mainSocket, false), false);
-            sslStream.AuthenticateAsServer(sslOption.Certificate, sslOption.ClientCertificateRequired, sslOption.SslProtocols, sslOption.CheckCertificateRevocation);
-            m_workStream = sslStream;
-            UseSsl = true;
-            if (receiveType == ReceiveType.Auto)
-            {
-                BeginSsl();
-            }
-        }
-
         internal void InternalConnected(TouchSocketEventArgs e)
         {
             m_online = true;
@@ -524,23 +511,6 @@ namespace SystemModule.Sockets.Components.TCP
             m_adapter = adapter;
         }
 
-        private void BeginSsl()
-        {
-            if (!DisposedValue)
-            {
-                ByteBlock byteBlock = new ByteBlock(BufferLength);
-                try
-                {
-                    m_workStream.BeginRead(byteBlock.Buffer, 0, byteBlock.Capacity, EndSsl, byteBlock);
-                }
-                catch (Exception ex)
-                {
-                    byteBlock.Dispose();
-                    BreakOut(ex.Message, false);
-                }
-            }
-        }
-
         private void BreakOut(string msg, bool manual)
         {
             lock (SyncRoot)
@@ -571,9 +541,7 @@ namespace SystemModule.Sockets.Components.TCP
                     BreakOut("远程终端主动关闭", false);
                 }
                 byteBlock.SetLength(r);
-
                 HandleBuffer(byteBlock);
-                BeginSsl();
             }
             catch (Exception ex)
             {

@@ -4,7 +4,6 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using SystemModule.Core.Common;
-using SystemModule.Core.Packages_;
 
 namespace SystemModule.ByteManager
 {
@@ -1216,48 +1215,7 @@ namespace SystemModule.ByteManager
         }
 
         #endregion Null
-
-        #region Package
-
-        /// <summary>
-        /// 读取一个指定类型的包
-        /// </summary>
-        /// <typeparam name="TPackage"></typeparam>
-        /// <returns></returns>
-        public TPackage ReadPackage<TPackage>() where TPackage : class, IPackage, new()
-        {
-            if (ReadIsNull())
-            {
-                return default;
-            }
-            else
-            {
-                TPackage package = new TPackage();
-                package.Unpackage(this);
-                return package;
-            }
-        }
-
-        /// <summary>
-        /// 以包进行写入。允许null值。
-        /// 读取时调用<see cref="ReadPackage"/>，解包。或者先判断<see cref="ReadIsNull"/>，然后自行解包。
-        /// </summary>
-        /// <typeparam name="TPackage"></typeparam>
-        /// <param name="package"></param>
-        /// <returns></returns>
-        public ByteBlock WritePackage<TPackage>(TPackage package) where TPackage : class, IPackage
-        {
-            WriteIsNull(package);
-            if (package != null)
-            {
-                package.Package(this);
-            }
-
-            return this;
-        }
-
-        #endregion Package
-
+      
         #region DateTime
 
         /// <summary>

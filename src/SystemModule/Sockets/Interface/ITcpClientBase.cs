@@ -2,11 +2,11 @@ using System.IO;
 using System.Net.Security;
 using System.Net.Sockets;
 using SystemModule.Core.Config;
-using SystemModule.Core.Event;
 using SystemModule.Sockets.Components.TCP;
 using SystemModule.Sockets.DataAdapter;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Interface.ISender;
+using SystemModule.Sockets.SocketEventArgs;
 
 namespace SystemModule.Sockets.Interface
 {
@@ -59,6 +59,7 @@ namespace SystemModule.Sockets.Interface
         /// 表示是否为客户端。
         /// </summary>
         bool IsClient { get; }
+        
         /// <summary>
         /// 主通信器
         /// </summary>
@@ -79,11 +80,6 @@ namespace SystemModule.Sockets.Interface
         /// 接收模式
         /// </summary>
         public ReceiveType ReceiveType { get; }
-
-        /// <summary>
-        /// 使用Ssl加密
-        /// </summary>
-        bool UseSsl { get; }
 
         /// <summary>
         /// 中断终端

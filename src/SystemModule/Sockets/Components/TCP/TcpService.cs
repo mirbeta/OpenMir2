@@ -7,7 +7,6 @@ using System.Threading;
 using SystemModule.ByteManager;
 using SystemModule.Core.Common;
 using SystemModule.Core.Config;
-using SystemModule.Core.Event;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Common;
@@ -49,8 +48,6 @@ namespace SystemModule.Sockets.Components.TCP
         private long m_nextId;
         private ReceiveType m_receiveType;
         private ServerState m_serverState;
-        private bool m_usePlugin;
-        private bool m_useSsl;
 
         #endregion 变量
 
@@ -95,11 +92,6 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public override SocketClientCollection SocketClients => m_socketClients;
-
-        /// <summary>
-        /// <inheritdoc/>
-        /// </summary>
-        public override bool UseSsl => m_useSsl;
 
         #endregion 属性
 
@@ -459,16 +451,10 @@ namespace SystemModule.Sockets.Components.TCP
             {
                 m_getDefaultNewID = fun;
             }
-            m_usePlugin = config.IsUsePlugin;
             m_maxCount = config.GetValue(TouchSocketConfigExtension.MaxCountProperty);
             m_backlog = config.GetValue(TouchSocketConfigExtension.BacklogProperty);
             BufferLength = config.GetValue(TouchSocketConfigExtension.BufferLengthProperty);
             m_receiveType = config.GetValue(TouchSocketConfigExtension.ReceiveTypeProperty);
-
-            if (config.GetValue(TouchSocketConfigExtension.SslOptionProperty) != null)
-            {
-                m_useSsl = true;
-            }
         }
 
         /// <summary>
@@ -621,22 +607,7 @@ namespace SystemModule.Sockets.Components.TCP
                         {
                             return;
                         }
-                        if (m_useSsl)
-                        {
-                            try
-                            {
-                                client.BeginReceiveSsl(m_receiveType, (ServiceSslOption)m_config.GetValue(TouchSocketConfigExtension.SslOptionProperty));
-                            }
-                            catch (Exception ex)
-                            {
-                                OnAuthenticatingError(ex);
-                                return;
-                            }
-                        }
-                        else
-                        {
-                            client.BeginReceive(m_receiveType);
-                        }
+                        client.BeginReceive(m_receiveType);
                     }
                     else
                     {

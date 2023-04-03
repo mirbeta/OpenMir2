@@ -1,5 +1,4 @@
 using SystemModule.ByteManager;
-using SystemModule.Core.Event;
 
 namespace SystemModule.Sockets.SocketEventArgs
 {
