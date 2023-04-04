@@ -795,6 +795,11 @@ namespace SystemModule
         /// </summary>
         public const byte RM_UPDATEVISIBLE = 0x01;
 
+        /// <summary>
+        /// 玩家杀死怪物触发消息
+        /// </summary>
+        public const byte RM_PlAYERKILLMONSTER = 0x02;
+
         public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series)
         {
             CommandMessage result = new CommandMessage

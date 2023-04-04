@@ -1478,7 +1478,7 @@ namespace GameSrv.Player {
             return true;
         }
 
-        internal void MakeWeaponUnlock() {
+        private void MakeWeaponUnlock() {
             if (UseItems[ItemLocation.Weapon] == null) {
                 return;
             }
@@ -1503,8 +1503,13 @@ namespace GameSrv.Player {
         /// <summary>
         /// 角色杀死目标触发
         /// </summary>
-        internal void KillTargetTrigger(BaseObject killObject)
+        private void KillTargetTrigger(int actorId)
         {
+            var killObject = M2Share.ActorMgr.Get(actorId);
+            if (killObject == null)
+            {
+                return;
+            }
             if (M2Share.FunctionNPC != null)
             {
                 M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);

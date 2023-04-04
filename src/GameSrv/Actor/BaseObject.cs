@@ -368,7 +368,7 @@ namespace GameSrv.Actor
         public BaseObject TargetCret;
         public int TargetFocusTick = 0;
         /// <summary>
-        /// 人物被对方杀害时对方对象
+        /// 被对方杀害时对方对象
         /// </summary>
         public BaseObject LastHiter;
         public int LastHiterTick;
@@ -1743,6 +1743,78 @@ namespace GameSrv.Actor
             HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
         }
 
+        public void SendMsg(int actorId, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
+        {
+            try
+            {
+                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+                var boSend = false;
+                if (IsRobot)
+                {
+                    switch (wIdent)
+                    {
+                        case Messages.RM_MAGSTRUCK:
+                        case Messages.RM_MAGSTRUCK_MINE:
+                        case Messages.RM_DELAYPUSHED:
+                        case Messages.RM_POISON:
+                        case Messages.RM_TRANSPARENT:
+                        case Messages.RM_DOOPENHEALTH:
+                        case Messages.RM_MAGHEALING:
+                        case Messages.RM_DELAYMAGIC:
+                        case Messages.RM_SENDDELITEMLIST:
+                        case Messages.RM_10401:
+                        case Messages.RM_STRUCK:
+                        case Messages.RM_STRUCK_MAG:
+                            boSend = true;
+                            break;
+                    }
+
+                    if (!boSend && IsRobot && Race == ActorRace.Play)
+                    {
+                        switch (wIdent)
+                        {
+                            case Messages.RM_HEAR:
+                            case Messages.RM_WHISPER:
+                            case Messages.RM_CRY:
+                            case Messages.RM_SYSMESSAGE:
+                            case Messages.RM_MOVEMESSAGE:
+                            case Messages.RM_GROUPMESSAGE:
+                            case Messages.RM_SYSMESSAGE2:
+                            case Messages.RM_GUILDMESSAGE:
+                            case Messages.RM_SYSMESSAGE3:
+                            case Messages.RM_MERCHANTSAY:
+                                boSend = true;
+                                break;
+                        }
+                    }
+                }
+                else
+                {
+                    boSend = true;
+                }
+                if (boSend && !Ghost)
+                {
+                    SendMessage sendMessage = new SendMessage
+                    {
+                        wIdent = wIdent,
+                        wParam = wParam,
+                        nParam1 = nParam1,
+                        nParam2 = nParam2,
+                        nParam3 = nParam3,
+                        DeliveryTime = 0,
+                        ActorId = actorId,
+                        LateDelivery = false,
+                        Buff = sMsg
+                    };
+                    MsgQueue.Enqueue(sendMessage, wIdent);
+                }
+            }
+            finally
+            {
+                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+            }
+        }
+                
         public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
             try
@@ -3513,12 +3585,12 @@ namespace GameSrv.Actor
         {
             if (ExpHitter != null && ExpHitter.Master != null)//如果是角色下属杀死对象
             {
-                ((PlayObject)ExpHitter.Master).KillTargetTrigger(this);
+                this.SendMsg(ExpHitter.Master.ActorId, Messages.RM_PlAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
                 return;
             }
             if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
             {
-                ((PlayObject)ExpHitter).KillTargetTrigger(this);
+                this.SendMsg(ExpHitter.ActorId, Messages.RM_PlAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
             }
         }
 
