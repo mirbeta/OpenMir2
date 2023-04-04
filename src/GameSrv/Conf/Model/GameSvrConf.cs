@@ -1726,7 +1726,7 @@ namespace GameSrv.Conf.Model {
             nLevelValueOfWarrHP = 4;
             nLevelValueOfWarrHPRate = 4.5;
             ProcessMonsterInterval = 2;
-            ProcessMonsterMultiThreadLimit = 2;
+            ProcessMonsterMultiThreadLimit = 1;
             ProcessMonsterRetainThreadLimit = 2;
             PermissionSystem = false;
             nRenewPercent = 60;
