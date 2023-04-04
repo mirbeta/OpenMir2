@@ -1,5 +1,3 @@
-using SystemModule.NativeList.Utils;
-
 namespace GameSrv.Maps
 {
     public struct MapCellInfo
@@ -52,8 +50,7 @@ namespace GameSrv.Maps
         public void Clear()
         {
             ObjList.Clear();
-            //ObjList.Dispose();
-            //ObjList = null;
+            ObjList = null;
         }
     }
 }

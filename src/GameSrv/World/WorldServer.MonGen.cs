@@ -166,25 +166,25 @@ namespace GameSrv.World {
         /// 取怪物刷新时间
         /// </summary>
         /// <returns></returns>
-        public int GetMonstersZenTime(int dwTime) {
-            int result;
-            if (dwTime < 30 * 60 * 1000) {
+        public int GetMonstersZenTime(int dwTime)
+        {
+            if (dwTime < 30 * 60 * 1000)
+            {
                 var d10 = (PlayObjectCount - M2Share.Config.UserFull) / HUtil32._MAX(1, M2Share.Config.ZenFastStep);
-                if (d10 > 0) {
-                    if (d10 > 6) {
+                if (d10 > 0)
+                {
+                    if (d10 > 6)
+                    {
                         d10 = 6;
                     }
-                    //result = dwTime - dwTime / 10 * d10;
-                    result = dwTime - HUtil32.Round((dwTime / 10) * d10);
+                    return dwTime - HUtil32.Round((dwTime / 10) * d10);
                 }
-                else {
-                    result = dwTime;
+                else
+                {
+                    return dwTime;
                 }
             }
-            else {
-                result = dwTime;
-            }
-            return result;
+            return dwTime;
         }
 
         /// <summary>
@@ -434,9 +434,6 @@ namespace GameSrv.World {
         /// </summary>
         /// <returns></returns>
         private BaseObject CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName) {
-            int n1C;
-            short n20;
-            short n24;
             BaseObject cert = null;
             var map = M2Share.MapMgr.FindMap(sMapName);
             if (map == null) return null;
@@ -659,14 +656,17 @@ namespace GameSrv.World {
             cert.Initialize();
             if (cert.AddtoMapSuccess) {
                 BaseObject outofrange = null;
-                n20 = cert.Envir.Width < 50 ? (short)2 : (short)3;
-                if (cert.Envir.Height < 250) {
+                short n20 = cert.Envir.Width < 50 ? (short)2 : (short)3;
+                short n24;
+                if (cert.Envir.Height < 250)
+                {
                     n24 = cert.Envir.Height < 30 ? (short)2 : (short)20;
                 }
-                else {
+                else
+                {
                     n24 = 50;
                 }
-                n1C = 0;
+                int n1C = 0;
                 while (true) {
                     if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false)) {
                         if ((cert.Envir.Width - n24 - 1) > cert.CurrX) {

@@ -1094,7 +1094,7 @@ namespace GameSrv.Conf.Model {
             CheckBlock = 4069;
             AvailableBlock = 8000;
             GateLoad = 0;
-            UserFull = 1000;
+            UserFull = 5000;
             ZenFastStep = 300;
             sGateAddr = "127.0.0.1";
             nGatePort = 5000;
