@@ -32,7 +32,7 @@ namespace GameSrv.Monster.Monsters
 
         public override bool IsProperTarget(BaseObject baseObject)
         {
-            bool result = false;
+            bool result = base.IsProperTarget(baseObject);
             if (Castle != null)
             {
                 if (LastHiter == baseObject)
@@ -173,7 +173,7 @@ namespace GameSrv.Monster.Monsters
                                             }
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                             {
-                                                if ((Race < ActorRace.Animal) || (Master != null) || CrazyMode || NastyMode || WantRefMsg || ((baseObject.Master != null) && (Math.Abs(baseObject.CurrX - CurrX) <= 3) && (Math.Abs(baseObject.CurrY - CurrY) <= 3)) || (baseObject.Race == ActorRace.Play))
+                                                if (((Math.Abs(baseObject.CurrX - CurrX) <= 6) && (Math.Abs(baseObject.CurrY - CurrY) <= 6)))
                                                 {                                                    
                                                     UpdateVisibleGay(baseObject);
                                                 }
