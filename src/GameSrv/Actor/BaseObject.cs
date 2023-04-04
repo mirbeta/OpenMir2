@@ -2145,7 +2145,7 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                MsgQueue.Enqueue(sendMessage, 0);//优先处理自身消息
+                MsgQueue.Enqueue(sendMessage, wIdent);//优先处理自身消息
             }
         }
 
@@ -3583,14 +3583,14 @@ namespace GameSrv.Actor
 
         private void KillTarget()
         {
-            if (ExpHitter != null && ExpHitter.Master != null)//如果是角色下属杀死对象
+            if (ExpHitter != null && ExpHitter.IsSlave)//如果是角色下属杀死对象
             {
-                this.SendMsg(ExpHitter.Master.ActorId, Messages.RM_PlAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
+                ExpHitter.Master.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
                 return;
             }
             if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
             {
-                this.SendMsg(ExpHitter.ActorId, Messages.RM_PlAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
+                ExpHitter.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
             }
         }
 
