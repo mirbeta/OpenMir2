@@ -58,7 +58,7 @@ namespace GameSrv.Player {
             ushort nPower = GetAttackPowerHit(wHitMode, nBasePower, attackTarget, ref canHit);
             SkillAttackDamage(wHitMode, nPower);
             AttackDir(attackTarget, nPower, nDir);
-            SendAttackMsg(GetHitMode(wHitMode), Dir, CurrX, CurrY);
+            SendAttackMsg(GetHitMode(wHitMode), Direction, CurrX, CurrY);
             AttackSuccess(wHitMode, nPower, canHit, attackTarget);
         }
 
@@ -951,14 +951,14 @@ namespace GameSrv.Player {
                     result = true;
                     if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3 * 1000) {
                         DoMotaeboTick = HUtil32.GetTickCount();
-                        Dir = (byte)nTargetX;
+                        Direction = (byte)nTargetX;
                         nSpellPoint = GetSpellPoint(UserMagic);
                         if (WAbil.MP >= nSpellPoint) {
                             if (nSpellPoint > 0) {
                                 DamageSpell(nSpellPoint);
                                 HealthSpellChanged();
                             }
-                            if (DoMotaebo(Dir, UserMagic.Level)) {
+                            if (DoMotaebo(Direction, UserMagic.Level)) {
                                 if (UserMagic.Level < 3) {
                                     if (UserMagic.Magic.TrainLevel[UserMagic.Level] < Abil.Level) {
                                         TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
@@ -1013,7 +1013,7 @@ namespace GameSrv.Player {
                     result = true;
                     break;
                 default:
-                    Dir = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
+                    Direction = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
                     BaseObject BaseObject = null;
                     if (CretInNearXy(targetBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {

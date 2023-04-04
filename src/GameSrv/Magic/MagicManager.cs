@@ -24,7 +24,7 @@ namespace GameSrv.Magic {
                             int levelgap = playObject.Abil.Level - baseObject.Abil.Level;
                             if (M2Share.RandomNumber.Random(20) < 6 + nPushLevel * 3 + levelgap) {
                                 if (playObject.IsProperTarget(baseObject)) {
-                                    int push = 1 + HUtil32._MAX(0, nPushLevel - 1) + M2Share.RandomNumber.Random(2);
+                                    byte push = (byte)(1 + HUtil32._MAX(0, nPushLevel - 1) + M2Share.RandomNumber.Random(2));
                                     byte nDir = M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, baseObject.CurrX, baseObject.CurrY);
                                     baseObject.CharPushed(nDir, push);
                                     result++;
@@ -694,7 +694,7 @@ namespace GameSrv.Magic {
             if (poseBaseObject != null && poseBaseObject != playObject && !poseBaseObject.Death && !poseBaseObject.Ghost && playObject.IsProperTarget(poseBaseObject) && !poseBaseObject.StickMode) {
                 if (Math.Abs(playObject.CurrX - poseBaseObject.CurrX) <= 1 && Math.Abs(playObject.CurrY - poseBaseObject.CurrY) <= 1 && playObject.Abil.Level > poseBaseObject.Abil.Level) {
                     if (M2Share.RandomNumber.Random(20) < userMagic.Level * 6 + 6 + (playObject.Abil.Level - poseBaseObject.Abil.Level)) {
-                        poseBaseObject.CharPushed(M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, poseBaseObject.CurrX, poseBaseObject.CurrY), HUtil32._MAX(0, userMagic.Level - 1) + 1);
+                        poseBaseObject.CharPushed(M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, poseBaseObject.CurrX, poseBaseObject.CurrY), (byte)(HUtil32._MAX(0, userMagic.Level - 1) + 1));
                         result = true;
                     }
                 }

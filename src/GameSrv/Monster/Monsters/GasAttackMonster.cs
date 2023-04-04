@@ -10,10 +10,10 @@ namespace GameSrv.Monster.Monsters {
 
         protected virtual BaseObject GasAttack(byte bt05) {
             BaseObject result = null;
-            Dir = bt05;
+            Direction = bt05;
             int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0) {
-                SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 BaseObject baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint) {
                     nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);

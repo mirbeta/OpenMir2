@@ -7,7 +7,7 @@ namespace GameSrv.Monster.Monsters {
         }
 
         private void AroundAttack() {
-            GetAttackDir(TargetCret, ref Dir);
+            GetAttackDir(TargetCret, ref Direction);
             IList<BaseObject> xTargetList = new List<BaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 1, xTargetList);
             if (xTargetList.Count > 0) {
@@ -19,7 +19,7 @@ namespace GameSrv.Monster.Monsters {
                     }
                 }
             }
-            SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
         }
 
         public override void Run() {

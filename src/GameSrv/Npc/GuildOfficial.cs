@@ -40,7 +40,7 @@ namespace GameSrv.Npc {
             }
             else {
                 if (M2Share.RandomNumber.Random(30) == 0) {
-                    SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
+                    SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 }
             }
             base.Run();

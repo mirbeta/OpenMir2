@@ -16,35 +16,35 @@ namespace GameSrv.Monster.Monsters {
             short n0C = 0;
             bool bo0D = false;
             if (N550 > 0) {
-                if (Envir.GetNextPosition(CurrX, CurrY, Dir, 1, ref n08, ref n0C)) {
+                if (Envir.GetNextPosition(CurrX, CurrY, Direction, 1, ref n08, ref n0C)) {
                     if (Envir.CanWalk(n08, n0C, bo0D)) {
-                        switch (Dir) {
+                        switch (Direction) {
                             case 0:
-                                Dir = 4;
+                                Direction = 4;
                                 break;
                             case 1:
-                                Dir = 7;
+                                Direction = 7;
                                 break;
                             case 2:
-                                Dir = 6;
+                                Direction = 6;
                                 break;
                             case 3:
-                                Dir = 5;
+                                Direction = 5;
                                 break;
                             case 4:
-                                Dir = 0;
+                                Direction = 0;
                                 break;
                             case 5:
-                                Dir = 3;
+                                Direction = 3;
                                 break;
                             case 6:
-                                Dir = 2;
+                                Direction = 2;
                                 break;
                             case 7:
-                                Dir = 1;
+                                Direction = 1;
                                 break;
                         }
-                        Envir.GetNextPosition(CurrX, CurrY, Dir, N550, ref TargetX, ref TargetY);
+                        Envir.GetNextPosition(CurrX, CurrY, Direction, N550, ref TargetX, ref TargetY);
                     }
                 }
             }
@@ -64,10 +64,10 @@ namespace GameSrv.Monster.Monsters {
             if (hiter == null) {
                 return;
             }
-            Dir = hiter.Dir;
+            Direction = hiter.Direction;
             N550 = M2Share.RandomNumber.Random(4) + N550 + 4;
             N550 = HUtil32._MIN(20, N550);
-            Envir.GetNextPosition(CurrX, CurrY, Dir, N550, ref TargetX, ref TargetY);
+            Envir.GetNextPosition(CurrX, CurrY, Direction, N550, ref TargetX, ref TargetY);
         }
     }
 }

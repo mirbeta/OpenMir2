@@ -37,7 +37,7 @@ namespace GameSrv.Monster.Monsters {
             if (BoIsFirst) {
                 BoIsFirst = false;
                 FixedHideMode = false;
-                SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
                 ResetElfMon();
             }
             if (Death) {

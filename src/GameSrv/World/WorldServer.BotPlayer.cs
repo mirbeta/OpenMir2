@@ -118,7 +118,7 @@ namespace GameSrv.World
             cert.MapName = ai.sMapName;
             cert.CurrX = ai.nX;
             cert.CurrY = ai.nY;
-            cert.Dir = (byte)M2Share.RandomNumber.Random(8);
+            cert.Direction = (byte)M2Share.RandomNumber.Random(8);
             cert.ChrName = ai.sChrName;
             cert.WAbil = cert.Abil;
             if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)

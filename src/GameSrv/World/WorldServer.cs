@@ -1141,7 +1141,7 @@ namespace GameSrv.World
             playObject.MapName = humData.CurMap;
             playObject.CurrX = humData.CurX;
             playObject.CurrY = humData.CurY;
-            playObject.Dir = humData.Dir;
+            playObject.Direction = humData.Dir;
             playObject.Hair = humData.Hair;
             playObject.Gender = Enum.Parse<PlayGender>(humData.Sex.ToString());
             playObject.Job = (PlayJob)humData.Job;
@@ -1271,7 +1271,7 @@ namespace GameSrv.World
             humanRcd.Data.CurMap = playObject.MapName;
             humanRcd.Data.CurX = playObject.CurrX;
             humanRcd.Data.CurY = playObject.CurrY;
-            humanRcd.Data.Dir = playObject.Dir;
+            humanRcd.Data.Dir = playObject.Direction;
             humanRcd.Data.Hair = playObject.Hair;
             humanRcd.Data.Sex = (byte)playObject.Gender;
             humanRcd.Data.Job = (byte)playObject.Job;

@@ -935,23 +935,32 @@ namespace GameSrv.Maps {
             return result;
         }
 
-        public BaseObject GetMovingObject(short nX, short nY, bool boFlag) {
+        public BaseObject GetMovingObject(short nX, short nY, bool boFlag)
+        {
             BaseObject result = null;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
-            if (cellSuccess && cellInfo.IsAvailable) {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++) {
+            if (cellSuccess && cellInfo.IsAvailable)
+            {
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                {
                     CellObject cellObject = cellInfo.ObjList[i];
-                    if (cellObject.CellObjId > 0 && cellObject.ActorObject) {
+                    if (cellObject.CellObjId > 0 && cellObject.ActorObject)
+                    {
                         BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                        if (baseObject != null && !baseObject.Ghost) {
-                            if (baseObject.CellType == CellType.CastleDoor) {
-                                if (((CastleDoor)baseObject).HoldPlace && (!boFlag || !baseObject.Death)) {
+                        if (baseObject != null && !baseObject.Ghost)
+                        {
+                            if (baseObject.CellType == CellType.CastleDoor)
+                            {
+                                if (((CastleDoor)baseObject).HoldPlace && (!boFlag || !baseObject.Death))
+                                {
                                     result = baseObject;
                                     break;
                                 }
                             }
-                            else {
-                                if ((!boFlag || !baseObject.Death)) {
+                            else
+                            {
+                                if ((!boFlag || !baseObject.Death))
+                                {
                                     result = baseObject;
                                     break;
                                 }
@@ -960,6 +969,7 @@ namespace GameSrv.Maps {
                     }
                 }
             }
+
             return result;
         }
 

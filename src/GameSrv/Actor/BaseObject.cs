@@ -29,7 +29,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 所在方向
         /// </summary>
-        public byte Dir;
+        public byte Direction;
         /// <summary>
         /// 所在地图名称
         /// </summary>
@@ -468,7 +468,7 @@ namespace GameSrv.Actor
             Death = false;
             DeathTick = 0;
             SendRefMsgTick = HUtil32.GetTickCount();
-            Dir = 4;
+            Direction = 4;
             Race = ActorRace.Animal;
             RaceImg = 0;
             Gold = 0;
@@ -739,40 +739,40 @@ namespace GameSrv.Actor
             {
                 short oldX = CurrX;
                 short oldY = CurrY;
-                Dir = btDir;
+                Direction = btDir;
                 short newX = 0;
                 short newY = 0;
                 switch (btDir)
                 {
-                    case Direction.Up:
+                    case SystemModule.Enums.Direction.Up:
                         newX = CurrX;
                         newY = (short)(CurrY - 1);
                         break;
-                    case Direction.UpRight:
+                    case SystemModule.Enums.Direction.UpRight:
                         newX = (short)(CurrX + 1);
                         newY = (short)(CurrY - 1);
                         break;
-                    case Direction.Right:
+                    case SystemModule.Enums.Direction.Right:
                         newX = (short)(CurrX + 1);
                         newY = CurrY;
                         break;
-                    case Direction.DownRight:
+                    case SystemModule.Enums.Direction.DownRight:
                         newX = (short)(CurrX + 1);
                         newY = (short)(CurrY + 1);
                         break;
-                    case Direction.Down:
+                    case SystemModule.Enums.Direction.Down:
                         newX = CurrX;
                         newY = (short)(CurrY + 1);
                         break;
-                    case Direction.DownLeft:
+                    case SystemModule.Enums.Direction.DownLeft:
                         newX = (short)(CurrX - 1);
                         newY = (short)(CurrY + 1);
                         break;
-                    case Direction.Left:
+                    case SystemModule.Enums.Direction.Left:
                         newX = (short)(CurrX - 1);
                         newY = CurrY;
                         break;
-                    case Direction.UpLeft:
+                    case SystemModule.Enums.Direction.UpLeft:
                         newX = (short)(CurrX - 1);
                         newY = (short)(CurrY - 1);
                         break;
@@ -786,7 +786,7 @@ namespace GameSrv.Actor
                     }
                     if (Master != null)
                     {
-                        Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Dir, 1, ref n20, ref n24);
+                        Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, 1, ref n20, ref n24);
                         if (newX == n20 && newY == n24)
                         {
                             walkSuccess = false;
@@ -1035,47 +1035,47 @@ namespace GameSrv.Actor
             }
         }
 
-        public static byte GetBackDir(int nDir)
+        public static byte GetBackDir(byte nDir)
         {
             byte result = 0;
             switch (nDir)
             {
-                case Direction.Up:
-                    result = Direction.Down;
+                case SystemModule.Enums.Direction.Up:
+                    result = SystemModule.Enums.Direction.Down;
                     break;
-                case Direction.Down:
-                    result = Direction.Up;
+                case SystemModule.Enums.Direction.Down:
+                    result = SystemModule.Enums.Direction.Up;
                     break;
-                case Direction.Left:
-                    result = Direction.Right;
+                case SystemModule.Enums.Direction.Left:
+                    result = SystemModule.Enums.Direction.Right;
                     break;
-                case Direction.Right:
-                    result = Direction.Left;
+                case SystemModule.Enums.Direction.Right:
+                    result = SystemModule.Enums.Direction.Left;
                     break;
-                case Direction.UpLeft:
-                    result = Direction.DownRight;
+                case SystemModule.Enums.Direction.UpLeft:
+                    result = SystemModule.Enums.Direction.DownRight;
                     break;
-                case Direction.UpRight:
-                    result = Direction.DownLeft;
+                case SystemModule.Enums.Direction.UpRight:
+                    result = SystemModule.Enums.Direction.DownLeft;
                     break;
-                case Direction.DownLeft:
-                    result = Direction.UpRight;
+                case SystemModule.Enums.Direction.DownLeft:
+                    result = SystemModule.Enums.Direction.UpRight;
                     break;
-                case Direction.DownRight:
-                    result = Direction.UpLeft;
+                case SystemModule.Enums.Direction.DownRight:
+                    result = SystemModule.Enums.Direction.UpLeft;
                     break;
             }
 
             return result;
         }
 
-        public int CharPushed(byte nDir, int nPushCount)
+        public int CharPushed(byte nDir, byte nPushCount)
         {
             short nx = 0;
             short ny = 0;
             int result = 0;
-            byte olddir = Dir;
-            Dir = nDir;
+            byte olddir = Direction;
+            Direction = nDir;
             byte nBackDir = GetBackDir(nDir);
             for (int i = 0; i < nPushCount; i++)
             {
@@ -1103,10 +1103,10 @@ namespace GameSrv.Actor
                     break;
                 }
             }
-            Dir = nBackDir;
+            Direction = nBackDir;
             if (result == 0)
             {
-                Dir = olddir;
+                Direction = olddir;
             }
             return result;
         }
@@ -1197,54 +1197,54 @@ namespace GameSrv.Actor
             Envirnoment envir = Envir;
             nX = CurrX;
             nY = CurrY;
-            switch (Dir)
+            switch (Direction)
             {
-                case Direction.Up:
+                case SystemModule.Enums.Direction.Up:
                     if (nY > 0)
                     {
                         nY -= 1;
                     }
                     break;
-                case Direction.UpRight:
+                case SystemModule.Enums.Direction.UpRight:
                     if ((nX < (envir.Width - 1)) && (nY > 0))
                     {
                         nX++;
                         nY -= 1;
                     }
                     break;
-                case Direction.Right:
+                case SystemModule.Enums.Direction.Right:
                     if (nX < (envir.Width - 1))
                     {
                         nX++;
                     }
                     break;
-                case Direction.DownRight:
+                case SystemModule.Enums.Direction.DownRight:
                     if ((nX < (envir.Width - 1)) && (nY < (envir.Height - 1)))
                     {
                         nX++;
                         nY++;
                     }
                     break;
-                case Direction.Down:
+                case SystemModule.Enums.Direction.Down:
                     if (nY < (envir.Height - 1))
                     {
                         nY++;
                     }
                     break;
-                case Direction.DownLeft:
+                case SystemModule.Enums.Direction.DownLeft:
                     if ((nX > 0) && (nY < (envir.Height - 1)))
                     {
                         nX -= 1;
                         nY++;
                     }
                     break;
-                case Direction.Left:
+                case SystemModule.Enums.Direction.Left:
                     if (nX > 0)
                     {
                         nX -= 1;
                     }
                     break;
-                case Direction.UpLeft:
+                case SystemModule.Enums.Direction.UpLeft:
                     if ((nX > 0) && (nY > 0))
                     {
                         nX -= 1;
@@ -1348,11 +1348,11 @@ namespace GameSrv.Actor
                         SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
                         {
-                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW2, Dir, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW2, Direction, CurrX, CurrY, 0, "");
                         }
                         else
                         {
-                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW, Dir, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_SPACEMOVE_SHOW, Direction, CurrX, CurrY, 0, "");
                         }
                         SpaceMoved = true;
                         moveSuccess = true;
@@ -1478,42 +1478,42 @@ namespace GameSrv.Actor
                 result = true;
                 if (((CurrX - 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                 {
-                    btDir = Direction.Left;
+                    btDir = SystemModule.Enums.Direction.Left;
                     return true;
                 }
                 if (((CurrX + 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                 {
-                    btDir = Direction.Right;
+                    btDir = SystemModule.Enums.Direction.Right;
                     return true;
                 }
                 if ((CurrX == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
-                    btDir = Direction.Up;
+                    btDir = SystemModule.Enums.Direction.Up;
                     return true;
                 }
                 if ((CurrX == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
-                    btDir = Direction.Down;
+                    btDir = SystemModule.Enums.Direction.Down;
                     return true;
                 }
                 if (((CurrX - 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
-                    btDir = Direction.UpLeft;
+                    btDir = SystemModule.Enums.Direction.UpLeft;
                     return true;
                 }
                 if (((CurrX + 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
                 {
-                    btDir = Direction.UpRight;
+                    btDir = SystemModule.Enums.Direction.UpRight;
                     return true;
                 }
                 if (((CurrX - 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
-                    btDir = Direction.DownLeft;
+                    btDir = SystemModule.Enums.Direction.DownLeft;
                     return true;
                 }
                 if (((CurrX + 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
                 {
-                    btDir = Direction.DownRight;
+                    btDir = SystemModule.Enums.Direction.DownRight;
                     return true;
                 }
                 btDir = 0;
@@ -1582,7 +1582,7 @@ namespace GameSrv.Actor
             bool result = point != null;
             if (!FixedHideMode)
             {
-                SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, 0, "");
             }
             return result;
         }
@@ -2463,7 +2463,7 @@ namespace GameSrv.Actor
                 }
                 if (result)
                 {
-                    SendRefMsg(nIdent, Dir, CurrX, CurrY, 0, "");
+                    SendRefMsg(nIdent, Direction, CurrX, CurrY, 0, "");
                 }
             }
             catch (Exception e)
@@ -2476,7 +2476,7 @@ namespace GameSrv.Actor
 
         protected void TurnTo(byte nDir)
         {
-            Dir = nDir;
+            Direction = nDir;
             SendRefMsg(Messages.RM_TURN, nDir, CurrX, CurrY, 0, "");
         }
 
@@ -3042,54 +3042,54 @@ namespace GameSrv.Actor
             Envirnoment envir = Envir;
             nX = CurrX;
             nY = CurrY;
-            switch (Dir)
+            switch (Direction)
             {
-                case Direction.Up:
+                case SystemModule.Enums.Direction.Up:
                     if (nY < (envir.Height - 1))
                     {
                         nY++;
                     }
                     break;
-                case Direction.Down:
+                case SystemModule.Enums.Direction.Down:
                     if (nY > 0)
                     {
                         nY -= 1;
                     }
                     break;
-                case Direction.Left:
+                case SystemModule.Enums.Direction.Left:
                     if (nX < (envir.Width - 1))
                     {
                         nX++;
                     }
                     break;
-                case Direction.Right:
+                case SystemModule.Enums.Direction.Right:
                     if (nX > 0)
                     {
                         nX -= 1;
                     }
                     break;
-                case Direction.UpLeft:
+                case SystemModule.Enums.Direction.UpLeft:
                     if ((nX < (envir.Width - 1)) && (nY < (envir.Height - 1)))
                     {
                         nX++;
                         nY++;
                     }
                     break;
-                case Direction.UpRight:
+                case SystemModule.Enums.Direction.UpRight:
                     if ((nX < (envir.Width - 1)) && (nY > 0))
                     {
                         nX -= 1;
                         nY++;
                     }
                     break;
-                case Direction.DownLeft:
+                case SystemModule.Enums.Direction.DownLeft:
                     if ((nX > 0) && (nY < (envir.Height - 1)))
                     {
                         nX++;
                         nY -= 1;
                     }
                     break;
-                case Direction.DownRight:
+                case SystemModule.Enums.Direction.DownRight:
                     if ((nX > 0) && (nY > 0))
                     {
                         nX -= 1;
@@ -3428,7 +3428,7 @@ namespace GameSrv.Actor
             bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
-                case Direction.Up:
+                case SystemModule.Enums.Direction.Up:
                     if (nCurrY > 1)
                     {
                         if ((Envir.CanWalkEx(nCurrX, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX, nCurrY - 2, canWalk)))
@@ -3437,7 +3437,7 @@ namespace GameSrv.Actor
                         }
                     }
                     break;
-                case Direction.UpRight:
+                case SystemModule.Enums.Direction.UpRight:
                     if (nCurrX < Envir.Width - 2 && nCurrY > 1)
                     {
                         if ((Envir.CanWalkEx(nCurrX + 1, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX + 2, nCurrY - 2, canWalk)))
@@ -3446,7 +3446,7 @@ namespace GameSrv.Actor
                         }
                     }
                     break;
-                case Direction.Right:
+                case SystemModule.Enums.Direction.Right:
                     if (nCurrX < Envir.Width - 2)
                     {
                         if (Envir.CanWalkEx(nCurrX + 1, nCurrY, canWalk) && (Envir.CanWalkEx(nCurrX + 2, nCurrY, canWalk)))
@@ -3455,31 +3455,31 @@ namespace GameSrv.Actor
                         }
                     }
                     break;
-                case Direction.DownRight:
+                case SystemModule.Enums.Direction.DownRight:
                     if ((nCurrX < Envir.Width - 2) && (nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX + 1, nCurrY + 1, canWalk) && (Envir.CanWalkEx(nCurrX + 2, nCurrY + 2, canWalk))))
                     {
                         return true;
                     }
                     break;
-                case Direction.Down:
+                case SystemModule.Enums.Direction.Down:
                     if ((nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX, nCurrY + 1, canWalk && (Envir.CanWalkEx(nCurrX, nCurrY + 2, canWalk)))))
                     {
                         return true;
                     }
                     break;
-                case Direction.DownLeft:
+                case SystemModule.Enums.Direction.DownLeft:
                     if ((nCurrX > 1) && (nCurrY < Envir.Height - 2) && (Envir.CanWalkEx(nCurrX - 1, nCurrY + 1, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY + 2, canWalk)))
                     {
                         return true;
                     }
                     break;
-                case Direction.Left:
+                case SystemModule.Enums.Direction.Left:
                     if ((nCurrX > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY, canWalk)))
                     {
                         return true;
                     }
                     break;
-                case Direction.UpLeft:
+                case SystemModule.Enums.Direction.UpLeft:
                     if ((nCurrX > 1) && (nCurrY > 1) && (Envir.CanWalkEx(nCurrX - 1, nCurrY - 1, canWalk)) && (Envir.CanWalkEx(nCurrX - 2, nCurrY - 2, canWalk)))
                     {
                         return true;
@@ -3495,7 +3495,7 @@ namespace GameSrv.Actor
             bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
-                case Direction.Up:
+                case SystemModule.Enums.Direction.Up:
                     if (CurrY > 1)
                     {
                         if ((Envir.CanWalkEx(CurrX, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX, CurrY - 2, canWalk)))
@@ -3504,7 +3504,7 @@ namespace GameSrv.Actor
                         }
                     }
                     break;
-                case Direction.UpRight:
+                case SystemModule.Enums.Direction.UpRight:
                     if (CurrX < Envir.Width - 2 && CurrY > 1)
                     {
                         if ((Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk)))
@@ -3513,7 +3513,7 @@ namespace GameSrv.Actor
                         }
                     }
                     break;
-                case Direction.Right:
+                case SystemModule.Enums.Direction.Right:
                     if (CurrX < Envir.Width - 2)
                     {
                         if (Envir.CanWalkEx(CurrX + 1, CurrY, canWalk && (Envir.CanWalkEx(CurrX + 2, CurrY, canWalk))))
@@ -3522,32 +3522,32 @@ namespace GameSrv.Actor
                         }
                     }
                     break;
-                case Direction.DownRight:
+                case SystemModule.Enums.Direction.DownRight:
                     if ((CurrX < Envir.Width - 2) && (CurrY < Envir.Height - 2) && (Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && (Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk))))
                     {
                         return true;
                     }
                     break;
-                case Direction.Down:
+                case SystemModule.Enums.Direction.Down:
                     if ((CurrY < Envir.Height - 2)
                         && (Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && (Envir.CanWalkEx(CurrX, CurrY + 2, canWalk))))
                     {
                         return true;
                     }
                     break;
-                case Direction.DownLeft:
+                case SystemModule.Enums.Direction.DownLeft:
                     if ((CurrX > 1) && (CurrY < Envir.Height - 2) && (Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk)))
                     {
                         return true;
                     }
                     break;
-                case Direction.Left:
+                case SystemModule.Enums.Direction.Left:
                     if ((CurrX > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY, canWalk)))
                     {
                         return true;
                     }
                     break;
-                case Direction.UpLeft:
+                case SystemModule.Enums.Direction.UpLeft:
                     if ((CurrX > 1) && (CurrY > 1) && (Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk)) && (Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk)))
                     {
                         return true;
@@ -3926,7 +3926,7 @@ namespace GameSrv.Actor
             RecalcAbilitys();
             Death = false;
             Invisible = false;
-            SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, GetFeatureToLong(), "");
+            SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, GetFeatureToLong(), "");
             MonsterSayMsg(null, MonStatus.MonGen);
             return true;
         }

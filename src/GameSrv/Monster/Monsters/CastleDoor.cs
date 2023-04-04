@@ -41,8 +41,8 @@ namespace GameSrv.Monster.Monsters {
             if (Death) {
                 return;
             }
-            Dir = 7;
-            SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
+            Direction = 7;
+            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
             IsOpened = true;
             StoneMode = true;
             SetMapXyFlag(0);
@@ -53,11 +53,11 @@ namespace GameSrv.Monster.Monsters {
             if (Death) {
                 return;
             }
-            Dir = (byte)(3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3));
-            if (Dir - 3 >= 0) {
-                Dir = 0;
+            Direction = (byte)(3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3));
+            if (Direction - 3 >= 0) {
+                Direction = 0;
             }
-            SendRefMsg(Messages.RM_DIGDOWN, Dir, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
             IsOpened = false;
             StoneMode = false;
             SetMapXyFlag(1);
@@ -78,9 +78,9 @@ namespace GameSrv.Monster.Monsters {
             }
             if (!IsOpened) {
                 int n08 = 3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3);
-                if (Dir != n08 && n08 < 3) {
-                    Dir = (byte)n08;
-                    SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, 0, "");
+                if (Direction != n08 && n08 < 3) {
+                    Direction = (byte)n08;
+                    SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, 0, "");
                 }
             }
             base.Run();
@@ -91,8 +91,8 @@ namespace GameSrv.Monster.Monsters {
             if (n08 - 3 >= 0) {
                 n08 = 0;
             }
-            Dir = (byte)n08;
-            SendRefMsg(Messages.RM_ALIVE, Dir, CurrX, CurrY, 0, "");
+            Direction = (byte)n08;
+            SendRefMsg(Messages.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
         }
 
         public override void Initialize() {

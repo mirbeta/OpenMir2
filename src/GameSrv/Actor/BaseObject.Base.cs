@@ -390,12 +390,12 @@ namespace GameSrv.Actor {
                 Envir.DelObjectCount(this);
                 DelFormMaped = true;
             }
-            SendRefMsg(Messages.RM_DEATH, Dir, CurrX, CurrY, 1, "");
+            SendRefMsg(Messages.RM_DEATH, Direction, CurrX, CurrY, 1, "");
         }
 
         internal virtual void ReAlive() {
             Death = false;
-            SendRefMsg(Messages.RM_ALIVE, Dir, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
         }
 
         protected virtual bool IsProtectTarget(BaseObject targetObject) {
@@ -617,7 +617,7 @@ namespace GameSrv.Actor {
                     case Messages.RM_DELAYPUSHED:
                         targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                         if (targetBaseObject != null) {
-                            targetBaseObject.CharPushed((byte)processMsg.wParam, processMsg.nParam2);
+                            targetBaseObject.CharPushed((byte)processMsg.wParam, (byte)processMsg.nParam2);
                         }
                         break;
                     case Messages.RM_POISON:

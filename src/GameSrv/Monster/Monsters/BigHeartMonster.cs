@@ -11,7 +11,7 @@ namespace GameSrv.Monster.Monsters {
             bool result = false;
             if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime) {
                 AttackTick = HUtil32.GetTickCount();
-                SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 for (int i = 0; i < VisibleActors.Count; i++) {
                     BaseObject baseObject = VisibleActors[i].BaseObject;

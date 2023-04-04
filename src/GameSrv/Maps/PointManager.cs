@@ -73,10 +73,10 @@ namespace GameSrv.Maps {
             if (PathType == FindPathType.Dynamic) {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
-                if (FBaseObject.Dir > 8) {
-                    FBaseObject.Dir = 4;
+                if (FBaseObject.Direction > 8) {
+                    FBaseObject.Direction = 4;
                 }
-                m_btDirection = FBaseObject.Dir;
+                m_btDirection = FBaseObject.Direction;
                 for (int i = 2; i >= 1; i--) {
                     if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY)) {
                         if (FBaseObject.CanMove(nMX, nMY, false)) {
@@ -344,7 +344,7 @@ namespace GameSrv.Maps {
                 m_nCurrX = nX;
                 m_nCurrY = nY;
                 nC = 0;
-                btDir = ((PlayObject)FBaseObject).Dir;
+                btDir = ((PlayObject)FBaseObject).Direction;
                 while (true) {
                     btDir = GetPoint1_GetNextDir(btDir);
                     for (int i = 2; i >= 1; i--) {

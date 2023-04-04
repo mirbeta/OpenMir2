@@ -12,7 +12,7 @@ namespace GameSrv.RobotPlay
             var n10 = int.MaxValue;
             MapWalkXY result = default;
             MapWalkXY MapWalkXY = default;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0 && Math.Abs(WalkStep[i].X - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].Y - TargetCret.CurrY) >= nRange)
                 {
@@ -29,7 +29,7 @@ namespace GameSrv.RobotPlay
                 var nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
                 var MapWalkXYA = MapWalkXY;
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount && Math.Abs(WalkStep[i].X - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].Y - TargetCret.CurrY) >= nRange)
                     {
@@ -57,7 +57,7 @@ namespace GameSrv.RobotPlay
             MapWalkXY result = default;
             MapWalkXY MapWalkXY = default;
             var n10 = int.MaxValue;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0)
                 {
@@ -74,7 +74,7 @@ namespace GameSrv.RobotPlay
                 var nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
                 var MapWalkXYA = MapWalkXY;
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount)
                     {
@@ -102,7 +102,7 @@ namespace GameSrv.RobotPlay
             var n10 = int.MaxValue;
             MapWalkXY result = default;
             MapWalkXY MapWalkXY = default;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0)
                 {
@@ -118,7 +118,7 @@ namespace GameSrv.RobotPlay
             {
                 var nMonCount = MapWalkXY.MonCount;
                 var MapWalkXYA = MapWalkXY;
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount)
                     {
@@ -171,7 +171,7 @@ namespace GameSrv.RobotPlay
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -201,7 +201,7 @@ namespace GameSrv.RobotPlay
             short nCurrX = 0;
             short nCurrY = 0;
             var result = false;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -231,7 +231,7 @@ namespace GameSrv.RobotPlay
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false))
                 {
@@ -258,7 +258,7 @@ namespace GameSrv.RobotPlay
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -280,7 +280,7 @@ namespace GameSrv.RobotPlay
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -306,7 +306,7 @@ namespace GameSrv.RobotPlay
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -328,7 +328,7 @@ namespace GameSrv.RobotPlay
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -627,29 +627,29 @@ namespace GameSrv.RobotPlay
             {
                 switch (btDir)
                 {
-                    case Direction.Up:
-                        result = Direction.Right;
+                    case SystemModule.Enums.Direction.Up:
+                        result = SystemModule.Enums.Direction.Right;
                         break;
-                    case Direction.UpRight:
-                        result = Direction.DownRight;
+                    case SystemModule.Enums.Direction.UpRight:
+                        result = SystemModule.Enums.Direction.DownRight;
                         break;
-                    case Direction.Right:
-                        result = Direction.Down;
+                    case SystemModule.Enums.Direction.Right:
+                        result = SystemModule.Enums.Direction.Down;
                         break;
-                    case Direction.DownRight:
-                        result = Direction.DownLeft;
+                    case SystemModule.Enums.Direction.DownRight:
+                        result = SystemModule.Enums.Direction.DownLeft;
                         break;
-                    case Direction.Down:
-                        result = Direction.Left;
+                    case SystemModule.Enums.Direction.Down:
+                        result = SystemModule.Enums.Direction.Left;
                         break;
-                    case Direction.DownLeft:
-                        result = Direction.UpLeft;
+                    case SystemModule.Enums.Direction.DownLeft:
+                        result = SystemModule.Enums.Direction.UpLeft;
                         break;
-                    case Direction.Left:
-                        result = Direction.Up;
+                    case SystemModule.Enums.Direction.Left:
+                        result = SystemModule.Enums.Direction.Up;
                         break;
-                    case Direction.UpLeft:
-                        result = Direction.UpRight;
+                    case SystemModule.Enums.Direction.UpLeft:
+                        result = SystemModule.Enums.Direction.UpRight;
                         break;
                 }
             }
@@ -657,29 +657,29 @@ namespace GameSrv.RobotPlay
             {
                 switch (btDir)
                 {
-                    case Direction.Up:
-                        result = Direction.Left;
+                    case SystemModule.Enums.Direction.Up:
+                        result = SystemModule.Enums.Direction.Left;
                         break;
-                    case Direction.UpRight:
-                        result = Direction.UpLeft;
+                    case SystemModule.Enums.Direction.UpRight:
+                        result = SystemModule.Enums.Direction.UpLeft;
                         break;
-                    case Direction.Right:
-                        result = Direction.Up;
+                    case SystemModule.Enums.Direction.Right:
+                        result = SystemModule.Enums.Direction.Up;
                         break;
-                    case Direction.DownRight:
-                        result = Direction.UpRight;
+                    case SystemModule.Enums.Direction.DownRight:
+                        result = SystemModule.Enums.Direction.UpRight;
                         break;
-                    case Direction.Down:
-                        result = Direction.Right;
+                    case SystemModule.Enums.Direction.Down:
+                        result = SystemModule.Enums.Direction.Right;
                         break;
-                    case Direction.DownLeft:
-                        result = Direction.DownRight;
+                    case SystemModule.Enums.Direction.DownLeft:
+                        result = SystemModule.Enums.Direction.DownRight;
                         break;
-                    case Direction.Left:
-                        result = Direction.Down;
+                    case SystemModule.Enums.Direction.Left:
+                        result = SystemModule.Enums.Direction.Down;
                         break;
-                    case Direction.UpLeft:
-                        result = Direction.DownLeft;
+                    case SystemModule.Enums.Direction.UpLeft:
+                        result = SystemModule.Enums.Direction.DownLeft;
                         break;
                 }
             }

@@ -15,7 +15,7 @@ namespace GameSrv.Monster.Monsters {
         }
 
         private void AttackTarger(BaseObject targetBaseObject) {
-            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
+            Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
             int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage > 0) {
                 nDamage = targetBaseObject.GetHitStruckDamage(this, nDamage);
@@ -26,7 +26,7 @@ namespace GameSrv.Monster.Monsters {
                 targetBaseObject.StruckDamage((ushort)nDamage);
                 targetBaseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, targetBaseObject.WAbil.HP, targetBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targetBaseObject.CurrX), Math.Abs(CurrY - targetBaseObject.CurrY)) * 50 + 600);
             }
-            SendRefMsg(Messages.RM_FLYAXE, Dir, CurrX, CurrY, targetBaseObject.ActorId, "");
+            SendRefMsg(Messages.RM_FLYAXE, Direction, CurrX, CurrY, targetBaseObject.ActorId, "");
         }
 
         public override void Run() {
@@ -62,7 +62,7 @@ namespace GameSrv.Monster.Monsters {
                     }
                 }
                 else {
-                    if (GuardDirection > 0 && Dir != GuardDirection) {
+                    if (GuardDirection > 0 && Direction != GuardDirection) {
                         TurnTo((byte)GuardDirection);
                     }
                 }

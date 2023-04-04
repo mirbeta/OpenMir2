@@ -8,7 +8,7 @@ namespace GameSrv.Monster.Monsters {
         public BoneKingMonster() : base() {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
-            Dir = 5;
+            Direction = 5;
             DangerLevel = 5;
             SlaveObjectList = new List<BaseObject>();
         }

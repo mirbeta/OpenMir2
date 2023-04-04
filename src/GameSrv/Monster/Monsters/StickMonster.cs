@@ -42,11 +42,11 @@ namespace GameSrv.Monster.Monsters {
 
         protected virtual void FindAttackTarget() {
             this.FixedHideMode = false;
-            this.SendRefMsg(Messages.RM_DIGUP, this.Dir, this.CurrX, this.CurrY, 0, "");
+            this.SendRefMsg(Messages.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
         }
 
         protected virtual void ComeDown() {
-            this.SendRefMsg(Messages.RM_DIGDOWN, this.Dir, this.CurrX, this.CurrY, 0, "");
+            this.SendRefMsg(Messages.RM_DIGDOWN, this.Direction, this.CurrX, this.CurrY, 0, "");
             for (int i = 0; i < this.VisibleActors.Count; i++) {
                 Dispose(VisibleActors[i]);
             }

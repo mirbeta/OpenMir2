@@ -667,6 +667,9 @@ namespace SystemModule
         public const int RM_ITEMHIDE = 8085;
         public const int RM_LEVELUP = 8086;
         public const int RM_CHANGENAMECOLOR = 8090;
+        /// <summary>
+        /// 往后退（野蛮冲转 抗拒火环）
+        /// </summary>
         public const int RM_PUSH = 8092;
         public const int RM_CLEAROBJECTS = 8097;
         public const int RM_CHANGEMAP = 8098;
