@@ -32,7 +32,6 @@ namespace GameSrv.Monster.Monsters
 
         public override bool IsProperTarget(BaseObject baseObject)
         {
-            bool result = base.IsProperTarget(baseObject);
             if (Castle != null)
             {
                 if (LastHiter == baseObject)
@@ -50,7 +49,7 @@ namespace GameSrv.Monster.Monsters
                     {
                         if ((HUtil32.GetTickCount() - guardObject.CrimeforCastleTime) < (2 * 60 * 1000))
                         {
-                            result = true;
+                            return true;
                         }
                         else
                         {
@@ -59,7 +58,7 @@ namespace GameSrv.Monster.Monsters
                         if (guardObject.Castle != null)
                         {
                             guardObject.CrimeforCastle = false;
-                            result = false;
+                            return false;
                         }
                     }
                 }
@@ -73,7 +72,7 @@ namespace GameSrv.Monster.Monsters
                             {
                                 if (LastHiter != baseObject)
                                 {
-                                    result = false;
+                                    return false;
                                 }
                             }
                         }
@@ -86,7 +85,7 @@ namespace GameSrv.Monster.Monsters
                             {
                                 if (LastHiter != baseObject.Master && LastHiter != baseObject)
                                 {
-                                    result = false;
+                                    return false;
                                 }
                             }
                         }
@@ -94,30 +93,33 @@ namespace GameSrv.Monster.Monsters
                 }
                 if (baseObject.AdminMode || baseObject.StoneMode || baseObject.Race >= ActorRace.NPC && baseObject.Race < ActorRace.Animal || baseObject == this || baseObject.Castle == Castle)
                 {
-                    result = false;
+                    return false;
                 }
-                return result;
             }
             if (LastHiter == baseObject)
             {
                 return true;
             }
-            if (baseObject.TargetCret != null && baseObject.TargetCret.Race == 112)
+            if (baseObject.TargetCret != null && baseObject.TargetCret.Race == ActorRace.MonsterArcherguard)
             {
                 return true;
             }
             if (baseObject.Race == ActorRace.Play)
             {
+                if (baseObject.AdminMode) //只有玩家才有管理员模式
+                {
+                    return false;
+                }
                 if (((PlayObject)baseObject).PvpLevel() >= 2)
                 {
                     return true;
                 }
             }
-            if (baseObject.AdminMode || baseObject.StoneMode || baseObject == this)
+            if (baseObject.StoneMode || baseObject == this)
             {
                 return false;
             }
-            return result;
+            return true;
         }
 
         public override void SearchViewRange()
