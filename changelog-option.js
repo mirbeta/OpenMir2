@@ -40,7 +40,6 @@ module.exports = {
             }
             if (typeof commit.hash === 'string') {
                 commit.hash = commit.hash.substring(0, 7)
-
             }
             if (typeof commit.subject === 'string') {
                 let url = context.repository
@@ -60,7 +59,6 @@ module.exports = {
                         if (username.includes('/')) {
                             return `@${username}`
                         }
-
                         return `[@${username}](${context.host}/${username})`
                     })
                 }
@@ -71,7 +69,6 @@ module.exports = {
                 if (issues.indexOf(reference.issue) === -1) {
                     return true
                 }
-
                 return false
             })
             return commit

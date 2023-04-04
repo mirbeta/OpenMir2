@@ -11,7 +11,7 @@ namespace GameSrv.Maps
         /// <summary>
         /// 地图对象列表
         /// </summary>
-        public NativeList<CellObject> ObjList;
+        public IList<CellObject> ObjList;
         /// <summary>
         /// 是否可以移动
         /// </summary>

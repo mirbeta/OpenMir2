@@ -122,7 +122,7 @@ namespace GameSrv.Maps {
                         }
                     }
                     if (!addSuccess) {
-                        cellInfo.ObjList ??= new NativeList<CellObject>();
+                        cellInfo.ObjList ??= new List<CellObject>();
                         CellObject cellObject = new CellObject {
                             CellType = cellType,
                             CellObjId = cellId,
@@ -175,7 +175,7 @@ namespace GameSrv.Maps {
                 cellInfo = ref _cellArray[nX * Height + nY];
                 if (cellInfo.Valid) {
                     if (cellInfo.ObjList == null) {
-                        cellInfo.ObjList = new NativeList<CellObject>();
+                        cellInfo.ObjList = new List<CellObject>();
                     }
                     return true;
                 }
@@ -189,7 +189,7 @@ namespace GameSrv.Maps {
                 ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
                 if (cellInfo.Valid) {
                     success = true;
-                    cellInfo.ObjList ??= new NativeList<CellObject>();
+                    cellInfo.ObjList ??= new List<CellObject>();
                     return ref cellInfo;
                 }
                 success = false;
@@ -270,7 +270,7 @@ namespace GameSrv.Maps {
                         }
                         cellInfo = ref GetCellInfo(nX, nY, out cellSuccess);
                         if (cellSuccess) {
-                            cellInfo.ObjList ??= new NativeList<CellObject>();
+                            cellInfo.ObjList ??= new List<CellObject>();
                             if (moveObject.CellObjId == 0) {
                                 moveObject.CellType = cert.CellType;
                                 moveObject.CellObjId = cert.ActorId;
@@ -537,7 +537,7 @@ namespace GameSrv.Maps {
         public bool AddToMapItemEvent<T>(int nX, int nY, CellType nType, T stoneMineEvent) where T : StoneMineEvent {
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid) {
-                cellInfo.ObjList ??= new NativeList<CellObject>();
+                cellInfo.ObjList ??= new List<CellObject>();
                 CellObject cellObject = new CellObject();
                 cellObject.CellType = nType;
                 cellObject.CellObjId = stoneMineEvent.Id;
@@ -576,7 +576,7 @@ namespace GameSrv.Maps {
                         }
                     }
                     if (isSpace) {
-                        cellInfo.ObjList ??= new NativeList<CellObject>();
+                        cellInfo.ObjList ??= new List<CellObject>();
                         CellObject cellObject = new CellObject {
                             CellType = cellType,
                             CellObjId = stoneMineEvent.Id,
@@ -665,7 +665,7 @@ namespace GameSrv.Maps {
                                 isInitialize = false;
                             }
                             if (isInitialize) {
-                                _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
+                                _cellArray[n24 + nH].ObjList = new List<CellObject>();
                             }
                             if ((mapUnitInfo.btDoorIndex & 0x80) != 0) {
                                 point = mapUnitInfo.btDoorIndex & 0x7F;
