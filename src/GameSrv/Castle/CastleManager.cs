@@ -80,18 +80,18 @@ namespace GameSrv.Castle {
         }
 
         // 城堡所在地图
-        public UserCastle IsCastleEnvir(Envirnoment Envir) {
+        public UserCastle IsCastleEnvir(Envirnoment envir) {
             for (int i = 0; i < _castleList.Count; i++) {
-                if (_castleList[i].CastleEnvir == Envir) {
+                if (_castleList[i].CastleEnvir == envir) {
                     return _castleList[i];
                 }
             }
             return null;
         }
 
-        public UserCastle IsCastleMember(PlayObject BaseObject) {
+        public UserCastle IsCastleMember(PlayObject playObject) {
             for (int i = 0; i < _castleList.Count; i++) {
-                if (_castleList[i].IsMember(BaseObject)) {
+                if (_castleList[i].IsMember(playObject)) {
                     return _castleList[i];
                 }
             }

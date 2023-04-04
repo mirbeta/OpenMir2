@@ -34,6 +34,9 @@ namespace GameSrv.Castle
         /// 是否开始攻城
         /// </summary>
         private bool IsStartWar;
+        /// <summary>
+        /// 正在沙巴克战役
+        /// </summary>
         public bool UnderWar;
         public ArcherUnit CenterWall;
         public DateTime ChangeDate;

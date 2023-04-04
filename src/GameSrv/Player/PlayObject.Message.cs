@@ -1502,12 +1502,15 @@ namespace GameSrv.Player
                                 }
                                 SetLastHiter(M2Share.ActorMgr.Get(processMsg.nParam3));
                             }
-                            if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                            if (this.MyGuild != null && this.Castle != null)
                             {
-                                if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
+                                if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                                 {
-                                    ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastle = true;
-                                    ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastleTime = HUtil32.GetTickCount();
+                                    if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
+                                    {
+                                        ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastle = true;
+                                        ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastleTime = HUtil32.GetTickCount();
+                                    }
                                 }
                             }
                             HealthTick = 0;

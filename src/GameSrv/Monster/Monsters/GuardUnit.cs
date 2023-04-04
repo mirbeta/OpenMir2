@@ -37,11 +37,11 @@ namespace GameSrv.Monster.Monsters
             {
                 if (LastHiter == baseObject)
                 {
-                    result = true;
+                    return true;
                 }
                 if (Castle.UnderWar)
                 {
-                    result = true;
+                    return true;
                 }
                 if (baseObject.Race == ActorRace.Guard)
                 {

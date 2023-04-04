@@ -91,7 +91,7 @@ namespace GameSrv.Actor
         /// </summary>
         public ushort Appr;
         /// <summary>
-        /// 种族
+        /// 种族类型
         /// </summary>
         public byte Race;
         /// <summary>

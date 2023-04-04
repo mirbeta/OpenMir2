@@ -49,9 +49,8 @@ namespace GameSrv.Monster.Monsters {
             return base.Operate(processMsg);
         }
 
-        private static bool CanAttckTarget(BaseObject baseObject) {
-            //todo 最好加个字段直接判断是否能被攻击，减少判断
-            return baseObject.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.PeaceNpc or ActorRace.NPC;
+        private static bool CanAttckTarget(int monsterType) {
+            return monsterType is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.PeaceNpc or ActorRace.NPC;
         }
 
         public override void Run() {
@@ -65,7 +64,7 @@ namespace GameSrv.Monster.Monsters {
                     if (attackObject == null) {
                         continue;
                     }
-                    if (attackObject.Death || attackObject.Ghost || CanAttckTarget(attackObject)) {
+                    if (attackObject.Death || attackObject.Ghost || CanAttckTarget(attackObject.Race)) {
                         VisibleActors.RemoveAt(i);
                         continue;
                     }
