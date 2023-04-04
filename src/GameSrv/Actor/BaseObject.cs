@@ -2580,7 +2580,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 怪物说话
         /// </summary>
-        protected void MonsterSayMsg(BaseObject attackBaseObject, MonStatus monStatus)
+        protected void MonsterSayMsg(BaseObject monsterObject, MonStatus monStatus)
         {
             if (!M2Share.Config.MonSayMsg)
             {
@@ -2594,22 +2594,22 @@ namespace GameSrv.Actor
             {
                 return;
             }
-            if (attackBaseObject == null)
+            if (monsterObject == null)
             {
                 return;
             }
             string sAttackName;
-            if ((attackBaseObject.Race != ActorRace.Play) && (attackBaseObject.Master == null))
+            if ((monsterObject.Race != ActorRace.Play) && (monsterObject.Master == null))
             {
                 return;
             }
-            if (attackBaseObject.Master != null)
+            if (monsterObject.Master != null)
             {
-                sAttackName = attackBaseObject.Master.ChrName;
+                sAttackName = monsterObject.Master.ChrName;
             }
             else
             {
-                sAttackName = attackBaseObject.ChrName;
+                sAttackName = monsterObject.ChrName;
             }
             for (int i = 0; i < SayMsgList.Count; i++)
             {
@@ -2629,7 +2629,7 @@ namespace GameSrv.Actor
                     }
                     else
                     {
-                        attackBaseObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
+                        monsterObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
                     }
                     break;
                 }
