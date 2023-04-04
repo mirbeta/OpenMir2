@@ -2929,7 +2929,7 @@ namespace GameSrv.Actor
             {
                 return;
             }
-            if ((Race >= 50) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 人攻击怪物
+            if ((Race >= ActorRace.Animal) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 人攻击怪物
             {
                 switch (((PlayObject)LastHiter).Job)
                 {
