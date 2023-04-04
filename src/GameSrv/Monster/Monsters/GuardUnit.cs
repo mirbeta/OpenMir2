@@ -1,5 +1,6 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Maps;
+using GameSrv.Npc;
 using GameSrv.Player;
 using SystemModule.Enums;
 
@@ -8,7 +9,7 @@ namespace GameSrv.Monster.Monsters
     /// <summary>
     /// 守卫类
     /// </summary>
-    public class GuardUnit : AnimalObject
+    public class GuardUnit : NormNpc
     {
         public sbyte GuardDirection;
         public bool CrimeforCastle;
