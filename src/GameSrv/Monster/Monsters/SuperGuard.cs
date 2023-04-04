@@ -1,5 +1,4 @@
 ﻿using GameSrv.Actor;
-using GameSrv.Npc;
 using GameSrv.Player;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -8,7 +7,7 @@ namespace GameSrv.Monster.Monsters {
     /// <summary>
     /// 守卫
     /// </summary>
-    public class SuperGuard : NormNpc {
+    public class SuperGuard : GuardUnit {
         protected bool AttackPet;
 
         private bool AttackTarget() {
