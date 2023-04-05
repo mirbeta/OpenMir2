@@ -642,9 +642,6 @@ namespace GameSrv.Actor {
                     case Messages.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
-                    case Messages.RM_UPDATEVISIBLE:
-                        UpdateMonsterVisible(processMsg.ActorId);
-                        break;
                 }
             }
             catch (Exception e) {

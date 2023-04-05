@@ -2660,91 +2660,108 @@ namespace GameSrv.Player {
         /// 更新玩家自身可见的玩家和怪物
         /// </summary>
         /// <param name="baseObject"></param>
-        protected override void UpdateVisibleGay(BaseObject baseObject) {
+        protected override void UpdateVisibleGay(BaseObject baseObject)
+        {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
-            if (baseObject.Race == ActorRace.Play || baseObject.Master != null) {
+            if (baseObject.Race == ActorRace.Play || baseObject.Master != null)
+            {
                 IsVisibleActive = true;// 如果是人物或宝宝则置TRUE
             }
-            for (int i = 0; i < VisibleActors.Count; i++) {
+            for (int i = 0; i < VisibleActors.Count; i++)
+            {
                 visibleBaseObject = VisibleActors[i];
-                if (visibleBaseObject.BaseObject == baseObject) {
+                if (visibleBaseObject.BaseObject == baseObject)
+                {
                     visibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
             }
-            if (boIsVisible) {
+            if (boIsVisible)
+            {
                 return;
             }
-            visibleBaseObject = new VisibleBaseObject {
+            visibleBaseObject = new VisibleBaseObject
+            {
                 VisibleFlag = VisibleFlag.Hidden,
                 BaseObject = baseObject
             };
             VisibleActors.Add(visibleBaseObject);
-            if (baseObject.Race == ActorRace.Play) {
-                SendWhisperMsg((PlayObject)baseObject);
-            }
         }
 
-        public override void SearchViewRange() {
-            for (int i = VisibleItems.Count - 1; i >= 0; i--) {
+        public override void SearchViewRange()
+        {
+            for (int i = VisibleItems.Count - 1; i >= 0; i--)
+            {
                 VisibleItems[i].VisibleFlag = 0;
             }
-            for (int i = VisibleEvents.Count - 1; i >= 0; i--) {
+            for (int i = VisibleEvents.Count - 1; i >= 0; i--)
+            {
                 VisibleEvents[i].VisibleFlag = 0;
             }
-            for (int i = VisibleActors.Count - 1; i >= 0; i--) {
+            for (int i = VisibleActors.Count - 1; i >= 0; i--)
+            {
                 VisibleActors[i].VisibleFlag = 0;
             }
             short nStartX = (short)(CurrX - ViewRange);
             short nEndX = (short)(CurrX + ViewRange);
             short nStartY = (short)(CurrY - ViewRange);
             short nEndY = (short)(CurrY + ViewRange);
-            try {
-                for (short nX = nStartX; nX <= nEndX; nX++) {
-                    for (short nY = nStartY; nY <= nEndY; nY++) {
-                        if (!Envir.ValidCell(nX, nY)) {
-                            break;//已超出地图范围，无需继续搜索
-                        }
+            try
+            {
+                for (short nX = nStartX; nX <= nEndX; nX++)
+                {
+                    for (short nY = nStartY; nY <= nEndY; nY++)
+                    {
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
-                        if (cellSuccess && cellInfo.IsAvailable) {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++) {
+                        if (cellSuccess && cellInfo.IsAvailable)
+                        {
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            {
                                 CellObject cellObject = cellInfo.ObjList[i];
-                                if (cellObject.CellObjId > 0) {
-                                    if (cellObject.ActorObject) {
-                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000) {
+                                switch (cellObject.CellType)
+                                {
+                                    case CellType.Play:
+                                    case CellType.Monster:
+                                    case CellType.Merchant:
+                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
+                                        {
                                             cellInfo.Remove(cellObject);
-                                            if (cellInfo.Count > 0) {
+                                            if (cellInfo.Count > 0)
+                                            {
                                                 continue;
                                             }
                                             cellInfo.Clear();
                                             break;
                                         }
                                         BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                        if (baseObject != null && !baseObject.Invisible) {
-                                            if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode) {
+                                        if (baseObject != null && !baseObject.Invisible)
+                                        {
+                                            if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                            {
                                                 if (Race < ActorRace.Animal || Master != null || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
                                                 {
                                                     UpdateVisibleGay(baseObject);//更新自己的视野对象
-                                                    if (CellType == CellType.Play && baseObject.CellType == CellType.Monster  && !ObMode && !baseObject.FixedHideMode)
+                                                    if (baseObject.CellType == CellType.Monster && !ObMode && !FixedHideMode) //进入附近怪物视野
                                                     {
-                                                        //我的视野 进入对方的攻击视野范围
                                                         if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange))
                                                         {
-                                                            baseObject.SendMsg(this, Messages.RM_UPDATEVISIBLE, 0, 0, 0, 0, ""); // 发送消息更新对方的视野
+                                                            M2Share.ActorMgr.SendMessage(baseObject.ActorId, Messages.RM_UPDATEVISIBLE, this.ActorId, 0, 0, 0, "");// 发送消息更新对方的视野
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
-                                    if (Race == ActorRace.Play) {
-                                        if (cellObject.CellType == CellType.Item) {
+                                        break;
+                                    case CellType.Item:
+                                        {
                                             if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                             {
                                                 cellInfo.Remove(cellObject);
-                                                if (cellInfo.Count > 0) {
+                                                M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
+                                                if (cellInfo.Count > 0)
+                                                {
                                                     continue;
                                                 }
                                                 cellInfo.Clear();
@@ -2756,46 +2773,59 @@ namespace GameSrv.Player {
                                                 continue;
                                             }
                                             UpdateVisibleItem(nX, nY, mapItem);
-                                            if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0) {
+                                            if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
+                                            {
                                                 if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
                                                 {
                                                     mapItem.OfBaseObject = 0;
                                                     mapItem.DropBaseObject = 0;
                                                 }
-                                                else {
-                                                    if (M2Share.ActorMgr.Get(mapItem.OfBaseObject) != null) {
-                                                        if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost) {
+                                                else
+                                                {
+                                                    if (M2Share.ActorMgr.Get(mapItem.OfBaseObject) != null)
+                                                    {
+                                                        if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
+                                                        {
                                                             mapItem.OfBaseObject = 0;
                                                         }
                                                     }
-                                                    if (M2Share.ActorMgr.Get(mapItem.DropBaseObject) != null) {
-                                                        if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost) {
+                                                    if (M2Share.ActorMgr.Get(mapItem.DropBaseObject) != null)
+                                                    {
+                                                        if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
+                                                        {
                                                             mapItem.DropBaseObject = 0;
                                                         }
                                                     }
                                                 }
                                             }
                                         }
-                                        if (cellObject.CellType == CellType.Event) {
+                                        break;
+                                    case CellType.Event:
+                                        {
                                             EventInfo mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
-                                            if (mapEvent.Visible) {
+                                            if (mapEvent.Visible)
+                                            {
                                                 UpdateVisibleEvent(nX, nY, mapEvent);
                                             }
                                         }
-                                    }
+                                        break;
                                 }
                             }
                         }
                     }
                 }
                 int n18 = 0;
-                while (true) {
-                    if (VisibleActors.Count <= n18) {
+                while (true)
+                {
+                    if (VisibleActors.Count <= n18)
+                    {
                         break;
                     }
                     VisibleBaseObject visibleBaseObject = VisibleActors[n18];
-                    if (visibleBaseObject.VisibleFlag == 0) {
-                        if (Race == ActorRace.Play) {
+                    if (visibleBaseObject.VisibleFlag == 0)
+                    {
+                        if (Race == ActorRace.Play)
+                        {
                             BaseObject baseObject = visibleBaseObject.BaseObject;
                             if (!baseObject.FixedHideMode && !baseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                             {
@@ -2806,18 +2836,24 @@ namespace GameSrv.Player {
                         Dispose(visibleBaseObject);
                         continue;
                     }
-                    if (Race == ActorRace.Play && visibleBaseObject.VisibleFlag == VisibleFlag.Hidden) {
+                    if (Race == ActorRace.Play && visibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
+                    {
                         BaseObject baseObject = visibleBaseObject.BaseObject;
-                        if (baseObject != this) {
-                            if (baseObject.Death) {
-                                if (baseObject.Skeleton) {
+                        if (baseObject != this)
+                        {
+                            if (baseObject.Death)
+                            {
+                                if (baseObject.Skeleton)
+                                {
                                     SendMsg(baseObject, Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                 }
-                                else {
+                                else
+                                {
                                     SendMsg(baseObject, Messages.RM_DEATH, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
                                 }
                             }
-                            else {
+                            else
+                            {
                                 SendMsg(baseObject, Messages.RM_TURN, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, baseObject.GetShowName());
                             }
                         }
@@ -2826,40 +2862,49 @@ namespace GameSrv.Player {
                 }
 
                 int I = 0;
-                while (true) {
-                    if (VisibleItems.Count <= I) {
+                while (true)
+                {
+                    if (VisibleItems.Count <= I)
+                    {
                         break;
                     }
                     VisibleMapItem visibleMapItem = VisibleItems[I];
-                    if (visibleMapItem.VisibleFlag == 0) {
+                    if (visibleMapItem.VisibleFlag == 0)
+                    {
                         SendMsg(this, Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, "");
                         VisibleItems.RemoveAt(I);
                         Dispose(visibleMapItem);
                         continue;
                     }
-                    if (visibleMapItem.VisibleFlag == VisibleFlag.Hidden) {
+                    if (visibleMapItem.VisibleFlag == VisibleFlag.Hidden)
+                    {
                         SendMsg(this, Messages.RM_ITEMSHOW, visibleMapItem.wLooks, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, visibleMapItem.sName);
                     }
                     I++;
                 }
                 I = 0;
-                while (true) {
-                    if (VisibleEvents.Count <= I) {
+                while (true)
+                {
+                    if (VisibleEvents.Count <= I)
+                    {
                         break;
                     }
                     EventInfo mapEvent = VisibleEvents[I];
-                    if (mapEvent.VisibleFlag == VisibleFlag.Visible) {
+                    if (mapEvent.VisibleFlag == VisibleFlag.Visible)
+                    {
                         SendMsg(this, Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                         VisibleEvents.RemoveAt(I);
                         continue;
                     }
-                    if (mapEvent.VisibleFlag == VisibleFlag.Hidden) {
+                    if (mapEvent.VisibleFlag == VisibleFlag.Hidden)
+                    {
                         SendMsg(this, Messages.RM_SHOWEVENT, (short)mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
                     }
                     I++;
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 M2Share.Logger.Error(e.StackTrace);
                 KickException();
             }

@@ -714,18 +714,6 @@ namespace GameSrv.Player {
             SendDefMessage(Messages.SM_MAPDESCRIPTION, nMusicid, 0, 0, 0, Envir.MapDesc);
         }
 
-        private void SendWhisperMsg(PlayObject playObject) {
-            if (playObject == this) {
-                return;
-            }
-            if (playObject.Permission >= 9 || Permission >= 9) {
-                return;
-            }
-            if (M2Share.WorldEngine.PlayObjectCount < M2Share.Config.nSendWhisperPlayCount + M2Share.RandomNumber.Random(5)) {
-                return;
-            }
-        }
-
         public void ChangeSpaceMove(Envirnoment envir, short nX, short nY) {
             SwitchMapName = envir.MapName;
             SwitchMapX = nX;

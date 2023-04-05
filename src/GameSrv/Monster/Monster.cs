@@ -1,5 +1,6 @@
 ﻿using GameSrv.Actor;
 using SystemModule.Data;
+using SystemModule.Enums;
 
 namespace GameSrv.Monster {
     public class MonsterObject : AnimalObject {
@@ -42,9 +43,54 @@ namespace GameSrv.Monster {
             }
             return null;
         }
+        
+        /// <summary>
+        /// 更新自身视野对象（可见对象）
+        /// </summary>
+        /// <param name="acrotId"></param>
+        private void UpdateMonsterVisible(int acrotId)
+        {
+            bool boIsVisible = false;
+            VisibleBaseObject visibleBaseObject;
+            var baseObject = M2Share.ActorMgr.Get(acrotId);
+            if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
+            {
+                IsVisibleActive = true;
+            }
+            for (int i = 0; i < VisibleActors.Count; i++)
+            {
+                visibleBaseObject = VisibleActors[i];
+                if (visibleBaseObject == null)
+                {
+                    continue;
+                }
+                if (visibleBaseObject.BaseObject == baseObject)
+                {
+                    visibleBaseObject.VisibleFlag = VisibleFlag.Invisible;
+                    boIsVisible = true;
+                    break;
+                }
+            }
+            if (boIsVisible)
+            {
+                return;
+            }
+            visibleBaseObject = new VisibleBaseObject
+            {
+                VisibleFlag = VisibleFlag.Hidden,
+                BaseObject = baseObject
+            };
+            VisibleActors.Add(visibleBaseObject);
+        }
 
-        protected override bool Operate(ProcessMessage ProcessMsg) {
-            return base.Operate(ProcessMsg);
+        protected override bool Operate(ProcessMessage processMsg)
+        {
+            if (processMsg.wIdent == Messages.RM_UPDATEVISIBLE)
+            {
+                UpdateMonsterVisible(processMsg.wParam);
+                return true;
+            }
+            return base.Operate(processMsg);
         }
 
         private bool Think() {

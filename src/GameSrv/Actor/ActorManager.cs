@@ -69,6 +69,23 @@ namespace GameSrv.Actor
             }
         }
 
+        public void SendMessage(int actorId, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
+        {
+            SendMessage sendMessage = new SendMessage
+            {
+                wIdent = wIdent,
+                wParam = wParam,
+                nParam1 = nParam1,
+                nParam2 = nParam2,
+                nParam3 = nParam3,
+                DeliveryTime = 0,
+                ActorId = actorId,
+                LateDelivery = false,
+                Buff = sMsg
+            };
+            SendMessage(actorId, sendMessage);
+        }
+
         public void AddOhter(int objectId, object obj)
         {
             _ohterMap.TryAdd(objectId, obj);
