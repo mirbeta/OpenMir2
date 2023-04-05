@@ -1637,7 +1637,7 @@ namespace GameSrv.Actor
             return baseObject.GetNameColor();
         }
 
-        public static int GetLevelExp(int nLevel)
+        protected static int GetLevelExp(int nLevel)
         {
             int result;
             if (nLevel <= Grobal2.MaxLevel)
@@ -1738,7 +1738,14 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                MsgQueue.Enqueue(sendMessage, (byte)Priority);
+                if (Priority == MessagePriority.High)
+                {
+                    MsgQueue.Enqueue(sendMessage, (byte)Priority);
+                }
+                else
+                {
+                    MsgQueue.Enqueue(sendMessage, wIdent);
+                }
             }
             HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
         }
@@ -1921,7 +1928,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 发送延时消息
         /// </summary>
-        public void SendDelayMsg(int baseObject, short wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        public void SendDelayMsg(int actorId, short wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
             {
@@ -1939,7 +1946,7 @@ namespace GameSrv.Actor
                         LateDelivery = true,
                         Buff = sMsg
                     };
-                    sendMessage.ActorId = baseObject == Messages.RM_STRUCK ? Messages.RM_STRUCK : baseObject;
+                    sendMessage.ActorId = actorId == Messages.RM_STRUCK ? Messages.RM_STRUCK : actorId;
                     MsgQueue.Enqueue(sendMessage, wIdent);
                 }
             }
