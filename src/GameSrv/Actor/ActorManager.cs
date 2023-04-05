@@ -61,6 +61,14 @@ namespace GameSrv.Actor
             return _actorsMap.TryGetValue(actorId, out var actor) ? (T)actor : default;
         }
 
+        public void SendMessage(int actorId, SendMessage sendMessage)
+        {
+            if (_actorsMap.TryGetValue(actorId, out var actor))
+            {
+                actor.AddMessage(sendMessage);
+            }
+        }
+
         public void AddOhter(int objectId, object obj)
         {
             _ohterMap.TryAdd(objectId, obj);

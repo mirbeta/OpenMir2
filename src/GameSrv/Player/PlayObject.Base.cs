@@ -1700,6 +1700,45 @@ namespace GameSrv.Player {
                     AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
                 }
             }
+            
+            if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
+            {
+                if (killObject.Race != ActorRace.Play) //怪杀死玩家
+                {
+                    if (ExpHitter != null)
+                    {
+                        if (ExpHitter.Race == ActorRace.Play)
+                        {
+                            M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                        }
+                        if (ExpHitter.Master != null)
+                        {
+                            M2Share.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                        }
+                    }
+                    else
+                    {
+                        if (LastHiter != null)
+                        {
+                            if (LastHiter.Race == ActorRace.Play)
+                            {
+                                M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            }
+                            if (LastHiter.Master != null)
+                            {
+                                M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
+                    {
+                        M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                    }
+                }
+            }
         }
 
         public override bool IsProperTarget(BaseObject baseObject) {

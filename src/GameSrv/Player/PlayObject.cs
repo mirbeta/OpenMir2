@@ -1085,7 +1085,7 @@ namespace GameSrv.Player {
             }
         }
 
-        public bool CancelGroup() {
+        private bool CancelGroup() {
             bool result = true;
             const string sCanceGrop = "你的小组被解散了.";
             if (GroupMembers.Count <= 1) {
@@ -1097,7 +1097,7 @@ namespace GameSrv.Player {
             return result;
         }
 
-        public void SendGroupMembers() {
+        private void SendGroupMembers() {
             PlayObject playObject;
             string sSendMsg = "";
             for (int i = 0; i < GroupMembers.Count; i++) {

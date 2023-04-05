@@ -393,10 +393,6 @@ namespace GameSrv.Actor
         /// </summary>
         protected int AutoRecoveryTick;
         /// <summary>
-        /// 消息列表
-        /// </summary>
-        protected readonly PriorityQueue<SendMessage, int> MsgQueue;
-        /// <summary>
         /// 可视范围内的人物列表
         /// </summary>
         protected readonly IList<int> VisibleHumanList;
@@ -513,7 +509,6 @@ namespace GameSrv.Actor
             NoAttackMode = false;
             NoTame = false;
             AddAbil = new AddAbility();
-            MsgQueue = new PriorityQueue<SendMessage, int>();
             VisibleHumanList = new List<int>();
             VisibleActors = new List<VisibleBaseObject>();
             ItemList = new List<UserItem>(Grobal2.MaxBagItem);
@@ -3588,62 +3583,19 @@ namespace GameSrv.Actor
             return null;
         }
 
-        private void KillTarget()
-        {
-            if (ExpHitter != null && ExpHitter.IsSlave)//如果是角色下属杀死对象
-            {
-                ExpHitter.Master.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
-                return;
-            }
-            if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
-            {
-                ExpHitter.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
-            }
-        }
-
         private void KillFunc()
         {
             const string sExceptionMsg = "[Exception] PlayObject::KillFunc";
             try
             {
-                KillTarget();
-                if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
+                if (ExpHitter != null && ExpHitter.IsSlave)//如果是角色下属杀死对象
                 {
-                    if (Race != ActorRace.Play)
-                    {
-                        if (ExpHitter != null)
-                        {
-                            if (ExpHitter.Race == ActorRace.Play)
-                            {
-                                M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                            }
-                            if (ExpHitter.Master != null)
-                            {
-                                M2Share.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                            }
-                        }
-                        else
-                        {
-                            if (LastHiter != null)
-                            {
-                                if (LastHiter.Race == ActorRace.Play)
-                                {
-                                    M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                                }
-                                if (LastHiter.Master != null)
-                                {
-                                    M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
-                                }
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
-                        {
-                            M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
-                        }
-                    }
+                    ExpHitter.Master.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
+                    return;
+                }
+                if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
+                {
+                    ExpHitter.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
                 }
             }
             catch (Exception e)
