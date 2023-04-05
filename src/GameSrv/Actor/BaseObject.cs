@@ -2197,7 +2197,7 @@ namespace GameSrv.Actor
                                             {
                                                 if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                                 {
-                                                    cellInfo.Remove(cellObject);
+                                                    cellInfo.Remove(i);
                                                     if (cellInfo.Count <= 0)
                                                     {
                                                         cellInfo.Clear();

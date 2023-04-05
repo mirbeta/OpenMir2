@@ -2717,9 +2717,14 @@ namespace GameSrv.Player {
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            var nIdx = 0;
+                            while (true)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
+                                if (cellInfo.Count <= nIdx)
+                                {
+                                    break;
+                                }
+                                CellObject cellObject = cellInfo.ObjList[nIdx];
                                 switch (cellObject.CellType)
                                 {
                                     case CellType.Play:
@@ -2727,7 +2732,7 @@ namespace GameSrv.Player {
                                     case CellType.Merchant:
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                         {
-                                            cellInfo.Remove(cellObject);
+                                            cellInfo.Remove(nIdx);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
@@ -2757,7 +2762,7 @@ namespace GameSrv.Player {
                                     case CellType.Item:
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                         {
-                                            cellInfo.Remove(cellObject);
+                                            cellInfo.Remove(nIdx);
                                             M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
                                             if (cellInfo.Count > 0)
                                             {
@@ -2806,6 +2811,7 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                 }
+                                nIdx++;
                             }
                         }
                     }

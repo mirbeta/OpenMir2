@@ -85,7 +85,7 @@ namespace GameSrv.Actor
                                 {
                                     if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                     {
-                                        cellInfo.Remove(cellObject);
+                                        cellInfo.Remove(i);
                                         if (cellInfo.Count > 0)
                                         {
                                             continue;
@@ -175,44 +175,37 @@ namespace GameSrv.Actor
                     ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        try
+                        for (int i = 0; i < cellInfo.ObjList.Count; i++)
                         {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            CellObject cellObject = cellInfo.ObjList[i];
+                            if (cellObject.CellObjId > 0)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
-                                if (cellObject.CellObjId > 0)
+                                if (cellObject.ActorObject)
                                 {
-                                    if (cellObject.ActorObject)
+                                    if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                     {
-                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
+                                        cellInfo.Remove(i);
+                                        if (cellInfo.Count > 0)
                                         {
-                                            cellInfo.Remove(cellObject);
-                                            if (cellInfo.Count > 0)
-                                            {
-                                                continue;
-                                            }
-                                            cellInfo.Clear();
-                                            break;
+                                            continue;
                                         }
+                                        cellInfo.Clear();
+                                        break;
                                     }
-                                    if ((cellObject.CellType == CellType.Item) && !Death && (Race > ActorRace.Monster))
+                                }
+                                if ((cellObject.CellType == CellType.Item) && !Death && (Race > ActorRace.Monster))
+                                {
+                                    if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
                                     {
-                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
+                                        cellInfo.Remove(i);
+                                        if (cellInfo.Count > 0)
                                         {
-                                            cellInfo.Remove(cellObject);
-                                            if (cellInfo.Count > 0)
-                                            {
-                                                continue;
-                                            }
-                                            cellInfo.Clear();
+                                            continue;
                                         }
+                                        cellInfo.Clear();
                                     }
                                 }
                             }
-                        }
-                        catch (Exception e)
-                        {
-                            M2Share.Logger.Error(e.StackTrace);
                         }
                     }
                 }

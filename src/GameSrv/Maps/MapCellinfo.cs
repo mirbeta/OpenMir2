@@ -1,3 +1,5 @@
+using SystemModule.NativeList.Utils;
+
 namespace GameSrv.Maps
 {
     public struct MapCellInfo
@@ -9,7 +11,7 @@ namespace GameSrv.Maps
         /// <summary>
         /// 地图对象列表
         /// </summary>
-        public IList<CellObject> ObjList;
+        public NativeList<CellObject> ObjList;
         /// <summary>
         /// 是否可以移动
         /// </summary>
@@ -39,8 +41,13 @@ namespace GameSrv.Maps
 
         public void Remove(CellObject index)
         {
-            //todo 此方法的需要异步通知处理并移除
+            //todo 异步通知处理并移除
             ObjList.Remove(index);
+        }
+
+        public void Remove(int index)
+        {
+            ObjList.RemoveAt(index);
         }
 
         public void SetAttribute(CellAttribute cellAttribute)
@@ -51,7 +58,7 @@ namespace GameSrv.Maps
         public void Clear()
         {
             ObjList.Clear();
-            ObjList = null;
+            //ObjList = null;
         }
     }
 }

@@ -136,7 +136,7 @@ namespace GameSrv.Maps {
                     }
                     if (!addSuccess)
                     {
-                        cellInfo.ObjList ??= new List<CellObject>();
+                        cellInfo.ObjList ??= new NativeList<CellObject>();
                         CellObject cellObject = new CellObject
                         {
                             CellType = cellType,
@@ -195,7 +195,7 @@ namespace GameSrv.Maps {
                 cellInfo = ref _cellArray[nX * Height + nY];
                 if (cellInfo.Valid) {
                     if (cellInfo.ObjList == null) {
-                        cellInfo.ObjList = new List<CellObject>();
+                        cellInfo.ObjList = new NativeList<CellObject>();
                     }
                     return true;
                 }
@@ -209,7 +209,7 @@ namespace GameSrv.Maps {
                 ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
                 if (cellInfo.Valid) {
                     success = true;
-                    cellInfo.ObjList ??= new List<CellObject>();
+                    cellInfo.ObjList ??= new NativeList<CellObject>();
                     return ref cellInfo;
                 }
                 success = false;
@@ -279,7 +279,7 @@ namespace GameSrv.Maps {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                                 moveObject = cellInfo.ObjList[i];
                                 if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject) {
-                                    cellInfo.Remove(moveObject);
+                                    cellInfo.Remove(i);
                                     if (cellInfo.Count > 0) {
                                         continue;
                                     }
@@ -290,7 +290,7 @@ namespace GameSrv.Maps {
                         }
                         cellInfo = ref GetCellInfo(nX, nY, out cellSuccess);
                         if (cellSuccess) {
-                            cellInfo.ObjList ??= new List<CellObject>();
+                            cellInfo.ObjList ??= new NativeList<CellObject>();
                             if (moveObject.CellObjId == 0) {
                                 moveObject.CellType = cert.CellType;
                                 moveObject.CellObjId = cert.ActorId;
@@ -477,45 +477,66 @@ namespace GameSrv.Maps {
         /// 从地图指定坐标上删除对象
         /// </summary>
         /// <returns></returns>
-        public int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, BaseObject pRemoveObject) {
+        public int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, BaseObject pRemoveObject)
+        {
             const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
             int result = -1;
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
-            if (cellSuccess && cellInfo.IsAvailable) {
-                try {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++) {
-                        CellObject cellObject = cellInfo.ObjList[i];
-                        if (cellObject.CellObjId > 0) {
-                            if (cellObject.CellType == cellType && cellObject.CellObjId == cellId) {
+            if (cellSuccess && cellInfo.IsAvailable)
+            {
+                try
+                {
+                    var nIdx = 0;
+                    while (true)
+                    {
+                        if (cellInfo.Count <= nIdx)
+                        {
+                            break;
+                        }
+                        CellObject cellObject = cellInfo.ObjList[nIdx];
+                        if (cellObject.CellObjId > 0)
+                        {
+                            if (cellObject.CellType == cellType && cellObject.CellObjId == cellId)
+                            {
                                 cellInfo.Remove(cellObject);
                                 result = 1;
-                                if (cellObject.ActorObject && pRemoveObject != null && !pRemoveObject.DelFormMaped) {
+                                if (cellObject.ActorObject && pRemoveObject != null && !pRemoveObject.DelFormMaped)
+                                {
                                     pRemoveObject.DelFormMaped = true;
                                     pRemoveObject.AddToMaped = false;
                                     DelObjectCount(pRemoveObject);// 减地图人物怪物计数
                                 }
-                                if (cellInfo.Count > 0) {
+                                if (cellInfo.Count > 0)
+                                {
                                     continue;
                                 }
                                 cellInfo.Clear();
                                 break;
                             }
                         }
-                        else {
-                            cellInfo.Remove(cellObject);
-                            if (cellInfo.Count > 0) {
+                        else
+                        {
+                            if (nIdx < cellInfo.Count)
+                            {
+                                cellInfo.Remove(cellObject);
+                            }
+                            if (cellInfo.Count > 0)
+                            {
                                 continue;
                             }
                             cellInfo.Clear();
                             break;
                         }
+                        nIdx++;
                     }
                 }
-                catch {
+                catch
+                {
                     M2Share.Logger.Error(string.Format(sExceptionMsg1, cellType));
                 }
             }
-            else {
+            else
+            {
                 result = 0;
             }
             return result;
@@ -559,7 +580,7 @@ namespace GameSrv.Maps {
         public bool AddToMapItemEvent<T>(int nX, int nY, CellType nType, T stoneMineEvent) where T : StoneMineEvent {
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid) {
-                cellInfo.ObjList ??= new List<CellObject>();
+                cellInfo.ObjList ??= new NativeList<CellObject>();
                 CellObject cellObject = new CellObject();
                 cellObject.CellType = nType;
                 cellObject.CellObjId = stoneMineEvent.Id;
@@ -598,7 +619,7 @@ namespace GameSrv.Maps {
                         }
                     }
                     if (isSpace) {
-                        cellInfo.ObjList ??= new List<CellObject>();
+                        cellInfo.ObjList ??= new NativeList<CellObject>();
                         CellObject cellObject = new CellObject {
                             CellType = cellType,
                             CellObjId = stoneMineEvent.Id,
@@ -687,7 +708,7 @@ namespace GameSrv.Maps {
                                 isInitialize = false;
                             }
                             if (isInitialize) {
-                                _cellArray[n24 + nH].ObjList = new List<CellObject>();
+                                _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
                             }
                             if ((mapUnitInfo.btDoorIndex & 0x80) != 0) {
                                 point = mapUnitInfo.btDoorIndex & 0x7F;

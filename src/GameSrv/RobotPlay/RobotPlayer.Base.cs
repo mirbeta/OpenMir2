@@ -485,9 +485,14 @@ namespace GameSrv.RobotPlay
                             {
                                 continue;
                             }
-                            for (var i = 0; i < cellInfo.ObjList.Count; i++)
+                            var nIdx = 0;
+                            while (true)
                             {
-                                var cellObject = cellInfo.ObjList[i];
+                                if (cellInfo.Count <= nIdx)
+                                {
+                                    break;
+                                }
+                                var cellObject = cellInfo.ObjList[nIdx];
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;
@@ -591,6 +596,7 @@ namespace GameSrv.RobotPlay
                                             break;
                                     }
                                 }
+                                nIdx++;
                             }
                         }
                     }
