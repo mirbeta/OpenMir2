@@ -39,6 +39,7 @@ namespace GameSrv.Maps
 
         public void Remove(CellObject index)
         {
+            //todo 此方法的需要异步通知处理并移除
             ObjList.Remove(index);
         }
 

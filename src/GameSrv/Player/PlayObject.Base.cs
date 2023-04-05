@@ -2755,58 +2755,54 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     case CellType.Item:
+                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                         {
-                                            if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
-                                            {
-                                                cellInfo.Remove(cellObject);
-                                                M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
-                                                if (cellInfo.Count > 0)
-                                                {
-                                                    continue;
-                                                }
-                                                cellInfo.Clear();
-                                                break;
-                                            }
-                                            MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
-                                            if (mapItem == null)
+                                            cellInfo.Remove(cellObject);
+                                            M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
+                                            if (cellInfo.Count > 0)
                                             {
                                                 continue;
                                             }
-                                            UpdateVisibleItem(nX, nY, mapItem);
-                                            if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
+                                            cellInfo.Clear();
+                                            break;
+                                        }
+                                        MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                        if (mapItem == null)
+                                        {
+                                            continue;
+                                        }
+                                        UpdateVisibleItem(nX, nY, mapItem);
+                                        if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
+                                        {
+                                            if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
                                             {
-                                                if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
+                                                mapItem.OfBaseObject = 0;
+                                                mapItem.DropBaseObject = 0;
+                                            }
+                                            else
+                                            {
+                                                if (M2Share.ActorMgr.Get(mapItem.OfBaseObject) != null)
                                                 {
-                                                    mapItem.OfBaseObject = 0;
-                                                    mapItem.DropBaseObject = 0;
-                                                }
-                                                else
-                                                {
-                                                    if (M2Share.ActorMgr.Get(mapItem.OfBaseObject) != null)
+                                                    if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
                                                     {
-                                                        if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
-                                                        {
-                                                            mapItem.OfBaseObject = 0;
-                                                        }
+                                                        mapItem.OfBaseObject = 0;
                                                     }
-                                                    if (M2Share.ActorMgr.Get(mapItem.DropBaseObject) != null)
+                                                }
+                                                if (M2Share.ActorMgr.Get(mapItem.DropBaseObject) != null)
+                                                {
+                                                    if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
                                                     {
-                                                        if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
-                                                        {
-                                                            mapItem.DropBaseObject = 0;
-                                                        }
+                                                        mapItem.DropBaseObject = 0;
                                                     }
                                                 }
                                             }
                                         }
                                         break;
                                     case CellType.Event:
+                                        EventInfo mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
+                                        if (mapEvent.Visible)
                                         {
-                                            EventInfo mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
-                                            if (mapEvent.Visible)
-                                            {
-                                                UpdateVisibleEvent(nX, nY, mapEvent);
-                                            }
+                                            UpdateVisibleEvent(nX, nY, mapEvent);
                                         }
                                         break;
                                 }
