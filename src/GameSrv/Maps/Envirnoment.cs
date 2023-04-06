@@ -506,6 +506,10 @@ namespace GameSrv.Maps {
                                     pRemoveObject.AddToMaped = false;
                                     DelObjectCount(pRemoveObject);// 减地图人物怪物计数
                                 }
+                                if (cellType == CellType.Item && cellObject.CellType == CellType.Item)
+                                {
+                                    M2Share.CellObjectMgr.Remove(cellId);//删除物品
+                                }
                                 if (cellInfo.Count > 0)
                                 {
                                     continue;
