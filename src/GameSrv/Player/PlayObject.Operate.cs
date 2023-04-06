@@ -16,6 +16,10 @@ namespace GameSrv.Player
         private void ClientQueryUserName(int targetId, int x, int y)
         {
             var baseObject = M2Share.ActorMgr.Get(targetId);
+            if (baseObject == null)
+            {
+                return;
+            }
             if (CretInNearXy(baseObject, x, y))
             {
                 var nameColor = GetChrColor(baseObject);
