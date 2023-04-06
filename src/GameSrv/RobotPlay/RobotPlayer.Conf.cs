@@ -7,7 +7,6 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.RobotPlay
 {
-
     public partial class RobotPlayer
     {
         public void LoadConfig()

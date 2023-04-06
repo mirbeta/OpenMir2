@@ -713,12 +713,10 @@ namespace GameSrv.RobotPlay
                         {
                             break;
                         }
-
                         VisibleMapItem visibleMapItem;
                         try
                         {
                             visibleMapItem = VisibleItems[position];
-                            nVisibleFlag = visibleMapItem.VisibleFlag;
                         }
                         catch
                         {
@@ -758,7 +756,6 @@ namespace GameSrv.RobotPlay
                         try
                         {
                             mapEvent = VisibleEvents[position];
-                            nVisibleFlag = mapEvent.VisibleFlag;
                         }
                         catch
                         {
