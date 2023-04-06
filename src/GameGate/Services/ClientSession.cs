@@ -140,7 +140,12 @@ namespace GameGate.Services
             {
                 if (packetLen < GateShare.CommandFixedLength)
                 {
+                    if (packetLen == 1) //心跳包
+                    {
+                        return;
+                    }
                     _session.Socket.Close(); //关闭异常会话
+                    Logger.Info("异常消息封包，关闭会话...");
                     return;
                 }
 

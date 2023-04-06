@@ -223,7 +223,7 @@ namespace GameGate.Services
             else
             {
                 token.Socket.Close();
-                _logger.Trace("非法攻击: " + sRemoteAddress);
+                _logger.Debug("非法攻击: " + sRemoteAddress);
             }
         }
     }
