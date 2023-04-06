@@ -796,12 +796,11 @@ namespace SystemModule
         /// <summary>
         /// 更新自身视野对象
         /// </summary>
-        public const byte RM_UPDATEVISIBLE = 0x01;
-
+        public const int RM_UPDATEVIEWRANGE = 60000;
         /// <summary>
         /// 玩家杀死怪物触发消息
         /// </summary>
-        public const int PL_KILLMONSTERMESSAGE = 60001;
+        public const int RM_PLAYERKILLMONSTER = 60001;
 
         public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series)
         {

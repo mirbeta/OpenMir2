@@ -2026,7 +2026,7 @@ namespace GameSrv.Player
                     ClientMsg = Messages.MakeMessage(Messages.SM_SELLOFFBUY_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam);
                     SendSocket(ClientMsg, processMsg.Msg);
                     break;
-                case Messages.PL_KILLMONSTERMESSAGE:
+                case Messages.RM_PLAYERKILLMONSTER:
                     KillTargetTrigger(processMsg.wParam);
                     break;
                 default:

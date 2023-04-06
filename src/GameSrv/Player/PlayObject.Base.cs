@@ -2752,7 +2752,7 @@ namespace GameSrv.Player {
                                                     {
                                                         if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange))
                                                         {
-                                                            M2Share.ActorMgr.SendMessage(baseObject.ActorId, Messages.RM_UPDATEVISIBLE, this.ActorId, 0, 0, 0, "");// 发送消息更新对方的视野
+                                                            M2Share.ActorMgr.SendMessage(baseObject.ActorId, Messages.RM_UPDATEVIEWRANGE, this.ActorId, 0, 0, 0, "");// 发送消息更新对方的视野
                                                         }
                                                     }
                                                 }

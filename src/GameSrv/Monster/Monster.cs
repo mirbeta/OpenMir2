@@ -85,7 +85,7 @@ namespace GameSrv.Monster {
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            if (processMsg.wIdent == Messages.RM_UPDATEVISIBLE)
+            if (processMsg.wIdent == Messages.RM_UPDATEVIEWRANGE)
             {
                 UpdateMonsterVisible(processMsg.wParam);
                 return true;

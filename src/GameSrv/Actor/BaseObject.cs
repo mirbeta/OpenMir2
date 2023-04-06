@@ -3585,23 +3585,14 @@ namespace GameSrv.Actor
 
         private void KillFunc()
         {
-            const string sExceptionMsg = "[Exception] PlayObject::KillFunc";
-            try
+            if (ExpHitter != null && ExpHitter.IsSlave)//如果是角色下属杀死对象
             {
-                if (ExpHitter != null && ExpHitter.IsSlave)//如果是角色下属杀死对象
-                {
-                    ExpHitter.Master.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
-                    return;
-                }
-                if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
-                {
-                    ExpHitter.SendSelfMsg(Messages.PL_KILLMONSTERMESSAGE, this.ActorId, 0, 0, 0, "");
-                }
+                ExpHitter.Master.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
+                return;
             }
-            catch (Exception e)
+            if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                ExpHitter.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
             }
         }
 
