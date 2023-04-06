@@ -78,16 +78,8 @@ namespace GameSrv.World
                     {
                         if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime)
                         {
-                            //if ((HUtil32.GetTickCount() - merchantNpc.SearchTick) > merchantNpc.SearchTime)
-                            //{
-                            //    merchantNpc.SearchTick = HUtil32.GetTickCount();
-                            //   // merchantNpc.SearchViewRange();
-                            //}
-                            if ((HUtil32.GetTickCount() - merchantNpc.RunTick) > merchantNpc.RunTime)
-                            {
-                                merchantNpc.RunTick = dwCurrTick;
-                                merchantNpc.Run();
-                            }
+                            merchantNpc.RunTick = dwCurrTick;
+                            merchantNpc.Run();
                         }
                     }
                     else
@@ -132,29 +124,20 @@ namespace GameSrv.World
             var boProcessLimit = false;
             try
             {
-                var dwCurrTick = HUtil32.GetTickCount();
                 for (var i = NpcPosition; i < QuestNpcList.Count; i++)
                 {
-                    var npc = QuestNpcList[i];
-                    if (!npc.Ghost)
+                    var normNpc = QuestNpcList[i];
+                    if (!normNpc.Ghost)
                     {
-                        if ((dwCurrTick - npc.RunTick) > npc.RunTime)
+                        if ((HUtil32.GetTickCount() - normNpc.RunTick) > normNpc.RunTime)
                         {
-                            //if ((HUtil32.GetTickCount() - npc.SearchTick) > npc.SearchTime)
-                            //{
-                            //    npc.SearchTick = HUtil32.GetTickCount();
-                            //    npc.SearchViewRange();
-                            //}
-                            if ((dwCurrTick - npc.RunTick) > npc.RunTime)
-                            {
-                                npc.RunTick = dwCurrTick;
-                                npc.Run();
-                            }
+                            normNpc.RunTick = HUtil32.GetTickCount();
+                            normNpc.Run();
                         }
                     }
                     else
                     {
-                        if ((HUtil32.GetTickCount() - npc.GhostTick) > 60 * 1000)
+                        if ((HUtil32.GetTickCount() - normNpc.GhostTick) > 60 * 1000)
                         {
                             QuestNpcList.RemoveAt(i);
                             break;
@@ -205,7 +188,6 @@ namespace GameSrv.World
             var normNpc = M2Share.ActorMgr.Get(npcId);
             return (T)Convert.ChangeType(normNpc, typeof(T));
         }
-
 
         public void AddMerchant(Merchant merchant)
         {

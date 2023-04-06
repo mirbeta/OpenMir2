@@ -275,7 +275,7 @@ namespace GameSrv.World {
                                                 if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
                                                 {
                                                     monster.SearchTick = HUtil32.GetTickCount();
-                                                    //怪物主动搜索视觉范围，修改为被动搜索，能够降低CPU和内存使用率，从而提升运行处理效率
+                                                    //怪物主动搜索视觉范围，修改为人物视野被动激活，从而大幅度降低CPU使用率
                                                     //区分哪些怪物是主动攻击，哪些怪物是被动攻击
                                                     //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
                                                     //其余怪物均为主动攻击
