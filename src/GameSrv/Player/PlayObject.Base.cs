@@ -2763,7 +2763,6 @@ namespace GameSrv.Player {
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                         {
                                             cellInfo.Remove(nIdx);
-                                            M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
