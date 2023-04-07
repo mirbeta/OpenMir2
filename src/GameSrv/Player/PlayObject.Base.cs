@@ -1741,21 +1741,29 @@ namespace GameSrv.Player {
             }
         }
 
-        public override bool IsProperTarget(BaseObject baseObject) {
-            bool result = base.IsProperTarget(baseObject);
-            if (!result) {
-                if (baseObject.Race == ActorRace.Play) {
-                    result = IsProtectTarget(baseObject);
+        public override bool IsProperTarget(BaseObject baseObject)
+        {
+            var result = base.IsProperTarget(baseObject);
+            if (!result)
+            {
+                if (baseObject.Race == ActorRace.Play)
+                {
+                    return IsProtectTarget(baseObject);
                 }
-                if ((baseObject != null) && (baseObject.Master != null) && (baseObject.Race != ActorRace.Play)) {
-                    if (baseObject.Master == this) {
-                        if (AttatckMode != AttackMode.HAM_ALL) {
-                            result = false;
+                if ((baseObject.Master != null) && (baseObject.Race != ActorRace.Play))
+                {
+                    if (baseObject.Master == this)
+                    {
+                        if (AttatckMode != AttackMode.HAM_ALL)
+                        {
+                            return false;
                         }
                     }
-                    else {
+                    else
+                    {
                         result = IsAttackTarget(baseObject.Master);
-                        if (InSafeZone() || baseObject.InSafeZone()) {
+                        if (InSafeZone() || baseObject.InSafeZone())
+                        {
                             result = false;
                         }
                     }
