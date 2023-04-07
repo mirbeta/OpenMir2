@@ -3016,6 +3016,14 @@ namespace GameSrv.Player {
             }
         }
 
+        protected override void KickException()
+        {
+            MapName = M2Share.Config.HomeMap;
+            CurrX = M2Share.Config.HomeX;
+            CurrY = M2Share.Config.HomeY;
+            BoEmergencyClose = true;
+        }
+
         /// <summary>
         /// 显示玩家名字
         /// </summary>

@@ -723,7 +723,6 @@ namespace GameSrv.Actor
         {
             short n20 = 0;
             short n24 = 0;
-            bool walkSuccess;
             const string sExceptionMsg = "[Exception] TBaseObject::WalkTo";
             bool result = false;
             if (HolySeize)
@@ -774,7 +773,7 @@ namespace GameSrv.Actor
                 }
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
-                    walkSuccess = true;
+                    var walkSuccess = true;
                     if (BoFearFire && !Envir.CanSafeWalk(newX, newY))
                     {
                         walkSuccess = false;
@@ -2361,21 +2360,11 @@ namespace GameSrv.Actor
             SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
-        protected void KickException()
+        protected virtual void KickException()
         {
-            if (Race == ActorRace.Play)
-            {
-                MapName = M2Share.Config.HomeMap;
-                CurrX = M2Share.Config.HomeX;
-                CurrY = M2Share.Config.HomeY;
-                ((PlayObject)this).BoEmergencyClose = true;
-            }
-            else
-            {
-                Death = true;
-                DeathTick = HUtil32.GetTickCount();
-                MakeGhost();
-            }
+            Death = true;
+            DeathTick = HUtil32.GetTickCount();
+            MakeGhost();
         }
 
         protected bool Walk(int nIdent)
@@ -2393,7 +2382,7 @@ namespace GameSrv.Actor
                 {
                     return true;
                 }
-                ref MapCellInfo cellInfo = ref Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
+                MapCellInfo cellInfo = Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
