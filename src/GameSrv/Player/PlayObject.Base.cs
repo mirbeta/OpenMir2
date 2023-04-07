@@ -4529,30 +4529,35 @@ namespace GameSrv.Player {
             }
         }
 
-        private void DelMember(PlayObject baseObject) {
-            if (GroupOwner != baseObject.ActorId) {
-                for (int i = 0; i < GroupMembers.Count; i++) {
-                    if (GroupMembers[i] == baseObject) {
+        private void DelMember(PlayObject baseObject)
+        {
+            if (GroupOwner != baseObject.ActorId)
+            {
+                for (int i = 0; i < GroupMembers.Count; i++)
+                {
+                    if (GroupMembers[i] == baseObject)
+                    {
                         baseObject.LeaveGroup();
                         GroupMembers.RemoveAt(i);
                         break;
                     }
                 }
             }
-            else {
-                for (int i = GroupMembers.Count - 1; i >= 0; i--) {
+            else
+            {
+                for (int i = GroupMembers.Count - 1; i >= 0; i--)
+                {
                     GroupMembers[i].LeaveGroup();
                     GroupMembers.RemoveAt(i);
                 }
             }
-            if (Race == ActorRace.Play) {
-                PlayObject playObject = this;
-                if (!playObject.CancelGroup()) {
-                    playObject.SendDefMessage(Messages.SM_GROUPCANCEL, 0, 0, 0, 0, "");
-                }
-                else {
-                    playObject.SendGroupMembers();
-                }
+            if (!this.CancelGroup())
+            {
+                this.SendDefMessage(Messages.SM_GROUPCANCEL, 0, 0, 0, 0, "");
+            }
+            else
+            {
+                this.SendGroupMembers();
             }
         }
 
@@ -4562,7 +4567,6 @@ namespace GameSrv.Player {
                 return false;
             }
             PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-
             for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++) {
                 if (groupOwnerPlay.GroupMembers[i] == target) {
                     result = true;
