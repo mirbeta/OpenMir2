@@ -220,10 +220,15 @@ namespace GameSrv.Maps {
         }
 
         public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success) {
-            ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
-            if (cellInfo.Valid) {
-                success = true;
-                return ref cellInfo;
+            ref MapCellInfo cellInfo = ref _cellArray[0];
+            if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
+            {
+                cellInfo = ref _cellArray[nX * Height + nY];
+                if (cellInfo.Valid)
+                {
+                    success = true;
+                    return ref cellInfo;
+                }
             }
             success = false;
             return ref cellInfo;
