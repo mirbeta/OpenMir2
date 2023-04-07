@@ -3,7 +3,7 @@ using GameSrv.Maps;
 
 namespace GameSrv.Event
 {
-    public class EventInfo : IDisposable
+    public class MapEvent : IDisposable
     {
         /// <summary>
         /// 事件唯一ID
@@ -54,7 +54,7 @@ namespace GameSrv.Event
         /// </summary>
         public bool IsDispose;
 
-        public EventInfo(Envirnoment envir, short ntX, short ntY, byte nType, int dwETime, bool boVisible)
+        public MapEvent(Envirnoment envir, short ntX, short ntY, byte nType, int dwETime, bool boVisible)
         {
             Id = M2Share.ActorMgr.GetNextIdentity();
             OpenStartTick = HUtil32.GetTickCount();
@@ -84,7 +84,7 @@ namespace GameSrv.Event
         /// <summary>
         /// 为了防止忘记显式的调用Dispose方法
         /// </summary>
-        ~EventInfo()
+        ~MapEvent()
         {
             //必须为false
             Dispose(false);

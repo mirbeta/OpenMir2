@@ -2428,11 +2428,11 @@ namespace GameSrv.Actor
                                 break;
                             case CellType.Event:
                                 {
-                                    EventInfo mapEvent = null;
-                                    EventInfo owinEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
+                                    MapEvent mapEvent = null;
+                                    MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                     if (owinEvent.OwnBaseObject != null)
                                     {
-                                        mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
+                                        mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                     }
                                     if (mapEvent != null)
                                     {

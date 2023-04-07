@@ -466,7 +466,7 @@ namespace GameSrv.RobotPlay
                     VisibleItems[i].VisibleFlag = 0;
                 }
             }
-            EventInfo mapEvent;
+            MapEvent mapEvent;
             try
             {
                 var nStartX = (short)(CurrX - ViewRange);
@@ -589,7 +589,7 @@ namespace GameSrv.RobotPlay
                                             {
                                                 if (cellObject.CellObjId < 0)
                                                 {
-                                                    mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
+                                                    mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                                     UpdateVisibleEvent(nX, nY, mapEvent);
                                                 }
                                             }

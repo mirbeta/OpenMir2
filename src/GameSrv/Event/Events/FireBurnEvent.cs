@@ -5,7 +5,7 @@ namespace GameSrv.Event.Events
     /// <summary>
     /// 火墙
     /// </summary>
-    public class FireBurnEvent : EventInfo
+    public class FireBurnEvent : MapEvent
     {
         /// <summary>
         /// 火墙运行时间

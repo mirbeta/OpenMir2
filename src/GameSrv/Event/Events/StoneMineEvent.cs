@@ -4,7 +4,7 @@ namespace GameSrv.Event.Events {
     /// <summary>
     /// 矿石事件
     /// </summary>
-    public class StoneMineEvent : EventInfo {
+    public class StoneMineEvent : MapEvent {
         private readonly int AddStoneCount;
         public int MineCount;
         public int AddStoneMineTick;

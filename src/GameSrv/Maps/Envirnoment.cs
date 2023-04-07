@@ -936,7 +936,7 @@ namespace GameSrv.Maps {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event) {
-                        EventInfo owinEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
+                        MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                         if (owinEvent?.Damage > 0) {
                             result = false;
                         }
@@ -1146,7 +1146,7 @@ namespace GameSrv.Maps {
             return baseObjectList.Count;
         }
 
-        public EventInfo GetEvent(int nX, int nY) {
+        public MapEvent GetEvent(int nX, int nY) {
             Bo2C = false;
             MapCellInfo cellInfo = default;
             bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
@@ -1154,7 +1154,7 @@ namespace GameSrv.Maps {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event) {
-                        return M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId); ;
+                        return M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId); ;
                     }
                 }
             }

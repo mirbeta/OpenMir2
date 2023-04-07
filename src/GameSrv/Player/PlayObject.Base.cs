@@ -200,7 +200,7 @@ namespace GameSrv.Player
         /// <summary>
         /// 可见事件列表
         /// </summary>
-        internal readonly IList<EventInfo> VisibleEvents;
+        internal readonly IList<MapEvent> VisibleEvents;
         /// <summary>
         /// 可见物品列表
         /// </summary>
@@ -1032,7 +1032,7 @@ namespace GameSrv.Player
             QuestFlag = new byte[128];
             MagicArr = new UserMagic[50];
             GroupMembers = new List<PlayObject>();
-            VisibleEvents = new List<EventInfo>();
+            VisibleEvents = new List<MapEvent>();
             VisibleItems = new List<VisibleMapItem>();
             MapMoveTick = HUtil32.GetTickCount();
             RandomNo = M2Share.RandomNumber.Random(999999).ToString();
@@ -3051,7 +3051,7 @@ namespace GameSrv.Player
                                         }
                                         break;
                                     case CellType.Event:
-                                        EventInfo mapEvent = M2Share.CellObjectMgr.Get<EventInfo>(cellObject.CellObjId);
+                                        MapEvent mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                         if (mapEvent.Visible)
                                         {
                                             UpdateVisibleEvent(nX, nY, mapEvent);
@@ -3138,7 +3138,7 @@ namespace GameSrv.Player
                     {
                         break;
                     }
-                    EventInfo mapEvent = VisibleEvents[I];
+                    MapEvent mapEvent = VisibleEvents[I];
                     if (mapEvent.VisibleFlag == VisibleFlag.Visible)
                     {
                         SendMsg(this, Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
@@ -5244,12 +5244,12 @@ namespace GameSrv.Player
             VisibleItems.Add(visibleMapItem);
         }
 
-        protected void UpdateVisibleEvent(short wX, short wY, EventInfo MapEvent)
+        protected void UpdateVisibleEvent(short wX, short wY, MapEvent MapEvent)
         {
             bool boIsVisible = false;
             for (int i = 0; i < VisibleEvents.Count; i++)
             {
-                EventInfo mapEvent = VisibleEvents[i];
+                MapEvent mapEvent = VisibleEvents[i];
                 if (mapEvent == MapEvent)
                 {
                     mapEvent.VisibleFlag = VisibleFlag.Invisible;

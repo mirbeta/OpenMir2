@@ -6,23 +6,23 @@ namespace GameSrv.Event
     public class EventManager
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<EventInfo> _eventList;
-        private readonly IList<EventInfo> _closedEventList;
+        private readonly IList<MapEvent> _eventList;
+        private readonly IList<MapEvent> _closedEventList;
 
         public EventManager()
         {
-            _eventList = new List<EventInfo>();
-            _closedEventList = new List<EventInfo>();
+            _eventList = new List<MapEvent>();
+            _closedEventList = new List<MapEvent>();
         }
 
-        public IList<EventInfo> Events => _eventList;
-        public IList<EventInfo> ClosedEvents => _closedEventList;
+        public IList<MapEvent> Events => _eventList;
+        public IList<MapEvent> ClosedEvents => _closedEventList;
         
-        public EventInfo GetEvent(Envirnoment envir, int nX, int nY, int nType)
+        public MapEvent GetEvent(Envirnoment envir, int nX, int nY, int nType)
         {
             for (int i = _eventList.Count - 1; i >= 0; i--)
             {
-                EventInfo currentEvent = _eventList[i];
+                MapEvent currentEvent = _eventList[i];
                 if (currentEvent.EventType == nType)
                 {
                     if (currentEvent.Envir == envir && currentEvent.nX == nX && currentEvent.nY == nY)
@@ -34,7 +34,7 @@ namespace GameSrv.Event
             return null;
         }
 
-        public void AddEvent(EventInfo @event)
+        public void AddEvent(MapEvent @event)
         {
             _eventList.Add(@event);
         }
