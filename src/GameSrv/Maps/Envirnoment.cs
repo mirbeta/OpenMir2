@@ -155,7 +155,7 @@ namespace GameSrv.Maps {
                             cellObject.ActorObject = true;
                         }
                         cellInfo.Add(cellObject);
-                        if (cellObject.CellType is CellType.Door or CellType.Item or CellType.MapRoute)
+                        if (cellObject.CellType is CellType.Door or CellType.Item or CellType.MapRoute or CellType.Event)
                         {
                             M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapObject);
                         }
