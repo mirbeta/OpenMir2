@@ -3422,14 +3422,11 @@ namespace GameSrv.Player
                         {
                             if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, ActorId))
                             {
-                                if (Race == ActorRace.Play)
+                                delList.Add(new DeleteItem()
                                 {
-                                    delList.Add(new DeleteItem()
-                                    {
-                                        ItemName = M2Share.WorldEngine.GetStdItemName(ItemList[i].Index),
-                                        MakeIndex = ItemList[i].MakeIndex
-                                    });
-                                }
+                                    ItemName = M2Share.WorldEngine.GetStdItemName(ItemList[i].Index),
+                                    MakeIndex = ItemList[i].MakeIndex
+                                });
                                 Dispose(ItemList[i]);
                                 ItemList.RemoveAt(i);
                             }
@@ -3993,19 +3990,15 @@ namespace GameSrv.Player
             {
                 UserItem useItems = new UserItem(UseItems[ItemLocation.Weapon]);
                 CheckWeaponUpgradeStatus(ref UseItems[ItemLocation.Weapon]);
-                StdItem StdItem;
+                StdItem StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
                 if (UseItems[ItemLocation.Weapon].Index == 0)
                 {
                     SysMsg(Settings.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
                     SendDelItems(useItems);
                     SendRefMsg(Messages.RM_BREAKWEAPON, 0, 0, 0, 0, "");
-                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
-                    if (StdItem != null)
+                    if (StdItem?.NeedIdentify == 1)
                     {
-                        if (StdItem.NeedIdentify == 1)
-                        {
-                            M2Share.EventSource.AddEventLog(21, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
-                        }
+                        M2Share.EventSource.AddEventLog(21, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem?.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     FeatureChanged();
                 }
@@ -4013,7 +4006,6 @@ namespace GameSrv.Player
                 {
                     SysMsg(Settings.TheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
                     SendUpdateItem(UseItems[ItemLocation.Weapon]);
-                    StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
                     if (StdItem.NeedIdentify == 1)
                     {
                         M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
