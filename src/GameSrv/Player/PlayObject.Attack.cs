@@ -168,14 +168,12 @@ namespace GameSrv.Player {
             }
         }
 
-        private void AttackSuccess(short wHitMode, ushort nPower, bool canHit, BaseObject AttackTarget) {
-            if (AttackTarget == null) {
+        private void AttackSuccess(short wHitMode, ushort nPower, bool canHit, BaseObject attackTarget) {
+            if (attackTarget == null) {
                 return;
             }
-            if (AttackTarget.Race == ActorRace.Play && Race == ActorRace.Play) {
-                if (!((PlayObject)AttackTarget).UnParalysis && Paralysis && (M2Share.RandomNumber.Random(AttackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0)) {
-                    AttackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
-                }
+            if (!attackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(attackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0)) {
+                attackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
             }
             ushort nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
             if ((nWeaponDamage > 0) && (UseItems[ItemLocation.Weapon] != null) && (UseItems[ItemLocation.Weapon].Index > 0)) {
@@ -234,14 +232,14 @@ namespace GameSrv.Player {
                     case ActorRace.Play:
                         if (IsRobot) {
                             if (((RobotPlayer)this).Abil.Level <= M2Share.Config.MonHptoExpLevel) {
-                                if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName)) {
+                                if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName)) {
                                     ((RobotPlayer)this).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                 }
                             }
                         }
                         else {
                             if (Abil.Level <= M2Share.Config.MonHptoExpLevel) {
-                                if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName)) {
+                                if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName)) {
                                     GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                 }
                             }
@@ -251,14 +249,14 @@ namespace GameSrv.Player {
                         if (Master != null) {
                             if (Master.IsRobot) {
                                 if (((RobotPlayer)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel) {
-                                    if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName)) {
+                                    if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName)) {
                                         ((RobotPlayer)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                     }
                                 }
                             }
                             else {
                                 if (((PlayObject)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel) {
-                                    if (!M2Share.GetNoHptoexpMonList(AttackTarget.ChrName)) {
+                                    if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName)) {
                                         ((PlayObject)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                     }
                                 }

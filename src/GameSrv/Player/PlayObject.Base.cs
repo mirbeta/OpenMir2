@@ -464,10 +464,6 @@ namespace GameSrv.Player
         /// </summary>
         internal bool Paralysis = false;
         /// <summary>
-        /// 防麻痹
-        /// </summary>
-        internal bool UnParalysis = false;
-        /// <summary>
         /// 火焰戒指
         /// </summary>
         private bool FlameRing = false;

@@ -87,6 +87,10 @@ namespace GameSrv.Actor
         /// </summary>
         internal int[] StatusArrTick;
         /// <summary>
+        /// 防麻痹
+        /// </summary>
+        internal bool UnParalysis = false;
+        /// <summary>
         /// 外观代码
         /// </summary>
         public ushort Appr;
