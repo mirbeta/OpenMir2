@@ -54,8 +54,10 @@ namespace GameSrv.Actor {
 
         protected virtual void Attack(BaseObject targetObject, byte nDir) {
             var nPower = GetBaseAttackPoewr();
-            AttackDir(targetObject, nPower, nDir);
-            SendAttackMsg(Messages.RM_HIT, Direction, CurrX, CurrY);
+            if (AttackDir(targetObject, nPower, nDir))
+            {
+                SendAttackMsg(Messages.RM_HIT, Direction, CurrX, CurrY);
+            }
         }
 
         protected void GotoTargetXy() {

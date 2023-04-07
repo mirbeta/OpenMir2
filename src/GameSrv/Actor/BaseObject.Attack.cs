@@ -2,11 +2,15 @@
 
 namespace GameSrv.Actor {
     public partial class BaseObject {
-        protected void AttackDir(BaseObject attackTarget, ushort nPower, byte nDir) {
+        protected bool AttackDir(BaseObject attackTarget, ushort nPower, byte nDir)
+        {
             Direction = nDir;
-            if (_Attack(nPower, attackTarget)) {
+            if (_Attack(nPower, attackTarget))
+            {
                 SetTargetCreat(attackTarget);
+                return true;
             }
+            return false;
         }
 
         /// <summary>

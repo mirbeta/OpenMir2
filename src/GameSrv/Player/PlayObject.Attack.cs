@@ -56,7 +56,7 @@ namespace GameSrv.Player {
             bool canHit = false;
             ushort nPower = GetAttackPowerHit(wHitMode, GetBaseAttackPoewr(), attackTarget, ref canHit);
             SkillAttackDamage(wHitMode, nPower);
-            AttackDir(attackTarget, nPower, nDir);
+            if (!AttackDir(attackTarget, nPower, nDir)) return;
             SendAttackMsg(GetHitMode(wHitMode), Direction, CurrX, CurrY);
             AttackSuccess(wHitMode, nPower, canHit, attackTarget);
         }
