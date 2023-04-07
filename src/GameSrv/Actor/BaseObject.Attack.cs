@@ -9,7 +9,12 @@ namespace GameSrv.Actor {
             }
         }
 
-        internal ushort GetBaseAttackPoewr() {
+        /// <summary>
+        /// 基础攻击力
+        /// </summary>
+        /// <returns></returns>
+        internal ushort GetBaseAttackPoewr()
+        {
             return GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
         }
 
