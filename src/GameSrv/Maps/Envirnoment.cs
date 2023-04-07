@@ -155,7 +155,7 @@ namespace GameSrv.Maps {
                             cellObject.ActorObject = true;
                         }
                         cellInfo.Add(cellObject);
-                        if (cellObject.CellType is CellType.Door or CellType.Item)
+                        if (cellObject.CellType is CellType.Door or CellType.Item or CellType.MapRoute)
                         {
                             M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapObject);
                         }
@@ -559,7 +559,7 @@ namespace GameSrv.Maps {
                     {
                         case CellType.Item:
                             return M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
-                        case CellType.Route:
+                        case CellType.MapRoute:
                             Bo2C = false;
                             break;
                         case CellType.Play:
@@ -1045,7 +1045,7 @@ namespace GameSrv.Maps {
                                 result = cellObject.CellObjId;
                                 nCount++;
                                 break;
-                            case CellType.Route:
+                            case CellType.MapRoute:
                                 Bo2C = false;
                                 break;
                             case CellType.Monster:

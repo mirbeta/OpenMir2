@@ -2394,8 +2394,8 @@ namespace GameSrv.Actor
                         }
                         switch (cellObject.CellType)
                         {
-                            case CellType.Route:
-                                GateObject mapRoute = M2Share.CellObjectMgr.Get<GateObject>(cellObject.CellObjId);
+                            case CellType.MapRoute:
+                                MapRouteItem mapRoute = M2Share.CellObjectMgr.Get<MapRouteItem>(cellObject.CellObjId);
                                 if (mapRoute.Envir != null)
                                 {
                                     if (Race == ActorRace.Play)

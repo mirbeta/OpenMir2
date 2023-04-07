@@ -102,14 +102,14 @@ namespace GameSrv.Maps {
             Envirnoment sEnvir = FindMap(sSMapNo);
             Envirnoment dEnvir = FindMap(sDMapNo);
             if (sEnvir != null && dEnvir != null) {
-                GateObject gateObj = new GateObject {
+                MapRouteItem gateObj = new MapRouteItem {
                     RouteId = M2Share.ActorMgr.GetNextIdentity(),
                     Flag = false,
                     Envir = dEnvir,
                     X = (short)nDMapX,
                     Y = (short)nDMapY
                 };
-                sEnvir.AddToMap(nSMapX, nSMapY, CellType.Route, gateObj.RouteId, gateObj);
+                sEnvir.AddToMap(nSMapX, nSMapY, CellType.MapRoute, gateObj.RouteId, gateObj);
                 result = true;
             }
             return result;

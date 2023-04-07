@@ -54,9 +54,9 @@ namespace GameSrv.Maps {
     }
 
     /// <summary>
-    /// 地图连接
+    /// 地图连接对象
     /// </summary>
-    public record struct GateObject {
+    public record struct MapRouteItem {
         public int RouteId;
         public Envirnoment Envir;
         public short X;
@@ -103,7 +103,7 @@ namespace GameSrv.Maps {
         /// <summary>
         /// 地图链接
         /// </summary>
-        Route = 4,
+        MapRoute = 4,
         /// <summary>
         /// 地图事件
         /// </summary>
