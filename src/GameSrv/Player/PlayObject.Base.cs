@@ -3268,33 +3268,29 @@ namespace GameSrv.Player
         /// <returns></returns>
         public override int GetFeature(BaseObject baseObject)
         {
-            if (Race == ActorRace.Play)
+            byte nDress = 0;
+            StdItem stdItem;
+            if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) // 衣服
             {
-                byte nDress = 0;
-                StdItem stdItem;
-                if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) // 衣服
+                stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
+                if (stdItem != null)
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
-                    if (stdItem != null)
-                    {
-                        nDress = (byte)(stdItem.Shape * 2);
-                    }
+                    nDress = (byte)(stdItem.Shape * 2);
                 }
-                PlayGender playGender = Gender;
-                nDress += (byte)playGender;
-                byte nWeapon = (byte)playGender;
-                if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Index > 0) // 武器
-                {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
-                    if (stdItem != null)
-                    {
-                        nWeapon += (byte)(stdItem.Shape * 2);
-                    }
-                }
-                byte nHair = (byte)(Hair * 2 + (byte)playGender);
-                return M2Share.MakeHumanFeature(0, nDress, nWeapon, nHair);
             }
-            return base.GetFeature(baseObject);
+            PlayGender playGender = Gender;
+            nDress += (byte)playGender;
+            byte nWeapon = (byte)playGender;
+            if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Index > 0) // 武器
+            {
+                stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+                if (stdItem != null)
+                {
+                    nWeapon += (byte)(stdItem.Shape * 2);
+                }
+            }
+            byte nHair = (byte)(Hair * 2 + (byte)playGender);
+            return M2Share.MakeHumanFeature(0, nDress, nWeapon, nHair);
         }
 
         public override void MakeGhost()
@@ -3534,26 +3530,23 @@ namespace GameSrv.Player
         {
             HitPlus = 0;
             HitDouble = 0;
-            if (Race == ActorRace.Play)
+            NakedAbility bonusTick = default;
+            switch (Job)
             {
-                NakedAbility bonusTick = default;
-                switch (Job)
-                {
-                    case PlayJob.Warrior:
-                        bonusTick = M2Share.Config.BonusAbilofWarr;
-                        HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-                        SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
-                        break;
-                    case PlayJob.Wizard:
-                        bonusTick = M2Share.Config.BonusAbilofWizard;
-                        HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-                        SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
-                        break;
-                    case PlayJob.Taoist:
-                        bonusTick = M2Share.Config.BonusAbilofTaos;
-                        SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
-                        break;
-                }
+                case PlayJob.Warrior:
+                    bonusTick = M2Share.Config.BonusAbilofWarr;
+                    HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                    SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                    break;
+                case PlayJob.Wizard:
+                    bonusTick = M2Share.Config.BonusAbilofWizard;
+                    HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                    SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                    break;
+                case PlayJob.Taoist:
+                    bonusTick = M2Share.Config.BonusAbilofTaos;
+                    SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
+                    break;
             }
             for (int i = 0; i < MagicList.Count; i++)
             {
