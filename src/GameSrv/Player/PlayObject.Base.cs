@@ -16,8 +16,10 @@ using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace GameSrv.Player {
-    public partial class PlayObject {
+namespace GameSrv.Player
+{
+    public partial class PlayObject
+    {
         /// <summary>
         /// 性别
         /// </summary>
@@ -854,7 +856,8 @@ namespace GameSrv.Player {
         public MarketUser MarketUser;
         public bool FlagReadyToSellCheck = false;
 
-        public PlayObject() {
+        public PlayObject()
+        {
             Race = ActorRace.Play;
             Hair = 0;
             Job = PlayJob.Warrior;
@@ -1035,51 +1038,67 @@ namespace GameSrv.Player {
             RandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
 
-        public override void Initialize() {
+        public override void Initialize()
+        {
             base.Initialize();
-            for (int i = 0; i < MagicList.Count; i++) {
-                if (MagicList[i].Level >= 4) {
+            for (int i = 0; i < MagicList.Count; i++)
+            {
+                if (MagicList[i].Level >= 4)
+                {
                     MagicList[i].Level = 0;
                 }
             }
             AddBodyLuck(0);
         }
 
-        private void SendNotice() {
+        private void SendNotice()
+        {
             //todo 优化
             List<string> loadList = new List<string>();
             M2Share.NoticeMgr.GetNoticeMsg("Notice", loadList);
             string sNoticeMsg = string.Empty;
-            if (loadList.Count > 0) {
-                for (int i = 0; i < loadList.Count; i++) {
+            if (loadList.Count > 0)
+            {
+                for (int i = 0; i < loadList.Count; i++)
+                {
                     sNoticeMsg = sNoticeMsg + loadList[i] + "\x20\x1B";
                 }
             }
             SendDefMessage(Messages.SM_SENDNOTICE, 2000, 0, 0, 0, sNoticeMsg.Replace("/r/n/r/n ", ""));
         }
 
-        public void RunNotice() {
+        public void RunNotice()
+        {
             const string sExceptionMsg = "[Exception] PlayObject::RunNotice";
-            if (BoEmergencyClose || BoKickFlag || BoSoftClose) {
-                if (BoKickFlag) {
+            if (BoEmergencyClose || BoKickFlag || BoSoftClose)
+            {
+                if (BoKickFlag)
+                {
                     SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
                 }
                 MakeGhost();
             }
-            else {
-                try {
-                    if (!IsSendNotice) {
+            else
+            {
+                try
+                {
+                    if (!IsSendNotice)
+                    {
                         SendNotice();
                         IsSendNotice = true;
                         WaitLoginNoticeOkTick = HUtil32.GetTickCount();
                     }
-                    else {
-                        if ((HUtil32.GetTickCount() - WaitLoginNoticeOkTick) > 10 * 1000) {
+                    else
+                    {
+                        if ((HUtil32.GetTickCount() - WaitLoginNoticeOkTick) > 10 * 1000)
+                        {
                             BoEmergencyClose = true;
                         }
                         ProcessMessage msg = default;
-                        while (GetMessage(ref msg)) {
-                            if (msg.wIdent == Messages.CM_LOGINNOTICEOK) {
+                        while (GetMessage(ref msg))
+                        {
+                            if (msg.wIdent == Messages.CM_LOGINNOTICEOK)
+                            {
                                 LoginNoticeOk = true;
                                 ClientTick = (short)msg.nParam1;
                                 SysMsg(ClientTick.ToString(), MsgColor.Red, MsgType.Notice);
@@ -1087,7 +1106,8 @@ namespace GameSrv.Player {
                         }
                     }
                 }
-                catch (Exception) {
+                catch (Exception)
+                {
                     M2Share.Logger.Error(sExceptionMsg);
                 }
             }
@@ -1096,15 +1116,18 @@ namespace GameSrv.Player {
         /// <summary>
         /// 发送登录消息
         /// </summary>
-        private void SendLogon() {
+        private void SendLogon()
+        {
             MessageBodyWL messageBodyWl = default;
             ClientMsg = Messages.MakeMessage(Messages.SM_LOGON, ActorId, CurrX, CurrY, HUtil32.MakeWord(Direction, Light));
             messageBodyWl.Param1 = GetFeatureToLong();
             messageBodyWl.Param2 = CharStatus;
-            if (AllowGroup) {
+            if (AllowGroup)
+            {
                 messageBodyWl.Tag1 = HUtil32.MakeLong(HUtil32.MakeWord(1, 0), GetFeatureEx());
             }
-            else {
+            else
+            {
                 messageBodyWl.Tag1 = 0;
             }
             messageBodyWl.Tag2 = 0;
@@ -1117,20 +1140,26 @@ namespace GameSrv.Player {
         /// <summary>
         /// 玩家登录
         /// </summary>
-        public void UserLogon() {
+        public void UserLogon()
+        {
             string sIPaddr = "127.0.0.1";
             const string sExceptionMsg = "[Exception] PlayObject::UserLogon";
             const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
-            try {
-                if (M2Share.Config.TestServer) {
-                    if (Abil.Level < M2Share.Config.TestLevel) {
+            try
+            {
+                if (M2Share.Config.TestServer)
+                {
+                    if (Abil.Level < M2Share.Config.TestLevel)
+                    {
                         Abil.Level = (byte)M2Share.Config.TestLevel;
                     }
-                    if (Gold < M2Share.Config.TestGold) {
+                    if (Gold < M2Share.Config.TestGold)
+                    {
                         Gold = M2Share.Config.TestGold;
                     }
                 }
-                if (M2Share.Config.TestServer || M2Share.Config.ServiceMode) {
+                if (M2Share.Config.TestServer || M2Share.Config.ServiceMode)
+                {
                     PayMent = 3;
                 }
                 MapMoveTick = HUtil32.GetTickCount();
@@ -1138,97 +1167,125 @@ namespace GameSrv.Player {
                 LogonTick = HUtil32.GetTickCount();
                 Initialize();
                 SendPriorityMsg(this, Messages.RM_LOGON, 0, 0, 0, 0, "", MessagePriority.High);
-                if (Abil.Level <= 7) {
-                    if (GetRangeHumanCount() >= 80) {
+                if (Abil.Level <= 7)
+                {
+                    if (GetRangeHumanCount() >= 80)
+                    {
                         MapRandomMove(Envir.MapName, 0);
                     }
                 }
-                if (DieInFight3Zone) {
+                if (DieInFight3Zone)
+                {
                     MapRandomMove(Envir.MapName, 0);
                 }
-                if (M2Share.WorldEngine.GetHumPermission(ChrName, ref sIPaddr, ref Permission)) {
-                    if (M2Share.Config.PermissionSystem) {
-                        if (!M2Share.CompareIPaddr(LoginIpAddr, sIPaddr)) {
+                if (M2Share.WorldEngine.GetHumPermission(ChrName, ref sIPaddr, ref Permission))
+                {
+                    if (M2Share.Config.PermissionSystem)
+                    {
+                        if (!M2Share.CompareIPaddr(LoginIpAddr, sIPaddr))
+                        {
                             SysMsg(sCheckIPaddrFail, MsgColor.Red, MsgType.Hint);
                             BoEmergencyClose = true;
                         }
                     }
                 }
                 GetStartPoint();
-                for (int i = MagicList.Count - 1; i >= 0; i--) {
+                for (int i = MagicList.Count - 1; i >= 0; i--)
+                {
                     CheckSeeHealGauge(MagicList[i]);
                 }
                 UserItem userItem;
-                if (IsNewHuman) {
+                if (IsNewHuman)
+                {
                     userItem = new UserItem();
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref userItem)) {
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref userItem))
+                    {
                         ItemList.Add(userItem);
                     }
-                    else {
+                    else
+                    {
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref userItem)) {
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref userItem))
+                    {
                         ItemList.Add(userItem);
                     }
-                    else {
+                    else
+                    {
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref userItem)) {
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref userItem))
+                    {
                         ItemList.Add(userItem);
                     }
-                    else {
+                    else
+                    {
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
                     string sItem = Gender == PlayGender.Man
                         ? M2Share.Config.ClothsMan
                         : M2Share.Config.ClothsWoman;
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(sItem, ref userItem)) {
+                    if (M2Share.WorldEngine.CopyToUserItemFromName(sItem, ref userItem))
+                    {
                         ItemList.Add(userItem);
                     }
-                    else {
+                    else
+                    {
                         Dispose(userItem);
                     }
                 }
                 // 检查背包中的物品是否合法
-                for (int i = ItemList.Count - 1; i >= 0; i--) {
+                for (int i = ItemList.Count - 1; i >= 0; i--)
+                {
                     if (!string.IsNullOrEmpty(M2Share.WorldEngine.GetStdItemName(ItemList[i].Index))) continue;
                     Dispose(ItemList[i]);
                     ItemList.RemoveAt(i);
                 }
                 // 检查人物身上的物品是否符合使用规则
-                if (M2Share.Config.CheckUserItemPlace) {
-                    for (int i = 0; i < UseItems.Length; i++) {
+                if (M2Share.Config.CheckUserItemPlace)
+                {
+                    for (int i = 0; i < UseItems.Length; i++)
+                    {
                         if (UseItems[i] == null || UseItems[i].Index <= 0) continue;
                         StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                        if (stdItem != null) {
-                            if (!M2Share.CheckUserItems(i, stdItem)) {
-                                if (!AddItemToBag(UseItems[i])) {
+                        if (stdItem != null)
+                        {
+                            if (!M2Share.CheckUserItems(i, stdItem))
+                            {
+                                if (!AddItemToBag(UseItems[i]))
+                                {
                                     ItemList.Insert(0, UseItems[i]);
                                 }
                                 UseItems[i].Index = 0;
                             }
                         }
-                        else {
+                        else
+                        {
                             UseItems[i].Index = 0;
                         }
                     }
                 }
                 // 检查背包中是否有复制品
-                for (int i = ItemList.Count - 1; i >= 0; i--) {
+                for (int i = ItemList.Count - 1; i >= 0; i--)
+                {
                     string sItemName = M2Share.WorldEngine.GetStdItemName(ItemList[i].Index);
-                    for (int j = i - 1; j >= 0; j--) {
+                    for (int j = i - 1; j >= 0; j--)
+                    {
                         UserItem userItem1 = ItemList[j];
-                        if (M2Share.WorldEngine.GetStdItemName(userItem1.Index) == sItemName && ItemList[i].MakeIndex == userItem1.MakeIndex) {
+                        if (M2Share.WorldEngine.GetStdItemName(userItem1.Index) == sItemName && ItemList[i].MakeIndex == userItem1.MakeIndex)
+                        {
                             ItemList.RemoveAt(j);
                             break;
                         }
                     }
                 }
-                for (int i = 0; i < StatusArrTick.Length; i++) {
-                    if (StatusTimeArr[i] > 0) {
+                for (int i = 0; i < StatusArrTick.Length; i++)
+                {
+                    if (StatusTimeArr[i] > 0)
+                    {
                         StatusArrTick[i] = HUtil32.GetTickCount();
                     }
                 }
@@ -1238,14 +1295,17 @@ namespace GameSrv.Player {
                 Abil.MaxExp = GetLevelExp(Abil.Level);// 登录重新取得升级所需经验值
                 WAbil.Exp = Abil.Exp;
                 WAbil.MaxExp = Abil.MaxExp;
-                if (BtB2 == 0) {
+                if (BtB2 == 0)
+                {
                     PkPoint = 0;
                     BtB2++;
                 }
-                if (Gold > M2Share.Config.HumanMaxGold * 2 && M2Share.Config.HumanMaxGold > 0) {
+                if (Gold > M2Share.Config.HumanMaxGold * 2 && M2Share.Config.HumanMaxGold > 0)
+                {
                     Gold = M2Share.Config.HumanMaxGold * 2;
                 }
-                if (!TryPlayMode) {
+                if (!TryPlayMode)
+                {
                     if (SoftVersionDate < M2Share.Config.SoftVersionDate)//登录版本号验证
                     {
                         SysMsg(Settings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
@@ -1254,10 +1314,12 @@ namespace GameSrv.Player {
                         BoEmergencyClose = true;
                         return;
                     }
-                    if (SoftVersionDateEx == 0 && M2Share.Config.boOldClientShowHiLevel) {
+                    if (SoftVersionDateEx == 0 && M2Share.Config.boOldClientShowHiLevel)
+                    {
                         SysMsg(Settings.ClientSoftVersionTooOld, MsgColor.Blue, MsgType.Hint);
                         SysMsg(Settings.DownLoadAndUseNewClient, MsgColor.Red, MsgType.Hint);
-                        if (!M2Share.Config.CanOldClientLogon) {
+                        if (!M2Share.Config.CanOldClientLogon)
+                        {
                             SysMsg(Settings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                             SysMsg(Settings.DownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
                             SysMsg(Settings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
@@ -1265,7 +1327,8 @@ namespace GameSrv.Player {
                             return;
                         }
                     }
-                    switch (AttatckMode) {
+                    switch (AttatckMode)
+                    {
                         case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
                             SysMsg(Settings.AttackModeOfAll, MsgColor.Green, MsgType.Hint);
                             break;
@@ -1289,11 +1352,14 @@ namespace GameSrv.Player {
                             break;
                     }
                     SysMsg(Settings.StartChangeAttackModeHelp, MsgColor.Green, MsgType.Hint);// 使用组合快捷键 CTRL-H 更改攻击...
-                    if (M2Share.Config.TestServer) {
+                    if (M2Share.Config.TestServer)
+                    {
                         SysMsg(Settings.StartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
-                    if (M2Share.WorldEngine.PlayObjectCount > M2Share.Config.TestUserLimit) {
-                        if (Permission < 2) {
+                    if (M2Share.WorldEngine.PlayObjectCount > M2Share.Config.TestUserLimit)
+                    {
+                        if (Permission < 2)
+                        {
                             SysMsg(Settings.OnlineUserFull, MsgColor.Red, MsgType.Hint);
                             SysMsg(Settings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
                             BoEmergencyClose = true;
@@ -1308,56 +1374,70 @@ namespace GameSrv.Player {
                 SendPriorityMsg(this, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(this, Messages.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
-                if (MyGuild != null) {
+                if (MyGuild != null)
+                {
                     GuildRankName = MyGuild.GetRankName(this, ref GuildRankNo);
-                    for (int i = MyGuild.GuildWarList.Count - 1; i >= 0; i--) {
+                    for (int i = MyGuild.GuildWarList.Count - 1; i >= 0; i--)
+                    {
                         SysMsg(MyGuild.GuildWarList[i] + " 正在与本行会进行行会战.", MsgColor.Green, MsgType.Hint);
                     }
                 }
                 RefShowName();
-                if (PayMent == 1) {
-                    if (!TryPlayMode) {
+                if (PayMent == 1)
+                {
+                    if (!TryPlayMode)
+                    {
                         SysMsg(Settings.YouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
                     }
                     GoldMax = M2Share.Config.HumanTryModeMaxGold;
-                    if (Abil.Level > M2Share.Config.TryModeLevel) {
+                    if (Abil.Level > M2Share.Config.TryModeLevel)
+                    {
                         SysMsg("测试状态可以使用到第 " + M2Share.Config.TryModeLevel, MsgColor.Red, MsgType.Hint);
                         SysMsg("链接中断，请到以下地址获得收费相关信息。(https://www.mir2.com)", MsgColor.Red, MsgType.Hint);
                         BoEmergencyClose = true;
                     }
                 }
-                if (PayMent == 3 && !TryPlayMode) {
+                if (PayMent == 3 && !TryPlayMode)
+                {
                     SysMsg(Settings.NowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
                 }
-                if (M2Share.Config.VentureServer) {
+                if (M2Share.Config.VentureServer)
+                {
                     SysMsg("当前服务器运行于冒险模式.", MsgColor.Green, MsgType.Hint);
                 }
-                if (MagicArr[MagicConst.SKILL_ERGUM] != null && !UseThrusting) {
+                if (MagicArr[MagicConst.SKILL_ERGUM] != null && !UseThrusting)
+                {
                     UseThrusting = true;
                     SendSocket("+LNG");
                 }
-                if (Envir.Flag.boNORECONNECT) {
+                if (Envir.Flag.boNORECONNECT)
+                {
                     MapRandomMove(Envir.Flag.sNoReConnectMap, 0);
                 }
                 if (CheckDenyLogon())// 如果人物在禁止登录列表里则直接掉线而不执行下面内容
                 {
                     return;
                 }
-                if (M2Share.ManageNPC != null) {
+                if (M2Share.ManageNPC != null)
+                {
                     M2Share.ManageNPC.GotoLable(this, "@Login", false);
                 }
                 FixedHideMode = false;
-                if (!string.IsNullOrEmpty(DearName)) {
+                if (!string.IsNullOrEmpty(DearName))
+                {
                     CheckMarry();
                 }
                 CheckMaster();
                 FilterSendMsg = M2Share.GetDisableSendMsgList(ChrName);
                 // 密码保护系统
-                if (M2Share.Config.PasswordLockSystem) {
-                    if (IsPasswordLocked) {
+                if (M2Share.Config.PasswordLockSystem)
+                {
+                    if (IsPasswordLocked)
+                    {
                         IsCanGetBackItem = !M2Share.Config.LockGetBackItemAction;
                     }
-                    if (M2Share.Config.LockHumanLogin && IsLockLogon && IsPasswordLocked) {
+                    if (M2Share.Config.LockHumanLogin && IsLockLogon && IsPasswordLocked)
+                    {
                         IsCanDeal = !M2Share.Config.LockDealAction;
                         IsCanDrop = !M2Share.Config.LockDropAction;
                         MBoCanUseItem = !M2Share.Config.LockUserItemAction;
@@ -1371,10 +1451,12 @@ namespace GameSrv.Player {
                         SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.LockLogon.CmdName, MsgColor.Red, MsgType.Hint);
                         SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
                     }
-                    if (!IsPasswordLocked) {
+                    if (!IsPasswordLocked)
+                    {
                         SysMsg(Format(Settings.PasswordNotSetMsg, CommandMgr.GameCommands.PasswordLock.CmdName), MsgColor.Red, MsgType.Hint);
                     }
-                    if (!IsLockLogon && IsPasswordLocked) {
+                    if (!IsLockLogon && IsPasswordLocked)
+                    {
                         SysMsg(Format(Settings.NotPasswordProtectMode, CommandMgr.GameCommands.LockLogon.CmdName), MsgColor.Red, MsgType.Hint);
                     }
                     SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName, MsgColor.Red, MsgType.Hint);
@@ -1386,7 +1468,8 @@ namespace GameSrv.Player {
                 AutoGetExpTick = HUtil32.GetTickCount();
                 GetSellOffGlod();// 检查是否有元宝寄售交易结束还没得到元宝
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 M2Share.Logger.Error(sExceptionMsg);
                 M2Share.Logger.Error(e.StackTrace);
             }
@@ -1397,46 +1480,57 @@ namespace GameSrv.Player {
         /// 使用祝福油
         /// </summary>
         /// <returns></returns>
-        private bool WeaptonMakeLuck() {
-            if (UseItems[ItemLocation.Weapon] == null || UseItems[ItemLocation.Weapon].Index <= 0) {
+        private bool WeaptonMakeLuck()
+        {
+            if (UseItems[ItemLocation.Weapon] == null || UseItems[ItemLocation.Weapon].Index <= 0)
+            {
                 return false;
             }
             int nRand = 0;
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
-            if (stdItem != null) {
+            if (stdItem != null)
+            {
                 nRand = Math.Abs(HUtil32.HiByte(stdItem.DC) - HUtil32.LoByte(stdItem.DC)) / 5;
             }
-            if (M2Share.RandomNumber.Random(M2Share.Config.WeaponMakeUnLuckRate) == 1) {
+            if (M2Share.RandomNumber.Random(M2Share.Config.WeaponMakeUnLuckRate) == 1)
+            {
                 MakeWeaponUnlock();
             }
-            else {
+            else
+            {
                 bool boMakeLuck = false;
-                if (UseItems[ItemLocation.Weapon].Desc[4] > 0) {
+                if (UseItems[ItemLocation.Weapon].Desc[4] > 0)
+                {
                     UseItems[ItemLocation.Weapon].Desc[4] -= 1;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint1) {
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint1)
+                {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1) {
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1)
+                {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1) {
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1)
+                {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                if (Race == ActorRace.Play) {
+                if (Race == ActorRace.Play)
+                {
                     RecalcAbilitys();
                     SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
                     SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
                 }
-                if (!boMakeLuck) {
+                if (!boMakeLuck)
+                {
                     SysMsg(Settings.WeaptonNotMakeLuck, MsgColor.Green, MsgType.Hint);
                 }
             }
@@ -1447,12 +1541,15 @@ namespace GameSrv.Player {
         /// 修复武器
         /// </summary>
         /// <returns></returns>
-        private bool RepairWeapon() {
-            if (UseItems[ItemLocation.Weapon] == null) {
+        private bool RepairWeapon()
+        {
+            if (UseItems[ItemLocation.Weapon] == null)
+            {
                 return false;
             }
             UserItem userItem = UseItems[ItemLocation.Weapon];
-            if (userItem.Index <= 0 || userItem.DuraMax <= userItem.Dura) {
+            if (userItem.Index <= 0 || userItem.DuraMax <= userItem.Dura)
+            {
                 return false;
             }
             userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / M2Share.Config.RepairItemDecDura);
@@ -1468,8 +1565,10 @@ namespace GameSrv.Player {
         /// 特修武器
         /// </summary>
         /// <returns></returns>
-        private bool SuperRepairWeapon() {
-            if (UseItems[ItemLocation.Weapon] == null || UseItems[ItemLocation.Weapon].Index <= 0) {
+        private bool SuperRepairWeapon()
+        {
+            if (UseItems[ItemLocation.Weapon] == null || UseItems[ItemLocation.Weapon].Index <= 0)
+            {
                 return false;
             }
             UseItems[ItemLocation.Weapon].Dura = UseItems[ItemLocation.Weapon].DuraMax;
@@ -1478,19 +1577,25 @@ namespace GameSrv.Player {
             return true;
         }
 
-        private void MakeWeaponUnlock() {
-            if (UseItems[ItemLocation.Weapon] == null) {
+        private void MakeWeaponUnlock()
+        {
+            if (UseItems[ItemLocation.Weapon] == null)
+            {
                 return;
             }
-            if (UseItems[ItemLocation.Weapon].Index <= 0) {
+            if (UseItems[ItemLocation.Weapon].Index <= 0)
+            {
                 return;
             }
-            if (UseItems[ItemLocation.Weapon].Desc[3] > 0) {
+            if (UseItems[ItemLocation.Weapon].Desc[3] > 0)
+            {
                 UseItems[ItemLocation.Weapon].Desc[3] -= 1;
                 SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
             }
-            else {
-                if (UseItems[ItemLocation.Weapon].Desc[4] < 10) {
+            else
+            {
+                if (UseItems[ItemLocation.Weapon].Desc[4] < 10)
+                {
                     UseItems[ItemLocation.Weapon].Desc[4]++;
                     SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
@@ -1700,7 +1805,7 @@ namespace GameSrv.Player {
                     AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
                 }
             }
-            
+
             if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
             {
                 if (killObject.Race != ActorRace.Play) //怪杀死玩家
@@ -1773,30 +1878,35 @@ namespace GameSrv.Player {
             return result;
         }
 
-        public override void Die() {
-            if (Race == ActorRace.Play) {
-                string tStr;
-                if (GroupOwner != 0) {
-                    PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                    groupOwnerPlay.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
-                }
-                if (LastHiter != null) {
-                    if (LastHiter.Race == ActorRace.Play) {
-                        tStr = LastHiter.ChrName;
-                    }
-                    else {
-                        tStr = '#' + LastHiter.ChrName;
-                    }
-                }
-                else {
-                    tStr = "####";
-                }
-                M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.Fight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
+        public override void Die()
+        {
+            string tStr;
+            if (GroupOwner != 0)
+            {
+                PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                groupOwnerPlay.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
             }
+            if (LastHiter != null)
+            {
+                if (LastHiter.Race == ActorRace.Play)
+                {
+                    tStr = LastHiter.ChrName;
+                }
+                else
+                {
+                    tStr = '#' + LastHiter.ChrName;
+                }
+            }
+            else
+            {
+                tStr = "####";
+            }
+            M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.Fight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
             base.Die();
         }
 
-        public override void RecalcAbilitys() {
+        public override void RecalcAbilitys()
+        {
             base.RecalcAbilitys();
             Luck = 0;
             Luck = (byte)(Luck + AddAbil.Luck);
@@ -2665,57 +2775,73 @@ namespace GameSrv.Player {
             }
         }
 
-        public override ushort GetAttackPower(int nBasePower, int nPower) {
-            if (nPower < 0) {
+        public override ushort GetAttackPower(int nBasePower, int nPower)
+        {
+            if (nPower < 0)
+            {
                 nPower = 0;
             }
             int result = 0;
-            if (Luck > 0) {
-                if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, Luck)) == 0) {
+            if (Luck > 0)
+            {
+                if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, Luck)) == 0)
+                {
                     result = nBasePower + nPower;
                 }
-                else {
+                else
+                {
                     result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
                 }
             }
-            else {
+            else
+            {
                 result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
-                if (Luck <= 0) {
-                    if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -Luck)) == 0) {
+                if (Luck <= 0)
+                {
+                    if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -Luck)) == 0)
+                    {
                         result = nBasePower;
                     }
                 }
             }
             result = HUtil32.Round(result * (PowerRate / 100));
-            if (BoPowerItem) {
+            if (BoPowerItem)
+            {
                 result = HUtil32.Round(PowerItem * result);
             }
-            if (AutoChangeColor) {
+            if (AutoChangeColor)
+            {
                 result = result * AutoChangeIdx + 1;
             }
-            if (FixColor) {
+            if (FixColor)
+            {
                 result = result * FixColorIdx + 1;
             }
             return (ushort)result;
         }
 
-        public override void StruckDamage(ushort nDamage) {
+        public override void StruckDamage(ushort nDamage)
+        {
             base.StruckDamage(nDamage);
             ushort nDam = (ushort)(M2Share.RandomNumber.Random(10) + 5);
-            if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0) {
+            if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
+            {
                 nDam = (ushort)HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
             }
             bool boRecalcAbi = false;
             ushort nDura;
             int nOldDura;
-            if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) {
+            if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0)
+            {
                 nDura = UseItems[ItemLocation.Dress].Dura;
                 nOldDura = HUtil32.Round(nDura / 1000);
                 nDura -= nDam;
-                if (nDura <= 0) {
+                if (nDura <= 0)
+                {
                     SendDelItems(UseItems[ItemLocation.Dress]);
                     StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
-                    if (stdItem.NeedIdentify == 1) {
+                    if (stdItem.NeedIdentify == 1)
+                    {
                         M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
                                                            ChrName + "\t" + stdItem.Name + "\t" +
                                                            UseItems[ItemLocation.Dress].MakeIndex + "\t"
@@ -2728,23 +2854,29 @@ namespace GameSrv.Player {
                     UseItems[ItemLocation.Dress].Dura = 0;
                     boRecalcAbi = true;
                 }
-                else {
+                else
+                {
                     UseItems[ItemLocation.Dress].Dura = nDura;
                 }
-                if (nOldDura != HUtil32.Round(nDura / 1000)) {
+                if (nOldDura != HUtil32.Round(nDura / 1000))
+                {
                     SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Dress, nDura, UseItems[ItemLocation.Dress].DuraMax, 0, "");
                 }
             }
 
-            for (int i = 0; i < UseItems.Length; i++) {
-                if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (M2Share.RandomNumber.Random(8) == 0)) {
+            for (int i = 0; i < UseItems.Length; i++)
+            {
+                if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (M2Share.RandomNumber.Random(8) == 0))
+                {
                     nDura = UseItems[i].Dura;
                     nOldDura = HUtil32.Round(nDura / 1000);
                     nDura -= nDam;
-                    if (nDura <= 0) {
+                    if (nDura <= 0)
+                    {
                         SendDelItems(UseItems[i]);
                         StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                        if (stdItem.NeedIdentify == 1) {
+                        if (stdItem.NeedIdentify == 1)
+                        {
                             M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
                                                    UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                         }
@@ -2754,15 +2886,18 @@ namespace GameSrv.Player {
                         UseItems[i].Dura = 0;
                         boRecalcAbi = true;
                     }
-                    else {
+                    else
+                    {
                         UseItems[i].Dura = nDura;
                     }
-                    if (nOldDura != HUtil32.Round(nDura / 1000)) {
+                    if (nOldDura != HUtil32.Round(nDura / 1000))
+                    {
                         SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
                     }
                 }
             }
-            if (boRecalcAbi) {
+            if (boRecalcAbi)
+            {
                 RecalcAbilitys();
                 SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
                 SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
@@ -3036,32 +3171,41 @@ namespace GameSrv.Player {
         /// 显示玩家名字
         /// </summary>
         /// <returns></returns>
-        public override string GetShowName() {
+        public override string GetShowName()
+        {
             string result = string.Empty;
             string sChrName = string.Empty;
             string sGuildName = string.Empty;
             string sDearName = string.Empty;
             string sMasterName = string.Empty;
             const string sExceptionMsg = "[Exception] PlayObject::GetShowName";
-            try {
-                if (MyGuild != null) {
+            try
+            {
+                if (MyGuild != null)
+                {
                     UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
-                    if (castle != null) {
+                    if (castle != null)
+                    {
                         sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
                         sGuildName = sGuildName.Replace("%guildname", MyGuild.GuildName);
                         sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                     }
-                    else {
+                    else
+                    {
                         castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea) {
+                        if (M2Share.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea)
+                        {
                             sGuildName = Settings.NoCastleGuildName.Replace("%guildname", MyGuild.GuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                         }
                     }
                 }
-                if (!M2Share.Config.ShowRankLevelName) {
-                    if (ReLevel > 0) {
-                        switch (Job) {
+                if (!M2Share.Config.ShowRankLevelName)
+                {
+                    if (ReLevel > 0)
+                    {
+                        switch (Job)
+                        {
                             case PlayJob.Warrior:
                                 sChrName = Settings.WarrReNewName.Replace("%chrname", ChrName);
                                 break;
@@ -3073,26 +3217,34 @@ namespace GameSrv.Player {
                                 break;
                         }
                     }
-                    else {
+                    else
+                    {
                         sChrName = ChrName;
                     }
                 }
-                else {
+                else
+                {
                     sChrName = Format(RankLevelName, ChrName);
                 }
-                if (!string.IsNullOrEmpty(MasterName)) {
-                    if (IsMaster) {
+                if (!string.IsNullOrEmpty(MasterName))
+                {
+                    if (IsMaster)
+                    {
                         sMasterName = Format(Settings.MasterName, MasterName);
                     }
-                    else {
+                    else
+                    {
                         sMasterName = Format(Settings.NoMasterName, MasterName);
                     }
                 }
-                if (!string.IsNullOrEmpty(DearName)) {
-                    if (Gender == PlayGender.Man) {
+                if (!string.IsNullOrEmpty(DearName))
+                {
+                    if (Gender == PlayGender.Man)
+                    {
                         sDearName = Format(Settings.ManDearName, DearName);
                     }
-                    else {
+                    else
+                    {
                         sDearName = Format(Settings.WoManDearName, DearName);
                     }
                 }
@@ -3102,7 +3254,8 @@ namespace GameSrv.Player {
                 sShowName = sShowName.Replace("%mastername", sMasterName);
                 result = sShowName;
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 M2Share.Logger.Error(sExceptionMsg);
                 M2Share.Logger.Error(e.Message);
             }
@@ -3113,14 +3266,17 @@ namespace GameSrv.Player {
         /// 计算角色外形代码
         /// </summary>
         /// <returns></returns>
-        public override int GetFeature(BaseObject baseObject) {
-            if (Race == ActorRace.Play) {
+        public override int GetFeature(BaseObject baseObject)
+        {
+            if (Race == ActorRace.Play)
+            {
                 byte nDress = 0;
                 StdItem stdItem;
                 if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) // 衣服
                 {
                     stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
-                    if (stdItem != null) {
+                    if (stdItem != null)
+                    {
                         nDress = (byte)(stdItem.Shape * 2);
                     }
                 }
@@ -3130,7 +3286,8 @@ namespace GameSrv.Player {
                 if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Index > 0) // 武器
                 {
                     stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
-                    if (stdItem != null) {
+                    if (stdItem != null)
+                    {
                         nWeapon += (byte)(stdItem.Shape * 2);
                     }
                 }
@@ -3140,31 +3297,41 @@ namespace GameSrv.Player {
             return base.GetFeature(baseObject);
         }
 
-        public override void MakeGhost() {
+        public override void MakeGhost()
+        {
             const string sExceptionMsg = "[Exception] PlayObject::MakeGhost";
-            try {
-                if (M2Share.HighLevelHuman == ActorId) {
+            try
+            {
+                if (M2Share.HighLevelHuman == ActorId)
+                {
                     M2Share.HighLevelHuman = 0;
                 }
-                if (M2Share.HighPKPointHuman == ActorId) {
+                if (M2Share.HighPKPointHuman == ActorId)
+                {
                     M2Share.HighPKPointHuman = 0;
                 }
-                if (M2Share.HighDCHuman == ActorId) {
+                if (M2Share.HighDCHuman == ActorId)
+                {
                     M2Share.HighDCHuman = 0;
                 }
-                if (M2Share.HighMCHuman == ActorId) {
+                if (M2Share.HighMCHuman == ActorId)
+                {
                     M2Share.HighMCHuman = 0;
                 }
-                if (M2Share.HighSCHuman == ActorId) {
+                if (M2Share.HighSCHuman == ActorId)
+                {
                     M2Share.HighSCHuman = 0;
                 }
-                if (M2Share.HighOnlineHuman == ActorId) {
+                if (M2Share.HighOnlineHuman == ActorId)
+                {
                     M2Share.HighOnlineHuman = 0;
                 }
                 // 人物下线后通知配偶，并把对方的相关记录清空
                 string sSayMsg;
-                if (DearHuman != null) {
-                    if (Gender == PlayGender.Man) {
+                if (DearHuman != null)
+                {
+                    if (Gender == PlayGender.Man)
+                    {
                         sSayMsg = Settings.ManLongOutDearOnlineMsg.Replace("%d", DearName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
@@ -3172,7 +3339,8 @@ namespace GameSrv.Player {
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                         DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                     }
-                    else {
+                    else
+                    {
                         sSayMsg = Settings.WoManLongOutDearOnlineMsg.Replace("%d", DearName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
@@ -3183,9 +3351,12 @@ namespace GameSrv.Player {
                     DearHuman.DearHuman = null;
                     DearHuman = null;
                 }
-                if (MasterHuman != null || MasterList.Count > 0) {
-                    if (IsMaster) {
-                        for (int i = MasterList.Count - 1; i >= 0; i--) {
+                if (MasterHuman != null || MasterList.Count > 0)
+                {
+                    if (IsMaster)
+                    {
+                        for (int i = MasterList.Count - 1; i >= 0; i--)
+                        {
                             PlayObject human = MasterList[i];
                             sSayMsg = Settings.MasterLongOutMasterListOnlineMsg.Replace("%s", ChrName);
                             sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
@@ -3195,8 +3366,10 @@ namespace GameSrv.Player {
                             human.MasterHuman = null;
                         }
                     }
-                    else {
-                        if (MasterHuman == null) {
+                    else
+                    {
+                        if (MasterHuman == null)
+                        {
                             return;
                         }
                         sSayMsg = Settings.MasterListLongOutMasterOnlineMsg.Replace("%d", MasterName);
@@ -3206,11 +3379,14 @@ namespace GameSrv.Player {
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                         MasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         // 如果为大徒弟则将对方的记录清空
-                        if (MasterHuman.MasterName == ChrName) {
+                        if (MasterHuman.MasterName == ChrName)
+                        {
                             MasterHuman.MasterHuman = null;
                         }
-                        for (int i = 0; i < MasterHuman.MasterList.Count; i++) {
-                            if (MasterHuman.MasterList[i] == this) {
+                        for (int i = 0; i < MasterHuman.MasterList.Count; i++)
+                        {
+                            if (MasterHuman.MasterList[i] == this)
+                            {
                                 MasterHuman.MasterList.RemoveAt(i);
                                 break;
                             }
@@ -3218,28 +3394,38 @@ namespace GameSrv.Player {
                     }
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 M2Share.Logger.Error(sExceptionMsg);
                 M2Share.Logger.Error(e.Message);
             }
             base.MakeGhost();
         }
 
-        internal override void ScatterBagItems(int itemOfCreat) {
+        internal override void ScatterBagItems(int itemOfCreat)
+        {
             const int dropWide = 2;
-            if (AngryRing || NoDropItem || Envir.Flag.NoDropItem) {
+            if (AngryRing || NoDropItem || Envir.Flag.NoDropItem)
+            {
                 return;// 不死戒指
             }
             const string sExceptionMsg = "[Exception] PlayObject::ScatterBagItems";
-            try {
-                if (ItemList.Count > 0) {
+            try
+            {
+                if (ItemList.Count > 0)
+                {
                     IList<DeleteItem> delList = new List<DeleteItem>();
                     bool boDropall = M2Share.Config.DieRedScatterBagAll && PvpLevel() >= 2;
-                    for (int i = ItemList.Count - 1; i >= 0; i--) {
-                        if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0) {
-                            if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, ActorId)) {
-                                if (Race == ActorRace.Play) {
-                                    delList.Add(new DeleteItem() {
+                    for (int i = ItemList.Count - 1; i >= 0; i--)
+                    {
+                        if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0)
+                        {
+                            if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, ActorId))
+                            {
+                                if (Race == ActorRace.Play)
+                                {
+                                    delList.Add(new DeleteItem()
+                                    {
                                         ItemName = M2Share.WorldEngine.GetStdItemName(ItemList[i].Index),
                                         MakeIndex = ItemList[i].MakeIndex
                                     });
@@ -3249,36 +3435,45 @@ namespace GameSrv.Player {
                             }
                         }
                     }
-                    if (delList.Count > 0) {
+                    if (delList.Count > 0)
+                    {
                         int objectId = HUtil32.Sequence();
                         M2Share.ActorMgr.AddOhter(objectId, delList);
                         SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                     }
                 }
             }
-            catch {
+            catch
+            {
                 M2Share.Logger.Error(sExceptionMsg);
             }
         }
 
-        protected override byte GetNameColor() {
+        protected override byte GetNameColor()
+        {
             byte pvpLevel = PvpLevel();
-            if (pvpLevel == 0) {
+            if (pvpLevel == 0)
+            {
                 return base.GetNameColor();
             }
             return pvpLevel >= 2 ? M2Share.Config.PKLevel2NameColor : M2Share.Config.PKLevel1NameColor;
         }
 
-        protected override byte GetChrColor(BaseObject baseObject) {
-            if (baseObject.Race == ActorRace.Play) {
+        protected override byte GetChrColor(BaseObject baseObject)
+        {
+            if (baseObject.Race == ActorRace.Play)
+            {
                 byte result = NameColor;
                 PlayObject targetObject = (PlayObject)baseObject;
-                if (targetObject.PvpLevel() < 2) {
-                    if (targetObject.PvpFlag) {
+                if (targetObject.PvpLevel() < 2)
+                {
+                    if (targetObject.PvpFlag)
+                    {
                         result = M2Share.Config.PKFlagNameColor;
                     }
                     int n10 = GetGuildRelation(this, targetObject);
-                    switch (n10) {
+                    switch (n10)
+                    {
                         case 1:
                         case 3:
                             result = M2Share.Config.AllyAndGuildNameColor;
@@ -3287,34 +3482,46 @@ namespace GameSrv.Player {
                             result = M2Share.Config.WarGuildNameColor;
                             break;
                     }
-                    if (targetObject.Envir.Flag.Fight3Zone) {
+                    if (targetObject.Envir.Flag.Fight3Zone)
+                    {
                         result = MyGuild == targetObject.MyGuild ? M2Share.Config.AllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
                     }
                 }
                 UserCastle castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
-                if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea) {
+                if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea)
+                {
                     result = M2Share.Config.InFreePKAreaNameColor;
                     GuildWarArea = true;
-                    if (MyGuild == null) {
+                    if (MyGuild == null)
+                    {
                         return result;
                     }
-                    if (castle.IsMasterGuild(MyGuild)) {
-                        if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild)) {
+                    if (castle.IsMasterGuild(MyGuild))
+                    {
+                        if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
+                        {
                             result = M2Share.Config.AllyAndGuildNameColor;
                         }
-                        else {
-                            if (castle.IsAttackGuild(targetObject.MyGuild)) {
+                        else
+                        {
+                            if (castle.IsAttackGuild(targetObject.MyGuild))
+                            {
                                 result = M2Share.Config.WarGuildNameColor;
                             }
                         }
                     }
-                    else {
-                        if (castle.IsAttackGuild(MyGuild)) {
-                            if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild)) {
+                    else
+                    {
+                        if (castle.IsAttackGuild(MyGuild))
+                        {
+                            if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
+                            {
                                 result = M2Share.Config.AllyAndGuildNameColor;
                             }
-                            else {
-                                if (castle.IsMember(targetObject)) {
+                            else
+                            {
+                                if (castle.IsMember(targetObject))
+                                {
                                     result = M2Share.Config.WarGuildNameColor;
                                 }
                             }
@@ -3326,12 +3533,15 @@ namespace GameSrv.Player {
             return base.GetChrColor(baseObject);
         }
 
-        protected override void RecalcHitSpeed() {
+        protected override void RecalcHitSpeed()
+        {
             HitPlus = 0;
             HitDouble = 0;
-            if (Race == ActorRace.Play) {
+            if (Race == ActorRace.Play)
+            {
                 NakedAbility bonusTick = default;
-                switch (Job) {
+                switch (Job)
+                {
                     case PlayJob.Warrior:
                         bonusTick = M2Share.Config.BonusAbilofWarr;
                         HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
@@ -3348,22 +3558,27 @@ namespace GameSrv.Player {
                         break;
                 }
             }
-            for (int i = 0; i < MagicList.Count; i++) {
+            for (int i = 0; i < MagicList.Count; i++)
+            {
                 UserMagic userMagic = MagicList[i];
                 MagicArr[userMagic.MagIdx] = userMagic;
-                switch (userMagic.MagIdx) {
+                switch (userMagic.MagIdx)
+                {
                     case MagicConst.SKILL_ONESWORD: // 基本剑法
-                        if (userMagic.Level > 0) {
+                        if (userMagic.Level > 0)
+                        {
                             HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
                         }
                         break;
                     case MagicConst.SKILL_ILKWANG: // 精神力战法
-                        if (userMagic.Level > 0) {
+                        if (userMagic.Level > 0)
+                        {
                             HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
                         }
                         break;
                     case MagicConst.SKILL_YEDO: // 攻杀剑法
-                        if (userMagic.Level > 0) {
+                        if (userMagic.Level > 0)
+                        {
                             HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
                         }
                         HitPlus = (byte)(Settings.DEFHIT + userMagic.Level);
@@ -3380,32 +3595,42 @@ namespace GameSrv.Player {
         /// <summary>
         /// 切换地图
         /// </summary>
-        internal bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY) {
+        internal bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
+        {
             bool result = false;
             const string sExceptionMsg = "[Exception] BaseObject::EnterAnotherMap";
-            try {
-                if (Abil.Level < envir.EnterLevel) {
+            try
+            {
+                if (Abil.Level < envir.EnterLevel)
+                {
                     SysMsg($"需要 {envir.Flag.RequestLevel - 1} 级以上才能进入 {envir.MapDesc}", MsgColor.Red, MsgType.Hint);
                     return false;
                 }
-                if (envir.QuestNpc != null) {
+                if (envir.QuestNpc != null)
+                {
                     envir.QuestNpc.Click(this);
                 }
-                if (envir.Flag.NeedSetonFlag >= 0) {
-                    if (GetQuestFalgStatus(envir.Flag.NeedSetonFlag) != envir.Flag.NeedOnOff) {
+                if (envir.Flag.NeedSetonFlag >= 0)
+                {
+                    if (GetQuestFalgStatus(envir.Flag.NeedSetonFlag) != envir.Flag.NeedOnOff)
+                    {
                         return false;
                     }
                 }
-                if (!envir.CellValid(nDMapX, nDMapY)) {
+                if (!envir.CellValid(nDMapX, nDMapY))
+                {
                     return false;
                 }
                 UserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
-                if ((castle != null)) {
-                    if (!castle.CheckInPalace(CurrX, CurrY)) {
+                if ((castle != null))
+                {
+                    if (!castle.CheckInPalace(CurrX, CurrY))
+                    {
                         return false;
                     }
                 }
-                if (envir.Flag.NoHorse) {
+                if (envir.Flag.NoHorse)
+                {
                     OnHorse = false;
                 }
                 Envirnoment oldEnvir = Envir;
@@ -3413,12 +3638,14 @@ namespace GameSrv.Player {
                 short nOldY = CurrY;
                 DisappearA();
                 VisibleHumanList.Clear();
-                for (int i = 0; i < VisibleItems.Count; i++) {
+                for (int i = 0; i < VisibleItems.Count; i++)
+                {
                     VisibleItems[i] = null;
                 }
                 VisibleItems.Clear();
                 VisibleEvents.Clear();
-                for (int i = 0; i < VisibleActors.Count; i++) {
+                for (int i = 0; i < VisibleActors.Count; i++)
+                {
                     VisibleActors[i] = null;
                 }
                 VisibleActors.Clear();
@@ -3429,12 +3656,14 @@ namespace GameSrv.Player {
                 CurrX = nDMapX;
                 CurrY = nDMapY;
                 SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
-                if (AddToMap()) {
+                if (AddToMap())
+                {
                     //MapMoveTick = HUtil32.GetTickCount();
                     SpaceMoved = true;
                     result = true;
                 }
-                else {
+                else
+                {
                     Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
@@ -3445,64 +3674,81 @@ namespace GameSrv.Player {
                 IncGamePointTick = HUtil32.GetTickCount();
                 IncGameGoldTick = HUtil32.GetTickCount();
                 AutoGetExpTick = HUtil32.GetTickCount();
-                if (Envir.Flag.Fight3Zone && (Envir.Flag.Fight3Zone != oldEnvir.Flag.Fight3Zone)) {
+                if (Envir.Flag.Fight3Zone && (Envir.Flag.Fight3Zone != oldEnvir.Flag.Fight3Zone))
+                {
                     RefShowName();
                 }
             }
-            catch {
+            catch
+            {
                 M2Share.Logger.Error(sExceptionMsg);
             }
             return result;
         }
 
-        private void WinLottery() {
+        private void WinLottery()
+        {
             int nGold = 0;
             int nWinLevel = 0;
             int nRate = M2Share.RandomNumber.Random(M2Share.Config.WinLotteryRate);
-            if (nRate >= M2Share.Config.WinLottery6Min && nRate <= M2Share.Config.WinLottery6Max) {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount) {
+            if (nRate >= M2Share.Config.WinLottery6Min && nRate <= M2Share.Config.WinLottery6Max)
+            {
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                {
                     nGold = M2Share.Config.WinLottery6Gold;
                     nWinLevel = 6;
                     M2Share.Config.WinLotteryLevel6++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery5Min && nRate <= M2Share.Config.WinLottery5Max) {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount) {
+            else if (nRate >= M2Share.Config.WinLottery5Min && nRate <= M2Share.Config.WinLottery5Max)
+            {
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                {
                     nGold = M2Share.Config.WinLottery5Gold;
                     nWinLevel = 5;
                     M2Share.Config.WinLotteryLevel5++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery4Min && nRate <= M2Share.Config.WinLottery4Max) {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount) {
+            else if (nRate >= M2Share.Config.WinLottery4Min && nRate <= M2Share.Config.WinLottery4Max)
+            {
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                {
                     nGold = M2Share.Config.WinLottery4Gold;
                     nWinLevel = 4;
                     M2Share.Config.WinLotteryLevel4++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery3Min && nRate <= M2Share.Config.WinLottery3Max) {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount) {
+            else if (nRate >= M2Share.Config.WinLottery3Min && nRate <= M2Share.Config.WinLottery3Max)
+            {
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                {
                     nGold = M2Share.Config.WinLottery3Gold;
                     nWinLevel = 3;
                     M2Share.Config.WinLotteryLevel3++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery2Min && nRate <= M2Share.Config.WinLottery2Max) {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount) {
+            else if (nRate >= M2Share.Config.WinLottery2Min && nRate <= M2Share.Config.WinLottery2Max)
+            {
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                {
                     nGold = M2Share.Config.WinLottery2Gold;
                     nWinLevel = 2;
                     M2Share.Config.WinLotteryLevel2++;
                 }
             }
-            else if (M2Share.Config.WinLottery1Min + M2Share.Config.WinLottery1Max == nRate) {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount) {
+            else if (M2Share.Config.WinLottery1Min + M2Share.Config.WinLottery1Max == nRate)
+            {
+                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                {
                     nGold = M2Share.Config.WinLottery1Gold;
                     nWinLevel = 1;
                     M2Share.Config.WinLotteryLevel1++;
                 }
             }
-            if (nGold > 0) {
-                switch (nWinLevel) {
+            if (nGold > 0)
+            {
+                switch (nWinLevel)
+                {
                     case 1:
                         SysMsg(Settings.WinLottery1Msg, MsgColor.Green, MsgType.Hint);
                         break;
@@ -3522,22 +3768,27 @@ namespace GameSrv.Player {
                         SysMsg(Settings.WinLottery6Msg, MsgColor.Green, MsgType.Hint);
                         break;
                 }
-                if (IncGold(nGold)) {
+                if (IncGold(nGold))
+                {
                     GoldChanged();
                 }
-                else {
+                else
+                {
                     DropGoldDown(nGold, true, 0, 0);
                 }
             }
-            else {
+            else
+            {
                 M2Share.Config.NoWinLotteryCount += 500;
                 SysMsg(Settings.NotWinLotteryMsg, MsgColor.Red, MsgType.Hint);
             }
         }
 
-        internal void AddItemSkill(int nIndex) {
+        internal void AddItemSkill(int nIndex)
+        {
             MagicInfo magic = null;
-            switch (nIndex) {
+            switch (nIndex)
+            {
                 case 1:
                     magic = M2Share.WorldEngine.FindMagic(M2Share.Config.FireBallSkill);
                     break;
@@ -3545,9 +3796,12 @@ namespace GameSrv.Player {
                     magic = M2Share.WorldEngine.FindMagic(M2Share.Config.HealSkill);
                     break;
             }
-            if (magic != null) {
-                if (!IsTrainingSkill(magic.MagicId)) {
-                    UserMagic userMagic = new UserMagic {
+            if (magic != null)
+            {
+                if (!IsTrainingSkill(magic.MagicId))
+                {
+                    UserMagic userMagic = new UserMagic
+                    {
                         Magic = magic,
                         MagIdx = magic.MagicId,
                         Key = (char)0,
@@ -3560,16 +3814,20 @@ namespace GameSrv.Player {
             }
         }
 
-        public void SetExpiredTime(int expiredTime) {
-            if (Abil.Level > Settings.ExpErienceLevel) {
+        public void SetExpiredTime(int expiredTime)
+        {
+            if (Abil.Level > Settings.ExpErienceLevel)
+            {
                 ExpireTime = HUtil32.GetTickCount() + (60 * 1000);
                 ExpireCount = expiredTime;
             }
         }
 
-        private void CheckExpiredTime() {
+        private void CheckExpiredTime()
+        {
             ExpireCount--;
-            switch (ExpireCount) {
+            switch (ExpireCount)
+            {
                 case 30:
                     SysMsg("您的账号游戏时间即将到期，您将在[30:00]分钟后断开服务器。", MsgColor.Blue, MsgType.System);
                     break;
@@ -3585,112 +3843,142 @@ namespace GameSrv.Player {
             }
         }
 
-        public int GetQuestFalgStatus(int nFlag) {
+        public int GetQuestFalgStatus(int nFlag)
+        {
             int result = 0;
             nFlag -= 1;
-            if (nFlag < 0) {
+            if (nFlag < 0)
+            {
                 return result;
             }
             int n10 = nFlag / 8;
             int n14 = nFlag % 8;
-            if ((n10 - QuestFlag.Length) < 0) {
-                if (((128 >> n14) & QuestFlag[n10]) != 0) {
+            if ((n10 - QuestFlag.Length) < 0)
+            {
+                if (((128 >> n14) & QuestFlag[n10]) != 0)
+                {
                     result = 1;
                 }
-                else {
+                else
+                {
                     result = 0;
                 }
             }
             return result;
         }
 
-        public void SetQuestFlagStatus(int nFlag, int nValue) {
+        public void SetQuestFlagStatus(int nFlag, int nValue)
+        {
             nFlag -= 1;
-            if (nFlag < 0) {
+            if (nFlag < 0)
+            {
                 return;
             }
             int n10 = nFlag / 8;
             int n14 = nFlag % 8;
-            if ((n10 - QuestFlag.Length) < 0) {
+            if ((n10 - QuestFlag.Length) < 0)
+            {
                 byte bt15 = QuestFlag[n10];
-                if (nValue == 0) {
+                if (nValue == 0)
+                {
                     QuestFlag[n10] = (byte)((~(128 >> n14)) & bt15);
                 }
-                else {
+                else
+                {
                     QuestFlag[n10] = (byte)((128 >> n14) | bt15);
                 }
             }
         }
 
-        public int GetQuestUnitOpenStatus(int nFlag) {
+        public int GetQuestUnitOpenStatus(int nFlag)
+        {
             int result = 0;
             nFlag -= 1;
-            if (nFlag < 0) {
+            if (nFlag < 0)
+            {
                 return result;
             }
             int n10 = nFlag / 8;
             int n14 = nFlag % 8;
-            if ((n10 - QuestUnitOpen.Length) < 0) {
-                if (((128 >> n14) & QuestUnitOpen[n10]) != 0) {
+            if ((n10 - QuestUnitOpen.Length) < 0)
+            {
+                if (((128 >> n14) & QuestUnitOpen[n10]) != 0)
+                {
                     result = 1;
                 }
-                else {
+                else
+                {
                     result = 0;
                 }
             }
             return result;
         }
 
-        public void SetQuestUnitOpenStatus(int nFlag, int nValue) {
+        public void SetQuestUnitOpenStatus(int nFlag, int nValue)
+        {
             nFlag -= 1;
-            if (nFlag < 0) {
+            if (nFlag < 0)
+            {
                 return;
             }
             int n10 = nFlag / 8;
             int n14 = nFlag % 8;
-            if ((n10 - QuestUnitOpen.Length) < 0) {
+            if ((n10 - QuestUnitOpen.Length) < 0)
+            {
                 byte bt15 = QuestUnitOpen[n10];
-                if (nValue == 0) {
+                if (nValue == 0)
+                {
                     QuestUnitOpen[n10] = (byte)((~(128 >> n14)) & bt15);
                 }
-                else {
+                else
+                {
                     QuestUnitOpen[n10] = (byte)((128 >> n14) | bt15);
                 }
             }
         }
 
-        public int GetQuestUnitStatus(int nFlag) {
+        public int GetQuestUnitStatus(int nFlag)
+        {
             int result = 0;
             nFlag -= 1;
-            if (nFlag < 0) {
+            if (nFlag < 0)
+            {
                 return result;
             }
             int n10 = nFlag / 8;
             int n14 = nFlag % 8;
-            if ((n10 - QuestUnit.Length) < 0) {
-                if (((128 >> n14) & QuestUnit[n10]) != 0) {
+            if ((n10 - QuestUnit.Length) < 0)
+            {
+                if (((128 >> n14) & QuestUnit[n10]) != 0)
+                {
                     result = 1;
                 }
-                else {
+                else
+                {
                     result = 0;
                 }
             }
             return result;
         }
 
-        public void SetQuestUnitStatus(int nFlag, int nValue) {
+        public void SetQuestUnitStatus(int nFlag, int nValue)
+        {
             nFlag -= 1;
-            if (nFlag < 0) {
+            if (nFlag < 0)
+            {
                 return;
             }
             int n10 = nFlag / 8;
             int n14 = nFlag % 8;
-            if ((n10 - QuestUnit.Length) < 0) {
+            if ((n10 - QuestUnit.Length) < 0)
+            {
                 byte bt15 = QuestUnit[n10];
-                if (nValue == 0) {
+                if (nValue == 0)
+                {
                     QuestUnit[n10] = (byte)((~(128 >> n14)) & bt15);
                 }
-                else {
+                else
+                {
                     QuestUnit[n10] = (byte)((128 >> n14) | bt15);
                 }
             }
@@ -3699,28 +3987,35 @@ namespace GameSrv.Player {
         /// <summary>
         /// 检查武器是否升级
         /// </summary>
-        private void CheckWeaponUpgrade() {
-            if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Desc[ItemAttr.WeaponUpgrade] > 0) {
+        private void CheckWeaponUpgrade()
+        {
+            if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Desc[ItemAttr.WeaponUpgrade] > 0)
+            {
                 UserItem useItems = new UserItem(UseItems[ItemLocation.Weapon]);
                 CheckWeaponUpgradeStatus(ref UseItems[ItemLocation.Weapon]);
                 StdItem StdItem;
-                if (UseItems[ItemLocation.Weapon].Index == 0) {
+                if (UseItems[ItemLocation.Weapon].Index == 0)
+                {
                     SysMsg(Settings.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
                     SendDelItems(useItems);
                     SendRefMsg(Messages.RM_BREAKWEAPON, 0, 0, 0, 0, "");
                     StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
-                    if (StdItem != null) {
-                        if (StdItem.NeedIdentify == 1) {
+                    if (StdItem != null)
+                    {
+                        if (StdItem.NeedIdentify == 1)
+                        {
                             M2Share.EventSource.AddEventLog(21, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                         }
                     }
                     FeatureChanged();
                 }
-                else {
+                else
+                {
                     SysMsg(Settings.TheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
                     SendUpdateItem(UseItems[ItemLocation.Weapon]);
                     StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
-                    if (StdItem.NeedIdentify == 1) {
+                    if (StdItem.NeedIdentify == 1)
+                    {
                         M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     RecalcAbilitys();
@@ -3733,41 +4028,54 @@ namespace GameSrv.Player {
         /// <summary>
         /// 检查武器升级状态
         /// </summary>
-        private static void CheckWeaponUpgradeStatus(ref UserItem userItem) {
-            if ((userItem.Desc[0] + userItem.Desc[1] + userItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint) {
-                if (userItem.Desc[ItemAttr.WeaponUpgrade] == 1) {
+        private static void CheckWeaponUpgradeStatus(ref UserItem userItem)
+        {
+            if ((userItem.Desc[0] + userItem.Desc[1] + userItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
+            {
+                if (userItem.Desc[ItemAttr.WeaponUpgrade] == 1)
+                {
                     userItem.Index = 0;
                 }
-                if (HUtil32.RangeInDefined(userItem.Desc[ItemAttr.WeaponUpgrade], 10, 13)) {
+                if (HUtil32.RangeInDefined(userItem.Desc[ItemAttr.WeaponUpgrade], 10, 13))
+                {
                     userItem.Desc[0] = (byte)(userItem.Desc[0] + userItem.Desc[ItemAttr.WeaponUpgrade] - 9);
                 }
-                if (HUtil32.RangeInDefined(userItem.Desc[ItemAttr.WeaponUpgrade], 20, 23)) {
+                if (HUtil32.RangeInDefined(userItem.Desc[ItemAttr.WeaponUpgrade], 20, 23))
+                {
                     userItem.Desc[1] = (byte)(userItem.Desc[1] + userItem.Desc[ItemAttr.WeaponUpgrade] - 19);
                 }
-                if (HUtil32.RangeInDefined(userItem.Desc[ItemAttr.WeaponUpgrade], 30, 33)) {
+                if (HUtil32.RangeInDefined(userItem.Desc[ItemAttr.WeaponUpgrade], 30, 33))
+                {
                     userItem.Desc[2] = (byte)(userItem.Desc[2] + userItem.Desc[ItemAttr.WeaponUpgrade] - 29);
                 }
             }
-            else {
+            else
+            {
                 userItem.Index = 0;
             }
             userItem.Desc[ItemAttr.WeaponUpgrade] = 0;
         }
 
-        private UserMagic GetMagicInfo(int nMagicId) {
-            for (int i = 0; i < MagicList.Count; i++) {
+        private UserMagic GetMagicInfo(int nMagicId)
+        {
+            for (int i = 0; i < MagicList.Count; i++)
+            {
                 UserMagic userMagic = MagicList[i];
-                if (userMagic.Magic.MagicId == nMagicId) {
+                if (userMagic.Magic.MagicId == nMagicId)
+                {
                     return userMagic;
                 }
             }
             return null;
         }
 
-        private bool IsProperIsFriend(BaseObject cret) {
+        private bool IsProperIsFriend(BaseObject cret)
+        {
             bool result = false;
-            if (cret.Race == ActorRace.Play) {
-                switch (AttatckMode) {
+            if (cret.Race == ActorRace.Play)
+            {
+                switch (AttatckMode)
+                {
                     case AttackMode.HAM_ALL:
                         result = true;
                         break;
@@ -3775,25 +4083,33 @@ namespace GameSrv.Player {
                         result = true;
                         break;
                     case AttackMode.HAM_DEAR:
-                        if ((this == cret) || (cret == DearHuman)) {
+                        if ((this == cret) || (cret == DearHuman))
+                        {
                             result = true;
                         }
                         break;
                     case AttackMode.HAM_MASTER:
-                        if (this == cret) {
+                        if (this == cret)
+                        {
                             result = true;
                         }
-                        else if (IsMaster) {
-                            for (int i = 0; i < MasterList.Count; i++) {
-                                if (MasterList[i] == cret) {
+                        else if (IsMaster)
+                        {
+                            for (int i = 0; i < MasterList.Count; i++)
+                            {
+                                if (MasterList[i] == cret)
+                                {
                                     result = true;
                                     break;
                                 }
                             }
                         }
-                        else if (((PlayObject)cret).IsMaster) {
-                            for (int i = 0; i < ((PlayObject)cret).MasterList.Count; i++) {
-                                if (((PlayObject)cret).MasterList[i] == this) {
+                        else if (((PlayObject)cret).IsMaster)
+                        {
+                            for (int i = 0; i < ((PlayObject)cret).MasterList.Count; i++)
+                            {
+                                if (((PlayObject)cret).MasterList[i] == this)
+                                {
                                     result = true;
                                     break;
                                 }
@@ -3801,39 +4117,51 @@ namespace GameSrv.Player {
                         }
                         break;
                     case AttackMode.HAM_GROUP:
-                        if (cret == this) {
+                        if (cret == this)
+                        {
                             result = true;
                         }
-                        if (IsGroupMember(cret)) {
+                        if (IsGroupMember(cret))
+                        {
                             result = true;
                         }
                         break;
                     case AttackMode.HAM_GUILD:
-                        if (cret == this) {
+                        if (cret == this)
+                        {
                             result = true;
                         }
-                        if (MyGuild != null) {
-                            if (MyGuild.IsMember(cret.ChrName)) {
+                        if (MyGuild != null)
+                        {
+                            if (MyGuild.IsMember(cret.ChrName))
+                            {
                                 result = true;
                             }
-                            if (GuildWarArea && (((PlayObject)cret).MyGuild != null)) {
-                                if (MyGuild.IsAllyGuild(((PlayObject)cret).MyGuild)) {
+                            if (GuildWarArea && (((PlayObject)cret).MyGuild != null))
+                            {
+                                if (MyGuild.IsAllyGuild(((PlayObject)cret).MyGuild))
+                                {
                                     result = true;
                                 }
                             }
                         }
                         break;
                     case AttackMode.HAM_PKATTACK:
-                        if (cret == this) {
+                        if (cret == this)
+                        {
                             result = true;
                         }
-                        if (PvpLevel() >= 2) {
-                            if (((PlayObject)cret).PvpLevel() < 2) {
+                        if (PvpLevel() >= 2)
+                        {
+                            if (((PlayObject)cret).PvpLevel() < 2)
+                            {
                                 result = true;
                             }
                         }
-                        else {
-                            if (((PlayObject)cret).PvpLevel() >= 2) {
+                        else
+                        {
+                            if (((PlayObject)cret).PvpLevel() >= 2)
+                            {
                                 result = true;
                             }
                         }
@@ -3843,29 +4171,38 @@ namespace GameSrv.Player {
             return result;
         }
 
-        internal void AddBodyLuck(double dLuck) {
-            if ((dLuck > 0) && (BodyLuck < 5 * Settings.BODYLUCKUNIT)) {
+        internal void AddBodyLuck(double dLuck)
+        {
+            if ((dLuck > 0) && (BodyLuck < 5 * Settings.BODYLUCKUNIT))
+            {
                 BodyLuck = BodyLuck + dLuck;
             }
-            if ((dLuck < 0) && (BodyLuck > -(5 * Settings.BODYLUCKUNIT))) {
+            if ((dLuck < 0) && (BodyLuck > -(5 * Settings.BODYLUCKUNIT)))
+            {
                 BodyLuck = BodyLuck + dLuck;
             }
             int n = Convert.ToInt32(BodyLuck / Settings.BODYLUCKUNIT);
-            if (n > 5) {
+            if (n > 5)
+            {
                 n = 5;
             }
-            if (n < -10) {
+            if (n < -10)
+            {
                 n = -10;
             }
             BodyLuckLevel = n;
         }
 
-        public void SetPkFlag(BaseObject baseObject) {
-            if (baseObject.Race == ActorRace.Play) {
+        public void SetPkFlag(BaseObject baseObject)
+        {
+            if (baseObject.Race == ActorRace.Play)
+            {
                 PlayObject targetObject = (PlayObject)baseObject;
-                if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.FightZone) && (!Envir.Flag.Fight3Zone) && !PvpFlag) {
+                if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.FightZone) && (!Envir.Flag.Fight3Zone) && !PvpFlag)
+                {
                     targetObject.PvpNameColorTick = HUtil32.GetTickCount();
-                    if (!targetObject.PvpFlag) {
+                    if (!targetObject.PvpFlag)
+                    {
                         targetObject.PvpFlag = true;
                         targetObject.RefNameColor();
                     }
@@ -3873,18 +4210,22 @@ namespace GameSrv.Player {
             }
         }
 
-        public void ChangePkStatus(bool boWarFlag) {
-            if (InGuildWarArea != boWarFlag) {
+        public void ChangePkStatus(bool boWarFlag)
+        {
+            if (InGuildWarArea != boWarFlag)
+            {
                 InGuildWarArea = boWarFlag;
                 NameColorChanged = true;
             }
         }
 
-        public byte PvpLevel() {
+        public byte PvpLevel()
+        {
             return (byte)(PkPoint / 100);
         }
 
-        internal void CheckPkStatus() {
+        internal void CheckPkStatus()
+        {
             if (PvpFlag && ((HUtil32.GetTickCount() - PvpNameColorTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
             {
                 PvpFlag = false;
@@ -3892,45 +4233,57 @@ namespace GameSrv.Player {
             }
         }
 
-        public void IncPkPoint(int nPoint) {
+        public void IncPkPoint(int nPoint)
+        {
             byte oldPvpLevel = PvpLevel();
             PkPoint += nPoint;
-            if (PvpLevel() != oldPvpLevel) {
-                if (PvpLevel() <= 2) {
+            if (PvpLevel() != oldPvpLevel)
+            {
+                if (PvpLevel() <= 2)
+                {
                     RefNameColor();
                 }
             }
         }
 
-        private void DecPkPoint(int nPoint) {
+        private void DecPkPoint(int nPoint)
+        {
             byte pvpLevel = PvpLevel();
             PkPoint -= nPoint;
-            if (PkPoint < 0) {
+            if (PkPoint < 0)
+            {
                 PkPoint = 0;
             }
-            if ((PvpLevel() != pvpLevel) && (pvpLevel > 0) && (pvpLevel <= 2)) {
+            if ((PvpLevel() != pvpLevel) && (pvpLevel > 0) && (pvpLevel <= 2))
+            {
                 RefNameColor();
             }
         }
 
-        public void TrainSkill(UserMagic userMagic, int nTranPoint) {
-            if (FastTrain) {
+        public void TrainSkill(UserMagic userMagic, int nTranPoint)
+        {
+            if (FastTrain)
+            {
                 nTranPoint = nTranPoint * 3;
             }
             userMagic.TranPoint += nTranPoint;
         }
 
-        public bool IsGuildMaster() {
+        public bool IsGuildMaster()
+        {
             return (MyGuild != null) && (GuildRankNo == 1);
         }
 
-        internal void ApplyItemParameters(UserItem uitem, StdItem stdItem, ref AddAbility aabil) {
+        internal void ApplyItemParameters(UserItem uitem, StdItem stdItem, ref AddAbility aabil)
+        {
             StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
-            if (item != null) {
+            if (item != null)
+            {
                 ClientItem clientItem = new ClientItem();
                 item.GetUpgradeStdItem(uitem, ref clientItem);
                 ApplyItemParametersByJob(uitem, ref clientItem);
-                switch (item.StdMode) {
+                switch (item.StdMode)
+                {
                     case 5:
                     case 6:
                         aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
@@ -3939,7 +4292,8 @@ namespace GameSrv.Player {
                         aabil.UnLuck = (byte)(aabil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
                         aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
                         aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
-                        if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10) {
+                        if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10)
+                        {
                             aabil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
                         }
                         break;
@@ -3952,55 +4306,73 @@ namespace GameSrv.Player {
                         aabil.AntiPoison = (ushort)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
                         aabil.HP = (ushort)(aabil.HP + clientItem.Item.HpAdd);
                         aabil.MP = (ushort)(aabil.MP + clientItem.Item.MpAdd);
-                        if (clientItem.Item.EffType1 > 0) {
-                            switch (clientItem.Item.EffType1) {
+                        if (clientItem.Item.EffType1 > 0)
+                        {
+                            switch (clientItem.Item.EffType1)
+                            {
                                 case EfftypeConst.EFFTYPE_HP_MP_ADD:
-                                    if ((aabil.HealthRecover + clientItem.Item.EffRate1 > 65000)) {
+                                    if ((aabil.HealthRecover + clientItem.Item.EffRate1 > 65000))
+                                    {
                                         aabil.HealthRecover = 65000;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aabil.HealthRecover = (ushort)(aabil.HealthRecover + clientItem.Item.EffRate1);
                                     }
-                                    if ((aabil.SpellRecover + clientItem.Item.EffValue1 > 65000)) {
+                                    if ((aabil.SpellRecover + clientItem.Item.EffValue1 > 65000))
+                                    {
                                         aabil.SpellRecover = 65000;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aabil.SpellRecover = (ushort)(aabil.SpellRecover + clientItem.Item.EffValue1);
                                     }
                                     break;
                             }
                         }
-                        if (clientItem.Item.EffType2 > 0) {
-                            switch (clientItem.Item.EffType2) {
+                        if (clientItem.Item.EffType2 > 0)
+                        {
+                            switch (clientItem.Item.EffType2)
+                            {
                                 case EfftypeConst.EFFTYPE_HP_MP_ADD:
-                                    if ((aabil.HealthRecover + clientItem.Item.EffRate2 > 65000)) {
+                                    if ((aabil.HealthRecover + clientItem.Item.EffRate2 > 65000))
+                                    {
                                         aabil.HealthRecover = 65000;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aabil.HealthRecover = (ushort)(aabil.HealthRecover + clientItem.Item.EffRate2);
                                     }
-                                    if ((aabil.SpellRecover + clientItem.Item.EffValue2 > 65000)) {
+                                    if ((aabil.SpellRecover + clientItem.Item.EffValue2 > 65000))
+                                    {
                                         aabil.SpellRecover = 65000;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aabil.SpellRecover = (ushort)(aabil.SpellRecover + clientItem.Item.EffValue2);
                                     }
                                     break;
                             }
                         }
-                        if (clientItem.Item.EffType1 == EfftypeConst.EFFTYPE_LUCK_ADD) {
-                            if (aabil.Luck + clientItem.Item.EffValue1 > 255) {
+                        if (clientItem.Item.EffType1 == EfftypeConst.EFFTYPE_LUCK_ADD)
+                        {
+                            if (aabil.Luck + clientItem.Item.EffValue1 > 255)
+                            {
                                 aabil.Luck = byte.MaxValue;
                             }
-                            else {
+                            else
+                            {
                                 aabil.Luck = (byte)(aabil.Luck + clientItem.Item.EffValue1);
                             }
                         }
-                        else if (clientItem.Item.EffType2 == EfftypeConst.EFFTYPE_LUCK_ADD) {
-                            if (aabil.Luck + clientItem.Item.EffValue2 > 255) {
+                        else if (clientItem.Item.EffType2 == EfftypeConst.EFFTYPE_LUCK_ADD)
+                        {
+                            if (aabil.Luck + clientItem.Item.EffValue2 > 255)
+                            {
                                 aabil.Luck = byte.MaxValue;
                             }
-                            else {
+                            else
+                            {
                                 aabil.Luck = (byte)(aabil.Luck + clientItem.Item.EffValue2);
                             }
                         }
@@ -4060,10 +4432,12 @@ namespace GameSrv.Player {
                         break;
                     case 24:
                     case 26:
-                        if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10) {
+                        if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10)
+                        {
                             aabil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
                         }
-                        switch (item.StdMode) {
+                        switch (item.StdMode)
+                        {
                             case 24:
                                 aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
                                 aabil.SPEED = (ushort)(aabil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
@@ -4104,48 +4478,63 @@ namespace GameSrv.Player {
             }
         }
 
-        internal static void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil) {
+        internal static void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
+        {
             StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
-            if (item != null) {
+            if (item != null)
+            {
                 ClientItem clientItem = new ClientItem();
                 item.GetUpgradeStdItem(uitem, ref clientItem);
-                switch (item.StdMode) {
+                switch (item.StdMode)
+                {
                     case 52:
-                        if (clientItem.Item.EffType1 > 0) {
-                            switch (clientItem.Item.EffType1) {
+                        if (clientItem.Item.EffType1 > 0)
+                        {
+                            switch (clientItem.Item.EffType1)
+                            {
                                 case EfftypeConst.EFFTYPE_TWOHAND_WEHIGHT_ADD:
-                                    if ((aWabil.MaxHandWeight + clientItem.Item.EffValue1 > 255)) {
+                                    if ((aWabil.MaxHandWeight + clientItem.Item.EffValue1 > 255))
+                                    {
                                         aWabil.MaxHandWeight = byte.MaxValue;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aWabil.MaxHandWeight = (byte)(aWabil.MaxHandWeight + clientItem.Item.EffValue1);
                                     }
                                     break;
                                 case EfftypeConst.EFFTYPE_EQUIP_WHEIGHT_ADD:
-                                    if ((aWabil.MaxWearWeight + clientItem.Item.EffValue1 > 255)) {
+                                    if ((aWabil.MaxWearWeight + clientItem.Item.EffValue1 > 255))
+                                    {
                                         aWabil.MaxWearWeight = byte.MaxValue;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aWabil.MaxWearWeight = (byte)(aWabil.MaxWearWeight + clientItem.Item.EffValue1);
                                     }
                                     break;
                             }
                         }
-                        if (clientItem.Item.EffType2 > 0) {
-                            switch (clientItem.Item.EffType2) {
+                        if (clientItem.Item.EffType2 > 0)
+                        {
+                            switch (clientItem.Item.EffType2)
+                            {
                                 case EfftypeConst.EFFTYPE_TWOHAND_WEHIGHT_ADD:
-                                    if ((aWabil.MaxHandWeight + clientItem.Item.EffValue2 > 255)) {
+                                    if ((aWabil.MaxHandWeight + clientItem.Item.EffValue2 > 255))
+                                    {
                                         aWabil.MaxHandWeight = byte.MaxValue;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aWabil.MaxHandWeight = (byte)(aWabil.MaxHandWeight + clientItem.Item.EffValue2);
                                     }
                                     break;
                                 case EfftypeConst.EFFTYPE_EQUIP_WHEIGHT_ADD:
-                                    if ((aWabil.MaxWearWeight + clientItem.Item.EffValue2 > 255)) {
+                                    if ((aWabil.MaxWearWeight + clientItem.Item.EffValue2 > 255))
+                                    {
                                         aWabil.MaxWearWeight = byte.MaxValue;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aWabil.MaxWearWeight = (byte)(aWabil.MaxWearWeight + clientItem.Item.EffValue2);
                                     }
                                     break;
@@ -4153,25 +4542,33 @@ namespace GameSrv.Player {
                         }
                         break;
                     case 54:
-                        if (clientItem.Item.EffType1 > 0) {
-                            switch (clientItem.Item.EffType1) {
+                        if (clientItem.Item.EffType1 > 0)
+                        {
+                            switch (clientItem.Item.EffType1)
+                            {
                                 case EfftypeConst.EFFTYPE_BAG_WHIGHT_ADD:
-                                    if ((aWabil.MaxWeight + clientItem.Item.EffValue1 > 65000)) {
+                                    if ((aWabil.MaxWeight + clientItem.Item.EffValue1 > 65000))
+                                    {
                                         aWabil.MaxWeight = 65000;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aWabil.MaxWeight = (ushort)(aWabil.MaxWeight + clientItem.Item.EffValue1);
                                     }
                                     break;
                             }
                         }
-                        if (clientItem.Item.EffType2 > 0) {
-                            switch (clientItem.Item.EffType2) {
+                        if (clientItem.Item.EffType2 > 0)
+                        {
+                            switch (clientItem.Item.EffType2)
+                            {
                                 case EfftypeConst.EFFTYPE_BAG_WHIGHT_ADD:
-                                    if ((aWabil.MaxWeight + clientItem.Item.EffValue2 > 65000)) {
+                                    if ((aWabil.MaxWeight + clientItem.Item.EffValue2 > 65000))
+                                    {
                                         aWabil.MaxWeight = 65000;
                                     }
-                                    else {
+                                    else
+                                    {
                                         aWabil.MaxWeight = (ushort)(aWabil.MaxWeight + clientItem.Item.EffValue2);
                                     }
                                     break;
@@ -4182,9 +4579,12 @@ namespace GameSrv.Player {
             }
         }
 
-        protected void ChangeItemByJob(ref ClientItem citem, int level) {
-            if ((citem.Item.StdMode == 22) && (citem.Item.Shape == DragonConst.DRAGON_RING_SHAPE)) {
-                switch (Job) {
+        protected void ChangeItemByJob(ref ClientItem citem, int level)
+        {
+            if ((citem.Item.StdMode == 22) && (citem.Item.Shape == DragonConst.DRAGON_RING_SHAPE))
+            {
+                switch (Job)
+                {
                     case PlayJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 4));
                         citem.Item.MC = 0;
@@ -4199,8 +4599,10 @@ namespace GameSrv.Player {
                         break;
                 }
             }
-            else if ((citem.Item.StdMode == 26) && (citem.Item.Shape == DragonConst.DRAGON_BRACELET_SHAPE)) {
-                switch (Job) {
+            else if ((citem.Item.StdMode == 26) && (citem.Item.Shape == DragonConst.DRAGON_BRACELET_SHAPE))
+            {
+                switch (Job)
+                {
                     case PlayJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                         citem.Item.MC = 0;
@@ -4217,8 +4619,10 @@ namespace GameSrv.Player {
                         break;
                 }
             }
-            else if ((citem.Item.StdMode == 19) && (citem.Item.Shape == DragonConst.DRAGON_NECKLACE_SHAPE)) {
-                switch (Job) {
+            else if ((citem.Item.StdMode == 19) && (citem.Item.Shape == DragonConst.DRAGON_NECKLACE_SHAPE))
+            {
+                switch (Job)
+                {
                     case PlayJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
@@ -4233,8 +4637,10 @@ namespace GameSrv.Player {
                         break;
                 }
             }
-            else if (((citem.Item.StdMode == 10) || (citem.Item.StdMode == 11)) && (citem.Item.Shape == DragonConst.DRAGON_DRESS_SHAPE)) {
-                switch (Job) {
+            else if (((citem.Item.StdMode == 10) || (citem.Item.StdMode == 11)) && (citem.Item.Shape == DragonConst.DRAGON_DRESS_SHAPE))
+            {
+                switch (Job)
+                {
                     case PlayJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
@@ -4249,8 +4655,10 @@ namespace GameSrv.Player {
                         break;
                 }
             }
-            else if ((citem.Item.StdMode == 15) && (citem.Item.Shape == DragonConst.DRAGON_HELMET_SHAPE)) {
-                switch (Job) {
+            else if ((citem.Item.StdMode == 15) && (citem.Item.Shape == DragonConst.DRAGON_HELMET_SHAPE))
+            {
+                switch (Job)
+                {
                     case PlayJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
@@ -4265,8 +4673,10 @@ namespace GameSrv.Player {
                         break;
                 }
             }
-            else if (((citem.Item.StdMode == 5) || (citem.Item.StdMode == 6)) && (citem.Item.Shape == DragonConst.DRAGON_WEAPON_SHAPE)) {
-                switch (Job) {
+            else if (((citem.Item.StdMode == 5) || (citem.Item.StdMode == 6)) && (citem.Item.Shape == DragonConst.DRAGON_WEAPON_SHAPE))
+            {
+                switch (Job)
+                {
                     case PlayJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 28));
                         citem.Item.MC = 0;
@@ -4275,10 +4685,12 @@ namespace GameSrv.Player {
                         break;
                     case PlayJob.Wizard:
                         citem.Item.SC = 0;
-                        if (HUtil32.HiByte(citem.Item.MAC) > 12) {
+                        if (HUtil32.HiByte(citem.Item.MAC) > 12)
+                        {
                             citem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MAC), (ushort)(HUtil32.HiByte(citem.Item.MAC) - 12));
                         }
-                        else {
+                        else
+                        {
                             citem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MAC), 0);
                         }
                         break;
@@ -4289,9 +4701,12 @@ namespace GameSrv.Player {
                         break;
                 }
             }
-            else if ((citem.Item.StdMode == 53)) {
-                if ((citem.Item.Shape == ShapeConst.LOLLIPOP_SHAPE)) {
-                    switch (Job) {
+            else if ((citem.Item.StdMode == 53))
+            {
+                if ((citem.Item.Shape == ShapeConst.LOLLIPOP_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                             citem.Item.MC = 0;
@@ -4309,8 +4724,10 @@ namespace GameSrv.Player {
                             break;
                     }
                 }
-                else if ((citem.Item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || (citem.Item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || (citem.Item.Shape == ShapeConst.BRONZEMEDAL_SHAPE)) {
-                    switch (Job) {
+                else if ((citem.Item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || (citem.Item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || (citem.Item.Shape == ShapeConst.BRONZEMEDAL_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC)));
                             citem.Item.MC = 0;
@@ -4331,11 +4748,15 @@ namespace GameSrv.Player {
             }
         }
 
-        private void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std) {
+        private void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std)
+        {
             StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
-            if (item != null) {
-                if ((item.StdMode == 22) && (item.Shape == DragonConst.DRAGON_RING_SHAPE)) {
-                    switch (Job) {
+            if (item != null)
+            {
+                if ((item.StdMode == 22) && (item.Shape == DragonConst.DRAGON_RING_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 4));
                             std.Item.MC = 0;
@@ -4350,8 +4771,10 @@ namespace GameSrv.Player {
                             break;
                     }
                 }
-                else if ((item.StdMode == 26) && (item.Shape == DragonConst.DRAGON_BRACELET_SHAPE)) {
-                    switch (Job) {
+                else if ((item.StdMode == 26) && (item.Shape == DragonConst.DRAGON_BRACELET_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                             std.Item.MC = 0;
@@ -4368,8 +4791,10 @@ namespace GameSrv.Player {
                             break;
                     }
                 }
-                else if ((item.StdMode == 19) && (item.Shape == DragonConst.DRAGON_NECKLACE_SHAPE)) {
-                    switch (Job) {
+                else if ((item.StdMode == 19) && (item.Shape == DragonConst.DRAGON_NECKLACE_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             std.Item.MC = 0;
                             std.Item.SC = 0;
@@ -4384,8 +4809,10 @@ namespace GameSrv.Player {
                             break;
                     }
                 }
-                else if (((item.StdMode == 10) || (item.StdMode == 11)) && (item.Shape == DragonConst.DRAGON_DRESS_SHAPE)) {
-                    switch (Job) {
+                else if (((item.StdMode == 10) || (item.StdMode == 11)) && (item.Shape == DragonConst.DRAGON_DRESS_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             std.Item.MC = 0;
                             std.Item.SC = 0;
@@ -4400,8 +4827,10 @@ namespace GameSrv.Player {
                             break;
                     }
                 }
-                else if ((item.StdMode == 15) && (item.Shape == DragonConst.DRAGON_HELMET_SHAPE)) {
-                    switch (Job) {
+                else if ((item.StdMode == 15) && (item.Shape == DragonConst.DRAGON_HELMET_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             std.Item.MC = 0;
                             std.Item.SC = 0;
@@ -4416,8 +4845,10 @@ namespace GameSrv.Player {
                             break;
                     }
                 }
-                else if (((item.StdMode == 5) || (item.StdMode == 6)) && (item.Shape == DragonConst.DRAGON_WEAPON_SHAPE)) {
-                    switch (Job) {
+                else if (((item.StdMode == 5) || (item.StdMode == 6)) && (item.Shape == DragonConst.DRAGON_WEAPON_SHAPE))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 28));
                             std.Item.MC = 0;
@@ -4426,10 +4857,12 @@ namespace GameSrv.Player {
                             break;
                         case PlayJob.Wizard:
                             std.Item.SC = 0;
-                            if (HUtil32.HiByte(item.MAC) > 12) {
+                            if (HUtil32.HiByte(item.MAC) > 12)
+                            {
                                 std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC), (ushort)(HUtil32.HiByte(item.MAC) - 12));
                             }
-                            else {
+                            else
+                            {
                                 std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC), 0);
                             }
                             break;
@@ -4440,9 +4873,12 @@ namespace GameSrv.Player {
                             break;
                     }
                 }
-                else if ((item.StdMode == 53)) {
-                    if ((item.Shape == ShapeConst.LOLLIPOP_SHAPE)) {
-                        switch (Job) {
+                else if ((item.StdMode == 53))
+                {
+                    if ((item.Shape == ShapeConst.LOLLIPOP_SHAPE))
+                    {
+                        switch (Job)
+                        {
                             case PlayJob.Warrior:
                                 std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                                 std.Item.MC = 0;
@@ -4460,8 +4896,10 @@ namespace GameSrv.Player {
                                 break;
                         }
                     }
-                    else if ((item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || (item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || (item.Shape == ShapeConst.BRONZEMEDAL_SHAPE)) {
-                        switch (Job) {
+                    else if ((item.Shape == ShapeConst.GOLDMEDAL_SHAPE) || (item.Shape == ShapeConst.SILVERMEDAL_SHAPE) || (item.Shape == ShapeConst.BRONZEMEDAL_SHAPE))
+                    {
+                        switch (Job)
+                        {
                             case PlayJob.Warrior:
                                 std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
                                 std.Item.MC = 0;
@@ -4480,8 +4918,10 @@ namespace GameSrv.Player {
                         }
                     }
                 }
-                if (((item.StdMode == 10) || (item.StdMode == 11)) && (item.Shape == ItemShapeConst.DRESS_SHAPE_PBKING)) {
-                    switch (Job) {
+                if (((item.StdMode == 10) || (item.StdMode == 11)) && (item.Shape == ItemShapeConst.DRESS_SHAPE_PBKING))
+                {
+                    switch (Job)
+                    {
                         case PlayJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                             std.Item.MC = 0;
@@ -4508,10 +4948,13 @@ namespace GameSrv.Player {
             }
         }
 
-        private void DeleteNameSkill(string sSkillName) {
-            for (int i = 0; i < MagicList.Count; i++) {
+        private void DeleteNameSkill(string sSkillName)
+        {
+            for (int i = 0; i < MagicList.Count; i++)
+            {
                 UserMagic userMagic = MagicList[i];
-                if (userMagic.Magic.MagicName == sSkillName) {
+                if (userMagic.Magic.MagicName == sSkillName)
+                {
                     SendDelMagic(userMagic);
                     MagicList.RemoveAt(i);
                     break;
@@ -4519,18 +4962,23 @@ namespace GameSrv.Player {
             }
         }
 
-        private void DelItemSkill(int nIndex) {
-            if (Race != ActorRace.Play) {
+        private void DelItemSkill(int nIndex)
+        {
+            if (Race != ActorRace.Play)
+            {
                 return;
             }
-            switch (nIndex) {
+            switch (nIndex)
+            {
                 case 1:
-                    if (Job != PlayJob.Wizard) {
+                    if (Job != PlayJob.Wizard)
+                    {
                         DeleteNameSkill(M2Share.Config.FireBallSkill);
                     }
                     break;
                 case 2:
-                    if (Job != PlayJob.Taoist) {
+                    if (Job != PlayJob.Taoist)
+                    {
                         DeleteNameSkill(M2Share.Config.HealSkill);
                     }
                     break;
@@ -4569,14 +5017,18 @@ namespace GameSrv.Player {
             }
         }
 
-        private bool IsGroupMember(BaseObject target) {
+        private bool IsGroupMember(BaseObject target)
+        {
             bool result = false;
-            if (GroupOwner == 0) {
+            if (GroupOwner == 0)
+            {
                 return false;
             }
             PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-            for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++) {
-                if (groupOwnerPlay.GroupMembers[i] == target) {
+            for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
+            {
+                if (groupOwnerPlay.GroupMembers[i] == target)
+                {
                     result = true;
                     break;
                 }
@@ -4584,40 +5036,50 @@ namespace GameSrv.Player {
             return result;
         }
 
-        private void LeaveGroup() {
+        private void LeaveGroup()
+        {
             const string sExitGropMsg = "{0} 已经退出了本组.";
             SendGroupText(Format(sExitGropMsg, ChrName));
             GroupOwner = 0;
             SendMsg(this, Messages.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
 
-        public void SendGroupText(string sMsg) {
+        public void SendGroupText(string sMsg)
+        {
             sMsg = M2Share.Config.GroupMsgPreFix + sMsg;
-            if (GroupOwner != 0) {
+            if (GroupOwner != 0)
+            {
                 PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++) {
+                for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
+                {
                     groupOwnerPlay.GroupMembers[i].SendMsg(this, Messages.RM_GROUPMESSAGE, 0, M2Share.Config.GroupMsgFColor, M2Share.Config.GroupMsgBColor, 0, sMsg);
                 }
             }
         }
 
-        public bool CheckMagicLevelup(UserMagic userMagic) {
+        public bool CheckMagicLevelup(UserMagic userMagic)
+        {
             bool result = false;
             int nLevel;
-            if ((userMagic.Level < 4) && (userMagic.Magic.TrainLv >= userMagic.Level)) {
+            if ((userMagic.Level < 4) && (userMagic.Magic.TrainLv >= userMagic.Level))
+            {
                 nLevel = userMagic.Level;
             }
-            else {
+            else
+            {
                 nLevel = 0;
             }
-            if ((userMagic.Magic.TrainLv > userMagic.Level) && (userMagic.Magic.MaxTrain[nLevel] <= userMagic.TranPoint)) {
-                if (userMagic.Magic.TrainLv > userMagic.Level) {
+            if ((userMagic.Magic.TrainLv > userMagic.Level) && (userMagic.Magic.MaxTrain[nLevel] <= userMagic.TranPoint))
+            {
+                if (userMagic.Magic.TrainLv > userMagic.Level)
+                {
                     userMagic.TranPoint -= userMagic.Magic.MaxTrain[nLevel];
                     userMagic.Level++;
                     SendUpdateDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
                     CheckSeeHealGauge(userMagic);
                 }
-                else {
+                else
+                {
                     userMagic.TranPoint = userMagic.Magic.MaxTrain[nLevel];
                 }
                 result = true;
@@ -4628,20 +5090,25 @@ namespace GameSrv.Player {
         /// <summary>
         /// 心灵启示
         /// </summary>
-        protected void CheckSeeHealGauge(UserMagic magic) {
-            if (magic.Magic.MagicId == 28) {
-                if (magic.Level >= 2) {
+        protected void CheckSeeHealGauge(UserMagic magic)
+        {
+            if (magic.Magic.MagicId == 28)
+            {
+                if (magic.Level >= 2)
+                {
                     AbilSeeHealGauge = true;
                 }
             }
         }
 
-        public void HasLevelUp(int nLevel) {
+        public void HasLevelUp(int nLevel)
+        {
             Abil.MaxExp = GetLevelExp(Abil.Level);
             RecalcLevelAbilitys();
             RecalcAbilitys();
             SendMsg(this, Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
-            if (M2Share.FunctionNPC != null) {
+            if (M2Share.FunctionNPC != null)
+            {
                 M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
         }
@@ -4650,7 +5117,8 @@ namespace GameSrv.Player {
         /// 无极真气
         /// </summary>
         /// <returns></returns>
-        public void AttPowerUp(ushort nPower, int nTime) {
+        public void AttPowerUp(ushort nPower, int nTime)
+        {
             this.ExtraAbil[0] = nPower;
             this.ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
             SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
@@ -4658,15 +5126,19 @@ namespace GameSrv.Player {
             SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
         }
 
-        public UserItem CheckItemCount(string sItemName, ref int nCount) {
+        public UserItem CheckItemCount(string sItemName, ref int nCount)
+        {
             UserItem result = null;
             nCount = 0;
-            for (int i = 0; i < UseItems.Length; i++) {
-                if (UseItems[i] == null) {
+            for (int i = 0; i < UseItems.Length; i++)
+            {
+                if (UseItems[i] == null)
+                {
                     continue;
                 }
                 string sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
-                if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0) {
+                if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                {
                     result = UseItems[i];
                     nCount++;
                 }
@@ -4677,25 +5149,33 @@ namespace GameSrv.Player {
         /// <summary>
         /// 减少复活戒指持久
         /// </summary>
-        internal void ItemDamageRevivalRing() {
-            for (int i = 0; i < UseItems.Length; i++) {
-                if (UseItems[i] != null && UseItems[i].Index > 0) {
+        internal void ItemDamageRevivalRing()
+        {
+            for (int i = 0; i < UseItems.Length; i++)
+            {
+                if (UseItems[i] != null && UseItems[i].Index > 0)
+                {
                     StdItem pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                    if (pSItem != null) {
-                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount))) {
+                    if (pSItem != null)
+                    {
+                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
+                        {
                             ushort nDura = UseItems[i].Dura;
                             ushort tDura = (ushort)HUtil32.Round(nDura / 1000.0);
                             nDura -= 1000;
-                            if (nDura <= 0) {
+                            if (nDura <= 0)
+                            {
                                 nDura = 0;
                                 UseItems[i].Dura = nDura;
-                                if (Race == ActorRace.Play) {
+                                if (Race == ActorRace.Play)
+                                {
                                     this.SendDelItems(UseItems[i]);
                                 }
                                 UseItems[i].Index = 0;
                                 RecalcAbilitys();
                             }
-                            else {
+                            else
+                            {
                                 UseItems[i].Dura = nDura;
                             }
                             if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
@@ -4708,30 +5188,39 @@ namespace GameSrv.Player {
             }
         }
 
-        private bool IsGoodKilling(BaseObject cert) {
+        private bool IsGoodKilling(BaseObject cert)
+        {
             return ((PlayObject)cert).PvpFlag;
         }
 
-        internal UserMagic GetAttrackMagic(int magicId) {
+        internal UserMagic GetAttrackMagic(int magicId)
+        {
             return MagicArr[magicId];
         }
 
-        internal byte GetMyLight() {
+        internal byte GetMyLight()
+        {
             byte currentLight = 0;
             if (true)//BoHighLevelEffect
             {
-                if (Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL) {
+                if (Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL)
+                {
                     currentLight = 1;
                 }
             }
-            for (byte i = ItemLocation.Dress; i <= ItemLocation.Charm; i++) {
-                if (UseItems[i] == null) {
+            for (byte i = ItemLocation.Dress; i <= ItemLocation.Charm; i++)
+            {
+                if (UseItems[i] == null)
+                {
                     continue;
                 }
-                if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0)) {
+                if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0))
+                {
                     StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                    if (stdItem != null) {
-                        if (currentLight < stdItem.Light) {
+                    if (stdItem != null)
+                    {
+                        if (currentLight < stdItem.Light)
+                        {
                             currentLight = stdItem.Light;
                         }
                     }
@@ -4770,17 +5259,21 @@ namespace GameSrv.Player {
             VisibleItems.Add(visibleMapItem);
         }
 
-        protected void UpdateVisibleEvent(short wX, short wY, EventInfo MapEvent) {
+        protected void UpdateVisibleEvent(short wX, short wY, EventInfo MapEvent)
+        {
             bool boIsVisible = false;
-            for (int i = 0; i < VisibleEvents.Count; i++) {
+            for (int i = 0; i < VisibleEvents.Count; i++)
+            {
                 EventInfo mapEvent = VisibleEvents[i];
-                if (mapEvent == MapEvent) {
+                if (mapEvent == MapEvent)
+                {
                     mapEvent.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
             }
-            if (boIsVisible) {
+            if (boIsVisible)
+            {
                 return;
             }
             MapEvent.VisibleFlag = VisibleFlag.Hidden;
