@@ -1120,10 +1120,9 @@ namespace GameSrv.World
                 Account = playObject.UserAccount,
                 ChrName = playObject.ChrName,
                 SessionID = playObject.SessionId,
-                PlayObject = playObject,
-                HumanRcd = new PlayerDataInfo()
+                PlayObject = playObject
             };
-            MakeSaveRcd(playObject, ref saveRcd.HumanRcd);
+            saveRcd.HumanRcd = MakeSaveRcd(playObject);
             M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
         }
 
@@ -1264,66 +1263,69 @@ namespace GameSrv.World
             }
         }
 
-        private static void MakeSaveRcd(PlayObject playObject, ref PlayerDataInfo humanRcd)
+        private static PlayerDataInfo MakeSaveRcd(PlayObject playObject)
         {
-            humanRcd.Data.ServerIndex = M2Share.ServerIndex;
-            humanRcd.Data.ChrName = playObject.ChrName;
-            humanRcd.Data.CurMap = playObject.MapName;
-            humanRcd.Data.CurX = playObject.CurrX;
-            humanRcd.Data.CurY = playObject.CurrY;
-            humanRcd.Data.Dir = playObject.Direction;
-            humanRcd.Data.Hair = playObject.Hair;
-            humanRcd.Data.Sex = (byte)playObject.Gender;
-            humanRcd.Data.Job = (byte)playObject.Job;
-            humanRcd.Data.Gold = playObject.Gold;
-            humanRcd.Data.Abil.Level = playObject.Abil.Level;
-            humanRcd.Data.Abil.HP = playObject.WAbil.HP;
-            humanRcd.Data.Abil.MP = playObject.WAbil.MP;
-            humanRcd.Data.Abil.MaxHP = playObject.WAbil.MaxHP;
-            humanRcd.Data.Abil.MaxMP = playObject.WAbil.MaxMP;
-            humanRcd.Data.Abil.Exp = playObject.Abil.Exp;
-            humanRcd.Data.Abil.MaxExp = playObject.Abil.MaxExp;
-            humanRcd.Data.Abil.Weight = playObject.WAbil.Weight;
-            humanRcd.Data.Abil.MaxWeight = playObject.WAbil.MaxWeight;
-            humanRcd.Data.Abil.WearWeight = playObject.WAbil.WearWeight;
-            humanRcd.Data.Abil.MaxWearWeight = playObject.WAbil.MaxWearWeight;
-            humanRcd.Data.Abil.HandWeight = playObject.WAbil.HandWeight;
-            humanRcd.Data.Abil.MaxHandWeight = playObject.WAbil.MaxHandWeight;
-            humanRcd.Data.Abil.HP = playObject.WAbil.HP;
-            humanRcd.Data.Abil.MP = playObject.WAbil.MP;
-            humanRcd.Data.StatusTimeArr = playObject.StatusTimeArr;
-            humanRcd.Data.HomeMap = playObject.HomeMap;
-            humanRcd.Data.HomeX = playObject.HomeX;
-            humanRcd.Data.HomeY = playObject.HomeY;
-            humanRcd.Data.PKPoint = playObject.PkPoint;
-            humanRcd.Data.BonusAbil = playObject.BonusAbil;
-            humanRcd.Data.BonusPoint = playObject.BonusPoint;
-            humanRcd.Data.StoragePwd = playObject.StoragePwd;
-            humanRcd.Data.CreditPoint = playObject.CreditPoint;
-            humanRcd.Data.ReLevel = playObject.ReLevel;
-            humanRcd.Data.MasterName = playObject.MasterName;
-            humanRcd.Data.IsMaster = playObject.IsMaster;
-            humanRcd.Data.DearName = playObject.DearName;
-            humanRcd.Data.GameGold = playObject.GameGold;
-            humanRcd.Data.GamePoint = playObject.GamePoint;
-            humanRcd.Data.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
-            humanRcd.Data.btF9 = playObject.BtB2;
-            humanRcd.Data.AttatckMode = (byte)playObject.AttatckMode;
-            humanRcd.Data.IncHealth = (byte)playObject.IncHealth;
-            humanRcd.Data.IncSpell = (byte)playObject.IncSpell;
-            humanRcd.Data.IncHealing = (byte)playObject.IncHealing;
-            humanRcd.Data.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
-            humanRcd.Data.Account = playObject.UserAccount;
-            humanRcd.Data.LockLogon = playObject.IsLockLogon;
-            humanRcd.Data.Contribution = playObject.Contribution;
-            humanRcd.Data.HungerStatus = playObject.HungerStatus;
-            humanRcd.Data.AllowGuildReCall = playObject.AllowGuildReCall;
-            humanRcd.Data.GroupRcallTime = playObject.GroupRcallTime;
-            humanRcd.Data.BodyLuck = playObject.BodyLuck;
-            humanRcd.Data.AllowGroupReCall = playObject.AllowGroupReCall;
-            humanRcd.Data.QuestUnitOpen = playObject.QuestUnitOpen;
-            humanRcd.Data.QuestUnit = playObject.QuestUnit;
-            humanRcd.Data.QuestFlag = playObject.QuestFlag;
+            var humanRcd = new PlayerDataInfo();
+            var playerInfo = humanRcd.Data;
+            var playAbil = humanRcd.Data.Abil;
+            playerInfo.ServerIndex = M2Share.ServerIndex;
+            playerInfo.ChrName = playObject.ChrName;
+            playerInfo.CurMap = playObject.MapName;
+            playerInfo.CurX = playObject.CurrX;
+            playerInfo.CurY = playObject.CurrY;
+            playerInfo.Dir = playObject.Direction;
+            playerInfo.Hair = playObject.Hair;
+            playerInfo.Sex = (byte)playObject.Gender;
+            playerInfo.Job = (byte)playObject.Job;
+            playerInfo.Gold = playObject.Gold;
+            playAbil.Level = playObject.Abil.Level;
+            playAbil.HP = playObject.WAbil.HP;
+            playAbil.MP = playObject.WAbil.MP;
+            playAbil.MaxHP = playObject.WAbil.MaxHP;
+            playAbil.MaxMP = playObject.WAbil.MaxMP;
+            playAbil.Exp = playObject.Abil.Exp;
+            playAbil.MaxExp = playObject.Abil.MaxExp;
+            playAbil.Weight = playObject.WAbil.Weight;
+            playAbil.MaxWeight = playObject.WAbil.MaxWeight;
+            playAbil.WearWeight = playObject.WAbil.WearWeight;
+            playAbil.MaxWearWeight = playObject.WAbil.MaxWearWeight;
+            playAbil.HandWeight = playObject.WAbil.HandWeight;
+            playAbil.MaxHandWeight = playObject.WAbil.MaxHandWeight;
+            playAbil.HP = playObject.WAbil.HP;
+            playAbil.MP = playObject.WAbil.MP;
+            playerInfo.StatusTimeArr = playObject.StatusTimeArr;
+            playerInfo.HomeMap = playObject.HomeMap;
+            playerInfo.HomeX = playObject.HomeX;
+            playerInfo.HomeY = playObject.HomeY;
+            playerInfo.PKPoint = playObject.PkPoint;
+            playerInfo.BonusAbil = playObject.BonusAbil;
+            playerInfo.BonusPoint = playObject.BonusPoint;
+            playerInfo.StoragePwd = playObject.StoragePwd;
+            playerInfo.CreditPoint = playObject.CreditPoint;
+            playerInfo.ReLevel = playObject.ReLevel;
+            playerInfo.MasterName = playObject.MasterName;
+            playerInfo.IsMaster = playObject.IsMaster;
+            playerInfo.DearName = playObject.DearName;
+            playerInfo.GameGold = playObject.GameGold;
+            playerInfo.GamePoint = playObject.GamePoint;
+            playerInfo.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
+            playerInfo.btF9 = playObject.BtB2;
+            playerInfo.AttatckMode = (byte)playObject.AttatckMode;
+            playerInfo.IncHealth = (byte)playObject.IncHealth;
+            playerInfo.IncSpell = (byte)playObject.IncSpell;
+            playerInfo.IncHealing = (byte)playObject.IncHealing;
+            playerInfo.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
+            playerInfo.Account = playObject.UserAccount;
+            playerInfo.LockLogon = playObject.IsLockLogon;
+            playerInfo.Contribution = playObject.Contribution;
+            playerInfo.HungerStatus = playObject.HungerStatus;
+            playerInfo.AllowGuildReCall = playObject.AllowGuildReCall;
+            playerInfo.GroupRcallTime = playObject.GroupRcallTime;
+            playerInfo.BodyLuck = playObject.BodyLuck;
+            playerInfo.AllowGroupReCall = playObject.AllowGroupReCall;
+            playerInfo.QuestUnitOpen = playObject.QuestUnitOpen;
+            playerInfo.QuestUnit = playObject.QuestUnit;
+            playerInfo.QuestFlag = playObject.QuestFlag;
             ServerUserItem[] HumItems = humanRcd.Data.HumItems;
             if (HumItems == null)
             {
@@ -1409,6 +1411,9 @@ namespace GameSrv.World
                     StorageItems[i] = HUtil32.DelfautItem.ToServerItem();
                 }
             }
+            humanRcd.Data = playerInfo;
+            humanRcd.Data.Abil = playAbil;
+            return humanRcd;
         }
 
         private static string GetHomeInfo(PlayJob nJob, ref short nX, ref short nY)

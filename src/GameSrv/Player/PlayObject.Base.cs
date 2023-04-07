@@ -1793,7 +1793,8 @@ namespace GameSrv.Player {
             Luck = 0;
             Luck = (byte)(Luck + AddAbil.Luck);
             Luck = (byte)(Luck - AddAbil.UnLuck);
-            if (Race == ActorRace.Play) {
+            if (Race == ActorRace.Play)
+            {
                 bool mhRing = false;
                 bool mhBracelet = false;
                 bool mhNecklace = false;
@@ -1880,16 +1881,22 @@ namespace GameSrv.Player {
                 bool dragonsetBoots = false;
                 bool dragonsetBelt = false;
                 bool dsetWingdress = false;
-                for (int i = 0; i < UseItems.Length; i++) {
-                    if (UseItems[i] != null && (UseItems[i].Index > 0)) {
+                for (int i = 0; i < UseItems.Length; i++)
+                {
+                    if (UseItems[i] != null && (UseItems[i].Index > 0))
+                    {
                         StdItem stdItem;
-                        if (UseItems[i].Dura == 0) {
+                        if (UseItems[i].Dura == 0)
+                        {
                             stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
-                            if (stdItem != null) {
-                                if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) {
+                            if (stdItem != null)
+                            {
+                                if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
+                                {
                                     WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
                                 }
-                                else {
+                                else
+                                {
                                     WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
                                 }
                             }
@@ -1898,24 +1905,32 @@ namespace GameSrv.Player {
                         stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                         ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
                         ApplyItemParametersEx(UseItems[i], ref WAbil);
-                        if (stdItem != null) {
-                            if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) {
+                        if (stdItem != null)
+                        {
+                            if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
+                            {
                                 WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
                             }
-                            else {
+                            else
+                            {
                                 WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
                             }
-                            switch (i) {
+                            switch (i)
+                            {
                                 case ItemLocation.Weapon:
                                 case ItemLocation.ArmRingl:
-                                case ItemLocation.ArmRingr: {
-                                        if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50)) {
+                                case ItemLocation.ArmRingr:
+                                    {
+                                        if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
+                                        {
                                             AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (-stdItem.SpecialPwr));
                                         }
-                                        if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100)) {
+                                        if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
+                                        {
                                             AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
                                         }
-                                        switch (stdItem.Shape) {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.CCHO_WEAPON:
                                                 choWeapon = true;
                                                 break;
@@ -1928,8 +1943,10 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case ItemLocation.Necklace: {
-                                        switch (stdItem.Shape) {
+                                case ItemLocation.Necklace:
+                                    {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.NECTLACE_FASTTRAINING_ITEM:
                                                 FastTrain = true;
                                                 break;
@@ -1990,8 +2007,10 @@ namespace GameSrv.Player {
                                         break;
                                     }
                                 case ItemLocation.Ringr:
-                                case ItemLocation.Ringl: {
-                                        switch (stdItem.Shape) {
+                                case ItemLocation.Ringl:
+                                    {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.RING_TRANSPARENT_ITEM:
                                                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 60000;
                                                 HideMode = true;
@@ -2076,11 +2095,14 @@ namespace GameSrv.Player {
                                             case ItemShapeConst.STRONG_RUBYSET_RING_SHAPE:
                                                 strongRubysetRing = true;
                                                 break;
-                                            case DragonConst.DRAGON_RING_SHAPE: {
-                                                    if ((i == ItemLocation.Ringl)) {
+                                            case DragonConst.DRAGON_RING_SHAPE:
+                                                {
+                                                    if ((i == ItemLocation.Ringl))
+                                                    {
                                                         dragonsetRingLeft = true;
                                                     }
-                                                    if ((i == ItemLocation.Ringr)) {
+                                                    if ((i == ItemLocation.Ringr))
+                                                    {
                                                         dragonsetRingRight = true;
                                                     }
                                                     break;
@@ -2089,10 +2111,13 @@ namespace GameSrv.Player {
                                         break;
                                     }
                             }
-                            switch (i) {
+                            switch (i)
+                            {
                                 case ItemLocation.ArmRingl:
-                                case ItemLocation.ArmRingr: {
-                                        switch (stdItem.Shape) {
+                                case ItemLocation.ArmRingr:
+                                    {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.ARMRING_HAP_ITEM:
                                                 cghi[2] = true;
                                                 break;
@@ -2149,11 +2174,14 @@ namespace GameSrv.Player {
                                             case ItemShapeConst.STRONG_RUBYSET_BRACELET_SHAPE:
                                                 strongRubysetBracelet = true;
                                                 break;
-                                            case DragonConst.DRAGON_BRACELET_SHAPE: {
-                                                    if ((i == ItemLocation.ArmRingl)) {
+                                            case DragonConst.DRAGON_BRACELET_SHAPE:
+                                                {
+                                                    if ((i == ItemLocation.ArmRingl))
+                                                    {
                                                         dragonsetBraceletLeft = true;
                                                     }
-                                                    if ((i == ItemLocation.ArmRingr)) {
+                                                    if ((i == ItemLocation.ArmRingr))
+                                                    {
                                                         dragonsetBraceletRight = true;
                                                     }
                                                     break;
@@ -2161,8 +2189,10 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case ItemLocation.Helmet: {
-                                        switch (stdItem.Shape) {
+                                case ItemLocation.Helmet:
+                                    {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.HELMET_IL_ITEM:
                                                 cghi[3] = true;
                                                 break;
@@ -2178,8 +2208,10 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case ItemLocation.Dress: {
-                                        switch (stdItem.Shape) {
+                                case ItemLocation.Dress:
+                                    {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.DRESS_SHAPE_WING:
                                                 dsetWingdress = true;
                                                 break;
@@ -2192,8 +2224,10 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case ItemLocation.Belt: {
-                                        switch (stdItem.Shape) {
+                                case ItemLocation.Belt:
+                                    {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.PTSET_BELT_SHAPE:
                                                 ptsetBelt = true;
                                                 break;
@@ -2218,8 +2252,10 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case ItemLocation.Boots: {
-                                        switch (stdItem.Shape) {
+                                case ItemLocation.Boots:
+                                    {
+                                        switch (stdItem.Shape)
+                                        {
                                             case ItemShapeConst.PTSET_BOOTS_SHAPE:
                                                 ptsetBoots = true;
                                                 break;
@@ -2244,8 +2280,10 @@ namespace GameSrv.Player {
                                         }
                                         break;
                                     }
-                                case ItemLocation.Charm: {
-                                        if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE)) {
+                                case ItemLocation.Charm:
+                                    {
+                                        if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE))
+                                        {
                                             AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 1));
                                         }
                                         break;
@@ -2254,71 +2292,89 @@ namespace GameSrv.Player {
                         }
                     }
                 }
-                if (cghi[0] && cghi[1] && cghi[2] && cghi[3]) {
+                if (cghi[0] && cghi[1] && cghi[2] && cghi[3])
+                {
                     RecallSuite = true;
                 }
-                if (mhNecklace && mhBracelet && mhRing) {
+                if (mhNecklace && mhBracelet && mhRing)
+                {
                     MoXieSuite = MoXieSuite + 50;
                 }
-                if (shNecklace && shBracelet && shRing) {
+                if (shNecklace && shBracelet && shRing)
+                {
                     AddAbil.HIT = (ushort)(AddAbil.HIT + 2);
                 }
-                if (hpBracelet && hpRing) {
+                if (hpBracelet && hpRing)
+                {
                     AddAbil.HP = (ushort)(AddAbil.HP + 50);
                 }
-                if (mpBracelet && mpRing) {
+                if (mpBracelet && mpRing)
+                {
                     AddAbil.MP = (ushort)(AddAbil.MP + 50);
                 }
-                if (hpmpBracelet && hpmpRing) {
+                if (hpmpBracelet && hpmpRing)
+                {
                     AddAbil.HP = (ushort)(AddAbil.HP + 30);
                     AddAbil.MP = (ushort)(AddAbil.MP + 30);
                 }
-                if (hppNecklace && hppBracelet && hppRing) {
+                if (hppNecklace && hppBracelet && hppRing)
+                {
                     AddAbil.HP = (ushort)(AddAbil.HP + ((WAbil.MaxHP * 30) / 100));
                     AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(2, 2));
                 }
-                if (choWeapon && choNecklace && choRing && choHelmet && choBracelet) {
+                if (choWeapon && choNecklace && choRing && choHelmet && choBracelet)
+                {
                     AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 4);
                     AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(2, 5));
                 }
-                if (psetBracelet && psetRing) {
+                if (psetBracelet && psetRing)
+                {
                     AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
-                    if (psetNecklace) {
+                    if (psetNecklace)
+                    {
                         AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(1, 3));
                     }
                 }
-                if (hsetBracelet && hsetRing) {
+                if (hsetBracelet && hsetRing)
+                {
                     WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 20);
                     WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 5));
-                    if (hsetNecklace) {
+                    if (hsetNecklace)
+                    {
                         AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(1, 2));
                     }
                 }
-                if (ysetBracelet && ysetRing) {
+                if (ysetBracelet && ysetRing)
+                {
                     AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + 3);
-                    if (ysetNecklace) {
+                    if (ysetNecklace)
+                    {
                         AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(1, 2));
                     }
                 }
-                if (bonesetWeapon && bonesetHelmet && bonesetDress) {
+                if (bonesetWeapon && bonesetHelmet && bonesetDress)
+                {
                     AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
                     AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
                     AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
                 }
-                if (bugsetNecklace && bugsetRing && bugsetBracelet) {
+                if (bugsetNecklace && bugsetRing && bugsetBracelet)
+                {
                     AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
                     AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
                     AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
                     AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 1);
                     AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + 1);
                 }
-                if (ptsetBelt && ptsetBoots && ptsetNecklace && ptsetBracelet && ptsetRing) {
+                if (ptsetBelt && ptsetBoots && ptsetNecklace && ptsetBracelet && ptsetRing)
+                {
                     AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 2));
                     AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
                     WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
                     WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
-                if (kssetBelt && kssetBoots && kssetNecklace && kssetBracelet && kssetRing) {
+                if (kssetBelt && kssetBoots && kssetNecklace && kssetBracelet && kssetRing)
+                {
                     AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
                     AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 1));
                     AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 1));
@@ -2326,19 +2382,22 @@ namespace GameSrv.Player {
                     WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
                     WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
-                if (rubysetBelt && rubysetBoots && rubysetNecklace && rubysetBracelet && rubysetRing) {
+                if (rubysetBelt && rubysetBoots && rubysetNecklace && rubysetBracelet && rubysetRing)
+                {
                     AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
                     AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 2));
                     WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
                     WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
-                if (strongPtsetBelt && strongPtsetBoots && strongPtsetNecklace && strongPtsetBracelet && strongPtsetRing) {
+                if (strongPtsetBelt && strongPtsetBoots && strongPtsetNecklace && strongPtsetBracelet && strongPtsetRing)
+                {
                     AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 3));
                     AddAbil.HP = (ushort)(AddAbil.HP + 30);
                     AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
                     WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
-                if (strongKssetBelt && strongKssetBoots && strongKssetNecklace && strongKssetBracelet && strongKssetRing) {
+                if (strongKssetBelt && strongKssetBoots && strongKssetNecklace && strongKssetBracelet && strongKssetRing)
+                {
                     AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
                     AddAbil.HP = (ushort)(AddAbil.HP + 15);
                     AddAbil.MP = (ushort)(AddAbil.MP + 20);
@@ -2347,13 +2406,15 @@ namespace GameSrv.Player {
                     AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
                     WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
-                if (strongRubysetBelt && strongRubysetBoots && strongRubysetNecklace && strongRubysetBracelet && strongRubysetRing) {
+                if (strongRubysetBelt && strongRubysetBoots && strongRubysetNecklace && strongRubysetBracelet && strongRubysetRing)
+                {
                     AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
                     AddAbil.MP = (ushort)(AddAbil.MP + 40);
                     AddAbil.SPEED = (ushort)(AddAbil.SPEED + 2);
                     WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
-                if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace && dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt) {
+                if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace && dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
+                {
                     AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 4));
                     AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 4));
                     AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 2));
@@ -2370,8 +2431,10 @@ namespace GameSrv.Player {
                     AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
                     AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
                 }
-                else {
-                    if (dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt) {
+                else
+                {
+                    if (dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
+                    {
                         WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 34));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
                         AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
@@ -2379,56 +2442,67 @@ namespace GameSrv.Player {
                         AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
                         AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
                     }
-                    else if (dragonsetDress && dragonsetBoots && dragonsetBelt) {
+                    else if (dragonsetDress && dragonsetBoots && dragonsetBelt)
+                    {
                         WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
                         AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 1));
                         AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
                         AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
                     }
-                    else if (dragonsetDress && dragonsetHelmet && dragonsetWeapon) {
+                    else if (dragonsetDress && dragonsetHelmet && dragonsetWeapon)
+                    {
                         AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 2));
                         AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
                         AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
                         AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
                     }
-                    if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace) {
+                    if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
+                    {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
                         AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 3));
                         AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 3));
                     }
-                    else if ((dragonsetRingLeft || dragonsetRingRight) && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace) {
+                    else if ((dragonsetRingLeft || dragonsetRingRight) && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
+                    {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
                         AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
                         AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                     }
-                    else if (dragonsetRingLeft && dragonsetRingRight && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace) {
+                    else if (dragonsetRingLeft && dragonsetRingRight && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
+                    {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
                         AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 2));
                         AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 2));
                     }
-                    else if ((dragonsetRingLeft || dragonsetRingRight) && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace) {
+                    else if ((dragonsetRingLeft || dragonsetRingRight) && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
+                    {
                         WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
                         WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
                         AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
                         AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                     }
-                    else {
-                        if (dragonsetBraceletLeft && dragonsetBraceletRight) {
+                    else
+                    {
+                        if (dragonsetBraceletLeft && dragonsetBraceletRight)
+                        {
                             AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC)));
                             AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC)));
                         }
-                        if (dragonsetRingLeft && dragonsetRingRight) {
+                        if (dragonsetRingLeft && dragonsetRingRight)
+                        {
                             AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
                             AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                         }
                     }
                 }
-                if (dsetWingdress && (Abil.Level >= 20)) {
-                    switch (Abil.Level) {
+                if (dsetWingdress && (Abil.Level >= 20))
+                {
+                    switch (Abil.Level)
+                    {
                         case < 40:
                             AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
                             AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
@@ -2454,73 +2528,95 @@ namespace GameSrv.Player {
                 }
                 WAbil.Weight = RecalcBagWeight();
 
-                if (FlameRing) {
+                if (FlameRing)
+                {
                     AddItemSkill(Settings.AM_FIREBALL);
                 }
-                else {
+                else
+                {
                     DelItemSkill(Settings.AM_FIREBALL);
                 }
-                if (RecoveryRing) {
+                if (RecoveryRing)
+                {
                     AddItemSkill(Settings.AM_HEALING);
                 }
-                else {
+                else
+                {
                     DelItemSkill(Settings.AM_HEALING);
                 }
-                if (MuscleRing) {
+                if (MuscleRing)
+                {
                     WAbil.MaxWeight = (ushort)(WAbil.MaxWeight * 2);
                     WAbil.MaxWearWeight = (byte)HUtil32._MIN(255, WAbil.MaxWearWeight * 2);
-                    if ((WAbil.MaxHandWeight * 2 > 255)) {
+                    if ((WAbil.MaxHandWeight * 2 > 255))
+                    {
                         WAbil.MaxHandWeight = 255;
                     }
-                    else {
+                    else
+                    {
                         WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight * 2);
                     }
                 }
-                if (MoXieSuite > 0) {
-                    if (MoXieSuite >= WAbil.MaxMP) {
+                if (MoXieSuite > 0)
+                {
+                    if (MoXieSuite >= WAbil.MaxMP)
+                    {
                         MoXieSuite = WAbil.MaxMP - 1;
                     }
                     WAbil.MaxMP = (ushort)(WAbil.MaxMP - MoXieSuite);
                     WAbil.MaxHP = (ushort)(WAbil.MaxHP + MoXieSuite);
-                    if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP)) {
+                    if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP))
+                    {
                         WAbil.HP = WAbil.MaxHP;
                     }
                 }
-                if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing)) {
+                if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
+                {
                     WAbil.HP = WAbil.MaxHP;
                 }
-                if ((Race == ActorRace.Play) && (WAbil.MP > WAbil.MaxMP)) {
+                if ((Race == ActorRace.Play) && (WAbil.MP > WAbil.MaxMP))
+                {
                     WAbil.MP = WAbil.MaxMP;
                 }
-                if (ExtraAbil[AbilConst.EABIL_DCUP] > 0) {
+                if (ExtraAbil[AbilConst.EABIL_DCUP] > 0)
+                {
                     WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]));
                 }
-                if (ExtraAbil[AbilConst.EABIL_MCUP] > 0) {
+                if (ExtraAbil[AbilConst.EABIL_MCUP] > 0)
+                {
                     WAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MC), (ushort)(HUtil32.HiByte(WAbil.MC) + ExtraAbil[AbilConst.EABIL_MCUP]));
                 }
-                if (ExtraAbil[AbilConst.EABIL_SCUP] > 0) {
+                if (ExtraAbil[AbilConst.EABIL_SCUP] > 0)
+                {
                     WAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.SC), (ushort)(HUtil32.HiByte(WAbil.SC) + ExtraAbil[AbilConst.EABIL_SCUP]));
                 }
-                if (ExtraAbil[AbilConst.EABIL_HITSPEEDUP] > 0) {
+                if (ExtraAbil[AbilConst.EABIL_HITSPEEDUP] > 0)
+                {
                     HitSpeed = (ushort)(HitSpeed + ExtraAbil[AbilConst.EABIL_HITSPEEDUP]);
                 }
-                if (ExtraAbil[AbilConst.EABIL_HPUP] > 0) {
+                if (ExtraAbil[AbilConst.EABIL_HPUP] > 0)
+                {
                     WAbil.MaxHP = (ushort)(WAbil.MaxHP + ExtraAbil[AbilConst.EABIL_HPUP]);
                 }
-                if (ExtraAbil[AbilConst.EABIL_MPUP] > 0) {
+                if (ExtraAbil[AbilConst.EABIL_MPUP] > 0)
+                {
                     WAbil.MaxMP = (ushort)(WAbil.MaxMP + ExtraAbil[AbilConst.EABIL_MPUP]);
                 }
-                if (ExtraAbil[AbilConst.EABIL_PWRRATE] > 0) {
+                if (ExtraAbil[AbilConst.EABIL_PWRRATE] > 0)
+                {
                     WAbil.DC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
                     WAbil.MC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
                     WAbil.SC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
                 }
-                if (Race == ActorRace.Play) {
+                if (Race == ActorRace.Play)
+                {
                     bool fastmoveflag = UseItems[ItemLocation.Boots] != null && UseItems[ItemLocation.Boots].Dura > 0 && UseItems[ItemLocation.Boots].Index == Settings.INDEX_MIRBOOTS;
-                    if (fastmoveflag) {
+                    if (fastmoveflag)
+                    {
                         StatusTimeArr[PoisonState.FASTMOVE] = 60000;
                     }
-                    else {
+                    else
+                    {
                         StatusTimeArr[PoisonState.FASTMOVE] = 0;
                     }
                     //if ((Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL))
@@ -2546,9 +2642,18 @@ namespace GameSrv.Player {
 
                 byte oldlight = Light;
                 Light = GetMyLight();
-                if (oldlight != Light) {
+                if (oldlight != Light)
+                {
                     SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                 }
+
+                WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
+                WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
+                WAbil.AC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
+                WAbil.MAC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
+                WAbil.DC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
+                WAbil.MC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
+                WAbil.SC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
             }
         }
 

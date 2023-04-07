@@ -31,7 +31,7 @@ namespace BotSrv.Objects
         /// <summary>
         /// 基础属性
         /// </summary>
-        public Ability Abil = null;
+        public Ability Abil;
         public TMonsterAction m_Action;
         public bool m_boAttackSlow; // 腕力不够时慢动作攻击.
         public bool Death;

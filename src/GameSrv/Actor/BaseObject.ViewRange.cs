@@ -78,14 +78,19 @@ namespace GameSrv.Actor
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            var nIdx = 0;
+                            while (true)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
+                                if (cellInfo.Count <= nIdx)
+                                {
+                                    break;
+                                }
+                                CellObject cellObject = cellInfo.ObjList[nIdx];
                                 if (cellObject.ActorObject)
                                 {
                                     if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                     {
-                                        cellInfo.Remove(i);
+                                        cellInfo.Remove(nIdx);
                                         if (cellInfo.Count > 0)
                                         {
                                             continue;
@@ -108,6 +113,7 @@ namespace GameSrv.Actor
                                         }
                                     }
                                 }
+                                nIdx++;
                             }
                         }
                     }

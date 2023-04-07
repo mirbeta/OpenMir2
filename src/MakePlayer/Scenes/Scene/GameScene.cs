@@ -104,7 +104,7 @@ namespace MakePlayer.Scenes.Scene
             var job = (byte)defMsg.Param;
             var gameGold = HUtil32.MakeLong(defMsg.Tag, defMsg.Series);
             var buff = EDCode.DecodeBuffer(sData);
-            PlayAbil = ClientPacket.ToPacket<Ability>(buff);
+            PlayAbil = SerializerUtil.Deserialize<Ability>(buff);
         }
 
         private void ClientGetWinExp(CommandMessage defMsg)
