@@ -3808,8 +3808,8 @@ namespace GameSrv.Player {
                             if (MyGuild.IsMember(cret.ChrName)) {
                                 result = true;
                             }
-                            if (GuildWarArea && ((cret as PlayObject).MyGuild != null)) {
-                                if (MyGuild.IsAllyGuild((cret as PlayObject).MyGuild)) {
+                            if (GuildWarArea && (((PlayObject)cret).MyGuild != null)) {
+                                if (MyGuild.IsAllyGuild(((PlayObject)cret).MyGuild)) {
                                     result = true;
                                 }
                             }
@@ -3820,12 +3820,12 @@ namespace GameSrv.Player {
                             result = true;
                         }
                         if (PvpLevel() >= 2) {
-                            if ((cret as PlayObject).PvpLevel() < 2) {
+                            if (((PlayObject)cret).PvpLevel() < 2) {
                                 result = true;
                             }
                         }
                         else {
-                            if ((cret as PlayObject).PvpLevel() >= 2) {
+                            if (((PlayObject)cret).PvpLevel() >= 2) {
                                 result = true;
                             }
                         }
