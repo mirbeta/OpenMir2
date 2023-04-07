@@ -3572,7 +3572,7 @@ namespace GameSrv.Player {
                     ExpireTime = 0;
                     ExpireCount = 0;
                     AccountExpired = true;
-                    SysMsg("您的账号游戏时间已到，请访问(https://mir2.sdo.com)进行充值，全服务器账号共享游戏时间。", MsgColor.Blue, MsgType.System);
+                    SysMsg("您的账号游戏时间已到期，访问(https://mir2.sdo.com)购买充值，所有游戏大区均可账号共享游戏时间。", MsgColor.Blue, MsgType.System);
                     break;
             }
         }
