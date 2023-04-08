@@ -41,66 +41,79 @@ namespace GameSrv.Player {
             return false;
         }
 
-        private bool ClientPickUpItem() {
-            bool result = false;
-            if (Dealing) {
-                return false;
+        private void ClientPickUpItem()
+        {
+            if (Dealing)
+            {
+                return;
             }
             MapItem mapItem = Envir.GetItem(CurrX, CurrY);
-            if (mapItem == null) {
-                return false;
+            if (mapItem == null)
+            {
+                return;
             }
             if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
             {
                 mapItem.OfBaseObject = 0;
             }
-            if (!ClientPickUpItemIsSelf(mapItem.OfBaseObject) && !ClientPickUpItemIsOfGroup(mapItem.OfBaseObject)) {
+            if (!ClientPickUpItemIsSelf(mapItem.OfBaseObject) && !ClientPickUpItemIsOfGroup(mapItem.OfBaseObject))
+            {
                 SysMsg(Settings.CanotPickUpItem, MsgColor.Red, MsgType.Hint);
-                return false;
+                return;
             }
-            if (mapItem.Name.Equals(Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase)) {
-                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1) {
-                    if (IncGold(mapItem.Count)) {
+            if (mapItem.Name.Equals(Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase))
+            {
+                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1)
+                {
+                    if (IncGold(mapItem.Count))
+                    {
                         SendRefMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY, "");
-                        if (M2Share.GameLogGold) {
+                        if (M2Share.GameLogGold)
+                        {
                             M2Share.EventSource.AddEventLog(4, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName
                                                                + "\t" + mapItem.Count + "\t" + '1' + "\t" + '0');
                         }
                         GoldChanged();
                         Dispose(mapItem);
                     }
-                    else {
+                    else
+                    {
                         Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, mapItem);
                     }
                 }
-                return result;
+                return;
             }
-            if (IsEnoughBag()) {
-                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1) {
+            if (IsEnoughBag())
+            {
+                if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1)
+                {
                     UserItem userItem = mapItem.UserItem;
                     StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
-                    if (stdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index))) {
+                    if (stdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
+                    {
                         SendMsg(this, Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY, "");
                         AddItemToBag(userItem);
-                        if (!M2Share.IsCheapStuff(stdItem.StdMode)) {
-                            if (stdItem.NeedIdentify == 1) {
+                        if (!M2Share.IsCheapStuff(stdItem.StdMode))
+                        {
+                            if (stdItem.NeedIdentify == 1)
+                            {
                                 M2Share.EventSource.AddEventLog(4, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name
                                                                    + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
                         Dispose(mapItem);
-                        if (Race == ActorRace.Play) {
+                        if (Race == ActorRace.Play)
+                        {
                             SendAddItem(userItem);
                         }
-                        result = true;
                     }
-                    else {
+                    else
+                    {
                         Dispose(userItem);
                         Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, mapItem);
                     }
                 }
             }
-            return result;
         }
 
         private void WinExp(int dwExp) {

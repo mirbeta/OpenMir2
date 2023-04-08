@@ -2,7 +2,6 @@ using Microsoft.Diagnostics.NETCore.Client;
 using Microsoft.Diagnostics.Tracing;
 using Microsoft.Diagnostics.Tracing.Parsers;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using NLog;
 using Spectre.Console;
 using System;
@@ -28,7 +27,7 @@ namespace LogDataSrv
             _appLifetime = lifetime;
         }
 
-        public async Task StartAsync(CancellationToken stoppingToken)
+        public Task StartAsync(CancellationToken stoppingToken)
         {
             _logger.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
@@ -90,6 +89,8 @@ namespace LogDataSrv
             });
 
             _appLifetime.ApplicationStopping.Register(OnShutdown);
+
+            return Task.CompletedTask;
         }
 
         public async Task StopAsync(CancellationToken stoppingToken)

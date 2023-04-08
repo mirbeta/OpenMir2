@@ -79,7 +79,7 @@ namespace GameGate.Services
         }
 
         private readonly byte[] httpSpan = HUtil32.GetBytes("http://");
-        private readonly byte[] commmandFlagSpan = HUtil32.GetBytes("@");
+        private readonly byte[] commandFlagSpan = HUtil32.GetBytes("@");
         private readonly byte[] whisperFlagSpan = HUtil32.GetBytes("/");
 
         /// <summary>
@@ -475,7 +475,7 @@ namespace GameGate.Services
                         var msgContent = decodeBuff[12..];
                         if (Config.IsChatInterval)
                         {
-                            if (!msgContent.StartsWith(commmandFlagSpan))
+                            if (!msgContent.StartsWith(commandFlagSpan))
                             {
                                 currentTick = HUtil32.GetTickCount();
                                 if (currentTick - gameSpeed.SayMsgTick < Config.ChatInterval)
@@ -487,7 +487,7 @@ namespace GameGate.Services
                         }
                         if (deCodeLen > GateShare.CommandFixedLength)
                         {
-                            if (msgContent.StartsWith(commmandFlagSpan))
+                            if (msgContent.StartsWith(commandFlagSpan))
                             {
                                 var pszChatBuffer = new byte[255];
                                 var pszChatCmd = string.Empty;
@@ -567,7 +567,7 @@ namespace GameGate.Services
                                     //    //}
                                     //}
                                 }
-                                else if (!msgContent.StartsWith(commmandFlagSpan))
+                                else if (!msgContent.StartsWith(commandFlagSpan))
                                 {
                                     var pszChatBuffer = new byte[255];
                                     MemoryCopy.BlockCopy(destinationSpan, GateShare.CommandFixedLength, pszChatBuffer, 0, deCodeLen - GateShare.CommandFixedLength);
