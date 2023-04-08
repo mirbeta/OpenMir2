@@ -276,7 +276,7 @@ namespace GameSrv.Player {
                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(useItem.Index);
                 if (stdItem != null)
                 {
-                    if (stdItem.Shape == 126 || stdItem.Shape == 127 || stdItem.Shape == 128 || stdItem.Shape == 129)
+                    if (stdItem.Shape is ItemShapeConst.SpiritItem3 or ItemShapeConst.SpiritItem1 or ItemShapeConst.SpiritItem2 or ItemShapeConst.SpiritItem4)
                     {
                         SendDelItems(useItem);
                         useItem.Index = 0;
