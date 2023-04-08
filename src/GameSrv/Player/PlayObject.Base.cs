@@ -5040,8 +5040,8 @@ namespace GameSrv.Player
 
         private void LeaveGroup()
         {
-            const string sExitGropMsg = "{0} 已经退出了本组.";
-            SendGroupText(Format(sExitGropMsg, ChrName));
+            const string sExitGroupMsg = "{0} 已经退出了本组.";
+            SendGroupText(Format(sExitGroupMsg, ChrName));
             GroupOwner = 0;
             SendMsg(this, Messages.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
