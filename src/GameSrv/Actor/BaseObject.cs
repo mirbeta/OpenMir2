@@ -48,10 +48,6 @@ namespace GameSrv.Actor
         public int CharStatus;
         protected int CharStatusEx;
         public MonGenInfo MonGen;
-        /// <summary>
-        /// 骑马
-        /// </summary>
-        public bool OnHorse;
         public ushort IncHealth;
         public ushort IncSpell;
         public ushort IncHealing;

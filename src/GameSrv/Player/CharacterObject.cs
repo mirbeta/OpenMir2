@@ -23,6 +23,10 @@ namespace GameSrv.Player {
         /// </summary>
         public byte HorseType;
         /// <summary>
+        /// 骑马
+        /// </summary>
+        public bool OnHorse;
+        /// <summary>
         /// 魔法盾
         /// </summary>
         internal bool AbilMagBubbleDefence;
