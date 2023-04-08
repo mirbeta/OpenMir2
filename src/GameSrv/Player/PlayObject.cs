@@ -692,7 +692,7 @@ namespace GameSrv.Player {
             try {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority)) {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
                         if (sendMessage.wIdent == Messages.CM_BUTCH) {
                             result++;
                         }
@@ -1235,7 +1235,7 @@ namespace GameSrv.Player {
                     ushort nSpellPoint = GetSpellPoint(userMagic);
                     if (nSpellPoint > 0) {
                         if (WAbil.MP < nSpellPoint) {
-                            return result;
+                            return false;
                         }
                         DamageSpell(nSpellPoint);
                         HealthSpellChanged();
@@ -2185,7 +2185,7 @@ namespace GameSrv.Player {
             try {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority)) {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
                         if (sendMessage.wIdent >= Messages.CM_HIT || sendMessage.wIdent <= Messages.CM_FIREHIT) {
                             result++;
                         }
@@ -2207,7 +2207,7 @@ namespace GameSrv.Player {
             try {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority)) {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
                         if (sendMessage.wIdent == Messages.CM_SPELL) {
                             result++;
                         }
@@ -2229,7 +2229,7 @@ namespace GameSrv.Player {
             try {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority)) {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
                         if (sendMessage.wIdent == Messages.CM_RUN) {
                             result++;
                         }
@@ -2251,7 +2251,7 @@ namespace GameSrv.Player {
             try {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority)) {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
                         if (sendMessage.wIdent == Messages.CM_WALK) {
                             result++;
                         }
@@ -2269,7 +2269,7 @@ namespace GameSrv.Player {
             try {
                 HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority)) {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
                         if (sendMessage.wIdent == Messages.CM_TURN) {
                             result++;
                         }
@@ -2287,7 +2287,7 @@ namespace GameSrv.Player {
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try {
                 for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage, out int priority)) {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
                         if (sendMessage.wIdent == Messages.CM_SITDOWN) {
                             result++;
                         }

@@ -264,7 +264,8 @@ namespace GameSrv.Magic {
                                 if (playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetObject)) {
                                     if (playObject.IsProperTarget(targetObject)) {
                                         if (M2Share.RandomNumber.Random(10) >= targetObject.AntiMagic) {
-                                            if (Math.Abs(targetObject.CurrX - nTargetX) <= 1 && Math.Abs(targetObject.CurrY - nTargetY) <= 1) {
+                                            if (Math.Abs(targetObject.CurrX - nTargetX) <= 1 && Math.Abs(targetObject.CurrY - nTargetY) <= 1)
+                                            {
                                                 nPower = playObject.GetAttackPower(GetPower(userMagic, MPow(userMagic)) + HUtil32.LoByte(playObject.WAbil.SC), HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
                                                 playObject.SendDelayMsg(playObject, Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 1200);
                                                 if (targetObject.Race >= ActorRace.Animal) {
