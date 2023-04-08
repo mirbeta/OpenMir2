@@ -537,7 +537,7 @@ namespace GameSrv.Magic {
             if (userMagic.Level < 3 && boTrain) {
                 if (userMagic.Magic.TrainLevel[userMagic.Level] <= playObject.Abil.Level) {
                     playObject.TrainSkill(userMagic, M2Share.RandomNumber.Random(3) + 1);
-                    if (!playObject.CheckMagicLevelup(userMagic)) {
+                    if (!playObject.CheckMagicLevelUp(userMagic)) {
                         playObject.SendDelayMsg(playObject, Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 1000);
                     }
                 }

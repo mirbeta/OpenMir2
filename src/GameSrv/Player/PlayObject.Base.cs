@@ -2843,7 +2843,7 @@ namespace GameSrv.Player
             ushort nDam = (ushort)(M2Share.RandomNumber.Random(10) + 5);
             if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
-                nDam = (ushort)HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10)); // 1.2
+                nDam = (ushort)HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10.0)); // 1.2
             }
             bool boRecalcAbi = false;
             ushort nDura;
@@ -2851,7 +2851,7 @@ namespace GameSrv.Player
             if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0)
             {
                 nDura = UseItems[ItemLocation.Dress].Dura;
-                nOldDura = HUtil32.Round(nDura / 1000);
+                nOldDura = HUtil32.Round(nDura / 1000.0);
                 nDura -= nDam;
                 if (nDura <= 0)
                 {
@@ -2875,7 +2875,7 @@ namespace GameSrv.Player
                 {
                     UseItems[ItemLocation.Dress].Dura = nDura;
                 }
-                if (nOldDura != HUtil32.Round(nDura / 1000))
+                if (nOldDura != HUtil32.Round(nDura / 1000.0))
                 {
                     SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Dress, nDura, UseItems[ItemLocation.Dress].DuraMax, 0, "");
                 }
@@ -2886,7 +2886,7 @@ namespace GameSrv.Player
                 if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (M2Share.RandomNumber.Random(8) == 0))
                 {
                     nDura = UseItems[i].Dura;
-                    nOldDura = HUtil32.Round(nDura / 1000);
+                    nOldDura = HUtil32.Round(nDura / 1000.0);
                     nDura -= nDam;
                     if (nDura <= 0)
                     {
@@ -2907,7 +2907,7 @@ namespace GameSrv.Player
                     {
                         UseItems[i].Dura = nDura;
                     }
-                    if (nOldDura != HUtil32.Round(nDura / 1000))
+                    if (nOldDura != HUtil32.Round(nDura / 1000.0))
                     {
                         SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
                     }
@@ -5059,7 +5059,7 @@ namespace GameSrv.Player
             }
         }
 
-        public bool CheckMagicLevelup(UserMagic userMagic)
+        public bool CheckMagicLevelUp(UserMagic userMagic)
         {
             bool result = false;
             int nLevel;
