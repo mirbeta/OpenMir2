@@ -2054,7 +2054,7 @@ namespace GameSrv.Actor
         protected bool GetMessage(ref ProcessMessage msg)
         {
             bool result = false;
-            //HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+            HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             try
             {
                 if (MsgQueue.TryDequeue(out SendMessage sendMessage))
@@ -2077,7 +2077,7 @@ namespace GameSrv.Actor
             }
             finally
             {
-                //HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }
