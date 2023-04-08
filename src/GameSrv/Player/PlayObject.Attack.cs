@@ -190,40 +190,40 @@ namespace GameSrv.Player {
             }
             UserMagic attackMagic;
             if (MagicArr[MagicConst.SKILL_ILKWANG] != null) {
-                attackMagic = GetAttrackMagic(MagicConst.SKILL_ILKWANG);
+                attackMagic = GetAttackMagic(MagicConst.SKILL_ILKWANG);
                 if (attackMagic.Level < 3) {
                     CheckSkillProficiency(M2Share.RandomNumber.Random(3) + 1, attackMagic);
                 }
             }
             if (canHit && (MagicArr[MagicConst.SKILL_YEDO] != null)) {
-                attackMagic = GetAttrackMagic(MagicConst.SKILL_YEDO);
+                attackMagic = GetAttackMagic(MagicConst.SKILL_YEDO);
                 if (attackMagic.Level < 3) {
                     CheckSkillProficiency(M2Share.RandomNumber.Random(3) + 1, attackMagic);
                 }
             }
             switch (wHitMode) {
                 case 4:
-                    attackMagic = GetAttrackMagic(MagicConst.SKILL_ERGUM);
+                    attackMagic = GetAttackMagic(MagicConst.SKILL_ERGUM);
                     CheckSkillProficiency(1, attackMagic);
                     break;
                 case 5:
-                    attackMagic = GetAttrackMagic(MagicConst.SKILL_BANWOL);
+                    attackMagic = GetAttackMagic(MagicConst.SKILL_BANWOL);
                     CheckSkillProficiency(1, attackMagic);
                     break;
                 case 12:
-                    attackMagic = GetAttrackMagic(MagicConst.SKILL_REDBANWOL);
+                    attackMagic = GetAttackMagic(MagicConst.SKILL_REDBANWOL);
                     CheckSkillProficiency(1, attackMagic);
                     break;
                 case 7:
-                    attackMagic = GetAttrackMagic(MagicConst.SKILL_FIRESWORD);
+                    attackMagic = GetAttackMagic(MagicConst.SKILL_FIRESWORD);
                     CheckSkillProficiency(1, attackMagic);
                     break;
                 case 8:
-                    attackMagic = GetAttrackMagic(MagicConst.SKILL_CROSSMOON);
+                    attackMagic = GetAttackMagic(MagicConst.SKILL_CROSSMOON);
                     CheckSkillProficiency(1, attackMagic);
                     break;
                 case 9:
-                    attackMagic = GetAttrackMagic(MagicConst.SKILL_TWINBLADE);
+                    attackMagic = GetAttackMagic(MagicConst.SKILL_TWINBLADE);
                     CheckSkillProficiency(1, attackMagic);
                     break;
             }

@@ -5190,12 +5190,12 @@ namespace GameSrv.Player
             }
         }
 
-        private bool IsGoodKilling(BaseObject cert)
+        private bool IsGoodKilling(PlayObject cert)
         {
-            return ((PlayObject)cert).PvpFlag;
+            return cert.PvpFlag;
         }
 
-        internal UserMagic GetAttrackMagic(int magicId)
+        internal UserMagic GetAttackMagic(int magicId)
         {
             return MagicArr[magicId];
         }
