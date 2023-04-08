@@ -2179,7 +2179,7 @@ namespace GameSrv.Player
                     {
                         UseItems[ItemLocation.RighThand].Dura = nDura;
                     }
-                    if (nOldDura != HUtil32.Round(nDura / 1000))
+                    if (nOldDura != HUtil32.Round(nDura / 1000.0))
                     {
                         SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[ItemLocation.RighThand].Dura, 0, 0, "");
                     }

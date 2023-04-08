@@ -83,7 +83,7 @@ namespace GameSrv.Magic {
         }
 
         private static ushort GetPower(UserMagic userMagic, ushort nPower) {
-            return (ushort)(HUtil32.Round(nPower / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1)) + userMagic.Magic.DefPower +
+            return (ushort)(HUtil32.Round(nPower / (double)(userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1)) + userMagic.Magic.DefPower +
                             M2Share.RandomNumber.Random(userMagic.Magic.DefMaxPower - userMagic.Magic.DefPower));
         }
 

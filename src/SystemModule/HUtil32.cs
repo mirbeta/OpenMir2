@@ -130,7 +130,7 @@ namespace SystemModule
 
         public static int Round(double r)
         {
-            return (int) Math.Round(r, 2, MidpointRounding.AwayFromZero);
+            return (int) Math.Round(r, MidpointRounding.AwayFromZero);
         }
 
         /// <summary>

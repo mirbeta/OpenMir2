@@ -632,10 +632,10 @@ namespace GameSrv.Player {
                             playObject = groupOwnerPlay.GroupMembers[i];
                             if (!playObject.Death && Envir == playObject.Envir && Math.Abs(CurrX - playObject.CurrX) <= 12 && Math.Abs(CurrX - playObject.CurrX) <= 12) {
                                 if (M2Share.Config.HighLevelKillMonFixExp) {
-                                    playObject.WinExp(HUtil32.Round(dwExp / n)); // 在高等级经验不变时，把组队的经验平均分配
+                                    playObject.WinExp(HUtil32.Round(dwExp / (double)n)); // 在高等级经验不变时，把组队的经验平均分配
                                 }
                                 else {
-                                    playObject.WinExp(HUtil32.Round(dwExp / sumlv * playObject.Abil.Level));
+                                    playObject.WinExp(HUtil32.Round(dwExp / (double)sumlv * playObject.Abil.Level));
                                 }
                             }
                         }
@@ -1680,7 +1680,7 @@ namespace GameSrv.Player {
                             result = true;
                             break;
                         case 3:
-                            IncHealthSpell(HUtil32.Round(WAbil.MaxHP / 100 * stdItem.AC), HUtil32.Round(WAbil.MaxMP / 100 * stdItem.MAC));
+                            IncHealthSpell(HUtil32.Round(WAbil.MaxHP / 100.0 * stdItem.AC), HUtil32.Round(WAbil.MaxMP / 100.0 * stdItem.MAC));
                             result = true;
                             break;
                         default:

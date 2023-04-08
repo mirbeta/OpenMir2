@@ -213,10 +213,10 @@ namespace GameSrv.RobotPlay
             {
                 dwExp = M2Share.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
                 dwExp = MNKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
-                dwExp = HUtil32.Round(KillMonExpRate / 100 * dwExp); // 人物指定的杀怪经验倍数
+                dwExp = HUtil32.Round(KillMonExpRate / 100.0 * dwExp); // 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
                 {
-                    dwExp = HUtil32.Round(Envir.Flag.ExpRate / 100 * dwExp); // 地图上指定杀怪经验倍数
+                    dwExp = HUtil32.Round(Envir.Flag.ExpRate / 100.0 * dwExp); // 地图上指定杀怪经验倍数
                 }
                 GetExp(dwExp);
             }
@@ -1495,7 +1495,7 @@ namespace GameSrv.RobotPlay
                 var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
-                    if (CheckItemType(nItemType, stdItem) && HUtil32.Round(ItemList[i].Dura / 100) >= nCount)
+                    if (CheckItemType(nItemType, stdItem) && HUtil32.Round(ItemList[i].Dura / 100.0) >= nCount)
                     {
                         result = i;
                         break;
@@ -3847,14 +3847,14 @@ namespace GameSrv.RobotPlay
                                     switch (nType)
                                     {
                                         case 1:
-                                            if (amuletStdItem.Shape == 5 && HUtil32.Round(userItem.Dura / 100) >= nCount)
+                                            if (amuletStdItem.Shape == 5 && HUtil32.Round(userItem.Dura / 100.0) >= nCount)
                                             {
                                                 result = true;
                                                 return result;
                                             }
                                             break;
                                         case 2:
-                                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(userItem.Dura / 100) >= nCount)
+                                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(userItem.Dura / 100.0) >= nCount)
                                             {
                                                 result = true;
                                                 return result;

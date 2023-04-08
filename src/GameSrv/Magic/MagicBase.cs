@@ -14,7 +14,7 @@ namespace GameSrv.Magic
 
         public static int GetPower(int nPower, UserMagic UserMagic)
         {
-            return HUtil32.Round(nPower / (UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1)) + UserMagic.Magic.DefPower + M2Share.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower);
+            return HUtil32.Round(nPower / (double)(UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1)) + UserMagic.Magic.DefPower + M2Share.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower);
         }
 
         public static int GetPower13(int nInt, UserMagic UserMagic)

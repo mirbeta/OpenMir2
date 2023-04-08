@@ -638,14 +638,14 @@ namespace GameSrv.Npc {
                 if (Castle != null && Castle.IsMasterGuild(playObject.MyGuild)) //沙巴克成员修复物品打折
                 {
                     var n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (M2Share.Config.CastleMemberPriceRate / 100.0)));//80%
-                    result = HUtil32.Round(nPrice / 100 * n14);
+                    result = HUtil32.Round(nPrice / 100.0 * n14);
                 }
                 else {
-                    result = HUtil32.Round(nPrice / 100 * PriceRate);
+                    result = HUtil32.Round(nPrice / 100.0 * PriceRate);
                 }
             }
             else {
-                result = HUtil32.Round(nPrice / 100 * PriceRate);
+                result = HUtil32.Round(nPrice / 100.0 * PriceRate);
             }
             return result;
         }
@@ -1365,7 +1365,7 @@ namespace GameSrv.Npc {
             if (nPrice > 0 && userItem.DuraMax > userItem.Dura) {
                 int nRepairPrice;
                 if (userItem.DuraMax > 0) {
-                    nRepairPrice = HUtil32.Round((nPrice / (double)3) / userItem.DuraMax * (userItem.DuraMax - userItem.Dura));
+                    nRepairPrice = HUtil32.Round((nPrice / 3.0) / userItem.DuraMax * (userItem.DuraMax - userItem.Dura));
                 }
                 else {
                     nRepairPrice = nPrice;
@@ -1422,7 +1422,7 @@ namespace GameSrv.Npc {
                 if (nPrice > 0 && userItem.DuraMax > userItem.Dura && stdItem.StdMode != 43) {
                     int nRepairPrice;
                     if (userItem.DuraMax > 0) {
-                        nRepairPrice = HUtil32.Round(nPrice / 3 / userItem.DuraMax * (userItem.DuraMax - userItem.Dura));
+                        nRepairPrice = HUtil32.Round(nPrice / 3.0 / userItem.DuraMax * (userItem.DuraMax - userItem.Dura));
                     }
                     else {
                         nRepairPrice = nPrice;

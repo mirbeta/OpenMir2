@@ -2824,7 +2824,7 @@ namespace GameSrv.Player
             result = HUtil32.Round(result * (PowerRate / 100.0));
             if (BoPowerItem)
             {
-                result = HUtil32.Round(PowerItem * result);
+                result = HUtil32.Round(PowerItem * (double)result);
             }
             if (AutoChangeColor)
             {
@@ -3574,19 +3574,19 @@ namespace GameSrv.Player
                     case MagicConst.SKILL_ONESWORD: // 基本剑法
                         if (userMagic.Level > 0)
                         {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3 * userMagic.Level));
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(9 / 3.0 * userMagic.Level));
                         }
                         break;
                     case MagicConst.SKILL_ILKWANG: // 精神力战法
                         if (userMagic.Level > 0)
                         {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3 * userMagic.Level));
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(8 / 3.0 * userMagic.Level));
                         }
                         break;
                     case MagicConst.SKILL_YEDO: // 攻杀剑法
                         if (userMagic.Level > 0)
                         {
-                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3 * userMagic.Level));
+                            HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3.0 * userMagic.Level));
                         }
                         HitPlus = (byte)(Settings.DEFHIT + userMagic.Level);
                         AttackSkillCount = (byte)(7 - userMagic.Level);
@@ -5124,15 +5124,15 @@ namespace GameSrv.Player
                 case PlayJob.Taoist:
                     Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round((nLevel / (double)M2Share.Config.nLevelValueOfTaosHP + M2Share.Config.nLevelValueOfTaosHPRate) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 13 + HUtil32.Round(nLevel / (double)M2Share.Config.nLevelValueOfTaosMP * 2.2 * nLevel));
-                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4 * nLevel));
-                    Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, (15 + HUtil32.Round(nLevel / 50 * nLevel)));
-                    if ((12 + HUtil32.Round(Abil.Level / 13 * Abil.Level)) > 255)
+                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4.0 * nLevel));
+                    Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, (15 + HUtil32.Round(nLevel / 50.0 * nLevel)));
+                    if ((12 + HUtil32.Round(Abil.Level / 13.0 * Abil.Level)) > 255)
                     {
                         Abil.MaxHandWeight = byte.MaxValue;
                     }
                     else
                     {
-                        Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 42 * nLevel));
+                        Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 42.0 * nLevel));
                     }
                     n = nLevel / 7;
                     Abil.DC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
@@ -5145,9 +5145,9 @@ namespace GameSrv.Player
                 case PlayJob.Wizard:
                     Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)M2Share.Config.nLevelValueOfWizardHP) + M2Share.Config.nLevelValueOfWizardHPRate) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 13 + HUtil32.Round(((nLevel / (double)5) + 2) * 2.2 * nLevel));
-                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5 * nLevel));
-                    Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, 15 + HUtil32.Round(nLevel / 100 * nLevel));
-                    Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 90 * nLevel));
+                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5.0 * nLevel));
+                    Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, 15 + HUtil32.Round(nLevel / 100.0 * nLevel));
+                    Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 90.0 * nLevel));
                     n = nLevel / 7;
                     Abil.DC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
                     Abil.MC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
@@ -5158,9 +5158,9 @@ namespace GameSrv.Player
                 case PlayJob.Warrior:
                     Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)M2Share.Config.nLevelValueOfWarrHP) + M2Share.Config.nLevelValueOfWarrHPRate + (nLevel / (double)20)) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
-                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3 * nLevel));
-                    Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, (15 + HUtil32.Round(nLevel / 20 * nLevel)));
-                    Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 13 * nLevel));
+                    Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3.0 * nLevel));
+                    Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, (15 + HUtil32.Round(nLevel / 20.0 * nLevel)));
+                    Abil.MaxHandWeight = (byte)(12 + HUtil32.Round(nLevel / 13.0 * nLevel));
                     Abil.DC = HUtil32.MakeWord((ushort)HUtil32._MAX(nLevel / 5 - 1, 1), (ushort)HUtil32._MAX(1, nLevel / 5));
                     Abil.SC = 0;
                     Abil.MC = 0;

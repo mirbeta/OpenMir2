@@ -17,7 +17,7 @@
         public void RefStatus() {
             byte n08;
             if (this.WAbil.HP > 0) {
-                n08 = (byte)(3 - HUtil32.Round(this.WAbil.HP / this.WAbil.MaxHP * 3));
+                n08 = (byte)(3 - HUtil32.Round(this.WAbil.HP / this.WAbil.MaxHP * 3.0));
             }
             else {
                 n08 = 4;
@@ -50,7 +50,7 @@
                 }
             }
             if (this.WAbil.HP > 0) {
-                n08 = 3 - HUtil32.Round(this.WAbil.HP / this.WAbil.MaxHP * 3);
+                n08 = 3 - HUtil32.Round(this.WAbil.HP / this.WAbil.MaxHP * 3.0);
             }
             else {
                 n08 = 4;

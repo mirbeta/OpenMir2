@@ -13,14 +13,14 @@
                 if (TargetCret != null) {
                     TargetX = TargetCret.CurrX;
                     TargetY = TargetCret.CurrY;
-                    if (WAbil.HP <= HUtil32.Round(WAbil.MaxHP / 2)) {
+                    if (WAbil.HP <= HUtil32.Round(WAbil.MaxHP / 2.0)) {
                         GetFrontPosition(ref nx, ref ny);
                         SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         SpaceMove(MapName, (short)(nx - 2), (short)(ny - 2), 0);
                         borunaway = true;
                     }
                     else {
-                        if (WAbil.HP >= HUtil32.Round(WAbil.MaxHP / 2)) {
+                        if (WAbil.HP >= HUtil32.Round(WAbil.MaxHP / 2.0)) {
                             borunaway = false;
                         }
                     }

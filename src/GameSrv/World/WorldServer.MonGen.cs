@@ -177,7 +177,7 @@ namespace GameSrv.World {
                     {
                         d10 = 6;
                     }
-                    return dwTime - HUtil32.Round((dwTime / 10) * d10);
+                    return dwTime - HUtil32.Round((dwTime / 10.0) * d10);
                 }
                 else
                 {
@@ -220,7 +220,7 @@ namespace GameSrv.World {
                         if (monGen.StartTick == 0 || ((HUtil32.GetTickCount() - monGen.StartTick) > GetMonstersZenTime(monGen.ZenTime))) {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (M2Share.Config.MonGenRate / 10)));//所需刷的怪总数
+                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (M2Share.Config.MonGenRate / 10.0)));//所需刷的怪总数
                             var map = M2Share.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
@@ -409,7 +409,7 @@ namespace GameSrv.World {
                             if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
                             UserItem userItem = null;
                             if (CopyToUserItemFromName(itemName, ref userItem)) {
-                                userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100 * (20 + M2Share.RandomNumber.Random(80)));
+                                userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100.0 * (20 + M2Share.RandomNumber.Random(80)));
                                 var stdItem = GetStdItem(userItem.Index);
                                 if (stdItem == null) continue;
                                 if (M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率

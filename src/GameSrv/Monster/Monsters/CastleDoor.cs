@@ -53,7 +53,7 @@ namespace GameSrv.Monster.Monsters {
             if (Death) {
                 return;
             }
-            Direction = (byte)(3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3));
+            Direction = (byte)(3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3.0));
             if (Direction - 3 >= 0) {
                 Direction = 0;
             }
@@ -77,7 +77,7 @@ namespace GameSrv.Monster.Monsters {
                 HealthTick = 0;
             }
             if (!IsOpened) {
-                int n08 = 3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3);
+                int n08 = 3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3.0);
                 if (Direction != n08 && n08 < 3) {
                     Direction = (byte)n08;
                     SendRefMsg(Messages.RM_TURN, Direction, CurrX, CurrY, 0, "");
@@ -87,7 +87,7 @@ namespace GameSrv.Monster.Monsters {
         }
 
         public void RefStatus() {
-            int n08 = 3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3);
+            int n08 = 3 - HUtil32.Round(WAbil.HP / WAbil.MaxHP * 3.0);
             if (n08 - 3 >= 0) {
                 n08 = 0;
             }

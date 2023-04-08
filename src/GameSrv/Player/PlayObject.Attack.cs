@@ -118,7 +118,7 @@ namespace GameSrv.Player {
                 switch (wHitMode) {
                     case 4:// 刺杀
                         if (MagicArr[MagicConst.SKILL_ERGUM] != null) {
-                            nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_ERGUM].Magic.TrainLv + 2) * (MagicArr[MagicConst.SKILL_ERGUM].Level + 2.0));
+                            nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_ERGUM].Magic.TrainLv + 2.0) * (MagicArr[MagicConst.SKILL_ERGUM].Level + 2.0));
                         }
                         if (nSecPwr > 0) {
                             if (!SwordLongAttack(ref nSecPwr) && M2Share.Config.LimitSwordLong) {
@@ -128,7 +128,7 @@ namespace GameSrv.Player {
                         break;
                     case 5: {
                             if (MagicArr[MagicConst.SKILL_BANWOL] != null) {
-                                nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_BANWOL].Magic.TrainLv + 10) * (MagicArr[MagicConst.SKILL_BANWOL].Level + 2.0));
+                                nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_BANWOL].Magic.TrainLv + 10.0) * (MagicArr[MagicConst.SKILL_BANWOL].Level + 2.0));
                             }
                             if (nSecPwr > 0) {
                                 SwordWideAttack(ref nSecPwr);
@@ -137,7 +137,7 @@ namespace GameSrv.Player {
                         }
                     case 12: {
                             if (MagicArr[MagicConst.SKILL_REDBANWOL] != null) {
-                                nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_REDBANWOL].Magic.TrainLv + 10) * (MagicArr[MagicConst.SKILL_REDBANWOL].Level + 2.0));
+                                nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_REDBANWOL].Magic.TrainLv + 10.0) * (MagicArr[MagicConst.SKILL_REDBANWOL].Level + 2.0));
                             }
                             if (nSecPwr > 0) {
                                 SwordWideAttack(ref nSecPwr);
@@ -146,7 +146,7 @@ namespace GameSrv.Player {
                         }
                     case 8: {
                             if (MagicArr[MagicConst.SKILL_CROSSMOON] != null) {
-                                nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_CROSSMOON].Magic.TrainLv + 10) * (MagicArr[MagicConst.SKILL_CROSSMOON].Level + 2.0));
+                                nSecPwr = HUtil32.Round(nPower / (MagicArr[MagicConst.SKILL_CROSSMOON].Magic.TrainLv + 10.0) * (MagicArr[MagicConst.SKILL_CROSSMOON].Level + 2.0));
                             }
                             if (nSecPwr > 0) {
                                 CrsWideAttack(nSecPwr);

@@ -76,7 +76,7 @@ namespace GameSrv.Player {
         public override ushort GetHitStruckDamage(BaseObject target, int nDamage) {
             ushort damage = base.GetHitStruckDamage(target, nDamage);
             if (nDamage > 0 && AbilMagBubbleDefence) {
-                damage = (ushort)HUtil32.Round(damage / 100 * (MagBubbleDefenceLevel + 2) * 8);
+                damage = (ushort)HUtil32.Round(damage / 100.0 * (MagBubbleDefenceLevel + 2) * 8);
                 DamageBubbleDefence(damage);
             }
             return damage;
