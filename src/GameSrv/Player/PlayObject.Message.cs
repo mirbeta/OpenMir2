@@ -695,7 +695,6 @@ namespace GameSrv.Player
         protected override bool Operate(ProcessMessage processMsg)
         {
             int nObjCount;
-            string sendMsg;
             int dwDelayTime = 0;
             int nMsgCount;
             bool result = true;
@@ -1473,13 +1472,13 @@ namespace GameSrv.Player
                         CharDesc turnmessage = default;
                         turnmessage.Feature = baseObject.GetFeature(baseObject);
                         turnmessage.Status = baseObject.CharStatus;
-                        sendMsg = EDCode.EncodePacket(turnmessage);
+                        var sendActonMsg = EDCode.EncodePacket(turnmessage);
                         nObjCount = GetChrColor(baseObject);
                         if (!string.IsNullOrEmpty(processMsg.Msg))
                         {
-                            sendMsg = sendMsg + EDCode.EncodeString($"{processMsg.Msg}/{nObjCount}");
+                            sendActonMsg = sendActonMsg + EDCode.EncodeString($"{processMsg.Msg}/{nObjCount}");
                         }
-                        SendSocket(ClientMsg, sendMsg);
+                        SendSocket(ClientMsg, sendActonMsg);
                         if (processMsg.wIdent == Messages.RM_TURN)
                         {
                             nObjCount = baseObject.GetFeatureToLong();
@@ -1894,7 +1893,7 @@ namespace GameSrv.Player
                     CharDesc showmessage = default;
                     showmessage.Feature = baseObject.GetFeature(this);
                     showmessage.Status = baseObject.CharStatus;
-                    sendMsg = EDCode.EncodePacket(showmessage);
+                    var sendMsg = EDCode.EncodePacket(showmessage);
                     nObjCount = GetChrColor(baseObject);
                     if (!string.IsNullOrEmpty(processMsg.Msg))
                     {
