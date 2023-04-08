@@ -601,7 +601,6 @@ namespace GameSrv.Player
                     WhisperHuman = null;
                 }
             }
-            ProcessSpiritSuite();
             try
             {
                 if ((HUtil32.GetTickCount() - ClearInvalidObjTick) > 30 * 1000)
@@ -2028,6 +2027,9 @@ namespace GameSrv.Player
                     break;
                 case Messages.RM_PLAYERKILLMONSTER:
                     KillTargetTrigger(processMsg.wParam);
+                    break;
+                case Messages.RM_SPIRITSUITE:
+                    ProcessSpiritSuite();
                     break;
                 default:
                     result = base.Operate(processMsg);

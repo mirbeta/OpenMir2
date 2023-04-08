@@ -153,7 +153,7 @@ namespace GameSrv.Player
         /// <summary>
         /// 祈祷
         /// </summary>
-        protected bool MBoPirit = false;
+        protected bool IsSpirit = false;
         /// <summary>
         /// 野蛮冲撞间隔
         /// </summary>
@@ -2700,7 +2700,7 @@ namespace GameSrv.Player
                 }
                 if (spiritArr[0] && spiritArr[2] && spiritArr[3] && spiritArr[4]) //祈祷套装
                 {
-                    MBoPirit = true;
+                    IsSpirit = true;
                 }
                 if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
                 {
@@ -2778,7 +2778,10 @@ namespace GameSrv.Player
                 {
                     SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                 }
-
+                if (IsSpirit)
+                {
+                    SendDelayMsg(this, Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
+                }
                 WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
                 WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
                 WAbil.AC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));

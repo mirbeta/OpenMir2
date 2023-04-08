@@ -686,6 +686,10 @@ namespace SystemModule
         public const int RM_TWINHIT = 9042;
         public const int RM_43 = 9043;
         public const int RM_MOVEMESSAGE = 10099;
+        /// <summary>
+        /// 祈祷套装
+        /// </summary>
+        public const int RM_SPIRITSUITE = 9045;
 
         public const int ISM_GROUPSERVERHEART = 100;
         public const int ISM_USERSERVERCHANGE = 200;

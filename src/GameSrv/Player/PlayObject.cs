@@ -255,22 +255,29 @@ namespace GameSrv.Player {
         /// <summary>
         /// 祈祷套装生效
         /// </summary>
-        private void ProcessSpiritSuite() {
-            if (!M2Share.Config.SpiritMutiny || !MBoPirit) {
+        private void ProcessSpiritSuite()
+        {
+            if (!M2Share.Config.SpiritMutiny || !IsSpirit)
+            {
                 return;
             }
-            MBoPirit = false;
-            for (int i = 0; i < UseItems.Length; i++) {
+            IsSpirit = false;
+            for (int i = 0; i < UseItems.Length; i++)
+            {
                 UserItem useItem = UseItems[i];
-                if (useItem == null) {
+                if (useItem == null)
+                {
                     continue;
                 }
-                if (useItem.Index <= 0) {
+                if (useItem.Index <= 0)
+                {
                     continue;
                 }
                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(useItem.Index);
-                if (stdItem != null) {
-                    if (stdItem.Shape == 126 || stdItem.Shape == 127 || stdItem.Shape == 128 || stdItem.Shape == 129) {
+                if (stdItem != null)
+                {
+                    if (stdItem.Shape == 126 || stdItem.Shape == 127 || stdItem.Shape == 128 || stdItem.Shape == 129)
+                    {
                         SendDelItems(useItem);
                         useItem.Index = 0;
                     }
