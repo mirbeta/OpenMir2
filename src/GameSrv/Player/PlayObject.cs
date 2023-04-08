@@ -1119,7 +1119,7 @@ namespace GameSrv.Player {
         }
 
         protected static ushort GetSpellPoint(UserMagic userMagic) {
-            return (ushort)(HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1)) + userMagic.Magic.DefSpell);
+            return (ushort)(HUtil32.Round(userMagic.Magic.Spell / 4.0 * (userMagic.Level + 1)) + userMagic.Magic.DefSpell);
         }
 
         private bool DoMotaeboCanMotaebo(BaseObject baseObject, int nMagicLevel) {
