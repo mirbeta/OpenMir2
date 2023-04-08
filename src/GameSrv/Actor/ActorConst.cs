@@ -137,6 +137,15 @@ namespace GameSrv.Actor {
         public const int NECKLACE_GI_ITEM = 123;
         public const int ARMRING_HAP_ITEM = 124;
         public const int HELMET_IL_ITEM = 125;
+
+        /// <summary>
+        /// 祈祷套装
+        /// </summary>
+        public const byte SpiritItem3 = 126;
+        public const byte SpiritItem1 = 127;
+        public const byte SpiritItem2 = 128;
+        public const byte SpiritItem4 = 129;
+
         public const int RING_OF_UNKNOWN = 130;
         public const int BRACELET_OF_UNKNOWN = 131;
         public const int HELMET_OF_UNKNOWN = 132;

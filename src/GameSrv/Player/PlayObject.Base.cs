@@ -1918,10 +1918,8 @@ namespace GameSrv.Player
                 MoXieSuite = 0;
                 SuckupEnemyHealthRate = 0;
                 SuckupEnemyHealth = 0;
-                bool[] cghi = new bool[4]
-                {
-                    false, false, false, false
-                };
+                bool[] spiritArr = new bool[4] { false, false, false, false };
+                bool[] cghi = new bool[4] { false, false, false, false };
                 bool shRing = false;
                 bool shBracelet = false;
                 bool shNecklace = false;
@@ -2403,10 +2401,26 @@ namespace GameSrv.Player
                                         break;
                                     }
                             }
+
+                            switch (stdItem.StdMode)
+                            {
+                                case ItemShapeConst.SpiritItem1:
+                                    spiritArr[0] = true;
+                                    break;
+                                case ItemShapeConst.SpiritItem2:
+                                    spiritArr[1] = true;
+                                    break;
+                                case ItemShapeConst.SpiritItem3:
+                                    spiritArr[2] = true;
+                                    break;
+                                case ItemShapeConst.SpiritItem4:
+                                    spiritArr[3] = true;
+                                    break;
+                            }
                         }
                     }
                 }
-                if (cghi[0] && cghi[1] && cghi[2] && cghi[3])
+                if (cghi[0] && cghi[1] && cghi[2] && cghi[3]) //记忆套装
                 {
                     RecallSuite = true;
                 }
@@ -2671,7 +2685,7 @@ namespace GameSrv.Player
                         WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight * 2);
                     }
                 }
-                if (MoXieSuite > 0)
+                if (MoXieSuite > 0) //魔血套装
                 {
                     if (MoXieSuite >= WAbil.MaxMP)
                     {
@@ -2683,6 +2697,10 @@ namespace GameSrv.Player
                     {
                         WAbil.HP = WAbil.MaxHP;
                     }
+                }
+                if (spiritArr[0] && spiritArr[2] && spiritArr[3] && spiritArr[4]) //祈祷套装
+                {
+                    MBoPirit = true;
                 }
                 if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
                 {
