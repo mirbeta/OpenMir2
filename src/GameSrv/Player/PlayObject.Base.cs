@@ -2821,7 +2821,7 @@ namespace GameSrv.Player
                     }
                 }
             }
-            result = HUtil32.Round(result * (PowerRate / 100));
+            result = HUtil32.Round(result * (PowerRate / 100.0));
             if (BoPowerItem)
             {
                 result = HUtil32.Round(PowerItem * result);

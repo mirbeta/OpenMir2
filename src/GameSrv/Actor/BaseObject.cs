@@ -2999,7 +2999,7 @@ namespace GameSrv.Actor
             }
             if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
-                nDamage = (ushort)HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / (double)10)); // 1.2
+                nDamage = (ushort)HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10.0)); // 1.2
             }
             DamageHealth(nDamage);
         }

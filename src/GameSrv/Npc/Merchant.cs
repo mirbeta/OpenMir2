@@ -637,7 +637,7 @@ namespace GameSrv.Npc {
             if (CastleMerchant) {
                 if (Castle != null && Castle.IsMasterGuild(playObject.MyGuild)) //沙巴克成员修复物品打折
                 {
-                    var n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (M2Share.Config.CastleMemberPriceRate / 100)));//80%
+                    var n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (M2Share.Config.CastleMemberPriceRate / 100.0)));//80%
                     result = HUtil32.Round(nPrice / 100 * n14);
                 }
                 else {

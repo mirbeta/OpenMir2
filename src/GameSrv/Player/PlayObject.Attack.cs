@@ -516,13 +516,13 @@ namespace GameSrv.Player {
                     case 7 when FireHitSkill:// 烈火剑法
                         FireHitSkill = false;
                         LatestFireHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10.0));
                         canHit = true;
                         break;
                     case 9 when TwinHitSkill:// 烈火剑法
                         TwinHitSkill = false;
                         LatestTwinHitTick = HUtil32.GetTickCount();// 禁止双烈火
-                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10));
+                        nPower = (ushort)(nPower + HUtil32.Round(nPower / 100 * HitDouble * 10.0));
                         canHit = true;
                         break;
                 }

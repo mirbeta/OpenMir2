@@ -709,7 +709,7 @@ namespace GameSrv.Castle
         /// </summary>
         public void IncRateGold(int nGold)
         {
-            int nInGold = HUtil32.Round(nGold * (M2Share.Config.CastleTaxRate / 100));
+            int nInGold = HUtil32.Round(nGold * (M2Share.Config.CastleTaxRate / 100.0));
             if (TodayIncome + nInGold <= M2Share.Config.CastleOneDayGold)
             {
                 TodayIncome += nInGold;

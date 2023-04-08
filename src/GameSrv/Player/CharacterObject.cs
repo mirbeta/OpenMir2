@@ -121,7 +121,7 @@ namespace GameSrv.Player {
                             }
                             if (stoneDura > dCount) {
                                 IncHealth += dCount;
-                                UseItems[ItemLocation.Charm].Dura -= (ushort)HUtil32.Round(dCount / 10);
+                                UseItems[ItemLocation.Charm].Dura -= (ushort)HUtil32.Round(dCount / 10.0);
                             }
                             else {
                                 stoneDura = 0;
@@ -152,7 +152,7 @@ namespace GameSrv.Player {
                             }
                             if (stoneDura > dCount) {
                                 IncSpell += dCount;
-                                UseItems[ItemLocation.Charm].Dura -= (ushort)HUtil32.Round(dCount / 10);
+                                UseItems[ItemLocation.Charm].Dura -= (ushort)HUtil32.Round(dCount / 10.0);
                             }
                             else {
                                 stoneDura = 0;

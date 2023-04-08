@@ -58,14 +58,14 @@ namespace GameSrv.Magic
                     switch (nType)
                     {
                         case 1:
-                            if (amuletStdItem.Shape == 5 && HUtil32.Round(playObject.UseItems[ItemLocation.ArmRingl].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(playObject.UseItems[ItemLocation.ArmRingl].Dura / 100.0) >= nCount)
                             {
                                 Idx = ItemLocation.ArmRingl;
                                 return true;
                             }
                             break;
                         case 2:
-                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(playObject.UseItems[ItemLocation.ArmRingl].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(playObject.UseItems[ItemLocation.ArmRingl].Dura / 100.0) >= nCount)
                             {
                                 Idx = ItemLocation.ArmRingl;
                                 return true;
@@ -82,14 +82,14 @@ namespace GameSrv.Magic
                     switch (nType)
                     {
                         case 1:
-                            if (amuletStdItem.Shape == 5 && HUtil32.Round(playObject.UseItems[ItemLocation.Bujuk].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape == 5 && HUtil32.Round(playObject.UseItems[ItemLocation.Bujuk].Dura / 100.0) >= nCount)
                             {
                                 Idx = ItemLocation.Bujuk;
                                 return true;
                             }
                             break;
                         case 2:
-                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(playObject.UseItems[ItemLocation.Bujuk].Dura / 100) >= nCount)
+                            if (amuletStdItem.Shape <= 2 && HUtil32.Round(playObject.UseItems[ItemLocation.Bujuk].Dura / 100.0) >= nCount)
                             {
                                 Idx = ItemLocation.Bujuk;
                                 return true;

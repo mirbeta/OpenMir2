@@ -75,7 +75,7 @@ namespace GameSrv.Actor {
             bool result = false;
             short nX = 0;
             short nY = 0;
-            nSecPwr = HUtil32.Round(nSecPwr * M2Share.Config.SwordLongPowerRate / 100);
+            nSecPwr = HUtil32.Round((nSecPwr * M2Share.Config.SwordLongPowerRate) / 100.0);
             if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY)) {
                 BaseObject baseObject = Envir.GetMovingObject(nX, nY, true);
                 if (baseObject != null) {

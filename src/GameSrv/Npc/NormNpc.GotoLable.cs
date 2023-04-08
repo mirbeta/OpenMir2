@@ -542,14 +542,14 @@ namespace GameSrv.Npc {
                         break;
                     case ScriptConst.nCHECKDURA:
                         userItem = playObject.QuestCheckItem(questConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
-                        if (HUtil32.Round(nDura / 1000) < questConditionInfo.nParam2) {
+                        if (HUtil32.Round(nDura / 1000.0) < questConditionInfo.nParam2) {
                             result = false;
                         }
                         break;
                     case ScriptConst.nCHECKDURAEVA:
                         userItem = playObject.QuestCheckItem(questConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
                         if (n1C > 0) {
-                            if (HUtil32.Round(nMaxDura / n1C / 1000) < questConditionInfo.nParam2) {
+                            if (HUtil32.Round(nMaxDura / n1C / 1000.0) < questConditionInfo.nParam2) {
                                 result = false;
                             }
                         }
