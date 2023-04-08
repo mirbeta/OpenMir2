@@ -2319,21 +2319,7 @@ namespace GameSrv.Actor
             }
             CharStatus = GetCharStatus();
         }
-
-        /// <summary>
-        /// 取怪物说话信息列表
-        /// </summary>
-        internal void LoadSayMsg()
-        {
-            for (int i = 0; i < M2Share.MonSayMsgList.Count; i++)
-            {
-                if (M2Share.MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
-                {
-                    break;
-                }
-            }
-        }
-
+        
         public virtual void Disappear()
         {
 

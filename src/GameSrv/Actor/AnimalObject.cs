@@ -122,6 +122,20 @@ namespace GameSrv.Actor {
             LoadSayMsg();
             MonsterSayMsg(null, MonStatus.MonGen);
         }
+        
+        /// <summary>
+        /// 取怪物说话信息列表
+        /// </summary>
+        internal void LoadSayMsg()
+        {
+            for (int i = 0; i < M2Share.MonSayMsgList.Count; i++)
+            {
+                if (M2Share.MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
+                {
+                    break;
+                }
+            }
+        }
 
         protected override bool Operate(ProcessMessage processMsg) {
             if (processMsg.wIdent == Messages.RM_STRUCK) {
