@@ -187,11 +187,11 @@ namespace GameSrv.Magic {
                                     switch (stdItem.Shape) {
                                         case 1:
                                             nPower = (ushort)(GetPower13(userMagic, 40) + GetRPow(playObject.WAbil.SC) * 2);// 中毒类型 - 绿毒
-                                            targetObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            targetObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                         case 2:
                                             nPower = (ushort)(GetPower13(userMagic, 30) + GetRPow(playObject.WAbil.SC) * 2);// 中毒类型 - 红毒
-                                            targetObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            targetObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                     }
                                     if (targetObject.Race == ActorRace.Play || targetObject.Race >= ActorRace.Animal) {
@@ -736,11 +736,11 @@ namespace GameSrv.Magic {
                                 switch (stdItem.Shape) {
                                     case 1:
                                         nPower = MagicBase.GetPower13(40, userMagic) + MagicBase.GetRPow(playObject.WAbil.SC) * 2;// 中毒类型 - 绿毒
-                                        baseObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        baseObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                     case 2:
                                         nPower = MagicBase.GetPower13(30, userMagic) + MagicBase.GetRPow(playObject.WAbil.SC) * 2;// 中毒类型 - 红毒
-                                        baseObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3 * (nPower / M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        baseObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                 }
                                 if (baseObject.Race == ActorRace.Play || baseObject.Race >= ActorRace.Animal) {
@@ -1017,7 +1017,7 @@ namespace GameSrv.Magic {
                                     targetObject.SetLastHiter(playObject);
                                     nPower = targetObject.GetMagStruckDamage(playObject, (ushort)nPower);
                                     playObject.SendDelayMsg(playObject, Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
-                                    if (targetObject.Race == ActorRace.Play && !(targetObject as PlayObject).UnParalysis) {
+                                    if (targetObject.Race == ActorRace.Play && !((PlayObject) targetObject).UnParalysis) {
                                         targetObject.SendDelayMsg(playObject, Messages.RM_POISON, PoisonState.STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), playObject.ActorId, nLevel, "", 650); // 中毒类型 - 麻痹
                                     }
                                     result = true;
