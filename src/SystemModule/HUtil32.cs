@@ -128,21 +128,6 @@ namespace SystemModule
             return CompareLStr(str, "HUMAN", 5) || CompareLStr(str, "GUILD", 5) || CompareLStr(str, "GLOBAL", 6);
         }
 
-        public static int Round(object r)
-        {
-            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
-        }
-
-        public static int Round(ushort r)
-        {
-            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
-        }
-
-        public static int Round(int r)
-        {
-            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
-        }
-
         public static int Round(double r)
         {
             return (int) Math.Round(r, 2, MidpointRounding.AwayFromZero);

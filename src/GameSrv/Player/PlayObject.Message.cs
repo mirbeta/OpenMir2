@@ -2152,7 +2152,7 @@ namespace GameSrv.Player
                     {
                         return;
                     }
-                    int nOldDura = HUtil32.Round((ushort)(UseItems[ItemLocation.RighThand].Dura / 1000));
+                    int nOldDura = HUtil32.Round((ushort)(UseItems[ItemLocation.RighThand].Dura / 1000.0));
                     ushort nDura;
                     if (M2Share.Config.DecLampDura)
                     {

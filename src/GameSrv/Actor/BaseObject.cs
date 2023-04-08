@@ -843,7 +843,7 @@ namespace GameSrv.Actor
             }
             else
             {
-                result = nExp - HUtil32.Round(nExp / 15 * (Abil.Level - (nLevel + 10)));
+                result = nExp - HUtil32.Round(nExp / 15 * (Abil.Level - (nLevel + 10.0)));
             }
             if (result <= 0)
             {
@@ -1708,7 +1708,7 @@ namespace GameSrv.Actor
                 maxHp = WAbil.MaxHP;
                 WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(SlaveExpLevel * 2 + HUtil32.HiWord(WAbil.DC)));
                 maxHp = maxHp + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
-                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60), maxHp);
+                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60.0), maxHp);
             }
         }
 
