@@ -3547,7 +3547,7 @@ namespace GameSrv.Player
         {
             HitPlus = 0;
             HitDouble = 0;
-            NakedAbility bonusTick = default;
+            NakedAbility bonusTick;
             switch (Job)
             {
                 case PlayJob.Warrior:
