@@ -5139,7 +5139,7 @@ namespace GameSrv.Player
                     Abil.MC = 0;
                     Abil.SC = HUtil32.MakeWord((ushort)HUtil32._MAX(n - 1, 0), (ushort)HUtil32._MAX(1, n));
                     Abil.AC = 0;
-                    n = HUtil32.Round(nLevel / 6);
+                    n = HUtil32.Round(nLevel / 6.0);
                     Abil.MAC = HUtil32.MakeWord((ushort)(n / 2), (ushort)(n + 1));
                     break;
                 case PlayJob.Wizard:
@@ -5255,7 +5255,7 @@ namespace GameSrv.Player
             }
         }
 
-        private bool IsGoodKilling(PlayObject cert)
+        private static bool IsGoodKilling(PlayObject cert)
         {
             return cert.PvpFlag;
         }
