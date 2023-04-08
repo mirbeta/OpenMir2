@@ -12,7 +12,7 @@ namespace GameSrv.Player {
         /// 计算施法魔法值
         /// </summary>
         internal static ushort GetMagicSpell(UserMagic userMagic) {
-            return (ushort)HUtil32.Round(userMagic.Magic.Spell / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1));
+            return (ushort)HUtil32.Round(userMagic.Magic.Spell / 4.0 * (userMagic.Level + 1));
         }
 
         protected void AttackDir(BaseObject targetObject, short wHitMode, byte nDir) {
