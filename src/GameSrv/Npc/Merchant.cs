@@ -1254,14 +1254,12 @@ namespace GameSrv.Npc {
             itemList.Insert(0, userItem);
         }
 
-        private bool ClientMakeDrugItem_sub_4A28FC(PlayObject playObject, string sItemName) {
-            var result = false;
+        private bool ClientMakeDrugCheckNeedItem(PlayObject playObject, string sItemName) {
             IList<MakeItem> list10 = M2Share.GetMakeItemInfo(sItemName);
-            IList<DeleteItem> list28;
             if (list10 == null) {
-                return result;
+                return false;
             }
-            result = true;
+            var result = true;
             string s20;
             int n1C;
             for (var i = 0; i < list10.Count; i++) {
@@ -1278,7 +1276,7 @@ namespace GameSrv.Npc {
                 }
             }
             if (result) {
-                list28 = null;
+                IList<DeleteItem> list28 = null;
                 for (var i = 0; i < list10.Count; i++) {
                     s20 = list10[i].ItemName;
                     n1C = list10[i].ItemCount;
@@ -1321,7 +1319,7 @@ namespace GameSrv.Npc {
                 {
                     if (playObject.Gold >= M2Share.Config.MakeDurgPrice)
                     {
-                        if (ClientMakeDrugItem_sub_4A28FC(playObject, sItemName))
+                        if (ClientMakeDrugCheckNeedItem(playObject, sItemName))
                         {
                             var userItem = new UserItem();
                             M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem);
@@ -1363,11 +1361,11 @@ namespace GameSrv.Npc {
         /// 客户查询修复所需成本
         /// </summary>
         public void ClientQueryRepairCost(PlayObject playObject, UserItem userItem) {
-            int nRepairPrice;
             var nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
             if (nPrice > 0 && userItem.DuraMax > userItem.Dura) {
+                int nRepairPrice;
                 if (userItem.DuraMax > 0) {
-                    nRepairPrice = HUtil32.Round((double)(nPrice / 3) / userItem.DuraMax * (userItem.DuraMax - userItem.Dura));
+                    nRepairPrice = HUtil32.Round((nPrice / (double)3) / userItem.DuraMax * (userItem.DuraMax - userItem.Dura));
                 }
                 else {
                     nRepairPrice = nPrice;
