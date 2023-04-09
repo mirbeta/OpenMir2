@@ -27,17 +27,17 @@ namespace GameSrv.Actor {
 
     public enum VisibleFlag : byte {
         /// <summary>
-        /// 可见
+        /// 隐藏
         /// </summary>
-        Visible = 0,
+        Hidden = 0,
         /// <summary>
         /// 不可见
         /// </summary>
         Invisible = 1,
         /// <summary>
-        /// 隐藏
+        /// 可见
         /// </summary>
-        Hidden = 2
+        Show = 2
     }
 
     public enum PlayGender : byte {

@@ -29,7 +29,7 @@ namespace GameSrv.Actor
             }
             visibleBaseObject = new VisibleBaseObject
             {
-                VisibleFlag = VisibleFlag.Hidden,
+                VisibleFlag = VisibleFlag.Show,
                 BaseObject = baseObject
             };
             VisibleActors.Add(visibleBaseObject);
@@ -136,7 +136,7 @@ namespace GameSrv.Actor
                         break;
                     }
                     VisibleBaseObject visibleBaseObject = VisibleActors[n18];
-                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Visible)
+                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
                     {
                         VisibleActors.RemoveAt(n18);
                         Dispose(visibleBaseObject);

@@ -77,7 +77,7 @@ namespace GameSrv.Monster {
             }
             visibleBaseObject = new VisibleBaseObject
             {
-                VisibleFlag = VisibleFlag.Hidden,
+                VisibleFlag = VisibleFlag.Show,
                 BaseObject = baseObject
             };
             VisibleActors.Add(visibleBaseObject);

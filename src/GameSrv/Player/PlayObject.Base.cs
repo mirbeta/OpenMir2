@@ -2934,7 +2934,7 @@ namespace GameSrv.Player
             }
             visibleBaseObject = new VisibleBaseObject
             {
-                VisibleFlag = VisibleFlag.Hidden,
+                VisibleFlag = VisibleFlag.Show,
                 BaseObject = baseObject
             };
             VisibleActors.Add(visibleBaseObject);
@@ -3088,7 +3088,7 @@ namespace GameSrv.Player
                         Dispose(visibleBaseObject);
                         continue;
                     }
-                    if (Race == ActorRace.Play && visibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
+                    if (Race == ActorRace.Play && visibleBaseObject.VisibleFlag == VisibleFlag.Show)
                     {
                         BaseObject baseObject = visibleBaseObject.BaseObject;
                         if (baseObject != this)
@@ -3121,14 +3121,14 @@ namespace GameSrv.Player
                         break;
                     }
                     VisibleMapItem visibleMapItem = VisibleItems[I];
-                    if (visibleMapItem.VisibleFlag == 0)
+                    if (visibleMapItem.VisibleFlag == VisibleFlag.Hidden)
                     {
                         SendMsg(Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, "");
                         VisibleItems.RemoveAt(I);
                         Dispose(visibleMapItem);
                         continue;
                     }
-                    if (visibleMapItem.VisibleFlag == VisibleFlag.Hidden)
+                    if (visibleMapItem.VisibleFlag == VisibleFlag.Show)
                     {
                         SendMsg(Messages.RM_ITEMSHOW, visibleMapItem.wLooks, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, visibleMapItem.sName);
                     }
@@ -3142,13 +3142,13 @@ namespace GameSrv.Player
                         break;
                     }
                     MapEvent mapEvent = VisibleEvents[I];
-                    if (mapEvent.VisibleFlag == VisibleFlag.Visible)
+                    if (mapEvent.VisibleFlag == VisibleFlag.Hidden)
                     {
                         SendMsg(Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                         VisibleEvents.RemoveAt(I);
                         continue;
                     }
-                    if (mapEvent.VisibleFlag == VisibleFlag.Hidden)
+                    if (mapEvent.VisibleFlag == VisibleFlag.Show)
                     {
                         SendMsg(Messages.RM_SHOWEVENT, (short)mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
                     }
@@ -5282,6 +5282,9 @@ namespace GameSrv.Player
             return currentLight;
         }
 
+        /// <summary>
+        /// 更新可见物品列表
+        /// </summary>
         protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem)
         {
             VisibleMapItem visibleMapItem = null;
@@ -5302,7 +5305,7 @@ namespace GameSrv.Player
             }
             visibleMapItem ??= new VisibleMapItem
             {
-                VisibleFlag = VisibleFlag.Hidden,
+                VisibleFlag = VisibleFlag.Show,
                 nX = wX,
                 nY = wY,
                 MapItem = MapItem,
@@ -5329,7 +5332,7 @@ namespace GameSrv.Player
             {
                 return;
             }
-            MapEvent.VisibleFlag = VisibleFlag.Hidden;
+            MapEvent.VisibleFlag = VisibleFlag.Show;
             MapEvent.nX = wX;
             MapEvent.nY = wY;
             VisibleEvents.Add(MapEvent);

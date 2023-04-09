@@ -636,7 +636,7 @@ namespace GameSrv.RobotPlay
                         }
                         switch (visibleBaseObject.VisibleFlag)
                         {
-                            case VisibleFlag.Visible:
+                            case VisibleFlag.Hidden:
                                 if (Race == ActorRace.Play)
                                 {
                                     baseObject = visibleBaseObject.BaseObject;
@@ -654,7 +654,7 @@ namespace GameSrv.RobotPlay
                                     Dispose(visibleBaseObject);
                                 }
                                 continue;
-                            case VisibleFlag.Hidden:
+                            case VisibleFlag.Show:
                                 if (Race == ActorRace.Play)
                                 {
                                     baseObject = visibleBaseObject.BaseObject;
@@ -770,7 +770,7 @@ namespace GameSrv.RobotPlay
                         {
                             switch (mapEvent.VisibleFlag)
                             {
-                                case VisibleFlag.Visible:
+                                case VisibleFlag.Hidden:
                                     SendMsg(Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                                     VisibleEvents.RemoveAt(position);
                                     if (VisibleEvents.Count > 0)
@@ -781,7 +781,7 @@ namespace GameSrv.RobotPlay
                                 case VisibleFlag.Invisible:
                                     mapEvent.VisibleFlag = 0;
                                     break;
-                                case VisibleFlag.Hidden:
+                                case VisibleFlag.Show:
                                     SendMsg(Messages.RM_SHOWEVENT, mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
                                     mapEvent.VisibleFlag = 0;
                                     break;

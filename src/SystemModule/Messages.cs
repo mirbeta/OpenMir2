@@ -662,8 +662,14 @@ namespace SystemModule
         public const int RM_SENDUSEITEMS = 8074;
         public const int RM_WINEXP = 8075;
         public const int RM_ADJUST_BONUS = 8078;
+        /// <summary>
+        /// 显示物品
+        /// </summary>
         public const int RM_ITEMSHOW = 8082;
         public const int RM_GAMEGOLDCHANGED = 8084;
+        /// <summary>
+        /// 删除物品
+        /// </summary>
         public const int RM_ITEMHIDE = 8085;
         public const int RM_LEVELUP = 8086;
         public const int RM_CHANGENAMECOLOR = 8090;

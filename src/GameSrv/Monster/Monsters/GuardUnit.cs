@@ -205,7 +205,7 @@ namespace GameSrv.Monster.Monsters
                         break;
                     }
                     VisibleBaseObject visibleBaseObject = VisibleActors[n18];
-                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Visible)
+                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
                     {
                         VisibleActors.RemoveAt(n18);
                         Dispose(visibleBaseObject);
