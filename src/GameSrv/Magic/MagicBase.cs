@@ -42,7 +42,7 @@ namespace GameSrv.Magic
         /// 检查护身符
         /// </summary>
         /// <returns></returns>
-        public static bool CheckAmulet(PlayObject playObject, int nCount, int nType, ref short Idx)
+        public static bool CheckAmulet(PlayObject playObject, byte nCount, byte nType, ref short Idx)
         {
             if (playObject == null)
             {
@@ -104,16 +104,16 @@ namespace GameSrv.Magic
         /// <summary>
         /// 使用护身符
         /// </summary>
-        public static void UseAmulet(PlayObject playObject, int nCount, int nType, short idx)
+        public static void UseAmulet(PlayObject playObject, byte nCount, byte nType, short idx)
         {
             if (playObject == null)
             {
                 return;
             }
-            ushort dura = (ushort)(nCount * 100);
-            if (playObject.UseItems[idx] != null && playObject.UseItems[idx].Dura > dura)
+            var duration = (ushort)(nCount * 100);
+            if (playObject.UseItems[idx] != null && playObject.UseItems[idx].Dura > duration)
             {
-                playObject.UseItems[idx].Dura -= dura;//减少护身符持久即数量
+                playObject.UseItems[idx].Dura -= duration;//减少护身符持久即数量
                 playObject.SendMsg(Messages.RM_DURACHANGE, idx, playObject.UseItems[idx].Dura, playObject.UseItems[idx].DuraMax, 0, "");
             }
             else
