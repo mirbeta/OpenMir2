@@ -2709,33 +2709,36 @@ namespace GameSrv.Actor
 
         private void KillFunc()
         {
-            if (ExpHitter != null && ExpHitter.IsSlave)//如果是角色下属杀死对象
+            if (ExpHitter != null)
             {
-                ExpHitter.Master.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
-                return;
+                if (ExpHitter.IsSlave)//如果是角色下属杀死对象
+                {
+                    ExpHitter.Master.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
+                    SendSelfMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0, "");
+                }
+                if (ExpHitter.Race == ActorRace.Play)
+                {
+                    ExpHitter.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
+                    SendSelfMsg(Messages.RM_DIEDROPITEM, ExpHitter.ActorId, 0, 0, 0, "");
+                }
             }
-            if (ExpHitter != null && ExpHitter.Race == ActorRace.Play)
-            {
-                ExpHitter.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
-            }
-            SendSelfMsg(Messages.RM_DIEDROPITEM, 0, 0, 0, 0, "");
         }
 
         /// <summary>
         /// 死亡掉落物品
         /// </summary>
-        private void DieDropItems()
+        private void DieDropItems(int actorId)
         {
             if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && !this.Animal)
             {
-                this.DropUseItems(ActorId);
+                this.DropUseItems(actorId);
                 if (Master == null && (!NoItem || !Envir.Flag.NoDropItem))
                 {
-                    this.ScatterBagItems(ActorId);
+                    this.ScatterBagItems(actorId);
                 }
                 if (this.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.NoDropItem))
                 {
-                    this.ScatterGolds(ActorId);
+                    this.ScatterGolds(actorId);
                 }
             }
         }

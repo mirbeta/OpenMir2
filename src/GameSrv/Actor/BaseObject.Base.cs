@@ -905,7 +905,7 @@ namespace GameSrv.Actor
                         MakeOpenHealth();
                         break;
                     case Messages.RM_DIEDROPITEM:
-                        DieDropItems();
+                        DieDropItems(processMsg.wParam);
                         break;
                 }
             }
