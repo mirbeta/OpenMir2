@@ -1902,6 +1902,7 @@ namespace GameSrv.Player
                 MoXieSuite = 0;
                 SuckupEnemyHealthRate = 0;
                 SuckupEnemyHealth = 0;
+                FastTrain = false;
                 bool[] spiritArr = new bool[4] { false, false, false, false };
                 bool[] cghi = new bool[4] { false, false, false, false };
                 bool shRing = false;
