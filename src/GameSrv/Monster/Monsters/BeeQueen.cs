@@ -21,7 +21,7 @@ namespace GameSrv.Monster.Monsters {
                 return;
             }
             SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
-            SendDelayMsg(Messages.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
+            SendDelayMsg(this.ActorId, Messages.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 
         protected override bool Operate(ProcessMessage processMsg) {

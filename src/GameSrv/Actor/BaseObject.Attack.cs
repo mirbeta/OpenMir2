@@ -57,7 +57,7 @@ namespace GameSrv.Actor
             }
             if (attackTarget.Race > ActorRace.Play)
             {
-                attackTarget.SendMsg(Messages.RM_STRUCK, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "");
+                attackTarget.SendMsg(attackTarget, Messages.RM_STRUCK, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "");
             }
             return result;
         }
@@ -75,7 +75,7 @@ namespace GameSrv.Actor
                         BaseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "", 500);
                         if (BaseObject.Race != ActorRace.Play)
                         {
-                            BaseObject.SendMsg(Messages.RM_STRUCK, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "");
+                            BaseObject.SendMsg(BaseObject, Messages.RM_STRUCK, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "");
                         }
                         result = true;
                     }

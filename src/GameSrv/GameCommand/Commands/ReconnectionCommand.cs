@@ -34,7 +34,7 @@ namespace GameSrv.GameCommand.Commands
             }
             if (!string.IsNullOrEmpty(sIPaddr) && !string.IsNullOrEmpty(sPort))
             {
-                PlayObject.SendMsg(Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
+                PlayObject.SendMsg(PlayObject,Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }
         }
     }

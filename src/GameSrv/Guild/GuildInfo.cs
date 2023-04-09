@@ -493,7 +493,7 @@ namespace GameSrv.Guild
                         nRankNo = guildRank.RankNo;
                         result = guildRank.RankName;
                         // PlayObject.RefShowName();
-                        playObject.SendMsg(Messages.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
+                        playObject.SendMsg(playObject, Messages.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
                         return result;
                     }
                 }

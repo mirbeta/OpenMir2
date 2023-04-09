@@ -771,7 +771,7 @@ namespace GameSrv.RobotPlay
                             switch (mapEvent.VisibleFlag)
                             {
                                 case VisibleFlag.Hidden:
-                                    SendMsg(Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
+                                    SendMsg(this, Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                                     VisibleEvents.RemoveAt(position);
                                     if (VisibleEvents.Count > 0)
                                     {
@@ -782,7 +782,7 @@ namespace GameSrv.RobotPlay
                                     mapEvent.VisibleFlag = 0;
                                     break;
                                 case VisibleFlag.Show:
-                                    SendMsg(Messages.RM_SHOWEVENT, mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
+                                    SendMsg(this, Messages.RM_SHOWEVENT, mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
                                     mapEvent.VisibleFlag = 0;
                                     break;
                             }
@@ -953,7 +953,7 @@ namespace GameSrv.RobotPlay
             {
                 var objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, dropItemList);
-                SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
         }
     }

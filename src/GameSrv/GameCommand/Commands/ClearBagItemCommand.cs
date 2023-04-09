@@ -47,7 +47,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 int ObjectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(ObjectId, DelList);
-                m_PlayObject.SendMsg(Messages.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
+                m_PlayObject.SendMsg(PlayObject, Messages.RM_SENDDELITEMLIST, 0, ObjectId, 0, 0, "");
             }
         }
     }

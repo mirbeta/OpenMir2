@@ -38,78 +38,6 @@ namespace GameSrv.Actor
             HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
         }
 
-        public void SendMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
-        {
-            try
-            {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                var boSend = false;
-                if (IsRobot)
-                {
-                    switch (wIdent)
-                    {
-                        case Messages.RM_MAGSTRUCK:
-                        case Messages.RM_MAGSTRUCK_MINE:
-                        case Messages.RM_DELAYPUSHED:
-                        case Messages.RM_POISON:
-                        case Messages.RM_TRANSPARENT:
-                        case Messages.RM_DOOPENHEALTH:
-                        case Messages.RM_MAGHEALING:
-                        case Messages.RM_DELAYMAGIC:
-                        case Messages.RM_SENDDELITEMLIST:
-                        case Messages.RM_10401:
-                        case Messages.RM_STRUCK:
-                        case Messages.RM_STRUCK_MAG:
-                            boSend = true;
-                            break;
-                    }
-
-                    if (!boSend && IsRobot && Race == ActorRace.Play)
-                    {
-                        switch (wIdent)
-                        {
-                            case Messages.RM_HEAR:
-                            case Messages.RM_WHISPER:
-                            case Messages.RM_CRY:
-                            case Messages.RM_SYSMESSAGE:
-                            case Messages.RM_MOVEMESSAGE:
-                            case Messages.RM_GROUPMESSAGE:
-                            case Messages.RM_SYSMESSAGE2:
-                            case Messages.RM_GUILDMESSAGE:
-                            case Messages.RM_SYSMESSAGE3:
-                            case Messages.RM_MERCHANTSAY:
-                                boSend = true;
-                                break;
-                        }
-                    }
-                }
-                else
-                {
-                    boSend = true;
-                }
-                if (boSend && !Ghost)
-                {
-                    SendMessage sendMessage = new SendMessage
-                    {
-                        wIdent = wIdent,
-                        wParam = wParam,
-                        nParam1 = nParam1,
-                        nParam2 = nParam2,
-                        nParam3 = nParam3,
-                        DeliveryTime = 0,
-                        ActorId = this.ActorId,
-                        LateDelivery = false,
-                        Buff = sMsg
-                    };
-                    MsgQueue.Enqueue(sendMessage);
-                }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
-            }
-        }
-
         public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
             try
@@ -171,37 +99,6 @@ namespace GameSrv.Actor
                         DeliveryTime = 0,
                         ActorId = baseObject.ActorId,
                         LateDelivery = false,
-                        Buff = sMsg
-                    };
-                    MsgQueue.Enqueue(sendMessage);
-                }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
-            }
-        }
-
-        /// <summary>
-        /// 发送延时消息
-        /// </summary>
-        public void SendDelayMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
-        {
-            try
-            {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                if (!Ghost)
-                {
-                    SendMessage sendMessage = new SendMessage
-                    {
-                        wIdent = wIdent,
-                        wParam = wParam,
-                        nParam1 = lParam1,
-                        nParam2 = lParam2,
-                        nParam3 = lParam3,
-                        DeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        ActorId = this.ActorId,
-                        LateDelivery = true,
                         Buff = sMsg
                     };
                     MsgQueue.Enqueue(sendMessage);
@@ -311,7 +208,7 @@ namespace GameSrv.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-            SendMsg(wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
+            SendMsg(this, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
         public void SendActionMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
@@ -348,7 +245,7 @@ namespace GameSrv.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-            SendMsg(wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
+            SendMsg(this, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
         internal bool GetMessage(ref ProcessMessage msg)
@@ -380,49 +277,6 @@ namespace GameSrv.Actor
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
-        }
-
-        public static bool GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, IList<BaseObject> rList)
-        {
-            const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
-            if (rList == null)
-            {
-                return false;
-            }
-            try
-            {
-                int nStartX = nX - nRage;
-                int nEndX = nX + nRage;
-                int nStartY = nY - nRage;
-                int nEndY = nY + nRage;
-                for (int x = nStartX; x <= nEndX; x++)
-                {
-                    for (int y = nStartY; y <= nEndY; y++)
-                    {
-                        MapCellInfo cellInfo = envir.GetCellInfo(x, y, out bool cellSuccess);
-                        if (cellSuccess && cellInfo.IsAvailable)
-                        {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
-                            {
-                                CellObject cellObject = cellInfo.ObjList[i];
-                                if (cellObject.CellObjId > 0 && cellObject.ActorObject)
-                                {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                    if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
-                                    {
-                                        rList.Add(baseObject);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            catch
-            {
-                M2Share.Logger.Error(sExceptionMsg);
-            }
-            return true;
         }
 
         /// <summary>
@@ -460,7 +314,7 @@ namespace GameSrv.Actor
             }
             if (ObMode || FixedHideMode)
             {
-                SendMsg(wIdent, wParam, nParam1, nParam2, nParam3, sMsg); // 如果隐身模式则只发送信息给自己
+                SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg); // 如果隐身模式则只发送信息给自己
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);

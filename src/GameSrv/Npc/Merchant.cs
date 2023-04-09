@@ -526,7 +526,7 @@ namespace GameSrv.Npc
             {
                 var objectId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(objectId, delItemList);
-                user.SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                user.SendMsg(user, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
             }
         }
 
@@ -573,7 +573,7 @@ namespace GameSrv.Npc
                 user.UseItems[ItemLocation.Weapon].Index = 0;
                 user.RecalcAbilitys();
                 user.FeatureChanged();
-                user.SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                user.SendMsg(user, Messages.RM_ABILITY, 0, 0, 0, 0, "");
                 UpgradeWaponAddValue(user, user.ItemList, ref upgradeInfo.Dc, ref upgradeInfo.Sc, ref upgradeInfo.Mc, ref upgradeInfo.Dura);
                 upgradeInfo.UpgradeTime = DateTime.Now;
                 upgradeInfo.GetBackTick = HUtil32.GetTickCount();
@@ -923,7 +923,7 @@ namespace GameSrv.Npc
                         }
                         else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            playObject.SendMsg(Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                            playObject.SendMsg(playObject, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -1891,7 +1891,7 @@ namespace GameSrv.Npc
                     userItem.Desc[13] = 0;
                 }
                 M2Share.CustomItemMgr.SaveCustomItemName();
-                playObject.SendMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                playObject.SendMsg(playObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                 playObject.SendMsg(this, Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, "");
             }
         }

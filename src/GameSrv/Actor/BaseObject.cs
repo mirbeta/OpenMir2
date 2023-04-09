@@ -1288,8 +1288,8 @@ namespace GameSrv.Actor
                     if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
                         Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
-                        SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
-                        SendMsg(Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
+                        SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                        SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
                         {
                             SendRefMsg(Messages.RM_SPACEMOVE_SHOW2, Direction, CurrX, CurrY, 0, "");
@@ -1803,7 +1803,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
+                            SendMsg(this, Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '<':// 聊天框彩色公告
@@ -1814,7 +1814,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(Messages.RM_SYSMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
+                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '{': // 屏幕居中公告
@@ -1827,7 +1827,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), HUtil32.StrToUInt16(nTime, 0), sMsg);
+                            SendMsg(this, Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), HUtil32.StrToUInt16(nTime, 0), sMsg);
                             break;
                         }
                     default:
@@ -1838,21 +1838,21 @@ namespace GameSrv.Actor
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Green:
                                 if (M2Share.Config.ShowPreFixMsg)
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Blue:
                                 if (M2Share.Config.ShowPreFixMsg)
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                                 break;
                         }
                         break;
@@ -1863,19 +1863,19 @@ namespace GameSrv.Actor
                 switch (msgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                        SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                        SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (msgType == MsgType.Cust)
                         {
-                            SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
+                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                         }
                         break;
                 }
@@ -2445,7 +2445,7 @@ namespace GameSrv.Actor
             StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
 
@@ -2468,7 +2468,7 @@ namespace GameSrv.Actor
             StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
 
@@ -3087,6 +3087,49 @@ namespace GameSrv.Actor
             //{
             //   ((TPlayObject)(this)).CheckMapEvent(5, "");
             //}
+        }
+
+        public static bool GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, IList<BaseObject> rList)
+        {
+            const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
+            if (rList == null)
+            {
+                return false;
+            }
+            try
+            {
+                int nStartX = nX - nRage;
+                int nEndX = nX + nRage;
+                int nStartY = nY - nRage;
+                int nEndY = nY + nRage;
+                for (int x = nStartX; x <= nEndX; x++)
+                {
+                    for (int y = nStartY; y <= nEndY; y++)
+                    {
+                        MapCellInfo cellInfo = envir.GetCellInfo(x, y, out bool cellSuccess);
+                        if (cellSuccess && cellInfo.IsAvailable)
+                        {
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            {
+                                CellObject cellObject = cellInfo.ObjList[i];
+                                if (cellObject.CellObjId > 0 && cellObject.ActorObject)
+                                {
+                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
+                                    {
+                                        rList.Add(baseObject);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                M2Share.Logger.Error(sExceptionMsg);
+            }
+            return true;
         }
 
         protected static void Dispose(object obj)

@@ -34,8 +34,8 @@ namespace GameSrv.GameCommand.Commands
             PlayObject.UseItems[ItemLocation.Weapon].Desc[5] = (byte)nHit;
             PlayObject.SendUpdateItem(PlayObject.UseItems[ItemLocation.Weapon]);
             PlayObject.RecalcAbilitys();
-            PlayObject.SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
-            PlayObject.SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(PlayObject, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(PlayObject, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
             M2Share.Logger.Warn("[武器调整]" + PlayObject.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
         }
     }

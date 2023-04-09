@@ -2047,7 +2047,7 @@ namespace GameSrv.Npc
                         for (int k = 0; k < BatchParamsList.Count; k++)
                         {
                             ScriptParams batchParam = BatchParamsList[k];
-                            playObject.SendDelayMsg(Messages.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
+                            playObject.SendDelayMsg(this.ActorId, Messages.RM_RANDOMSPACEMOVE, 0, 0, 0, 0, BatchParamsList[k].sParams, batchParam.nParams + n20);
                             n20 += batchParam.nParams;
                         }
                         break;

@@ -31,7 +31,7 @@ namespace GameSrv.GameCommand.Commands
             if (m_PlayObject != null)
             {
                 m_PlayObject.HungerStatus = nHungerPoint;
-                m_PlayObject.SendMsg(Messages.RM_MYSTATUS, 0, 0, 0, 0, "");
+                m_PlayObject.SendMsg(PlayObject, Messages.RM_MYSTATUS, 0, 0, 0, 0, "");
                 m_PlayObject.RefMyStatus();
                 PlayObject.SysMsg(sHumanName + " 的能量值已改变。", MsgColor.Green, MsgType.Hint);
             }
