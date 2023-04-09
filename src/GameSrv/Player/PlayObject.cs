@@ -1211,7 +1211,7 @@ namespace GameSrv.Player {
                 baseObject34.StruckDamage((ushort)nDmg);
                 baseObject34.SendRefMsg(Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId, "");
                 if (baseObject34.Race != ActorRace.Play) {
-                    baseObject34.SendMsg(baseObject34, Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId, "");
+                    baseObject34.SendMsg(Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId, "");
                 }
             }
             if (bo35) {
@@ -2579,7 +2579,7 @@ namespace GameSrv.Player {
                             human.CreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                         }
                         human.BonusPoint += M2Share.Config.nMasterOKBonusPoint;
-                        human.SendMsg(human, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                        human.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     }
                     else {
                         // 如果师父不在线则保存到记录表中

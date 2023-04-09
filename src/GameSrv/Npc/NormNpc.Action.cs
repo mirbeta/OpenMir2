@@ -147,7 +147,7 @@ namespace GameSrv.Npc
                 }
                 else
                 {
-                    playObject.SendMsg(playObject, Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, "您未开通寄售服务,请先开通!!!");
+                    playObject.SendMsg(Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, "您未开通寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -254,7 +254,7 @@ namespace GameSrv.Npc
                 }
                 else
                 {
-                    playObject.SendMsg(playObject, Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
+                    playObject.SendMsg(Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -547,7 +547,7 @@ namespace GameSrv.Npc
                     }
                     playObject.Abil.Exp += dwInt;
                     // PlayObject.GetExp(dwInt);
-                    playObject.SendMsg(playObject, Messages.RM_WINEXP, 0, dwInt, 0, 0, "");
+                    playObject.SendMsg(Messages.RM_WINEXP, 0, dwInt, 0, 0, "");
                     break;
             }
         }
@@ -2979,13 +2979,13 @@ namespace GameSrv.Npc
                 case '=':
                     playObject.HasLevelUp(0);
                     playObject.BonusPoint = nBonusPoint;
-                    playObject.SendMsg(playObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                    playObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
                 case '-':
                     break;
                 case '+':
                     playObject.BonusPoint += nBonusPoint;
-                    playObject.SendMsg(playObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                    playObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     break;
             }
         }
@@ -3006,7 +3006,7 @@ namespace GameSrv.Npc
         {
             var nTotleUsePoint = playObject.BonusAbil.DC + playObject.BonusAbil.MC + playObject.BonusAbil.SC + playObject.BonusAbil.AC + playObject.BonusAbil.MAC + playObject.BonusAbil.HP + playObject.BonusAbil.MP + playObject.BonusAbil.Hit + playObject.BonusAbil.Speed + playObject.BonusAbil.Reserved;
             playObject.BonusPoint += nTotleUsePoint;
-            playObject.SendMsg(playObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+            playObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
             playObject.HasLevelUp(0);
             playObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
         }
@@ -3084,7 +3084,7 @@ namespace GameSrv.Npc
                     playObject.Abil.Exp = 0;
                 }
                 playObject.BonusPoint += nBounsuPoint;
-                playObject.SendMsg(playObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                playObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 playObject.HasLevelUp(0);
                 playObject.RefShowName();
             }

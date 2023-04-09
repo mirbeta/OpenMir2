@@ -80,7 +80,7 @@ namespace GameSrv.GameCommand.Commands {
                     M2Share.SaveItemBindAccount();
                     PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
                     m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
-                    m_PlayObject.SendMsg(m_PlayObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                    m_PlayObject.SendMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
                 case 1:
                     sBindName = m_PlayObject.ChrName;
@@ -113,7 +113,7 @@ namespace GameSrv.GameCommand.Commands {
                     PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
                     m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayObject.SendUpdateItem(UserItem);
-                    m_PlayObject.SendMsg(m_PlayObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                    m_PlayObject.SendMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
                 case 2:
                     boFind = false;
@@ -146,7 +146,7 @@ namespace GameSrv.GameCommand.Commands {
                     PlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), UserItem.Index, UserItem.MakeIndex, UserItem.Dura, UserItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
                     m_PlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(UserItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayObject.SendUpdateItem(UserItem);
-                    m_PlayObject.SendMsg(m_PlayObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
+                    m_PlayObject.SendMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "");
                     break;
                 case 3:// 人物装备死亡不爆绑定
                     sBindName = PlayObject.ChrName;

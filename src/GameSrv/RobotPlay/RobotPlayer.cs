@@ -265,28 +265,28 @@ namespace GameSrv.RobotPlay
                 }
                 if (Permission > 0)
                 {
-                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
+                    playObject.SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        WhisperHuman.SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                     if (playObject.WhisperHuman != null && !playObject.WhisperHuman.Ghost)
                     {
-                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        playObject.WhisperHuman.SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                 }
                 else
                 {
-                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
+                    playObject.SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        WhisperHuman.SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                     if (playObject.WhisperHuman != null && !playObject.WhisperHuman.Ghost)
                     {
-                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        playObject.WhisperHuman.SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                 }
             }
