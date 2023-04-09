@@ -1162,7 +1162,7 @@ namespace GameSrv.Player
                 LogonTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
                 LogonTick = HUtil32.GetTickCount();
                 Initialize();
-                SendPriorityMsg(this, Messages.RM_LOGON, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_LOGON, 0, 0, 0, 0, "", MessagePriority.High);
                 if (Abil.Level <= 7)
                 {
                     if (GetRangeHumanCount() >= 80)
@@ -1363,12 +1363,12 @@ namespace GameSrv.Player
                     }
                 }
                 Bright = M2Share.GameTime;
-                SendPriorityMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(this, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(this, Messages.RM_DAYCHANGING, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(this, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(this, Messages.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {
@@ -1522,8 +1522,8 @@ namespace GameSrv.Player
                 if (Race == ActorRace.Play)
                 {
                     RecalcAbilitys();
-                    SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                    SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
                 }
                 if (!boMakeLuck)
                 {
@@ -1552,7 +1552,7 @@ namespace GameSrv.Player
             ushort nDura = (ushort)HUtil32._MIN(5000, userItem.DuraMax - userItem.Dura);
             if (nDura <= 0) return false;
             userItem.Dura += nDura;
-            SendMsg(this, Messages.RM_DURACHANGE, 1, userItem.Dura, userItem.DuraMax, 0, "");
+            SendMsg(Messages.RM_DURACHANGE, 1, userItem.Dura, userItem.DuraMax, 0, "");
             SysMsg(Settings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
@@ -1568,7 +1568,7 @@ namespace GameSrv.Player
                 return false;
             }
             UseItems[ItemLocation.Weapon].Dura = UseItems[ItemLocation.Weapon].DuraMax;
-            SendMsg(this, Messages.RM_DURACHANGE, 1, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
+            SendMsg(Messages.RM_DURACHANGE, 1, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
             SysMsg(Settings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
@@ -1597,8 +1597,8 @@ namespace GameSrv.Player
                 }
             }
             RecalcAbilitys();
-            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-            SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
         }
 
         /// <summary>
@@ -2768,7 +2768,7 @@ namespace GameSrv.Player
                     //}
                     CharStatus = GetCharStatus();
                     StatusChanged();
-                    SendUpdateMsg(this, Messages.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
+                    SendUpdateMsg(Messages.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
                 }
                 RecalcAdjusBonus();
 
@@ -2780,7 +2780,7 @@ namespace GameSrv.Player
                 }
                 if (IsSpirit)
                 {
-                    SendDelayMsg(this, Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
+                    SendDelayMsg(Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
                 }
                 WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
                 WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
@@ -2877,7 +2877,7 @@ namespace GameSrv.Player
                 }
                 if (nOldDura != HUtil32.Round(nDura / 1000.0))
                 {
-                    SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Dress, nDura, UseItems[ItemLocation.Dress].DuraMax, 0, "");
+                    SendMsg(Messages.RM_DURACHANGE, ItemLocation.Dress, nDura, UseItems[ItemLocation.Dress].DuraMax, 0, "");
                 }
             }
 
@@ -2909,15 +2909,15 @@ namespace GameSrv.Player
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000.0))
                     {
-                        SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                        SendMsg(Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
                     }
                 }
             }
             if (boRecalcAbi)
             {
                 RecalcAbilitys();
-                SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
             }
         }
 
@@ -3137,14 +3137,14 @@ namespace GameSrv.Player
                     VisibleMapItem visibleMapItem = VisibleItems[I];
                     if (visibleMapItem.VisibleFlag == 0)
                     {
-                        SendMsg(this, Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, "");
+                        SendMsg(Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, "");
                         VisibleItems.RemoveAt(I);
                         Dispose(visibleMapItem);
                         continue;
                     }
                     if (visibleMapItem.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(this, Messages.RM_ITEMSHOW, visibleMapItem.wLooks, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, visibleMapItem.sName);
+                        SendMsg(Messages.RM_ITEMSHOW, visibleMapItem.wLooks, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, visibleMapItem.sName);
                     }
                     I++;
                 }
@@ -3158,13 +3158,13 @@ namespace GameSrv.Player
                     MapEvent mapEvent = VisibleEvents[I];
                     if (mapEvent.VisibleFlag == VisibleFlag.Visible)
                     {
-                        SendMsg(this, Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
+                        SendMsg(Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
                         VisibleEvents.RemoveAt(I);
                         continue;
                     }
                     if (mapEvent.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(this, Messages.RM_SHOWEVENT, (short)mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
+                        SendMsg(Messages.RM_SHOWEVENT, (short)mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
                     }
                     I++;
                 }
@@ -3449,7 +3449,7 @@ namespace GameSrv.Player
                     {
                         int objectId = HUtil32.Sequence();
                         M2Share.ActorMgr.AddOhter(objectId, delList);
-                        SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                        SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                     }
                 }
             }
@@ -3656,13 +3656,13 @@ namespace GameSrv.Player
                     VisibleActors[i] = null;
                 }
                 VisibleActors.Clear();
-                SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
                 Envir = envir;
                 MapName = envir.MapName;
                 MapFileName = envir.MapFileName;
                 CurrX = nDMapX;
                 CurrY = nDMapY;
-                SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
+                SendMsg(Messages.RM_CHANGEMAP, 0, 0, 0, 0, envir.MapFileName);
                 if (AddToMap())
                 {
                     //MapMoveTick = HUtil32.GetTickCount();
@@ -4021,8 +4021,8 @@ namespace GameSrv.Player
                         M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     RecalcAbilitys();
-                    SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                    SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
                 }
             }
         }
@@ -5043,7 +5043,7 @@ namespace GameSrv.Player
             const string sExitGroupMsg = "{0} 已经退出了本组.";
             SendGroupText(Format(sExitGroupMsg, ChrName));
             GroupOwner = 0;
-            SendMsg(this, Messages.RM_GROUPCANCEL, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_GROUPCANCEL, 0, 0, 0, 0, "");
         }
 
         public void SendGroupText(string sMsg)
@@ -5077,7 +5077,7 @@ namespace GameSrv.Player
                 {
                     userMagic.TranPoint -= userMagic.Magic.MaxTrain[nLevel];
                     userMagic.Level++;
-                    SendUpdateDelayMsg(this, Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
+                    SendUpdateDelayMsg(Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
                     CheckSeeHealGauge(userMagic);
                 }
                 else
@@ -5108,7 +5108,7 @@ namespace GameSrv.Player
             Abil.MaxExp = GetLevelExp(Abil.Level);
             RecalcLevelAbilitys();
             RecalcAbilitys();
-            SendMsg(this, Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
+            SendMsg(Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
             if (M2Share.FunctionNPC != null)
             {
                 M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
@@ -5190,7 +5190,7 @@ namespace GameSrv.Player
             this.ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
             SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
         }
 
         public UserItem CheckItemCount(string sItemName, ref int nCount)
@@ -5247,7 +5247,7 @@ namespace GameSrv.Player
                             }
                             if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
                             {
-                                SendMsg(this, Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                                SendMsg(Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
                             }
                         }
                     }

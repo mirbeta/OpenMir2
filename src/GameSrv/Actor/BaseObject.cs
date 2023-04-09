@@ -707,7 +707,7 @@ namespace GameSrv.Actor
         {
             if (Race == ActorRace.Play)
             {
-                SendUpdateMsg(this, Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
         }
 
@@ -715,7 +715,7 @@ namespace GameSrv.Actor
         {
             if (Race == ActorRace.Play)
             {
-                SendUpdateMsg(this, Messages.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(Messages.RM_GAMEGOLDCHANGED, 0, 0, 0, 0, "");
             }
         }
 
@@ -826,7 +826,7 @@ namespace GameSrv.Actor
         {
             if (Race == ActorRace.Play)
             {
-                SendUpdateMsg(this, Messages.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(Messages.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
             }
             if (ShowHp)
             {
@@ -1089,7 +1089,7 @@ namespace GameSrv.Actor
                             {
                                 magPwr = HUtil32.Round(magPwr * 1.5);
                             }
-                            baseObject.SendDelayMsg(this, Messages.RM_MAGSTRUCK, 0, magPwr, 0, 0, "", 600);
+                            baseObject.SendDelayMsg(Messages.RM_MAGSTRUCK, 0, magPwr, 0, 0, "", 600);
                             tcount++;
                         }
                     }
@@ -1306,8 +1306,8 @@ namespace GameSrv.Actor
                     if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
                         Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
-                        SendMsg(this, Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
-                        SendMsg(this, Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
+                        SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                        SendMsg(Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
                         {
                             SendRefMsg(Messages.RM_SPACEMOVE_SHOW2, Direction, CurrX, CurrY, 0, "");
@@ -1683,7 +1683,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 发送优先级消息
         /// </summary>
-        public void SendPriorityMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "", MessagePriority Priority = MessagePriority.Normal)
+        public void SendPriorityMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "", MessagePriority Priority = MessagePriority.Normal)
         {
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
             if (!Ghost)
@@ -1696,7 +1696,7 @@ namespace GameSrv.Actor
                     nParam2 = nParam2,
                     nParam3 = nParam3,
                     DeliveryTime = 0,
-                    ActorId = baseObject.ActorId,
+                    ActorId = this.ActorId,
                     LateDelivery = false,
                     Buff = sMsg
                 };
@@ -1712,7 +1712,7 @@ namespace GameSrv.Actor
             HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
         }
 
-        public void SendMsg(int actorId, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
+        public void SendMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
             try
             {
@@ -1771,7 +1771,7 @@ namespace GameSrv.Actor
                         nParam2 = nParam2,
                         nParam3 = nParam3,
                         DeliveryTime = 0,
-                        ActorId = actorId,
+                        ActorId = this.ActorId,
                         LateDelivery = false,
                         Buff = sMsg
                     };
@@ -1783,7 +1783,7 @@ namespace GameSrv.Actor
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
         }
-                
+
         public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
             try
@@ -1859,11 +1859,11 @@ namespace GameSrv.Actor
         /// <summary>
         /// 发送延时消息
         /// </summary>
-        public void SendDelayMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        public void SendDelayMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
             {
-                //HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
                 if (!Ghost)
                 {
                     SendMessage sendMessage = new SendMessage
@@ -1874,7 +1874,7 @@ namespace GameSrv.Actor
                         nParam2 = lParam2,
                         nParam3 = lParam3,
                         DeliveryTime = HUtil32.GetTickCount() + dwDelay,
-                        ActorId = baseObject.ActorId,
+                        ActorId = this.ActorId,
                         LateDelivery = true,
                         Buff = sMsg
                     };
@@ -1883,7 +1883,7 @@ namespace GameSrv.Actor
             }
             finally
             {
-                //HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
         }
 
@@ -1918,7 +1918,38 @@ namespace GameSrv.Actor
             }
         }
 
-        internal void SendUpdateDelayMsg(BaseObject baseObject, short wIdent, short wParam, int lParam1, int lParam2,
+        /// <summary>
+        /// 发送延时消息
+        /// </summary>
+        public void SendDelayMsg(short wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        {
+            try
+            {
+                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+                if (!Ghost)
+                {
+                    SendMessage sendMessage = new SendMessage
+                    {
+                        wIdent = wIdent,
+                        wParam = wParam,
+                        nParam1 = lParam1,
+                        nParam2 = lParam2,
+                        nParam3 = lParam3,
+                        DeliveryTime = HUtil32.GetTickCount() + dwDelay,
+                        LateDelivery = true,
+                        Buff = sMsg
+                    };
+                    sendMessage.ActorId = this.ActorId;
+                    MsgQueue.Enqueue(sendMessage);
+                }
+            }
+            finally
+            {
+                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+            }
+        }
+
+        internal void SendUpdateDelayMsg(short wIdent, short wParam, int lParam1, int lParam2,
             int lParam3, string sMsg, int dwDelay)
         {
             int i;
@@ -1947,10 +1978,10 @@ namespace GameSrv.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-            SendDelayMsg(baseObject.ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
+            SendDelayMsg(ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
         }
 
-        public void SendUpdateMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
+        public void SendUpdateMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
             string sMsg)
         {
             int i;
@@ -1979,7 +2010,7 @@ namespace GameSrv.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-            SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
+            SendMsg(wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
         public void SendActionMsg(BaseObject baseObject, int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
@@ -2019,7 +2050,7 @@ namespace GameSrv.Actor
             SendMsg(baseObject, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        protected bool GetMessage(ref ProcessMessage msg)
+        internal bool GetMessage(ref ProcessMessage msg)
         {
             bool result = false;
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
@@ -2122,7 +2153,7 @@ namespace GameSrv.Actor
             }
             if (ObMode || FixedHideMode)
             {
-                SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg); // 如果隐身模式则只发送信息给自己
+                SendMsg(wIdent, wParam, nParam1, nParam2, nParam3, sMsg); // 如果隐身模式则只发送信息给自己
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
@@ -2437,7 +2468,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
+                            SendMsg(Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '<':// 聊天框彩色公告
@@ -2448,7 +2479,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
+                            SendMsg(Messages.RM_SYSMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
                         }
                     case '{': // 屏幕居中公告
@@ -2461,7 +2492,7 @@ namespace GameSrv.Actor
                             {
                                 sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
-                            SendMsg(this, Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), HUtil32.StrToUInt16(nTime, 0), sMsg);
+                            SendMsg(Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), HUtil32.StrToUInt16(nTime, 0), sMsg);
                             break;
                         }
                     default:
@@ -2472,21 +2503,21 @@ namespace GameSrv.Actor
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Green:
                                 if (M2Share.Config.ShowPreFixMsg)
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Blue:
                                 if (M2Share.Config.ShowPreFixMsg)
                                 {
                                     sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                                 break;
                         }
                         break;
@@ -2497,19 +2528,19 @@ namespace GameSrv.Actor
                 switch (msgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
+                        SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
+                        SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (msgType == MsgType.Cust)
                         {
-                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
+                            SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(this, Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                         }
                         break;
                 }
@@ -2759,7 +2790,7 @@ namespace GameSrv.Actor
         protected void WeightChanged()
         {
             WAbil.Weight = RecalcBagWeight();
-            SendUpdateMsg(this, Messages.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
+            SendUpdateMsg(Messages.RM_WEIGHTCHANGED, 0, 0, 0, 0, "");
         }
 
         public bool InSafeZone()
@@ -3258,7 +3289,7 @@ namespace GameSrv.Actor
             StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
 
@@ -3281,7 +3312,7 @@ namespace GameSrv.Actor
             StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
             return result;
         }
 

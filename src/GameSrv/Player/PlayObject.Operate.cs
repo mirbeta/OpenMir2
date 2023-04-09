@@ -450,8 +450,8 @@ namespace GameSrv.Player
                                 SendAddItem(takeOffItem);
                             }
                             RecalcAbilitys();
-                            SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                            SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                            SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
                             SendDefMessage(Messages.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                             FeatureChanged();
                             if ((stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_MAN) || (stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_WOMAN))
@@ -539,8 +539,8 @@ namespace GameSrv.Player
                                 //m_UseItems[btWhere].wIndex = 0;
                                 UseItems[btWhere] = null;
                                 RecalcAbilitys();
-                                SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                                SendMsg(this, Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                                SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
                                 SendDefMessage(Messages.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
                                 FeatureChanged();
                                 if (M2Share.FunctionNPC != null)

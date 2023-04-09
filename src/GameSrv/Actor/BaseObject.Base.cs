@@ -339,7 +339,7 @@ namespace GameSrv.Actor {
             }
             if (boNeedRecalc) {
                 RecalcAbilitys();
-                SendMsg(this, Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
             }
             if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime) {
                 PoisoningTick = HUtil32.GetTickCount();
@@ -562,7 +562,7 @@ namespace GameSrv.Actor {
                                 if (Animal) {
                                     MeatQuality -= (ushort)(nDamage * 1000);
                                 }
-                                SendMsg(this, Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
+                                SendMsg(Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
                             }
                         }
                         if (FastParalysis) {
@@ -588,7 +588,7 @@ namespace GameSrv.Actor {
                     case Messages.RM_REFMESSAGE:
                         SendRefMsg(processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         if ((processMsg.ActorId == Messages.RM_STRUCK) && (Race != ActorRace.Play)) {
-                            SendMsg(this, processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
+                            SendMsg(processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         }
                         if (FastParalysis) {
                             StatusTimeArr[PoisonState.STONE] = 1;

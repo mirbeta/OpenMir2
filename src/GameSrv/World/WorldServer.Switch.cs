@@ -16,7 +16,8 @@ namespace GameSrv.World {
             return result;
         }
 
-        private static void LoadSwitchData(SwitchDataInfo switchData, ref PlayObject playObject) {
+        private static void LoadSwitchData(SwitchDataInfo switchData, ref PlayObject playObject)
+        {
             playObject.BanShout = switchData.boBanShout;
             playObject.HearWhisper = switchData.boHearWhisper;
             playObject.BanGuildChat = switchData.boBanGuildChat;
@@ -24,23 +25,26 @@ namespace GameSrv.World {
             playObject.AdminMode = switchData.boAdminMode;
             playObject.ObMode = switchData.boObMode;
             int nCount = 0;
-            while (true) {
+            while (true)
+            {
                 if (string.IsNullOrEmpty(switchData.BlockWhisperArr[nCount])) break;
                 playObject.LockWhisperList.Add(switchData.BlockWhisperArr[nCount]);
                 nCount++;
                 if (nCount >= switchData.BlockWhisperArr.Count) break;
             }
             nCount = 0;
-            while (true) {
+            while (true)
+            {
                 if (string.IsNullOrEmpty(switchData.SlaveArr[nCount].SlaveName)) break;
                 int slaveId = HUtil32.Sequence();
                 M2Share.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
-                playObject.SendDelayMsg(playObject, Messages.RM_10401, 0, slaveId, 0, 0, "", 500);
+                playObject.SendDelayMsg(Messages.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
                 if (nCount >= 5) break;
             }
             nCount = 0;
-            while (true) {
+            while (true)
+            {
                 playObject.ExtraAbil[nCount] = switchData.StatusValue[nCount];
                 playObject.ExtraAbilTimes[nCount] = switchData.StatusTimeOut[nCount];
                 nCount++;

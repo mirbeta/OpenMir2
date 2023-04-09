@@ -452,7 +452,7 @@ namespace GameSrv.Player
             }
             if (tObjCount != GameGold)
             {
-                SendUpdateMsg(this, Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
+                SendUpdateMsg(Messages.RM_GOLDCHANGED, 0, 0, 0, 0, "");
             }
             if (Envir.Flag.Fight3Zone)
             {
@@ -788,7 +788,7 @@ namespace GameSrv.Player
                                 }
                                 else
                                 {
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -976,7 +976,7 @@ namespace GameSrv.Player
                                 }
                                 else
                                 {
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1035,7 +1035,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1084,7 +1084,7 @@ namespace GameSrv.Player
                                 {
                                     SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
-                                SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                 result = false;
                             }
                         }
@@ -1138,7 +1138,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", dwDelayTime);
+                                    SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1201,7 +1201,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg("操作延迟 Ident: " + processMsg.wIdent + " Time: " + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1256,7 +1256,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1311,7 +1311,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1596,7 +1596,7 @@ namespace GameSrv.Player
                 case Messages.RM_LOGON:
                     ClientMsg = Messages.MakeMessage(Messages.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
                     SendSocket(ClientMsg, EDCode.EncodeString(MapFileName));
-                    SendMsg(this, Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                     SendLogon();
                     SendServerConfig();
                     ClientQueryUserName(ActorId, CurrX, CurrY);
@@ -2127,7 +2127,7 @@ namespace GameSrv.Player
                 {
                     int objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);
-                    SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                    SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                 }
             }
             catch (Exception ex)
@@ -2172,7 +2172,7 @@ namespace GameSrv.Player
                         UseItems[ItemLocation.RighThand].Index = 0;
                         Light = 0;
                         SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
-                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
+                        SendMsg(Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
                         RecalcAbilitys();
                     }
                     else
@@ -2181,7 +2181,7 @@ namespace GameSrv.Player
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000.0))
                     {
-                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[ItemLocation.RighThand].Dura, 0, 0, "");
+                        SendMsg(Messages.RM_LAMPCHANGEDURA, 0, UseItems[ItemLocation.RighThand].Dura, 0, 0, "");
                     }
                 }
             }

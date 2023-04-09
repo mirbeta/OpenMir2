@@ -14,12 +14,14 @@ namespace GameSrv.Monster.Monsters {
             BeeList = new List<BaseObject>();
         }
 
-        private void MakeChildBee() {
-            if (BeeList.Count >= 15) {
+        private void MakeChildBee()
+        {
+            if (BeeList.Count >= 15)
+            {
                 return;
             }
             SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
-            SendDelayMsg(this, Messages.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
+            SendDelayMsg(Messages.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 
         protected override bool Operate(ProcessMessage processMsg) {
