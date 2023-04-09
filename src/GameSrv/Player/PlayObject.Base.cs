@@ -2944,15 +2944,15 @@ namespace GameSrv.Player
         {
             for (int i = VisibleItems.Count - 1; i >= 0; i--)
             {
-                VisibleItems[i].VisibleFlag = 0;
+                VisibleItems[i].VisibleFlag = VisibleFlag.Hidden;
             }
             for (int i = VisibleEvents.Count - 1; i >= 0; i--)
             {
-                VisibleEvents[i].VisibleFlag = 0;
+                VisibleEvents[i].VisibleFlag = VisibleFlag.Hidden;
             }
             for (int i = VisibleActors.Count - 1; i >= 0; i--)
             {
-                VisibleActors[i].VisibleFlag = 0;
+                VisibleActors[i].VisibleFlag = VisibleFlag.Hidden;
             }
             short nStartX = (short)(CurrX - ViewRange);
             short nEndX = (short)(CurrX + ViewRange);
@@ -3074,21 +3074,18 @@ namespace GameSrv.Player
                         break;
                     }
                     VisibleBaseObject visibleBaseObject = VisibleActors[n18];
-                    if (visibleBaseObject.VisibleFlag == 0)
+                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        if (Race == ActorRace.Play)
+                        BaseObject baseObject = visibleBaseObject.BaseObject;
+                        if (!baseObject.FixedHideMode && !baseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                         {
-                            BaseObject baseObject = visibleBaseObject.BaseObject;
-                            if (!baseObject.FixedHideMode && !baseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
-                            {
-                                SendMsg(baseObject, Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
-                            }
+                            SendMsg(baseObject, Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
                         }
                         VisibleActors.RemoveAt(n18);
                         Dispose(visibleBaseObject);
                         continue;
                     }
-                    if (Race == ActorRace.Play && visibleBaseObject.VisibleFlag == VisibleFlag.Show)
+                    if (visibleBaseObject.VisibleFlag == VisibleFlag.Show)
                     {
                         BaseObject baseObject = visibleBaseObject.BaseObject;
                         if (baseObject != this)

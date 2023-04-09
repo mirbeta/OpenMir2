@@ -129,7 +129,7 @@ namespace GameSrv.Monster.Monsters
             IsVisibleActive = false;// 先置为FALSE
             for (int i = 0; i < VisibleActors.Count; i++)
             {
-                VisibleActors[i].VisibleFlag = 0;
+                VisibleActors[i].VisibleFlag = VisibleFlag.Hidden;
             }
             short nStartX = (short)(CurrX - ViewRange);
             short nEndX = (short)(CurrX + ViewRange);

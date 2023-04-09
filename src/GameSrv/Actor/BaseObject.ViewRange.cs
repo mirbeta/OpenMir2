@@ -62,7 +62,7 @@ namespace GameSrv.Actor
             IsVisibleActive = false;// 先置为FALSE
             for (int i = 0; i < VisibleActors.Count; i++)
             {
-                VisibleActors[i].VisibleFlag = 0;
+                VisibleActors[i].VisibleFlag = VisibleFlag.Hidden;
             }
             short nStartX = (short)(CurrX - ViewRange);
             short nEndX = (short)(CurrX + ViewRange);
@@ -168,7 +168,7 @@ namespace GameSrv.Actor
                 if (VisibleActors[i] == null) {
                     continue;
                 }
-                VisibleActors[i].VisibleFlag = 0;
+                VisibleActors[i].VisibleFlag = VisibleFlag.Hidden;
             }
             short nStartX = (short)(CurrX - ViewRange);
             short nEndX = (short)(CurrX + ViewRange);

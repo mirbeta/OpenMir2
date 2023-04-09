@@ -683,10 +683,10 @@ namespace GameSrv.RobotPlay
                                         }
                                     }
                                 }
-                                visibleBaseObject.VisibleFlag = 0;
+                                visibleBaseObject.VisibleFlag = VisibleFlag.Hidden;
                                 break;
                             case VisibleFlag.Invisible:
-                                visibleBaseObject.VisibleFlag = 0;
+                                visibleBaseObject.VisibleFlag = VisibleFlag.Hidden;
                                 break;
                         }
                     }
