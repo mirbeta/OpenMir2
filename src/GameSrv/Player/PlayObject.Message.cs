@@ -347,7 +347,8 @@ namespace GameSrv.Player
                             }
                             else
                             {
-                                if (DropItemDown(UseItems[i], 1, false, 0, ActorId))
+                                int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                                if (DropItemDown(UseItems[i], dropWide, false, 0, ActorId))
                                 {
                                     boTakeItem = true;
                                 }
@@ -2103,7 +2104,8 @@ namespace GameSrv.Player
                         continue;
                     }
                     // 检查是否在禁止取下列表,如果在列表中则不掉此物品
-                    if (DropItemDown(UseItems[i], 2, true, baseObject, ActorId))
+                    int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                    if (DropItemDown(UseItems[i], dropWide, true, baseObject, ActorId))
                     {
                         stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)

@@ -286,7 +286,8 @@ namespace GameSrv.Player
                                 result = true;
                                 break;
                             }
-                            if (DropItemDown(userItem, 1, false, 0, this.ActorId))
+                            int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                            if (DropItemDown(userItem, dropWide, false, 0, this.ActorId))
                             {
                                 Dispose(userItem);
                                 ItemList.RemoveAt(i);

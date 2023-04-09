@@ -3455,7 +3455,7 @@ namespace GameSrv.Npc
                         nDy = nOrgY + j;
                         if (envir.GetItemEx(nDx, nDy, ref nItemCount) == 0)
                         {
-                            if (envir.Bo2C)
+                            if (envir.ChFlag)
                             {
                                 result = true;
                                 break;
@@ -3463,7 +3463,7 @@ namespace GameSrv.Npc
                         }
                         else
                         {
-                            if (envir.Bo2C && n24 > nItemCount)
+                            if (envir.ChFlag && n24 > nItemCount)
                             {
                                 n24 = nItemCount;
                                 n28 = nDx;

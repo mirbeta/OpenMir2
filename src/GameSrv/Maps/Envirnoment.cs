@@ -34,7 +34,7 @@ namespace GameSrv.Maps {
         /// </summary>
         public readonly int EnterLevel = 0;
         public MapInfoFlag Flag;
-        public bool Bo2C;
+        public bool ChFlag;
         /// <summary>
         /// 门
         /// </summary>
@@ -552,11 +552,11 @@ namespace GameSrv.Maps {
         }
 
         public MapItem GetItem(int nX, int nY) {
-            Bo2C = false;
+            ChFlag = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
-                Bo2C = true;
+                ChFlag = true;
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
                     CellObject cellObject = cellInfo.ObjList[i];
@@ -565,7 +565,7 @@ namespace GameSrv.Maps {
                         case CellType.Item:
                             return M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                         case CellType.MapRoute:
-                            Bo2C = false;
+                            ChFlag = false;
                             break;
                         case CellType.Play:
                         case CellType.Monster:
@@ -573,7 +573,7 @@ namespace GameSrv.Maps {
                             BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (!baseObject.Death)
                             {
-                                Bo2C = false;
+                                ChFlag = false;
                             }
                             break;
                     }
@@ -1034,30 +1034,37 @@ namespace GameSrv.Maps {
             return null;
         }
 
-        public int GetItemEx(int nX, int nY, ref int nCount) {
+        public int GetItemEx(int nX, int nY, ref int nCount)
+        {
             int result = 0;
             nCount = 0;
-            Bo2C = false;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
-            if (cellSuccess && cellInfo.Valid) {
-                Bo2C = true;
-                if (cellInfo.IsAvailable) {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++) {
+            ChFlag = false;
+            var cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
+            if (cellSuccess && cellInfo.Valid)
+            {
+                ChFlag = true;
+                if (cellInfo.IsAvailable)
+                {
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    {
                         CellObject cellObject = cellInfo.ObjList[i];
-                        switch (cellObject.CellType) {
+                        switch (cellObject.CellType)
+                        {
                             case CellType.Item:
                                 result = cellObject.CellObjId;
                                 nCount++;
                                 break;
                             case CellType.MapRoute:
-                                Bo2C = false;
+                                ChFlag = false;
                                 break;
                             case CellType.Monster:
-                            case CellType.Play: {
+                            case CellType.Merchant:
+                            case CellType.Play:
+                                {
                                     BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                    if (!baseObject.Death) {
-                                        Bo2C = false;
+                                    if (!baseObject.Death)
+                                    {
+                                        ChFlag = false;
                                     }
                                     break;
                                 }
@@ -1152,7 +1159,7 @@ namespace GameSrv.Maps {
         }
 
         public MapEvent GetEvent(int nX, int nY) {
-            Bo2C = false;
+            ChFlag = false;
             MapCellInfo cellInfo = default;
             bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
             if (cellSuccess && cellInfo.IsAvailable) {

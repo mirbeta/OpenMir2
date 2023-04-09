@@ -591,11 +591,11 @@ namespace GameSrv.Actor
                 {
                     for (int iii = -i; iii <= i; iii++)
                     {
-                        pX = (short)(nOrgX + iii - 1);
-                        pY = (short)(nOrgY + ii - 1);
+                        pX = (short)(nOrgX + iii + 1);
+                        pY = (short)(nOrgY + ii + 1);
                         if (Envir.GetItemEx(pX, pY, ref nItemCount) == 0)
                         {
-                            if (Envir.Bo2C)
+                            if (Envir.ChFlag)
                             {
                                 result = true;
                                 break;
@@ -603,7 +603,7 @@ namespace GameSrv.Actor
                         }
                         else
                         {
-                            if (Envir.Bo2C && n24 > nItemCount)
+                            if (Envir.ChFlag && n24 > nItemCount)
                             {
                                 n24 = nItemCount;
                                 n28 = pX;

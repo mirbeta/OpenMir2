@@ -922,7 +922,8 @@ namespace GameSrv.RobotPlay
                         nC++;
                         continue;
                     }
-                    if (DropItemDown(UseItems[nC], 2, true, baseObject, this.ActorId))
+                    int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                    if (DropItemDown(UseItems[nC], dropWide, true, baseObject, this.ActorId))
                     {
                         var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
