@@ -3000,5 +3000,36 @@ namespace GameSrv.Player {
             }
         }
 
+        private int GetGuildRelation(PlayObject play, PlayObject target)
+        {
+            GuildWarArea = false;
+            if ((play.MyGuild == null) || (target.MyGuild == null))
+            {
+                return 0;
+            }
+            if (play.InSafeArea() || target.InSafeArea())
+            {
+                return 0;
+            }
+            if (play.MyGuild.GuildWarList.Count <= 0)
+            {
+                return 0;
+            }
+            GuildWarArea = true;
+            int result = 0;
+            if (play.MyGuild.IsWarGuild(target.MyGuild) && target.MyGuild.IsWarGuild(play.MyGuild))
+            {
+                result = 2;
+            }
+            if (play.MyGuild == target.MyGuild)
+            {
+                result = 1;
+            }
+            if (play.MyGuild.IsAllyGuild(target.MyGuild) && target.MyGuild.IsAllyGuild(play.MyGuild))
+            {
+                result = 3;
+            }
+            return result;
+        }
     }
 }
