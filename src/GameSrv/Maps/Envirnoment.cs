@@ -97,7 +97,7 @@ namespace GameSrv.Maps {
                 ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.Valid)
                 {
-                    if (cellType == CellType.Item)
+                    if (cellType == CellType.Item && cellInfo.IsAvailable)
                     {
                         if (string.Compare((mapObject as MapItem)?.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
                         {

@@ -1755,53 +1755,37 @@ namespace GameSrv.Player
             {
                 M2Share.Logger.Error(ex);
             }
-            if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && !killObject.Animal)
+            if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && killObject.Race == ActorRace.Play)
             {
                 BaseObject AttackBaseObject = killObject;
                 if (killObject.Master != null)
                 {
                     AttackBaseObject = killObject.Master;
                 }
-                if (killObject.Race != ActorRace.Play)
+                if (!NoItem || !Envir.Flag.NoDropItem)//允许设置 m_boNoItem 后人物死亡不掉物品
                 {
-                    killObject.DropUseItems(ActorId);
-                    if (Master == null && (!NoItem || !Envir.Flag.NoDropItem))
+                    if (AttackBaseObject != null)
                     {
-                        killObject.ScatterBagItems(ActorId);
-                    }
-                    if (killObject.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.NoDropItem))
-                    {
-                        killObject.ScatterGolds(ActorId);
-                    }
-                }
-                else
-                {
-                    if (!NoItem || !Envir.Flag.NoDropItem)//允许设置 m_boNoItem 后人物死亡不掉物品
-                    {
-                        if (AttackBaseObject != null)
-                        {
-                            if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
-                            {
-                                killObject.DropUseItems(0);
-                            }
-                        }
-                        else
+                        if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
                         {
                             killObject.DropUseItems(0);
                         }
-                        if (M2Share.Config.DieScatterBag)
-                        {
-                            killObject.ScatterBagItems(0);
-                        }
-                        if (M2Share.Config.DieDropGold)
-                        {
-                            killObject.ScatterGolds(0);
-                        }
                     }
-                    AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
+                    else
+                    {
+                        killObject.DropUseItems(0);
+                    }
+                    if (M2Share.Config.DieScatterBag)
+                    {
+                        killObject.ScatterBagItems(0);
+                    }
+                    if (M2Share.Config.DieDropGold)
+                    {
+                        killObject.ScatterGolds(0);
+                    }
                 }
+                AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
             }
-
             if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
             {
                 if (killObject.Race != ActorRace.Play) //怪杀死玩家

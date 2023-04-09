@@ -904,6 +904,9 @@ namespace GameSrv.Actor
                     case Messages.RM_DOOPENHEALTH:
                         MakeOpenHealth();
                         break;
+                    case Messages.RM_DIEDROPITEM:
+                        DieDropItems();
+                        break;
                 }
             }
             catch (Exception e)

@@ -2718,6 +2718,26 @@ namespace GameSrv.Actor
             {
                 ExpHitter.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
             }
+            SendSelfMsg(Messages.RM_DIEDROPITEM, 0, 0, 0, 0, "");
+        }
+
+        /// <summary>
+        /// 死亡掉落物品
+        /// </summary>
+        private void DieDropItems()
+        {
+            if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && !this.Animal)
+            {
+                this.DropUseItems(ActorId);
+                if (Master == null && (!NoItem || !Envir.Flag.NoDropItem))
+                {
+                    this.ScatterBagItems(ActorId);
+                }
+                if (this.Race >= ActorRace.Animal && Master == null && (!NoItem || !Envir.Flag.NoDropItem))
+                {
+                    this.ScatterGolds(ActorId);
+                }
+            }
         }
 
         public bool ReAliveEx(MonGenInfo monGen)

@@ -805,6 +805,10 @@ namespace SystemModule
         /// 玩家杀死怪物触发消息
         /// </summary>
         public const int RM_PLAYERKILLMONSTER = 60001;
+        /// <summary>
+        /// 死亡掉落物品
+        /// </summary>
+        public const int RM_DIEDROPITEM = 60002;
 
         public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series)
         {
