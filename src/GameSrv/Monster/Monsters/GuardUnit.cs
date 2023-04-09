@@ -165,11 +165,7 @@ namespace GameSrv.Monster.Monsters
                                     {
                                         if (!baseObject.Death && !baseObject.Invisible)
                                         {
-                                            if (IsPassiveAttack(baseObject))//守卫和护卫不搜索不主动攻击的怪物
-                                            {
-                                                continue;
-                                            }
-                                            if (baseObject.Race == 112)
+                                            if (CanPassiveAttack(baseObject))//守卫和护卫不搜索不主动攻击的怪物
                                             {
                                                 continue;
                                             }
@@ -227,9 +223,9 @@ namespace GameSrv.Monster.Monsters
         /// 如：鹿 鸡 羊
         /// </summary>
         /// <returns></returns>
-        private static bool IsPassiveAttack(BaseObject monsterObject)
+        private static bool CanPassiveAttack(BaseObject monsterObject)
         {
-            return monsterObject.Race <= 52;
+            return monsterObject.Race <= 52 || monsterObject.Race == 112;
         }
     }
 }

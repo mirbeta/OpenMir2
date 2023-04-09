@@ -289,7 +289,9 @@ namespace SystemModule
         public const int SM_WEIGHTCHANGED = 622;
         public const int SM_QUERYITEMDLG = 623;
         public const int SM_ITEMDLGSELECT = 624;
-
+        /// <summary>
+        /// 清理对象
+        /// </summary>
         public const int SM_CLEAROBJECTS = 633;
         public const int SM_CHANGEMAP = 634;
         public const int SM_EAT_OK = 635;

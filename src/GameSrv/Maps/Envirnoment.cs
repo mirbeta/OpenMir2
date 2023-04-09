@@ -503,7 +503,7 @@ namespace GameSrv.Maps {
                         {
                             if (cellObject.CellType == cellType && cellObject.CellObjId == cellId)
                             {
-                                cellInfo.Remove(cellObject);
+                                cellInfo.Remove(nIdx);
                                 result = 1;
                                 if (cellObject.ActorObject && pRemoveObject != null && !pRemoveObject.DelFormMaped)
                                 {
@@ -527,7 +527,7 @@ namespace GameSrv.Maps {
                         {
                             if (nIdx < cellInfo.Count)
                             {
-                                cellInfo.Remove(cellObject);
+                                cellInfo.Remove(nIdx);
                             }
                             if (cellInfo.Count > 0)
                             {
