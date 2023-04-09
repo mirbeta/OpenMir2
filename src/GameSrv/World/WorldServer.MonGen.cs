@@ -392,36 +392,45 @@ namespace GameSrv.World {
         /// 即创建怪物对象的时候已经算好要掉落的物品和属性
         /// </summary>
         /// <returns></returns>
-        private void MonGetRandomItems(BaseObject mon) {
-            IList<MonsterDropItem> itemList = null;
+        private void MonGetRandomItems(BaseObject mon)
+        {
             var itemName = string.Empty;
-            if (MonsterList.TryGetValue(mon.ChrName, out var monster)) {
-                itemList = monster.ItemList;
-            }
-            if (itemList != null) {
-                for (var i = 0; i < itemList.Count; i++) {
-                    var monItem = itemList[i];
-                    if (M2Share.RandomNumber.Random(monItem.MaxPoint) <= monItem.SelPoint) {
-                        if (string.Compare(monItem.ItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0) {
-                            mon.Gold = mon.Gold + monItem.Count / 2 + M2Share.RandomNumber.Random(monItem.Count);
-                        }
-                        else {
-                            if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
-                            UserItem userItem = null;
-                            if (CopyToUserItemFromName(itemName, ref userItem)) {
-                                userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100.0 * (20 + M2Share.RandomNumber.Random(80)));
-                                var stdItem = GetStdItem(userItem.Index);
-                                if (stdItem == null) continue;
-                                if (M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率
+            if (MonsterList.TryGetValue(mon.ChrName, out var monster))
+            {
+                IList<MonsterDropItem> itemList = monster.ItemList;
+                if (itemList != null)
+                {
+                    for (var i = 0; i < itemList.Count; i++)
+                    {
+                        var monItem = itemList[i];
+                        if (M2Share.RandomNumber.Random(monItem.MaxPoint) <= monItem.SelPoint)
+                        {
+                            if (string.Compare(monItem.ItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
+                            {
+                                mon.Gold = mon.Gold + monItem.Count / 2 + M2Share.RandomNumber.Random(monItem.Count);
+                            }
+                            else
+                            {
+                                if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
+                                UserItem userItem = null;
+                                if (CopyToUserItemFromName(itemName, ref userItem))
                                 {
-                                    stdItem.RandomUpgradeItem(userItem);
-                                }
-                                if (M2Share.StdModeMap.Contains(stdItem.StdMode)) {
-                                    if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132) {
-                                        stdItem.RandomSetUnknownItem(userItem);
+                                    userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100.0 * (20 + M2Share.RandomNumber.Random(80)));
+                                    var stdItem = GetStdItem(userItem.Index);
+                                    if (stdItem == null) continue;
+                                    if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率
+                                    {
+                                        stdItem.RandomUpgradeItem(userItem);
                                     }
+                                    if (M2Share.StdModeMap.Contains(stdItem.StdMode))
+                                    {
+                                        if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
+                                        {
+                                            stdItem.RandomSetUnknownItem(userItem);
+                                        }
+                                    }
+                                    mon.ItemList.Add(userItem);
                                 }
-                                mon.ItemList.Add(userItem);
                             }
                         }
                     }
@@ -767,7 +776,6 @@ namespace GameSrv.World {
             baseObject.FightExp = monster.Exp;
             baseObject.Abil.HP = monster.HP;
             baseObject.Abil.MaxHP = monster.HP;
-            baseObject.MonsterWeapon = HUtil32.LoByte(monster.MP);
             baseObject.Abil.MP = 0;
             baseObject.Abil.MaxMP = monster.MP;
             baseObject.Abil.AC = HUtil32.MakeWord(monster.AC, monster.AC);
@@ -775,6 +783,7 @@ namespace GameSrv.World {
             baseObject.Abil.DC = HUtil32.MakeWord(monster.DC, monster.MaxDC);
             baseObject.Abil.MC = HUtil32.MakeWord(monster.MC, monster.MC);
             baseObject.Abil.SC = HUtil32.MakeWord(monster.SC, monster.SC);
+            baseObject.MonsterWeapon = HUtil32.LoByte(monster.MP);
             baseObject.SpeedPoint = monster.Speed;
             baseObject.HitPoint = monster.HitPoint;
             baseObject.WalkSpeed = monster.WalkSpeed;
