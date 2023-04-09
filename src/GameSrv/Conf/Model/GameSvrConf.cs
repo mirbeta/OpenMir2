@@ -350,6 +350,9 @@ namespace GameSrv.Conf.Model {
         /// 是否显示在线人数
         /// </summary>
         public bool SendOnlineCount;
+        /// <summary>
+        /// 在线人物虚假人数倍率，真实数据为除以10，默认为10就是一倍，11 就是1.1倍
+        /// </summary>
         public int SendOnlineCountRate;
         /// <summary>
         /// NPC点击间隔
@@ -363,13 +366,25 @@ namespace GameSrv.Conf.Model {
         /// 发送在线人数间隔时间
         /// </summary>
         public int SendOnlineTime;
+        /// <summary>
+        /// 人物数据自动保存间隔时间
+        /// </summary>
         public int SaveHumanRcdTime;
+        /// <summary>
+        /// 人物退后指定时间后释放时间，这个时间不能太短，否则可能引起错误
+        /// </summary>
         public int HumanFreeDelayTime;
         /// <summary>
         /// 死亡对象清理时间
         /// </summary>
         public int MakeGhostTime;
+        /// <summary>
+        /// 清理清除地上物品时间
+        /// </summary>
         public int ClearDropOnFloorItemTime;
+        /// <summary>
+        /// 掉地上物品可捡间隔时间
+        /// </summary>
         public int FloorItemCanPickUpTime;
         /// <summary>
         /// 是否启用密码保护系统
