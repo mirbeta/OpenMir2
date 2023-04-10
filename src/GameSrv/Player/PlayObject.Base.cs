@@ -1851,7 +1851,7 @@ namespace GameSrv.Player
                     else
                     {
                         result = base.IsAttackTarget(baseObject.Master);
-                        if (InSafeZone() || baseObject.InSafeZone()) //todo 检查安全区有很大的问题,需要优化
+                        if (IsProtectTarget(baseObject)) //todo 检查安全区有很大的问题,需要优化
                         {
                             result = false;
                         }

@@ -498,13 +498,13 @@ namespace GameSrv.Actor
             SendRefMsg(Messages.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
         }
 
-        protected virtual bool IsProtectTarget(BaseObject targetObject)
+        protected bool IsProtectTarget(BaseObject targetObject)
         {
             if (targetObject == null)
             {
                 return true;
             }
-            if (InSafeZone() || targetObject.InSafeZone())
+            if (InSafeZone() || targetObject.InSafeZone()) //todo 检查安全区有很大的问题,需要优化
             {
                 return false;
             }

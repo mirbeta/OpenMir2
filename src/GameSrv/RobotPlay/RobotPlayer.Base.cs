@@ -312,16 +312,6 @@ namespace GameSrv.RobotPlay
             base.Run();
         }
 
-        protected override bool IsProtectTarget(BaseObject baseObject)
-        {
-            return base.IsProtectTarget(baseObject);
-        }
-
-        protected override bool IsAttackTarget(BaseObject baseObject)
-        {
-            return base.IsAttackTarget(baseObject);
-        }
-
         public override bool IsProperTarget(BaseObject baseObject)
         {
             var result = false;
