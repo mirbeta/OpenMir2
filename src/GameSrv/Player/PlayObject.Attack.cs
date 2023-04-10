@@ -623,11 +623,7 @@ namespace GameSrv.Player
 
         protected override bool IsAttackTarget(BaseObject baseObject)
         {
-            bool result = base.IsAttackTarget(baseObject);
-            if (result)
-            {
-                return true;
-            }
+            var result = false;
             switch (AttatckMode)
             {
                 case AttackMode.HAM_ALL:

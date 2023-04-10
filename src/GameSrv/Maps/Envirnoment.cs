@@ -1132,22 +1132,30 @@ namespace GameSrv.Maps {
         /// <param name="boFlag">是否包括死亡对象 FALSE 包括死亡对象 TRUE  不包括死亡对象</param>
         /// <param name="baseObjectList"></param>
         /// <returns></returns>
-        public int GetBaseObjects(int nX, int nY, bool boFlag, IList<BaseObject> baseObjectList) {
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
-            if (cellSuccess && cellInfo.IsAvailable) {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++) {
+        public int GetBaseObjects(int nX, int nY, bool boFlag, IList<BaseObject> baseObjectList)
+        {
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            if (cellSuccess && cellInfo.IsAvailable)
+            {
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                {
                     CellObject cellObject = cellInfo.ObjList[i];
-                    if (cellObject.CellObjId > 0 && cellObject.ActorObject) {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
-                        if (baseObject != null) {
-                            if (baseObject.CellType == CellType.CastleDoor) {
-                                if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !boFlag || !baseObject.Death) {
+                    if (cellObject.CellObjId > 0 && cellObject.ActorObject)
+                    {
+                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        if (baseObject != null)
+                        {
+                            if (baseObject.CellType == CellType.CastleDoor)
+                            {
+                                if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !boFlag || !baseObject.Death)
+                                {
                                     baseObjectList.Add(baseObject);
                                 }
                             }
-                            else {
-                                if (!baseObject.Ghost && !boFlag || !baseObject.Death) {
+                            else
+                            {
+                                if (!baseObject.Ghost && !boFlag || !baseObject.Death)
+                                {
                                     baseObjectList.Add(baseObject);
                                 }
                             }

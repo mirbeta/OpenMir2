@@ -1832,8 +1832,8 @@ namespace GameSrv.Player
             {
                 return false;
             }
-            var result = base.IsProperTarget(baseObject);
-            if (!result)
+            var result = IsAttackTarget(baseObject);
+            if (result)
             {
                 if (baseObject.Race == ActorRace.Play)
                 {
@@ -1850,16 +1850,20 @@ namespace GameSrv.Player
                     }
                     else
                     {
-                        result = IsAttackTarget(baseObject.Master);
-                        if (InSafeZone() || baseObject.InSafeZone())
+                        result = base.IsAttackTarget(baseObject.Master);
+                        if (InSafeZone() || baseObject.InSafeZone()) //todo 检查安全区有很大的问题,需要优化
                         {
                             result = false;
                         }
                     }
                 }
-                return result;
+                if (result)
+                {
+                    return result;
+                }
+                return base.IsAttackTarget(baseObject);
             }
-            return result;
+            return false;
         }
 
         public override void Die()
