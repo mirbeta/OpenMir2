@@ -1832,7 +1832,7 @@ namespace GameSrv.Player
             {
                 return false;
             }
-            var result = IsAttackTarget(baseObject);
+            var result = IsAttackTarget(baseObject);//先检查攻击模式
             if (result)
             {
                 if (baseObject.Race == ActorRace.Play)
@@ -1850,8 +1850,8 @@ namespace GameSrv.Player
                     }
                     else
                     {
-                        result = base.IsAttackTarget(baseObject.Master);
-                        if (IsProtectTarget(baseObject)) //todo 检查安全区有很大的问题,需要优化
+                        result = base.IsAttackTarget(baseObject);//是否可以攻击对方召唤者
+                        if (IsProtectTarget(baseObject))
                         {
                             result = false;
                         }
