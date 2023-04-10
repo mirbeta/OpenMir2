@@ -32,6 +32,19 @@ namespace GameSrv.Monster.Monsters {
             ResetElfMon();
         }
 
+        //protected override bool AttackTarget()
+        //{
+        //    if (TargetCret != null && (!TargetCret.Death || !TargetCret.Ghost))
+        //    {
+        //        return base.AttackTarget();
+        //    }
+        //    else
+        //    {
+        //        DelTargetCreat();
+        //    }
+        //    return false;
+        //}
+
         private void ResetElfMon() {
             NextHitTime = 1500 - SlaveMakeLevel * 100;
             WalkSpeed = 500 - SlaveMakeLevel * 50;

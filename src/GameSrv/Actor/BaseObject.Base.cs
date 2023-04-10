@@ -712,11 +712,11 @@ namespace GameSrv.Actor
                     if (VisibleActors[i].BaseObject == baseObject)
                     {
                         VisibleActors.RemoveAt(i);
-                        DelTargetCreat();
                         break;
                     }
                 }
             }
+            DelTargetCreat();
         }
 
         public virtual bool IsProperFriend(BaseObject attackTarget)

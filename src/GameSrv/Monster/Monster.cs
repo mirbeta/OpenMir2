@@ -118,9 +118,12 @@ namespace GameSrv.Monster {
 
         protected virtual bool AttackTarget() {
             byte btDir = 0;
-            if (TargetCret != null) {
-                if (GetAttackDir(TargetCret, ref btDir)) {
-                    if (HUtil32.GetTickCount() - AttackTick > NextHitTime) {
+            if (TargetCret != null)
+            {
+                if (GetAttackDir(TargetCret, ref btDir))
+                {
+                    if (HUtil32.GetTickCount() - AttackTick > NextHitTime)
+                    {
                         AttackTick = HUtil32.GetTickCount();
                         TargetFocusTick = HUtil32.GetTickCount();
                         Attack(TargetCret, btDir);
@@ -128,11 +131,14 @@ namespace GameSrv.Monster {
                     }
                     return true;
                 }
-                else {
-                    if (TargetCret.Envir == Envir) {
+                else
+                {
+                    if (TargetCret.Envir == Envir)
+                    {
                         SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
                     }
-                    else {
+                    else
+                    {
                         DelTargetCreat();
                     }
                 }
@@ -162,7 +168,8 @@ namespace GameSrv.Monster {
                     if (!RunAwayMode) {
                         if (!NoAttackMode) {
                             if (TargetCret != null) {
-                                if (AttackTarget()) {
+                                if (AttackTarget())
+                                {
                                     base.Run();
                                     return;
                                 }

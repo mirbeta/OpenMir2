@@ -1153,26 +1153,39 @@ namespace GameSrv.Magic {
             return result;
         }
 
-        private static bool MagMakeSinSuSlave(BaseObject playObject, UserMagic userMagic) {
+        private static bool MagMakeSinSuSlave(BaseObject playObject, UserMagic userMagic)
+        {
             var result = false;
-            if (!playObject.CheckServerMakeSlave()) {
+            if (!playObject.CheckServerMakeSlave())
+            {
                 var sMonName = M2Share.Config.Dragon;
                 int nExpLevel = userMagic.Level;
+                var nMakeLevel = HUtil32._MIN(4, userMagic.Level);
+                if (nExpLevel > 4)
+                {
+                    sMonName = string.Concat(M2Share.Config.Dragon, (nExpLevel / 4) + 4);
+                }
                 var nCount = M2Share.Config.DragonCount;
-                for (var i = 0; i < M2Share.Config.DragonArray.Length; i++) {
-                    if (M2Share.Config.DragonArray[i].nHumLevel == 0) {
+                for (var i = 0; i < M2Share.Config.DragonArray.Length; i++)
+                {
+                    if (M2Share.Config.DragonArray[i].nHumLevel == 0)
+                    {
                         break;
                     }
-                    if (playObject.Abil.Level >= M2Share.Config.DragonArray[i].nHumLevel) {
+                    if (playObject.Abil.Level >= M2Share.Config.DragonArray[i].nHumLevel)
+                    {
                         sMonName = M2Share.Config.DragonArray[i].sMonName;
                         nExpLevel = M2Share.Config.DragonArray[i].nLevel;
                         nCount = M2Share.Config.DragonArray[i].nCount;
+                        break;
                     }
                 }
-                if (playObject.MakeSlave(sMonName, userMagic.Level, nExpLevel, nCount, DwRoyaltySec) != null) {
+                if (playObject.MakeSlave(sMonName, userMagic.Level, nExpLevel, nCount, DwRoyaltySec) != null)
+                {
                     result = true;
                 }
-                else {
+                else
+                {
                     playObject.RecallSlave(sMonName);
                 }
             }
