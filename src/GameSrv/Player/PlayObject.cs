@@ -2582,7 +2582,7 @@ namespace GameSrv.Player {
                             human.CreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                         }
                         human.BonusPoint += M2Share.Config.nMasterOKBonusPoint;
-                        human.SendMsg(human, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                        human.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                     }
                     else {
                         // 如果师父不在线则保存到记录表中

@@ -29,7 +29,7 @@ namespace GameSrv.GameCommand.Commands
                 nTotleUsePoint = m_PlayObject.BonusAbil.DC + m_PlayObject.BonusAbil.MC + m_PlayObject.BonusAbil.SC + m_PlayObject.BonusAbil.AC + m_PlayObject.BonusAbil.MAC
                     + m_PlayObject.BonusAbil.HP + m_PlayObject.BonusAbil.MP + m_PlayObject.BonusAbil.Hit + m_PlayObject.BonusAbil.Speed + m_PlayObject.BonusAbil.Reserved;
                 m_PlayObject.BonusPoint += nTotleUsePoint;
-                m_PlayObject.SendMsg(PlayObject, Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                m_PlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
                 m_PlayObject.HasLevelUp(0);
                 m_PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
                 PlayObject.SysMsg(sHumName + " 的分配点数已复位.", MsgColor.Green, MsgType.Hint);
