@@ -666,7 +666,7 @@ namespace GameSrv.Player
                                         }
                                         else
                                         {
-                                            if (UseStdmodeFunItem(stdItem))
+                                            if (UseStdModeFunItem(stdItem))
                                             {
                                                 Dispose(userItem);
                                                 ItemList.RemoveAt(i);

@@ -874,7 +874,7 @@ namespace GameSrv.Player {
             }
         }
 
-        private bool UseStdmodeFunItem(StdItem stdItem) {
+        private bool UseStdModeFunItem(StdItem stdItem) {
             bool result = false;
             if (M2Share.FunctionNPC != null) {
                 M2Share.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
