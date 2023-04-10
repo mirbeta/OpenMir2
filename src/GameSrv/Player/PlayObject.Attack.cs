@@ -637,19 +637,19 @@ namespace GameSrv.Player
                     }
                     if (M2Share.Config.PveServer)
                     {
-                        result = true;
+                        return true;
                     }
                     break;
                 case AttackMode.HAM_PEACE:
                     if (baseObject.Race >= ActorRace.Animal)
                     {
-                        result = true;
+                        return true;
                     }
                     break;
                 case AttackMode.HAM_DEAR:
                     if (baseObject != DearHuman)
                     {
-                        result = true;
+                        return true;
                     }
                     break;
                 case AttackMode.HAM_MASTER:
@@ -698,7 +698,7 @@ namespace GameSrv.Player
                     }
                     if (M2Share.Config.PveServer)
                     {
-                        result = true;
+                        return true;
                     }
                     break;
                 case AttackMode.HAM_GUILD:

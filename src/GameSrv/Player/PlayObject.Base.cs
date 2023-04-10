@@ -1828,6 +1828,10 @@ namespace GameSrv.Player
 
         public override bool IsProperTarget(BaseObject baseObject)
         {
+            if (baseObject == null || baseObject.ActorId == this.ActorId)
+            {
+                return false;
+            }
             var result = base.IsProperTarget(baseObject);
             if (!result)
             {
