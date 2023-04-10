@@ -789,7 +789,7 @@ namespace GameSrv.Player
                                 }
                                 else
                                 {
-                                    SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -977,7 +977,7 @@ namespace GameSrv.Player
                                 }
                                 else
                                 {
-                                    SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1036,7 +1036,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1085,7 +1085,7 @@ namespace GameSrv.Player
                                 {
                                     SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                 }
-                                SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                 result = false;
                             }
                         }
@@ -1139,7 +1139,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1202,7 +1202,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg("操作延迟 Ident: " + processMsg.wIdent + " Time: " + dwDelayTime, MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1257,7 +1257,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }
@@ -1312,7 +1312,7 @@ namespace GameSrv.Player
                                     {
                                         SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendDelayMsg(this.ActorId, processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
                                     result = false;
                                 }
                             }

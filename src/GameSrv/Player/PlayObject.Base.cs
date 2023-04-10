@@ -2769,7 +2769,7 @@ namespace GameSrv.Player
                 }
                 if (IsSpirit)
                 {
-                    SendDelayMsg(Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
+                    SendSelfDelayMsg(Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
                 }
                 WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
                 WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
@@ -5064,7 +5064,7 @@ namespace GameSrv.Player
                 {
                     userMagic.TranPoint -= userMagic.Magic.MaxTrain[nLevel];
                     userMagic.Level++;
-                    SendUpdateDelayMsg(Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
+                    UpdateDelayMsg(Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 800);
                     CheckSeeHealGauge(userMagic);
                 }
                 else

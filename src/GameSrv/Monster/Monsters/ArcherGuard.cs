@@ -24,7 +24,7 @@ namespace GameSrv.Monster.Monsters {
                 targetBaseObject.SetLastHiter(this);
                 targetBaseObject.ExpHitter = null;
                 targetBaseObject.StruckDamage((ushort)nDamage);
-                targetBaseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, targetBaseObject.WAbil.HP, targetBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targetBaseObject.CurrX), Math.Abs(CurrY - targetBaseObject.CurrY)) * 50 + 600);
+                targetBaseObject.SendTargetDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, targetBaseObject.WAbil.HP, targetBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targetBaseObject.CurrX), Math.Abs(CurrY - targetBaseObject.CurrY)) * 50 + 600);
             }
             SendRefMsg(Messages.RM_FLYAXE, Direction, CurrX, CurrY, targetBaseObject.ActorId, "");
         }

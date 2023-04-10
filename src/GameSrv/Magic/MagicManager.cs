@@ -47,7 +47,7 @@ namespace GameSrv.Magic {
                 {
                     if (baseObject.WAbil.HP < baseObject.WAbil.MaxHP)
                     {
-                        baseObject.SendDelayMsg(Messages.RM_MAGHEALING, 0, nPower, 0, 0, "", 800);
+                        baseObject.SendSelfDelayMsg(Messages.RM_MAGHEALING, 0, nPower, 0, 0, "", 800);
                         result = true;
                     }
                     if (playObject.AbilSeeHealGauge)
@@ -154,7 +154,7 @@ namespace GameSrv.Magic {
                             if (targetObject.AntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(targetObject.CurrX - nTargetX) <= 1 && Math.Abs(targetObject.CurrY - nTargetY) <= 1)
                             {
                                 nPower = playObject.GetAttackPower(GetPower(userMagic, MPow(userMagic)) + HUtil32.LoByte(playObject.WAbil.MC), HUtil32.HiByte(playObject.WAbil.MC) - HUtil32.LoByte(playObject.WAbil.MC) + 1);
-                                playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
+                                playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
                                 if (targetObject.Race >= ActorRace.Animal)
                                 {
                                     boTrain = true;
@@ -187,7 +187,7 @@ namespace GameSrv.Magic {
                         nPower = playObject.GetAttackPower(GetPower(userMagic, MPow(userMagic)) + HUtil32.LoByte(playObject.WAbil.SC) * 2, (HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC)) * 2 + 1);
                         if (targetObject.WAbil.HP < targetObject.WAbil.MaxHP)
                         {
-                            targetObject.SendDelayMsg(Messages.RM_MAGHEALING, 0, nPower, 0, 0, "", 800);
+                            targetObject.SendSelfDelayMsg(Messages.RM_MAGHEALING, 0, nPower, 0, 0, "", 800);
                             boTrain = true;
                         }
                         if (playObject.AbilSeeHealGauge)
@@ -212,11 +212,11 @@ namespace GameSrv.Magic {
                                     {
                                         case 1:
                                             nPower = (ushort)(GetPower13(userMagic, 40) + GetRPow(playObject.WAbil.SC) * 2);// 中毒类型 - 绿毒
-                                            targetObject.SendDelayMsg(Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            targetObject.SendSelfDelayMsg(Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                         case 2:
                                             nPower = (ushort)(GetPower13(userMagic, 30) + GetRPow(playObject.WAbil.SC) * 2);// 中毒类型 - 红毒
-                                            targetObject.SendDelayMsg(Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                            targetObject.SendSelfDelayMsg(Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                             break;
                                     }
                                     if (targetObject.Race == ActorRace.Play || targetObject.Race >= ActorRace.Animal)
@@ -270,7 +270,7 @@ namespace GameSrv.Magic {
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
-                            playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
+                            playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
                             if (targetObject.Race >= ActorRace.Animal)
                             {
                                 boTrain = true;
@@ -309,7 +309,7 @@ namespace GameSrv.Magic {
                                             if (Math.Abs(targetObject.CurrX - nTargetX) <= 1 && Math.Abs(targetObject.CurrY - nTargetY) <= 1)
                                             {
                                                 nPower = playObject.GetAttackPower(GetPower(userMagic, MPow(userMagic)) + HUtil32.LoByte(playObject.WAbil.SC), HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
-                                                playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 1200);
+                                                playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 1200);
                                                 if (targetObject.Race >= ActorRace.Animal)
                                                 {
                                                     boTrain = true;
@@ -409,7 +409,7 @@ namespace GameSrv.Magic {
                         {
                             targetObject.ShowHpTick = HUtil32.GetTickCount();
                             targetObject.ShowHpInterval = GetPower13(userMagic, GetRPow(playObject.WAbil.SC) * 2 + 30) * 1000;
-                            targetObject.SendDelayMsg(Messages.RM_DOOPENHEALTH, 0, 0, 0, 0, "", 1500);
+                            targetObject.SendSelfDelayMsg(Messages.RM_DOOPENHEALTH, 0, 0, 0, 0, "", 1500);
                             boTrain = true;
                         }
                     }
@@ -544,7 +544,7 @@ namespace GameSrv.Magic {
                             {
                                 nPower = (ushort)HUtil32.Round(nPower * 1.5);
                             }
-                            playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
+                            playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
                             if (targetObject.Race >= ActorRace.Animal)
                             {
                                 boTrain = true;
@@ -637,7 +637,7 @@ namespace GameSrv.Magic {
                     playObject.TrainSkill(userMagic, M2Share.RandomNumber.Random(3) + 1);
                     if (!playObject.CheckMagicLevelUp(userMagic))
                     {
-                        playObject.SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 1000);
+                        playObject.SendSelfDelayMsg(Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 1000);
                     }
                 }
             }
@@ -843,11 +843,11 @@ namespace GameSrv.Magic {
                                 {
                                     case 1:
                                         nPower = MagicBase.GetPower13(40, userMagic) + MagicBase.GetRPow(playObject.WAbil.SC) * 2;// 中毒类型 - 绿毒
-                                        baseObject.SendDelayMsg(Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        baseObject.SendSelfDelayMsg(Messages.RM_POISON, PoisonState.DECHEALTH, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                     case 2:
                                         nPower = MagicBase.GetPower13(30, userMagic) + MagicBase.GetRPow(playObject.WAbil.SC) * 2;// 中毒类型 - 红毒
-                                        baseObject.SendDelayMsg(Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
+                                        baseObject.SendSelfDelayMsg(Messages.RM_POISON, PoisonState.DAMAGEARMOR, nPower, playObject.ActorId, HUtil32.Round(userMagic.Level / 3.0 * (nPower / (double)M2Share.Config.AmyOunsulPoint)), "", 1000);
                                         break;
                                 }
                                 if (baseObject.Race == ActorRace.Play || baseObject.Race >= ActorRace.Animal)
@@ -884,7 +884,7 @@ namespace GameSrv.Magic {
                     }
                     if (nPower > 0) {
                         baseObject.StruckDamage(nPower);
-                        playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 1, baseObject.ActorId, "", 200);
+                        playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 1, baseObject.ActorId, "", 200);
                     }
                     if (baseObject.Race >= ActorRace.Animal) {
                         result = true;
@@ -913,7 +913,7 @@ namespace GameSrv.Magic {
                         if (baseObject.LifeAttrib == Grobal2.LA_UNDEAD) {
                             nPower = (ushort)HUtil32.Round(nPower * 1.5);
                         }
-                        playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 2, baseObject.ActorId, "", 600);
+                        playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 2, baseObject.ActorId, "", 600);
                         if (baseObject.Race >= ActorRace.Animal) {
                             result = true;
                         }
@@ -946,7 +946,7 @@ namespace GameSrv.Magic {
                 return false;
             }
             var nPower = playObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(userMagic), userMagic) + HUtil32.LoByte(playObject.WAbil.MC), HUtil32.HiByte(playObject.WAbil.MC) - HUtil32.LoByte(playObject.WAbil.MC) + 1);
-            playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetBaseObject.ActorId, "", 600);
+            playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetBaseObject.ActorId, "", 600);
             if (targetBaseObject.Race >= ActorRace.Animal)
             {
                 result = true;
@@ -960,7 +960,7 @@ namespace GameSrv.Magic {
                     if (push > 0)
                     {
                         var nDir = M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
-                        playObject.SendDelayMsg(Messages.RM_DELAYPUSHED, nDir, HUtil32.MakeLong(nTargetX, nTargetY), push, targetBaseObject.ActorId, "", 600);
+                        playObject.SendSelfDelayMsg(Messages.RM_DELAYPUSHED, nDir, HUtil32.MakeLong(nTargetX, nTargetY), push, targetBaseObject.ActorId, "", 600);
                     }
                 }
             }
@@ -1114,7 +1114,7 @@ namespace GameSrv.Magic {
                 var targetBaseObject = baseObjectList[i];
                 if (baseObject.IsProperFriend(targetBaseObject)) {
                     if (targetBaseObject.StatusTimeArr[PoisonState.STATETRANSPARENT] == 0) {
-                        targetBaseObject.SendDelayMsg(Messages.RM_TRANSPARENT, 0, nHTime, 0, 0, "", 800);
+                        targetBaseObject.SendSelfDelayMsg(Messages.RM_TRANSPARENT, 0, nHTime, 0, 0, "", 800);
                         result = true;
                     }
                 }
@@ -1128,7 +1128,7 @@ namespace GameSrv.Magic {
             if (playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetObject)) {
                 if (playObject.IsProperTarget(targetObject)) {
                     if (targetObject.AntiMagic <= M2Share.RandomNumber.Random(10) && Math.Abs(targetObject.CurrX - nTargetX) <= 1 && Math.Abs(targetObject.CurrY - nTargetY) <= 1) {
-                        playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower / 3, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
+                        playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower / 3, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
                         if (M2Share.RandomNumber.Random(2) + (playObject.Abil.Level - 1) > targetObject.Abil.Level) {
                             var nLv = playObject.Abil.Level - targetObject.Abil.Level;
                             if (M2Share.RandomNumber.Random(M2Share.Config.MabMabeHitRandRate) < HUtil32._MAX(M2Share.Config.MabMabeHitMinLvLimit, nLevel * 8 - nLevel + 15 + nLv)) {
@@ -1139,9 +1139,9 @@ namespace GameSrv.Magic {
                                     }
                                     targetObject.SetLastHiter(playObject);
                                     nPower = targetObject.GetMagStruckDamage(playObject, (ushort)nPower);
-                                    playObject.SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
+                                    playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
                                     if (targetObject.Race == ActorRace.Play && !((PlayObject) targetObject).UnParalysis) {
-                                        targetObject.SendDelayMsg(Messages.RM_POISON, PoisonState.STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), playObject.ActorId, nLevel, "", 650); // 中毒类型 - 麻痹
+                                        targetObject.SendSelfDelayMsg(Messages.RM_POISON, PoisonState.STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), playObject.ActorId, nLevel, "", 650); // 中毒类型 - 麻痹
                                     }
                                     result = true;
                                 }

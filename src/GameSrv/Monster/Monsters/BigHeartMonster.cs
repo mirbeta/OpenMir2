@@ -20,7 +20,7 @@ namespace GameSrv.Monster.Monsters {
                     }
                     if (IsProperTarget(baseObject)) {
                         if (Math.Abs(CurrX - baseObject.CurrX) <= ViewRange && Math.Abs(CurrY - baseObject.CurrY) <= ViewRange) {
-                            SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 1, baseObject.ActorId, "", 200);
+                            SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 1, baseObject.ActorId, "", 200);
                             SendRefMsg(Messages.RM_10205, 0, baseObject.CurrX, baseObject.CurrY, 1, "");
                         }
                     }

@@ -61,7 +61,7 @@ namespace GameSrv.Monster.Monsters
                         if (Math.Abs(CurrX - baseObject.CurrX) < ViewRange && Math.Abs(CurrY - baseObject.CurrY) < ViewRange)
                         {
                             TargetFocusTick = HUtil32.GetTickCount();
-                            SendDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 2, baseObject.ActorId, "", 600);
+                            SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 2, baseObject.ActorId, "", 600);
                             if (M2Share.RandomNumber.Random(4) == 0)
                             {
                                 if (M2Share.RandomNumber.Random(3) != 0)

@@ -183,9 +183,9 @@ namespace GameSrv.Actor
         }
 
         /// <summary>
-        /// 发送延时消息
+        /// 发送自身延时消息
         /// </summary>
-        public void SendDelayMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        public void SendSelfDelayMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
             {
@@ -214,9 +214,9 @@ namespace GameSrv.Actor
         }
 
         /// <summary>
-        /// 发送延时消息
+        /// 发送目标延时消息
         /// </summary>
-        public void SendDelayMsg(int actorId, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        public void SendTargetDelayMsg(int actorId, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
             {
@@ -247,7 +247,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 更新延时消息
         /// </summary>
-        internal void SendUpdateDelayMsg(int wIdent, short wParam, int lParam1, int lParam2,
+        internal void UpdateDelayMsg(int wIdent, short wParam, int lParam1, int lParam2,
             int lParam3, string sMsg, int dwDelay)
         {
             int i;
@@ -276,7 +276,7 @@ namespace GameSrv.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-            SendDelayMsg(ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
+            SendTargetDelayMsg(ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
         }
 
         /// <summary>

@@ -51,7 +51,7 @@ namespace GameSrv.Actor
                 if (nPower > 0)
                 {
                     attackTarget.StruckDamage(nPower);
-                    attackTarget.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "", 200);
+                    attackTarget.SendTargetDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, attackTarget.WAbil.HP, attackTarget.WAbil.MaxHP, ActorId, "", 200);
                     result = true;
                 }
             }
@@ -72,7 +72,7 @@ namespace GameSrv.Actor
                     if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
                     {
                         BaseObject.StruckDamage((ushort)nSecPwr);
-                        BaseObject.SendDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "", 500);
+                        BaseObject.SendTargetDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "", 500);
                         if (BaseObject.Race != ActorRace.Play)
                         {
                             BaseObject.SendMsg(BaseObject, Messages.RM_STRUCK, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "");
