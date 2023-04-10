@@ -41,7 +41,7 @@ namespace GameSrv.Player
                 }
             }
             buffer = cnt + '/' + page + '/' + maxpage + '/' + buffer;
-            SendMsg(this, Messages.RM_MARKET_LIST, 0, MarketUser.UserMode, MarketUser.ItemType, bFirstSend, buffer);
+            SendMsg(Messages.RM_MARKET_LIST, 0, MarketUser.UserMode, MarketUser.ItemType, bFirstSend, buffer);
         }
 
         public void ReadyToSellUserMarket(MarkerUserLoadMessage readyItem)
@@ -49,11 +49,11 @@ namespace GameSrv.Player
             if (readyItem.IsBusy != MarketConst.UMRESULT_SUCCESS) return;
             if (readyItem.SellCount < MarketConst.MARKET_MAX_SELL_COUNT)
             {
-                SendMsg(this, Messages.RM_MARKET_RESULT, 0, readyItem.MarketNPC, MarketConst.UMResult_ReadyToSell, 0, "");
+                SendMsg(Messages.RM_MARKET_RESULT, 0, readyItem.MarketNPC, MarketConst.UMResult_ReadyToSell, 0, "");
             }
             else
             {
-                SendMsg(this, Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_OverSellCount, 0, "");
+                SendMsg(Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_OverSellCount, 0, "");
             }
             FlagReadyToSellCheck = true;
         }

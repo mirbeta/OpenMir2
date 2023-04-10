@@ -151,7 +151,7 @@ namespace GameSrv.Player
                             {
                                 if (Race == ActorRace.Play)
                                 {
-                                    SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Charm, UseItems[ItemLocation.Charm].Dura, UseItems[ItemLocation.Charm].DuraMax, 0, "");
+                                    SendMsg(Messages.RM_DURACHANGE, ItemLocation.Charm, UseItems[ItemLocation.Charm].Dura, UseItems[ItemLocation.Charm].DuraMax, 0, "");
                                 }
                             }
                             else
@@ -190,7 +190,7 @@ namespace GameSrv.Player
                             {
                                 if (Race == ActorRace.Play)
                                 {
-                                    SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Charm, UseItems[ItemLocation.Charm].Dura, UseItems[ItemLocation.Charm].DuraMax, 0, "");
+                                    SendMsg(Messages.RM_DURACHANGE, ItemLocation.Charm, UseItems[ItemLocation.Charm].Dura, UseItems[ItemLocation.Charm].DuraMax, 0, "");
                                 }
                             }
                             else

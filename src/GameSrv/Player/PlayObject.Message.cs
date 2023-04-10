@@ -1597,7 +1597,7 @@ namespace GameSrv.Player
                 case Messages.RM_LOGON:
                     ClientMsg = Messages.MakeMessage(Messages.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
                     SendSocket(ClientMsg, EDCode.EncodeString(MapFileName));
-                    SendMsg(this, Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                     SendLogon();
                     SendServerConfig();
                     ClientQueryUserName(ActorId, CurrX, CurrY);
@@ -2129,7 +2129,7 @@ namespace GameSrv.Player
                 {
                     int objectId = HUtil32.Sequence();
                     M2Share.ActorMgr.AddOhter(objectId, dropItemList);
-                    SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                    SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
                 }
             }
             catch (Exception ex)
@@ -2174,7 +2174,7 @@ namespace GameSrv.Player
                         UseItems[ItemLocation.RighThand].Index = 0;
                         Light = 0;
                         SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
-                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
+                        SendMsg(Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
                         RecalcAbilitys();
                     }
                     else
@@ -2183,7 +2183,7 @@ namespace GameSrv.Player
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000.0))
                     {
-                        SendMsg(this, Messages.RM_LAMPCHANGEDURA, 0, UseItems[ItemLocation.RighThand].Dura, 0, 0, "");
+                        SendMsg(Messages.RM_LAMPCHANGEDURA, 0, UseItems[ItemLocation.RighThand].Dura, 0, 0, "");
                     }
                 }
             }

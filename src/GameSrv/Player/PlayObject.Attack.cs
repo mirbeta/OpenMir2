@@ -372,7 +372,7 @@ namespace GameSrv.Player
                     TrainSkill(MagicArr[MagicConst.SKILL_ILKWANG], M2Share.RandomNumber.Random(3) + 1);
                     if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_ILKWANG]))
                     {
-                        SendDelayMsg(this.ActorId,Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].Magic.MagicId, MagicArr[MagicConst.SKILL_ILKWANG].Level, MagicArr[MagicConst.SKILL_ILKWANG].TranPoint, "", 3000);
+                        SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].Magic.MagicId, MagicArr[MagicConst.SKILL_ILKWANG].Level, MagicArr[MagicConst.SKILL_ILKWANG].TranPoint, "", 3000);
                     }
                 }
             }
@@ -1454,7 +1454,7 @@ namespace GameSrv.Player
                     }
                 }
                 UseItems[ItemLocation.Weapon].Index = 0;
-                SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Weapon, nDura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
+                SendMsg(Messages.RM_DURACHANGE, ItemLocation.Weapon, nDura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
             }
             else
             {
@@ -1462,7 +1462,7 @@ namespace GameSrv.Player
             }
             if ((ushort)Math.Abs((nDura / 1.03)) != nDuraPoint)
             {
-                SendMsg(this, Messages.RM_DURACHANGE, ItemLocation.Weapon, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
+                SendMsg(Messages.RM_DURACHANGE, ItemLocation.Weapon, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
             }
         }
     }
