@@ -3460,7 +3460,7 @@ namespace GameSrv.Player
         {
             if (baseObject.Race == ActorRace.Play)
             {
-                byte result = NameColor;
+                byte result = baseObject.NameColor;
                 PlayObject targetObject = (PlayObject)baseObject;
                 if (targetObject.PvpLevel() < 2)
                 {

@@ -23,7 +23,7 @@ namespace GameSrv.Player
             if (CretInNearXy(baseObject, x, y))
             {
                 var nameColor = GetChrColor(baseObject);
-                var defMsg = Messages.MakeMessage(Messages.SM_USERNAME, baseObject.ActorId, nameColor, 0, 0);
+                var defMsg = Messages.MakeMessage(Messages.SM_USERNAME, targetId, nameColor, 0, 0);
                 SendSocket(defMsg, EDCode.EncodeString(baseObject.GetShowName()));
             }
             else
