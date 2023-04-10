@@ -1248,7 +1248,7 @@ namespace GameSrv.Npc
                                 }
                                 break;
                         }
-                        playObject.SendDelayMsg(playObject.ActorId, Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 100);
+                        playObject.SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 100);
                         break;
                     }
                 }

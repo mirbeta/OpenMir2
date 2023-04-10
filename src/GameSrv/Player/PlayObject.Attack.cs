@@ -203,7 +203,7 @@ namespace GameSrv.Player
                     TrainSkill(attackMagic, nTranPoint);
                     if (!CheckMagicLevelUp(attackMagic))
                     {
-                        SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
+                        SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
                     }
                 }
             }
@@ -361,7 +361,7 @@ namespace GameSrv.Player
                     TrainSkill(MagicArr[MagicConst.SKILL_ONESWORD], M2Share.RandomNumber.Random(3) + 1);
                     if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_ONESWORD]))
                     {
-                        SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ONESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_ONESWORD].Level, MagicArr[MagicConst.SKILL_ONESWORD].TranPoint, "", 3000);
+                        SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ONESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_ONESWORD].Level, MagicArr[MagicConst.SKILL_ONESWORD].TranPoint, "", 3000);
                     }
                 }
             }
@@ -372,7 +372,7 @@ namespace GameSrv.Player
                     TrainSkill(MagicArr[MagicConst.SKILL_ILKWANG], M2Share.RandomNumber.Random(3) + 1);
                     if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_ILKWANG]))
                     {
-                        SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].Magic.MagicId, MagicArr[MagicConst.SKILL_ILKWANG].Level, MagicArr[MagicConst.SKILL_ILKWANG].TranPoint, "", 3000);
+                        SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].Magic.MagicId, MagicArr[MagicConst.SKILL_ILKWANG].Level, MagicArr[MagicConst.SKILL_ILKWANG].TranPoint, "", 3000);
                     }
                 }
             }
@@ -385,7 +385,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_YEDO], M2Share.RandomNumber.Random(3) + 1);
                             if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_YEDO]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_YEDO].Magic.MagicId, MagicArr[MagicConst.SKILL_YEDO].Level, MagicArr[MagicConst.SKILL_YEDO].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_YEDO].Magic.MagicId, MagicArr[MagicConst.SKILL_YEDO].Level, MagicArr[MagicConst.SKILL_YEDO].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -397,7 +397,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_ERGUM], 1);
                             if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_ERGUM]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ERGUM].Magic.MagicId, MagicArr[MagicConst.SKILL_ERGUM].Level, MagicArr[MagicConst.SKILL_ERGUM].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ERGUM].Magic.MagicId, MagicArr[MagicConst.SKILL_ERGUM].Level, MagicArr[MagicConst.SKILL_ERGUM].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -409,7 +409,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_BANWOL], 1);
                             if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_BANWOL]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_BANWOL].Magic.MagicId, MagicArr[MagicConst.SKILL_BANWOL].Level, MagicArr[MagicConst.SKILL_BANWOL].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_BANWOL].Magic.MagicId, MagicArr[MagicConst.SKILL_BANWOL].Level, MagicArr[MagicConst.SKILL_BANWOL].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -421,7 +421,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[MagicConst.SKILL_FIRESWORD], 1);
                             if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_FIRESWORD]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_FIRESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_FIRESWORD].Level, MagicArr[MagicConst.SKILL_FIRESWORD].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_FIRESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_FIRESWORD].Level, MagicArr[MagicConst.SKILL_FIRESWORD].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -433,7 +433,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[43], 1);
                             if (!CheckMagicLevelUp(MagicArr[43]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[43].Magic.MagicId, MagicArr[43].Level, MagicArr[43].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[43].Magic.MagicId, MagicArr[43].Level, MagicArr[43].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -445,7 +445,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[56], 1);
                             if (!CheckMagicLevelUp(MagicArr[56]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[56].Magic.MagicId, MagicArr[56].Level, MagicArr[56].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[56].Magic.MagicId, MagicArr[56].Level, MagicArr[56].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -457,7 +457,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[40], 1);
                             if (!CheckMagicLevelUp(MagicArr[40]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[40].Magic.MagicId, MagicArr[40].Level, MagicArr[40].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[40].Magic.MagicId, MagicArr[40].Level, MagicArr[40].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -469,7 +469,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[42], 1);
                             if (!CheckMagicLevelUp(MagicArr[42]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[42].Magic.MagicId, MagicArr[42].Level, MagicArr[42].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[42].Magic.MagicId, MagicArr[42].Level, MagicArr[42].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -481,7 +481,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[66], 1);
                             if (!CheckMagicLevelUp(MagicArr[66]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[66].Magic.MagicId, MagicArr[66].Level, MagicArr[66].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[66].Magic.MagicId, MagicArr[66].Level, MagicArr[66].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -493,7 +493,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[61], 1);
                             if (!CheckMagicLevelUp(MagicArr[61]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[61].Magic.MagicId, MagicArr[61].Level, MagicArr[61].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[61].Magic.MagicId, MagicArr[61].Level, MagicArr[61].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -505,7 +505,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[101], 1);
                             if (!CheckMagicLevelUp(MagicArr[101]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[101].Magic.MagicId, MagicArr[101].Level, MagicArr[101].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[101].Magic.MagicId, MagicArr[101].Level, MagicArr[101].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -517,7 +517,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[102], 1);
                             if (!CheckMagicLevelUp(MagicArr[102]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[102].Magic.MagicId, MagicArr[102].Level, MagicArr[102].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[102].Magic.MagicId, MagicArr[102].Level, MagicArr[102].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -529,7 +529,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[103], 1);
                             if (!CheckMagicLevelUp(MagicArr[103]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[103].Magic.MagicId, MagicArr[103].Level, MagicArr[103].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[103].Magic.MagicId, MagicArr[103].Level, MagicArr[103].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -541,7 +541,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[114], 1);
                             if (!CheckMagicLevelUp(MagicArr[114]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[114].Magic.MagicId, MagicArr[114].Level, MagicArr[114].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[114].Magic.MagicId, MagicArr[114].Level, MagicArr[114].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -553,7 +553,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[113], 1);
                             if (!CheckMagicLevelUp(MagicArr[113]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[113].Magic.MagicId, MagicArr[113].Level, MagicArr[113].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[113].Magic.MagicId, MagicArr[113].Level, MagicArr[113].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -565,7 +565,7 @@ namespace GameSrv.Player
                             TrainSkill(MagicArr[115], 1);
                             if (!CheckMagicLevelUp(MagicArr[115]))
                             {
-                                SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, MagicArr[115].Magic.MagicId, MagicArr[115].Level, MagicArr[115].TranPoint, "", 3000);
+                                SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[115].Magic.MagicId, MagicArr[115].Level, MagicArr[115].TranPoint, "", 3000);
                             }
                         }
                         break;
@@ -1204,7 +1204,7 @@ namespace GameSrv.Player
                                         TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
                                         if (!CheckMagicLevelUp(UserMagic))
                                         {
-                                            SendDelayMsg(this.ActorId, Messages.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 1000);
+                                            SendDelayMsg(Messages.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 1000);
                                         }
                                     }
                                 }

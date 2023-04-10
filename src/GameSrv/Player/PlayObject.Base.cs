@@ -2769,7 +2769,7 @@ namespace GameSrv.Player
                 }
                 if (IsSpirit)
                 {
-                    SendDelayMsg(this.ActorId, Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
+                    SendDelayMsg(Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
                 }
                 WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
                 WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
