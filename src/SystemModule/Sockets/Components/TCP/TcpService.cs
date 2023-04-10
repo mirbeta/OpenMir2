@@ -261,6 +261,11 @@ namespace SystemModule.Sockets.Components.TCP
             return clientsArr;
         }
 
+        public void NextId()
+        {
+            Interlocked.Decrement(ref m_nextId);
+        }
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

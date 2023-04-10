@@ -75,6 +75,7 @@ namespace GameSrv.Network
         {
             var client = (SocketClient)sender;
             M2Share.SocketMgr.CloseGate(client.ID, client.ServiceIP);
+            tcpService.NextId();
         }
 
         public void Initialize()
