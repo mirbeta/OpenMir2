@@ -185,6 +185,37 @@ namespace GameSrv.Actor
         /// <summary>
         /// 发送延时消息
         /// </summary>
+        public void SendDelayMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        {
+            try
+            {
+                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+                if (!Ghost)
+                {
+                    SendMessage sendMessage = new SendMessage
+                    {
+                        wIdent = wIdent,
+                        wParam = wParam,
+                        nParam1 = lParam1,
+                        nParam2 = lParam2,
+                        nParam3 = lParam3,
+                        DeliveryTime = HUtil32.GetTickCount() + dwDelay,
+                        LateDelivery = true,
+                        Buff = sMsg,
+                        ActorId = this.ActorId
+                    };
+                    MsgQueue.Enqueue(sendMessage);
+                }
+            }
+            finally
+            {
+                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+            }
+        }
+
+        /// <summary>
+        /// 发送延时消息
+        /// </summary>
         public void SendDelayMsg(int actorId, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
