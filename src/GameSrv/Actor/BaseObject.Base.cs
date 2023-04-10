@@ -761,9 +761,9 @@ namespace GameSrv.Actor
                             StruckDamage(nDamage);
                             HealthSpellChanged();
                             SendRefMsg(Messages.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
-                            targetBaseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
                             if (M2Share.Config.MonDelHptoExp)
                             {
+                                targetBaseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
                                 switch (targetBaseObject.Race)
                                 {
                                     case ActorRace.Play:

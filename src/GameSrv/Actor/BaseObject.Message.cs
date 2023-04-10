@@ -214,9 +214,9 @@ namespace GameSrv.Actor
         }
 
         /// <summary>
-        /// 发送目标延时消息
+        /// 发送伤害目标延时消息
         /// </summary>
-        public void SendTargetDelayMsg(int actorId, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        public void SendStruckDelayMsg(int actorId, int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             try
             {
@@ -276,7 +276,7 @@ namespace GameSrv.Actor
             {
                 HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
-            SendTargetDelayMsg(ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
+            SendStruckDelayMsg(ActorId, wIdent, wParam, lParam1, lParam2, lParam3, sMsg, dwDelay);
         }
 
         /// <summary>

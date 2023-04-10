@@ -17,7 +17,7 @@
                     WAbil.HP += (ushort)(nDamage / btGetBackHp);
                 }
                 TargetCret.StruckDamage(nDamage);
-                TargetCret.SendTargetDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, TargetCret.WAbil.HP, TargetCret.WAbil.MaxHP, ActorId, "", 200);
+                TargetCret.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, TargetCret.WAbil.HP, TargetCret.WAbil.MaxHP, ActorId, "", 200);
             }
             SendRefMsg(Messages.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
         }

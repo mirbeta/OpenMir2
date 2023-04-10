@@ -46,7 +46,7 @@ namespace GameSrv.Monster.Monsters {
                             nDamage = baseObject.GetHitStruckDamage(this, nDamage);
                             if (nDamage > 0) {
                                 baseObject.StruckDamage((ushort)nDamage);
-                                baseObject.SendTargetDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
+                                baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                             }
                         }
                     }

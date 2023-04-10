@@ -1071,7 +1071,7 @@ namespace GameSrv.Actor
                             {
                                 magPwr = HUtil32.Round(magPwr * 1.5);
                             }
-                            baseObject.SendTargetDelayMsg(this.ActorId, Messages.RM_MAGSTRUCK, 0, magPwr, 0, 0, "", 600);
+                            baseObject.SendStruckDelayMsg(this.ActorId, Messages.RM_MAGSTRUCK, 0, magPwr, 0, 0, "", 600);
                             tcount++;
                         }
                     }

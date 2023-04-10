@@ -19,7 +19,7 @@ namespace GameSrv.Monster.Monsters {
                     nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
                     if (nPower > 0) {
                         baseObject.StruckDamage((ushort)nPower);
-                        baseObject.SendTargetDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
+                        baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
                         if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0) {
                             baseObject.MakePosion(PoisonState.STONE, 5, 0);
                         }

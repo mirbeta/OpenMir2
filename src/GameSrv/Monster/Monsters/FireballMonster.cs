@@ -24,7 +24,7 @@ namespace GameSrv.Monster.Monsters {
                                                 SpellTick = HUtil32.GetTickCount();
                                                 SendRefMsg(Messages.RM_SPELL, 48, TargetCret.CurrX, TargetCret.CurrY, 48, "");
                                                 SendRefMsg(Messages.RM_MAGICFIRE, 0, HUtil32.MakeWord(2, 48), HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), TargetCret.ActorId, "");
-                                                SendTargetDelayMsg(Messages.RM_STRUCK, Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), 2, TargetCret.ActorId, "", 600);
+                                                SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(TargetCret.CurrX, TargetCret.CurrY), 2, TargetCret.ActorId, "", 600);
                                             }
                                         }
                                     }
