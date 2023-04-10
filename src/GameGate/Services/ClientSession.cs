@@ -888,12 +888,13 @@ namespace GameGate.Services
             if (bufferLen < 0)//小包 走路 攻击等
             {
                 var buffLen = -bufferLen;
-                Span<byte> sendBuffer = stackalloc byte[buffLen + 2];//小包直接申请
+                Span<byte> sendBuffer = stackalloc byte[buffLen + 2];//小包用完即释放
                 var destinationSpan = new byte[buffLen + 2];
                 sendBuffer[0] = (byte)'#';//消息头
                 MemoryCopy.BlockCopy(message.Buffer, 0, sendBuffer, 1, buffLen);
                 sendBuffer[buffLen + 1] = (byte)'!';//消息结尾
                 _session.Socket.Send(sendBuffer, SocketFlags.None);
+                return;
             }
             else
             {
@@ -902,8 +903,10 @@ namespace GameGate.Services
                 sendMsg.ConnectionId = (ushort)_session.ConnectionId;
                 sendMsg.SessionId = message.SessionId;
                 var sendLen = bufferLen + CommandMessage.Size;
+
                 var sendBuffer = GateShare.BytePool.Rent(sendLen);
                 sendBuffer[0] = (byte)'#';//消息头
+
                 var nLen = EncryptUtil.Encode(message.Buffer, CommandMessage.Size, sendBuffer, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
@@ -916,14 +919,11 @@ namespace GameGate.Services
 
                 if (bufferLen > 8)
                 {
-                    var sourceSpan = message.Buffer.AsSpan();
-                    var recog = BitConverter.ToInt32(sourceSpan[..4]);
-                    var ident = BitConverter.ToUInt16(sourceSpan.Slice(4, 2));
-                    int series;
-                    switch (ident)
+                    var commandMessage = SerializerUtil.Deserialize<CommandMessage>(message.Buffer);
+                    switch (commandMessage.Ident)
                     {
                         case Messages.SM_RUSH:
-                            if (SvrObjectId == recog)
+                            if (SvrObjectId == commandMessage.Recog)
                             {
                                 var dwCurrentTick = HUtil32.GetTickCount();
                                 gameSpeed.MoveTick = dwCurrentTick;
@@ -939,27 +939,25 @@ namespace GameGate.Services
                         case Messages.SM_LOGON:
                             if (SvrObjectId == 0)
                             {
-                                SvrObjectId = recog;
+                                SvrObjectId = commandMessage.Recog;
                             }
                             break;
                         case Messages.SM_PLAYERCONFIG:
 
                             break;
                         case Messages.SM_CHARSTATUSCHANGED:
-                            series = BitConverter.ToUInt16(sourceSpan.Slice(10, 2));
-                            if (SvrObjectId == recog)
+                            if (SvrObjectId == commandMessage.Recog)
                             {
-                                gameSpeed.DefItemSpeed = series;
-                                gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, series);
+                                gameSpeed.DefItemSpeed = commandMessage.Series;
+                                gameSpeed.ItemSpeed = HUtil32._MIN(Config.MaxItemSpeed, commandMessage.Series);
                                 //_mNChrStutas = HUtil32.MakeLong(param, tag);
                                 //message.Buffer[10] = (byte)_gameSpeed.ItemSpeed; //同时限制客户端
                             }
                             break;
                         case Messages.SM_HWID:
-                            series = BitConverter.ToUInt16(sourceSpan.Slice(10, 2));
                             if (Config.IsProcClientHardwareID)
                             {
-                                switch (series)
+                                switch (commandMessage.Series)
                                 {
                                     case 1:
                                         Logger.Debug("封机器码");
