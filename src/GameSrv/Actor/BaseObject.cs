@@ -681,15 +681,7 @@ namespace GameSrv.Actor
                 if (pr == mapItem)
                 {
                     SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dx, dy, mapItem.Name);
-                    int logcap;
-                    if (boDieDrop)
-                    {
-                        logcap = 15;
-                    }
-                    else
-                    {
-                        logcap = 7;
-                    }
+                    int logcap = boDieDrop ? 15 : 7;
                     if (!M2Share.IsCheapStuff(stdItem.StdMode))
                     {
                         if (stdItem.NeedIdentify == 1)
