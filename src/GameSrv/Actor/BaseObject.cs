@@ -722,8 +722,6 @@ namespace GameSrv.Actor
 
         protected bool WalkTo(byte btDir, bool boFlag)
         {
-            short n20 = 0;
-            short n24 = 0;
             const string sExceptionMsg = "[Exception] TBaseObject::WalkTo";
             bool result = false;
             if (HolySeize)
@@ -781,8 +779,10 @@ namespace GameSrv.Actor
                     }
                     if (Master != null)
                     {
+                        short n20 = 0;
+                        short n24 = 0;
                         Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Direction, 1, ref n20, ref n24);
-                        if (newX == n20 && newY == n24)
+                        if (newX == 0 && newY == n24)
                         {
                             walkSuccess = false;
                         }

@@ -875,7 +875,6 @@ namespace GameSrv.Maps {
         }
 
         public bool GetNextPosition(short sx, short sy, byte ndir, int nFlag, ref short snx, ref short sny) {
-            bool result;
             snx = sx;
             sny = sy;
             switch (ndir) {
@@ -924,13 +923,7 @@ namespace GameSrv.Maps {
                     }
                     break;
             }
-            if (snx == sx && sny == sy) {
-                result = false;
-            }
-            else {
-                result = true;
-            }
-            return result;
+            return snx == sx && sny == sy ? false : true;
         }
 
         public bool CanSafeWalk(int nX, int nY) {
