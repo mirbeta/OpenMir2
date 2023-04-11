@@ -174,7 +174,7 @@ namespace GameSrv.Actor {
         protected void HitMagAttackTarget(BaseObject targetBaseObject, int nHitPower, int nMagPower, bool boFlag) {
             IList<BaseObject> baseObjectList = new List<BaseObject>();
             Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
-            Envir.GetBaseObjects(targetBaseObject.CurrX, targetBaseObject.CurrY, false, baseObjectList);
+            Envir.GetBaseObjects(targetBaseObject.CurrX, targetBaseObject.CurrY, false, ref baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++) {
                 var baseObject = baseObjectList[i];
                 if (IsProperTarget(baseObject)) {

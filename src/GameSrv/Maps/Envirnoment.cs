@@ -652,6 +652,47 @@ namespace GameSrv.Maps
             return null;
         }
 
+        public int GetItemEx(int nX, int nY, ref int nCount)
+        {
+            int result = 0;
+            nCount = 0;
+            ChFlag = false;
+            var cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
+            if (cellSuccess && cellInfo.Valid)
+            {
+                ChFlag = true;
+                if (cellInfo.IsAvailable)
+                {
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    {
+                        CellObject cellObject = cellInfo.ObjList[i];
+                        switch (cellObject.CellType)
+                        {
+                            case CellType.Item:
+                                result = cellObject.CellObjId;
+                                nCount++;
+                                break;
+                            case CellType.MapRoute:
+                                ChFlag = false;
+                                break;
+                            case CellType.Monster:
+                            case CellType.Merchant:
+                            case CellType.Play:
+                                {
+                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    if (baseObject != null && !baseObject.Death)
+                                    {
+                                        ChFlag = false;
+                                    }
+                                    break;
+                                }
+                        }
+                    }
+                }
+            }
+            return result;
+        }
+
         public bool IsCheapStuff()
         {
             return QuestList.Any();
@@ -1188,47 +1229,6 @@ namespace GameSrv.Maps
             return null;
         }
 
-        public int GetItemEx(int nX, int nY, ref int nCount)
-        {
-            int result = 0;
-            nCount = 0;
-            ChFlag = false;
-            var cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
-            if (cellSuccess && cellInfo.Valid)
-            {
-                ChFlag = true;
-                if (cellInfo.IsAvailable)
-                {
-                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
-                    {
-                        CellObject cellObject = cellInfo.ObjList[i];
-                        switch (cellObject.CellType)
-                        {
-                            case CellType.Item:
-                                result = cellObject.CellObjId;
-                                nCount++;
-                                break;
-                            case CellType.MapRoute:
-                                ChFlag = false;
-                                break;
-                            case CellType.Monster:
-                            case CellType.Merchant:
-                            case CellType.Play:
-                                {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                    if (baseObject != null && !baseObject.Death)
-                                    {
-                                        ChFlag = false;
-                                    }
-                                    break;
-                                }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-
         public DoorInfo GetDoor(int nX, int nY)
         {
             for (int i = 0; i < DoorList.Count; i++)
@@ -1271,7 +1271,7 @@ namespace GameSrv.Maps
             {
                 for (int nYy = nY - nRage; nYy <= nY + nRage; nYy++)
                 {
-                    GetBaseObjects(nXx, nYy, boFlag, baseObjectList);
+                    GetBaseObjects(nXx, nYy, boFlag, ref baseObjectList);
                 }
             }
             return baseObjectList.Count;
@@ -1299,7 +1299,7 @@ namespace GameSrv.Maps
         /// <param name="boFlag">是否包括死亡对象 FALSE 包括死亡对象 TRUE  不包括死亡对象</param>
         /// <param name="baseObjectList"></param>
         /// <returns></returns>
-        public int GetBaseObjects(int nX, int nY, bool boFlag, IList<BaseObject> baseObjectList)
+        public int GetBaseObjects(int nX, int nY, bool boFlag, ref IList<BaseObject> baseObjectList)
         {
             MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
