@@ -1362,23 +1362,21 @@ namespace GameSrv.Maps
 
         public bool CanFly(int nsX, int nsY, int ndX, int ndY)
         {
-            int n18;
-            int n1C;
             bool result = true;
             double r28 = (ndX - nsX) / 1.0e1;
             double r30 = (ndY - ndX) / 1.0e1;
-            int n14 = 0;
+            int tryCount = 0;
             while (true)
             {
-                n18 = HUtil32.Round(nsX + r28);
-                n1C = HUtil32.Round(nsY + r30);
-                if (!CanWalk(n18, n1C, true))
+                int flyX = HUtil32.Round(nsX + r28);
+                int flyY = HUtil32.Round(nsY + r30);
+                if (!CanWalk(flyX, flyY, true))
                 {
                     result = false;
                     break;
                 }
-                n14++;
-                if (n14 >= 10)
+                tryCount++;
+                if (tryCount >= 10)
                 {
                     break;
                 }
