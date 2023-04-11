@@ -190,20 +190,6 @@ namespace GameSrv.Maps {
             return nX >= 0 && nX < Width && nY >= 0 && nY < Height;
         }
 
-        private bool GetCellInfo(int nX, int nY, ref MapCellInfo cellInfo) {
-            if (nX >= 0 && nX < Width && nY >= 0 && nY < Height) {
-                cellInfo = ref _cellArray[nX * Height + nY];
-                if (cellInfo.Valid) {
-                    if (cellInfo.ObjList == null) {
-                        cellInfo.ObjList = new NativeList<CellObject>();
-                    }
-                    return true;
-                }
-                return false;
-            }
-            return false;
-        }
-
         public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success, ref MapCellInfo mapCell) {
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height) {
                 ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
@@ -333,8 +319,7 @@ namespace GameSrv.Maps {
         /// <returns> 返回值 True 为可以移动，False 为不可以移动</returns>
         public bool CanWalk(int nX, int nY, bool boFlag) {
             bool result = false;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid) {
                 if (boFlag) {
                     return true;
@@ -380,8 +365,7 @@ namespace GameSrv.Maps {
         /// <returns>返回值 True 为可以移动，False 为不可以移动</returns>
         public bool CanWalkOfItem(int nX, int nY, bool boFlag, bool boItem) {
             bool result = true;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid) {
                 if (cellInfo.IsAvailable) {
                     for (int i = 0; i < cellInfo.ObjList.Count; i++) {
@@ -415,8 +399,7 @@ namespace GameSrv.Maps {
 
         public bool CanWalkEx(int nX, int nY, bool boFlag) {
             bool result = false;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid) {
                 result = true;
                 if (!boFlag && cellInfo.IsAvailable) {
@@ -605,31 +588,38 @@ namespace GameSrv.Maps {
         /// 添加矿石到地图上
         /// </summary>
         /// <returns></returns>
-        public bool AddToMapMineEvent<T>(int nX, int nY, CellType cellType, T stoneMineEvent) where T : StoneMineEvent {
+        public bool AddToMapMineEvent<T>(int nX, int nY, CellType cellType, T stoneMineEvent) where T : StoneMineEvent
+        {
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMapMineEvent ";
-            try {
+            try
+            {
                 ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                 if (cellSuccess && !cellInfo.Valid) //不动走动的地方才允许放矿
                 {
                     bool isSpace = false;// 人物可以走到的地方才放上矿
-                    for (int x = nX - 1; x <= nX + 1; x++) {
-                        for (int y = nY - 1; y <= nY + 1; y++) {
-                            if (GetCellInfo(x, y, ref cellInfo)) {
-                                if (cellInfo.Valid) {
-                                    isSpace = true;
-                                }
+                    for (int x = nX - 1; x <= nX + 1; x++)
+                    {
+                        for (int y = nY - 1; y <= nY + 1; y++)
+                        {
+                            if (CellValid(x, y))
+                            {
+                                isSpace = true;
                             }
-                            if (isSpace) {
+                            if (isSpace)
+                            {
                                 break;
                             }
                         }
-                        if (isSpace) {
+                        if (isSpace)
+                        {
                             break;
                         }
                     }
-                    if (isSpace) {
+                    if (isSpace)
+                    {
                         cellInfo.ObjList ??= new NativeList<CellObject>();
-                        CellObject cellObject = new CellObject {
+                        CellObject cellObject = new CellObject
+                        {
                             CellType = cellType,
                             CellObjId = stoneMineEvent.Id,
                             AddTime = HUtil32.GetTickCount()
@@ -640,7 +630,8 @@ namespace GameSrv.Maps {
                     }
                 }
             }
-            catch {
+            catch
+            {
                 M2Share.Logger.Error(sExceptionMsg);
             }
             return false;
@@ -844,26 +835,35 @@ namespace GameSrv.Maps {
             return true;
         }
 
-        public int GetXyObjCount(int nX, int nY) {
+        public int GetXyObjCount(int nX, int nY)
+        {
             int result = 0;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
-            if (cellSuccess && cellInfo.IsAvailable) {
-                for (int i = 0; i < cellInfo.ObjList.Count; i++) {
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            if (cellSuccess && cellInfo.IsAvailable)
+            {
+                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                {
                     CellObject cellObject = cellInfo.ObjList[i];
-                    if (cellObject.CellObjId == 0) {
+                    if (cellObject.CellObjId == 0)
+                    {
                         continue;
                     }
-                    if (cellObject.ActorObject) {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
-                        if (baseObject != null) {
-                            if (baseObject.CellType == CellType.CastleDoor) {
-                                if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode) {
+                    if (cellObject.ActorObject)
+                    {
+                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        if (baseObject != null)
+                        {
+                            if (baseObject.CellType == CellType.CastleDoor)
+                            {
+                                if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                {
                                     result++;
                                 }
                             }
-                            else {
-                                if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode) {
+                            else
+                            {
+                                if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                {
                                     result++;
                                 }
                             }
@@ -935,8 +935,7 @@ namespace GameSrv.Maps {
 
         public bool CanSafeWalk(int nX, int nY) {
             bool result = true;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable) {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                     CellObject cellObject = cellInfo.ObjList[i];
@@ -1088,8 +1087,7 @@ namespace GameSrv.Maps {
         public bool IsValidObject(int nX, int nY, int nRage, BaseObject baseObject) {
             for (int nXx = nX - nRage; nXx <= nX + nRage; nXx++) {
                 for (int nYy = nY - nRage; nYy <= nY + nRage; nYy++) {
-                    MapCellInfo cellInfo = default;
-                    bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+                    MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable) {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                             CellObject cellObject = cellInfo.ObjList[i];
@@ -1168,8 +1166,7 @@ namespace GameSrv.Maps {
 
         public MapEvent GetEvent(int nX, int nY) {
             ChFlag = false;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable) {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                     CellObject cellObject = cellInfo.ObjList[i];
@@ -1182,8 +1179,7 @@ namespace GameSrv.Maps {
         }
 
         public void SetMapXyFlag(int nX, int nY, bool boFlag) {
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess) {
                 cellInfo.SetAttribute(boFlag ? CellAttribute.Walk : CellAttribute.LowWall);
             }
@@ -1217,8 +1213,7 @@ namespace GameSrv.Maps {
         /// <returns></returns>
         public bool GetXyHuman(int nMapX, int nMapY) {
             bool result = false;
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nMapX, nMapY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nMapX, nMapY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable) {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                     CellObject cellObject = cellInfo.ObjList[i];
@@ -1235,8 +1230,7 @@ namespace GameSrv.Maps {
         }
 
         public bool IsValidCell(int nX, int nY) {
-            MapCellInfo cellInfo = default;
-            bool cellSuccess = GetCellInfo(nX, nY, ref cellInfo);
+            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Attribute == CellAttribute.LowWall) {
                 return false;
             }
