@@ -94,9 +94,9 @@ namespace GameSrv.Player
         /// 获取魔法伤害点数
         /// </summary>
         /// <returns></returns>
-        public override ushort GetMagStruckDamage(BaseObject baseObject, ushort nDamage)
+        public override int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            ushort damage = base.GetMagStruckDamage(baseObject, nDamage);
+            var damage = base.GetMagStruckDamage(baseObject, nDamage);
             if ((damage > 0) && AbilMagBubbleDefence)
             {
                 damage = (ushort)HUtil32.Round(damage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);//魔法盾减伤

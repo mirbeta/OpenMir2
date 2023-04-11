@@ -2830,7 +2830,7 @@ namespace GameSrv.Player
             return (ushort)result;
         }
 
-        public override void StruckDamage(ushort nDamage)
+        public override void StruckDamage(int nDamage)
         {
             base.StruckDamage(nDamage);
             ushort nDam = (ushort)(M2Share.RandomNumber.Random(10) + 5);

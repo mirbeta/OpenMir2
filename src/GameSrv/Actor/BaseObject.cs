@@ -934,7 +934,7 @@ namespace GameSrv.Actor
         /// 减少生命值
         /// </summary>
         /// <param name="nDamage"></param>
-        internal void DamageHealth(ushort nDamage)
+        internal void DamageHealth(int nDamage)
         {
             if ((LastHiter == null) || ((LastHiter.Race == ActorRace.Play) && !((PlayObject)LastHiter).UnMagicShield))
             {

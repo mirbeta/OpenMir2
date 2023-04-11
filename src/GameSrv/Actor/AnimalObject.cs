@@ -178,9 +178,9 @@ namespace GameSrv.Actor {
             for (var i = 0; i < baseObjectList.Count; i++) {
                 var baseObject = baseObjectList[i];
                 if (IsProperTarget(baseObject)) {
-                    ushort nDamage = 0;
+                    int nDamage = 0;
                     nDamage += baseObject.GetHitStruckDamage(this, nHitPower);
-                    nDamage += baseObject.GetMagStruckDamage(this, (ushort)nMagPower);
+                    nDamage += baseObject.GetMagStruckDamage(this, nMagPower);
                     if (nDamage > 0) {
                         baseObject.StruckDamage(nDamage);
                         baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 200);

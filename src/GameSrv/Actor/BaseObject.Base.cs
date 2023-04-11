@@ -755,7 +755,7 @@ namespace GameSrv.Actor
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
-                        ushort nDamage = GetMagStruckDamage(null, (ushort)processMsg.nParam1);
+                        var nDamage = GetMagStruckDamage(null, processMsg.nParam1);
                         if (nDamage > 0)
                         {
                             StruckDamage(nDamage);
@@ -950,9 +950,9 @@ namespace GameSrv.Actor
             return (ushort)nDamage;
         }
 
-        public virtual ushort GetMagStruckDamage(BaseObject baseObject, ushort nDamage)
+        public virtual int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            int n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
+            var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = (ushort)HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
@@ -965,7 +965,7 @@ namespace GameSrv.Actor
         /// 受攻击,减身上装备的持久
         /// </summary>
         /// <param name="nDamage"></param>
-        public virtual void StruckDamage(ushort nDamage)
+        public virtual void StruckDamage(int nDamage)
         {
             if (nDamage <= 0)
             {

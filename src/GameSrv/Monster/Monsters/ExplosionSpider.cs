@@ -22,9 +22,9 @@ namespace GameSrv.Monster.Monsters {
                 }
                 if (IsProperTarget(baseObject)) {
                     if (Math.Abs(CurrX - baseObject.CurrX) <= 1 && Math.Abs(CurrY - baseObject.CurrY) <= 1) {
-                        ushort damage = 0;
+                        int damage = 0;
                         damage += baseObject.GetHitStruckDamage(this, nPower / 2);
-                        damage += baseObject.GetMagStruckDamage(this, (ushort)(nPower / 2));
+                        damage += baseObject.GetMagStruckDamage(this, nPower / 2);
                         if (damage > 0) {
                             baseObject.StruckDamage(damage);
                             baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, damage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 700);
