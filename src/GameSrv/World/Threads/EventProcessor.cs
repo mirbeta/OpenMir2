@@ -33,6 +33,10 @@ namespace GameSrv.World.Threads
             for (var i = eventList.Count - 1; i >= 0; i--)
             {
                 var executeEvent = eventList[i];
+                if (executeEvent == null)
+                {
+                    continue;
+                }
                 if (executeEvent.Active && (HUtil32.GetTickCount() - executeEvent.RunStart) > executeEvent.RunTick)
                 {
                     executeEvent.RunStart = HUtil32.GetTickCount();
