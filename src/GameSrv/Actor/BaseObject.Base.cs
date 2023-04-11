@@ -837,6 +837,18 @@ namespace GameSrv.Actor
                             IncHealing = 300;
                         }
                         break;
+                    case Messages.RM_STRUCKEFFECT:
+                        SendRefMsg(processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
+                        if (processMsg.ActorId == Messages.RM_STRUCK)
+                        {
+                            SendMsg(this, processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
+                        }
+                        if (FastParalysis)
+                        {
+                            StatusTimeArr[PoisonState.STONE] = 1;
+                            FastParalysis = false;
+                        }
+                        break;
                     case Messages.RM_REFMESSAGE:
                         SendRefMsg(processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg);
                         if ((processMsg.ActorId == Messages.RM_STRUCK) && (Race != ActorRace.Play))

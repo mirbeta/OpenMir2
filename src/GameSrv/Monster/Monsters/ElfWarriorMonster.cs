@@ -32,18 +32,69 @@ namespace GameSrv.Monster.Monsters {
             ResetElfMon();
         }
 
-        //protected override bool AttackTarget()
-        //{
-        //    if (TargetCret != null && (!TargetCret.Death || !TargetCret.Ghost))
-        //    {
-        //        return base.AttackTarget();
-        //    }
-        //    else
-        //    {
-        //        DelTargetCreat();
-        //    }
-        //    return false;
-        //}
+        private void SpitAttack(byte dir)
+        {
+            Direction = dir;
+            var wAbil = WAbil;
+            var nDamage = (M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC)) + 1) + HUtil32.LoWord(wAbil.DC));
+            if (nDamage <= 0)
+            {
+                return;
+            }
+            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            nDamage = 1;
+            short nX = 0;
+            short nY = 0;
+            while (true)
+            {
+                if (Envir.GetNextPosition(CurrX, CurrY, Direction, nDamage, ref nX, ref nY))
+                {
+                    var baseObject = Envir.GetMovingObject(nX, nY, true);
+                    if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && (M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint))
+                    {
+                        nDamage = baseObject.GetMagStruckDamage(this, nDamage);
+                        if (nDamage > 0)
+                        {
+                            baseObject.StruckDamage(nDamage);
+                            baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_STRUCKEFFECT, nDamage, WAbil.HP, WAbil.MaxHP, this.ActorId, "", 300);
+                        }
+                    }
+                }
+            }
+        }
+
+        protected override bool AttackTarget()
+        {
+            if (TargetCret == null)
+            {
+                return false;
+            }
+            if (Appr != 704 && Appr != 706 && Appr != 708) //不是强化神兽则用普通攻击
+            {
+                return base.AttackTarget();
+            }
+            byte btDir = 0;
+            if (TargetInSpitRange(TargetCret, ref btDir) || GetLongAttackDirDis(TargetCret, 3, ref btDir))
+            {
+                if (HUtil32.GetTickCount() - AttackTick > NextHitTime)
+                {
+                    AttackTick = HUtil32.GetTickCount();
+                    TargetFocusTick = HUtil32.GetTickCount();
+                    SpitAttack(btDir);
+                    BreakHolySeizeMode();
+                }
+                return true;
+            }
+            if (TargetCret.Envir == Envir)
+            {
+                SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
+            }
+            else
+            {
+                DelTargetCreat();
+            }
+            return false;
+        }
 
         private void ResetElfMon() {
             NextHitTime = 1500 - SlaveMakeLevel * 100;

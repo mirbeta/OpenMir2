@@ -1482,8 +1482,8 @@ namespace GameSrv.Actor
             bool result = false;
             if ((Math.Abs(baseObject.CurrX - CurrX) <= 2) && (Math.Abs(baseObject.CurrY - CurrY) <= 2))
             {
-                int nX = baseObject.CurrX - CurrX;
-                int nY = baseObject.CurrY - CurrY;
+                var nX = baseObject.CurrX - CurrX;
+                var nY = baseObject.CurrY - CurrY;
                 if ((Math.Abs(nX) <= 1) && (Math.Abs(nY) <= 1))
                 {
                     GetAttackDir(baseObject, ref btDir);

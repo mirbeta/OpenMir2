@@ -649,6 +649,10 @@ namespace SystemModule
         public const int RM_ZEN_BEE = 8020;
         public const int RM_DELAYMAGIC = 8021;
         public const int RM_STRUCK = 8018;
+        /// <summary>
+        /// 强化攻击伤害
+        /// </summary>
+        public const int RM_STRUCKEFFECT = 10102;
         public const int RM_MAGSTRUCK_MINE = 8030;
         public const int RM_MAGHEALING = 8034;
         public const int RM_POISON = 8037;
