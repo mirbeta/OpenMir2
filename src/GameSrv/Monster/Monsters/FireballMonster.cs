@@ -17,9 +17,9 @@ namespace GameSrv.Monster.Monsters {
                                 if (nPower > 0) {
                                     BaseObject baseObject = GetPoseCreate();
                                     if (baseObject != null && IsProperTarget(baseObject) && AntiMagic > 0) {
-                                        nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
+                                        nPower = baseObject.GetMagStruckDamage(this, nPower);
                                         if (nPower > 0) {
-                                            baseObject.StruckDamage((ushort)nPower);
+                                            baseObject.StruckDamage(nPower);
                                             if ((HUtil32.GetTickCount() - SpellTick) > NextHitTime) {
                                                 SpellTick = HUtil32.GetTickCount();
                                                 SendRefMsg(Messages.RM_SPELL, 48, TargetCret.CurrX, TargetCret.CurrY, 48, "");

@@ -71,7 +71,7 @@ namespace GameSrv.Actor
                 {
                     if (M2Share.RandomNumber.RandomByte(BaseObject.SpeedPoint) < HitPoint)
                     {
-                        BaseObject.StruckDamage((ushort)nSecPwr);
+                        BaseObject.StruckDamage(nSecPwr);
                         BaseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nSecPwr, BaseObject.WAbil.HP, BaseObject.WAbil.MaxHP, ActorId, "", 500);
                         if (BaseObject.Race != ActorRace.Play)
                         {

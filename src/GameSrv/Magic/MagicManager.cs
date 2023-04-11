@@ -1138,7 +1138,7 @@ namespace GameSrv.Magic {
                                         playObject.SetTargetCreat(targetObject);
                                     }
                                     targetObject.SetLastHiter(playObject);
-                                    nPower = targetObject.GetMagStruckDamage(playObject, (ushort)nPower);
+                                    nPower = targetObject.GetMagStruckDamage(playObject, nPower);
                                     playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
                                     if (targetObject.Race == ActorRace.Play && !((PlayObject) targetObject).UnParalysis) {
                                         targetObject.SendSelfDelayMsg(Messages.RM_POISON, PoisonState.STONE, nPower / M2Share.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), playObject.ActorId, nLevel, "", 650); // 中毒类型 - 麻痹

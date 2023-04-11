@@ -16,7 +16,7 @@ namespace GameSrv.Monster.Monsters {
                     nDamage = target.GetHitStruckDamage(this, nDamage);
                 }
                 if (nDamage > 0) {
-                    target.StruckDamage((ushort)nDamage);
+                    target.StruckDamage(nDamage);
                     target.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, target.WAbil.HP, target.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - target.CurrX), Math.Abs(CurrY - target.CurrY)) * 50 + 600);
                 }
                 SendRefMsg(Messages.RM_FLYAXE, Direction, CurrX, CurrY, target.ActorId, "");

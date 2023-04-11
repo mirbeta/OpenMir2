@@ -45,7 +45,7 @@ namespace GameSrv.Monster.Monsters {
                         if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint) {
                             nDamage = baseObject.GetHitStruckDamage(this, nDamage);
                             if (nDamage > 0) {
-                                baseObject.StruckDamage((ushort)nDamage);
+                                baseObject.StruckDamage(nDamage);
                                 baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                             }
                         }

@@ -1210,7 +1210,7 @@ namespace GameSrv.Player {
                 }
                 nDmg = M2Share.RandomNumber.Random((n24 + 1) * 10) + (n24 + 1) * 10;
                 nDmg = baseObject34.GetHitStruckDamage(this, nDmg);
-                baseObject34.StruckDamage((ushort)nDmg);
+                baseObject34.StruckDamage(nDmg);
                 baseObject34.SendRefMsg(Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId, "");
                 if (baseObject34.Race != ActorRace.Play)
                 {
@@ -1228,7 +1228,7 @@ namespace GameSrv.Player {
                 }
                 nDmg = M2Share.RandomNumber.Random(n24 * 10) + (n24 + 1) * 3;
                 nDmg = GetHitStruckDamage(this, nDmg);
-                StruckDamage((ushort)nDmg);
+                StruckDamage(nDmg);
                 SendRefMsg(Messages.RM_STRUCK, nDmg, WAbil.HP, WAbil.MaxHP, 0, "");
             }
             return result;

@@ -16,9 +16,9 @@ namespace GameSrv.Monster.Monsters {
                 SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
                 BaseObject baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint) {
-                    nPower = baseObject.GetMagStruckDamage(this, (ushort)nPower);
+                    nPower = baseObject.GetMagStruckDamage(this, nPower);
                     if (nPower > 0) {
-                        baseObject.StruckDamage((ushort)nPower);
+                        baseObject.StruckDamage(nPower);
                         baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
                         if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0) {
                             baseObject.MakePosion(PoisonState.STONE, 5, 0);
