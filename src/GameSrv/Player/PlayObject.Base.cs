@@ -5259,12 +5259,9 @@ namespace GameSrv.Player
         internal byte GetMyLight()
         {
             byte currentLight = 0;
-            if (true)//BoHighLevelEffect
+            if (Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL)
             {
-                if (Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL)
-                {
-                    currentLight = 1;
-                }
+                currentLight = 1;
             }
             for (byte i = ItemLocation.Dress; i <= ItemLocation.Charm; i++)
             {

@@ -2172,7 +2172,7 @@ namespace GameSrv.Player
                             SendDelItems(UseItems[ItemLocation.RighThand]);
                         }
                         UseItems[ItemLocation.RighThand].Index = 0;
-                        Light = 0;
+                        Light = GetMyLight();
                         SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
                         SendMsg(Messages.RM_LAMPCHANGEDURA, 0, 0, 0, 0, "");
                         RecalcAbilitys();
