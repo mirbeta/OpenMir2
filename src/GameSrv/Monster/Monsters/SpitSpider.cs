@@ -18,8 +18,8 @@ namespace GameSrv.Monster.Monsters {
                 return;
             }
             SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
-            for (int i = 0; i < 4; i++) {
-                for (int k = 0; k < 4; k++) {
+            for (int i = 0; i < 5; i++) {
+                for (int k = 0; k < 5; k++) {
                     if (M2Share.Config.SpitMap[btDir, i, k] == 1) {
                         short nX = (short)(CurrX - 2 + k);
                         short nY = (short)(CurrY - 2 + i);
