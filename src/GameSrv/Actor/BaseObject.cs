@@ -6,6 +6,7 @@ using GameSrv.Monster;
 using GameSrv.Monster.Monsters;
 using GameSrv.Player;
 using SystemModule.Consts;
+using SystemModule.Core.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -2035,30 +2036,28 @@ namespace GameSrv.Actor
             {
                 return true;
             }
-            bool result = Envir.Flag.SafeArea;
-            if (result)
+            var result = Envir.Flag.SafeArea;
+            if (result) //安全区
             {
-                return true;
-            }
-            if ((Envir.MapName != M2Share.Config.RedHomeMap) || (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) ||
-                (Math.Abs(CurrY - M2Share.Config.RedHomeY) > M2Share.Config.SafeZoneSize))
-            {
-                result = false;
-            }
-            else
-            {
-                return true;
-            }
-            for (int i = 0; i < M2Share.StartPointList.Count; i++)
-            {
-                if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
+                if ((Envir.MapName != M2Share.Config.RedHomeMap) || (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) || (Math.Abs(CurrY - M2Share.Config.RedHomeY) > M2Share.Config.SafeZoneSize))
                 {
-                    short nSafeX = M2Share.StartPointList[i].CurrX;
-                    short nSafeY = M2Share.StartPointList[i].CurrY;
-                    if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) && (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
+                    for (int i = 0; i < M2Share.StartPointList.Count; i++)
                     {
-                        result = true;
+                        if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            short nSafeX = M2Share.StartPointList[i].CurrX;
+                            short nSafeY = M2Share.StartPointList[i].CurrY;
+                            if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) && (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
+                            {
+                                result = true;
+                                break;
+                            }
+                        }
                     }
+                }
+                else
+                {
+                    result = true;
                 }
             }
             return result;

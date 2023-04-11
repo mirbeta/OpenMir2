@@ -504,7 +504,7 @@ namespace GameSrv.Actor
             {
                 return true;
             }
-            if (InSafeZone() || targetObject.InSafeZone()) //todo 检查安全区有很大的问题,需要优化
+            if (InSafeZone() || targetObject.InSafeZone())
             {
                 return false;
             }
