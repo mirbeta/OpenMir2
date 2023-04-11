@@ -318,63 +318,81 @@ namespace GameSrv {
             return result;
         }
 
-        public static byte GetNextDirection(short sx, short sy, short dx, short dy) {
+        public static byte GetNextDirection(short sx, short sy, short dx, short dy)
+        {
             short flagx;
             short flagy;
-            var result = Direction.Down;
-            if (sx < dx) {
+            if (sx < dx)
+            {
                 flagx = 1;
             }
-            else if (sx == dx) {
+            else if (sx == dx)
+            {
                 flagx = 0;
             }
-            else {
+            else
+            {
                 flagx = -1;
             }
-            if (Math.Abs(sy - dy) > 2) {
-                if (sx >= dx - 1 && sx <= dx + 1) {
+            if (Math.Abs(sy - dy) > 2)
+            {
+                if (sx >= dx - 1 && sx <= dx + 1)
+                {
                     flagx = 0;
                 }
             }
-            if (sy < dy) {
+            if (sy < dy)
+            {
                 flagy = 1;
             }
-            else if (sy == dy) {
+            else if (sy == dy)
+            {
                 flagy = 0;
             }
-            else {
+            else
+            {
                 flagy = -1;
             }
-            if (Math.Abs(sx - dx) > 2) {
-                if (sy > dy - 1 && sy <= dy + 1) {
+            if (Math.Abs(sx - dx) > 2)
+            {
+                if (sy > dy - 1 && sy <= dy + 1)
+                {
                     flagy = 0;
                 }
             }
-            if (flagx == 0 && flagy == -1) {
-                result = Direction.Up;
+            if (flagx == 0 && flagy == -1)
+            {
+                return Direction.Up;
             }
-            if (flagx == 1 && flagy == -1) {
-                result = Direction.UpRight;
+            if (flagx == 1 && flagy == -1)
+            {
+                return Direction.UpRight;
             }
-            if (flagx == 1 && flagy == 0) {
-                result = Direction.Right;
+            if (flagx == 1 && flagy == 0)
+            {
+                return Direction.Right;
             }
-            if (flagx == 1 && flagy == 1) {
-                result = Direction.DownRight;
+            if (flagx == 1 && flagy == 1)
+            {
+                return Direction.DownRight;
             }
-            if (flagx == 0 && flagy == 1) {
-                result = Direction.Down;
+            if (flagx == 0 && flagy == 1)
+            {
+                return Direction.Down;
             }
-            if (flagx == -1 && flagy == 1) {
-                result = Direction.DownLeft;
+            if (flagx == -1 && flagy == 1)
+            {
+                return Direction.DownLeft;
             }
-            if (flagx == -1 && flagy == 0) {
-                result = Direction.Left;
+            if (flagx == -1 && flagy == 0)
+            {
+                return Direction.Left;
             }
-            if (flagx == -1 && flagy == -1) {
-                result = Direction.UpLeft;
+            if (flagx == -1 && flagy == -1)
+            {
+                return Direction.UpLeft;
             }
-            return result;
+            return Direction.Down;
         }
 
         public static bool CheckUserItems(int nIdx, StdItem StdItem) {
