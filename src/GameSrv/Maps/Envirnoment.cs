@@ -359,6 +359,7 @@ namespace GameSrv.Maps
         /// <param name="nY"></param>
         /// <param name="boFlag">如果为TRUE 则忽略座标上是否有角色</param>
         /// <returns> 返回值 True 为可以移动，False 为不可以移动</returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public bool CanWalk(int nX, int nY, bool boFlag)
         {
             bool result = false;
@@ -551,6 +552,7 @@ namespace GameSrv.Maps
         /// 从地图指定坐标上删除对象
         /// </summary>
         /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, BaseObject pRemoveObject)
         {
             const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
@@ -560,6 +562,7 @@ namespace GameSrv.Maps
             {
                 try
                 {
+
                     var nIdx = 0;
                     while (true)
                     {
@@ -580,7 +583,7 @@ namespace GameSrv.Maps
                                     pRemoveObject.AddToMaped = false;
                                     DelObjectCount(pRemoveObject);// 减地图人物怪物计数
                                 }
-                                if (cellType == CellType.Item && cellObject.CellType == CellType.Item)
+                                if (cellType != CellType.Monster)
                                 {
                                     M2Share.CellObjectMgr.Remove(cellId);//删除物品
                                 }
@@ -620,6 +623,7 @@ namespace GameSrv.Maps
             return result;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public MapItem GetItem(int nX, int nY)
         {
             ChFlag = false;
@@ -652,6 +656,7 @@ namespace GameSrv.Maps
             return null;
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public int GetItemEx(int nX, int nY, ref int nCount)
         {
             int result = 0;
