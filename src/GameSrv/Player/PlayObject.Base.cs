@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Runtime.CompilerServices;
 using GameSrv.Actor;
 using GameSrv.Castle;
 using GameSrv.Event;
@@ -2948,6 +2949,7 @@ namespace GameSrv.Player
             VisibleActors.Add(visibleBaseObject);
         }
 
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public override void SearchViewRange()
         {
             for (int i = VisibleItems.Count - 1; i >= 0; i--)
@@ -2968,6 +2970,7 @@ namespace GameSrv.Player
             short nEndY = (short)(CurrY + ViewRange);
             try
             {
+                //todo 需要要优化整个方法
                 for (short nX = nStartX; nX <= nEndX; nX++)
                 {
                     for (short nY = nStartY; nY <= nEndY; nY++)
@@ -3021,7 +3024,6 @@ namespace GameSrv.Player
                                         if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                         {
                                             cellInfo.Remove(nIdx);
-                                            M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
                                             if (cellInfo.Count > 0)
                                             {
                                                 continue;
