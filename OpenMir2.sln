@@ -61,7 +61,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SocketPlugin", "src\Plugin\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pluging", "Pluging", "{3B18FA0C-89A7-41F4-959F-1891DDA84BE6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WatchServer", "src\GameTerminal\WatchServer.csproj", "{09619452-44F4-4CB1-8349-AB1D688156ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameTerminal", "src\GameTerminal\GameTerminal.csproj", "{09619452-44F4-4CB1-8349-AB1D688156ED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

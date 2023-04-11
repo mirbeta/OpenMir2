@@ -646,11 +646,11 @@ namespace GameSrv.Player
                                                 HalfMoonOnOff(true);
                                                 SendSocket("+WID");
                                             }
-                                            if (MagicArr[MagicConst.SKILL_REDBANWOL] != null && !RedUseHalfMoon)
-                                            {
-                                                RedHalfMoonOnOff(true);
-                                                SendSocket("+WID");
-                                            }
+                                            //if (MagicArr[MagicConst.SKILL_REDBANWOL] != null && !RedUseHalfMoon)
+                                            //{
+                                            //    RedHalfMoonOnOff(true);
+                                            //    SendSocket("+WID");
+                                            //}
                                         }
                                         break;
                                     case 31: // 解包物品
