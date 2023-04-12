@@ -469,7 +469,7 @@ namespace GameSrv.DataSource {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
                         if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null) {
-                            monGenInfo.CertList = new List<BaseObject>();
+                            monGenInfo.CertList = new List<AnimalObject>();
                             monGenInfo.Envir = M2Share.MapMgr.FindMap(monGenInfo.MapName);
                             if (monGenInfo.Envir != null) {
                                 M2Share.WorldEngine.MonGenList.Add(monGenInfo);
@@ -481,7 +481,7 @@ namespace GameSrv.DataSource {
                     }
                 }
                 monGenInfo = new MonGenInfo {
-                    CertList = new List<BaseObject>(),
+                    CertList = new List<AnimalObject>(),
                     Envir = null
                 };
                 if (M2Share.WorldEngine.MonGenInfoThreadMap.ContainsKey(0)) {

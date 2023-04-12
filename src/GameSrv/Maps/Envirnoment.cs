@@ -223,18 +223,17 @@ namespace GameSrv.Maps
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success)
         {
-            ref MapCellInfo cellInfo = ref _cellArray[0];
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                cellInfo = ref _cellArray[nX * Height + nY];
-                if (cellInfo.Valid)
+                ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
+                if (cellInfo.Attribute == CellAttribute.Walk)
                 {
                     success = true;
                     return ref cellInfo;
                 }
             }
             success = false;
-            return ref cellInfo;
+            return ref _cellArray[0];
         }
 
         public bool MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
@@ -788,11 +787,25 @@ namespace GameSrv.Maps
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
                         CellObject cellObject = cellInfo.ObjList[i];
-                        if (cellObject.ActorObject && cellObject.CellObjId == baseObject.ActorId)
+                        if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                         {
-                            cellInfo.Update(i, ref cellObject);
                             boVerify = true;
+                            cellInfo.Remove(i);
+                            if (cellInfo.Count > 0)
+                            {
+                                continue;
+                            }
+                            cellInfo.Clear();
                             break;
+                        }
+                        else
+                        {
+                            if (cellObject.ActorObject && cellObject.CellObjId == baseObject.ActorId)
+                            {
+                                cellInfo.Update(i, ref cellObject);
+                                boVerify = true;
+                                break;
+                            }
                         }
                     }
                 }

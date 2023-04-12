@@ -2254,24 +2254,16 @@ namespace GameSrv.Actor
         public bool CheckServerMakeSlave()
         {
             bool result = false;
-            HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-            try
+            for (int i = 0; i < MsgQueue.Count; i++)
             {
-                for (int i = 0; i < MsgQueue.Count; i++)
+                if (MsgQueue.TryPeek(out SendMessage sendMessage))
                 {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                    if (sendMessage.wIdent == Messages.RM_10401)
                     {
-                        if (sendMessage.wIdent == Messages.RM_10401)
-                        {
-                            result = true;
-                            break;
-                        }
+                        result = true;
+                        break;
                     }
                 }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }

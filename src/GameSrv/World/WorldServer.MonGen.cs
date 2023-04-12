@@ -190,34 +190,44 @@ namespace GameSrv.World {
         /// <summary>
         /// 刷新怪物和怪物行动
         /// </summary>
-        private void ProcessMonsters(MonsterThread monsterThread) {
+        private void ProcessMonsters(MonsterThread monsterThread)
+        {
             if (monsterThread == null)
             {
                 return;
             }
-            if (!MonGenInfoThreadMap.TryGetValue(monsterThread.Id, out IList<MonGenInfo> mongenList)) {
+            if (!MonGenInfoThreadMap.TryGetValue(monsterThread.Id, out IList<MonGenInfo> mongenList))
+            {
                 return;
             }
             _logger.Debug($"Monster Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
 
-            while (true) {
+            while (true)
+            {
                 MonGenInfo monGen = null;
-                if ((HUtil32.GetTickCount() - monsterThread.RegenMonstersTick) > M2Share.Config.RegenMonstersTime) {
+                if ((HUtil32.GetTickCount() - monsterThread.RegenMonstersTick) > M2Share.Config.RegenMonstersTime)
+                {
                     monsterThread.RegenMonstersTick = HUtil32.GetTickCount();
-                    if (monsterThread.CurrMonGenIdx < mongenList.Count) {
+                    if (monsterThread.CurrMonGenIdx < mongenList.Count)
+                    {
                         monGen = mongenList[monsterThread.CurrMonGenIdx];
                     }
-                    else if (mongenList.Count > 0) {
+                    else if (mongenList.Count > 0)
+                    {
                         monGen = mongenList[0];
                     }
-                    if (monsterThread.CurrMonGenIdx < mongenList.Count - 1) {
+                    if (monsterThread.CurrMonGenIdx < mongenList.Count - 1)
+                    {
                         monsterThread.CurrMonGenIdx++;
                     }
-                    else {
+                    else
+                    {
                         monsterThread.CurrMonGenIdx = 0;
                     }
-                    if (monGen != null && !string.IsNullOrEmpty(monGen.MonName) && !M2Share.Config.VentureServer) {
-                        if (monGen.StartTick == 0 || ((HUtil32.GetTickCount() - monGen.StartTick) > GetMonstersZenTime(monGen.ZenTime))) {
+                    if (monGen != null && !string.IsNullOrEmpty(monGen.MonName) && !M2Share.Config.VentureServer)
+                    {
+                        if (monGen.StartTick == 0 || ((HUtil32.GetTickCount() - monGen.StartTick) > GetMonstersZenTime(monGen.ZenTime)))
+                        {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
                             var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (M2Share.Config.MonGenRate / 10.0)));//所需刷的怪总数
@@ -231,7 +241,8 @@ namespace GameSrv.World {
                             {
                                 boRegened = RegenMonsters(monGen, genModCount - nGenCount);
                             }
-                            if (boRegened) {
+                            if (boRegened)
+                            {
                                 monGen.StartTick = HUtil32.GetTickCount();
                             }
                         }
@@ -239,37 +250,49 @@ namespace GameSrv.World {
                 }
 
                 var dwRunTick = HUtil32.GetTickCount();
-                try {
+                try
+                {
                     var boProcessLimit = false;
                     var dwCurrentTick = HUtil32.GetTickCount();
                     var dwMonProcTick = HUtil32.GetTickCount();
                     monsterThread.MonsterProcessCount = 0;
                     var i = 0;
-                    for (i = monsterThread.MonGenListPosition; i < mongenList.Count; i++) {
+                    for (i = monsterThread.MonGenListPosition; i < mongenList.Count; i++)
+                    {
                         monGen = mongenList[i];
                         var processPosition = monsterThread.MonGenCertListPosition < monGen.CertList.Count ? monsterThread.MonGenCertListPosition : 0;
                         monsterThread.MonGenCertListPosition = 0;
-                        while (true) {
-                            if (processPosition >= monGen.CertList.Count) {
+                        while (true)
+                        {
+                            if (processPosition >= monGen.CertList.Count)
+                            {
                                 break;
                             }
-                            var monster = (AnimalObject)monGen.CertList[processPosition];
-                            if (monster != null) {
-                                if (!monster.Ghost) {
-                                    if ((dwCurrentTick - monster.RunTick) > monster.RunTime) {
+                            var monster = monGen.CertList[processPosition];
+                            if (monster != null)
+                            {
+                                if (!monster.Ghost)//这里要优化,CPU占用高
+                                {
+                                    if ((dwCurrentTick - monster.RunTick) > monster.RunTime)
+                                    {
                                         monster.RunTick = dwRunTick;
-                                        if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null)) {
-                                            if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime)) {
-                                                if (monster.ReAliveEx(monster.MonGen)) {
+                                        if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
+                                        {
+                                            if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
+                                            {
+                                                if (monster.ReAliveEx(monster.MonGen))
+                                                {
                                                     monster.ProcessRunCount = 0;
                                                     monster.ReAliveTick = HUtil32.GetTickCount();
                                                 }
                                             }
                                         }
-                                        if (!monster.IsVisibleActive && (monster.ProcessRunCount < M2Share.Config.ProcessMonsterInterval)) {
+                                        if (!monster.IsVisibleActive && (monster.ProcessRunCount < M2Share.Config.ProcessMonsterInterval))
+                                        {
                                             monster.ProcessRunCount++;
                                         }
-                                        else {
+                                        else
+                                        {
                                             if (monster.IsSlave || (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster))// 守卫和下属主动搜索附近的精灵
                                             {
                                                 if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
@@ -290,8 +313,10 @@ namespace GameSrv.World {
                                     }
                                     monsterThread.MonsterProcessPostion++;
                                 }
-                                else {
-                                    if ((HUtil32.GetTickCount() - monster.GhostTick) > 5 * 60 * 1000) {
+                                else
+                                {
+                                    if ((HUtil32.GetTickCount() - monster.GhostTick) > 5 * 60 * 1000) //要找出GhostTick所有地方然后从怪物列表删除
+                                    {
                                         monGen.CertList.RemoveAt(processPosition);
                                         monGen.CertCount--;
                                         monster = null;
@@ -300,7 +325,8 @@ namespace GameSrv.World {
                                 }
                             }
                             processPosition++;
-                            if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.MonLimit) {
+                            if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.MonLimit)
+                            {
                                 boProcessLimit = true;
                                 monsterThread.MonGenCertListPosition = processPosition;
                                 break;
@@ -308,17 +334,20 @@ namespace GameSrv.World {
                         }
                         if (boProcessLimit) break;
                     }
-                    if (MonGenInfoThreadMap.Count <= i) {
+                    if (MonGenInfoThreadMap.Count <= i)
+                    {
                         monsterThread.MonGenListPosition = 0;
                         monsterThread.MonsterCount = monsterThread.MonsterProcessPostion;
                         monsterThread.MonsterProcessPostion = 0;
                     }
                     monsterThread.MonGenListPosition = !boProcessLimit ? 0 : i;
                 }
-                catch (Exception e) {
+                catch (Exception e)
+                {
                     _logger.Error(e.StackTrace);
                 }
-                finally {
+                finally
+                {
                     Thread.Sleep(20);
                 }
             }
@@ -355,7 +384,7 @@ namespace GameSrv.World {
                     MonGenInfo.Count = 1;
                     MonGenInfo.ZenTime = 0;
                     MonGenInfo.MissionGenRate = 0;// 集中座标刷新机率 1 -100
-                    MonGenInfo.CertList = new List<BaseObject>();
+                    MonGenInfo.CertList = new List<AnimalObject>();
                     MonGenInfo.Envir = M2Share.MapMgr.FindMap(MonGenInfo.MapName);
                     if (MonGenInfo.TryAdd(baseObject)) {
                         MonGenInfo.CertCount++;
@@ -442,8 +471,8 @@ namespace GameSrv.World {
         /// 创建对象
         /// </summary>
         /// <returns></returns>
-        private BaseObject CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName) {
-            BaseObject cert = null;
+        private AnimalObject CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName) {
+            AnimalObject cert = null;
             var map = M2Share.MapMgr.FindMap(sMapName);
             if (map == null) return null;
             switch (nMonRace) {
@@ -710,7 +739,7 @@ namespace GameSrv.World {
         /// </summary>
         /// <returns></returns>
         private bool RegenMonsters(MonGenInfo monGen, int nCount) {
-            BaseObject cert;
+            AnimalObject cert;
             const string sExceptionMsg = "[Exception] TUserEngine::RegenMonsters";
             var result = true;
             var dwStartTick = HUtil32.GetTickCount();

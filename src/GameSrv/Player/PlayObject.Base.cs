@@ -2991,16 +2991,16 @@ namespace GameSrv.Player
                                     case CellType.Play:
                                     case CellType.Monster:
                                     case CellType.Merchant:
-                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
-                                        {
-                                            cellInfo.Remove(nIdx);
-                                            if (cellInfo.Count > 0)
-                                            {
-                                                continue;
-                                            }
-                                            cellInfo.Clear();
-                                            break;
-                                        }
+                                        //if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
+                                        //{
+                                        //    cellInfo.Remove(nIdx);
+                                        //    if (cellInfo.Count > 0)
+                                        //    {
+                                        //        continue;
+                                        //    }
+                                        //    cellInfo.Clear();
+                                        //    break;
+                                        //}
                                         BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                         if (baseObject != null && !baseObject.Invisible)
                                         {
@@ -3065,6 +3065,10 @@ namespace GameSrv.Player
                                         break;
                                     case CellType.Event:
                                         MapEvent mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                        if (mapEvent == null)
+                                        {
+                                            continue;
+                                        }
                                         if (mapEvent.Visible)
                                         {
                                             UpdateVisibleEvent(nX, nY, mapEvent);

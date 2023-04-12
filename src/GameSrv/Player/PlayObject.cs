@@ -687,20 +687,24 @@ namespace GameSrv.Player {
                 + " 会员等级:" + MemberLevel + " 经验倍数:" + KillMonExpRate / 100 + " 攻击倍数:" + PowerRate / 100 + " 声望值:" + CreditPoint;
         }
 
-        private int GetDigUpMsgCount() {
+        private int GetDigUpMsgCount()
+        {
             int result = 0;
-            try {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
-                        if (sendMessage.wIdent == Messages.CM_BUTCH) {
+            try
+            {
+                for (int i = 0; i < MsgQueue.Count; i++)
+                {
+                    if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                    {
+                        if (sendMessage.wIdent == Messages.CM_BUTCH)
+                        {
                             result++;
                         }
                     }
                 }
             }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+            finally
+            {
             }
             return result;
         }
@@ -2186,20 +2190,18 @@ namespace GameSrv.Player {
         /// 攻击消息数量
         /// </summary>
         /// <returns></returns>
-        private int GetHitMsgCount() {
+        private int GetHitMsgCount()
+        {
             int result = 0;
-            try {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
-                        if (sendMessage.wIdent >= Messages.CM_HIT || sendMessage.wIdent <= Messages.CM_FIREHIT) {
-                            result++;
-                        }
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                {
+                    if (sendMessage.wIdent >= Messages.CM_HIT || sendMessage.wIdent <= Messages.CM_FIREHIT)
+                    {
+                        result++;
                     }
                 }
-            }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }
@@ -2208,20 +2210,18 @@ namespace GameSrv.Player {
         /// 魔法消息数量
         /// </summary>
         /// <returns></returns>
-        private int GetSpellMsgCount() {
+        private int GetSpellMsgCount()
+        {
             int result = 0;
-            try {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
-                        if (sendMessage.wIdent == Messages.CM_SPELL) {
-                            result++;
-                        }
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                {
+                    if (sendMessage.wIdent == Messages.CM_SPELL)
+                    {
+                        result++;
                     }
                 }
-            }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }
@@ -2230,20 +2230,18 @@ namespace GameSrv.Player {
         /// 跑步消息数量
         /// </summary>
         /// <returns></returns>
-        private int GetRunMsgCount() {
+        private int GetRunMsgCount()
+        {
             int result = 0;
-            try {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
-                        if (sendMessage.wIdent == Messages.CM_RUN) {
-                            result++;
-                        }
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                {
+                    if (sendMessage.wIdent == Messages.CM_RUN)
+                    {
+                        result++;
                     }
                 }
-            }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }
@@ -2252,56 +2250,50 @@ namespace GameSrv.Player {
         /// 走路消息数量
         /// </summary>
         /// <returns></returns>
-        private int GetWalkMsgCount() {
+        private int GetWalkMsgCount()
+        {
             int result = 0;
-            try {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
-                        if (sendMessage.wIdent == Messages.CM_WALK) {
-                            result++;
-                        }
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                {
+                    if (sendMessage.wIdent == Messages.CM_WALK)
+                    {
+                        result++;
                     }
                 }
-            }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }
 
-        private int GetTurnMsgCount() {
+        private int GetTurnMsgCount()
+        {
             int result = 0;
-            try {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
-                        if (sendMessage.wIdent == Messages.CM_TURN) {
-                            result++;
-                        }
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                {
+                    if (sendMessage.wIdent == Messages.CM_TURN)
+                    {
+                        result++;
                     }
                 }
-            }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }
 
-        private int GetSiteDownMsgCount() {
+        private int GetSiteDownMsgCount()
+        {
             int result = 0;
-            HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-            try {
-                for (int i = 0; i < MsgQueue.Count; i++) {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage)) {
-                        if (sendMessage.wIdent == Messages.CM_SITDOWN) {
-                            result++;
-                        }
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                {
+                    if (sendMessage.wIdent == Messages.CM_SITDOWN)
+                    {
+                        result++;
                     }
                 }
-            }
-            finally {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
             }
             return result;
         }

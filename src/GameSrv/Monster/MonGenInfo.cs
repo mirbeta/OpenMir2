@@ -30,7 +30,7 @@ namespace GameSrv.Monster {
         /// <summary>
         /// 对象列表
         /// </summary>
-        public IList<BaseObject> CertList;
+        public IList<AnimalObject> CertList;
         public int CertCount;
         public Envirnoment Envir;
         public int Race;
@@ -50,7 +50,7 @@ namespace GameSrv.Monster {
         /// </summary>
         /// <param name="baseObject"></param>
         /// <returns></returns>
-        public bool TryAdd(BaseObject baseObject) {
+        public bool TryAdd(AnimalObject baseObject) {
             if (CertList.Count > MonGenConst.ThreadMonLimit) {
                 return false;
             }

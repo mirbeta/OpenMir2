@@ -7,7 +7,7 @@ namespace GameSrv.Maps
         /// <summary>
         /// 对象数量
         /// </summary>
-        public int? Count => ObjList?.Count;
+        public int Count;
         /// <summary>
         /// 地图对象列表
         /// </summary>
@@ -26,11 +26,12 @@ namespace GameSrv.Maps
             ObjList = null;
         }
 
-        public bool IsAvailable => ObjList?.Count > 0;
+        public bool IsAvailable => Count > 0;
 
         public void Add(CellObject cell)
         {
             ObjList.Add(cell);
+            Interlocked.Increment(ref Count);
         }
 
         public void Update(int index, ref CellObject cell)
@@ -43,11 +44,13 @@ namespace GameSrv.Maps
         {
             //todo 异步通知处理并移除
             ObjList.Remove(index);
+            Interlocked.Decrement(ref Count);
         }
 
         public void Remove(int index)
         {
             ObjList.RemoveAt(index);
+            Interlocked.Decrement(ref Count);
         }
 
         public void SetAttribute(CellAttribute cellAttribute)
@@ -58,6 +61,7 @@ namespace GameSrv.Maps
         public void Clear()
         {
             ObjList.Clear();
+            Count = 0;
             //ObjList = null;
         }
     }
