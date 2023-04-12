@@ -2256,7 +2256,7 @@ namespace GameSrv.Actor
             bool result = false;
             for (int i = 0; i < MsgQueue.Count; i++)
             {
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
                 {
                     if (sendMessage.wIdent == Messages.RM_10401)
                     {

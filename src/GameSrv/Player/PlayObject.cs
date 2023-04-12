@@ -687,28 +687,6 @@ namespace GameSrv.Player {
                 + " 会员等级:" + MemberLevel + " 经验倍数:" + KillMonExpRate / 100 + " 攻击倍数:" + PowerRate / 100 + " 声望值:" + CreditPoint;
         }
 
-        private int GetDigUpMsgCount()
-        {
-            int result = 0;
-            try
-            {
-                for (int i = 0; i < MsgQueue.Count; i++)
-                {
-                    if (MsgQueue.TryPeek(out SendMessage sendMessage))
-                    {
-                        if (sendMessage.wIdent == Messages.CM_BUTCH)
-                        {
-                            result++;
-                        }
-                    }
-                }
-            }
-            finally
-            {
-            }
-            return result;
-        }
-
         public void GoldChange(string sChrName, int nGold) {
             int s10;
             string s14;
@@ -2185,119 +2163,7 @@ namespace GameSrv.Player {
             GuildRankName = sRankName;
             SendMsg(Messages.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
         }
-
-        /// <summary>
-        /// 攻击消息数量
-        /// </summary>
-        /// <returns></returns>
-        private int GetHitMsgCount()
-        {
-            int result = 0;
-            for (int i = 0; i < MsgQueue.Count; i++)
-            {
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
-                {
-                    if (sendMessage.wIdent >= Messages.CM_HIT || sendMessage.wIdent <= Messages.CM_FIREHIT)
-                    {
-                        result++;
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 魔法消息数量
-        /// </summary>
-        /// <returns></returns>
-        private int GetSpellMsgCount()
-        {
-            int result = 0;
-            for (int i = 0; i < MsgQueue.Count; i++)
-            {
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
-                {
-                    if (sendMessage.wIdent == Messages.CM_SPELL)
-                    {
-                        result++;
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 跑步消息数量
-        /// </summary>
-        /// <returns></returns>
-        private int GetRunMsgCount()
-        {
-            int result = 0;
-            for (int i = 0; i < MsgQueue.Count; i++)
-            {
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
-                {
-                    if (sendMessage.wIdent == Messages.CM_RUN)
-                    {
-                        result++;
-                    }
-                }
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// 走路消息数量
-        /// </summary>
-        /// <returns></returns>
-        private int GetWalkMsgCount()
-        {
-            int result = 0;
-            for (int i = 0; i < MsgQueue.Count; i++)
-            {
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
-                {
-                    if (sendMessage.wIdent == Messages.CM_WALK)
-                    {
-                        result++;
-                    }
-                }
-            }
-            return result;
-        }
-
-        private int GetTurnMsgCount()
-        {
-            int result = 0;
-            for (int i = 0; i < MsgQueue.Count; i++)
-            {
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
-                {
-                    if (sendMessage.wIdent == Messages.CM_TURN)
-                    {
-                        result++;
-                    }
-                }
-            }
-            return result;
-        }
-
-        private int GetSiteDownMsgCount()
-        {
-            int result = 0;
-            for (int i = 0; i < MsgQueue.Count; i++)
-            {
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
-                {
-                    if (sendMessage.wIdent == Messages.CM_SITDOWN)
-                    {
-                        result++;
-                    }
-                }
-            }
-            return result;
-        }
-
+       
         private bool CheckActionStatus(int wIdent, ref int dwDelayTime) {
             bool result = false;
             dwDelayTime = 0;

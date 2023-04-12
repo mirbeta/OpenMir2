@@ -1,24 +1,23 @@
-using System.Collections.Concurrent;
-
-namespace GameSrv.Actor {
+namespace GameSrv.Actor
+{
     public class ActorEntity : IDisposable {
         /// <summary>
         /// 对象唯一ID
         /// </summary>
-        public int ActorId { get; private set; }
+        public readonly int ActorId;
         /// <summary>
         /// 消息列表
         /// </summary>
-        protected readonly ConcurrentQueue<SendMessage> MsgQueue;
+        protected readonly PriorityQueue<SendMessage, int> MsgQueue;
         
         public ActorEntity() {
             ActorId = M2Share.ActorMgr.GetNextIdentity();
-            MsgQueue = new ConcurrentQueue<SendMessage>();
+            MsgQueue = new PriorityQueue<SendMessage, int>();
         }
 
         public void AddMessage(SendMessage sendMessage)
         {
-            MsgQueue.Enqueue(sendMessage);
+            MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
         }
 
         /// <summary>

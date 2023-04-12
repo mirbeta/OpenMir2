@@ -27,11 +27,11 @@ namespace GameSrv.Actor
                 };
                 if (Priority == MessagePriority.High)
                 {
-                    MsgQueue.Enqueue(sendMessage);
+                    MsgQueue.Enqueue(sendMessage, (int)Priority);
                 }
                 else
                 {
-                    MsgQueue.Enqueue(sendMessage);
+                    MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
                 }
             }
         }
@@ -96,7 +96,30 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                MsgQueue.Enqueue(sendMessage);
+                switch (wIdent)
+                {
+                    case Messages.CM_WALK:
+                    case Messages.CM_RUN:
+                    case Messages.CM_HIT:
+                    case Messages.CM_HEAVYHIT:
+                    case Messages.CM_BIGHIT:
+                    case Messages.CM_POWERHIT:
+                    case Messages.CM_LONGHIT:
+                    case Messages.CM_WIDEHIT:
+                    case Messages.CM_CRSHIT:
+                    case Messages.CM_FIREHIT:
+                    case Messages.CM_SPELL:
+                    case Messages.CM_SITDOWN:
+                    case Messages.CM_BUTCH:
+                    case Messages.CM_TURN:
+                    case Messages.CM_DEALTRY:
+                    case Messages.CM_SAY:
+                    case Messages.CM_PICKUP:
+                    case Messages.CM_EAT:
+                        sendMessage.wIdent = 0;
+                        break;
+                }
+                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
             }
         }
 
@@ -160,7 +183,30 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                MsgQueue.Enqueue(sendMessage);
+                switch (wIdent)
+                {
+                    case Messages.CM_WALK:
+                    case Messages.CM_RUN:
+                    case Messages.CM_HIT:
+                    case Messages.CM_HEAVYHIT:
+                    case Messages.CM_BIGHIT:
+                    case Messages.CM_POWERHIT:
+                    case Messages.CM_LONGHIT:
+                    case Messages.CM_WIDEHIT:
+                    case Messages.CM_CRSHIT:
+                    case Messages.CM_FIREHIT:
+                    case Messages.CM_SPELL:
+                    case Messages.CM_SITDOWN:
+                    case Messages.CM_BUTCH:
+                    case Messages.CM_TURN:
+                    case Messages.CM_DEALTRY:
+                    case Messages.CM_SAY:
+                    case Messages.CM_PICKUP:
+                    case Messages.CM_EAT:
+                        sendMessage.wIdent = 0;
+                        break;
+                }
+                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
             }
         }
 
@@ -183,7 +229,7 @@ namespace GameSrv.Actor
                     Buff = sMsg,
                     ActorId = this.ActorId
                 };
-                MsgQueue.Enqueue(sendMessage);
+                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
             }
         }
 
@@ -206,7 +252,7 @@ namespace GameSrv.Actor
                     Buff = sMsg
                 };
                 sendMessage.ActorId = actorId == Messages.RM_STRUCK ? Messages.RM_STRUCK : actorId;
-                MsgQueue.Enqueue(sendMessage);
+                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
             }
         }
 
@@ -224,11 +270,11 @@ namespace GameSrv.Actor
                 {
                     break;
                 }
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
                 {
                     if ((sendMessage.wIdent == wIdent) && (sendMessage.nParam1 == lParam1))
                     {
-                        MsgQueue.TryDequeue(out sendMessage);
+                        MsgQueue.TryDequeue(out sendMessage, out _);
                         Dispose(sendMessage);
                     }
                 }
@@ -251,11 +297,11 @@ namespace GameSrv.Actor
                 {
                     break;
                 }
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
                 {
                     if (sendMessage.wIdent == wIdent)
                     {
-                        MsgQueue.TryDequeue(out sendMessage);
+                        MsgQueue.TryDequeue(out sendMessage, out _);
                         Dispose(sendMessage);
                     }
                 }
@@ -275,7 +321,7 @@ namespace GameSrv.Actor
                 {
                     break;
                 }
-                if (MsgQueue.TryPeek(out SendMessage sendMessage))
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
                 {
                     if ((sendMessage.wIdent == Messages.CM_TURN) || (sendMessage.wIdent == Messages.CM_WALK) ||
                         (sendMessage.wIdent == Messages.CM_SITDOWN) || (sendMessage.wIdent == Messages.CM_HORSERUN) ||
@@ -284,7 +330,7 @@ namespace GameSrv.Actor
                         (sendMessage.wIdent == Messages.CM_POWERHIT) || (sendMessage.wIdent == Messages.CM_LONGHIT) ||
                         (sendMessage.wIdent == Messages.CM_WIDEHIT) || (sendMessage.wIdent == Messages.CM_FIREHIT))
                     {
-                        MsgQueue.TryDequeue(out sendMessage);
+                        MsgQueue.TryDequeue(out sendMessage, out _);
                         Dispose(sendMessage);
                     }
                 }
@@ -296,11 +342,11 @@ namespace GameSrv.Actor
         internal bool GetMessage(ref ProcessMessage msg)
         {
             bool result = false;
-            if (MsgQueue.TryDequeue(out SendMessage sendMessage))
+            if (MsgQueue.TryDequeue(out SendMessage sendMessage, out _))
             {
                 if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                 {
-                    MsgQueue.Enqueue(sendMessage);
+                    MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
                     return false;
                 }
                 msg.wIdent = sendMessage.wIdent;
@@ -334,7 +380,7 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                MsgQueue.Enqueue(sendMessage);//优先处理自身消息
+                MsgQueue.Enqueue(sendMessage, wIdent);//优先处理自身消息
             }
         }
 
@@ -456,6 +502,134 @@ namespace GameSrv.Actor
                     }
                 }
             }
+        }
+
+        protected int GetDigUpMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_BUTCH)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 攻击消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetHitMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent >= Messages.CM_HIT || sendMessage.wIdent <= Messages.CM_FIREHIT)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 魔法消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetSpellMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_SPELL)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 跑步消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetRunMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_RUN)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 走路消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetWalkMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_WALK)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        protected int GetTurnMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_TURN)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        protected int GetSiteDownMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_SITDOWN)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

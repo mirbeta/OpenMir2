@@ -1366,8 +1366,8 @@ namespace GameSrv.Player
                 Bright = M2Share.GameTime;
                 SendPriorityMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0, "", MessagePriority.High);
+                SendPriorityMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "", MessagePriority.Normal);
+                SendPriorityMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0, "", MessagePriority.Normal);
                 SendPriorityMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);

@@ -271,7 +271,7 @@ namespace GameSrv.World {
                             var monster = monGen.CertList[processPosition];
                             if (monster != null)
                             {
-                                if (!monster.Ghost)//这里要优化,CPU占用高
+                                if (!monster.Ghost)
                                 {
                                     if ((dwCurrentTick - monster.RunTick) > monster.RunTime)
                                     {
@@ -315,7 +315,7 @@ namespace GameSrv.World {
                                 }
                                 else
                                 {
-                                    if ((HUtil32.GetTickCount() - monster.GhostTick) > 5 * 60 * 1000) //要找出GhostTick所有地方然后从怪物列表删除
+                                    if ((HUtil32.GetTickCount() - monster.GhostTick) > 5 * 60 * 1000)
                                     {
                                         monGen.CertList.RemoveAt(processPosition);
                                         monGen.CertCount--;
