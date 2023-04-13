@@ -194,30 +194,30 @@ namespace GameSrv.Player
             }
         }
 
-        private void CheckSkillProficiency(int nTranPoint, UserMagic attackMagic)
+        private void CheckSkillProficiency(int nTranPoint, UserMagic userMagic)
         {
-            if (attackMagic != null)
+            if (userMagic != null)
             {
-                if ((attackMagic.Level < 3) && (attackMagic.Magic.TrainLevel[attackMagic.Level] <= Abil.Level))
+                if ((userMagic.Level < 3) && (userMagic.Magic.TrainLevel[userMagic.Level] <= Abil.Level))
                 {
-                    TrainSkill(attackMagic, nTranPoint);
-                    if (!CheckMagicLevelUp(attackMagic))
+                    TrainSkill(userMagic, nTranPoint);
+                    if (!CheckMagicLevelUp(userMagic))
                     {
-                        SendSelfDelayMsg(Messages.RM_MAGIC_LVEXP, 0, attackMagic.Magic.MagicId, attackMagic.Level, attackMagic.TranPoint, "", 3000);
+                        SendSelfDelayMsg(Messages.RM_MAGIC_LVEXP, 0, userMagic.Magic.MagicId, userMagic.Level, userMagic.TranPoint, "", 3000);
                     }
                 }
             }
         }
 
-        private void AttackSuccess(short wHitMode, int nPower, bool canHit, BaseObject attackTarget)
+        private void AttackSuccess(short wHitMode, int nPower, bool canHit, BaseObject targetObject)
         {
-            if (attackTarget == null)
+            if (targetObject == null)
             {
                 return;
             }
-            if (!attackTarget.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(attackTarget.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
+            if (!targetObject.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(targetObject.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
             {
-                attackTarget.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
+                targetObject.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
             }
             ushort nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
             if ((nWeaponDamage > 0) && (UseItems[ItemLocation.Weapon] != null) && (UseItems[ItemLocation.Weapon].Index > 0))
@@ -287,7 +287,7 @@ namespace GameSrv.Player
                         {
                             if (((RobotPlayer)this).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                             {
-                                if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName))
+                                if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                 {
                                     ((RobotPlayer)this).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                 }
@@ -297,7 +297,7 @@ namespace GameSrv.Player
                         {
                             if (Abil.Level <= M2Share.Config.MonHptoExpLevel)
                             {
-                                if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName))
+                                if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                 {
                                     GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                 }
@@ -311,7 +311,7 @@ namespace GameSrv.Player
                             {
                                 if (((RobotPlayer)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
-                                    if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName))
+                                    if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                     {
                                         ((RobotPlayer)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                     }
@@ -321,7 +321,7 @@ namespace GameSrv.Player
                             {
                                 if (((PlayObject)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel)
                                 {
-                                    if (!M2Share.GetNoHptoexpMonList(attackTarget.ChrName))
+                                    if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                     {
                                         ((PlayObject)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
                                     }
@@ -573,10 +573,10 @@ namespace GameSrv.Player
             }
         }
 
-        protected int GetAttackPowerHit(short wHitMode, int nPower, BaseObject AttackTarget, ref bool canHit)
+        protected int GetAttackPowerHit(short wHitMode, int nPower, BaseObject targetObject, ref bool canHit)
         {
             canHit = false;
-            if (AttackTarget != null)
+            if (targetObject != null)
             {
                 switch (wHitMode)
                 {
@@ -621,13 +621,13 @@ namespace GameSrv.Player
             return nPower;
         }
 
-        protected override bool IsAttackTarget(BaseObject baseObject)
+        protected override bool IsAttackTarget(BaseObject targetObject)
         {
             var result = false;
             switch (AttatckMode)
             {
                 case AttackMode.HAM_ALL:
-                    if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
+                    if ((targetObject.Race < ActorRace.NPC) || (targetObject.Race > ActorRace.PeaceNpc))
                     {
                         result = true;
                     }
@@ -637,37 +637,37 @@ namespace GameSrv.Player
                     }
                     break;
                 case AttackMode.HAM_PEACE:
-                    if (baseObject.Race >= ActorRace.Animal)
+                    if (targetObject.Race >= ActorRace.Animal)
                     {
                         return true;
                     }
                     break;
                 case AttackMode.HAM_DEAR:
-                    if (baseObject != DearHuman)
+                    if (targetObject != DearHuman)
                     {
                         return true;
                     }
                     break;
                 case AttackMode.HAM_MASTER:
-                    if (baseObject.Race == ActorRace.Play)
+                    if (targetObject.Race == ActorRace.Play)
                     {
                         result = true;
                         if (IsMaster)
                         {
                             for (int i = 0; i < MasterList.Count; i++)
                             {
-                                if (MasterList[i] == baseObject)
+                                if (MasterList[i] == targetObject)
                                 {
                                     result = false;
                                     break;
                                 }
                             }
                         }
-                        if (((PlayObject)baseObject).IsMaster)
+                        if (((PlayObject)targetObject).IsMaster)
                         {
-                            for (int i = 0; i < ((PlayObject)baseObject).MasterList.Count; i++)
+                            for (int i = 0; i < ((PlayObject)targetObject).MasterList.Count; i++)
                             {
-                                if (((PlayObject)baseObject).MasterList[i] == this)
+                                if (((PlayObject)targetObject).MasterList[i] == this)
                                 {
                                     result = false;
                                     break;
@@ -681,13 +681,13 @@ namespace GameSrv.Player
                     }
                     break;
                 case AttackMode.HAM_GROUP:
-                    if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
+                    if ((targetObject.Race < ActorRace.NPC) || (targetObject.Race > ActorRace.PeaceNpc))
                     {
                         result = true;
                     }
-                    if (baseObject.Race == ActorRace.Play)
+                    if (targetObject.Race == ActorRace.Play)
                     {
-                        if (IsGroupMember(baseObject))
+                        if (IsGroupMember(targetObject))
                         {
                             result = false;
                         }
@@ -698,21 +698,21 @@ namespace GameSrv.Player
                     }
                     break;
                 case AttackMode.HAM_GUILD:
-                    if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
+                    if ((targetObject.Race < ActorRace.NPC) || (targetObject.Race > ActorRace.PeaceNpc))
                     {
                         result = true;
                     }
-                    if (baseObject.Race == ActorRace.Play)
+                    if (targetObject.Race == ActorRace.Play)
                     {
                         if (MyGuild != null)
                         {
-                            if (MyGuild.IsMember(baseObject.ChrName))
+                            if (MyGuild.IsMember(targetObject.ChrName))
                             {
                                 result = false;
                             }
-                            if (GuildWarArea && (((PlayObject)baseObject).MyGuild != null))
+                            if (GuildWarArea && (((PlayObject)targetObject).MyGuild != null))
                             {
-                                if (MyGuild.IsAllyGuild(((PlayObject)baseObject).MyGuild))
+                                if (MyGuild.IsAllyGuild(((PlayObject)targetObject).MyGuild))
                                 {
                                     result = false;
                                 }
@@ -725,19 +725,19 @@ namespace GameSrv.Player
                     }
                     break;
                 case AttackMode.HAM_PKATTACK:
-                    if ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc))
+                    if ((targetObject.Race < ActorRace.NPC) || (targetObject.Race > ActorRace.PeaceNpc))
                     {
                         result = true;
                     }
-                    if (baseObject.Race == ActorRace.Play)
+                    if (targetObject.Race == ActorRace.Play)
                     {
                         if (PvpLevel() >= 2)
                         {
-                            result = ((PlayObject)baseObject).PvpLevel() < 2;
+                            result = ((PlayObject)targetObject).PvpLevel() < 2;
                         }
                         else
                         {
-                            result = ((PlayObject)baseObject).PvpLevel() >= 2;
+                            result = ((PlayObject)targetObject).PvpLevel() >= 2;
                         }
                     }
                     if (M2Share.Config.PveServer)
@@ -749,39 +749,39 @@ namespace GameSrv.Player
             return result;
         }
 
-        public override bool IsProperFriend(BaseObject attackTarget)
+        public override bool IsProperFriend(BaseObject targetObject)
         {
-            if (attackTarget.Race == ActorRace.Play)
+            if (targetObject.Race == ActorRace.Play)
             {
-                bool result = IsProperIsFriend(attackTarget);
-                if (attackTarget.Race < ActorRace.Animal)
+                bool result = IsProperIsFriend(targetObject);
+                if (targetObject.Race < ActorRace.Animal)
                 {
                     return result;
                 }
-                if (attackTarget.Master == this)
+                if (targetObject.Master == this)
                 {
                     return true;
                 }
-                if (attackTarget.Master != null)
+                if (targetObject.Master != null)
                 {
-                    return IsProperIsFriend(attackTarget.Master);
+                    return IsProperIsFriend(targetObject.Master);
                 }
-                if (attackTarget.Race > ActorRace.Play) return result;
-                PlayObject targetObject = (PlayObject)attackTarget;
-                if (!targetObject.InGuildWarArea)
+                if (targetObject.Race > ActorRace.Play) return result;
+                PlayObject playObject = (PlayObject)targetObject;
+                if (!playObject.InGuildWarArea)
                 {
                     if (M2Share.Config.boPKLevelProtect)// 新人保护
                     {
                         if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
                         {
-                            if (!targetObject.PvpFlag && targetObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && targetObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                            if (!playObject.PvpFlag && targetObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && playObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                             {
                                 return false;
                             }
                         }
                         if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
                         {
-                            if (!targetObject.PvpFlag && targetObject.WAbil.Level > M2Share.Config.nPKProtectLevel && targetObject.PvpLevel() < 2)
+                            if (!playObject.PvpFlag && targetObject.WAbil.Level > M2Share.Config.nPKProtectLevel && playObject.PvpLevel() < 2)
                             {
                                 return false;
                             }
@@ -790,7 +790,7 @@ namespace GameSrv.Player
                     // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
                     if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
                     {
-                        if (targetObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && targetObject.PvpLevel() < 2)
+                        if (targetObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && playObject.PvpLevel() < 2)
                         {
                             return false;
                         }
@@ -798,19 +798,19 @@ namespace GameSrv.Player
                     // 小于指定级别的非红名人物不可以杀指定级别红名人物。
                     if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
                     {
-                        if (targetObject.PvpLevel() >= 2 && targetObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                        if (playObject.PvpLevel() >= 2 && targetObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
                         {
                             return false;
                         }
                     }
-                    if (((HUtil32.GetTickCount() - MapMoveTick) < 3000) || ((HUtil32.GetTickCount() - targetObject.MapMoveTick) < 3000))
+                    if (((HUtil32.GetTickCount() - MapMoveTick) < 3000) || ((HUtil32.GetTickCount() - playObject.MapMoveTick) < 3000))
                     {
                         result = false;
                     }
                 }
                 return result;
             }
-            return base.IsProperFriend(attackTarget);
+            return base.IsProperFriend(targetObject);
         }
 
         private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
@@ -1044,7 +1044,7 @@ namespace GameSrv.Player
             return result;
         }
 
-        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject targetBaseObject, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject targetObject, bool boLateDelivery, ref int dwDelayTime)
         {
             dwDelayTime = 0;
             if (!IsCanSpell)
@@ -1261,14 +1261,14 @@ namespace GameSrv.Player
                     break;
                 default:
                     Direction = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
-                    BaseObject BaseObject = null;
-                    if (CretInNearXy(targetBaseObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
+                    BaseObject spellObject = null;
+                    if (CretInNearXy(targetObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {
-                        BaseObject = targetBaseObject;
-                        nTargetX = BaseObject.CurrX;
-                        nTargetY = BaseObject.CurrY;
+                        spellObject = targetObject;
+                        nTargetX = spellObject.CurrX;
+                        nTargetY = spellObject.CurrY;
                     }
-                    if (!DoSpell(UserMagic, nTargetX, nTargetY, BaseObject))
+                    if (!DoSpell(UserMagic, nTargetX, nTargetY, spellObject))
                     {
                         SendRefMsg(Messages.RM_MAGICFIREFAIL, 0, 0, 0, 0, "");
                     }
@@ -1456,7 +1456,7 @@ namespace GameSrv.Player
             {
                 UseItems[ItemLocation.Weapon].Dura = nDura;
             }
-            if ((ushort)Math.Abs((nDura / 1.03)) != nDuraPoint)
+            if (Math.Abs((nDura / 1.03)) != nDuraPoint)
             {
                 SendMsg(Messages.RM_DURACHANGE, ItemLocation.Weapon, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
             }

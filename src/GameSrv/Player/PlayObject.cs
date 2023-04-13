@@ -1216,7 +1216,7 @@ namespace GameSrv.Player {
             return result;
         }
 
-        private bool DoSpell(UserMagic userMagic, short targetX, short targetY, BaseObject baseObject) {
+        private bool DoSpell(UserMagic userMagic, short targetX, short targetY, BaseObject targetObject) {
             bool result = false;
             try {
                 if (!MagicManager.IsWarrSkill(userMagic.MagIdx)) {
@@ -1228,7 +1228,7 @@ namespace GameSrv.Player {
                         DamageSpell(nSpellPoint);
                         HealthSpellChanged();
                     }
-                    result = MagicManager.DoSpell(this, userMagic, targetX, targetY, baseObject);
+                    result = MagicManager.DoSpell(this, userMagic, targetX, targetY, targetObject);
                 }
             }
             catch (Exception e) {

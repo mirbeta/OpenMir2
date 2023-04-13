@@ -1902,21 +1902,21 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool AutoSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject baseObject)
+        private bool AutoSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetObject)
         {
             var result = false;
             try
             {
-                if (baseObject != null)
+                if (targetObject != null)
                 {
-                    if (baseObject.Ghost || baseObject.Death || baseObject.WAbil.HP <= 0)
+                    if (targetObject.Ghost || targetObject.Death || targetObject.WAbil.HP <= 0)
                     {
                         return false;
                     }
                 }
                 if (!MagicManager.IsWarrSkill(userMagic.MagIdx))
                 {
-                    result = MagicManager.DoSpell(this, userMagic, nTargetX, nTargetY, baseObject);
+                    result = MagicManager.DoSpell(this, userMagic, nTargetX, nTargetY, targetObject);
                     AttackTick = HUtil32.GetTickCount();
                 }
             }
