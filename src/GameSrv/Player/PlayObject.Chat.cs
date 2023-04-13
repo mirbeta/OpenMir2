@@ -269,12 +269,10 @@ namespace GameSrv.Player
                         StoragePwd = sData;
                         IsPasswordLocked = true;
                         IsCanGetBackItem = false;
-                        MSTempPwd = "";
                         SysMsg(Settings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        MSTempPwd = "";
                         SysMsg(Settings.ReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
@@ -316,7 +314,7 @@ namespace GameSrv.Player
                             }
                             if (M2Share.Config.LockUserItemAction)
                             {
-                                MBoCanUseItem = true;
+                                BoCanUseItem = true;
                             }
                             if (M2Share.Config.LockInObModeAction)
                             {

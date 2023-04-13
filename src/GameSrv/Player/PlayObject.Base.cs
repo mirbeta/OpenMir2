@@ -717,7 +717,7 @@ namespace GameSrv.Player
         /// <summary>
         /// 是否允许使用物品
         /// </summary>
-        public bool MBoCanUseItem;
+        public bool BoCanUseItem;
         /// <summary>
         /// 是否允许交易物品
         /// </summary>
@@ -937,8 +937,6 @@ namespace GameSrv.Player
             PvpFlag = false;
             // 锁仓库
             PwdFailCount = 0;
-            MSTempPwd = "";
-            StoragePwd = "";
             FilterSendMsg = false;
             IsCanDeal = true;
             IsCanDrop = true;
@@ -947,7 +945,7 @@ namespace GameSrv.Player
             IsCanRun = true;
             IsCanHit = true;
             IsCanSpell = true;
-            MBoCanUseItem = true;
+            BoCanUseItem = true;
             MemberType = 0;
             MemberLevel = 0;
             GameGold = 0;
@@ -1437,7 +1435,7 @@ namespace GameSrv.Player
                     {
                         IsCanDeal = !M2Share.Config.LockDealAction;
                         IsCanDrop = !M2Share.Config.LockDropAction;
-                        MBoCanUseItem = !M2Share.Config.LockUserItemAction;
+                        BoCanUseItem = !M2Share.Config.LockUserItemAction;
                         IsCanWalk = !M2Share.Config.LockWalkAction;
                         IsCanRun = !M2Share.Config.LockRunAction;
                         IsCanHit = !M2Share.Config.LockHitAction;

@@ -102,6 +102,16 @@ namespace GameSrv.Player
             M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
         }
 
+        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries)
+        {
+            if (IsRobot)
+            {
+                return;
+            }
+            ClientMsg = Messages.MakeMessage(wIdent, nRecog, nParam, nTag, nSeries);
+            SendSocket(ClientMsg);
+        }
+
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
         {
             if (IsRobot)

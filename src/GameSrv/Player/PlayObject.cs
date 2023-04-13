@@ -2616,11 +2616,9 @@ namespace GameSrv.Player {
                 if (string.Compare(MSTempPwd, sData, StringComparison.OrdinalIgnoreCase) == 0) {
                     StoragePwd = sData;
                     IsPasswordLocked = true;
-                    MSTempPwd = "";
                     SysMsg(Settings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
                 }
                 else {
-                    MSTempPwd = "";
                     SysMsg(Settings.ReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                 }
                 return;
@@ -2651,7 +2649,7 @@ namespace GameSrv.Player {
                             IsCanSendMsg = true;
                         }
                         if (M2Share.Config.LockUserItemAction) {
-                            MBoCanUseItem = true;
+                            BoCanUseItem = true;
                         }
                         if (M2Share.Config.LockInObModeAction) {
                             ObMode = false;

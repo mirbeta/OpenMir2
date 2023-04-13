@@ -601,10 +601,10 @@ namespace GameSrv.Player
 
         private void ClientUseItems(int nItemIdx, string sItemName)
         {
-            var boEatOk = false;
+            var eatSuccess = false;
             StdItem stdItem = null;
             var itemIndex = 0;
-            if (MBoCanUseItem)
+            if (BoCanUseItem)
             {
                 if (!Death)
                 {
@@ -627,7 +627,7 @@ namespace GameSrv.Player
                                         {
                                             Dispose(userItem);
                                             ItemList.RemoveAt(i);
-                                            boEatOk = true;
+                                            eatSuccess = true;
                                         }
                                         break;
                                     case 4: // 书
@@ -635,7 +635,7 @@ namespace GameSrv.Player
                                         {
                                             Dispose(userItem);
                                             ItemList.RemoveAt(i);
-                                            boEatOk = true;
+                                            eatSuccess = true;
                                             if (MagicArr[MagicConst.SKILL_ERGUM] != null && !UseThrusting)
                                             {
                                                 ThrustingOnOff(true);
@@ -661,7 +661,7 @@ namespace GameSrv.Player
                                                 Dispose(userItem);
                                                 ItemList.RemoveAt(i);
                                                 ClientUseItemsGetUnBindItems(ClientUseItemsGetUnbindItemName(stdItem.Shape), 6);
-                                                boEatOk = true;
+                                                eatSuccess = true;
                                             }
                                         }
                                         else
@@ -670,7 +670,7 @@ namespace GameSrv.Player
                                             {
                                                 Dispose(userItem);
                                                 ItemList.RemoveAt(i);
-                                                boEatOk = true;
+                                                eatSuccess = true;
                                             }
                                         }
                                         break;
@@ -685,7 +685,7 @@ namespace GameSrv.Player
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotUseItemMsg);
             }
-            if (boEatOk)
+            if (eatSuccess)
             {
                 WeightChanged();
                 SendDefMessage(Messages.SM_EAT_OK, 0, 0, 0, 0, "");
