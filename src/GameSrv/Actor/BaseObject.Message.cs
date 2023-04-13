@@ -25,14 +25,7 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                if (Priority == MessagePriority.High)
-                {
-                    MsgQueue.Enqueue(sendMessage, (int)Priority);
-                }
-                else
-                {
-                    MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
-                }
+                MsgQueue.Enqueue(sendMessage, (byte)Priority);
             }
         }
 
@@ -96,7 +89,7 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
             }
         }
 
@@ -183,7 +176,7 @@ namespace GameSrv.Actor
                 //        sendMessage.wIdent = 0;
                 //        break;
                 //}
-                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
             }
         }
 
@@ -206,7 +199,7 @@ namespace GameSrv.Actor
                     Buff = sMsg,
                     ActorId = this.ActorId
                 };
-                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
             }
         }
 
@@ -229,7 +222,7 @@ namespace GameSrv.Actor
                     Buff = sMsg
                 };
                 sendMessage.ActorId = actorId == Messages.RM_STRUCK ? Messages.RM_STRUCK : actorId;
-                MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
             }
         }
 
@@ -319,11 +312,11 @@ namespace GameSrv.Actor
         internal bool GetMessage(ref ProcessMessage msg)
         {
             bool result = false;
-            if (MsgQueue.TryDequeue(out SendMessage sendMessage, out _))
+            if (MsgQueue.TryDequeue(out SendMessage sendMessage, out var priority))
             {
                 if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
                 {
-                    MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
+                    MsgQueue.Enqueue(sendMessage, priority);
                     return false;
                 }
                 msg.wIdent = sendMessage.wIdent;
@@ -335,7 +328,6 @@ namespace GameSrv.Actor
                 msg.LateDelivery = sendMessage.LateDelivery;
                 msg.Msg = sendMessage.Buff;
                 result = true;
-                //MsgQueue.TryDequeue(out _, out _);
             }
             return result;
         }
@@ -436,9 +428,9 @@ namespace GameSrv.Actor
                 return;
             }
 
-            for (int nC = 0; nC < VisibleHumanList.Count; nC++)
+            for (int i = 0; i < VisibleHumanList.Count; i++)
             {
-                BaseObject baseObject = M2Share.ActorMgr.Get(VisibleHumanList[nC]);
+                BaseObject baseObject = M2Share.ActorMgr.Get(VisibleHumanList[i]);
                 if (baseObject.Ghost)
                 {
                     continue;

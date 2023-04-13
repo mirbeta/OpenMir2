@@ -1,3 +1,5 @@
+using SystemModule.Enums;
+
 namespace GameSrv.Actor
 {
     public class ActorEntity : IDisposable {
@@ -8,16 +10,16 @@ namespace GameSrv.Actor
         /// <summary>
         /// 消息列表
         /// </summary>
-        protected readonly PriorityQueue<SendMessage, int> MsgQueue;
+        protected readonly PriorityQueue<SendMessage, byte> MsgQueue;
         
         public ActorEntity() {
             ActorId = M2Share.ActorMgr.GetNextIdentity();
-            MsgQueue = new PriorityQueue<SendMessage, int>();
+            MsgQueue = new PriorityQueue<SendMessage, byte>();
         }
 
         public void AddMessage(SendMessage sendMessage)
         {
-            MsgQueue.Enqueue(sendMessage, sendMessage.wIdent);
+            MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
         }
 
         /// <summary>
