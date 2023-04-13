@@ -1026,6 +1026,7 @@ namespace GameSrv.Player
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
             MagicArr = new UserMagic[50];
+            SlaveList = new List<BaseObject>();
             GroupMembers = new List<PlayObject>();
             VisibleEvents = new List<MapEvent>();
             VisibleItems = new List<VisibleMapItem>();

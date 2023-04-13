@@ -315,11 +315,14 @@ namespace GameSrv.Actor
                 }
             }
             // 清除宝宝列表中已经死亡及叛变的宝宝信息
-            for (int i = SlaveList.Count - 1; i >= 0; i--)
+            if (SlaveList != null)
             {
-                if (SlaveList[i].Death || SlaveList[i].Ghost || (SlaveList[i].Master != this))
+                for (int i = SlaveList.Count - 1; i >= 0; i--)
                 {
-                    SlaveList.RemoveAt(i);
+                    if (SlaveList[i].Death || SlaveList[i].Ghost || (SlaveList[i].Master != this))
+                    {
+                        SlaveList.RemoveAt(i);
+                    }
                 }
             }
             if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))

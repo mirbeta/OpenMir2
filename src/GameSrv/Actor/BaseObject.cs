@@ -518,7 +518,6 @@ namespace GameSrv.Actor
             Master = null;
             KillMonCount = 0;
             SlaveExpLevel = 0;
-            SlaveList = new List<BaseObject>();
             Abil = new Ability();
             Abil = new Ability
             {
@@ -1329,6 +1328,10 @@ namespace GameSrv.Actor
 
         public BaseObject MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec)
         {
+            if (SlaveList == null)
+            {
+                SlaveList = new List<BaseObject>();
+            }
             if (SlaveList.Count < nMaxMob)
             {
                 short nX = 0;
