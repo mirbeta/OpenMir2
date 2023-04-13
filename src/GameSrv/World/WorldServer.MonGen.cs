@@ -427,8 +427,9 @@ namespace GameSrv.World {
             if (MonsterList.TryGetValue(mon.ChrName, out var monster))
             {
                 IList<MonsterDropItem> itemList = monster.ItemList;
-                if (itemList != null)
+                if (itemList != null && itemList.Count > 0)
                 {
+                    mon.ItemList = new List<UserItem>();
                     for (var i = 0; i < itemList.Count; i++)
                     {
                         var monItem = itemList[i];
@@ -680,7 +681,7 @@ namespace GameSrv.World {
 
             if (cert == null)
                 return null;
-            ApplyMonsterAbility((AnimalObject)cert, sMonName);
+            ApplyMonsterAbility(cert, sMonName);
             cert.Envir = map;
             cert.MapName = sMapName;
             cert.CurrX = nX;
@@ -738,49 +739,61 @@ namespace GameSrv.World {
         /// 在指定时间内创建完对象，则返加TRUE，如果超过指定时间则返回FALSE
         /// </summary>
         /// <returns></returns>
-        private bool RegenMonsters(MonGenInfo monGen, int nCount) {
+        private bool RegenMonsters(MonGenInfo monGen, int nCount)
+        {
             AnimalObject cert;
-            const string sExceptionMsg = "[Exception] TUserEngine::RegenMonsters";
+            const string sExceptionMsg = "[Exception] WorldEngine::RegenMonsters";
             var result = true;
             var dwStartTick = HUtil32.GetTickCount();
-            try {
-                if (monGen.Race > 0) {
+            try
+            {
+                if (monGen.Race > 0)
+                {
                     short nX;
                     short nY;
-                    if (monGen.MissionGenRate > 0 && M2Share.RandomNumber.Random(100) < monGen.MissionGenRate) {
+                    if (monGen.MissionGenRate > 0 && M2Share.RandomNumber.Random(100) < monGen.MissionGenRate)
+                    {
                         nX = (short)(monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
                         nY = (short)(monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
-                        for (var i = 0; i < nCount; i++) {
+                        for (var i = 0; i < nCount; i++)
+                        {
                             cert = CreateMonster(monGen.MapName, (short)(nX - 10 + M2Share.RandomNumber.Random(20)), (short)(nY - 10 + M2Share.RandomNumber.Random(20)), monGen.Race, monGen.MonName);
-                            if (cert != null) {
+                            if (cert != null)
+                            {
                                 cert.CanReAlive = true;
                                 cert.ReAliveTick = HUtil32.GetTickCount();
                                 cert.MonGen = monGen;
                                 monGen.ActiveCount++;
                                 monGen.TryAdd(cert);
                             }
-                            if ((HUtil32.GetTickCount() - dwStartTick) > M2Share.ZenLimit) {
+                            if ((HUtil32.GetTickCount() - dwStartTick) > M2Share.ZenLimit)
+                            {
                                 result = false;
                                 break;
                             }
                         }
                     }
-                    else {
-                        for (var i = 0; i < nCount; i++) {
+                    else
+                    {
+                        for (var i = 0; i < nCount; i++)
+                        {
                             nX = (short)((monGen.X - monGen.Range) + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
                             nY = (short)((monGen.Y - monGen.Range) + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
                             cert = CreateMonster(monGen.MapName, nX, nY, monGen.Race, monGen.MonName);
-                            if (cert != null) {
+                            if (cert != null)
+                            {
                                 cert.CanReAlive = true;
                                 cert.ReAliveTick = HUtil32.GetTickCount();
                                 cert.MonGen = monGen;
                                 monGen.ActiveCount++;
                                 monGen.TryAdd(cert);
                             }
-                            else {
+                            else
+                            {
                                 return false;
                             }
-                            if (HUtil32.GetTickCount() - dwStartTick > M2Share.ZenLimit) {
+                            if (HUtil32.GetTickCount() - dwStartTick > M2Share.ZenLimit)
+                            {
                                 result = false;
                                 break;
                             }
@@ -788,7 +801,8 @@ namespace GameSrv.World {
                     }
                 }
             }
-            catch {
+            catch
+            {
                 _logger.Error(sExceptionMsg);
             }
             return result;

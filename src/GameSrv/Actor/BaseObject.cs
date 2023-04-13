@@ -511,7 +511,7 @@ namespace GameSrv.Actor
             AddAbil = new AddAbility();
             VisibleHumanList = new List<int>();
             VisibleActors = new List<VisibleBaseObject>();
-            ItemList = new List<UserItem>(Grobal2.MaxBagItem);
+            //ItemList = new List<UserItem>();
             IsVisibleActive = false;
             Castle = null;
             Master = null;

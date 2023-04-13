@@ -1030,6 +1030,7 @@ namespace GameSrv.Player
             GroupMembers = new List<PlayObject>();
             VisibleEvents = new List<MapEvent>();
             VisibleItems = new List<VisibleMapItem>();
+            ItemList = new List<UserItem>(Grobal2.MaxBagItem);
             MapMoveTick = HUtil32.GetTickCount();
             RandomNo = M2Share.RandomNumber.Random(999999).ToString();
         }
