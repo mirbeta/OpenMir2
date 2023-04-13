@@ -11,7 +11,7 @@ namespace GameSrv.Monster.Monsters {
             IList<BaseObject> xTargetList = new List<BaseObject>();
             GetMapBaseObjects(Envir, CurrX, CurrY, 1, xTargetList);
             if (xTargetList.Count > 0) {
-                ushort nPower = GetBaseAttackPoewr();
+                int nPower = GetBaseAttackPoewr();
                 for (int i = xTargetList.Count - 1; i >= 0; i--) {
                     if (xTargetList[i] != null) {
                         _Attack(nPower, xTargetList[i]);

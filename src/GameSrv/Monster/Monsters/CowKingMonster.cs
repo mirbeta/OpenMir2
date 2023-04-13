@@ -21,7 +21,7 @@ namespace GameSrv.Monster.Monsters {
         }
 
         protected override void Attack(BaseObject targetBaseObject, byte nDir) {
-            ushort nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+             var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             HitMagAttackTarget(targetBaseObject, nPower / 2, nPower / 2, true);
         }
 
@@ -35,7 +35,6 @@ namespace GameSrv.Monster.Monsters {
             if (!Death && !Ghost && (HUtil32.GetTickCount() - JumpTime) > (30 * 1000)) {
                 short nX = 0;
                 short nY = 0;
-                int oldCrazyCount;
                 JumpTime = HUtil32.GetTickCount();
                 if (TargetCret != null && SiegeLockCount() >= 5) {
                     TargetCret.GetBackPosition(ref nX, ref nY);
@@ -46,7 +45,7 @@ namespace GameSrv.Monster.Monsters {
                     MapRandomMove(Envir.MapName, 0);
                     return;
                 }
-                oldCrazyCount = CrazyCount;
+                var oldCrazyCount = CrazyCount;
                 CrazyCount = 7 - WAbil.HP / (WAbil.MaxHP / 7);
                 if (CrazyCount >= 2 && CrazyCount != oldCrazyCount) {
                     CrazyReadyMode = true;

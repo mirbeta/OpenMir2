@@ -1040,7 +1040,7 @@ namespace GameSrv.Actor
             return baseObject.GetNameColor();
         }
 
-        public virtual ushort GetAttackPower(int nBasePower, int nPower)
+        public virtual int GetAttackPower(int nBasePower, int nPower)
         {
             if (nPower < 0)
             {
@@ -1055,7 +1055,7 @@ namespace GameSrv.Actor
             {
                 result = result * FixColorIdx + 1;
             }
-            return (ushort)result;
+            return result;
         }
 
         protected virtual byte GetNameColor()

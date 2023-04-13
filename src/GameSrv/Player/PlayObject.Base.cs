@@ -2784,7 +2784,7 @@ namespace GameSrv.Player
             }
         }
 
-        public override ushort GetAttackPower(int nBasePower, int nPower)
+        public override int GetAttackPower(int nBasePower, int nPower)
         {
             if (nPower < 0)
             {
@@ -5179,9 +5179,9 @@ namespace GameSrv.Player
         /// 无极真气
         /// </summary>
         /// <returns></returns>
-        public void AttPowerUp(ushort nPower, int nTime)
+        public void AttPowerUp(int nPower, int nTime)
         {
-            this.ExtraAbil[0] = nPower;
+            this.ExtraAbil[0] = (ushort)nPower;
             this.ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
             SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();

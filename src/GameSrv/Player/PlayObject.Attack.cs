@@ -67,7 +67,7 @@ namespace GameSrv.Player
             }
 
             bool canHit = false;
-            ushort nPower = GetAttackPowerHit(wHitMode, GetBaseAttackPoewr(), attackTarget, ref canHit);
+            int nPower = GetAttackPowerHit(wHitMode, GetBaseAttackPoewr(), attackTarget, ref canHit);
             SkillAttackDamage(wHitMode, nPower);
             AttackDir(attackTarget, nPower, nDir);
             SendAttackMsg(GetHitMode(wHitMode), Direction, CurrX, CurrY);
@@ -134,7 +134,7 @@ namespace GameSrv.Player
             return wIdent;
         }
 
-        private void SkillAttackDamage(short wHitMode, ushort nPower)
+        private void SkillAttackDamage(short wHitMode, int nPower)
         {
             int nSecPwr = 0;
             if (wHitMode > 0)
@@ -209,7 +209,7 @@ namespace GameSrv.Player
             }
         }
 
-        private void AttackSuccess(short wHitMode, ushort nPower, bool canHit, BaseObject attackTarget)
+        private void AttackSuccess(short wHitMode, int nPower, bool canHit, BaseObject attackTarget)
         {
             if (attackTarget == null)
             {
@@ -226,7 +226,7 @@ namespace GameSrv.Player
             }
             if (SuckupEnemyHealthRate > 0)// 虹魔，吸血
             {
-                SuckupEnemyHealth = nPower / 100 * SuckupEnemyHealthRate;
+                SuckupEnemyHealth = nPower / 100.0 * SuckupEnemyHealthRate;
                 if (SuckupEnemyHealth >= 2.0)
                 {
                     ushort n20 = Convert.ToUInt16(SuckupEnemyHealth);
@@ -573,7 +573,7 @@ namespace GameSrv.Player
             }
         }
 
-        protected ushort GetAttackPowerHit(short wHitMode, ushort nPower, BaseObject AttackTarget, ref bool canHit)
+        protected int GetAttackPowerHit(short wHitMode, int nPower, BaseObject AttackTarget, ref bool canHit)
         {
             canHit = false;
             if (AttackTarget != null)

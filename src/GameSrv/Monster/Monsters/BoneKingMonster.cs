@@ -31,7 +31,7 @@ namespace GameSrv.Monster.Monsters {
         }
 
         protected override void Attack(BaseObject targetBaseObject, byte nDir) {
-            ushort nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+            var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             HitMagAttackTarget(targetBaseObject, 0, nPower, true);
         }
 

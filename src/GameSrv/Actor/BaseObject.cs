@@ -2366,7 +2366,7 @@ namespace GameSrv.Actor
             return result;
         }
 
-        public int MagMakeDefenceArea(int nX, int nY, int nRange, ushort nSec, byte btState)
+        public int MagMakeDefenceArea(int nX, int nY, int nRange, int nSec, byte btState)
         {
             int result = 0;
             int nStartX = nX - nRange;
@@ -2409,20 +2409,20 @@ namespace GameSrv.Actor
             return result;
         }
 
-        private bool DefenceUp(ushort nSec)
+        private bool DefenceUp(int nSec)
         {
             bool result = false;
             if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             {
                 if (StatusTimeArr[PoisonState.DefenceUP] < nSec)
                 {
-                    StatusTimeArr[PoisonState.DefenceUP] = nSec;
+                    StatusTimeArr[PoisonState.DefenceUP] = (ushort)nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusTimeArr[PoisonState.DefenceUP] = nSec;
+                StatusTimeArr[PoisonState.DefenceUP] = (ushort)nSec;
                 result = true;
             }
             StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
@@ -2432,20 +2432,20 @@ namespace GameSrv.Actor
             return result;
         }
 
-        private bool MagDefenceUp(ushort nSec)
+        private bool MagDefenceUp(int nSec)
         {
             bool result = false;
             if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
             {
                 if (StatusTimeArr[PoisonState.MagDefenceUP] < nSec)
                 {
-                    StatusTimeArr[PoisonState.MagDefenceUP] = nSec;
+                    StatusTimeArr[PoisonState.MagDefenceUP] = (ushort)nSec;
                     result = true;
                 }
             }
             else
             {
-                StatusTimeArr[PoisonState.MagDefenceUP] = nSec;
+                StatusTimeArr[PoisonState.MagDefenceUP] = (ushort)nSec;
                 result = true;
             }
             StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();

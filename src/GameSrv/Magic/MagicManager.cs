@@ -142,7 +142,7 @@ namespace GameSrv.Magic {
             {
                 return false;
             }
-            ushort nPower;
+            int nPower;
             switch (userMagic.Magic.MagicId)
             {
                 case MagicConst.SKILL_FIREBALL:

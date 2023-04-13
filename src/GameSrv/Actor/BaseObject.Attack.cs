@@ -4,7 +4,7 @@ namespace GameSrv.Actor
 {
     public partial class BaseObject
     {
-        protected bool AttackDir(BaseObject attackTarget, ushort nPower, byte nDir)
+        protected bool AttackDir(BaseObject attackTarget, int nPower, byte nDir)
         {
             Direction = nDir;
             if (_Attack(nPower, attackTarget))
@@ -19,12 +19,12 @@ namespace GameSrv.Actor
         /// 基础攻击力
         /// </summary>
         /// <returns></returns>
-        internal ushort GetBaseAttackPoewr()
+        internal int GetBaseAttackPoewr()
         {
             return GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
         }
 
-        internal bool _Attack(ushort nPower, BaseObject attackTarget)
+        internal bool _Attack(int nPower, BaseObject attackTarget)
         {
             if (attackTarget == null)
             {
