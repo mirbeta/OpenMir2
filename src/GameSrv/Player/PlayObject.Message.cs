@@ -9,7 +9,6 @@ using GameSrv.World;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
@@ -1960,7 +1959,6 @@ namespace GameSrv.Player
                     ClientMsg = Messages.MakeMessage(Messages.SM_PASSWORDSTATUS, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     SendSocket(ClientMsg, processMsg.Msg);
                     break;
-                // ---------------------------元宝寄售系统---------------------------------------
                 case Messages.RM_SENDDEALOFFFORM:// 打开出售物品窗口
                     SendDefMessage(Messages.SM_SENDDEALOFFFORM, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
@@ -2191,6 +2189,134 @@ namespace GameSrv.Player
             {
                 M2Share.Logger.Error(sExceptionMsg);
             }
+        }
+
+        protected int GetDigUpMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_BUTCH)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 攻击消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetHitMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent >= Messages.CM_HIT || sendMessage.wIdent <= Messages.CM_FIREHIT)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 魔法消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetSpellMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_SPELL)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 跑步消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetRunMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_RUN)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 走路消息数量
+        /// </summary>
+        /// <returns></returns>
+        protected int GetWalkMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_WALK)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        protected int GetTurnMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_TURN)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
+        }
+
+        protected int GetSiteDownMsgCount()
+        {
+            int result = 0;
+            for (int i = 0; i < MsgQueue.Count; i++)
+            {
+                if (MsgQueue.TryPeek(out SendMessage sendMessage, out _))
+                {
+                    if (sendMessage.wIdent == Messages.CM_SITDOWN)
+                    {
+                        result++;
+                    }
+                }
+            }
+            return result;
         }
     }
 }

@@ -2696,13 +2696,13 @@ namespace GameSrv.Actor
             {
                 if (ExpHitter.IsSlave)//如果是角色下属杀死对象
                 {
-                    ExpHitter.Master.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
-                    SendSelfMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0, "");
+                    ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
+                    SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0, "");
                 }
                 if (ExpHitter.Race == ActorRace.Play)
                 {
-                    ExpHitter.SendSelfMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
-                    SendSelfMsg(Messages.RM_DIEDROPITEM, ExpHitter.ActorId, 0, 0, 0, "");
+                    ExpHitter.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
+                    SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.ActorId, 0, 0, 0, "");
                 }
             }
         }
