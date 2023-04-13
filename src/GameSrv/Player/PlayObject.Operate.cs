@@ -42,7 +42,7 @@ namespace GameSrv.Player
                 if (item != null)
                 {
                     var clientItem = new ClientItem();
-                    item.GetUpgradeStdItem(userItem, ref clientItem);
+                    ItemSystem.GetUpgradeStdItem(item,userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
@@ -92,7 +92,7 @@ namespace GameSrv.Player
                         continue;
                     }
                     var clientItem = new ClientItem();
-                    stdItem.GetUpgradeStdItem(playObject.UseItems[i], ref clientItem);
+                    ItemSystem.GetUpgradeStdItem(stdItem, playObject.UseItems[i], ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(playObject.UseItems[i]);
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
@@ -401,7 +401,7 @@ namespace GameSrv.Player
             {
                 if (M2Share.CheckUserItems(btWhere, stdItem))
                 {
-                    stdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                    ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref clientItem) && CheckItemBindUse(userItem))
                     {

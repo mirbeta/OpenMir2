@@ -97,11 +97,10 @@ namespace GameSrv.Npc
                                             }
                                             continue;
                                         }
-                                        var stdItem80 = stdItem;
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S, sizeof(TStdItem));
                                         sClientDealOffInfo.UseItems[j] = new ClientItem();
-                                        stdItem80.GetUpgradeStdItem(dealOffInfo.UseItems[j], ref sClientDealOffInfo.UseItems[j]);
+                                        ItemSystem.GetUpgradeStdItem(stdItem, dealOffInfo.UseItems[j], ref sClientDealOffInfo.UseItems[j]);
                                         //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
                                         var sUserItemName = string.Empty;

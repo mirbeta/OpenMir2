@@ -378,7 +378,7 @@ namespace GameSrv.Npc
 
         private void UpgradeWaponAddValue(PlayObject user, IList<UserItem> itemList, ref byte btDc, ref byte btSc, ref byte btMc, ref byte btDura)
         {
-            ClientItem stdItem80 = null;
+            ClientItem clientItem = null;
             IList<DeleteItem> delItemList = null;
             int nDc;
             int nSc;
@@ -417,31 +417,31 @@ namespace GameSrv.Npc
                         var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
-                            stdItem.GetUpgradeStdItem(userItem, ref stdItem80);
+                            ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                             //StdItem.GetItemAddValue(UserItem, ref StdItem80);
                             nDc = 0;
                             nSc = 0;
                             nMc = 0;
-                            switch (stdItem80.Item.StdMode)
+                            switch (clientItem.Item.StdMode)
                             {
                                 case 19:
                                 case 20:
                                 case 21:
-                                    nDc = HUtil32.HiWord(stdItem80.Item.DC) + HUtil32.LoWord(stdItem80.Item.DC);
-                                    nSc = HUtil32.HiWord(stdItem80.Item.SC) + HUtil32.LoWord(stdItem80.Item.SC);
-                                    nMc = HUtil32.HiWord(stdItem80.Item.MC) + HUtil32.LoWord(stdItem80.Item.MC);
+                                    nDc = HUtil32.HiWord(clientItem.Item.DC) + HUtil32.LoWord(clientItem.Item.DC);
+                                    nSc = HUtil32.HiWord(clientItem.Item.SC) + HUtil32.LoWord(clientItem.Item.SC);
+                                    nMc = HUtil32.HiWord(clientItem.Item.MC) + HUtil32.LoWord(clientItem.Item.MC);
                                     break;
                                 case 22:
                                 case 23:
-                                    nDc = HUtil32.HiWord(stdItem80.Item.DC) + HUtil32.LoWord(stdItem80.Item.DC);
-                                    nSc = HUtil32.HiWord(stdItem80.Item.SC) + HUtil32.LoWord(stdItem80.Item.SC);
-                                    nMc = HUtil32.HiWord(stdItem80.Item.MC) + HUtil32.LoWord(stdItem80.Item.MC);
+                                    nDc = HUtil32.HiWord(clientItem.Item.DC) + HUtil32.LoWord(clientItem.Item.DC);
+                                    nSc = HUtil32.HiWord(clientItem.Item.SC) + HUtil32.LoWord(clientItem.Item.SC);
+                                    nMc = HUtil32.HiWord(clientItem.Item.MC) + HUtil32.LoWord(clientItem.Item.MC);
                                     break;
                                 case 24:
                                 case 26:
-                                    nDc = HUtil32.HiWord(stdItem80.Item.DC) + HUtil32.LoWord(stdItem80.Item.DC) + 1;
-                                    nSc = HUtil32.HiWord(stdItem80.Item.SC) + HUtil32.LoWord(stdItem80.Item.SC) + 1;
-                                    nMc = HUtil32.HiWord(stdItem80.Item.MC) + HUtil32.LoWord(stdItem80.Item.MC) + 1;
+                                    nDc = HUtil32.HiWord(clientItem.Item.DC) + HUtil32.LoWord(clientItem.Item.DC) + 1;
+                                    nSc = HUtil32.HiWord(clientItem.Item.SC) + HUtil32.LoWord(clientItem.Item.SC) + 1;
+                                    nMc = HUtil32.HiWord(clientItem.Item.MC) + HUtil32.LoWord(clientItem.Item.MC) + 1;
                                     break;
                             }
                             if (nDcMin < nDc)
@@ -1420,7 +1420,7 @@ namespace GameSrv.Npc
                     {
                         userItem = list20[j];
                         var clientItem = new ClientItem();
-                        item.GetUpgradeStdItem(userItem, ref clientItem);
+                        ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Dura = userItem.Dura;
                         clientItem.DuraMax = (ushort)GetUserPrice(playObject, GetUserItemPrice(userItem));

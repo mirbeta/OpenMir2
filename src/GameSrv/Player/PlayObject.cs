@@ -180,7 +180,7 @@ namespace GameSrv.Player {
                 return;
             }
             ClientItem clientItem = new ClientItem();
-            item.GetUpgradeStdItem(userItem, ref clientItem);
+            ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
             clientItem.Item.Name = CustomItem.GetItemName(userItem);
             clientItem.MakeIndex = userItem.MakeIndex;
             clientItem.Dura = userItem.Dura;
@@ -819,7 +819,7 @@ namespace GameSrv.Player {
                     StdItem item = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (item != null) {
                         ClientItem clientItem = new ClientItem();
-                        item.GetUpgradeStdItem(UseItems[i], ref clientItem);
+                        ItemSystem.GetUpgradeStdItem(item, UseItems[i], ref clientItem);
                         //Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
                         clientItem.Item.Name = CustomItem.GetItemName(UseItems[i]);
                         clientItem.Dura = UseItems[i].Dura;
@@ -1299,7 +1299,7 @@ namespace GameSrv.Player {
                     StdItem item = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     if (item != null) {
                         ClientItem clientItem = new ClientItem();
-                        item.GetUpgradeStdItem(userItem, ref clientItem);
+                        ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Item.Name = CustomItem.GetItemName(userItem);
                         clientItem.Dura = userItem.Dura;
@@ -1335,7 +1335,7 @@ namespace GameSrv.Player {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null) {
                 ClientItem clientItem = new ClientItem();
-                stdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1352,7 +1352,7 @@ namespace GameSrv.Player {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null) {
                 ClientItem clientItem = new ClientItem();
-                stdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1369,7 +1369,7 @@ namespace GameSrv.Player {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null) {
                 ClientItem clientItem = new ClientItem();
-                stdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1387,7 +1387,7 @@ namespace GameSrv.Player {
             StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
             if (stdItem != null) {
                 ClientItem clientItem = new ClientItem();
-                stdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1917,7 +1917,7 @@ namespace GameSrv.Player {
                 StdItem pStdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (pStdItem != null) {
                     ClientItem clientItem = new ClientItem();
-                    pStdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                    ItemSystem.GetUpgradeStdItem(pStdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
@@ -1940,7 +1940,7 @@ namespace GameSrv.Player {
                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (stdItem != null) {
                     ClientItem clientItem = new ClientItem();
-                    stdItem.GetUpgradeStdItem(userItem, ref clientItem);
+                    ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;

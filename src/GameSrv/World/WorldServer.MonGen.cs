@@ -450,13 +450,13 @@ namespace GameSrv.World {
                                     if (stdItem == null) continue;
                                     if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率
                                     {
-                                        stdItem.RandomUpgradeItem(userItem);
+                                        Items.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                                     }
                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                                     {
                                         if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                         {
-                                            stdItem.RandomSetUnknownItem(userItem);
+                                            Items.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
                                         }
                                     }
                                     mon.ItemList.Add(userItem);

@@ -4279,14 +4279,14 @@ namespace GameSrv.Player
             if (item != null)
             {
                 ClientItem clientItem = new ClientItem();
-                item.GetUpgradeStdItem(uitem, ref clientItem);
+                ItemSystem.GetUpgradeStdItem(item, uitem, ref clientItem);
                 ApplyItemParametersByJob(uitem, ref clientItem);
                 switch (item.StdMode)
                 {
                     case 5:
                     case 6:
                         aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + StdItem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
+                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + ItemSystem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
                         aabil.Luck = (byte)(aabil.Luck + HUtil32.LoByte(clientItem.Item.AC));
                         aabil.UnLuck = (byte)(aabil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
                         aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
@@ -4483,7 +4483,7 @@ namespace GameSrv.Player
             if (item != null)
             {
                 ClientItem clientItem = new ClientItem();
-                item.GetUpgradeStdItem(uitem, ref clientItem);
+                ItemSystem.GetUpgradeStdItem(item, uitem, ref clientItem);
                 switch (item.StdMode)
                 {
                     case 52:
