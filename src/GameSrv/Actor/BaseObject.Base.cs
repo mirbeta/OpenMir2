@@ -1,5 +1,4 @@
-﻿using GameSrv.Items;
-using GameSrv.Magic;
+﻿using GameSrv.Magic;
 using GameSrv.Player;
 using GameSrv.RobotPlay;
 using SystemModule.Consts;
@@ -648,20 +647,20 @@ namespace GameSrv.Actor
                 int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
-                    bool boCanNotDrop = false;
-                    if (StdItem != null)
+                    var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
+                    var boCanNotDrop = false;
+                    if (stdItem != null)
                     {
-                        if (M2Share.MonDropLimitLIst.TryGetValue(StdItem.Name, out MonsterLimitDrop MonDrop))
+                        if (M2Share.MonDropLimitLIst.TryGetValue(stdItem.Name, value: out MonsterLimitDrop monDrop))
                         {
-                            if (MonDrop.DropCount < MonDrop.CountLimit)
+                            if (monDrop.DropCount < monDrop.CountLimit)
                             {
-                                MonDrop.DropCount++;
-                                M2Share.MonDropLimitLIst[StdItem.Name] = MonDrop;
+                                monDrop.DropCount++;
+                                M2Share.MonDropLimitLIst[stdItem.Name] = monDrop;
                             }
                             else
                             {
-                                MonDrop.NoDropCount++;
+                                monDrop.NoDropCount++;
                                 boCanNotDrop = true;
                             }
                         }
@@ -683,14 +682,14 @@ namespace GameSrv.Actor
             }
         }
 
-        internal virtual void DropUseItems(int BaseObject)
+        internal virtual void DropUseItems(int baseObject)
         {
 
         }
 
-        public virtual void SetTargetCreat(BaseObject BaseObject)
+        public virtual void SetTargetCreat(BaseObject baseObject)
         {
-            TargetCret = BaseObject;
+            TargetCret = baseObject;
             TargetFocusTick = HUtil32.GetTickCount();
         }
 
@@ -1040,13 +1039,13 @@ namespace GameSrv.Actor
             return baseObject.GetNameColor();
         }
 
-        public virtual int GetAttackPower(int nBasePower, int nPower)
+        public virtual int GetAttackPower(int basePower, int power)
         {
-            if (nPower < 0)
+            if (power < 0)
             {
-                nPower = 0;
+                power = 0;
             }
-            int result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
+            var result = basePower + M2Share.RandomNumber.Random(power + 1);
             if (AutoChangeColor)
             {
                 result = result * AutoChangeIdx + 1;
