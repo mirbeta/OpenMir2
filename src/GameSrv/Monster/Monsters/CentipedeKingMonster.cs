@@ -47,7 +47,7 @@ namespace GameSrv.Monster.Monsters
             if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
             {
                 AttackTick = HUtil32.GetTickCount();
-                SendAttackMsg(Messages.RM_HIT, Direction, CurrX, CurrY);
+                SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
                 int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {

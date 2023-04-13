@@ -8,7 +8,7 @@
         }
 
         private void LightingAttack(byte nDir) {
-            Direction = nDir;
+            Dir = nDir;
             var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0) {

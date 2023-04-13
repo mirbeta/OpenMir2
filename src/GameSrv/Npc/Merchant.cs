@@ -138,7 +138,7 @@ namespace GameSrv.Npc
                 {
                     if (M2Share.RandomNumber.Random(50) == 0)
                     {
-                        SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                        SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
                     }
                 }
                 if (CastleMerchant && Castle != null && Castle.UnderWar)
@@ -154,7 +154,7 @@ namespace GameSrv.Npc
                     if (FixedHideMode)
                     {
                         FixedHideMode = false;
-                        SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
+                        SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
                     }
                 }
                 if (BoCanMove && (HUtil32.GetTickCount() - MoveTick) > MoveTime * 1000)

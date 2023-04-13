@@ -20,7 +20,7 @@ namespace GameSrv.Monster.Monsters {
             {
                 return;
             }
-            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
             SendSelfDelayMsg(Messages.RM_ZEN_BEE, 0, 0, 0, 0, "", 500);
         }
 

@@ -491,13 +491,13 @@ namespace GameSrv.Actor
                 Envir.DelObjectCount(this);
                 DelFormMaped = true;
             }
-            SendRefMsg(Messages.RM_DEATH, Direction, CurrX, CurrY, 1, "");
+            SendRefMsg(Messages.RM_DEATH, Dir, CurrX, CurrY, 1, "");
         }
 
         internal virtual void ReAlive()
         {
             Death = false;
-            SendRefMsg(Messages.RM_ALIVE, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_ALIVE, Dir, CurrX, CurrY, 0, "");
         }
 
         protected bool IsProtectTarget(BaseObject targetObject)

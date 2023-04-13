@@ -55,39 +55,39 @@ namespace GameSrv.Actor {
         protected virtual void Attack(BaseObject targetObject, byte nDir) {
             var nPower = GetBaseAttackPoewr();
             AttackDir(targetObject, nPower, nDir);
-            SendAttackMsg(Messages.RM_HIT, Direction, CurrX, CurrY);
+            SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
         }
 
         protected void GotoTargetXy() {
             if (CurrX != TargetX || CurrY != TargetY) {
                 int n10 = TargetX;
                 int n14 = TargetY;
-                var nDir = SystemModule.Enums.Direction.Down;
+                var nDir = Direction.Down;
                 if (n10 > CurrX) {
-                    nDir = SystemModule.Enums.Direction.Right;
+                    nDir = Direction.Right;
                     if (n14 > CurrY) {
-                        nDir = SystemModule.Enums.Direction.DownRight;
+                        nDir = Direction.DownRight;
                     }
                     if (n14 < CurrY) {
-                        nDir = SystemModule.Enums.Direction.UpRight;
+                        nDir = Direction.UpRight;
                     }
                 }
                 else {
                     if (n10 < CurrX) {
-                        nDir = SystemModule.Enums.Direction.Left;
+                        nDir = Direction.Left;
                         if (n14 > CurrY) {
-                            nDir = SystemModule.Enums.Direction.DownLeft;
+                            nDir = Direction.DownLeft;
                         }
                         if (n14 < CurrY) {
-                            nDir = SystemModule.Enums.Direction.UpLeft;
+                            nDir = Direction.UpLeft;
                         }
                     }
                     else {
                         if (n14 > CurrY) {
-                            nDir = SystemModule.Enums.Direction.Down;
+                            nDir = Direction.Down;
                         }
                         else if (n14 < CurrY) {
-                            nDir = SystemModule.Enums.Direction.Up;
+                            nDir = Direction.Up;
                         }
                     }
                 }
@@ -95,7 +95,7 @@ namespace GameSrv.Actor {
                 int nOldY = CurrY;
                 WalkTo(nDir, false);
                 var n20 = M2Share.RandomNumber.Random(3);
-                for (var i = SystemModule.Enums.Direction.Up; i <= SystemModule.Enums.Direction.UpLeft; i++) {
+                for (var i = Direction.Up; i <= Direction.UpLeft; i++) {
                     if (nOldX == CurrX && nOldY == CurrY) {
                         if (n20 != 0) {
                             nDir++;
@@ -104,10 +104,10 @@ namespace GameSrv.Actor {
                             nDir -= 1;
                         }
                         else {
-                            nDir = SystemModule.Enums.Direction.UpLeft;
+                            nDir = Direction.UpLeft;
                         }
-                        if (nDir > SystemModule.Enums.Direction.UpLeft) {
-                            nDir = SystemModule.Enums.Direction.Up;
+                        if (nDir > Direction.UpLeft) {
+                            nDir = Direction.Up;
                         }
                         WalkTo(nDir, false);
                     }
@@ -173,7 +173,7 @@ namespace GameSrv.Actor {
 
         protected void HitMagAttackTarget(BaseObject targetBaseObject, int nHitPower, int nMagPower, bool boFlag) {
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            Direction = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
+            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
             Envir.GetBaseObjects(targetBaseObject.CurrX, targetBaseObject.CurrY, false, ref baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++) {
                 var baseObject = baseObjectList[i];
@@ -188,7 +188,7 @@ namespace GameSrv.Actor {
                 }
             }
             baseObjectList.Clear();
-            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
         }
 
         protected override void DelTargetCreat() {
@@ -235,7 +235,7 @@ namespace GameSrv.Actor {
                 TurnTo(M2Share.RandomNumber.RandomByte(8));
             }
             else {
-                WalkTo(Direction, false);
+                WalkTo(Dir, false);
             }
         }
     }

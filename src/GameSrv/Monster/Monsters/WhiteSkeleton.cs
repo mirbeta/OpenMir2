@@ -24,9 +24,9 @@ namespace GameSrv.Monster.Monsters {
         public override void Run() {
             if (BoIsFirst) {
                 BoIsFirst = false;
-                this.Direction = 5;
+                this.Dir = 5;
                 this.FixedHideMode = false;
-                this.SendRefMsg(Messages.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
+                this.SendRefMsg(Messages.RM_DIGUP, this.Dir, this.CurrX, this.CurrY, 0, "");
             }
             base.Run();
         }

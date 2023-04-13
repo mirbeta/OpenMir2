@@ -29,7 +29,7 @@ namespace GameSrv.Monster.Monsters {
             short nSy = 0;
             short nTx = 0;
             short nTy = 0;
-            Direction = nDir;
+            Dir = nDir;
             SendRefMsg(Messages.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSx, ref nSy)) {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTx, ref nTy);

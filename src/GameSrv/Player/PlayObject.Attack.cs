@@ -70,7 +70,7 @@ namespace GameSrv.Player
             int nPower = GetAttackPowerHit(wHitMode, GetBaseAttackPoewr(), attackTarget, ref canHit);
             SkillAttackDamage(wHitMode, nPower);
             AttackDir(attackTarget, nPower, nDir);
-            SendAttackMsg(GetHitMode(wHitMode), Direction, CurrX, CurrY);
+            SendAttackMsg(GetHitMode(wHitMode), Dir, CurrX, CurrY);
             AttackSuccess(wHitMode, nPower, canHit, attackTarget);
         }
 
@@ -1182,7 +1182,7 @@ namespace GameSrv.Player
                     if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3 * 1000)
                     {
                         DoMotaeboTick = HUtil32.GetTickCount();
-                        Direction = (byte)nTargetX;
+                        Dir = (byte)nTargetX;
                         nSpellPoint = GetSpellPoint(UserMagic);
                         if (WAbil.MP >= nSpellPoint)
                         {
@@ -1191,7 +1191,7 @@ namespace GameSrv.Player
                                 DamageSpell(nSpellPoint);
                                 HealthSpellChanged();
                             }
-                            if (DoMotaebo(Direction, UserMagic.Level))
+                            if (DoMotaebo(Dir, UserMagic.Level))
                             {
                                 if (UserMagic.Level < 3)
                                 {
@@ -1260,7 +1260,7 @@ namespace GameSrv.Player
                     result = true;
                     break;
                 default:
-                    Direction = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
+                    Dir = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
                     BaseObject spellObject = null;
                     if (CretInNearXy(targetObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {

@@ -42,7 +42,7 @@ namespace GameSrv.Monster
                 ElfMon.TargetFocusTick = OldMon.TargetFocusTick;
                 ElfMon.LastHiter = OldMon.LastHiter;
                 ElfMon.LastHiterTick = OldMon.LastHiterTick;
-                ElfMon.Direction = OldMon.Direction;
+                ElfMon.Dir = OldMon.Dir;
                 ElfMon.IsSlave = true;
                 if (OldMon.Master != null)
                 {
@@ -276,48 +276,48 @@ namespace GameSrv.Monster
                 {
                     if ((CurrX - nC == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.Left;
+                        dir = Direction.Left;
                         result = true;
                     }
                     if ((CurrX + nC == baseObject.CurrX) && (CurrY == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.Right;
+                        dir = Direction.Right;
                         result = true;
                         break;
                     }
                     if (CurrX == baseObject.CurrX && ((CurrY - nC) == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.Up;
+                        dir = Direction.Up;
                         result = true;
                         break;
                     }
                     if (CurrX == baseObject.CurrX && ((CurrY + nC) == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.Down;
+                        dir = Direction.Down;
                         result = true;
                         break;
                     }
                     if ((CurrX - nC) == baseObject.CurrX && ((CurrY - nC) == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.UpLeft;
+                        dir = Direction.UpLeft;
                         result = true;
                         break;
                     }
                     if ((CurrX + nC) == baseObject.CurrX && ((CurrY - nC) == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.UpRight;
+                        dir = Direction.UpRight;
                         result = true;
                         break;
                     }
                     if ((CurrX - nC) == baseObject.CurrX && ((CurrY + nC) == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.DownLeft;
+                        dir = Direction.DownLeft;
                         result = true;
                         break;
                     }
                     if ((CurrX + nC) == baseObject.CurrX && ((CurrY + nC) == baseObject.CurrY))
                     {
-                        dir = SystemModule.Enums.Direction.DownRight;
+                        dir = Direction.DownRight;
                         result = true;
                         break;
                     }

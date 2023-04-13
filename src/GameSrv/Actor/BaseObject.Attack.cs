@@ -6,7 +6,7 @@ namespace GameSrv.Actor
     {
         protected bool AttackDir(BaseObject attackTarget, int nPower, byte nDir)
         {
-            Direction = nDir;
+            Dir = nDir;
             if (_Attack(nPower, attackTarget))
             {
                 SetTargetCreat(attackTarget);
@@ -93,7 +93,7 @@ namespace GameSrv.Actor
             short nX = 0;
             short nY = 0;
             nSecPwr = HUtil32.Round((nSecPwr * M2Share.Config.SwordLongPowerRate) / 100.0);
-            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY))
+            if (Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref nX, ref nY))
             {
                 BaseObject baseObject = Envir.GetMovingObject(nX, nY, true);
                 if (baseObject != null)
@@ -121,7 +121,7 @@ namespace GameSrv.Actor
             short nY = 0;
             while (true)
             {
-                byte nDir = (byte)((Direction + M2Share.Config.WideAttack[nC]) % 8);
+                byte nDir = (byte)((Dir + M2Share.Config.WideAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
                     BaseObject BaseObject = Envir.GetMovingObject(nX, nY, true);
@@ -148,7 +148,7 @@ namespace GameSrv.Actor
             short nY = 0;
             while (true)
             {
-                byte nDir = (byte)((Direction + M2Share.Config.CrsAttack[nC]) % 8);
+                byte nDir = (byte)((Dir + M2Share.Config.CrsAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
                     BaseObject BaseObject = Envir.GetMovingObject(nX, nY, true);

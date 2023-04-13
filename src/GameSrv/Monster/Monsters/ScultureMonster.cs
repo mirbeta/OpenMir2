@@ -13,7 +13,7 @@ namespace GameSrv.Monster.Monsters {
         private void MeltStone() {
             CharStatusEx = 0;
             CharStatus = GetCharStatus();
-            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
             StoneMode = false;
         }
 

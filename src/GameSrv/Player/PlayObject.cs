@@ -310,26 +310,26 @@ namespace GameSrv.Player {
             try {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
-                Direction = btDir;
+                Dir = btDir;
                 bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir) {
-                    case SystemModule.Enums.Direction.Up:
+                    case Direction.Up:
                         if (CurrY > 1 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 2, true)) {
                             CurrY -= 2;
                         }
                         break;
-                    case SystemModule.Enums.Direction.UpRight:
+                    case Direction.UpRight:
                         if (CurrX < Envir.Width - 2 && CurrY > 1 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY - 2, true)) {
                             CurrX += 2;
                             CurrY -= 2;
                         }
                         break;
-                    case SystemModule.Enums.Direction.Right:
+                    case Direction.Right:
                         if (CurrX < Envir.Width - 2 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY, true)) {
                             CurrX += 2;
                         }
                         break;
-                    case SystemModule.Enums.Direction.DownRight:
+                    case Direction.DownRight:
                         if (CurrX < Envir.Width - 2 && CurrY < Envir.Height - 2 &&
                             Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) &&
                             Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 2, CurrY + 2, true)) {
@@ -337,23 +337,23 @@ namespace GameSrv.Player {
                             CurrY += 2;
                         }
                         break;
-                    case SystemModule.Enums.Direction.Down:
+                    case Direction.Down:
                         if (CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 2, true)) {
                             CurrY += 2;
                         }
                         break;
-                    case SystemModule.Enums.Direction.DownLeft:
+                    case Direction.DownLeft:
                         if (CurrX > 1 && CurrY < Envir.Height - 2 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY + 2, true)) {
                             CurrX -= 2;
                             CurrY += 2;
                         }
                         break;
-                    case SystemModule.Enums.Direction.Left:
+                    case Direction.Left:
                         if (CurrX > 1 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY, true)) {
                             CurrX -= 2;
                         }
                         break;
-                    case SystemModule.Enums.Direction.UpLeft:
+                    case Direction.UpLeft:
                         if (CurrX > 1 && CurrY > 1 &&
                             Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 2, CurrY - 2, true)) {
                             CurrX -= 2;
@@ -384,55 +384,55 @@ namespace GameSrv.Player {
             try {
                 int n10 = CurrX;
                 int n14 = CurrY;
-                Direction = btDir;
+                Dir = btDir;
                 bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir) {
-                    case SystemModule.Enums.Direction.Up:
+                    case Direction.Up:
                         if (CurrY > 2 && Envir.CanWalkEx(CurrX, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX, CurrY - 3, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY - 3, true)) {
                             CurrY -= 3;
                         }
                         break;
-                    case SystemModule.Enums.Direction.UpRight:
+                    case Direction.UpRight:
                         if (CurrX < Envir.Width - 3 && CurrY > 2 && Envir.CanWalkEx(CurrX + 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY - 3, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY - 3, true)) {
                             CurrX += 3;
                             CurrY -= 3;
                         }
                         break;
-                    case SystemModule.Enums.Direction.Right:
+                    case Direction.Right:
                         if (CurrX < Envir.Width - 3 && Envir.CanWalkEx(CurrX + 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY, true)) {
                             CurrX += 3;
                         }
                         break;
-                    case SystemModule.Enums.Direction.DownRight:
+                    case Direction.DownRight:
                         if (CurrX < Envir.Width - 3 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX + 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX + 2, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX + 3, CurrY + 3, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX + 3, CurrY + 3, true)) {
                             CurrX += 3;
                             CurrY += 3;
                         }
                         break;
-                    case SystemModule.Enums.Direction.Down:
+                    case Direction.Down:
                         if (CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX, CurrY + 3, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX, CurrY + 3, true)) {
                             CurrY += 3;
                         }
                         break;
-                    case SystemModule.Enums.Direction.DownLeft:
+                    case Direction.DownLeft:
                         if (CurrX > 2 && CurrY < Envir.Height - 3 && Envir.CanWalkEx(CurrX - 1, CurrY + 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY + 2, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY + 3, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY + 3, true)) {
                             CurrX -= 3;
                             CurrY += 3;
                         }
                         break;
-                    case SystemModule.Enums.Direction.Left:
+                    case Direction.Left:
                         if (CurrX > 2 && Envir.CanWalkEx(CurrX - 1, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY, true)) {
                             CurrX -= 3;
                         }
                         break;
-                    case SystemModule.Enums.Direction.UpLeft:
+                    case Direction.UpLeft:
                         if (CurrX > 2 && CurrY > 2 && Envir.CanWalkEx(CurrX - 1, CurrY - 1, canWalk) && Envir.CanWalkEx(CurrX - 2, CurrY - 2, canWalk) && Envir.CanWalkEx(CurrX - 3, CurrY - 3, canWalk) &&
                             Envir.MoveToMovingObject(CurrX, CurrY, this, CurrX - 3, CurrY - 3, true)) {
                             CurrX -= 3;
@@ -1129,7 +1129,7 @@ namespace GameSrv.Player {
             bool bo35 = true;
             byte n24 = (byte)(nMagicLevel + 1);
             byte n28 = n24;
-            Direction = nDir;
+            Dir = nDir;
             BaseObject poseCreate = GetPoseCreate();
             if (poseCreate != null) {
                 for (int i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++) {
@@ -1140,15 +1140,15 @@ namespace GameSrv.Player {
                             break;
                         }
                         if (nMagicLevel >= 3) {
-                            if (Envir.GetNextPosition(CurrX, CurrY, Direction, 2, ref nX, ref nY)) {
+                            if (Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref nX, ref nY)) {
                                 BaseObject baseObject30 = Envir.GetMovingObject(nX, nY, true);
                                 if (baseObject30 != null && DoMotaeboCanMotaebo(baseObject30, nMagicLevel)) {
-                                    baseObject30.CharPushed(Direction, 1);
+                                    baseObject30.CharPushed(Dir, 1);
                                 }
                             }
                         }
                         baseObject34 = poseCreate;
-                        if (poseCreate.CharPushed(Direction, 1) != 1) {
+                        if (poseCreate.CharPushed(Dir, 1) != 1) {
                             break;
                         }
                         GetFrontPosition(ref nX, ref nY);
@@ -1201,7 +1201,7 @@ namespace GameSrv.Player {
             }
             if (bo35) {
                 GetFrontPosition(ref nX, ref nY);
-                SendRefMsg(Messages.RM_RUSHKUNG, Direction, nX, nY, 0, "");
+                SendRefMsg(Messages.RM_RUSHKUNG, Dir, nX, nY, 0, "");
                 SysMsg(Settings.MateDoTooweak, MsgColor.Red, MsgType.Hint);
             }
             if (n28 > 0) {
@@ -1279,7 +1279,7 @@ namespace GameSrv.Player {
                     }
                 }
             }
-            SendRefMsg(Messages.RM_HEAVYHIT, Direction, CurrX, CurrY, 0, s1C);
+            SendRefMsg(Messages.RM_HEAVYHIT, Dir, CurrX, CurrY, 0, s1C);
             return result;
         }
 
@@ -2176,7 +2176,7 @@ namespace GameSrv.Player {
                 dwCheckTime = HUtil32.GetTickCount() - StruckTick;
                 if (M2Share.Config.StruckTime > dwCheckTime) {
                     dwDelayTime = M2Share.Config.StruckTime - dwCheckTime;
-                    MBtOldDir = Direction;
+                    MBtOldDir = Dir;
                     return false;
                 }
             }
@@ -2195,39 +2195,39 @@ namespace GameSrv.Player {
             int dwActionIntervalTime = ActionIntervalTime;
             switch (wIdent) {
                 case Messages.CM_LONGHIT:
-                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_RUN && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_RUN && MBtOldDir != Dir) {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_HIT:
-                    if (M2Share.Config.boControlWalkHit && OldIdent == Messages.CM_WALK && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlWalkHit && OldIdent == Messages.CM_WALK && MBtOldDir != Dir) {
                         dwActionIntervalTime = WalkHitIntervalTime; // 走位攻击
                     }
-                    if (M2Share.Config.boControlRunHit && OldIdent == Messages.CM_RUN && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlRunHit && OldIdent == Messages.CM_RUN && MBtOldDir != Dir) {
                         dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
                     break;
                 case Messages.CM_RUN:
-                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Dir) {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
-                    if (M2Share.Config.boControlRunHit && OldIdent == Messages.CM_HIT && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlRunHit && OldIdent == Messages.CM_HIT && MBtOldDir != Dir) {
                         dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
-                    if (M2Share.Config.boControlRunMagic && OldIdent == Messages.CM_SPELL && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlRunMagic && OldIdent == Messages.CM_SPELL && MBtOldDir != Dir) {
                         dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
                     break;
                 case Messages.CM_WALK:
-                    if (M2Share.Config.boControlWalkHit && OldIdent == Messages.CM_HIT && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlWalkHit && OldIdent == Messages.CM_HIT && MBtOldDir != Dir) {
                         dwActionIntervalTime = WalkHitIntervalTime;// 走位攻击
                     }
-                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Dir) {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_SPELL:
-                    if (M2Share.Config.boControlRunMagic && OldIdent == Messages.CM_RUN && MBtOldDir != Direction) {
+                    if (M2Share.Config.boControlRunMagic && OldIdent == Messages.CM_RUN && MBtOldDir != Dir) {
                         dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
                     break;
@@ -2244,7 +2244,7 @@ namespace GameSrv.Player {
                 dwDelayTime = dwActionIntervalTime - dwCheckTime;
             }
             OldIdent = wIdent;
-            MBtOldDir = Direction;
+            MBtOldDir = Dir;
             return result;
         }
 

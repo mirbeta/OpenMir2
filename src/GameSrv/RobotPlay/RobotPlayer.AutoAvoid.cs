@@ -97,49 +97,49 @@ namespace GameSrv.RobotPlay
                             {
                                 switch (nDir)
                                 {
-                                    case SystemModule.Enums.Direction.Up:
+                                    case Direction.Up:
                                         if (Math.Abs(nX - baseObject.CurrX) <= nRange && baseObject.CurrY - nY >= 0 && baseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
-                                    case SystemModule.Enums.Direction.UpRight:
+                                    case Direction.UpRight:
                                         if (baseObject.CurrX - nX >= 0 && baseObject.CurrX - nX <= nRange && baseObject.CurrY - nY >= 0 && baseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
-                                    case SystemModule.Enums.Direction.Right:
+                                    case Direction.Right:
                                         if (baseObject.CurrX - nX >= 0 && baseObject.CurrX - nX <= nRange && Math.Abs(nY - baseObject.CurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
-                                    case SystemModule.Enums.Direction.DownRight:
+                                    case Direction.DownRight:
                                         if (baseObject.CurrX - nX >= 0 && baseObject.CurrX - nX <= nRange && nY - baseObject.CurrY >= 0 && nY - baseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
-                                    case SystemModule.Enums.Direction.Down:
+                                    case Direction.Down:
                                         if (Math.Abs(nX - baseObject.CurrX) <= nRange && nY - baseObject.CurrY >= 0 && nY - baseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
-                                    case SystemModule.Enums.Direction.DownLeft:
+                                    case Direction.DownLeft:
                                         if (nX - baseObject.CurrX >= 0 && nX - baseObject.CurrX <= nRange && nY - baseObject.CurrY >= 0 && nY - baseObject.CurrY <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
-                                    case SystemModule.Enums.Direction.Left:
+                                    case Direction.Left:
                                         if (nX - baseObject.CurrX >= 0 && nX - baseObject.CurrX <= nRange && Math.Abs(nY - baseObject.CurrY) <= nRange)
                                         {
                                             result++;
                                         }
                                         break;
-                                    case SystemModule.Enums.Direction.UpLeft:
+                                    case Direction.UpLeft:
                                         if (nX - baseObject.CurrX >= 0 && nX - baseObject.CurrX <= nRange && baseObject.CurrY - nY >= 0 && baseObject.CurrY - nY <= nRange)
                                         {
                                             result++;
@@ -164,42 +164,42 @@ namespace GameSrv.RobotPlay
             int n14;
             n10 = TargetCret.CurrX;
             n14 = TargetCret.CurrY;
-            int result = SystemModule.Enums.Direction.Down;
+            int result = Direction.Down;
             if (n10 > CurrX)
             {
-                result = SystemModule.Enums.Direction.Left;
+                result = Direction.Left;
                 if (n14 > CurrY)
                 {
-                    result = SystemModule.Enums.Direction.DownLeft;
+                    result = Direction.DownLeft;
                 }
                 if (n14 < CurrY)
                 {
-                    result = SystemModule.Enums.Direction.UpLeft;
+                    result = Direction.UpLeft;
                 }
             }
             else
             {
                 if (n10 < CurrX)
                 {
-                    result = SystemModule.Enums.Direction.Right;
+                    result = Direction.Right;
                     if (n14 > CurrY)
                     {
-                        result = SystemModule.Enums.Direction.DownRight;
+                        result = Direction.DownRight;
                     }
                     if (n14 < CurrY)
                     {
-                        result = SystemModule.Enums.Direction.UpRight;
+                        result = Direction.UpRight;
                     }
                 }
                 else
                 {
                     if (n14 > CurrY)
                     {
-                        result = SystemModule.Enums.Direction.Up;
+                        result = Direction.Up;
                     }
                     else if (n14 < CurrY)
                     {
-                        result = SystemModule.Enums.Direction.Down;
+                        result = Direction.Down;
                     }
                 }
             }
@@ -210,42 +210,42 @@ namespace GameSrv.RobotPlay
         {
             int n10 = nTargetX;
             int n14 = nTargetY;
-            byte result = SystemModule.Enums.Direction.Down;
+            byte result = Direction.Down;
             if (n10 > CurrX)
             {
-                result = SystemModule.Enums.Direction.Right;
+                result = Direction.Right;
                 if (n14 > CurrY)
                 {
-                    result = SystemModule.Enums.Direction.DownRight;
+                    result = Direction.DownRight;
                 }
                 if (n14 < CurrY)
                 {
-                    result = SystemModule.Enums.Direction.UpRight;
+                    result = Direction.UpRight;
                 }
             }
             else
             {
                 if (n10 < CurrX)
                 {
-                    result = SystemModule.Enums.Direction.Left;
+                    result = Direction.Left;
                     if (n14 > CurrY)
                     {
-                        result = SystemModule.Enums.Direction.DownLeft;
+                        result = Direction.DownLeft;
                     }
                     if (n14 < CurrY)
                     {
-                        result = SystemModule.Enums.Direction.UpLeft;
+                        result = Direction.UpLeft;
                     }
                 }
                 else
                 {
                     if (n14 > CurrY)
                     {
-                        result = SystemModule.Enums.Direction.Down;
+                        result = Direction.Down;
                     }
                     else if (n14 < CurrY)
                     {
-                        result = SystemModule.Enums.Direction.Up;
+                        result = Direction.Up;
                     }
                 }
             }
@@ -259,7 +259,7 @@ namespace GameSrv.RobotPlay
             {
                 switch (nDir)
                 {
-                    case SystemModule.Enums.Direction.Up:
+                    case Direction.Up:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY -= 2;
@@ -275,7 +275,7 @@ namespace GameSrv.RobotPlay
                             n01 += 2;
                             continue;
                         }
-                    case SystemModule.Enums.Direction.UpRight:
+                    case Direction.UpRight:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
@@ -293,7 +293,7 @@ namespace GameSrv.RobotPlay
                             n01 += 2;
                             continue;
                         }
-                    case SystemModule.Enums.Direction.Right:
+                    case Direction.Right:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
@@ -309,7 +309,7 @@ namespace GameSrv.RobotPlay
                             n01 += 2;
                             continue;
                         }
-                    case SystemModule.Enums.Direction.DownRight:
+                    case Direction.DownRight:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX += 2;
@@ -327,7 +327,7 @@ namespace GameSrv.RobotPlay
                             n01 += 2;
                             continue;
                         }
-                    case SystemModule.Enums.Direction.Down:
+                    case Direction.Down:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetY += 2;
@@ -343,7 +343,7 @@ namespace GameSrv.RobotPlay
                             n01 += 2;
                             continue;
                         }
-                    case SystemModule.Enums.Direction.DownLeft:
+                    case Direction.DownLeft:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
@@ -361,7 +361,7 @@ namespace GameSrv.RobotPlay
                             n01 += 2;
                             continue;
                         }
-                    case SystemModule.Enums.Direction.Left:
+                    case Direction.Left:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;
@@ -377,7 +377,7 @@ namespace GameSrv.RobotPlay
                             n01 += 2;
                             continue;
                         }
-                    case SystemModule.Enums.Direction.UpLeft:
+                    case Direction.UpLeft:
                         if (Envir.CanWalk(nTargetX, nTargetY, false) && CheckTargetXYCountOfDirection(nTargetX, nTargetY, nDir, 3) == 0)
                         {
                             nTargetX -= 2;

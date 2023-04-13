@@ -328,7 +328,7 @@ namespace GameSrv.Player
             }
             if (nX == CurrX && nY == CurrY)
             {
-                Direction = nDir;
+                Dir = nDir;
                 if (Walk(Messages.RM_TURN))
                 {
                     TurnTick = HUtil32.GetTickCount();
@@ -731,7 +731,7 @@ namespace GameSrv.Player
                             {
                                 baseObject.Skeleton = true;
                                 baseObject.ApplyMeatQuality();
-                                baseObject.SendRefMsg(Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
+                                baseObject.SendRefMsg(Messages.RM_SKELETON, baseObject.Dir, baseObject.CurrX, baseObject.CurrY, 0, "");
                             }
                             if (!TakeBagItems(baseObject))
                             {
@@ -742,9 +742,9 @@ namespace GameSrv.Player
                         DeathTick = HUtil32.GetTickCount();
                     }
                 }
-                Direction = btDir;
+                Dir = btDir;
             }
-            SendRefMsg(Messages.RM_BUTCH, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_BUTCH, Dir, CurrX, CurrY, 0, "");
             return false;
         }
 

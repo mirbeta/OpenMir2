@@ -25,7 +25,7 @@ namespace GameSrv.GameCommand.Commands
             nType = (byte)HUtil32._MIN(nType, 8);
             if (nType == 0)
             {
-                playObject.CharPushed(BaseObject.GetBackDir(playObject.Direction), nCount);
+                playObject.CharPushed(BaseObject.GetBackDir(playObject.Dir), nCount);
             }
             else
             {

@@ -10,7 +10,7 @@
         }
 
         public override void Initialize() {
-            this.Direction = 0;
+            this.Dir = 0;
             base.Initialize();
         }
 
@@ -25,8 +25,8 @@
             if (n08 >= 5) {
                 n08 = 0;
             }
-            this.Direction = n08;
-            this.SendRefMsg(Messages.RM_ALIVE, this.Direction, this.CurrX, this.CurrY, 0, "");
+            this.Dir = n08;
+            this.SendRefMsg(Messages.RM_ALIVE, this.Dir, this.CurrX, this.CurrY, 0, "");
         }
 
         public override void Die() {
@@ -55,9 +55,9 @@
             else {
                 n08 = 4;
             }
-            if (this.Direction != n08 && n08 < 5) {
-                this.Direction = (byte)n08;
-                this.SendRefMsg(Messages.RM_DIGUP, this.Direction, this.CurrX, this.CurrY, 0, "");
+            if (this.Dir != n08 && n08 < 5) {
+                this.Dir = (byte)n08;
+                this.SendRefMsg(Messages.RM_DIGUP, this.Dir, this.CurrX, this.CurrY, 0, "");
             }
             base.Run();
         }

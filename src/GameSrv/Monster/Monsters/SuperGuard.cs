@@ -18,17 +18,17 @@ namespace GameSrv.Monster.Monsters {
                     this.TargetFocusTick = HUtil32.GetTickCount();
                     short nOldX = this.CurrX;
                     short nOldY = this.CurrY;
-                    byte btOldDir = this.Direction;
+                    byte btOldDir = this.Dir;
                     this.TargetCret.GetBackPosition(ref this.CurrX, ref this.CurrY);
-                    this.Direction = M2Share.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
-                    this.SendRefMsg(Messages.RM_HIT, this.Direction, this.CurrX, this.CurrY, 0, "");
+                    this.Dir = M2Share.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
+                    this.SendRefMsg(Messages.RM_HIT, this.Dir, this.CurrX, this.CurrY, 0, "");
                     this._Attack(GetBaseAttackPoewr(), this.TargetCret);
                     this.TargetCret.SetLastHiter(this);
                     this.TargetCret.ExpHitter = null;
                     this.CurrX = nOldX;
                     this.CurrY = nOldY;
-                    this.Direction = btOldDir;
-                    this.TurnTo(this.Direction);
+                    this.Dir = btOldDir;
+                    this.TurnTo(this.Dir);
                     this.BreakHolySeizeMode();
                 }
                 result = true;

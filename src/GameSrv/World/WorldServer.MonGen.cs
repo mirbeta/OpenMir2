@@ -685,7 +685,7 @@ namespace GameSrv.World {
             cert.MapName = sMapName;
             cert.CurrX = nX;
             cert.CurrY = nY;
-            cert.Direction = M2Share.RandomNumber.RandomByte(8);
+            cert.Dir = M2Share.RandomNumber.RandomByte(8);
             cert.ChrName = sMonName;
             cert.WAbil = cert.Abil;
             cert.OnEnvirnomentChanged();

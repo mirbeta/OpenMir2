@@ -12,7 +12,7 @@ namespace GameSrv.Monster.Monsters {
         public void AppearNow() {
             BoIsFirst = false;
             FixedHideMode = false;
-            SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
             RecalcAbilitys();
             WalkTick = WalkTick + 800;
             DigDownTick = HUtil32.GetTickCount();
@@ -34,20 +34,20 @@ namespace GameSrv.Monster.Monsters {
 
         private void SpitAttack(byte dir)
         {
-            Direction = dir;
+            Dir = dir;
             var wAbil = WAbil;
             var nDamage = (M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC)) + 1) + HUtil32.LoWord(wAbil.DC));
             if (nDamage <= 0)
             {
                 return;
             }
-            SendRefMsg(Messages.RM_HIT, Direction, CurrX, CurrY, 0, "");
+            SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
             nDamage = 1;
             short nX = 0;
             short nY = 0;
             while (true)
             {
-                if (Envir.GetNextPosition(CurrX, CurrY, Direction, nDamage, ref nX, ref nY))
+                if (Envir.GetNextPosition(CurrX, CurrY, Dir, nDamage, ref nX, ref nY))
                 {
                     var baseObject = Envir.GetMovingObject(nX, nY, true);
                     if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && (M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint))
@@ -106,7 +106,7 @@ namespace GameSrv.Monster.Monsters {
             if (BoIsFirst) {
                 BoIsFirst = false;
                 FixedHideMode = false;
-                SendRefMsg(Messages.RM_DIGUP, Direction, CurrX, CurrY, 0, "");
+                SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
                 ResetElfMon();
             }
             if (Death) {
@@ -128,7 +128,7 @@ namespace GameSrv.Monster.Monsters {
                             elfMon = MakeClone(elfName, this);
                         }
                         if (elfMon != null) {
-                            SendRefMsg(Messages.RM_DIGDOWN, Direction, CurrX, CurrY, 0, "");
+                            SendRefMsg(Messages.RM_DIGDOWN, Dir, CurrX, CurrY, 0, "");
                             SendRefMsg(Messages.RM_CHANGEFACE, 0, ActorId, elfMon.ActorId, 0, "");
                             elfMon.AutoChangeColor = AutoChangeColor;
                             if (elfMon is ElfMonster monster) {
