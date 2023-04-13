@@ -617,7 +617,7 @@ namespace GameGate.Services
                                 }
                                 else
                                 {
-                                    var eatPacket = new CommandMessage();
+                                    CommandMessage eatPacket = default;
                                     eatPacket.Recog = recog;
                                     eatPacket.Ident = Messages.SM_EAT_FAIL;
                                     var pszSendBuf = new byte[GateShare.CommandFixedLength];
