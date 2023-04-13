@@ -302,7 +302,7 @@ namespace GameSrv.Player
                     MakeGhost();
                     if (BoKickFlag)
                     {
-                        SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
+                        SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
                     }
                     if (!BoReconnection && BoSoftClose)
                     {
@@ -834,7 +834,7 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_TEST:
-                    SendDefMessage(1, 0, 0, 0, 0, "");
+                    SendDefMessage(1, 0, 0, 0, 0);
                     break;
                 case Messages.CM_GROUPMODE:
                     if (processMsg.nParam2 == 0)
@@ -847,11 +847,11 @@ namespace GameSrv.Player
                     }
                     if (AllowGroup)
                     {
-                        SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 1, 0, 0, "");
+                        SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 1, 0, 0);
                     }
                     else
                     {
-                        SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 0, 0, 0, "");
+                        SendDefMessage(Messages.SM_GROUPMODECHANGED, 0, 0, 0, 0);
                     }
                     break;
                 case Messages.CM_CREATEGROUP:
@@ -1482,7 +1482,7 @@ namespace GameSrv.Player
                         if (processMsg.wIdent == Messages.RM_TURN)
                         {
                             nObjCount = baseObject.GetFeatureToLong();
-                            SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.ActorId, HUtil32.LoWord(nObjCount), HUtil32.HiWord(nObjCount), baseObject.GetFeatureEx(), "");
+                            SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.ActorId, HUtil32.LoWord(nObjCount), HUtil32.HiWord(nObjCount), baseObject.GetFeatureEx());
                         }
                     }
                     break;
@@ -1588,10 +1588,10 @@ namespace GameSrv.Player
                     SendSocket(ClientMsg);
                     ClientMsg = Messages.MakeMessage(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
                     SendSocket(ClientMsg, EDCode.EncodePacket(WAbil));
-                    SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
+                    SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover));
                     break;
                 case Messages.RM_CHANGENAMECOLOR:
-                    SendDefMessage(Messages.SM_CHANGENAMECOLOR, processMsg.ActorId, GetChrColor(baseObject), 0, 0, "");
+                    SendDefMessage(Messages.SM_CHANGENAMECOLOR, processMsg.ActorId, GetChrColor(baseObject), 0, 0);
                     break;
                 case Messages.RM_LOGON:
                     ClientMsg = Messages.MakeMessage(Messages.SM_NEWMAP, ActorId, CurrX, CurrY, DayBright());
@@ -1661,22 +1661,22 @@ namespace GameSrv.Player
                     SendDefMessage(Messages.SM_ITEMSHOW, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.wParam, processMsg.Msg);
                     break;
                 case Messages.RM_ITEMHIDE:
-                    SendDefMessage(Messages.SM_ITEMHIDE, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, "");
+                    SendDefMessage(Messages.SM_ITEMHIDE, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0);
                     break;
                 case Messages.RM_DOOROPEN:
-                    SendDefMessage(Messages.SM_OPENDOOR_OK, 0, processMsg.nParam1, processMsg.nParam2, 0, "");
+                    SendDefMessage(Messages.SM_OPENDOOR_OK, 0, processMsg.nParam1, processMsg.nParam2, 0);
                     break;
                 case Messages.RM_DOORCLOSE:
-                    SendDefMessage(Messages.SM_CLOSEDOOR, 0, processMsg.nParam1, processMsg.nParam2, 0, "");
+                    SendDefMessage(Messages.SM_CLOSEDOOR, 0, processMsg.nParam1, processMsg.nParam2, 0);
                     break;
                 case Messages.RM_SENDUSEITEMS:
                     SendUseItems();
                     break;
                 case Messages.RM_WEIGHTCHANGED:
-                    SendDefMessage(Messages.SM_WEIGHTCHANGED, WAbil.Weight, WAbil.WearWeight, WAbil.HandWeight, (((WAbil.Weight + WAbil.WearWeight + WAbil.HandWeight) ^ 0x3A5F) ^ 0x1F35) ^ 0xaa21, "");
+                    SendDefMessage(Messages.SM_WEIGHTCHANGED, WAbil.Weight, WAbil.WearWeight, WAbil.HandWeight, (((WAbil.Weight + WAbil.WearWeight + WAbil.HandWeight) ^ 0x3A5F) ^ 0x1F35) ^ 0xaa21);
                     break;
                 case Messages.RM_FEATURECHANGED:
-                    SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam, "");
+                    SendDefMessage(Messages.SM_FEATURECHANGED, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam);
                     break;
                 case Messages.RM_CLEAROBJECTS:
                     VisibleEvents.Clear();
@@ -1685,7 +1685,7 @@ namespace GameSrv.Player
                         VisibleItems[i] = null;
                     }
                     VisibleItems.Clear();
-                    SendDefMessage(Messages.SM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_CLEAROBJECTS, 0, 0, 0, 0);
                     break;
                 case Messages.RM_CHANGEMAP:
                     MapMoveTick = HUtil32.GetTickCount();
@@ -1708,19 +1708,19 @@ namespace GameSrv.Player
                     SendSocket(ClientMsg, sSendStr);
                     break;
                 case Messages.RM_MAGICFIREFAIL:
-                    SendDefMessage(Messages.SM_MAGICFIRE_FAIL, processMsg.ActorId, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_MAGICFIRE_FAIL, processMsg.ActorId, 0, 0, 0);
                     break;
                 case Messages.RM_SENDMYMAGIC:
                     SendUseMagic();
                     break;
                 case Messages.RM_MAGIC_LVEXP:
-                    SendDefMessage(Messages.SM_MAGIC_LVEXP, processMsg.nParam1, processMsg.nParam2, HUtil32.LoWord(processMsg.nParam3), HUtil32.HiWord(processMsg.nParam3), "");
+                    SendDefMessage(Messages.SM_MAGIC_LVEXP, processMsg.nParam1, processMsg.nParam2, HUtil32.LoWord(processMsg.nParam3), HUtil32.HiWord(processMsg.nParam3));
                     break;
                 case Messages.RM_DURACHANGE:
-                    SendDefMessage(Messages.SM_DURACHANGE, processMsg.nParam1, processMsg.wParam, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), "");
+                    SendDefMessage(Messages.SM_DURACHANGE, processMsg.nParam1, processMsg.wParam, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2));
                     break;
                 case Messages.RM_MERCHANTDLGCLOSE:
-                    SendDefMessage(Messages.SM_MERCHANTDLGCLOSE, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_MERCHANTDLGCLOSE, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_SENDGOODSLIST:
                     SendDefMessage(Messages.SM_SENDGOODSLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
@@ -1729,56 +1729,56 @@ namespace GameSrv.Player
                     SendDefMessage(Messages.SM_SENDUSERSELL, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
                 case Messages.RM_SENDBUYPRICE:
-                    SendDefMessage(Messages.SM_SENDBUYPRICE, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_SENDBUYPRICE, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_USERSELLITEM_OK:
-                    SendDefMessage(Messages.SM_USERSELLITEM_OK, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_USERSELLITEM_OK, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_USERSELLITEM_FAIL:
-                    SendDefMessage(Messages.SM_USERSELLITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_USERSELLITEM_FAIL, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_BUYITEM_SUCCESS:
-                    SendDefMessage(Messages.SM_BUYITEM_SUCCESS, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0, "");
+                    SendDefMessage(Messages.SM_BUYITEM_SUCCESS, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0);
                     break;
                 case Messages.RM_BUYITEM_FAIL:
-                    SendDefMessage(Messages.SM_BUYITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_BUYITEM_FAIL, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_SENDDETAILGOODSLIST:
                     SendDefMessage(Messages.SM_SENDDETAILGOODSLIST, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, processMsg.Msg);
                     break;
                 case Messages.RM_GOLDCHANGED:
-                    SendDefMessage(Messages.SM_GOLDCHANGED, Gold, HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold), 0, "");
+                    SendDefMessage(Messages.SM_GOLDCHANGED, Gold, HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold), 0);
                     break;
                 case Messages.RM_GAMEGOLDCHANGED:
                     SendGoldInfo(false);
                     break;
                 case Messages.RM_CHANGELIGHT:
-                    SendDefMessage(Messages.SM_CHANGELIGHT, processMsg.ActorId, baseObject.Light, (short)M2Share.Config.nClientKey, 0, "");
+                    SendDefMessage(Messages.SM_CHANGELIGHT, processMsg.ActorId, baseObject.Light, (short)M2Share.Config.nClientKey, 0);
                     break;
                 case Messages.RM_LAMPCHANGEDURA:
-                    SendDefMessage(Messages.SM_LAMPCHANGEDURA, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_LAMPCHANGEDURA, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_CHARSTATUSCHANGED:
-                    SendDefMessage(Messages.SM_CHARSTATUSCHANGED, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam, "");
+                    SendDefMessage(Messages.SM_CHARSTATUSCHANGED, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam);
                     break;
                 case Messages.RM_GROUPCANCEL:
-                    SendDefMessage(Messages.SM_GROUPCANCEL, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_GROUPCANCEL, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_SENDUSERREPAIR:
                 case Messages.RM_SENDUSERSREPAIR:
-                    SendDefMessage(Messages.SM_SENDUSERREPAIR, processMsg.nParam1, processMsg.nParam2, 0, 0, "");
+                    SendDefMessage(Messages.SM_SENDUSERREPAIR, processMsg.nParam1, processMsg.nParam2, 0, 0);
                     break;
                 case Messages.RM_USERREPAIRITEM_OK:
-                    SendDefMessage(Messages.SM_USERREPAIRITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0, "");
+                    SendDefMessage(Messages.SM_USERREPAIRITEM_OK, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, 0);
                     break;
                 case Messages.RM_SENDREPAIRCOST:
-                    SendDefMessage(Messages.SM_SENDREPAIRCOST, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_SENDREPAIRCOST, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_USERREPAIRITEM_FAIL:
-                    SendDefMessage(Messages.SM_USERREPAIRITEM_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_USERREPAIRITEM_FAIL, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_USERSTORAGEITEM:
-                    SendDefMessage(Messages.SM_SENDUSERSTORAGEITEM, processMsg.nParam1, processMsg.nParam2, 0, 0, "");
+                    SendDefMessage(Messages.SM_SENDUSERSTORAGEITEM, processMsg.nParam1, processMsg.nParam2, 0, 0);
                     break;
                 case Messages.RM_USERGETBACKITEM:
                     SendSaveItemList(processMsg.nParam1);
@@ -1792,10 +1792,10 @@ namespace GameSrv.Player
                     SendDefMessage(Messages.SM_SENDUSERMAKEDRUGITEMLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
                     break;
                 case Messages.RM_MAKEDRUG_SUCCESS:
-                    SendDefMessage(Messages.SM_MAKEDRUG_SUCCESS, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_MAKEDRUG_SUCCESS, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_MAKEDRUG_FAIL:
-                    SendDefMessage(Messages.SM_MAKEDRUG_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_MAKEDRUG_FAIL, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_ALIVE:
                     ClientMsg = Messages.MakeMessage(Messages.SM_ALIVE, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
@@ -1842,28 +1842,28 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.RM_10205:
-                    SendDefMessage(Messages.SM_716, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "");
+                    SendDefMessage(Messages.SM_716, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
                     break;
                 case Messages.RM_CHANGEGUILDNAME:
                     SendChangeGuildName();
                     break;
                 case Messages.RM_SUBABILITY:
-                    SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover), "");
+                    SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover));
                     break;
                 case Messages.RM_BUILDGUILD_OK:
-                    SendDefMessage(Messages.SM_BUILDGUILD_OK, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_BUILDGUILD_OK, 0, 0, 0, 0);
                     break;
                 case Messages.RM_BUILDGUILD_FAIL:
-                    SendDefMessage(Messages.SM_BUILDGUILD_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_BUILDGUILD_FAIL, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_DONATE_OK:
-                    SendDefMessage(Messages.SM_DONATE_OK, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_DONATE_OK, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_DONATE_FAIL:
-                    SendDefMessage(Messages.SM_DONATE_FAIL, processMsg.nParam1, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_DONATE_FAIL, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_MYSTATUS:
-                    SendDefMessage(Messages.SM_MYSTATUS, 0, (short)GetMyStatus(), 0, 0, "");
+                    SendDefMessage(Messages.SM_MYSTATUS, 0, (short)GetMyStatus(), 0, 0);
                     break;
                 case Messages.RM_MENU_OK:
                     SendDefMessage(Messages.SM_MENU_OK, processMsg.nParam1, 0, 0, 0, processMsg.Msg);
@@ -1906,7 +1906,7 @@ namespace GameSrv.Player
                     SendDefMessage(Messages.SM_RECONNECT, 0, 0, 0, 0, processMsg.Msg);
                     break;
                 case Messages.RM_HIDEEVENT:
-                    SendDefMessage(Messages.SM_HIDEEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3, "");
+                    SendDefMessage(Messages.SM_HIDEEVENT, processMsg.nParam1, processMsg.wParam, processMsg.nParam2, processMsg.nParam3);
                     break;
                 case Messages.RM_SHOWEVENT:
                     ShortMessage shortMessage = new ShortMessage();
@@ -1923,16 +1923,16 @@ namespace GameSrv.Player
                     M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
                 case Messages.RM_OPENHEALTH:
-                    SendDefMessage(Messages.SM_OPENHEALTH, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");
+                    SendDefMessage(Messages.SM_OPENHEALTH, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0);
                     break;
                 case Messages.RM_CLOSEHEALTH:
-                    SendDefMessage(Messages.SM_CLOSEHEALTH, processMsg.ActorId, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_CLOSEHEALTH, processMsg.ActorId, 0, 0, 0);
                     break;
                 case Messages.RM_BREAKWEAPON:
-                    SendDefMessage(Messages.SM_BREAKWEAPON, processMsg.ActorId, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_BREAKWEAPON, processMsg.ActorId, 0, 0, 0);
                     break;
                 case Messages.RM_10414:
-                    SendDefMessage(Messages.SM_INSTANCEHEALGUAGE, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0, "");
+                    SendDefMessage(Messages.SM_INSTANCEHEALGUAGE, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0);
                     break;
                 case Messages.RM_CHANGEFACE:
                     if (processMsg.nParam1 != 0 && processMsg.nParam2 != 0)
@@ -1945,7 +1945,7 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.RM_PASSWORD:
-                    SendDefMessage(Messages.SM_PASSWORD, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_PASSWORD, 0, 0, 0, 0);
                     break;
                 case Messages.RM_PLAYDICE:
                     MessageBodyWL playdiceMessage = default;

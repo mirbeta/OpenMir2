@@ -420,7 +420,7 @@ namespace GameSrv.Npc
             playObject.OffLineFlag = true;
             playObject.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
             IdSrvClient.Instance.SendHumanLogOutMsgA(playObject.UserAccount, playObject.SessionId);
-            playObject.SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
+            playObject.SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
         }
 
         private void ActionOfAutoSubGameGold(PlayObject playObject, QuestActionInfo questActionInfo, int nPoint, int nTime)

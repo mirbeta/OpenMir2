@@ -1069,7 +1069,7 @@ namespace GameSrv.Player
             {
                 if (BoKickFlag)
                 {
-                    SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
                 }
                 MakeGhost();
             }
@@ -1128,8 +1128,8 @@ namespace GameSrv.Player
             messageBodyWl.Tag2 = 0;
             SendSocket(ClientMsg, EDCode.EncodePacket(messageBodyWl));
             int nRecog = GetFeatureToLong();
-            SendDefMessage(Messages.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx(), "");
-            SendDefMessage(Messages.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_FEATURECHANGED, ActorId, HUtil32.LoWord(nRecog), HUtil32.HiWord(nRecog), GetFeatureEx());
+            SendDefMessage(Messages.SM_ATTACKMODE, (byte)AttatckMode, 0, 0, 0);
         }
 
         /// <summary>
@@ -5006,7 +5006,7 @@ namespace GameSrv.Player
             }
             if (!this.CancelGroup())
             {
-                this.SendDefMessage(Messages.SM_GROUPCANCEL, 0, 0, 0, 0, "");
+                this.SendDefMessage(Messages.SM_GROUPCANCEL, 0, 0, 0, 0);
             }
             else
             {

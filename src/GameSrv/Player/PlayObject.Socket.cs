@@ -13,6 +13,33 @@ namespace GameSrv.Player
             //messageHead.SessionId = SocketIdx;
         }
 
+        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries)
+        {
+            if (IsRobot)
+            {
+                return;
+            }
+            ClientMsg = Messages.MakeMessage(wIdent, nRecog, nParam, nTag, nSeries);
+            SendSocket(ClientMsg);
+        }
+
+        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
+        {
+            if (IsRobot)
+            {
+                return;
+            }
+            ClientMsg = Messages.MakeMessage(wIdent, nRecog, nParam, nTag, nSeries);
+            if (!string.IsNullOrEmpty(sMsg))
+            {
+                SendSocket(ClientMsg, EDCode.EncodeString(sMsg));
+            }
+            else
+            {
+                SendSocket(ClientMsg);
+            }
+        }
+
         /// <summary>
         /// 动作消息 走路、跑步、战士攻击等
         /// </summary>
@@ -27,8 +54,6 @@ namespace GameSrv.Player
             {
                 return;
             }
-            if (string.IsNullOrEmpty(sMsg))
-                return;
             byte[] msgBuff = HUtil32.GetBytes(sMsg);
             ServerMessage messageHead = new ServerMessage
             {
@@ -100,33 +125,6 @@ namespace GameSrv.Player
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
             M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
-        }
-
-        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries)
-        {
-            if (IsRobot)
-            {
-                return;
-            }
-            ClientMsg = Messages.MakeMessage(wIdent, nRecog, nParam, nTag, nSeries);
-            SendSocket(ClientMsg);
-        }
-
-        public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries, string sMsg)
-        {
-            if (IsRobot)
-            {
-                return;
-            }
-            ClientMsg = Messages.MakeMessage(wIdent, nRecog, nParam, nTag, nSeries);
-            if (!string.IsNullOrEmpty(sMsg))
-            {
-                SendSocket(ClientMsg, EDCode.EncodeString(sMsg));
-            }
-            else
-            {
-                SendSocket(ClientMsg);
-            }
         }
     }
 }

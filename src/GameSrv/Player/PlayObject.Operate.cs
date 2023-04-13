@@ -28,7 +28,7 @@ namespace GameSrv.Player
             }
             else
             {
-                SendDefMessage(Messages.SM_GHOST, baseObject.ActorId, x, y, 0, "");
+                SendDefMessage(Messages.SM_GHOST, baseObject.ActorId, x, y, 0);
             }
         }
 
@@ -453,7 +453,7 @@ namespace GameSrv.Player
                             RecalcAbilitys();
                             SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
                             SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
-                            SendDefMessage(Messages.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
+                            SendDefMessage(Messages.SM_TAKEON_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0);
                             FeatureChanged();
                             if ((stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_MAN) || (stdItem.StdMode == ItemShapeConst.DRESS_STDMODE_WOMAN))
                             {
@@ -490,7 +490,7 @@ namespace GameSrv.Player
         FailExit:
             if (n18 <= 0)
             {
-                SendDefMessage(Messages.SM_TAKEON_FAIL, n18, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_TAKEON_FAIL, n18, 0, 0, 0);
             }
         }
 
@@ -542,7 +542,7 @@ namespace GameSrv.Player
                                 RecalcAbilitys();
                                 SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
                                 SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
-                                SendDefMessage(Messages.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0, "");
+                                SendDefMessage(Messages.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0);
                                 FeatureChanged();
                                 if (M2Share.FunctionNPC != null)
                                 {
@@ -569,7 +569,7 @@ namespace GameSrv.Player
         FailExit:
             if (n10 <= 0)
             {
-                SendDefMessage(Messages.SM_TAKEOFF_FAIL, n10, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_TAKEOFF_FAIL, n10, 0, 0, 0);
             }
         }
 
@@ -688,7 +688,7 @@ namespace GameSrv.Player
             if (eatSuccess)
             {
                 WeightChanged();
-                SendDefMessage(Messages.SM_EAT_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_EAT_OK, 0, 0, 0, 0);
                 if (stdItem.NeedIdentify == 1)
                 {
                     M2Share.EventSource.AddEventLog(11, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + itemIndex + "\t" + '1' + "\t" + '0');
@@ -696,7 +696,7 @@ namespace GameSrv.Player
             }
             else
             {
-                SendDefMessage(Messages.SM_EAT_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_EAT_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -813,22 +813,22 @@ namespace GameSrv.Player
             var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != 0)
             {
-                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -1, 0, 0, 0);
                 return;
             }
             if (playObject == null || playObject == this || playObject.Death || playObject.Ghost)
             {
-                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -2, 0, 0, 0);
                 return;
             }
             if (playObject.GroupOwner != 0)
             {
-                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -3, 0, 0, 0);
                 return;
             }
             if (!playObject.AllowGroup)
             {
-                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -4, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -4, 0, 0, 0);
                 return;
             }
             GroupMembers.Clear();
@@ -837,7 +837,7 @@ namespace GameSrv.Player
             JoinGroup(this);
             playObject.JoinGroup(this);
             AllowGroup = true;
-            SendDefMessage(Messages.SM_CREATEGROUP_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_CREATEGROUP_OK, 0, 0, 0, 0);
             SendGroupMembers();
             if (M2Share.FunctionNPC != null)
             {
@@ -850,32 +850,32 @@ namespace GameSrv.Player
             var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this.ActorId)
             {
-                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0);
                 return;
             }
             if (GroupMembers.Count > M2Share.Config.GroupMembersMax)
             {
-                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0);
                 return;
             }
             if (playObject == null || playObject == this || playObject.Death || playObject.Ghost)
             {
-                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -2, 0, 0, 0);
                 return;
             }
             if (playObject.GroupOwner != 0)
             {
-                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -3, 0, 0, 0);
                 return;
             }
             if (!playObject.AllowGroup)
             {
-                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -4, 0, 0, 0);
                 return;
             }
             this.GroupMembers.Add(playObject);
             playObject.JoinGroup(this);
-            SendDefMessage(Messages.SM_GROUPADDMEM_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_GROUPADDMEM_OK, 0, 0, 0, 0);
             SendGroupMembers();
             if (M2Share.FunctionNPC != null)
             {
@@ -888,17 +888,17 @@ namespace GameSrv.Player
             var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this.ActorId)
             {
-                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0);
                 return;
             }
             if (playObject == null)
             {
-                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -2, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -2, 0, 0, 0);
                 return;
             }
             if (!IsGroupMember(playObject))
             {
-                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -3, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -3, 0, 0, 0);
                 return;
             }
             DelMember(playObject);
@@ -952,13 +952,13 @@ namespace GameSrv.Player
                     }
                     else
                     {
-                        SendDefMessage(Messages.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
+                        SendDefMessage(Messages.SM_DEALTRY_FAIL, 0, 0, 0, 0);
                     }
                 }
             }
             else
             {
-                SendDefMessage(Messages.SM_DEALTRY_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALTRY_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -995,7 +995,7 @@ namespace GameSrv.Player
             }
             if (!dealSuccess)
             {
-                SendDefMessage(Messages.SM_DEALADDITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALADDITEM_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -1004,7 +1004,7 @@ namespace GameSrv.Player
             if (M2Share.Config.CanNotGetBackDeal)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
-                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
                 return;
             }
             if (DealCreat == null || !Dealing)
@@ -1038,7 +1038,7 @@ namespace GameSrv.Player
             }
             if (!bo11)
             {
-                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -1052,12 +1052,12 @@ namespace GameSrv.Player
             if (DealGolds > 0 && M2Share.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
-                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
                 return;
             }
             if (nGold < 0)
             {
-                SendDefMessage(Messages.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
+                SendDefMessage(Messages.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0);
                 return;
             }
             var bo09 = false;
@@ -1069,8 +1069,8 @@ namespace GameSrv.Player
                     {
                         Gold = Gold + DealGolds - nGold;
                         DealGolds = nGold;
-                        SendDefMessage(Messages.SM_DEALCHGGOLD_OK, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
-                        DealCreat.SendDefMessage(Messages.SM_DEALREMOTECHGGOLD, DealGolds, 0, 0, 0, "");
+                        SendDefMessage(Messages.SM_DEALCHGGOLD_OK, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0);
+                        DealCreat.SendDefMessage(Messages.SM_DEALREMOTECHGGOLD, DealGolds, 0, 0, 0);
                         DealCreat.DealLastTick = HUtil32.GetTickCount();
                         bo09 = true;
                         DealLastTick = HUtil32.GetTickCount();
@@ -1079,7 +1079,7 @@ namespace GameSrv.Player
             }
             if (!bo09)
             {
-                SendDefMessage(Messages.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0, "");
+                SendDefMessage(Messages.SM_DEALCHGGOLD_FAIL, DealGolds, HUtil32.LoWord(Gold), HUtil32.HiWord(Gold), 0);
             }
         }
 
@@ -1176,14 +1176,14 @@ namespace GameSrv.Player
                         }
                     }
                     var playObject = DealCreat;
-                    playObject.SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0, "");
+                    playObject.SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
                     playObject.SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     playObject.DealCreat = null;
                     playObject.Dealing = false;
                     playObject.DealItemList.Clear();
                     playObject.DealGolds = 0;
                     playObject.DealSuccess = false;
-                    SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
                     SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     DealCreat = null;
                     Dealing = false;
@@ -1207,11 +1207,11 @@ namespace GameSrv.Player
         {
             if (Envir.MinMap > 0)
             {
-                SendDefMessage(Messages.SM_READMINIMAP_OK, 0, Envir.MinMap, 0, 0, "");
+                SendDefMessage(Messages.SM_READMINIMAP_OK, 0, Envir.MinMap, 0, 0);
             }
             else
             {
-                SendDefMessage(Messages.SM_READMINIMAP_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_READMINIMAP_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -1273,7 +1273,7 @@ namespace GameSrv.Player
             }
             else
             {
-                SendDefMessage(Messages.SM_OPENGUILDDLG_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_OPENGUILDDLG_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -1358,11 +1358,11 @@ namespace GameSrv.Player
             }
             if (nC == 0)
             {
-                SendDefMessage(Messages.SM_GUILDADDMEMBER_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDADDMEMBER_OK, 0, 0, 0, 0);
             }
             else
             {
-                SendDefMessage(Messages.SM_GUILDADDMEMBER_FAIL, nC, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDADDMEMBER_FAIL, nC, 0, 0, 0);
             }
         }
 
@@ -1415,11 +1415,11 @@ namespace GameSrv.Player
             }
             if (nC == 0)
             {
-                SendDefMessage(Messages.SM_GUILDDELMEMBER_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDDELMEMBER_OK, 0, 0, 0, 0);
             }
             else
             {
-                SendDefMessage(Messages.SM_GUILDDELMEMBER_FAIL, nC, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDDELMEMBER_FAIL, nC, 0, 0, 0);
             }
         }
 
@@ -1457,7 +1457,7 @@ namespace GameSrv.Player
             {
                 if (nC <= -2)
                 {
-                    SendDefMessage(Messages.SM_GUILDRANKUPDATE_FAIL, nC, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_GUILDRANKUPDATE_FAIL, nC, 0, 0, 0);
                 }
             }
         }
@@ -1508,11 +1508,11 @@ namespace GameSrv.Player
                 }
                 if (n8 == 0)
                 {
-                    SendDefMessage(Messages.SM_GUILDMAKEALLY_OK, 0, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_GUILDMAKEALLY_OK, 0, 0, 0, 0);
                 }
                 else
                 {
-                    SendDefMessage(Messages.SM_GUILDMAKEALLY_FAIL, n8, 0, 0, 0, "");
+                    SendDefMessage(Messages.SM_GUILDMAKEALLY_FAIL, n8, 0, 0, 0);
                 }
             }
             catch (Exception e)
@@ -1547,11 +1547,11 @@ namespace GameSrv.Player
             }
             if (guildsuccess)
             {
-                SendDefMessage(Messages.SM_GUILDBREAKALLY_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDBREAKALLY_OK, 0, 0, 0, 0);
             }
             else
             {
-                SendDefMessage(Messages.SM_GUILDMAKEALLY_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_GUILDMAKEALLY_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -1631,7 +1631,7 @@ namespace GameSrv.Player
                             StorageItemList.Add(userItem);
                             ItemList.RemoveAt(i);
                             WeightChanged();
-                            SendDefMessage(Messages.SM_STORAGE_OK, 0, 0, 0, 0, "");
+                            SendDefMessage(Messages.SM_STORAGE_OK, 0, 0, 0, 0);
                             var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
@@ -1640,7 +1640,7 @@ namespace GameSrv.Player
                         }
                         else
                         {
-                            SendDefMessage(Messages.SM_STORAGE_FULL, 0, 0, 0, 0, "");
+                            SendDefMessage(Messages.SM_STORAGE_FULL, 0, 0, 0, 0);
                         }
                         bo19 = true;
                     }
@@ -1649,7 +1649,7 @@ namespace GameSrv.Player
             }
             if (!bo19)
             {
-                SendDefMessage(Messages.SM_STORAGE_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_STORAGE_FAIL, 0, 0, 0, 0);
             }
         }
 
@@ -1685,7 +1685,7 @@ namespace GameSrv.Player
                             {
                                 SendAddItem(userItem);
                                 StorageItemList.RemoveAt(i);
-                                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0, "");
+                                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0);
                                 var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
                                 {
@@ -1694,7 +1694,7 @@ namespace GameSrv.Player
                             }
                             else
                             {
-                                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_FULLBAG, 0, 0, 0, 0, "");
+                                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_FULLBAG, 0, 0, 0, 0);
                             }
                             bo19 = true;
                         }
@@ -1708,7 +1708,7 @@ namespace GameSrv.Player
             }
             if (!bo19)
             {
-                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_FAIL, 0, 0, 0, 0);
             }
         }
 

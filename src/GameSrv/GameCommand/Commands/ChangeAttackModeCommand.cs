@@ -49,7 +49,7 @@ namespace GameSrv.GameCommand.Commands {
                     PlayObject.SysMsg(Settings.AttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
                     break;
             }
-            PlayObject.SendDefMessage(Messages.SM_ATTACKMODE, (byte)PlayObject.AttatckMode, 0, 0, 0, "");
+            PlayObject.SendDefMessage(Messages.SM_ATTACKMODE, (byte)PlayObject.AttatckMode, 0, 0, 0);
         }
     }
 }

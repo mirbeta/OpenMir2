@@ -244,7 +244,7 @@ namespace GameSrv.Player {
             if (InGuildWarArea) {
                 n8 = n8 | 4;
             }
-            SendDefMessage(Messages.SM_AREASTATE, n8, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_AREASTATE, n8, 0, 0, 0);
         }
 
         public void RefMyStatus() {
@@ -584,7 +584,7 @@ namespace GameSrv.Player {
                 return;
             }
             Dealing = false;
-            SendDefMessage(Messages.SM_DEALCANCEL, 0, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_DEALCANCEL, 0, 0, 0, 0);
             if (DealCreat != null) {
                 DealCreat.DealCancel();
             }
@@ -1318,7 +1318,7 @@ namespace GameSrv.Player {
                 SendDefMessage(Messages.SM_CHANGEGUILDNAME, 0, 0, 0, 0, MyGuild.GuildName + '/' + GuildRankName);
             }
             else {
-                SendDefMessage(Messages.SM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_CHANGEGUILDNAME, 0, 0, 0, 0);
             }
         }
 
@@ -1927,15 +1927,15 @@ namespace GameSrv.Player {
                     DealCreat.DealLastTick = HUtil32.GetTickCount();
                     DealLastTick = HUtil32.GetTickCount();
                 }
-                SendDefMessage(Messages.SM_DEALDELITEM_OK, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALDELITEM_OK, 0, 0, 0, 0);
             }
             else {
-                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0, "");
+                SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
             }
         }
 
         private void SendAddDealItem(UserItem userItem) {
-            SendDefMessage(Messages.SM_DEALADDITEM_OK, 0, 0, 0, 0, "");
+            SendDefMessage(Messages.SM_DEALADDITEM_OK, 0, 0, 0, 0);
             if (DealCreat != null) {
                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                 if (stdItem != null) {
@@ -2855,7 +2855,7 @@ namespace GameSrv.Player {
                     else {
                         nTemp = 0;
                     }
-                    SendDefMessage(Messages.SM_ITEMDLGSELECT, 1, nTemp, 0, 0, "");
+                    SendDefMessage(Messages.SM_ITEMDLGSELECT, 1, nTemp, 0, 0);
                     //Npc.m_OprCount = 0;
                     npc.GotoLable(this, GotoNpcLabel, false);
                     GotoNpcLabel = string.Empty;
