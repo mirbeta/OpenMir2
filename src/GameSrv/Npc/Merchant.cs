@@ -1389,11 +1389,11 @@ namespace GameSrv.Npc
             }
             if (n1C == 0)
             {
-                playObject.SendMsg(this, Messages.SM_BUYITEM_SUCCESS, 0, playObject.Gold, nInt, 0, "");
+                playObject.SendMsg(this, Messages.RM_BUYITEM_SUCCESS, 0, playObject.Gold, nInt, 0, "");
             }
             else
             {
-                playObject.SendMsg(this, Messages.SM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
+                playObject.SendMsg(this, Messages.RM_BUYITEM_FAIL, 0, n1C, 0, 0, "");
             }
         }
 
