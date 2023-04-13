@@ -11,7 +11,7 @@ namespace GameSrv.Event.Events
         /// 火墙运行时间
         /// </summary>
         protected int FireRunTick;
-        private IList<BaseObject> BaseObjectList = new List<BaseObject>();
+        private IList<BaseObject> ObjectList = new List<BaseObject>();
 
         public FireBurnEvent(BaseObject creat, short nX, short nY, byte nType, int nTime, int nDamage) : base(creat.Envir, nX, nY, nType, nTime, true)
         {
@@ -24,19 +24,19 @@ namespace GameSrv.Event.Events
             if ((HUtil32.GetTickCount() - FireRunTick) > 3000)
             {
                 FireRunTick = HUtil32.GetTickCount();
-                if (Envir != null)
+                if (Envirnoment != null)
                 {
-                    Envir.GetBaseObjects(nX, nY, true, ref BaseObjectList);
-                    for (int i = 0; i < BaseObjectList.Count; i++)
+                    Envirnoment.GetBaseObjects(nX, nY, true, ref ObjectList);
+                    for (int i = 0; i < ObjectList.Count; i++)
                     {
-                        BaseObject targetBaseObject = BaseObjectList[i];
+                        BaseObject targetBaseObject = ObjectList[i];
                         if (targetBaseObject != null && OwnBaseObject != null && OwnBaseObject.IsProperTarget(targetBaseObject))
                         {
                             targetBaseObject.SendMsg(OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, Damage, 0, 0);
                         }
                     }
                 }
-                BaseObjectList.Clear();
+                ObjectList.Clear();
             }
             base.Run();
         }

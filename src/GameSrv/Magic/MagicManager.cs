@@ -1156,8 +1156,8 @@ namespace GameSrv.Magic
                             magicEvent = new MagicEvent
                             {
                                 BaseObjectList = new List<BaseObject>(),
-                                dwStartTick = HUtil32.GetTickCount(),
-                                dwTime = nPower * 1000
+                                StartTick = HUtil32.GetTickCount(),
+                                Time = nPower * 1000
                             };
                         }
                         magicEvent.BaseObjectList.Add(targetObject);

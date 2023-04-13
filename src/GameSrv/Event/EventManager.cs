@@ -25,7 +25,7 @@ namespace GameSrv.Event
                 MapEvent currentEvent = _eventList[i];
                 if (currentEvent.EventType == nType)
                 {
-                    if (currentEvent.Envir == envir && currentEvent.nX == nX && currentEvent.nY == nY)
+                    if (currentEvent.Envirnoment == envir && currentEvent.nX == nX && currentEvent.nY == nY)
                     {
                         return currentEvent;
                     }

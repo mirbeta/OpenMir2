@@ -10,7 +10,7 @@ namespace GameSrv.Event
         /// </summary>
         public readonly int Id;
         public VisibleFlag VisibleFlag = 0;
-        public Envirnoment Envir;
+        public Envirnoment Envirnoment;
         public short nX;
         public short nY;
         public int EventType;
@@ -63,7 +63,7 @@ namespace GameSrv.Event
             ContinueTime = dwETime;
             Visible = boVisible;
             Closed = false;
-            Envir = envir;
+            Envirnoment = envir;
             nX = ntX;
             nY = ntY;
             Active = true;
@@ -71,9 +71,9 @@ namespace GameSrv.Event
             OwnBaseObject = null;
             RunStart = HUtil32.GetTickCount();
             RunTick = 500;
-            if (Envir != null && Visible)
+            if (Envirnoment != null && Visible)
             {
-                Envir.AddToMap(nX, nY, CellType.Event, this.Id, this);
+                Envirnoment.AddToMap(nX, nY, CellType.Event, this.Id, this);
             }
             else
             {
@@ -108,11 +108,11 @@ namespace GameSrv.Event
             CloseTick = HUtil32.GetTickCount();
             if (!Visible) return;
             Visible = false;
-            if (Envir != null)
+            if (Envirnoment != null)
             {
-                Envir.DeleteFromMap(nX, nY, CellType.Event, this.Id, null);
+                Envirnoment.DeleteFromMap(nX, nY, CellType.Event, this.Id, null);
             }
-            Envir = null;
+            Envirnoment = null;
         }
 
         /// <summary>执行与释放或重置非托管资源关联的应用程序定义的任务。</summary>
@@ -137,7 +137,7 @@ namespace GameSrv.Event
             //清理托管资源
             if (disposing)
             {
-
+                OwnBaseObject = null;
             }
             //告诉自己已经被释放
             IsDispose = true;

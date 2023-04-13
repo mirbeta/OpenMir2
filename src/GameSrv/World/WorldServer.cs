@@ -1546,8 +1546,7 @@ namespace GameSrv.World
                             magicEvent.BaseObjectList.RemoveAt(j);
                         }
                     }
-                    if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.dwStartTick) > magicEvent.dwTime ||
-                        (HUtil32.GetTickCount() - magicEvent.dwStartTick) > 180000)
+                    if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.StartTick) > magicEvent.Time || (HUtil32.GetTickCount() - magicEvent.StartTick) > 180000)
                     {
                         var count = 0;
                         while (true)

@@ -5,8 +5,8 @@ namespace GameSrv.Event.Events
     public class MagicEvent
     {
         public IList<BaseObject> BaseObjectList;
-        public int dwStartTick;
-        public int dwTime;
+        public int StartTick;
+        public int Time;
         public MapEvent[] Events;
 
         public MagicEvent()

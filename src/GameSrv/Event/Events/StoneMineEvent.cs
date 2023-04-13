@@ -10,10 +10,10 @@ namespace GameSrv.Event.Events {
         public int AddStoneMineTick;
         public bool AddToMap;
 
-        public StoneMineEvent(Envirnoment Envir, short nX, short nY, byte nType) : base(Envir, nX, nY, nType, 0, false) {
+        public StoneMineEvent(Envirnoment envir, short nX, short nY, byte nType) : base(envir, nX, nY, nType, 0, false) {
             AddToMap = true;
             if (nType is 55 or 56 or 57) {
-                if (Envir.AddToMapItemEvent(nX, nY, CellType.Event, this)) {
+                if (envir.AddToMapItemEvent(nX, nY, CellType.Event, this)) {
                     Visible = false;
                     MineCount = M2Share.RandomNumber.Random(2000) + 300;
                     AddStoneMineTick = HUtil32.GetTickCount();
@@ -25,7 +25,7 @@ namespace GameSrv.Event.Events {
                 }
             }
             else {
-                if (Envir.AddToMapMineEvent(nX, nY, CellType.Event, this)) {
+                if (envir.AddToMapMineEvent(nX, nY, CellType.Event, this)) {
                     Visible = false;
                     MineCount = M2Share.RandomNumber.Random(200) + 1;
                     AddStoneMineTick = HUtil32.GetTickCount();
