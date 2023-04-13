@@ -3,11 +3,15 @@
     public enum MessagePriority : byte
     {
         /// <summary>
+        /// 最低
+        /// </summary>
+        Lowest = 255,
+        /// <summary>
         /// 低
         /// </summary>
         Low = 2,
         /// <summary>
-        /// 正常
+        /// 普通
         /// </summary>
         Normal = 1,
         /// <summary>

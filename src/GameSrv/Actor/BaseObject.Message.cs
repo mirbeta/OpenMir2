@@ -200,7 +200,7 @@ namespace GameSrv.Actor
                     Buff = sMsg,
                     ActorId = this.ActorId
                 };
-                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Low);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Lowest);
             }
         }
 
@@ -223,7 +223,7 @@ namespace GameSrv.Actor
                     Buff = sMsg,
                     ActorId = Messages.RM_STRUCK
                 };
-                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Low);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Lowest);
             }
         }
 
@@ -246,7 +246,7 @@ namespace GameSrv.Actor
                     Buff = sMsg
                 };
                 sendMessage.ActorId = actorId == Messages.RM_STRUCK ? Messages.RM_STRUCK : actorId;
-                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Low);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Lowest);
             }
         }
 
@@ -337,7 +337,7 @@ namespace GameSrv.Actor
             {
                 if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) 
                 {
-                    MsgQueue.Enqueue(sendMessage, 255);//延时消息优先级最低
+                    MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Lowest);//延时消息优先级最低
                     return false;
                 }
                 msg.wIdent = sendMessage.wIdent;
@@ -360,7 +360,7 @@ namespace GameSrv.Actor
             {
                 if ((sendMessage.DeliveryTime > 0) && (msgTick < sendMessage.DeliveryTime))
                 {
-                    MsgQueue.Enqueue(sendMessage, 255);//延时消息优先级最低
+                    MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Lowest);//延时消息优先级最低
                     return false;
                 }
                 msg.wIdent = sendMessage.wIdent;
