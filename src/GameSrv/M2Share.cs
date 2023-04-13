@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Text.RegularExpressions;
 using GameSrv.Actor;
 using GameSrv.Castle;
 using GameSrv.Conf;
@@ -9,7 +6,6 @@ using GameSrv.DataSource;
 using GameSrv.Event;
 using GameSrv.Guild;
 using GameSrv.Items;
-using GameSrv.Magic;
 using GameSrv.Maps;
 using GameSrv.Maps.AutoPath;
 using GameSrv.Network;
@@ -22,15 +18,19 @@ using GameSrv.World;
 using GameSrv.World.Managers;
 using GameSrv.World.Threads;
 using NLog;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSrv {
+namespace GameSrv
+{
     public static class M2Share {
         public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         /// <summary>
-        /// 服务端启动路径
+        /// 启动路径
         /// </summary>
         public static readonly string BasePath;
         /// <summary>
@@ -43,12 +43,6 @@ namespace GameSrv {
         public static long StartTime;
         public static int ShareFileNameNum = 0;
         public static int ServerTickDifference = 0;
-        public static readonly ServerConf ServerConf;
-        public static readonly GameSvrConf Config;
-        private static readonly StringConf StringConf;
-        private static readonly ExpsConf ExpConf;
-        private static readonly GlobalConf GlobalConf;
-        private static readonly GameSettingConf GameSetting;
         public static readonly WordStatistics Statistics;
         public static readonly ActorMgr ActorMgr;
         /// <summary>
@@ -217,8 +211,12 @@ namespace GameSrv {
         public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
-
-        public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
+        public static readonly ServerConf ServerConf;
+        public static readonly GameSvrConf Config;
+        private static readonly StringConf StringConf;
+        private static readonly ExpsConf ExpConf;
+        private static readonly GlobalConf GlobalConf;
+        private static readonly GameSettingConf GameSetting;
 
         static M2Share() {
             BasePath = AppContext.BaseDirectory;
@@ -246,6 +244,8 @@ namespace GameSrv {
             TimedRobotProcessor = new TimedRobotProcessor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
+
+        public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
 
         public static bool LoadLineNotice(string FileName) {
             var result = false;
