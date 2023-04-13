@@ -1365,8 +1365,8 @@ namespace GameSrv.Player
                 Bright = M2Share.GameTime;
                 SendPriorityMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "", MessagePriority.High);
-                SendPriorityMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "", MessagePriority.Normal);
-                SendPriorityMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0, "", MessagePriority.Normal);
+                SendPriorityMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
+                SendPriorityMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0);
                 SendPriorityMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
@@ -1522,8 +1522,8 @@ namespace GameSrv.Player
                 if (Race == ActorRace.Play)
                 {
                     RecalcAbilitys();
-                    SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                    SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
+                    SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0);
                 }
                 if (!boMakeLuck)
                 {
@@ -1552,7 +1552,7 @@ namespace GameSrv.Player
             ushort nDura = (ushort)HUtil32._MIN(5000, userItem.DuraMax - userItem.Dura);
             if (nDura <= 0) return false;
             userItem.Dura += nDura;
-            SendMsg(Messages.RM_DURACHANGE, 1, userItem.Dura, userItem.DuraMax, 0, "");
+            SendMsg(Messages.RM_DURACHANGE, 1, userItem.Dura, userItem.DuraMax, 0);
             SysMsg(Settings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
@@ -1568,7 +1568,7 @@ namespace GameSrv.Player
                 return false;
             }
             UseItems[ItemLocation.Weapon].Dura = UseItems[ItemLocation.Weapon].DuraMax;
-            SendMsg(Messages.RM_DURACHANGE, 1, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
+            SendMsg(Messages.RM_DURACHANGE, 1, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0);
             SysMsg(Settings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
@@ -1597,8 +1597,8 @@ namespace GameSrv.Player
                 }
             }
             RecalcAbilitys();
-            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
-            SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
+            SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0);
         }
 
         /// <summary>
@@ -2870,7 +2870,7 @@ namespace GameSrv.Player
                 }
                 if (nOldDura != HUtil32.Round(nDura / 1000.0))
                 {
-                    SendMsg(Messages.RM_DURACHANGE, ItemLocation.Dress, nDura, UseItems[ItemLocation.Dress].DuraMax, 0, "");
+                    SendMsg(Messages.RM_DURACHANGE, ItemLocation.Dress, nDura, UseItems[ItemLocation.Dress].DuraMax, 0);
                 }
             }
 
@@ -2902,15 +2902,15 @@ namespace GameSrv.Player
                     }
                     if (nOldDura != HUtil32.Round(nDura / 1000.0))
                     {
-                        SendMsg(Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                        SendMsg(Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0);
                     }
                 }
             }
             if (boRecalcAbi)
             {
                 RecalcAbilitys();
-                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
+                SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0);
             }
         }
 
@@ -3092,7 +3092,7 @@ namespace GameSrv.Player
                         BaseObject baseObject = visibleBaseObject.BaseObject;
                         if (!baseObject.FixedHideMode && !baseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                         {
-                            SendMsg(baseObject, Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
+                            SendMsg(baseObject, Messages.RM_DISAPPEAR, 0, 0, 0, 0);
                         }
                         VisibleActors.RemoveAt(n18);
                         Dispose(visibleBaseObject);
@@ -3107,11 +3107,11 @@ namespace GameSrv.Player
                             {
                                 if (baseObject.Skeleton)
                                 {
-                                    SendMsg(baseObject, Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
+                                    SendMsg(baseObject, Messages.RM_SKELETON, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0);
                                 }
                                 else
                                 {
-                                    SendMsg(baseObject, Messages.RM_DEATH, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0, "");
+                                    SendMsg(baseObject, Messages.RM_DEATH, baseObject.Direction, baseObject.CurrX, baseObject.CurrY, 0);
                                 }
                             }
                             else
@@ -3133,7 +3133,7 @@ namespace GameSrv.Player
                     VisibleMapItem visibleMapItem = VisibleItems[I];
                     if (visibleMapItem.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY, "");
+                        SendMsg(Messages.RM_ITEMHIDE, 0, visibleMapItem.MapItem.ItemId, visibleMapItem.nX, visibleMapItem.nY);
                         VisibleItems.RemoveAt(I);
                         Dispose(visibleMapItem);
                         continue;
@@ -3154,13 +3154,13 @@ namespace GameSrv.Player
                     MapEvent mapEvent = VisibleEvents[I];
                     if (mapEvent.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        SendMsg(Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY, "");
+                        SendMsg(Messages.RM_HIDEEVENT, 0, mapEvent.Id, mapEvent.nX, mapEvent.nY);
                         VisibleEvents.RemoveAt(I);
                         continue;
                     }
                     if (mapEvent.VisibleFlag == VisibleFlag.Show)
                     {
-                        SendMsg(Messages.RM_SHOWEVENT, (short)mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY, "");
+                        SendMsg(Messages.RM_SHOWEVENT, (short)mapEvent.EventType, mapEvent.Id, HUtil32.MakeLong(mapEvent.nX, (short)mapEvent.EventParam), mapEvent.nY);
                     }
                     I++;
                 }
@@ -3445,7 +3445,7 @@ namespace GameSrv.Player
                     {
                         int objectId = HUtil32.Sequence();
                         M2Share.ActorMgr.AddOhter(objectId, delList);
-                        SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0, "");
+                        SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
                     }
                 }
             }
@@ -3652,7 +3652,7 @@ namespace GameSrv.Player
                     VisibleActors[i] = null;
                 }
                 VisibleActors.Clear();
-                SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0);
                 Envir = envir;
                 MapName = envir.MapName;
                 MapFileName = envir.MapFileName;
@@ -4017,8 +4017,8 @@ namespace GameSrv.Player
                         M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     RecalcAbilitys();
-                    SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                    SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
+                    SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0);
                 }
             }
         }
@@ -5039,7 +5039,7 @@ namespace GameSrv.Player
             const string sExitGroupMsg = "{0} 已经退出了本组.";
             SendGroupText(Format(sExitGroupMsg, ChrName));
             GroupOwner = 0;
-            SendMsg(Messages.RM_GROUPCANCEL, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_GROUPCANCEL, 0, 0, 0, 0);
         }
 
         public void SendGroupText(string sMsg)
@@ -5104,7 +5104,7 @@ namespace GameSrv.Player
             Abil.MaxExp = GetLevelExp(Abil.Level);
             RecalcLevelAbilitys();
             RecalcAbilitys();
-            SendMsg(Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0, "");
+            SendMsg(Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0);
             if (M2Share.FunctionNPC != null)
             {
                 M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
@@ -5186,7 +5186,7 @@ namespace GameSrv.Player
             this.ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
             SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
         }
 
         public UserItem CheckItemCount(string sItemName, ref int nCount)
@@ -5243,7 +5243,7 @@ namespace GameSrv.Player
                             }
                             if (tDura != HUtil32.Round(nDura / 1000.0)) // 1.03
                             {
-                                SendMsg(Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0, "");
+                                SendMsg(Messages.RM_DURACHANGE, i, nDura, UseItems[i].DuraMax, 0);
                             }
                         }
                     }

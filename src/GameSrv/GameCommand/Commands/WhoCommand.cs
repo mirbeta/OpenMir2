@@ -7,9 +7,9 @@ namespace GameSrv.GameCommand.Commands {
     [Command("Who", "查看在线人数", "统计服务器在线人数", 10)]
     public class WhoCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
+        public void Execute(PlayObject playObject) {
             int offlineCount = 0;
-            PlayObject.HearMsg($"当前服务器在线人数: {M2Share.WorldEngine.PlayObjectCount}({offlineCount}/{(M2Share.WorldEngine.PlayObjectCount - offlineCount)})");
+            playObject.HearMsg($"当前服务器在线人数: {M2Share.WorldEngine.PlayObjectCount}({offlineCount}/{(M2Share.WorldEngine.PlayObjectCount - offlineCount)})");
         }
     }
 }

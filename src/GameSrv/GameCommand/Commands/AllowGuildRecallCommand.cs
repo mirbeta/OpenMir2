@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
-    [Command("Allowguildrecall", "", "", 0)]
+    [Command("Allowguildrecall", "", "")]
     public class AllowGuildRecallCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {

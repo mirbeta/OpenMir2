@@ -7,7 +7,7 @@ namespace GameSrv.GameCommand.Commands {
     [Command("GameGird", "调整指定玩家灵符", 10)]
     public class GameGirdCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             //string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             //string sCtr = @Params.Length > 1 ? @Params[1] : "";
             //int nGameGird = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2],0) : 0;

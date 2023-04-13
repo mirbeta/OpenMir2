@@ -9,9 +9,9 @@ namespace GameSrv.GameCommand.Commands
     public class TotalCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
+        public void Execute(PlayObject playObject)
         {
-            PlayObject.HearMsg($"总在线数{M2Share.TotalHumCount}");
+            playObject.HearMsg($"总在线数{M2Share.TotalHumCount}");
         }
     }
 }

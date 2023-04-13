@@ -5,13 +5,13 @@ namespace GameSrv.GameCommand.Commands {
     [Command("DelDenyIPaddrLogon", "", "IP地址", 10)]
     public class DelDenyIPaddrLogonCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sIPaddr = @Params.Length > 0 ? @Params[0] : "";
+            string sIPaddr = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sIPaddr)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boDelete = false;
@@ -36,7 +36,7 @@ namespace GameSrv.GameCommand.Commands {
             finally {
             }
             if (!boDelete) {
-                PlayObject.SysMsg(sIPaddr + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(sIPaddr + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

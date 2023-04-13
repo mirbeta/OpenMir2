@@ -7,7 +7,7 @@ namespace GameSrv.GameCommand.Commands
     public class TestFireCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null)
             {
@@ -18,19 +18,19 @@ namespace GameSrv.GameCommand.Commands
             int nTime = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
             int nPoint = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 0;
 
-            FireBurnEvent FireBurnEvent;
-            int nMinX = PlayObject.CurrX - nRange;
-            int nMaxX = PlayObject.CurrX + nRange;
-            int nMinY = PlayObject.CurrY - nRange;
-            int nMaxY = PlayObject.CurrY + nRange;
+            FireBurnEvent fireBurnEvent;
+            int nMinX = playObject.CurrX - nRange;
+            int nMaxX = playObject.CurrX + nRange;
+            int nMinY = playObject.CurrY - nRange;
+            int nMaxY = playObject.CurrY + nRange;
             for (int nX = nMinX; nX <= nMaxX; nX++)
             {
                 for (int nY = nMinY; nY <= nMaxY; nY++)
                 {
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
-                        FireBurnEvent = new FireBurnEvent(PlayObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
-                        M2Share.EventMgr.AddEvent(FireBurnEvent);
+                        fireBurnEvent = new FireBurnEvent(playObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
+                        M2Share.EventMgr.AddEvent(fireBurnEvent);
                     }
                 }
             }

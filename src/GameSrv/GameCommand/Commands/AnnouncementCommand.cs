@@ -7,7 +7,7 @@ namespace GameSrv.GameCommand.Commands {
     [Command("Announcement", "查看行会争霸赛结果", 10)]
     public class AnnouncementCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             //string sGuildName = @Params.Length > 0 ? @Params[0] : "";
             //TGUild Guild;
             //string sHumanName;

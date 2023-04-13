@@ -1280,7 +1280,7 @@ namespace GameSrv.Actor
                     if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
                         Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
-                        SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0, "");
+                        SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0);
                         SendMsg(Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
                         {
@@ -1748,7 +1748,7 @@ namespace GameSrv.Actor
                                     {
                                         if (mapEvent.OwnBaseObject.IsProperTarget(this))
                                         {
-                                            SendMsg(mapEvent.OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0, "");
+                                            SendMsg(mapEvent.OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0);
                                         }
                                     }
                                     break;
@@ -2431,7 +2431,7 @@ namespace GameSrv.Actor
             StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
             return result;
         }
 
@@ -2454,7 +2454,7 @@ namespace GameSrv.Actor
             StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
-            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
             return result;
         }
 
@@ -2699,13 +2699,13 @@ namespace GameSrv.Actor
             {
                 if (ExpHitter.IsSlave)//如果是角色下属杀死对象
                 {
-                    ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
-                    SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0, "");
+                    ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0);
+                    SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0);
                 }
                 if (ExpHitter.Race == ActorRace.Play)
                 {
-                    ExpHitter.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0, "");
-                    SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.ActorId, 0, 0, 0, "");
+                    ExpHitter.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0);
+                    SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.ActorId, 0, 0, 0);
                 }
             }
         }

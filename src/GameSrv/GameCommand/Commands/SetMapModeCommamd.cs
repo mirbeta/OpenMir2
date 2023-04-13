@@ -7,15 +7,15 @@ namespace GameSrv.GameCommand.Commands {
     [Command("SetMapMode", "设置地图模式", 10)]
     public class SetMapModeCommamd : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sMapName = @Params.Length > 0 ? @Params[0] : "";
-            string sMapMode = @Params.Length > 1 ? @Params[1] : "";
-            string sParam1 = @Params.Length > 2 ? @Params[2] : "";
-            string sParam2 = @Params.Length > 3 ? @Params[3] : "";
-            if (PlayObject.Permission < 6) {
+            string sMapName = @params.Length > 0 ? @params[0] : "";
+            string sMapMode = @params.Length > 1 ? @params[1] : "";
+            string sParam1 = @params.Length > 2 ? @params[2] : "";
+            string sParam2 = @params.Length > 3 ? @params[3] : "";
+            if (playObject.Permission < 6) {
                 return;
             }
 

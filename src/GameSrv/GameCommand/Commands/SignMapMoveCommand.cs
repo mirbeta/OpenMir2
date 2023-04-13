@@ -7,7 +7,7 @@ namespace GameSrv.GameCommand.Commands {
     [Command("SignMapMove", "回到上次死亡地点", 10)]
     public class SignMapMoveCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
+        public void Execute(PlayObject playObject) {
             //try
             //{
             //    Envirnoment Envir = null;

@@ -5,14 +5,14 @@ namespace GameSrv.GameCommand.Commands {
     [Command("DelDenyAccountLogon", "", "登录帐号", 10)]
     public class DelDenyAccountLogonCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sAccount = @Params.Length > 0 ? @Params[0] : "";
-            string sFixDeny = @Params.Length > 1 ? @Params[1] : "";
+            string sAccount = @params.Length > 0 ? @params[0] : "";
+            string sFixDeny = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sAccount)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boDelete = false;
@@ -30,7 +30,7 @@ namespace GameSrv.GameCommand.Commands {
                 //}
             }
             if (!boDelete) {
-                PlayObject.SysMsg(sAccount + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(sAccount + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

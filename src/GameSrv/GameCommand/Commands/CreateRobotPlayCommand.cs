@@ -8,11 +8,11 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 增加AI玩家
     /// </summary>
-    [Command("AddRobotPlay", "增加机器人玩家", "数量 地图 X Y", 0)]
+    [Command("AddRobotPlay", "增加机器人玩家", "数量 地图 X Y")]
     public class CreateRobotPlayCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null)
             {
@@ -20,7 +20,7 @@ namespace GameSrv.GameCommand.Commands
             }
             if (@params[0] == "?")
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var userCount = HUtil32.StrToInt(@params[0], 1);
@@ -34,7 +34,7 @@ namespace GameSrv.GameCommand.Commands
                 nY = HUtil32.StrToInt16(@params[3], 0);
                 if (string.IsNullOrEmpty(sMapName) || (nX == 0 || nY == 0))
                 {
-                    PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
@@ -55,7 +55,7 @@ namespace GameSrv.GameCommand.Commands
                     nY = nY
                 });
             }
-            PlayObject.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{M2Share.WorldEngine.RobotLogonQueue.Count}],当前共[{M2Share.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{M2Share.WorldEngine.RobotLogonQueue.Count}],当前共[{M2Share.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
         }
     }
 }

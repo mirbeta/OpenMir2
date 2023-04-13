@@ -7,13 +7,13 @@ namespace GameSrv.GameCommand.Commands {
     [Command("UnBindUseItem", "解除指定玩家物品绑定属性", 10)]
     public class UnBindUseItemCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            string sItem = @Params.Length > 1 ? @Params[1] : "";
-            string sType = @Params.Length > 2 ? @Params[2] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sItem = @params.Length > 1 ? @params[1] : "";
+            string sType = @params.Length > 2 ? @params[2] : "";
 
             //TPlayObject m_PlayObject;
             //TUserItem UserItem = null;

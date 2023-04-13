@@ -7,12 +7,12 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ShowEffect", "播放特效", 10)]
     public class ShowEffectCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sEffect = @Params.Length > 0 ? @Params[0] : "";
-            string sTime = @Params.Length > 1 ? @Params[1] : "";
+            string sEffect = @params.Length > 0 ? @params[0] : "";
+            string sTime = @params.Length > 1 ? @params[1] : "";
             //int nEffectType;
             //TFlowerEvent FlowerEvent = null;
             //if ((sEffect == "") || (HUtil32.Str_ToInt(sEffect, -1) <= 0))

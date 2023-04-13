@@ -10,7 +10,7 @@ namespace GameSrv.GameCommand.Commands
     public class ReAliveCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null)
             {
@@ -19,20 +19,20 @@ namespace GameSrv.GameCommand.Commands
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null)
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            m_PlayObject.ReAlive();
-            m_PlayObject.WAbil.HP = m_PlayObject.WAbil.MaxHP;
-            m_PlayObject.SendMsg(PlayObject, Messages.RM_ABILITY, 0, 0, 0, 0, "");
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandReAliveMsg, sHumanName), MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg(sHumanName + " 已获重生。", MsgColor.Green, MsgType.Hint);
+            mPlayObject.ReAlive();
+            mPlayObject.WAbil.HP = mPlayObject.WAbil.MaxHP;
+            mPlayObject.SendMsg(playObject, Messages.RM_ABILITY, 0, 0, 0, 0);
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandReAliveMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg(sHumanName + " 已获重生。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

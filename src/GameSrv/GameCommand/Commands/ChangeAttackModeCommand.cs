@@ -5,51 +5,51 @@ namespace GameSrv.GameCommand.Commands {
     /// <summary>
     /// 调整当前玩家攻击模式
     /// </summary>
-    [Command("AttackMode", "调整当前玩家攻击模式", 0)]
+    [Command("AttackMode", "调整当前玩家攻击模式")]
     public class ChangeAttackModeCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
-            if (PlayObject.AttatckMode >= AttackMode.HAM_PKATTACK) {
-                PlayObject.AttatckMode = 0;
+        public void Execute(PlayObject playObject) {
+            if (playObject.AttatckMode >= AttackMode.HAM_PKATTACK) {
+                playObject.AttatckMode = 0;
             }
             else {
-                if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK) {
-                    PlayObject.AttatckMode++;
+                if (playObject.AttatckMode < AttackMode.HAM_PKATTACK) {
+                    playObject.AttatckMode++;
                 }
                 else {
-                    PlayObject.AttatckMode = AttackMode.HAM_ALL;
+                    playObject.AttatckMode = AttackMode.HAM_ALL;
                 }
             }
-            if (PlayObject.AttatckMode < AttackMode.HAM_PKATTACK) {
-                PlayObject.AttatckMode++;
+            if (playObject.AttatckMode < AttackMode.HAM_PKATTACK) {
+                playObject.AttatckMode++;
             }
             else {
-                PlayObject.AttatckMode = AttackMode.HAM_ALL;
+                playObject.AttatckMode = AttackMode.HAM_ALL;
             }
-            switch (PlayObject.AttatckMode) {
+            switch (playObject.AttatckMode) {
                 case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
-                    PlayObject.SysMsg(Settings.AttackModeOfAll, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.AttackModeOfAll, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_PEACE: // [攻击模式: 和平攻击]
-                    PlayObject.SysMsg(Settings.AttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.AttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_DEAR:// [攻击模式: 和平攻击]
-                    PlayObject.SysMsg(Settings.AttackModeOfDear, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.AttackModeOfDear, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_MASTER:// [攻击模式: 和平攻击]
-                    PlayObject.SysMsg(Settings.AttackModeOfMaster, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.AttackModeOfMaster, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_GROUP:// [攻击模式: 编组攻击]
-                    PlayObject.SysMsg(Settings.AttackModeOfGroup, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.AttackModeOfGroup, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_GUILD:// [攻击模式: 行会攻击]
-                    PlayObject.SysMsg(Settings.AttackModeOfGuild, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.AttackModeOfGuild, MsgColor.Green, MsgType.Hint);
                     break;
                 case AttackMode.HAM_PKATTACK:// [攻击模式: 红名攻击]
-                    PlayObject.SysMsg(Settings.AttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(Settings.AttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
                     break;
             }
-            PlayObject.SendDefMessage(Messages.SM_ATTACKMODE, (byte)PlayObject.AttatckMode, 0, 0, 0);
+            playObject.SendDefMessage(Messages.SM_ATTACKMODE, (byte)playObject.AttatckMode, 0, 0, 0);
         }
     }
 }

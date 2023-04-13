@@ -9,17 +9,17 @@ namespace GameSrv.GameCommand.Commands {
     [Command("DelSkill", "删除指定玩家技能", "人物名称 技能名称", 10)]
     public class DelSkillCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            string sSkillName = @Params.Length > 1 ? @Params[1] : "";
-            string Herostr = @Params.Length > 2 ? @Params[2] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sSkillName = @params.Length > 1 ? @params[1] : "";
+            string herostr = @params.Length > 2 ? @params[2] : "";
             bool boDelAll;
-            UserMagic UserMagic;
+            UserMagic userMagic;
             if (string.IsNullOrEmpty(sHumanName) || (string.IsNullOrEmpty(sSkillName))) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (string.Compare(sSkillName, "All", StringComparison.OrdinalIgnoreCase) == 0) {
@@ -28,32 +28,32 @@ namespace GameSrv.GameCommand.Commands {
             else {
                 boDelAll = false;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null) {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null) {
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = m_PlayObject.MagicList.Count - 1; i >= 0; i--) {
-                if (m_PlayObject.MagicList.Count <= 0) {
+            for (int i = mPlayObject.MagicList.Count - 1; i >= 0; i--) {
+                if (mPlayObject.MagicList.Count <= 0) {
                     break;
                 }
-                UserMagic = m_PlayObject.MagicList[i];
-                if (UserMagic != null) {
+                userMagic = mPlayObject.MagicList[i];
+                if (userMagic != null) {
                     if (boDelAll) {
-                        m_PlayObject.MagicList.RemoveAt(i);
+                        mPlayObject.MagicList.RemoveAt(i);
                     }
                     else {
-                        if (string.Compare(UserMagic.Magic.Desc, sSkillName, StringComparison.OrdinalIgnoreCase) == 0) {
-                            m_PlayObject.SendDelMagic(UserMagic);
-                            m_PlayObject.MagicList.RemoveAt(i);
-                            m_PlayObject.SysMsg($"技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);
-                            PlayObject.SysMsg($"{sHumanName}的技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);
+                        if (string.Compare(userMagic.Magic.Desc, sSkillName, StringComparison.OrdinalIgnoreCase) == 0) {
+                            mPlayObject.SendDelMagic(userMagic);
+                            mPlayObject.MagicList.RemoveAt(i);
+                            mPlayObject.SysMsg($"技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);
+                            playObject.SysMsg($"{sHumanName}的技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);
                             break;
                         }
                     }
                 }
             }
-            m_PlayObject.RecalcAbilitys();
+            mPlayObject.RecalcAbilitys();
         }
     }
 }

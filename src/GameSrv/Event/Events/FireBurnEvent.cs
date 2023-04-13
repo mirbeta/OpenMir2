@@ -32,7 +32,7 @@ namespace GameSrv.Event.Events
                         BaseObject targetBaseObject = BaseObjectList[i];
                         if (targetBaseObject != null && OwnBaseObject != null && OwnBaseObject.IsProperTarget(targetBaseObject))
                         {
-                            targetBaseObject.SendMsg(OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, Damage, 0, 0, "");
+                            targetBaseObject.SendMsg(OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, Damage, 0, 0);
                         }
                     }
                 }

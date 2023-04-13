@@ -8,13 +8,13 @@ namespace GameSrv.GameCommand.Commands {
     [Command("AllowDearRecall", "", 10)]
     public class AllowDearRecallCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            PlayObject.CanDearRecall = !PlayObject.CanDearRecall;
-            if (PlayObject.CanDearRecall) {
-                PlayObject.SysMsg(CommandHelp.EnableDearRecall, MsgColor.Blue, MsgType.Hint);
+        public void Execute(string[] @params, PlayObject playObject) {
+            playObject.CanDearRecall = !playObject.CanDearRecall;
+            if (playObject.CanDearRecall) {
+                playObject.SysMsg(CommandHelp.EnableDearRecall, MsgColor.Blue, MsgType.Hint);
             }
             else {
-                PlayObject.SysMsg(CommandHelp.DisableDearRecall, MsgColor.Blue, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.DisableDearRecall, MsgColor.Blue, MsgType.Hint);
             }
         }
     }

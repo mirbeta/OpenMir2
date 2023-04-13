@@ -8,33 +8,33 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ChangeJob", "调整指定玩家职业", CommandHelp.GameCommandChangeJobHelpMsg, 10)]
     public class ChangeJobCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             if (@params == null) {
                 return;
             }
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             string sJobName = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sJobName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject != null) {
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject != null) {
                 if (string.Compare(sJobName, "Warr", StringComparison.OrdinalIgnoreCase) == 0) {
-                    m_PlayObject.Job = PlayJob.Warrior;
+                    mPlayObject.Job = PlayJob.Warrior;
                 }
                 if (string.Compare(sJobName, "Wizard", StringComparison.OrdinalIgnoreCase) == 0) {
-                    m_PlayObject.Job = PlayJob.Wizard;
+                    mPlayObject.Job = PlayJob.Wizard;
                 }
                 if (string.Compare(sJobName, "Taos", StringComparison.OrdinalIgnoreCase) == 0) {
-                    m_PlayObject.Job = PlayJob.Taoist;
+                    mPlayObject.Job = PlayJob.Taoist;
                 }
-                m_PlayObject.HasLevelUp(1);
-                m_PlayObject.SysMsg(CommandHelp.GameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+                mPlayObject.HasLevelUp(1);
+                mPlayObject.SysMsg(CommandHelp.GameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
             }
             else {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

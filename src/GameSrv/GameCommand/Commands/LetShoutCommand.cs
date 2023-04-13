@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
-    [Command("Letshout", "", "", 0)]
+    [Command("Letshout", "", "")]
     public class LetShoutCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {

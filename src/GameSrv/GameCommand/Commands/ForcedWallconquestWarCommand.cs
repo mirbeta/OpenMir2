@@ -10,35 +10,35 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ForcedWallconquestWar", "开始攻城战役", "城堡名称", 10)]
     public class ForcedWallconquestWarCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sCastleName = @Params.Length > 0 ? @Params[0] : "";
+            string sCastleName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sCastleName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            UserCastle Castle = M2Share.CastleMgr.Find(sCastleName);
-            if (Castle != null) {
-                Castle.UnderWar = !Castle.UnderWar;
-                if (Castle.UnderWar) {
-                    Castle.ShowOverMsg = false;
-                    Castle.WarDate = DateTime.Now;
-                    Castle.StartCastleWarTick = HUtil32.GetTickCount();
-                    Castle.StartWallconquestWar();
+            UserCastle castle = M2Share.CastleMgr.Find(sCastleName);
+            if (castle != null) {
+                castle.UnderWar = !castle.UnderWar;
+                if (castle.UnderWar) {
+                    castle.ShowOverMsg = false;
+                    castle.WarDate = DateTime.Now;
+                    castle.StartCastleWarTick = HUtil32.GetTickCount();
+                    castle.StartWallconquestWar();
                     WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
-                    string s20 = "[" + Castle.sName + " 攻城战已经开始]";
+                    string s20 = "[" + castle.sName + " 攻城战已经开始]";
                     M2Share.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
                     WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
-                    Castle.MainDoorControl(true);
+                    castle.MainDoorControl(true);
                 }
                 else {
-                    Castle.StopWallconquestWar();
+                    castle.StopWallconquestWar();
                 }
             }
             else {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

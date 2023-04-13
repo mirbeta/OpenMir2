@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
-    [Command("Authally", "", "", 0)]
+    [Command("Authally", "", "")]
     internal class AuthallyCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {

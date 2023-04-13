@@ -10,35 +10,35 @@ namespace GameSrv.GameCommand.Commands
     public class BonuPointCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
-            if (@Params == null)
+            if (@params == null)
             {
                 return;
             }
-            string sHumName = @Params.Length > 0 ? @Params[0] : "";
-            int nCount = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;
+            string sHumName = @params.Length > 0 ? @params[0] : "";
+            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (string.IsNullOrEmpty(sHumName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (m_PlayObject == null)
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            if (mPlayObject == null)
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount > 0)
             {
-                m_PlayObject.BonusPoint = nCount;
-                m_PlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                mPlayObject.BonusPoint = nCount;
+                mPlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
                 return;
             }
-            string sMsg = string.Format("未分配点数:{0} 已分配点数:(DC:{1} MC:{2} SC:{3} AC:{4} MAC:{5} HP:{6} MP:{7} HIT:{8} SPEED:{9})", m_PlayObject.BonusPoint,
-                m_PlayObject.BonusAbil.DC, m_PlayObject.BonusAbil.MC, m_PlayObject.BonusAbil.SC, m_PlayObject.BonusAbil.AC,
-                m_PlayObject.BonusAbil.MAC, m_PlayObject.BonusAbil.HP, m_PlayObject.BonusAbil.MP, m_PlayObject.BonusAbil.Hit, m_PlayObject.BonusAbil.Speed);
-            PlayObject.SysMsg(string.Format("{0}的属性点数为:{1}", sHumName, sMsg), MsgColor.Red, MsgType.Hint);
+            string sMsg = string.Format("未分配点数:{0} 已分配点数:(DC:{1} MC:{2} SC:{3} AC:{4} MAC:{5} HP:{6} MP:{7} HIT:{8} SPEED:{9})", mPlayObject.BonusPoint,
+                mPlayObject.BonusAbil.DC, mPlayObject.BonusAbil.MC, mPlayObject.BonusAbil.SC, mPlayObject.BonusAbil.AC,
+                mPlayObject.BonusAbil.MAC, mPlayObject.BonusAbil.HP, mPlayObject.BonusAbil.MP, mPlayObject.BonusAbil.Hit, mPlayObject.BonusAbil.Speed);
+            playObject.SysMsg(string.Format("{0}的属性点数为:{1}", sHumName, sMsg), MsgColor.Red, MsgType.Hint);
         }
     }
 }

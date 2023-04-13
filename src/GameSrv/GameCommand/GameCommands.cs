@@ -123,7 +123,7 @@ namespace GameSrv.GameCommand {
         public readonly GameCmd Data;
         [RegisterCommand(typeof(PrvMsgCommand))]
         public readonly GameCmd PrvMsg;
-        [RegisterCommand(typeof(UserMoveXYCommand))]
+        [RegisterCommand(typeof(UserMoveXyCommand))]
         public readonly GameCmd UserMove;
         [RegisterCommand(typeof(AllowGroupReCallCommand))]
         public readonly GameCmd AllowGroupCall;
@@ -289,7 +289,7 @@ namespace GameSrv.GameCommand {
         public readonly GameCmd ReloadRobot;
         [RegisterCommand(typeof(ReloadMonItemsCommand))]
         public readonly GameCmd ReloadMonItems;
-        [RegisterCommand(typeof(ReloadMagicDBCommand))]
+        [RegisterCommand(typeof(ReloadMagicDbCommand))]
         public readonly GameCmd ReloadMagicDb;
         [RegisterCommand(typeof(ReAliveCommand))]
         public readonly GameCmd ReaLive;

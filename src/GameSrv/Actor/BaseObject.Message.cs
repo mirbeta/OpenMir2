@@ -30,7 +30,7 @@ namespace GameSrv.Actor
             }
         }
 
-        public void SendMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
+        public void SendMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "")
         {
             var boSend = false;
             if (IsRobot)
@@ -94,7 +94,7 @@ namespace GameSrv.Actor
             }
         }
 
-        public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
+        public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "")
         {
             var boSend = false;
             if (IsRobot)
@@ -335,7 +335,7 @@ namespace GameSrv.Actor
             bool result = false;
             if (MsgQueue.TryDequeue(out SendMessage sendMessage, out _))
             {
-                if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) 
+                if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime))
                 {
                     MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Lowest);//延时消息优先级最低
                     return false;

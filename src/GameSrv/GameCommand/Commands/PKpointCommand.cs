@@ -8,21 +8,21 @@ namespace GameSrv.GameCommand.Commands {
     [Command("PKpoint", "查看指定玩家PK值", CommandHelp.GameCommandPKPointHelpMsg, 10)]
     public class PKpointCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (!string.IsNullOrEmpty(sHumanName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null) {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null) {
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandPKPointMsg, sHumanName, m_PlayObject.PkPoint), MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandPKPointMsg, sHumanName, mPlayObject.PkPoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

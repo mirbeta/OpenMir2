@@ -253,7 +253,7 @@ namespace GameSrv.Player
                         MSTempPwd = sData;
                         IsReConfigPwd = true;
                         SysMsg(Settings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);
-                        SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                     }
                     else
                     {
@@ -351,7 +351,7 @@ namespace GameSrv.Player
                     IsCheckOldPwd = false;
                     if (StoragePwd == sData)
                     {
-                        SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                        SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                         SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         IsSetStoragePwd = true;
                     }

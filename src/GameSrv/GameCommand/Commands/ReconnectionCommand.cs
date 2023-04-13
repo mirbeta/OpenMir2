@@ -10,7 +10,7 @@ namespace GameSrv.GameCommand.Commands
     public class ReconnectionCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null)
             {
@@ -18,23 +18,23 @@ namespace GameSrv.GameCommand.Commands
             }
             string sIPaddr = @params.Length > 0 ? @params[0] : "";
             string sPort = @params.Length > 1 ? @params[1] : "";
-            if (PlayObject.Permission < 10)
+            if (playObject.Permission < 10)
             {
                 return;
             }
             if (!string.IsNullOrEmpty(sIPaddr) && sIPaddr[0] == '?')
             {
-                PlayObject.SysMsg("此命令用于改变客户端连接网关的IP及端口。", MsgColor.Blue, MsgType.Hint);
+                playObject.SysMsg("此命令用于改变客户端连接网关的IP及端口。", MsgColor.Blue, MsgType.Hint);
                 return;
             }
             if (string.IsNullOrEmpty(sIPaddr) || string.IsNullOrEmpty(sPort))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (!string.IsNullOrEmpty(sIPaddr) && !string.IsNullOrEmpty(sPort))
             {
-                PlayObject.SendMsg(PlayObject,Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
+                playObject.SendMsg(playObject,Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }
         }
     }

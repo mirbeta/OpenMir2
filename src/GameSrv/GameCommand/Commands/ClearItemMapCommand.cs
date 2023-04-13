@@ -4,15 +4,15 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
     public class ClearItemMapCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sMap = @Params.Length > 0 ? @Params[0] : "";
-            string sItemName = @Params.Length > 1 ? @Params[1] : "";
-            int nX = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2],0) : 0;
-            int nY = @Params.Length > 3 ? HUtil32.StrToInt(@Params[3],0) : 0;
-            int nRange = @Params.Length > 4 ? HUtil32.StrToInt(@Params[4],0) : 0;
+            string sMap = @params.Length > 0 ? @params[0] : "";
+            string sItemName = @params.Length > 1 ? @params[1] : "";
+            int nX = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
+            int nY = @params.Length > 3 ? HUtil32.StrToInt(@params[3],0) : 0;
+            int nRange = @params.Length > 4 ? HUtil32.StrToInt(@params[4],0) : 0;
             if (string.IsNullOrEmpty(sMap) || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?') {
                 //PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

@@ -7,11 +7,11 @@ namespace GameSrv.GameCommand.Commands {
     /// </summary>
     [Command("ReloadMagicDB", "重新加载技能数据库", 10)]
 
-    public class ReloadMagicDBCommand : GameCommand {
+    public class ReloadMagicDbCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
+        public void Execute(PlayObject playObject) {
             M2Share.CommonDb.LoadMagicDB();
-            PlayObject.SysMsg("魔法数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg("魔法数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

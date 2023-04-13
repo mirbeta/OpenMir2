@@ -8,14 +8,14 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ChangeSuperManMode", "进入/退出无敌模式(进入模式后人物不会死亡)", 10)]
     public class ChangeSuperManModeCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
-            bool boFlag = !PlayObject.SuperMan;
-            PlayObject.SuperMan = boFlag;
-            if (PlayObject.SuperMan) {
-                PlayObject.SysMsg(Settings.SupermanMode, MsgColor.Green, MsgType.Hint);
+        public void Execute(PlayObject playObject) {
+            bool boFlag = !playObject.SuperMan;
+            playObject.SuperMan = boFlag;
+            if (playObject.SuperMan) {
+                playObject.SysMsg(Settings.SupermanMode, MsgColor.Green, MsgType.Hint);
             }
             else {
-                PlayObject.SysMsg(Settings.ReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(Settings.ReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }

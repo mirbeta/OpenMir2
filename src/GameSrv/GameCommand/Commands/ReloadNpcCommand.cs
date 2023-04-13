@@ -10,48 +10,48 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ReloadNpc", "重新加载当前9格范围内NPC", 10)]
     public class ReloadNpcCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             string sParam = string.Empty;
-            if (@Params != null) {
-                sParam = @Params.Length > 0 ? @Params[0] : "";
+            if (@params != null) {
+                sParam = @params.Length > 0 ? @params[0] : "";
             }
 
-            Merchant Merchant;
-            NormNpc NPC;
+            Merchant merchant;
+            NormNpc npc;
             if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0) {
                 M2Share.LocalDb.ReLoadMerchants();
                 M2Share.WorldEngine.ReloadMerchantList();
-                PlayObject.SysMsg("交易NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg("交易NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
                 M2Share.WorldEngine.ReloadNpcList();
-                PlayObject.SysMsg("管理NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg("管理NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             else {
-                IList<BaseObject> TmpMerList = new List<BaseObject>();
+                IList<BaseObject> tmpMerList = new List<BaseObject>();
                 try {
-                    if (M2Share.WorldEngine.GetMerchantList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpMerList) > 0) {
-                        for (int i = 0; i < TmpMerList.Count; i++) {
-                            Merchant = (Merchant)TmpMerList[i];
-                            Merchant.ClearScript();
-                            Merchant.LoadMerchantScript();
-                            PlayObject.SysMsg(Merchant.ChrName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
+                    if (M2Share.WorldEngine.GetMerchantList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpMerList) > 0) {
+                        for (int i = 0; i < tmpMerList.Count; i++) {
+                            merchant = (Merchant)tmpMerList[i];
+                            merchant.ClearScript();
+                            merchant.LoadMerchantScript();
+                            playObject.SysMsg(merchant.ChrName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else {
-                        PlayObject.SysMsg("附近未发现任何交易NPC!!!", MsgColor.Red, MsgType.Hint);
+                        playObject.SysMsg("附近未发现任何交易NPC!!!", MsgColor.Red, MsgType.Hint);
                     }
 
-                    IList<BaseObject> TmpNorList = new List<BaseObject>();
-                    if (M2Share.WorldEngine.GetNpcList(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 9, TmpNorList) > 0) {
-                        for (int i = 0; i < TmpNorList.Count; i++) {
-                            NPC = TmpNorList[i] as NormNpc;
-                            NPC.ClearScript();
-                            NPC.LoadNPCScript();
-                            PlayObject.SysMsg(NPC.ChrName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
+                    IList<BaseObject> tmpNorList = new List<BaseObject>();
+                    if (M2Share.WorldEngine.GetNpcList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpNorList) > 0) {
+                        for (int i = 0; i < tmpNorList.Count; i++) {
+                            npc = tmpNorList[i] as NormNpc;
+                            npc.ClearScript();
+                            npc.LoadNPCScript();
+                            playObject.SysMsg(npc.ChrName + "重新加载成功...", MsgColor.Green, MsgType.Hint);
                         }
                     }
                     else {
-                        PlayObject.SysMsg("附近未发现任何管理NPC!!!", MsgColor.Red, MsgType.Hint);
+                        playObject.SysMsg("附近未发现任何管理NPC!!!", MsgColor.Red, MsgType.Hint);
                     }
                 }
                 finally {

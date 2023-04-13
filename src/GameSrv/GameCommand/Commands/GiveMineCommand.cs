@@ -10,19 +10,19 @@ namespace GameSrv.GameCommand.Commands {
     [Command("GiveMine", "给指定纯度的矿石", "矿石名称 数量 持久", 10)]
     public class GiveMineCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sMineName = @Params.Length > 0 ? @Params[0] : "";
-            int nMineCount = @Params.Length > 0 ? HUtil32.StrToInt(@Params[1], 0) : 0;
-            int nDura = @Params.Length > 0 ? HUtil32.StrToInt(@Params[2], 0) : 0;
-            if (PlayObject.Permission < this.Command.PermissionMin) {
-                PlayObject.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
+            string sMineName = @params.Length > 0 ? @params[0] : "";
+            int nMineCount = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            int nDura = @params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            if (playObject.Permission < this.Command.PermissionMin) {
+                playObject.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (string.IsNullOrEmpty(sMineName) || !string.IsNullOrEmpty(sMineName) && sMineName[0] == '?' || nMineCount <= 0) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nDura <= 0) {
@@ -30,27 +30,27 @@ namespace GameSrv.GameCommand.Commands {
             }
             // 如纯度不填,则随机给纯度
             for (int i = 0; i < nMineCount; i++) {
-                UserItem UserItem = new UserItem();
-                if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref UserItem)) {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                    if (StdItem != null && StdItem.StdMode == 43) {
-                        if (PlayObject.IsAddWeightAvailable(StdItem.Weight * nMineCount)) {
-                            UserItem.Dura = Convert.ToUInt16(nDura * 1000);
-                            if (UserItem.Dura > UserItem.DuraMax) {
-                                UserItem.Dura = UserItem.DuraMax;
+                UserItem userItem = new UserItem();
+                if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref userItem)) {
+                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                    if (stdItem != null && stdItem.StdMode == 43) {
+                        if (playObject.IsAddWeightAvailable(stdItem.Weight * nMineCount)) {
+                            userItem.Dura = Convert.ToUInt16(nDura * 1000);
+                            if (userItem.Dura > userItem.DuraMax) {
+                                userItem.Dura = userItem.DuraMax;
                             }
-                            PlayObject.ItemList.Add(UserItem);
-                            PlayObject.SendAddItem(UserItem);
-                            if (StdItem.NeedIdentify == 1) {
-                                M2Share.EventSource.AddEventLog(5, PlayObject.MapName + "\09" + PlayObject.CurrX + "\09" + PlayObject.CurrY + "\09" +
-                                                                   PlayObject.ChrName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex + "\09" + UserItem.Dura + "/"
-                                                                   + UserItem.DuraMax + "\09" + PlayObject.ChrName);
+                            playObject.ItemList.Add(userItem);
+                            playObject.SendAddItem(userItem);
+                            if (stdItem.NeedIdentify == 1) {
+                                M2Share.EventSource.AddEventLog(5, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09" +
+                                                                   playObject.ChrName + "\09" + stdItem.Name + "\09" + userItem.MakeIndex + "\09" + userItem.Dura + "/"
+                                                                   + userItem.DuraMax + "\09" + playObject.ChrName);
                             }
                         }
                     }
                 }
                 else {
-                    UserItem = null;
+                    userItem = null;
                     break;
                 }
             }

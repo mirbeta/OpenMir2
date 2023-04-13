@@ -8,15 +8,15 @@ namespace GameSrv.GameCommand.Commands {
     [Command("Shutup", "将指定人物禁言", CommandHelp.GameCommandShutupHelpMsg, 10)]
     public class ShutupCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            string sTime = @Params.Length > 1 ? @Params[1] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sTime = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sTime) || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             uint dwTime = (uint)HUtil32.StrToInt(sTime, 5);
@@ -44,7 +44,7 @@ namespace GameSrv.GameCommand.Commands {
             finally {
                 HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
             }
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
         }
     }
 }

@@ -49,11 +49,11 @@ namespace GameSrv.Player
             if (readyItem.IsBusy != MarketConst.UMRESULT_SUCCESS) return;
             if (readyItem.SellCount < MarketConst.MARKET_MAX_SELL_COUNT)
             {
-                SendMsg(Messages.RM_MARKET_RESULT, 0, readyItem.MarketNPC, MarketConst.UMResult_ReadyToSell, 0, "");
+                SendMsg(Messages.RM_MARKET_RESULT, 0, readyItem.MarketNPC, MarketConst.UMResult_ReadyToSell, 0);
             }
             else
             {
-                SendMsg(Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_OverSellCount, 0, "");
+                SendMsg(Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_OverSellCount, 0);
             }
             FlagReadyToSellCheck = true;
         }

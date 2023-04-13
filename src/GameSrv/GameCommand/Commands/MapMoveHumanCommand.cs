@@ -11,42 +11,42 @@ namespace GameSrv.GameCommand.Commands
     public class MapMoveHumanCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
-            if (@Params == null)
+            if (@params == null)
             {
                 return;
             }
-            var sSrcMap = @Params.Length > 0 ? @Params[0] : "";
-            var sDenMap = @Params.Length > 1 ? @Params[1] : "";
+            var sSrcMap = @params.Length > 0 ? @params[0] : "";
+            var sDenMap = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sDenMap) || string.IsNullOrEmpty(sSrcMap) ||
                 !string.IsNullOrEmpty(sSrcMap) && sSrcMap[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var SrcEnvir = M2Share.MapMgr.FindMap(sSrcMap);
-            var DenEnvir = M2Share.MapMgr.FindMap(sDenMap);
-            if (SrcEnvir == null)
+            var srcEnvir = M2Share.MapMgr.FindMap(sSrcMap);
+            var denEnvir = M2Share.MapMgr.FindMap(sDenMap);
+            if (srcEnvir == null)
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red,
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red,
                     MsgType.Hint);
                 return;
             }
-            if (DenEnvir == null)
+            if (denEnvir == null)
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red,
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red,
                     MsgType.Hint);
                 return;
             }
-            IList<BaseObject> HumanList = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapRageHuman(SrcEnvir, SrcEnvir.Width / 2, SrcEnvir.Height / 2, 1000, ref HumanList, true);
-            for (var i = 0; i < HumanList.Count; i++)
+            IList<BaseObject> humanList = new List<BaseObject>();
+            M2Share.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
+            for (var i = 0; i < humanList.Count; i++)
             {
-                var MoveHuman = (PlayObject)HumanList[i];
-                if (MoveHuman != PlayObject)
+                var moveHuman = (PlayObject)humanList[i];
+                if (moveHuman != playObject)
                 {
-                    MoveHuman.MapRandomMove(sDenMap, 0);
+                    moveHuman.MapRandomMove(sDenMap, 0);
                 }
             }
         }

@@ -5,37 +5,37 @@ namespace GameSrv.GameCommand.Commands {
     /// <summary>
     /// 夫妻传送，将对方传送到自己身边，对方必须允许传送。
     /// </summary>
-    [Command("DearRecall", "夫妻传送", "(夫妻传送，将对方传送到自己身边，对方必须允许传送。)", 0)]
+    [Command("DearRecall", "夫妻传送", "(夫妻传送，将对方传送到自己身边，对方必须允许传送。)")]
     public class DearRecallCommond : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
-            if (string.IsNullOrEmpty(PlayObject.DearName)) {
-                PlayObject.SysMsg("你没有结婚!!!", MsgColor.Red, MsgType.Hint);
+        public void Execute(PlayObject playObject) {
+            if (string.IsNullOrEmpty(playObject.DearName)) {
+                playObject.SysMsg("你没有结婚!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.Envir.Flag.boNODEARRECALL) {
-                PlayObject.SysMsg("本地图禁止夫妻传送!!!", MsgColor.Red, MsgType.Hint);
+            if (playObject.Envir.Flag.boNODEARRECALL) {
+                playObject.SysMsg("本地图禁止夫妻传送!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.DearHuman == null) {
-                if (PlayObject.Gender == 0) {
-                    PlayObject.SysMsg("你的老婆不在线!!!", MsgColor.Red, MsgType.Hint);
+            if (playObject.DearHuman == null) {
+                if (playObject.Gender == 0) {
+                    playObject.SysMsg("你的老婆不在线!!!", MsgColor.Red, MsgType.Hint);
                 }
                 else {
-                    PlayObject.SysMsg("你的老公不在线!!!", MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg("你的老公不在线!!!", MsgColor.Red, MsgType.Hint);
                 }
                 return;
             }
-            if (HUtil32.GetTickCount() - PlayObject.DearRecallTick < 10000) {
-                PlayObject.SysMsg("稍等会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
+            if (HUtil32.GetTickCount() - playObject.DearRecallTick < 10000) {
+                playObject.SysMsg("稍等会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.DearRecallTick = HUtil32.GetTickCount();
-            if (PlayObject.DearHuman.CanDearRecall) {
-                PlayObject.RecallHuman(PlayObject.DearHuman.ChrName);
+            playObject.DearRecallTick = HUtil32.GetTickCount();
+            if (playObject.DearHuman.CanDearRecall) {
+                playObject.RecallHuman(playObject.DearHuman.ChrName);
             }
             else {
-                PlayObject.SysMsg(PlayObject.DearHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(playObject.DearHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

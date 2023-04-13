@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands {
-    [Command("Allowmsg", "", "", 0)]
+    [Command("Allowmsg", "", "")]
     public class AllowMsgCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {

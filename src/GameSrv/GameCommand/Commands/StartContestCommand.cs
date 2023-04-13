@@ -10,54 +10,54 @@ namespace GameSrv.GameCommand.Commands {
     [Command("StartContest", "开始行会争霸赛", 10)]
     public class StartContestCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
-            PlayObject m_PlayObject;
-            PlayObject PlayObjectA;
+        public void Execute(PlayObject playObject) {
+            PlayObject mPlayObject;
+            PlayObject playObjectA;
             bool bo19;
-            if (!PlayObject.Envir.Flag.Fight3Zone) {
-                PlayObject.SysMsg("此命令不能在当前地图中使用!!!", MsgColor.Red, MsgType.Hint);
+            if (!playObject.Envir.Flag.Fight3Zone) {
+                playObject.SysMsg("此命令不能在当前地图中使用!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject.SysMsg("开始行会争霸赛。", MsgColor.Red, MsgType.Hint);
-            IList<BaseObject> List10 = new List<BaseObject>();
-            IList<PlayObject> List14 = new List<PlayObject>();
+            playObject.SysMsg("开始行会争霸赛。", MsgColor.Red, MsgType.Hint);
+            IList<BaseObject> list10 = new List<BaseObject>();
+            IList<PlayObject> list14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
-            M2Share.WorldEngine.GetMapRageHuman(PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, ref List10);
-            for (int i = 0; i < List10.Count; i++) {
-                m_PlayObject = List10[i] as PlayObject;
-                if (!m_PlayObject.ObMode || !m_PlayObject.AdminMode) {
-                    m_PlayObject.FightZoneDieCount = 0;
-                    if (m_PlayObject.MyGuild == null) {
+            M2Share.WorldEngine.GetMapRageHuman(playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, ref list10);
+            for (int i = 0; i < list10.Count; i++) {
+                mPlayObject = list10[i] as PlayObject;
+                if (!mPlayObject.ObMode || !mPlayObject.AdminMode) {
+                    mPlayObject.FightZoneDieCount = 0;
+                    if (mPlayObject.MyGuild == null) {
                         continue;
                     }
                     bo19 = false;
-                    for (int j = 0; j < List14.Count; j++) {
-                        PlayObjectA = List14[j];
-                        if (m_PlayObject.MyGuild == PlayObjectA.MyGuild) {
+                    for (int j = 0; j < list14.Count; j++) {
+                        playObjectA = list14[j];
+                        if (mPlayObject.MyGuild == playObjectA.MyGuild) {
                             bo19 = true;
                         }
                     }
                     if (!bo19) {
-                        guildList.Add(m_PlayObject.MyGuild);
+                        guildList.Add(mPlayObject.MyGuild);
                     }
                 }
             }
-            PlayObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
-            M2Share.WorldEngine.CryCry(Messages.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- 行会战争已爆发。");
+            playObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
+            M2Share.WorldEngine.CryCry(Messages.RM_CRY, playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- 行会战争已爆发。");
             string s20 = "";
-            GuildInfo Guild;
+            GuildInfo guild;
             for (int i = 0; i < guildList.Count; i++) {
-                Guild = guildList[i];
-                Guild.StartTeamFight();
-                for (int II = 0; II < List10.Count; II++) {
-                    m_PlayObject = List10[i] as PlayObject;
-                    if (m_PlayObject.MyGuild == Guild) {
-                        Guild.AddTeamFightMember(m_PlayObject.ChrName);
+                guild = guildList[i];
+                guild.StartTeamFight();
+                for (int ii = 0; ii < list10.Count; ii++) {
+                    mPlayObject = list10[i] as PlayObject;
+                    if (mPlayObject.MyGuild == guild) {
+                        guild.AddTeamFightMember(mPlayObject.ChrName);
                     }
                 }
-                s20 = s20 + Guild.GuildName + ' ';
+                s20 = s20 + guild.GuildName + ' ';
             }
-            M2Share.WorldEngine.CryCry(Messages.RM_CRY, PlayObject.Envir, PlayObject.CurrX, PlayObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, " -参加的门派:" + s20);
+            M2Share.WorldEngine.CryCry(Messages.RM_CRY, playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, " -参加的门派:" + s20);
         }
     }
 }

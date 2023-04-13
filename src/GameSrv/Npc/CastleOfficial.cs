@@ -190,15 +190,15 @@ namespace GameSrv.Npc {
                         else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREGUARDNOW)) {
                             s20 = sLabel.Substring(ScriptConst.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
-                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0);
                         }
                         else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREARCHERNOW)) {
                             s20 = sLabel.Substring(ScriptConst.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);
-                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
-                            PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                            PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                         }
                         else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {

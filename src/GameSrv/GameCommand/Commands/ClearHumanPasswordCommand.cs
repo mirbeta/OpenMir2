@@ -8,25 +8,25 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ClearHumanPassword", "清楚指定玩家仓库密码", "人物名称", 10)]
     public class ClearHumanPasswordCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?') {
-                PlayObject.SysMsg("清除玩家的仓库密码!!!", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg("清除玩家的仓库密码!!!", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null) {
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null) {
                 return;
             }
-            m_PlayObject.IsPasswordLocked = false;
-            m_PlayObject.IsUnLockStoragePwd = false;
-            m_PlayObject.StoragePwd = "";
-            m_PlayObject.SysMsg("你的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
-            PlayObject.SysMsg($"{sHumanName}的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
+            mPlayObject.IsPasswordLocked = false;
+            mPlayObject.IsUnLockStoragePwd = false;
+            mPlayObject.StoragePwd = "";
+            mPlayObject.SysMsg("你的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg($"{sHumanName}的保护密码已被清除!!!", MsgColor.Green, MsgType.Hint);
         }
     }
 }

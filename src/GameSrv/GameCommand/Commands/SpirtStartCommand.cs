@@ -8,11 +8,11 @@ namespace GameSrv.GameCommand.Commands {
     [Command("SpirtStart", "此命令用于开始祈祷生效宝宝叛变", 10)]
     public class SpirtStartCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sParam1 = @Params.Length > 0 ? @Params[0] : "";
+            string sParam1 = @params.Length > 0 ? @params[0] : "";
             int nTime = HUtil32.StrToInt(sParam1, -1);
             int dwTime;
             if (nTime > 0) {
@@ -22,7 +22,7 @@ namespace GameSrv.GameCommand.Commands {
                 dwTime = M2Share.Config.SpiritMutinyTime;
             }
             M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
-            PlayObject.SysMsg("祈祷叛变已开始。持续时长 " + dwTime / 1000 + " 秒。", MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg("祈祷叛变已开始。持续时长 " + dwTime / 1000 + " 秒。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

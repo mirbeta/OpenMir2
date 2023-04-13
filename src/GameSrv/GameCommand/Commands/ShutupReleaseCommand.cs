@@ -5,14 +5,14 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ShutupRelease", "恢复禁言", CommandHelp.GameCommandShutupReleaseHelpMsg, 10)]
     public class ShutupReleaseCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             if (@params == null) {
                 return;
             }
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             bool boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);

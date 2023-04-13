@@ -70,7 +70,7 @@ namespace GameSrv.Npc {
                         ReQuestCastleWar(PlayObject, sLabel[ScriptConst.sREQUESTCASTLEWAR.Length..]);
                     }
                     else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
-                        PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                        PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                     }
                     else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
                         if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {
@@ -130,10 +130,10 @@ namespace GameSrv.Npc {
                 }
             }
             if (result >= 0) {
-                PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_OK, 0, 0, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_OK, 0, 0, 0, 0);
             }
             else {
-                PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_FAIL, 0, result, 0, 0, "");
+                PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_FAIL, 0, result, 0, 0);
             }
             return result;
         }
@@ -161,7 +161,7 @@ namespace GameSrv.Npc {
         }
 
         private void DoNate(PlayObject PlayObject) {
-            PlayObject.SendMsg(this, Messages.RM_DONATE_OK, 0, 0, 0, 0, "");
+            PlayObject.SendMsg(this, Messages.RM_DONATE_OK, 0, 0, 0, 0);
         }
 
         private void ReQuestCastleWar(PlayObject PlayObject, string sIndex) {

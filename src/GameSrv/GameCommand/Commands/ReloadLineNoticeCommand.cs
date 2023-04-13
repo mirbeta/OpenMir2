@@ -8,12 +8,12 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ReloadLineNotice", "重新加载游戏公告", 10)]
     public class ReloadLineNoticeCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
+        public void Execute(PlayObject playObject) {
             if (M2Share.LoadLineNotice(M2Share.GetNoticeFilePath("LineNotice.txt"))) {
-                PlayObject.SysMsg(CommandHelp.GameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.GameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
             }
             else {
-                PlayObject.SysMsg(CommandHelp.GameCommandReloadLineNoticeFailMsg, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.GameCommandReloadLineNoticeFailMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }

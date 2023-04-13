@@ -8,7 +8,7 @@ namespace GameSrv.GameCommand.Commands {
     [Command("KickHuman", "剔除指定玩家下线", CommandHelp.GameCommandHumanLocalHelpMsg, 10)]
     public class KickHumanCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             if (@params == null) {
                 return;
             }
@@ -16,15 +16,15 @@ namespace GameSrv.GameCommand.Commands {
             if (string.IsNullOrEmpty(sHumName)) {
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (m_PlayObject != null) {
-                m_PlayObject.BoKickFlag = true;
-                m_PlayObject.BoEmergencyClose = true;
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            if (mPlayObject != null) {
+                mPlayObject.BoKickFlag = true;
+                mPlayObject.BoEmergencyClose = true;
                 //m_PlayObject.m_boPlayOffLine = false;
                 //m_PlayObject.m_boNotOnlineAddExp = false;
             }
             else {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

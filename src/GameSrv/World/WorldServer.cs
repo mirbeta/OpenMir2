@@ -826,11 +826,11 @@ namespace GameSrv.World
                     }
                     else
                     {
-                        playObject.SendMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series), "");
+                        playObject.SendMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series));
                     }
                     break;
                 case Messages.CM_QUERYUSERNAME:
-                    playObject.SendMsg(playObject, defMsg.Ident, 0, defMsg.Recog, defMsg.Param, defMsg.Tag, "");
+                    playObject.SendMsg(playObject, defMsg.Ident, 0, defMsg.Recog, defMsg.Param, defMsg.Tag);
                     break;
                 case Messages.CM_DROPITEM:
                 case Messages.CM_TAKEONITEM:
@@ -886,7 +886,7 @@ namespace GameSrv.World
                     }
                     else
                     {
-                        playObject.SendMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), 0, "");
+                        playObject.SendMsg(playObject, defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), 0);
                     }
                     break;
                 case Messages.CM_SAY:
@@ -1502,7 +1502,7 @@ namespace GameSrv.World
                                 var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
                                 {
-                                    baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0, "");
+                                    baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0);
                                 }
                             }
                         }

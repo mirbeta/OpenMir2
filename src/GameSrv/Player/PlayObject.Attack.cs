@@ -1450,7 +1450,7 @@ namespace GameSrv.Player
                     }
                 }
                 UseItems[ItemLocation.Weapon].Index = 0;
-                SendMsg(Messages.RM_DURACHANGE, ItemLocation.Weapon, nDura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
+                SendMsg(Messages.RM_DURACHANGE, ItemLocation.Weapon, nDura, UseItems[ItemLocation.Weapon].DuraMax, 0);
             }
             else
             {
@@ -1458,7 +1458,7 @@ namespace GameSrv.Player
             }
             if (Math.Abs((nDura / 1.03)) != nDuraPoint)
             {
-                SendMsg(Messages.RM_DURACHANGE, ItemLocation.Weapon, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0, "");
+                SendMsg(Messages.RM_DURACHANGE, ItemLocation.Weapon, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0);
             }
         }
     }

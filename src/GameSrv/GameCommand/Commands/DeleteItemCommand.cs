@@ -10,35 +10,35 @@ namespace GameSrv.GameCommand.Commands {
     [Command("DeleteItem", "删除人物身上指定的物品", help: "人物名称 物品名称 数量", 10)]
     public class DeleteItemCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : ""; //玩家名称
-            string sItemName = @Params.Length > 1 ? @Params[1] : ""; //物品名称
-            int nCount = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2], 0) : 0; //数量
-            StdItem StdItem;
-            UserItem UserItem;
+            string sHumanName = @params.Length > 0 ? @params[0] : ""; //玩家名称
+            string sItemName = @params.Length > 1 ? @params[1] : ""; //物品名称
+            int nCount = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0; //数量
+            StdItem stdItem;
+            UserItem userItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null) {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null) {
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nItemCount = 0;
-            for (int i = m_PlayObject.ItemList.Count - 1; i >= 0; i--) {
-                if (m_PlayObject.ItemList.Count <= 0) {
+            for (int i = mPlayObject.ItemList.Count - 1; i >= 0; i--) {
+                if (mPlayObject.ItemList.Count <= 0) {
                     break;
                 }
 
-                UserItem = m_PlayObject.ItemList[i];
-                StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                    m_PlayObject.SendDelItems(UserItem);
-                    m_PlayObject.ItemList.RemoveAt(i);
+                userItem = mPlayObject.ItemList[i];
+                stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
+                    mPlayObject.SendDelItems(userItem);
+                    mPlayObject.ItemList.RemoveAt(i);
                     nItemCount++;
                     if (nItemCount >= nCount) {
                         break;

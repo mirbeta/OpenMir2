@@ -11,18 +11,18 @@ namespace GameSrv.GameCommand.Commands {
     [Command("MobFireBurn", "调整安全去光环", 10)]
     public class MobFireBurnCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sMAP = @Params.Length > 0 ? @Params[0] : "";//地图号
-            string sX = @Params.Length > 1 ? @Params[1] : "";//坐标X
-            string sY = @Params.Length > 2 ? @Params[2] : "";//坐标Y
-            string sType = @Params.Length > 3 ? @Params[3] : "";//光环效果
-            string sTime = @Params.Length > 4 ? @Params[4] : "";//持续时间
-            string sPoint = @Params.Length > 5 ? @Params[5] : "";//未知
-            if (string.IsNullOrEmpty(sMAP) || sMAP != "" && sMAP[1] == '?') {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMAP, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
+            string sMap = @params.Length > 0 ? @params[0] : "";//地图号
+            string sX = @params.Length > 1 ? @params[1] : "";//坐标X
+            string sY = @params.Length > 2 ? @params[2] : "";//坐标Y
+            string sType = @params.Length > 3 ? @params[3] : "";//光环效果
+            string sTime = @params.Length > 4 ? @params[4] : "";//持续时间
+            string sPoint = @params.Length > 5 ? @params[5] : "";//未知
+            if (string.IsNullOrEmpty(sMap) || sMap != "" && sMap[1] == '?') {
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nX = HUtil32.StrToInt(sX, -1);
@@ -33,21 +33,21 @@ namespace GameSrv.GameCommand.Commands {
             if (nPoint < 0) {
                 nPoint = 1;
             }
-            if (string.IsNullOrEmpty(sMAP ) || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0) {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMAP, sX, sY,
+            if (string.IsNullOrEmpty(sMap ) || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0) {
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY,
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Envirnoment Envir = M2Share.MapMgr.FindMap(sMAP);
-            if (Envir != null) {
-                Envirnoment OldEnvir = PlayObject.Envir;
-                PlayObject.Envir = Envir;
-                FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
-                M2Share.EventMgr.AddEvent(FireBurnEvent);
-                PlayObject.Envir = OldEnvir;
+            Envirnoment envir = M2Share.MapMgr.FindMap(sMap);
+            if (envir != null) {
+                Envirnoment oldEnvir = playObject.Envir;
+                playObject.Envir = envir;
+                FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
+                M2Share.EventMgr.AddEvent(fireBurnEvent);
+                playObject.Envir = oldEnvir;
                 return;
             }
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnMapNotFountMsg, this.Command.Name, sMAP), MsgColor.Red, MsgType.Hint);
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnMapNotFountMsg, this.Command.Name, sMap), MsgColor.Red, MsgType.Hint);
         }
     }
 }

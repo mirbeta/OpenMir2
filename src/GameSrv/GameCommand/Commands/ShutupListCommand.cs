@@ -8,12 +8,12 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ShutupList", "查看禁言列表中的内容", 10)]
     public class ShutupListCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
+        public void Execute(PlayObject playObject) {
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try {
                 int nCount = M2Share.DenySayMsgList.Count;
                 if (M2Share.DenySayMsgList.Count <= 0) {
-                    PlayObject.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
                 }
                 if (nCount > 0) {
                     //foreach (var item in Settings.g_DenySayMsgList)

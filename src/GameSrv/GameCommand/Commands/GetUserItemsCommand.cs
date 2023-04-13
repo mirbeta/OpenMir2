@@ -10,75 +10,75 @@ namespace GameSrv.GameCommand.Commands {
     [Command("GetUserItems", "取指定玩家物品", "人物名称 物品名称 数量 类型(0,1,2)", 10)]
     public class GetUserItemsCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            string sItemName = @Params.Length > 1 ? @Params[1] : "";
-            string sItemCount = @Params.Length > 2 ? @Params[2] : "";
-            string sType = @Params.Length > 3 ? @Params[3] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sItemName = @params.Length > 1 ? @params[1] : "";
+            string sItemCount = @params.Length > 2 ? @params[2] : "";
+            string sType = @params.Length > 3 ? @params[3] : "";
 
             int nItemCount;
-            StdItem StdItem;
+            StdItem stdItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || string.IsNullOrEmpty(sItemCount) || string.IsNullOrEmpty(sType)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null) {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null) {
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nCount = HUtil32.StrToInt(sItemCount, 0);
             int nType = HUtil32.StrToInt(sType, 0);
-            UserItem UserItem;
+            UserItem userItem;
             switch (nType) {
                 case 0:
                     nItemCount = 0;
-                    for (int i = 0; i < m_PlayObject.UseItems.Length; i++) {
-                        if (m_PlayObject.ItemList.Count >= 46) {
+                    for (int i = 0; i < mPlayObject.UseItems.Length; i++) {
+                        if (mPlayObject.ItemList.Count >= 46) {
                             break;
                         }
-                        UserItem = m_PlayObject.UseItems[i];
-                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (!m_PlayObject.IsEnoughBag()) {
+                        userItem = mPlayObject.UseItems[i];
+                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                        if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (!mPlayObject.IsEnoughBag()) {
                                 break;
                             }
-                            UserItem = new UserItem(); ;
-                            UserItem = m_PlayObject.UseItems[i];
-                            m_PlayObject.ItemList.Add(UserItem);
-                            m_PlayObject.SendAddItem(UserItem);
-                            m_PlayObject.UseItems[i].Index = 0;
+                            userItem = new UserItem(); ;
+                            userItem = mPlayObject.UseItems[i];
+                            mPlayObject.ItemList.Add(userItem);
+                            mPlayObject.SendAddItem(userItem);
+                            mPlayObject.UseItems[i].Index = 0;
                             nItemCount++;
                             if (nItemCount >= nCount) {
                                 break;
                             }
                         }
                     }
-                    m_PlayObject.SendUseItems();
+                    mPlayObject.SendUseItems();
                     break;
 
                 case 1:
                     nItemCount = 0;
-                    for (int i = m_PlayObject.ItemList.Count - 1; i >= 0; i--) {
-                        if (m_PlayObject.ItemList.Count >= 46) {
+                    for (int i = mPlayObject.ItemList.Count - 1; i >= 0; i--) {
+                        if (mPlayObject.ItemList.Count >= 46) {
                             break;
                         }
-                        if (m_PlayObject.ItemList.Count <= 0) {
+                        if (mPlayObject.ItemList.Count <= 0) {
                             break;
                         }
-                        UserItem = m_PlayObject.ItemList[i];
-                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (!m_PlayObject.IsEnoughBag()) {
+                        userItem = mPlayObject.ItemList[i];
+                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                        if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (!mPlayObject.IsEnoughBag()) {
                                 break;
                             }
-                            m_PlayObject.SendDelItems(UserItem);
-                            m_PlayObject.ItemList.RemoveAt(i);
-                            m_PlayObject.ItemList.Add(UserItem);
-                            m_PlayObject.SendAddItem(UserItem);
+                            mPlayObject.SendDelItems(userItem);
+                            mPlayObject.ItemList.RemoveAt(i);
+                            mPlayObject.ItemList.Add(userItem);
+                            mPlayObject.SendAddItem(userItem);
                             nItemCount++;
                             if (nItemCount >= nCount) {
                                 break;
@@ -89,22 +89,22 @@ namespace GameSrv.GameCommand.Commands {
 
                 case 2:
                     nItemCount = 0;
-                    for (int i = m_PlayObject.StorageItemList.Count - 1; i >= 0; i--) {
-                        if (m_PlayObject.ItemList.Count >= 46) {
+                    for (int i = mPlayObject.StorageItemList.Count - 1; i >= 0; i--) {
+                        if (mPlayObject.ItemList.Count >= 46) {
                             break;
                         }
-                        if (m_PlayObject.StorageItemList.Count <= 0) {
+                        if (mPlayObject.StorageItemList.Count <= 0) {
                             break;
                         }
-                        UserItem = m_PlayObject.StorageItemList[i];
-                        StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
-                        if (StdItem != null && string.Compare(sItemName, StdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (!m_PlayObject.IsEnoughBag()) {
+                        userItem = mPlayObject.StorageItemList[i];
+                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                        if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
+                            if (!mPlayObject.IsEnoughBag()) {
                                 break;
                             }
-                            m_PlayObject.StorageItemList.RemoveAt(i);
-                            m_PlayObject.ItemList.Add(UserItem);
-                            m_PlayObject.SendAddItem(UserItem);
+                            mPlayObject.StorageItemList.RemoveAt(i);
+                            mPlayObject.ItemList.Add(userItem);
+                            mPlayObject.SendAddItem(userItem);
                             nItemCount++;
                             if (nItemCount >= nCount) {
                                 break;

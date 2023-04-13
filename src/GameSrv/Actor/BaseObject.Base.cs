@@ -429,7 +429,7 @@ namespace GameSrv.Actor
             if (boNeedRecalc)
             {
                 RecalcAbilitys();
-                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
             }
             if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
             {
@@ -811,7 +811,7 @@ namespace GameSrv.Actor
                                 {
                                     MeatQuality -= (ushort)(nDamage * 1000);
                                 }
-                                SendMsg(Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
+                                SendMsg(Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId);
                             }
                         }
                         if (FastParalysis)
@@ -878,7 +878,7 @@ namespace GameSrv.Actor
                             }
                             if ((Math.Abs(nTargetX - targetBaseObject.CurrX) <= nRage) && (Math.Abs(nTargetY - targetBaseObject.CurrY) <= nRage))
                             {
-                                targetBaseObject.SendMsg(this, Messages.RM_MAGSTRUCK, 0, nPower, 0, 0, "");
+                                targetBaseObject.SendMsg(this, Messages.RM_MAGSTRUCK, 0, nPower, 0, 0);
                             }
                         }
                         break;

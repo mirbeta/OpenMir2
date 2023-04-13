@@ -11,19 +11,19 @@ namespace GameSrv.GameCommand.Commands
     public class ReCallMobExCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
-            if (@Params == null)
+            if (@params == null)
             {
                 return;
             }
-            string sMonName = @Params.Length > 0 ? @Params[0] : "";
-            int nNameColor = @Params.Length > 0 ? HUtil32.StrToInt(@Params[1], 0) : 0;
-            short nX = (short)(@Params.Length > 0 ? HUtil32.StrToInt(@Params[2], 0) : 0);
-            short nY = (short)(@Params.Length > 0 ? HUtil32.StrToInt(@Params[3], 0) : 0);
+            string sMonName = @params.Length > 0 ? @params[0] : "";
+            int nNameColor = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            short nX = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0);
+            short nY = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[3], 0) : 0);
             if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nX < 0)
@@ -42,17 +42,17 @@ namespace GameSrv.GameCommand.Commands
             {
                 nNameColor = 255;
             }
-            BaseObject mon = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
+            BaseObject mon = M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
-                mon.Master = PlayObject;
+                mon.Master = playObject;
                 mon.MasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
                 mon.SlaveMakeLevel = 3;
                 mon.SlaveExpLevel = 1;
                 mon.NameColor = (byte)nNameColor;
                 mon.RecalcAbilitys();
                 mon.RefNameColor();
-                PlayObject.SlaveList.Add(mon);
+                playObject.SlaveList.Add(mon);
             }
         }
     }

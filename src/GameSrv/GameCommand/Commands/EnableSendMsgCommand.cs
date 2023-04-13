@@ -8,13 +8,13 @@ namespace GameSrv.GameCommand.Commands {
     [Command("EnableSendMsg", "从禁言列表中删除指定玩家", "人物名称", 10)]
     public class EnableSendMsgCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             if (@params == null) {
                 return;
             }
             string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (int i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--) {
@@ -34,7 +34,7 @@ namespace GameSrv.GameCommand.Commands {
                 //    return;
                 //}
             }
-            PlayObject.SysMsg(sHumanName + " 没有被禁言!!!", MsgColor.Red, MsgType.Hint);
+            playObject.SysMsg(sHumanName + " 没有被禁言!!!", MsgColor.Red, MsgType.Hint);
         }
     }
 }

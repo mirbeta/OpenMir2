@@ -61,7 +61,7 @@ namespace GameSrv.Magic
                     }
                     if (playObject.AbilSeeHealGauge)
                     {
-                        playObject.SendMsg(baseObject, Messages.RM_10414, 0, 0, 0, 0, "");
+                        playObject.SendMsg(baseObject, Messages.RM_10414, 0, 0, 0, 0);
                     }
                 }
             }
@@ -211,7 +211,7 @@ namespace GameSrv.Magic
                         }
                         if (playObject.AbilSeeHealGauge)
                         {
-                            playObject.SendMsg(targetObject, Messages.RM_10414, 0, 0, 0, 0, "");
+                            playObject.SendMsg(targetObject, Messages.RM_10414, 0, 0, 0, 0);
                         }
                     }
                     break;
@@ -1102,7 +1102,7 @@ namespace GameSrv.Magic
                 if (baseObject.IsProperTarget(targetObject))
                 {
                     baseObject.SetTargetCreat(targetObject);
-                    targetObject.SendMsg(baseObject, Messages.RM_MAGSTRUCK, 0, nPower, 0, 0, "");
+                    targetObject.SendMsg(baseObject, Messages.RM_MAGSTRUCK, 0, nPower, 0, 0);
                     result = true;
                 }
             }
@@ -1129,7 +1129,7 @@ namespace GameSrv.Magic
                 }
                 if (baseObject.IsProperTarget(targetObject))
                 {
-                    targetObject.SendMsg(baseObject, Messages.RM_MAGSTRUCK, 0, nPowerPoint, 0, 0, "");
+                    targetObject.SendMsg(baseObject, Messages.RM_MAGSTRUCK, 0, nPowerPoint, 0, 0);
                     result = true;
                 }
             }

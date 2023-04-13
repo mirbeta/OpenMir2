@@ -6,7 +6,7 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 设置密码
     /// </summary>
-    [Command("SetPassWord", "设置登录密码", "", 0)]
+    [Command("SetPassWord", "设置登录密码", "")]
     public class SetPassWordCommand : GameCommand
     {
         [ExecuteCommand]
@@ -19,7 +19,7 @@ namespace GameSrv.GameCommand.Commands
             }
             if (string.IsNullOrEmpty(playObject.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 playObject.IsSetStoragePwd = true;
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
@@ -33,7 +33,7 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 解除密码
     /// </summary>
-    [Command("UnPassWord", "解除登录密码", "", 0)]
+    [Command("UnPassWord", "解除登录密码", "")]
     public class UnPasswWordCommand : GameCommand
     {
         [ExecuteCommand]
@@ -59,7 +59,7 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 修改登录密码
     /// </summary>
-    [Command("ChgpassWordCommand", "修改登录密码", "", 0)]
+    [Command("ChgpassWordCommand", "修改登录密码", "")]
     public class ChgpassWordCommand : GameCommand
     {
         [ExecuteCommand]
@@ -78,7 +78,7 @@ namespace GameSrv.GameCommand.Commands
             }
             if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 playObject.IsCheckOldPwd = true;
                 playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
@@ -92,7 +92,7 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 解除仓库密码
     /// </summary>
-    [Command("UnlockStorage", "解除仓库密码", "", 0)]
+    [Command("UnlockStorage", "解除仓库密码", "")]
     public class UnlockStorageCommand : GameCommand
     {
         [ExecuteCommand]
@@ -113,7 +113,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 if (!playObject.IsUnLockStoragePwd)
                 {
-                    playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                    playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                     playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                     playObject.IsUnLockStoragePwd = true;
                 }
@@ -132,7 +132,7 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 解除密码
     /// </summary>
-    [Command("UnLock", "解除密码", "", 0)]
+    [Command("UnLock", "解除密码", "")]
     public class UnLockCommand : GameCommand
     {
         [ExecuteCommand]
@@ -153,7 +153,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 if (!playObject.IsUnLockPwd)
                 {
-                    playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                    playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                     playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                     playObject.IsUnLockPwd = true;
                 }
@@ -172,7 +172,7 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 锁定密码
     /// </summary>
-    [Command("Lock", "锁定密码", "", 0)]
+    [Command("Lock", "锁定密码", "")]
     public class LockCommand : GameCommand
     {
         [ExecuteCommand]
@@ -217,26 +217,25 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
-            if (PlayObject != null)
+            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            if (playObject != null)
             {
                 int nFlag = HUtil32.StrToInt(@params[1], 0);
                 int nValue = HUtil32.StrToInt(@params[2], 0);
-                PlayObject.SetQuestFlagStatus(nFlag, nValue);
-                if (PlayObject.GetQuestFalgStatus(nFlag) == 1)
+                playObject.SetQuestFlagStatus(nFlag, nValue);
+                if (playObject.GetQuestFalgStatus(nFlag) == 1)
                 {
-                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                playObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                targetObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
-            return;
         }
     }
 
@@ -253,26 +252,25 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
-            if (PlayObject != null)
+            PlayObject targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            if (playObject != null)
             {
                 int nFlag = HUtil32.StrToInt(@params[1], 0);
                 int nValue = HUtil32.StrToInt(@params[2], 0);
-                PlayObject.SetQuestUnitOpenStatus(nFlag, nValue);
-                if (PlayObject.GetQuestUnitOpenStatus(nFlag) == 1)
+                playObject.SetQuestUnitOpenStatus(nFlag, nValue);
+                if (playObject.GetQuestUnitOpenStatus(nFlag) == 1)
                 {
-                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                playObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                targetObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
-            return;
         }
     }
 
@@ -289,26 +287,25 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
-            if (PlayObject != null)
+            PlayObject targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            if (playObject != null)
             {
                 int nFlag = HUtil32.StrToInt(@params[1], 0);
                 int nValue = HUtil32.StrToInt(@params[2], 0);
-                PlayObject.SetQuestUnitStatus(nFlag, nValue);
-                if (PlayObject.GetQuestUnitStatus(nFlag) == 1)
+                playObject.SetQuestUnitStatus(nFlag, nValue);
+                if (playObject.GetQuestUnitStatus(nFlag) == 1)
                 {
-                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(PlayObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                playObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
+                targetObject.SysMsg('@' + this.Command.Name + " 人物名称 标志号 数字(0 - 1)", MsgColor.Red, MsgType.Hint);
             }
-            return;
         }
     }
 }

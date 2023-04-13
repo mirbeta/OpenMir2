@@ -1809,7 +1809,7 @@ namespace GameSrv.Npc
                         GotoLableTakeWItem(playObject, questActionInfo.sParam1, questActionInfo.nParam2);
                         break;
                     case ScriptConst.nCLOSE:
-                        playObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0, "");
+                        playObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                         break;
                     case ScriptConst.nRESET:
                         for (int k = 0; k < questActionInfo.nParam2; k++)

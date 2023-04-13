@@ -7,8 +7,8 @@ namespace GameSrv.GameCommand.Commands {
     [Command("AdjustExp", "", 10)]
     public class AdjustExpCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (PlayObject.Permission < 6) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (playObject.Permission < 6) {
                 return;
             }
         }

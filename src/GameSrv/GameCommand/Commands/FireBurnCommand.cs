@@ -8,26 +8,26 @@ namespace GameSrv.GameCommand.Commands
     public class FireBurnCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
-            if (@Params == null)
+            if (@params == null)
             {
                 return;
             }
-            int nInt = @Params.Length > 0 ? HUtil32.StrToInt(@Params[0], 0) : 0;
-            int nTime = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;
-            int nN = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2], 0) : 0;
-            if (PlayObject.Permission < 6)
+            int nInt = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            int nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            int nN = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            if (playObject.Permission < 6)
             {
                 return;
             }
             if (nInt == 0 || nTime == 0 || nN == 0)
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            FireBurnEvent FireBurnEvent = new FireBurnEvent(PlayObject, PlayObject.CurrX, PlayObject.CurrY, (byte)nInt, nTime, nN);
-            M2Share.EventMgr.AddEvent(FireBurnEvent);
+            FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, playObject.CurrX, playObject.CurrY, (byte)nInt, nTime, nN);
+            M2Share.EventMgr.AddEvent(fireBurnEvent);
         }
     }
 }

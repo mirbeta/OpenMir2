@@ -91,7 +91,7 @@ namespace GameSrv.Player {
                     StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     if (stdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
                     {
-                        SendMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY, "");
+                        SendMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY);
                         AddItemToBag(userItem);
                         if (!M2Share.IsCheapStuff(stdItem.StdMode))
                         {
@@ -135,7 +135,7 @@ namespace GameSrv.Player {
         private void GetExp(int dwExp) {
             Abil.Exp += dwExp;
             AddBodyLuck(dwExp * 0.002);
-            SendMsg(Messages.RM_WINEXP, 0, dwExp, 0, 0, "");
+            SendMsg(Messages.RM_WINEXP, 0, dwExp, 0, 0);
             if (Abil.Exp >= Abil.MaxExp) {
                 Abil.Exp -= Abil.MaxExp;
                 if (Abil.Level < Settings.MAXUPLEVEL) {
@@ -249,7 +249,7 @@ namespace GameSrv.Player {
 
         public void RefMyStatus() {
             RecalcAbilitys();
-            SendMsg(Messages.RM_MYSTATUS, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_MYSTATUS, 0, 0, 0, 0);
         }
 
         /// <summary>
@@ -656,7 +656,7 @@ namespace GameSrv.Player {
         public void GameTimeChanged() {
             if (Bright != M2Share.GameTime) {
                 Bright = M2Share.GameTime;
-                SendMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0);
             }
         }
 
@@ -946,8 +946,8 @@ namespace GameSrv.Player {
                 BonusAbil.Speed += bonusAbil.Speed;
                 BonusAbil.Reserved += bonusAbil.Reserved;
                 RecalcAbilitys();
-                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
-                SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
+                SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0);
             }
             else
             {
@@ -1196,7 +1196,7 @@ namespace GameSrv.Player {
                 baseObject34.SendRefMsg(Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId, "");
                 if (baseObject34.Race != ActorRace.Play)
                 {
-                    baseObject34.SendMsg(baseObject34, Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId, "");
+                    baseObject34.SendMsg(baseObject34, Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId);
                 }
             }
             if (bo35) {
@@ -1742,7 +1742,7 @@ namespace GameSrv.Player {
                             }
                             if (boNeedRecalc) {
                                 RecalcAbilitys();
-                                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "");
+                                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
                                 result = true;
                             }
                             break;
@@ -2161,7 +2161,7 @@ namespace GameSrv.Player {
         public void RefRankInfo(short nRankNo, string sRankName) {
             GuildRankNo = nRankNo;
             GuildRankName = sRankName;
-            SendMsg(Messages.RM_CHANGEGUILDNAME, 0, 0, 0, 0, "");
+            SendMsg(Messages.RM_CHANGEGUILDNAME, 0, 0, 0, 0);
         }
        
         private bool CheckActionStatus(int wIdent, ref int dwDelayTime) {
@@ -2440,7 +2440,7 @@ namespace GameSrv.Player {
                             human.CreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                         }
                         human.BonusPoint += M2Share.Config.nMasterOKBonusPoint;
-                        human.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                        human.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
                     }
                     else {
                         // 如果师父不在线则保存到记录表中
@@ -2481,7 +2481,7 @@ namespace GameSrv.Player {
                     CreditPoint += (byte)M2Share.Config.MasterOKCreditPoint;
                 }
                 BonusPoint += M2Share.Config.nMasterOKBonusPoint;
-                SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
+                SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
             }
             if (string.IsNullOrEmpty(MasterName)) {
                 return;
@@ -2604,7 +2604,7 @@ namespace GameSrv.Player {
                     MSTempPwd = sData;
                     IsReConfigPwd = true;
                     SysMsg(Settings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);// '请重复输入一次仓库密码：'
-                    SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 }
                 else {
                     SysMsg(Settings.PasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
@@ -2679,7 +2679,7 @@ namespace GameSrv.Player {
             if (IsCheckOldPwd) {
                 IsCheckOldPwd = false;
                 if (StoragePwd == sData) {
-                    SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                    SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                     SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                     IsSetStoragePwd = true;
                 }

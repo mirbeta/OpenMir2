@@ -8,17 +8,17 @@ namespace GameSrv.GameCommand.Commands {
     [Command("PrvMsg", "拒绝发言", CommandHelp.GameCommandPrvMsgHelpMsg, 10)]
     public class PrvMsgCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = PlayObject.LockWhisperList.Count - 1; i >= 0; i--) {
-                if (PlayObject.LockWhisperList.Count <= 0) {
+            for (int i = playObject.LockWhisperList.Count - 1; i >= 0; i--) {
+                if (playObject.LockWhisperList.Count <= 0) {
                     break;
                 }
                 //if ((PlayObject.m_BlockWhisperList[i]).CompareTo((sHumanName)) == 0)
@@ -28,8 +28,8 @@ namespace GameSrv.GameCommand.Commands {
                 //    return;
                 //}
             }
-            PlayObject.LockWhisperList.Add(sHumanName);
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandPrvMsgLimitMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+            playObject.LockWhisperList.Add(sHumanName);
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandPrvMsgLimitMsg, sHumanName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

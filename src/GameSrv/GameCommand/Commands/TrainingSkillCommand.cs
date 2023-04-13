@@ -9,26 +9,26 @@ namespace GameSrv.GameCommand.Commands {
     [Command("TrainingSkill", "调整指定玩家技能等级", "人物名称  技能名称 修炼等级(0-3)", 10)]
     public class TrainingSkillCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            string sSkillName = @Params.Length > 1 ? @Params[1] : "";
-            int nLevel = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2], 0) : 0;
-            UserMagic UserMagic;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sSkillName = @params.Length > 1 ? @params[1] : "";
+            int nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            UserMagic userMagic;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel <= 0) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject == null) {
-                PlayObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject == null) {
+                playObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = 0; i < m_PlayObject.MagicList.Count; i++) {
-                UserMagic = m_PlayObject.MagicList[i];
+            for (int i = 0; i < mPlayObject.MagicList.Count; i++) {
+                userMagic = mPlayObject.MagicList[i];
                 //if (string.Compare(UserMagic.MagicInfo.GetMagicName(), sSkillName, true) == 0)
                 //{
                 //    UserMagic.btLevel = (byte)nLevel;

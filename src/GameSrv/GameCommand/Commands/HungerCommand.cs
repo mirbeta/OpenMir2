@@ -10,34 +10,34 @@ namespace GameSrv.GameCommand.Commands
     public class HungerCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
-            if (@Params == null)
+            if (@params == null)
             {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            int nHungerPoint = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : -1;
-            if (PlayObject.Permission < 6)
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            int nHungerPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : -1;
+            if (playObject.Permission < 6)
             {
                 return;
             }
             if (string.IsNullOrEmpty(sHumanName) || nHungerPoint < 0)
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (m_PlayObject != null)
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (mPlayObject != null)
             {
-                m_PlayObject.HungerStatus = nHungerPoint;
-                m_PlayObject.SendMsg(PlayObject, Messages.RM_MYSTATUS, 0, 0, 0, 0, "");
-                m_PlayObject.RefMyStatus();
-                PlayObject.SysMsg(sHumanName + " 的能量值已改变。", MsgColor.Green, MsgType.Hint);
+                mPlayObject.HungerStatus = nHungerPoint;
+                mPlayObject.SendMsg(playObject, Messages.RM_MYSTATUS, 0, 0, 0, 0);
+                mPlayObject.RefMyStatus();
+                playObject.SysMsg(sHumanName + " 的能量值已改变。", MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(sHumanName + "没有在线!!!", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(sHumanName + "没有在线!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

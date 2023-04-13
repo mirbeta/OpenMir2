@@ -9,27 +9,27 @@ namespace GameSrv.GameCommand.Commands {
     [Command("Kill", "剔除面对面玩家下线", "玩家名称", 10)]
     public class KillCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            BaseObject BaseObject;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            BaseObject baseObject;
             if (!string.IsNullOrEmpty(sHumanName)) {
-                BaseObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-                if (BaseObject == null) {
-                    PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                baseObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                if (baseObject == null) {
+                    playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
             else {
-                BaseObject = PlayObject.GetPoseCreate();
-                if (BaseObject == null) {
-                    PlayObject.SysMsg("命令使用方法不正确，必须与角色面对面站好!!!", MsgColor.Red, MsgType.Hint);
+                baseObject = playObject.GetPoseCreate();
+                if (baseObject == null) {
+                    playObject.SysMsg("命令使用方法不正确，必须与角色面对面站好!!!", MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
-            BaseObject.Die();
+            baseObject.Die();
         }
     }
 }

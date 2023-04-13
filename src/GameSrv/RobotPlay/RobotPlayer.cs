@@ -226,7 +226,7 @@ namespace GameSrv.RobotPlay
         {
             Abil.Exp += dwExp;
             AddBodyLuck(dwExp * 0.002);
-            SendMsg(Messages.RM_WINEXP, 0, dwExp, 0, 0, "");
+            SendMsg(Messages.RM_WINEXP, 0, dwExp, 0, 0);
             if (Abil.Exp >= Abil.MaxExp)
             {
                 Abil.Exp -= Abil.MaxExp;

@@ -4,7 +4,7 @@ namespace GameSrv.GameCommand.Commands {
     [Command("GameDiaMond", "调整玩家金刚石", 10)]
     public class GameDiaMondCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";
             //int nGameDiaMond = @Params.Length > 2 ? HUtil32.StrToInt(@Params[3]) : 0;

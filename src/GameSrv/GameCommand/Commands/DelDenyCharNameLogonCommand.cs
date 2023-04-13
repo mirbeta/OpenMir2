@@ -5,13 +5,13 @@ namespace GameSrv.GameCommand.Commands {
     [Command("DelDenyChrNameLogon", "", "人物名称", 10)]
     public class DelDenyChrNameLogonCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sChrName = @Params.Length > 0 ? @Params[0] : "";
+            string sChrName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sChrName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boDelete = false;
@@ -33,7 +33,7 @@ namespace GameSrv.GameCommand.Commands {
             finally {
             }
             if (!boDelete) {
-                PlayObject.SysMsg(sChrName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(sChrName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

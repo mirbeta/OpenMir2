@@ -5,13 +5,13 @@ namespace GameSrv.GameCommand.Commands {
     [Command("TestStatus", "", 10)]
     public class TestStatusCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            int nType = @Params.Length > 0 ? HUtil32.StrToInt(@Params[0], 0) : 0;
-            int nTime = @Params.Length > 1 ? HUtil32.StrToInt(@Params[1], 0) : 0;
-            if (PlayObject.Permission < 6) {
+            int nType = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            int nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            if (playObject.Permission < 6) {
                 return;
             }
 
@@ -20,11 +20,11 @@ namespace GameSrv.GameCommand.Commands {
             //    this.SysMsg("命令格式: @" + sCmd + " 类型(0..11) 时长", TMsgColor.c_Red, TMsgType.t_Hint);
             //    return;
             //}
-            PlayObject.StatusTimeArr[nType] = (ushort)(nTime * 1000);
-            PlayObject.StatusArrTick[nType] = HUtil32.GetTickCount();
-            PlayObject.CharStatus = PlayObject.GetCharStatus();
-            PlayObject.StatusChanged();
-            PlayObject.SysMsg(string.Format("状态编号:{0} 时间长度: {1} 秒", nType, nTime), MsgColor.Green, MsgType.Hint);
+            playObject.StatusTimeArr[nType] = (ushort)(nTime * 1000);
+            playObject.StatusArrTick[nType] = HUtil32.GetTickCount();
+            playObject.CharStatus = playObject.GetCharStatus();
+            playObject.StatusChanged();
+            playObject.SysMsg(string.Format("状态编号:{0} 时间长度: {1} 秒", nType, nTime), MsgColor.Green, MsgType.Hint);
         }
     }
 }

@@ -6,53 +6,53 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 此命令用于查询配偶当前所在位置
     /// </summary>
-    [Command("SearchDear", "此命令用于查询配偶当前所在位置", 0)]
+    [Command("SearchDear", "此命令用于查询配偶当前所在位置")]
     public class SearchDearCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject)
+        public void Execute(PlayObject playObject)
         {
-            if (string.IsNullOrEmpty(PlayObject.DearName))
+            if (string.IsNullOrEmpty(playObject.DearName))
             {
-                PlayObject.SysMsg(Settings.YouAreNotMarryedMsg, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Settings.YouAreNotMarryedMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayObject.DearHuman == null)
+            if (playObject.DearHuman == null)
             {
-                if (PlayObject.Gender == 0)
+                if (playObject.Gender == 0)
                 {
-                    PlayObject.SysMsg(Settings.YourWifeNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg(Settings.YourWifeNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
                 else
                 {
-                    PlayObject.SysMsg(Settings.YourHusbandNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg(Settings.YourHusbandNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
                 return;
             }
-            if (PlayObject.Gender == 0)
+            if (playObject.Gender == 0)
             {
                 // '你的老婆现在位于:'
-                PlayObject.SysMsg(Settings.YourWifeNowLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.SysMsg(PlayObject.DearHuman.ChrName + ' ' + PlayObject.DearHuman.Envir.MapDesc + '(' +
-                                  PlayObject.DearHuman.CurrX + ':' + PlayObject.DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(Settings.YourWifeNowLocateMsg, MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(playObject.DearHuman.ChrName + ' ' + playObject.DearHuman.Envir.MapDesc + '(' +
+                                  playObject.DearHuman.CurrX + ':' + playObject.DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
 
                 // '你的老公正在找你，他现在位于:'
-                PlayObject.DearHuman.SysMsg(Settings.YourHusbandSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.DearHuman.SysMsg(
-                    PlayObject.ChrName + ' ' + PlayObject.Envir.MapDesc + '(' + PlayObject.CurrX + ':' +
-                    PlayObject.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                playObject.DearHuman.SysMsg(Settings.YourHusbandSearchLocateMsg, MsgColor.Green, MsgType.Hint);
+                playObject.DearHuman.SysMsg(
+                    playObject.ChrName + ' ' + playObject.Envir.MapDesc + '(' + playObject.CurrX + ':' +
+                    playObject.CurrY + ')', MsgColor.Green, MsgType.Hint);
             }
             else
             {
                 // '你的老公现在位于:'
-                PlayObject.SysMsg(Settings.YourHusbandNowLocateMsg, MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(PlayObject.DearHuman.ChrName + ' ' + PlayObject.DearHuman.Envir.MapDesc + '(' +
-                                  PlayObject.DearHuman.CurrX + ':' + PlayObject.DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(Settings.YourHusbandNowLocateMsg, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(playObject.DearHuman.ChrName + ' ' + playObject.DearHuman.Envir.MapDesc + '(' +
+                                  playObject.DearHuman.CurrX + ':' + playObject.DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
 
                 // '你的老婆正在找你，她现在位于:'
-                PlayObject.DearHuman.SysMsg(Settings.YourWifeSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayObject.DearHuman.SysMsg(PlayObject.ChrName + ' ' + PlayObject.Envir.MapDesc + '(' + PlayObject.CurrX + ':' +
-                                            PlayObject.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                playObject.DearHuman.SysMsg(Settings.YourWifeSearchLocateMsg, MsgColor.Green, MsgType.Hint);
+                playObject.DearHuman.SysMsg(playObject.ChrName + ' ' + playObject.Envir.MapDesc + '(' + playObject.CurrX + ':' +
+                                            playObject.CurrY + ')', MsgColor.Green, MsgType.Hint);
             }
         }
     }

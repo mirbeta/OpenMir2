@@ -6,7 +6,7 @@ namespace GameSrv.GameCommand.Commands
     /// <summary>
     /// 密码锁定
     /// </summary>
-    [Command("PasswordLock", "锁定登录", "", 0)]
+    [Command("PasswordLock", "锁定登录", "")]
     public class PasswordLockCommand : GameCommand
     {
         [ExecuteCommand]
@@ -23,7 +23,7 @@ namespace GameSrv.GameCommand.Commands
             }
             if (string.IsNullOrEmpty(playObject.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 playObject.IsSetStoragePwd = true;
                 playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                 return;
@@ -36,7 +36,7 @@ namespace GameSrv.GameCommand.Commands
             }
             if (!string.IsNullOrEmpty(playObject.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0, "");
+                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 playObject.IsCheckOldPwd = true;
                 playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }

@@ -9,29 +9,29 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ReloadGuild", "重新读取指定行会", 10)]
     public class ReloadGuildCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
             string sParam1 = string.Empty;
-            if (@Params.Length > 0) {
-                sParam1 = @Params.Length > 0 ? @Params[0] : "";
+            if (@params.Length > 0) {
+                sParam1 = @params.Length > 0 ? @params[0] : "";
                 if (string.IsNullOrEmpty(sParam1)) {
-                    PlayObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandReloadGuildHelpMsg), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
             if (M2Share.ServerIndex != 0) {
-                PlayObject.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            GuildInfo Guild = M2Share.GuildMgr.FindGuild(sParam1);
-            if (Guild == null) {
-                PlayObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
+            GuildInfo guild = M2Share.GuildMgr.FindGuild(sParam1);
+            if (guild == null) {
+                playObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Guild.LoadGuild();
-            PlayObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildSuccessMsg, sParam1), MsgColor.Red, MsgType.Hint);
+            guild.LoadGuild();
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildSuccessMsg, sParam1), MsgColor.Red, MsgType.Hint);
             // UserEngine.SendServerGroupMsg(SS_207, nServerIndex, sParam1);
         }
     }

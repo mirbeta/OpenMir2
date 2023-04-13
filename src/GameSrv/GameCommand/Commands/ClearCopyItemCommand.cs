@@ -9,50 +9,50 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ClearCopyItem", "清除游戏中指定玩家复制物品", "人物名称", 10)]
     public class ClearCopyItemCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
-            string sHumanName = @Params.Length > 0 ? @Params[0] : "";
-            UserItem UserItem;
-            UserItem UserItem1;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            UserItem userItem;
+            UserItem userItem1;
             string s14;
             if (string.IsNullOrEmpty(sHumanName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject TargerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (TargerObject == null) {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            PlayObject targerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            if (targerObject == null) {
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = TargerObject.ItemList.Count - 1; i >= 0; i--) {
-                if (TargerObject.ItemList.Count <= 0) {
+            for (int i = targerObject.ItemList.Count - 1; i >= 0; i--) {
+                if (targerObject.ItemList.Count <= 0) {
                     break;
                 }
 
-                UserItem = TargerObject.ItemList[i];
-                s14 = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
+                userItem = targerObject.ItemList[i];
+                s14 = M2Share.WorldEngine.GetStdItemName(userItem.Index);
                 for (int j = i - 1; j >= 0; j--) {
-                    UserItem1 = TargerObject.ItemList[j];
-                    if (M2Share.WorldEngine.GetStdItemName(UserItem1.Index) == s14 && UserItem.MakeIndex == UserItem1.MakeIndex) {
-                        PlayObject.ItemList.RemoveAt(j);
+                    userItem1 = targerObject.ItemList[j];
+                    if (M2Share.WorldEngine.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex) {
+                        playObject.ItemList.RemoveAt(j);
                         break;
                     }
                 }
             }
 
-            for (int i = TargerObject.StorageItemList.Count - 1; i >= 0; i--) {
-                if (TargerObject.StorageItemList.Count <= 0) {
+            for (int i = targerObject.StorageItemList.Count - 1; i >= 0; i--) {
+                if (targerObject.StorageItemList.Count <= 0) {
                     break;
                 }
-                UserItem = TargerObject.StorageItemList[i];
-                s14 = M2Share.WorldEngine.GetStdItemName(UserItem.Index);
+                userItem = targerObject.StorageItemList[i];
+                s14 = M2Share.WorldEngine.GetStdItemName(userItem.Index);
                 for (int j = i - 1; j >= 0; j--) {
-                    UserItem1 = TargerObject.StorageItemList[j];
-                    if (M2Share.WorldEngine.GetStdItemName(UserItem1.Index) == s14 &&
-                        UserItem.MakeIndex == UserItem1.MakeIndex) {
-                        PlayObject.StorageItemList.RemoveAt(j);
+                    userItem1 = targerObject.StorageItemList[j];
+                    if (M2Share.WorldEngine.GetStdItemName(userItem1.Index) == s14 &&
+                        userItem.MakeIndex == userItem1.MakeIndex) {
+                        playObject.StorageItemList.RemoveAt(j);
                         break;
                     }
                 }

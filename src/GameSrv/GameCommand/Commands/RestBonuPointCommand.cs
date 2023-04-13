@@ -10,33 +10,33 @@ namespace GameSrv.GameCommand.Commands
     public class RestBonuPointCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject)
+        public void Execute(string[] @params, PlayObject playObject)
         {
-            if (@Params == null)
+            if (@params == null)
             {
                 return;
             }
-            string sHumName = @Params.Length > 0 ? @Params[0] : "";
+            string sHumName = @params.Length > 0 ? @params[0] : "";
             int nTotleUsePoint;
             if (string.IsNullOrEmpty(sHumName))
             {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (m_PlayObject != null)
+            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            if (mPlayObject != null)
             {
-                nTotleUsePoint = m_PlayObject.BonusAbil.DC + m_PlayObject.BonusAbil.MC + m_PlayObject.BonusAbil.SC + m_PlayObject.BonusAbil.AC + m_PlayObject.BonusAbil.MAC
-                    + m_PlayObject.BonusAbil.HP + m_PlayObject.BonusAbil.MP + m_PlayObject.BonusAbil.Hit + m_PlayObject.BonusAbil.Speed + m_PlayObject.BonusAbil.Reserved;
-                m_PlayObject.BonusPoint += nTotleUsePoint;
-                m_PlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0, "");
-                m_PlayObject.HasLevelUp(0);
-                m_PlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
-                PlayObject.SysMsg(sHumName + " 的分配点数已复位.", MsgColor.Green, MsgType.Hint);
+                nTotleUsePoint = mPlayObject.BonusAbil.DC + mPlayObject.BonusAbil.MC + mPlayObject.BonusAbil.SC + mPlayObject.BonusAbil.AC + mPlayObject.BonusAbil.MAC
+                    + mPlayObject.BonusAbil.HP + mPlayObject.BonusAbil.MP + mPlayObject.BonusAbil.Hit + mPlayObject.BonusAbil.Speed + mPlayObject.BonusAbil.Reserved;
+                mPlayObject.BonusPoint += nTotleUsePoint;
+                mPlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
+                mPlayObject.HasLevelUp(0);
+                mPlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(sHumName + " 的分配点数已复位.", MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

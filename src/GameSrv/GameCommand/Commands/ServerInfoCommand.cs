@@ -5,7 +5,7 @@ namespace GameSrv.GameCommand.Commands {
     [Command("ServerInfo", "查看服务器信息", 10)]
     public class ServerInfoCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
+        public void Execute(string[] @params, PlayObject playObject) {
             StringBuilder sb = new StringBuilder();
             //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", M2Share.WorldEngine.MonsterCount,
             //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, M2Share.WorldEngine.OnlinePlayObject,

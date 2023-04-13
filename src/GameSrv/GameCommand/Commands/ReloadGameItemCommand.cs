@@ -9,9 +9,9 @@ namespace GameSrv.GameCommand.Commands {
 
     public class ReloadGameItemCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject PlayObject) {
+        public void Execute(PlayObject playObject) {
             M2Share.CommonDb.LoadItemsDB();
-            PlayObject.SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

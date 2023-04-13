@@ -9,17 +9,17 @@ namespace GameSrv.GameCommand.Commands {
     [Command("Mob", "刷指定怪物", "怪物名称 数量 等级(0-7)", 10)]
     public class MobCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @Params, PlayObject PlayObject) {
-            if (@Params == null) {
+        public void Execute(string[] @params, PlayObject playObject) {
+            if (@params == null) {
                 return;
             }
             short nX = 0;
             short nY = 0;
-            string sMonName = Params.Length > 0 ? @Params[0] : "";//名称
-            int nCount = Params.Length > 1 ? HUtil32.StrToInt(@Params[1],0) : 1;//数量
-            byte nLevel = Params.Length > 2 ? (byte)HUtil32.StrToInt(@Params[2],0) : (byte)0;//怪物等级
+            string sMonName = @params.Length > 0 ? @params[0] : "";//名称
+            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1],0) : 1;//数量
+            byte nLevel = @params.Length > 2 ? (byte)HUtil32.StrToInt(@params[2],0) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName)) {
-                PlayObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount <= 0) {
@@ -29,17 +29,17 @@ namespace GameSrv.GameCommand.Commands {
                 nLevel = 0;
             }
             nCount = (byte)HUtil32._MIN(64, nCount);
-            PlayObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
+            playObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (int i = 0; i < nCount; i++) {
-                BaseObject Monster = M2Share.WorldEngine.RegenMonsterByName(PlayObject.Envir.MapName, nX, nY, sMonName);
-                if (Monster != null) {
-                    Monster.SlaveMakeLevel = nLevel;
-                    Monster.SlaveExpLevel = nLevel;
-                    Monster.RecalcAbilitys();
-                    Monster.RefNameColor();
+                BaseObject monster = M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+                if (monster != null) {
+                    monster.SlaveMakeLevel = nLevel;
+                    monster.SlaveExpLevel = nLevel;
+                    monster.RecalcAbilitys();
+                    monster.RefNameColor();
                 }
                 else {
-                    PlayObject.SysMsg(CommandHelp.GameCommandMobMsg, MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg(CommandHelp.GameCommandMobMsg, MsgColor.Red, MsgType.Hint);
                     break;
                 }
             }
