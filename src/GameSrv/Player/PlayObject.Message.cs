@@ -284,7 +284,7 @@ namespace GameSrv.Player
             try
             {
                 GetMessageTick = HUtil32.GetTickCount();
-                while (((HUtil32.GetTickCount() - GetMessageTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(ref processMsg))
+                while (((HUtil32.GetTickCount() - GetMessageTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(GetMessageTick, ref processMsg))
                 {
                     if (!Operate(processMsg))
                     {

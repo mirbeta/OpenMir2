@@ -28,7 +28,7 @@ namespace GameSrv.Monster.Monsters {
                             nDamage = baseObject.GetMagStruckDamage(this, nDamage);
                             if (nDamage > 0) {
                                 baseObject.StruckDamage(nDamage);
-                                baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
+                                baseObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                                 if (UsePoison) {
                                     if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0) {
                                         baseObject.MakePosion(PoisonState.DECHEALTH, 30, 1);

@@ -1,4 +1,6 @@
 using GameSrv.Maps;
+using Spectre.Console;
+using System.Diagnostics;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -20,7 +22,6 @@ namespace GameSrv.Actor
                     nParam1 = nParam1,
                     nParam2 = nParam2,
                     nParam3 = nParam3,
-                    DeliveryTime = 0,
                     ActorId = this.ActorId,
                     LateDelivery = false,
                     Buff = sMsg
@@ -89,7 +90,7 @@ namespace GameSrv.Actor
                     LateDelivery = false,
                     Buff = sMsg
                 };
-                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
+                MsgQueue.Enqueue(sendMessage, (byte)wIdent);
             }
         }
 
@@ -176,7 +177,7 @@ namespace GameSrv.Actor
                 //        sendMessage.wIdent = 0;
                 //        break;
                 //}
-                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
+                MsgQueue.Enqueue(sendMessage, (byte)wIdent);
             }
         }
 
@@ -199,7 +200,30 @@ namespace GameSrv.Actor
                     Buff = sMsg,
                     ActorId = this.ActorId
                 };
-                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Low);
+            }
+        }
+
+        /// <summary>
+        /// 发送伤害目标延时消息
+        /// </summary>
+        public void SendStruckDelayMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
+        {
+            if (!Ghost)
+            {
+                SendMessage sendMessage = new SendMessage
+                {
+                    wIdent = wIdent,
+                    wParam = wParam,
+                    nParam1 = lParam1,
+                    nParam2 = lParam2,
+                    nParam3 = lParam3,
+                    DeliveryTime = HUtil32.GetTickCount() + dwDelay,
+                    LateDelivery = true,
+                    Buff = sMsg,
+                    ActorId = Messages.RM_STRUCK
+                };
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Low);
             }
         }
 
@@ -222,15 +246,14 @@ namespace GameSrv.Actor
                     Buff = sMsg
                 };
                 sendMessage.ActorId = actorId == Messages.RM_STRUCK ? Messages.RM_STRUCK : actorId;
-                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Normal);
+                MsgQueue.Enqueue(sendMessage, (byte)MessagePriority.Low);
             }
         }
 
         /// <summary>
         /// 更新延时消息
         /// </summary>
-        internal void UpdateDelayMsg(int wIdent, short wParam, int lParam1, int lParam2,
-            int lParam3, string sMsg, int dwDelay)
+        internal void UpdateDelayMsg(int wIdent, short wParam, int lParam1, int lParam2, int lParam3, string sMsg, int dwDelay)
         {
             int i;
             i = 0;
@@ -244,7 +267,7 @@ namespace GameSrv.Actor
                 {
                     if ((sendMessage.wIdent == wIdent) && (sendMessage.nParam1 == lParam1))
                     {
-                        MsgQueue.TryDequeue(out sendMessage, out _);
+                        MsgQueue.TryDequeue(out _, out _);
                         Dispose(sendMessage);
                     }
                 }
@@ -256,8 +279,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 更新普通消息
         /// </summary>
-        public void SendUpdateMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
-            string sMsg)
+        public void SendUpdateMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg)
         {
             int i;
             i = 0;
@@ -271,7 +293,7 @@ namespace GameSrv.Actor
                 {
                     if (sendMessage.wIdent == wIdent)
                     {
-                        MsgQueue.TryDequeue(out sendMessage, out _);
+                        MsgQueue.TryDequeue(out _, out _);
                         Dispose(sendMessage);
                     }
                 }
@@ -280,8 +302,7 @@ namespace GameSrv.Actor
             SendMsg(this, wIdent, wParam, lParam1, lParam2, lParam3, sMsg);
         }
 
-        public void SendActionMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3,
-            string sMsg)
+        public void SendActionMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg)
         {
             int i;
             i = 0;
@@ -300,7 +321,7 @@ namespace GameSrv.Actor
                         (sendMessage.wIdent == Messages.CM_POWERHIT) || (sendMessage.wIdent == Messages.CM_LONGHIT) ||
                         (sendMessage.wIdent == Messages.CM_WIDEHIT) || (sendMessage.wIdent == Messages.CM_FIREHIT))
                     {
-                        MsgQueue.TryDequeue(out sendMessage, out _);
+                        MsgQueue.TryDequeue(out _, out _);
                         Dispose(sendMessage);
                     }
                 }
@@ -312,11 +333,34 @@ namespace GameSrv.Actor
         internal bool GetMessage(ref ProcessMessage msg)
         {
             bool result = false;
-            if (MsgQueue.TryDequeue(out SendMessage sendMessage, out var priority))
+            if (MsgQueue.TryDequeue(out SendMessage sendMessage, out _))
             {
-                if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) //延时消息
+                if ((sendMessage.DeliveryTime > 0) && (HUtil32.GetTickCount() < sendMessage.DeliveryTime)) 
                 {
-                    MsgQueue.Enqueue(sendMessage, priority);
+                    MsgQueue.Enqueue(sendMessage, 255);//延时消息优先级最低
+                    return false;
+                }
+                msg.wIdent = sendMessage.wIdent;
+                msg.wParam = sendMessage.wParam;
+                msg.nParam1 = sendMessage.nParam1;
+                msg.nParam2 = sendMessage.nParam2;
+                msg.nParam3 = sendMessage.nParam3;
+                msg.ActorId = sendMessage.ActorId;
+                msg.LateDelivery = sendMessage.LateDelivery;
+                msg.Msg = sendMessage.Buff;
+                result = true;
+            }
+            return result;
+        }
+
+        internal bool GetMessage(int msgTick, ref ProcessMessage msg)
+        {
+            bool result = false;
+            if (MsgQueue.TryDequeue(out SendMessage sendMessage, out _))
+            {
+                if ((sendMessage.DeliveryTime > 0) && (msgTick < sendMessage.DeliveryTime))
+                {
+                    MsgQueue.Enqueue(sendMessage, 255);//延时消息优先级最低
                     return false;
                 }
                 msg.wIdent = sendMessage.wIdent;

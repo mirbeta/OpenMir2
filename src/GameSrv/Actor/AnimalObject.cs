@@ -183,7 +183,7 @@ namespace GameSrv.Actor {
                     nDamage += baseObject.GetMagStruckDamage(this, nMagPower);
                     if (nDamage > 0) {
                         baseObject.StruckDamage(nDamage);
-                        baseObject.SendStruckDelayMsg(Messages.RM_STRUCK, Messages.RM_REFMESSAGE, nDamage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 200);
+                        baseObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nDamage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 200);
                     }
                 }
             }

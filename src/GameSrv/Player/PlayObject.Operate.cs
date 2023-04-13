@@ -586,10 +586,7 @@ namespace GameSrv.Player
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
                     ItemList.Add(userItem);
-                    if (Race == ActorRace.Play)
-                    {
-                        SendAddItem(userItem);
-                    }
+                    SendAddItem(userItem);
                 }
                 else
                 {
