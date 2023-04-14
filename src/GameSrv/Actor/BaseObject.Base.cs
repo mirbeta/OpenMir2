@@ -348,7 +348,7 @@ namespace GameSrv.Actor
                     {
                         ((AnimalObject)this).MeatQuality -= 1000;
                     }
-                    DamageHealth((ushort)(GreenPoisoningPoint + 1));
+                    DamageHealth(GreenPoisoningPoint + 1);
                     HealthTick = 0;
                     SpellTick = 0;
                     HealthSpellChanged();
