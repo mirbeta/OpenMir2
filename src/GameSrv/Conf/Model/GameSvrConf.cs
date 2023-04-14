@@ -163,7 +163,13 @@ namespace GameSrv.Conf.Model {
         public string PayMentPointName;
         public int HealthFillTime;
         public int SpellFillTime;
+        /// <summary>
+        /// 宝宝升级杀怪基数
+        /// </summary>
         public int MonUpLvNeedKillBase;
+        /// <summary>
+        /// 宝宝升级杀怪倍数
+        /// </summary>
         public int MonUpLvRate;
         public int[] MonUpLvNeedKillCount;
         public byte[] SlaveColor;
@@ -174,11 +180,29 @@ namespace GameSrv.Conf.Model {
         public string HomeMap;
         public short HomeX;
         public short HomeY;
+        /// <summary>
+        /// 红名村地图号
+        /// </summary>
         public string RedHomeMap;
+        /// <summary>
+        /// 红名村坐标X
+        /// </summary>
         public short RedHomeX;
+        /// <summary>
+        /// 红名村坐标Y
+        /// </summary>
         public short RedHomeY;
+        /// <summary>
+        /// 红名死亡回城地图号
+        /// </summary>
         public string RedDieHomeMap;
+        /// <summary>
+        /// 红名死亡回城地图坐标X
+        /// </summary>
         public short RedDieHomeX;
+        /// <summary>
+        /// 红名死亡回城地图坐标Y
+        /// </summary>
         public short RedDieHomeY;
         public bool JobHomePoint;
         public string WarriorHomeMap;
@@ -312,8 +336,17 @@ namespace GameSrv.Conf.Model {
         public int CastleWarTime;
         public int GetCastleTime;
         public int GuildWarTime;
+        /// <summary>
+        /// 申请行会费用
+        /// </summary>
         public int BuildGuildPrice;
+        /// <summary>
+        /// 申请行会战费用
+        /// </summary>
         public int GuildWarPrice;
+        /// <summary>
+        /// 炼药费用
+        /// </summary>
         public int MakeDurgPrice;
         /// <summary>
         /// 玩家最大金币上限
@@ -343,8 +376,17 @@ namespace GameSrv.Conf.Model {
         public int KillHumanWinExp;
         public int KillHumanLostExp;
         public int HumanLevelDiffer;
+        /// <summary>
+        /// 怪物属性倍数（防御力、魔法防御力、攻击力、魔法力、道术力数据库为基础倍数为10除以实数）
+        /// </summary>
         public int MonsterPowerRate;
+        /// <summary>
+        /// 物品属性倍数（攻击力、魔法力、道术力以数据库为基础，倍数为10除以实数）
+        /// </summary>
         public int ItemsPowerRate;
+        /// <summary>
+        /// 物品属性倍数（防御力、魔法防御力以数据库为基础，倍数为10除以实数）
+        /// </summary>
         public int ItemsACPowerRate;
         /// <summary>
         /// 是否显示在线人数
@@ -464,12 +506,21 @@ namespace GameSrv.Conf.Model {
         /// </summary>
         public bool boGMRunAll;
         public bool boSafeZoneRunAll;
+        /// <summary>
+        /// 交易间隔时间（秒）3000为3秒
+        /// </summary>
         public int TryDealTime;
+        /// <summary>
+        /// 确认交易时间（秒）1000为1秒
+        /// </summary>
         public int DealOKTime;
         /// <summary>
         /// 是否禁止取回交易物品
         /// </summary>
         public bool CanNotGetBackDeal;
+        /// <summary>
+        /// 交易设置 false为可以交易 true为不可交易
+        /// </summary>
         public bool DisableDeal;
         public int MasterOKLevel;
         public int MasterOKCreditPoint;
@@ -616,6 +667,9 @@ namespace GameSrv.Conf.Model {
         /// 挖矿率
         /// </summary>        
         public int MakeMineRate;
+        /// <summary>
+        /// 矿石因子
+        /// </summary>
         public int StoneTypeRate;
         public int StoneTypeRateMin;
         public int GoldStoneMin;
@@ -661,9 +715,21 @@ namespace GameSrv.Conf.Model {
         public int ItemNumberEx;
         public int GuildRecallTime;
         public short GroupRecallTime;
+        /// <summary>
+        /// 安全区禁止扔物品控制（false为不禁止,true为禁止）
+        /// </summary>
         public bool ControlDropItem;
+        /// <summary>
+        /// 安全区禁止扔物品控制（false为不禁止,true为禁止）
+        /// </summary>
         public bool InSafeDisableDrop;
+        /// <summary>
+        /// 扔物品控制的金币数设定
+        /// </summary>
         public int CanDropGold;
+        /// <summary>
+        /// 扔物品控制的物品价格设定
+        /// </summary>
         public int CanDropPrice;
         public bool SendCustemMsg;
         public bool SubkMasterSendMsg;
@@ -699,9 +765,18 @@ namespace GameSrv.Conf.Model {
         /// 死亡是否掉落金币
         /// </summary>
         public bool DieDropGold;
+        /// <summary>
+        /// 被怪物杀死掉装备控制（0为不掉,1为掉）
+        /// </summary>
         public bool KillByHumanDropUseItem;
+        /// <summary>
+        /// 被怪物杀死掉装备控制（0为不掉,1为掉）
+        /// </summary>
         public bool KillByMonstDropUseItem;
         public bool KickExpireHuman;
+        /// <summary>
+        /// 行会封号最大长度
+        /// </summary>
         public byte GuildRankNameLen;
         public int GuildMemberMaxLimit;
         public byte GuildNameLen;
@@ -723,8 +798,17 @@ namespace GameSrv.Conf.Model {
         public int dwUserMoveTime;
         public int dwPKDieLostExpRate;
         public int nPKDieLostLevelRate;
+        /// <summary>
+        /// 攻击其它人时名字颜色
+        /// </summary>
         public byte PKFlagNameColor;
+        /// <summary>
+        /// PK点超过100时名字颜色
+        /// </summary>
         public byte PKLevel1NameColor;
+        /// <summary>
+        /// PK点超过200时名字颜色
+        /// </summary>
         public byte PKLevel2NameColor;
         /// <summary>
         /// 结盟行会名字颜色
@@ -734,13 +818,37 @@ namespace GameSrv.Conf.Model {
         /// 敌对行会名字颜色
         /// </summary>
         public byte WarGuildNameColor;
+        /// <summary>
+        /// 战争区域时名字颜色
+        /// </summary>
         public byte InFreePKAreaNameColor;
+        /// <summary>
+        /// 祈祷生效设置（true为开启 false为不开启）
+        /// </summary>
         public bool SpiritMutiny;
+        /// <summary>
+        /// 祈祷生效时间长度（3600000为3600秒）
+        /// </summary>
         public int SpiritMutinyTime;
+        /// <summary>
+        /// 祈祷生效时能量倍数
+        /// </summary>
         public int SpiritPowerRate;
+        /// <summary>
+        /// 主人死亡宝宝叛变控制（false为不叛变 true为叛变）
+        /// </summary>
         public bool MasterDieMutiny;
+        /// <summary>
+        /// 宝宝叛变机率（数字越小叛变机率越大）
+        /// </summary>
         public int MasterDieMutinyRate;
+        /// <summary>
+        /// 宝宝叛变增加攻击机率（数字越小叛变机率越大）
+        /// </summary>
         public int MasterDieMutinyPower;
+        /// <summary>
+        /// 宝宝叛变增加攻击速度机率（数字越小叛变机率越大）
+        /// </summary>
         public int MasterDieMutinySpeed;
         public bool BBMonAutoChangeColor;
         public int BBMonAutoChangeColorTime;
@@ -770,11 +878,17 @@ namespace GameSrv.Conf.Model {
         public int AmyOunsulPoint;
         public bool DisableInSafeZoneFireCross;
         public bool GroupMbAttackPlayObject;
+        /// <summary>
+        /// 绿毒减HP时间（毫秒）
+        /// </summary>
         public int PosionDecHealthTime;
         /// <summary>
         /// 中红毒着持久及减防量（实际大小为 12 / 10）
         /// </summary>
         public int PosionDamagarmor;
+        /// <summary>
+        /// 是否禁止无限刺杀（false不禁止,true禁止）
+        /// </summary>
         public bool LimitSwordLong;
         public int SwordLongPowerRate;
         public byte FireBoomRage;
@@ -799,17 +913,41 @@ namespace GameSrv.Conf.Model {
         /// 成功机率=怪物最高HP 除以 此倍率，此倍率越大诱惑机率越高
         /// </summary>        
         public int MagTammingHPRate;
-        public int MagTammingCount;
+        /// <summary>
+        /// 诱惑之光能召唤的最高怪物数量（实数）
+        /// </summary>
+        public byte MagTammingCount;
         public int MabMabeHitRandRate;
         public int MabMabeHitMinLvLimit;
         public int MabMabeHitSucessRate;
         public int MabMabeHitMabeTimeRate;
+        /// <summary>
+        /// 沙巴克名称
+        /// </summary>
         public string CastleName;
+        /// <summary>
+        /// 回城点地图号
+        /// </summary>
         public string CastleHomeMap;
+        /// <summary>
+        /// 回城点地图坐标X
+        /// </summary>
         public short CastleHomeX;
+        /// <summary>
+        /// 回城点地图坐标Y
+        /// </summary>
         public short CastleHomeY;
+        /// <summary>
+        /// 攻城区域范围X
+        /// </summary>
         public short CastleWarRangeX;
+        /// <summary>
+        /// 攻城区域范围Y
+        /// </summary>
         public short CastleWarRangeY;
+        /// <summary>
+        /// 所有商人交税百分比
+        /// </summary>
         public int CastleTaxRate;
         public bool GetAllNpcTax;
         public int HireGuardPrice;
