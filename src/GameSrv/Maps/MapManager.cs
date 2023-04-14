@@ -23,18 +23,18 @@ namespace GameSrv.Maps {
         /// </summary>
         public void MakeSafePkZone() {
             for (int i = 0; i < M2Share.StartPointList.Count; i++) {
-                StartPoint startPoint = M2Share.StartPointList[i];
+                var startPoint = M2Share.StartPointList[i];
                 if (string.IsNullOrEmpty(startPoint.MapName) && startPoint.Type > 0) {
                     Envirnoment envir = FindMap(startPoint.MapName);
                     if (envir != null) {
-                        int nMinX = startPoint.CurrX - startPoint.Range;
-                        int nMaxX = startPoint.CurrX + startPoint.Range;
-                        int nMinY = startPoint.CurrY - startPoint.Range;
-                        int nMaxY = startPoint.CurrY + startPoint.Range;
-                        for (int nX = nMinX; nX <= nMaxX; nX++) {
-                            for (int nY = nMinY; nY <= nMaxY; nY++) {
+                        short nMinX = (short)(startPoint.CurrX - startPoint.Range);
+                        short nMaxX = (short)(startPoint.CurrX + startPoint.Range);
+                        short nMinY = (short)(startPoint.CurrY - startPoint.Range);
+                        short nMaxY = (short)(startPoint.CurrY + startPoint.Range);
+                        for (short nX = nMinX; nX <= nMaxX; nX++) {
+                            for (short nY = nMinY; nY <= nMaxY; nY++) {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY) {
-                                    SafeEvent safeEvent = new SafeEvent(envir, nX, nY, startPoint.Type);
+                                    SafeEvent safeEvent = new SafeEvent(envir, nX, nY, (byte)startPoint.Type);
                                     M2Share.EventMgr.AddEvent(safeEvent);
                                 }
                             }

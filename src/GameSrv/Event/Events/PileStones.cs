@@ -2,7 +2,7 @@
 
 namespace GameSrv.Event.Events {
     public class PileStones : MapEvent {
-        public PileStones(Envirnoment envir, int nX, int nY, int nType, int nTime) : base(envir, (short)nX, (short)nY, (byte)nType, nTime, true) {
+        public PileStones(Envirnoment envir, short nX, short nY, byte nType, int nTime) : base(envir, nX, nY, nType, nTime, true) {
             EventParam = 1;
         }
 

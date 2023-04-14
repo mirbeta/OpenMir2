@@ -16,9 +16,9 @@ namespace GameSrv.GameCommand.Commands
         public void Execute(string[] @params, PlayObject playObject)
         {
             if (@params == null) return;
-            string sItemName = @params.Length > 0 ? @params[0] : ""; //物品名称
-            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1; //数量
-            string sParam = @params.Length > 2 ? @params[2] : ""; //可选参数（持久力）
+            var sItemName = @params.Length > 0 ? @params[0] : ""; //物品名称
+            var nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1; //数量
+            var sParam = @params.Length > 2 ? @params[2] : ""; //可选参数（持久力）
             if (string.IsNullOrEmpty(sItemName))
             {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -45,13 +45,13 @@ namespace GameSrv.GameCommand.Commands
                 }
                 nCount = 1;
             }
-            for (int i = 0; i < nCount; i++)
+            for (var i = 0; i < nCount; i++)
             {
                 if (playObject.ItemList.Count >= Grobal2.MaxBagItem) return;
                 UserItem userItem = null;
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     if (stdItem.Price >= 15000 && !M2Share.Config.TestServer && playObject.Permission < 5)
                     {
                         return;

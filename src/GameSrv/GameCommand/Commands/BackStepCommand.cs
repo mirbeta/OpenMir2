@@ -16,8 +16,8 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            byte nType = (byte)(@params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0);
-            byte nCount = (byte)(@params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0);
+            var nType = (byte)(@params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0);
+            var nCount = (byte)(@params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0);
             if (playObject.Permission < 6)
             {
                 return;

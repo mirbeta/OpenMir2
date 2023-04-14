@@ -9,8 +9,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            bool boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

@@ -12,12 +12,12 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sChrName = @params.Length > 0 ? @params[0] : "";
+            var sChrName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sChrName) || !string.IsNullOrEmpty(sChrName) && sChrName[1] == '?') {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sChrName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sChrName);
             if (mPlayObject != null) {
                 if (mPlayObject.WhisperHuman == playObject) {
                     mPlayObject.WhisperHuman = null;

@@ -12,14 +12,14 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sCtr = @params.Length > 1 ? @params[1] : "";
-            string sPoint = @params.Length > 2 ? @params[2] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sCtr = @params.Length > 1 ? @params[1] : "";
+            var sPoint = @params.Length > 2 ? @params[2] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?') {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
@@ -28,8 +28,8 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandLuckPointMsg, sHumanName, mPlayObject.BodyLuckLevel, mPlayObject.BodyLuck, mPlayObject.Luck), MsgColor.Green, MsgType.Hint);
                 return;
             }
-            byte nPoint = (byte)HUtil32.StrToInt(sPoint, 0);
-            char cMethod = sCtr[0];
+            var nPoint = (byte)HUtil32.StrToInt(sPoint, 0);
+            var cMethod = sCtr[0];
             switch (cMethod) {
                 case '=':
                     mPlayObject.Luck = nPoint;

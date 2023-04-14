@@ -12,7 +12,7 @@ namespace GameSrv.GameCommand.Commands {
         public void Execute(PlayObject playObject) {
             IList<BaseObject> baseObjectList = new List<BaseObject>();
             playObject.Envir.GetRangeBaseObject(playObject.CurrX, playObject.CurrY, 2, true, baseObjectList);
-            for (int i = 0; i < baseObjectList.Count; i++) {
+            for (var i = 0; i < baseObjectList.Count; i++) {
                 playObject.SysMsg(baseObjectList[i].GetBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
             }
             baseObjectList.Clear();

@@ -18,12 +18,12 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            string sMonName = @params.Length > 0 ? @params[0] : "";
-            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            int nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
-            int nTick = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 86400000;
-            int nAutoChangeColor = @params.Length > 4 ? HUtil32.StrToInt(@params[4], 0) : 0;
-            int nFixColor = @params.Length > 5 ? HUtil32.StrToInt(@params[5], 0) : 0;
+            var sMonName = @params.Length > 0 ? @params[0] : "";
+            var nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            var nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            var nTick = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 86400000;
+            var nAutoChangeColor = @params.Length > 4 ? HUtil32.StrToInt(@params[4], 0) : 0;
+            var nFixColor = @params.Length > 5 ? HUtil32.StrToInt(@params[5], 0) : 0;
             short nX = 0;
             short nY = 0;
             MonsterObject mon;
@@ -40,7 +40,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 nCount = 1;
             }
-            for (int i = 0; i < nCount; i++)
+            for (var i = 0; i < nCount; i++)
             {
                 if (playObject.SlaveList.Count >= 20)
                 {

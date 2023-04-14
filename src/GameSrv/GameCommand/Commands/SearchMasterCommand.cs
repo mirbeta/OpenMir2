@@ -19,8 +19,8 @@ namespace GameSrv.GameCommand.Commands {
                     return;
                 }
                 playObject.SysMsg(Settings.YourMasterListNowLocateMsg, MsgColor.Green, MsgType.Hint);
-                for (int i = 0; i < playObject.MasterList.Count; i++) {
-                    PlayObject human = playObject.MasterList[i];
+                for (var i = 0; i < playObject.MasterList.Count; i++) {
+                    var human = playObject.MasterList[i];
                     playObject.SysMsg(human.ChrName + " " + human.Envir.MapDesc + "(" + human.CurrX + ":" + human.CurrY + ")", MsgColor.Green, MsgType.Hint);
                     human.SysMsg(Settings.YourMasterSearchLocateMsg, MsgColor.Green, MsgType.Hint);
                     human.SysMsg(playObject.ChrName + " " + playObject.Envir.MapDesc + "(" + playObject.CurrX + ":" + playObject.CurrY + ")", MsgColor.Green, MsgType.Hint);

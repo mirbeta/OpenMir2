@@ -11,7 +11,7 @@ namespace GameSrv.GameCommand.Commands {
                     playObject.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
-                for (int i = 0; i < M2Share.DenyChrNameList.Count; i++) {
+                for (var i = 0; i < M2Share.DenyChrNameList.Count; i++) {
                     //PlayObject.SysMsg(Settings.g_DenyChrNameList[i], TMsgColor.c_Green, TMsgType.t_Hint);
                 }
             }

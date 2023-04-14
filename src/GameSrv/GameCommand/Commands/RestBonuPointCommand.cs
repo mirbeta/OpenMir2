@@ -16,14 +16,14 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            string sHumName = @params.Length > 0 ? @params[0] : "";
+            var sHumName = @params.Length > 0 ? @params[0] : "";
             int nTotleUsePoint;
             if (string.IsNullOrEmpty(sHumName))
             {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (mPlayObject != null)
             {
                 nTotleUsePoint = mPlayObject.BonusAbil.DC + mPlayObject.BonusAbil.MC + mPlayObject.BonusAbil.SC + mPlayObject.BonusAbil.AC + mPlayObject.BonusAbil.MAC

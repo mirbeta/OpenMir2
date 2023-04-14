@@ -17,10 +17,10 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            string sMonName = @params.Length > 0 ? @params[0] : "";
-            int nNameColor = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            short nX = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0);
-            short nY = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[3], 0) : 0);
+            var sMonName = @params.Length > 0 ? @params[0] : "";
+            var nNameColor = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            var nX = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0);
+            var nY = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[3], 0) : 0);
             if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
             {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 nNameColor = 255;
             }
-            MonsterObject mon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+            var mon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.Master = playObject;

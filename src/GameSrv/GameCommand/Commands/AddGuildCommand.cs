@@ -13,8 +13,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sGuildName = @params.Length > 0 ? @params[0] : "";
-            string sGuildChief = @params.Length > 1 ? @params[1] : "";
+            var sGuildName = @params.Length > 0 ? @params[0] : "";
+            var sGuildChief = @params.Length > 1 ? @params[1] : "";
             if (M2Share.ServerIndex != 0) {
                 playObject.SysMsg("这个命令只能使用在主服务器上", MsgColor.Red, MsgType.Hint);
                 return;
@@ -23,8 +23,8 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            bool boAddState = false;
-            PlayObject chiefObject = M2Share.WorldEngine.GetPlayObject(sGuildChief);
+            var boAddState = false;
+            var chiefObject = M2Share.WorldEngine.GetPlayObject(sGuildChief);
             if (chiefObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
                 return;

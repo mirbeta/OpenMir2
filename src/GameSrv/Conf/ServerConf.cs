@@ -467,7 +467,7 @@ namespace GameSrv.Conf {
             M2Share.Config.WinLottery5Gold = ReadWriteInteger("Setup", "WinLottery5Gold", M2Share.Config.WinLottery5Gold);
             M2Share.Config.WinLottery6Gold = ReadWriteInteger("Setup", "WinLottery6Gold", M2Share.Config.WinLottery6Gold);
             M2Share.Config.GuildRecallTime = ReadWriteInteger("Setup", "GuildRecallTime", M2Share.Config.GuildRecallTime);
-            M2Share.Config.GroupRecallTime = (short)ReadWriteInteger("Setup", "GroupRecallTime", M2Share.Config.GroupRecallTime);
+            M2Share.Config.GroupRecallTime = ReadWriteInt16("Setup", "GroupRecallTime", M2Share.Config.GroupRecallTime);
             M2Share.Config.ControlDropItem = ReadWriteBool("Setup", "ControlDropItem", M2Share.Config.ControlDropItem);
             M2Share.Config.InSafeDisableDrop = ReadWriteBool("Setup", "InSafeDisableDrop", M2Share.Config.InSafeDisableDrop);
             M2Share.Config.CanDropGold = ReadWriteInteger("Setup", "CanDropGold", M2Share.Config.CanDropGold);

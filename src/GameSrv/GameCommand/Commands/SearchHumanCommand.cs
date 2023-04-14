@@ -12,7 +12,7 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (playObject.ProbeNecklace || playObject.Permission >= 6) {
                 if (string.IsNullOrEmpty(sHumanName)) {
                     playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -20,7 +20,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 if (HUtil32.GetTickCount() - playObject.ProbeTick > 10000 || playObject.Permission >= 3) {
                     playObject.ProbeTick = HUtil32.GetTickCount();
-                    PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                    var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
                     if (mPlayObject != null) {
                         playObject.SysMsg(sHumanName + " 现在位于 " + mPlayObject.Envir.MapDesc + '(' + mPlayObject.Envir.MapName + ") " + mPlayObject.CurrX + ':'
                             + playObject.CurrY, MsgColor.Blue, MsgType.Hint);

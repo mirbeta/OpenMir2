@@ -23,7 +23,7 @@ namespace GameSrv.GameCommand.Commands {
             IList<PlayObject> list14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
             M2Share.WorldEngine.GetMapRageHuman(playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, ref list10);
-            for (int i = 0; i < list10.Count; i++) {
+            for (var i = 0; i < list10.Count; i++) {
                 mPlayObject = list10[i] as PlayObject;
                 if (!mPlayObject.ObMode || !mPlayObject.AdminMode) {
                     mPlayObject.FightZoneDieCount = 0;
@@ -31,7 +31,7 @@ namespace GameSrv.GameCommand.Commands {
                         continue;
                     }
                     bo19 = false;
-                    for (int j = 0; j < list14.Count; j++) {
+                    for (var j = 0; j < list14.Count; j++) {
                         playObjectA = list14[j];
                         if (mPlayObject.MyGuild == playObjectA.MyGuild) {
                             bo19 = true;
@@ -44,12 +44,12 @@ namespace GameSrv.GameCommand.Commands {
             }
             playObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
             M2Share.WorldEngine.CryCry(Messages.RM_CRY, playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- 行会战争已爆发。");
-            string s20 = "";
+            var s20 = "";
             GuildInfo guild;
-            for (int i = 0; i < guildList.Count; i++) {
+            for (var i = 0; i < guildList.Count; i++) {
                 guild = guildList[i];
                 guild.StartTeamFight();
-                for (int ii = 0; ii < list10.Count; ii++) {
+                for (var ii = 0; ii < list10.Count; ii++) {
                     mPlayObject = list10[i] as PlayObject;
                     if (mPlayObject.MyGuild == guild) {
                         guild.AddTeamFightMember(mPlayObject.ChrName);

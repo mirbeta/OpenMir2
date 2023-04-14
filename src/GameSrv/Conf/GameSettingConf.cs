@@ -85,11 +85,11 @@ namespace GameSrv.Conf {
             M2Share.Config.ClientConf.boShowHelp = ReadWriteBool("Config", "ShowHelp", M2Share.Config.ClientConf.boShowHelp);
 
             Settings.boSecondCardSystem = ReadWriteBool("Config", "SecondCardSystem", Settings.boSecondCardSystem);
-            Settings.ExpErienceLevel = (byte)ReadWriteInteger("Config", "ExpErienceLevel", Settings.ExpErienceLevel);
+            Settings.ExpErienceLevel = ReadWriteByte("Config", "ExpErienceLevel", Settings.ExpErienceLevel);
 
             Settings.BADMANHOMEMAP = ReadWriteString("Config", "BadManHomeMap", Settings.BADMANHOMEMAP);
-            Settings.BADMANSTARTX = (short)ReadWriteInteger("Config", "BadManStartX", Settings.BADMANSTARTX);
-            Settings.BADMANSTARTY = (short)ReadWriteInteger("Config", "BadManStartY", Settings.BADMANSTARTY);
+            Settings.BADMANSTARTX = ReadWriteInt16("Config", "BadManStartX", Settings.BADMANSTARTX);
+            Settings.BADMANSTARTY = ReadWriteInt16("Config", "BadManStartY", Settings.BADMANSTARTY);
             M2Share.Config.ClientConf.boGamepath = ReadWriteBool("Config", "Gamepath", M2Share.Config.ClientConf.boGamepath);
             Settings.RECHARGINGMAP = ReadWriteString("Config", "RECHARGINGMAP", Settings.RECHARGINGMAP); //充值
         }

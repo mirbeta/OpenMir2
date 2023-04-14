@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
             BaseObject baseObject;
             if (!string.IsNullOrEmpty(sHumanName)) {
                 baseObject = M2Share.WorldEngine.GetPlayObject(sHumanName);

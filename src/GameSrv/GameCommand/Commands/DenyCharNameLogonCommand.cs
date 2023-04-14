@@ -12,8 +12,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sChrName = @params.Length > 0 ? @params[0] : "";
-            string sFixDeny = @params.Length > 1 ? @params[1] : "";
+            var sChrName = @params.Length > 0 ? @params[0] : "";
+            var sFixDeny = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sChrName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

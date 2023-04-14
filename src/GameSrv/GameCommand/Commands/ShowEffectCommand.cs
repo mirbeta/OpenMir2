@@ -11,8 +11,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sEffect = @params.Length > 0 ? @params[0] : "";
-            string sTime = @params.Length > 1 ? @params[1] : "";
+            var sEffect = @params.Length > 0 ? @params[0] : "";
+            var sTime = @params.Length > 1 ? @params[1] : "";
             //int nEffectType;
             //TFlowerEvent FlowerEvent = null;
             //if ((sEffect == "") || (HUtil32.Str_ToInt(sEffect, -1) <= 0))

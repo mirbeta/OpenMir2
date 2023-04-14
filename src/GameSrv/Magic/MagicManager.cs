@@ -615,8 +615,8 @@ namespace GameSrv.Magic
                         {
                             MagicBase.UseAmulet(playObject, 1, 1, nAmuletIdx);
                             nPower = (ushort)(userMagic.Level + 1 + M2Share.RandomNumber.Random(userMagic.Level));
-                            n14 = (short)playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
-                            ((PlayObject)targetObject).AttPowerUp(nPower, n14);
+                            var nTime = playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
+                            ((PlayObject)targetObject).AttPowerUp(nPower, nTime);
                             boTrain = true;
                             boSpellFail = false;
                         }

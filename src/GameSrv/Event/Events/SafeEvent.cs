@@ -5,7 +5,7 @@ namespace GameSrv.Event.Events {
     /// 安全区光环
     /// </summary>
     public class SafeEvent : MapEvent {
-        public SafeEvent(Envirnoment envir, int nX, int nY, int nType) : base(envir, (short)nX, (short)nY, (byte)nType, HUtil32.GetTickCount(), true) {
+        public SafeEvent(Envirnoment envir, short nX, short nY, byte nType) : base(envir, nX, nY, nType, HUtil32.GetTickCount(), true) {
 
         }
 

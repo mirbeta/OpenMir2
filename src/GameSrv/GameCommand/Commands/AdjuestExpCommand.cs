@@ -12,16 +12,16 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sExp = @params.Length > 1 ? @params[1] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sExp = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            int dwExp = HUtil32.StrToInt(sExp, 0);
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var dwExp = HUtil32.StrToInt(sExp, 0);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
-                int dwOExp = playObject.Abil.Exp;
+                var dwOExp = playObject.Abil.Exp;
                 mPlayObject.Abil.Exp = dwExp;
                 mPlayObject.HasLevelUp(mPlayObject.Abil.Level - 1);
                 playObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);

@@ -14,13 +14,13 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            int nWhere = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
-            int nValueType = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;//参数16为吸伤属性
-            int nValue = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
+            var nWhere = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            var nValueType = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;//参数16为吸伤属性
+            var nValue = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
             string sShowMsg;
             if (nWhere >= 0 && nWhere <= 12 && nValueType >= 0 && nValueType <= 15 && nValue >= 0 && nValue <= 255) {
                 if (playObject.UseItems[nWhere].Index > 0) {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nWhere].Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nWhere].Index);
                     if (stdItem == null) {
                         return;
                     }

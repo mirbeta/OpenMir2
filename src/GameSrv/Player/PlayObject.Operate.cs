@@ -305,7 +305,7 @@ namespace GameSrv.Player
             return result;
         }
 
-        private bool ClientChangeDir(short wIdent, int nX, int nY, byte nDir, ref int dwDelayTime)
+        private bool ClientChangeDir(int wIdent, int nX, int nY, byte nDir, ref int dwDelayTime)
         {
             if (Death || StatusTimeArr[PoisonState.STONE] != 0)// 防麻
             {

@@ -14,13 +14,13 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sX = @params.Length > 0 ? @params[0] : "";
-            string sY = @params.Length > 1 ? @params[1] : "";
-            string sMonName = @params.Length > 2 ? @params[2] : "";
-            string sCount = @params.Length > 3 ? @params[3] : "";
-            int nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
-            short nX = HUtil32.StrToInt16(sX, 0);
-            short nY = HUtil32.StrToInt16(sY, 0);
+            var sX = @params.Length > 0 ? @params[0] : "";
+            var sY = @params.Length > 1 ? @params[1] : "";
+            var sMonName = @params.Length > 2 ? @params[2] : "";
+            var sCount = @params.Length > 3 ? @params[3] : "";
+            var nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
+            var nX = HUtil32.StrToInt16(sX, 0);
+            var nY = HUtil32.StrToInt16(sY, 0);
             BaseObject mon = null;
             nCount = HUtil32._MIN(500, HUtil32.StrToInt(sCount, 0));
             nX = HUtil32.StrToInt16(sX, 0);
@@ -29,13 +29,13 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Envirnoment mEnvir = M2Share.MapMgr.FindMap(M2Share.MissionMap);
+            var mEnvir = M2Share.MapMgr.FindMap(M2Share.MissionMap);
             if (!M2Share.BoMission || mEnvir == null) {
                 playObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
                 playObject.SysMsg("请先用命令" + this.Command.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = 0; i < nCount; i++) {
+            for (var i = 0; i < nCount; i++) {
                 mon = M2Share.WorldEngine.RegenMonsterByName(M2Share.MissionMap, nX, nY, sMonName);
                 if (mon != null) {
                     mon.Mission = true;

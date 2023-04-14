@@ -13,9 +13,9 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sSkillName = @params.Length > 1 ? @params[1] : "";
-            string herostr = @params.Length > 2 ? @params[2] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sSkillName = @params.Length > 1 ? @params[1] : "";
+            var herostr = @params.Length > 2 ? @params[2] : "";
             bool boDelAll;
             UserMagic userMagic;
             if (string.IsNullOrEmpty(sHumanName) || (string.IsNullOrEmpty(sSkillName))) {
@@ -28,12 +28,12 @@ namespace GameSrv.GameCommand.Commands {
             else {
                 boDelAll = false;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = mPlayObject.MagicList.Count - 1; i >= 0; i--) {
+            for (var i = mPlayObject.MagicList.Count - 1; i >= 0; i--) {
                 if (mPlayObject.MagicList.Count <= 0) {
                     break;
                 }

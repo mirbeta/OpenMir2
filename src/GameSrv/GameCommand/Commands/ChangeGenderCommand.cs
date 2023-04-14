@@ -13,9 +13,9 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sSex = @params.Length > 1 ? @params[1] : "";
-            int nSex = -1;
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sSex = @params.Length > 1 ? @params[1] : "";
+            var nSex = -1;
             if (sSex == "Man" || sSex == "男" || sSex == "0") {
                 nSex = 0;
             }
@@ -29,7 +29,7 @@ namespace GameSrv.GameCommand.Commands {
             if (!Enum.TryParse(nSex.ToString(), out PlayGender playSex)) {
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 if (mPlayObject.Gender != playSex) {
                     mPlayObject.Gender = playSex;

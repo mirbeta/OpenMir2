@@ -12,12 +12,12 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--) {
+            for (var i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--) {
                 if (M2Share.DisableSendMsgList.Count <= 0) {
                     break;
                 }

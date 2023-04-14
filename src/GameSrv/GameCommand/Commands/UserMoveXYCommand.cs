@@ -12,11 +12,11 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sX = @params.Length > 0 ? @params[0] : "";
-            string sY = @params.Length > 1 ? @params[1] : "";
+            var sX = @params.Length > 0 ? @params[0] : "";
+            var sY = @params.Length > 1 ? @params[1] : "";
             if (playObject.Teleport) {
-                short nX = HUtil32.StrToInt16(sX, -1);
-                short nY = HUtil32.StrToInt16(sY, -1);
+                var nX = HUtil32.StrToInt16(sX, -1);
+                var nY = HUtil32.StrToInt16(sY, -1);
                 if (!playObject.Envir.Flag.boNOPOSITIONMOVE) {
                     if (playObject.Envir.CanWalkOfItem(nX, nY, M2Share.Config.boUserMoveCanDupObj, M2Share.Config.boUserMoveCanOnItem)) {
                         if ((HUtil32.GetTickCount() - playObject.TeleportTick) > M2Share.Config.dwUserMoveTime * 1000) {

@@ -13,17 +13,17 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sMapName = @params.Length > 0 ? @params[0] : "";
+            var sMapName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sMapName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null) {
                 playObject.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            string sMsg = "地图模式: " + envir.GetEnvirInfo();
+            var sMsg = "地图模式: " + envir.GetEnvirInfo();
             playObject.SysMsg(sMsg, MsgColor.Blue, MsgType.Hint);
         }
     }

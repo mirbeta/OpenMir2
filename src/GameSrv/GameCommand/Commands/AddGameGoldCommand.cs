@@ -12,8 +12,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumName = @params.Length > 0 ? @params[0] : "";
-            int nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            var sHumName = @params.Length > 0 ? @params[0] : "";
+            var nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (playObject.Permission < 6) {
                 return;
             }
@@ -21,7 +21,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (mPlayObject != null) {
                 if (mPlayObject.GameGold + nPoint < 2000000) {
                     mPlayObject.GameGold += nPoint;

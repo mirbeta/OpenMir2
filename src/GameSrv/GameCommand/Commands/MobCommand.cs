@@ -19,9 +19,9 @@ namespace GameSrv.GameCommand.Commands
             }
             short nX = 0;
             short nY = 0;
-            string sMonName = @params.Length > 0 ? @params[0] : "";//名称
-            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1;//数量
-            byte nLevel = @params.Length > 2 ? (byte)HUtil32.StrToInt(@params[2], 0) : (byte)0;//怪物等级
+            var sMonName = @params.Length > 0 ? @params[0] : "";//名称
+            var nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1;//数量
+            var nLevel = @params.Length > 2 ? (byte)HUtil32.StrToInt(@params[2], 0) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName))
             {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -37,9 +37,9 @@ namespace GameSrv.GameCommand.Commands
             }
             nCount = (byte)HUtil32._MIN(64, nCount);
             playObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
-            for (int i = 0; i < nCount; i++)
+            for (var i = 0; i < nCount; i++)
             {
-                MonsterObject monster = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+                var monster = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
                 if (monster != null)
                 {
                     monster.SlaveMakeLevel = nLevel;
