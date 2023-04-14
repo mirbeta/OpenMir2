@@ -104,7 +104,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 中绿毒降HP点数
         /// </summary>
-        private ushort GreenPoisoningPoint;
+        private byte GreenPoisoningPoint;
         /// <summary>
         /// 敏捷度
         /// </summary>
@@ -2152,7 +2152,7 @@ namespace GameSrv.Actor
             }
             StatusArrTick[nType] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
-            GreenPoisoningPoint = (ushort)nPoint;
+            GreenPoisoningPoint = (byte)HUtil32._MAX(255, nPoint);
             if (nOldCharStatus != CharStatus)
             {
                 StatusChanged();
