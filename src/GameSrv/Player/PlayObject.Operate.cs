@@ -1172,14 +1172,13 @@ namespace GameSrv.Player
                             M2Share.EventSource.AddEventLog(8, DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + Grobal2.StringGoldName + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + ChrName);
                         }
                     }
-                    var playObject = DealCreat;
-                    playObject.SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
-                    playObject.SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
-                    playObject.DealCreat = null;
-                    playObject.Dealing = false;
-                    playObject.DealItemList.Clear();
-                    playObject.DealGolds = 0;
-                    playObject.DealSuccess = false;
+                    DealCreat.SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
+                    DealCreat.SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    DealCreat.DealCreat = null;
+                    DealCreat.Dealing = false;
+                    DealCreat.DealItemList.Clear();
+                    DealCreat.DealGolds = 0;
+                    DealCreat.DealSuccess = false;
                     SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
                     SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     DealCreat = null;
