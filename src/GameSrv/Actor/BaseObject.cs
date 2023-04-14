@@ -365,7 +365,6 @@ namespace GameSrv.Actor
         /// 玩家包裹物品列表或怪物物品掉落列表
         /// </summary>
         public IList<UserItem> ItemList;
-        public IList<MonsterSayMsg> SayMsgList;
         private int SendRefMsgTick;
         /// <summary>
         /// 攻击间隔
@@ -501,7 +500,6 @@ namespace GameSrv.Actor
             TargetCret = null;
             LastHiter = null;
             ExpHitter = null;
-            SayMsgList = null;
             DenyRefStatus = false;
             AddToMaped = true;
             AutoChangeColor = false;
@@ -1793,66 +1791,7 @@ namespace GameSrv.Actor
                 }
             }
         }
-
-        /// <summary>
-        /// 怪物说话
-        /// </summary>
-        protected void MonsterSayMsg(BaseObject monsterObject, MonStatus monStatus)
-        {
-            if (!M2Share.Config.MonSayMsg)
-            {
-                return;
-            }
-            if (Race == ActorRace.Play)
-            {
-                return;
-            }
-            if (SayMsgList == null)
-            {
-                return;
-            }
-            if (monsterObject == null)
-            {
-                return;
-            }
-            string sAttackName;
-            if ((monsterObject.Race != ActorRace.Play) && (monsterObject.Master == null))
-            {
-                return;
-            }
-            if (monsterObject.Master != null)
-            {
-                sAttackName = monsterObject.Master.ChrName;
-            }
-            else
-            {
-                sAttackName = monsterObject.ChrName;
-            }
-            for (int i = 0; i < SayMsgList.Count; i++)
-            {
-                MonsterSayMsg monSayMsg = SayMsgList[i];
-                string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(ChrName));
-                sMsg = sMsg.Replace("%d", sAttackName);
-                if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))
-                {
-                    if (monStatus == MonStatus.MonGen)
-                    {
-                        M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
-                        break;
-                    }
-                    if (monSayMsg.Color == MsgColor.White)
-                    {
-                        ProcessSayMsg(sMsg);
-                    }
-                    else
-                    {
-                        monsterObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
-                    }
-                    break;
-                }
-            }
-        }
-
+        
         /// <summary>
         /// 设置肉的品质
         /// </summary>
@@ -2930,7 +2869,7 @@ namespace GameSrv.Actor
             Death = false;
             Invisible = false;
             SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, GetFeatureToLong(), "");
-            MonsterSayMsg(null, MonStatus.MonGen);
+            ((AnimalObject)this).MonsterSayMessage(null, MonStatus.MonGen);
             return true;
         }
 

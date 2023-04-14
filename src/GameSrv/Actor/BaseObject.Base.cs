@@ -382,14 +382,7 @@ namespace GameSrv.Actor
                 }
             }
             KillFunc();
-            if (LastHiter != null && Race != ActorRace.Play)
-            {
-                MonsterSayMsg(LastHiter, MonStatus.Die);
-            }
-            else if (LastHiter != null && Race == ActorRace.Play)
-            {
-                LastHiter.MonsterSayMsg(this, MonStatus.KillHuman);
-            }
+
             Master = null;
             if (Master == null && !DelFormMaped) // 减少地图上的计数
             {

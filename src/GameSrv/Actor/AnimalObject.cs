@@ -45,6 +45,10 @@ namespace GameSrv.Actor
         /// 是否属于召唤怪物(宝宝)
         /// </summary>
         public bool IsSlave;
+        /// <summary>
+        /// 说话信息列表
+        /// </summary>
+        public IList<MonsterSayMsg> SayMsgList;
 
         public AnimalObject()
         {
@@ -158,7 +162,7 @@ namespace GameSrv.Actor
         {
             base.Initialize();
             LoadSayMsg();
-            MonsterSayMsg(null, MonStatus.MonGen);
+            MonsterSayMessage(null, MonStatus.MonGen);
         }
 
         /// <summary>
@@ -172,6 +176,83 @@ namespace GameSrv.Actor
                 {
                     break;
                 }
+            }
+        }
+        
+        /// <summary>
+        /// 怪物说话
+        /// </summary>
+        internal void MonsterSayMessage(BaseObject monsterObject, MonStatus monStatus)
+        {
+            if (!M2Share.Config.MonSayMsg)
+            {
+                return;
+            }
+            if (Race == ActorRace.Play)
+            {
+                return;
+            }
+            if (SayMsgList == null)
+            {
+                return;
+            }
+            if (monsterObject == null)
+            {
+                return;
+            }
+            string sAttackName;
+            if ((monsterObject.Race != ActorRace.Play) && (monsterObject.Master == null))
+            {
+                return;
+            }
+            if (monsterObject.Master != null)
+            {
+                sAttackName = monsterObject.Master.ChrName;
+            }
+            else
+            {
+                sAttackName = monsterObject.ChrName;
+            }
+            for (int i = 0; i < SayMsgList.Count; i++)
+            {
+                MonsterSayMsg monSayMsg = SayMsgList[i];
+                string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(ChrName));
+                sMsg = sMsg.Replace("%d", sAttackName);
+                if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))
+                {
+                    if (monStatus == MonStatus.MonGen)
+                    {
+                        M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
+                        break;
+                    }
+                    if (monSayMsg.Color == MsgColor.White)
+                    {
+                        ProcessSayMsg(sMsg);
+                    }
+                    else
+                    {
+                        monsterObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
+                    }
+                    break;
+                }
+            }
+        }
+
+        public override void Die()
+        {
+            base.Die();
+            if (!SuperMan)
+            {
+                return;
+            }
+            if (LastHiter != null && Race != ActorRace.Play)
+            {
+                MonsterSayMessage(LastHiter, MonStatus.Die);
+            }
+            else if (LastHiter != null && Race == ActorRace.Play)
+            {
+                //LastHiter.MonsterSayMessage(this, MonStatus.KillHuman);
+                MonsterSayMessage(LastHiter, MonStatus.KillHuman);
             }
         }
 
@@ -189,7 +270,7 @@ namespace GameSrv.Actor
                     {
                         ((PlayObject)Master).SetPkFlag(struckObject);
                     }
-                    MonsterSayMsg(struckObject, MonStatus.UnderFire);
+                    MonsterSayMessage(struckObject, MonStatus.UnderFire);
                 }
                 return true;
             }
