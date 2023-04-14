@@ -168,7 +168,7 @@ namespace GameSrv.Actor
         /// </summary>
         public bool NoItem;
         /// <summary>
-        /// 隐身模式
+        /// 固定隐身模式
         /// </summary>
         public bool FixedHideMode;
         /// <summary>
@@ -176,7 +176,7 @@ namespace GameSrv.Actor
         /// </summary>
         public bool StickMode;
         /// <summary>
-        /// 被打到是否减慢行走速度,等级小于50的怪 F-减慢 T-不减慢
+        /// 被打到是否减慢行走速度,等级小于50的怪 false-减慢 true-不减慢
         /// </summary>
         public bool RushMode;
         public bool NoTame;

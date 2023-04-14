@@ -422,14 +422,14 @@ namespace GameSrv.Actor
         /// 是否可以攻击的目标
         /// </summary>
         /// <returns></returns>
-        protected virtual bool IsAttackTarget(BaseObject baseObject)
+        protected virtual bool IsAttackTarget(BaseObject targetObject)
         {
             bool result = false;
-            if ((baseObject == null) || (baseObject == this))
+            if ((targetObject == null) || (targetObject == this))
             {
                 return false;
             }
-            if (baseObject.AdminMode || baseObject.StoneMode)
+            if (targetObject.AdminMode || targetObject.StoneMode)
             {
                 return false;
             }
@@ -437,33 +437,33 @@ namespace GameSrv.Actor
             {
                 if (Master != null)
                 {
-                    if ((Master.LastHiter == baseObject) || (Master.ExpHitter == baseObject) || (Master.TargetCret == baseObject))
+                    if ((Master.LastHiter == targetObject) || (Master.ExpHitter == targetObject) || (Master.TargetCret == targetObject))
                     {
                         result = true;
                     }
-                    if (baseObject.TargetCret != null)
+                    if (targetObject.TargetCret != null)
                     {
-                        if ((baseObject.TargetCret == Master) || (baseObject.TargetCret.Master == Master) && (baseObject.Race != ActorRace.Play))
+                        if ((targetObject.TargetCret == Master) || (targetObject.TargetCret.Master == Master) && (targetObject.Race != ActorRace.Play))
                         {
                             result = true;
                         }
                     }
-                    if ((baseObject.TargetCret == this) && (baseObject.Race >= ActorRace.Animal))
+                    if ((targetObject.TargetCret == this) && (targetObject.Race >= ActorRace.Animal))
                     {
                         result = true;
                     }
-                    if (baseObject.Master != null)
+                    if (targetObject.Master != null)
                     {
-                        if ((baseObject.Master == Master.LastHiter) || (baseObject.Master == Master.TargetCret))
+                        if ((targetObject.Master == Master.LastHiter) || (targetObject.Master == Master.TargetCret))
                         {
                             result = true;
                         }
                     }
-                    if (baseObject.Master == Master)
+                    if (targetObject.Master == Master)
                     {
                         result = false;
                     }
-                    if (baseObject.HolySeize)
+                    if (targetObject.HolySeize)
                     {
                         result = false;
                     }
@@ -471,9 +471,9 @@ namespace GameSrv.Actor
                     {
                         result = false;
                     }
-                    if (baseObject.Race == ActorRace.Play)
+                    if (targetObject.Race == ActorRace.Play)
                     {
-                        if (baseObject.InSafeZone())
+                        if (targetObject.InSafeZone())
                         {
                             result = false;
                         }
@@ -482,7 +482,7 @@ namespace GameSrv.Actor
                 }
                 else
                 {
-                    if (baseObject.Race == ActorRace.Play)
+                    if (targetObject.Race == ActorRace.Play)
                     {
                         result = true;
                     }
@@ -490,16 +490,16 @@ namespace GameSrv.Actor
                     {
                         result = true;
                     }
-                    if (baseObject.Master != null)
+                    if (targetObject.Master != null)
                     {
                         result = true;
                     }
                 }
-                if (CrazyMode && ((baseObject.Race == ActorRace.Play) || (baseObject.Race > ActorRace.PeaceNpc)))
+                if (CrazyMode && ((targetObject.Race == ActorRace.Play) || (targetObject.Race > ActorRace.PeaceNpc)))
                 {
                     result = true;
                 }
-                if (NastyMode && ((baseObject.Race < ActorRace.NPC) || (baseObject.Race > ActorRace.PeaceNpc)))
+                if (NastyMode && ((targetObject.Race < ActorRace.NPC) || (targetObject.Race > ActorRace.PeaceNpc)))
                 {
                     result = true;
                 }
@@ -710,7 +710,7 @@ namespace GameSrv.Actor
                                         break;
                                 }
                             }
-                            if (Race != ActorRace.Play)
+                            if (Race > ActorRace.Play)
                             {
                                 if (Animal)
                                 {

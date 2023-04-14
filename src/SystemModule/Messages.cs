@@ -653,12 +653,18 @@ namespace SystemModule
         /// 强化攻击伤害
         /// </summary>
         public const int RM_STRUCKEFFECT = 10102;
+        /// <summary>
+        /// 魔法伤害
+        /// </summary>
         public const int RM_MAGSTRUCK_MINE = 8030;
         public const int RM_MAGHEALING = 8034;
         public const int RM_POISON = 8037;
         public const int RM_DOOPENHEALTH = 8040;
         public const int RM_SPACEMOVE_FIRE2 = 8042;
         public const int RM_DELAYPUSHED = 8043;
+        /// <summary>
+        /// 魔法伤害
+        /// </summary>
         public const int RM_MAGSTRUCK = 8044;
         public const int RM_TRANSPARENT = 8045;
         public const int RM_DOOROPEN = 8046;
