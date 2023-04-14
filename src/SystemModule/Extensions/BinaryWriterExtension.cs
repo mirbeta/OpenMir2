@@ -12,9 +12,14 @@ namespace SystemModule.Extensions
         public static void WriteAsciiString(this BinaryWriter binaryWriter, string value, int defaultSize)
         {
             if (binaryWriter == null)
+            {
                 throw new ArgumentNullException(nameof(binaryWriter));
+            }
+
             if (defaultSize == 0)
+            {
                 throw new ArgumentNullException(nameof(defaultSize));
+            }
 
             byte[] buffer;
             if (string.IsNullOrEmpty(value) && defaultSize > 0)
@@ -26,8 +31,8 @@ namespace SystemModule.Extensions
                 buffer = HUtil32.StringToByte(value);
             }
 
-            var reSize = buffer.Length + 1;
-            var tempSize = defaultSize;
+            int reSize = buffer.Length + 1;
+            int tempSize = defaultSize;
             if (reSize < tempSize)
             {
                 reSize = tempSize;

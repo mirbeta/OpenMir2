@@ -64,7 +64,7 @@ namespace SystemModule.RandomSelector
         /// <param name="items"></param>
         public void Add(IEnumerable<WeightedItem<T>> items)
         {
-            foreach (var item in items)
+            foreach (WeightedItem<T> item in items)
             {
                 Add(item);
             }
@@ -96,7 +96,7 @@ namespace SystemModule.RandomSelector
         public T Select()
         {
             CalculateCumulativeWeights();
-            var selector = new SingleSelector<T>(this);
+            SingleSelector<T> selector = new SingleSelector<T>(this);
             return selector.Select();
         }
 
@@ -106,7 +106,7 @@ namespace SystemModule.RandomSelector
         public List<T> SelectMultiple(int count)
         {
             CalculateCumulativeWeights();
-            var selector = new MultipleSelector<T>(this);
+            MultipleSelector<T> selector = new MultipleSelector<T>(this);
             return selector.Select(count);
         }
 
@@ -134,9 +134,9 @@ namespace SystemModule.RandomSelector
         {
             int totalWeight = 0;
             int index = 0;
-            var results = new int[items.Count + 1];
+            int[] results = new int[items.Count + 1];
 
-            foreach (var item in items)
+            foreach (WeightedItem<T> item in items)
             {
                 totalWeight += item.Weight;
                 results[index] = totalWeight;

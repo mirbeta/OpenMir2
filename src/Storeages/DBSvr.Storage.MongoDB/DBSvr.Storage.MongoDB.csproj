@@ -7,6 +7,8 @@
         <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
         <Nullable>disable</Nullable>
         <EnableDynamicLoading>true</EnableDynamicLoading>
+        <AssemblyName>DBSrv.Storage.MongoDB</AssemblyName>
+        <RootNamespace>DBSrv.Storage.MongoDB</RootNamespace>
     </PropertyGroup>
 
     <Choose>
@@ -29,13 +31,13 @@
 
     
     <ItemGroup>
-      <PackageReference Include="MongoDB.Bson" Version="2.18.0" />
-      <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
-      <PackageReference Include="NLog" Version="5.1.0" />
+      <PackageReference Include="MongoDB.Bson" Version="2.19.1" />
+      <PackageReference Include="MongoDB.Driver" Version="2.19.1" />
+      <PackageReference Include="NLog" Version="5.1.3" />
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\DBSvr.Storage\DBSvr.Storage.csproj" />
+      <ProjectReference Include="..\DBSrv.Storage\DBSrv.Storage.csproj" />
     </ItemGroup>
 
 </Project>

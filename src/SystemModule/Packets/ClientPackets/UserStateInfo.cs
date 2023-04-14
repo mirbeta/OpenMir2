@@ -4,7 +4,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class UserStateInfo : ClientPackage
+    public class UserStateInfo : ClientPacket
     {
         public int Feature;
         public string UserName;
@@ -35,7 +35,7 @@ namespace SystemModule.Packets.ClientPackets
             writer.Write(NameColor);
             writer.WriteAsciiString(GuildName, 20);
             writer.WriteAsciiString(GuildRankName, 14);
-            for (var i = 0; i < UseItems.Length; i++)
+            for (int i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] == null)
                 {

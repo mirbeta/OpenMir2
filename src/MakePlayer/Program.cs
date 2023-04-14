@@ -21,7 +21,6 @@ namespace MakePlayer
                   .ConfigureServices((hostContext, services) =>
                   {
                       services.Configure<MakePlayOptions>(config.GetSection("MakePlay"));
-                      services.AddSingleton<ClientManager>();
                       services.AddHostedService<AppService>();
                   });
 

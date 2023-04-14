@@ -1,26 +1,25 @@
+using NLog;
 using SelGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using SystemModule;
-using SystemModule.Logger;
 
 namespace SelGate.Services
 {
     /// <summary>
-    /// GameGate->GameSvr
+    /// GameGate->GameSrv
     /// </summary>
     public class ClientManager
     {
-        private readonly MirLogger _logQueue;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
 
-        public ClientManager(MirLogger logQueue, SessionManager sessionManager, ConfigManager configManager)
+        public ClientManager(SessionManager sessionManager, ConfigManager configManager)
         {
-            _logQueue = logQueue;
             _configManager = configManager;
             _sessionManager = sessionManager;
             _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
@@ -35,10 +34,10 @@ namespace SelGate.Services
                 var serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    _logQueue.DebugLog($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    _logger.Debug($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
-                _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager, _logQueue));
+                _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager));
             }
         }
 

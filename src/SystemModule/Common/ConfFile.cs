@@ -147,7 +147,7 @@ namespace SystemModule.Common
                 int pos = str.IndexOf(']');
                 if (pos > 0)
                 {
-                    return str.Substring(1, pos - 1).Trim();
+                    return str[1..pos].Trim();
                 }
             }
             return "";
@@ -175,7 +175,7 @@ namespace SystemModule.Common
 
         public string ReadString(string section, string key, string defval)
         {
-            var result = GetString(section, key);
+            string result = GetString(section, key);
             if (string.IsNullOrEmpty(result))
             {
                 return defval;
@@ -256,7 +256,7 @@ namespace SystemModule.Common
                             int index = str.IndexOf(";;");
                             if (index >= 0)
                             {
-                                str = str.Substring(0, index).Trim();
+                                str = str[..index].Trim();
                             }
                             if (curSec == null)
                             {
@@ -292,7 +292,7 @@ namespace SystemModule.Common
                 return null;
             }
             s = s.Trim();
-            if (!(s == ""))
+            if (!(string.IsNullOrEmpty(s)))
             {
                 str = str + s;
             }
@@ -352,7 +352,7 @@ namespace SystemModule.Common
             }
             if ((pos > 0) && (pos < str.Length))
             {
-                return new string[] { str.Substring(0, pos), str.Substring(pos + 1) };
+                return new[] { str[..pos], str[(pos + 1)..] };
             }
             return null;
         }

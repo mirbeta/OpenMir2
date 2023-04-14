@@ -1,8 +1,10 @@
 using MemoryPack;
+using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public partial class ServerRequestData
     {
         public int QueryId { get; set; }
@@ -21,7 +23,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class LoadPlayerDataPacket 
+    public partial class LoadPlayerDataPacket
     {
         public string ChrName { get; set; }
         public PlayerDataInfo HumDataInfo { get; set; }

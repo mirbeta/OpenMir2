@@ -8,8 +8,8 @@ namespace SystemModule
         public static readonly byte[] EmptyDigest = { 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00, 00 };
 
         private static byte[] _padding = {0x80, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-            0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+        0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
 
         private static uint F(uint x, uint y, uint z)
         {
@@ -38,7 +38,7 @@ namespace SystemModule
 
         private static void FF(ref uint a, uint b, uint c, uint d, uint x, byte s, uint AC)
         {
-            var calc = (x + AC);
+            uint calc = (x + AC);
             a += F(b, c, d) + calc;
             Rot(ref a, s);
             a += b;
@@ -68,17 +68,14 @@ namespace SystemModule
         /// <summary>
         /// Encode Count bytes at Source into (Count / 4) DWORDs at Target
         /// </summary>
-        /// <param name="Source"></param>
-        /// <param name="Target"></param>
-        /// <param name="Count"></param>
         private static void Encode(byte[] Source, ref uint[] Target, int Count)
         {
-            var s = Source;
-            var len = Count / 4;
-            var c = 0;
-            for (var i = 0; i < len; i++)
+            byte[] s = Source;
+            int len = Count / 4;
+            int c = 0;
+            for (int i = 0; i < len; i++)
             {
-                var t = Source[c];
+                byte t = Source[c];
                 Target[i] = ((uint)(t | (s[c + 1] << 8)));
                 Target[i] = (Target[i] | (uint)(s[c + 2] << 16));
                 Target[i] = (Target[i] | (uint)(s[c + 3] << 24));
@@ -94,8 +91,8 @@ namespace SystemModule
         /// <param name="Count"></param>
         private static void Decode(uint[] Source, ref byte[] Target, int Count)
         {
-            var list = new List<byte>(Count);
-            for (var i = 0; i < Count; i++)
+            List<byte> list = new List<byte>(Count);
+            for (int i = 0; i < Count; i++)
             {
                 list.Add((byte)(Source[i] & 0xFF));
                 list.Add((byte)((Source[i] >> 8) & 0xFF));
@@ -107,12 +104,12 @@ namespace SystemModule
 
         private static void Transform(byte[] Buffer, ref uint[] State)
         {
-            var Block = new uint[16];
+            uint[] Block = new uint[16];
             Encode(Buffer, ref Block, 64);
-            var a = State[0];
-            var b = State[1];
-            var c = State[2];
-            var d = State[3];
+            uint a = State[0];
+            uint b = State[1];
+            uint c = State[2];
+            uint d = State[3];
             FF(ref a, b, c, d, Block[0], 7, 0xD76AA478);
             FF(ref d, a, b, c, Block[1], 12, 0xE8C7B756);
             FF(ref c, d, a, b, Block[2], 17, 0x242070DB);
@@ -196,15 +193,15 @@ namespace SystemModule
 
         private static void MD5Update(ref MD5Context Context, ref byte[] Input, int Length)
         {
-            var i = 0;
-            var Index = (int)((Context.Count[0] >> 3) & 0x3F);
+            int i = 0;
+            int Index = (int)((Context.Count[0] >> 3) & 0x3F);
             Context.Count[0] += (uint)(Length << 3);
             if (Context.Count[0] < (Length << 3))
             {
                 Context.Count[1]++;
             }
             Context.Count[1] += (uint)(Length >> 29);
-            var PartLen = 64 - Index;
+            int PartLen = 64 - Index;
             if (Length >= PartLen)
             {
                 Array.Copy(Input, 0, Context.Buffer, Index, PartLen);
@@ -229,7 +226,7 @@ namespace SystemModule
             byte[] Bits = new byte[8];
             int PadLen;
             Decode(Context.Count, ref Bits, 2);
-            var Index = (int)((Context.Count[0] >> 3) & 0x3F);
+            int Index = (int)((Context.Count[0] >> 3) & 0x3F);
             if (Index < 56)
             {
                 PadLen = 56 - Index;
@@ -246,9 +243,9 @@ namespace SystemModule
 
         private static byte[] MD5String(string m)
         {
-            var buff = HUtil32.GetBytes(m);
+            byte[] buff = HUtil32.GetBytes(m);
             byte[] result = new byte[16];
-            var context = new MD5Context();
+            MD5Context context = new MD5Context();
             MD5Init(ref context);
             MD5Update(ref context, ref buff, m.Length);
             MD5Final(ref context, ref result);
@@ -258,8 +255,8 @@ namespace SystemModule
         public static string MD5Print(byte[] d)
         {
             char[] digits = { '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F' };
-            var result = "";
-            for (var i = 0; i < 15; i++)
+            string result = "";
+            for (int i = 0; i < 15; i++)
             {
                 result = result + digits[(d[i] >> 4) & 0x0F] + digits[d[i] & 0x0F];
             }
@@ -270,10 +267,14 @@ namespace SystemModule
         {
             byte[] result = null;
             byte[] digest = new byte[16];
-            if (s.Length != 32) return null;
+            if (s.Length != 32)
+            {
+                return null;
+            }
+
             try
             {
-                for (var i = 0; i < 15; i++)
+                for (int i = 0; i < 15; i++)
                 {
                     digest[i] = Convert.ToByte("$" + s.Substring(1 + i * 2 - 1, 2));
                 }
@@ -291,7 +292,7 @@ namespace SystemModule
         public static bool MD5Match(byte[] D1, byte[] D2)
         {
             byte i = 0;
-            var result = true;
+            bool result = true;
             while (result && (i < 16))
             {
                 result = D1[i] == D2[i];

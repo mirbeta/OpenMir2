@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net6.0</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+        <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <AnalysisLevel>latest</AnalysisLevel>
+    </PropertyGroup>
+
+    <Choose>
+        <When Condition="$(Configuration)=='Release'">
+            <PropertyGroup>
+                <DebugSymbols>false</DebugSymbols>
+                <Optimize>true</Optimize>
+                <DefineConstants>TRACE</DefineConstants>
+            </PropertyGroup>
+        </When>
+
+        <When Condition="$(Configuration)=='Debug'">
+            <Choose>
+                <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+                    <PropertyGroup>
+                        <OutputPath>D:\MirServer\LogServer</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/Data/Mirserver/LogServer</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/opt/Mirserver/LogServer</OutputPath>
+                    </PropertyGroup>
+                </When>
+            </Choose>
+        </When>
+        
+    </Choose>
+    
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Diagnostics.NETCore.Client" Version="0.2.410101" />
+        <PackageReference Include="Microsoft.Diagnostics.Tracing.TraceEvent" Version="3.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+        <PackageReference Include="Spectre.Console" Version="0.46.0" />
+        <PackageReference Include="NLog" Version="5.1.3" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
+        <PackageReference Include="System.Diagnostics.Tracing" Version="4.3.0" />
+    </ItemGroup>
+
+</Project>

@@ -11,7 +11,7 @@ namespace SystemModule.Packets.ClientPackets
         public const int WeaponUpgrade = 10;
     }
 
-    public class ClientUserItem : ClientPackage
+    public class UserItem : ClientPacket
     {
         /// <summary>
         /// 唯一ID
@@ -35,13 +35,13 @@ namespace SystemModule.Packets.ClientPackets
         public byte ColorB { get; set; }
         public char[] Prefix { get; set; }
 
-        public ClientUserItem()
+        public UserItem()
         {
             Desc = new byte[14];
             Prefix = new char[13];
         }
 
-        public ClientUserItem(ClientUserItem userItem)
+        public UserItem(UserItem userItem)
         {
             MakeIndex = userItem.MakeIndex;
             Index = userItem.Index;

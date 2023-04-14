@@ -1,5 +1,5 @@
 using LoginGate.Conf;
-using LoginGate.Packet;
+using NLog;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,28 +7,25 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Logger;
-using SystemModule.Packets;
 using SystemModule.Packets.ServerPackets;
 
 namespace LoginGate.Services
 {
     /// <summary>
-    /// LoginGate->LoginSvr
+    /// LoginGate->LoginSrv
     /// </summary>
     public class ClientManager
     {
         private readonly Channel<ServerDataMessage> _sendQueue;
         private readonly SessionManager _sessionManager;
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<ClientThread> _serverGateList;
         private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
         private readonly ConfigManager _configManager;
         private readonly ServerManager _serverManager;
 
-        public ClientManager(MirLogger logger, SessionManager sessionManager, ConfigManager configManager, ServerManager serverManager)
+        public ClientManager(SessionManager sessionManager, ConfigManager configManager, ServerManager serverManager)
         {
-            _logger = logger;
             _sessionManager = sessionManager;
             _configManager = configManager;
             _serverManager = serverManager;
@@ -44,7 +41,7 @@ namespace LoginGate.Services
             var serverList = _serverManager.GetServerList();
             for (var i = 0; i < serverList.Count; i++)
             {
-                _serverGateList.Add(new ClientThread(_logger, _sessionManager, this));
+                _serverGateList.Add(new ClientThread(this, _sessionManager));
             }
         }
 
@@ -171,7 +168,7 @@ namespace LoginGate.Services
                 clientThread.CheckServerFailCount = 1;
                 if (HUtil32.GetTickCount() - clientThread.KeepAliveTick > GateShare.KeepAliveTickTimeOut) //30s没有LoginSvr服务器心跳回应则超时
                 {
-                    _logger.LogError("账号服务器长时间没有响应，断开链接。");
+                    _logger.Warn("账号服务器长时间没有响应，断开链接。");
                     clientThread.ConnectState = false;
                     clientThread.Stop();
                 }
@@ -184,12 +181,12 @@ namespace LoginGate.Services
                 {
                     clientThread.ReConnected();
                     clientThread.CheckServerFailCount++;
-                    _logger.DebugLog($"重新与服务器[{clientThread.EndPoint}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                    _logger.Debug($"重新与服务器[{clientThread.EndPoint}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;
                 }
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
-                _logger.DebugLog($"服务器[{clientThread.EndPoint}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
+                _logger.Debug($"服务器[{clientThread.EndPoint}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
             }
         }
 

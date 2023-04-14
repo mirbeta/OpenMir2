@@ -1,9 +1,11 @@
 ﻿using MemoryPack;
+using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial class MagicRcd 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public partial class MagicRcd
     {
         /// <summary>
         /// 技能ID

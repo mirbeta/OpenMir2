@@ -3,7 +3,7 @@ using SystemModule.Extensions;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class ClientItem : ClientPackage
+    public class ClientItem : ClientPacket
     {
         public ClientStdItem Item;
         public int MakeIndex;

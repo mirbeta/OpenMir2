@@ -17,12 +17,12 @@ namespace SystemModule.RandomSelector
         public List<T> Select(int count)
         {
             Validate(ref count);
-            var items = new List<WeightedItem<T>>(WeightedSelector.Items);
-            var resultList = new List<T>();
+            List<WeightedItem<T>> items = new List<WeightedItem<T>>(WeightedSelector.Items);
+            List<T> resultList = new List<T>();
 
             do
             {
-                var item = WeightedSelector.Option.AllowDuplicate ? BinarySelect(items) : LinearSelect(items);
+                WeightedItem<T> item = WeightedSelector.Option.AllowDuplicate ? BinarySelect(items) : LinearSelect(items);
                 resultList.Add(item.Value);
                 if (!WeightedSelector.Option.AllowDuplicate)
                 {
@@ -39,7 +39,7 @@ namespace SystemModule.RandomSelector
                 throw new InvalidOperationException("筛选个数必须大于0");
             }
 
-            var items = WeightedSelector.Items;
+            List<WeightedItem<T>> items = WeightedSelector.Items;
 
             if (items.Count == 0)
             {

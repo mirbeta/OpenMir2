@@ -1,23 +1,24 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
 using SelGate.Conf;
 using SelGate.Services;
 using Spectre.Console;
 using System;
 using System.IO;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule.Hosts;
-using SystemModule.Logger;
+using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace SelGate
 {
     public class AppServer : ServiceHost
     {
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly PeriodicTimer _timer;
 
         public AppServer()
@@ -36,9 +37,13 @@ namespace SelGate
             Builder.ConfigureServices(ConfigureServices);
         }
 
+        public override void Initialize()
+        {
+
+        }
+        
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<MirLogger>();
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
             services.AddSingleton<ServerService>();
             services.AddSingleton<SessionManager>();
@@ -112,7 +117,7 @@ namespace SelGate
         {
             var config = Host.Services.GetService<ConfigManager>();
             config?.ReLoadConfig();
-            Logger.Info("重新读取配置文件完成...");
+            _logger.Info("重新读取配置文件完成...");
             return Task.CompletedTask;
         }
 
@@ -177,11 +182,6 @@ namespace SelGate
         private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
-            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("SelGate.logo.png");
-            var logo = new CanvasImage(logoStream!)
-            {
-                MaxWidth = 25
-            };
 
             var table = new Table()
             {
@@ -218,15 +218,10 @@ namespace SelGate
                 .AddEmptyRow()
                 .AddEmptyRow()
                 .AddRow(markup);
-            table.AddRow(logo, rightTable);
+            table.AddRow(rightTable);
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();
-        }
-
-        public override void Dispose()
-        {
-            throw new NotImplementedException();
         }
     }
 }

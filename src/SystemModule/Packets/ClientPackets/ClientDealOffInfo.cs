@@ -6,7 +6,7 @@ namespace SystemModule.Packets.ClientPackets
     /// <summary>
     /// 客户端元宝寄售数据结构
     /// </summary>
-    public class ClientDealOffInfo : ClientPackage
+    public class ClientDealOffInfo : ClientPacket
     {
         /// <summary>
         /// 寄售人
@@ -44,9 +44,9 @@ namespace SystemModule.Packets.ClientPackets
             writer.Write(BuyChrName.ToByte(15));
             writer.Write(SellDateTime);
             writer.Write(SellGold);
-            var nullItem = new ClientItem();
-            var nullBuff = nullItem.GetBuffer();
-            for (var i = 0; i < UseItems.Length; i++)
+            ClientItem nullItem = new ClientItem();
+            byte[] nullBuff = nullItem.GetBuffer();
+            for (int i = 0; i < UseItems.Length; i++)
             {
                 if (UseItems[i] == null)
                 {

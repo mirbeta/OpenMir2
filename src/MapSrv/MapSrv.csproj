@@ -1,0 +1,45 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+        <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+        <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+        <AnalysisLevel>latest</AnalysisLevel>
+    </PropertyGroup>
+
+    <Choose>
+        <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+            <PropertyGroup>
+                <OutputPath>D:\MirServer\MapServer</OutputPath>
+            </PropertyGroup>
+        </When>
+        <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+            <PropertyGroup>
+                <OutputPath>/Volumes/Data/Mirserver/MapServer</OutputPath>
+            </PropertyGroup>
+        </When>
+        <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+            <PropertyGroup>
+                <OutputPath>/Volumes/opt/Mirserver/MapServer</OutputPath>
+            </PropertyGroup>
+        </When>
+    </Choose>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+        <PackageReference Include="Spectre.Console" Version="0.46.0" />
+        <PackageReference Include="NLog" Version="5.1.3" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\nlog.config">
+            <Link>nlog.config</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+</Project>

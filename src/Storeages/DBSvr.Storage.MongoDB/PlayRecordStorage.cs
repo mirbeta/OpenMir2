@@ -1,10 +1,11 @@
-using DBSvr.Storage.Model;
+using DBSrv.Storage.Impl;
+using DBSrv.Storage.Model;
 using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace DBSvr.Storage.MongoDB
+namespace DBSrv.Storage.MongoDB
 {
     public class PlayRecordStorage : IPlayRecordStorage
     {

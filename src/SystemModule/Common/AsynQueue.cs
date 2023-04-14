@@ -203,7 +203,7 @@ namespace SystemModule.Common
 
         private void OnProcessException(Exception ex)
         {
-            var tempException = ProcessException;
+            EventHandler<EventArgs<Exception>> tempException = ProcessException;
             Interlocked.CompareExchange(ref ProcessException, null, null);
 
             if (tempException != null)

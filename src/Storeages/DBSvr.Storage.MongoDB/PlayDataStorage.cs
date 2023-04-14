@@ -1,4 +1,5 @@
-using DBSvr.Storage.Model;
+using DBSrv.Storage.Impl;
+using DBSrv.Storage.Model;
 using MongoDB.Driver;
 using NLog;
 using System;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using SystemModule.Packets.ServerPackets;
 
-namespace DBSvr.Storage.MongoDB
+namespace DBSrv.Storage.MongoDB
 {
     public class PlayDataStorage : IPlayDataStorage
     {

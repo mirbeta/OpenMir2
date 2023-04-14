@@ -1,15 +1,15 @@
 ﻿namespace SystemModule.Data
 {
-    public class StartPoint
+    public record struct StartPoint
     {
-        public string m_sMapName;
-        public short m_nCurrX;
-        public short m_nCurrY;
-        public bool m_boNotAllowSay;
-        public int m_nRange;
-        public int m_nType;
-        public int m_nPkZone;
-        public int m_nPkFire;
-        public byte m_btShape;
+        public string MapName;
+        public short CurrX;
+        public short CurrY;
+        public bool NotAllowSay;
+        public int Range;
+        public int Type;
+        public int PkZone;
+        public int PkFire;
+        public byte Shape;
     }
 }

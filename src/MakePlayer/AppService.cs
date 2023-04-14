@@ -2,52 +2,40 @@
 using MakePlayer.Option;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using System.Net;
 using SystemModule;
+using System;
 
 namespace MakePlayer
 {
-    public class AppService : IHostedService
+    public class AppService : BackgroundService
     {
         private readonly MakePlayOptions _options;
-        private readonly ClientManager _clientManager;
         private readonly CancellationTokenSource _cancellation = new CancellationTokenSource();
         private int _loginIndex;
         private int _loginTimeTick;
 
-        public AppService(IOptions<MakePlayOptions> options, ClientManager clientManager)
+        public AppService(IOptions<MakePlayOptions> options)
         {
-            _clientManager = clientManager;
-            _options = options.Value;
+            this._options = options.Value;
         }
 
-        public Task StartAsync(CancellationToken cancellationToken)
+        public override Task StartAsync(CancellationToken cancellationToken)
         {
+            PlayHelper.LoadSayListFile();
             _options.ChrCount = HUtil32._MIN(_options.ChrCount, _options.TotalChrCount);
             _loginTimeTick = HUtil32.GetTickCount() - 1000 * _options.ChrCount;
-            Task.Factory.StartNew(Start, _cancellation.Token);
-            Task.Factory.StartNew(Run, _cancellation.Token, TaskCreationOptions.LongRunning, TaskScheduler.Current);
-            _clientManager.Start();
-            return Task.CompletedTask;
+            ClientManager.Start();
+            return base.StartAsync(cancellationToken);
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _clientManager.Stop();
+            ClientManager.Stop();
             _cancellation.Cancel();
             return Task.CompletedTask;
         }
 
-        private void Run()
-        {
-            while (!_cancellation.IsCancellationRequested)
-            {
-                _clientManager.Run();
-                Thread.Sleep(TimeSpan.FromMilliseconds(10));
-            }
-        }
-
-        private void Start()
+        protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!_cancellation.IsCancellationRequested)
             {
@@ -66,27 +54,29 @@ namespace MakePlayer
                         }
                         for (var i = 0; i < _options.ChrCount; i++)
                         {
-                            var playClient = new PlayClient(_clientManager);
+                            var playClient = new PlayClient(_options);
                             playClient.SessionId = Guid.NewGuid().ToString("N");
-                            playClient.m_boNewAccount = _options.NewAccount;
-                            playClient.LoginAccount = string.Concat(_options.LoginAccount, _loginIndex);
-                            if (playClient.LoginAccount.Length > 10)
+                            playClient.CreateAccount = _options.NewAccount;
+                            var loginAccount = string.Concat(_options.LoginAccount, _loginIndex);
+                            if (loginAccount.Length > 10)
                             {
-                                playClient.LoginAccount = playClient.LoginAccount.Substring(1, 8);
+                                loginAccount = string.Concat(loginAccount.AsSpan(2, 8), RandomNumber.GetInstance().GenerateRandomNumber(3));
                             }
-                            playClient.LoginPasswd = playClient.LoginAccount;
-                            playClient.ChrName = playClient.LoginAccount;
+                            var loginPasswd = loginAccount;
+                            playClient.ChrName = loginAccount;
                             playClient.ServerName = _options.ServerName;
-                            //playClient.ClientSocket.Close();
-                            playClient.ClientSocket.RemoteEndPoint = new IPEndPoint(IPAddress.Parse(_options.Address), _options.Port);
-                            playClient.ConnectTick = HUtil32.GetTickCount() + (i + 1) * 3000;
-                            _clientManager.AddClient(playClient.SessionId, playClient);
+                            playClient.RunTick = HUtil32.GetTickCount() + (i + 1) * 3000;
+                            playClient.LoginId = loginAccount;
+                            playClient.LoginPasswd = loginPasswd;
+                            ClientManager.AddClient(playClient.SessionId, playClient);
                             _loginIndex++;
                         }
                     }
                 }
-                Thread.Sleep(TimeSpan.FromMilliseconds(5));
+                ClientManager.Run();
+                Thread.Sleep(TimeSpan.FromMilliseconds(50));
             }
+            return Task.CompletedTask;
         }
     }
 }

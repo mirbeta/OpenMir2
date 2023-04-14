@@ -1,10 +1,10 @@
 ﻿using LoginGate.Services;
 using Microsoft.Extensions.Hosting;
+using NLog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Logger;
 
 namespace LoginGate
 {
@@ -12,13 +12,12 @@ namespace LoginGate
     {
         private int _processDelayTick = 0;
         private int _heartInterval = 0;
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SessionManager _sessionManager;
         private readonly ClientManager _clientManager;
 
-        public TimedService(MirLogger logger, ClientManager clientManager, SessionManager sessionManager)
+        public TimedService(ClientManager clientManager, SessionManager sessionManager)
         {
-            _logger = logger;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
         }

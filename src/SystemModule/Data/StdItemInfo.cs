@@ -39,7 +39,7 @@ namespace SystemModule.Data
         }
     }
 
-    public class TEvaAbil : ClientPackage
+    public class TEvaAbil : ClientPacket
     {
         public byte btType;
         public byte btValue;

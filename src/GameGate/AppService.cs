@@ -1,47 +1,74 @@
-using GameGate.Conf;
-using GameGate.Filters;
-using Microsoft.Extensions.Hosting;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using GameGate.Conf;
+using GameGate.Filters;
+using GameGate.Services;
+using Microsoft.Extensions.Hosting;
+using NLog;
 
 namespace GameGate
 {
     public class AppService : BackgroundService
     {
-        private readonly ServerApp _serverApp;
-        private static MirLog LogQueue => MirLog.Instance;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static ConfigManager ConfigManager => ConfigManager.Instance;
+        private static SessionContainer SessionContainer => SessionContainer.Instance;
+        private static ServerManager ServerManager => ServerManager.Instance;
 
-        public AppService(ServerApp serverApp)
+        public AppService()
         {
-            _serverApp = serverApp;
+
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            _logger.Info("服务已启动成功...");
+            _logger.Info("欢迎使用翎风系列游戏软件...");
+            _logger.Info("网站:http://www.gameofmir.com");
+            _logger.Info("论坛:http://bbs.gameofmir.com");
             stoppingToken.Register(() => Debug.WriteLine($"GameGate is stopping."));
-            _serverApp.StartService(stoppingToken);
-            return Task.CompletedTask;
+            if (ConfigManager.GateConfig.UseCloudGate)
+            {
+                if (string.IsNullOrEmpty(ConfigManager.GateConfig.CloudAddr) || ConfigManager.GateConfig.CloudPort <= 0)
+                {
+                    _logger.Info("智能防外挂云网关服务地址配置错误.请检查配置文件是否配置正确.");
+                }
+                if (string.IsNullOrEmpty(ConfigManager.GateConfig.LicenseCode))
+                {
+                    _logger.Info("智能防外挂云网关授权码为空或配置错误,请检查配置文件是否配置正确.");
+                }
+                //var cloudEndpoint = new IPEndPoint(IPAddress.Parse(ConfigManager.GateConfig.CloudAddr), ConfigManager.GateConfig.CloudPort);
+                //_cloudClient.Start(cloudEndpoint);
+                _logger.Info("智能反外挂程序已启动...");
+            }
+            ServerManager.Initialize();
+            ServerManager.Start(stoppingToken);
+            ServerManager.StartServerThreadMessageWork(stoppingToken);
+            await ServerManager.StartClientMessageWork(stoppingToken);
+            //await SessionContainer.ProcessSendMessage(stoppingToken);
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            LogQueue.DebugLog("GameGate is starting.");
-            LogQueue.Log("正在启动服务...", 2);
-            LogQueue.Log("正在加载配置信息...", 3);
+            _logger.Debug("GameGate is starting.");
+            _logger.Info("正在启动服务...");
+            _logger.Info("正在加载配置信息...");
+            GateShare.Initialization();
+            GateShare.Load();
             ConfigManager.LoadConfig();
+            ConfigManager.SaveConfig();
             GateShare.HardwareFilter = new HardwareFilter();
-            LogQueue.Log("配置信息加载完成...", 3);
+            _logger.Info("配置信息加载完成...");
             return base.StartAsync(cancellationToken);
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
             Debug.WriteLine("GameGate is stopping.");
-            LogQueue.Log("正在停止服务...", 2);
-            _serverApp.StopService();
-            LogQueue.Log("服务停止成功...", 2);
+            _logger.Info("正在停止服务...");
+            ServerManager.Stop();
+            _logger.Info("服务停止成功...");
             return base.StopAsync(cancellationToken);
         }
     }

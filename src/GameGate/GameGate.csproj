@@ -3,14 +3,39 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net7.0</TargetFramework>
-		<LangVersion>10</LangVersion>
+		<LangVersion>11</LangVersion>
 		<RootNamespace>GameGate</RootNamespace>
 		<DebugType>embedded</DebugType>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+
+		<!--AOT发布-->
+		<PublishAot>true</PublishAot>
+		<!--裁剪-->
+		<PublishTrimmed>true</PublishTrimmed>
+		<TrimMode>Link</TrimMode>
+		<!--指定 Speed 表示以最大性能为目标生成代码-->
+		<IlcOptimizationPreference>Size</IlcOptimizationPreference>
+		<!--参数则可以将相同的方法体合并-->
+		<IlcFoldIdenticalMethodBodies>true</IlcFoldIdenticalMethodBodies>
+		<!--不生成完整的类型元数据-->
+		<IlcGenerateCompleteTypeMetadata>false</IlcGenerateCompleteTypeMetadata>
+		<!--关闭对EventSource的支持-->
+		<EventSourceSupport>false</EventSourceSupport>
+		<!--删除 System.* 程序集的异常消息-->
+		<UseSystemResourceKeys>true</UseSystemResourceKeys>
+		<!--删除全球化特定的代码和数据-->
+		<InvariantGlobalization>true</InvariantGlobalization>
+		<!--移除堆栈跟踪数据-->
+		<IlcGenerateStackTraceData>false</IlcGenerateStackTraceData>
+		<!--移除其它语言的支持-->
+		<IlcInvariantGlobalization>true</IlcInvariantGlobalization>
+		<!--禁用反射-->
+		<IlcDisableReflection>true</IlcDisableReflection>
 	</PropertyGroup>
+	
 	<Choose>
 		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>
@@ -45,12 +70,12 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 
-	<ItemGroup>
-		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
-	</ItemGroup>
+	<PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
 
 	<ItemGroup>
-		<EmbeddedResource Include="..\..\logo.png" Link="logo.png" />
+		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
@@ -62,12 +87,11 @@
 
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.0" />
-		<PackageReference Include="Spectre.Console" Version="0.45.0" />
-		<PackageReference Include="Spectre.Console.ImageSharp" Version="0.45.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+		<PackageReference Include="Spectre.Console" Version="0.46.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-		<PackageReference Include="NLog" Version="5.1.0" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.0" />
+		<PackageReference Include="NLog" Version="5.1.3" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
 	</ItemGroup>
 
 	<ItemGroup>

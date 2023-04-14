@@ -1,8 +1,8 @@
 using LoginGate.Conf;
+using NLog;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using SystemModule.Logger;
 
 namespace LoginGate.Services
 {
@@ -11,20 +11,19 @@ namespace LoginGate.Services
     /// </summary>
     public class SessionManager
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configManager;
         private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
 
-        public SessionManager(MirLogger logger, ConfigManager configManager)
+        public SessionManager(ConfigManager configManager)
         {
-            _logger = logger;
             _configManager = configManager;
             _sessionMap = new ConcurrentDictionary<int, ClientSession>();
         }
 
         public void AddSession(TSessionInfo sessionInfo, ClientThread clientThread)
         {
-            var userSession = new ClientSession(_logger, sessionInfo, clientThread, _configManager);
+            var userSession = new ClientSession(sessionInfo, clientThread, _configManager);
             _sessionMap.TryAdd(sessionInfo.ConnectionId, userSession);
             userSession.UserEnter();
         }

@@ -46,9 +46,9 @@ namespace SystemModule.RandomSelector
                 throw new InvalidOperationException("没有元素可以筛选");
             }
 
-            var count = 0;
-            var seed = new Random().Next(1, items.Sum(i => i.Weight) + 1);
-            foreach (var item in items)
+            int count = 0;
+            int seed = new Random().Next(1, items.Sum(i => i.Weight) + 1);
+            foreach (WeightedItem<T> item in items)
             {
                 count += item.Weight;
                 if (seed <= count)

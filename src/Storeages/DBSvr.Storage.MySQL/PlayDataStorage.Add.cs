@@ -5,7 +5,7 @@ using System.Text;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace DBSvr.Storage.MySQL
+namespace DBSrv.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
@@ -220,7 +220,7 @@ namespace DBSvr.Storage.MySQL
             var useSize = oldItems.Length;
             if (useItemCount <= 0)
             {
-                var addItem = new ClientUserItem[useSize];
+                var addItem = new UserItem[useSize];
                 var addItemCount = 0;
                 if (useItemCount == 0)
                 {
@@ -231,7 +231,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     for (var i = 0; i < addItemCount; i++)
                     {
-                        addItem[i] = new ClientUserItem();
+                        addItem[i] = new UserItem();
                     }
                 }
                 for (var i = 0; i < addItem.Length; i++)
@@ -272,7 +272,7 @@ namespace DBSvr.Storage.MySQL
             var bagSize = oldItems.Length;
             if (bagItemCount <= 0)
             {
-                var addItem = new ClientUserItem[bagSize];
+                var addItem = new UserItem[bagSize];
                 var addItemCount = 0;
                 if (bagItemCount == 0)
                 {
@@ -283,7 +283,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     for (var i = 0; i < addItemCount; i++)
                     {
-                        addItem[i] = new ClientUserItem();
+                        addItem[i] = new UserItem();
                     }
                 }
                 for (var i = 0; i < addItem.Length; i++)
@@ -320,7 +320,7 @@ namespace DBSvr.Storage.MySQL
             var storageSize = oldItems.Length;
             if (storageItemCount <= 0)
             {
-                var addItem = new ClientUserItem[storageSize];
+                var addItem = new UserItem[storageSize];
                 var addItemCount = 0;
                 if (storageItemCount == 0)
                 {
@@ -331,7 +331,7 @@ namespace DBSvr.Storage.MySQL
                 {
                     for (var i = 0; i < addItemCount; i++)
                     {
-                        addItem[i] = new ClientUserItem();
+                        addItem[i] = new UserItem();
                     }
                 }
                 try
@@ -358,7 +358,7 @@ namespace DBSvr.Storage.MySQL
             }
         }
 
-        private void CreateItemAttr(StorageContext context, int playerId, ClientUserItem[] userItems)
+        private void CreateItemAttr(StorageContext context, int playerId, UserItem[] userItems)
         {
             try
             {

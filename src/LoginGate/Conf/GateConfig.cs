@@ -5,10 +5,10 @@ namespace LoginGate.Conf
     /// <summary>
     /// 网关配置类
     /// </summary>
-    public class GateConfig : IniFile
+    public class GateConfig : ConfigFile
     {
         public int ShowLogLevel;
-        public bool ShowDebugLog;
+        public bool ShowDebug;
         public int GateCount;
         private readonly GameGateInfo[] GameGateList;
         public bool m_fCheckNewIDOfIP;
@@ -55,7 +55,7 @@ namespace LoginGate.Conf
             m_nCheckNewIDOfIP = 5;
             ClientTimeOutTime = 60 * 1000;
             MaxClientPacketCount = 2;
-            ShowDebugLog = false;
+            ShowDebug = false;
         }
     }
 

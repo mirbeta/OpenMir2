@@ -1,26 +1,23 @@
+using NLog;
 using SelGate.Package;
 using System;
-using System.IO;
 using System.Net;
 using SystemModule;
-using SystemModule.Logger;
-using SystemModule.Packets;
-using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.AsyncSocketClient;
-using SystemModule.Sockets.Event;
+using SystemModule.SocketComponents.AsyncSocketClient;
+using SystemModule.SocketComponents.Event;
 
 namespace SelGate.Services
 {
     /// <summary>
-    /// 网关客户端(SelGate-DBSvr)
+    /// 网关客户端(SelGate-DBSrv)
     /// </summary>
     public class ClientThread
     {
         /// <summary>
         /// Socket客户端
         /// </summary>
-        private readonly ClientScoket _clientSocket;
+        private readonly ScoketClient _clientSocket;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
@@ -59,7 +56,7 @@ namespace SelGate.Services
         /// <summary>
         /// Logger
         /// </summary>
-        private static MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 数据缓冲区
         /// </summary>
@@ -69,13 +66,12 @@ namespace SelGate.Services
         /// </summary>
         private int DataLen;
         
-        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager, MirLogger logger)
+        public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
         {
             ClientId = clientId;
-            _logger = logger;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
-            _clientSocket = new ClientScoket(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
+            _clientSocket = new ScoketClient(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
             _clientSocket.OnReceivedData += ClientSocketRead;
@@ -83,7 +79,7 @@ namespace SelGate.Services
             SockThreadStutas = SockThreadStutas.Connecting;
             KeepAliveTick = HUtil32.GetTickCount();
             KeepAlive = true;
-            DataBuff = new byte[10 * 1024];
+            DataBuff = new byte[2048 * 10];
         }
 
         public bool IsConnected => isConnected;
@@ -132,8 +128,8 @@ namespace SelGate.Services
             KeepAliveTick = HUtil32.GetTickCount();
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
-            _logger.LogInformation($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
-            _logger.DebugLog($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            _logger.Info($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
+            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
         }
 
         private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -153,7 +149,7 @@ namespace SelGate.Services
             }
             RestSessionArray();
             GateShare.ServerGateList.Remove(this);
-            _logger.LogInformation($"数据库服务器[{e.RemoteEndPoint}]断开链接.", 1);
+            _logger.Info($"数据库服务器[{e.RemoteEndPoint}]断开链接.", 1);
             boGateReady = false;
             isConnected = false;
             CheckServerFail = true;
@@ -171,15 +167,12 @@ namespace SelGate.Services
             }
             if (DataLen > 0)
             {
-                var packetData = new byte[nMsgLen];
-                Buffer.BlockCopy(e.Buff, 0, packetData, 0, nMsgLen);
-                MemoryCopy.BlockCopy(packetData, 0, DataBuff, DataLen, nMsgLen);
-                ProcessServerData(DataBuff, DataLen + nMsgLen, e.SocketId);
+                MemoryCopy.BlockCopy(e.Buff, 0, DataBuff, DataLen, nMsgLen);
+                ProcessServerData(DataBuff, DataLen + nMsgLen);
             }
             else
             {
-                Buffer.BlockCopy(e.Buff, 0, DataBuff, 0, nMsgLen);
-                ProcessServerData(DataBuff, nMsgLen, e.SocketId);
+                ProcessServerData(e.Buff, nMsgLen);
             }
         }
 
@@ -188,31 +181,31 @@ namespace SelGate.Services
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
+                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]关闭连接...失败[{CheckServerFailCount}]次", 1);
+                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]关闭连接...失败[{CheckServerFailCount}]次", 1);
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.LogInformation($"数据库服务器[{_clientSocket.RemoteEndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
+                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
                     break;
             }
         }
 
-        private void ProcessServerData(byte[] data, int nLen, int socketId)
+        private void ProcessServerData(byte[] data, int nLen)
         {
             var srcOffset = 0;
             Span<byte> dataBuff = data;
             while (nLen > ServerDataPacket.FixedHeaderLen)
             {
                 var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                var message = ServerPacket.ToPacket<ServerDataPacket>(packetHead);
-                if (message.PacketCode != Grobal2.RUNGATECODE)
+                var message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
+                if (message.PacketCode != Grobal2.PacketCode)
                 {
                     srcOffset++;
                     dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                     nLen -= 1;
-                    _logger.DebugLog($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                    _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                     continue;
                 }
                 var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
@@ -220,7 +213,7 @@ namespace SelGate.Services
                 {
                     break;
                 } 
-                var messageData = ServerPackSerializer.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 switch (messageData.Type)
                 {
                     case ServerDataType.KeepAlive:
@@ -228,7 +221,7 @@ namespace SelGate.Services
                         CheckServerFail = false;
                         boGateReady = true;
                         isConnected = true;
-                        _logger.DebugLog("DBSvr Heartbeat Response");
+                        _logger.Debug("DBSrv Heartbeat Response");
                         break;
                     case ServerDataType.Leave:
                         _sessionManager.CloseSession(messageData.SocketId);
@@ -292,8 +285,8 @@ namespace SelGate.Services
         {
             var messageData = new ServerDataMessage();
             messageData.Type = ServerDataType.KeepAlive;
-            SendSocket(ServerPackSerializer.Serialize(messageData));
-            _logger.DebugLog("Send DBSvr Heartbeat.");
+            SendSocket(SerializerUtil.Serialize(messageData));
+            _logger.Debug("Send DBSrv Heartbeat.");
         }
 
         public void SendBuffer(string sendText)
@@ -312,18 +305,15 @@ namespace SelGate.Services
         
         private void SendMessage(byte[] sendBuffer)
         {
-            using var memoryStream = new MemoryStream();
-            using var backingStream = new BinaryWriter(memoryStream);
             var serverMessage = new ServerDataPacket
             {
-                PacketCode = Grobal2.RUNGATECODE,
-                PacketLen = (short)sendBuffer.Length
+                PacketCode = Grobal2.PacketCode,
+                PacketLen = (ushort)sendBuffer.Length
             };
-            backingStream.Write(serverMessage.GetBuffer());
-            backingStream.Write(sendBuffer);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-            var data = new byte[memoryStream.Length];
-            memoryStream.Read(data, 0, data.Length);
+            var dataBuff = SerializerUtil.Serialize(serverMessage);
+            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
+            MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _clientSocket.Send(data);
         }
     }

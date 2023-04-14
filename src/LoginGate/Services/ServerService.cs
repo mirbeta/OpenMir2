@@ -1,11 +1,12 @@
 using LoginGate.Conf;
 using LoginGate.Packet;
+using NLog;
 using System;
 using System.Net;
 using SystemModule;
-using SystemModule.Logger;
+using SystemModule.SocketComponents;
+using SystemModule.SocketComponents.AsyncSocketServer;
 using SystemModule.Sockets;
-using SystemModule.Sockets.AsyncSocketServer;
 
 namespace LoginGate.Services
 {
@@ -14,16 +15,15 @@ namespace LoginGate.Services
     /// </summary>
     public class ServerService
     {
-        private readonly MirLogger _logger;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SocketServer _serverSocket;
         private readonly SessionManager _sessionManager;
         private readonly ClientManager _clientManager;
         private readonly ServerManager _serverManager;
         private IPEndPoint _serverEndPoint;
 
-        public ServerService(MirLogger logger, ServerManager serverManager, ClientManager clientManager, SessionManager sessionManager)
+        public ServerService(ServerManager serverManager, ClientManager clientManager, SessionManager sessionManager)
         {
-            _logger = logger;
             _serverManager = serverManager;
             _clientManager = clientManager;
             _sessionManager = sessionManager;
@@ -41,13 +41,13 @@ namespace LoginGate.Services
             _serverEndPoint = new IPEndPoint(IPAddress.Parse(gateInfo.GateAddress), gateInfo.GatePort);
             _serverSocket.Init();
             _serverSocket.Start(_serverEndPoint);
-            _logger.LogInformation($"登录网关[{_serverEndPoint}]已启动...", 1);
+            _logger.Info($"登录网关[{_serverEndPoint}]已启动...");
         }
 
         public void Stop()
         {
             _serverSocket.Shutdown();
-            _logger.LogInformation($"登录网关[{_serverEndPoint}]停止服务...", 1);
+            _logger.Info($"登录网关[{_serverEndPoint}]停止服务...");
         }
 
         /// <summary>
@@ -59,16 +59,16 @@ namespace LoginGate.Services
             var clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
             {
-                _logger.DebugLog("获取登陆服务失败。");
+                _logger.Debug("获取登陆服务失败。");
                 return;
             }
             if (!clientThread.ConnectState)
             {
-                _logger.LogInformation("未就绪: " + sRemoteAddress, 5);
-                _logger.DebugLog($"游戏引擎链接失败 Server:[{clientThread.EndPoint}] ConnectionId:[{e.ConnectionId}]");
+                _logger.Info("未就绪: " + sRemoteAddress);
+                _logger.Debug($"游戏引擎链接失败 Server:[{clientThread.EndPoint}] ConnectionId:[{e.ConnectionId}]");
                 return;
             }
-            _logger.DebugLog($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
+            _logger.Debug($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
             TSessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < GateShare.MaxSession; nIdx++)
             {
@@ -86,13 +86,13 @@ namespace LoginGate.Services
             }
             if (sessionInfo != null)
             {
-                _logger.LogInformation("开始连接: " + sRemoteAddress, 5);
+                _logger.Info("开始连接: " + sRemoteAddress);
                 _sessionManager.AddSession(sessionInfo, clientThread);
             }
             else
             {
                 e.Socket.Close();
-                _logger.LogInformation("禁止连接: " + sRemoteAddress, 1);
+                _logger.Info("禁止连接: " + sRemoteAddress);
             }
         }
 
@@ -108,15 +108,15 @@ namespace LoginGate.Services
             {
                 userSession.UserLeave();
                 userSession.CloseSession();
-                _logger.LogInformation("断开连接: " + e.RemoteIPaddr, 5);
-                _logger.DebugLog($"用户[{e.RemoteIPaddr}] 会话ID:[{e.SocHandle}] 断开链接.");
+                _logger.Info("断开连接: " + e.RemoteIPaddr);
+                _logger.Debug($"用户[{e.RemoteIPaddr}] 会话ID:[{e.SocHandle}] 断开链接.");
             }
             _sessionManager.CloseSession(e.SocHandle);
         }
 
         private void ServerSocketClientError(object sender, AsyncSocketErrorEventArgs e)
         {
-            _logger.LogError($"客户端链接错误.[{e.Exception.ErrorCode}]");
+            _logger.Error($"客户端链接错误.[{e.Exception.ErrorCode}]");
         }
 
         /// <summary>

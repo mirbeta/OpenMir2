@@ -1,8 +1,7 @@
 ﻿using GameGate.Services;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using NLog;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using SystemModule;
@@ -11,22 +10,21 @@ namespace GameGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly ILogger<TimedService> _logger;
-        private static MirLog LogQueue => MirLog.Instance;
+        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static ClientManager ClientManager => ClientManager.Instance;
-        private static SessionManager SessionManager => SessionManager.Instance;
+        private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
         private int ProcessDelayTick { get; set; }
         private int ProcessDelayCloseTick { get; set; }
         private int ProcessClearSessionTick { get; set; }
         private int CheckServerConnectTick { get; set; }
         private int KepAliveTick { get; set; }
+        private int ShowMonitorTick { get; set; }
 
         private readonly PeriodicTimer _periodicTimer;
 
-        public TimedService(ILogger<TimedService> logger)
+        public TimedService()
         {
-            _logger = logger;
             KepAliveTick = HUtil32.GetTickCount();
             _periodicTimer = new PeriodicTimer(TimeSpan.FromMilliseconds(10));
         }
@@ -39,39 +37,41 @@ namespace GameGate
             ProcessClearSessionTick = startTick;
             KepAliveTick = startTick;
             CheckServerConnectTick = startTick;
+            ShowMonitorTick = startTick;
             while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
                 var currentTick = HUtil32.GetTickCount();
-                OutMianMessage();
                 ProcessDelayMsg(currentTick);
                 ClearIdleSession(currentTick);
                 KeepAlive(currentTick);
                 ProcessDelayClose(currentTick);
+                ShowNetworkMonitor(currentTick);
             }
         }
 
-        private void OutMianMessage()
+        private void ShowNetworkMonitor(int currentTick)
         {
-            if (!GateShare.ShowLog)
-                return;
-
-            while (!LogQueue.MessageLogQueue.IsEmpty)
+            if (currentTick - ShowMonitorTick > 10000)
             {
-                string message;
-                if (!LogQueue.MessageLogQueue.TryDequeue(out message)) continue;
-                _logger.LogInformation(message);
-            }
-
-            while (!LogQueue.DebugLogQueue.IsEmpty)
-            {
-                string message;
-                if (!LogQueue.DebugLogQueue.TryDequeue(out message)) continue;
-                _logger.LogDebug(message);
+                ShowMonitorTick = HUtil32.GetTickCount();
+                var serverList = ServerManager.GetServerList();
+                if (serverList == null)
+                {
+                    return;
+                }
+                for (var i = 0; i < serverList.Length; i++)
+                {
+                    if (serverList[i] == null)
+                    {
+                        continue;
+                    }
+                   _logger.Debug( $"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(500)}");
+                }
             }
         }
 
         /// <summary>
-        /// GameGate->GameSvr 心跳
+        /// GameGate->GameSrv 心跳
         /// </summary>
         private void KeepAlive(int currentTick)
         {
@@ -79,18 +79,17 @@ namespace GameGate
             {
                 CheckServerConnectTick = HUtil32.GetTickCount();
                 var clientList = ClientManager.GetClients();
-                if (clientList.Count == 0)
+                if (clientList == null)
                 {
                     return;
                 }
-                var clients = clientList.ToArray();
-                for (var i = 0; i < clients.Length; i++)
+                for (var i = 0; i < clientList.Length; i++)
                 {
-                    if (clients[i] == null)
+                    if (clientList[i] == null)
                     {
                         continue;
                     }
-                    clients[i].CheckConnectedState();
+                    clientList[i].CheckConnectedState();
                 }
             }
         }
@@ -103,20 +102,31 @@ namespace GameGate
             if (currentTick - ProcessDelayTick > 200)
             {
                 ProcessDelayTick = currentTick;
-                var sessionList = SessionManager.GetSessions();
-                if (sessionList.Count == 0)
+                var sessionList = SessionContainer.GetSessions();
+                if (sessionList == null)
                 {
                     return;
                 }
-                var sessions = sessionList.ToArray();
-                for (var i = 0; i < sessions.Length; i++)
+                for (var i = 0; i < sessionList.Length; i++)
                 {
-                    var clientSession = sessions[i];
-                    if (clientSession?.Session?.Socket == null || !clientSession.Session.Socket.Connected)
+                    var serverSession = sessionList[i];
+                    if (serverSession == null)
                     {
                         continue;
                     }
-                    clientSession.ProcessDelayMessage();
+                    for (int j = 0; j < serverSession.Length; j++)
+                    {
+                        var clientSession = serverSession[j];
+                        if (clientSession == null)
+                        {
+                            continue;
+                        }
+                        if (clientSession.Session?.Socket == null || !clientSession.Session.Socket.Connected)
+                        {
+                            continue;
+                        }
+                        clientSession.ProcessDelayMessage();
+                    }
                 }
             }
         }
@@ -127,13 +137,17 @@ namespace GameGate
             {
                 ProcessDelayCloseTick = HUtil32.GetTickCount();
                 var serverList = ServerManager.GetServerList();
+                if (serverList == null)
+                {
+                    return;
+                }
                 for (var i = 0; i < serverList.Length; i++)
                 {
                     if (serverList[i] == null)
                     {
                         continue;
                     }
-                    serverList[i].CloseWaitList();
+                    serverList[i].ProcessCloseSessionQueue();
                 }
             }
         }
@@ -147,20 +161,19 @@ namespace GameGate
             {
                 ProcessClearSessionTick = HUtil32.GetTickCount();
                 var clientList = ClientManager.GetClients();
-                if (clientList.Count == 0)
+                if (clientList == null)
                 {
                     return;
                 }
-                var clients = clientList.ToArray();
-                for (var i = 0; i < clients.Length; i++)
+                for (var i = 0; i < clientList.Length; i++)
                 {
-                    if (clients[i] == null)
+                    if (clientList[i] == null)
                     {
                         continue;
                     }
-                    clients[i].ProcessIdleSession();
+                    clientList[i].ProcessIdleSession();
                 }
-                LogQueue.DebugLog("清理超时无效会话...");
+                _logger.Debug("清理空闲或无效客户端会话...");
             }
         }
 

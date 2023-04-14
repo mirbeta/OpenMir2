@@ -1,0 +1,96 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
+		<LangVersion>11</LangVersion>
+		<Nullable>disable</Nullable>
+		<PackageId>GameSrv</PackageId>
+		<OutputType>Exe</OutputType>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+		<Description>网络游戏数据处理引擎</Description>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<Using Include="GameSrv" />
+		<Using Include="SystemModule" />
+	</ItemGroup>
+	
+	<PropertyGroup>
+		<ServerGarbageCollection>false</ServerGarbageCollection>
+		<ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+		<TieredCompilation>false</TieredCompilation>
+		<TieredCompilationQuickJit>false</TieredCompilationQuickJit>
+		<TieredCompilationQuickJitForLoops>false</TieredCompilationQuickJitForLoops>
+	</PropertyGroup>
+	
+	<Choose>
+		<When Condition="$(Configuration)=='Release'">
+			<PropertyGroup>
+				<DebugSymbols>false</DebugSymbols>
+				<Optimize>true</Optimize>
+				<DefineConstants>TRACE</DefineConstants>
+			</PropertyGroup>
+		</When>
+
+		<When Condition="$(Configuration)=='Debug'">
+			<Choose>
+				<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+					<PropertyGroup>
+						<OutputPath>D:\MirServer\Mir200</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/Data/Mirserver/Mir200</OutputPath>
+					</PropertyGroup>
+				</When>
+				<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+					<PropertyGroup>
+						<OutputPath>/Volumes/opt/Mirserver/Mir200</OutputPath>
+					</PropertyGroup>
+				</When>
+			</Choose>
+		</When>
+		
+	</Choose>
+
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>False</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<Optimize>True</Optimize>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(RunConfiguration)' == 'MirServer' ">
+		<ExternalConsole>true</ExternalConsole>
+	</PropertyGroup>
+	
+	<ItemGroup>
+		<PackageReference Include="Collections.Pooled" Version="1.0.82" />
+		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
+		<PackageReference Include="MQTTnet" Version="4.1.4.563" />
+		<PackageReference Include="MySqlConnector" Version="2.2.5" />
+		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+		<PackageReference Include="Spectre.Console" Version="0.46.0" />
+		<PackageReference Include="NLog" Version="5.1.3" />
+		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Include="..\..\nlog.config">
+			<Link>nlog.config</Link>
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+	</ItemGroup>
+</Project>

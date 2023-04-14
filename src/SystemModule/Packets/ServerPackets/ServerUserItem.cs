@@ -1,10 +1,12 @@
 ﻿using MemoryPack;
+using System.Runtime.InteropServices;
 using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial class ServerUserItem 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public partial class ServerUserItem
     {
         /// <summary>
         /// 唯一ID
@@ -34,9 +36,9 @@ namespace SystemModule.Packets.ServerPackets
             Prefix = new char[13];
         }
 
-        public ClientUserItem ToClientItem()
+        public UserItem ToClientItem()
         {
-            return new ClientUserItem
+            return new UserItem
             {
                 MakeIndex = MakeIndex,
                 Index = Index,

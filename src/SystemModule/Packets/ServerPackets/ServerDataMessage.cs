@@ -1,15 +1,12 @@
 ﻿using MemoryPack;
-using System.IO;
+using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ServerPackets
 {
-    public class ServerDataPacket : ServerPacket
+    [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public partial struct ServerDataPacket
     {
-        /// <summary>
-        /// 消息头固定大小
-        /// </summary>
-        public const int FixedHeaderLen = 6;
-
         /// <summary>
         /// 封包标识码
         /// </summary>
@@ -17,23 +14,17 @@ namespace SystemModule.Packets.ServerPackets
         /// <summary>
         /// 封包总长度
         /// </summary>
-        public short PacketLen { get; set; }
+        public ushort PacketLen { get; set; }
 
-        protected override void ReadPacket(BinaryReader reader)
-        {
-            PacketCode = reader.ReadUInt32();
-            PacketLen = reader.ReadInt16();
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(PacketCode);
-            writer.Write(PacketLen);
-        }
+        /// <summary>
+        /// 消息头固定大小
+        /// </summary>
+        public const int FixedHeaderLen = 6;
     }
 
     [MemoryPackable]
-    public partial class ServerDataMessage 
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public partial struct ServerDataMessage
     {
         public ServerDataType Type { get; set; }
         public int SocketId { get; set; }

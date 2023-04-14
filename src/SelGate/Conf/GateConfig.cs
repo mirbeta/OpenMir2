@@ -7,7 +7,7 @@ namespace SelGate.Conf
     public class GateConfig
     {
         public int ShowLogLevel = 0;
-        public bool ShowDebugLog = false;
+        public bool ShowDebug = false;
         public int m_nGateCount = 0;
         public bool m_fCheckNewIDOfIP = false;
         public bool m_fCheckNullSession = false;
@@ -83,7 +83,7 @@ namespace SelGate.Conf
             m_nCheckNewIDOfIP = 5;
             m_nClientTimeOutTime = 60 * 1000;
             m_nMaxClientPacketCount = 2;
-            ShowDebugLog = false;
+            ShowDebug = false;
         }
     }
 }

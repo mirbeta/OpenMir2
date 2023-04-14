@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using SystemModule;
-using SystemModule.Common;
 
 namespace GameGate.Filters
 {
@@ -63,15 +62,15 @@ namespace GameGate.Filters
 
         public void LoadDenyList()
         {
-            var ls = new StringList();
-            if (!File.Exists(_configManager.GateConfig.m_szBlockHWIDFileName))
+            var ls = new SystemModule.Common.StringList();
+            if (!File.Exists(_configManager.GateConfig.BlockHWIDFileName))
             {
-                ls.SaveToFile(_configManager.GateConfig.m_szBlockHWIDFileName);
+                ls.SaveToFile(_configManager.GateConfig.BlockHWIDFileName);
             }
-            ls.LoadFromFile(_configManager.GateConfig.m_szBlockHWIDFileName);
+            ls.LoadFromFile(_configManager.GateConfig.BlockHWIDFileName);
             for (var i = 0; i < ls.Count; i++)
             {
-                if (ls[i] == "" || ls[i][0] == ';' || ls[i].Length != 32)
+                if (string.IsNullOrEmpty(ls[i]) || ls[i][0] == ';' || ls[i].Length != 32)
                 {
                     continue;
                 }

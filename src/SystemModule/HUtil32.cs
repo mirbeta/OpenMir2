@@ -1,16 +1,17 @@
 using System;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
 namespace SystemModule
 {
-    public class HUtil32
+    public partial class HUtil32
     {
-        public const string Backslash = "/";
-        public static readonly string[] Separator = { " ", ",", "\t" };
-        public static readonly ClientUserItem DelfautItem = new ClientUserItem();
+        public const char Backslash = '/';
+        public static readonly char[] Separator = { ' ', ',', '\t' };
+        public static readonly UserItem DelfautItem = new UserItem();
         public static readonly MagicRcd DetailtMagicRcd = new MagicRcd();
 
         /// <summary>
@@ -18,13 +19,16 @@ namespace SystemModule
         /// </summary>
         public static int Sequence()
         {
-            var bytes = Guid.NewGuid().ToByteArray();
-            var sequence = BitConverter.ToInt32(bytes, 0);
+            byte[] bytes = Guid.NewGuid().ToByteArray();
+            int sequence = BitConverter.ToInt32(bytes, 0);
             while (sequence < 0)
             {
                 bytes = Guid.NewGuid().ToByteArray();
                 sequence = BitConverter.ToInt32(bytes, 0);
-                if (sequence > 0) break;
+                if (sequence > 0)
+                {
+                    break;
+                }
             }
             return sequence;
         }
@@ -34,24 +38,34 @@ namespace SystemModule
             return Environment.TickCount;
         }
 
+        public static long GetTimestamp()
+        {
+            return DateTimeOffset.Now.ToUnixTimeMilliseconds();
+        }
+
+        public static long GetTimestamp(TimeSpan timeSpan)
+        {
+            return DateTimeOffset.Now.Add(timeSpan).ToUnixTimeMilliseconds();
+        }
+
         public static int MakeLong(short lowPart, short highPart)
         {
-            return (int)(((ushort)lowPart) | (uint)(highPart << 16));
+            return (ushort)lowPart | highPart << 16;
         }
 
         public static int MakeLong(ushort lowPart, ushort highPart)
         {
-            return (int)(lowPart | (uint)(highPart << 16));
+            return lowPart | highPart << 16;
         }
 
         public static ushort MakeWord(byte low, byte high)
         {
-            return (ushort)((high << 8) | low);
+            return (ushort)(high << 8 | low);
         }
 
         public static ushort MakeWord(ushort bLow, ushort bHigh)
         {
-            return (ushort)(bLow | (bHigh << 8));
+            return (ushort)(bLow | bHigh << 8);
         }
 
         public static ushort HiWord(ushort dword)
@@ -111,27 +125,12 @@ namespace SystemModule
 
         public static bool IsVarNumber(string str)
         {
-            return (CompareLStr(str, "HUMAN", 5)) || (CompareLStr(str, "GUILD", 5)) || (CompareLStr(str, "GLOBAL", 6));
-        }
-
-        public static int Round(object r)
-        {
-            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
-        }
-
-        public static int Round(ushort r)
-        {
-            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
-        }
-
-        public static int Round(int r)
-        {
-            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
+            return CompareLStr(str, "HUMAN", 5) || CompareLStr(str, "GUILD", 5) || CompareLStr(str, "GLOBAL", 6);
         }
 
         public static int Round(double r)
         {
-            return (int)Math.Round(Convert.ToDouble(r) + 0.5, 1, MidpointRounding.AwayFromZero);
+            return (int) Math.Round(r, MidpointRounding.AwayFromZero);
         }
 
         /// <summary>
@@ -191,7 +190,7 @@ namespace SystemModule
             return Encoding.GetEncoding("gb2312").GetString(bytes[0..len]);
         }
 
-        public static string GetString(Span<byte> bytes, int index, int count)
+        public static string GetString(ReadOnlySpan<byte> bytes, int index, int count)
         {
             return Encoding.GetEncoding("gb2312").GetString(bytes.Slice(index, count));
         }
@@ -208,7 +207,7 @@ namespace SystemModule
 
         public static DateTime DoubleToDateTime(double xd)
         {
-            return (new DateTime(1899, 12, 30)).AddDays(xd);
+            return new DateTime(1899, 12, 30).AddDays(xd);
         }
 
         public static double DateTimeToDouble(DateTime dt)
@@ -219,26 +218,19 @@ namespace SystemModule
 
         public static string StrPas(byte[] buff)
         {
-            var nLen = buff.Length;
-            var ret = new string('\0', nLen);
-            var sb = new StringBuilder(ret);
-            for (var i = 0; i < nLen; i++)
+            int nLen = buff.Length;
+            string ret = new string('\0', nLen);
+            StringBuilder sb = new StringBuilder(ret);
+            for (int i = 0; i < nLen; i++)
             {
                 sb[i] = (char)buff[i];
             }
             return sb.ToString();
         }
 
-        public static string StrPas(Span<byte> buff)
+        public static string SpanToStr(ReadOnlySpan<byte> buff)
         {
-            var nLen = buff.Length;
-            var ret = new string('\0', nLen);
-            var sb = new StringBuilder(ret);
-            for (var i = 0; i < nLen; i++)
-            {
-                sb[i] = (char)buff[i];
-            }
-            return sb.ToString();
+            return Encoding.ASCII.GetString(buff);
         }
 
         /// <summary>
@@ -254,34 +246,51 @@ namespace SystemModule
         /// <returns></returns>
         private static unsafe int StringToBytePtr(string str, byte* retby, int startIndex)
         {
-            var bDecode = false;
-            if (string.IsNullOrEmpty(str)) return 0;
-            for (var i = 0; i < str.Length; i++)
+            bool bDecode = false;
+            if (string.IsNullOrEmpty(str))
+            {
+                return 0;
+            }
+
+            for (int i = 0; i < str.Length; i++)
+            {
                 if (str[i] >> 8 != 0)
                 {
                     bDecode = true;
                     break;
                 }
-
-            var nLen = 0;
-            if (bDecode)
-                nLen = Encoding.GetEncoding("gb2312").GetByteCount(str);
-            else
-                nLen = str.Length;
-            if (retby == null)
-                return nLen;
-
+            }
+            int nLen = 0;
             if (bDecode)
             {
-                var by = Encoding.GetEncoding("gb2312").GetBytes(str);
-                var pb = retby + startIndex;
-                for (var i = 0; i < by.Length; i++)
-                    *pb++ = by[i];
+                nLen = Encoding.GetEncoding("gb2312").GetByteCount(str);
             }
             else
             {
-                var pb = retby + startIndex;
-                for (var i = 0; i < str.Length; i++) *pb++ = (byte)str[i];
+                nLen = str.Length;
+            }
+
+            if (retby == null)
+            {
+                return nLen;
+            }
+
+            if (bDecode)
+            {
+                byte[] by = Encoding.GetEncoding("gb2312").GetBytes(str);
+                byte* pb = retby + startIndex;
+                for (int i = 0; i < by.Length; i++)
+                {
+                    *pb++ = by[i];
+                }
+            }
+            else
+            {
+                byte* pb = retby + startIndex;
+                for (int i = 0; i < str.Length; i++)
+                {
+                    *pb++ = (byte)str[i];
+                }
             }
 
             return nLen;
@@ -292,160 +301,180 @@ namespace SystemModule
             string result;
             int st;
             int et;
-            int c;
-            int len;
-            int i;
-            if (source == "")
+            if (string.IsNullOrEmpty(source))
             {
-                rdstr = "";
-                result = "";
-                return result;
+                return string.Empty;
             }
-            c = 1;
-            len = source.Length;
+            int c = 1;
+            int len = source.Length;
             while (source[c] == ' ')
+            {
                 if (c < len)
+                {
                     c++;
+                }
                 else
+                {
                     break;
+                }
+            }
             if (source[c] == '\"' && c < len)
             {
                 st = c + 1;
                 et = len;
-                for (i = c + 1; i <= len; i++)
+                for (int i = c + 1; i <= len; i++)
+                {
                     if (source[i] == '\"')
                     {
                         et = i - 1;
                         break;
                     }
+                }
             }
             else
             {
                 st = c;
                 et = len;
-                for (i = c; i <= len; i++)
+                for (int i = c; i <= len; i++)
+                {
                     if (source[i] == ' ')
                     {
                         et = i - 1;
                         break;
                     }
+                }
             }
-
             rdstr = source.Substring(st - 1, et - st + 1);
             if (len >= et + 2)
+            {
                 result = source.Substring(et + 2 - 1, len - (et + 1));
+            }
             else
-                result = "";
+            {
+                result = string.Empty;
+            }
             return result;
         }
 
         public static int StrToInt(string str, int def)
         {
-            return int.TryParse(str, out var result) ? result : def;
+            return int.TryParse(str, out int result) ? result : def;
+        }
+
+        public static ushort StrToUInt16(string str, ushort def)
+        {
+            return ushort.TryParse(str, out ushort result) ? result : def;
+        }
+
+        public static short StrToInt16(string str, short def)
+        {
+            return short.TryParse(str, out short result) ? result : def;
         }
 
         public static int StrToInt(ReadOnlySpan<char> str, int def)
         {
-            return int.TryParse(str, out var result) ? result : def;
+            return int.TryParse(str, out int result) ? result : def;
         }
 
         public static DateTime StrToDate(string str)
         {
-            if (string.IsNullOrEmpty(str))
+            return string.IsNullOrEmpty(str) ? DateTime.Today : Convert.ToDateTime(str);
+        }
+
+        public static string GetValidStr3(string source, ref string dest, char divider)
+        {
+            string[] ary = source.Split(divider, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : string.Empty; //目标置为第一个
+            return ary.Length > 1 ? ary[1] : string.Empty; //返回第二个
+        }
+
+        public static string GetValidStr3(string source, ref string dest, char[] dividerAry)
+        {
+            char[] div = new char[dividerAry.Length];
+            for (int i = 0; i < dividerAry.Length; i++)
             {
-                return DateTime.Today;
+                div[i] = dividerAry[i];
             }
-            return Convert.ToDateTime(str);
+
+            string[] ary = source.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : string.Empty; //目标置为第一个
+            return ary.Length > 1 ? ary[1] : string.Empty; //返回第二个
         }
 
-        public static DateTime Str_ToTime(string str)
+        public static string GetValidStr3(string source, ref string dest, string[] dividerAry)
         {
-            DateTime result;
-            if (str.Trim() == "")
-                result = DateTime.Now;
-            else
-                result = Convert.ToDateTime(str);
-            return result;
-        }
-
-        public static string GetValidStr3(string str, ref string dest, char divider)
-        {
-            var ary = str.Split('/'); //返回不包含空的值
-            dest = ary.Length > 0 ? ary[0] : ""; //目标置为第一个
-            return ary.Length > 1 ? ary[1] : ""; //返回第二个
-        }
-
-        public static string GetValidStr3(string str, ref string dest, char[] dividerAry)
-        {
-            var div = new char[dividerAry.Length];
-            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
-            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            dest = ary.Length > 0 ? ary[0] : ""; //目标置为第一个
-            return ary.Length > 1 ? ary[1] : ""; //返回第二个
-        }
-
-        public static string GetValidStr3(string str, ref string dest, string[] dividerAry)
-        {
-            var div = new char[dividerAry.Length];
-            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i][0];
-            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            dest = ary.Length > 0 ? ary[0] : "";
-            return ary.Length > 1 ? ary[1] : "";
-        }
-
-        public static string GetValidStr3(string str, ref int dest, string[] dividerAry)
-        {
-            var div = new char[dividerAry.Length];
-            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i][0];
-            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
-            if (ary.Length <= 0) return ary.Length > 1 ? ary[1] : "";
-            if (!int.TryParse(ary[0], out dest))
+            char[] div = new char[dividerAry.Length];
+            for (int i = 0; i < dividerAry.Length; i++)
             {
-                dest = -1;
+                div[i] = dividerAry[i][0];
             }
-            return ary.Length > 1 ? ary[1] : "";
+            string[] ary = source.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            dest = ary.Length > 0 ? ary[0] : string.Empty;//目标置为第一个
+            return ary.Length > 1 ? ary[1] : string.Empty;//返回第二个
         }
 
         public static string GetValidStr3(string str, ref string dest, string dividerAry)
         {
-            var div = new char[dividerAry.Length];
-            for (var i = 0; i < dividerAry.Length; i++) div[i] = dividerAry[i];
-            var ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
+            //var ss = Regex.Split(str, Regex.Escape(dividerAry), RegexOptions.IgnorePatternWhitespace);
+            char[] div = new char[dividerAry.Length];
+            for (int i = 0; i < dividerAry.Length; i++)
+            {
+                div[i] = dividerAry[i];
+            }
+
+            string[] ary = str.Split(div, 2, StringSplitOptions.RemoveEmptyEntries); //返回不包含空的值
             dest = ary.Length > 0 ? ary[0] : "";
             return ary.Length > 1 ? ary[1] : "";
+        }
+
+        public static string GetValidStrCap(string str, ref string dest, char divider)
+        {
+            string result;
+            if (!string.IsNullOrEmpty(str))
+            {
+                result = str[0] == '\"' ? CaptureString(str, ref dest) : GetValidStr3(str, ref dest, divider);
+            }
+            else
+            {
+                result = string.Empty;
+                dest = string.Empty;
+            }
+            return result;
+        }
+
+        public static string GetValidStrCap(string str, ref string dest, char[] divider)
+        {
+            string result;
+            if (!string.IsNullOrEmpty(str))
+            {
+                result = str[0] == '\"' ? CaptureString(str, ref dest) : GetValidStr3(str, ref dest, divider);
+            }
+            else
+            {
+                result = string.Empty;
+                dest = string.Empty;
+            }
+            return result;
         }
 
         public static string GetValidStrCap(string str, ref string dest, string[] divider)
         {
             string result;
-            str = str.TrimStart();
-            if (str != "")
+            if (!string.IsNullOrEmpty(str))
             {
-                if (str[0] == '\"')
-                    result = CaptureString(str, ref dest);
-                else
-                    result = GetValidStr3(str, ref dest, divider);
+                result = str[0] == '\"' ? CaptureString(str, ref dest) : GetValidStr3(str, ref dest, divider);
             }
             else
             {
-                result = "";
-                dest = "";
+                result = string.Empty;
+                dest = string.Empty;
             }
             return result;
         }
 
         public static bool IsStringNumber(string str)
         {
-            var result = true;
-            for (var i = 0; i < str.Length - 1; i++)
-            {
-                if ((byte)str[i] < (byte)'0' || (byte)str[i] > (byte)'9')
-                {
-                    result = false;
-                    break;
-                }
-            }
-            return result;
+            return string.IsNullOrEmpty(str) || ValidationNumber().IsMatch(str);
         }
 
         /// <summary>
@@ -462,10 +491,10 @@ namespace SystemModule
             {
                 return string.Empty;
             }
-            var sourceSpan = source.AsSpan();
-            var spanLen = sourceSpan.Length;
-            var result = string.Empty;
-            var findData = false;
+            ReadOnlySpan<char> sourceSpan = source.AsSpan();
+            int spanLen = sourceSpan.Length;
+            string result = string.Empty;
+            bool findData = false;
             try
             {
                 if (spanLen >= 2)
@@ -477,7 +506,7 @@ namespace SystemModule
                     }
                     else
                     {
-                        var n = sourceSpan.IndexOf(searchAfter, StringComparison.OrdinalIgnoreCase);
+                        int n = sourceSpan.IndexOf(searchAfter, StringComparison.OrdinalIgnoreCase);
                         if (n > 0)
                         {
                             sourceSpan = sourceSpan.Slice(n + 1, spanLen - n - 1);
@@ -487,7 +516,7 @@ namespace SystemModule
                 }
                 if (findData)
                 {
-                    var n = sourceSpan.IndexOf(arrestBefore, StringComparison.OrdinalIgnoreCase) + 1;
+                    int n = sourceSpan.IndexOf(arrestBefore, StringComparison.OrdinalIgnoreCase) + 1;
                     if (n > 0)
                     {
                         arrestStr = sourceSpan[..(n - 1)].ToString();
@@ -500,7 +529,7 @@ namespace SystemModule
                 }
                 else
                 {
-                    for (var i = 0; i < spanLen; i++)
+                    for (int i = 0; i < spanLen; i++)
                     {
                         if (sourceSpan[i - 1].ToString() == searchAfter)
                         {
@@ -521,12 +550,28 @@ namespace SystemModule
         public static bool CompareLStr(string src, string targ)
         {
             int compn = targ.Length;
-            if (compn <= 0) return false;
-            if (src.Length < compn) return false;
-            if (targ.Length < compn) return false;
-            for (var i = 0; i < compn; i++)
+            if (compn <= 0)
             {
-                if (char.ToUpper(src[i]) == char.ToUpper(targ[i])) continue;
+                return false;
+            }
+
+            if (src.Length < compn)
+            {
+                return false;
+            }
+
+            if (targ.Length < compn)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < compn; i++)
+            {
+                if (char.ToUpper(src[i]) == char.ToUpper(targ[i]))
+                {
+                    continue;
+                }
+
                 return false;
             }
             return true;
@@ -534,12 +579,28 @@ namespace SystemModule
 
         public static bool CompareLStr(string src, string targ, int compn)
         {
-            if (compn <= 0) return false;
-            if (src.Length < compn) return false;
-            if (targ.Length < compn) return false;
-            for (var i = 0; i < compn; i++)
+            if (compn <= 0)
             {
-                if (char.ToUpper(src[i]) == char.ToUpper(targ[i])) continue;
+                return false;
+            }
+
+            if (src.Length < compn)
+            {
+                return false;
+            }
+
+            if (targ.Length < compn)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < compn; i++)
+            {
+                if (char.ToUpper(src[i]) == char.ToUpper(targ[i]))
+                {
+                    continue;
+                }
+
                 return false;
             }
             return true;
@@ -557,11 +618,14 @@ namespace SystemModule
 
         public static bool IsEnglishStr(string sEngStr)
         {
-            var result = false;
-            for (var i = 0; i < sEngStr.Length; i++)
+            bool result = false;
+            for (int i = 0; i < sEngStr.Length; i++)
             {
                 result = IsEnglish(sEngStr[i]);
-                if (result) break;
+                if (result)
+                {
+                    break;
+                }
             }
             return result;
         }
@@ -571,20 +635,29 @@ namespace SystemModule
             if (src != "")
             {
                 int len = src.Length;
-                var sb = new StringBuilder();
-                for (var i = 0; i < len; i++)
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < len; i++)
+                {
                     if (src[i] == srcchr)
+                    {
                         sb.Append(repchr);
+                    }
+                }
             }
             return src;
         }
 
         public static int TagCount(string source, char tag)
         {
-            var count = 0;
-            for (var i = 0; i < source.Length; i++)
+            int count = 0;
+            for (int i = 0; i < source.Length; i++)
+            {
                 if (source[i] == tag)
+                {
                     count++;
+                }
+            }
+
             return count;
         }
 
@@ -630,7 +703,11 @@ namespace SystemModule
 
         public static int GetDayCount(DateTime maxDate, DateTime minDate)
         {
-            if (maxDate < minDate) return 0;
+            if (maxDate < minDate)
+            {
+                return 0;
+            }
+
             int yearMax = maxDate.Year;
             int monthMax = maxDate.Month;
             int dayMax = maxDate.Day;
@@ -663,10 +740,14 @@ namespace SystemModule
 
         private static unsafe string BytePtrToString(byte* by, int startIndex, int len)
         {
-            var ret = new string('\0', len);
-            var sb = new StringBuilder(ret);
+            string ret = new string('\0', len);
+            StringBuilder sb = new StringBuilder(ret);
             by += startIndex;
-            for (var i = 0; i < len; i++) sb[i] = (char)*@by++;
+            for (int i = 0; i < len; i++)
+            {
+                sb[i] = (char)*@by++;
+            }
+
             return sb.ToString();
         }
 
@@ -686,7 +767,7 @@ namespace SystemModule
         public static unsafe byte[] StringToByteAry(string str, out int strLength)
         {
             strLength = StringToBytePtr(str, null, 0);
-            var ret = new byte[strLength + 1];
+            byte[] ret = new byte[strLength + 1];
             fixed (byte* pb = ret)
             {
                 StringToBytePtr(str, pb, 1);
@@ -696,7 +777,7 @@ namespace SystemModule
 
         public static bool CompareBackLStr(string src, string targ, int compn)
         {
-            var result = false;
+            bool result = false;
             if (compn <= 0)
             {
                 return result;
@@ -709,10 +790,10 @@ namespace SystemModule
             {
                 return result;
             }
-            var slen = src.Length;
-            var tLen = targ.Length;
+            int slen = src.Length;
+            int tLen = targ.Length;
             result = true;
-            for (var i = 0; i < compn; i++)
+            for (int i = 0; i < compn; i++)
             {
                 if (char.ToUpper(src[slen - (i + 1)]) != char.ToUpper(targ[tLen - (i + 1)]))
                 {
@@ -723,6 +804,46 @@ namespace SystemModule
             return result;
         }
 
+        /// <summary>
+        /// 获取大小的显示字符串
+        /// </summary>
+        /// <returns></returns>
+        public static string FormatBytesValue(double length)
+        {
+            const int byteConversion = 1024;
+            // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
+            if (length >= Math.Pow(byteConversion, 6)) // EB
+            {
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 6), 2), " EB");
+            }
+            if (length >= Math.Pow(byteConversion, 5)) // PB
+            {
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 5), 2), " PB");
+            }
+            if (length >= Math.Pow(byteConversion, 4)) // TB
+            {
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 4), 2), " TB");
+            }
+            if (length >= Math.Pow(byteConversion, 3)) // GB
+            {
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 3), 2), " GB");
+            }
+            if (length >= Math.Pow(byteConversion, 2)) // MB
+            {
+                return string.Concat(Math.Round(length / Math.Pow(byteConversion, 2), 2), " MB");
+            }
+            if (length >= byteConversion) // KB
+            {
+                return string.Concat(Math.Round(length / byteConversion, 2), " KB");
+            }
+            return string.Concat(length, " Bytes");// Bytes
+        }
+
+        /// <summary>
+        /// IP地址转数字
+        /// </summary>
+        /// <param name="ip"></param>
+        /// <returns></returns>
         public static long IpToInt(string ip)
         {
             if (string.IsNullOrEmpty(ip))
@@ -737,40 +858,10 @@ namespace SystemModule
                    | long.Parse(items[3]);
         }
 
-        /// <summary>
-        /// 获取大小的显示字符串
-        /// </summary>
-        /// <returns></returns>
-        public static string FormatBytesValue(long length)
-        {
-            int byteConversion = 1024;
-            double bytes = Convert.ToDouble(length);
-            // 超过EB的单位已经没有实际转换意义了, 太大了, 忽略不用
-            if (bytes >= Math.Pow(byteConversion, 6)) // EB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 6), 2), " EB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 5)) // PB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 5), 2), " PB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 4)) // TB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 4), 2), " TB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 3)) // GB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 3), 2), " GB");
-            }
-            if (bytes >= Math.Pow(byteConversion, 2)) // MB
-            {
-                return string.Concat(Math.Round(bytes / Math.Pow(byteConversion, 2), 2), " MB");
-            }
-            if (bytes >= byteConversion) // KB
-            {
-                return string.Concat(Math.Round(bytes / byteConversion, 2), " KB");
-            }
-            return string.Concat(bytes, " Bytes");// Bytes
-        }
+        [GeneratedRegex("^[+-]?\\d*[.]?\\d*$")]
+        private static partial Regex ValidationNumber();
+
+        [GeneratedRegex(@"^[+-]?\d*$")]
+        private static partial Regex IntRegex();
     }
 }

@@ -1,11 +1,30 @@
-using System.IO;
+using MemoryPack;
+using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ClientPackets
 {
     /// <summary>
-    /// 客户端消息
+    /// 客户端消息体
     /// </summary>
-    public class ClientMesaagePacket : ClientPackage
+    [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
+    public partial struct CommandMessage
+    {
+        [MemoryPackInclude]
+        public int Recog;
+        [MemoryPackInclude]
+        public ushort Ident;
+        [MemoryPackInclude]
+        public ushort Param;
+        [MemoryPackInclude]
+        public ushort Tag;
+        [MemoryPackInclude]
+        public ushort Series;
+
+        public const int Size = 12;
+    }
+
+    public struct ServerCommandMessage
     {
         public int UID;
         public ushort Cmd;
@@ -41,17 +60,15 @@ namespace SystemModule.Packets.ClientPackets
         public ushort Param;
         public ushort Tag;
         public ushort Series;
-        public int OtpCode;
 
-        public const int PackSize = 12;
 
-        protected override void ReadPacket(BinaryReader reader)
+        public void ToServerCommand(CommandMessage command)
         {
-            Recog = reader.ReadInt32();
-            Ident = reader.ReadUInt16();
-            Param = reader.ReadUInt16();
-            Tag = reader.ReadUInt16();
-            Series = reader.ReadUInt16();
+            Recog = command.Recog;
+            Ident = command.Ident;
+            Param = command.Param;
+            Tag = command.Tag;
+            Series = command.Series;
 
             Cmd = Ident;
             Cmd1 = Ident;
@@ -81,15 +98,6 @@ namespace SystemModule.Packets.ClientPackets
             Direct = Series;
             WID = Series;
             IDHi = Series;
-        }
-
-        protected override void WritePacket(BinaryWriter writer)
-        {
-            writer.Write(Recog);
-            writer.Write(Ident);
-            writer.Write(Param);
-            writer.Write(Tag);
-            writer.Write(Series);
         }
     }
 }

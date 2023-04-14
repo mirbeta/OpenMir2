@@ -1,5 +1,6 @@
-﻿using System.Runtime.Serialization;
-using MemoryPack;
+﻿using MemoryPack;
+using System;
+using System.Runtime.Serialization;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
@@ -34,7 +35,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class LoadPlayerDataMessage 
+    public partial record struct LoadPlayerDataMessage
     {
         public string Account { get; set; }
         public string ChrName { get; set; }

@@ -1,0 +1,74 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <LangVersion>10</LangVersion>
+        <RootNamespace>BotSrv</RootNamespace>
+        <DebugType>embedded</DebugType>
+        <ServerGarbageCollection>true</ServerGarbageCollection>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <EnableNETAnalyzers>False</EnableNETAnalyzers>
+    </PropertyGroup>
+    <Choose>
+        <When Condition="$(Configuration)=='Release'">
+            <PropertyGroup>
+                <DebugSymbols>false</DebugSymbols>
+                <Optimize>true</Optimize>
+                <DefineConstants>TRACE</DefineConstants>
+            </PropertyGroup>
+        </When>
+
+        <When Condition="$(Configuration)=='Debug'">
+            <Choose>
+                <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+                    <PropertyGroup>
+                        <OutputPath>D:\MirServer\BotSrv</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/Data/Mirserver/BotSrv</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/opt/Mirserver/BotSrv</OutputPath>
+                    </PropertyGroup>
+                </When>
+            </Choose>
+        </When>
+        
+    </Choose>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+    </ItemGroup>
+ 
+	<ItemGroup>
+		<None Update="AppSetting.json">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</None>
+
+	</ItemGroup>
+    <ItemGroup>
+        <None Include="..\..\nlog.config">
+            <Link>nlog.config</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
+        <PackageReference Include="Spectre.Console" Version="0.46.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+        <PackageReference Include="NLog" Version="5.1.3" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
+    </ItemGroup>
+
+</Project>

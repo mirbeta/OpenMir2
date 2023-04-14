@@ -3,12 +3,15 @@ using SystemModule.Data;
 
 namespace SystemModule.Packets.ClientPackets
 {
-    public class UserMagic : ClientPackage
+    public class UserMagic : ClientPacket
     {
         public MagicInfo Magic;
         public ushort MagIdx;
         public byte Level;
         public char Key;
+        /// <summary>
+        /// 技能熟练点
+        /// </summary>
         public int TranPoint;
 
         public UserMagic()

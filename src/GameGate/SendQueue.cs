@@ -1,33 +1,35 @@
-using GameGate.Services;
 using System;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using GameGate.Services;
+using NLog;
 
 namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Channel<ClientOutPacketData> _sendQueue;
+        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        private readonly Channel<SessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
         public SendQueue()
         {
-            _sendQueue = Channel.CreateUnbounded<ClientOutPacketData>();
+            _sendQueue = Channel.CreateUnbounded<SessionMessage>();
         }
 
         /// <summary>
-        /// 获取待发送队列数量
+        /// 返回等待发送到客户端消息的消息数量
         /// </summary>
         public int QueueCount => _sendQueue.Reader.Count;
 
         /// <summary>
         /// 添加到发送队列
         /// </summary>
-        public void AddClientQueue(string connectionId, int threadId, byte[] buffer)
+        public void AddClientQueue(SessionMessage sessionPacket)
         {
-            var sendPacket = new ClientOutPacketData(connectionId, threadId, buffer);
-            _sendQueue.Writer.TryWrite(sendPacket);
+            _sendQueue.Writer.TryWrite(sessionPacket);
         }
 
         /// <summary>
@@ -43,29 +45,20 @@ namespace GameGate
                     {
                         try
                         {
-                            ServerMgr.AddPacketOutQueue(sendPacket);
+                            ServerMgr.Send(sendPacket);
                         }
                         catch (Exception e)
                         {
-                            Console.WriteLine(e.StackTrace);
+                            logger.Error(e.StackTrace);
+                        }
+                        finally
+                        {
+                            GateShare.BytePool.Return(sendPacket.Buffer, true);//必须要清空申请的byte数组
+                            GateShare.PacketMessagePool.Return(sendPacket);
                         }
                     }
                 }
-            }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
-        }
-    }
-
-    public readonly struct ClientOutPacketData
-    {
-        public readonly string ConnectId;
-        public readonly int ThreadId;
-        public readonly byte[] Buffer;
-
-        public ClientOutPacketData(string connectId, int threadId, byte[] buff)
-        {
-            ConnectId = connectId;
-            ThreadId = threadId;
-            Buffer = buff;
+            }, stoppingToken);
         }
     }
 }

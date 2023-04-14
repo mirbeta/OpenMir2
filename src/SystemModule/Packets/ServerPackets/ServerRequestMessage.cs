@@ -1,4 +1,5 @@
 ﻿using MemoryPack;
+using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ServerPackets
 {
@@ -6,6 +7,7 @@ namespace SystemModule.Packets.ServerPackets
     /// 请求消息定义
     /// </summary>
     [MemoryPackable]
+    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public partial class ServerRequestMessage
     {
         public int Recog { get; set; }

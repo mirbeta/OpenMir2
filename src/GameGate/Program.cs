@@ -1,4 +1,10 @@
-﻿using GameGate.Conf;
+﻿using System;
+using System.Linq;
+using System.Runtime;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using GameGate.Conf;
 using GameGate.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,13 +13,7 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Runtime;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+using LogLevel = NLog.LogLevel;
 
 namespace GameGate
 {
@@ -26,7 +26,7 @@ namespace GameGate
         private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
+            GCSettings.LatencyMode = GCLatencyMode.Batch;
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
             ThreadPool.SetMaxThreads(200, 200);
@@ -39,7 +39,7 @@ namespace GameGate
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
-                GateShare.ShowLog = true;
+                ChanggeLogLevel(LogLevel.Info);
                 if (_timer != null)
                 {
                     _timer.Dispose();
@@ -57,7 +57,6 @@ namespace GameGate
                 .ConfigureServices((hostContext, services) =>
                 {
                     //services.AddSingleton<CloudClient>();
-                    services.AddSingleton<ServerApp>();
                     services.AddHostedService<TimedService>();
                     services.AddHostedService<AppService>();
                 }).ConfigureLogging(logging =>
@@ -76,6 +75,7 @@ namespace GameGate
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
                 ctx.Spinner(Spinner.Known.Dots);
+                LogManager.Shutdown();
             });
         }
 
@@ -130,17 +130,27 @@ namespace GameGate
         private static Task ReLoadConfig()
         {
             ConfigManager.Instance.ReLoadConfig();
-            ServerManager.Instance.StartMessageWorkThread(CancellationToken.Token);
+            ServerManager.Instance.StartClientMessageWork(CancellationToken.Token);
             Console.WriteLine("重新读取配置文件完成...");
             return Task.CompletedTask;
         }
 
+        private static void ChanggeLogLevel(LogLevel logLevel)
+        {
+            LogManager.Configuration.Variables["MirLevel"] = logLevel.ToString();
+            LogManager.ReconfigExistingLoggers();
+            LogManager.Configuration.Reload();
+        }
+        
         private static async Task ShowServerStatus()
         {
-            GateShare.ShowLog = false;
+            //GateShare.ShowLog = false;
+            ChanggeLogLevel(LogLevel.Off);
+            
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);
+            table.AddColumn("[yellow]Id[/]");
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
             table.AddColumn("[yellow]Online[/]");
@@ -157,7 +167,7 @@ namespace GameGate
                  .Cropping(VerticalOverflowCropping.Bottom)
                  .StartAsync(async ctx =>
                  {
-                     foreach (var _ in Enumerable.Range(0, 10))
+                     foreach (var _ in Enumerable.Range(0, serverList.Length))
                      {
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
@@ -186,11 +196,6 @@ namespace GameGate
         private static void PrintUsage()
         {
             AnsiConsole.WriteLine();
-            using var logoStream = Assembly.GetExecutingAssembly().GetManifestResourceStream("GameGate.logo.png");
-            var logo = new CanvasImage(logoStream!)
-            {
-                MaxWidth = 25
-            };
 
             var table = new Table()
             {
@@ -227,7 +232,7 @@ namespace GameGate
                 .AddEmptyRow()
                 .AddEmptyRow()
                 .AddRow(markup);
-            table.AddRow(logo, rightTable);
+            table.AddRow(rightTable);
 
             AnsiConsole.Write(table);
             AnsiConsole.WriteLine();

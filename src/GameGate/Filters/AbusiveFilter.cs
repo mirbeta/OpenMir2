@@ -42,13 +42,13 @@ namespace GameGate.Filters
                             kick = false;
                             break;
                         case ChatFilterMethod.ReplaceAll:
-                            chatMsg = _configManager.GateConfig.m_szChatFilterReplace;
+                            chatMsg = _configManager.GateConfig.ChatFilterReplace;
                             break;
                         case ChatFilterMethod.ReplaceOne:
                             var szRplace = string.Empty;
                             for (int j = 0; j < AbuseList[i].Length; j++)
                             {
-                                szRplace = szRplace + "*";
+                                szRplace += "*";
                                 chatMsg = chatMsg.Replace(chatMsg, szRplace);
                                 rplaceCount++;
                                 if (rplaceCount > 4)

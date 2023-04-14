@@ -26,7 +26,11 @@ namespace SystemModule
         /// <returns></returns>
         public static TimestampID GetInstance(DateTime? initialDateTime = null)
         {
-            if (_timestampID == null) Interlocked.CompareExchange(ref _timestampID, new TimestampID(initialDateTime), null);
+            if (_timestampID == null)
+            {
+                Interlocked.CompareExchange(ref _timestampID, new TimestampID(initialDateTime), null);
+            }
+
             return _timestampID;
         }
 
@@ -37,7 +41,11 @@ namespace SystemModule
         {
             get
             {
-                if (_initialDateTime == null || _initialDateTime.Value == DateTime.MinValue) return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                if (_initialDateTime == null || _initialDateTime.Value == DateTime.MinValue)
+                {
+                    return new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+                }
+
                 return _initialDateTime.Value;
             }
         }
@@ -49,7 +57,7 @@ namespace SystemModule
         public string GetID()
         {
             long temp;
-            var timestamp = GetUniqueTimeStamp(_lastTimestamp, out temp);
+            long timestamp = GetUniqueTimeStamp(_lastTimestamp, out temp);
             return string.Format("{0}{Fill({1})}", timestamp, temp);
         }
 
@@ -62,7 +70,7 @@ namespace SystemModule
             lock (this)
             {
                 temp = 1;
-                var timeStamp = GetTimestamp();
+                long timeStamp = GetTimestamp();
                 if (timeStamp == _lastTimestamp)
                 {
                     _sequence = _sequence + 1;
@@ -89,8 +97,12 @@ namespace SystemModule
         /// <returns></returns>
         private long GetTimestamp()
         {
-            if (InitialDateTime >= DateTime.Now) throw new Exception("最初时间比当前时间还大，不合理");
-            var ts = DateTime.UtcNow - InitialDateTime;
+            if (InitialDateTime >= DateTime.Now)
+            {
+                throw new Exception("最初时间比当前时间还大，不合理");
+            }
+
+            TimeSpan ts = DateTime.UtcNow - InitialDateTime;
             return (long)ts.TotalMilliseconds;
         }
     }

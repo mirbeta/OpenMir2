@@ -3,7 +3,7 @@ using NLog;
 using System;
 using System.Data;
 
-namespace DBSvr.Storage.MySQL
+namespace DBSrv.Storage.MySQL
 {
     public class StorageContext : IDisposable
     {
@@ -17,19 +17,19 @@ namespace DBSvr.Storage.MySQL
             _storageOption = storageOption;
         }
 
-        public void Open(ref bool succes)
+        public void Open(ref bool success)
         {
             _connection = new MySqlConnection(_storageOption.ConnectionString);
             try
             {
                 _connection.Open();
-                succes = true;
+                success = true;
             }
             catch (Exception e)
             {
                 _logger.Error("打开数据库[MySql]失败.");
                 _logger.Error(e.StackTrace);
-                succes = false;
+                success = false;
             }
         }
 
