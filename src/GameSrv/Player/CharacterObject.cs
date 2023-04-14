@@ -8,6 +8,9 @@ namespace GameSrv.Player
 {
     public class CharacterObject : AnimalObject
     {
+        public byte PerHealth;
+        public byte PerHealing;
+        public byte PerSpell;
         /// <summary>
         /// 身上物品
         /// </summary>
@@ -50,6 +53,9 @@ namespace GameSrv.Player
 
         public CharacterObject()
         {
+            PerHealth = 5;
+            PerHealing = 5;
+            PerSpell = 5;
             IncHpStoneTime = HUtil32.GetTickCount();
             IncMpStoneTime = HUtil32.GetTickCount();
             UseItems = new UserItem[13];

@@ -104,9 +104,6 @@ namespace GameSrv.Actor
         public byte AntiPoison;
         public ushort PoisonRecover;
         public ushort AntiMagic;
-        public byte PerHealth;
-        public byte PerHealing;
-        public byte PerSpell;
         /// <summary>
         /// 增加血量的间隔
         /// </summary>
@@ -442,9 +439,6 @@ namespace GameSrv.Actor
             HealthRecover = 0;
             SpellRecover = 0;
             AntiMagic = 0;
-            PerHealth = 5;
-            PerHealing = 5;
-            PerSpell = 5;
             IncHealthSpellTick = HUtil32.GetTickCount();
             GreenPoisoningPoint = 0;
             CharStatus = 0;
