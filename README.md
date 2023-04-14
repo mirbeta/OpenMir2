@@ -9,10 +9,10 @@ Legend of Mir 2 game server, support online and multiplayer interaction.
 This project refers to the network Delphi code, which can be used with the original 1.76 source code of Legend of Blood for game experience. If you have any questions or problems, please submit Issues.  
 
 ### How to use    
-## Client
+## Client Project
 >  (https://github.com/mirbeta/MirClient) Here，Use Delphi XE 10.4.
 
-## Server
+## Server File
 > (https://github.com/mirbeta/MirServer) Here，Basic File.
 
 ## Startup sequence and project description. 
