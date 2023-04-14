@@ -19,6 +19,10 @@ namespace GameSrv.Actor
         /// </summary>
         public string ChrName;
         /// <summary>
+        /// 人物名字的颜色
+        /// </summary>        
+        public byte NameColor;
+        /// <summary>
         /// 所在座标X
         /// </summary>
         public short CurrX;
@@ -99,7 +103,13 @@ namespace GameSrv.Actor
         /// 人物攻击准确度
         /// </summary>
         public byte HitPoint;
+        /// <summary>
+        /// 中毒躲避
+        /// </summary>
         public byte AntiPoison;
+        /// <summary>
+        /// 魔法躲避
+        /// </summary>
         public ushort AntiMagic;
         /// <summary>
         /// 中绿毒降HP点数
@@ -137,10 +147,6 @@ namespace GameSrv.Actor
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
         public bool SlaveRelax = false;
-        /// <summary>
-        /// 人物名字的颜色
-        /// </summary>        
-        public byte NameColor;
         /// <summary>
         /// 亮度
         /// </summary>
