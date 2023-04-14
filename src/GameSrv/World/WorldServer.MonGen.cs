@@ -566,15 +566,15 @@ namespace GameSrv.World {
                     break;
                 case ActorRace.MonsterDigoutzombi:
                     cert = new DigOutZombi();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.BoFearFire = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) ((MonsterObject)cert).BoFearFire = true;
                     break;
                 case ActorRace.MonsterZilkinzombi:
                     cert = new ZilKinZombi();
-                    if (M2Share.RandomNumber.Random(4) == 0) cert.BoFearFire = true;
+                    if (M2Share.RandomNumber.Random(4) == 0) ((MonsterObject)cert).BoFearFire = true;
                     break;
                 case 97:
                     cert = new CowMonster();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.BoFearFire = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) ((MonsterObject)cert).BoFearFire = true;
                     break;
                 case ActorRace.MonsterWhiteskeleton:
                     cert = new WhiteSkeleton();

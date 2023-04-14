@@ -20,6 +20,10 @@ namespace GameSrv.Monster
         /// 召唤等级
         /// </summary>
         public byte SlaveMakeLevel;
+        /// <summary>
+        /// 不进入火墙
+        /// </summary>
+        public bool BoFearFire;
         private int m_dwThinkTick;
         private bool m_boDupMode;
 

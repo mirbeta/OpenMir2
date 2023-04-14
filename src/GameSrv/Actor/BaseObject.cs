@@ -164,10 +164,6 @@ namespace GameSrv.Actor
         /// </summary>
         public bool SuperMan;
         /// <summary>
-        /// 不进入火墙
-        /// </summary>
-        public bool BoFearFire;
-        /// <summary>
         /// 是否是动物
         /// </summary>
         public bool Animal;
@@ -437,7 +433,6 @@ namespace GameSrv.Actor
             ViewRange = 5;
             Light = 0;
             NameColor = 255;
-            BoFearFire = false;
             HitPoint = 5;
             SpeedPoint = 15;
             HitSpeed = 0;
@@ -720,10 +715,14 @@ namespace GameSrv.Actor
                 }
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
-                    var walkSuccess = true;
-                    if (BoFearFire && !Envir.CanSafeWalk(newX, newY))
+                    bool walkSuccess = true;
+                    if (Race == ActorRace.Play)
                     {
-                        walkSuccess = false;
+                        walkSuccess =!Envir.CanSafeWalk(newX, newY);
+                    }
+                    else
+                    {
+                        walkSuccess = !(((MonsterObject)this).BoFearFire && !Envir.CanSafeWalk(newX, newY));
                     }
                     if (Master != null)
                     {
