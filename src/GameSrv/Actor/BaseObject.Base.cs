@@ -324,6 +324,7 @@ namespace GameSrv.Actor
                         SlaveList.RemoveAt(i);
                     }
                 }
+                SlaveList = null;
             }
             if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
             {

@@ -1869,6 +1869,10 @@ namespace GameSrv.Player
 
         public override void Die()
         {
+            if (SuperMan)
+            {
+                return;
+            }
             string tStr;
             if (GroupOwner != 0)
             {

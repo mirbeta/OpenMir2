@@ -269,7 +269,7 @@ namespace GameSrv.Actor
         /// </summary>
         public bool Ghost;
         /// <summary>
-        /// 尸体清除间隔
+        /// 尸体清除时间
         /// </summary>
         public int GhostTick;
         /// <summary>
@@ -277,7 +277,7 @@ namespace GameSrv.Actor
         /// </summary>
         public bool Death;
         /// <summary>
-        /// 死亡间隔
+        /// 死亡时间
         /// </summary>
         public int DeathTick;
         public bool Invisible;
