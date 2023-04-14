@@ -1629,19 +1629,19 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool CanAttack(short nCurrX, short nCurrY, BaseObject baseObject, int nRange, ref byte btDir)
+        private bool CanAttack(short nCurrX, short nCurrY, BaseObject targetObject, int nRange, ref byte btDir)
         {
             var result = false;
             short nX = 0;
             short nY = 0;
-            btDir = M2Share.GetNextDirection(nCurrX, nCurrY, baseObject.CurrX, baseObject.CurrY);
+            btDir = M2Share.GetNextDirection(nCurrX, nCurrY, targetObject.CurrX, targetObject.CurrY);
             for (var i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(nCurrX, nCurrY, btDir, i, ref nX, ref nY))
                 {
                     break;
                 }
-                if (baseObject.CurrX == nX && baseObject.CurrY == nY)
+                if (targetObject.CurrX == nX && targetObject.CurrY == nY)
                 {
                     result = true;
                     break;
@@ -1650,19 +1650,19 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool CanAttack(BaseObject baseObject, int nRange, ref byte btDir)
+        private bool CanAttack(BaseObject targetObject, int nRange, ref byte btDir)
         {
             short nX = 0;
             short nY = 0;
             var result = false;
-            btDir = M2Share.GetNextDirection(CurrX, CurrY, baseObject.CurrX, baseObject.CurrY);
+            btDir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             for (var i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nX, ref nY))
                 {
                     break;
                 }
-                if (baseObject.CurrX == nX && baseObject.CurrY == nY)
+                if (targetObject.CurrX == nX && targetObject.CurrY == nY)
                 {
                     result = true;
                     break;
@@ -1761,7 +1761,7 @@ namespace GameSrv.RobotPlay
             return result;
         }
 
-        private bool UseSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetBaseObject)
+        private bool UseSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetObject)
         {
             var result = false;
             if (!IsCanSpell)
@@ -1783,7 +1783,6 @@ namespace GameSrv.RobotPlay
                     return false;
                 }
             }
-            var boIsWarrSkill = MagicManager.IsWarrSkill(userMagic.MagIdx);// 是否是战士技能
             SpellTick -= 450;
             SpellTick = HUtil32._MAX(0, SpellTick);
             switch (userMagic.MagIdx)
@@ -1827,7 +1826,7 @@ namespace GameSrv.RobotPlay
                     if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3000)
                     {
                         DoMotaeboTick = HUtil32.GetTickCount();
-                        if (GetAttackDir(targetBaseObject, ref Dir))
+                        if (GetAttackDir(targetObject, ref Dir))
                         {
                             DoMotaebo(Dir, userMagic.Level);
                         }
@@ -1842,9 +1841,9 @@ namespace GameSrv.RobotPlay
                     BaseObject baseObject = null;
                     if (userMagic.MagIdx >= 60 && userMagic.MagIdx <= 65)
                     {
-                        if (CretInNearXy(targetBaseObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
+                        if (CretInNearXy(targetObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                         {
-                            baseObject = targetBaseObject;
+                            baseObject = targetObject;
                             nTargetX = baseObject.CurrX;
                             nTargetY = baseObject.CurrY;
                         }
@@ -1883,9 +1882,9 @@ namespace GameSrv.RobotPlay
                                 }
                                 break;
                             default:
-                                if (CretInNearXy(targetBaseObject, nTargetX, nTargetY))
+                                if (CretInNearXy(targetObject, nTargetX, nTargetY))
                                 {
-                                    baseObject = targetBaseObject;
+                                    baseObject = targetObject;
                                     nTargetX = baseObject.CurrX;
                                     nTargetY = baseObject.CurrY;
                                 }

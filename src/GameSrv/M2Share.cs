@@ -580,7 +580,7 @@ namespace GameSrv
         }
 
         /// <summary>
-        /// 获取服务器变量
+        /// 获取变量
         /// </summary>
         /// <param name="sText"></param>
         /// <returns></returns>

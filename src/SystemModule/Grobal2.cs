@@ -60,6 +60,9 @@ namespace SystemModule
         /// 最大包裹数
         /// </summary>
         public const byte MaxBagItem = 46;
+        /// <summary>
+        /// 不死系怪
+        /// </summary>
         public const byte LA_UNDEAD = 1;
     }
 }

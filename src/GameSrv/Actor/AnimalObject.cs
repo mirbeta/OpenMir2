@@ -4,8 +4,10 @@ using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSrv.Actor {
-    public class AnimalObject : BaseObject {
+namespace GameSrv.Actor
+{
+    public class AnimalObject : BaseObject
+    {
         internal short TargetX;
         internal short TargetY;
         public bool RunAwayMode;
@@ -27,8 +29,13 @@ namespace GameSrv.Actor {
         /// 当前处理数量
         /// </summary>
         public int ProcessRunCount;
+        /// <summary>
+        /// 是否属于召唤怪物(宝宝)
+        /// </summary>
+        public bool IsSlave;
 
-        public AnimalObject() {
+        public AnimalObject()
+        {
             TargetX = -1;
             Race = ActorRace.Animal;
             AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
@@ -48,45 +55,59 @@ namespace GameSrv.Actor {
         /// 是否可以走动
         /// </summary>
         /// <returns></returns>
-        protected bool CanMove() {
+        protected bool CanMove()
+        {
             return !Ghost && !Death && StatusTimeArr[PoisonState.STONE] == 0;
         }
 
-        protected virtual void Attack(BaseObject targetObject, byte nDir) {
+        protected virtual void Attack(BaseObject targetObject, byte nDir)
+        {
             var nPower = GetBaseAttackPoewr();
             AttackDir(targetObject, nPower, nDir);
             SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
         }
 
-        protected void GotoTargetXy() {
-            if (CurrX != TargetX || CurrY != TargetY) {
+        protected void GotoTargetXy()
+        {
+            if (CurrX != TargetX || CurrY != TargetY)
+            {
                 int n10 = TargetX;
                 int n14 = TargetY;
                 var nDir = Direction.Down;
-                if (n10 > CurrX) {
+                if (n10 > CurrX)
+                {
                     nDir = Direction.Right;
-                    if (n14 > CurrY) {
+                    if (n14 > CurrY)
+                    {
                         nDir = Direction.DownRight;
                     }
-                    if (n14 < CurrY) {
+                    if (n14 < CurrY)
+                    {
                         nDir = Direction.UpRight;
                     }
                 }
-                else {
-                    if (n10 < CurrX) {
+                else
+                {
+                    if (n10 < CurrX)
+                    {
                         nDir = Direction.Left;
-                        if (n14 > CurrY) {
+                        if (n14 > CurrY)
+                        {
                             nDir = Direction.DownLeft;
                         }
-                        if (n14 < CurrY) {
+                        if (n14 < CurrY)
+                        {
                             nDir = Direction.UpLeft;
                         }
                     }
-                    else {
-                        if (n14 > CurrY) {
+                    else
+                    {
+                        if (n14 > CurrY)
+                        {
                             nDir = Direction.Down;
                         }
-                        else if (n14 < CurrY) {
+                        else if (n14 < CurrY)
+                        {
                             nDir = Direction.Up;
                         }
                     }
@@ -95,18 +116,24 @@ namespace GameSrv.Actor {
                 int nOldY = CurrY;
                 WalkTo(nDir, false);
                 var n20 = M2Share.RandomNumber.Random(3);
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++) {
-                    if (nOldX == CurrX && nOldY == CurrY) {
-                        if (n20 != 0) {
+                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                {
+                    if (nOldX == CurrX && nOldY == CurrY)
+                    {
+                        if (n20 != 0)
+                        {
                             nDir++;
                         }
-                        else if (nDir > 0) {
+                        else if (nDir > 0)
+                        {
                             nDir -= 1;
                         }
-                        else {
+                        else
+                        {
                             nDir = Direction.UpLeft;
                         }
-                        if (nDir > Direction.UpLeft) {
+                        if (nDir > Direction.UpLeft)
+                        {
                             nDir = Direction.Up;
                         }
                         WalkTo(nDir, false);
@@ -115,12 +142,13 @@ namespace GameSrv.Actor {
             }
         }
 
-        public override void Initialize() {
+        public override void Initialize()
+        {
             base.Initialize();
             LoadSayMsg();
             MonsterSayMsg(null, MonStatus.MonGen);
         }
-        
+
         /// <summary>
         /// 取怪物说话信息列表
         /// </summary>
@@ -135,14 +163,18 @@ namespace GameSrv.Actor {
             }
         }
 
-        protected override bool Operate(ProcessMessage processMsg) {
-            if (processMsg.wIdent == Messages.RM_STRUCK) {
+        protected override bool Operate(ProcessMessage processMsg)
+        {
+            if (processMsg.wIdent == Messages.RM_STRUCK)
+            {
                 var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
-                if (processMsg.ActorId == ActorId && struckObject != null) {
+                if (processMsg.ActorId == ActorId && struckObject != null)
+                {
                     SetLastHiter(struckObject);
                     Struck(struckObject);
                     BreakHolySeizeMode();
-                    if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play) {
+                    if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
+                    {
                         ((PlayObject)Master).SetPkFlag(struckObject);
                     }
                     MonsterSayMsg(struckObject, MonStatus.UnderFire);
@@ -152,36 +184,46 @@ namespace GameSrv.Actor {
             return base.Operate(processMsg);
         }
 
-        public virtual void Struck(BaseObject hiter) {
+        public virtual void Struck(BaseObject hiter)
+        {
             byte btDir = 0;
             StruckTick = HUtil32.GetTickCount();
-            if (hiter != null) {
-                if (TargetCret == null || GetAttackDir(TargetCret, ref btDir) || M2Share.RandomNumber.Random(6) == 0) {
-                    if (IsProperTarget(hiter)) {
+            if (hiter != null)
+            {
+                if (TargetCret == null || GetAttackDir(TargetCret, ref btDir) || M2Share.RandomNumber.Random(6) == 0)
+                {
+                    if (IsProperTarget(hiter))
+                    {
                         SetTargetCreat(hiter);
                     }
                 }
             }
-            if (Animal) {
+            if (Animal)
+            {
                 MeatQuality = (ushort)(MeatQuality - M2Share.RandomNumber.Random(300));
-                if (MeatQuality < 0) {
+                if (MeatQuality < 0)
+                {
                     MeatQuality = 0;
                 }
             }
             AttackTick = AttackTick + (150 - HUtil32._MIN(130, Abil.Level * 4));
         }
 
-        protected void HitMagAttackTarget(BaseObject targetBaseObject, int nHitPower, int nMagPower, bool boFlag) {
+        protected void HitMagAttackTarget(BaseObject targetObject, int nHitPower, int nMagPower, bool boFlag)
+        {
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
-            Envir.GetBaseObjects(targetBaseObject.CurrX, targetBaseObject.CurrY, false, ref baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++) {
+            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
+            Envir.GetBaseObjects(targetObject.CurrX, targetObject.CurrY, false, ref baseObjectList);
+            for (var i = 0; i < baseObjectList.Count; i++)
+            {
                 var baseObject = baseObjectList[i];
-                if (IsProperTarget(baseObject)) {
+                if (IsProperTarget(baseObject))
+                {
                     int nDamage = 0;
                     nDamage += baseObject.GetHitStruckDamage(this, nHitPower);
                     nDamage += baseObject.GetMagStruckDamage(this, nMagPower);
-                    if (nDamage > 0) {
+                    if (nDamage > 0)
+                    {
                         baseObject.StruckDamage(nDamage);
                         baseObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nDamage, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 200);
                     }
@@ -191,7 +233,8 @@ namespace GameSrv.Actor {
             SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
         }
 
-        protected override void DelTargetCreat() {
+        protected override void DelTargetCreat()
+        {
             base.DelTargetCreat();
             TargetX = -1;
             TargetY = -1;
@@ -200,44 +243,54 @@ namespace GameSrv.Actor {
         /// <summary>
         /// 搜索目标
         /// </summary>
-        protected virtual void SearchTarget() {
+        protected virtual void SearchTarget()
+        {
             BaseObject searchTarget = null;
             var n10 = 999;
-            for (var i = 0; i < VisibleActors.Count; i++) {
+            for (var i = 0; i < VisibleActors.Count; i++)
+            {
                 var baseObject = VisibleActors[i].BaseObject;
-                if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15)) {
+                if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15))
+                {
                     ClearTargetCreat(baseObject);
                     continue;
                 }
-                if (!baseObject.Death) {
-                    if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye)) {
+                if (!baseObject.Death)
+                {
+                    if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
+                    {
                         var nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
-                        if (nC < n10) {
+                        if (nC < n10)
+                        {
                             n10 = nC;
                             searchTarget = baseObject;
                         }
                     }
                 }
             }
-            if (searchTarget != null) {
+            if (searchTarget != null)
+            {
                 SetTargetCreat(searchTarget);
             }
         }
 
-        protected virtual void SetTargetXy(short nX, short nY) {
+        protected virtual void SetTargetXy(short nX, short nY)
+        {
             TargetX = nX;
             TargetY = nY;
         }
 
-        protected virtual void Wondering() {
+        protected virtual void Wondering()
+        {
             if (M2Share.RandomNumber.Random(20) != 0) return;
-            if (M2Share.RandomNumber.Random(4) == 1) {
+            if (M2Share.RandomNumber.Random(4) == 1)
+            {
                 TurnTo(M2Share.RandomNumber.RandomByte(8));
             }
-            else {
+            else
+            {
                 WalkTo(Dir, false);
             }
         }
     }
 }
-

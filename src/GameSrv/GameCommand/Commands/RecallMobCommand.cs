@@ -26,7 +26,7 @@ namespace GameSrv.GameCommand.Commands
             int nFixColor = @params.Length > 5 ? HUtil32.StrToInt(@params[5], 0) : 0;
             short nX = 0;
             short nY = 0;
-            BaseObject mon;
+            AnimalObject mon;
             if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
             {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -47,7 +47,7 @@ namespace GameSrv.GameCommand.Commands
                     break;
                 }
                 playObject.GetFrontPosition(ref nX, ref nY);
-                mon = M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+                mon = (AnimalObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
                 if (mon != null)
                 {
                     mon.Master = playObject;

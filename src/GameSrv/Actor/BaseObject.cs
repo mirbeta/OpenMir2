@@ -131,10 +131,6 @@ namespace GameSrv.Actor
         /// </summary>
         protected ushort HitSpeed;
         /// <summary>
-        /// 不死系,1-为不死系
-        /// </summary>
-        public byte LifeAttrib;
-        /// <summary>
         /// 否可以看到隐身人物(视线范围) 
         /// </summary>
         public byte CoolEyeCode = 0;
@@ -147,9 +143,9 @@ namespace GameSrv.Actor
         /// </summary>
         public BaseObject Master;
         /// <summary>
-        /// 是否属于召唤怪物(宝宝)
+        /// 不死系,1为不死系
         /// </summary>
-        public bool IsSlave;
+        public byte LifeAttrib;
         /// <summary>
         /// 杀怪计数
         /// </summary>
@@ -1336,7 +1332,7 @@ namespace GameSrv.Actor
                 short nX = 0;
                 short nY = 0;
                 GetFrontPosition(ref nX, ref nY);
-                BaseObject monObj = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                AnimalObject monObj = (AnimalObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
                 {
                     monObj.Master = this;
@@ -1407,50 +1403,48 @@ namespace GameSrv.Actor
             return null;
         }
 
-        protected bool GetAttackDir(BaseObject baseObject, ref byte btDir)
+        protected bool GetAttackDir(BaseObject targetObject, ref byte btDir)
         {
             bool result = false;
-            if ((CurrX - 1 <= baseObject.CurrX) && (CurrX + 1 >= baseObject.CurrX) &&
-                (CurrY - 1 <= baseObject.CurrY) && (CurrY + 1 >= baseObject.CurrY) &&
-                ((CurrX != baseObject.CurrX) || (CurrY != baseObject.CurrY)))
+            if ((CurrX - 1 <= targetObject.CurrX) && (CurrX + 1 >= targetObject.CurrX) && (CurrY - 1 <= targetObject.CurrY) && (CurrY + 1 >= targetObject.CurrY) && ((CurrX != targetObject.CurrX) || (CurrY != targetObject.CurrY)))
             {
                 result = true;
-                if (((CurrX - 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
+                if (((CurrX - 1) == targetObject.CurrX) && (CurrY == targetObject.CurrY))
                 {
                     btDir = Direction.Left;
                     return true;
                 }
-                if (((CurrX + 1) == baseObject.CurrX) && (CurrY == baseObject.CurrY))
+                if (((CurrX + 1) == targetObject.CurrX) && (CurrY == targetObject.CurrY))
                 {
                     btDir = Direction.Right;
                     return true;
                 }
-                if ((CurrX == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
+                if ((CurrX == targetObject.CurrX) && ((CurrY - 1) == targetObject.CurrY))
                 {
                     btDir = Direction.Up;
                     return true;
                 }
-                if ((CurrX == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
+                if ((CurrX == targetObject.CurrX) && ((CurrY + 1) == targetObject.CurrY))
                 {
                     btDir = Direction.Down;
                     return true;
                 }
-                if (((CurrX - 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
+                if (((CurrX - 1) == targetObject.CurrX) && ((CurrY - 1) == targetObject.CurrY))
                 {
                     btDir = Direction.UpLeft;
                     return true;
                 }
-                if (((CurrX + 1) == baseObject.CurrX) && ((CurrY - 1) == baseObject.CurrY))
+                if (((CurrX + 1) == targetObject.CurrX) && ((CurrY - 1) == targetObject.CurrY))
                 {
                     btDir = Direction.UpRight;
                     return true;
                 }
-                if (((CurrX - 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
+                if (((CurrX - 1) == targetObject.CurrX) && ((CurrY + 1) == targetObject.CurrY))
                 {
                     btDir = Direction.DownLeft;
                     return true;
                 }
-                if (((CurrX + 1) == baseObject.CurrX) && ((CurrY + 1) == baseObject.CurrY))
+                if (((CurrX + 1) == targetObject.CurrX) && ((CurrY + 1) == targetObject.CurrY))
                 {
                     btDir = Direction.DownRight;
                     return true;
@@ -1460,35 +1454,35 @@ namespace GameSrv.Actor
             return result;
         }
 
-        protected bool GetAttackDir(BaseObject baseObject, int nRange, ref byte btDir)
+        protected bool GetAttackDir(BaseObject targetObject, int nRange, ref byte btDir)
         {
             short nX = 0;
             short nY = 0;
-            btDir = M2Share.GetNextDirection(CurrX, CurrY, baseObject.CurrX, baseObject.CurrY);
+            btDir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             if (Envir.GetNextPosition(CurrX, CurrY, btDir, nRange, ref nX, ref nY))
             {
-                return baseObject == Envir.GetMovingObject(nX, nY, true);
+                return targetObject == Envir.GetMovingObject(nX, nY, true);
             }
             return false;
         }
 
-        protected bool TargetInSpitRange(BaseObject baseObject, ref byte btDir)
+        protected bool TargetInSpitRange(BaseObject targetObject, ref byte btDir)
         {
             bool result = false;
-            if ((Math.Abs(baseObject.CurrX - CurrX) <= 2) && (Math.Abs(baseObject.CurrY - CurrY) <= 2))
+            if ((Math.Abs(targetObject.CurrX - CurrX) <= 2) && (Math.Abs(targetObject.CurrY - CurrY) <= 2))
             {
-                var nX = baseObject.CurrX - CurrX;
-                var nY = baseObject.CurrY - CurrY;
+                var nX = targetObject.CurrX - CurrX;
+                var nY = targetObject.CurrY - CurrY;
                 if ((Math.Abs(nX) <= 1) && (Math.Abs(nY) <= 1))
                 {
-                    GetAttackDir(baseObject, ref btDir);
+                    GetAttackDir(targetObject, ref btDir);
                     return true;
                 }
                 nX += 2;
                 nY += 2;
                 if ((nX >= 0) && (nX <= 4) && (nY >= 0) && (nY <= 4))
                 {
-                    btDir = M2Share.GetNextDirection(CurrX, CurrY, baseObject.CurrX, baseObject.CurrY);
+                    btDir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
                     if (M2Share.Config.SpitMap[btDir, nY, nX] == 1)
                     {
                         result = true;
@@ -2333,26 +2327,26 @@ namespace GameSrv.Actor
             }
         }
 
-        public bool MagCanHitTarget(short nX, short nY, BaseObject targeBaseObject)
+        public bool MagCanHitTarget(short nX, short nY, BaseObject targetObject)
         {
             bool result = false;
-            if (targeBaseObject == null)
+            if (targetObject == null)
             {
                 return false;
             }
-            int n20 = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
+            int n20 = Math.Abs(nX - targetObject.CurrX) + Math.Abs(nY - targetObject.CurrY);
             int n14 = 0;
             while (n14 < 13)
             {
-                byte n18 = M2Share.GetNextDirection(nX, nY, targeBaseObject.CurrX, targeBaseObject.CurrY);
+                byte n18 = M2Share.GetNextDirection(nX, nY, targetObject.CurrX, targetObject.CurrY);
                 if (Envir.GetNextPosition(nX, nY, n18, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
                 {
-                    if ((nX == targeBaseObject.CurrX) && (nY == targeBaseObject.CurrY))
+                    if ((nX == targetObject.CurrX) && (nY == targetObject.CurrY))
                     {
                         result = true;
                         break;
                     }
-                    int n1C = Math.Abs(nX - targeBaseObject.CurrX) + Math.Abs(nY - targeBaseObject.CurrY);
+                    int n1C = Math.Abs(nX - targetObject.CurrX) + Math.Abs(nY - targetObject.CurrY);
                     if (n1C > n20)
                     {
                         result = true;
@@ -2696,7 +2690,7 @@ namespace GameSrv.Actor
         {
             if (ExpHitter != null)
             {
-                if (ExpHitter.IsSlave)//如果是角色下属杀死对象
+                if (ExpHitter.Master != null) //如果是角色下属杀死对象
                 {
                     ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0);
                     SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0);

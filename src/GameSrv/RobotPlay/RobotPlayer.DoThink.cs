@@ -86,15 +86,15 @@ namespace GameSrv.RobotPlay
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var actorObject = VisibleActors[i].BaseObject;
-                    if (Math.Abs(CurrX - actorObject.CurrX) <= 1 && Math.Abs(CurrY - actorObject.CurrY) <= 1)
+                    var targetObject = VisibleActors[i].BaseObject;
+                    if (Math.Abs(CurrX - targetObject.CurrX) <= 1 && Math.Abs(CurrY - targetObject.CurrY) <= 1)
                     {
-                        if (!actorObject.Death && actorObject != this && IsProperTarget(actorObject))
+                        if (!targetObject.Death && targetObject != this && IsProperTarget(targetObject))
                         {
-                            if (Abil.Level > actorObject.Abil.Level && !actorObject.StickMode)
+                            if (Abil.Level > targetObject.Abil.Level && !targetObject.StickMode)
                             {
-                                btNewDir = M2Share.GetNextDirection(actorObject.CurrX, actorObject.CurrY, CurrX, CurrY);
-                                if (Envir.GetNextPosition(actorObject.CurrX, actorObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
+                                btNewDir = M2Share.GetNextDirection(targetObject.CurrX, targetObject.CurrY, CurrX, CurrY);
+                                if (Envir.GetNextPosition(targetObject.CurrX, targetObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                                 {
                                     if (Envir.CanWalk(nTargetX, nTargetY, true))
                                     {

@@ -23,7 +23,7 @@ namespace GameSrv.Monster
 
         protected BaseObject MakeClone(string sMonName, BaseObject OldMon)
         {
-            BaseObject ElfMon = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
+            AnimalObject ElfMon = (AnimalObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
                 if (OldMon.TargetCret == null)

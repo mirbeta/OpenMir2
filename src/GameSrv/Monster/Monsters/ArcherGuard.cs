@@ -17,22 +17,22 @@ namespace GameSrv.Monster.Monsters
             Race = ActorRace.ArcherGuard;
         }
 
-        private void AttackTarger(BaseObject targetBaseObject)
+        private void AttackTarger(BaseObject targetObject)
         {
-            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetBaseObject.CurrX, targetBaseObject.CurrY);
+            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage > 0)
             {
-                nDamage = targetBaseObject.GetHitStruckDamage(this, nDamage);
+                nDamage = targetObject.GetHitStruckDamage(this, nDamage);
             }
             if (nDamage > 0)
             {
-                targetBaseObject.SetLastHiter(this);
-                targetBaseObject.ExpHitter = null;
-                targetBaseObject.StruckDamage(nDamage);
-                targetBaseObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nDamage, targetBaseObject.WAbil.HP, targetBaseObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targetBaseObject.CurrX), Math.Abs(CurrY - targetBaseObject.CurrY)) * 50 + 600);
+                targetObject.SetLastHiter(this);
+                targetObject.ExpHitter = null;
+                targetObject.StruckDamage(nDamage);
+                targetObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nDamage, targetObject.WAbil.HP, targetObject.WAbil.MaxHP, ActorId, "", HUtil32._MAX(Math.Abs(CurrX - targetObject.CurrX), Math.Abs(CurrY - targetObject.CurrY)) * 50 + 600);
             }
-            SendRefMsg(Messages.RM_FLYAXE, Dir, CurrX, CurrY, targetBaseObject.ActorId, "");
+            SendRefMsg(Messages.RM_FLYAXE, Dir, CurrX, CurrY, targetObject.ActorId, "");
         }
 
         public override void Run()

@@ -779,6 +779,9 @@ namespace GameSrv.Conf.Model {
         public int SwordLongPowerRate;
         public byte FireBoomRage;
         public byte SnowWindRange;
+        /// <summary>
+        /// 地狱雷光范围
+        /// </summary>
         public byte ElecBlizzardRange;
         /// <summary>
         /// 圣言怪物等级限制
