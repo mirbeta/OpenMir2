@@ -49,10 +49,6 @@ namespace GameSrv.Actor
         protected int CharStatusEx;
         public MonGenInfo MonGen;
         /// <summary>
-        /// 怪物经验值
-        /// </summary>
-        public int FightExp = 0;
-        /// <summary>
         /// 基本属性
         /// </summary>
         public Ability Abil;
@@ -2651,14 +2647,15 @@ namespace GameSrv.Actor
         {
             if (ExpHitter != null)
             {
+                var fightExp = ((AnimalObject)this).FightExp; //后续移动到AnimalObject实现,减少一次转换
                 if (ExpHitter.Master != null) //如果是角色下属杀死对象
                 {
-                    ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0);
+                    ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, fightExp, 0, 0);
                     SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0);
                 }
                 if (ExpHitter.Race == ActorRace.Play)
                 {
-                    ExpHitter.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0);
+                    ExpHitter.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, fightExp, 0, 0);
                     SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.ActorId, 0, 0, 0);
                 }
             }

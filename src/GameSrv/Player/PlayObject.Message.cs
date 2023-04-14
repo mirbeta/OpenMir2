@@ -2108,7 +2108,7 @@ namespace GameSrv.Player
                     SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_PLAYERKILLMONSTER:
-                    KillTargetTrigger(processMsg.wParam);
+                    KillTargetTrigger(processMsg.wParam, processMsg.nParam1);
                     break;
                 case Messages.RM_SPIRITSUITE:
                     ProcessSpiritSuite();

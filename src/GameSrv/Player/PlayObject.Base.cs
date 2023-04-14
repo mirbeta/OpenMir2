@@ -1606,7 +1606,7 @@ namespace GameSrv.Player
         /// <summary>
         /// 角色杀死目标触发
         /// </summary>
-        private void KillTargetTrigger(int actorId)
+        private void KillTargetTrigger(int actorId,int fightExp)
         {
             var killObject = M2Share.ActorMgr.Get(actorId);
             if (killObject == null)
@@ -1617,7 +1617,7 @@ namespace GameSrv.Player
             {
                 M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
-            int monsterExp = CalcGetExp(WAbil.Level, killObject.FightExp);
+            int monsterExp = CalcGetExp(WAbil.Level, fightExp);
             if (!M2Share.Config.VentureServer)
             {
                 if (IsRobot && ExpHitter != null && ExpHitter.Race == ActorRace.Play)

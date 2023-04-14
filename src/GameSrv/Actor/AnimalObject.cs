@@ -8,6 +8,10 @@ namespace GameSrv.Actor
 {
     public class AnimalObject : BaseObject
     {
+        /// <summary>
+        /// 经验值
+        /// </summary>
+        public int FightExp = 0;
         internal short TargetX;
         internal short TargetY;
         public bool RunAwayMode;
