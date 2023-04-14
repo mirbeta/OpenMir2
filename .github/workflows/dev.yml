@@ -20,6 +20,6 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build --no-restore -c Debug
+      run: dotnet build --no-restore -c Debug /p:Mode=Dev
     - name: Test
       run: dotnet test --no-build --verbosity normal
