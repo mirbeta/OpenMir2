@@ -821,6 +821,14 @@ namespace SystemModule
         /// 死亡掉落物品
         /// </summary>
         public const int RM_DIEDROPITEM = 60002;
+        /// <summary>
+        /// 主人死亡宠物叛变消息
+        /// </summary>
+        public const int RM_MASTERDIEMUTINY = 60003;
+        /// <summary>
+        /// 主人死亡尸体消息宠物消失消息
+        /// </summary>
+        public const int RM_MASTERDIEGHOST = 60004;
 
         public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series)
         {

@@ -291,28 +291,6 @@ namespace GameSrv.Actor
                     FixStatus = CharStatus;
                     StatusChanged();
                 }
-                // 宝宝在主人死亡后死亡处理
-                if (Master.Death && ((HUtil32.GetTickCount() - Master.DeathTick) > 1000))
-                {
-                    if (M2Share.Config.MasterDieMutiny && (Master.LastHiter != null) && (M2Share.RandomNumber.Random(M2Share.Config.MasterDieMutinyRate) == 0))
-                    {
-                        Master = null;
-                        SlaveExpLevel = (byte)M2Share.Config.SlaveColor.Length;
-                        RecalcAbilitys();
-                        WAbil.DC = (ushort)HUtil32.MakeLong((short)(HUtil32.LoByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower), (short)(HUtil32.HiByte(WAbil.DC) * M2Share.Config.MasterDieMutinyPower));
-                        WalkSpeed = WalkSpeed / M2Share.Config.MasterDieMutinySpeed;
-                        RefNameColor();
-                        RefShowName();
-                    }
-                    else
-                    {
-                        WAbil.HP = 0;
-                    }
-                }
-                if (Master.Ghost && ((HUtil32.GetTickCount() - Master.GhostTick) > 1000))
-                {
-                    MakeGhost();
-                }
             }
             // 清除宝宝列表中已经死亡及叛变的宝宝信息
             if (SlaveList != null)

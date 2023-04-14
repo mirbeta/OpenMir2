@@ -2029,6 +2029,12 @@ namespace GameSrv.Player
                 case Messages.RM_SPIRITSUITE:
                     ProcessSpiritSuite();
                     break;
+                case Messages.RM_MASTERDIEMUTINY:
+                    ProcessSlaveMutiny();
+                    break;
+                case Messages.RM_MASTERDIEGHOST:
+                    ProcessSlaveGhost();
+                    break;
                 default:
                     result = base.Operate(processMsg);
                     break;
@@ -2142,7 +2148,7 @@ namespace GameSrv.Player
         /// </summary>
         private void UseLamp()
         {
-            const string sExceptionMsg = "[Exception] TBaseObject::UseLamp";
+            const string sExceptionMsg = "[Exception] PlayObject::UseLamp";
             try
             {
                 if (UseItems[ItemLocation.RighThand] != null && UseItems[ItemLocation.RighThand].Index > 0)
