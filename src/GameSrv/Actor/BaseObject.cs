@@ -57,7 +57,7 @@ namespace GameSrv.Actor
         /// </summary>
         public Ability Abil;
         /// <summary>
-        /// 角色属性
+        /// 属性
         /// </summary>
         public Ability WAbil;
         /// <summary>
