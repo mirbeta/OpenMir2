@@ -1,7 +1,7 @@
 [EN](https://github.com/dwbeta/OpenMir2/blob/master/README.md)  | [中文](https://github.com/dwbeta/OpenMir2/blob/master/README.cn.md)  
 
 [![Main](https://github.com/mirbeta/OpenMir2/actions/workflows/main.yml/badge.svg)](https://github.com/mirbeta/OpenMir2/actions/workflows/main.yml)
-[![Dev](https://github.com/mirbeta/OpenMir2/actions/workflows/dev.yml/badge.svg)](https://github.com/mirbeta/OpenMir2/actions/workflows/dev.yml)
+[![Dev](https://github.com/mirbeta/OpenMir2/actions/workflows/dev.yml/badge.svg?branch=dev)](https://github.com/mirbeta/OpenMir2/actions/workflows/dev.yml)
 
 Legend of Mir 2 game server, support online and multiplayer interaction.
 
