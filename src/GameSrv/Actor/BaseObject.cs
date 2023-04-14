@@ -144,10 +144,6 @@ namespace GameSrv.Actor
         /// </summary>
         public byte LifeAttrib;
         /// <summary>
-        /// 杀怪计数
-        /// </summary>
-        public int KillMonCount;
-        /// <summary>
         /// 宝宝等级(1-7)
         /// </summary>
         public byte SlaveExpLevel;
@@ -158,7 +154,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 下属列表
         /// </summary>        
-        internal IList<BaseObject> SlaveList;
+        internal IList<MonsterObject> SlaveList;
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -505,7 +501,6 @@ namespace GameSrv.Actor
             IsVisibleActive = false;
             Castle = null;
             Master = null;
-            KillMonCount = 0;
             SlaveExpLevel = 0;
             Abil = new Ability();
             Abil = new Ability
@@ -837,36 +832,7 @@ namespace GameSrv.Actor
         {
             SendRefMsg(Messages.RM_CHANGENAMECOLOR, 0, 0, 0, 0, "");
         }
-
-        private int GainSlaveUpKillCount()
-        {
-            int tCount;
-            if (SlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
-            {
-                tCount = M2Share.Config.MonUpLvNeedKillCount[SlaveExpLevel];
-            }
-            else
-            {
-                tCount = 0;
-            }
-            return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
-        }
-
-        private void GainSlaveExp(byte nLevel)
-        {
-            KillMonCount += nLevel;
-            if (GainSlaveUpKillCount() < KillMonCount)
-            {
-                KillMonCount -= GainSlaveUpKillCount();
-                if (SlaveExpLevel < (SlaveMakeLevel * 2 + 1))
-                {
-                    SlaveExpLevel++;
-                    RecalcAbilitys();
-                    RefNameColor();
-                }
-            }
-        }
-
+        
         protected bool DropGoldDown(int nGold, bool boFalg, int goldOfCreat, int dropGoldCreat)
         {
             bool result = false;
@@ -1319,14 +1285,14 @@ namespace GameSrv.Actor
         {
             if (SlaveList == null)
             {
-                SlaveList = new List<BaseObject>();
+                SlaveList = new List<MonsterObject>();
             }
             if (SlaveList.Count < nMaxMob)
             {
                 short nX = 0;
                 short nY = 0;
                 GetFrontPosition(ref nX, ref nY);
-                AnimalObject monObj = (AnimalObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                MonsterObject monObj = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
                 {
                     monObj.Master = this;

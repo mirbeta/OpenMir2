@@ -8,6 +8,7 @@ using GameSrv.Guild;
 using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
+using GameSrv.Monster;
 using GameSrv.Npc;
 using GameSrv.RobotPlay;
 using GameSrv.Script;
@@ -1026,7 +1027,7 @@ namespace GameSrv.Player
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
             MagicArr = new UserMagic[50];
-            SlaveList = new List<BaseObject>();
+            SlaveList = new List<MonsterObject>();
             GroupMembers = new List<PlayObject>();
             VisibleEvents = new List<MapEvent>();
             VisibleItems = new List<VisibleMapItem>();

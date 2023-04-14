@@ -7,6 +7,7 @@ using GameSrv.Guild;
 using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
+using GameSrv.Monster;
 using GameSrv.Npc;
 using GameSrv.Services;
 using GameSrv.World;
@@ -1938,7 +1939,7 @@ namespace GameSrv.Player {
 
         private void ChangeServerMakeSlave(SlaveInfo slaveInfo) {
             int nSlavecount = Job == PlayJob.Taoist ? 1 : 5;
-            BaseObject baseObject = MakeSlave(slaveInfo.SlaveName, 3, slaveInfo.SlaveLevel, nSlavecount, slaveInfo.RoyaltySec);
+            MonsterObject baseObject = (MonsterObject)MakeSlave(slaveInfo.SlaveName, 3, slaveInfo.SlaveLevel, nSlavecount, slaveInfo.RoyaltySec);
             if (baseObject != null) {
                 baseObject.KillMonCount = slaveInfo.KillCount;
                 baseObject.SlaveExpLevel = slaveInfo.SlaveExpLevel;

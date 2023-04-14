@@ -1,4 +1,4 @@
-﻿using GameSrv.Actor;
+﻿using GameSrv.Monster;
 using GameSrv.Player;
 using SystemModule.Enums;
 
@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 nNameColor = 255;
             }
-            BaseObject mon = M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+            MonsterObject mon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.Master = playObject;

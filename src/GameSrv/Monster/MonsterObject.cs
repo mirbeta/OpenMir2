@@ -8,6 +8,10 @@ namespace GameSrv.Monster
 {
     public class MonsterObject : AnimalObject
     {
+        /// <summary>
+        /// 杀怪计数
+        /// </summary>
+        public int KillMonCount;
         private int m_dwThinkTick;
         private bool m_boDupMode;
 
@@ -20,10 +24,39 @@ namespace GameSrv.Monster
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
         }
+        
+        private void GainSlaveExp(byte nLevel)
+        {
+            KillMonCount += nLevel;
+            if (GainSlaveUpKillCount() < KillMonCount)
+            {
+                KillMonCount -= GainSlaveUpKillCount();
+                if (SlaveExpLevel < (SlaveMakeLevel * 2 + 1))
+                {
+                    SlaveExpLevel++;
+                    RecalcAbilitys();
+                    RefNameColor();
+                }
+            }
+        }
+        
+        private int GainSlaveUpKillCount()
+        {
+            int tCount;
+            if (SlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
+            {
+                tCount = M2Share.Config.MonUpLvNeedKillCount[SlaveExpLevel];
+            }
+            else
+            {
+                tCount = 0;
+            }
+            return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
+        }
 
         protected BaseObject MakeClone(string sMonName, BaseObject OldMon)
         {
-            AnimalObject ElfMon = (AnimalObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
+            MonsterObject ElfMon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
                 if (OldMon.TargetCret == null)

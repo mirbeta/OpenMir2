@@ -1,4 +1,4 @@
-﻿using GameSrv.Actor;
+﻿using GameSrv.Monster;
 using GameSrv.Player;
 using SystemModule.Data;
 
@@ -96,7 +96,7 @@ namespace GameSrv.World {
             }
 
             for (int i = 0; i < playObject.SlaveList.Count; i++) {
-                BaseObject baseObject = playObject.SlaveList[i];
+                MonsterObject baseObject = playObject.SlaveList[i];
                 if (i <= 4) {
                     switchData.SlaveArr[i].SlaveName = baseObject.ChrName;
                     switchData.SlaveArr[i].KillCount = baseObject.KillMonCount;

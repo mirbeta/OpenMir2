@@ -1,5 +1,6 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Event.Events;
+using GameSrv.Monster;
 using GameSrv.Player;
 using SystemModule.Consts;
 using SystemModule.Enums;
@@ -765,7 +766,7 @@ namespace GameSrv.Magic
                                                 targetObject.NextHitTime = 2000 - magicLevel * 200;
                                             }
                                             targetObject.RefShowName();
-                                            playObject.SlaveList.Add(targetObject);
+                                            playObject.SlaveList.Add((MonsterObject)targetObject);
                                         }
                                         else
                                         {
