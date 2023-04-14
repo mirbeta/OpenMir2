@@ -2,6 +2,7 @@
 
 [![Main](https://github.com/mirbeta/OpenMir2/actions/workflows/main.yml/badge.svg)](https://github.com/mirbeta/OpenMir2/actions/workflows/main.yml)
 [![Dev](https://github.com/mirbeta/OpenMir2/actions/workflows/dev.yml/badge.svg?branch=dev)](https://github.com/mirbeta/OpenMir2/actions/workflows/dev.yml)
+[![OSCS Status](https://www.oscs1024.com/platform/badge/OpenMir2.svg?size=small)](https://www.murphysec.com/accept?code=602a83a9b09478f193d69b09c8f3ef11&type=1&from=2)
 
 Legend of Mir 2 game server, support online and multiplayer interaction.
 
