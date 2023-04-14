@@ -1,4 +1,5 @@
 ﻿using GameSrv.Magic;
+using GameSrv.Monster;
 using GameSrv.Player;
 using GameSrv.RobotPlay;
 using SystemModule.Consts;
@@ -208,7 +209,7 @@ namespace GameSrv.Actor
                     CheckRoyaltyTick = HUtil32.GetTickCount();
                     if (Master != null)
                     {
-                        if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
+                        if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (((MonsterObject)this).SlaveExpLevel < 5))
                         {
                             MasterRoyaltyTick = 0;
                         }
@@ -920,9 +921,13 @@ namespace GameSrv.Actor
             {
                 return 0x7D;
             }
-            if (baseObject.Master != null && baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
+            if (baseObject.Master != null)
             {
-                return M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
+                var slaveExpLevel = ((MonsterObject)baseObject).SlaveExpLevel;
+                if (slaveExpLevel <= Grobal2.SlaveMaxLevel)
+                {
+                    return M2Share.Config.SlaveColor[slaveExpLevel];
+                }
             }
             return baseObject.GetNameColor();
         }

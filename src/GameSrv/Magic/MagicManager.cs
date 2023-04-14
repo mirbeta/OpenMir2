@@ -751,7 +751,7 @@ namespace GameSrv.Magic
                                             }
                                             targetObject.Master = playObject;
                                             targetObject.MasterRoyaltyTick = (M2Share.RandomNumber.Random(playObject.Abil.Level * 2) + (magicLevel << 2) * 5 + 20) * 60 * 1000 + HUtil32.GetTickCount();
-                                            targetObject.SlaveMakeLevel = magicLevel;
+                                            ((MonsterObject)targetObject).SlaveMakeLevel = magicLevel;
                                             if (targetObject.MasterTick == 0)
                                             {
                                                 targetObject.MasterTick = HUtil32.GetTickCount();

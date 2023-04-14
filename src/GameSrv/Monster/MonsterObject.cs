@@ -12,6 +12,14 @@ namespace GameSrv.Monster
         /// 杀怪计数
         /// </summary>
         public int KillMonCount;
+        /// <summary>
+        /// 宝宝等级(1-7)
+        /// </summary>
+        public byte SlaveExpLevel;
+        /// <summary>
+        /// 召唤等级
+        /// </summary>
+        public byte SlaveMakeLevel;
         private int m_dwThinkTick;
         private bool m_boDupMode;
 
@@ -54,7 +62,7 @@ namespace GameSrv.Monster
             return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
         }
 
-        protected BaseObject MakeClone(string sMonName, BaseObject OldMon)
+        protected BaseObject MakeClone(string sMonName, MonsterObject OldMon)
         {
             MonsterObject ElfMon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)

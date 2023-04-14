@@ -140,14 +140,6 @@ namespace GameSrv.Actor
         /// </summary>
         public byte LifeAttrib;
         /// <summary>
-        /// 宝宝等级(1-7)
-        /// </summary>
-        public byte SlaveExpLevel;
-        /// <summary>
-        /// 召唤等级
-        /// </summary>
-        public byte SlaveMakeLevel;
-        /// <summary>
         /// 下属列表
         /// </summary>        
         internal IList<MonsterObject> SlaveList;
@@ -208,7 +200,6 @@ namespace GameSrv.Actor
         /// 尸体
         /// </summary>
         public bool Skeleton;
-
         /// <summary>
         /// 身体坚韧性
         /// </summary>
@@ -494,7 +485,6 @@ namespace GameSrv.Actor
             IsVisibleActive = false;
             Castle = null;
             Master = null;
-            SlaveExpLevel = 0;
             Abil = new Ability();
             Abil = new Ability
             {
@@ -1557,10 +1547,11 @@ namespace GameSrv.Actor
             int maxHp = 0;
             if ((Race == ActorRace.MonsterWhiteskeleton) || (Race == ActorRace.MonsterElfmonster) || (Race == ActorRace.MonsterElfwarrior))
             {
-                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
-                maxHp = maxHp + HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * SlaveExpLevel;
+                var slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((slaveExpLevel * 0.1 + 0.3) * 3.0 * slaveExpLevel + HUtil32.HiWord(WAbil.DC)));
+                maxHp = maxHp + HUtil32.Round((slaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * slaveExpLevel;
                 maxHp = maxHp + WAbil.MaxHP;
-                if (SlaveExpLevel > 0)
+                if (slaveExpLevel > 0)
                 {
                     WAbil.MaxHP = (ushort)maxHp;
                 }
@@ -1571,10 +1562,11 @@ namespace GameSrv.Actor
             }
             else
             {
+                var slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
                 maxHp = WAbil.MaxHP;
-                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(SlaveExpLevel * 2.0 + HUtil32.HiWord(WAbil.DC)));
-                maxHp = maxHp + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
-                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60.0), maxHp);
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(slaveExpLevel * 2.0 + HUtil32.HiWord(WAbil.DC)));
+                maxHp = maxHp + HUtil32.Round(WAbil.MaxHP * 0.15) * slaveExpLevel;
+                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + slaveExpLevel * 60.0), maxHp);
             }
         }
 
