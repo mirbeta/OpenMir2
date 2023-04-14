@@ -20,9 +20,6 @@ namespace GameSrv.Actor
             WAbil.WearWeight = 0;
             WAbil.HandWeight = 0;
             AntiPoison = 0;
-            PoisonRecover = 0;
-            HealthRecover = 0;
-            SpellRecover = 0;
             AntiMagic = 1;
             HitSpeed = 0;
             bool oldhmode = HideMode;
@@ -54,9 +51,6 @@ namespace GameSrv.Actor
             SpeedPoint = (byte)(SpeedPoint + AddAbil.SPEED);
             HitPoint = (byte)(HitPoint + AddAbil.HIT);
             AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
-            PoisonRecover = (ushort)(PoisonRecover + AddAbil.PoisonRecover);
-            HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
-            SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
             AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
             HitSpeed = AddAbil.HitSpeed;
             WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);

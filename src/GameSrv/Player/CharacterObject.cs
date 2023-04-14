@@ -8,9 +8,25 @@ namespace GameSrv.Player
 {
     public class CharacterObject : AnimalObject
     {
-        public byte PerHealth;
-        public byte PerHealing;
-        public byte PerSpell;
+        /// <summary>
+        /// HP恢复点数
+        /// </summary>
+        protected ushort HealthRecover;
+        /// <summary>
+        /// MP恢复点数
+        /// </summary>
+        protected ushort SpellRecover;
+        /// <summary>
+        /// 中毒恢复点数
+        /// </summary>
+        protected ushort PoisonRecover;
+        protected byte PerHealth;
+        protected byte PerHealing;
+        protected byte PerSpell;
+        /// <summary>
+        /// 增加血量的间隔
+        /// </summary>
+        protected int IncHealthSpellTick;
         /// <summary>
         /// 身上物品
         /// </summary>
@@ -56,6 +72,7 @@ namespace GameSrv.Player
             PerHealth = 5;
             PerHealing = 5;
             PerSpell = 5;
+            IncHealthSpellTick = HUtil32.GetTickCount();
             IncHpStoneTime = HUtil32.GetTickCount();
             IncMpStoneTime = HUtil32.GetTickCount();
             UseItems = new UserItem[13];
