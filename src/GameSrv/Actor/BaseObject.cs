@@ -99,18 +99,8 @@ namespace GameSrv.Actor
         /// 人物攻击准确度
         /// </summary>
         public byte HitPoint;
-        public ushort HealthRecover;
-        public ushort SpellRecover;
         public byte AntiPoison;
-        public ushort PoisonRecover;
         public ushort AntiMagic;
-        public byte PerHealth;
-        public byte PerHealing;
-        public byte PerSpell;
-        /// <summary>
-        /// 增加血量的间隔
-        /// </summary>
-        public int IncHealthSpellTick;
         /// <summary>
         /// 中绿毒降HP点数
         /// </summary>
@@ -438,14 +428,7 @@ namespace GameSrv.Actor
             HitSpeed = 0;
             LifeAttrib = 0;
             AntiPoison = 0;
-            PoisonRecover = 0;
-            HealthRecover = 0;
-            SpellRecover = 0;
             AntiMagic = 0;
-            PerHealth = 5;
-            PerHealing = 5;
-            PerSpell = 5;
-            IncHealthSpellTick = HUtil32.GetTickCount();
             GreenPoisoningPoint = 0;
             CharStatus = 0;
             CharStatusEx = 0;
