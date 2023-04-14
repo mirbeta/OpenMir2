@@ -161,7 +161,13 @@ namespace GameSrv.Conf.Model {
         public string GameGoldName;
         public string GamePointName;
         public string PayMentPointName;
+        /// <summary>
+        /// 血量恢复间隔
+        /// </summary>
         public int HealthFillTime;
+        /// <summary>
+        /// 魔法恢复间隔
+        /// </summary>
         public int SpellFillTime;
         /// <summary>
         /// 宝宝升级杀怪基数
