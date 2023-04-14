@@ -291,6 +291,39 @@ namespace GameSrv.Actor
                     FixStatus = CharStatus;
                     StatusChanged();
                 }
+                
+                if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
+                {
+                    CheckRoyaltyTick = HUtil32.GetTickCount();
+                    if (Master != null)
+                    {
+                        if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
+                        {
+                            MasterRoyaltyTick = 0;
+                        }
+                        if (HUtil32.GetTickCount() > MasterRoyaltyTick)
+                        {
+                            for (int i = 0; i < Master.SlaveList.Count; i++)
+                            {
+                                if (Master.SlaveList[i] == this)
+                                {
+                                    Master.SlaveList.RemoveAt(i);
+                                    break;
+                                }
+                            }
+                            Master = null;
+                            WAbil.HP = (ushort)(WAbil.HP / 10);
+                            RefShowName();
+                        }
+                        if (MasterTick != 0)
+                        {
+                            if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000) //超过叛变时间则死亡
+                            {
+                                WAbil.HP = 0;
+                            }
+                        }
+                    }
+                }
             }
             // 清除宝宝列表中已经死亡及叛变的宝宝信息
             if (SlaveList != null)
@@ -315,38 +348,6 @@ namespace GameSrv.Actor
             if (ShowHp && ((HUtil32.GetTickCount() - ShowHpTick) > ShowHpInterval))
             {
                 BreakOpenHealth();
-            }
-            if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
-            {
-                CheckRoyaltyTick = HUtil32.GetTickCount();
-                if (Master != null)
-                {
-                    if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
-                    {
-                        MasterRoyaltyTick = 0;
-                    }
-                    if (HUtil32.GetTickCount() > MasterRoyaltyTick)
-                    {
-                        for (int i = 0; i < Master.SlaveList.Count; i++)
-                        {
-                            if (Master.SlaveList[i] == this)
-                            {
-                                Master.SlaveList.RemoveAt(i);
-                                break;
-                            }
-                        }
-                        Master = null;
-                        WAbil.HP = (ushort)(WAbil.HP / 10);
-                        RefShowName();
-                    }
-                    if (MasterTick != 0)
-                    {
-                        if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000) //超过叛变时间则死亡
-                        {
-                            WAbil.HP = 0;
-                        }
-                    }
-                }
             }
             if ((HUtil32.GetTickCount() - VerifyTick) > 30 * 1000)
             {
