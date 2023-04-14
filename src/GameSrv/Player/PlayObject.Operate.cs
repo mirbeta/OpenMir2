@@ -720,10 +720,10 @@ namespace GameSrv.Player
                         var n10 = (byte)(M2Share.RandomNumber.Random(16) + 5);
                         var meatQuality = (ushort)(M2Share.RandomNumber.Random(201) + 100);
                         baseObject.BodyLeathery -= n10;
-                        baseObject.MeatQuality -= meatQuality;//随机降低肉的品质
-                        if (baseObject.MeatQuality <= 0)
+                        ((AnimalObject)baseObject).MeatQuality -= meatQuality;//随机降低肉的品质
+                        if (((AnimalObject)baseObject).MeatQuality <= 0)
                         {
-                            baseObject.MeatQuality = 0;
+                            ((AnimalObject)baseObject).MeatQuality = 0;
                         }
                         if (baseObject.BodyLeathery <= 0)
                         {

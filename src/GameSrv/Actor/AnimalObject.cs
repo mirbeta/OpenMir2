@@ -26,6 +26,10 @@ namespace GameSrv.Actor
         /// </summary>
         protected bool WalkWaitLocked;
         /// <summary>
+        /// 肉的品质
+        /// </summary>
+        public ushort MeatQuality;
+        /// <summary>
         /// 当前处理数量
         /// </summary>
         public int ProcessRunCount;

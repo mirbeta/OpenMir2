@@ -212,10 +212,7 @@ namespace GameSrv.Actor
         /// 尸体
         /// </summary>
         public bool Skeleton;
-        /// <summary>
-        /// 肉的品质
-        /// </summary>
-        public ushort MeatQuality;
+
         /// <summary>
         /// 身体坚韧性
         /// </summary>
@@ -1895,6 +1892,10 @@ namespace GameSrv.Actor
         /// </summary>
         internal void ApplyMeatQuality()
         {
+            if (!Animal)
+            {
+                return;//不是动物无需设置肉的品质
+            }
             for (int i = 0; i < ItemList.Count; i++)
             {
                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
@@ -1902,7 +1903,7 @@ namespace GameSrv.Actor
                 {
                     if (stdItem.StdMode == 40)
                     {
-                        ItemList[i].Dura = MeatQuality;
+                        ItemList[i].Dura = ((AnimalObject)this).MeatQuality;
                     }
                 }
             }
@@ -2792,33 +2793,35 @@ namespace GameSrv.Actor
                 FixedHideMode = true;
                 StickMode = true;
             }
-
-            MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
             //m_nBodyLeathery = m_nPerBodyLeathery;
             //m_nPushedCount = 0;
             //m_nBodyState = 0;
-
+            
+            if (Animal)
+            {
+                ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+            }
+            
             switch (Race)
             {
                 case 51:
-                    MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+                    ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
                     BodyLeathery = 50;
                     break;
                 case 52:
                     if (M2Share.RandomNumber.Random(30) == 0)
                     {
-                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
+                        ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
                         BodyLeathery = 150;
                     }
                     else
                     {
-                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                        ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
                         BodyLeathery = 150;
                     }
-
                     break;
                 case 53:
-                    MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                    ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
                     BodyLeathery = 150;
                     break;
                 case 54:
@@ -2829,21 +2832,18 @@ namespace GameSrv.Actor
                     {
                         // m_boSafeWalk = true;
                     }
-
                     break;
                 case 96:
                     if (M2Share.RandomNumber.Random(4) == 0)
                     {
                         // m_boSafeWalk = true;
                     }
-
                     break;
                 case 97:
                     if (M2Share.RandomNumber.Random(2) == 0)
                     {
                         // m_boSafeWalk = true;
                     }
-
                     break;
                 case 169:
                     StickMode = false;

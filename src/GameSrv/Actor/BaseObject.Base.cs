@@ -345,7 +345,7 @@ namespace GameSrv.Actor
                 {
                     if (Animal)
                     {
-                        MeatQuality -= 1000;
+                        ((AnimalObject)this).MeatQuality -= 1000;
                     }
                     DamageHealth((ushort)(GreenPoisoningPoint + 1));
                     HealthTick = 0;
@@ -713,7 +713,7 @@ namespace GameSrv.Actor
                             {
                                 if (Animal)
                                 {
-                                    MeatQuality -= (ushort)(nDamage * 1000);
+                                    ((AnimalObject)this).MeatQuality -= (ushort)(nDamage * 1000);
                                 }
                                 SendMsg(Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId);
                             }
