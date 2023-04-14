@@ -19,6 +19,9 @@
 	  <DefineConstants>TRACE;NET6_0_OR_GREATER</DefineConstants>
 	</PropertyGroup>
 	<Choose>
+		<When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
+
+		</When>
 		<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
 			<PropertyGroup>
 				<OutputPath>D:\MirServer\DBServer</OutputPath>
