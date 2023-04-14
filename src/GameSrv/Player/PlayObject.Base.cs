@@ -1896,6 +1896,16 @@ namespace GameSrv.Player
             }
             M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.Fight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
             base.Die();
+            SendSelfDelayMsg(Messages.RM_MASTERDIEMUTINY, 0, 0, 0, 0, "", 1000);
+        }
+
+        protected override void KickException()
+        {
+            MapName = M2Share.Config.HomeMap;
+            CurrX = M2Share.Config.HomeX;
+            CurrY = M2Share.Config.HomeY;
+            BoEmergencyClose = true;
+            SendSelfDelayMsg(Messages.RM_MASTERDIEMUTINY, 0, 0, 0, 0, "", 1000);
         }
 
         public override void RecalcAbilitys()
@@ -2832,7 +2842,7 @@ namespace GameSrv.Player
             {
                 result = result * FixColorIdx + 1;
             }
-            return (ushort)result;
+            return result;
         }
 
         public override void StruckDamage(int nDamage)
@@ -3177,14 +3187,6 @@ namespace GameSrv.Player
             }
         }
 
-        protected override void KickException()
-        {
-            MapName = M2Share.Config.HomeMap;
-            CurrX = M2Share.Config.HomeX;
-            CurrY = M2Share.Config.HomeY;
-            BoEmergencyClose = true;
-        }
-
         /// <summary>
         /// 显示玩家名字
         /// </summary>
@@ -3414,6 +3416,10 @@ namespace GameSrv.Player
                 M2Share.Logger.Error(e.Message);
             }
             base.MakeGhost();
+            if (Ghost)
+            {
+                SendSelfDelayMsg(Messages.RM_MASTERDIEGHOST, 0, 0, 0, 0, "", 1000);
+            }
         }
 
         internal override void ScatterBagItems(int itemOfCreat)

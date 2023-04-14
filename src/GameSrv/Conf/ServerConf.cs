@@ -521,7 +521,7 @@ namespace GameSrv.Conf {
             M2Share.Config.MagTammingLevel = ReadWriteInteger("Setup", "MagTammingLevel", M2Share.Config.MagTammingLevel);
             M2Share.Config.MagTammingTargetLevel = ReadWriteInteger("Setup", "MagTammingTargetLevel", M2Share.Config.MagTammingTargetLevel);
             M2Share.Config.MagTammingHPRate = ReadWriteInteger("Setup", "MagTammingTargetHPRate", M2Share.Config.MagTammingHPRate);
-            M2Share.Config.MagTammingCount = ReadWriteInteger("Setup", "MagTammingCount", M2Share.Config.MagTammingCount);
+            M2Share.Config.MagTammingCount = ReadWriteByte("Setup", "MagTammingCount", M2Share.Config.MagTammingCount);
             M2Share.Config.MabMabeHitRandRate = ReadWriteInteger("Setup", "MabMabeHitRandRate", M2Share.Config.MabMabeHitRandRate);
             M2Share.Config.MabMabeHitMinLvLimit = ReadWriteInteger("Setup", "MabMabeHitMinLvLimit", M2Share.Config.MabMabeHitMinLvLimit);
             M2Share.Config.MabMabeHitSucessRate = ReadWriteInteger("Setup", "MabMabeHitSucessRate", M2Share.Config.MabMabeHitSucessRate);

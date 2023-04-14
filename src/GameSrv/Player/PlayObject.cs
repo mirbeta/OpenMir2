@@ -289,6 +289,48 @@ namespace GameSrv.Player {
             SysMsg("祈祷发出强烈的宇宙效应", MsgColor.Green, MsgType.Hint);
         }
 
+        private void ProcessSlaveMutiny()
+        {
+            // 宝宝在主人死亡后死亡处理
+            if (!Death)
+            {
+                return;
+            }
+            if (!M2Share.Config.MasterDieMutiny)
+            {
+                return;
+            }
+            for (int i = SlaveList.Count - 1; i >= 0; i--)
+            {
+                if (SlaveList[i].Master.LastHiter != null && (M2Share.RandomNumber.Random(M2Share.Config.MasterDieMutinyRate) == 0))
+                {
+                    SlaveList[i].Master = null;
+                    SlaveList[i].SlaveExpLevel = (byte)M2Share.Config.SlaveColor.Length;
+                    SlaveList[i].RecalcAbilitys();
+                    SlaveList[i].WAbil.DC = (ushort)HUtil32.MakeLong((short)(HUtil32.LoByte(SlaveList[i].WAbil.DC) * M2Share.Config.MasterDieMutinyPower), (short)(HUtil32.HiByte(SlaveList[i].WAbil.DC) * M2Share.Config.MasterDieMutinyPower));
+                    SlaveList[i].WalkSpeed = SlaveList[i].WalkSpeed / M2Share.Config.MasterDieMutinySpeed;
+                    SlaveList[i].RefNameColor();
+                    SlaveList[i].RefShowName();
+                }
+                else
+                {
+                    SlaveList[i].WAbil.HP = 0;
+                }
+            }
+        }
+
+        private void ProcessSlaveGhost()
+        {
+            if (!Ghost)
+            {
+                return;
+            }
+            for (int i = SlaveList.Count - 1; i >= 0; i--)
+            {
+                SlaveList[i].MakeGhost();
+            }
+        }
+
         private void LogonTimcCost() {
             int n08;
             if (PayMent == 2 || M2Share.Config.TestServer) {
