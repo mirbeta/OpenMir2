@@ -1873,6 +1873,9 @@ namespace GameSrv.Player
             {
                 return;
             }
+            IncSpell = 0;
+            IncHealth = 0;
+            IncHealing = 0;
             string tStr;
             if (GroupOwner != 0)
             {

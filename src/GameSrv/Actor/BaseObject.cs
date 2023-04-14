@@ -48,9 +48,6 @@ namespace GameSrv.Actor
         public int CharStatus;
         protected int CharStatusEx;
         public MonGenInfo MonGen;
-        public ushort IncHealth;
-        public ushort IncSpell;
-        public ushort IncHealing;
         /// <summary>
         /// 怪物经验值
         /// </summary>
@@ -478,9 +475,6 @@ namespace GameSrv.Actor
             HealthRecover = 0;
             SpellRecover = 0;
             AntiMagic = 0;
-            IncSpell = 0;
-            IncHealth = 0;
-            IncHealing = 0;
             PerHealth = 5;
             PerHealing = 5;
             PerSpell = 5;

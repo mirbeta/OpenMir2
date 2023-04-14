@@ -67,6 +67,79 @@ namespace GameSrv.Player
                     IsTimeRecall = false;
                     SpaceMove(TimeRecallMoveMap, TimeRecallMoveX, TimeRecallMoveY, 0);
                 }
+                if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
+                {
+                    int dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
+                    if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
+                    {
+                        int incHealthTick = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
+                        IncHealthSpellTick = HUtil32.GetTickCount() + incHealthTick;
+                        if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
+                        {
+                            if (PerHealth <= 0)
+                            {
+                                PerHealth = 1;
+                            }
+                            if (PerSpell <= 0)
+                            {
+                                PerSpell = 1;
+                            }
+                            if (PerHealing <= 0)
+                            {
+                                PerHealing = 1;
+                            }
+                            int nHP;
+                            if (IncHealth < PerHealth)
+                            {
+                                nHP = IncHealth;
+                                IncHealth = 0;
+                            }
+                            else
+                            {
+                                nHP = PerHealth;
+                                IncHealth -= PerHealth;
+                            }
+                            int nMP;
+                            if (IncSpell < PerSpell)
+                            {
+                                nMP = IncSpell;
+                                IncSpell = 0;
+                            }
+                            else
+                            {
+                                nMP = PerSpell;
+                                IncSpell -= PerSpell;
+                            }
+                            if (IncHealing < PerHealing)
+                            {
+                                nHP += IncHealing;
+                                IncHealing = 0;
+                            }
+                            else
+                            {
+                                nHP += PerHealing;
+                                IncHealing -= PerHealing;
+                            }
+                            PerHealth = (byte)(WAbil.Level / 10 + 5);
+                            PerSpell = (byte)(WAbil.Level / 10 + 5);
+                            PerHealing = 5;
+                            IncHealthSpell(nHP, nMP);
+                            if (WAbil.HP == WAbil.MaxHP)
+                            {
+                                IncHealth = 0;
+                                IncHealing = 0;
+                            }
+                            if (WAbil.MP == WAbil.MaxMP)
+                            {
+                                IncSpell = 0;
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    IncHealthSpellTick = HUtil32.GetTickCount();
+                }
                 for (int i = 0; i < 20; i++) //个人定时器
                 {
                     if (AutoTimerStatus[i] > 500)
@@ -1541,6 +1614,17 @@ namespace GameSrv.Player
                                 SendSocket(ClientMsg, EDCode.EncodePacket(struckMessage));
                             }
                         }
+                    }
+                    break;
+                case Messages.RM_MAGHEALING:
+                    if ((IncHealing + processMsg.nParam1) < 300)
+                    {
+                        IncHealing += (ushort)processMsg.nParam1;
+                        PerHealing = 5;
+                    }
+                    else
+                    {
+                        IncHealing = 300;
                     }
                     break;
                 case Messages.RM_DEATH:
