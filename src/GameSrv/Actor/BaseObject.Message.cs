@@ -409,60 +409,38 @@ namespace GameSrv.Actor
                             continue;
                         }
                         MapCellInfo cellInfo = Envir.GetCellInfo(nCx, nCy, out bool cellSuccess);//占用CPU
-                        if (cellSuccess)
+                        if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            if (cellInfo.IsAvailable)
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
                             {
-                                for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                                CellObject cellObject = cellInfo.ObjList[i];
+                                if (cellObject.ActorObject)
                                 {
-                                    CellObject cellObject = cellInfo.ObjList[i];
-                                    if (cellObject.CellObjId > 0)
+                                    //if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
+                                    //{
+                                    //    cellInfo.Remove(i);
+                                    //    if (cellInfo.Count <= 0)
+                                    //    {
+                                    //        cellInfo.Clear();
+                                    //        break;
+                                    //    }
+                                    //}
+                                    BaseObject targetObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    if ((targetObject != null) && !targetObject.Ghost)
                                     {
-                                        if (cellObject.ActorObject)
+                                        if (targetObject.Race == ActorRace.Play)
                                         {
-                                            //if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
-                                            //{
-                                            //    cellInfo.Remove(i);
-                                            //    if (cellInfo.Count <= 0)
-                                            //    {
-                                            //        cellInfo.Clear();
-                                            //        break;
-                                            //    }
-                                            //}
-                                            //else
-                                            //{
-                                            try
+                                            targetObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                                            VisibleHumanList.Add(targetObject.ActorId);
+                                        }
+                                        else if (targetObject.WantRefMsg)
+                                        {
+                                            if ((wIdent == Messages.RM_STRUCK) || (wIdent == Messages.RM_HEAR) || (wIdent == Messages.RM_DEATH))
                                             {
-                                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                                if ((baseObject != null) && !baseObject.Ghost)
-                                                {
-                                                    if (baseObject.Race == ActorRace.Play)
-                                                    {
-                                                        baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
-                                                        VisibleHumanList.Add(baseObject.ActorId);
-                                                    }
-                                                    else if (baseObject.WantRefMsg)
-                                                    {
-                                                        if ((wIdent == Messages.RM_STRUCK) || (wIdent == Messages.RM_HEAR) || (wIdent == Messages.RM_DEATH))
-                                                        {
-                                                            baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
-                                                            VisibleHumanList.Add(baseObject.ActorId);
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                            catch (Exception e)
-                                            {
-                                                cellInfo.Remove(cellObject);
-                                                if (cellInfo.Count <= 0)
-                                                {
-                                                    cellInfo.Clear();
-                                                }
-                                                M2Share.Logger.Error(Format(sExceptionMsg, ChrName));
-                                                M2Share.Logger.Error(e.Message);
+                                                targetObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                                                VisibleHumanList.Add(targetObject.ActorId);
                                             }
                                         }
-                                        //}
                                     }
                                 }
                             }
@@ -474,22 +452,22 @@ namespace GameSrv.Actor
 
             for (int i = 0; i < VisibleHumanList.Count; i++)
             {
-                BaseObject baseObject = M2Share.ActorMgr.Get(VisibleHumanList[i]);
-                if (baseObject.Ghost)
+                BaseObject targetObject = M2Share.ActorMgr.Get(VisibleHumanList[i]);
+                if (targetObject.Ghost)
                 {
                     continue;
                 }
-                if ((baseObject.Envir == Envir) && (Math.Abs(baseObject.CurrX - CurrX) < 11) && (Math.Abs(baseObject.CurrY - CurrY) < 11))
+                if ((targetObject.Envir == Envir) && (Math.Abs(targetObject.CurrX - CurrX) < 11) && (Math.Abs(targetObject.CurrY - CurrY) < 11))
                 {
-                    if (baseObject.Race == ActorRace.Play)
+                    if (targetObject.Race == ActorRace.Play)
                     {
-                        baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                        targetObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                     }
-                    else if (baseObject.WantRefMsg)
+                    else if (targetObject.WantRefMsg)
                     {
                         if ((wIdent == Messages.RM_STRUCK) || (wIdent == Messages.RM_HEAR) || (wIdent == Messages.RM_DEATH))
                         {
-                            baseObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
+                            targetObject.SendMsg(this, wIdent, wParam, nParam1, nParam2, nParam3, sMsg);
                         }
                     }
                 }

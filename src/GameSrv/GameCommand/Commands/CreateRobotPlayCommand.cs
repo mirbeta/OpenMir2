@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 sMapName = WorldServer.GetHomeInfo(ref nX, ref nY);
             }
-            for (int i = 0; i < userCount; i++)
+            for (var i = 0; i < userCount; i++)
             {
                 M2Share.WorldEngine.AddRobotLogon(new RoBotLogon()
                 {

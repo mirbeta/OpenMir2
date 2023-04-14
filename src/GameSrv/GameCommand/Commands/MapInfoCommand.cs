@@ -10,13 +10,13 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null || @params.Length <= 0) {
                 return;
             }
-            string sMap = @params[2];
-            short nX = HUtil32.StrToInt16(@params[0], 0);
-            short nY = HUtil32.StrToInt16(@params[1], 0);
+            var sMap = @params[2];
+            var nX = HUtil32.StrToInt16(@params[0], 0);
+            var nY = HUtil32.StrToInt16(@params[1], 0);
             if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0) {
-                Envirnoment map = M2Share.MapMgr.FindMap(sMap);
+                var map = M2Share.MapMgr.FindMap(sMap);
                 if (map != null && map.IsValidCell(nX, nY)) {
-                    MapCellInfo cellInfo = map.GetCellInfo(nX, nY, out bool cellSuccess);
+                    var cellInfo = map.GetCellInfo(nX, nY, out var cellSuccess);
                     if (cellSuccess) {
                         playObject.SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);
                         if (cellInfo.IsAvailable) {

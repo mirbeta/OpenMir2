@@ -49,15 +49,11 @@ namespace GameSrv.Actor
         protected int CharStatusEx;
         public MonGenInfo MonGen;
         /// <summary>
-        /// 怪物经验值
-        /// </summary>
-        public int FightExp = 0;
-        /// <summary>
         /// 基本属性
         /// </summary>
         public Ability Abil;
         /// <summary>
-        /// 角色属性
+        /// 属性
         /// </summary>
         public Ability WAbil;
         /// <summary>
@@ -103,22 +99,12 @@ namespace GameSrv.Actor
         /// 人物攻击准确度
         /// </summary>
         public byte HitPoint;
-        public ushort HealthRecover;
-        public ushort SpellRecover;
         public byte AntiPoison;
-        public ushort PoisonRecover;
         public ushort AntiMagic;
-        public byte PerHealth;
-        public byte PerHealing;
-        public byte PerSpell;
-        /// <summary>
-        /// 增加血量的间隔
-        /// </summary>
-        public int IncHealthSpellTick;
         /// <summary>
         /// 中绿毒降HP点数
         /// </summary>
-        private byte GreenPoisoningPoint;
+        private ushort GreenPoisoningPoint;
         /// <summary>
         /// 敏捷度
         /// </summary>
@@ -144,21 +130,9 @@ namespace GameSrv.Actor
         /// </summary>
         public byte LifeAttrib;
         /// <summary>
-        /// 杀怪计数
-        /// </summary>
-        public int KillMonCount;
-        /// <summary>
-        /// 宝宝等级(1-7)
-        /// </summary>
-        public byte SlaveExpLevel;
-        /// <summary>
-        /// 召唤等级
-        /// </summary>
-        public byte SlaveMakeLevel;
-        /// <summary>
         /// 下属列表
         /// </summary>        
-        internal IList<BaseObject> SlaveList;
+        internal IList<MonsterObject> SlaveList;
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -172,10 +146,6 @@ namespace GameSrv.Actor
         /// </summary>
         public byte Light;
         /// <summary>
-        /// 行会占争范围
-        /// </summary>
-        public bool GuildWarArea;
-        /// <summary>
         /// 所属城堡
         /// </summary>
         public UserCastle Castle;
@@ -183,10 +153,6 @@ namespace GameSrv.Actor
         /// 无敌模式
         /// </summary>
         public bool SuperMan;
-        /// <summary>
-        /// 不进入火墙
-        /// </summary>
-        public bool BoFearFire;
         /// <summary>
         /// 是否是动物
         /// </summary>
@@ -207,19 +173,11 @@ namespace GameSrv.Actor
         /// 被打到是否减慢行走速度,等级小于50的怪 F-减慢 T-不减慢
         /// </summary>
         public bool RushMode;
-        /// <summary>
-        /// 非攻击模式 F-可攻击 T-不攻击
-        /// </summary>
-        public bool NoAttackMode;
         public bool NoTame;
         /// <summary>
         /// 尸体
         /// </summary>
         public bool Skeleton;
-        /// <summary>
-        /// 肉的品质
-        /// </summary>
-        public ushort MeatQuality;
         /// <summary>
         /// 身体坚韧性
         /// </summary>
@@ -465,26 +423,17 @@ namespace GameSrv.Actor
             ViewRange = 5;
             Light = 0;
             NameColor = 255;
-            BoFearFire = false;
             HitPoint = 5;
             SpeedPoint = 15;
             HitSpeed = 0;
             LifeAttrib = 0;
             AntiPoison = 0;
-            PoisonRecover = 0;
-            HealthRecover = 0;
-            SpellRecover = 0;
             AntiMagic = 0;
-            PerHealth = 5;
-            PerHealing = 5;
-            PerSpell = 5;
-            IncHealthSpellTick = HUtil32.GetTickCount();
             GreenPoisoningPoint = 0;
             CharStatus = 0;
             CharStatusEx = 0;
             StatusTimeArr = new ushort[15];
             StatusArrTick = new int[15];
-            GuildWarArea = false;
             SuperMan = false;
             Skeleton = false;
             RushMode = false;
@@ -496,7 +445,6 @@ namespace GameSrv.Actor
             BodyLeathery = 50;
             FixedHideMode = false;
             StickMode = false;
-            NoAttackMode = false;
             NoTame = false;
             AddAbil = new AddAbility();
             VisibleHumanList = new List<int>();
@@ -505,8 +453,6 @@ namespace GameSrv.Actor
             IsVisibleActive = false;
             Castle = null;
             Master = null;
-            KillMonCount = 0;
-            SlaveExpLevel = 0;
             Abil = new Ability();
             Abil = new Ability
             {
@@ -752,10 +698,14 @@ namespace GameSrv.Actor
                 }
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
-                    var walkSuccess = true;
-                    if (BoFearFire && !Envir.CanSafeWalk(newX, newY))
+                    bool walkSuccess = true;
+                    if (Race == ActorRace.Play)
                     {
-                        walkSuccess = false;
+                        walkSuccess =!Envir.CanSafeWalk(newX, newY);
+                    }
+                    else
+                    {
+                        walkSuccess = !(((MonsterObject)this).BoFearFire && !Envir.CanSafeWalk(newX, newY));
                     }
                     if (Master != null)
                     {
@@ -837,36 +787,7 @@ namespace GameSrv.Actor
         {
             SendRefMsg(Messages.RM_CHANGENAMECOLOR, 0, 0, 0, 0, "");
         }
-
-        private int GainSlaveUpKillCount()
-        {
-            int tCount;
-            if (SlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
-            {
-                tCount = M2Share.Config.MonUpLvNeedKillCount[SlaveExpLevel];
-            }
-            else
-            {
-                tCount = 0;
-            }
-            return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
-        }
-
-        private void GainSlaveExp(byte nLevel)
-        {
-            KillMonCount += nLevel;
-            if (GainSlaveUpKillCount() < KillMonCount)
-            {
-                KillMonCount -= GainSlaveUpKillCount();
-                if (SlaveExpLevel < (SlaveMakeLevel * 2 + 1))
-                {
-                    SlaveExpLevel++;
-                    RecalcAbilitys();
-                    RefNameColor();
-                }
-            }
-        }
-
+        
         protected bool DropGoldDown(int nGold, bool boFalg, int goldOfCreat, int dropGoldCreat)
         {
             bool result = false;
@@ -1319,14 +1240,14 @@ namespace GameSrv.Actor
         {
             if (SlaveList == null)
             {
-                SlaveList = new List<BaseObject>();
+                SlaveList = new List<MonsterObject>();
             }
             if (SlaveList.Count < nMaxMob)
             {
                 short nX = 0;
                 short nY = 0;
                 GetFrontPosition(ref nX, ref nY);
-                AnimalObject monObj = (AnimalObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                MonsterObject monObj = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
                 {
                     monObj.Master = this;
@@ -1598,10 +1519,11 @@ namespace GameSrv.Actor
             int maxHp = 0;
             if ((Race == ActorRace.MonsterWhiteskeleton) || (Race == ActorRace.MonsterElfmonster) || (Race == ActorRace.MonsterElfwarrior))
             {
-                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * 3.0 * SlaveExpLevel + HUtil32.HiWord(WAbil.DC)));
-                maxHp = maxHp + HUtil32.Round((SlaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * SlaveExpLevel;
+                var slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((slaveExpLevel * 0.1 + 0.3) * 3.0 * slaveExpLevel + HUtil32.HiWord(WAbil.DC)));
+                maxHp = maxHp + HUtil32.Round((slaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * slaveExpLevel;
                 maxHp = maxHp + WAbil.MaxHP;
-                if (SlaveExpLevel > 0)
+                if (slaveExpLevel > 0)
                 {
                     WAbil.MaxHP = (ushort)maxHp;
                 }
@@ -1612,10 +1534,11 @@ namespace GameSrv.Actor
             }
             else
             {
+                var slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
                 maxHp = WAbil.MaxHP;
-                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(SlaveExpLevel * 2.0 + HUtil32.HiWord(WAbil.DC)));
-                maxHp = maxHp + HUtil32.Round(WAbil.MaxHP * 0.15) * SlaveExpLevel;
-                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + SlaveExpLevel * 60.0), maxHp);
+                WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(slaveExpLevel * 2.0 + HUtil32.HiWord(WAbil.DC)));
+                maxHp = maxHp + HUtil32.Round(WAbil.MaxHP * 0.15) * slaveExpLevel;
+                WAbil.MaxHP = (ushort)HUtil32._MIN(HUtil32.Round(WAbil.MaxHP + slaveExpLevel * 60.0), maxHp);
             }
         }
 
@@ -1929,6 +1852,10 @@ namespace GameSrv.Actor
         /// </summary>
         internal void ApplyMeatQuality()
         {
+            if (!Animal)
+            {
+                return;//不是动物无需设置肉的品质
+            }
             for (int i = 0; i < ItemList.Count; i++)
             {
                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
@@ -1936,7 +1863,7 @@ namespace GameSrv.Actor
                 {
                     if (stdItem.StdMode == 40)
                     {
-                        ItemList[i].Dura = MeatQuality;
+                        ItemList[i].Dura = ((AnimalObject)this).MeatQuality;
                     }
                 }
             }
@@ -2225,7 +2152,7 @@ namespace GameSrv.Actor
             }
             StatusArrTick[nType] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
-            GreenPoisoningPoint = (byte)nPoint;
+            GreenPoisoningPoint = (ushort)nPoint;
             if (nOldCharStatus != CharStatus)
             {
                 StatusChanged();
@@ -2684,14 +2611,15 @@ namespace GameSrv.Actor
         {
             if (ExpHitter != null)
             {
+                var fightExp = ((AnimalObject)this).FightExp; //后续移动到AnimalObject实现,减少一次转换
                 if (ExpHitter.Master != null) //如果是角色下属杀死对象
                 {
-                    ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0);
+                    ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, fightExp, 0, 0);
                     SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.Master.ActorId, 0, 0, 0);
                 }
                 if (ExpHitter.Race == ActorRace.Play)
                 {
-                    ExpHitter.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, 0, 0, 0);
+                    ExpHitter.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, fightExp, 0, 0);
                     SendMsg(Messages.RM_DIEDROPITEM, ExpHitter.ActorId, 0, 0, 0);
                 }
             }
@@ -2798,7 +2726,7 @@ namespace GameSrv.Actor
             if (this is ElfMonster)
             {
                 FixedHideMode = true;
-                NoAttackMode = true;
+                ((ElfMonster)this).NoAttackMode = true;
                 ((ElfMonster)this).BoIsFirst = true;
             }
 
@@ -2826,33 +2754,35 @@ namespace GameSrv.Actor
                 FixedHideMode = true;
                 StickMode = true;
             }
-
-            MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
             //m_nBodyLeathery = m_nPerBodyLeathery;
             //m_nPushedCount = 0;
             //m_nBodyState = 0;
-
+            
+            if (Animal)
+            {
+                ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+            }
+            
             switch (Race)
             {
                 case 51:
-                    MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
+                    ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
                     BodyLeathery = 50;
                     break;
                 case 52:
                     if (M2Share.RandomNumber.Random(30) == 0)
                     {
-                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
+                        ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
                         BodyLeathery = 150;
                     }
                     else
                     {
-                        MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                        ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
                         BodyLeathery = 150;
                     }
-
                     break;
                 case 53:
-                    MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
+                    ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
                     BodyLeathery = 150;
                     break;
                 case 54:
@@ -2863,21 +2793,18 @@ namespace GameSrv.Actor
                     {
                         // m_boSafeWalk = true;
                     }
-
                     break;
                 case 96:
                     if (M2Share.RandomNumber.Random(4) == 0)
                     {
                         // m_boSafeWalk = true;
                     }
-
                     break;
                 case 97:
                     if (M2Share.RandomNumber.Random(2) == 0)
                     {
                         // m_boSafeWalk = true;
                     }
-
                     break;
                 case 169:
                     StickMode = false;

@@ -13,10 +13,10 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sCtr = @params.Length > 1 ? @params[1] : "";
-            int nPoint = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
-            char ctr = '1';
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sCtr = @params.Length > 1 ? @params[1] : "";
+            var nPoint = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            var ctr = '1';
             int nCreditPoint;
             if (!string.IsNullOrEmpty(sCtr)) {
                 ctr = sCtr[0];
@@ -26,7 +26,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;

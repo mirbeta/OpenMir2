@@ -12,14 +12,14 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sX = @params.Length > 0 ? @params[0] : "";
-            string sY = @params.Length > 1 ? @params[1] : "";
+            var sX = @params.Length > 0 ? @params[0] : "";
+            var sY = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sX) || string.IsNullOrEmpty(sY)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            short nX = HUtil32.StrToInt16(sX, 0);
-            short nY = HUtil32.StrToInt16(sY, 0);
+            var nX = HUtil32.StrToInt16(sX, 0);
+            var nY = HUtil32.StrToInt16(sY, 0);
             M2Share.BoMission = true;
             M2Share.MissionMap = playObject.MapName;
             M2Share.MissionX = nX;

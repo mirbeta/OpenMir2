@@ -8,6 +8,10 @@ namespace GameSrv.Actor
 {
     public class AnimalObject : BaseObject
     {
+        /// <summary>
+        /// 经验值
+        /// </summary>
+        public int FightExp = 0;
         internal short TargetX;
         internal short TargetY;
         public bool RunAwayMode;
@@ -26,9 +30,17 @@ namespace GameSrv.Actor
         /// </summary>
         protected bool WalkWaitLocked;
         /// <summary>
+        /// 肉的品质
+        /// </summary>
+        public ushort MeatQuality;
+        /// <summary>
         /// 当前处理数量
         /// </summary>
         public int ProcessRunCount;
+        /// <summary>
+        /// 非攻击模式 F-可攻击 T-不攻击
+        /// </summary>
+        public bool NoAttackMode;
         /// <summary>
         /// 是否属于召唤怪物(宝宝)
         /// </summary>

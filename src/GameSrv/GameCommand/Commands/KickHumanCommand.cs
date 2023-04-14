@@ -12,11 +12,11 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumName = @params.Length > 0 ? @params[0] : "";
+            var sHumName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumName)) {
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (mPlayObject != null) {
                 mPlayObject.BoKickFlag = true;
                 mPlayObject.BoEmergencyClose = true;

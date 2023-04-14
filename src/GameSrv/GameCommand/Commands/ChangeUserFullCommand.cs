@@ -12,8 +12,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sUserCount = @params.Length > 0 ? @params[0] : "";
-            int nCount = HUtil32.StrToInt(sUserCount, -1);
+            var sUserCount = @params.Length > 0 ? @params[0] : "";
+            var nCount = HUtil32.StrToInt(sUserCount, -1);
             if (string.IsNullOrEmpty(sUserCount) || nCount < 1 || !string.IsNullOrEmpty(sUserCount))
             {
                 playObject.SysMsg("设置服务器最高上线人数。", MsgColor.Red, MsgType.Hint);

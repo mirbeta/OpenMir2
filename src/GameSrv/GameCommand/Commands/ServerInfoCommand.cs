@@ -6,7 +6,7 @@ namespace GameSrv.GameCommand.Commands {
     public class ServerInfoCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject) {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", M2Share.WorldEngine.MonsterCount,
             //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, M2Share.WorldEngine.OnlinePlayObject,
             //       M2Share.WorldEngine.PlayObjectCount, M2Share.WorldEngine.LoadPlayCount, M2Share.WorldEngine.m_PlayObjectFreeList.Count));

@@ -1006,7 +1006,7 @@ namespace GameSrv.Player
                     ClientGuildBreakAlly(processMsg.Msg);
                     break;
                 case Messages.CM_TURN:
-                    if (ClientChangeDir((short)processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
+                    if (ClientChangeDir(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -2108,7 +2108,7 @@ namespace GameSrv.Player
                     SendSocket(ClientMsg, processMsg.Msg);
                     break;
                 case Messages.RM_PLAYERKILLMONSTER:
-                    KillTargetTrigger(processMsg.wParam);
+                    KillTargetTrigger(processMsg.wParam, processMsg.nParam1);
                     break;
                 case Messages.RM_SPIRITSUITE:
                     ProcessSpiritSuite();

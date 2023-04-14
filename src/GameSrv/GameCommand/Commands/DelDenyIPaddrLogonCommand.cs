@@ -9,14 +9,14 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sIPaddr = @params.Length > 0 ? @params[0] : "";
+            var sIPaddr = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sIPaddr)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            bool boDelete = false;
+            var boDelete = false;
             try {
-                for (int i = M2Share.DenyIPAddrList.Count - 1; i >= 0; i--) {
+                for (var i = M2Share.DenyIPAddrList.Count - 1; i >= 0; i--) {
                     if (M2Share.DenyIPAddrList.Count <= 0) {
                         break;
                     }

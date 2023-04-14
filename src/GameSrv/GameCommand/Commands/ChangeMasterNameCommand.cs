@@ -12,14 +12,14 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sMasterName = @params.Length > 1 ? @params[1] : "";
-            string sIsMaster = @params.Length > 2 ? @params[2] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sMasterName = @params.Length > 1 ? @params[1] : "";
+            var sIsMaster = @params.Length > 2 ? @params[2] : "";
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sMasterName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 if (string.Compare(sMasterName, "无", StringComparison.OrdinalIgnoreCase) == 0) {
                     mPlayObject.MasterName = "";

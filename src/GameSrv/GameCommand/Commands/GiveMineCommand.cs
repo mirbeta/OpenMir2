@@ -14,9 +14,9 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sMineName = @params.Length > 0 ? @params[0] : "";
-            int nMineCount = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            int nDura = @params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            var sMineName = @params.Length > 0 ? @params[0] : "";
+            var nMineCount = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            var nDura = @params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0;
             if (playObject.Permission < this.Command.PermissionMin) {
                 playObject.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
                 return;
@@ -29,10 +29,10 @@ namespace GameSrv.GameCommand.Commands {
                 nDura = M2Share.RandomNumber.Random(18) + 3;
             }
             // 如纯度不填,则随机给纯度
-            for (int i = 0; i < nMineCount; i++) {
-                UserItem userItem = new UserItem();
+            for (var i = 0; i < nMineCount; i++) {
+                var userItem = new UserItem();
                 if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref userItem)) {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                    var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                     if (stdItem != null && stdItem.StdMode == 43) {
                         if (playObject.IsAddWeightAvailable(stdItem.Weight * nMineCount)) {
                             userItem.Dura = Convert.ToUInt16(nDura * 1000);

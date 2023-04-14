@@ -8,6 +8,7 @@ using GameSrv.Guild;
 using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
+using GameSrv.Monster;
 using GameSrv.Npc;
 using GameSrv.RobotPlay;
 using GameSrv.Script;
@@ -65,6 +66,10 @@ namespace GameSrv.Player
         /// 人物身上最多可带金币数
         /// </summary>
         public int GoldMax;
+        /// <summary>
+        /// 行会占争范围
+        /// </summary>
+        public bool GuildWarArea;
         /// <summary>
         /// 允许行会传送
         /// </summary>
@@ -1026,7 +1031,7 @@ namespace GameSrv.Player
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
             MagicArr = new UserMagic[50];
-            SlaveList = new List<BaseObject>();
+            SlaveList = new List<MonsterObject>();
             GroupMembers = new List<PlayObject>();
             VisibleEvents = new List<MapEvent>();
             VisibleItems = new List<VisibleMapItem>();
@@ -1605,7 +1610,7 @@ namespace GameSrv.Player
         /// <summary>
         /// 角色杀死目标触发
         /// </summary>
-        private void KillTargetTrigger(int actorId)
+        private void KillTargetTrigger(int actorId,int fightExp)
         {
             var killObject = M2Share.ActorMgr.Get(actorId);
             if (killObject == null)
@@ -1616,7 +1621,7 @@ namespace GameSrv.Player
             {
                 M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
-            int monsterExp = CalcGetExp(WAbil.Level, killObject.FightExp);
+            int monsterExp = CalcGetExp(WAbil.Level, fightExp);
             if (!M2Share.Config.VentureServer)
             {
                 if (IsRobot && ExpHitter != null && ExpHitter.Race == ActorRace.Play)

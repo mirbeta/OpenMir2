@@ -9,14 +9,14 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sChrName = @params.Length > 0 ? @params[0] : "";
+            var sChrName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sChrName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            bool boDelete = false;
+            var boDelete = false;
             try {
-                for (int i = 0; i < M2Share.DenyChrNameList.Count; i++) {
+                for (var i = 0; i < M2Share.DenyChrNameList.Count; i++) {
                     //if ((sChrName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyChrNameList[i]) != 0)

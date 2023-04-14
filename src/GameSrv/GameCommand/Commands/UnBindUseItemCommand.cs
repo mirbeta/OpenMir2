@@ -11,9 +11,9 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sItem = @params.Length > 1 ? @params[1] : "";
-            string sType = @params.Length > 2 ? @params[2] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sItem = @params.Length > 1 ? @params[1] : "";
+            var sType = @params.Length > 2 ? @params[2] : "";
 
             //TPlayObject m_PlayObject;
             //TUserItem UserItem = null;

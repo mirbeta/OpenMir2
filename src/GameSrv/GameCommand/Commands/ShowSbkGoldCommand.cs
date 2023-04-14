@@ -13,9 +13,9 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sCastleName = @params.Length > 0 ? @params[0] : "";
-            string sCtr = @params.Length > 1 ? @params[1] : "";
-            string sGold = @params.Length > 2 ? @params[2] : "";
+            var sCastleName = @params.Length > 0 ? @params[0] : "";
+            var sCtr = @params.Length > 1 ? @params[1] : "";
+            var sGold = @params.Length > 2 ? @params[2] : "";
             if (!string.IsNullOrEmpty(sCastleName) && sCastleName[0] == '?') {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, ""), MsgColor.Red, MsgType.Hint);
                 return;
@@ -23,18 +23,18 @@ namespace GameSrv.GameCommand.Commands {
             if (string.IsNullOrEmpty(sCastleName)) {
                 IList<string> list = new List<string>();
                 M2Share.CastleMgr.GetCastleGoldInfo(list);
-                for (int i = 0; i < list.Count; i++) {
+                for (var i = 0; i < list.Count; i++) {
                     playObject.SysMsg(list[i], MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
-            UserCastle castle = M2Share.CastleMgr.Find(sCastleName);
+            var castle = M2Share.CastleMgr.Find(sCastleName);
             if (castle == null) {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            char ctr = sCtr[1];
-            int nGold = HUtil32.StrToInt(sGold, -1);
+            var ctr = sCtr[1];
+            var nGold = HUtil32.StrToInt(sGold, -1);
             if (!new List<char>(new[] { '=', '-', '+' }).Contains(ctr) || nGold < 0 || nGold > 100000000) {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;

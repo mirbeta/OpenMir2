@@ -11,9 +11,9 @@ namespace GameSrv.GameCommand.Commands {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
             const string sDelOk = "删除NPC成功...";
-            BaseObject baseObject = playObject.GetPoseCreate();
+            var baseObject = playObject.GetPoseCreate();
             if (baseObject != null) {
-                for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
+                for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
                     if (M2Share.WorldEngine.MerchantList[i] == baseObject) {
                         baseObject.Ghost = true;
                         baseObject.GhostTick = HUtil32.GetTickCount();
@@ -22,7 +22,7 @@ namespace GameSrv.GameCommand.Commands {
                         return;
                     }
                 }
-                for (int i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++) {
+                for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++) {
                     if (M2Share.WorldEngine.QuestNpcList[i] == baseObject) {
                         baseObject.Ghost = true;
                         baseObject.GhostTick = HUtil32.GetTickCount();

@@ -12,12 +12,12 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumName = @params.Length > 0 ? @params[0] : "";
+            var sHumName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject targerPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var targerPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (targerPlayObject != null) {
                 targerPlayObject.BonusPoint = 0;
                 targerPlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);

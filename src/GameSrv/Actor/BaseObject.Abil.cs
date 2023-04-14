@@ -1,4 +1,5 @@
-﻿using SystemModule.Consts;
+﻿using GameSrv.Monster;
+using SystemModule.Consts;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -19,9 +20,6 @@ namespace GameSrv.Actor
             WAbil.WearWeight = 0;
             WAbil.HandWeight = 0;
             AntiPoison = 0;
-            PoisonRecover = 0;
-            HealthRecover = 0;
-            SpellRecover = 0;
             AntiMagic = 1;
             HitSpeed = 0;
             bool oldhmode = HideMode;
@@ -53,9 +51,6 @@ namespace GameSrv.Actor
             SpeedPoint = (byte)(SpeedPoint + AddAbil.SPEED);
             HitPoint = (byte)(HitPoint + AddAbil.HIT);
             AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
-            PoisonRecover = (ushort)(PoisonRecover + AddAbil.PoisonRecover);
-            HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
-            SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
             AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
             HitSpeed = AddAbil.HitSpeed;
             WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
@@ -117,12 +112,13 @@ namespace GameSrv.Actor
             //    return;
             //}
             ushort chp = 0;
+            var slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
             if ((Race == ActorRace.WhiteSkeleton) || (Race == ActorRace.ElfMonster) || (Race == ActorRace.ElfWarriormon)) {
                 WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(Abil.DC));
-                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(int)Math.Round(HUtil32.HiByte(WAbil.DC) + (3 * (0.3 + SlaveExpLevel * 0.1) * SlaveExpLevel)));
-                chp = (ushort)(chp + Math.Round(Abil.MaxHP * (0.3 + SlaveExpLevel * 0.1)) * SlaveExpLevel);
+                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(int)Math.Round(HUtil32.HiByte(WAbil.DC) + (3 * (0.3 + slaveExpLevel * 0.1) * slaveExpLevel)));
+                chp = (ushort)(chp + Math.Round(Abil.MaxHP * (0.3 + slaveExpLevel * 0.1)) * slaveExpLevel);
                 chp = (ushort)(Abil.MaxHP + chp);
-                if (SlaveExpLevel > 0) {
+                if (slaveExpLevel > 0) {
                     WAbil.MaxHP = chp;
                 }
                 else {
@@ -134,9 +130,9 @@ namespace GameSrv.Actor
                 if (Master != null) {
                     chp = Abil.MaxHP;
                     WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), HUtil32.HiByte(Abil.DC));
-                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)Math.Abs(HUtil32.HiByte(WAbil.DC) + (2 * SlaveExpLevel)));
-                    chp = (ushort)(chp + Math.Round(Abil.MaxHP * 0.15) * SlaveExpLevel);
-                    WAbil.MaxHP = (ushort)HUtil32._MIN(Math.Abs(Abil.MaxHP + 60 * SlaveExpLevel), chp);
+                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)Math.Abs(HUtil32.HiByte(WAbil.DC) + (2 * slaveExpLevel)));
+                    chp = (ushort)(chp + Math.Round(Abil.MaxHP * 0.15) * slaveExpLevel);
+                    WAbil.MaxHP = (ushort)HUtil32._MIN(Abil.MaxHP + 60 * slaveExpLevel, chp);
                     WAbil.MAC = 0;
                 }
             }

@@ -11,7 +11,7 @@ namespace GameSrv.GameCommand.Commands {
     public class ReloadNpcCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject) {
-            string sParam = string.Empty;
+            var sParam = string.Empty;
             if (@params != null) {
                 sParam = @params.Length > 0 ? @params[0] : "";
             }
@@ -30,7 +30,7 @@ namespace GameSrv.GameCommand.Commands {
                 IList<BaseObject> tmpMerList = new List<BaseObject>();
                 try {
                     if (M2Share.WorldEngine.GetMerchantList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpMerList) > 0) {
-                        for (int i = 0; i < tmpMerList.Count; i++) {
+                        for (var i = 0; i < tmpMerList.Count; i++) {
                             merchant = (Merchant)tmpMerList[i];
                             merchant.ClearScript();
                             merchant.LoadMerchantScript();
@@ -43,7 +43,7 @@ namespace GameSrv.GameCommand.Commands {
 
                     IList<BaseObject> tmpNorList = new List<BaseObject>();
                     if (M2Share.WorldEngine.GetNpcList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpNorList) > 0) {
-                        for (int i = 0; i < tmpNorList.Count; i++) {
+                        for (var i = 0; i < tmpNorList.Count; i++) {
                             npc = tmpNorList[i] as NormNpc;
                             npc.ClearScript();
                             npc.LoadNPCScript();

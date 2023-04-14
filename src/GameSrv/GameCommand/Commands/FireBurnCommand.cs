@@ -14,9 +14,9 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            int nInt = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
-            int nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            int nN = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            var nInt = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            var nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            var nN = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
             if (playObject.Permission < 6)
             {
                 return;
@@ -26,7 +26,7 @@ namespace GameSrv.GameCommand.Commands
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, playObject.CurrX, playObject.CurrY, (byte)nInt, nTime, nN);
+            var fireBurnEvent = new FireBurnEvent(playObject, playObject.CurrX, playObject.CurrY, (byte)nInt, nTime, nN);
             M2Share.EventMgr.AddEvent(fireBurnEvent);
         }
     }

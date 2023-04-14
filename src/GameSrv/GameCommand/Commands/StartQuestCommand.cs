@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sQuestName = @params.Length > 0 ? @params[0] : "";
+            var sQuestName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sQuestName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;

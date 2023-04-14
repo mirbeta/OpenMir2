@@ -1,4 +1,5 @@
 ﻿using GameSrv.Magic;
+using GameSrv.Monster;
 using GameSrv.Player;
 using GameSrv.RobotPlay;
 using SystemModule.Consts;
@@ -106,22 +107,6 @@ namespace GameSrv.Actor
                 HealthTick += M2Share.Config.HealthFillTime;
                 HealthSpellChanged();
             }
-            // 检查HP/MP值是否大于最大值，大于则降低到正常大小
-            bool boNeedRecalc = false;
-            if (WAbil.HP > WAbil.MaxHP)
-            {
-                boNeedRecalc = true;
-                WAbil.HP = (ushort)(WAbil.MaxHP - 1);
-            }
-            if (WAbil.MP > WAbil.MaxMP)
-            {
-                boNeedRecalc = true;
-                WAbil.MP = (ushort)(WAbil.MaxMP - 1);
-            }
-            if (boNeedRecalc)
-            {
-                HealthSpellChanged();
-            }
             // 清理目标对象
             if (TargetCret != null)//fix 目标对象走远后还会攻击人物(人物的攻击目标没清除)
             {
@@ -224,7 +209,7 @@ namespace GameSrv.Actor
                     CheckRoyaltyTick = HUtil32.GetTickCount();
                     if (Master != null)
                     {
-                        if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (SlaveExpLevel < 5))
+                        if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (((MonsterObject)this).SlaveExpLevel < 5))
                         {
                             MasterRoyaltyTick = 0;
                         }
@@ -242,7 +227,7 @@ namespace GameSrv.Actor
                             WAbil.HP = (ushort)(WAbil.HP / 10);
                             RefShowName();
                         }
-                        if (MasterTick != 0)
+                        if (MasterTick > 0)
                         {
                             if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000) //超过叛变时间则死亡
                             {
@@ -283,9 +268,25 @@ namespace GameSrv.Actor
                 {
                     Envir.VerifyMapTime(CurrX, CurrY, this);// 刷新在地图上位置的时间
                 }
+                // 检查HP/MP值是否大于最大值，大于则降低到正常大小
+                var needRecalc = false;
+                if (WAbil.HP > WAbil.MaxHP)
+                {
+                    needRecalc = true;
+                    WAbil.HP = (ushort)(WAbil.MaxHP - 1);
+                }
+                if (WAbil.MP > WAbil.MaxMP)
+                {
+                    needRecalc = true;
+                    WAbil.MP = (ushort)(WAbil.MaxMP - 1);
+                }
+                if (needRecalc)
+                {
+                    HealthSpellChanged();
+                }
             }
             bool boChg = false;
-            boNeedRecalc = false;
+            var boNeedRecalc = false;
             for (int i = 0; i < StatusArrTick.Length; i++)
             {
                 if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
@@ -345,9 +346,9 @@ namespace GameSrv.Actor
                 {
                     if (Animal)
                     {
-                        MeatQuality -= 1000;
+                        ((AnimalObject)this).MeatQuality -= 1000;
                     }
-                    DamageHealth((ushort)(GreenPoisoningPoint + 1));
+                    DamageHealth(GreenPoisoningPoint + 1);
                     HealthTick = 0;
                     SpellTick = 0;
                     HealthSpellChanged();
@@ -713,7 +714,7 @@ namespace GameSrv.Actor
                             {
                                 if (Animal)
                                 {
-                                    MeatQuality -= (ushort)(nDamage * 1000);
+                                    ((AnimalObject)this).MeatQuality -= (ushort)(nDamage * 1000);
                                 }
                                 SendMsg(Messages.RM_STRUCK, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId);
                             }
@@ -920,9 +921,13 @@ namespace GameSrv.Actor
             {
                 return 0x7D;
             }
-            if (baseObject.Master != null && baseObject.SlaveExpLevel <= Grobal2.SlaveMaxLevel)
+            if (baseObject.Master != null)
             {
-                return M2Share.Config.SlaveColor[baseObject.SlaveExpLevel];
+                var slaveExpLevel = ((MonsterObject)baseObject).SlaveExpLevel;
+                if (slaveExpLevel <= Grobal2.SlaveMaxLevel)
+                {
+                    return M2Share.Config.SlaveColor[slaveExpLevel];
+                }
             }
             return baseObject.GetNameColor();
         }

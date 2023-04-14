@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
     public class ChangeObModeCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            bool boFlag = !playObject.ObMode;
+            var boFlag = !playObject.ObMode;
             if (boFlag) {
                 playObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");// 发送刷新数据到客户端，解决隐身有影子问题
             }

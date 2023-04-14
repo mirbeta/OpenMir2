@@ -12,8 +12,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sParam1 = @params.Length > 0 ? @params[0] : "";
-            int nTime = HUtil32.StrToInt(sParam1, -1);
+            var sParam1 = @params.Length > 0 ? @params[0] : "";
+            var nTime = HUtil32.StrToInt(sParam1, -1);
             int dwTime;
             if (nTime > 0) {
                 dwTime = nTime * 1000;

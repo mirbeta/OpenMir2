@@ -13,21 +13,21 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sSkillName = @params.Length > 1 ? @params[1] : "";
-            int nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sSkillName = @params.Length > 1 ? @params[1] : "";
+            var nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
             UserMagic userMagic;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel <= 0) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = 0; i < mPlayObject.MagicList.Count; i++) {
+            for (var i = 0; i < mPlayObject.MagicList.Count; i++) {
                 userMagic = mPlayObject.MagicList[i];
                 //if (string.Compare(UserMagic.MagicInfo.GetMagicName(), sSkillName, true) == 0)
                 //{

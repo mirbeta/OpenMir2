@@ -10,17 +10,17 @@ namespace GameSrv.GameCommand.Commands {
     public class NpcScriptCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            string sScriptFileName = string.Empty;
-            int nNpcType = -1;
-            BaseObject baseObject = playObject.GetPoseCreate();
+            var sScriptFileName = string.Empty;
+            var nNpcType = -1;
+            var baseObject = playObject.GetPoseCreate();
             if (baseObject != null) {
-                for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
+                for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
                     if (M2Share.WorldEngine.MerchantList[i] == baseObject) {
                         nNpcType = 0;
                         break;
                     }
                 }
-                for (int i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++) {
+                for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++) {
                     if (M2Share.WorldEngine.QuestNpcList[i] == baseObject) {
                         nNpcType = 1;
                         break;
@@ -32,23 +32,23 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             if (nNpcType == 0) {
-                Merchant merchant = (Merchant)baseObject;
+                var merchant = (Merchant)baseObject;
                 sScriptFileName = M2Share.GetEnvirFilePath(ScriptConst.sMarket_Def + merchant.ScriptName + "-" + merchant.MapName + ".txt");
             }
             if (nNpcType == 1) {
-                NormNpc normNpc = (NormNpc)baseObject;
+                var normNpc = (NormNpc)baseObject;
                 sScriptFileName = M2Share.GetEnvirFilePath(ScriptConst.sNpc_def + normNpc.ChrName + "-" + normNpc.MapName + ".txt");
             }
             if (File.Exists(sScriptFileName)) {
-                using StringList loadList = new StringList();
+                using var loadList = new StringList();
                 try {
                     loadList.LoadFromFile(sScriptFileName);
                 }
                 catch {
                     playObject.SysMsg("读取脚本文件错误: " + sScriptFileName, MsgColor.Red, MsgType.Hint);
                 }
-                for (int i = 0; i < loadList.Count; i++) {
-                    string sScriptLine = loadList[i].Trim();
+                for (var i = 0; i < loadList.Count; i++) {
+                    var sScriptLine = loadList[i].Trim();
                     sScriptLine = HUtil32.ReplaceChar(sScriptLine, ' ', ',');
                     playObject.SysMsg(i + "," + sScriptLine, MsgColor.Blue, MsgType.Hint);
                 }

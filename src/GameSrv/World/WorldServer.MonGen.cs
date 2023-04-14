@@ -566,15 +566,15 @@ namespace GameSrv.World {
                     break;
                 case ActorRace.MonsterDigoutzombi:
                     cert = new DigOutZombi();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.BoFearFire = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) ((MonsterObject)cert).BoFearFire = true;
                     break;
                 case ActorRace.MonsterZilkinzombi:
                     cert = new ZilKinZombi();
-                    if (M2Share.RandomNumber.Random(4) == 0) cert.BoFearFire = true;
+                    if (M2Share.RandomNumber.Random(4) == 0) ((MonsterObject)cert).BoFearFire = true;
                     break;
                 case 97:
                     cert = new CowMonster();
-                    if (M2Share.RandomNumber.Random(2) == 0) cert.BoFearFire = true;
+                    if (M2Share.RandomNumber.Random(2) == 0) ((MonsterObject)cert).BoFearFire = true;
                     break;
                 case ActorRace.MonsterWhiteskeleton:
                     cert = new WhiteSkeleton();
@@ -690,8 +690,8 @@ namespace GameSrv.World {
             cert.ChrName = sMonName;
             cert.WAbil = cert.Abil;
             cert.OnEnvirnomentChanged();
-            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
             MonGetRandomItems(cert);
+            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
             cert.Initialize();
             if (cert.AddtoMapSuccess) {
                 BaseObject outofrange = null;

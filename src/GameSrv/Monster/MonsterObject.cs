@@ -8,6 +8,22 @@ namespace GameSrv.Monster
 {
     public class MonsterObject : AnimalObject
     {
+        /// <summary>
+        /// 杀怪计数
+        /// </summary>
+        public int KillMonCount;
+        /// <summary>
+        /// 宝宝等级(1-7)
+        /// </summary>
+        public byte SlaveExpLevel;
+        /// <summary>
+        /// 召唤等级
+        /// </summary>
+        public byte SlaveMakeLevel;
+        /// <summary>
+        /// 不进入火墙
+        /// </summary>
+        public bool BoFearFire;
         private int m_dwThinkTick;
         private bool m_boDupMode;
 
@@ -20,10 +36,39 @@ namespace GameSrv.Monster
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
         }
-
-        protected BaseObject MakeClone(string sMonName, BaseObject OldMon)
+        
+        private void GainSlaveExp(byte nLevel)
         {
-            AnimalObject ElfMon = (AnimalObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
+            KillMonCount += nLevel;
+            if (GainSlaveUpKillCount() < KillMonCount)
+            {
+                KillMonCount -= GainSlaveUpKillCount();
+                if (SlaveExpLevel < (SlaveMakeLevel * 2 + 1))
+                {
+                    SlaveExpLevel++;
+                    RecalcAbilitys();
+                    RefNameColor();
+                }
+            }
+        }
+        
+        private int GainSlaveUpKillCount()
+        {
+            int tCount;
+            if (SlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
+            {
+                tCount = M2Share.Config.MonUpLvNeedKillCount[SlaveExpLevel];
+            }
+            else
+            {
+                tCount = 0;
+            }
+            return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
+        }
+
+        protected BaseObject MakeClone(string sMonName, MonsterObject OldMon)
+        {
+            MonsterObject ElfMon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
                 if (OldMon.TargetCret == null)

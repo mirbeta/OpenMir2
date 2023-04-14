@@ -220,8 +220,8 @@ namespace GameSrv.GameCommand.Commands
             var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (playObject != null)
             {
-                int nFlag = HUtil32.StrToInt(@params[1], 0);
-                int nValue = HUtil32.StrToInt(@params[2], 0);
+                var nFlag = HUtil32.StrToInt(@params[1], 0);
+                var nValue = HUtil32.StrToInt(@params[2], 0);
                 playObject.SetQuestFlagStatus(nFlag, nValue);
                 if (playObject.GetQuestFalgStatus(nFlag) == 1)
                 {
@@ -252,11 +252,11 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            PlayObject targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (playObject != null)
             {
-                int nFlag = HUtil32.StrToInt(@params[1], 0);
-                int nValue = HUtil32.StrToInt(@params[2], 0);
+                var nFlag = HUtil32.StrToInt(@params[1], 0);
+                var nValue = HUtil32.StrToInt(@params[2], 0);
                 playObject.SetQuestUnitOpenStatus(nFlag, nValue);
                 if (playObject.GetQuestUnitOpenStatus(nFlag) == 1)
                 {
@@ -287,11 +287,11 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            PlayObject targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
             if (playObject != null)
             {
-                int nFlag = HUtil32.StrToInt(@params[1], 0);
-                int nValue = HUtil32.StrToInt(@params[2], 0);
+                var nFlag = HUtil32.StrToInt(@params[1], 0);
+                var nValue = HUtil32.StrToInt(@params[2], 0);
                 playObject.SetQuestUnitStatus(nFlag, nValue);
                 if (playObject.GetQuestUnitStatus(nFlag) == 1)
                 {

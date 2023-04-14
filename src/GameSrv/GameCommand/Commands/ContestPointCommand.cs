@@ -13,13 +13,13 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sGuildName = @params.Length > 0 ? @params[0] : "";
+            var sGuildName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sGuildName) || !string.IsNullOrEmpty(sGuildName) && sGuildName[0] == '?') {
                 playObject.SysMsg("查看行会战的得分数。", MsgColor.Red, MsgType.Hint);
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            GuildInfo guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            var guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (guild != null) {
                 playObject.SysMsg($"{sGuildName} 的得分为: {guild.ContestPoint}", MsgColor.Green, MsgType.Hint);
             }

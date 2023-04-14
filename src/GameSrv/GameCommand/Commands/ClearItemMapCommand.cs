@@ -8,11 +8,11 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sMap = @params.Length > 0 ? @params[0] : "";
-            string sItemName = @params.Length > 1 ? @params[1] : "";
-            int nX = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
-            int nY = @params.Length > 3 ? HUtil32.StrToInt(@params[3],0) : 0;
-            int nRange = @params.Length > 4 ? HUtil32.StrToInt(@params[4],0) : 0;
+            var sMap = @params.Length > 0 ? @params[0] : "";
+            var sItemName = @params.Length > 1 ? @params[1] : "";
+            var nX = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
+            var nY = @params.Length > 3 ? HUtil32.StrToInt(@params[3],0) : 0;
+            var nRange = @params.Length > 4 ? HUtil32.StrToInt(@params[4],0) : 0;
             if (string.IsNullOrEmpty(sMap) || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?') {
                 //PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
                 return;

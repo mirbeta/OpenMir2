@@ -12,18 +12,18 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sFlag = @params.Length > 1 ? @params[1] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sFlag = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?') {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            int nFlag = HUtil32.StrToInt(sFlag, 0);
+            var nFlag = HUtil32.StrToInt(sFlag, 0);
             if (mPlayObject.GetQuestFalgStatus(nFlag) == 1) {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandShowHumanFlagONMsg, mPlayObject.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
             }

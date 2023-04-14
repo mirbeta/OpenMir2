@@ -15,21 +15,21 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sMap = @params.Length > 0 ? @params[0] : "";//地图号
-            string sX = @params.Length > 1 ? @params[1] : "";//坐标X
-            string sY = @params.Length > 2 ? @params[2] : "";//坐标Y
-            string sType = @params.Length > 3 ? @params[3] : "";//光环效果
-            string sTime = @params.Length > 4 ? @params[4] : "";//持续时间
-            string sPoint = @params.Length > 5 ? @params[5] : "";//未知
+            var sMap = @params.Length > 0 ? @params[0] : "";//地图号
+            var sX = @params.Length > 1 ? @params[1] : "";//坐标X
+            var sY = @params.Length > 2 ? @params[2] : "";//坐标Y
+            var sType = @params.Length > 3 ? @params[3] : "";//光环效果
+            var sTime = @params.Length > 4 ? @params[4] : "";//持续时间
+            var sPoint = @params.Length > 5 ? @params[5] : "";//未知
             if (string.IsNullOrEmpty(sMap) || sMap != "" && sMap[1] == '?') {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            int nX = HUtil32.StrToInt(sX, -1);
-            int nY = HUtil32.StrToInt(sY, -1);
-            int nType = HUtil32.StrToInt(sType, -1);
-            int nTime = HUtil32.StrToInt(sTime, -1);
-            int nPoint = HUtil32.StrToInt(sPoint, -1);
+            var nX = (short)HUtil32.StrToInt(sX, -1);
+            var nY = (short)HUtil32.StrToInt(sY, -1);
+            var nType = (byte)HUtil32.StrToInt(sType, -1);
+            var nTime = HUtil32.StrToInt(sTime, -1);
+            var nPoint = HUtil32.StrToInt(sPoint, -1);
             if (nPoint < 0) {
                 nPoint = 1;
             }
@@ -38,11 +38,11 @@ namespace GameSrv.GameCommand.Commands {
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Envirnoment envir = M2Share.MapMgr.FindMap(sMap);
+            var envir = M2Share.MapMgr.FindMap(sMap);
             if (envir != null) {
-                Envirnoment oldEnvir = playObject.Envir;
+                var oldEnvir = playObject.Envir;
                 playObject.Envir = envir;
-                FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
+                var fireBurnEvent = new FireBurnEvent(playObject, nX, nY, nType, nTime * 1000, nPoint);
                 M2Share.EventMgr.AddEvent(fireBurnEvent);
                 playObject.Envir = oldEnvir;
                 return;

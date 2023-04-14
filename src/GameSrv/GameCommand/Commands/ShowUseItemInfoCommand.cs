@@ -13,18 +13,18 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = 0; i < mPlayObject.UseItems.Length; i++) {
-                UserItem userItem = mPlayObject.UseItems[i];
+            for (var i = 0; i < mPlayObject.UseItems.Length; i++) {
+                var userItem = mPlayObject.UseItems[i];
                 if (userItem.Index == 0) {
                     continue;
                 }

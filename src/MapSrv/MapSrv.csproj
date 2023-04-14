@@ -11,6 +11,9 @@
     </PropertyGroup>
 
     <Choose>
+        <When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
+
+        </When>
         <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
             <PropertyGroup>
                 <OutputPath>D:\MirServer\MapServer</OutputPath>

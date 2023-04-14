@@ -10,6 +10,9 @@
 	</PropertyGroup>
 	
 	<Choose>
+		<When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
+
+		</When>
 		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>
 				<DebugSymbols>false</DebugSymbols>
@@ -17,7 +20,7 @@
 				<DefineConstants>TRACE</DefineConstants>
 			</PropertyGroup>
 		</When>
-		<When Condition="$(Configuration)=='Debug'">
+		<When Condition="$(Configuration)=='Debug' and '$(Mode)' == ''">
 			<Choose>
 				<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
 					<PropertyGroup>

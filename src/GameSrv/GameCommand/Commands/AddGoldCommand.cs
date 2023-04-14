@@ -12,9 +12,9 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumName = @params.Length > 0 ? @params[0] : "";//玩家名称
-            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;//金币数量
-            int nServerIndex = 0;
+            var sHumName = @params.Length > 0 ? @params[0] : "";//玩家名称
+            var nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;//金币数量
+            var nServerIndex = 0;
             if (playObject.Permission < 6) {
                 return;
             }
@@ -22,7 +22,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (mPlayObject != null) {
                 if (mPlayObject.Gold + nCount < mPlayObject.GoldMax) {
                     mPlayObject.Gold += nCount;

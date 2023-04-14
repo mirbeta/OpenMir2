@@ -10,7 +10,7 @@ namespace GameSrv.GameCommand.Commands {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
             if (playObject.RecallSuite || playObject.Permission >= 6) {
-                short dwValue = (short)((HUtil32.GetTickCount() - playObject.GroupRcallTick) / 1000);
+                var dwValue = (short)((HUtil32.GetTickCount() - playObject.GroupRcallTick) / 1000);
                 playObject.GroupRcallTick = playObject.GroupRcallTick + dwValue * 1000;
                 if (playObject.Permission >= 6) {
                     playObject.GroupRcallTime = 0;
@@ -23,8 +23,8 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 if (playObject.GroupRcallTime == 0) {
                     if (playObject.GroupOwner == playObject.ActorId) {
-                        for (int i = 0; i < playObject.GroupMembers.Count; i++) {
-                            PlayObject mPlayObject = playObject.GroupMembers[i];
+                        for (var i = 0; i < playObject.GroupMembers.Count; i++) {
+                            var mPlayObject = playObject.GroupMembers[i];
                             if (mPlayObject.AllowGroupReCall) {
                                 if (mPlayObject.Envir.Flag.NoReCall) {
                                     playObject.SysMsg($"{mPlayObject.ChrName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);

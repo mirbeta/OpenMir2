@@ -9,8 +9,8 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            int nType = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
-            int nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            var nType = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            var nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (playObject.Permission < 6) {
                 return;
             }

@@ -23,14 +23,14 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            UserCastle mCastle = M2Share.CastleMgr.InCastleWarArea(playObject);
+            var mCastle = M2Share.CastleMgr.InCastleWarArea(playObject);
             if (mCastle != null && mCastle.UnderWar) {
                 playObject.SysMsg("攻城区域不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            int nRecallCount = 0;
-            int nNoRecallCount = 0;
-            int dwValue = (HUtil32.GetTickCount() - playObject.GroupRcallTick) / 1000;
+            var nRecallCount = 0;
+            var nNoRecallCount = 0;
+            var dwValue = (HUtil32.GetTickCount() - playObject.GroupRcallTick) / 1000;
             playObject.GroupRcallTick = playObject.GroupRcallTick + dwValue * 1000;
             if (playObject.Permission >= 6) {
                 playObject.GroupRcallTime = 0;
@@ -45,13 +45,13 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg($"{playObject.GroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (int i = 0; i < playObject.MyGuild.RankList.Count; i++) {
-                GuildRank guildRank = playObject.MyGuild.RankList[i];
+            for (var i = 0; i < playObject.MyGuild.RankList.Count; i++) {
+                var guildRank = playObject.MyGuild.RankList[i];
                 if (guildRank == null) {
                     continue;
                 }
-                for (int j = 0; j < guildRank.MemberList.Count; j++) {
-                    PlayObject memberObject = M2Share.WorldEngine.GetPlayObject(guildRank.MemberList[j].MemberName);
+                for (var j = 0; j < guildRank.MemberList.Count; j++) {
+                    var memberObject = M2Share.WorldEngine.GetPlayObject(guildRank.MemberList[j].MemberName);
                     if (memberObject != null) {
                         if (memberObject == playObject) {
                             // Inc(nNoRecallCount);

@@ -12,14 +12,14 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            string sTime = @params.Length > 1 ? @params[1] : "";
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var sTime = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sTime) || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            uint dwTime = (uint)HUtil32.StrToInt(sTime, 5);
+            var dwTime = (uint)HUtil32.StrToInt(sTime, 5);
             HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
             try {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))

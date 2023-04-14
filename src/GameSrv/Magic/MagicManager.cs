@@ -1,5 +1,6 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Event.Events;
+using GameSrv.Monster;
 using GameSrv.Player;
 using SystemModule.Consts;
 using SystemModule.Enums;
@@ -385,9 +386,9 @@ namespace GameSrv.Magic
                     }
                     break;
                 case MagicConst.SKILL_TAMMING:
-                    if (playObject.IsProperTarget(targetObject))
+                    if (playObject.IsProperTarget(targetObject) && !targetObject.Animal) //不是动物才能被诱惑
                     {
-                        if (MagTamming(playObject, targetObject, nTargetX, nTargetY, userMagic.Level))
+                        if (MagTamming(playObject, (MonsterObject)targetObject, nTargetX, nTargetY, userMagic.Level))
                         {
                             boTrain = true;
                         }
@@ -614,8 +615,8 @@ namespace GameSrv.Magic
                         {
                             MagicBase.UseAmulet(playObject, 1, 1, nAmuletIdx);
                             nPower = (ushort)(userMagic.Level + 1 + M2Share.RandomNumber.Random(userMagic.Level));
-                            n14 = (short)playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
-                            ((PlayObject)targetObject).AttPowerUp(nPower, n14);
+                            var nTime = playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
+                            ((PlayObject)targetObject).AttPowerUp(nPower, nTime);
                             boTrain = true;
                             boSpellFail = false;
                         }
@@ -694,7 +695,7 @@ namespace GameSrv.Magic
         /// <summary>
         /// 诱惑之光
         /// </summary>
-        private static bool MagTamming(PlayObject playObject, BaseObject targetObject, int nTargetX, int nTargetY, byte magicLevel)
+        private static bool MagTamming(PlayObject playObject, MonsterObject targetObject, int nTargetX, int nTargetY, byte magicLevel)
         {
             var result = false;
             if (targetObject.Race != ActorRace.Play && M2Share.RandomNumber.Random(4 - magicLevel) == 0)
@@ -765,7 +766,7 @@ namespace GameSrv.Magic
                                                 targetObject.NextHitTime = 2000 - magicLevel * 200;
                                             }
                                             targetObject.RefShowName();
-                                            playObject.SlaveList.Add(targetObject);
+                                            playObject.SlaveList.Add((MonsterObject)targetObject);
                                         }
                                         else
                                         {

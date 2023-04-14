@@ -12,13 +12,13 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sHumanName = @params.Length > 0 ? @params[0] : "";
-            int nLevel = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            var nLevel = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (string.IsNullOrEmpty(sHumanName)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayObject mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 int nOLevel = mPlayObject.Abil.Level;
                 mPlayObject.HasLevelUp(1);

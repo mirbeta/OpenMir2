@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sParam1 = string.Empty;
+            var sParam1 = string.Empty;
             if (@params.Length > 0) {
                 sParam1 = @params.Length > 0 ? @params[0] : "";
                 if (string.IsNullOrEmpty(sParam1)) {
@@ -25,7 +25,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            GuildInfo guild = M2Share.GuildMgr.FindGuild(sParam1);
+            var guild = M2Share.GuildMgr.FindGuild(sParam1);
             if (guild == null) {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
                 return;

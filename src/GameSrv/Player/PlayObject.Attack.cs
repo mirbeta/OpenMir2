@@ -893,7 +893,7 @@ namespace GameSrv.Player
                                 SpellTick = HUtil32._MAX(0, SpellTick);
                                 PerHealth -= 2;
                                 PerSpell -= 2;
-                                return result;
+                                return true;
                             }
                         }
                     }

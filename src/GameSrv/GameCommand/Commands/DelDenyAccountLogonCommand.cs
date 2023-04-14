@@ -9,14 +9,14 @@ namespace GameSrv.GameCommand.Commands {
             if (@params == null) {
                 return;
             }
-            string sAccount = @params.Length > 0 ? @params[0] : "";
-            string sFixDeny = @params.Length > 1 ? @params[1] : "";
+            var sAccount = @params.Length > 0 ? @params[0] : "";
+            var sFixDeny = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sAccount)) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            bool boDelete = false;
-            for (int i = 0; i < M2Share.DenyAccountList.Count; i++) {
+            var boDelete = false;
+            for (var i = 0; i < M2Share.DenyAccountList.Count; i++) {
                 //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{
                 //    //if (((int)M2Share.g_DenyAccountList[i]) != 0)

@@ -17,13 +17,13 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            string sMapName = @params.Length > 0 ? @params[0] : "";
+            var sMapName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sMapName))
             {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 playObject.SysMsg(CommandHelp.GameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);

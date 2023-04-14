@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
     public class ChangeSuperManModeCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            bool boFlag = !playObject.SuperMan;
+            var boFlag = !playObject.SuperMan;
             playObject.SuperMan = boFlag;
             if (playObject.SuperMan) {
                 playObject.SysMsg(Settings.SupermanMode, MsgColor.Green, MsgType.Hint);
