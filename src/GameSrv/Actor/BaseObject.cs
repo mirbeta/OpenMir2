@@ -187,10 +187,6 @@ namespace GameSrv.Actor
         /// 被打到是否减慢行走速度,等级小于50的怪 F-减慢 T-不减慢
         /// </summary>
         public bool RushMode;
-        /// <summary>
-        /// 非攻击模式 F-可攻击 T-不攻击
-        /// </summary>
-        public bool NoAttackMode;
         public bool NoTame;
         /// <summary>
         /// 尸体
@@ -471,7 +467,6 @@ namespace GameSrv.Actor
             BodyLeathery = 50;
             FixedHideMode = false;
             StickMode = false;
-            NoAttackMode = false;
             NoTame = false;
             AddAbil = new AddAbility();
             VisibleHumanList = new List<int>();
@@ -2749,7 +2744,7 @@ namespace GameSrv.Actor
             if (this is ElfMonster)
             {
                 FixedHideMode = true;
-                NoAttackMode = true;
+                ((ElfMonster)this).NoAttackMode = true;
                 ((ElfMonster)this).BoIsFirst = true;
             }
 

@@ -38,6 +38,10 @@ namespace GameSrv.Actor
         /// </summary>
         public int ProcessRunCount;
         /// <summary>
+        /// 非攻击模式 F-可攻击 T-不攻击
+        /// </summary>
+        public bool NoAttackMode;
+        /// <summary>
         /// 是否属于召唤怪物(宝宝)
         /// </summary>
         public bool IsSlave;
