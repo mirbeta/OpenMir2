@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class AddAbility
+    public struct AddAbility
     {
         public ushort HP;
         public ushort MP;
@@ -16,8 +16,17 @@
         public ushort HealthRecover;
         public ushort SpellRecover;
         public ushort AntiMagic;
+        /// <summary>
+        /// 幸运点
+        /// </summary>
         public byte Luck;
+        /// <summary>
+        /// 诅咒点或神圣点
+        /// </summary>
         public byte UnLuck;
+        /// <summary>
+        /// 攻击强度
+        /// </summary>
         public byte WeaponStrong;
         public byte UndeadPower;
         /// <summary>

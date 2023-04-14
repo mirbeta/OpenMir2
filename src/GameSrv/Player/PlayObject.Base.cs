@@ -2793,6 +2793,16 @@ namespace GameSrv.Player
                 {
                     SendSelfDelayMsg(Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
                 }
+                SpeedPoint = (byte)(SpeedPoint + AddAbil.SPEED);
+                HitPoint = (byte)(HitPoint + AddAbil.HIT);
+                AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
+                PoisonRecover = (ushort)(PoisonRecover + AddAbil.PoisonRecover);
+                HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
+                SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
+                AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
+                Luck = (byte)(Luck + AddAbil.Luck);
+                Luck = (byte)(Luck - AddAbil.UnLuck);
+                HitSpeed = AddAbil.HitSpeed;
                 WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
                 WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
                 WAbil.AC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
@@ -4286,9 +4296,8 @@ namespace GameSrv.Player
             return (MyGuild != null) && (GuildRankNo == 1);
         }
 
-        internal void ApplyItemParameters(UserItem uitem, StdItem stdItem, ref AddAbility aabil)
+        internal void ApplyItemParameters(UserItem uitem, StdItem item, ref AddAbility aabil)
         {
-            StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
             if (item != null)
             {
                 ClientItem clientItem = new ClientItem();

@@ -1,16 +1,16 @@
-﻿using GameSrv.Player;
-using SystemModule.Consts;
-using SystemModule.Data;
+﻿using SystemModule.Consts;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.Actor {
+namespace GameSrv.Actor
+{
     public partial class BaseObject {
         /// <summary>
         /// 计算自身属性
         /// </summary>
-        public virtual void RecalcAbilitys() {
-            AddAbil = new AddAbility();
+        public virtual void RecalcAbilitys()
+        {
+            AddAbil = default;
             Ability temp = WAbil;
             WAbil = (Ability)Abil.Clone();
             WAbil.HP = temp.HP;
