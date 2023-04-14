@@ -156,10 +156,6 @@ namespace GameSrv.Actor
         /// </summary>
         public byte Light;
         /// <summary>
-        /// 行会占争范围
-        /// </summary>
-        public bool GuildWarArea;
-        /// <summary>
         /// 所属城堡
         /// </summary>
         public UserCastle Castle;
@@ -464,7 +460,6 @@ namespace GameSrv.Actor
             CharStatusEx = 0;
             StatusTimeArr = new ushort[15];
             StatusArrTick = new int[15];
-            GuildWarArea = false;
             SuperMan = false;
             Skeleton = false;
             RushMode = false;

@@ -67,6 +67,10 @@ namespace GameSrv.Player
         /// </summary>
         public int GoldMax;
         /// <summary>
+        /// 行会占争范围
+        /// </summary>
+        public bool GuildWarArea;
+        /// <summary>
         /// 允许行会传送
         /// </summary>
         public bool AllowGuildReCall = false;
