@@ -44,6 +44,9 @@ namespace GameSrv.Player
         /// 魔血石时间
         /// </summary>
         private int IncMpStoneTime;
+        public ushort IncHealth;
+        public ushort IncSpell;
+        public ushort IncHealing;
 
         public CharacterObject()
         {

@@ -100,79 +100,6 @@ namespace GameSrv.Actor
                     }
                 }
             }
-            if (!Death && ((IncSpell > 0) || (IncHealth > 0) || (IncHealing > 0)))
-            {
-                int dwInChsTime = 600 - HUtil32._MIN(400, WAbil.Level * 10);
-                if (((HUtil32.GetTickCount() - IncHealthSpellTick) >= dwInChsTime) && !Death)
-                {
-                    int incHealthTick = HUtil32._MIN(200, HUtil32.GetTickCount() - IncHealthSpellTick - dwInChsTime);
-                    IncHealthSpellTick = HUtil32.GetTickCount() + incHealthTick;
-                    if ((IncSpell > 0) || (IncHealth > 0) || (PerHealing > 0))
-                    {
-                        if (PerHealth <= 0)
-                        {
-                            PerHealth = 1;
-                        }
-                        if (PerSpell <= 0)
-                        {
-                            PerSpell = 1;
-                        }
-                        if (PerHealing <= 0)
-                        {
-                            PerHealing = 1;
-                        }
-                        int nHP;
-                        if (IncHealth < PerHealth)
-                        {
-                            nHP = IncHealth;
-                            IncHealth = 0;
-                        }
-                        else
-                        {
-                            nHP = PerHealth;
-                            IncHealth -= PerHealth;
-                        }
-                        int nMP;
-                        if (IncSpell < PerSpell)
-                        {
-                            nMP = IncSpell;
-                            IncSpell = 0;
-                        }
-                        else
-                        {
-                            nMP = PerSpell;
-                            IncSpell -= PerSpell;
-                        }
-                        if (IncHealing < PerHealing)
-                        {
-                            nHP += IncHealing;
-                            IncHealing = 0;
-                        }
-                        else
-                        {
-                            nHP += PerHealing;
-                            IncHealing -= PerHealing;
-                        }
-                        PerHealth = (byte)(WAbil.Level / 10 + 5);
-                        PerSpell = (byte)(WAbil.Level / 10 + 5);
-                        PerHealing = 5;
-                        IncHealthSpell(nHP, nMP);
-                        if (WAbil.HP == WAbil.MaxHP)
-                        {
-                            IncHealth = 0;
-                            IncHealing = 0;
-                        }
-                        if (WAbil.MP == WAbil.MaxMP)
-                        {
-                            IncSpell = 0;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                IncHealthSpellTick = HUtil32.GetTickCount();
-            }
             if ((HealthTick < -M2Share.Config.HealthFillTime) && (WAbil.HP > 1))
             {
                 WAbil.HP -= 1;
@@ -196,7 +123,7 @@ namespace GameSrv.Actor
                 HealthSpellChanged();
             }
             // 清理目标对象
-            if (TargetCret != null)//修复弓箭卫士在人物进入房间后再出来，还会攻击人物(人物的攻击目标没清除)
+            if (TargetCret != null)//fix 目标对象走远后还会攻击人物(人物的攻击目标没清除)
             {
                 if (((HUtil32.GetTickCount() - TargetFocusTick) > 30000) || TargetCret.Death || TargetCret.Ghost || (TargetCret.Envir != Envir) || (Math.Abs(TargetCret.CurrX - CurrX) > 15) || (Math.Abs(TargetCret.CurrY - CurrY) > 15))
                 {
@@ -453,9 +380,6 @@ namespace GameSrv.Actor
                     MonGen = null;
                 }
             }
-            IncSpell = 0;
-            IncHealth = 0;
-            IncHealing = 0;
             KillFunc();
             if (LastHiter != null && Race != ActorRace.Play)
             {
@@ -798,25 +722,6 @@ namespace GameSrv.Actor
                         {
                             StatusTimeArr[PoisonState.STONE] = 1;
                             FastParalysis = false;
-                        }
-                        break;
-                    case Messages.RM_MAGHEALING:
-                        if ((IncHealing + processMsg.nParam1) < 300)
-                        {
-                            if (Race == ActorRace.Play)
-                            {
-                                IncHealing += (ushort)processMsg.nParam1;
-                                PerHealing = 5;
-                            }
-                            else
-                            {
-                                IncHealing += (ushort)processMsg.nParam1;
-                                PerHealing = 5;
-                            }
-                        }
-                        else
-                        {
-                            IncHealing = 300;
                         }
                         break;
                     case Messages.RM_STRUCKEFFECT:
