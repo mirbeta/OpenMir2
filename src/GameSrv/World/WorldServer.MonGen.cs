@@ -690,8 +690,8 @@ namespace GameSrv.World {
             cert.ChrName = sMonName;
             cert.WAbil = cert.Abil;
             cert.OnEnvirnomentChanged();
-            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
             MonGetRandomItems(cert);
+            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
             cert.Initialize();
             if (cert.AddtoMapSuccess) {
                 BaseObject outofrange = null;

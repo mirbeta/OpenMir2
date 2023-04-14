@@ -386,9 +386,9 @@ namespace GameSrv.Magic
                     }
                     break;
                 case MagicConst.SKILL_TAMMING:
-                    if (playObject.IsProperTarget(targetObject))
+                    if (playObject.IsProperTarget(targetObject) && !targetObject.Animal) //不是动物才能被诱惑
                     {
-                        if (MagTamming(playObject, targetObject, nTargetX, nTargetY, userMagic.Level))
+                        if (MagTamming(playObject, (MonsterObject)targetObject, nTargetX, nTargetY, userMagic.Level))
                         {
                             boTrain = true;
                         }
@@ -695,7 +695,7 @@ namespace GameSrv.Magic
         /// <summary>
         /// 诱惑之光
         /// </summary>
-        private static bool MagTamming(PlayObject playObject, BaseObject targetObject, int nTargetX, int nTargetY, byte magicLevel)
+        private static bool MagTamming(PlayObject playObject, MonsterObject targetObject, int nTargetX, int nTargetY, byte magicLevel)
         {
             var result = false;
             if (targetObject.Race != ActorRace.Play && M2Share.RandomNumber.Random(4 - magicLevel) == 0)
@@ -751,7 +751,7 @@ namespace GameSrv.Magic
                                             }
                                             targetObject.Master = playObject;
                                             targetObject.MasterRoyaltyTick = (M2Share.RandomNumber.Random(playObject.Abil.Level * 2) + (magicLevel << 2) * 5 + 20) * 60 * 1000 + HUtil32.GetTickCount();
-                                            ((MonsterObject)targetObject).SlaveMakeLevel = magicLevel;
+                                            targetObject.SlaveMakeLevel = magicLevel;
                                             if (targetObject.MasterTick == 0)
                                             {
                                                 targetObject.MasterTick = HUtil32.GetTickCount();
