@@ -37,7 +37,7 @@ namespace GameSrv.Monster
         /// <summary>
         /// 怪物叛变时间间隔
         /// </summary>
-        protected int CheckRoyaltyTick;
+        private int CheckRoyaltyTick;
         
         public MonsterObject() : base()
         {
