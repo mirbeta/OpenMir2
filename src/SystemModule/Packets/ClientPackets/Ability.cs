@@ -12,14 +12,29 @@ namespace SystemModule.Packets.ClientPackets
         public byte Level { get; set; }
         [MemoryPackOrder(1)]
         public byte Reserved1 { get; set; }
+        /// <summary>
+        /// 防御力
+        /// </summary>
         [MemoryPackOrder(2)]
         public ushort AC { get; set; }
+        /// <summary>
+        /// 魔防力
+        /// </summary>
         [MemoryPackOrder(3)]
         public ushort MAC { get; set; }
+        /// <summary>
+        /// 攻击力
+        /// </summary>
         [MemoryPackOrder(4)]
         public ushort DC { get; set; }
+        /// <summary>
+        /// 魔法力
+        /// </summary>
         [MemoryPackOrder(5)]
         public ushort MC { get; set; }
+        /// <summary>
+        /// 道术
+        /// </summary>
         [MemoryPackOrder(6)]
         public ushort SC { get; set; }
         /// <summary>
