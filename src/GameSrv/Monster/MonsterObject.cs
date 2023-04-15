@@ -104,6 +104,9 @@ namespace GameSrv.Monster
         /// <param name="acrotId"></param>
         private void UpdateMonsterVisible(int acrotId)
         {
+            if ((HUtil32.GetTickCount() - SearchTick) <= SearchTime)
+                return;
+            SearchTick = HUtil32.GetTickCount();
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
             var baseObject = M2Share.ActorMgr.Get(acrotId);
