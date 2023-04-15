@@ -119,7 +119,6 @@ namespace GameSrv.Actor
         /// 敏捷度
         /// </summary>
         public byte SpeedPoint;
-
         /// <summary>
         /// 否可以看到隐身人物(视线范围) 
         /// </summary>
@@ -279,7 +278,7 @@ namespace GameSrv.Actor
         /// </summary>
         public bool StoneMode;
         /// <summary>
-        /// 魔法隐身了
+        /// 魔法隐身(隐身术)
         /// </summary>
         public bool Transparent;
         /// <summary>

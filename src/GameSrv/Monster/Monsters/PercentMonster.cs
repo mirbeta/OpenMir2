@@ -119,9 +119,7 @@ namespace GameSrv.Monster.Monsters {
                                     }
                                 }
                             }
-                            if (!Master.SlaveRelax &&
-                                (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 ||
-                                 Math.Abs(CurrY - Master.CurrY) > 20)) {
+                            if (!Master.SlaveRelax && (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20)) {
                                 SpaceMove(Master.Envir.MapName, TargetX, TargetY, 1);
                             }
                         }
