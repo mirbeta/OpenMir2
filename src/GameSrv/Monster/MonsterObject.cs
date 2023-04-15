@@ -26,7 +26,7 @@ namespace GameSrv.Monster
         /// <summary>
         /// 思考间隔
         /// </summary>
-        public int ThinkTick;
+        protected int ThinkTick;
         /// <summary>
         /// 重叠检测
         /// </summary>
@@ -62,11 +62,11 @@ namespace GameSrv.Monster
         /// <summary>
         /// 不能走动时间(困魔咒)
         /// </summary>
-        public int HolySeizeTick;
+        private int HolySeizeTick;
         /// <summary>
         /// 不能走动时长(困魔咒)
         /// </summary>
-        public int HolySeizeInterval;
+        private int HolySeizeInterval;
         
         public MonsterObject() : base()
         {
