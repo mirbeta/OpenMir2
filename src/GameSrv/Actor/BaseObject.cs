@@ -290,10 +290,6 @@ namespace GameSrv.Actor
         /// </summary>
         public bool ObMode;
         /// <summary>
-        /// 死亡是不是掉装备
-        /// </summary>
-        public bool NoDropUseItem = false;
-        /// <summary>
         /// 力量物品值
         /// </summary>
         protected byte PowerItem = 0;

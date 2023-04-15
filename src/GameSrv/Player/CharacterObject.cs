@@ -70,6 +70,10 @@ namespace GameSrv.Player
         public ushort IncHealth;
         public ushort IncSpell;
         public ushort IncHealing;
+        /// <summary>
+        /// 死亡是不是掉装备
+        /// </summary>
+        public bool NoDropUseItem = false;
 
         public CharacterObject()
         {
