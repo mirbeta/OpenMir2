@@ -25,6 +25,14 @@ namespace GameSrv.Monster
         private int m_dwThinkTick;
         private bool m_boDupMode;
         /// <summary>
+        /// 怪物叛变时间
+        /// </summary>
+        public int MasterRoyaltyTick;
+        /// <summary>
+        /// 诱惑怪物时间
+        /// </summary>
+        public int MasterTick;
+        /// <summary>
         /// 怪物叛变时间间隔
         /// </summary>
         private int CheckRoyaltyTick;
