@@ -1,6 +1,4 @@
 ﻿using GameSrv.Actor;
-using Spectre.Console;
-using SystemModule.Core.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -38,6 +36,18 @@ namespace GameSrv.Monster
         /// 怪物叛变时间间隔
         /// </summary>
         private int CheckRoyaltyTick;
+        /// <summary>
+        /// 狂暴模式
+        /// </summary>
+        public bool CrazyMode;
+        /// <summary>
+        /// 狂暴开始时间
+        /// </summary>
+        private int CrazyModeTick;
+        /// <summary>
+        /// 狂暴时常
+        /// </summary>
+        private int CrazyModeInterval;
         
         public MonsterObject() : base()
         {
@@ -48,6 +58,7 @@ namespace GameSrv.Monster
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
             CheckRoyaltyTick = HUtil32.GetTickCount();
+            CrazyMode = false;
         }
         
         private void GainSlaveExp(byte nLevel)
@@ -325,6 +336,10 @@ namespace GameSrv.Monster
                 }
             }
             CheckRoyalty();
+            if (CrazyMode && ((HUtil32.GetTickCount() - CrazyModeTick) > CrazyModeInterval))
+            {
+                BreakCrazyMode();
+            }
             base.Run();
         }
 
@@ -431,6 +446,32 @@ namespace GameSrv.Monster
                 }
             }
             return result;
+        }
+
+        public void OpenCrazyMode(int nTime)
+        {
+            CrazyMode = true;
+            CrazyModeTick = HUtil32.GetTickCount();
+            CrazyModeInterval = nTime * 1000;
+            RefNameColor();
+        }
+
+        public void BreakCrazyMode()
+        {
+            if (CrazyMode)
+            {
+                CrazyMode = false;
+                RefNameColor();
+            }
+        }
+        
+        protected override byte GetChrColor(BaseObject baseObject)
+        {
+            if (baseObject.ActorId == this.ActorId && this.CrazyMode)
+            {
+                return 0xF9;
+            }
+            return base.GetChrColor(baseObject);
         }
     }
 }
