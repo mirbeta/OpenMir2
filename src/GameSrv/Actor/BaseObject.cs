@@ -290,10 +290,6 @@ namespace GameSrv.Actor
         /// </summary>
         public bool ObMode;
         /// <summary>
-        /// 力量物品值
-        /// </summary>
-        protected byte PowerItem = 0;
-        /// <summary>
         /// 视觉搜索时间间隔
         /// </summary>
         public int SearchTime;
@@ -331,7 +327,7 @@ namespace GameSrv.Actor
         /// <summary>
         /// 恢复血量和魔法间隔
         /// </summary>
-        protected int AutoRecoveryTick;
+        private int AutoRecoveryTick;
         /// <summary>
         /// 可视范围内的人物列表
         /// </summary>
