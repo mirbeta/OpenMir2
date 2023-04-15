@@ -21,7 +21,6 @@ namespace GameSrv.Actor
             WAbil.HandWeight = 0;
             AntiPoison = 0;
             AntiMagic = 1;
-            HitSpeed = 0;
             bool oldhmode = HideMode;
             HideMode = false;
             if (Transparent && (StatusTimeArr[PoisonState.STATETRANSPARENT] > 0)) {
@@ -52,7 +51,6 @@ namespace GameSrv.Actor
             HitPoint = (byte)(HitPoint + AddAbil.HIT);
             AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
             AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
-            HitSpeed = AddAbil.HitSpeed;
             WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
             WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
             WAbil.AC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));

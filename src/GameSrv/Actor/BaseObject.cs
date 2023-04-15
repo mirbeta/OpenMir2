@@ -119,10 +119,7 @@ namespace GameSrv.Actor
         /// 敏捷度
         /// </summary>
         public byte SpeedPoint;
-        /// <summary>
-        /// 攻击速度
-        /// </summary>
-        protected ushort HitSpeed;
+
         /// <summary>
         /// 否可以看到隐身人物(视线范围) 
         /// </summary>
@@ -430,7 +427,6 @@ namespace GameSrv.Actor
             NameColor = 255;
             HitPoint = 5;
             SpeedPoint = 15;
-            HitSpeed = 0;
             LifeAttrib = 0;
             AntiPoison = 0;
             AntiMagic = 0;
@@ -1582,7 +1578,7 @@ namespace GameSrv.Actor
 
         public void StatusChanged()
         {
-            SendRefMsg(Messages.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
+            SendRefMsg(Messages.RM_CHARSTATUSCHANGED, 0, CharStatus, 0, 0, "");
         }
 
         protected void DisappearA()

@@ -9,6 +9,10 @@ namespace GameSrv.Player
     public class CharacterObject : AnimalObject
     {
         /// <summary>
+        /// 攻击速度
+        /// </summary>
+        internal ushort HitSpeed;
+        /// <summary>
         /// HP恢复点数
         /// </summary>
         protected ushort HealthRecover;

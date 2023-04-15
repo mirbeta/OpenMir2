@@ -1843,7 +1843,7 @@ namespace GameSrv.Player
                     SendDefMessage(Messages.SM_LAMPCHANGEDURA, processMsg.nParam1, 0, 0, 0);
                     break;
                 case Messages.RM_CHARSTATUSCHANGED:
-                    SendDefMessage(Messages.SM_CHARSTATUSCHANGED, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), processMsg.wParam);
+                    SendDefMessage(Messages.SM_CHARSTATUSCHANGED, processMsg.ActorId, HUtil32.LoWord(processMsg.nParam1), HUtil32.HiWord(processMsg.nParam1), this.HitSpeed);
                     break;
                 case Messages.RM_GROUPCANCEL:
                     SendDefMessage(Messages.SM_GROUPCANCEL, processMsg.nParam1, 0, 0, 0);

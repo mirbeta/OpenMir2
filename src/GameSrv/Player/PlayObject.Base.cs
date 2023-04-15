@@ -1934,6 +1934,7 @@ namespace GameSrv.Player
                 SuckupEnemyHealthRate = 0;
                 SuckupEnemyHealth = 0;
                 FastTrain = false;
+                HitSpeed = 0;
                 bool[] spiritArr = new bool[4] { false, false, false, false };
                 bool[] cghi = new bool[4] { false, false, false, false };
                 bool shRing = false;
