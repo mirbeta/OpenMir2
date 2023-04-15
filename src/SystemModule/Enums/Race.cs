@@ -19,7 +19,7 @@ namespace SystemModule.Enums
         /// </summary>
         public const byte PeaceNpc = 15;
         /// <summary>
-        /// 怪物
+        /// 动物
         /// </summary>
         public const byte Animal = 50;
         /// <summary>
