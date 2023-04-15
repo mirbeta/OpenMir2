@@ -1,6 +1,4 @@
 ﻿using GameSrv.Actor;
-using Spectre.Console;
-using SystemModule.Core.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -29,13 +27,13 @@ namespace GameSrv.Monster
         /// <summary>
         /// 怪物叛变时间间隔
         /// </summary>
-        protected int CheckRoyaltyTick;
+        private int CheckRoyaltyTick;
         /// <summary>
         /// 狂暴模式
         /// </summary>
         public bool CrazyMode;
         /// <summary>
-        /// 狂暴间隔
+        /// 狂暴开始时间
         /// </summary>
         private int CrazyModeTick;
         /// <summary>
