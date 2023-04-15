@@ -19,10 +19,10 @@ namespace GameSrv.Monster.Monsters {
 
         private void MeltStoneAll() {
             MeltStone();
-            IList<BaseObject> list10 = new List<BaseObject>();
-            GetMapBaseObjects(Envir, CurrX, CurrY, 7, list10);
-            for (int i = 0; i < list10.Count; i++) {
-                BaseObject baseObject = list10[i];
+            IList<BaseObject> objectList = new List<BaseObject>();
+            GetMapBaseObjects(Envir, CurrX, CurrY, 7, ref objectList);
+            for (int i = 0; i < objectList.Count; i++) {
+                BaseObject baseObject = objectList[i];
                 if (baseObject.StoneMode) {
                     if (baseObject is ScultureMonster) {
                         ((ScultureMonster)baseObject).MeltStone();

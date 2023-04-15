@@ -8,14 +8,14 @@ namespace GameSrv.Monster.Monsters {
 
         private void AroundAttack() {
             GetAttackDir(TargetCret, ref Dir);
-            IList<BaseObject> xTargetList = new List<BaseObject>();
-            GetMapBaseObjects(Envir, CurrX, CurrY, 1, xTargetList);
-            if (xTargetList.Count > 0) {
+            IList<BaseObject> objectList = new List<BaseObject>();
+            GetMapBaseObjects(Envir, CurrX, CurrY, 1, ref objectList);
+            if (objectList.Count > 0) {
                 int nPower = GetBaseAttackPoewr();
-                for (int i = xTargetList.Count - 1; i >= 0; i--) {
-                    if (xTargetList[i] != null) {
-                        _Attack(nPower, xTargetList[i]);
-                        xTargetList.RemoveAt(i);
+                for (int i = objectList.Count - 1; i >= 0; i--) {
+                    if (objectList[i] != null) {
+                        _Attack(nPower, objectList[i]);
+                        objectList.RemoveAt(i);
                     }
                 }
             }

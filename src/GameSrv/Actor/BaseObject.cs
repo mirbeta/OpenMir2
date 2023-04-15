@@ -2843,13 +2843,9 @@ namespace GameSrv.Actor
             //}
         }
 
-        public static bool GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, IList<BaseObject> rList)
+        public static void GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, ref IList<BaseObject> objectList)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
-            if (rList == null)
-            {
-                return false;
-            }
             try
             {
                 int nStartX = nX - nRage;
@@ -2871,7 +2867,7 @@ namespace GameSrv.Actor
                                     BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
                                     {
-                                        rList.Add(baseObject);
+                                        objectList.Add(baseObject);
                                     }
                                 }
                             }
@@ -2883,7 +2879,6 @@ namespace GameSrv.Actor
             {
                 M2Share.Logger.Error(sExceptionMsg);
             }
-            return true;
         }
 
         protected static void Dispose(object obj)

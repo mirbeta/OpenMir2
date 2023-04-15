@@ -48,11 +48,11 @@ namespace GameSrv.Magic
         private static bool MagBigHealing(PlayObject playObject, int nPower, int nX, int nY)
         {
             var result = false;
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(playObject.Envir, nX, nY, 1, baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            IList<BaseObject> objectList = new List<BaseObject>();
+            BaseObject.GetMapBaseObjects(playObject.Envir, nX, nY, 1, ref objectList);
+            for (var i = 0; i < objectList.Count; i++)
             {
-                var baseObject = baseObjectList[i];
+                var baseObject = objectList[i];
                 if (playObject.IsProperFriend(baseObject))
                 {
                     if (baseObject.WAbil.HP < baseObject.WAbil.MaxHP)
@@ -670,11 +670,11 @@ namespace GameSrv.Magic
             {
                 return false;
             }
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, 9, baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            IList<BaseObject> objectList = new List<BaseObject>();
+            BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, 9, ref objectList);
+            for (var i = 0; i < objectList.Count; i++)
             {
-                var targetObject = baseObjectList[i];
+                var targetObject = objectList[i];
                 if (targetObject.Race >= ActorRace.Animal && targetObject.TargetCret == baseObject)
                 {
                     if (Math.Abs(targetObject.CurrX - baseObject.CurrX) > 1 || Math.Abs(targetObject.CurrY - baseObject.CurrY) > 1 || M2Share.RandomNumber.Random(2) == 0)
@@ -683,7 +683,7 @@ namespace GameSrv.Magic
                     }
                 }
             }
-            baseObjectList.Clear();
+            objectList.Clear();
             baseObject.StatusTimeArr[PoisonState.STATETRANSPARENT] = nHTime;
             baseObject.CharStatus = baseObject.GetCharStatus();
             baseObject.StatusChanged();
@@ -888,11 +888,11 @@ namespace GameSrv.Magic
         {
             short nAmuletIdx = 0;
             var result = false;
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            IList<BaseObject> objectList = new List<BaseObject>();
+            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
+            for (var i = 0; i < objectList.Count; i++)
             {
-                var baseObject = baseObjectList[i];
+                var baseObject = objectList[i];
                 if (baseObject.Death || baseObject.Ghost || playObject == baseObject)
                 {
                     continue;
@@ -929,7 +929,7 @@ namespace GameSrv.Magic
                     }
                 }
             }
-            baseObjectList.Clear();
+            objectList.Clear();
             return result;
         }
 
@@ -937,11 +937,11 @@ namespace GameSrv.Magic
         {
             BaseObject baseObject;
             var result = false;
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            IList<BaseObject> objectList = new List<BaseObject>();
+            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
+            for (var i = 0; i < objectList.Count; i++)
             {
-                baseObject = baseObjectList[i];
+                baseObject = objectList[i];
                 if (baseObject.Death || baseObject.Ghost || playObject == baseObject)
                 {
                     continue;
@@ -969,7 +969,7 @@ namespace GameSrv.Magic
                 }
                 playObject.SendRefMsg(Messages.RM_10205, 0, baseObject.CurrX, baseObject.CurrY, 1, "");
             }
-            baseObjectList.Clear();
+            objectList.Clear();
             return result;
         }
 
@@ -977,12 +977,12 @@ namespace GameSrv.Magic
         {
             var result = false;
             boSpellFire = false;
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), baseObjectList);
+            IList<BaseObject> objectList = new List<BaseObject>();
+            BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
             playObject.SendRefMsg(Messages.RM_MAGICFIRE, 0, HUtil32.MakeWord(userMagic.Magic.EffectType, userMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), targetObject.ActorId, "");
-            for (var i = 0; i < baseObjectList.Count; i++)
+            for (var i = 0; i < objectList.Count; i++)
             {
-                var baseObject = baseObjectList[i];
+                var baseObject = objectList[i];
                 if (baseObject.Death || baseObject.Ghost || playObject == baseObject)
                 {
                     continue;
@@ -1008,7 +1008,7 @@ namespace GameSrv.Magic
                     }
                 }
             }
-            baseObjectList.Clear();
+            objectList.Clear();
             return result;
         }
 
@@ -1095,11 +1095,11 @@ namespace GameSrv.Magic
         private static bool MagBigExplosion(BaseObject baseObject, int nPower, int nX, int nY, int nRage)
         {
             var result = false;
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, nRage, baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            IList<BaseObject> objectList = new List<BaseObject>();
+            BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, nRage, ref objectList);
+            for (var i = 0; i < objectList.Count; i++)
             {
-                var targetObject = baseObjectList[i];
+                var targetObject = objectList[i];
                 if (baseObject.IsProperTarget(targetObject))
                 {
                     baseObject.SetTargetCreat(targetObject);
@@ -1107,7 +1107,7 @@ namespace GameSrv.Magic
                     result = true;
                 }
             }
-            baseObjectList.Clear();
+            objectList.Clear();
             return result;
         }
 
@@ -1115,7 +1115,7 @@ namespace GameSrv.Magic
         {
             var result = false;
             IList<BaseObject> objectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, M2Share.Config.ElecBlizzardRange, objectList);
+            BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, M2Share.Config.ElecBlizzardRange, ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
                 var targetObject = objectList[i];
@@ -1145,7 +1145,7 @@ namespace GameSrv.Magic
             {
                 IList<BaseObject> baseObjectList = new List<BaseObject>();
                 MagicEvent magicEvent = null;
-                BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, baseObjectList);
+                BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref baseObjectList);
                 for (var i = 0; i < baseObjectList.Count; i++)
                 {
                     var targetObject = baseObjectList[i];
@@ -1209,11 +1209,11 @@ namespace GameSrv.Magic
         private static bool MagMakeGroupTransparent(BaseObject baseObject, int nX, int nY, int nHTime)
         {
             var result = false;
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
-            BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            IList<BaseObject> objectList = new List<BaseObject>();
+            BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref objectList);
+            for (var i = 0; i < objectList.Count; i++)
             {
-                var targetObject = baseObjectList[i];
+                var targetObject = objectList[i];
                 if (baseObject.IsProperFriend(targetObject))
                 {
                     if (targetObject.StatusTimeArr[PoisonState.STATETRANSPARENT] == 0)
@@ -1223,7 +1223,7 @@ namespace GameSrv.Magic
                     }
                 }
             }
-            baseObjectList.Clear();
+            objectList.Clear();
             return result;
         }
 
