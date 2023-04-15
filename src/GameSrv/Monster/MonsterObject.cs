@@ -48,6 +48,18 @@ namespace GameSrv.Monster
         /// 狂暴时常
         /// </summary>
         private int CrazyModeInterval;
+        /// <summary>
+        /// 不能走动模式(困魔咒)
+        /// </summary>
+        public bool HolySeize;
+        /// <summary>
+        /// 不能走动时间(困魔咒)
+        /// </summary>
+        public int HolySeizeTick;
+        /// <summary>
+        /// 不能走动时长(困魔咒)
+        /// </summary>
+        public int HolySeizeInterval;
         
         public MonsterObject() : base()
         {
@@ -191,6 +203,10 @@ namespace GameSrv.Monster
             }
             if (m_boDupMode)
             {
+                if (HolySeize)
+                {
+                    return false;
+                }
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(M2Share.RandomNumber.RandomByte(8), false);
@@ -340,6 +356,10 @@ namespace GameSrv.Monster
             {
                 BreakCrazyMode();
             }
+            if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
+            {
+                BreakHolySeizeMode();
+            }
             base.Run();
         }
 
@@ -465,11 +485,29 @@ namespace GameSrv.Monster
             }
         }
         
+        public void OpenHolySeizeMode(int dwInterval)
+        {
+            HolySeize = true;
+            HolySeizeTick = HUtil32.GetTickCount();
+            HolySeizeInterval = dwInterval;
+            RefNameColor();
+        }
+
+        public void BreakHolySeizeMode()
+        {
+            HolySeize = false;
+            RefNameColor();
+        }
+
         protected override byte GetChrColor(BaseObject baseObject)
         {
             if (baseObject.ActorId == this.ActorId && this.CrazyMode)
             {
                 return 0xF9;
+            }
+            if (baseObject.ActorId == this.ActorId && this.HolySeize)
+            {
+                return 0x7D;
             }
             return base.GetChrColor(baseObject);
         }

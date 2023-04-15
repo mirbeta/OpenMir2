@@ -216,10 +216,6 @@ namespace GameSrv.Actor
                 }
                 SlaveList = null;
             }
-            if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
-            {
-                BreakHolySeizeMode();
-            }
             if (ShowHp && ((HUtil32.GetTickCount() - ShowHpTick) > ShowHpInterval))
             {
                 BreakOpenHealth();
@@ -419,7 +415,7 @@ namespace GameSrv.Actor
                     {
                         result = false;
                     }
-                    if (targetObject.HolySeize)
+                    if (((MonsterObject)targetObject).HolySeize)
                     {
                         result = false;
                     }
@@ -871,10 +867,6 @@ namespace GameSrv.Actor
             if (baseObject.Race == ActorRace.NPC) //增加NPC名字颜色单独控制
             {
                 return M2Share.Config.NpcNameColor;
-            }
-            if (baseObject.HolySeize)
-            {
-                return 0x7D;
             }
             if (baseObject.Master != null)
             {

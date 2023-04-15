@@ -1541,7 +1541,11 @@ namespace GameSrv.World
                     for (var j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--)
                     {
                         var baseObject = magicEvent.BaseObjectList[j];
-                        if (baseObject.Death || baseObject.Ghost || !baseObject.HolySeize)
+                        if (baseObject.Race > ActorRace.Animal && ((MonsterObject)baseObject).HolySeize)
+                        {
+                            magicEvent.BaseObjectList.RemoveAt(j);
+                        }
+                        else if (baseObject.Death || baseObject.Ghost)
                         {
                             magicEvent.BaseObjectList.RemoveAt(j);
                         }

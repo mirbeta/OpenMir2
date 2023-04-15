@@ -52,7 +52,7 @@ namespace GameSrv.Monster.Monsters {
                         AttackTick = HUtil32.GetTickCount();
                         TargetFocusTick = HUtil32.GetTickCount();
                         Attack(TargetCret, btDir);
-                        BreakHolySeizeMode();
+                        //BreakHolySeizeMode();
                     }
                     result = true;
                 }

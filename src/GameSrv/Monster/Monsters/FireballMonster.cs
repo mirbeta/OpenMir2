@@ -45,7 +45,7 @@ namespace GameSrv.Monster.Monsters
                             }
                         }
                     }
-                    BreakHolySeizeMode();
+                    //BreakHolySeizeMode();
                 }
                 else
                 {

@@ -265,7 +265,7 @@ namespace GameSrv.Actor
                 {
                     SetLastHiter(struckObject);
                     Struck(struckObject);
-                    BreakHolySeizeMode();
+                    //BreakHolySeizeMode(); //按代码逻辑来看动物不能被困住才对，暂时先注释
                     if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
                     {
                         ((PlayObject)Master).SetPkFlag(struckObject);

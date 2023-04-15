@@ -1151,7 +1151,7 @@ namespace GameSrv.Magic
                     var targetObject = baseObjectList[i];
                     if (targetObject.Race >= ActorRace.Animal && M2Share.RandomNumber.Random(4) + (baseObject.Abil.Level - 1) > targetObject.Abil.Level && targetObject.Master == null)
                     {
-                        targetObject.OpenHolySeizeMode(nPower * 1000);
+                        ((MonsterObject)targetObject).OpenHolySeizeMode(nPower * 1000);
                         if (magicEvent == null)
                         {
                             magicEvent = new MagicEvent
