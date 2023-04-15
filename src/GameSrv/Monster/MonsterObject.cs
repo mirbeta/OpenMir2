@@ -1,4 +1,5 @@
 ﻿using GameSrv.Actor;
+using GameSrv.Player;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -178,12 +179,30 @@ namespace GameSrv.Monster
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            if (processMsg.wIdent == Messages.RM_UPDATEVIEWRANGE)
+            switch (processMsg.wIdent)
             {
-                UpdateMonsterVisible(processMsg.wParam);
-                return true;
+                case Messages.RM_UPDATEVIEWRANGE:
+                    UpdateMonsterVisible(processMsg.wParam);
+                    return true;
+                case Messages.RM_STRUCK:
+                {
+                    var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                    if (processMsg.ActorId == ActorId && struckObject != null)
+                    {
+                        SetLastHiter(struckObject);
+                        Struck(struckObject);
+                        BreakHolySeizeMode(); 
+                        if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
+                        {
+                            ((PlayObject)Master).SetPkFlag(struckObject);
+                        }
+                        MonsterSayMessage(struckObject, MonStatus.UnderFire);
+                    }
+                    return true;
+                }
+                default:
+                    return base.Operate(processMsg);
             }
-            return base.Operate(processMsg);
         }
 
         private bool Think()

@@ -28,7 +28,6 @@ namespace GameSrv.RobotPlay
                     TargetFocusTick = HUtil32.GetTickCount();
                     AttackDir(TargetCret, wHitMode, dir);
                     ActionTick = HUtil32.GetTickCount();
-                    //BreakHolySeizeMode();
                     result = true;
                 }
                 else

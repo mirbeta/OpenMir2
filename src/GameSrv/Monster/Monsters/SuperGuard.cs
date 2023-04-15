@@ -29,7 +29,6 @@ namespace GameSrv.Monster.Monsters {
                     this.CurrY = nOldY;
                     this.Dir = btOldDir;
                     this.TurnTo(this.Dir);
-                    //this.BreakHolySeizeMode(); //守卫能被困住？
                 }
                 result = true;
             }

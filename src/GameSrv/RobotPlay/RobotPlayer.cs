@@ -1198,7 +1198,6 @@ namespace GameSrv.RobotPlay
                             }
                             SetLastHiter(attackBaseObject);
                             Struck(attackBaseObject);
-                            //BreakHolySeizeMode();
                         }
                         if (M2Share.CastleMgr.IsCastleMember(this) != null && attackBaseObject != null)
                         {
@@ -2020,7 +2019,6 @@ namespace GameSrv.RobotPlay
                                         TargetFocusTick = HUtil32.GetTickCount();
                                         Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                                         Attack(TargetCret, Dir);
-                                        //BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
                                         return false;
                                     }
@@ -2058,7 +2056,6 @@ namespace GameSrv.RobotPlay
                                         TargetFocusTick = HUtil32.GetTickCount();
                                         Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                                         Attack(TargetCret, Dir);
-                                        //BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
                                         return false;
                                     }
@@ -2090,7 +2087,6 @@ namespace GameSrv.RobotPlay
                                         TargetFocusTick = HUtil32.GetTickCount();
                                         Dir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                                         Attack(TargetCret, Dir);
-                                        //BreakHolySeizeMode();
                                         AttackTick = HUtil32.GetTickCount();
                                         return false;
                                     }
