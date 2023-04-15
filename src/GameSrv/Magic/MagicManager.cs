@@ -703,7 +703,7 @@ namespace GameSrv.Magic
                 targetObject.TargetCret = null;
                 if (targetObject.Master == playObject)
                 {
-                    targetObject.OpenHolySeizeMode((magicLevel * 5 + 10) * 1000);
+                    targetObject.SendMsg(Messages.RM_MAKEHOLYSEIZEMODE, (magicLevel * 5 + 10) * 1000, 0, 0, 0);
                     result = true;
                 }
                 else
@@ -803,7 +803,7 @@ namespace GameSrv.Magic
                     }
                     else
                     {
-                        targetObject.OpenHolySeizeMode((magicLevel * 5 + 10) * 1000);
+                        targetObject.SendMsg(Messages.RM_MAKEHOLYSEIZEMODE, (magicLevel * 5 + 10) * 1000, 0, 0, 0);
                     }
                     result = true;
                 }
@@ -1151,7 +1151,7 @@ namespace GameSrv.Magic
                     var targetObject = baseObjectList[i];
                     if (targetObject.Race >= ActorRace.Animal && M2Share.RandomNumber.Random(4) + (baseObject.Abil.Level - 1) > targetObject.Abil.Level && targetObject.Master == null)
                     {
-                        targetObject.OpenHolySeizeMode(nPower * 1000);
+                        targetObject.SendMsg(Messages.RM_MAKEHOLYSEIZEMODE, nPower * 1000, 0, 0, 0);
                         if (magicEvent == null)
                         {
                             magicEvent = new MagicEvent

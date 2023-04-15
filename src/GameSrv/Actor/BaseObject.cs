@@ -185,19 +185,6 @@ namespace GameSrv.Actor
         /// </summary>
         public byte BodyLeathery;
         /// <summary>
-        /// 不能走动模式(困魔咒)
-        /// </summary>
-        public bool HolySeize;
-        /// <summary>
-        /// 不能走动间隔(困魔咒)
-        /// </summary>
-        public int HolySeizeTick;
-        /// <summary>
-        /// 不能走动时长(困魔咒)
-        /// </summary>
-        public int HolySeizeInterval;
-
-        /// <summary>
         /// 心灵启示
         /// </summary>
         public bool ShowHp;
@@ -409,7 +396,6 @@ namespace GameSrv.Actor
             SuperMan = false;
             Skeleton = false;
             RushMode = false;
-            HolySeize = false;
             ShowHp = false;
             Animal = false;
             NoItem = false;
@@ -618,10 +604,6 @@ namespace GameSrv.Actor
         {
             const string sExceptionMsg = "[Exception] TBaseObject::WalkTo";
             bool result = false;
-            if (HolySeize)
-            {
-                return false;
-            }
             try
             {
                 short oldX = CurrX;
@@ -1916,21 +1898,7 @@ namespace GameSrv.Actor
             }
             return result;
         }
-
-        public void OpenHolySeizeMode(int dwInterval)
-        {
-            HolySeize = true;
-            HolySeizeTick = HUtil32.GetTickCount();
-            HolySeizeInterval = dwInterval;
-            RefNameColor();
-        }
-
-        public void BreakHolySeizeMode()
-        {
-            HolySeize = false;
-            RefNameColor();
-        }
-
+        
         /// <summary>
         /// 召唤属下
         /// </summary>
@@ -2543,12 +2511,12 @@ namespace GameSrv.Actor
             NoItem = false;
             StoneMode = false;
             Skeleton = false;
-            HolySeize = false;
             ShowHp = false;
             FixedHideMode = false;
             if (Race > ActorRace.Animal)
             {
                 ((MonsterObject)this).CrazyMode = false;
+                ((MonsterObject)this).HolySeize = false;
             }
             if (this is CastleDoor)
             {

@@ -1,4 +1,5 @@
 ﻿using GameSrv.Actor;
+using GameSrv.Player;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -22,8 +23,14 @@ namespace GameSrv.Monster
         /// 不进入火墙
         /// </summary>
         public bool BoFearFire;
-        private int m_dwThinkTick;
-        private bool m_boDupMode;
+        /// <summary>
+        /// 思考间隔
+        /// </summary>
+        protected int ThinkTick;
+        /// <summary>
+        /// 重叠检测
+        /// </summary>
+        public bool DupMode;
         /// <summary>
         /// 怪物叛变时间
         /// </summary>
@@ -48,11 +55,23 @@ namespace GameSrv.Monster
         /// 狂暴时常
         /// </summary>
         private int CrazyModeInterval;
+        /// <summary>
+        /// 不能走动模式(困魔咒)
+        /// </summary>
+        public bool HolySeize;
+        /// <summary>
+        /// 不能走动时间(困魔咒)
+        /// </summary>
+        private int HolySeizeTick;
+        /// <summary>
+        /// 不能走动时长(困魔咒)
+        /// </summary>
+        private int HolySeizeInterval;
         
         public MonsterObject() : base()
         {
-            m_boDupMode = false;
-            m_dwThinkTick = HUtil32.GetTickCount();
+            DupMode = false;
+            ThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
             RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
@@ -166,37 +185,60 @@ namespace GameSrv.Monster
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            if (processMsg.wIdent == Messages.RM_UPDATEVIEWRANGE)
+            switch (processMsg.wIdent)
             {
-                UpdateMonsterVisible(processMsg.wParam);
-                return true;
+                case Messages.RM_UPDATEVIEWRANGE:
+                    UpdateMonsterVisible(processMsg.wParam);
+                    return true;
+                case Messages.RM_STRUCK:
+                    var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                    if (processMsg.ActorId == ActorId && struckObject != null)
+                    {
+                        SetLastHiter(struckObject);
+                        Struck(struckObject);
+                        BreakHolySeizeMode(); 
+                        if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
+                        {
+                            ((PlayObject)Master).SetPkFlag(struckObject);
+                        }
+                        MonsterSayMessage(struckObject, MonStatus.UnderFire);
+                    }
+                    return true;
+                case Messages.RM_MAKEHOLYSEIZEMODE:
+                    OpenHolySeizeMode(processMsg.wParam);
+                    return true;
+                default:
+                    return base.Operate(processMsg);
             }
-            return base.Operate(processMsg);
         }
 
         private bool Think()
         {
             bool result = false;
-            if ((HUtil32.GetTickCount() - m_dwThinkTick) > (3 * 1000))
+            if ((HUtil32.GetTickCount() - ThinkTick) > (3 * 1000))
             {
-                m_dwThinkTick = HUtil32.GetTickCount();
+                ThinkTick = HUtil32.GetTickCount();
                 if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
                 {
-                    m_boDupMode = true;
+                    DupMode = true;
                 }
                 if (!IsProperTarget(TargetCret))
                 {
                     TargetCret = null;
                 }
             }
-            if (m_boDupMode)
+            if (DupMode)
             {
+                if (HolySeize)
+                {
+                    return false;
+                }
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX != CurrX || nOldY != CurrY)
                 {
-                    m_boDupMode = false;
+                    DupMode = false;
                     result = true;
                 }
             }
@@ -340,6 +382,10 @@ namespace GameSrv.Monster
             {
                 BreakCrazyMode();
             }
+            if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
+            {
+                BreakHolySeizeMode();
+            }
             base.Run();
         }
 
@@ -464,12 +510,30 @@ namespace GameSrv.Monster
                 RefNameColor();
             }
         }
-        
+
+        private void OpenHolySeizeMode(int dwInterval)
+        {
+            HolySeize = true;
+            HolySeizeTick = HUtil32.GetTickCount();
+            HolySeizeInterval = dwInterval;
+            RefNameColor();
+        }
+
+        public void BreakHolySeizeMode()
+        {
+            HolySeize = false;
+            RefNameColor();
+        }
+
         protected override byte GetChrColor(BaseObject baseObject)
         {
             if (baseObject.ActorId == this.ActorId && this.CrazyMode)
             {
                 return 0xF9;
+            }
+            if (baseObject.ActorId == this.ActorId && this.HolySeize)
+            {
+                return 0x7D;
             }
             return base.GetChrColor(baseObject);
         }
