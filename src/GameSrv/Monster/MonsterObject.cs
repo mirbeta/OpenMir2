@@ -26,7 +26,11 @@ namespace GameSrv.Monster
         public bool BoFearFire;
         private int m_dwThinkTick;
         private bool m_boDupMode;
-
+        /// <summary>
+        /// 怪物叛变时间间隔
+        /// </summary>
+        protected int CheckRoyaltyTick;
+        
         public MonsterObject() : base()
         {
             m_boDupMode = false;
@@ -35,6 +39,7 @@ namespace GameSrv.Monster
             RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
+            CheckRoyaltyTick = HUtil32.GetTickCount();
         }
         
         private void GainSlaveExp(byte nLevel)
@@ -311,7 +316,47 @@ namespace GameSrv.Monster
                     }
                 }
             }
+            CheckRoyalty();
             base.Run();
+        }
+
+        /// <summary>
+        /// 宠物叛变时间检测
+        /// </summary>
+        private void CheckRoyalty()
+        {
+            if ((HUtil32.GetTickCount() - CheckRoyaltyTick) > 10000)
+            {
+                CheckRoyaltyTick = HUtil32.GetTickCount();
+                if (Master != null)
+                {
+                    if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (this.SlaveExpLevel < 5))
+                    {
+                        MasterRoyaltyTick = 0;
+                    }
+                    if (HUtil32.GetTickCount() > MasterRoyaltyTick)
+                    {
+                        for (int i = 0; i < Master.SlaveList.Count; i++)
+                        {
+                            if (Master.SlaveList[i] == this)
+                            {
+                                Master.SlaveList.RemoveAt(i);
+                                break;
+                            }
+                        }
+                        Master = null;
+                        WAbil.HP = (ushort)(WAbil.HP / 10);
+                        RefShowName();
+                    }
+                    if (MasterTick > 0)
+                    {
+                        if ((HUtil32.GetTickCount() - MasterTick) > 12 * 60 * 60 * 1000) //超过叛变时间则死亡
+                        {
+                            WAbil.HP = 0;
+                        }
+                    }
+                }
+            }
         }
 
         protected bool GetLongAttackDirDis(BaseObject baseObject, int dis, ref byte dir)

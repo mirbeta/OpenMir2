@@ -329,10 +329,6 @@ namespace GameSrv.Actor
         protected int PoisoningTick;
         protected int VerifyTick;
         /// <summary>
-        /// 怪物叛变时间间隔
-        /// </summary>
-        protected int CheckRoyaltyTick;
-        /// <summary>
         /// 怪物叛变时间
         /// </summary>
         public int MasterRoyaltyTick;
@@ -481,7 +477,6 @@ namespace GameSrv.Actor
             SearchTick = HUtil32.GetTickCount();
             PoisoningTick = HUtil32.GetTickCount();
             VerifyTick = HUtil32.GetTickCount();
-            CheckRoyaltyTick = HUtil32.GetTickCount();
             AutoRecoveryTick = HUtil32.GetTickCount();
             MasterTick = 0;
             WalkSpeed = 1400;
