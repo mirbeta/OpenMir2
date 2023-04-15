@@ -191,7 +191,6 @@ namespace GameSrv.Monster
                     UpdateMonsterVisible(processMsg.wParam);
                     return true;
                 case Messages.RM_STRUCK:
-                {
                     var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
                     if (processMsg.ActorId == ActorId && struckObject != null)
                     {
@@ -205,7 +204,9 @@ namespace GameSrv.Monster
                         MonsterSayMessage(struckObject, MonStatus.UnderFire);
                     }
                     return true;
-                }
+                case Messages.RM_MAKEHOLYSEIZEMODE:
+                    OpenHolySeizeMode(processMsg.wParam);
+                    return true;
                 default:
                     return base.Operate(processMsg);
             }
@@ -509,8 +510,8 @@ namespace GameSrv.Monster
                 RefNameColor();
             }
         }
-        
-        public void OpenHolySeizeMode(int dwInterval)
+
+        private void OpenHolySeizeMode(int dwInterval)
         {
             HolySeize = true;
             HolySeizeTick = HUtil32.GetTickCount();

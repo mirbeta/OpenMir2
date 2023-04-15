@@ -835,6 +835,10 @@ namespace SystemModule
         /// 主人死亡尸体消息宠物消失消息
         /// </summary>
         public const int RM_MASTERDIEGHOST = 60004;
+        /// <summary>
+        /// 困魔咒
+        /// </summary>
+        public const int RM_MAKEHOLYSEIZEMODE = 60005;
 
         public static CommandMessage MakeMessage(int msg, int recog, int param, int tag, int series)
         {
