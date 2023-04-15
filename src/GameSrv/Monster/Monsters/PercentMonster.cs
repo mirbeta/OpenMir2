@@ -1,14 +1,9 @@
-﻿using GameSrv.Actor;
-using SystemModule.Data;
-
-namespace GameSrv.Monster.Monsters {
-    public class PercentMonster : AnimalObject {
-        public int MDwThinkTick;
-        public bool MBoDupMode;
+﻿namespace GameSrv.Monster.Monsters {
+    public class PercentMonster : MonsterObject {
 
         public PercentMonster() : base() {
-            MBoDupMode = false;
-            MDwThinkTick = HUtil32.GetTickCount();
+            DupMode = false;
+            ThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
             RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
@@ -16,28 +11,24 @@ namespace GameSrv.Monster.Monsters {
             Race = 80;
         }
 
-        protected override bool Operate(ProcessMessage processMsg) {
-            return base.Operate(processMsg);
-        }
-
         private bool Think() {
-            if ((HUtil32.GetTickCount() - MDwThinkTick) > 3 * 1000) {
-                MDwThinkTick = HUtil32.GetTickCount();
+            if ((HUtil32.GetTickCount() - ThinkTick) > 3 * 1000) {
+                ThinkTick = HUtil32.GetTickCount();
                 if (Envir.GetXyObjCount(CurrX, CurrY) >= 2) {
-                    MBoDupMode = true;
+                    DupMode = true;
                 }
                 if (!IsProperTarget(TargetCret)) {
                     TargetCret = null;
                 }
             }
-            if (MBoDupMode) {
+            if (DupMode) {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX == CurrX && nOldY == CurrY) {
                     return false;
                 }
-                MBoDupMode = false;
+                DupMode = false;
                 return true;
             }
             return false;
@@ -52,7 +43,7 @@ namespace GameSrv.Monster.Monsters {
                         AttackTick = HUtil32.GetTickCount();
                         TargetFocusTick = HUtil32.GetTickCount();
                         Attack(TargetCret, btDir);
-                        //BreakHolySeizeMode();
+                        BreakHolySeizeMode();
                     }
                     result = true;
                 }

@@ -23,8 +23,14 @@ namespace GameSrv.Monster
         /// 不进入火墙
         /// </summary>
         public bool BoFearFire;
-        private int m_dwThinkTick;
-        private bool m_boDupMode;
+        /// <summary>
+        /// 思考间隔
+        /// </summary>
+        public int ThinkTick;
+        /// <summary>
+        /// 重叠检测
+        /// </summary>
+        public bool DupMode;
         /// <summary>
         /// 怪物叛变时间
         /// </summary>
@@ -64,8 +70,8 @@ namespace GameSrv.Monster
         
         public MonsterObject() : base()
         {
-            m_boDupMode = false;
-            m_dwThinkTick = HUtil32.GetTickCount();
+            DupMode = false;
+            ThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
             RunTime = 250;
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
@@ -208,19 +214,19 @@ namespace GameSrv.Monster
         private bool Think()
         {
             bool result = false;
-            if ((HUtil32.GetTickCount() - m_dwThinkTick) > (3 * 1000))
+            if ((HUtil32.GetTickCount() - ThinkTick) > (3 * 1000))
             {
-                m_dwThinkTick = HUtil32.GetTickCount();
+                ThinkTick = HUtil32.GetTickCount();
                 if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
                 {
-                    m_boDupMode = true;
+                    DupMode = true;
                 }
                 if (!IsProperTarget(TargetCret))
                 {
                     TargetCret = null;
                 }
             }
-            if (m_boDupMode)
+            if (DupMode)
             {
                 if (HolySeize)
                 {
@@ -231,7 +237,7 @@ namespace GameSrv.Monster
                 WalkTo(M2Share.RandomNumber.RandomByte(8), false);
                 if (nOldX != CurrX || nOldY != CurrY)
                 {
-                    m_boDupMode = false;
+                    DupMode = false;
                     result = true;
                 }
             }

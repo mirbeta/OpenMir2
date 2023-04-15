@@ -1,14 +1,7 @@
-﻿using GameSrv.Actor;
-using SystemModule.Data;
+﻿namespace GameSrv.Monster.Monsters {
+    public class MagicMonster : MonsterObject {
 
-namespace GameSrv.Monster.Monsters {
-    public class MagicMonster : AnimalObject {
-        /// <summary>
-        /// 思考间隔
-        /// </summary>
-        public int ThinkTick;
         //public int SpellTick = 0;
-        public bool DupMode;
 
         public MagicMonster() : base() {
             DupMode = false;
@@ -18,10 +11,6 @@ namespace GameSrv.Monster.Monsters {
             SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
             Race = 215;
-        }
-
-        protected override bool Operate(ProcessMessage processMsg) {
-            return base.Operate(processMsg);
         }
 
         private bool Think() {
