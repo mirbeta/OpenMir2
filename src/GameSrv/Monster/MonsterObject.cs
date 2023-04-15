@@ -537,5 +537,14 @@ namespace GameSrv.Monster
             }
             return base.GetChrColor(baseObject);
         }
+
+        protected override void GotoTargetXy()
+        {
+            if (HolySeize)
+            {
+                return;
+            }
+            base.GotoTargetXy();
+        }
     }
 }
