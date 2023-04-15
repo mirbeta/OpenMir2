@@ -196,6 +196,10 @@ namespace GameSrv.Player
         protected int LatestFireHitTick = 0;
         protected int LatestTwinHitTick = 0;
         /// <summary>
+        /// 力量物品值
+        /// </summary>
+        protected byte PowerItem = 0;
+        /// <summary>
         /// 交易列表
         /// </summary>
         public IList<UserItem> DealItemList;
