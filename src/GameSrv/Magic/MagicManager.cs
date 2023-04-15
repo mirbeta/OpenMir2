@@ -62,7 +62,7 @@ namespace GameSrv.Magic
                     }
                     if (playObject.AbilSeeHealGauge)
                     {
-                        playObject.SendMsg(baseObject, Messages.RM_10414, 0, 0, 0, 0);
+                        playObject.SendMsg(baseObject, Messages.RM_ABILSEEHEALGAUGE, 0, 0, 0, 0);
                     }
                 }
             }
@@ -212,7 +212,7 @@ namespace GameSrv.Magic
                         }
                         if (playObject.AbilSeeHealGauge)
                         {
-                            playObject.SendMsg(targetObject, Messages.RM_10414, 0, 0, 0, 0);
+                            playObject.SendMsg(targetObject, Messages.RM_ABILSEEHEALGAUGE, 0, 0, 0, 0);
                         }
                     }
                     break;

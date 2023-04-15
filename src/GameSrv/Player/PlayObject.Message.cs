@@ -2015,7 +2015,7 @@ namespace GameSrv.Player
                 case Messages.RM_BREAKWEAPON:
                     SendDefMessage(Messages.SM_BREAKWEAPON, processMsg.ActorId, 0, 0, 0);
                     break;
-                case Messages.RM_10414:
+                case Messages.RM_ABILSEEHEALGAUGE:
                     SendDefMessage(Messages.SM_INSTANCEHEALGUAGE, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0);
                     break;
                 case Messages.RM_CHANGEFACE:

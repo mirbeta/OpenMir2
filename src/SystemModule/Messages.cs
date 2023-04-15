@@ -633,7 +633,10 @@ namespace SystemModule
         /// 升级武器失败
         /// </summary>
         public const int RM_BREAKWEAPON = 10413;
-        public const int RM_10414 = 10414;
+        /// <summary>
+        /// 心灵启示
+        /// </summary>
+        public const int RM_ABILSEEHEALGAUGE = 10414;
         public const int RM_CHANGEFACE = 10415;
         public const int RM_PASSWORD = 10416;
         public const int RM_PLAYDICE = 10500;
