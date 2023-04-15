@@ -1,4 +1,5 @@
 using GameSrv.Magic;
+using GameSrv.Monster;
 using SystemModule.Consts;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -60,7 +61,12 @@ namespace GameSrv.RobotPlay
                 {
                     if (TargetCret != null)
                     {
-                        if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.25) || TargetCret.CrazyMode)
+                        var crazyMode = false;
+                        if (TargetCret.Race == ActorRace.Play)
+                        {
+                            crazyMode = ((MonsterObject)TargetCret).CrazyMode;
+                        }
+                        if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.25) || crazyMode)
                         {
                             if (AllowUseMagic(MagicConst.SKILL_ERGUM))
                             {

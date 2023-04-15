@@ -196,18 +196,7 @@ namespace GameSrv.Actor
         /// 不能走动时长(困魔咒)
         /// </summary>
         public int HolySeizeInterval;
-        /// <summary>
-        /// 狂暴模式
-        /// </summary>
-        public bool CrazyMode;
-        /// <summary>
-        /// 狂暴间隔
-        /// </summary>
-        private int CrazyModeTick;
-        /// <summary>
-        /// 狂暴时常
-        /// </summary>
-        private int CrazyModeInterval;
+
         /// <summary>
         /// 心灵启示
         /// </summary>
@@ -426,7 +415,6 @@ namespace GameSrv.Actor
             Skeleton = false;
             RushMode = false;
             HolySeize = false;
-            CrazyMode = false;
             ShowHp = false;
             Animal = false;
             NoItem = false;
@@ -1949,23 +1937,6 @@ namespace GameSrv.Actor
             RefNameColor();
         }
 
-        public void OpenCrazyMode(int nTime)
-        {
-            CrazyMode = true;
-            CrazyModeTick = HUtil32.GetTickCount();
-            CrazyModeInterval = nTime * 1000;
-            RefNameColor();
-        }
-
-        public void BreakCrazyMode()
-        {
-            if (CrazyMode)
-            {
-                CrazyMode = false;
-                RefNameColor();
-            }
-        }
-
         /// <summary>
         /// 召唤属下
         /// </summary>
@@ -2579,47 +2550,42 @@ namespace GameSrv.Actor
             StoneMode = false;
             Skeleton = false;
             HolySeize = false;
-            CrazyMode = false;
             ShowHp = false;
             FixedHideMode = false;
-
+            if (Race > ActorRace.Animal)
+            {
+                ((MonsterObject)this).CrazyMode = false;
+            }
             if (this is CastleDoor)
             {
                 ((CastleDoor)this).IsOpened = false;
                 StickMode = true;
             }
-
             if (this is MagicMonster)
             {
                 ((MagicMonster)this).DupMode = false;
             }
-
             if (this is MagicMonObject)
             {
                 ((MagicMonObject)this).UseMagic = false;
             }
-
             if (this is RockManObject)
             {
                 HideMode = false;
             }
-
             if (this is WallStructure)
             {
                 ((WallStructure)this).SetMapFlaged = false;
             }
-
             if (this is SoccerBall)
             {
                 ((SoccerBall)this).N550 = 0;
                 ((SoccerBall)this).TargetX = -1;
             }
-
             if (this is FrostTiger)
             {
                 //((TFrostTiger)(this)).m_boApproach = false;
             }
-
             if (this is CowKingMonster)
             {
                 /*((TCowKingMonster)(this)).m_boCowKingMon = true;
@@ -2627,7 +2593,6 @@ namespace GameSrv.Actor
                 ((TCowKingMonster)(this)).m_boDanger = false;
                 ((TCowKingMonster)(this)).m_boCrazy = false;*/
             }
-
             if (this is DigOutZombi)
             {
                 FixedHideMode = true;
