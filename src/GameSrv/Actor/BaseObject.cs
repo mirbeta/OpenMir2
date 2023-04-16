@@ -1526,9 +1526,9 @@ namespace GameSrv.Actor
             SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
         }
 
-        protected bool Walk(int nIdent)
+        protected virtual bool Walk(int nIdent)
         {
-            const string sExceptionMsg = "[Exception] BaseObject::Walk {0} {1} {2}:{3}";
+            const string sExceptionMsg = "[Exception] PlayObject::Walk {0} {1} {2}:{3}";
             bool result = true;
             if (Envir == null)
             {
@@ -1547,66 +1547,25 @@ namespace GameSrv.Actor
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
                         CellObject cellObject = cellInfo.ObjList[i];
-                        if (cellObject.CellObjId == 0)
-                        {
-                            continue;
-                        }
                         switch (cellObject.CellType)
                         {
                             case CellType.MapRoute:
-                                MapRouteItem mapRoute = M2Share.CellObjectMgr.Get<MapRouteItem>(cellObject.CellObjId);
-                                if (mapRoute.Envir != null)
-                                {
-                                    if (Race == ActorRace.Play)
-                                    {
-                                        if (Envir.ArroundDoorOpened(CurrX, CurrY))
-                                        {
-                                            if ((!mapRoute.Envir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
-                                            {
-                                                if (M2Share.ServerIndex == mapRoute.Envir.ServerIndex)
-                                                {
-                                                    if (!((PlayObject)this).EnterAnotherMap(mapRoute.Envir, mapRoute.X, mapRoute.Y))
-                                                    {
-                                                        result = false;
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    DisappearA();
-                                                    SpaceMoved = true;
-                                                    ((PlayObject)this).ChangeSpaceMove(mapRoute.Envir, mapRoute.X, mapRoute.Y);
-                                                }
-                                            }
-                                        }
-                                    }
-                                    else
-                                    {
-                                        result = false;
-                                    }
-                                }
+                                result = false;
                                 break;
                             case CellType.Event:
+                                MapEvent mapEvent = null;
+                                MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                if (owinEvent.OwnBaseObject != null)
                                 {
-                                    MapEvent mapEvent = null;
-                                    MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
-                                    if (owinEvent.OwnBaseObject != null)
-                                    {
-                                        mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
-                                    }
-                                    if (mapEvent != null)
-                                    {
-                                        if (mapEvent.OwnBaseObject.IsProperTarget(this))
-                                        {
-                                            SendMsg(mapEvent.OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0);
-                                        }
-                                    }
-                                    break;
+                                    mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                 }
-                            case CellType.MapEvent:
-                                break;
-                            case CellType.Door:
-                                break;
-                            case CellType.Roon:
+                                if (mapEvent != null)
+                                {
+                                    if (mapEvent.OwnBaseObject.IsProperTarget(this))
+                                    {
+                                        SendMsg(mapEvent.OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0);
+                                    }
+                                }
                                 break;
                         }
                     }

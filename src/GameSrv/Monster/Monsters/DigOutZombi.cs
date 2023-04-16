@@ -1,7 +1,8 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Event;
 
-namespace GameSrv.Monster.Monsters {
+namespace GameSrv.Monster.Monsters
+{
     public class DigOutZombi : MonsterObject {
         public DigOutZombi() : base() {
             ViewRange = 7;

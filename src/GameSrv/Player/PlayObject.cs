@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Runtime.CompilerServices;
-using GameSrv.Actor;
+﻿using GameSrv.Actor;
 using GameSrv.Castle;
 using GameSrv.Event;
 using GameSrv.GameCommand;
@@ -8,10 +6,11 @@ using GameSrv.Guild;
 using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
-using GameSrv.Monster;
 using GameSrv.Npc;
 using GameSrv.RobotPlay;
 using GameSrv.Script;
+using System.Collections;
+using System.Runtime.CompilerServices;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -1833,6 +1832,80 @@ namespace GameSrv.Player
                     }
                 }
             }
+        }
+
+        protected override bool Walk(int nIdent)
+        {
+            const string sExceptionMsg = "[Exception] BaseObject::Walk {0} {1} {2}:{3}";
+            bool result = true;
+            try
+            {
+                if (!Envir.ValidCell(CurrX, CurrY))
+                {
+                    return true;
+                }
+                MapCellInfo cellInfo = Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
+                if (cellSuccess && cellInfo.IsAvailable)
+                {
+                    for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                    {
+                        CellObject cellObject = cellInfo.ObjList[i];
+                        switch (cellObject.CellType)
+                        {
+                            case CellType.MapRoute:
+                                MapRouteItem mapRoute = M2Share.CellObjectMgr.Get<MapRouteItem>(cellObject.CellObjId);
+                                if (mapRoute.Envir != null)
+                                {
+                                    if (Envir.ArroundDoorOpened(CurrX, CurrY))
+                                    {
+                                        if ((!mapRoute.Envir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
+                                        {
+                                            if (M2Share.ServerIndex == mapRoute.Envir.ServerIndex)
+                                            {
+                                                if (!EnterAnotherMap(mapRoute.Envir, mapRoute.X, mapRoute.Y))
+                                                {
+                                                    result = false;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                DisappearA();
+                                                SpaceMoved = true;
+                                                ChangeSpaceMove(mapRoute.Envir, mapRoute.X, mapRoute.Y);
+                                            }
+                                        }
+                                    }
+                                }
+                                break;
+                            case CellType.Event:
+                                MapEvent mapEvent = null;
+                                MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                if (owinEvent.OwnBaseObject != null)
+                                {
+                                    mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                }
+                                if (mapEvent != null)
+                                {
+                                    if (mapEvent.OwnBaseObject.IsProperTarget(this))
+                                    {
+                                        SendMsg(mapEvent.OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, mapEvent.Damage, 0, 0);
+                                    }
+                                }
+                                break;
+                        }
+                    }
+                }
+                if (result)
+                {
+                    SendRefMsg(nIdent, Dir, CurrX, CurrY, 0, "");
+                }
+            }
+            catch (Exception e)
+            {
+                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                M2Share.Logger.Error(e.Message);
+            }
+            return result;
         }
 
         public override bool IsProperTarget(BaseObject baseObject)

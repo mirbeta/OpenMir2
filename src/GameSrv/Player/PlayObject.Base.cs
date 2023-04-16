@@ -352,8 +352,8 @@ namespace GameSrv.Player {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
             bool result = false;
             try {
-                int nOldX = CurrX;
-                int nOldY = CurrY;
+                var nOldX = CurrX;
+                var nOldY = CurrY;
                 Dir = btDir;
                 bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir) {
@@ -410,8 +410,8 @@ namespace GameSrv.Player {
                         result = true;
                     }
                     else {
-                        CurrX = (short)nOldX;
-                        CurrY = (short)nOldY;
+                        CurrX = nOldX;
+                        CurrY = nOldY;
                         Envir.MoveToMovingObject(nOldX, nOldY, this, CurrX, CurrX, true);
                     }
                 }
@@ -426,8 +426,8 @@ namespace GameSrv.Player {
             const string sExceptionMsg = "[Exception] PlayObject::HorseRunTo";
             bool result = false;
             try {
-                int n10 = CurrX;
-                int n14 = CurrY;
+                var nOldX = CurrX;
+                var nOldY = CurrY;
                 Dir = btDir;
                 bool canWalk = M2Share.Config.DiableHumanRun || Permission > 9 && M2Share.Config.boGMRunAll;
                 switch (btDir) {
@@ -484,14 +484,14 @@ namespace GameSrv.Player {
                         }
                         break;
                 }
-                if (CurrX != n10 || CurrY != n14) {
+                if (CurrX != nOldX || CurrY != nOldY) {
                     if (Walk(Messages.RM_HORSERUN)) {
                         result = true;
                     }
                     else {
-                        CurrX = (short)n10;
-                        CurrY = (short)n14;
-                        Envir.MoveToMovingObject(n10, n14, this, CurrX, CurrX, true);
+                        CurrX = nOldX;
+                        CurrY = nOldY;
+                        Envir.MoveToMovingObject(nOldX, nOldY, this, CurrX, CurrX, true);
                     }
                 }
             }
