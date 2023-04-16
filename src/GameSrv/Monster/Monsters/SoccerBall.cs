@@ -52,7 +52,7 @@ namespace GameSrv.Monster.Monsters {
                 TargetX = -1;
             }
             if (TargetX != -1) {
-                GotoTargetXy();
+                GotoTargetXY();
                 if (TargetX == CurrX && TargetY == CurrY) {
                     N550 = 0;
                 }

@@ -334,7 +334,7 @@ namespace GameSrv.Monster
                     }
                     if (TargetX != -1)
                     {
-                        GotoTargetXy();
+                        GotoTargetXY();
                     }
                     else
                     {
@@ -488,13 +488,13 @@ namespace GameSrv.Monster
             return base.GetChrColor(baseObject);
         }
 
-        protected override void GotoTargetXy()
+        protected override void GotoTargetXY()
         {
             if (HolySeize)
             {
                 return;
             }
-            base.GotoTargetXy();
+            base.GotoTargetXY();
         }
     }
 }

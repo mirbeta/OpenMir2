@@ -79,6 +79,74 @@ namespace GameSrv.Actor
             CellType = CellType.Monster;
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            LoadSayMsg();
+            MonsterSayMessage(null, MonStatus.MonGen);
+        }
+
+        public override void Die()
+        {
+            base.Die();
+            if (!SuperMan)
+            {
+                return;
+            }
+            if (LastHiter != null && Race != ActorRace.Play)
+            {
+                MonsterSayMessage(LastHiter, MonStatus.Die);
+            }
+            else if (LastHiter != null && Race == ActorRace.Play)
+            {
+                //LastHiter.MonsterSayMessage(this, MonStatus.KillHuman);
+                MonsterSayMessage(LastHiter, MonStatus.KillHuman);
+            }
+        }
+
+        protected override bool Operate(ProcessMessage processMsg)
+        {
+            switch (processMsg.wIdent)
+            {
+                case Messages.RM_STRUCK:
+                    {
+                        var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        if (processMsg.ActorId == ActorId && struckObject != null)
+                        {
+                            SetLastHiter(struckObject);
+                            Struck(struckObject);
+                            if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
+                            {
+                                ((PlayObject)Master).SetPkFlag(struckObject);
+                            }
+                            MonsterSayMessage(struckObject, MonStatus.UnderFire);
+                        }
+                        return true;
+                    }
+                case Messages.RM_MAKEHOLYSEIZEMODE:
+                    OpenHolySeizeMode(processMsg.wParam);
+                    return true;
+                default:
+                    return base.Operate(processMsg);
+            }
+        }
+
+        public override void Run()
+        {
+            if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
+            {
+                BreakHolySeizeMode();
+            }
+            base.Run();
+        }
+
+        protected override void DelTargetCreat()
+        {
+            base.DelTargetCreat();
+            TargetX = -1;
+            TargetY = -1;
+        }
+
         /// <summary>
         /// 是否可以走动
         /// </summary>
@@ -95,7 +163,7 @@ namespace GameSrv.Actor
             SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
         }
 
-        protected virtual void GotoTargetXy()
+        protected virtual void GotoTargetXY()
         {
             if (CurrX != TargetX || CurrY != TargetY)
             {
@@ -170,13 +238,6 @@ namespace GameSrv.Actor
             }
         }
 
-        public override void Initialize()
-        {
-            base.Initialize();
-            LoadSayMsg();
-            MonsterSayMessage(null, MonStatus.MonGen);
-        }
-
         /// <summary>
         /// 取怪物说话信息列表
         /// </summary>
@@ -249,60 +310,6 @@ namespace GameSrv.Actor
                 }
             }
         }
-
-        public override void Die()
-        {
-            base.Die();
-            if (!SuperMan)
-            {
-                return;
-            }
-            if (LastHiter != null && Race != ActorRace.Play)
-            {
-                MonsterSayMessage(LastHiter, MonStatus.Die);
-            }
-            else if (LastHiter != null && Race == ActorRace.Play)
-            {
-                //LastHiter.MonsterSayMessage(this, MonStatus.KillHuman);
-                MonsterSayMessage(LastHiter, MonStatus.KillHuman);
-            }
-        }
-
-        protected override bool Operate(ProcessMessage processMsg)
-        {
-            switch (processMsg.wIdent)
-            {
-                case Messages.RM_STRUCK:
-                {
-                    var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
-                    if (processMsg.ActorId == ActorId && struckObject != null)
-                    {
-                        SetLastHiter(struckObject);
-                        Struck(struckObject);
-                        if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
-                        {
-                            ((PlayObject)Master).SetPkFlag(struckObject);
-                        }
-                        MonsterSayMessage(struckObject, MonStatus.UnderFire);
-                    }
-                    return true;
-                }
-                case Messages.RM_MAKEHOLYSEIZEMODE:
-                    OpenHolySeizeMode(processMsg.wParam);
-                    return true;
-                default:
-                    return base.Operate(processMsg);
-            }
-        }
-
-        public override void Run()
-        {
-            if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
-            {
-                BreakHolySeizeMode();
-            }
-            base.Run();
-        }
         
         private void OpenHolySeizeMode(int dwInterval)
         {
@@ -365,13 +372,6 @@ namespace GameSrv.Actor
             }
             baseObjectList.Clear();
             SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
-        }
-
-        protected override void DelTargetCreat()
-        {
-            base.DelTargetCreat();
-            TargetX = -1;
-            TargetY = -1;
         }
 
         /// <summary>

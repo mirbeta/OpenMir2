@@ -648,14 +648,14 @@ namespace GameSrv.Actor
                 }
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
-                    bool walkSuccess = true;
+                    bool canWalk = true;
                     if (Race == ActorRace.Play)
                     {
-                        walkSuccess = !Envir.CanSafeWalk(newX, newY);
+                        canWalk = !Envir.CanSafeWalk(newX, newY);
                     }
                     else
                     {
-                        walkSuccess = !(((MonsterObject)this).BoFearFire && !Envir.CanSafeWalk(newX, newY));
+                        canWalk = !(((MonsterObject)this).BoFearFire && !Envir.CanSafeWalk(newX, newY));
                     }
                     if (Master != null)
                     {
@@ -664,10 +664,10 @@ namespace GameSrv.Actor
                         Master.Envir.GetNextPosition(Master.CurrX, Master.CurrY, Master.Dir, 1, ref n20, ref n24);
                         if (newX == 0 && newY == n24)
                         {
-                            walkSuccess = false;
+                            canWalk = false;
                         }
                     }
-                    if (walkSuccess)
+                    if (canWalk)
                     {
                         if (Envir.MoveToMovingObject(CurrX, CurrY, this, newX, newY, boFlag))
                         {

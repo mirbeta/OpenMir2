@@ -131,7 +131,7 @@
                         return;
                     }
                     if (TargetX != -1) {
-                        GotoTargetXy();
+                        GotoTargetXY();
                     }
                     else {
                         if (TargetCret == null) {

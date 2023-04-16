@@ -813,13 +813,13 @@ namespace GameSrv.Player
             return base.IsProperFriend(targetObject);
         }
 
-        private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientHitXY(int wIdent, int nX, int nY, byte nDir, bool boLateDelivery, ref int delayTime)
         {
             bool result = false;
             short n14 = 0;
             short n18 = 0;
             const string sExceptionMsg = "[Exception] PlayObject::ClientHitXY";
-            dwDelayTime = 0;
+            delayTime = 0;
             try
             {
                 if (!IsCanHit)
@@ -834,7 +834,7 @@ namespace GameSrv.Player
                 {
                     if (!boLateDelivery)
                     {
-                        if (!CheckActionStatus(wIdent, ref dwDelayTime))
+                        if (!CheckActionStatus(wIdent, ref delayTime))
                         {
                             IsFilterAction = false;
                             return false;
@@ -845,17 +845,17 @@ namespace GameSrv.Player
                         if (dwCheckTime < dwAttackTime)
                         {
                             AttackCount++;
-                            dwDelayTime = dwAttackTime - dwCheckTime;
-                            if (dwDelayTime > M2Share.Config.DropOverSpeed)
+                            delayTime = dwAttackTime - dwCheckTime;
+                            if (delayTime > M2Share.Config.DropOverSpeed)
                             {
                                 if (AttackCount >= 4)
                                 {
                                     AttackTick = HUtil32.GetTickCount();
                                     AttackCount = 0;
-                                    dwDelayTime = M2Share.Config.DropOverSpeed;
+                                    delayTime = M2Share.Config.DropOverSpeed;
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg($"攻击忙!!!{dwDelayTime}", MsgColor.Red, MsgType.Hint);
+                                        SysMsg($"攻击忙!!!{delayTime}", MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
@@ -866,7 +866,7 @@ namespace GameSrv.Player
                             }
                             if (TestSpeedMode)
                             {
-                                SysMsg($"攻击步忙!!!{dwDelayTime}", MsgColor.Red, MsgType.Hint);
+                                SysMsg($"攻击步忙!!!{delayTime}", MsgColor.Red, MsgType.Hint);
                             }
                             return false;
                         }
@@ -960,12 +960,12 @@ namespace GameSrv.Player
             return result;
         }
 
-        private bool ClientHorseRunXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientHorseRunXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int delayTime)
         {
             bool result = false;
             byte n14;
             int dwCheckTime;
-            dwDelayTime = 0;
+            delayTime = 0;
             if (!IsCanRun)
             {
                 return result;
@@ -978,7 +978,7 @@ namespace GameSrv.Player
             {
                 if (!boLateDelivery)
                 {
-                    if (!CheckActionStatus(wIdent, ref dwDelayTime))
+                    if (!CheckActionStatus(wIdent, ref delayTime))
                     {
                         IsFilterAction = false;
                         return result;
@@ -988,17 +988,17 @@ namespace GameSrv.Player
                     if (dwCheckTime < M2Share.Config.RunIntervalTime)
                     {
                         MoveCount++;
-                        dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
-                        if (dwDelayTime > M2Share.Config.DropOverSpeed)
+                        delayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
+                        if (delayTime > M2Share.Config.DropOverSpeed)
                         {
                             if (MoveCount >= 4)
                             {
                                 MoveTick = HUtil32.GetTickCount();
                                 MoveCount = 0;
-                                dwDelayTime = M2Share.Config.DropOverSpeed;
+                                delayTime = M2Share.Config.DropOverSpeed;
                                 if (TestSpeedMode)
                                 {
-                                    SysMsg("马跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                                    SysMsg("马跑步忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
@@ -1011,7 +1011,7 @@ namespace GameSrv.Player
                         {
                             if (TestSpeedMode)
                             {
-                                SysMsg("马跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                                SysMsg("马跑步忙!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                             }
                             return result;
                         }
@@ -1044,9 +1044,9 @@ namespace GameSrv.Player
             return result;
         }
 
-        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject targetObject, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject targetObject, bool boLateDelivery, ref int delayTime)
         {
-            dwDelayTime = 0;
+            delayTime = 0;
             if (!IsCanSpell)
             {
                 return false;
@@ -1063,7 +1063,7 @@ namespace GameSrv.Player
             bool boIsWarrSkill = MagicManager.IsWarrSkill(UserMagic.MagIdx);
             if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
             {
-                if (!CheckActionStatus(wIdent, ref dwDelayTime))
+                if (!CheckActionStatus(wIdent, ref delayTime))
                 {
                     IsFilterAction = false;
                     return false;
@@ -1073,17 +1073,17 @@ namespace GameSrv.Player
                 if (dwCheckTime < MagicAttackInterval)
                 {
                     MagicAttackCount++;
-                    dwDelayTime = MagicAttackInterval - dwCheckTime;
-                    if (dwDelayTime > M2Share.Config.MagicHitIntervalTime / 3)
+                    delayTime = MagicAttackInterval - dwCheckTime;
+                    if (delayTime > M2Share.Config.MagicHitIntervalTime / 3)
                     {
                         if (MagicAttackCount >= 4)
                         {
                             MagicAttackTick = HUtil32.GetTickCount();
                             MagicAttackCount = 0;
-                            dwDelayTime = M2Share.Config.MagicHitIntervalTime / 3;
+                            delayTime = M2Share.Config.MagicHitIntervalTime / 3;
                             if (TestSpeedMode)
                             {
-                                SysMsg("魔法忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                                SysMsg("魔法忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
@@ -1094,7 +1094,7 @@ namespace GameSrv.Player
                     }
                     if (TestSpeedMode)
                     {
-                        SysMsg("魔法忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                        SysMsg("魔法忙!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                     }
                     return false;
                 }
@@ -1299,7 +1299,7 @@ namespace GameSrv.Player
                     return false;
                 }
                 IsFilterAction = true;
-                int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
+                var dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
                     MoveCount++;
@@ -1355,10 +1355,10 @@ namespace GameSrv.Player
             return result;
         }
 
-        private bool ClientWalkXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int dwDelayTime)
+        private bool ClientWalkXY(int wIdent, short nX, short nY, bool boLateDelivery, ref int delayTime)
         {
             bool result = false;
-            dwDelayTime = 0;
+            delayTime = 0;
             if (!IsCanWalk)
             {
                 return false;
@@ -1369,7 +1369,7 @@ namespace GameSrv.Player
             }
             if (!boLateDelivery && (!M2Share.Config.CloseSpeedHackCheck))
             {
-                if (!CheckActionStatus(wIdent, ref dwDelayTime))
+                if (!CheckActionStatus(wIdent, ref delayTime))
                 {
                     IsFilterAction = false;
                     return false;
@@ -1379,17 +1379,17 @@ namespace GameSrv.Player
                 if (dwCheckTime < M2Share.Config.WalkIntervalTime)
                 {
                     MoveCount++;
-                    dwDelayTime = M2Share.Config.WalkIntervalTime - dwCheckTime;
-                    if (dwDelayTime > M2Share.Config.WalkIntervalTime / 3)
+                    delayTime = M2Share.Config.WalkIntervalTime - dwCheckTime;
+                    if (delayTime > M2Share.Config.WalkIntervalTime / 3)
                     {
                         if (MoveCount >= 4)
                         {
                             MoveTick = HUtil32.GetTickCount();
                             MoveCount = 0;
-                            dwDelayTime = M2Share.Config.WalkIntervalTime / 3;
+                            delayTime = M2Share.Config.WalkIntervalTime / 3;
                             if (TestSpeedMode)
                             {
-                                SysMsg("走路忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                                SysMsg("走路忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
@@ -1400,7 +1400,7 @@ namespace GameSrv.Player
                     }
                     if (TestSpeedMode)
                     {
-                        SysMsg("走路忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                        SysMsg("走路忙!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                     }
                     return false;
                 }
