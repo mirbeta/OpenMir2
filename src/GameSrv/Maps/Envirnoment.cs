@@ -104,6 +104,9 @@ namespace GameSrv.Maps
                 ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.Valid)
                 {
+                    if (cellInfo.ObjList == null) {
+                        cellInfo.ObjList = new NativeList<CellObject>();
+                    }
                     if (cellType == CellType.Item && cellInfo.IsAvailable)
                     {
                         if (string.Compare((mapObject as MapItem)?.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -226,7 +229,7 @@ namespace GameSrv.Maps
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
                 ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
-                if (cellInfo.Attribute == CellAttribute.Walk)
+                if (cellInfo.Valid)
                 {
                     success = true;
                     return ref cellInfo;
@@ -1129,11 +1132,14 @@ namespace GameSrv.Maps
 
         public bool CanSafeWalk(int nX, int nY)
         {
-            bool result = false;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
-            if (cellSuccess && cellInfo.IsAvailable)
+            bool result = true;
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            if (cellSuccess)
             {
-                result = true;
+                if (cellInfo.ObjList == null)
+                {
+                    return true;
+                }
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
                     CellObject cellObject = cellInfo.ObjList[i];

@@ -648,13 +648,12 @@ namespace GameSrv.Actor
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
                     bool canWalk = true;
-                    if (Race == ActorRace.Play)
+                    if (Race >= ActorRace.Animal)
                     {
-                        canWalk = !Envir.CanSafeWalk(newX, newY);
-                    }
-                    else
-                    {
-                        canWalk = !(((MonsterObject)this).BoFearFire && !Envir.CanSafeWalk(newX, newY));
+                        if ((((MonsterObject)this).BoFearFire))//怪物不进入火墙才判断是否能走动
+                        {
+                            canWalk = !Envir.CanSafeWalk(newX, newY);
+                        }
                     }
                     if (Master != null)
                     {
