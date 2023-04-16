@@ -203,7 +203,7 @@ namespace GameSrv.Monster
                 }
                 int nOldX = CurrX;
                 int nOldY = CurrY;
-                WalkTo(M2Share.RandomNumber.RandomByte(8), false);
+                WalkTo(M2Share.RandomNumber.RandomByte(8), false, BoFearFire);
                 if (nOldX != CurrX || nOldY != CurrY)
                 {
                     DupMode = false;

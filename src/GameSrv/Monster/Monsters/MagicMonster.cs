@@ -13,22 +13,28 @@
             Race = 215;
         }
 
-        private bool Think() {
+        private bool Think()
+        {
             bool result = false;
-            if ((HUtil32.GetTickCount() - ThinkTick) > (3 * 1000)) {
+            if ((HUtil32.GetTickCount() - ThinkTick) > (3 * 1000))
+            {
                 ThinkTick = HUtil32.GetTickCount();
-                if (Envir.GetXyObjCount(CurrX, CurrY) >= 2) {
+                if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
+                {
                     DupMode = true;
                 }
-                if (!IsProperTarget(TargetCret)) {
+                if (!IsProperTarget(TargetCret))
+                {
                     TargetCret = null;
                 }
             }
-            if (DupMode) {
+            if (DupMode)
+            {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
-                WalkTo(M2Share.RandomNumber.RandomByte(8), false);
-                if (nOldX != CurrX || nOldY != CurrY) {
+                WalkTo(M2Share.RandomNumber.RandomByte(8), false, BoFearFire);
+                if (nOldX != CurrX || nOldY != CurrY)
+                {
                     DupMode = false;
                     result = true;
                 }

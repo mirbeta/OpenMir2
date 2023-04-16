@@ -39,11 +39,11 @@
                         {
                             if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1)
                             {
-                                WalkTo(M2Share.RandomNumber.RandomByte(4), true);
+                                WalkTo(M2Share.RandomNumber.RandomByte(4), true, BoFearFire);
                             }
                             else
                             {
-                                WalkTo(M2Share.RandomNumber.RandomByte(7), true);
+                                WalkTo(M2Share.RandomNumber.RandomByte(7), true, BoFearFire);
                             }
                         }
                         else

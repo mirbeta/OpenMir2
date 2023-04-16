@@ -599,7 +599,7 @@ namespace GameSrv.Actor
             }
         }
 
-        protected bool WalkTo(byte btDir, bool boFlag)
+        protected bool WalkTo(byte btDir, bool boFlag, bool fearFire = false)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::WalkTo";
             bool result = false;
@@ -647,13 +647,10 @@ namespace GameSrv.Actor
                 }
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
-                    bool canWalk = true;
-                    if (Race >= ActorRace.Animal)
+                    var canWalk = true;
+                    if (fearFire)//怪物不进入火墙才判断是否能走动
                     {
-                        if ((((MonsterObject)this).BoFearFire))//怪物不进入火墙才判断是否能走动
-                        {
-                            canWalk = !Envir.CanSafeWalk(newX, newY);
-                        }
+                        canWalk = !Envir.CanSafeWalk(newX, newY);
                     }
                     if (Master != null)
                     {
