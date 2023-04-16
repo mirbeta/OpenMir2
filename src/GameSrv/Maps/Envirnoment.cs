@@ -243,25 +243,7 @@ namespace GameSrv.Maps
         {
             return nX >= 0 && nX < Width && nY >= 0 && nY < Height;
         }
-
-        public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success, ref MapCellInfo mapCell)
-        {
-            if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
-            {
-                ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
-                if (cellInfo.Valid)
-                {
-                    success = true;
-                    cellInfo.ObjList ??= new NativeList<CellObject>();
-                    return ref cellInfo;
-                }
-                success = false;
-                return ref cellInfo;
-            }
-            success = false;
-            return ref mapCell;
-        }
-
+        
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public ref MapCellInfo GetCellInfo(int nX, int nY, out bool success)
         {
@@ -404,7 +386,7 @@ namespace GameSrv.Maps
         public bool CanWalk(int nX, int nY, bool boFlag)
         {
             bool result = false;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 if (boFlag)
@@ -462,7 +444,7 @@ namespace GameSrv.Maps
         public bool CanWalkOfItem(int nX, int nY, bool boFlag, bool boItem)
         {
             bool result = true;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 if (cellInfo.IsAvailable)
@@ -507,7 +489,7 @@ namespace GameSrv.Maps
         public bool CanWalkEx(int nX, int nY, bool boFlag)
         {
             bool result = false;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 result = true;
@@ -667,7 +649,7 @@ namespace GameSrv.Maps
         public bool GetItem(int nX, int nY, ref MapItem mapItem)
         {
             ChFlag = false;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 ChFlag = true;
@@ -703,7 +685,7 @@ namespace GameSrv.Maps
             int result = 0;
             nCount = 0;
             ChFlag = false;
-            var cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
+            ref var cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 ChFlag = true;
@@ -1071,7 +1053,7 @@ namespace GameSrv.Maps
         public int GetXyObjCount(int nX, int nY)
         {
             int result = 0;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1216,7 +1198,7 @@ namespace GameSrv.Maps
         public BaseObject GetMovingObject(short nX, short nY, bool boFlag)
         {
             BaseObject result = null;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1312,7 +1294,7 @@ namespace GameSrv.Maps
             {
                 for (int nYy = nY - nRage; nYy <= nY + nRage; nYy++)
                 {
-                    MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+                    ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1365,7 +1347,7 @@ namespace GameSrv.Maps
         /// <returns></returns>
         public int GetBaseObjects(int nX, int nY, bool boFlag, ref IList<BaseObject> baseObjectList)
         {
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1400,7 +1382,7 @@ namespace GameSrv.Maps
         public MapEvent GetEvent(int nX, int nY)
         {
             ChFlag = false;
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1417,7 +1399,7 @@ namespace GameSrv.Maps
 
         public void SetMapXyFlag(int nX, int nY, bool boFlag)
         {
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess)
             {
                 cellInfo.SetAttribute(boFlag ? CellAttribute.Walk : CellAttribute.LowWall);
@@ -1455,7 +1437,7 @@ namespace GameSrv.Maps
         public bool GetXyHuman(int nMapX, int nMapY)
         {
             bool result = false;
-            MapCellInfo cellInfo = GetCellInfo(nMapX, nMapY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nMapX, nMapY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1477,7 +1459,7 @@ namespace GameSrv.Maps
 
         public bool IsValidCell(int nX, int nY)
         {
-            MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.Attribute == CellAttribute.LowWall)
             {
                 return false;

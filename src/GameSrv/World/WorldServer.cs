@@ -1491,7 +1491,7 @@ namespace GameSrv.World
             {
                 for (var n14 = n20; n14 <= n28; n14++)
                 {
-                    var cellInfo = envir.GetCellInfo(n10, n14, out var cellSuccess);
+                    ref var cellInfo = ref envir.GetCellInfo(n10, n14, out var cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (var i = 0; i < cellInfo.ObjList.Count; i++)

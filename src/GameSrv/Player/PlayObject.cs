@@ -1844,7 +1844,7 @@ namespace GameSrv.Player
                 {
                     return true;
                 }
-                MapCellInfo cellInfo = Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
+                ref MapCellInfo cellInfo = ref Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)

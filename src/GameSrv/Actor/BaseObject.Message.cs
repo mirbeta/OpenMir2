@@ -408,7 +408,7 @@ namespace GameSrv.Actor
                         {
                             continue;
                         }
-                        MapCellInfo cellInfo = Envir.GetCellInfo(nCx, nCy, out bool cellSuccess);//占用CPU
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nCx, nCy, out bool cellSuccess);//占用CPU
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)
