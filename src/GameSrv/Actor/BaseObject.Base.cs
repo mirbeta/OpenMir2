@@ -506,6 +506,10 @@ namespace GameSrv.Actor
                 {
                     return;
                 }
+                if (ItemList == null)
+                {
+                    return;
+                }
                 int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
