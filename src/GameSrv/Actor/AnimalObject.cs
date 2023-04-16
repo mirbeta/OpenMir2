@@ -83,7 +83,7 @@ namespace GameSrv.Actor
             SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
         }
 
-        protected void GotoTargetXy()
+        protected virtual void GotoTargetXy()
         {
             if (CurrX != TargetX || CurrY != TargetY)
             {
