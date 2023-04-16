@@ -1143,12 +1143,12 @@ namespace GameSrv.Magic
             var result = 0;
             if (baseObject.Envir.CanWalk(nX, nY, true))
             {
-                IList<BaseObject> baseObjectList = new List<BaseObject>();
+                IList<BaseObject> objectList = new List<BaseObject>();
                 MagicEvent magicEvent = null;
-                BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref baseObjectList);
-                for (var i = 0; i < baseObjectList.Count; i++)
+                BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref objectList);
+                for (var i = 0; i < objectList.Count; i++)
                 {
-                    var targetObject = baseObjectList[i];
+                    var targetObject = objectList[i];
                     if (targetObject.Race >= ActorRace.Animal && M2Share.RandomNumber.Random(4) + (baseObject.Abil.Level - 1) > targetObject.Abil.Level && targetObject.Master == null)
                     {
                         targetObject.SendMsg(Messages.RM_MAKEHOLYSEIZEMODE, nPower * 1000, 0, 0, 0);
