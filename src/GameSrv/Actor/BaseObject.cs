@@ -1541,7 +1541,7 @@ namespace GameSrv.Actor
                 {
                     return true;
                 }
-                MapCellInfo cellInfo = Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
+                ref MapCellInfo cellInfo = ref Envir.GetCellInfo(CurrX, CurrY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.IsAvailable)
                 {
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -2102,7 +2102,7 @@ namespace GameSrv.Actor
             {
                 for (int cY = nStartY; cY <= nEndY; cY++)
                 {
-                    MapCellInfo cellInfo = Envir.GetCellInfo(nX, nY, out bool cellSuccess);
+                    ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -2807,7 +2807,7 @@ namespace GameSrv.Actor
                 {
                     for (int y = nStartY; y <= nEndY; y++)
                     {
-                        MapCellInfo cellInfo = envir.GetCellInfo(x, y, out bool cellSuccess);
+                        ref MapCellInfo cellInfo = ref envir.GetCellInfo(x, y, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             for (int i = 0; i < cellInfo.ObjList.Count; i++)

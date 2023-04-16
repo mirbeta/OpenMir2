@@ -837,7 +837,7 @@ namespace GameSrv.Player {
             }
             for (int cX = nX - 1; cX <= nX + 1; cX++) {
                 for (int cY = nY - 1; cY <= nY + 1; cY++) {
-                    MapCellInfo cellInfo = Envir.GetCellInfo(cX, cY, out bool cellSuccess);
+                    ref MapCellInfo cellInfo = ref Envir.GetCellInfo(cX, cY, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable) {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++) {
                             CellObject cellObject = cellInfo.ObjList[i];
