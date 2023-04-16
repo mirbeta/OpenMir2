@@ -274,33 +274,30 @@ namespace GameSrv.Maps
                 ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                 if (!boFlag && cellSuccess)
                 {
-                    if (cellInfo.Valid)
+                    if (cellInfo.Valid && cellInfo.IsAvailable)
                     {
-                        if (cellInfo.IsAvailable)
+                        for (int i = 0; i < cellInfo.ObjList.Count; i++)
                         {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            CellObject cellObject = cellInfo.ObjList[i];
+                            if (cellObject.ActorObject)
                             {
-                                CellObject cellObject = cellInfo.ObjList[i];
-                                if (cellObject.ActorObject)
+                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                if (baseObject != null)
                                 {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
-                                    if (baseObject != null)
+                                    if (baseObject.CellType == CellType.CastleDoor)
                                     {
-                                        if (baseObject.CellType == CellType.CastleDoor)
+                                        if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                         {
-                                            if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
-                                            {
-                                                moveSuccess = false;
-                                                break;
-                                            }
+                                            moveSuccess = false;
+                                            break;
                                         }
-                                        else
+                                    }
+                                    else
+                                    {
+                                        if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                         {
-                                            if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
-                                            {
-                                                moveSuccess = false;
-                                                break;
-                                            }
+                                            moveSuccess = false;
+                                            break;
                                         }
                                     }
                                 }
@@ -399,7 +396,7 @@ namespace GameSrv.Maps
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
                         CellObject cellObject = cellInfo.ObjList[i];
-                        if (cellObject.CellObjId > 0 && cellObject.ActorObject)
+                        if (cellObject.ActorObject)
                         {
                             BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
@@ -434,7 +431,7 @@ namespace GameSrv.Maps
         }
 
         /// <summary>
-        /// 检查地图指定座标是否可以移动
+        /// 检查地图指定座标上是否有物品
         /// </summary>
         /// <param name="nX"></param>
         /// <param name="nY"></param>
@@ -498,7 +495,7 @@ namespace GameSrv.Maps
                     for (int i = 0; i < cellInfo.ObjList.Count; i++)
                     {
                         CellObject cellObject = cellInfo.ObjList[i];
-                        if (cellObject.CellObjId > 0 && cellObject.ActorObject)
+                        if (cellObject.ActorObject)
                         {
                             BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)

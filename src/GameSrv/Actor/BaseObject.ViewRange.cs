@@ -184,32 +184,29 @@ namespace GameSrv.Actor
                         for (int i = 0; i < cellInfo.ObjList.Count; i++)
                         {
                             CellObject cellObject = cellInfo.ObjList[i];
-                            if (cellObject.CellObjId > 0)
+                            if (cellObject.ActorObject)
                             {
-                                if (cellObject.ActorObject)
+                                if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
                                 {
-                                    if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
+                                    cellInfo.Remove(i);
+                                    if (cellInfo.Count > 0)
                                     {
-                                        cellInfo.Remove(i);
-                                        if (cellInfo.Count > 0)
-                                        {
-                                            continue;
-                                        }
-                                        cellInfo.Clear();
-                                        break;
+                                        continue;
                                     }
+                                    cellInfo.Clear();
+                                    break;
                                 }
-                                if ((cellObject.CellType == CellType.Item) && !Death && (Race > ActorRace.Monster))
+                            }
+                            if ((cellObject.CellType == CellType.Item) && !Death && (Race > ActorRace.Monster))
+                            {
+                                if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
                                 {
-                                    if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
+                                    cellInfo.Remove(i);
+                                    if (cellInfo.Count > 0)
                                     {
-                                        cellInfo.Remove(i);
-                                        if (cellInfo.Count > 0)
-                                        {
-                                            continue;
-                                        }
-                                        cellInfo.Clear();
+                                        continue;
                                     }
+                                    cellInfo.Clear();
                                 }
                             }
                         }
