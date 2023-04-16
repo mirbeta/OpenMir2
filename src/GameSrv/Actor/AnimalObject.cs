@@ -49,6 +49,18 @@ namespace GameSrv.Actor
         /// 说话信息列表
         /// </summary>
         public IList<MonsterSayMsg> SayMsgList;
+        /// <summary>
+        /// 不能走动模式(困魔咒)
+        /// </summary>
+        public bool HolySeize;
+        /// <summary>
+        /// 不能走动时间(困魔咒)
+        /// </summary>
+        private int HolySeizeTick;
+        /// <summary>
+        /// 不能走动时长(困魔咒)
+        /// </summary>
+        private int HolySeizeInterval;
 
         public AnimalObject()
         {
@@ -258,22 +270,52 @@ namespace GameSrv.Actor
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            if (processMsg.wIdent == Messages.RM_STRUCK)
+            switch (processMsg.wIdent)
             {
-                var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
-                if (processMsg.ActorId == ActorId && struckObject != null)
+                case Messages.RM_STRUCK:
                 {
-                    SetLastHiter(struckObject);
-                    Struck(struckObject);
-                    if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
+                    var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                    if (processMsg.ActorId == ActorId && struckObject != null)
                     {
-                        ((PlayObject)Master).SetPkFlag(struckObject);
+                        SetLastHiter(struckObject);
+                        Struck(struckObject);
+                        if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
+                        {
+                            ((PlayObject)Master).SetPkFlag(struckObject);
+                        }
+                        MonsterSayMessage(struckObject, MonStatus.UnderFire);
                     }
-                    MonsterSayMessage(struckObject, MonStatus.UnderFire);
+                    return true;
                 }
-                return true;
+                case Messages.RM_MAKEHOLYSEIZEMODE:
+                    OpenHolySeizeMode(processMsg.wParam);
+                    return true;
+                default:
+                    return base.Operate(processMsg);
             }
-            return base.Operate(processMsg);
+        }
+
+        public override void Run()
+        {
+            if (HolySeize && ((HUtil32.GetTickCount() - HolySeizeTick) > HolySeizeInterval))
+            {
+                BreakHolySeizeMode();
+            }
+            base.Run();
+        }
+        
+        private void OpenHolySeizeMode(int dwInterval)
+        {
+            HolySeize = true;
+            HolySeizeTick = HUtil32.GetTickCount();
+            HolySeizeInterval = dwInterval;
+            RefNameColor();
+        }
+
+        public void BreakHolySeizeMode()
+        {
+            HolySeize = false;
+            RefNameColor();
         }
 
         public virtual void Struck(BaseObject hiter)

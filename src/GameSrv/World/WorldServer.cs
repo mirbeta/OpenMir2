@@ -1538,19 +1538,19 @@ namespace GameSrv.World
                 var magicEvent = MagicEventList[i];
                 if (magicEvent != null)
                 {
-                    for (var j = magicEvent.BaseObjectList.Count - 1; j >= 0; j--)
+                    for (var j = magicEvent.ObjectList.Count - 1; j >= 0; j--)
                     {
-                        var baseObject = magicEvent.BaseObjectList[j];
-                        if (baseObject.Race > ActorRace.Animal && !((MonsterObject)baseObject).HolySeize)
+                        var baseObject = magicEvent.ObjectList[j];
+                        if (baseObject.Race >= ActorRace.Animal && !((AnimalObject)baseObject).HolySeize)
                         {
-                            magicEvent.BaseObjectList.RemoveAt(j);
+                            magicEvent.ObjectList.RemoveAt(j);
                         }
                         else if (baseObject.Death || baseObject.Ghost)
                         {
-                            magicEvent.BaseObjectList.RemoveAt(j);
+                            magicEvent.ObjectList.RemoveAt(j);
                         }
                     }
-                    if (magicEvent.BaseObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.StartTick) > magicEvent.Time || (HUtil32.GetTickCount() - magicEvent.StartTick) > 180000)
+                    if (magicEvent.ObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.StartTick) > magicEvent.Time || (HUtil32.GetTickCount() - magicEvent.StartTick) > 180000)
                     {
                         var count = 0;
                         while (true)

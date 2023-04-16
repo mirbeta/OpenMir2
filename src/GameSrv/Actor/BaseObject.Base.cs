@@ -415,7 +415,7 @@ namespace GameSrv.Actor
                     {
                         result = false;
                     }
-                    if (((MonsterObject)targetObject).HolySeize)
+                    if (((AnimalObject)targetObject).HolySeize)
                     {
                         result = false;
                     }
