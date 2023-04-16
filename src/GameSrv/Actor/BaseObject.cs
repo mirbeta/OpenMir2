@@ -2513,10 +2513,10 @@ namespace GameSrv.Actor
             Skeleton = false;
             ShowHp = false;
             FixedHideMode = false;
-            if (Race > ActorRace.Animal)
+            if (Race >= ActorRace.Animal)
             {
                 ((MonsterObject)this).CrazyMode = false;
-                ((MonsterObject)this).HolySeize = false;
+                ((AnimalObject)this).HolySeize = false;
             }
             if (this is CastleDoor)
             {

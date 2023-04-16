@@ -1144,24 +1144,24 @@ namespace GameSrv.Magic
             if (baseObject.Envir.CanWalk(nX, nY, true))
             {
                 IList<BaseObject> objectList = new List<BaseObject>();
-                MagicEvent magicEvent = null;
                 BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref objectList);
+                if (!objectList.Any())
+                {
+                    return 0;
+                }
+                MagicEvent magicEvent = new MagicEvent
+                {
+                    ObjectList = new List<BaseObject>(),
+                    StartTick = HUtil32.GetTickCount(),
+                    Time = nPower * 1000
+                };
                 for (var i = 0; i < objectList.Count; i++)
                 {
                     var targetObject = objectList[i];
                     if (targetObject.Race >= ActorRace.Animal && M2Share.RandomNumber.Random(4) + (baseObject.Abil.Level - 1) > targetObject.Abil.Level && targetObject.Master == null)
                     {
                         targetObject.SendMsg(Messages.RM_MAKEHOLYSEIZEMODE, nPower * 1000, 0, 0, 0);
-                        if (magicEvent == null)
-                        {
-                            magicEvent = new MagicEvent
-                            {
-                                BaseObjectList = new List<BaseObject>(),
-                                StartTick = HUtil32.GetTickCount(),
-                                Time = nPower * 1000
-                            };
-                        }
-                        magicEvent.BaseObjectList.Add(targetObject);
+                        magicEvent.ObjectList.Add(targetObject);
                         result++;
                     }
                     else
@@ -1169,7 +1169,7 @@ namespace GameSrv.Magic
                         result = 0;
                     }
                 }
-                if (result > 0 && magicEvent != null)
+                if (result > 0)
                 {
                     var holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX - 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(holyCurtainEvent);
@@ -1196,11 +1196,6 @@ namespace GameSrv.Magic
                     M2Share.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[7] = holyCurtainEvent;
                     M2Share.WorldEngine.MagicEventList.Add(magicEvent);
-                }
-                else
-                {
-                    if (magicEvent == null) return result;
-                    magicEvent.BaseObjectList = null;
                 }
             }
             return result;

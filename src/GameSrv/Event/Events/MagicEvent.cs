@@ -4,7 +4,7 @@ namespace GameSrv.Event.Events
 {
     public class MagicEvent
     {
-        public IList<BaseObject> BaseObjectList;
+        public IList<BaseObject> ObjectList;
         public int StartTick;
         public int Time;
         public MapEvent[] Events;
