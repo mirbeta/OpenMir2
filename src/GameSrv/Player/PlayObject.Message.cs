@@ -768,7 +768,7 @@ namespace GameSrv.Player
         protected override bool Operate(ProcessMessage processMsg)
         {
             int nObjCount;
-            int dwDelayTime = 0;
+            int delayTime = 0;
             int nMsgCount;
             bool result = true;
             BaseObject baseObject = null;
@@ -827,9 +827,9 @@ namespace GameSrv.Player
                     ClientUseItems(processMsg.nParam1, processMsg.Msg);
                     break;
                 case Messages.CM_BUTCH:
-                    if (!ClientGetButchItem(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, (byte)processMsg.wParam, ref dwDelayTime))
+                    if (!ClientGetButchItem(processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, (byte)processMsg.wParam, ref delayTime))
                     {
-                        if (dwDelayTime != 0)
+                        if (delayTime != 0)
                         {
                             nMsgCount = GetDigUpMsgCount();
                             if (nMsgCount >= M2Share.Config.MaxDigUpMsgCount)
@@ -844,24 +844,24 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
+                                if (delayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                     SendSocket(M2Share.GetGoodTick);
                                 }
                                 else
                                 {
-                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", delayTime);
                                     result = false;
                                 }
                             }
@@ -1006,14 +1006,14 @@ namespace GameSrv.Player
                     ClientGuildBreakAlly(processMsg.Msg);
                     break;
                 case Messages.CM_TURN:
-                    if (ClientChangeDir(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
+                    if (ClientChangeDir(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
                     {
-                        if (dwDelayTime == 0)
+                        if (delayTime == 0)
                         {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
@@ -1032,24 +1032,24 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
+                                if (delayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
-                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", delayTime);
                                     result = false;
                                 }
                             }
@@ -1057,14 +1057,14 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_WALK:
-                    if (ClientWalkXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
+                    if (ClientWalkXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
                     {
-                        if (dwDelayTime == 0)
+                        if (delayTime == 0)
                         {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
@@ -1083,32 +1083,32 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                                 if (TestSpeedMode)
                                 {
-                                    SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", delayTime);
                                     result = false;
                                 }
                             }
@@ -1116,14 +1116,14 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_HORSERUN:
-                    if (ClientHorseRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref dwDelayTime))
+                    if (ClientHorseRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.LateDelivery, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
                     {
-                        if (dwDelayTime == 0)
+                        if (delayTime == 0)
                         {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
@@ -1142,36 +1142,36 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
                                 if (TestSpeedMode)
                                 {
-                                    SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                 }
                             }
                             else
                             {
                                 if (TestSpeedMode)
                                 {
-                                    SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                 }
-                                SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", delayTime);
                                 result = false;
                             }
                         }
                     }
                     break;
                 case Messages.CM_RUN:
-                    if (ClientRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.nParam3, ref dwDelayTime))
+                    if (ClientRunXY(processMsg.wIdent, (short)processMsg.nParam1, (short)processMsg.nParam2, processMsg.nParam3, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
                     {
-                        if (dwDelayTime == 0)
+                        if (delayTime == 0)
                         {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
@@ -1190,28 +1190,28 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, Messages.CM_RUN, "", delayTime);
                                     result = false;
                                 }
                             }
@@ -1227,14 +1227,14 @@ namespace GameSrv.Player
                 case Messages.CM_CRSHIT:
                 case Messages.CM_TWINHIT:
                 case Messages.CM_FIREHIT:
-                    if (ClientHitXY(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, processMsg.LateDelivery, ref dwDelayTime))
+                    if (ClientHitXY(processMsg.wIdent, processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, processMsg.LateDelivery, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
                     {
-                        if (dwDelayTime == 0)
+                        if (delayTime == 0)
                         {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
@@ -1253,28 +1253,28 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.HitOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.HitOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg("操作延迟 Ident: " + processMsg.wIdent + " Time: " + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                                        SysMsg("操作延迟 Ident: " + processMsg.wIdent + " Time: " + delayTime, MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", delayTime);
                                     result = false;
                                 }
                             }
@@ -1282,14 +1282,14 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_SITDOWN:
-                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref dwDelayTime))
+                    if (ClientSitDownHit(processMsg.nParam1, processMsg.nParam2, (byte)processMsg.wParam, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
                     {
-                        if (dwDelayTime == 0)
+                        if (delayTime == 0)
                         {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
@@ -1308,28 +1308,28 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
-                                if (dwDelayTime < M2Share.Config.DropOverSpeed)
+                                if (delayTime < M2Share.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", delayTime);
                                     result = false;
                                 }
                             }
@@ -1337,14 +1337,14 @@ namespace GameSrv.Player
                     }
                     break;
                 case Messages.CM_SPELL:
-                    if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, M2Share.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref dwDelayTime))
+                    if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, M2Share.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
                     }
                     else
                     {
-                        if (dwDelayTime == 0)
+                        if (delayTime == 0)
                         {
                             SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                         }
@@ -1363,28 +1363,28 @@ namespace GameSrv.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                        M2Share.Logger.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, dwDelayTime, nMsgCount));
+                                        M2Share.Logger.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
                             }
                             else
                             {
-                                if (dwDelayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("速度异常 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
                                 }
                                 else
                                 {
                                     if (TestSpeedMode)
                                     {
-                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, dwDelayTime), MsgColor.Red, MsgType.Hint);
+                                        SysMsg(Format("操作延迟 Ident: {0} Time: {1}", processMsg.wIdent, delayTime), MsgColor.Red, MsgType.Hint);
                                     }
-                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", dwDelayTime);
+                                    SendSelfDelayMsg(processMsg.wIdent, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, "", delayTime);
                                     result = false;
                                 }
                             }

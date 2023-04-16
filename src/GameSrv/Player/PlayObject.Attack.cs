@@ -1278,11 +1278,11 @@ namespace GameSrv.Player
             return result;
         }
 
-        private bool ClientRunXY(int wIdent, short nX, short nY, int nFlag, ref int dwDelayTime)
+        private bool ClientRunXY(int wIdent, short nX, short nY, int nFlag, ref int delayTime)
         {
             bool result = false;
             byte nDir;
-            dwDelayTime = 0;
+            delayTime = 0;
             if (!IsCanRun)
             {
                 return false;
@@ -1293,7 +1293,7 @@ namespace GameSrv.Player
             }
             if (nFlag != wIdent && (!M2Share.Config.CloseSpeedHackCheck))
             {
-                if (!CheckActionStatus(wIdent, ref dwDelayTime))
+                if (!CheckActionStatus(wIdent, ref delayTime))
                 {
                     IsFilterAction = false;
                     return false;
@@ -1303,17 +1303,17 @@ namespace GameSrv.Player
                 if (dwCheckTime < M2Share.Config.RunIntervalTime)
                 {
                     MoveCount++;
-                    dwDelayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
-                    if (dwDelayTime > M2Share.Config.RunIntervalTime / 3)
+                    delayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
+                    if (delayTime > M2Share.Config.RunIntervalTime / 3)
                     {
                         if (MoveCount >= 4)
                         {
                             MoveTick = HUtil32.GetTickCount();
                             MoveCount = 0;
-                            dwDelayTime = M2Share.Config.RunIntervalTime / 3;
+                            delayTime = M2Share.Config.RunIntervalTime / 3;
                             if (TestSpeedMode)
                             {
-                                SysMsg("跑步忙复位!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                                SysMsg("跑步忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                             }
                         }
                         else
@@ -1324,7 +1324,7 @@ namespace GameSrv.Player
                     }
                     if (TestSpeedMode)
                     {
-                        SysMsg("跑步忙!!!" + dwDelayTime, MsgColor.Red, MsgType.Hint);
+                        SysMsg("跑步忙!!!" + delayTime, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
