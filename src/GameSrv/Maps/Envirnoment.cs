@@ -1124,15 +1124,16 @@ namespace GameSrv.Maps
                     }
                     break;
             }
-            return snx == sx && sny == sy ? false : true;
+            return (snx == sx && sny == sy) ? false : true;
         }
 
         public bool CanSafeWalk(int nX, int nY)
         {
-            bool result = true;
+            bool result = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
+                result = true;
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
                     CellObject cellObject = cellInfo.ObjList[i];

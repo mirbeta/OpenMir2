@@ -651,7 +651,7 @@ namespace GameSrv.Actor
                     bool walkSuccess = true;
                     if (Race == ActorRace.Play)
                     {
-                        walkSuccess =!Envir.CanSafeWalk(newX, newY);
+                        walkSuccess = !Envir.CanSafeWalk(newX, newY);
                     }
                     else
                     {
