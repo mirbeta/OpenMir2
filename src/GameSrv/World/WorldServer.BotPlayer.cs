@@ -138,7 +138,7 @@ namespace GameSrv.World
             cert.Abil.MP = cert.Abil.MaxMP;
             if (cert.AddtoMapSuccess)
             {
-                object p28 = null;
+                bool mapSuccess = false;
                 int n20;
                 if (cert.Envir.Width < 50)
                 {
@@ -188,7 +188,7 @@ namespace GameSrv.World
                     }
                     else
                     {
-                        p28 = cert.Envir.AddToMap(cert.CurrX, cert.CurrY, cert.CellType, cert.ActorId, cert);
+                        mapSuccess = cert.Envir.AddMapObject(cert.CurrX, cert.CurrY, cert.CellType, cert.ActorId, cert);
                         break;
                     }
                     n1C++;
@@ -197,7 +197,7 @@ namespace GameSrv.World
                         break;
                     }
                 }
-                if (p28 == null)
+                if (!mapSuccess)
                 {
                     cert = null;
                 }

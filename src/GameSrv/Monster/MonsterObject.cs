@@ -186,7 +186,7 @@ namespace GameSrv.Monster
             if ((HUtil32.GetTickCount() - ThinkTick) > (3 * 1000))
             {
                 ThinkTick = HUtil32.GetTickCount();
-                if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
+                if (Envir.GetXYObjCount(CurrX, CurrY) >= 2)
                 {
                     DupMode = true;
                 }

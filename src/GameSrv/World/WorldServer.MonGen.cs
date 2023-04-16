@@ -694,7 +694,7 @@ namespace GameSrv.World {
             if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
             cert.Initialize();
             if (cert.AddtoMapSuccess) {
-                BaseObject outofrange = null;
+                bool outofrange = false;
                 short n20 = cert.Envir.Width < 50 ? (short)2 : (short)3;
                 short n24;
                 if (cert.Envir.Height < 250)
@@ -720,13 +720,13 @@ namespace GameSrv.World {
                         }
                     }
                     else {
-                        outofrange = (BaseObject)cert.Envir.AddToMap(cert.CurrX, cert.CurrY, CellType.Monster, cert.ActorId, cert);
+                        outofrange = cert.Envir.AddMapObject(cert.CurrX, cert.CurrY, CellType.Monster, cert.ActorId, cert);
                         break;
                     }
                     n1C++;
                     if (n1C >= 31) break;
                 }
-                if (outofrange == null) {
+                if (!outofrange) {
                     //_logger.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
                     return null;
                 }

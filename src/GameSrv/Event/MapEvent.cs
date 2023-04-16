@@ -73,7 +73,7 @@ namespace GameSrv.Event
             RunTick = 500;
             if (Envirnoment != null && Visible)
             {
-                Envirnoment.AddToMap(nX, nY, CellType.Event, this.Id, this);
+                Envirnoment.AddMapEvent(nX, nY, this);
             }
             else
             {

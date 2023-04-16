@@ -3776,7 +3776,7 @@ namespace GameSrv.Player
                     Envir = oldEnvir;
                     CurrX = nOldX;
                     CurrY = nOldY;
-                    Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
+                    Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
                 }
                 OnEnvirnomentChanged();
                 // 复位泡点，及金币，时间

@@ -97,6 +97,10 @@ namespace GameSrv.Maps {
             }
         }
 
+        /// <summary>
+        /// 添加地图链接点
+        /// </summary>
+        /// <returns></returns>
         public bool AddMapRoute(string sSMapNo, int nSMapX, int nSMapY, string sDMapNo, int nDMapX, int nDMapY)
         {
             bool result = false;
@@ -104,7 +108,7 @@ namespace GameSrv.Maps {
             Envirnoment dEnvir = FindMap(sDMapNo);
             if (sEnvir != null && dEnvir != null)
             {
-                MapRouteItem gateObj = new MapRouteItem
+                MapRouteItem mapRoute = new MapRouteItem
                 {
                     RouteId = M2Share.ActorMgr.GetNextIdentity(),
                     Flag = false,
@@ -112,7 +116,7 @@ namespace GameSrv.Maps {
                     X = (short)nDMapX,
                     Y = (short)nDMapY
                 };
-                sEnvir.AddToMap(nSMapX, nSMapY, CellType.MapRoute, gateObj.RouteId, gateObj);
+                sEnvir.AddMapRoute(nSMapX, nSMapY, mapRoute);
                 result = true;
             }
             return result;

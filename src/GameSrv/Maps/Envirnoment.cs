@@ -7,6 +7,7 @@ using GameSrv.Event.Events;
 using GameSrv.Monster.Monsters;
 using GameSrv.Npc;
 using GameSrv.Player;
+using System.Runtime.InteropServices;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -163,22 +164,101 @@ namespace GameSrv.Maps
             return result;
         }
 
+        public void AddMapRoute(int nX, int nY, MapRouteItem mapRoute)
+        {
+            if (!ValidCell(nX, nY))
+            {
+                return;
+            }
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
+            if (cellSuccess && cellInfo.Valid)
+            {
+                if (cellInfo.ObjList == null)
+                {
+                    cellInfo.ObjList = new NativeList<CellObject>();
+                }
+                CellObject cellObject = new CellObject
+                {
+                    CellType = CellType.MapRoute,
+                    CellObjId = mapRoute.RouteId,
+                    AddTime = HUtil32.GetTickCount()
+                };
+                cellInfo.Add(cellObject);
+                M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapRoute);
+            }
+        }
+
+        public void AddMapDoor(int nX, int nY, MapDoor mapDoor)
+        {
+            if (!ValidCell(nX, nY))
+            {
+                return;
+            }
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
+            if (cellSuccess && cellInfo.Valid)
+            {
+                if (cellInfo.ObjList == null)
+                {
+                    cellInfo.ObjList = new NativeList<CellObject>();
+                }
+                CellObject cellObject = new CellObject
+                {
+                    CellType = CellType.Door,
+                    CellObjId = mapDoor.DoorId,
+                    AddTime = HUtil32.GetTickCount()
+                };
+                cellInfo.Add(cellObject);
+                if (cellObject.CellType is CellType.Door or CellType.Event)
+                {
+                    M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapDoor);
+                }
+            }
+        }
+
+        public void AddMapEvent(int nX, int nY, MapEvent mapEvent)
+        {
+            if (mapEvent == null)
+            {
+                return;
+            }
+            if (!ValidCell(nX, nY))
+            {
+                return;
+            }
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
+            if (cellSuccess && cellInfo.Valid)
+            {
+                if (cellInfo.ObjList == null)
+                {
+                    cellInfo.ObjList = new NativeList<CellObject>();
+                }
+                CellObject cellObject = new CellObject
+                {
+                    CellType = CellType.Event,
+                    CellObjId = mapEvent.Id,
+                    AddTime = HUtil32.GetTickCount()
+                };
+                cellInfo.Add(cellObject);
+                M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapEvent);
+            }
+        }
+
         /// <summary>
         /// 添加对象到地图
         /// </summary>
         /// <returns></returns>
-        public object AddToMap(int nX, int nY, CellType cellType, int cellId, object mapObject)
+        public bool AddMapObject(int nX, int nY, CellType cellType, int cellId, BaseObject mapObject)
         {
             if (mapObject == null)
             {
-                return null;
+                return false;
             }
             if (!ValidCell(nX, nY))
             {
-                return null;
+                return false;
             }
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMap";
-            object result = null;
+            bool result = false;
             try
             {
                 ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
@@ -194,23 +274,15 @@ namespace GameSrv.Maps
                         CellObjId = cellId,
                         AddTime = HUtil32.GetTickCount()
                     };
-                    if (cellType is CellType.Play or CellType.Monster or CellType.Merchant)
+                    if (!mapObject.AddToMaped)
                     {
-                        BaseObject baseObject = mapObject as BaseObject;
-                        if (!baseObject.AddToMaped)
-                        {
-                            baseObject.DelFormMaped = false;
-                            baseObject.AddToMaped = true;
-                            AddObject(baseObject);
-                        }
-                        cellObject.ActorObject = true;
+                        mapObject.DelFormMaped = false;
+                        mapObject.AddToMaped = true;
+                        AddObject(mapObject);
                     }
+                    cellObject.ActorObject = true;
                     cellInfo.Add(cellObject);
-                    if (cellObject.CellType is CellType.Door or CellType.MapRoute or CellType.Event)
-                    {
-                        M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapObject);
-                    }
-                    result = mapObject;
+                    result = true;
                 }
             }
             catch (Exception ex)
@@ -226,7 +298,7 @@ namespace GameSrv.Maps
             for (int i = 0; i < DoorList.Count; i++)
             {
                 MapDoor door = DoorList[i];
-                AddToMap(door.nX, door.nY, CellType.Door, door.DoorId, door);
+                AddMapDoor(door.nX, door.nY, door);
             }
         }
 
@@ -832,7 +904,7 @@ namespace GameSrv.Maps
                 }
                 if (!boVerify)
                 {
-                    AddToMap(nX, nY, baseObject.CellType, baseObject.ActorId, baseObject);
+                    AddMapObject(nX, nY, baseObject.CellType, baseObject.ActorId, baseObject);
                 }
             }
             catch
@@ -1047,7 +1119,7 @@ namespace GameSrv.Maps
             return true;
         }
 
-        public int GetXyObjCount(int nX, int nY)
+        public int GetXYObjCount(int nX, int nY)
         {
             int result = 0;
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
@@ -1056,10 +1128,6 @@ namespace GameSrv.Maps
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
                 {
                     CellObject cellObject = cellInfo.ObjList[i];
-                    if (cellObject.CellObjId == 0)
-                    {
-                        continue;
-                    }
                     if (cellObject.ActorObject)
                     {
                         BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
@@ -1342,7 +1410,7 @@ namespace GameSrv.Maps
         /// <param name="boFlag">是否包括死亡对象 FALSE 包括死亡对象 TRUE  不包括死亡对象</param>
         /// <param name="baseObjectList"></param>
         /// <returns></returns>
-        public int GetBaseObjects(int nX, int nY, bool boFlag, ref IList<BaseObject> baseObjectList)
+        public void GetBaseObjects(int nX, int nY, bool boFlag, ref IList<BaseObject> baseObjectList)
         {
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
@@ -1373,7 +1441,6 @@ namespace GameSrv.Maps
                     }
                 }
             }
-            return baseObjectList.Count;
         }
 
         public MapEvent GetEvent(int nX, int nY)
@@ -1522,6 +1589,7 @@ namespace GameSrv.Maps
             GC.SuppressFinalize(this);
         }
 
+        [StructLayout(LayoutKind.Sequential, Pack = 1)]
         private record struct MapUnitInfo
         {
             public ushort wBkImg;

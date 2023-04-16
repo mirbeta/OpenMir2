@@ -264,7 +264,7 @@ namespace GameSrv.Player
                 {
                     CheckDupObjTick = HUtil32.GetTickCount();
                     GetStartPoint();
-                    tObjCount = Envir.GetXyObjCount(CurrX, CurrY);
+                    tObjCount = Envir.GetXYObjCount(CurrX, CurrY);
                     if (tObjCount >= 2)
                     {
                         if (!BoDuplication)

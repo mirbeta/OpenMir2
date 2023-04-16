@@ -1949,7 +1949,7 @@ namespace GameSrv.RobotPlay
                 if (HUtil32.GetTickCount() - ThinkTick > 3000)
                 {
                     ThinkTick = HUtil32.GetTickCount();
-                    if (Envir.GetXyObjCount(CurrX, CurrY) >= 2)
+                    if (Envir.GetXYObjCount(CurrX, CurrY) >= 2)
                     {
                         MBoDupMode = true;
                     }

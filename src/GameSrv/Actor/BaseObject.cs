@@ -685,7 +685,7 @@ namespace GameSrv.Actor
                         Envir.DeleteFromMap(CurrX, CurrY, CellType, this.ActorId, this);
                         CurrX = oldX;
                         CurrY = oldY;
-                        Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
+                        Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
                     }
                 }
             }
@@ -1128,7 +1128,7 @@ namespace GameSrv.Actor
                     CurrY = nY;
                     if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
                     {
-                        Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
+                        Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
                         SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0);
                         SendMsg(Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
                         if (nInt == 1)
@@ -1147,7 +1147,7 @@ namespace GameSrv.Actor
                         Envir = oldEnvir;
                         CurrX = nOldX;
                         CurrY = nOldY;
-                        Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
+                        Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
                     }
                     OnEnvirnomentChanged();
                 }
@@ -1365,8 +1365,7 @@ namespace GameSrv.Actor
 
         internal bool AddToMap()
         {
-            object point = Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
-            bool result = point != null;
+            var result = Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
             if (!FixedHideMode)
             {
                 SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, 0, "");
@@ -2677,7 +2676,7 @@ namespace GameSrv.Actor
             }
 
             int nC = 0;
-            object addObj = null;
+            bool addObj = false;
             short nX2 = CurrX;
             short nY2 = CurrY;
             while (true)
@@ -2706,7 +2705,7 @@ namespace GameSrv.Actor
                 {
                     CurrX = nX;
                     CurrY = nY;
-                    addObj = Envir.AddToMap(nX, nY, CellType, this.ActorId, this);
+                    addObj = Envir.AddMapObject(nX, nY, CellType, this.ActorId, this);
                     break;
                 }
                 nC++;
@@ -2715,11 +2714,11 @@ namespace GameSrv.Actor
                     break;
                 }
             }
-            if (addObj == null)
+            if (!addObj)
             {
                 CurrX = nX2;
                 CurrY = nY2;
-                Envir.AddToMap(CurrX, CurrY, CellType, this.ActorId, this);
+                Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
             }
             Abil.HP = Abil.MaxHP;
             Abil.MP = Abil.MaxMP;
