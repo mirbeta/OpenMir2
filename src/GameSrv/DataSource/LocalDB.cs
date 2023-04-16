@@ -500,39 +500,50 @@ namespace GameSrv.DataSource {
         /// 读取怪物物品掉落配置
         /// </summary>
         /// <returns></returns>
-        public void LoadMonitems(string monName, ref IList<MonsterDropItem> itemList) {
+        public void LoadMonitems(string monName, ref IList<MonsterDropItem> itemList)
+        {
             string sData = string.Empty;
             string monFileName = M2Share.GetEnvirFilePath("MonItems", $"{monName}.txt");
-            if (File.Exists(monFileName)) {
-                if (itemList != null) {
-                    for (int i = 0; i < itemList.Count; i++) {
-                        itemList[i] = default(MonsterDropItem);
+            if (File.Exists(monFileName))
+            {
+                if (itemList != null)
+                {
+                    for (int i = 0; i < itemList.Count; i++)
+                    {
+                        itemList[i] = default;
                     }
                     itemList.Clear();
                 }
-                if (itemList == null) {
+                if (itemList == null)
+                {
                     itemList = new List<MonsterDropItem>();
                 }
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(monFileName);
-                for (int i = 0; i < loadList.Count; i++) {
+                for (int i = 0; i < loadList.Count; i++)
+                {
                     string s28 = loadList[i];
-                    if (!string.IsNullOrEmpty(s28) && s28[0] != ';') {
+                    if (!string.IsNullOrEmpty(s28) && s28[0] != ';')
+                    {
                         s28 = HUtil32.GetValidStr3(s28, ref sData, _monsterSpitConst);
                         int n18 = HUtil32.StrToInt(sData, -1);
                         s28 = HUtil32.GetValidStr3(s28, ref sData, _monsterSpitConst);
                         int n1C = HUtil32.StrToInt(sData, -1);
                         s28 = HUtil32.GetValidStr3(s28, ref sData, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sData)) {
-                            if (sData[0] == '\"') {
+                        if (!string.IsNullOrEmpty(sData))
+                        {
+                            if (sData[0] == '\"')
+                            {
                                 HUtil32.ArrestStringEx(sData, "\"", "\"", ref sData);
                             }
                         }
                         string itemName = sData;
                         s28 = HUtil32.GetValidStr3(s28, ref sData, _textSpitConst);
                         int itemCount = HUtil32.StrToInt(sData, 1);
-                        if (n18 > 0 && n1C > 0 && !string.IsNullOrEmpty(itemName)) {
-                            MonsterDropItem monItem = new MonsterDropItem {
+                        if (n18 > 0 && n1C > 0 && !string.IsNullOrEmpty(itemName))
+                        {
+                            MonsterDropItem monItem = new MonsterDropItem
+                            {
                                 SelPoint = n18 - 1,
                                 MaxPoint = n1C,
                                 ItemName = itemName,

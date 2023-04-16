@@ -205,7 +205,7 @@ namespace GameSrv.Actor
                 }
             }
             // 清除宝宝列表中已经死亡及叛变的宝宝信息
-            if (SlaveList != null)
+            if (SlaveList != null && SlaveList.Any())
             {
                 for (int i = SlaveList.Count - 1; i >= 0; i--)
                 {
@@ -214,7 +214,6 @@ namespace GameSrv.Actor
                         SlaveList.RemoveAt(i);
                     }
                 }
-                SlaveList = null;
             }
             if (ShowHp && ((HUtil32.GetTickCount() - ShowHpTick) > ShowHpInterval))
             {

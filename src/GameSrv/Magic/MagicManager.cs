@@ -1261,7 +1261,7 @@ namespace GameSrv.Magic
             return result;
         }
 
-        private static bool MagMakeSinSuSlave(BaseObject playObject, UserMagic userMagic)
+        private static bool MagMakeSinSuSlave(PlayObject playObject, UserMagic userMagic)
         {
             var result = false;
             if (!playObject.CheckServerMakeSlave())

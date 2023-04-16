@@ -406,7 +406,6 @@ namespace GameSrv.Actor
             AddAbil = new AddAbility();
             VisibleHumanList = new List<int>();
             VisibleActors = new List<VisibleBaseObject>();
-            //ItemList = new List<UserItem>();
             IsVisibleActive = false;
             Castle = null;
             Master = null;
@@ -2669,11 +2668,14 @@ namespace GameSrv.Actor
             }
 
             //UseItems = new UserItem[13];
-            for (int i = 0; i < ItemList.Count; i++)
+            if (ItemList != null)
             {
-                ItemList[i] = null;
+                for (int i = 0; i < ItemList.Count; i++)
+                {
+                    ItemList[i] = null;
+                }
+                ItemList.Clear();
             }
-            ItemList.Clear();
 
             OnEnvirnomentChanged();
             CharStatus = GetCharStatus();

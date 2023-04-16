@@ -243,7 +243,6 @@ namespace GameSrv.DataSource
                     if (monster.ItemList == null || monster.ItemList.Count <= 0)
                     {
                         logger.Debug($"怪物[{monster.Name}]爆率文件为空.");
-                        continue;
                     }
                     M2Share.WorldEngine.MonsterList.Add(monster.Name, monster);
                     result = 1;
