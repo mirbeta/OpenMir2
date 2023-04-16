@@ -2,6 +2,7 @@ using GameSrv.Actor;
 using GameSrv.GameCommand;
 using GameSrv.Items;
 using GameSrv.Magic;
+using GameSrv.Maps;
 using GameSrv.Npc;
 using GameSrv.World;
 using SystemModule.Consts;
@@ -360,8 +361,8 @@ namespace GameSrv.Player
 
         private void ClientOpenDoor(int nX, int nY)
         {
-            var door = Envir.GetDoor(nX, nY);
-            if (door == null)
+            MapDoor door = default;
+            if (Envir.GetDoor(nX, nY, ref door))
             {
                 return;
             }

@@ -177,7 +177,7 @@ namespace GameSrv.Castle
         public void Initialize()
         {
             ArcherUnit ObjUnit;
-            DoorInfo Door;
+            MapDoor Door;
             LoadConfig();
             LoadAttackSabukWall();
             if (M2Share.MapMgr.GetMapOfServerIndex(MapName) == M2Share.ServerIndex)

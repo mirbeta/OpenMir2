@@ -41,7 +41,7 @@ namespace GameSrv.Maps
         /// <summary>
         /// 门
         /// </summary>
-        public readonly IList<DoorInfo> DoorList;
+        public readonly IList<MapDoor> DoorList;
         public Merchant QuestNpc = null;
         /// <summary>
         /// 任务
@@ -58,7 +58,7 @@ namespace GameSrv.Maps
             monCount = 0;
             humCount = 0;
             Flag = new MapInfoFlag();
-            DoorList = new List<DoorInfo>();
+            DoorList = new List<MapDoor>();
             QuestList = new List<MapQuestInfo>();
             PointList = new List<PointInfo>();
         }
@@ -82,6 +82,87 @@ namespace GameSrv.Maps
             return true;
         }
 
+        public bool AddItemToMap(int nX, int nY, MapItem mapItem)
+        {
+            if (mapItem.ItemId == 0)
+            {
+                return false;
+            }
+            if (!ValidCell(nX, nY))
+            {
+                return false;
+            }
+            const string sExceptionMsg = "[Exception] Envirnoment::AddItemToMap";
+            bool result = false;
+            try
+            {
+                bool addSuccess = false;
+                ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
+                if (cellSuccess && cellInfo.Valid)
+                {
+                    if (cellInfo.ObjList == null)
+                    {
+                        cellInfo.ObjList = new NativeList<CellObject>();
+                    }
+                    if (cellInfo.IsAvailable)
+                    {
+                        if (string.Compare(mapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
+                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            {
+                                CellObject cellObject = cellInfo.ObjList[i];
+                                if (cellObject.CellType == CellType.Item)
+                                {
+                                    MapItem cellItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                    if (cellItem.ItemId == 0)
+                                    {
+                                        continue;
+                                    }
+                                    if (string.Compare(mapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
+                                    {
+                                        int nGoldCount = mapItem.Count + mapItem.Count;
+                                        if (nGoldCount <= 2000)
+                                        {
+                                            mapItem.Count = nGoldCount;
+                                            mapItem.Looks = M2Share.GetGoldShape(nGoldCount);
+                                            mapItem.AniCount = 0;
+                                            mapItem.Reserved = 0;
+                                            result = true;
+                                            cellInfo.Update(i, ref cellObject);
+                                            addSuccess = true;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (!addSuccess && cellInfo.Count >= 5)
+                        {
+                            result = false;
+                            addSuccess = true;
+                        }
+                    }
+                    if (!addSuccess)
+                    {
+                        CellObject cellObject = new CellObject
+                        {
+                            CellType = CellType.Item,
+                            CellObjId = mapItem.ItemId,
+                            AddTime = HUtil32.GetTickCount()
+                        };
+                        cellInfo.Add(cellObject);
+                        M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapItem);
+                        result = true;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(ex);
+            }
+            return result;
+        }
+
         /// <summary>
         /// 添加对象到地图
         /// </summary>
@@ -100,77 +181,36 @@ namespace GameSrv.Maps
             object result = null;
             try
             {
-                bool addSuccess = false;
                 ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                 if (cellSuccess && cellInfo.Valid)
                 {
-                    if (cellInfo.ObjList == null) {
+                    if (cellInfo.ObjList == null)
+                    {
                         cellInfo.ObjList = new NativeList<CellObject>();
                     }
-                    if (cellType == CellType.Item && cellInfo.IsAvailable)
+                    CellObject cellObject = new CellObject
                     {
-                        if (string.Compare((mapObject as MapItem)?.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
-                        {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
-                            {
-                                CellObject cellObject = cellInfo.ObjList[i];
-                                if (cellObject.CellType == CellType.Item)
-                                {
-                                    MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
-                                    if (mapItem == null)
-                                    {
-                                        continue;
-                                    }
-                                    if (string.Compare(mapItem.Name, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
-                                    {
-                                        int nGoldCount = mapItem.Count + ((MapItem)mapObject).Count;
-                                        if (nGoldCount <= 2000)
-                                        {
-                                            mapItem.Count = nGoldCount;
-                                            mapItem.Looks = M2Share.GetGoldShape(nGoldCount);
-                                            mapItem.AniCount = 0;
-                                            mapItem.Reserved = 0;
-                                            result = mapItem;
-                                            cellInfo.Update(i, ref cellObject);
-                                            addSuccess = true;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (!addSuccess && cellInfo.Count >= 5)
-                        {
-                            result = null;
-                            addSuccess = true;
-                        }
-                    }
-                    if (!addSuccess)
+                        CellType = cellType,
+                        CellObjId = cellId,
+                        AddTime = HUtil32.GetTickCount()
+                    };
+                    if (cellType is CellType.Play or CellType.Monster or CellType.Merchant)
                     {
-                        cellInfo.ObjList ??= new NativeList<CellObject>();
-                        CellObject cellObject = new CellObject
+                        BaseObject baseObject = mapObject as BaseObject;
+                        if (!baseObject.AddToMaped)
                         {
-                            CellType = cellType,
-                            CellObjId = cellId,
-                            AddTime = HUtil32.GetTickCount()
-                        };
-                        if (cellType is CellType.Play or CellType.Monster or CellType.Merchant)
-                        {
-                            BaseObject baseObject = mapObject as BaseObject;
-                            if (!baseObject.AddToMaped)
-                            {
-                                baseObject.DelFormMaped = false;
-                                baseObject.AddToMaped = true;
-                                AddObject(baseObject);
-                            }
-                            cellObject.ActorObject = true;
+                            baseObject.DelFormMaped = false;
+                            baseObject.AddToMaped = true;
+                            AddObject(baseObject);
                         }
-                        cellInfo.Add(cellObject);
-                        if (cellObject.CellType is CellType.Door or CellType.Item or CellType.MapRoute or CellType.Event)
-                        {
-                            M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapObject);
-                        }
-                        result = mapObject;
+                        cellObject.ActorObject = true;
                     }
+                    cellInfo.Add(cellObject);
+                    if (cellObject.CellType is CellType.Door or CellType.MapRoute or CellType.Event)
+                    {
+                        M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapObject);
+                    }
+                    result = mapObject;
                 }
             }
             catch (Exception ex)
@@ -178,7 +218,6 @@ namespace GameSrv.Maps
                 M2Share.Logger.Error(sExceptionMsg);
                 M2Share.Logger.Error(ex);
             }
-
             return result;
         }
 
@@ -186,7 +225,7 @@ namespace GameSrv.Maps
         {
             for (int i = 0; i < DoorList.Count; i++)
             {
-                DoorInfo door = DoorList[i];
+                MapDoor door = DoorList[i];
                 AddToMap(door.nX, door.nY, CellType.Door, door.DoorId, door);
             }
         }
@@ -555,16 +594,15 @@ namespace GameSrv.Maps
         /// </summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, BaseObject pRemoveObject)
+        public int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, BaseObject mapObject)
         {
-            const string sExceptionMsg1 = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
+            const string sExceptionMsg = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
             int result = -1;
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 try
                 {
-
                     var nIdx = 0;
                     while (true)
                     {
@@ -579,11 +617,11 @@ namespace GameSrv.Maps
                             {
                                 cellInfo.Remove(nIdx);
                                 result = 1;
-                                if (cellObject.ActorObject && pRemoveObject != null && !pRemoveObject.DelFormMaped)
+                                if (cellObject.ActorObject && mapObject != null && !mapObject.DelFormMaped)
                                 {
-                                    pRemoveObject.DelFormMaped = true;
-                                    pRemoveObject.AddToMaped = false;
-                                    DelObjectCount(pRemoveObject);// 减地图人物怪物计数
+                                    mapObject.DelFormMaped = true;
+                                    mapObject.AddToMaped = false;
+                                    DelObjectCount(mapObject);// 减地图人物怪物计数
                                 }
                                 if (cellType != CellType.Monster)
                                 {
@@ -615,7 +653,7 @@ namespace GameSrv.Maps
                 }
                 catch
                 {
-                    M2Share.Logger.Error(string.Format(sExceptionMsg1, cellType));
+                    M2Share.Logger.Error(string.Format(sExceptionMsg, cellType));
                 }
             }
             else
@@ -626,7 +664,7 @@ namespace GameSrv.Maps
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public MapItem GetItem(int nX, int nY)
+        public bool GetItem(int nX, int nY, ref MapItem mapItem)
         {
             ChFlag = false;
             MapCellInfo cellInfo = GetCellInfo(nX, nY, out bool cellSuccess);
@@ -639,7 +677,8 @@ namespace GameSrv.Maps
                     switch (cellObject.CellType)
                     {
                         case CellType.Item:
-                            return M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                            mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                            return true;
                         case CellType.MapRoute:
                             ChFlag = false;
                             break;
@@ -655,7 +694,7 @@ namespace GameSrv.Maps
                     }
                 }
             }
-            return null;
+            return false;
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -705,14 +744,14 @@ namespace GameSrv.Maps
             return QuestList.Any();
         }
 
-        public bool AddToMapItemEvent<T>(int nX, int nY, CellType nType, T stoneMineEvent) where T : StoneMineEvent
+        public bool AddMineToEvent<T>(int nX, int nY, T stoneMineEvent) where T : StoneMineEvent
         {
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 cellInfo.ObjList ??= new NativeList<CellObject>();
                 CellObject cellObject = new CellObject();
-                cellObject.CellType = nType;
+                cellObject.CellType = CellType.Event;
                 cellObject.CellObjId = stoneMineEvent.Id;
                 cellObject.AddTime = HUtil32.GetTickCount();
                 cellInfo.Add(cellObject);
@@ -726,7 +765,7 @@ namespace GameSrv.Maps
         /// 添加矿石到地图上
         /// </summary>
         /// <returns></returns>
-        public bool AddToMapMineEvent<T>(int nX, int nY, CellType cellType, T stoneMineEvent) where T : StoneMineEvent
+        public bool AddToMapMineEvent<T>(int nX, int nY, T stoneMineEvent) where T : StoneMineEvent
         {
             const string sExceptionMsg = "[Exception] Envirnoment::AddToMapMineEvent ";
             try
@@ -758,7 +797,7 @@ namespace GameSrv.Maps
                         cellInfo.ObjList ??= new NativeList<CellObject>();
                         CellObject cellObject = new CellObject
                         {
-                            CellType = cellType,
+                            CellType = CellType.Event,
                             CellObjId = stoneMineEvent.Id,
                             AddTime = HUtil32.GetTickCount()
                         };
@@ -828,7 +867,7 @@ namespace GameSrv.Maps
             bool result = false;
             int n24;
             int point;
-            DoorInfo door;
+            MapDoor door;
             try
             {
                 if (File.Exists(sMapFile))
@@ -881,7 +920,7 @@ namespace GameSrv.Maps
                                 point = mapUnitInfo.btDoorIndex & 0x7F;
                                 if (point > 0)
                                 {
-                                    door = new DoorInfo
+                                    door = new MapDoor
                                     {
                                         nX = (short)nW,
                                         nY = (short)nH,
@@ -1161,7 +1200,7 @@ namespace GameSrv.Maps
             bool result = true;
             for (int i = 0; i < DoorList.Count; i++)
             {
-                DoorInfo door = DoorList[i];
+                MapDoor door = DoorList[i];
                 if (Math.Abs(door.nX - nX) <= 1 && Math.Abs(door.nY - nY) <= 1)
                 {
                     if (!door.Status.Opened)
@@ -1254,17 +1293,17 @@ namespace GameSrv.Maps
             return null;
         }
 
-        public DoorInfo GetDoor(int nX, int nY)
+        public bool GetDoor(int nX, int nY, ref MapDoor door)
         {
             for (int i = 0; i < DoorList.Count; i++)
             {
-                DoorInfo door = DoorList[i];
-                if (door.nX == nX && door.nY == nY)
+                if (DoorList[i].nX == nX && DoorList[i].nY == nY)
                 {
-                    return door;
+                    door = DoorList[i];
+                    return true;
                 }
             }
-            return null;
+            return false;
         }
 
         public bool IsValidObject(int nX, int nY, int nRage, BaseObject baseObject)

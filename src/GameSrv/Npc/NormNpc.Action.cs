@@ -3348,14 +3348,8 @@ namespace GameSrv.Npc
                         mapItem.OfBaseObject = playObject.ActorId;
                         mapItem.CanPickUpTick = HUtil32.GetTickCount();
                         mapItem.DropBaseObject = playObject.ActorId;
-                        mapItemA = (MapItem)envir.AddToMap(dX, dY, CellType.Item, mapItem.ItemId, mapItem);
-                        if (mapItemA != null)
+                        if (envir.AddItemToMap(dX, dY, mapItem))
                         {
-                            if (mapItemA != mapItem)
-                            {
-                                Dispose(mapItem);
-                                mapItem = mapItemA;
-                            }
                             SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dX, dY, mapItem.Name + "@0");
                         }
                         else
@@ -3407,14 +3401,8 @@ namespace GameSrv.Npc
                                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                                 mapItem.DropBaseObject = playObject.ActorId;
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
-                                mapItemA = (MapItem)envir.AddToMap(dX, dY, CellType.Item, mapItem.ItemId, mapItem);
-                                if (mapItemA != null)
+                                if (envir.AddItemToMap(dX, dY, mapItem))
                                 {
-                                    if (mapItemA != mapItem)
-                                    {
-                                        Dispose(mapItem);
-                                        mapItem = mapItemA;
-                                    }
                                     SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dX, dY, mapItem.Name + nameCorlr);
                                 }
                                 else

@@ -147,7 +147,6 @@ namespace GameSrv.RobotPlay
             ProtectStatus = false;// 守护模式
             ProtectDest = true;// 到达守护坐标
             GotoProtectXyCount = 0;// 是向守护坐标的累计数
-            MSelMapItem = null;
             PickUpItemTick = HUtil32.GetTickCount();
             AiSayMsgList = new ArrayList();// 受攻击说话列表
             NAmuletIndx = 0;
@@ -533,9 +532,9 @@ namespace GameSrv.RobotPlay
         private bool SearchPickUpItemPickUpItem(short nX, short nY)
         {
             var result = false;
-            UserItem userItem = null;
-            var mapItem = Envir.GetItem(nX, nY);
-            if (mapItem == null)
+            MapItem mapItem = default;
+            var success = Envir.GetItem(nX, nY, ref mapItem);
+            if (!success)
             {
                 return false;
             }
@@ -553,12 +552,12 @@ namespace GameSrv.RobotPlay
                     }
                     else
                     {
-                        Envir.AddToMap(nX, nY, CellType.Item, mapItem.ItemId, mapItem);
+                        Envir.AddItemToMap(nX, nY, mapItem);
                     }
                 }
                 else
                 {
-                    Envir.AddToMap(nX, nY, CellType.Item, mapItem.ItemId, mapItem);
+                    Envir.AddItemToMap(nX, nY, mapItem);
                 }
             }
             else
@@ -567,9 +566,9 @@ namespace GameSrv.RobotPlay
                 var stdItem = M2Share.WorldEngine.GetStdItem(mapItem.UserItem.Index);
                 if (stdItem != null)
                 {
+                    UserItem userItem = null;
                     if (Envir.DeleteFromMap(nX, nY, CellType.Item, mapItem.ItemId, null) == 1)
                     {
-                        userItem = new UserItem();
                         userItem = mapItem.UserItem;
                         stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(userItem.Index)))
@@ -592,19 +591,19 @@ namespace GameSrv.RobotPlay
                             else
                             {
                                 Dispose(userItem);
-                                Envir.AddToMap(nX, nY, CellType.Item, mapItem.ItemId, mapItem);
+                                Envir.AddItemToMap(nX, nY, mapItem);
                             }
                         }
                         else
                         {
                             Dispose(userItem);
-                            Envir.AddToMap(nX, nY, CellType.Item, mapItem.ItemId, mapItem);
+                            Envir.AddItemToMap(nX, nY, mapItem);
                         }
                     }
                     else
                     {
                         Dispose(userItem);
-                        Envir.AddToMap(nX, nY, CellType.Item, mapItem.ItemId, mapItem);
+                        Envir.AddItemToMap(nX, nY, mapItem);
                     }
                 }
             }
@@ -625,7 +624,7 @@ namespace GameSrv.RobotPlay
                 if (IsEnoughBag() && TargetCret == null)
                 {
                     var boFound = false;
-                    if (MSelMapItem != null)
+                    if (MSelMapItem.ItemId>0)
                     {
                         CanPickIng = true;
                         for (var i = 0; i < VisibleItems.Count; i++)
@@ -643,9 +642,9 @@ namespace GameSrv.RobotPlay
                     }
                     if (!boFound)
                     {
-                        MSelMapItem = null;
+                        MSelMapItem = default;
                     }
-                    if (MSelMapItem != null)
+                    if (MSelMapItem.ItemId > 0)
                     {
                         if (SearchPickUpItemPickUpItem(CurrX, CurrY))
                         {
@@ -656,7 +655,7 @@ namespace GameSrv.RobotPlay
                     var n01 = 999;
                     VisibleMapItem selVisibleMapItem = null;
                     boFound = false;
-                    if (MSelMapItem != null)
+                    if (MSelMapItem.ItemId > 0)
                     {
                         for (var i = 0; i < VisibleItems.Count; i++)
                         {
@@ -682,7 +681,7 @@ namespace GameSrv.RobotPlay
                                 if (visibleMapItem.VisibleFlag > 0)
                                 {
                                     var mapItem = visibleMapItem.MapItem;
-                                    if (mapItem != null)
+                                    if (mapItem.ItemId > 0)
                                     {
                                         if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(M2Share.WorldEngine.GetStdItemWeight(mapItem.UserItem.Index)))
                                         {
@@ -707,7 +706,7 @@ namespace GameSrv.RobotPlay
                     if (selVisibleMapItem != null)
                     {
                         MSelMapItem = selVisibleMapItem.MapItem;
-                        if (MSelMapItem != null)
+                        if (MSelMapItem.ItemId > 0)
                         {
                             CanPickIng = true;
                         }
@@ -728,7 +727,6 @@ namespace GameSrv.RobotPlay
                 }
                 else
                 {
-                    MSelMapItem = null;
                     CanPickIng = false;
                 }
             }

@@ -564,8 +564,7 @@ namespace GameSrv.Actor
                 mapItem.CanPickUpTick = HUtil32.GetTickCount();
                 mapItem.DropBaseObject = dropCreat;
                 GetDropPosition(CurrX, CurrY, nScatterRange, ref dx, ref dy);
-                object pr = Envir.AddToMap(dx, dy, CellType.Item, mapItem.ItemId, mapItem);
-                if (pr == mapItem)
+                if (Envir.AddItemToMap(dx, dy, mapItem))
                 {
                     SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dx, dy, mapItem.Name);
                     int logcap = boDieDrop ? 15 : 7;
@@ -732,7 +731,7 @@ namespace GameSrv.Actor
         {
             SendRefMsg(Messages.RM_CHANGENAMECOLOR, 0, 0, 0, 0, "");
         }
-        
+
         protected bool DropGoldDown(int nGold, bool boFalg, int goldOfCreat, int dropGoldCreat)
         {
             bool result = false;
@@ -749,13 +748,8 @@ namespace GameSrv.Actor
                 DropBaseObject = dropGoldCreat
             };
             GetDropPosition(CurrX, CurrY, 3, ref nX, ref nY);
-            MapItem mapItemA = (MapItem)Envir.AddToMap(nX, nY, CellType.Item, mapItem.ItemId, mapItem);
-            if (mapItemA != null)
+            if (Envir.AddItemToMap(nX, nY, mapItem))
             {
-                if (mapItemA.ItemId != mapItem.ItemId)
-                {
-                    mapItem = mapItemA;
-                }
                 SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, nX, nY, mapItem.Name);
                 if (Race == ActorRace.Play)
                 {

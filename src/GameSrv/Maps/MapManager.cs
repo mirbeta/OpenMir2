@@ -97,12 +97,15 @@ namespace GameSrv.Maps {
             }
         }
 
-        public bool AddMapRoute(string sSMapNo, int nSMapX, int nSMapY, string sDMapNo, int nDMapX, int nDMapY) {
+        public bool AddMapRoute(string sSMapNo, int nSMapX, int nSMapY, string sDMapNo, int nDMapX, int nDMapY)
+        {
             bool result = false;
             Envirnoment sEnvir = FindMap(sSMapNo);
             Envirnoment dEnvir = FindMap(sDMapNo);
-            if (sEnvir != null && dEnvir != null) {
-                MapRouteItem gateObj = new MapRouteItem {
+            if (sEnvir != null && dEnvir != null)
+            {
+                MapRouteItem gateObj = new MapRouteItem
+                {
                     RouteId = M2Share.ActorMgr.GetNextIdentity(),
                     Flag = false,
                     Envir = dEnvir,

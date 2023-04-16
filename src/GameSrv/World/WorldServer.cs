@@ -139,20 +139,20 @@ namespace GameSrv.World
         {
             try
             {
-                for (var i = 0; i < MobThreads.Length; i++)
-                {
-                    var mobThread = MobThreads[i];
-                    if (mobThread == null)
-                    {
-                        continue;
-                    }
-                    if (!mobThread.Stop) continue;
-                    mobThread.Stop = false;
-                }
-                lock (_locker)
-                {
-                    Monitor.PulseAll(_locker);
-                }
+                //for (var i = 0; i < MobThreads.Length; i++)
+                //{
+                //    var mobThread = MobThreads[i];
+                //    if (mobThread == null)
+                //    {
+                //        continue;
+                //    }
+                //    if (!mobThread.Stop) continue;
+                //    mobThread.Stop = false;
+                //}
+                //lock (_locker)
+                //{
+                //    Monitor.PulseAll(_locker);
+                //}
                 if ((HUtil32.GetTickCount() - ProcessMissionsTime) > 1000)
                 {
                     ProcessMissionsTime = HUtil32.GetTickCount();
@@ -1464,8 +1464,8 @@ namespace GameSrv.World
 
         public static void OpenDoor(Envirnoment envir, int nX, int nY)
         {
-            var door = envir.GetDoor(nX, nY);
-            if (door != null && !door.Status.Opened)
+            MapDoor door = default;
+            if (envir.GetDoor(nX, nY, ref door) && !door.Status.Opened)
             {
                 door.Status.Opened = true;
                 door.Status.OpenTick = HUtil32.GetTickCount();
@@ -1473,7 +1473,7 @@ namespace GameSrv.World
             }
         }
 
-        private static void CloseDoor(Envirnoment envir, DoorInfo door)
+        private static void CloseDoor(Envirnoment envir, MapDoor door)
         {
             if (door == null || !door.Status.Opened)
                 return;

@@ -48,8 +48,9 @@ namespace GameSrv.Player {
             {
                 return;
             }
-            MapItem mapItem = Envir.GetItem(CurrX, CurrY);
-            if (mapItem == null)
+            MapItem mapItem = default;
+            var success = Envir.GetItem(CurrX, CurrY, ref mapItem);
+            if (!success)
             {
                 return;
             }
@@ -79,7 +80,7 @@ namespace GameSrv.Player {
                     }
                     else
                     {
-                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, mapItem);
+                        Envir.AddItemToMap(CurrX, CurrY, mapItem);
                     }
                 }
                 return;
@@ -111,7 +112,7 @@ namespace GameSrv.Player {
                     else
                     {
                         Dispose(userItem);
-                        Envir.AddToMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, mapItem);
+                        Envir.AddItemToMap(CurrX, CurrY, mapItem);
                     }
                 }
             }

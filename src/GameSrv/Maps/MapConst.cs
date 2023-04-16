@@ -2,20 +2,23 @@
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.Maps {
-    public class DoorInfo {
+namespace GameSrv.Maps
+{
+    public record struct MapDoor
+    {
         public int DoorId;
         public short nX;
         public short nY;
         public DoorStatus Status;
         public int n08;
 
-        public DoorInfo() {
+        public MapDoor()
+        {
             DoorId = M2Share.ActorMgr.GetNextIdentity();
         }
     }
 
-    public class MapItem {
+    public record struct MapItem {
         /// <summary>
         /// 物品唯一ID
         /// </summary>
@@ -74,16 +77,6 @@ namespace GameSrv.Maps {
         public string sName;
         public ushort wLooks;
         public VisibleFlag VisibleFlag;
-    }
-
-    /// <summary>
-    /// 地图对象类型
-    /// </summary>
-    public enum CellObjectType : byte {
-        /// <summary>
-        /// 可以移动的对象
-        /// </summary>
-        MoveObject = 0
     }
 
     public enum CellType : byte {
