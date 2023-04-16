@@ -137,11 +137,11 @@ namespace GameSrv.Monster.Monsters
             short nEndY = (short)(CurrY + ViewRange);
             try
             {
-                for (short n18 = nStartX; n18 <= nEndX; n18++)
+                for (short nX = nStartX; nX <= nEndX; nX++)
                 {
-                    for (short n1C = nStartY; n1C <= nEndY; n1C++)
+                    for (short nY = nStartY; nY <= nEndY; nY++)
                     {
-                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(n18, n1C, out bool cellSuccess);
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
