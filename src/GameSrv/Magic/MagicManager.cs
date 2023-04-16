@@ -766,7 +766,7 @@ namespace GameSrv.Magic
                                                 targetObject.NextHitTime = 2000 - magicLevel * 200;
                                             }
                                             targetObject.RefShowName();
-                                            playObject.SlaveList.Add((MonsterObject)targetObject);
+                                            playObject.SlaveList.Add(targetObject);
                                         }
                                         else
                                         {
