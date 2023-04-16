@@ -1475,7 +1475,7 @@ namespace GameSrv.World
 
         private static void CloseDoor(Envirnoment envir, MapDoor door)
         {
-            if (door == null || !door.Status.Opened)
+            if (!door.Status.Opened)
                 return;
             door.Status.Opened = false;
             SendDoorStatus(envir, door.nX, door.nY, Messages.RM_DOORCLOSE, 0, door.nX, door.nY);
