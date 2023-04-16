@@ -115,6 +115,7 @@ namespace GameSrv.Actor
                         {
                             SetLastHiter(struckObject);
                             Struck(struckObject);
+                            BreakHolySeizeMode();
                             if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
                             {
                                 ((PlayObject)Master).SetPkFlag(struckObject);
