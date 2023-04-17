@@ -1840,7 +1840,7 @@ namespace GameSrv.Player
             bool result = true;
             try
             {
-                if (!Envir.ValidCell(CurrX, CurrY))
+                if (!Envir.CellMatch(CurrX, CurrY))
                 {
                     return true;
                 }

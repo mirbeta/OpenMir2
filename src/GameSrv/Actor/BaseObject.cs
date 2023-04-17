@@ -1536,7 +1536,7 @@ namespace GameSrv.Actor
             }
             try
             {
-                if (!Envir.ValidCell(CurrX, CurrY))
+                if (!Envir.CellMatch(CurrX, CurrY))
                 {
                     return true;
                 }

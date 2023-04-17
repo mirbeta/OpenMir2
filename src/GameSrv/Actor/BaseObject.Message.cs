@@ -404,7 +404,7 @@ namespace GameSrv.Actor
                 {
                     for (short nCy = nLy; nCy <= nHy; nCy++)
                     {
-                        if (!Envir.ValidCell(nCx, nCy))
+                        if (!Envir.CellMatch(nCx, nCy))
                         {
                             continue;
                         }

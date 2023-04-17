@@ -89,7 +89,7 @@ namespace GameSrv.Maps
             {
                 return false;
             }
-            if (!ValidCell(nX, nY))
+            if (!CellMatch(nX, nY))
             {
                 return false;
             }
@@ -166,7 +166,7 @@ namespace GameSrv.Maps
 
         public void AddMapRoute(int nX, int nY, MapRouteItem mapRoute)
         {
-            if (!ValidCell(nX, nY))
+            if (!CellMatch(nX, nY))
             {
                 return;
             }
@@ -190,7 +190,7 @@ namespace GameSrv.Maps
 
         public void AddMapDoor(int nX, int nY, MapDoor mapDoor)
         {
-            if (!ValidCell(nX, nY))
+            if (!CellMatch(nX, nY))
             {
                 return;
             }
@@ -221,7 +221,7 @@ namespace GameSrv.Maps
             {
                 return;
             }
-            if (!ValidCell(nX, nY))
+            if (!CellMatch(nX, nY))
             {
                 return;
             }
@@ -253,7 +253,7 @@ namespace GameSrv.Maps
             {
                 return false;
             }
-            if (!ValidCell(nX, nY))
+            if (!CellMatch(nX, nY))
             {
                 return false;
             }
@@ -311,7 +311,7 @@ namespace GameSrv.Maps
             return true;
         }
 
-        public bool ValidCell(int nX, int nY)
+        public bool CellMatch(int nX, int nY)
         {
             return nX >= 0 && nX < Width && nY >= 0 && nY < Height;
         }
@@ -334,12 +334,12 @@ namespace GameSrv.Maps
 
         public bool MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
         {
-            if (!ValidCell(nX, nY))
+            if (!CellMatch(nX, nY))
             {
                 return false;
             }
-            bool moveSuccess = true;
             const string sExceptionMsg = "[Exception] TEnvirnoment::MoveToMovingObject";
+            bool canMove = true;
             bool result = false;
             try
             {
@@ -356,21 +356,15 @@ namespace GameSrv.Maps
                                 BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
-                                    if (baseObject.CellType == CellType.CastleDoor)
+                                    if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
                                     {
-                                        if (!baseObject.Ghost && ((CastleDoor)baseObject).HoldPlace && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
+                                        if (baseObject.CellType == CellType.CastleDoor && ((CastleDoor)baseObject).HoldPlace)
                                         {
-                                            moveSuccess = false;
+                                            canMove = false;
                                             break;
                                         }
-                                    }
-                                    else
-                                    {
-                                        if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
-                                        {
-                                            moveSuccess = false;
-                                            break;
-                                        }
+                                        canMove = false;
+                                        break;
                                     }
                                 }
                             }
@@ -378,61 +372,52 @@ namespace GameSrv.Maps
                     }
                     else
                     {
-                        result = false;
-                        moveSuccess = false;
+                        canMove = false;
                     }
                 }
-                if (moveSuccess)
+                if (canMove && cellInfo.Valid)
                 {
-                    if (!CellValid(nX, nY))
+                    CellObject moveObject = default;
+                    ref var oldCellInfo = ref GetCellInfo(nCx, nCy, out bool oldSuccess);
+                    if (oldSuccess && oldCellInfo.IsAvailable)
                     {
-                        result = false;
+                        for (int i = 0; i < oldCellInfo.ObjList.Count; i++)
+                        {
+                            moveObject = oldCellInfo.ObjList[i];
+                            if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject)
+                            {
+                                oldCellInfo.Remove(i);
+                                if (oldCellInfo.Count > 0)
+                                {
+                                    continue;
+                                }
+                                oldCellInfo.Clear();
+                                break;
+                            }
+                        }
                     }
-                    else
+                    if (cellSuccess)
                     {
-                        CellObject moveObject = default;
-                        cellInfo = ref GetCellInfo(nCx, nCy, out cellSuccess);
-                        if (cellSuccess && cellInfo.IsAvailable)
+                        cellInfo.ObjList ??= new NativeList<CellObject>();
+                        if (moveObject.CellObjId == 0)
                         {
-                            for (int i = 0; i < cellInfo.ObjList.Count; i++)
+                            moveObject.CellType = cert.CellType;
+                            moveObject.CellObjId = cert.ActorId;
+                            switch (cert.CellType)
                             {
-                                moveObject = cellInfo.ObjList[i];
-                                if (moveObject.CellObjId == cert.ActorId && moveObject.ActorObject)
-                                {
-                                    cellInfo.Remove(i);
-                                    if (cellInfo.Count > 0)
-                                    {
-                                        continue;
-                                    }
-                                    cellInfo.Clear();
+                                case CellType.Play:
+                                case CellType.Monster:
+                                case CellType.Merchant:
+                                    moveObject.ActorObject = true;
                                     break;
-                                }
+                                default:
+                                    moveObject.ActorObject = false;
+                                    break;
                             }
                         }
-                        cellInfo = ref GetCellInfo(nX, nY, out cellSuccess);
-                        if (cellSuccess)
-                        {
-                            cellInfo.ObjList ??= new NativeList<CellObject>();
-                            if (moveObject.CellObjId == 0)
-                            {
-                                moveObject.CellType = cert.CellType;
-                                moveObject.CellObjId = cert.ActorId;
-                                switch (cert.CellType)
-                                {
-                                    case CellType.Play:
-                                    case CellType.Monster:
-                                    case CellType.Merchant:
-                                        moveObject.ActorObject = true;
-                                        break;
-                                    default:
-                                        moveObject.ActorObject = false;
-                                        break;
-                                }
-                            }
-                            moveObject.AddTime = HUtil32.GetTickCount();
-                            cellInfo.Add(moveObject);
-                            result = true;
-                        }
+                        moveObject.AddTime = HUtil32.GetTickCount();
+                        cellInfo.Add(moveObject);
+                        result = true;
                     }
                 }
             }
