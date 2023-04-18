@@ -225,12 +225,14 @@ namespace GameSrv.Npc {
         /// <summary>
         /// 获取全局变量信息
         /// </summary>
-        protected virtual void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg) {
+        protected virtual void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg)
+        {
             string s14 = string.Empty;
             DynamicVar DynamicVar;
             bool boFoundVar;
             string sText;
-            switch (sVariable) {
+            switch (sVariable)
+            {
                 case "$SERVERNAME":
                     sMsg = ReplaceVariableText(sMsg, "<$SERVERNAME>", M2Share.Config.ServerName);
                     return;
@@ -308,61 +310,79 @@ namespace GameSrv.Npc {
                     sText = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     sMsg = ReplaceVariableText(sMsg, "<$DATETIME>", sText);
                     return;
-                case "$HIGHLEVELINFO": {
-                        if (M2Share.HighLevelHuman != 0) {
+                case "$HIGHLEVELINFO":
+                    {
+                        if (M2Share.HighLevelHuman != 0)
+                        {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman)).GetMyInfo();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHLEVELINFO>", sText);
                         return;
                     }
-                case "$HIGHPKINFO": {
-                        if (M2Share.HighPKPointHuman != 0) {
+                case "$HIGHPKINFO":
+                    {
+                        if (M2Share.HighPKPointHuman != 0)
+                        {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighPKPointHuman)).GetMyInfo();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHPKINFO>", sText);
                         return;
                     }
-                case "$HIGHDCINFO": {
-                        if (M2Share.HighDCHuman != 0) {
+                case "$HIGHDCINFO":
+                    {
+                        if (M2Share.HighDCHuman != 0)
+                        {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighDCHuman)).GetMyInfo();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHDCINFO>", sText);
                         return;
                     }
-                case "$HIGHMCINFO": {
-                        if (M2Share.HighMCHuman != 0) {
+                case "$HIGHMCINFO":
+                    {
+                        if (M2Share.HighMCHuman != 0)
+                        {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighMCHuman)).GetMyInfo();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHMCINFO>", sText);
                         return;
                     }
-                case "$HIGHSCINFO": {
-                        if (M2Share.HighSCHuman != 0) {
+                case "$HIGHSCINFO":
+                    {
+                        if (M2Share.HighSCHuman != 0)
+                        {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighSCHuman)).GetMyInfo();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHSCINFO>", sText);
                         return;
                     }
-                case "$HIGHONLINEINFO": {
-                        if (M2Share.HighOnlineHuman != 0) {
+                case "$HIGHONLINEINFO":
+                    {
+                        if (M2Share.HighOnlineHuman != 0)
+                        {
                             sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighOnlineHuman)).GetMyInfo();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$HIGHONLINEINFO>", sText);
@@ -378,13 +398,17 @@ namespace GameSrv.Npc {
                 case "$HUMANSHOWNAME":
                     sMsg = ReplaceVariableText(sMsg, "<$HUMANSHOWNAME>", PlayObject.GetShowName());
                     return;
-                case "$MONKILLER": {
-                        if (PlayObject.LastHiter != null) {
-                            if (PlayObject.LastHiter.Race != ActorRace.Play) {
+                case "$MONKILLER":
+                    {
+                        if (PlayObject.LastHiter != null)
+                        {
+                            if (PlayObject.LastHiter.Race != ActorRace.Play)
+                            {
                                 sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", PlayObject.LastHiter.ChrName);
                             }
                         }
-                        else {
+                        else
+                        {
                             sMsg = ReplaceVariableText(sMsg, "<$MONKILLER>", "未知");
                         }
                         return;
@@ -394,13 +418,17 @@ namespace GameSrv.Npc {
                         sMsg = ReplaceVariableText(sMsg, "<$QUERYYBDEALLOG>", PlayObject.SelectSellDate());
                         return;
                     }
-                case "$KILLER": {
-                        if (PlayObject.LastHiter != null) {
-                            if (PlayObject.LastHiter.Race == ActorRace.Play) {
+                case "$KILLER":
+                    {
+                        if (PlayObject.LastHiter != null)
+                        {
+                            if (PlayObject.LastHiter.Race == ActorRace.Play)
+                            {
                                 sMsg = ReplaceVariableText(sMsg, "<$KILLER>", PlayObject.LastHiter.ChrName);
                             }
                         }
-                        else {
+                        else
+                        {
                             sMsg = ReplaceVariableText(sMsg, "<$KILLER>", "未知");
                         }
                         return;
@@ -408,11 +436,14 @@ namespace GameSrv.Npc {
                 case "$USERNAME":
                     sMsg = ReplaceVariableText(sMsg, "<$USERNAME>", PlayObject.ChrName);
                     return;
-                case "$GUILDNAME": {
-                        if (PlayObject.MyGuild != null) {
+                case "$GUILDNAME":
+                    {
+                        if (PlayObject.MyGuild != null)
+                        {
                             sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.GuildName);
                         }
-                        else {
+                        else
+                        {
                             sMsg = "无";
                         }
                         return;
@@ -604,41 +635,53 @@ namespace GameSrv.Npc {
                     sText = PlayObject.LoginIpLocal;
                     sMsg = ReplaceVariableText(sMsg, "<$IPLOCAL>", sText);
                     return;
-                case "$GUILDBUILDPOINT": {
-                        if (PlayObject.MyGuild == null) {
+                case "$GUILDBUILDPOINT":
+                    {
+                        if (PlayObject.MyGuild == null)
+                        {
                             sText = "无";
                         }
-                        else {
+                        else
+                        {
                             sText = PlayObject.MyGuild.BuildPoint.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDBUILDPOINT>", sText);
                         return;
                     }
-                case "$GUILDAURAEPOINT": {
-                        if (PlayObject.MyGuild == null) {
+                case "$GUILDAURAEPOINT":
+                    {
+                        if (PlayObject.MyGuild == null)
+                        {
                             sText = "无";
                         }
-                        else {
+                        else
+                        {
                             sText = PlayObject.MyGuild.Aurae.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDAURAEPOINT>", sText);
                         return;
                     }
-                case "$GUILDSTABILITYPOINT": {
-                        if (PlayObject.MyGuild == null) {
+                case "$GUILDSTABILITYPOINT":
+                    {
+                        if (PlayObject.MyGuild == null)
+                        {
                             sText = "无";
                         }
-                        else {
+                        else
+                        {
                             sText = PlayObject.MyGuild.Stability.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDSTABILITYPOINT>", sText);
                         return;
                     }
-                case "$GUILDFLOURISHPOINT": {
-                        if (PlayObject.MyGuild == null) {
+                case "$GUILDFLOURISHPOINT":
+                    {
+                        if (PlayObject.MyGuild == null)
+                        {
                             sText = "无";
                         }
-                        else {
+                        else
+                        {
                             sText = PlayObject.MyGuild.Flourishing.ToString();
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$GUILDFLOURISHPOINT>", sText);
@@ -656,39 +699,51 @@ namespace GameSrv.Npc {
                     sText = M2Share.Config.WomaHorn;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", sText);
                     return;
-                case "$OWNERGUILD": {
-                        if (Castle != null) {
+                case "$OWNERGUILD":
+                    {
+                        if (Castle != null)
+                        {
                             sText = Castle.OwnGuild;
-                            if (string.IsNullOrEmpty(sText)) {
+                            if (string.IsNullOrEmpty(sText))
+                            {
                                 sText = "游戏管理";
                             }
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$OWNERGUILD>", sText);
                         return;
                     }
-                case "$CASTLENAME": {
-                        if (Castle != null) {
+                case "$CASTLENAME":
+                    {
+                        if (Castle != null)
+                        {
                             sText = Castle.sName;
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLENAME>", sText);
                         return;
                     }
-                case "$LORD": {
-                        if (Castle != null) {
-                            if (Castle.MasterGuild != null) {
+                case "$LORD":
+                    {
+                        if (Castle != null)
+                        {
+                            if (Castle.MasterGuild != null)
+                            {
                                 sText = Castle.MasterGuild.GetChiefName();
                             }
-                            else {
+                            else
+                            {
                                 sText = "管理员";
                             }
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$LORD>", sText);
@@ -700,66 +755,87 @@ namespace GameSrv.Npc {
                 case "$BUILDGUILDFEE":
                     sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.BuildGuildPrice.ToString());
                     return;
-                case "$CASTLEWARDATE": {
-                        if (Castle == null) {
+                case "$CASTLEWARDATE":
+                    {
+                        if (Castle == null)
+                        {
                             Castle = M2Share.CastleMgr.GetCastle(0);
                         }
-                        if (Castle != null) {
-                            if (!Castle.UnderWar) {
+                        if (Castle != null)
+                        {
+                            if (!Castle.UnderWar)
+                            {
                                 sText = Castle.GetWarDate();
-                                if (!string.IsNullOrEmpty(sText)) {
+                                if (!string.IsNullOrEmpty(sText))
+                                {
                                     sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARDATE>", sText);
                                 }
-                                else {
+                                else
+                                {
                                     sMsg = "暂时没有行会攻城 .\\ \\<返回/@main>";
                                 }
                             }
-                            else {
+                            else
+                            {
                                 sMsg = "正在攻城当中.\\ \\<返回/@main>";
                             }
                         }
                         return;
                     }
-                case "$LISTOFWAR": {
-                        if (Castle != null) {
+                case "$LISTOFWAR":
+                    {
+                        if (Castle != null)
+                        {
                             sText = Castle.GetAttackWarList();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
-                        if (!string.IsNullOrEmpty(sText)) {
+                        if (!string.IsNullOrEmpty(sText))
+                        {
                             sMsg = ReplaceVariableText(sMsg, "<$LISTOFWAR>", sText);
                         }
-                        else {
+                        else
+                        {
                             sMsg = "暂时没有行会攻城 .\\ \\<返回/@main>";
                         }
                         return;
                     }
-                case "$CASTLECHANGEDATE": {
-                        if (Castle != null) {
+                case "$CASTLECHANGEDATE":
+                    {
+                        if (Castle != null)
+                        {
                             sText = Castle.ChangeDate.ToString("yyyy-MM-dd HH:mm:ss");
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLECHANGEDATE>", sText);
                         return;
                     }
-                case "$CASTLEWARLASTDATE": {
-                        if (Castle != null) {
+                case "$CASTLEWARLASTDATE":
+                    {
+                        if (Castle != null)
+                        {
                             sText = Castle.WarDate.ToString("yyyy-MM-dd HH:mm:ss");
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLEWARLASTDATE>", sText);
                         return;
                     }
-                case "$CASTLEGETDAYS": {
-                        if (Castle != null) {
+                case "$CASTLEGETDAYS":
+                    {
+                        if (Castle != null)
+                        {
                             sText = HUtil32.GetDayCount(DateTime.Now, Castle.ChangeDate).ToString();
                         }
-                        else {
+                        else
+                        {
                             sText = "????";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$CASTLEGETDAYS>", sText);
@@ -862,20 +938,24 @@ namespace GameSrv.Npc {
                     }
                 case "$BSNAME":// 上次攻击我的名称
                     {
-                        if (PlayObject.LastHiter != null) {
+                        if (PlayObject.LastHiter != null)
+                        {
                             sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", PlayObject.LastHiter.ChrName);
                         }
-                        else {
+                        else
+                        {
                             sMsg = ReplaceVariableText(sMsg, "<$BSNAME>", "");
                         }
                         return;
                     }
                 case "$TARGETNAME":// 正在攻击的人物或怪物名称
                     {
-                        if (PlayObject.TargetCret != null) {
+                        if (PlayObject.TargetCret != null)
+                        {
                             sText = PlayObject.TargetCret.ChrName;
                         }
-                        else {
+                        else
+                        {
                             sText = "";
                         }
                         sMsg = ReplaceVariableText(sMsg, "<$TARGETNAME>", sText);
@@ -955,7 +1035,8 @@ namespace GameSrv.Npc {
                 {
                     MapName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
                 }
-                if (MonsterName.StartsWith("$")) {
+                if (MonsterName.StartsWith("$"))
+                {
                     MonsterName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
                 }
                 MonGenInfo MonGen;
@@ -964,31 +1045,42 @@ namespace GameSrv.Npc {
                 {
                     if (string.Compare(MonsterName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)// 如果是全部名字的怪物
                     {
-                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
-                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
+                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                        {
+                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                            {
                                 MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                if (MonGen == null) {
+                                if (MonGen == null)
+                                {
                                     continue;
                                 }
-                                for (int k = 0; k < MonGen.CertList.Count; k++) {
+                                for (int k = 0; k < MonGen.CertList.Count; k++)
+                                {
                                     BaseObject = MonGen.CertList[k];
-                                    if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost) {
+                                    if (BaseObject.Master == null && !BaseObject.Death && !BaseObject.Ghost)
+                                    {
                                         MonGenCount++;
                                     }
                                 }
                             }
                         }
                     }
-                    else {
-                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
-                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
+                    else
+                    {
+                        for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                        {
+                            for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                            {
                                 MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                if (MonGen == null) {
+                                if (MonGen == null)
+                                {
                                     continue;
                                 }
-                                for (int k = 0; k < MonGen.CertList.Count; k++) {
+                                for (int k = 0; k < MonGen.CertList.Count; k++)
+                                {
                                     BaseObject = MonGen.CertList[k];
-                                    if (BaseObject.Master == null && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost) {
+                                    if (BaseObject.Master == null && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                    {
                                         MonGenCount++;
                                     }
                                 }
@@ -996,37 +1088,50 @@ namespace GameSrv.Npc {
                         }
                     }
                 }
-                else {
+                else
+                {
                     // 如果不是全部地图
                     Envirnoment Envir = M2Share.MapMgr.FindMap(MapName);
-                    if (Envir != null) {
+                    if (Envir != null)
+                    {
                         if (string.Compare(MonsterName, "ALL", StringComparison.CurrentCulture) == 0)// 如果是全部名字的怪物
                         {
-                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
-                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
+                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                            {
+                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                                {
                                     MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                    if (MonGen == null) {
+                                    if (MonGen == null)
+                                    {
                                         continue;
                                     }
-                                    for (int k = 0; k < MonGen.CertList.Count; k++) {
+                                    for (int k = 0; k < MonGen.CertList.Count; k++)
+                                    {
                                         BaseObject = MonGen.CertList[k];
-                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost) {
+                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && !BaseObject.Death && !BaseObject.Ghost)
+                                        {
                                             MonGenCount++;
                                         }
                                     }
                                 }
                             }
                         }
-                        else {
-                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++) {
-                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++) {
+                        else
+                        {
+                            for (int i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                            {
+                                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+                                {
                                     MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
-                                    if (MonGen == null) {
+                                    if (MonGen == null)
+                                    {
                                         continue;
                                     }
-                                    for (int k = 0; k < MonGen.CertList.Count; k++) {
+                                    for (int k = 0; k < MonGen.CertList.Count; k++)
+                                    {
                                         BaseObject = MonGen.CertList[k];
-                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost) {
+                                        if (BaseObject.Master == null && BaseObject.Envir == Envir && string.Compare(BaseObject.ChrName, MonsterName, StringComparison.OrdinalIgnoreCase) == 0 && !BaseObject.Death && !BaseObject.Ghost)
+                                        {
                                             MonGenCount++;
                                         }
                                     }
@@ -1174,10 +1279,12 @@ namespace GameSrv.Npc {
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 int n18 = HUtil32.StrToInt(s14, -1);
-                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0) {
+                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
+                {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.UseItems[n18].MakeIndex.ToString());
                 }
-                else {
+                else
+                {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", "0");
                 }
                 return;
@@ -1186,17 +1293,20 @@ namespace GameSrv.Npc {
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 int n18 = HUtil32.StrToInt(s14, -1);
-                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0) {
+                if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
+                {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[n18].Index));
                 }
-                else {
+                else
+                {
                     sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", "无");
                 }
                 return;
             }
             if (sVariable == "$ATTACKMODE")// 显示用户当前的攻击模式
             {
-                switch (PlayObject.AttatckMode) {
+                switch (PlayObject.AttatckMode)
+                {
                     case AttackMode.HAM_ALL: // [攻击模式: 全体攻击]
                         sMsg = ReplaceVariableText(sMsg, "<$ATTACKMODE>", "0");
                         break;
@@ -1230,11 +1340,14 @@ namespace GameSrv.Npc {
                 sMsg = ReplaceVariableText(sMsg, "<$QUERYYBDEALLOG>", PlayObject.SelectSellDate());
                 return;
             }
-            if (sVariable == "$GUILDNAME") {
-                if (PlayObject.MyGuild != null) {
+            if (sVariable == "$GUILDNAME")
+            {
+                if (PlayObject.MyGuild != null)
+                {
                     sMsg = ReplaceVariableText(sMsg, "<$GUILDNAME>", PlayObject.MyGuild.GuildName);
                 }
-                else {
+                else
+                {
                     sMsg = "无";
                 }
                 return;
@@ -1289,11 +1402,14 @@ namespace GameSrv.Npc {
                 sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", M2Share.Config.BuildGuildPrice.ToString());
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$HUMAN(")) {
+            if (HUtil32.CompareLStr(sVariable, "$HUMAN("))
+            {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (PlayObject.DynamicVarMap.TryGetValue(s14, out DynamicVar)) {
-                    switch (DynamicVar.VarType) {
+                if (PlayObject.DynamicVarMap.TryGetValue(s14, out DynamicVar))
+                {
+                    switch (DynamicVar.VarType)
+                    {
                         case VarType.Integer:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                             boFoundVar = true;
@@ -1304,20 +1420,26 @@ namespace GameSrv.Npc {
                             break;
                     }
                 }
-                if (!boFoundVar) {
+                if (!boFoundVar)
+                {
                     sMsg = "??";
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$GUILD(")) {
-                if (PlayObject.MyGuild == null) {
+            if (HUtil32.CompareLStr(sVariable, "$GUILD("))
+            {
+                if (PlayObject.MyGuild == null)
+                {
                     return;
                 }
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (PlayObject.MyGuild.DynamicVarList.TryGetValue(s14, out DynamicVar)) {
-                    if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0) {
-                        switch (DynamicVar.VarType) {
+                if (PlayObject.MyGuild.DynamicVarList.TryGetValue(s14, out DynamicVar))
+                {
+                    if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        switch (DynamicVar.VarType)
+                        {
                             case VarType.Integer:
                                 sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                                 boFoundVar = true;
@@ -1329,16 +1451,20 @@ namespace GameSrv.Npc {
                         }
                     }
                 }
-                if (!boFoundVar) {
+                if (!boFoundVar)
+                {
                     sMsg = "??";
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$GLOBAL(")) {
+            if (HUtil32.CompareLStr(sVariable, "$GLOBAL("))
+            {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 boFoundVar = false;
-                if (M2Share.DynamicVarList.TryGetValue(s14, out DynamicVar)) {
-                    switch (DynamicVar.VarType) {
+                if (M2Share.DynamicVarList.TryGetValue(s14, out DynamicVar))
+                {
+                    switch (DynamicVar.VarType)
+                    {
                         case VarType.Integer:
                             sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
                             boFoundVar = true;
@@ -1349,43 +1475,56 @@ namespace GameSrv.Npc {
                             break;
                     }
                 }
-                if (!boFoundVar) {
+                if (!boFoundVar)
+                {
                     sMsg = "??";
                 }
                 return;
             }
-            if (HUtil32.CompareLStr(sVariable, "$STR(")) {
+            if (HUtil32.CompareLStr(sVariable, "$STR("))
+            {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref s14);
                 int nVarValue = M2Share.GetValNameNo(s14);
-                if (nVarValue >= 0) {
-                    if (HUtil32.RangeInDefined(nVarValue, 0, 99)) {
+                if (nVarValue >= 0)
+                {
+                    if (HUtil32.RangeInDefined(nVarValue, 0, 99))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MNVal[nVarValue].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 100, 199)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 100, 199))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalVal[nVarValue - 100].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 200, 299)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 200, 299))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MDyVal[nVarValue - 200].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 300, 399)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 300, 399))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MNMval[nVarValue - 300].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 400, 499)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 400, 499))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobaDyMval[nVarValue - 400].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 500, 599)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 500, 599))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MNInteger[nVarValue - 500].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 600, 699)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 600, 699))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MSString[nVarValue - 600]);
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 700, 799)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 700, 799))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalAVal[nVarValue - 700]);
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 800, 1199)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 800, 1199))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalVal[nVarValue - 700].ToString());
                     }
-                    else if (HUtil32.RangeInDefined(nVarValue, 1200, 1599)) {
+                    else if (HUtil32.RangeInDefined(nVarValue, 1200, 1599))
+                    {
                         sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", M2Share.Config.GlobalAVal[nVarValue - 1100]);
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1600, 1699)) //个人服务器字符串变量E
@@ -1410,10 +1549,6 @@ namespace GameSrv.Npc {
                 m_sPath = FilePath;
                 M2Share.ScriptSystem.LoadScript(this, FilePath, ChrName);
             }
-        }
-
-        protected override bool Operate(ProcessMessage ProcessMsg) {
-            return base.Operate(ProcessMsg);
         }
 
         public override void Run() {

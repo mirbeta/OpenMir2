@@ -416,5 +416,18 @@
         public const string sSC_INCASTLEWARAREA = "INCASTLEWARAREA";
         public const string sSC_ISONMAP = "ISONMAP";// 检测地图命令
         public const int nSC_ISONMAP = 478;
+
+        public const string sSC_CHECKISONMAP = "ISONMAP";
+        // 检测当前人是否在MAP地图上
+        public const int nSC_CHECKISONMAP = 256;
+
+        public const string sSC_REVIVESLAVE = "REVIVESLAVES";
+        public const int nSC_REVIVESLAVE = 257;
+        public const string sSC_CHECKMAGICLVL = "CHECKMAGICLVL";
+        public const int nSC_CHECKMAGICLVL = 258;
+        public const string sSC_CHECKGROUPCLASS = "CHECKGROUPCLASS";
+        public const int nSC_CHECKGROUPCLASS = 259;
+        public const string sSC_ISHIGH = "ISHIGH";
+        public const int nSC_ISHIGH = 260;
     }
 }

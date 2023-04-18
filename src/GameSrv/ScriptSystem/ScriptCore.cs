@@ -30,6 +30,114 @@ namespace GameSrv
             return GetVarValue(PlayObject, sData, ref sVar, ref sValue, ref nValue);
         }
 
+        public bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue)
+        {
+            if (string.IsNullOrEmpty(sMsg))
+            {
+                return false;
+            }
+            bool result = false;
+            var n01 = M2Share.GetValNameNo(sMsg);
+            if (n01 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n01, 600, 699))
+                {
+                    sValue = PlayObject.MSString[n01 - 600];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 700, 799))
+                {
+                    sValue = M2Share.Config.GlobalAVal[n01 - 700];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1200, 1599))
+                {
+                    sValue = M2Share.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1600, 1699))
+                {
+                    sValue = PlayObject.MServerStrVal[n01 - 1600];
+                    result = true;
+                }
+            }
+            return result;
+        }
+
+        public bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)
+        {
+            bool result = false;
+            if (string.IsNullOrEmpty(sMsg))
+            {
+                return false;
+            }
+            int n01 = M2Share.GetValNameNo(sMsg);
+            if (n01 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n01, 0, 99))
+                {
+                    nValue = PlayObject.MNVal[n01];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 100, 199))
+                {
+                    nValue = M2Share.Config.GlobalVal[n01 - 100];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 200, 299))
+                {
+                    nValue = PlayObject.MDyVal[n01 - 200];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 300, 399))
+                {
+                    nValue = PlayObject.MNMval[n01 - 300];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 400, 499))
+                {
+                    nValue = M2Share.Config.GlobaDyMval[n01 - 400];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 500, 599))
+                {
+                    nValue = PlayObject.MNInteger[n01 - 500];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 600, 699))
+                {
+                    nValue = HUtil32.StrToInt(PlayObject.MSString[n01 - 600], 0);
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 700, 799))
+                {
+                    nValue = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n01 - 700], 0);
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 800, 1199))
+                {
+                    nValue = M2Share.Config.GlobalVal[n01 - 700];
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1200, 1599))
+                {
+                    nValue = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n01 - 1100], 0);
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1600, 1699))
+                {
+                    nValue = HUtil32.StrToInt(PlayObject.MServerStrVal[n01 - 1600], 0);
+                    result = true;
+                }
+                else if (HUtil32.RangeInDefined(n01, 1700, 1799))
+                {
+                    nValue = PlayObject.MServerIntVal[n01 - 1700];
+                    result = true;
+                }
+            }
+            return result;
+        }
+
         /// <summary>
         /// 取文本变量
         /// </summary>
@@ -678,11 +786,11 @@ namespace GameSrv
             return result;
         }
 
-        public bool GotoLable_CheckStringList(string sHumName, string sListFileName)
+        public bool GotoLableCheckStringList(string sHumName, string sListFileName)
         {
             bool result = false;
             StringList LoadList;
-            sListFileName = M2Share.Config.EnvirDir + sListFileName;
+            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
                 LoadList = new StringList();

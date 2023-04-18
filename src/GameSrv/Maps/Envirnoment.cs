@@ -372,7 +372,7 @@ namespace GameSrv.Maps
                     }
                     else
                     {
-                        canMove = false;
+                        canMove = true;
                     }
                 }
                 if (canMove && cellInfo.Valid)

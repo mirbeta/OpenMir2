@@ -27,7 +27,8 @@ using SystemModule.Enums;
 
 namespace GameSrv
 {
-    public static class M2Share {
+    public static class M2Share
+    {
         public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 启动路径
@@ -218,7 +219,8 @@ namespace GameSrv
         private static readonly GlobalConf GlobalConf;
         private static readonly GameSettingConf GameSetting;
 
-        static M2Share() {
+        static M2Share()
+        {
             BasePath = AppContext.BaseDirectory;
             ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.ServerFileName));
             StringConf = new StringConf(Path.Combine(BasePath, ConfConst.StringFileName));
@@ -247,19 +249,24 @@ namespace GameSrv
 
         public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
 
-        public static bool LoadLineNotice(string FileName) {
+        public static bool LoadLineNotice(string FileName)
+        {
             var result = false;
-            if (File.Exists(FileName)) {
+            if (File.Exists(FileName))
+            {
                 LineNoticeList.Clear();
                 var LoadList = new StringList();
                 LoadList.LoadFromFile(FileName);
                 var i = 0;
-                while (true) {
-                    if (LoadList.Count <= i) {
+                while (true)
+                {
+                    if (LoadList.Count <= i)
+                    {
                         break;
                     }
                     var sText = LoadList[i].Trim();
-                    if (string.IsNullOrEmpty(sText)) {
+                    if (string.IsNullOrEmpty(sText))
+                    {
                         LoadList.RemoveAt(i);
                         continue;
                     }
@@ -275,17 +282,22 @@ namespace GameSrv
         /// 随机获取其他服务器
         /// </summary>
         /// <returns></returns>
-        public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort) {
+        public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort)
+        {
             var result = false;
-            for (var i = 0; i < ServerTableList.Length; i++) {
+            for (var i = 0; i < ServerTableList.Length; i++)
+            {
                 var routeInfo = ServerTableList[i];
-                if (routeInfo == null) {
+                if (routeInfo == null)
+                {
                     continue;
                 }
-                if (routeInfo.GateCount <= 0) {
+                if (routeInfo.GateCount <= 0)
+                {
                     continue;
                 }
-                if (routeInfo.ServerIdx == serverIndex) {
+                if (routeInfo.ServerIdx == serverIndex)
+                {
                     sIPaddr = GetRandpmRoute(routeInfo, ref nPort);
                     result = true;
                     break;
@@ -296,20 +308,25 @@ namespace GameSrv
 
         private static readonly Regex ScriptRegex = new Regex("(?<=(<))[.\\s\\S]*?(?=(>))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
 
-        public static MatchCollection MatchScriptLabel(string script) {
+        public static MatchCollection MatchScriptLabel(string script)
+        {
             return ScriptRegex.Matches(script);
         }
 
-        private static string GetRandpmRoute(TRouteInfo routeInfo, ref int gatePort) {
+        private static string GetRandpmRoute(TRouteInfo routeInfo, ref int gatePort)
+        {
             var random = RandomNumber.Random(routeInfo.GateCount);
             gatePort = routeInfo.GameGatePort[random];
             return routeInfo.GameGateIP[random];
         }
 
-        public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate) {
+        public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
+        {
             var result = 0;
-            if (nVersionDate > 10000000) {
-                while (nVersionDate > 10000000) {
+            if (nVersionDate > 10000000)
+            {
+                while (nVersionDate > 10000000)
+                {
                     nVersionDate -= 10000;
                     result += 100000000;
                 }
@@ -395,67 +412,81 @@ namespace GameSrv
             return Direction.Down;
         }
 
-        public static bool CheckUserItems(int nIdx, StdItem StdItem) {
+        public static bool CheckUserItems(int nIdx, StdItem StdItem)
+        {
             var result = false;
-            switch (nIdx) {
+            switch (nIdx)
+            {
                 case ItemLocation.Dress:
-                    if (StdItem.StdMode == 10 || StdItem.StdMode == 11) {
+                    if (StdItem.StdMode == 10 || StdItem.StdMode == 11)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Weapon:
-                    if (StdItem.StdMode == 5 || StdItem.StdMode == 6) {
+                    if (StdItem.StdMode == 5 || StdItem.StdMode == 6)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.RighThand:
-                    if (StdItem.StdMode == 29 || StdItem.StdMode == 30 || StdItem.StdMode == 28) {
+                    if (StdItem.StdMode == 29 || StdItem.StdMode == 30 || StdItem.StdMode == 28)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Necklace:
-                    if (StdItem.StdMode == 19 || StdItem.StdMode == 20 || StdItem.StdMode == 21) {
+                    if (StdItem.StdMode == 19 || StdItem.StdMode == 20 || StdItem.StdMode == 21)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Helmet:
-                    if (StdItem.StdMode == 15) {
+                    if (StdItem.StdMode == 15)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.ArmRingl:
-                    if (StdItem.StdMode == 24 || StdItem.StdMode == 25 || StdItem.StdMode == 26) {
+                    if (StdItem.StdMode == 24 || StdItem.StdMode == 25 || StdItem.StdMode == 26)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.ArmRingr:
-                    if (StdItem.StdMode == 24 || StdItem.StdMode == 26) {
+                    if (StdItem.StdMode == 24 || StdItem.StdMode == 26)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Ringl:
                 case ItemLocation.Ringr:
-                    if (StdItem.StdMode == 22 || StdItem.StdMode == 23) {
+                    if (StdItem.StdMode == 22 || StdItem.StdMode == 23)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Bujuk:
-                    if (StdItem.StdMode == 25 || StdItem.StdMode == 51) {
+                    if (StdItem.StdMode == 25 || StdItem.StdMode == 51)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Belt:
-                    if (StdItem.StdMode == 54 || StdItem.StdMode == 64) {
+                    if (StdItem.StdMode == 54 || StdItem.StdMode == 64)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Boots:
-                    if (StdItem.StdMode == 52 || StdItem.StdMode == 62) {
+                    if (StdItem.StdMode == 52 || StdItem.StdMode == 62)
+                    {
                         result = true;
                     }
                     break;
                 case ItemLocation.Charm:
-                    if (StdItem.StdMode == 53 || StdItem.StdMode == 63) {
+                    if (StdItem.StdMode == 53 || StdItem.StdMode == 63)
+                    {
                         result = true;
                     }
                     break;
@@ -463,7 +494,8 @@ namespace GameSrv
             return result;
         }
 
-        public static DateTime AddDateTimeOfDay(DateTime DateTime, int nDay) {
+        public static DateTime AddDateTimeOfDay(DateTime DateTime, int nDay)
+        {
             var result = DateTime.Now;
             //if (nDay > 0)
             //{
@@ -502,18 +534,23 @@ namespace GameSrv
             return result;
         }
 
-        public static ushort GetGoldShape(int nGold) {
+        public static ushort GetGoldShape(int nGold)
+        {
             ushort result = 112;
-            if (nGold >= 30) {
+            if (nGold >= 30)
+            {
                 result = 113;
             }
-            if (nGold >= 70) {
+            if (nGold >= 70)
+            {
                 result = 114;
             }
-            if (nGold >= 300) {
+            if (nGold >= 300)
+            {
                 result = 115;
             }
-            if (nGold >= 1000) {
+            if (nGold >= 1000)
+            {
                 result = 116;
             }
             return result;
@@ -523,57 +560,72 @@ namespace GameSrv
         /// 金币在地上显示的外形ID
         /// </summary>
         /// <returns></returns>
-        public static int GetRandomLook(int nBaseLook, int nRage) {
+        public static int GetRandomLook(int nBaseLook, int nRage)
+        {
             return nBaseLook + RandomNumber.Random(nRage);
         }
 
-        public static bool CheckGuildName(string sGuildName) {
+        public static bool CheckGuildName(string sGuildName)
+        {
             var result = true;
-            if (sGuildName.Length > Config.GuildNameLen) {
+            if (sGuildName.Length > Config.GuildNameLen)
+            {
                 return false;
             }
-            for (var i = 0; i < sGuildName.Length - 1; i++) {
+            for (var i = 0; i < sGuildName.Length - 1; i++)
+            {
                 if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
-                    || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>') {
+                    || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
+                {
                     result = false;
                 }
             }
             return result;
         }
 
-        public static int GetItemNumber() {
+        public static int GetItemNumber()
+        {
             Config.ItemNumber++;
-            if (Config.ItemNumber > int.MaxValue / 2 - 1) {
+            if (Config.ItemNumber > int.MaxValue / 2 - 1)
+            {
                 Config.ItemNumber = 1;
             }
             return Config.ItemNumber + HUtil32.GetTickCount();
         }
 
-        public static int GetItemNumberEx() {
+        public static int GetItemNumberEx()
+        {
             Config.ItemNumberEx++;
-            if (Config.ItemNumberEx < int.MaxValue / 2) {
+            if (Config.ItemNumberEx < int.MaxValue / 2)
+            {
                 Config.ItemNumberEx = int.MaxValue / 2;
             }
-            if (Config.ItemNumberEx > int.MaxValue - 1) {
+            if (Config.ItemNumberEx > int.MaxValue - 1)
+            {
                 Config.ItemNumberEx = int.MaxValue / 2;
             }
             return Config.ItemNumberEx + HUtil32.GetTickCount();
         }
 
-        public static string FilterShowName(string sName) {
-            if (string.IsNullOrEmpty(sName)) {
+        public static string FilterShowName(string sName)
+        {
+            if (string.IsNullOrEmpty(sName))
+            {
                 return sName;
             }
             var result = string.Empty;
             var bo11 = false;
-            for (var i = 0; i < sName.Length; i++) {
-                if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-') {
+            for (var i = 0; i < sName.Length; i++)
+            {
+                if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
+                {
                     result = sName[..i];
                     bo11 = true;
                     break;
                 }
             }
-            if (!bo11) {
+            if (!bo11)
+            {
                 result = sName;
             }
             return result;
@@ -584,177 +636,229 @@ namespace GameSrv
         /// </summary>
         /// <param name="sText"></param>
         /// <returns></returns>
-        public static int GetValNameNo(string sText) {
+        public static int GetValNameNo(string sText)
+        {
             var result = -1;
             ReadOnlySpan<char> valText = sText.AsSpan();
-            if (sText.Length >= 2) {
+            if (sText.Length >= 2)
+            {
                 var valType = char.ToUpper(sText[0]);
                 int nValNo;
-                switch (valType) {
+                switch (valType)
+                {
                     case 'P':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo;
                             }
                         }
                         break;
                     case 'G':
-                        if (sText.Length == 4) {
+                        if (sText.Length == 4)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 3), -1);
-                            if ((nValNo < 500) && (nValNo > 99)) {
+                            if ((nValNo < 500) && (nValNo > 99))
+                            {
                                 result = nValNo + 700;
                             }
                         }
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 100;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 100;
                             }
                         }
                         break;
                     case 'M':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 300;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 300;
                             }
                         }
                         break;
                     case 'I':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 400;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 400;
                             }
                         }
                         break;
                     case 'D':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 200;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 200;
                             }
                         }
                         break;
                     case 'N':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 500;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 500;
                             }
                         }
                         break;
                     case 'S':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(2 - 1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 600;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 600;
                             }
                         }
                         break;
                     case 'A':
-                        if (sText.Length == 4) {
+                        if (sText.Length == 4)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(1, 3), -1);
-                            if ((nValNo < 500) && (nValNo > 99)) {
+                            if ((nValNo < 500) && (nValNo > 99))
+                            {
                                 result = nValNo + 1100;
                             }
                         }
-                        else {
-                            if (sText.Length == 3) {
+                        else
+                        {
+                            if (sText.Length == 3)
+                            {
                                 nValNo = HUtil32.StrToInt(valText.Slice(1, 2), -1);
-                                if ((nValNo >= 0) && (nValNo < 100)) {
+                                if ((nValNo >= 0) && (nValNo < 100))
+                                {
                                     result = nValNo + 700;
                                 }
                             }
-                            else {
+                            else
+                            {
                                 nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                                if ((nValNo >= 0) && (nValNo < 10)) {
+                                if ((nValNo >= 0) && (nValNo < 10))
+                                {
                                     result = nValNo + 700;
                                 }
                             }
                         }
                         break;
                     case 'T':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(2 - 1, 3), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 700;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 700;
                             }
                         }
                         break;
                     case 'E':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(2 - 1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 1600;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 1600;
                             }
                         }
                         break;
                     case 'W':
-                        if (sText.Length == 3) {
+                        if (sText.Length == 3)
+                        {
                             nValNo = HUtil32.StrToInt(valText.Slice(2 - 1, 2), -1);
-                            if ((nValNo >= 0) && (nValNo < 100)) {
+                            if ((nValNo >= 0) && (nValNo < 100))
+                            {
                                 result = nValNo + 1700;
                             }
                         }
-                        else {
+                        else
+                        {
                             nValNo = HUtil32.StrToInt(sText[1].ToString(), -1);
-                            if ((nValNo >= 0) && (nValNo < 10)) {
+                            if ((nValNo >= 0) && (nValNo < 10))
+                            {
                                 result = nValNo + 1700;
                             }
                         }
@@ -764,25 +868,31 @@ namespace GameSrv
             return result;
         }
 
-        public static bool IsAccessory(ushort nIndex) {
+        public static bool IsAccessory(ushort nIndex)
+        {
             var item = WorldEngine.GetStdItem(nIndex);
             return IsAccessoryMap.Contains(item.StdMode);
         }
 
-        public static IList<MakeItem> GetMakeItemInfo(string sItemName) {
-            if (MakeItemList.TryGetValue(sItemName, out IList<MakeItem> itemList)) {
+        public static IList<MakeItem> GetMakeItemInfo(string sItemName)
+        {
+            if (MakeItemList.TryGetValue(sItemName, out IList<MakeItem> itemList))
+            {
                 return itemList;
             }
             return null;
         }
 
-        public static string GetStartPointInfo(int nIndex, ref short nX, ref short nY) {
+        public static string GetStartPointInfo(int nIndex, ref short nX, ref short nY)
+        {
             var result = string.Empty;
             nX = 0;
             nY = 0;
-            if (nIndex >= 0 && nIndex < StartPointList.Count) {
+            if (nIndex >= 0 && nIndex < StartPointList.Count)
+            {
                 var startPoint = StartPointList[nIndex];
-                if (!string.IsNullOrEmpty(startPoint.MapName)) {
+                if (!string.IsNullOrEmpty(startPoint.MapName))
+                {
                     nX = startPoint.CurrX;
                     nY = startPoint.CurrY;
                     result = startPoint.MapName;
@@ -791,18 +901,23 @@ namespace GameSrv
             return result;
         }
 
-        public static void AddLogonCostLog(string sMsg) {
+        public static void AddLogonCostLog(string sMsg)
+        {
             LogonCostLogList.Add(sMsg);
         }
 
-        public static void TrimStringList(StringList sList) {
+        public static void TrimStringList(StringList sList)
+        {
             var n8 = 0;
-            while (true) {
-                if (sList.Count <= n8) {
+            while (true)
+            {
+                if (sList.Count <= n8)
+                {
                     break;
                 }
                 var line = sList[n8].Trim();
-                if (string.IsNullOrEmpty(line)) {
+                if (string.IsNullOrEmpty(line))
+                {
                     sList.RemoveAt(n8);
                     continue;
                 }
@@ -810,7 +925,8 @@ namespace GameSrv
             }
         }
 
-        public static bool CanMakeItem(string sItemName) {
+        public static bool CanMakeItem(string sItemName)
+        {
             var result = false;
             //g_DisableMakeItemList.__Lock();
             //try {
@@ -841,9 +957,11 @@ namespace GameSrv
             return result;
         }
 
-        public static bool CanMoveMap(string sMapName) {
+        public static bool CanMoveMap(string sMapName)
+        {
             var result = true;
-            for (var i = 0; i < DisableMoveMapList.Count; i++) {
+            for (var i = 0; i < DisableMoveMapList.Count; i++)
+            {
                 //if ((g_DisableMoveMapList[I]).CompareTo((sMapName)) == 0)
                 //{
                 //    result = false;
@@ -853,9 +971,11 @@ namespace GameSrv
             return result;
         }
 
-        public static bool CanSellItem(string sItemName) {
+        public static bool CanSellItem(string sItemName)
+        {
             var result = true;
-            for (var i = 0; i < DisableSellOffList.Count; i++) {
+            for (var i = 0; i < DisableSellOffList.Count; i++)
+            {
                 //if ((g_DisableSellOffList[i]).CompareTo((sItemName)) == 0)
                 //{
                 //    result = false;
@@ -865,23 +985,28 @@ namespace GameSrv
             return result;
         }
 
-        public static bool LoadItemBindIPaddr() {
+        public static bool LoadItemBindIPaddr()
+        {
             StringList LoadList = null;
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
             var sFileName = GetEnvirFilePath("ItemBindIPaddr.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 LoadList = new StringList();
-                for (var i = 0; i < ItemBindIPaddr.Count; i++) {
+                for (var i = 0; i < ItemBindIPaddr.Count; i++)
+                {
                     ItemBindIPaddr[i] = null;
                 }
                 ItemBindIPaddr.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var sLineText = LoadList[i].Trim();
-                    if (sLineText[0] == ';') {
+                    if (sLineText[0] == ';')
+                    {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
@@ -889,8 +1014,10 @@ namespace GameSrv
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                     var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
-                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName))) {
-                        var ItemBind = new ItemBind {
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
+                    {
+                        var ItemBind = new ItemBind
+                        {
                             nMakeIdex = nMakeIndex,
                             nItemIdx = nItemIndex,
                             sBindName = sBindName
@@ -900,13 +1027,15 @@ namespace GameSrv
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveItemBindIPaddr() {
+        public static bool SaveItemBindIPaddr()
+        {
             var sFileName = GetEnvirFilePath("ItemBindIPaddr.txt");
             //SaveList = new StringList();
             //try {
@@ -922,22 +1051,27 @@ namespace GameSrv
             return true;
         }
 
-        public static bool LoadItemBindAccount() {
+        public static bool LoadItemBindAccount()
+        {
             using var LoadList = new StringList();
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
             var sFileName = GetEnvirFilePath("ItemBindAccount.txt");
-            if (File.Exists(sFileName)) {
-                for (var i = 0; i < ItemBindAccount.Count; i++) {
+            if (File.Exists(sFileName))
+            {
+                for (var i = 0; i < ItemBindAccount.Count; i++)
+                {
                     ItemBindAccount[i] = null;
                 }
                 ItemBindAccount.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var sLineText = LoadList[i].Trim();
-                    if (sLineText[0] == ';') {
+                    if (sLineText[0] == ';')
+                    {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
@@ -945,8 +1079,10 @@ namespace GameSrv
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                     var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
-                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName))) {
-                        var ItemBind = new ItemBind {
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
+                    {
+                        var ItemBind = new ItemBind
+                        {
                             nMakeIdex = nMakeIndex,
                             nItemIdx = nItemIndex,
                             sBindName = sBindName
@@ -956,13 +1092,15 @@ namespace GameSrv
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveItemBindAccount() {
+        public static bool SaveItemBindAccount()
+        {
             var sFileName = GetEnvirFilePath("ItemBindAccount.txt");
             //SaveList = new StringList();
             //g_ItemBindAccount.__Lock();
@@ -981,22 +1119,27 @@ namespace GameSrv
             return result;
         }
 
-        public static bool LoadItemBindChrName() {
+        public static bool LoadItemBindChrName()
+        {
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sBindName = string.Empty;
             var result = false;
             var sFileName = GetEnvirFilePath("ItemBindChrName.txt");
             using var LoadList = new StringList();
-            if (File.Exists(sFileName)) {
-                for (var i = 0; i < ItemBindChrName.Count; i++) {
+            if (File.Exists(sFileName))
+            {
+                for (var i = 0; i < ItemBindChrName.Count; i++)
+                {
                     ItemBindChrName[i] = null;
                 }
                 ItemBindChrName.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var sLineText = LoadList[i].Trim();
-                    if (sLineText[0] == ';') {
+                    if (sLineText[0] == ';')
+                    {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
@@ -1004,8 +1147,10 @@ namespace GameSrv
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
                     var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
                     var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
-                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName))) {
-                        var ItemBind = new ItemBind {
+                    if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
+                    {
+                        var ItemBind = new ItemBind
+                        {
                             nMakeIdex = nMakeIndex,
                             nItemIdx = nItemIndex,
                             sBindName = sBindName
@@ -1015,13 +1160,15 @@ namespace GameSrv
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveItemBindChrName() {
+        public static bool SaveItemBindChrName()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("ItemBindChrName.txt");
             //g_ItemBindChrName.__Lock();
@@ -1040,7 +1187,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool LoadDisableMakeItem() {
+        public static bool LoadDisableMakeItem()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("DisableMakeItem.txt");
             //var LoadList = new ArrayList();
@@ -1067,13 +1215,15 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveDisableMakeItem() {
+        public static bool SaveDisableMakeItem()
+        {
             var sFileName = GetEnvirFilePath("DisableMakeItem.txt");
             //g_DisableMakeItemList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool LoadUnMasterList() {
+        public static bool LoadUnMasterList()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("UnMaster.txt");
             //var LoadList = new ArrayList();
@@ -1100,37 +1250,44 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveUnMasterList() {
+        public static bool SaveUnMasterList()
+        {
             var sFileName = GetEnvirFilePath("UnMaster.txt");
             //g_UnMasterList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool LoadUnForceMasterList() {
+        public static bool LoadUnForceMasterList()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("UnForceMaster.txt");
             using var LoadList = new StringList();
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 UnForceMasterList.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     UnForceMasterList.Add(LoadList[i].Trim());
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveUnForceMasterList() {
+        public static bool SaveUnForceMasterList()
+        {
             var sFileName = GetEnvirFilePath("UnForceMaster.txt");
             //g_UnForceMasterList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool LoadEnableMakeItem() {
+        public static bool LoadEnableMakeItem()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("EnableMakeItem.txt");
             //if (File.Exists(sFileName))
@@ -1156,61 +1313,73 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveEnableMakeItem() {
+        public static bool SaveEnableMakeItem()
+        {
             var sFileName = GetEnvirFilePath("EnableMakeItem.txt");
             //g_EnableMakeItemList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool LoadDisableMoveMap() {
+        public static bool LoadDisableMoveMap()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("DisableMoveMap.txt");
             var loadList = new StringList();
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 DisableMoveMapList.Clear();
                 loadList.LoadFromFile(sFileName);
-                for (var i = 0; i < loadList.Count; i++) {
+                for (var i = 0; i < loadList.Count; i++)
+                {
                     DisableMoveMapList.Add(loadList[i].Trim());
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 loadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveDisableMoveMap() {
+        public static bool SaveDisableMoveMap()
+        {
             var sFileName = GetEnvirFilePath("DisableMoveMap.txt");
             DisableMoveMapList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool LoadAllowSellOffItem() {
+        public static bool LoadAllowSellOffItem()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("DisableSellOffItem.txt");
             using var LoadList = new StringList();
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 DisableSellOffList.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     DisableSellOffList.Add(LoadList[i].Trim());
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveAllowSellOffItem() {
+        public static bool SaveAllowSellOffItem()
+        {
             var sFileName = GetEnvirFilePath("DisableSellOffItem.txt");
             //g_DisableSellOffList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool SaveChatLog() {
+        public static bool SaveChatLog()
+        {
             //if (File.Exists(sFileName))
             //{
             //    LoadList = new ArrayList();
@@ -1230,53 +1399,69 @@ namespace GameSrv
             return true;
         }
 
-        public static int GetUseItemIdx(string sName) {
+        public static int GetUseItemIdx(string sName)
+        {
             var result = -1;
-            if (string.Compare(sName, Settings.DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            if (string.Compare(sName, Settings.DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 0;
             }
-            else if (string.Compare(sName, Settings.WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 1;
             }
-            else if (string.Compare(sName, Settings.RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 2;
             }
-            else if (string.Compare(sName, Settings.NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 3;
             }
-            else if (string.Compare(sName, Settings.HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 4;
             }
-            else if (string.Compare(sName, Settings.ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 5;
             }
-            else if (string.Compare(sName, Settings.ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 6;
             }
-            else if (string.Compare(sName, Settings.RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 7;
             }
-            else if (string.Compare(sName, Settings.RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 8;
             }
-            else if (string.Compare(sName, Settings.BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 9;
             }
-            else if (string.Compare(sName, Settings.BELTNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 10;
             }
-            else if (string.Compare(sName, Settings.BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 11;
             }
-            else if (string.Compare(sName, Settings.CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0) {
+            else if (string.Compare(sName, Settings.CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 result = 12;
             }
             return result;
         }
 
-        public static string GetUseItemName(int nIndex) {
+        public static string GetUseItemName(int nIndex)
+        {
             var result = string.Empty;
-            switch (nIndex) {
+            switch (nIndex)
+            {
                 case 0:
                     result = Settings.DRESSNAME;
                     break;
@@ -1320,7 +1505,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool LoadDisableSendMsgList() {
+        public static bool LoadDisableSendMsgList()
+        {
             var sFileName = GetEnvirFilePath("DisableSendMsgList.txt");
             //var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
@@ -1340,25 +1526,31 @@ namespace GameSrv
             return false;
         }
 
-        public static bool LoadMonDropLimitList() {
+        public static bool LoadMonDropLimitList()
+        {
             var sItemName = string.Empty;
             var sItemCount = string.Empty;
             var result = false;
             var sFileName = GetEnvirFilePath("MonDropLimitList.txt");
             var LoadList = new StringList();
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 MonDropLimitLIst.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var sLineText = LoadList[i].Trim();
-                    if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';')) {
+                    if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';'))
+                    {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new[] { ' ', '/', ',', '\t' });
                     var nItemCount = HUtil32.StrToInt(sItemCount, -1);
-                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0)) {
-                        var MonDrop = new MonsterLimitDrop {
+                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
+                    {
+                        var MonDrop = new MonsterLimitDrop
+                        {
                             ItemName = sItemName,
                             DropCount = 0,
                             NoDropCount = 0,
@@ -1369,16 +1561,19 @@ namespace GameSrv
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveMonDropLimitList() {
+        public static bool SaveMonDropLimitList()
+        {
             var sFileName = GetEnvirFilePath("MonDropLimitList.txt");
             var LoadList = new StringList();
-            foreach (KeyValuePair<string, MonsterLimitDrop> item in MonDropLimitLIst) {
+            foreach (KeyValuePair<string, MonsterLimitDrop> item in MonDropLimitLIst)
+            {
                 var monDrop = item.Value;
                 var sLineText = monDrop.ItemName + "\t" + monDrop.CountLimit;
                 LoadList.Add(sLineText);
@@ -1387,39 +1582,47 @@ namespace GameSrv
             return true;
         }
 
-        public static bool LoadDisableTakeOffList() {
+        public static bool LoadDisableTakeOffList()
+        {
             var sItemName = string.Empty;
             var sItemIdx = string.Empty;
             var result = false;
             var sFileName = GetEnvirFilePath("DisableTakeOffList.txt");
             var LoadList = new StringList();
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 LoadList.LoadFromFile(sFileName);
                 DisableTakeOffList.Clear();
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var sLineText = LoadList[i].Trim();
-                    if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';')) {
+                    if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';'))
+                    {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new[] { ' ', '/', ',', '\t' });
                     var nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
-                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0)) {
+                    if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
+                    {
                         DisableTakeOffList.Add(nItemIdx, sItemName);
                     }
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool SaveDisableTakeOffList() {
+        public static bool SaveDisableTakeOffList()
+        {
             var sFileName = GetEnvirFilePath("DisableTakeOffList.txt");
             var LoadList = new StringList();
-            foreach (KeyValuePair<int, string> item in DisableTakeOffList) {
+            foreach (KeyValuePair<int, string> item in DisableTakeOffList)
+            {
                 var sLineText = item.Value + "\t" + item.Key;
                 LoadList.Add(sLineText);
             }
@@ -1427,20 +1630,24 @@ namespace GameSrv
             return true;
         }
 
-        public static bool InDisableTakeOffList(int nItemIdx) {
+        public static bool InDisableTakeOffList(int nItemIdx)
+        {
             return DisableTakeOffList.ContainsKey(nItemIdx - 1);
         }
 
-        public static void SaveDisableSendMsgList() {
+        public static void SaveDisableSendMsgList()
+        {
             var sFileName = GetEnvirFilePath("DisableSendMsgList.txt");
             var LoadList = new StringList();
-            for (var i = 0; i < DisableSendMsgList.Count; i++) {
+            for (var i = 0; i < DisableSendMsgList.Count; i++)
+            {
                 LoadList.Add(DisableSendMsgList[i]);
             }
             LoadList.SaveToFile(sFileName);
         }
 
-        public static bool GetDisableSendMsgList(string sHumanName) {
+        public static bool GetDisableSendMsgList(string sHumanName)
+        {
             var result = false;
             //for (I = 0; I < g_DisableSendMsgList.Count; I ++ )
             //{
@@ -1453,35 +1660,44 @@ namespace GameSrv
             return result;
         }
 
-        public static bool LoadGameLogItemNameList() {
+        public static bool LoadGameLogItemNameList()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("GameLogItemNameList.txt");
             var LoadList = new StringList();
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 GameLogItemNameList.Clear();
                 LoadList.LoadFromFile(sFileName);
-                if (LoadList.Count == 1 && LoadList[0].StartsWith("*")) {
+                if (LoadList.Count == 1 && LoadList[0].StartsWith("*"))
+                {
                     GameLogItemNameList.Add("*");
                     return true;
                 }
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     GameLogItemNameList.Add(LoadList[i].Trim());
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static byte GetGameLogItemNameList(string sItemName) {
+        public static byte GetGameLogItemNameList(string sItemName)
+        {
             byte result = 0;
-            if (GameLogItemNameList.Count == 1 && GameLogItemNameList[0].StartsWith("*")) {
+            if (GameLogItemNameList.Count == 1 && GameLogItemNameList[0].StartsWith("*"))
+            {
                 return 1;
             }
-            for (var i = 0; i < GameLogItemNameList.Count; i++) {
-                if (string.Compare(sItemName, GameLogItemNameList[i], StringComparison.OrdinalIgnoreCase) == 0) {
+            for (var i = 0; i < GameLogItemNameList.Count; i++)
+            {
+                if (string.Compare(sItemName, GameLogItemNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
+                {
                     result = 1;
                     break;
                 }
@@ -1489,13 +1705,15 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveGameLogItemNameList() {
+        public static bool SaveGameLogItemNameList()
+        {
             var sFileName = GetEnvirFilePath("GameLogItemNameList.txt");
             //g_GameLogItemNameList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool LoadDenyIPAddrList() {
+        public static bool LoadDenyIPAddrList()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("DenyIPAddrList.txt");
             //if (File.Exists(sFileName))
@@ -1521,9 +1739,11 @@ namespace GameSrv
             return result;
         }
 
-        public static bool GetDenyIPAddrList(string sIPaddr) {
+        public static bool GetDenyIPAddrList(string sIPaddr)
+        {
             var result = false;
-            for (var i = 0; i < DenyIPAddrList.Count; i++) {
+            for (var i = 0; i < DenyIPAddrList.Count; i++)
+            {
                 //if ((sIPaddr).CompareTo((g_DenyIPAddrList[I])) == 0)
                 //{
                 //    result = true;
@@ -1533,7 +1753,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveDenyIPAddrList() {
+        public static bool SaveDenyIPAddrList()
+        {
             var sFileName = GetEnvirFilePath("DenyIPAddrList.txt");
             //SaveList = new StringList();
             //g_DenyIPAddrList.__Lock();
@@ -1553,7 +1774,8 @@ namespace GameSrv
             return true;
         }
 
-        public static bool LoadDenyChrNameList() {
+        public static bool LoadDenyChrNameList()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("DenyChrNameList.txt");
             //if (File.Exists(sFileName))
@@ -1580,7 +1802,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool GetDenyChrNameList(string sChrName) {
+        public static bool GetDenyChrNameList(string sChrName)
+        {
             var result = false;
             //for (I = 0; I < g_DenyChrNameList.Count; I ++ )
             //{
@@ -1593,7 +1816,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveDenyChrNameList() {
+        public static bool SaveDenyChrNameList()
+        {
             var sFileName = GetEnvirFilePath("DenyChrNameList.txt");
             //SaveList = new StringList();
             //g_DenyChrNameList.__Lock();
@@ -1613,10 +1837,12 @@ namespace GameSrv
             return true;
         }
 
-        public static bool LoadDenyAccountList() {
+        public static bool LoadDenyAccountList()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("DenyAccountList.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 DenyAccountList.Clear();
                 //LoadList.LoadFromFile(sFileName);
                 //for (I = 0; I < LoadList.Count; I++)
@@ -1625,16 +1851,19 @@ namespace GameSrv
                 //}
                 result = true;
             }
-            else {
+            else
+            {
                 //LoadList.SaveToFile(sFileName);
             }
             //LoadList.Free;
             return result;
         }
 
-        public static bool GetDenyAccountList(string sAccount) {
+        public static bool GetDenyAccountList(string sAccount)
+        {
             var result = false;
-            for (var I = 0; I < DenyAccountList.Count; I++) {
+            for (var I = 0; I < DenyAccountList.Count; I++)
+            {
                 //if ((sAccount).CompareTo((g_DenyAccountList[I])) == 0)
                 //{
                 //    result = true;
@@ -1644,7 +1873,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveDenyAccountList() {
+        public static bool SaveDenyAccountList()
+        {
             var sFileName = GetEnvirFilePath("DenyAccountList.txt");
             //SaveList = new StringList();
             //g_DenyAccountList.__Lock();
@@ -1664,25 +1894,30 @@ namespace GameSrv
             return true;
         }
 
-        public static bool LoadNoClearMonList() {
+        public static bool LoadNoClearMonList()
+        {
             var result = false;
             var sFileName = GetEnvirFilePath("NoClearMonList.txt");
             using var LoadList = new StringList();
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 NoClearMonLIst.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     NoClearMonLIst.Add(LoadList[i].Trim());
                 }
                 result = true;
             }
-            else {
+            else
+            {
                 LoadList.SaveToFile(sFileName);
             }
             return result;
         }
 
-        public static bool GetNoHptoexpMonList(string sMonName) {
+        public static bool GetNoHptoexpMonList(string sMonName)
+        {
             var result = false;
             //for (var i = 0; i < g_NoHptoexpMonLIst.Count; i++)
             //{
@@ -1695,7 +1930,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool GetNoClearMonList(string sMonName) {
+        public static bool GetNoClearMonList(string sMonName)
+        {
             var result = false;
             //for (var I = 0; I < g_NoClearMonLIst.Count; I++)
             //{
@@ -1708,7 +1944,8 @@ namespace GameSrv
             return result;
         }
 
-        public static bool SaveNoHptoexpMonList() {
+        public static bool SaveNoHptoexpMonList()
+        {
             var sFileName = GetEnvirFilePath("NoHptoExpMonList.txt");
             //SaveList = new StringList();
             //g_NoHptoexpMonLIst.__Lock();
@@ -1725,17 +1962,20 @@ namespace GameSrv
             return true;
         }
 
-        public static bool SaveNoClearMonList() {
+        public static bool SaveNoClearMonList()
+        {
             var sFileName = GetEnvirFilePath("NoClearMonList.txt");
             var SaveList = new StringList();
-            for (var I = 0; I < NoClearMonLIst.Count; I++) {
+            for (var I = 0; I < NoClearMonLIst.Count; I++)
+            {
                 //SaveList.Add(g_NoClearMonLIst[I]);
             }
             SaveList.SaveToFile(sFileName);
             return true;
         }
 
-        public static bool LoadMonSayMsg() {
+        public static bool LoadMonSayMsg()
+        {
             var sStatus = string.Empty;
             var sRate = string.Empty;
             var sColor = string.Empty;
@@ -1743,25 +1983,31 @@ namespace GameSrv
             var sSayMsg = string.Empty;
             var result = false;
             var sFileName = GetEnvirFilePath("GenMsg.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 MonSayMsgList.Clear();
                 var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++) {
+                for (var i = 0; i < LoadList.Count; i++)
+                {
                     var sLineText = LoadList[i].Trim();
-                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';') {
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
+                    {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new[] { ' ', '/', ',', '\t' });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, new[] { ' ', '/', ',', '\t' });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, new[] { ' ', '/', ',', '\t' });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, new[] { ' ', '/', ',', '\t' });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new[] { ' ', '/', ',', '\t' });
-                        if (!string.IsNullOrEmpty(sStatus) && !string.IsNullOrEmpty(sRate) && !string.IsNullOrEmpty(sColor) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sSayMsg)) {
+                        if (!string.IsNullOrEmpty(sStatus) && !string.IsNullOrEmpty(sRate) && !string.IsNullOrEmpty(sColor) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sSayMsg))
+                        {
                             var nStatus = HUtil32.StrToInt(sStatus, -1);
                             var nRate = HUtil32.StrToInt(sRate, -1);
                             var nColor = HUtil32.StrToInt(sColor, -1);
-                            if (nStatus >= 0 && nRate >= 0 && nColor >= 0) {
+                            if (nStatus >= 0 && nRate >= 0 && nColor >= 0)
+                            {
                                 var MonSayMsg = new MonsterSayMsg();
-                                switch (nStatus) {
+                                switch (nStatus)
+                                {
                                     case 0:
                                         MonSayMsg.State = MonStatus.KillHuman;
                                         break;
@@ -1778,7 +2024,8 @@ namespace GameSrv
                                         MonSayMsg.State = MonStatus.UnderFire;
                                         break;
                                 }
-                                switch (nColor) {
+                                switch (nColor)
+                                {
                                     case 0:
                                         MonSayMsg.Color = MsgColor.Red;
                                         break;
@@ -1822,7 +2069,8 @@ namespace GameSrv
             return result;
         }
 
-        public static void LoadConfig() {
+        public static void LoadConfig()
+        {
             ServerConf.LoadConfig();
             StringConf.LoadString();
             ExpConf.LoadConfig();
@@ -1830,55 +2078,79 @@ namespace GameSrv
             GameSetting.LoadConfig();
         }
 
-        public static string GetIPLocal(string sIPaddr) {
+        public static string GetIPLocal(string sIPaddr)
+        {
             return "未知!!!";
         }
 
         // 是否记录物品日志
         // 返回 FALSE 为记录
         // 返回 TRUE  为不记录
-        public static bool IsCheapStuff(byte tByte) {
+        public static bool IsCheapStuff(byte tByte)
+        {
             return false;
         }
 
         // sIPaddr 为当前IP
         // dIPaddr 为要比较的IP
         // * 号为通配符
-        public static bool CompareIPaddr(string sIPaddr, string dIPaddr) {
+        public static bool CompareIPaddr(string sIPaddr, string dIPaddr)
+        {
             bool result;
-            if (string.IsNullOrEmpty(sIPaddr) || string.IsNullOrEmpty(dIPaddr)) {
+            if (string.IsNullOrEmpty(sIPaddr) || string.IsNullOrEmpty(dIPaddr))
+            {
                 return false;
             }
-            if (dIPaddr[1] == '*') {
+            if (dIPaddr[1] == '*')
+            {
                 return true;
             }
             var nPos = dIPaddr.IndexOf('*');
-            if (nPos > 0) {
+            if (nPos > 0)
+            {
                 result = HUtil32.CompareLStr(sIPaddr, dIPaddr, nPos - 1);
             }
-            else {
+            else
+            {
                 result = string.Compare(sIPaddr, dIPaddr, StringComparison.OrdinalIgnoreCase) == 0;
             }
             return result;
         }
 
-        public static int MakeMonsterFeature(byte btRaceImg, byte btWeapon, ushort wAppr) {
+        public static int MakeMonsterFeature(byte btRaceImg, byte btWeapon, ushort wAppr)
+        {
             return HUtil32.MakeLong(HUtil32.MakeWord(btRaceImg, btWeapon), wAppr);
         }
 
-        public static int MakeHumanFeature(byte btRaceImg, byte btDress, byte btWeapon, byte btHair) {
+        public static int MakeHumanFeature(byte btRaceImg, byte btDress, byte btWeapon, byte btHair)
+        {
             return HUtil32.MakeLong(HUtil32.MakeWord(btRaceImg, btWeapon), HUtil32.MakeWord(btHair, btDress));
         }
 
-        public static string GetEnvirFilePath(string filePath) {
+        public static string GetEnvirFilePath(string filePath)
+        {
+            if (filePath.StartsWith(".."))
+            {
+                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+            }
             return Path.Combine(BasePath, Config.EnvirDir, filePath);
         }
 
-        public static string GetEnvirFilePath(string dirPath, string filePath) {
+        public static string GetEnvirFilePath(string dirPath, string filePath)
+        {
+            if (filePath.StartsWith(".."))
+            {
+                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+            }
             return Path.Combine(BasePath, Config.EnvirDir, dirPath, filePath);
         }
 
-        public static string GetNoticeFilePath(string filePath) {
+        public static string GetNoticeFilePath(string filePath)
+        {
+            if (filePath.StartsWith(".."))
+            {
+                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+            }
             return Path.Combine(BasePath, Config.NoticeDir, filePath);
         }
     }
