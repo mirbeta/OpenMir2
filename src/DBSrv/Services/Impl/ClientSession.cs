@@ -279,7 +279,7 @@ namespace DBSrv.Services.Impl
             globaSessionInfo.sAccount = sAccount;
             globaSessionInfo.sIPaddr = sIPaddr;
             globaSessionInfo.nSessionID = HUtil32.StrToInt(s10, 0);
-            //GlobaSessionInfo.n24 = HUtil32.Str_ToInt(s14, 0);
+            //GlobaSessionInfo.n24 = HUtil32.StrToInt(s14, 0);
             globaSessionInfo.boStartPlay = false;
             globaSessionInfo.boLoadRcd = false;
             globaSessionInfo.dwAddTick = HUtil32.GetTickCount();

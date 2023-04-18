@@ -1187,7 +1187,7 @@ namespace BotSrv
             //    result = true;
             //}
             //MShare.g_WaitingUseItem.Item.Item.Name = "";
-            //for (i = 0; i < BotConst.MAXBAGITEMCL; i++)
+            //for (i = 0; i < BotConst.MaxBagItemCL; i++)
             //{
             //    if ((MShare.g_ItemArr[i].MakeIndex == mindex) && (MShare.g_ItemArr[i].Item.Name == iname) && (MShare.g_ItemArr[i].Item.Overlap > 0))
             //    {

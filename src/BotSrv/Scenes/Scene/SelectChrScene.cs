@@ -204,7 +204,7 @@ namespace BotSrv.Scenes.Scene
             //MShare.g_ConnectionStep = TConnectionStep.cnsPlay;
             //CloseSocket();//断开游戏网关链接
             //ClientSocket.Host = addr;
-            //ClientSocket.Port = HUtil32.Str_ToInt(sport, 0);
+            //ClientSocket.Port = HUtil32.StrToInt(sport, 0);
             //ClientSocket.Connect();
             //robotClient.SocStr = string.Empty;
             //robotClient.BufferStr = string.Empty;

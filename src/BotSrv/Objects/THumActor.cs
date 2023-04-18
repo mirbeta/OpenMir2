@@ -123,7 +123,7 @@ namespace BotSrv.Objects
             //    if ((frame == 5) && this.m_boDigFragment)
             //    {
             //        this.m_boDigFragment = false;
-            //        var __event = ClMain.EventMan.GetEvent(this.m_nCurrX, this.m_nCurrY, Grobal2.ET_PILESTONES);
+            //        var __event = ClMain.EventMan.GetEvent(this.CurrX, this.CurrY, Grobal2.ET_PILESTONES);
             //        if (__event != null)
             //        {
             //            __event.m_nEventParam = __event.m_nEventParam + 1;
@@ -135,7 +135,7 @@ namespace BotSrv.Objects
             //    if ((frame == 5) && this.m_boDigFragment)
             //    {
             //        this.m_boDigFragment = false;
-            //        var __event = ClMain.EventMan.GetEvent(this.m_nCurrX, this.m_nCurrY, Grobal2.ET_PILESTONES);
+            //        var __event = ClMain.EventMan.GetEvent(this.CurrX, this.CurrY, Grobal2.ET_PILESTONES);
             //        if (__event != null)
             //        {
             //            __event.m_nEventParam = __event.m_nEventParam + 1;
@@ -331,7 +331,7 @@ namespace BotSrv.Objects
                             }
                             if (sskill)
                                 //TUseMagicInfo _wvar1 = this.m_CurMagic;
-                                //ClMain.g_PlayScene.NewMagic(this, _wvar1.ServerMagicCode, _wvar1.EffectNumber, this.m_nCurrX, this.m_nCurrY, _wvar1.targx, _wvar1.targy, _wvar1.target, _wvar1.EffectType, _wvar1.Recusion, _wvar1.anitime, ref boFly, _wvar1.magfirelv, _wvar1.Poison);
+                                //ClMain.g_PlayScene.NewMagic(this, _wvar1.ServerMagicCode, _wvar1.EffectNumber, this.CurrX, this.CurrY, _wvar1.targx, _wvar1.targy, _wvar1.target, _wvar1.EffectType, _wvar1.Recusion, _wvar1.anitime, ref boFly, _wvar1.magfirelv, _wvar1.Poison);
                                 m_boNewMagic = false;
                         }
                         switch (m_CurMagic.EffectNumber)
@@ -349,7 +349,7 @@ namespace BotSrv.Objects
                             if (m_CurMagic.ServerMagicCode > 0 && (!bss || m_boNewMagic))
                             {
                                 //TUseMagicInfo _wvar2 = this.m_CurMagic;
-                                //ClMain.g_PlayScene.NewMagic(this, _wvar2.ServerMagicCode, _wvar2.EffectNumber, this.m_nCurrX, this.m_nCurrY, _wvar2.targx, _wvar2.targy, _wvar2.target, _wvar2.EffectType, _wvar2.Recusion, _wvar2.anitime, ref boFly, _wvar2.magfirelv, _wvar2.Poison);
+                                //ClMain.g_PlayScene.NewMagic(this, _wvar2.ServerMagicCode, _wvar2.EffectNumber, this.CurrX, this.CurrY, _wvar2.targx, _wvar2.targy, _wvar2.target, _wvar2.EffectType, _wvar2.Recusion, _wvar2.anitime, ref boFly, _wvar2.magfirelv, _wvar2.Poison);
                             }
 
                             if (this == MShare.MySelf) MShare.LatestSpellTick = MShare.GetTickCount();

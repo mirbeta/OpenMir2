@@ -18,7 +18,7 @@ namespace BotSrv.Objects
         {
             if (m_nCurrentAction == Messages.SM_LIGHTING && boCasted)
                 boCasted = false;
-            //ClMain.g_PlayScene.NewMagic(this, 1, 39, this.m_nCurrX, this.m_nCurrY, this.m_nTargetX, this.m_nTargetY, this.m_nTargetRecog, magiceff.TMagicType.mtFly, false, 30, ref bofly);
+            //ClMain.g_PlayScene.NewMagic(this, 1, 39, this.CurrX, this.CurrY, this.m_nTargetX, this.m_nTargetY, this.m_nTargetRecog, magiceff.TMagicType.mtFly, false, 30, ref bofly);
             base.Run();
         }
 

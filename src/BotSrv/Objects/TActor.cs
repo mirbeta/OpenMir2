@@ -445,8 +445,8 @@ namespace BotSrv.Objects
                         case Messages.CM_THROW:
                             if (m_nFeature != 0)
                             {
-                                //m_nTargetX = (Msg.Feature as TActor).m_nCurrX;
-                                //m_nTargetY = (Msg.Feature as TActor).m_nCurrY;
+                                //m_nTargetX = (Msg.Feature as TActor).CurrX;
+                                //m_nTargetY = (Msg.Feature as TActor).CurrY;
                                 //m_nTargetRecog = (Msg.Feature as TActor).m_nRecogId;
                             }
                             RealActionMsg = Msg;
@@ -1043,7 +1043,7 @@ namespace BotSrv.Objects
                         {
                             if (m_CurMagic.ServerMagicCode > 0)
                             {
-                                //robotClient.g_PlayScene.NewMagic(this, m_CurMagic.ServerMagicCode, m_CurMagic.EffectNumber, m_nCurrX, m_nCurrY, m_CurMagic.targx, m_CurMagic.targy, m_CurMagic.target, m_CurMagic.EffectType, m_CurMagic.Recusion, m_CurMagic.anitime, ref boFly, m_CurMagic.magfirelv);
+                                //robotClient.g_PlayScene.NewMagic(this, m_CurMagic.ServerMagicCode, m_CurMagic.EffectNumber, CurrX, CurrY, m_CurMagic.targx, m_CurMagic.targy, m_CurMagic.target, m_CurMagic.EffectType, m_CurMagic.Recusion, m_CurMagic.anitime, ref boFly, m_CurMagic.magfirelv);
                             }
                             m_CurMagic.ServerMagicCode = 0;
                         }

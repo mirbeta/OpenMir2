@@ -3051,7 +3051,7 @@ namespace BotSrv.Player
             //var ItemSaveArr = new ClientItem[BotConst.MaxBagItemcl];
             //FillChar(MShare.g_RefineItems, sizeof(TMovingItem) * 3, '\0');
             //FillChar(MShare.g_BuildAcuses, sizeof(MShare.g_BuildAcuses), '\0');
-            //FillChar(MShare.g_ItemArr * BotConst.MAXBAGITEMCL, '\0');
+            //FillChar(MShare.g_ItemArr * BotConst.MaxBagItemCL, '\0');
             //FillChar(MShare.g_TIItems, sizeof(MShare.g_TIItems), '\0');
             //FillChar(MShare.g_spItems, sizeof(MShare.g_spItems), '\0');
             if (MShare.MovingItem != null)
@@ -3075,7 +3075,7 @@ namespace BotSrv.Player
             //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sChrName + ".itm-plus", ItemSaveArr);
             //if (ClientGetBagItmes_CompareItemArr())
             //{
-            //    Move(ItemSaveArr, MShare.g_ItemArr * BotConst.MAXBAGITEMCL);
+            //    Move(ItemSaveArr, MShare.g_ItemArr * BotConst.MaxBagItemCL);
             //}
             BotHelper.ArrangeItembag();
             MShare.g_boBagLoaded = true;
@@ -3479,8 +3479,8 @@ namespace BotSrv.Player
         private void ClientGetMerchantSay(int merchant, int face, string saying)
         {
             //string npcname;
-            //MShare.g_nMDlgX = MShare.g_MySelf.m_nCurrX;
-            //MShare.g_nMDlgY = MShare.g_MySelf.m_nCurrY;
+            //MShare.g_nMDlgX = MShare.g_MySelf.CurrX;
+            //MShare.g_nMDlgY = MShare.g_MySelf.CurrY;
             //if (MShare.g_nCurMerchant != merchant)
             //{
             //    MShare.g_nCurMerchant = merchant;
@@ -3511,9 +3511,9 @@ namespace BotSrv.Player
             //    {
             //        pcg = new TClientGoods();
             //        pcg.Name = gname;
-            //        pcg.SubMenu = HUtil32.Str_ToInt(gsub, 0);
-            //        pcg.Price = HUtil32.Str_ToInt(gprice, 0);
-            //        pcg.Stock = HUtil32.Str_ToInt(gstock, 0);
+            //        pcg.SubMenu = HUtil32.StrToInt(gsub, 0);
+            //        pcg.Price = HUtil32.StrToInt(gprice, 0);
+            //        pcg.Stock = HUtil32.StrToInt(gstock, 0);
             //        pcg.Grade = -1;
             //        FrmDlg.MenuList.Add(pcg);
             //    }
@@ -3546,9 +3546,9 @@ namespace BotSrv.Player
             //    {
             //        pcg = new TDelChar();
             //        pcg.sChrName = gname;
-            //        pcg.nLevel = HUtil32.Str_ToInt(glevel, 1);
-            //        pcg.btJob = HUtil32.Str_ToInt(gjob, 0);
-            //        pcg.btSex = HUtil32.Str_ToInt(gsex, 0);
+            //        pcg.nLevel = HUtil32.StrToInt(glevel, 1);
+            //        pcg.btJob = HUtil32.StrToInt(gjob, 0);
+            //        pcg.btSex = HUtil32.StrToInt(gsex, 0);
             //        FrmDlg.m_DelCharList.Add(pcg);
             //    }
             //    else
@@ -3579,9 +3579,9 @@ namespace BotSrv.Player
             //    {
             //        pcg = new TClientGoods();
             //        pcg.Name = gname;
-            //        pcg.SubMenu = HUtil32.Str_ToInt(gsub, 0);
-            //        pcg.Price = HUtil32.Str_ToInt(gprice, 0);
-            //        pcg.Stock = HUtil32.Str_ToInt(gstock, 0);
+            //        pcg.SubMenu = HUtil32.StrToInt(gsub, 0);
+            //        pcg.Price = HUtil32.StrToInt(gprice, 0);
+            //        pcg.Stock = HUtil32.StrToInt(gstock, 0);
             //        pcg.Grade = -1;
             //        FrmDlg.MenuList.Add(pcg);
             //    }
