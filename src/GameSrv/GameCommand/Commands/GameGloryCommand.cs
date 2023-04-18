@@ -11,7 +11,7 @@ namespace GameSrv.GameCommand.Commands {
             //var Ctr = '1';
             //if ((PlayObject.m_btPermission < this.Attributes.nPermissionMin))
             //{
-            //    PlayObject.SysMsg(Settings.GameCommandPermissionTooLow, TMsgColor.c_Red, TMsgType.t_Hint); // 权限不够
+            //    PlayObject.SysMsg(Settings.GameCommandPermissionTooLow, MsgColor.c_Red, MsgType.t_Hint); // 权限不够
             //    return;
             //}
 
@@ -26,15 +26,15 @@ namespace GameSrv.GameCommand.Commands {
             //    {
             //        PlayObject.SysMsg(
             //            string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name,
-            //                Settings.GameCommandGameGloryHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+            //                Settings.GameCommandGameGloryHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
             //        return;
             //    }
 
-            //    var TargerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            //    var TargerObject = M2Share.WorldEngine.GePlayObject(sHumanName);
             //    if (TargerObject == null)
             //    {
             //        PlayObject.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, new string[] { sHumanName }),
-            //            TMsgColor.c_Red, TMsgType.t_Hint);
+            //            MsgColor.c_Red, MsgType.t_Hint);
             //        return;
             //    }
 
@@ -54,19 +54,19 @@ namespace GameSrv.GameCommand.Commands {
             //    if (Settings.g_boGameLogGameGlory)
             //    {
             //        M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GameGlory,
-            //            TargerObject.m_sMapName, TargerObject.m_nCurrX, TargerObject.m_nCurrY, TargerObject.m_sChrName,
-            //            Settings.g_Config.sGameGlory, TargerObject.m_btGameGlory,
+            //            TargerObject.MapName, TargerObject.CurrX, TargerObject.CurrY, TargerObject.m_sChrName,
+            //            Settings.Config.sGameGlory, TargerObject.m_btGameGlory,
             //            sCtr[1] + "(" + (nGameGlory).ToString() + ")", PlayObject.m_sChrName));
             //    }
 
             //    TargerObject.GameGloryChanged();
             //    TargerObject.SysMsg(
-            //        string.Format(Settings.GameCommandGameGirdHumanMsg, Settings.g_Config.sGameGlory, nGameGlory,
-            //            TargerObject.m_btGameGlory, Settings.g_Config.sGameGlory), TMsgColor.c_Green, TMsgType.t_Hint);
+            //        string.Format(Settings.GameCommandGameGirdHumanMsg, Settings.Config.sGameGlory, nGameGlory,
+            //            TargerObject.m_btGameGlory, Settings.Config.sGameGlory), MsgColor.c_Green, MsgType.t_Hint);
             //    PlayObject.SysMsg(
-            //        string.Format(Settings.GameCommandGameGirdGMMsg, sHumanName, Settings.g_Config.sGameGlory,
-            //            nGameGlory, TargerObject.m_btGameGlory, Settings.g_Config.sGameGlory), TMsgColor.c_Green,
-            //        TMsgType.t_Hint);
+            //        string.Format(Settings.GameCommandGameGirdGMMsg, sHumanName, Settings.Config.sGameGlory,
+            //            nGameGlory, TargerObject.m_btGameGlory, Settings.Config.sGameGlory), MsgColor.c_Green,
+            //        MsgType.t_Hint);
             //}
         }
     }

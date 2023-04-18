@@ -23,7 +23,7 @@ namespace GameSrv.GameCommand.Commands {
             //{
             //    M2Share.dwStartTimeTick = HUtil32.GetTickCount();
             //}
-            //M2Share.MainOutMessage(sb.ToString());
+            //M2Share.Logger.Error(sb.ToString());
 
             //TGateInfo GateInfo;
             //sb.Clear();
@@ -57,7 +57,7 @@ namespace GameSrv.GameCommand.Commands {
             //}
             //if (sb.Length > 0)
             //{
-            //    M2Share.MainOutMessage(sb.ToString());
+            //    M2Share.Logger.Error(sb.ToString());
             //}
         }
     }

@@ -214,7 +214,7 @@ namespace GameSrv.Network
                         }
                         if (gateUser != null)
                         {
-                            if (gateUser.PlayObject != null && gateUser.UserEngine != null)
+                            if (gateUser.PlayObject != null && gateUser.WorldEngine != null)
                             {
                                 if (gateUser.Certification && nMsgLen >= 12)
                                 {
@@ -442,7 +442,7 @@ namespace GameSrv.Network
                 nSocket = socket,
                 SocketId = socketId,
                 SessionID = 0,
-                UserEngine = null,
+                WorldEngine = null,
                 FrontEngine = null,
                 PlayObject = null,
                 dwNewUserTick = HUtil32.GetTickCount(),
@@ -491,7 +491,7 @@ namespace GameSrv.Network
                     if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
-                        gateUserInfo.UserEngine = M2Share.WorldEngine;
+                        gateUserInfo.WorldEngine = M2Share.WorldEngine;
                         gateUserInfo.PlayObject = playObject;
                         break;
                     }

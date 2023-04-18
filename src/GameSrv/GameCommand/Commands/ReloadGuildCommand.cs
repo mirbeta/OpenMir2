@@ -32,7 +32,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             guild.LoadGuild();
             playObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildSuccessMsg, sParam1), MsgColor.Red, MsgType.Hint);
-            // UserEngine.SendServerGroupMsg(SS_207, nServerIndex, sParam1);
+            // WorldEngine.SendServerGroupMsg(SS_207, nServerIndex, sParam1);
         }
     }
 }

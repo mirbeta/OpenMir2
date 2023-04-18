@@ -20,18 +20,18 @@ namespace GameSrv.GameCommand.Commands {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
                 //    Settings.g_DenySayMsgList.Remove(sHumanName);
-                //    TPlayObject m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-                //    //PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                //    PlayObject m_PlayObject = M2Share.WorldEngine.GePlayObject(sHumanName);
+                //    //PlayObject = M2Share.WorldEngine.GePlayObject(sHumanName);
                 //    if (m_PlayObject != null)
                 //    {
-                //        m_PlayObject.SysMsg(Settings.GameCommandShutupReleaseCanSendMsg, TMsgColor.c_Red, TMsgType.t_Hint);
+                //        m_PlayObject.SysMsg(Settings.GameCommandShutupReleaseCanSendMsg, MsgColor.c_Red, MsgType.t_Hint);
                 //    }
                 //    if (boAll)
                 //    {
                 //        //M2Share.WorldEngine.SendServerGroupMsg(SS_210, nServerIndex, sHumanName);
                 //    }
                 //    PlayObject.SysMsg(string.Format(Settings.GameCommandShutupReleaseHumanCanSendMsg, sHumanName),
-                //        TMsgColor.c_Green, TMsgType.t_Hint);
+                //        MsgColor.c_Green, MsgType.t_Hint);
                 //}
             }
             finally {

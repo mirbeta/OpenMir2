@@ -19,7 +19,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             //if (PlayObject.m_PEnvir.m_boNOMASTERRECALL)
             //{
-            //    PlayObject.SysMsg("本地图禁止师徒传送!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+            //    PlayObject.SysMsg("本地图禁止师徒传送!!!", MsgColor.c_Red, MsgType.t_Hint);
             //    return;
             //}
             if ((HUtil32.GetTickCount() - playObject.MasterRecallTick) < 10000) {

@@ -293,7 +293,7 @@ namespace GameSrv.RobotPlay
 
         protected override void ProcessSayMsg(string sData)
         {
-            const string sExceptionMsg = "RobotPlayObject.ProcessSayMsg Msg:%s";
+            const string sExceptionMsg = "RoboPlayObject.ProcessSayMsg Msg:%s";
             if (string.IsNullOrEmpty(sData))
             {
                 return;
@@ -732,7 +732,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RobotPlayObject.SearchPickUpItem");
+                M2Share.Logger.Error("RoboPlayObject.SearchPickUpItem");
             }
             return result;
         }
@@ -1918,7 +1918,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error(Format("RobotPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, nTargetX, nTargetY));
+                M2Share.Logger.Error(Format("RoboPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, nTargetX, nTargetY));
             }
             return result;
         }
@@ -1976,7 +1976,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RobotPlayObject.Thinking");
+                M2Share.Logger.Error("RoboPlayObject.Thinking");
             }
             return result;
         }
@@ -3862,7 +3862,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error("RobotPlayObject.CheckHeroAmulet");
+                M2Share.Logger.Error("RoboPlayObject.CheckHeroAmulet");
             }
             return result;
         }

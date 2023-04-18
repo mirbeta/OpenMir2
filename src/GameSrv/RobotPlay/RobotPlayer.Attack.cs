@@ -146,7 +146,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                // M2Share.MainOutMessage(format("{%s} RobotPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
+                // M2Share.Logger.Error(format("{%s} RoboPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
             }
             return result;
         }
@@ -199,7 +199,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RobotPlayObject.WizardAttackTarget");
+                M2Share.Logger.Error("RoboPlayObject.WizardAttackTarget");
             }
             return result;
         }
@@ -427,7 +427,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                // M2Share.MainOutMessage('{异常} RobotPlayObject.TaoistAttackTarget');
+                // M2Share.Logger.Error('{异常} RoboPlayObject.TaoistAttackTarget');
             }
             return result;
         }
@@ -511,7 +511,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RobotPlayObject.AttackTarget");
+                M2Share.Logger.Error("RoboPlayObject.AttackTarget");
             }
             return result;
         }

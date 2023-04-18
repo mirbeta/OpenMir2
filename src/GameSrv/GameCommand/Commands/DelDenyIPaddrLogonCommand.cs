@@ -27,7 +27,7 @@ namespace GameSrv.GameCommand.Commands {
                     //    //    M2Share.SaveDenyIPAddrList();
                     //    //}
                     //    Settings.g_DenyIPAddrList.RemoveAt(i);
-                    //    PlayObject.SysMsg(sIPaddr + "已从禁止登录IP列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    //    PlayObject.SysMsg(sIPaddr + "已从禁止登录IP列表中删除。", MsgColor.c_Green, MsgType.t_Hint);
                     //    boDelete = true;
                     //    break;
                     //}

@@ -14,14 +14,14 @@ namespace GameSrv.GameCommand.Commands {
             var nY = @params.Length > 3 ? HUtil32.StrToInt(@params[3],0) : 0;
             var nRange = @params.Length > 4 ? HUtil32.StrToInt(@params[4],0) : 0;
             if (string.IsNullOrEmpty(sMap) || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?') {
-                //PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), TMsgColor.c_Red, TMsgType.t_Hint);
+                //PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
                 return;
             }
             if (sItemName == "ALL") {
             }
             // TMapItem MapItem = null;
             // var ItemList = new List<TMapItem>();
-            // var Envir = Settings.g_MapManager.FindMap(sMap);// 查找地图
+            // var Envir = Settings.g_MapMgr.FindMap(sMap);// 查找地图
             // if (Envir != null)
             // {
             //     ItemList = new List<TMapItem>();

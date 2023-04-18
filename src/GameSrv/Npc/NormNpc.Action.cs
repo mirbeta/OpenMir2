@@ -84,7 +84,7 @@ namespace GameSrv.Npc
                                             if (!bo12 && dealOffInfo.UseItems[j].MakeIndex > 0 && dealOffInfo.UseItems[j].Index == ushort.MaxValue && dealOffInfo.UseItems[j].Dura == ushort.MaxValue && dealOffInfo.UseItems[j].DuraMax == ushort.MaxValue)
                                             {
                                                 var wvar1 = sClientDealOffInfo.UseItems[j];// '金刚石'
-                                                //_wvar1.S.Name = Settings.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
+                                                //_wvar1.S.Name = Settings.Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;// 金刚石数量
                                                 wvar1.Dura = ushort.MaxValue;// 客户端金刚石特征
                                                 wvar1.Item.DuraMax = ushort.MaxValue;// 客户端金刚石特征
@@ -189,7 +189,7 @@ namespace GameSrv.Npc
                                             if (!bo12 && dealOffInfo.UseItems[k].MakeIndex > 0 && dealOffInfo.UseItems[k].Index == short.MaxValue && dealOffInfo.UseItems[k].Dura == short.MaxValue && dealOffInfo.UseItems[k].DuraMax == short.MaxValue)
                                             {
                                                 var wvar1 = sClientDealOffInfo.UseItems[k];// '金刚石'
-                                                //_wvar1.S.Name = Settings.g_Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
+                                                //_wvar1.S.Name = Settings.Config.sGameDiaMond + '(' + (DealOffInfo.UseItems[K].MakeIndex).ToString() + ')';
                                                 //_wvar1.S.Price = DealOffInfo.UseItems[K].MakeIndex;
                                                 //// 金刚石数量
                                                 //_wvar1.Dura = UInt16.MaxValue;// 客户端金刚石特征
@@ -1351,7 +1351,7 @@ namespace GameSrv.Npc
                         }
                         else
                         {
-                            //sUnMarryFileName = Settings.g_Config.sEnvirDir + "UnMarry.txt";
+                            //sUnMarryFileName = Settings.Config.sEnvirDir + "UnMarry.txt";
                             //LoadList = new StringList();
                             //if (File.Exists(sUnMarryFileName))
                             //{
@@ -1872,10 +1872,10 @@ namespace GameSrv.Npc
                 //IniFile.Load();
                 /*switch (DynamicVar.VarType)
                 {
-                    case TVarType.Integer:
+                    case VarType.Integer:
                         DynamicVar.nInternet = IniFile.ReadWriteInteger(sName, DynamicVar.sName, 0);
                         break;
-                    case TVarType.String:
+                    case VarType.String:
                         DynamicVar.sString = IniFile.ReadWriteString(sName, DynamicVar.sName, "");
                         break;
                 }*/

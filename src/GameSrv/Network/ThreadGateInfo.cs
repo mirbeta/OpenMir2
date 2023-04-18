@@ -96,7 +96,7 @@ namespace GameSrv.Network
         public PlayerSession SessInfo;
         public int nSocket;
         public FrontEngine FrontEngine;
-        public WorldServer UserEngine;
+        public WorldServer WorldEngine;
         public int dwNewUserTick;
     }
 }

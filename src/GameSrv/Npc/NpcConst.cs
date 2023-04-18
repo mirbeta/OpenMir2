@@ -59,6 +59,8 @@ namespace GameSrv.Npc {
         public int nParam5;
         public string sParam6;
         public int nParam6;
+        public string sParam7;
+        public int nParam7;
         public string sOpName;
         public string sOpHName;
     }

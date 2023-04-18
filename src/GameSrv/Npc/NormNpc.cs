@@ -18,6 +18,7 @@ namespace GameSrv.Npc {
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
         /// </summary>
         public short NpcFlag = 0;
+        private ConditionFunction ConditionScript;
         public IList<ScriptInfo> m_ScriptList;
         public string FilePath;
         /// <summary>
@@ -43,6 +44,8 @@ namespace GameSrv.Npc {
             IsHide = false;
             IsQuest = true;
             CellType = CellType.Merchant;
+            ConditionScript = new ConditionFunction(m_sPath, ChrName, MapName, CurrX, CurrY);
+            ConditionScript.Initialize();
         }
 
         ~NormNpc() {
@@ -1050,7 +1053,7 @@ namespace GameSrv.Npc {
             if (HUtil32.CompareLStr(sVariable, "$MONKILLER["))// $MONKILLER(怪物名称 + 地图号) 显示杀死此怪物的杀手
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1067,7 +1070,7 @@ namespace GameSrv.Npc {
             if (HUtil32.CompareLStr(sVariable, "$MONDIEHOUR[")) // $MONDIEHOUR(怪物名称 + 地图号) 显示该怪物死时的小时
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1084,7 +1087,7 @@ namespace GameSrv.Npc {
             if (HUtil32.CompareLStr(sVariable, "$MONDIEMIN["))// $MONDIEMIN(怪物名称 + 地图号) 显示该怪物死时的分钟
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1101,7 +1104,7 @@ namespace GameSrv.Npc {
             if (HUtil32.CompareLStr(sVariable, "$MONDIESEC["))// $MONDIESEC(怪物名称 + 地图号) 显示该怪物死时的秒数
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1118,7 +1121,7 @@ namespace GameSrv.Npc {
             if (HUtil32.CompareLStr(sVariable, "$MONDIEYEAR["))// $MONDIEYEAR[怪物名称 + 地图号]   显示该怪物死亡的年
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1135,7 +1138,7 @@ namespace GameSrv.Npc {
             if (HUtil32.CompareLStr(sVariable, "$MONDIEMONTH["))// $MONDIEMONTH[怪物名称 + 地图号]  显示该怪物死亡的月
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;
@@ -1152,7 +1155,7 @@ namespace GameSrv.Npc {
             if (HUtil32.CompareLStr(sVariable, "$MONDIEDAY["))// $MONDIEDAY[怪物名称 + 地图号]    显示该怪物死亡的日
             {
                 HUtil32.ArrestStringEx(sVariable, "[", "]", ref s14);
-                //MonDie = new FileStream(Settings.g_Config.sEnvirDir + "MonDieDataList.txt");
+                //MonDie = new FileStream(Settings.Config.sEnvirDir + "MonDieDataList.txt");
                 //if (MonDie == null)
                 //{
                 //    return;

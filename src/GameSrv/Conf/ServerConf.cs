@@ -41,7 +41,7 @@ namespace GameSrv.Conf {
             M2Share.Config.ChatSrvAddr = ReadWriteString("Server", "ChatSrvAddr", M2Share.Config.ChatSrvAddr);
             M2Share.Config.ChatSrvPort = ReadWriteInteger("Server", "ChatSrvPort", M2Share.Config.ChatSrvPort);
             M2Share.Config.ChatSrvToken = ReadWriteString("Server", "ChatSrvToken", M2Share.Config.ChatSrvToken);
-            M2Share.Config.DiscountForNightTime = ReadWriteString("Server", "DiscountForNightTime", HUtil32.BoolToStr(M2Share.Config.DiscountForNightTime)).CompareTo("TRUE".ToLower()) == 0;
+            M2Share.Config.DiscountForNightTime = ReadWriteString("Server", "DiscountForNightTime", HUtil32.BoolToStr(M2Share.Config.DiscountForNightTime)).CompareTo("TRUE") == 0;
             M2Share.Config.HalfFeeStart = ReadWriteInteger("Server", "HalfFeeStart", M2Share.Config.HalfFeeStart);
             M2Share.Config.HalfFeeEnd = ReadWriteInteger("Server", "HalfFeeEnd", M2Share.Config.HalfFeeEnd);
             M2Share.HumLimit = ReadWriteInteger("Server", "HumLimit", M2Share.HumLimit);

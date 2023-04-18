@@ -23,14 +23,14 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 //if ((sHumanName).CompareTo((Settings.g_DisableSendMsgList[i])) == 0)
                 //{
-                //    m_PlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                //    m_PlayObject = M2Share.WorldEngine.GePlayObject(sHumanName);
                 //    if (m_PlayObject != null)
                 //    {
                 //        m_PlayObject.m_boFilterSendMsg = false;
                 //    }
                 //    Settings.g_DisableSendMsgList.RemoveAt(i);
                 //    M2Share.SaveDisableSendMsgList();
-                //    PlayObject.SysMsg(sHumanName + " 已从禁言列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
+                //    PlayObject.SysMsg(sHumanName + " 已从禁言列表中删除。", MsgColor.c_Green, MsgType.t_Hint);
                 //    return;
                 //}
             }

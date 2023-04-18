@@ -73,7 +73,7 @@ namespace SystemModule.Sockets.Common
             {
                 return string.Empty.GetHashCode();
             }
-            return value.ToLower().GetHashCode();
+            return value.GetHashCode();
         }
 
         /// <summary>

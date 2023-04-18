@@ -24,7 +24,7 @@ namespace GameSrv.GameCommand.Commands {
                 //if ((PlayObject.m_BlockWhisperList[i]).CompareTo((sHumanName)) == 0)
                 //{
                 //    PlayObject.m_BlockWhisperList.RemoveAt(i);
-                //    PlayObject.SysMsg(string.Format(Settings.GameCommandPrvMsgUnLimitMsg, sHumanName), TMsgColor.c_Green, TMsgType.t_Hint);
+                //    PlayObject.SysMsg(string.Format(Settings.GameCommandPrvMsgUnLimitMsg, sHumanName), MsgColor.c_Green, MsgType.t_Hint);
                 //    return;
                 //}
             }

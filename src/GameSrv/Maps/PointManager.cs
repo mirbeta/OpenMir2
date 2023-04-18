@@ -5,8 +5,8 @@ using SystemModule.Enums;
 namespace GameSrv.Maps {
     public class PointManager 
     {
-        public short m_nCurrX;
-        public short m_nCurrY;
+        public short CurrX;
+        public short CurrY;
         public int m_nPostion;
         public byte m_btDirection;
         public int m_nTurnCount;
@@ -15,8 +15,8 @@ namespace GameSrv.Maps {
         private readonly BaseObject FBaseObject;
 
         public PointManager(BaseObject baseObject) {
-            m_nCurrX = -1;
-            m_nCurrY = -1;
+            CurrX = -1;
+            CurrY = -1;
             m_nPostion = -1;
             FBaseObject = baseObject;
             PathType = FindPathType.Dynamic;
@@ -71,14 +71,14 @@ namespace GameSrv.Maps {
             int nStep;
             bool result = false;
             if (PathType == FindPathType.Dynamic) {
-                m_nCurrX = nX;
-                m_nCurrY = nY;
+                CurrX = nX;
+                CurrY = nY;
                 if (FBaseObject.Dir > 8) {
                     FBaseObject.Dir = 4;
                 }
                 m_btDirection = FBaseObject.Dir;
                 for (int i = 2; i >= 1; i--) {
-                    if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, m_btDirection, i, ref nMX, ref nMY)) {
+                    if (FBaseObject.Envir.GetNextPosition(CurrX, CurrY, m_btDirection, i, ref nMX, ref nMY)) {
                         if (FBaseObject.CanMove(nMX, nMY, false)) {
                             m_nTurnCount = 0;
                             nX = nMX;
@@ -93,7 +93,7 @@ namespace GameSrv.Maps {
                 while (true) {
                     btDir = GetNextDir(btDir);
                     for (int i = 2; i >= 1; i--) {
-                        if (FBaseObject.Envir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY)) {
+                        if (FBaseObject.Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY)) {
                             if (FBaseObject.CanMove(nMX, nMY, false)) {
                                 nX = nMX;
                                 nY = nMY;
@@ -114,12 +114,12 @@ namespace GameSrv.Maps {
                 if (((PlayObject)FBaseObject).Envir != m_PEnvir) {
                     m_PEnvir = ((PlayObject)FBaseObject).Envir;
                     m_nPostion = 0;
-                    m_nCurrX = nX;
-                    m_nCurrY = nY;
+                    CurrX = nX;
+                    CurrY = nY;
                 }
                 nIndex = m_PEnvir.PointList.Count;
                 n10 = 99999;
-                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && m_nCurrX == nX && m_nCurrY == nY)) {
+                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && CurrX == nX && CurrY == nY)) {
                     m_nPostion = 0;
                 }
                 PointInfo Pt;
@@ -187,8 +187,8 @@ namespace GameSrv.Maps {
                     }
                     nX = nMX;
                     nY = nMY;
-                    m_nCurrX = nX;
-                    m_nCurrY = nY;
+                    CurrX = nX;
+                    CurrY = nY;
                 }
             }
             return result;
@@ -341,14 +341,14 @@ namespace GameSrv.Maps {
             byte btDir = 0;
             int nStep;
             if (PathType == FindPathType.Dynamic) {
-                m_nCurrX = nX;
-                m_nCurrY = nY;
+                CurrX = nX;
+                CurrY = nY;
                 nC = 0;
                 btDir = ((PlayObject)FBaseObject).Dir;
                 while (true) {
                     btDir = GetPoint1_GetNextDir(btDir);
                     for (int i = 2; i >= 1; i--) {
-                        if (((PlayObject)FBaseObject).Envir.GetNextPosition(m_nCurrX, m_nCurrY, btDir, i, ref nMX, ref nMY)) {
+                        if (((PlayObject)FBaseObject).Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY)) {
                             if (((PlayObject)FBaseObject).CanMove(nMX, nMY, false)) {
                                 nX = nMX;
                                 nY = nMY;
@@ -369,12 +369,12 @@ namespace GameSrv.Maps {
                 if (((PlayObject)FBaseObject).Envir != m_PEnvir) {
                     m_PEnvir = ((PlayObject)FBaseObject).Envir;
                     m_nPostion = 0;
-                    m_nCurrX = nX;
-                    m_nCurrY = nY;
+                    CurrX = nX;
+                    CurrY = nY;
                 }
                 nIndex = m_PEnvir.PointList.Count;
                 n10 = 99999;
-                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && m_nCurrX == nX && m_nCurrY == nY)) {
+                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && CurrX == nX && CurrY == nY)) {
                     m_nPostion = 0;
                 }
                 PointInfo Pt;
@@ -442,8 +442,8 @@ namespace GameSrv.Maps {
                     }
                     nX = nMX;
                     nY = nMY;
-                    m_nCurrX = nX;
-                    m_nCurrY = nY;
+                    CurrX = nX;
+                    CurrY = nY;
                 }
             }
             return result;

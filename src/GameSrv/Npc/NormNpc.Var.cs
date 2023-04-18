@@ -1946,7 +1946,7 @@ namespace GameSrv.Npc {
                     return result;
                 case "$GUILDBUILDPOINT": {
                         if (PlayObject.MyGuild != null) {
-                            //nValue = PlayObject.m_MyGuild.nBuildPoint;
+                            //nValue = PlayObject.MyGuild.nBuildPoint;
                         }
                         nDataType = 0;
                         result = true;

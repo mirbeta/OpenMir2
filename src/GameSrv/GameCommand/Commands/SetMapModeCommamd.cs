@@ -21,16 +21,16 @@ namespace GameSrv.GameCommand.Commands {
 
             //if ((string.IsNullOrEmpty(sMapName)) || (string.IsNullOrEmpty(sMapMode)))
             //{
-            //    if (Settings.g_Config.boGMShowFailMsg)
+            //    if (Settings.Config.boGMShowFailMsg)
             //    {
-            //        PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号 模式", TMsgColor.c_Red, TMsgType.t_Hint);
+            //        PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号 模式", MsgColor.c_Red, MsgType.t_Hint);
             //    }
             //    return;
             //}
-            //Envir = Settings.g_MapManager.FindMap(sMapName);
+            //Envir = Settings.g_MapMgr.FindMap(sMapName);
             //if ((Envir == null))
             //{
-            //    PlayObject.   SysMsg(sMapName + " 不存在!!!", TMsgColor.c_Red, TMsgType.t_Hint);
+            //    PlayObject.   SysMsg(sMapName + " 不存在!!!", MsgColor.c_Red, MsgType.t_Hint);
             //    return;
             //}
             //if ((sMapMode).CompareTo(("SAFE")) == 0)
@@ -149,7 +149,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))))
             //    {
             //        Envir.m_boMUSIC = true;
-            //        Envir.m_nMUSICID = HUtil32.Str_ToInt(sParam1, -1);
+            //        Envir.m_nMUSICID = HUtil32.StrToInt(sParam1, -1);
             //    }
             //    else
             //    {
@@ -161,7 +161,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))))
             //    {
             //        Envir.m_boEXPRATE = true;
-            //        Envir.m_nEXPRATE = HUtil32.Str_ToInt(sParam1, -1);
+            //        Envir.m_nEXPRATE = HUtil32.StrToInt(sParam1, -1);
             //    }
             //    else
             //    {
@@ -173,7 +173,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))))
             //    {
             //        Envir.m_boPKWINLEVEL = true;
-            //        Envir.m_nPKWINLEVEL = HUtil32.Str_ToInt(sParam1, -1);
+            //        Envir.m_nPKWINLEVEL = HUtil32.StrToInt(sParam1, -1);
             //    }
             //    else
             //    {
@@ -185,7 +185,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))))
             //    {
             //        Envir.m_boPKWINEXP = true;
-            //        Envir.m_nPKWINEXP = HUtil32.Str_ToInt(sParam1, -1);
+            //        Envir.m_nPKWINEXP = HUtil32.StrToInt(sParam1, -1);
             //    }
             //    else
             //    {
@@ -197,7 +197,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))))
             //    {
             //        Envir.m_boPKLOSTLEVEL = true;
-            //        Envir.m_nPKLOSTLEVEL = HUtil32.Str_ToInt(sParam1, -1);
+            //        Envir.m_nPKLOSTLEVEL = HUtil32.StrToInt(sParam1, -1);
             //    }
             //    else
             //    {
@@ -209,7 +209,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))))
             //    {
             //        Envir.m_boPKLOSTEXP = true;
-            //        Envir.m_nPKLOSTEXP = HUtil32.Str_ToInt(sParam1, -1);
+            //        Envir.m_nPKLOSTEXP = HUtil32.StrToInt(sParam1, -1);
             //    }
             //    else
             //    {
@@ -221,8 +221,8 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))) && (if(!string.IsNullOrEmpty(sParam2))))
             //    {
             //        Envir.m_boDECHP = true;
-            //        Envir.m_nDECHPTIME = HUtil32.Str_ToInt(sParam1, -1);
-            //        Envir.m_nDECHPPOINT = HUtil32.Str_ToInt(sParam2, -1);
+            //        Envir.m_nDECHPTIME = HUtil32.StrToInt(sParam1, -1);
+            //        Envir.m_nDECHPPOINT = HUtil32.StrToInt(sParam2, -1);
             //    }
             //    else
             //    {
@@ -234,8 +234,8 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))) && (if(!string.IsNullOrEmpty(sParam2))))
             //    {
             //        Envir.m_boDecGameGold = true;
-            //        Envir.m_nDECGAMEGOLDTIME = HUtil32.Str_ToInt(sParam1, -1);
-            //        Envir.m_nDecGameGold = HUtil32.Str_ToInt(sParam2, -1);
+            //        Envir.m_nDECGAMEGOLDTIME = HUtil32.StrToInt(sParam1, -1);
+            //        Envir.m_nDecGameGold = HUtil32.StrToInt(sParam2, -1);
             //    }
             //    else
             //    {
@@ -248,7 +248,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))))
             //    {
             //        Envir.m_boKILLFUNC = true;
-            //        Envir.m_nKILLFUNC = HUtil32.Str_ToInt(sParam1, -1);
+            //        Envir.m_nKILLFUNC = HUtil32.StrToInt(sParam1, -1);
             //    }
             //    else
             //    {
@@ -260,8 +260,8 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))) && (if(!string.IsNullOrEmpty(sParam2))))
             //    {
             //        Envir.m_boIncGameGold = true;
-            //        Envir.m_nINCGAMEGOLDTIME = HUtil32.Str_ToInt(sParam1, -1);
-            //        Envir.m_nIncGameGold = HUtil32.Str_ToInt(sParam2, -1);
+            //        Envir.m_nINCGAMEGOLDTIME = HUtil32.StrToInt(sParam1, -1);
+            //        Envir.m_nIncGameGold = HUtil32.StrToInt(sParam2, -1);
             //    }
             //    else
             //    {
@@ -273,8 +273,8 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))) && (if(!string.IsNullOrEmpty(sParam2))))
             //    {
             //        Envir.m_boINCGAMEPOINT = true;
-            //        Envir.m_nINCGAMEPOINTTIME = HUtil32.Str_ToInt(sParam1, -1);
-            //        Envir.m_nINCGAMEPOINT = HUtil32.Str_ToInt(sParam2, -1);
+            //        Envir.m_nINCGAMEPOINTTIME = HUtil32.StrToInt(sParam1, -1);
+            //        Envir.m_nINCGAMEPOINT = HUtil32.StrToInt(sParam2, -1);
             //    }
             //    else
             //    {
@@ -288,7 +288,7 @@ namespace GameSrv.GameCommand.Commands {
             //    if ((if(!string.IsNullOrEmpty(sParam1))) && (if(!string.IsNullOrEmpty(sParam2))))
             //    {
             //        Envir.m_boNEEDLEVELTIME = true;
-            //        Envir.m_nNEEDLEVELPOINT = HUtil32.Str_ToInt(sParam1, 0);
+            //        Envir.m_nNEEDLEVELPOINT = HUtil32.StrToInt(sParam1, 0);
             //        // 进地图最低等级
             //    }
             //    else
@@ -468,7 +468,7 @@ namespace GameSrv.GameCommand.Commands {
             //    }
             //}
             //sMsg = "地图模式: " + Envir.GetEnvirInfo();
-            //PlayObject.SysMsg(sMsg, TMsgColor.c_Blue, TMsgType.t_Hint);
+            //PlayObject.SysMsg(sMsg, MsgColor.c_Blue, MsgType.t_Hint);
         }
     }
 }

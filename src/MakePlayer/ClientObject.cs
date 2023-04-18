@@ -2,7 +2,7 @@ namespace MakePlayer
 {
     public class ClientObject
     {
-        public const int MAXBAGITEMCL = 40;
+        public const int MaxBagItemCL = 40;
     }
 
     public struct UserCharacterInfo

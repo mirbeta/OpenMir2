@@ -364,11 +364,11 @@ namespace GameSrv.Services {
             sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s1C, HUtil32.Backslash);
-            M2Share.nCurrentMonthly = HUtil32.Str_ToInt(sC, 0);
-            M2Share.nLastMonthlyTotalUsage = HUtil32.Str_ToInt(s10, 0);
-            M2Share.nTotalTimeUsage = HUtil32.Str_ToInt(s14, 0);
-            M2Share.nGrossTotalCnt = HUtil32.Str_ToInt(s18, 0);
-            M2Share.nGrossResetCnt = HUtil32.Str_ToInt(s1C, 0);*/
+            M2Share.nCurrentMonthly = HUtil32.StrToInt(sC, 0);
+            M2Share.nLastMonthlyTotalUsage = HUtil32.StrToInt(s10, 0);
+            M2Share.nTotalTimeUsage = HUtil32.StrToInt(s14, 0);
+            M2Share.nGrossTotalCnt = HUtil32.StrToInt(s18, 0);
+            M2Share.nGrossResetCnt = HUtil32.StrToInt(s1C, 0);*/
         }
 
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e) {
@@ -378,7 +378,7 @@ namespace GameSrv.Services {
         }
 
         private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e) {
-            // if (!Settings.g_Config.boIDSocketConnected)
+            // if (!Settings.Config.boIDSocketConnected)
             // {
             //     return;
             // }

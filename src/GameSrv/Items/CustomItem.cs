@@ -121,7 +121,7 @@ namespace GameSrv.Items {
         /// <returns></returns>
         public static int GetItemAddValuePointColor(UserItem UserItem) {
             var result = 0;
-            // if (Settings.g_Config.boRandomnameColor)
+            // if (Settings.Config.boRandomnameColor)
             // {
             //     for (var I = 0; I <= 7; I ++ )
             //     {
@@ -135,25 +135,25 @@ namespace GameSrv.Items {
             //         switch(ItemVlue)
             //         {
             //             case 1:
-            //                 result = Settings.g_Config.nRandom1nameColor;
+            //                 result = Settings.Config.nRandom1nameColor;
             //                 break;
             //             case 2:
-            //                 result = Settings.g_Config.nRandom2nameColor;
+            //                 result = Settings.Config.nRandom2nameColor;
             //                 break;
             //             case 3:
-            //                 result = Settings.g_Config.nRandom3nameColor;
+            //                 result = Settings.Config.nRandom3nameColor;
             //                 break;
             //             case 4:
-            //                 result = Settings.g_Config.nRandom4nameColor;
+            //                 result = Settings.Config.nRandom4nameColor;
             //                 break;
             //             default:
-            //                 result = Settings.g_Config.nRandom5nameColor;
+            //                 result = Settings.Config.nRandom5nameColor;
             //                 break;
             //         }
             //     }
             //     else
             //     {
-            //         StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+            //         StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             //         if (StdItem != null)
             //         {
             //             switch(StdItem.StdMode)
@@ -161,7 +161,7 @@ namespace GameSrv.Items {
             //                 case 0:
             //                 case 1:
             //                 case 3:
-            //                     result = Settings.g_Config.nRandom8nameColor;
+            //                     result = Settings.Config.nRandom8nameColor;
             //                     break;
             //                 case 5:
             //                 case 6:
@@ -187,10 +187,10 @@ namespace GameSrv.Items {
             //                 case 62:
             //                 case 63:
             //                 case 64:
-            //                     result = Settings.g_Config.nRandom7nameColor;
+            //                     result = Settings.Config.nRandom7nameColor;
             //                     break;
             //                 default:
-            //                     result = Settings.g_Config.nRandom6nameColor;
+            //                     result = Settings.Config.nRandom6nameColor;
             //                     break;
             //             }
             //         }
@@ -198,7 +198,7 @@ namespace GameSrv.Items {
             // }
             // else
             // {
-            //     StdItem = M2Share.WorldEngine.GetStdItem(UserItem.wIndex);
+            //     StdItem = M2Share.WorldEngine.GetStdItem(UserItem.Index);
             //     if (StdItem != null)
             //     {
             //         if (StdItem.NameColor != 0)

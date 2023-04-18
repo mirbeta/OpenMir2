@@ -41,7 +41,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
             }
             catch (Exception e) {
-                M2Share.Logger.Error("[Exceptioin] TPlayObject.CmdPositionMove");
+                M2Share.Logger.Error("[Exceptioin] PlayObject.CmdPositionMove");
                 M2Share.Logger.Error(e.Message);
             }
         }

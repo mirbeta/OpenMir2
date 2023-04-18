@@ -444,7 +444,7 @@ namespace GameSrv.RobotPlay
         public override void SearchViewRange()
         {
             BaseObject baseObject;
-            const string sExceptionMsg = "RobotPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
+            const string sExceptionMsg = "RoboPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             if (Ghost)
             {
                 return;

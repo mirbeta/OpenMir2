@@ -538,7 +538,7 @@ namespace GameSrv.Player
                             if (AddItemToBag(userItem))
                             {
                                 SendAddItem(userItem);
-                                //m_UseItems[btWhere].wIndex = 0;
+                                //UseItems[btWhere].wIndex = 0;
                                 UseItems[btWhere] = null;
                                 RecalcAbilitys();
                                 SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);

@@ -107,7 +107,7 @@ namespace GameSrv.Player
                             SellOffItemList.Add(userItem);
                             this.SendMsg(Messages.RM_SELLOFFADDITEM_OK, 0, 0, 0, 0); // 放物品成功
                             this.ItemList.RemoveAt(i);
-                            //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品
+                            //ClearCopyItem(0, UserItem.Index, UserItem.MakeIndex); // 清理包裹和仓库复制物品
                             bo11 = true;
                             break;
                         }
@@ -162,7 +162,7 @@ namespace GameSrv.Player
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品 
+                            //ClearCopyItem(0, UserItem.Index, UserItem.MakeIndex); // 清理包裹和仓库复制物品 
                             this.ItemList.Add(userItem);
                             this.SendMsg(Messages.RM_SELLOFFDELITEM_OK, 0, 0, 0, 0);
                             SellOffItemList.RemoveAt(i);
@@ -243,7 +243,7 @@ namespace GameSrv.Player
             }
             catch
             {
-                M2Share.Logger.Error("{异常} TPlayObject.ClientCancelSellOffIng");
+                M2Share.Logger.Error("{异常} PlayObject.ClientCancelSellOffIng");
             }
         }
 
@@ -338,13 +338,13 @@ namespace GameSrv.Player
                                         UserItem userItem = dealOffInfo.UseItems[j];
                                         if (IsEnoughBag()) // 检查人物的包裹是否满了 
                                         {
-                                            //ClearCopyItem(0, UserItem.wIndex, UserItem.MakeIndex); // 清理包裹和仓库复制物品 
+                                            //ClearCopyItem(0, UserItem.Index, UserItem.MakeIndex); // 清理包裹和仓库复制物品 
                                             if (this.AddItemToBag(userItem))
                                             {
                                                 SendAddItem(userItem);
                                                 if (stdItem.NeedIdentify == 1)
                                                 {
-                                                    // M2Share.ItemEventSource.AddGameLog('9' + "\09" + this.m_sMapName + "(*)" + "\09" + this.m_nCurrX.ToString() + "\09" + this.m_nCurrY.ToString() + "\09" + this.m_sChrName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex.ToString() + "\09" + '(' + HUtil32.LoWord(StdItem.DC).ToString() + '/' + HUtil32.HiWord(StdItem.DC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.MC).ToString() + '/' + HUtil32.HiWord(StdItem.MC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.SC).ToString() + '/' + HUtil32.HiWord(StdItem.SC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.AC).ToString() + '/' + HUtil32.HiWord(StdItem.AC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.MAC).ToString() + '/' + HUtil32.HiWord(StdItem.MAC).ToString() + ')' + UserItem.btValue[0].ToString() + '/' + UserItem.btValue[1].ToString() + '/' + UserItem.btValue[2].ToString() + '/' + UserItem.btValue[3].ToString() + '/' + UserItem.btValue[4].ToString() + '/' + UserItem.btValue[5].ToString() + '/' + UserItem.btValue[6].ToString() + '/' + UserItem.btValue[7].ToString() + '/' + UserItem.btValue[8].ToString() + '/' + UserItem.btValue[14].ToString() + "\09" + DealOffInfo.sDealChrName);
+                                                    // M2Share.ItemEventSource.AddGameLog('9' + "\09" + this.MapName + "(*)" + "\09" + this.CurrX.ToString() + "\09" + this.CurrY.ToString() + "\09" + this.m_sChrName + "\09" + StdItem.Name + "\09" + UserItem.MakeIndex.ToString() + "\09" + '(' + HUtil32.LoWord(StdItem.DC).ToString() + '/' + HUtil32.HiWord(StdItem.DC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.MC).ToString() + '/' + HUtil32.HiWord(StdItem.MC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.SC).ToString() + '/' + HUtil32.HiWord(StdItem.SC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.AC).ToString() + '/' + HUtil32.HiWord(StdItem.AC).ToString() + ')' + '(' + HUtil32.LoWord(StdItem.MAC).ToString() + '/' + HUtil32.HiWord(StdItem.MAC).ToString() + ')' + UserItem.btValue[0].ToString() + '/' + UserItem.btValue[1].ToString() + '/' + UserItem.btValue[2].ToString() + '/' + UserItem.btValue[3].ToString() + '/' + UserItem.btValue[4].ToString() + '/' + UserItem.btValue[5].ToString() + '/' + UserItem.btValue[6].ToString() + '/' + UserItem.btValue[7].ToString() + '/' + UserItem.btValue[8].ToString() + '/' + UserItem.btValue[14].ToString() + "\09" + DealOffInfo.sDealChrName);
                                                 }
                                             }
                                         }
@@ -376,7 +376,7 @@ namespace GameSrv.Player
             }
             catch
             {
-                M2Share.Logger.Error("{异常} TPlayObject.ClientBuySellOffItme");
+                M2Share.Logger.Error("{异常} PlayObject.ClientBuySellOffItme");
             }
         }
 
@@ -420,7 +420,7 @@ namespace GameSrv.Player
             }
             catch
             {
-                M2Share.Logger.Error("{异常} TPlayObject.GetSellOffGlod");
+                M2Share.Logger.Error("{异常} PlayObject.GetSellOffGlod");
             }
         }
 

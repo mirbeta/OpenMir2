@@ -12,7 +12,7 @@ namespace GameSrv.GameCommand.Commands {
                     return;
                 }
                 for (var i = 0; i < M2Share.DenyChrNameList.Count; i++) {
-                    //PlayObject.SysMsg(Settings.g_DenyChrNameList[i], TMsgColor.c_Green, TMsgType.t_Hint);
+                    //PlayObject.SysMsg(Settings.g_DenyChrNameList[i], MsgColor.c_Green, MsgType.t_Hint);
                 }
             }
             finally {

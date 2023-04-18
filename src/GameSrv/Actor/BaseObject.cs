@@ -2766,9 +2766,9 @@ namespace GameSrv.Actor
             //                    MessageBodyW.Tag2 = 0;
             //                    sSENDMSG = EDcode.EncodeBuffer(@MessageBodyW);
             //                }
-            //                ((TPlayObject)(this)).m_DefMsg = EDCode.MakeDefaultMsg(Messages.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
-            //                ((TPlayObject)(this)).SendSocket(((TPlayObject)(this)).m_DefMsg, sSENDMSG);
-            //                ((TPlayObject)(this)).protectedPowerPointChanged();
+            //                ((PlayObject)(this)).m_DefMsg = EDCode.MakeDefaultMsg(Messages.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
+            //                ((PlayObject)(this)).SendSocket(((PlayObject)(this)).m_DefMsg, sSENDMSG);
+            //                ((PlayObject)(this)).protectedPowerPointChanged();
             //                SendUpdateMsg(this, Messages.RM_USERNAME, 0, 0, 0, 0, GetShowName());
             //            }
             //            HealthSpellChanged();
@@ -2782,14 +2782,14 @@ namespace GameSrv.Actor
             //for (int i = 0; i < M2Share.StartPointList.Count; i++)
             //{
             //    var StartPointInfo = M2Share.StartPointList[i];
-            //    if (StartPointInfo.m_sMapName == m_PEnvir.sMapName)
+            //    if (StartPointInfo.MapName == m_PEnvir.sMapName)
             //    {
             //        m_CurSafeZoneList.Add(StartPointInfo);
             //    }
             //}
-            //if ((m_btRaceServer == ActorRace.Play) && !((TPlayObject)(this)).m_boOffLineFlag)
+            //if ((m_btRaceServer == ActorRace.Play) && !((PlayObject)(this)).m_boOffLineFlag)
             //{
-            //   ((TPlayObject)(this)).CheckMapEvent(5, "");
+            //   ((PlayObject)(this)).CheckMapEvent(5, "");
             //}
         }
 

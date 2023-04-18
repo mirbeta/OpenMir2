@@ -474,7 +474,7 @@ namespace SystemModule
 
         public static bool IsStringNumber(string str)
         {
-            return string.IsNullOrEmpty(str) || ValidationNumber().IsMatch(str);
+            return !string.IsNullOrEmpty(str) || ValidationNumber().IsMatch(str);
         }
 
         /// <summary>

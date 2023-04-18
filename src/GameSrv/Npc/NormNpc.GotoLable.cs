@@ -374,6 +374,13 @@ namespace GameSrv.Npc
             for (int i = 0; i < conditionList.Count; i++)
             {
                 var questConditionInfo = conditionList[i];
+                if (ConditionScript.IsRegister(questConditionInfo.CmdCode))
+                {
+                    ConditionScript.Execute(playObject, questConditionInfo, ref result);
+                    return result;
+                } 
+                M2Share.Logger.Info($"[QuestCheckCondition] 未处理命令:[{questConditionInfo.CmdCode}]");
+
                 if (!string.IsNullOrEmpty(questConditionInfo.sParam1))
                 {
                     if (questConditionInfo.sParam1[0] == '$')
@@ -475,7 +482,7 @@ namespace GameSrv.Npc
                         playObject = human;
                         if (!string.IsNullOrEmpty(questConditionInfo.sOpHName) && string.Compare(questConditionInfo.sOpHName, "H", StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            //todo 英雄
+                            
                         }
                     }
                 }
@@ -2195,8 +2202,8 @@ namespace GameSrv.Npc
                         ActionOfSetMemberLevel(playObject, questActionInfo);
                         break;
                     case ScriptConst.nSC_GAMEGOLD:
-                        // nSC_SETMEMBERTYPE:   PlayObject.m_nMemberType:=Str_ToInt(QuestActionInfo.sParam1,0);
-                        // nSC_SETMEMBERLEVEL:  PlayObject.m_nMemberType:=Str_ToInt(QuestActionInfo.sParam1,0);
+                        // nSC_SETMEMBERTYPE:   PlayObject.m_nMemberType:=StrToInt(QuestActionInfo.sParam1,0);
+                        // nSC_SETMEMBERLEVEL:  PlayObject.m_nMemberType:=StrToInt(QuestActionInfo.sParam1,0);
                         ActionOfGameGold(playObject, questActionInfo);
                         break;
                     case ScriptConst.nSC_GAMEPOINT:

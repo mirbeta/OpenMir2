@@ -14,6 +14,8 @@ namespace GameSrv.Castle {
             _castleList = new List<UserCastle>();
         }
 
+        public IList<UserCastle> CastleList => _castleList;
+
         public UserCastle Find(string sCastleName) {
             for (int i = 0; i < _castleList.Count; i++) {
                 if (string.Compare(_castleList[i].sName, sCastleName, StringComparison.OrdinalIgnoreCase) == 0) {

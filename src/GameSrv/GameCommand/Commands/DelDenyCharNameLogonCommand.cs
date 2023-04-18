@@ -24,7 +24,7 @@ namespace GameSrv.GameCommand.Commands {
                     //    //    M2Share.SaveDenyChrNameList();
                     //    //}
                     //    M2Share.g_DenyChrNameList.RemoveAt(i);
-                    //    PlayObject.SysMsg(sChrName + "已从禁止登录人物列表中删除。", TMsgColor.c_Green, TMsgType.t_Hint);
+                    //    PlayObject.SysMsg(sChrName + "已从禁止登录人物列表中删除。", MsgColor.c_Green, MsgType.t_Hint);
                     //    boDelete = true;
                     //    break;
                     //}

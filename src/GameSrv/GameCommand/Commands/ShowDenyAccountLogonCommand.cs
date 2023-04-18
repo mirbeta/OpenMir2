@@ -15,7 +15,7 @@ namespace GameSrv.GameCommand.Commands {
                     return;
                 }
                 for (var i = 0; i < M2Share.DenyAccountList.Count; i++) {
-                    //PlayObject.SysMsg(Settings.g_DenyAccountList[i], TMsgColor.c_Green, TMsgType.t_Hint);
+                    //PlayObject.SysMsg(Settings.g_DenyAccountList[i], MsgColor.c_Green, MsgType.t_Hint);
                 }
             }
             finally {

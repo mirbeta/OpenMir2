@@ -976,7 +976,7 @@ namespace GameSrv.DataSource {
             //                    }
             //                    else
             //                    {
-            //                        if (((TUserItem)(List[0])).wIndex == UserItem.wIndex)
+            //                        if (((TUserItem)(List[0])).wIndex == UserItem.Index)
             //                        {
             //                            List.Add(UserItem);
             //                        }

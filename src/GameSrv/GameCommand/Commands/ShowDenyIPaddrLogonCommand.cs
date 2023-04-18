@@ -14,7 +14,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 if (nCount > 0) {
                     for (var i = 0; i < M2Share.DenyIPAddrList.Count; i++) {
-                        //PlayObject.SysMsg(Settings.g_DenyIPAddrList[i], TMsgColor.c_Green, TMsgType.t_Hint);
+                        //PlayObject.SysMsg(Settings.g_DenyIPAddrList[i], MsgColor.c_Green, MsgType.t_Hint);
                     }
                 }
             }

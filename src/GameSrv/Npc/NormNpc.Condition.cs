@@ -1393,7 +1393,7 @@ namespace GameSrv.Npc {
                         s18 = HUtil32.GetValidStr3(s18, ref Petname, HUtil32.Backslash);
                         s18 = HUtil32.GetValidStr3(s18, ref lvl, HUtil32.Backslash);
                         s18 = HUtil32.GetValidStr3(s18, ref lvlexp, HUtil32.Backslash);
-                        // PlayObject.ReviveSlave(PetName,str_ToInt(lvl,0),str_ToInt(lvlexp,0),nslavecount,10 * 24 * 60 * 60);
+                        // PlayObject.ReviveSlave(PetName,StrToInt(lvl,0),StrToInt(lvlexp,0),nslavecount,10 * 24 * 60 * 60);
                     }
                 }
                 if (LoadList.Count > 0) {
@@ -2193,13 +2193,13 @@ namespace GameSrv.Npc {
             }
             switch (GotoLable_CheckVarNameNo_GetDataType(CheckQuestConditionInfo)) {
                 case 0:
-                    if (GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject, sParam1, sParam2, ref n140) && GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam3, ref n180)) {
+                    if (GotoLable_CheckVarNameNo_GeDynamicVarValue(PlayObject, sParam1, sParam2, ref n140) && GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam3, ref n180)) {
                         result = true;
                     }
                     break;
                 case 1:
                     n180 = CheckQuestConditionInfo.nParam3;
-                    if (GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject, sParam1, sParam2, ref n140)) {
+                    if (GotoLable_CheckVarNameNo_GeDynamicVarValue(PlayObject, sParam1, sParam2, ref n140)) {
                         result = true;
                     }
                     break;
@@ -2209,7 +2209,7 @@ namespace GameSrv.Npc {
                     }
                     break;
                 case 3:
-                    if (GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam1, ref n140) && GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject, sParam2, sParam3, ref n180)) {
+                    if (GotoLable_CheckVarNameNo_GetValValue(PlayObject, sParam1, ref n140) && GotoLable_CheckVarNameNo_GeDynamicVarValue(PlayObject, sParam2, sParam3, ref n180)) {
                         result = true;
                     }
                     break;
@@ -2272,7 +2272,7 @@ namespace GameSrv.Npc {
             return result;
         }
 
-        private static bool GotoLable_CheckVarNameNo_GetDynamicVarValue(PlayObject PlayObject, string sVarType, string sValName, ref int nValue) {
+        private static bool GotoLable_CheckVarNameNo_GeDynamicVarValue(PlayObject PlayObject, string sVarType, string sValName, ref int nValue) {
             bool result = false;
             string sName = string.Empty;
             Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);

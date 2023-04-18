@@ -824,7 +824,7 @@ namespace GameSrv.Player {
             if (Permission < 10) {
                 return;
             }
-            //this.SysMsg((HUtil32.CalcFileCRC(Application.ExeName)).ToString(), TMsgColor.c_Red, TMsgType.t_Hint);
+            //this.SysMsg((HUtil32.CalcFileCRC(Application.ExeName)).ToString(), MsgColor.c_Red, MsgType.t_Hint);
         }
 
         // 检查角色的座标是否在指定误差范围以内
@@ -1276,7 +1276,7 @@ namespace GameSrv.Player {
                 }
             }
             catch (Exception e) {
-                M2Share.Logger.Error(Format("[Exception] TPlayObject.DoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, targetX, targetY));
+                M2Share.Logger.Error(Format("[Exception] PlayObject.DoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, targetX, targetY));
                 M2Share.Logger.Error(e.Message);
             }
             return result;
@@ -2590,7 +2590,7 @@ namespace GameSrv.Player {
             return sMyInfo;
         }
 
-        private bool CheckItemBindUse(UserItem userItem) {
+        internal bool CheckItemBindUse(UserItem userItem) {
             ItemBind itemBind;
             bool result = true;
             for (int i = 0; i < M2Share.ItemBindAccount.Count; i++) {
@@ -2887,7 +2887,7 @@ namespace GameSrv.Player {
                                 StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
                                 if (stdItem != null) {
                                     if (stdItem.NeedIdentify == 1) {
-                                        // M2Share.ItemEventSource.AddGameLog('10' + #9 + m_sMapName + #9 +inttostr(m_nCurrX) + #9 + inttostr(m_nCurrY) + #9 +m_sChrName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sChrName);
+                                        // M2Share.ItemEventSource.AddGameLog('10' + #9 + MapName + #9 +inttostr(CurrX) + #9 + inttostr(CurrY) + #9 +m_sChrName + #9 + StdItem.Name + #9 +inttostr(UserItem.MakeIndex) + #9 + '1' + #9 + m_sChrName);
                                         SendDelItems(userItem);
                                         ItemList.RemoveAt(i);
                                         DlgItemIndex = 0;

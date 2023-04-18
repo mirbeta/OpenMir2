@@ -566,6 +566,14 @@ namespace GameSrv.Player
         /// E 0-20 个人服务器字符串变量，不可保存，不可操作
         /// </summary>
         public int[] MServerIntVal;
+        public Dictionary<string, int> m_IntegerList = null;
+        public Dictionary<string, string> m_StringList = null;
+        public string ScatterItemName = String.Empty;
+        public string ScatterItemOwnerName = String.Empty;
+        public int ScatterItemX = 0;
+        public int ScatterItemY = 0;
+        public string ScatterItemMapName = String.Empty;
+        public string ScatterItemMapDesc = String.Empty;
         /// <summary>
         /// 技能表
         /// </summary>
@@ -4160,7 +4168,7 @@ namespace GameSrv.Player
             userItem.Desc[ItemAttr.WeaponUpgrade] = 0;
         }
 
-        private UserMagic GetMagicInfo(int nMagicId)
+        internal UserMagic GetMagicInfo(int nMagicId)
         {
             for (int i = 0; i < MagicList.Count; i++)
             {
@@ -4171,6 +4179,21 @@ namespace GameSrv.Player
                 }
             }
             return null;
+        }
+        
+        public UserMagic GetMagicInfo(string sMagicName)
+        {
+            UserMagic result = null;
+            for (int i = 0; i < this.MagicList.Count; i++)
+            {
+                var userMagic = this.MagicList[i];
+                if (string.Compare(userMagic.Magic.MagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    result = userMagic;
+                    break;
+                }
+            }
+            return result;
         }
 
         private bool IsProperIsFriend(BaseObject cret)

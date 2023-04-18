@@ -19,12 +19,12 @@ namespace GameSrv.GameCommand.Commands {
                     //foreach (var item in Settings.g_DenySayMsgList)
                     //{
                     //    PlayObject.SysMsg(Settings.g_DenySayMsgList[item.Key] + ' ' + (((Settings.g_DenySayMsgList[item.Key]) - HUtil32.GetTickCount()) / 60000).ToString()
-                    //        , TMsgColor.c_Green, TMsgType.t_Hint);
+                    //        , MsgColor.c_Green, MsgType.t_Hint);
                     //}
 
                     //for (int i = 0; i < Settings.g_DenySayMsgList.Count; i++)
                     //{
-                    //this.SysMsg(Settings.g_DenySayMsgList[i] + ' ' + ((((uint)Settings.g_DenySayMsgList[i]) - HUtil32.GetTickCount()) / 60000).ToString(), TMsgColor.c_Green, TMsgType.t_Hint);
+                    //this.SysMsg(Settings.g_DenySayMsgList[i] + ' ' + ((((uint)Settings.g_DenySayMsgList[i]) - HUtil32.GetTickCount()) / 60000).ToString(), MsgColor.c_Green, MsgType.t_Hint);
                     //}
                 }
             }

@@ -17,7 +17,7 @@ namespace GameSrv.GameCommand.Commands {
 
             //if ((!(nType >= Grobal2.ushort.GetLowerBound(0) && nType<= Grobal2.ushort..Length)) || (nTime < 0))
             //{
-            //    this.SysMsg("命令格式: @" + sCmd + " 类型(0..11) 时长", TMsgColor.c_Red, TMsgType.t_Hint);
+            //    this.SysMsg("命令格式: @" + sCmd + " 类型(0..11) 时长", MsgColor.c_Red, MsgType.t_Hint);
             //    return;
             //}
             playObject.StatusTimeArr[nType] = (ushort)(nTime * 1000);

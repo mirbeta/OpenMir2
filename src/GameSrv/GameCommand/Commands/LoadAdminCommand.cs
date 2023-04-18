@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             //LocalDB.GetInstance().LoadAdminList();
-            // UserEngine.SendServerGroupMsg(213, nServerIndex, '');
+            // WorldEngine.SendServerGroupMsg(213, nServerIndex, '');
             playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }
