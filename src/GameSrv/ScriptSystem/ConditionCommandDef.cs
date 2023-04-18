@@ -1,6 +1,6 @@
 ﻿namespace GameSrv
 {
-    public class CheckScriptDef
+    public class ConditionCommandDef
     {
         public const string sCHECK = "CHECK";
         public const int nCHECK = 1;
@@ -137,7 +137,6 @@
 
         // 是否为攻城方联盟行会
         public const int nSC_ISATTACKALLYGUILD = 73;
-
         public const string sSC_ISDEFENSEALLYGUILD = "ISDEFENSEALLYGUILD";
 
         // 是否为守城方联盟行会
