@@ -1,128 +1,126 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using GameSrv.Actor;
+﻿using GameSrv.Actor;
 using GameSrv.GameCommand;
 using GameSrv.Player;
 using GameSrv.Script;
+using GameSrv.ScriptSystem;
 using SystemModule.Enums;
 
 namespace GameSrv
 {
     /// <summary>
-    /// 全局变量脚本处理
+    /// 全局变量脚本处理模块
     /// </summary>
-    public class GrobalVarScript
+    public class GrobalVarProcessingSys
     {
         /// <summary>
         /// 全局变量消息处理列表
         /// </summary>
-        private static Dictionary<int, TProcessGrobalMessage> ProcessGrobalMessage;
+        private static Dictionary<int, HandleGrobalMessage> ProcessGrobalMessage;
 
-        private delegate void TProcessGrobalMessage(PlayObject PlayObject, string sVariable, ref string sMsg);
+        private delegate void HandleGrobalMessage(PlayObject PlayObject, string sVariable, ref string sMsg);
 
         /// <summary>
         /// 初始化全局变量脚本处理列表
         /// </summary>
-        public GrobalVarScript()
+        public GrobalVarProcessingSys()
         {
-            ProcessGrobalMessage = new Dictionary<int, TProcessGrobalMessage>();
-            ProcessGrobalMessage[ScriptConst.nVAR_SERVERNAME] = GetServerName;
-            ProcessGrobalMessage[ScriptConst.nVAR_SERVERIP] = GetServerIp;
-            ProcessGrobalMessage[ScriptConst.nVAR_WEBSITE] = GetWebSite;
-            ProcessGrobalMessage[ScriptConst.nVAR_BBSSITE] = GetBbsWeiSite;
-            ProcessGrobalMessage[ScriptConst.nVAR_CLIENTDOWNLOAD] = GetCilentDownLoad;
-            ProcessGrobalMessage[ScriptConst.nVAR_QQ] = GetQQ;
-            ProcessGrobalMessage[ScriptConst.nVAR_PHONE] = GetPhone;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT0] = GetBankAccount0;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT1] = GetBankAccount1;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT2] = GetBankAccount2;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT3] = GetBankAccount3;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT4] = GetBankAccount4;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT5] = GetBankAccount5;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT6] = GetBankAccount6;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT7] = GetBankAccount7;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT8] = GetBankAccount8;
-            ProcessGrobalMessage[ScriptConst.nVAR_BANKACCOUNT9] = GetBankAccount9;
-            ProcessGrobalMessage[ScriptConst.nVAR_GAMEGOLDNAME] = GetGameGoldName;
-            ProcessGrobalMessage[ScriptConst.nVAR_GAMEPOINTNAME] = GetPointName;
-            ProcessGrobalMessage[ScriptConst.nVAR_USERCOUNT] = GetUserCount;
-            ProcessGrobalMessage[ScriptConst.nVAR_DATETIME] = GetDateTime;
-            ProcessGrobalMessage[ScriptConst.nVAR_USERNAME] = GetUserName;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAPNAME] = GetMapName;
-            ProcessGrobalMessage[ScriptConst.nVAR_GUILDNAME] = GetGuilidName;
-            ProcessGrobalMessage[ScriptConst.nVAR_RANKNAME] = GetGuilidRankName;
-            ProcessGrobalMessage[ScriptConst.nVAR_LEVEL] = GetLevel;
-            ProcessGrobalMessage[ScriptConst.nVAR_HP] = GetHP;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXHP] = GetMaxHP;
-            ProcessGrobalMessage[ScriptConst.nVAR_MP] = GetMP;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXMP] = GetMaxHP;
-            ProcessGrobalMessage[ScriptConst.nVAR_AC] = GetAc;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXAC] = GetMaxAc;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAC] = GetMac;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXMAC] = GetMaxMac;
-            ProcessGrobalMessage[ScriptConst.nVAR_DC] = GetDC;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXDC] = GetMaxDC;
-            ProcessGrobalMessage[ScriptConst.nVAR_MC] = GetMc;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXMC] = GetMaxMc;
-            ProcessGrobalMessage[ScriptConst.nVAR_SC] = GetSc;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXSC] = GetMaxSc;
-            ProcessGrobalMessage[ScriptConst.nVAR_EXP] = GetExp;
-            ProcessGrobalMessage[ScriptConst.nVAR_MAXEXP] = GetMaxExp;
-            ProcessGrobalMessage[ScriptConst.nVAR_PKPOINT] = GetPkPoint;
-            ProcessGrobalMessage[ScriptConst.nVAR_CREDITPOINT] = GetCreditPoint;
-            ProcessGrobalMessage[ScriptConst.nVAR_GOLDCOUNT] = GetGoldCount;
-            ProcessGrobalMessage[ScriptConst.nVAR_GAMEGOLD] = GetGameGold;
-            ProcessGrobalMessage[ScriptConst.nVAR_GAMEPOINT] = GetGamePoint;
-            ProcessGrobalMessage[ScriptConst.nVAR_LOGINTIME] = GetLoginTime;
-            ProcessGrobalMessage[ScriptConst.nVAR_LOGINLONG] = GetLoginTime;
-            ProcessGrobalMessage[ScriptConst.nVAR_DRESS] = GetDress;
-            ProcessGrobalMessage[ScriptConst.nVAR_WEAPON] = GetWeapon;
-            ProcessGrobalMessage[ScriptConst.nVAR_RIGHTHAND] = GetRightHand;
-            ProcessGrobalMessage[ScriptConst.nVAR_HELMET] = GetHelmet;
-            ProcessGrobalMessage[ScriptConst.nVAR_NECKLACE] = GetNecklace;
-            ProcessGrobalMessage[ScriptConst.nVAR_RING_R] = GetRing_R;
-            ProcessGrobalMessage[ScriptConst.nVAR_RING_L] = GetRing_L;
-            ProcessGrobalMessage[ScriptConst.nVAR_ARMRING_R] = GetArmring_R;
-            ProcessGrobalMessage[ScriptConst.nVAR_ARMRING_L] = GetArmring_L;
-            ProcessGrobalMessage[ScriptConst.nVAR_BUJUK] = GetBujuk;
-            ProcessGrobalMessage[ScriptConst.nVAR_BELT] = GetBelt;
-            ProcessGrobalMessage[ScriptConst.nVAR_BOOTS] = GetBoots;
-            ProcessGrobalMessage[ScriptConst.nVAR_CHARM] = GetChrm;
-            ProcessGrobalMessage[ScriptConst.nVAR_IPADDR] = GetIpAddr;
-            ProcessGrobalMessage[ScriptConst.nVAR_IPLOCAL] = GetIpLocal;
-            ProcessGrobalMessage[ScriptConst.nVAR_GUILDBUILDPOINT] = GeTGuildBuildPoint;
-            ProcessGrobalMessage[ScriptConst.nVAR_GUILDAURAEPOINT] = GeTGuildAuraePoint;
-            ProcessGrobalMessage[ScriptConst.nVAR_GUILDSTABILITYPOINT] = GeTGuildStabilityPoint;
-            ProcessGrobalMessage[ScriptConst.nVAR_GUILDFLOURISHPOINT] = GeTGuildFlourishPoint;
-            ProcessGrobalMessage[ScriptConst.nVAR_REQUESTCASTLEWARITEM] = GetRequestCastlewarItem;
-            ProcessGrobalMessage[ScriptConst.nVAR_REQUESTCASTLEWARDAY] = GetRequestCastleWarday;
-            ProcessGrobalMessage[ScriptConst.nVAR_REQUESTBUILDGUILDITEM] = GetRequestBuildGuildItem;
-            ProcessGrobalMessage[ScriptConst.nVAR_OWNERGUILD] = GetOwnerGuild;
-            ProcessGrobalMessage[ScriptConst.nVAR_CASTLENAME] = GetCastleName;
-            ProcessGrobalMessage[ScriptConst.nVAR_LORD] = GetLord;
-            ProcessGrobalMessage[ScriptConst.nVAR_GUILDWARFEE] = GeTGuildWarfee;
-            ProcessGrobalMessage[ScriptConst.nVAR_BUILDGUILDFEE] = GetBuildGuildfee;
-            ProcessGrobalMessage[ScriptConst.nVAR_CASTLEWARDATE] = GetCastleWarDate;
-            ProcessGrobalMessage[ScriptConst.nVAR_LISTOFWAR] = GetListofWar;
-            ProcessGrobalMessage[ScriptConst.nVAR_CASTLECHANGEDATE] = GetCastleChangeDate;
-            ProcessGrobalMessage[ScriptConst.nVAR_CASTLEWARLASTDATE] = GetCastlewarLastDate;
-            ProcessGrobalMessage[ScriptConst.nVAR_CASTLEGETDAYS] = GetCastlegetDays;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_DATE] = GetCmdDate;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_ALLOWMSG] = GetCmdAllowmsg;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_LETSHOUT] = GetCmdletshout;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_LETTRADE] = GetCmdLettrade;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_LETGuild] = GetCmdLeTGuild;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_ENDGUILD] = GetCmdEndGuild;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_BANGUILDCHAT] = GetCmdBanGuildChat;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_AUTHALLY] = GetCmdAuthally;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_AUTH] = GetCmdAuth;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_AUTHCANCEL] = GetCmdAythCcancel;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_USERMOVE] = GetCmdUserMove;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_SEARCHING] = GetCmdSearching;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_ALLOWGROUPCALL] = GetCmdAllowGroupCall;
-            ProcessGrobalMessage[ScriptConst.nVAR_CMD_GROUPRECALLL] = GetCmdGroupCall;
-            ProcessGrobalMessage[ScriptConst.nVAR_STR] = GetGrobalVarStr;
+            ProcessGrobalMessage = new Dictionary<int, HandleGrobalMessage>();
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_SERVERNAME] = GetServerName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_SERVERIP] = GetServerIp;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_WEBSITE] = GetWebSite;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BBSSITE] = GetBbsWeiSite;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CLIENTDOWNLOAD] = GetCilentDownLoad;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_QQ] = GetQQ;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_PHONE] = GetPhone;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT0] = GetBankAccount0;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT1] = GetBankAccount1;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT2] = GetBankAccount2;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT3] = GetBankAccount3;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT4] = GetBankAccount4;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT5] = GetBankAccount5;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT6] = GetBankAccount6;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT7] = GetBankAccount7;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT8] = GetBankAccount8;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BANKACCOUNT9] = GetBankAccount9;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GAMEGOLDNAME] = GetGameGoldName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GAMEPOINTNAME] = GetPointName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_USERCOUNT] = GetUserCount;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_DATETIME] = GetDateTime;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_USERNAME] = GetUserName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAPNAME] = GetMapName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GUILDNAME] = GetGuilidName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_RANKNAME] = GetGuilidRankName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_LEVEL] = GetLevel;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_HP] = GetHP;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXHP] = GetMaxHP;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MP] = GetMP;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXMP] = GetMaxHP;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_AC] = GetAc;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXAC] = GetMaxAc;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAC] = GetMac;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXMAC] = GetMaxMac;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_DC] = GetDC;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXDC] = GetMaxDC;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MC] = GetMc;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXMC] = GetMaxMc;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_SC] = GetSc;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXSC] = GetMaxSc;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_EXP] = GetExp;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_MAXEXP] = GetMaxExp;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_PKPOINT] = GetPkPoint;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CREDITPOINT] = GetCreditPoint;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GOLDCOUNT] = GetGoldCount;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GAMEGOLD] = GetGameGold;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GAMEPOINT] = GetGamePoint;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_LOGINTIME] = GetLoginTime;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_LOGINLONG] = GetLoginTime;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_DRESS] = GetDress;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_WEAPON] = GetWeapon;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_RIGHTHAND] = GetRightHand;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_HELMET] = GetHelmet;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_NECKLACE] = GetNecklace;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_RING_R] = GetRing_R;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_RING_L] = GetRing_L;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_ARMRING_R] = GetArmring_R;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_ARMRING_L] = GetArmring_L;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BUJUK] = GetBujuk;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BELT] = GetBelt;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BOOTS] = GetBoots;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CHARM] = GetChrm;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_IPADDR] = GetIpAddr;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_IPLOCAL] = GetIpLocal;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GUILDBUILDPOINT] = GeTGuildBuildPoint;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GUILDAURAEPOINT] = GeTGuildAuraePoint;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GUILDSTABILITYPOINT] = GeTGuildStabilityPoint;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GUILDFLOURISHPOINT] = GeTGuildFlourishPoint;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_REQUESTCASTLEWARITEM] = GetRequestCastlewarItem;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_REQUESTCASTLEWARDAY] = GetRequestCastleWarday;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_REQUESTBUILDGUILDITEM] = GetRequestBuildGuildItem;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_OWNERGUILD] = GetOwnerGuild;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CASTLENAME] = GetCastleName;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_LORD] = GetLord;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_GUILDWARFEE] = GeTGuildWarfee;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_BUILDGUILDFEE] = GetBuildGuildfee;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CASTLEWARDATE] = GetCastleWarDate;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_LISTOFWAR] = GetListofWar;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CASTLECHANGEDATE] = GetCastleChangeDate;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CASTLEWARLASTDATE] = GetCastlewarLastDate;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CASTLEGETDAYS] = GetCastlegetDays;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_DATE] = GetCmdDate;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_ALLOWMSG] = GetCmdAllowmsg;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_LETSHOUT] = GetCmdletshout;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_LETTRADE] = GetCmdLettrade;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_LETGuild] = GetCmdLeTGuild;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_ENDGUILD] = GetCmdEndGuild;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_BANGUILDCHAT] = GetCmdBanGuildChat;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_AUTHALLY] = GetCmdAuthally;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_AUTH] = GetCmdAuth;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_AUTHCANCEL] = GetCmdAythCcancel;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_USERMOVE] = GetCmdUserMove;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_SEARCHING] = GetCmdSearching;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_ALLOWGROUPCALL] = GetCmdAllowGroupCall;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_CMD_GROUPRECALLL] = GetCmdGroupCall;
+            ProcessGrobalMessage[GrobalVarCodeDef.nVAR_STR] = GetGrobalVarStr;
         }
 
         /// <summary>

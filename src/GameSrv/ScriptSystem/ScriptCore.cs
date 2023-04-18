@@ -6,7 +6,7 @@ using SystemModule.Enums;
 
 namespace GameSrv
 {
-    internal class ScriptCore
+    internal class ProcessingBase
     {
         /// <summary>
         /// 取文本变量
@@ -434,7 +434,7 @@ namespace GameSrv
                 {
                     return;
                 }
-                GrobalVarScript.Handler(PlayObject, nIdx, sVariable, ref sMsg);
+                GrobalVarProcessingSys.Handler(PlayObject, nIdx, sVariable, ref sMsg);
                 return;
             }
             // 个人信息
@@ -765,9 +765,6 @@ namespace GameSrv
         /// <summary>
         /// 合并字符串
         /// </summary>
-        /// <param name="sMsg"></param>
-        /// <param name="variable"></param>
-        /// <param name="variableVal"></param>
         /// <returns></returns>
         public string CombineStr(string sMsg, string variable, object variableVal)
         {

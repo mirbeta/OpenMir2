@@ -71,7 +71,7 @@ namespace GameSrv.Npc {
             bool result = false;
             int nPoint = HUtil32.StrToInt(QuestConditionInfo.sParam2, -1);
             if (nPoint < 0) {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKFLOURISHPOINT);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ConditionCodeDef.sSC_CHECKFLOURISHPOINT);
                 return false;
             }
             if (PlayObject.MyGuild == null) {
@@ -110,7 +110,7 @@ namespace GameSrv.Npc {
             int nY = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
             int nRange = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((string.IsNullOrEmpty(sMapName)) || (nX < 0) || (nY < 0) || (nRange < 0)) {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKINMAPRANGE);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ConditionCodeDef.sSC_CHECKINMAPRANGE);
                 return false;
             }
             if (string.Compare(PlayObject.MapName, sMapName, StringComparison.OrdinalIgnoreCase) != 0) {

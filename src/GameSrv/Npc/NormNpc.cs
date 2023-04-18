@@ -18,7 +18,7 @@ namespace GameSrv.Npc {
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
         /// </summary>
         public short NpcFlag = 0;
-        private ConditionFunction ConditionScript;
+        private ConditionProcessingSys ConditionScript;
         public IList<ScriptInfo> m_ScriptList;
         public string FilePath;
         /// <summary>
@@ -44,7 +44,7 @@ namespace GameSrv.Npc {
             IsHide = false;
             IsQuest = true;
             CellType = CellType.Merchant;
-            ConditionScript = new ConditionFunction(m_sPath, ChrName, MapName, CurrX, CurrY);
+            ConditionScript = new ConditionProcessingSys(m_sPath, ChrName, MapName, CurrX, CurrY);
             ConditionScript.Initialize();
         }
 

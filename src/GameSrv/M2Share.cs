@@ -60,7 +60,7 @@ namespace GameSrv
         public static DBService DataServer = null;
         public static MarketService MarketService = null;
         public static ChatChannelService ChatChannel = null;
-        public static ScriptSystem ScriptSystem = null;
+        public static ScriptEngine ScriptSystem = null;
         public static ThreadSocketMgr SocketMgr = null;
         public static GameEventSource EventSource;
         public static MapManager MapMgr = null;

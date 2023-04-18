@@ -1,6 +1,9 @@
 ﻿namespace GameSrv
 {
-    public class ActionScriptDef
+    /// <summary>
+    /// 执行指令编码定义
+    /// </summary>
+    public class ExecutionCodeDef
     {
         public const string sSET = "SET";
         public const int nSET = 1;
@@ -498,11 +501,9 @@
         public const string sSTARTTAKEGOLD = "STARTTAKEGOLD";
         public const int nSTARTTAKEGOLD = 370;
 
-        // sDELAYGOTO = 'DELAYGOTO';
-        // nDELAYGOTO = 371;
         public const string sCLEARDELAYGOTO = "CLEARDELAYGOTO";
+        public const int nCLEARDELAYGOTO = 474;
 
-        public const int nCLEARDELAYGOTO = 372;
         public const string sCHANGERECOMMENDGAMEGOLD = "CHANGERECOMMENDGAMEGOLD";
         public const int nCHANGERECOMMENDGAMEGOLD = 373;
         public const string sSC_ADDUSERDATE = "ADDUSERDATE";
@@ -693,5 +694,100 @@
 
         public const string sSC_ACTMISSION = "ACTMISSION";
         public const int nSC_ACTMISSION = 1000;
+        
+        public const string sSC_GUILDRECALL = "GUILDRECALL";
+        public const int nSC_GUILDRECALL = 368;
+        public const string sSC_GROUPADDLIST = "GROUPADDLIST";
+        public const int nSC_GROUPADDLIST = 369;
+        public const string sSC_CLEARLIST = "CLEARLIST";
+        public const int nSC_CLEARLIST = 370;
+        public const string sSC_GROUPRECALL = "GROUPRECALL";
+        public const int nSC_GROUPRECALL = 371;
+        public const string sSC_GROUPMOVEMAP = "GROUPMOVEMAP";
+        public const int nSC_GROUPMOVEMAP = 372;
+        public const string sSC_SAVESLAVES = "SAVESLAVES";
+        public const int nSC_SAVESLAVES = 373;
+        // =========================================================
+        public const string sCHECKUSERDATE = "CHECKUSERDATE";
+        // 检查会员时间
+        public const int nCHECKUSERDATE = 375;
+        public const string sADDUSERDATE = "ADDUSERDATE";
+        // 加入会员人物及时间
+        public const int nADDUSERDATE = 376;
+        public const string sDELUSERDATE = "DELUSERDATE";
+        // 删除会员人物及时间
+        public const int nDELUSERDATE = 377;
+        public const string sSC_OffLine = "OFFLINE";
+        // 增加挂机
+        public const int nSC_OffLine = 379;
+        public const string sSC_REPAIRALL = "REPAIRALL";
+        // 特修身上所有装备
+        public const int nSC_REPAIRALL = 380;
+        public const string sSC_SETRANDOMNO = "SETRANDOMNO";
+        // 产生一个随机数字
+        public const int nSC_SETRANDOMNO = 381;
+        public const string sSC_QUERYBAGITEMS = "QUERYBAGITEMS";
+        // 刷新包裹物品命令
+        public const int nSC_QUERYBAGITEMS = 382;
+        public const string sSC_ISHIGH = "ISHIGH";
+        public const int nSC_ISHIGH = 383;
+        /// <summary>
+        /// 将指定物品刷新到指定地图坐标范围内
+        /// </summary>
+        public const string sTHROWITEM = "THROWITEM";
+        public const string sDROPITEMMAP = "DROPITEMMAP";
+        public const int nTHROWITEM = 384;
+        /// <summary>
+        /// 开通元宝交易
+        /// </summary>
+        public const string sOPENYBDEAL = "OPENYBDEAL";
+        /// <summary>
+        /// 查询正在出售的物品
+        /// </summary>        
+        public const int nOPENYBDEAL = 252;
+        public const string sQUERYYBSELL = "QUERYYBSELL";
+        /// <summary>
+        /// 查询可以的购买物品
+        /// </summary>        
+        public const int nQUERYYBSELL = 253;
+        public const string sQUERYYBDEAL = "QUERYYBDEAL";
+        public const int nQUERYYBDEAL = 254;
+        /// <summary>
+        /// 延时跳转
+        /// </summary>
+        public const string sDELAYGOTO = "DELAYGOTO";
+        public const string sDELAYCALL = "DELAYCALL";
+        public const int nDELAYGOTO = 255;
+        /// <summary>
+        /// 获取客户端输入值
+        /// </summary>
+        public const string sSC_QUERYVALUE = "QUERYVALUE";
+        public const int nSC_QUERYVALUE = 258;
+        /// <summary>
+        /// 杀死所有宠物
+        /// </summary>
+        public const string sSC_KILLSLAVENAME = "KILLSLAVENAME";
+        public const int nSC_KILLSLAVENAME = 259;
+        /// <summary>
+        /// 查询物品信息
+        /// </summary>
+        public const string sSC_QUERYITEMDLG = "QUERYITEMDLG";
+        public const int nSC_QUERYITEMDLG = 261;
+        /// <summary>
+        /// 升级对话框中的物品
+        /// </summary>
+        public const string sSC_UPGRADEDLGITEM = "UPGRADEDLGITEM";
+        public const int nSC_UPGRADEDLGITEM = 262;
+        /// <summary>
+        /// 获取装备指定属性到变量中
+        /// </summary>
+        public const string sSC_GETDLGITEMVALUE = "GETDLGITEMVALUE";
+        public const int nSC_GETDLGITEMVALUE = 263;
+        /// <summary>
+        /// 回收对话框中的物品
+        /// </summary>
+        public const string sSC_TAKEDLGITEM = "TAKEDLGITEM";
+        public const int nSC_TAKEDLGITEM = 264;
+
     }
 }

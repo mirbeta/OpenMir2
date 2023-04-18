@@ -1,6 +1,9 @@
 ﻿namespace GameSrv
 {
-    public class ConditionCommandDef
+    /// <summary>
+    /// 条件检测编码定义
+    /// </summary>
+    public class ConditionCodeDef
     {
         public const string sCHECK = "CHECK";
         public const int nCHECK = 1;
@@ -428,5 +431,53 @@
         public const int nSC_CHECKGROUPCLASS = 259;
         public const string sSC_ISHIGH = "ISHIGH";
         public const int nSC_ISHIGH = 260;
+        // ==================================================================
+        public const string sCheckDiemon = "CHECKDIEMON";
+        // 检查人物死亡被指定怪物杀死
+        public const int nCheckDiemon = 209;
+        public const string scheckkillplaymon = "CHECKKILLPLAYMON";
+        // 检查杀死怪物
+        public const int ncheckkillplaymon = 210;
+        public const string sSC_CHECKRANDOMNO = "CHECKRANDOMNO";
+        // 检测输入的验证码是否正确
+        public const int nSC_CHECKRANDOMNO = 212;
+        public const string sSC_KILLBYHUM = "KILLBYHUM";
+        // 是否被人杀
+        public const int nSC_KILLBYHUM = 214;
+        public const string sSC_KILLBYMON = "KILLBYMON";
+        // 是否被怪杀
+        public const int nSC_KILLBYMON = 215;
+        /// <summary>
+        /// 检测人物是否在安全区
+        /// </summary>
+        public const string sSC_CHECKINSAFEZONE = "INSAFEZONE";
+        public const int nSC_CHECKINSAFEZONE = 216;
+        /// <summary>
+        /// 检查放入装备指定的属性点
+        /// </summary>
+        public const string sSC_CHECKDLGITEMADDVALUE = "CHECKDLGITEMADDVALUE";
+        public const int nSC_CHECKDLGITEMADDVALUE = 218;
+        /// <summary>
+        /// 检查放入装备的类型
+        /// </summary>
+        public const string sSC_CHECKDLGITEMTYPE = "CHECKDLGITEMTYPE";
+        public const int nSC_CHECKDLGITEMTYPE = 219;
+        /// <summary>
+        /// 检查放入装备名称特征字符
+        /// </summary>
+        public const string sSC_CHECKDLGITEMNAME = "CHECKDLGITEMNAME";
+        public const int nSC_CHECKDLGITEMNAME = 220;
+
+        /// <summary>
+        /// 检查已杀死怪物
+        /// </summary>
+        public const string sSCHECKDEATHPLAYMON = "CHECKDEATHPLAYMON";
+        /// <summary>
+        /// 检查已杀死怪物
+        /// </summary>
+        public const string sSCHECKKILLMOBNAME = "CHECKKILLMONNAME";
+        public const int nSCHECKDEATHPLAYMON = 257;
+        public const string sSC_CHECKMAP = "CHECKMAP";
+        public const int nSC_CHECKMAP = 258;
     }
 }

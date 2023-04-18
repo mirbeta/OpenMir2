@@ -14,7 +14,10 @@ using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv
 {
-    internal class ConditionFunction : ScriptCore
+    /// <summary>
+    /// 脚本命令检查处理模块
+    /// </summary>
+    internal class ConditionProcessingSys : ProcessingBase
     {
         private delegate void ScriptCondition(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success);
         /// <summary>
@@ -28,7 +31,7 @@ namespace GameSrv
         private short X;
         private short Y;
 
-        public ConditionFunction(string sPath, string chrName, string sMapName, short nX, short nY)
+        public ConditionProcessingSys(string sPath, string chrName, string sMapName, short nX, short nY)
         {
             Path = sPath;
             _chrName = chrName;
@@ -53,117 +56,117 @@ namespace GameSrv
         public void Initialize()
         {
             _conditionMap = new Dictionary<int, ScriptCondition>();
-            _conditionMap[ConditionCommandDef.nCHECK] = ConditionOfCheck;
-            _conditionMap[ConditionCommandDef.nRANDOM] = ConditionOfRandom;
-            _conditionMap[ConditionCommandDef.nGENDER] = ConditionOfGender;
-            _conditionMap[ConditionCommandDef.nDAYTIME] = ConditionOfDayTime;
-            _conditionMap[ConditionCommandDef.nCHECKOPEN] = ConditionOfCheckOpen;
-            _conditionMap[ConditionCommandDef.nCHECKUNIT] = ConditionCheckUnit;
-            _conditionMap[ConditionCommandDef.nCHECKLEVEL] = ConditionOfCheckLevel;
-            _conditionMap[ConditionCommandDef.nCHECKJOB] = ConditionOfCheckJob;
-            _conditionMap[ConditionCommandDef.nCHECKITEM] = ConditionOfCheckItem;
-            _conditionMap[ConditionCommandDef.nCHECKGOLD] = ConditionOfCheckGold;
-            _conditionMap[ConditionCommandDef.nCHECKDURA] = ConditionOfCheckDura;
-            _conditionMap[ConditionCommandDef.nDAYOFWEEK] = ConditionOfDayOfWeek;
-            _conditionMap[ConditionCommandDef.nHOUR] = ConditionOfHour;
-            _conditionMap[ConditionCommandDef.nMIN] = ConditionOfMin;
-            _conditionMap[ConditionCommandDef.nCHECKPKPOINT] = ConditionOfCheckPkPoint;
-            _conditionMap[ConditionCommandDef.nCHECKMONMAP] = ConditionOfCheckMonMapCount;
-            _conditionMap[ConditionCommandDef.nCHECKHUM] = ConditionOfCheckHum;
-            _conditionMap[ConditionCommandDef.nCHECKBAGGAGE] = ConditionOfCheckBagGage;
-            _conditionMap[ConditionCommandDef.nCHECKNAMELIST] = ConditionOfCheckNameList;
-            _conditionMap[ConditionCommandDef.nCHECKACCOUNTLIST] = ConditionOfCheckAccountList;
-            _conditionMap[ConditionCommandDef.nCHECKIPLIST] = ConditionOfCheckIpList;
-            _conditionMap[ConditionCommandDef.nEQUAL] = ConditionOfEqual;
-            _conditionMap[ConditionCommandDef.nLARGE] = ConditionOfLapge;
-            _conditionMap[ConditionCommandDef.nSMALL] = ConditionOfSmall;
-            _conditionMap[ConditionCommandDef.nSC_ISSYSOP] = ConditionOfIssysop;
-            _conditionMap[ConditionCommandDef.nSC_ISADMIN] = ConditionOfIsAdmin;
-            _conditionMap[ConditionCommandDef.nSC_CHECKGROUPCOUNT] = ConditionOfCheckGroupCount;
-            _conditionMap[ConditionCommandDef.nSC_CHECKPOS] = ConditionOfCheckPos;
-            _conditionMap[ConditionCommandDef.nSC_CHECKPOSEDIR] = ConditionOfCheckPoseDir;
-            _conditionMap[ConditionCommandDef.nSC_CHECKPOSELEVEL] = ConditionOfCheckPoseLevel;
-            _conditionMap[ConditionCommandDef.nSC_CHECKPOSEGENDER] = ConditionOfCheckPoseGender;
-            _conditionMap[ConditionCommandDef.nSC_CHECKLEVELEX] = ConditionOfCheckLevelEx;
-            _conditionMap[ConditionCommandDef.nSC_CHECKBONUSPOINT] = ConditionOfCheckBonusPoint;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMARRY] = ConditionOfCheckMarry;
-            _conditionMap[ConditionCommandDef.nSC_CHECKPOSEMARRY] = ConditionOfCheckPoseMarry;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMARRYCOUNT] = ConditionOfCheckMarryCount;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMASTER] = ConditionOfCheckMaster;
-            _conditionMap[ConditionCommandDef.nSC_HAVEMASTER] = ConditionOfHaveMaster;
-            _conditionMap[ConditionCommandDef.nSC_CHECKPOSEMASTER] = ConditionOfCheckPoseMaster;
-            _conditionMap[ConditionCommandDef.nSC_POSEHAVEMASTER] = ConditionOfPoseHaveMaster;
-            _conditionMap[ConditionCommandDef.nSC_CHECKISMASTER] = ConditionOfCheckIsMaster;
-            _conditionMap[ConditionCommandDef.nSC_HASGUILD] = ConditionOfCheckHaveGuild;
-            _conditionMap[ConditionCommandDef.nSC_ISGUILDMASTER] = ConditionOfCheckIsGuildMaster;
-            _conditionMap[ConditionCommandDef.nSC_CHECKCASTLEMASTER] = ConditionOfCheckIsCastleMaster;
-            _conditionMap[ConditionCommandDef.nSC_ISCASTLEGUILD] = ConditionOfCheckIsCastleaGuild;
-            _conditionMap[ConditionCommandDef.nSC_ISATTACKGUILD] = ConditionOfCheckIsAttackGuild;
-            _conditionMap[ConditionCommandDef.nSC_ISDEFENSEGUILD] = ConditionOfCheckIsDefenseGuild;
-            _conditionMap[ConditionCommandDef.nSC_CHECKCASTLEDOOR] = ConditionOfCheckCastleDoorStatus;
-            _conditionMap[ConditionCommandDef.nSC_ISDEFENSEALLYGUILD] = ConditionOfCheckIsDefenseAllyGuild;
-            _conditionMap[ConditionCommandDef.nSC_CHECKPOSEISMASTER] = ConditionOfCheckPoseIsMaster;
-            _conditionMap[ConditionCommandDef.nSC_CHECKNAMEIPLIST] = ConditionOfCheckNameIpList;
-            _conditionMap[ConditionCommandDef.nSC_CHECKACCOUNTIPLIST] = ConditionOfCheckAccountIpList;
-            _conditionMap[ConditionCommandDef.nSC_CHECKSLAVECOUNT] = ConditionOfCheckSlaveCount;
-            _conditionMap[ConditionCommandDef.nSC_ISNEWHUMAN] = ConditionOfIsNewHuman;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMEMBERTYPE] = ConditionOfCheckMemberType;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMEMBERLEVEL] = ConditionOfCheckMemBerLevel;
-            _conditionMap[ConditionCommandDef.nSC_CHECKGAMEPOINT] = ConditionOfCheckGamePoint;
-            _conditionMap[ConditionCommandDef.nSC_CHECKNAMELISTPOSITION] = ConditionOfCheckNameListPostion;
-            _conditionMap[ConditionCommandDef.nSC_CHECKGUILDLIST] = ConditionOfCheckGuildList;
-            _conditionMap[ConditionCommandDef.nSC_CHECKRENEWLEVEL] = ConditionOfCheckReNewLevel;
-            _conditionMap[ConditionCommandDef.nSC_CHECKSLAVELEVEL] = ConditionOfCheckSlaveLevel;
-            _conditionMap[ConditionCommandDef.nSC_CHECKSLAVENAME] = ConditionOfCheckSlaveName;
-            _conditionMap[ConditionCommandDef.nSC_CHECKCREDITPOINT] = ConditionOfCheckCreditPoint;
-            _conditionMap[ConditionCommandDef.nSC_CHECKOFGUILD] = ConditionOfCheckOfGuild;
-            _conditionMap[ConditionCommandDef.nSC_CHECKUSEITEM] = ConditionOfCheckUseItem;
-            _conditionMap[ConditionCommandDef.nSC_CHECKBAGSIZE] = ConditionOfCheckBagSize;
-            _conditionMap[ConditionCommandDef.nSC_CHECKDC] = ConditionOfCheckDc;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMC] = ConditionOfCheckMC;
-            _conditionMap[ConditionCommandDef.nSC_CHECKSC] = ConditionOfCheckSc;
-            _conditionMap[ConditionCommandDef.nSC_CHECKHP] = ConditionOfCheckHp;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMP] = ConditionOfCheckMp;
-            _conditionMap[ConditionCommandDef.nSC_CHECKITEMTYPE] = ConditionOfCheckItemType;
-            _conditionMap[ConditionCommandDef.nSC_CHECKEXP] = ConditionOfCheckExp;
-            _conditionMap[ConditionCommandDef.nSC_CHECKCASTLEGOLD] = ConditionOfCheckCastleGold;
-            _conditionMap[ConditionCommandDef.nSC_CHECKBUILDPOINT] = ConditionOfCheckGuildBuildPoint;
-            _conditionMap[ConditionCommandDef.nSC_CHECKAURAEPOINT] = ConditionOfCheckGuildAuraePoint;
-            _conditionMap[ConditionCommandDef.nSC_CHECKSTABILITYPOINT] = ConditionOfCheckStabilityPoint;
-            _conditionMap[ConditionCommandDef.nSC_CHECKFLOURISHPOINT] = ConditionOfCheckFlourishPoint;
-            _conditionMap[ConditionCommandDef.nSC_CHECKCONTRIBUTION] = ConditionOfCheckContribution;
-            _conditionMap[ConditionCommandDef.nSC_CHECKRANGEMONCOUNT] = ConditionOfCheckRangeMonCount;
-            _conditionMap[ConditionCommandDef.nSC_CHECKINMAPRANGE] = ConditionOfCheckInMapRange;
-            _conditionMap[ConditionCommandDef.nSC_CASTLECHANGEDAY] = ConditionOfCheckCastleChageDay;
-            _conditionMap[ConditionCommandDef.nSC_CASTLEWARDAY] = ConditionOfCheckCastleWarDay;
-            _conditionMap[ConditionCommandDef.nSC_ONLINELONGMIN] = ConditionOfCheckOnlineLongMin;
-            _conditionMap[ConditionCommandDef.nSC_CHECKGUILDCHIEFITEMCOUNT] = ConditionOfCheckChiefItemCount;
-            _conditionMap[ConditionCommandDef.nSC_CHECKNAMEDATELIST] = ConditionOfCheckNameDateList;
-            _conditionMap[ConditionCommandDef.nSC_CHECKUSERDATE] = ConditionOfCheckNameDateList;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMAPHUMANCOUNT] = ConditionOfCheckMapHumanCount;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMAPMONCOUNT] = ConditionOfCheckMapMonCount;
-            _conditionMap[ConditionCommandDef.nSC_CHECKVAR] = ConditionOfCheckVar;
-            _conditionMap[ConditionCommandDef.nSC_CHECKSERVERNAME] = ConditionOfCheckServerName;
-            _conditionMap[ConditionCommandDef.nCHECKMAPNAME] = ConditionOfCheckMapName;
-            _conditionMap[ConditionCommandDef.nINSAFEZONE] = ConditionOfCheckSafeZone;
+            _conditionMap[ConditionCodeDef.nCHECK] = ConditionOfCheck;
+            _conditionMap[ConditionCodeDef.nRANDOM] = ConditionOfRandom;
+            _conditionMap[ConditionCodeDef.nGENDER] = ConditionOfGender;
+            _conditionMap[ConditionCodeDef.nDAYTIME] = ConditionOfDayTime;
+            _conditionMap[ConditionCodeDef.nCHECKOPEN] = ConditionOfCheckOpen;
+            _conditionMap[ConditionCodeDef.nCHECKUNIT] = ConditionCheckUnit;
+            _conditionMap[ConditionCodeDef.nCHECKLEVEL] = ConditionOfCheckLevel;
+            _conditionMap[ConditionCodeDef.nCHECKJOB] = ConditionOfCheckJob;
+            _conditionMap[ConditionCodeDef.nCHECKITEM] = ConditionOfCheckItem;
+            _conditionMap[ConditionCodeDef.nCHECKGOLD] = ConditionOfCheckGold;
+            _conditionMap[ConditionCodeDef.nCHECKDURA] = ConditionOfCheckDura;
+            _conditionMap[ConditionCodeDef.nDAYOFWEEK] = ConditionOfDayOfWeek;
+            _conditionMap[ConditionCodeDef.nHOUR] = ConditionOfHour;
+            _conditionMap[ConditionCodeDef.nMIN] = ConditionOfMin;
+            _conditionMap[ConditionCodeDef.nCHECKPKPOINT] = ConditionOfCheckPkPoint;
+            _conditionMap[ConditionCodeDef.nCHECKMONMAP] = ConditionOfCheckMonMapCount;
+            _conditionMap[ConditionCodeDef.nCHECKHUM] = ConditionOfCheckHum;
+            _conditionMap[ConditionCodeDef.nCHECKBAGGAGE] = ConditionOfCheckBagGage;
+            _conditionMap[ConditionCodeDef.nCHECKNAMELIST] = ConditionOfCheckNameList;
+            _conditionMap[ConditionCodeDef.nCHECKACCOUNTLIST] = ConditionOfCheckAccountList;
+            _conditionMap[ConditionCodeDef.nCHECKIPLIST] = ConditionOfCheckIpList;
+            _conditionMap[ConditionCodeDef.nEQUAL] = ConditionOfEqual;
+            _conditionMap[ConditionCodeDef.nLARGE] = ConditionOfLapge;
+            _conditionMap[ConditionCodeDef.nSMALL] = ConditionOfSmall;
+            _conditionMap[ConditionCodeDef.nSC_ISSYSOP] = ConditionOfIssysop;
+            _conditionMap[ConditionCodeDef.nSC_ISADMIN] = ConditionOfIsAdmin;
+            _conditionMap[ConditionCodeDef.nSC_CHECKGROUPCOUNT] = ConditionOfCheckGroupCount;
+            _conditionMap[ConditionCodeDef.nSC_CHECKPOS] = ConditionOfCheckPos;
+            _conditionMap[ConditionCodeDef.nSC_CHECKPOSEDIR] = ConditionOfCheckPoseDir;
+            _conditionMap[ConditionCodeDef.nSC_CHECKPOSELEVEL] = ConditionOfCheckPoseLevel;
+            _conditionMap[ConditionCodeDef.nSC_CHECKPOSEGENDER] = ConditionOfCheckPoseGender;
+            _conditionMap[ConditionCodeDef.nSC_CHECKLEVELEX] = ConditionOfCheckLevelEx;
+            _conditionMap[ConditionCodeDef.nSC_CHECKBONUSPOINT] = ConditionOfCheckBonusPoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMARRY] = ConditionOfCheckMarry;
+            _conditionMap[ConditionCodeDef.nSC_CHECKPOSEMARRY] = ConditionOfCheckPoseMarry;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMARRYCOUNT] = ConditionOfCheckMarryCount;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMASTER] = ConditionOfCheckMaster;
+            _conditionMap[ConditionCodeDef.nSC_HAVEMASTER] = ConditionOfHaveMaster;
+            _conditionMap[ConditionCodeDef.nSC_CHECKPOSEMASTER] = ConditionOfCheckPoseMaster;
+            _conditionMap[ConditionCodeDef.nSC_POSEHAVEMASTER] = ConditionOfPoseHaveMaster;
+            _conditionMap[ConditionCodeDef.nSC_CHECKISMASTER] = ConditionOfCheckIsMaster;
+            _conditionMap[ConditionCodeDef.nSC_HASGUILD] = ConditionOfCheckHaveGuild;
+            _conditionMap[ConditionCodeDef.nSC_ISGUILDMASTER] = ConditionOfCheckIsGuildMaster;
+            _conditionMap[ConditionCodeDef.nSC_CHECKCASTLEMASTER] = ConditionOfCheckIsCastleMaster;
+            _conditionMap[ConditionCodeDef.nSC_ISCASTLEGUILD] = ConditionOfCheckIsCastleaGuild;
+            _conditionMap[ConditionCodeDef.nSC_ISATTACKGUILD] = ConditionOfCheckIsAttackGuild;
+            _conditionMap[ConditionCodeDef.nSC_ISDEFENSEGUILD] = ConditionOfCheckIsDefenseGuild;
+            _conditionMap[ConditionCodeDef.nSC_CHECKCASTLEDOOR] = ConditionOfCheckCastleDoorStatus;
+            _conditionMap[ConditionCodeDef.nSC_ISDEFENSEALLYGUILD] = ConditionOfCheckIsDefenseAllyGuild;
+            _conditionMap[ConditionCodeDef.nSC_CHECKPOSEISMASTER] = ConditionOfCheckPoseIsMaster;
+            _conditionMap[ConditionCodeDef.nSC_CHECKNAMEIPLIST] = ConditionOfCheckNameIpList;
+            _conditionMap[ConditionCodeDef.nSC_CHECKACCOUNTIPLIST] = ConditionOfCheckAccountIpList;
+            _conditionMap[ConditionCodeDef.nSC_CHECKSLAVECOUNT] = ConditionOfCheckSlaveCount;
+            _conditionMap[ConditionCodeDef.nSC_ISNEWHUMAN] = ConditionOfIsNewHuman;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMEMBERTYPE] = ConditionOfCheckMemberType;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMEMBERLEVEL] = ConditionOfCheckMemBerLevel;
+            _conditionMap[ConditionCodeDef.nSC_CHECKGAMEPOINT] = ConditionOfCheckGamePoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKNAMELISTPOSITION] = ConditionOfCheckNameListPostion;
+            _conditionMap[ConditionCodeDef.nSC_CHECKGUILDLIST] = ConditionOfCheckGuildList;
+            _conditionMap[ConditionCodeDef.nSC_CHECKRENEWLEVEL] = ConditionOfCheckReNewLevel;
+            _conditionMap[ConditionCodeDef.nSC_CHECKSLAVELEVEL] = ConditionOfCheckSlaveLevel;
+            _conditionMap[ConditionCodeDef.nSC_CHECKSLAVENAME] = ConditionOfCheckSlaveName;
+            _conditionMap[ConditionCodeDef.nSC_CHECKCREDITPOINT] = ConditionOfCheckCreditPoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKOFGUILD] = ConditionOfCheckOfGuild;
+            _conditionMap[ConditionCodeDef.nSC_CHECKUSEITEM] = ConditionOfCheckUseItem;
+            _conditionMap[ConditionCodeDef.nSC_CHECKBAGSIZE] = ConditionOfCheckBagSize;
+            _conditionMap[ConditionCodeDef.nSC_CHECKDC] = ConditionOfCheckDc;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMC] = ConditionOfCheckMC;
+            _conditionMap[ConditionCodeDef.nSC_CHECKSC] = ConditionOfCheckSc;
+            _conditionMap[ConditionCodeDef.nSC_CHECKHP] = ConditionOfCheckHp;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMP] = ConditionOfCheckMp;
+            _conditionMap[ConditionCodeDef.nSC_CHECKITEMTYPE] = ConditionOfCheckItemType;
+            _conditionMap[ConditionCodeDef.nSC_CHECKEXP] = ConditionOfCheckExp;
+            _conditionMap[ConditionCodeDef.nSC_CHECKCASTLEGOLD] = ConditionOfCheckCastleGold;
+            _conditionMap[ConditionCodeDef.nSC_CHECKBUILDPOINT] = ConditionOfCheckGuildBuildPoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKAURAEPOINT] = ConditionOfCheckGuildAuraePoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKSTABILITYPOINT] = ConditionOfCheckStabilityPoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKFLOURISHPOINT] = ConditionOfCheckFlourishPoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKCONTRIBUTION] = ConditionOfCheckContribution;
+            _conditionMap[ConditionCodeDef.nSC_CHECKRANGEMONCOUNT] = ConditionOfCheckRangeMonCount;
+            _conditionMap[ConditionCodeDef.nSC_CHECKINMAPRANGE] = ConditionOfCheckInMapRange;
+            _conditionMap[ConditionCodeDef.nSC_CASTLECHANGEDAY] = ConditionOfCheckCastleChageDay;
+            _conditionMap[ConditionCodeDef.nSC_CASTLEWARDAY] = ConditionOfCheckCastleWarDay;
+            _conditionMap[ConditionCodeDef.nSC_ONLINELONGMIN] = ConditionOfCheckOnlineLongMin;
+            _conditionMap[ConditionCodeDef.nSC_CHECKGUILDCHIEFITEMCOUNT] = ConditionOfCheckChiefItemCount;
+            _conditionMap[ConditionCodeDef.nSC_CHECKNAMEDATELIST] = ConditionOfCheckNameDateList;
+            _conditionMap[ConditionCodeDef.nSC_CHECKUSERDATE] = ConditionOfCheckNameDateList;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMAPHUMANCOUNT] = ConditionOfCheckMapHumanCount;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMAPMONCOUNT] = ConditionOfCheckMapMonCount;
+            _conditionMap[ConditionCodeDef.nSC_CHECKVAR] = ConditionOfCheckVar;
+            _conditionMap[ConditionCodeDef.nSC_CHECKSERVERNAME] = ConditionOfCheckServerName;
+            _conditionMap[ConditionCodeDef.nCHECKMAPNAME] = ConditionOfCheckMapName;
+            _conditionMap[ConditionCodeDef.nINSAFEZONE] = ConditionOfCheckSafeZone;
             //FNpcCondition[CheckScriptDef.nCHECKSKILL] = ConditionOfCheckSkill;
-            _conditionMap[ConditionCommandDef.nSC_CHECKCONTAINSTEXT] = ConditionOfAnsiContainsText;
-            _conditionMap[ConditionCommandDef.nSC_COMPARETEXT] = ConditionOfCompareText;
-            _conditionMap[ConditionCommandDef.nSC_CHECKTEXTLIST] = ConditionOfCheckTextList;
-            _conditionMap[ConditionCommandDef.nSC_ISGROUPMASTER] = ConditionOfIsGroupMaster;
-            _conditionMap[ConditionCommandDef.nSC_CHECKCONTAINSTEXTLIST] = ConditionOfCheCkContAinsTextList;
-            _conditionMap[ConditionCommandDef.nSC_CHECKONLINE] = ConditionOfCheckOnLine;
-            _conditionMap[ConditionCommandDef.nSC_ISDUPMODE] = ConditionOfIsDupMode;
-            _conditionMap[ConditionCommandDef.nSC_ISONMAP] = ConditionOfIosnMap;
-            _conditionMap[ConditionCommandDef.nSC_CHECKGAMEGOLD] = ConditionOfCheckGameGold;
-            _conditionMap[ConditionCommandDef.nSC_CHECKISONMAP] = ConditionOfCheckIsOnMap;
-            _conditionMap[ConditionCommandDef.nSC_CHECKITEMADDVALUE] = ConditionOfCheckItemAddValue;
-            _conditionMap[ConditionCommandDef.nSC_REVIVESLAVE] = ConditionOfReviveSlave;
-            _conditionMap[ConditionCommandDef.nSC_CHECKMAGICLVL] = ConditionOfCheckMagicLvl;
-            _conditionMap[ConditionCommandDef.nSC_CHECKGROUPCLASS] = ConditionOfCheckGroupClass;
-            _conditionMap[ConditionCommandDef.nSC_ISHIGH] = ConditionOfIsHigh;
-            _conditionMap[ConditionCommandDef.nCHECKBBCOUNT] = ConditionOfCheckSlaveListCount;
-            _conditionMap[ConditionCommandDef.nCHECKLUCKYPOINT] = ConditionOfCheckLuckyPoint;
+            _conditionMap[ConditionCodeDef.nSC_CHECKCONTAINSTEXT] = ConditionOfAnsiContainsText;
+            _conditionMap[ConditionCodeDef.nSC_COMPARETEXT] = ConditionOfCompareText;
+            _conditionMap[ConditionCodeDef.nSC_CHECKTEXTLIST] = ConditionOfCheckTextList;
+            _conditionMap[ConditionCodeDef.nSC_ISGROUPMASTER] = ConditionOfIsGroupMaster;
+            _conditionMap[ConditionCodeDef.nSC_CHECKCONTAINSTEXTLIST] = ConditionOfCheCkContAinsTextList;
+            _conditionMap[ConditionCodeDef.nSC_CHECKONLINE] = ConditionOfCheckOnLine;
+            _conditionMap[ConditionCodeDef.nSC_ISDUPMODE] = ConditionOfIsDupMode;
+            _conditionMap[ConditionCodeDef.nSC_ISONMAP] = ConditionOfIosnMap;
+            _conditionMap[ConditionCodeDef.nSC_CHECKGAMEGOLD] = ConditionOfCheckGameGold;
+            _conditionMap[ConditionCodeDef.nSC_CHECKISONMAP] = ConditionOfCheckIsOnMap;
+            _conditionMap[ConditionCodeDef.nSC_CHECKITEMADDVALUE] = ConditionOfCheckItemAddValue;
+            _conditionMap[ConditionCodeDef.nSC_REVIVESLAVE] = ConditionOfReviveSlave;
+            _conditionMap[ConditionCodeDef.nSC_CHECKMAGICLVL] = ConditionOfCheckMagicLvl;
+            _conditionMap[ConditionCodeDef.nSC_CHECKGROUPCLASS] = ConditionOfCheckGroupClass;
+            _conditionMap[ConditionCodeDef.nSC_ISHIGH] = ConditionOfIsHigh;
+            _conditionMap[ConditionCodeDef.nCHECKBBCOUNT] = ConditionOfCheckSlaveListCount;
+            _conditionMap[ConditionCodeDef.nCHECKLUCKYPOINT] = ConditionOfCheckLuckyPoint;
         }
 
         private void ConditionOfCheckLuckyPoint(PlayObject PlayObject, QuestConditionInfo QuestConditionInfo, ref bool success)
@@ -240,7 +243,7 @@ namespace GameSrv
             success = false;
             if (string.IsNullOrEmpty(QuestConditionInfo.sParam1))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISHIGH);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ExecutionCodeDef.sSC_ISHIGH);
                 return;
             }
             char cMode = QuestConditionInfo.sParam1[0];
@@ -262,7 +265,7 @@ namespace GameSrv
                     success = M2Share.HighSCHuman == PlayObject.ActorId;
                     break;
                 default:
-                    ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_ISHIGH);
+                    ScriptConditionError(PlayObject, QuestConditionInfo, ExecutionCodeDef.sSC_ISHIGH);
                     break;
             }
         }
@@ -287,7 +290,7 @@ namespace GameSrv
             }
             if (nJob < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHANGEJOB);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ExecutionCodeDef.sSC_CHANGEJOB);
                 return;
             }
             if (PlayObject.GroupOwner != 0)
@@ -408,7 +411,7 @@ namespace GameSrv
             int nAddValue = HUtil32.StrToInt(QuestConditionInfo.sParam3, -1);
             if (!(nWhere >= 0 && nWhere <= PlayObject.UseItems.Length) || (nAddValue < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKITEMADDVALUE);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ConditionCodeDef.sSC_CHECKITEMADDVALUE);
                 return;
             }
             UserItem UserItem = PlayObject.UseItems[nWhere];
@@ -490,7 +493,7 @@ namespace GameSrv
             success = false;
             if (string.IsNullOrEmpty(questConditionInfo.sParam1))
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKOFGUILD);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKOFGUILD);
                 return;
             }
             if (playObject.MyGuild != null)
@@ -514,7 +517,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nOnlineMin);
                 if (nOnlineMin < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_ONLINELONGMIN);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_ONLINELONGMIN);
                     return;
                 }
             }
@@ -559,7 +562,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nErrorCount);
                 if (nErrorCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_PASSWORDERRORCOUNT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_PASSWORDERRORCOUNT);
                     return;
                 }
             }
@@ -615,7 +618,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam1, ref nPayMent);
                 if (nPayMent < 1)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKPAYMENT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKPAYMENT);
                     return;
                 }
             }
@@ -632,7 +635,7 @@ namespace GameSrv
             success = false;
             if (questConditionInfo.sParam1 == "")
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSLAVENAME);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSLAVENAME);
                 return;
             }
             var sSlaveName = questConditionInfo.sParam1;
@@ -667,7 +670,7 @@ namespace GameSrv
             var cMethod = questConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMEDATELIST);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMEDATELIST);
                 return;
             }
             var sListFileName = M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1);
@@ -730,7 +733,7 @@ namespace GameSrv
                             case VarAttr.aNone:
                             case VarAttr.aConst:
                                 ScriptConditionError(playObject, questConditionInfo,
-                                    ConditionCommandDef.sSC_CHECKNAMEDATELIST);
+                                    ConditionCodeDef.sSC_CHECKNAMEDATELIST);
                                 break;
                             case VarAttr.aFixStr:
                                 SetValNameValue(playObject, sVar, sValue, nDay);
@@ -745,7 +748,7 @@ namespace GameSrv
                             case VarAttr.aNone:
                             case VarAttr.aConst:
                                 ScriptConditionError(playObject, questConditionInfo,
-                                    ConditionCommandDef.sSC_CHECKNAMEDATELIST);
+                                    ConditionCodeDef.sSC_CHECKNAMEDATELIST);
                                 break;
                             case VarAttr.aFixStr:
                                 SetValNameValue(playObject, sVar, sValue, nDayCount - nDay);
@@ -806,7 +809,7 @@ namespace GameSrv
                 cMethod = questConditionInfo.sParam2[1];
                 if (nDayCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKGUILDNAMEDATELIST);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKGUILDNAMEDATELIST);
                     return;
                 }
                 sListFileName = M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1);
@@ -872,7 +875,7 @@ namespace GameSrv
                                     case VarAttr.aNone:
                                     case VarAttr.aConst:
                                         ScriptConditionError(playObject, questConditionInfo,
-                                            ConditionCommandDef.sSC_CHECKGUILDNAMEDATELIST);
+                                            ConditionCodeDef.sSC_CHECKGUILDNAMEDATELIST);
                                         break;
 
                                     case VarAttr.aFixStr:
@@ -892,7 +895,7 @@ namespace GameSrv
                                     case VarAttr.aNone:
                                     case VarAttr.aConst:
                                         ScriptConditionError(playObject, questConditionInfo,
-                                            ConditionCommandDef.sSC_CHECKGUILDNAMEDATELIST);
+                                            ConditionCodeDef.sSC_CHECKGUILDNAMEDATELIST);
                                         break;
 
                                     case VarAttr.aFixStr:
@@ -944,13 +947,13 @@ namespace GameSrv
                     GetVarValue((PlayObject)baseObject, questConditionInfo.sParam3, ref nCount);
                     if (nCount < 0)
                     {
-                        ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMAPHUMANCOUNT);
+                        ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMAPHUMANCOUNT);
                         return;
                     }
                 }
                 else
                 {
-                    ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMAPHUMANCOUNT);
+                    ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMAPHUMANCOUNT);
                     return;
                 }
             }
@@ -963,7 +966,7 @@ namespace GameSrv
             }
             if (envir == null)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMAPHUMANCOUNT);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMAPHUMANCOUNT);
                 return;
             }
             var nHumanCount = M2Share.WorldEngine.GetMapHuman(envir.MapName);
@@ -1019,7 +1022,7 @@ namespace GameSrv
             }
             if (nCount < 0 || envir == null)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMAPMONCOUNT);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMAPMONCOUNT);
                 return;
             }
             var nMonCount = M2Share.WorldEngine.GetMapMonster(envir, null);
@@ -1076,7 +1079,7 @@ namespace GameSrv
             var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_ISONMAP);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_ISONMAP);
             }
             if (playObject.Envir == envir)
             {
@@ -1103,7 +1106,7 @@ namespace GameSrv
             }
             if (envir == null || nCount < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sCHECKMONMAP);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sCHECKMONMAP);
                 return;
             }
             var monList = new List<BaseObject>();
@@ -1160,7 +1163,7 @@ namespace GameSrv
             var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null || nX < 0 || nY < 0 || nRange < 0 || nCount < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKRANGEMONCOUNT);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKRANGEMONCOUNT);
                 return;
             }
             var monList = new List<BaseObject>();
@@ -1238,7 +1241,7 @@ namespace GameSrv
                 }
                 if (nRange < 0 || nCount < 0 || cMethod == ' ')
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKRANGEROUPCOUNT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKRANGEROUPCOUNT);
                     return;
                 }
                 nMapRangeCount = 0;
@@ -1292,7 +1295,7 @@ namespace GameSrv
             success = false;
             if (questConditionInfo.sParam1 == "" || questConditionInfo.sParam2 == "")
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKONLINEPLAYCOUNT);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKONLINEPLAYCOUNT);
                 return;
             }
             var cMethod = questConditionInfo.sParam1[0];
@@ -1303,7 +1306,7 @@ namespace GameSrv
             }
             if (nCount < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKONLINEPLAYCOUNT);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKONLINEPLAYCOUNT);
                 return;
             }
             switch (cMethod)
@@ -1348,7 +1351,7 @@ namespace GameSrv
             }
             if (nWhere < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKUSEITEMBIND);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKUSEITEMBIND);
                 return false;
             }
             userItem = playObject.UseItems[nWhere];
@@ -1381,7 +1384,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nLevel);
                 if (nLevel < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKLEVELEX);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKLEVELEX);
                     return;
                 }
             }
@@ -1430,7 +1433,7 @@ namespace GameSrv
                     GetVarValue((PlayObject)baseObject, questConditionInfo.sParam2, ref nLevel);
                     if (!(nLevel >= 0 && nLevel <= 7))
                     {
-                        ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSLAVELEVEL);
+                        ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSLAVELEVEL);
                         return;
                     }
                 }
@@ -1487,7 +1490,7 @@ namespace GameSrv
                 GetVarValue((PlayObject)baseObject, questConditionInfo.sParam3, ref nRange);
                 if (nRange < 0)
                 {
-                    ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSLAVERANGE);
+                    ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSLAVERANGE);
                     return;
                 }
             }
@@ -1559,14 +1562,14 @@ namespace GameSrv
             var sVarValue = questConditionInfo.sParam4;
             if (sType == "" || sVarName == "" || sMethod == "")
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKVAR);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKVAR);
                 return;
             }
             var cMethod = sMethod[1];
             Dictionary<string, DynamicVar> dynamicVarList = GeDynamicVarList(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKVAR);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKVAR);
                 return;
             }
             else
@@ -1620,7 +1623,7 @@ namespace GameSrv
                 }
                 if (!boFoundVar)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKVAR);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKVAR);
                 }
             }
         }
@@ -1660,7 +1663,7 @@ namespace GameSrv
             }
             if (nGold < 0 || playObject.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKCASTLEGOLD);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKCASTLEGOLD);
                 return;
             }
             var cMethod = questConditionInfo.sParam1[0];
@@ -1705,7 +1708,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nContribution);
                 if (nContribution < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKCONTRIBUTION);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKCONTRIBUTION);
                     return;
                 }
             }
@@ -1751,7 +1754,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nCreditPoint);
                 if (nCreditPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKCREDITPOINT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKCREDITPOINT);
                     return;
                 }
             }
@@ -1825,7 +1828,7 @@ namespace GameSrv
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKACCOUNTIPLIST);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKACCOUNTIPLIST);
                 }
             }
             finally
@@ -1844,7 +1847,7 @@ namespace GameSrv
             }
             if (nSize <= 0 || nSize > Grobal2.MaxBagItem)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKBAGSIZE);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKBAGSIZE);
                 return;
             }
             if (baseObject.ItemList.Count + nSize <= Grobal2.MaxBagItem)
@@ -1947,7 +1950,7 @@ namespace GameSrv
             }
             if (nMin < 0 || nMax < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKHP);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKHP);
                 return;
             }
             switch (cMethodMin)
@@ -2033,7 +2036,7 @@ namespace GameSrv
             }
             if (nMin < 0 || nMax < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMP);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMP);
                 return;
             }
             switch (cMethodMin)
@@ -2117,7 +2120,7 @@ namespace GameSrv
             }
             if (nMin < 0 || nMax < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKDC);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKDC);
                 return;
             }
             switch (cMethodMin)
@@ -2160,7 +2163,7 @@ namespace GameSrv
             int nMax = HUtil32.StrToInt(QuestConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ScriptConst.sSC_CHECKMC);
+                ScriptConditionError(PlayObject, QuestConditionInfo, ConditionCodeDef.sSC_CHECKMC);
                 return;
             }
             switch (cMethodMin)
@@ -2279,7 +2282,7 @@ namespace GameSrv
             }
             if (nMin < 0 || nMax < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSC);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSC);
                 return;
             }
             switch (cMethodMin)
@@ -2323,7 +2326,7 @@ namespace GameSrv
             }
             if (dwExp < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKEXP);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKEXP);
                 return;
             }
             var cMethod = questConditionInfo.sParam1[0];
@@ -2367,7 +2370,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKFLOURISHPOINT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKFLOURISHPOINT);
                     return;
                 }
             }
@@ -2414,7 +2417,7 @@ namespace GameSrv
             long nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKFLOURISHPOINT);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKFLOURISHPOINT);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2463,7 +2466,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKAURAEPOINT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKAURAEPOINT);
                     return;
                 }
             }
@@ -2513,7 +2516,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKBUILDPOINT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKBUILDPOINT);
                     return;
                 }
             }
@@ -2563,7 +2566,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSTABILITYPOINT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSTABILITYPOINT);
                     return;
                 }
             }
@@ -2613,7 +2616,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nGameGold);
                 if (nGameGold < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKGAMEGOLD);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKGAMEGOLD);
                     return;
                 }
             }
@@ -2658,7 +2661,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nGamePoint);
                 if (nGamePoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKGAMEPOINT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKGAMEPOINT);
                     return;
                 }
             }
@@ -2710,7 +2713,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nCount);
                 if (nCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKGROUPCOUNT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKGROUPCOUNT);
                     return;
                 }
             }
@@ -2762,7 +2765,7 @@ namespace GameSrv
         {
             if (playObject.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_ISATTACKGUILD);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_ISATTACKGUILD);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2787,7 +2790,7 @@ namespace GameSrv
             }
             if (nDay < 0 || playObject.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CASTLECHANGEDAY);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CASTLECHANGEDAY);
                 return;
             }
             var nChangeDay = HUtil32.GetDayCount(DateTime.Now, playObject.Castle.ChangeDate);
@@ -2837,7 +2840,7 @@ namespace GameSrv
             }
             if (nDay < 0 || playObject.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CASTLEWARDAY);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CASTLEWARDAY);
                 return;
             }
             var nWarDay = HUtil32.GetDayCount(DateTime.Now, playObject.Castle.WarDate);
@@ -2898,7 +2901,7 @@ namespace GameSrv
             }
             if (nDay < 0 || playObject.Castle == null || nDoorStatus < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKCASTLEDOOR);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKCASTLEDOOR);
                 return;
             }
             CastleDoor castleDoor = (CastleDoor)playObject.Castle.MainDoor.BaseObject;
@@ -2930,7 +2933,7 @@ namespace GameSrv
             success = false;
             if (playObject.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_ISATTACKALLYGUILD);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_ISATTACKALLYGUILD);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2949,7 +2952,7 @@ namespace GameSrv
             success = false;
             if (playObject.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_ISDEFENSEALLYGUILD);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_ISDEFENSEALLYGUILD);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2968,7 +2971,7 @@ namespace GameSrv
             success = false;
             if (playObject.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_ISDEFENSEGUILD);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_ISDEFENSEGUILD);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -3033,7 +3036,7 @@ namespace GameSrv
             }
             if (!(nWhere >= baseObject.UseItems.GetLowerBound(0) && nWhere <= baseObject.UseItems.GetUpperBound(0)))
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKITEMTYPE);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKITEMTYPE);
                 success = false;
             }
             UserItem userItem = baseObject.UseItems[nWhere];
@@ -3057,7 +3060,7 @@ namespace GameSrv
                 GetVarValue((PlayObject)baseObject, questConditionInfo.sParam2, ref nLevel);
                 if (nLevel < 0)
                 {
-                    ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKLEVELEX);
+                    ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKLEVELEX);
                     return;
                 }
             }
@@ -3126,7 +3129,7 @@ namespace GameSrv
                 }
                 else
                 {
-                    ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMELISTPOSITION);
+                    ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMELISTPOSITION);
                 }
             }
             finally
@@ -3142,7 +3145,7 @@ namespace GameSrv
                 {
                     case VarAttr.aNone:
                     case VarAttr.aConst:
-                        ScriptConditionError((PlayObject)baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMELISTPOSITION);
+                        ScriptConditionError((PlayObject)baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMELISTPOSITION);
                         return;
                     case VarAttr.aFixStr:
                         SetValNameValue((PlayObject)baseObject, sVar, sValue, nNamePostion);
@@ -3155,7 +3158,7 @@ namespace GameSrv
             }
             if (nPostion < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMELISTPOSITION);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMELISTPOSITION);
                 return;
             }
             switch (cMethod)
@@ -3220,7 +3223,7 @@ namespace GameSrv
             }
             if (nItemCount < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKBAGITEMINLIST);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKBAGITEMINLIST);
                 return;
             }
             for (int i = 0; i < loadList.Count; i++)
@@ -3257,7 +3260,7 @@ namespace GameSrv
                     {
                         case VarAttr.aNone:
                         case VarAttr.aConst:
-                            ScriptConditionError((PlayObject)baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKBAGITEMINLIST);
+                            ScriptConditionError((PlayObject)baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKBAGITEMINLIST);
                             break;
                         case VarAttr.aFixStr:
                             SetValNameValue((PlayObject)baseObject, sVar, sValue, nItemCount);
@@ -3294,7 +3297,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nCount);
                 if (nCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMARRYCOUNT);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMARRYCOUNT);
                     return;
                 }
             }
@@ -3344,7 +3347,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nLevel);
                 if (nLevel < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMEMBERLEVEL);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMEMBERLEVEL);
                     return;
                 }
             }
@@ -3389,7 +3392,7 @@ namespace GameSrv
                 GetVarValue(playObject, questConditionInfo.sParam2, ref nType);
                 if (nType < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKMEMBERTYPE);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKMEMBERTYPE);
                     return;
                 }
             }
@@ -3455,7 +3458,7 @@ namespace GameSrv
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMEIPLIST);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMEIPLIST);
                 }
             }
             finally
@@ -3545,13 +3548,13 @@ namespace GameSrv
                     GetVarValue((PlayObject)baseObject, questConditionInfo.sParam2, ref nLevel);
                     if (nLevel < 0)
                     {
-                        ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKPOSELEVEL);
+                        ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKPOSELEVEL);
                         return;
                     }
                 }
                 else
                 {
-                    ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKPOSELEVEL);
+                    ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKPOSELEVEL);
                     return;
                 }
             }
@@ -3637,13 +3640,13 @@ namespace GameSrv
                     GetVarValue((PlayObject)baseObject, questConditionInfo.sParam2, ref nCount);
                     if (nCount < 0)
                     {
-                        ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSLAVECOUNT);
+                        ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSLAVECOUNT);
                         return;
                     }
                 }
                 else
                 {
-                    ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSLAVECOUNT);
+                    ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSLAVECOUNT);
                     return;
                 }
             }
@@ -3716,7 +3719,7 @@ namespace GameSrv
                     GetVarValue(baseObject, questConditionInfo.sParam3, ref nSkillLevel);
                     if (nSkillLevel < 0)
                     {
-                        ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sCHECKSKILL);
+                        ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sCHECKSKILL);
                         return false;
                     }
                 }
@@ -3794,7 +3797,7 @@ namespace GameSrv
             }
             if (pvpPoint < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKPKPOINTEX);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKPKPOINTEX);
                 return;
             }
             var cMethod = questConditionInfo.sParam1[0];
@@ -3882,7 +3885,7 @@ namespace GameSrv
             }
             if (nX < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKINCURRRECT);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKINCURRRECT);
                 return;
             }
             if (nY < 0)
@@ -3891,7 +3894,7 @@ namespace GameSrv
             }
             if (nY < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKINCURRRECT);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKINCURRRECT);
                 return;
             }
             if (nRange < 0)
@@ -3900,7 +3903,7 @@ namespace GameSrv
             }
             if (nRange < 0)
             {
-                ScriptConditionError(baseObject, questConditionInfo, ConditionCommandDef.sSC_CHECKINCURRRECT);
+                ScriptConditionError(baseObject, questConditionInfo, ConditionCodeDef.sSC_CHECKINCURRRECT);
                 return;
             }
             var nLeft = HUtil32._MAX(nX - nRange, 0);
@@ -3942,7 +3945,7 @@ namespace GameSrv
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_INDEXOF);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_INDEXOF);
                 }
             }
             finally
@@ -3956,7 +3959,7 @@ namespace GameSrv
                 {
                     case VarAttr.aNone:
                     case VarAttr.aConst:
-                        ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_INDEXOF);
+                        ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_INDEXOF);
                         break;
                     case VarAttr.aFixStr:
                         SetValNameValue(playObject, sVar, sValue, nPostion);
@@ -3968,7 +3971,7 @@ namespace GameSrv
             }
             else
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_INDEXOF);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_INDEXOF);
             }
         }
 
@@ -4367,7 +4370,7 @@ namespace GameSrv
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMELISTPOSITION);
+                    ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMELISTPOSITION);
                 }
             }
             finally
@@ -4383,7 +4386,7 @@ namespace GameSrv
                 {
                     case VarAttr.aNone:
                     case VarAttr.aConst:
-                        ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMELISTPOSITION);
+                        ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMELISTPOSITION);
                         return;
                     case VarAttr.aFixStr:
                         SetValNameValue(playObject, sVar, sValue, nNamePostion);
@@ -4396,7 +4399,7 @@ namespace GameSrv
             }
             if (nPostion < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKNAMELISTPOSITION);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKNAMELISTPOSITION);
                 return;
             }
             switch (cMethod)
@@ -4463,7 +4466,7 @@ namespace GameSrv
             success = false;
             if (questConditionInfo.sParam1 == "")
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKSLAVENAME);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKSLAVENAME);
             }
             var sSlaveName = questConditionInfo.sParam1;
             if (playObject.Race == ActorRace.Play)
@@ -4501,7 +4504,7 @@ namespace GameSrv
             }
             if (nWhere < 0 || nWhere > playObject.UseItems.GetUpperBound(0))
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKUSEITEM);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKUSEITEM);
                 return;
             }
             if (playObject.UseItems[nWhere].Index > 0)
@@ -4540,7 +4543,7 @@ namespace GameSrv
             }
             if (sMapName == "" || nX < 0 || nY < 0 || nRange < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCommandDef.sSC_CHECKINMAPRANGE);
+                ScriptConditionError(playObject, questConditionInfo, ConditionCodeDef.sSC_CHECKINMAPRANGE);
                 return;
             }
             if (string.Compare(playObject.MapName, sMapName, StringComparison.Ordinal) != 0)
