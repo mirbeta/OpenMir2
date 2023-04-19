@@ -542,7 +542,7 @@ namespace GameSrv.RobotPlay
                                                     continue;
                                                 }
                                                 var mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
-                                                if (mapItem == null)
+                                                if (mapItem.ItemId == 0)
                                                 {
                                                     continue;
                                                 }
