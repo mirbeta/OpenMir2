@@ -76,7 +76,7 @@ namespace GameSrv
         [ScriptCode("CHANGEXP")]
         ChangExp,
         [ScriptCode("RECALLMOB")]
-        ReCallmob,
+        ReCallMob,
         [ScriptCode("MOVR")]
         Movr,
         [ScriptCode("EXCHANGEMAP")]
@@ -84,13 +84,13 @@ namespace GameSrv
         [ScriptCode("RECALLMAP")]
         ReCallMap,
         [ScriptCode("ADDBATCH")]
-        Addbatch,
+        AddBatch,
         [ScriptCode("BATCHDELAY")]
-        Batchdelay,
+        BatchDelay,
         [ScriptCode("BATCHMOVE")]
         BatchMove,
         [ScriptCode("PLAYDICE")]
-        Playdice,
+        PlayDice,
         [ScriptCode("PASTEMAP")]
         PasteMap,
         [ScriptCode("LOADGEN")]
@@ -108,13 +108,13 @@ namespace GameSrv
         [ScriptCode("DELACCOUNTLIST")]
         DelAccountList,
         [ScriptCode("ADDIPLIST")]
-        AddipList,
+        AddIpList,
         [ScriptCode("DELIPLIST")]
-        DelipList,
+        DelIpList,
         [ScriptCode("GOQUEST")]
-        Goquest,
+        GoQuest,
         [ScriptCode("ENDQUEST")]
-        Endquest,
+        EndQuest,
         [ScriptCode("GOTO")]
         Goto,
         [ScriptCode("HAIRCOLOR")]
@@ -372,7 +372,7 @@ namespace GameSrv
         [ScriptCode("ADDSKILL")]
         AddSkill,
         [ScriptCode("SKILLLEVEL")]
-        Skilllevel,
+        SkillLevel,
         [ScriptCode("CHANGEPKPOINT")]
         ChangePkPoint,
         [ScriptCode("CHANGEEXP")]
@@ -382,7 +382,7 @@ namespace GameSrv
         [ScriptCode("MISSION")]
         Mission,
         [ScriptCode("MOBPLACE")]
-        Mobplace,
+        MobPlace,
         [ScriptCode("SETMEMBERTYPE")]
         SetMemberType,
         [ScriptCode("SETMEMBERLEVEL")]
@@ -432,7 +432,7 @@ namespace GameSrv
         [ScriptCode("UPGRADEITEM")]
         UpgradeItems,
         [ScriptCode("UPGRADEITEMEX")]
-        UpgradeItemsex,
+        UpgradeItemSex,
         [ScriptCode("MONGENEX")]
         MonGenex,
         [ScriptCode("CLEARMAPMON")]

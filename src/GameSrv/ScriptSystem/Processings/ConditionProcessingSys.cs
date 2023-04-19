@@ -6,13 +6,12 @@ using GameSrv.Maps;
 using GameSrv.Monster.Monsters;
 using GameSrv.Npc;
 using GameSrv.Player;
-using GameSrv.Script;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv
+namespace GameSrv.Script
 {
     /// <summary>
     /// 脚本命令检查处理模块

@@ -5,6 +5,7 @@ using GameSrv.Maps;
 using GameSrv.Monster;
 using GameSrv.Player;
 using GameSrv.Script;
+using GameSrv.ScriptSystem;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -19,6 +20,7 @@ namespace GameSrv.Npc {
         /// </summary>
         public short NpcFlag = 0;
         private ConditionProcessingSys ConditionScript;
+        private ExecutionProcessingSys ExecutionProcessing;
         public IList<ScriptInfo> m_ScriptList;
         public string FilePath;
         /// <summary>
@@ -29,7 +31,7 @@ namespace GameSrv.Npc {
         /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
         public bool IsQuest;
-        protected string m_sPath = string.Empty;
+        public string m_sPath = string.Empty;
         private IList<ScriptParams> BatchParamsList;
         public int ProcessRefillIndex;
 
@@ -46,6 +48,8 @@ namespace GameSrv.Npc {
             CellType = CellType.Merchant;
             ConditionScript = new ConditionProcessingSys(m_sPath, ChrName, MapName, CurrX, CurrY);
             ConditionScript.Initialize();
+            ExecutionProcessing = new ExecutionProcessingSys();
+            ExecutionProcessing.Initialize();
         }
 
         ~NormNpc() {
@@ -63,7 +67,12 @@ namespace GameSrv.Npc {
             GotoLable(PlayObject, "@main", false);
         }
 
-        private void ExeAction(PlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3) {
+        public void SendSayMsg(string msg)
+        {
+            ProcessSayMsg(msg);
+        }
+
+        internal void ExeAction(PlayObject PlayObject, string sParam1, string sParam2, string sParam3, int nParam1, int nParam2, int nParam3) {
             int nInt1;
             int dwInt;
             // ================================================
@@ -1644,7 +1653,7 @@ namespace GameSrv.Npc {
             Castle = M2Share.CastleMgr.InCastleWarArea(this);
         }
 
-        private static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject PlayObject, string sType, ref string sName) {
+        public static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject PlayObject, string sType, ref string sName) {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5)) {
                 result = PlayObject.DynamicVarMap;
