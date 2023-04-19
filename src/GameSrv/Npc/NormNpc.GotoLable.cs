@@ -899,30 +899,6 @@ namespace GameSrv.Npc
                     case ExecutionCode.MapMove:
                         bo11 = true;
                         break;
-                    case ExecutionCode.Mov:
-                        MovData(playObject, questActionInfo);
-                        break;
-                    case ExecutionCode.Inc:
-                        IncInteger(playObject, questActionInfo);
-                        break;
-                    case ExecutionCode.Dec:
-                        DecInteger(playObject, questActionInfo);
-                        break;
-                    case ExecutionCode.Sum:
-                        SumData(playObject, questActionInfo);
-                        break;
-                    case ExecutionCode.Div:
-                        DivData(playObject, questActionInfo);
-                        break;
-                    case ExecutionCode.Mul:
-                        MulData(playObject, questActionInfo);
-                        break;
-                    case ExecutionCode.Percent:
-                        PercentData(playObject, questActionInfo);
-                        break;
-                    case ExecutionCode.Movr:
-                        MovrData(playObject, questActionInfo);
-                        break;
                     case ExecutionCode.AddBatch:
                         if (BatchParamsList == null)
                         {

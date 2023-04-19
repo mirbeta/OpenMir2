@@ -154,6 +154,14 @@ namespace GameSrv.ScriptSystem
             ProcessExecutionMessage[(int)ExecutionCode.SetRandomNo] = ActionOfSetRandomNo;
             ProcessExecutionMessage[(int)ExecutionCode.PlayDice] = ActionOfPlayDice;
             ProcessExecutionMessage[(int)ExecutionCode.Exeaction] = ActionOfExeaction;
+            ProcessExecutionMessage[(int)ExecutionCode.Dec] = ActionOfDecInteger;
+            ProcessExecutionMessage[(int)ExecutionCode.Mov] = ActionOfMovData;
+            ProcessExecutionMessage[(int)ExecutionCode.Inc] = ActionOfIncInteger;
+            ProcessExecutionMessage[(int)ExecutionCode.Sum] = ActionOfSumData;
+            ProcessExecutionMessage[(int)ExecutionCode.Div] = ActionOfDivData;
+            ProcessExecutionMessage[(int)ExecutionCode.Mul] = ActionOfMulData;
+            ProcessExecutionMessage[(int)ExecutionCode.Percent] = ActionOfPercentData;
+            ProcessExecutionMessage[(int)ExecutionCode.Movr] = ActionOfMovrData;
         }
 
         public bool IsRegister(int cmdCode)
@@ -168,6 +176,1849 @@ namespace GameSrv.ScriptSystem
                 ProcessExecutionMessage[questConditionInfo.nCmdCode](normNpc, playObject, questConditionInfo, ref success);
             }
         }
+
+        /// <summary>
+        /// 取随机值赋给变量
+        /// 拓展可以随机参数2到参数3之间的数
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
+        private void ActionOfMovrData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            string s34 = string.Empty;
+            int n14;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.MNVal[n14] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.MNVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 119))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        M2Share.Config.GlobalVal[n14 - 100] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        M2Share.Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.MDyVal[n14 - 200] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.MDyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.MNMval[n14 - 300] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.MNMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        M2Share.Config.GlobaDyMval[n14 - 400] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        M2Share.Config.GlobaDyMval[n14 - 400] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        PlayObject.MNInteger[n14 - 500] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        PlayObject.MNInteger[n14 - 500] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    {
+                        M2Share.Config.GlobalVal[n14 - 700] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                    }
+                    else
+                    {
+                        M2Share.Config.GlobalVal[n14 - 700] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                    }
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Movr);
+                }
+            }
+            else
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Movr);
+            }
+        }
+
+        private void ActionOfMovData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            string sValue = string.Empty;
+            int nValue = 0;
+            int nDataType = 0;
+            const string sVarFound = "变量{0}不存在，变量类型:{1}";
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
+            }
+            else
+            {
+                sParam1 = QuestActionInfo.sParam1;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref sParam2);
+            }
+            else
+            {
+                sParam2 = QuestActionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = QuestActionInfo.sParam3;
+            }
+            if (string.IsNullOrEmpty(sParam1))
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                return;
+            }
+            switch (GetMovDataType(QuestActionInfo))
+            {
+                case 0:
+                    if (GetMovDataHumanInfoValue(normNpc, PlayObject, sParam3, ref sValue, ref nValue, ref nDataType))
+                    {
+                        if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, sValue, nValue, nDataType))
+                        {
+                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                case 1:
+                    if (GetMovDataValNameValue(PlayObject, sParam3, ref sValue, ref nValue, ref nDataType))
+                    {
+                        if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, sValue, nValue, nDataType))
+                        {
+                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                case 2:
+                    if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam3, 1))
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                case 3:
+                    if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam3, 0))
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                case 4:
+                    if (GetMovDataHumanInfoValue(normNpc, PlayObject, sParam2, ref sValue, ref nValue, ref nDataType))
+                    {
+                        if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                        {
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                case 5:
+                    if (GetMovDataValNameValue(PlayObject, sParam2, ref sValue, ref nValue, ref nDataType))
+                    {
+                        if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                        {
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                case 6:
+                    if (GetMovDataDynamicVarValue(PlayObject, sParam2, sParam3, ref sValue, ref nValue, ref nDataType))
+                    {
+                        if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                        {
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam3), QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                case 7:
+                    if (GetMovDataValNameValue(PlayObject, sParam1, ref sValue, ref nValue, ref nDataType))
+                    {
+                        if ((!string.IsNullOrEmpty(sParam2)) && (sParam2[0] == '<') && (sParam2[1] == '$'))//  支持:MOV A14 <$USERALLNAME>\天下第一战士 的传值
+                        {
+                            GetMovDataHumanInfoValue(normNpc, PlayObject, sParam2, ref sValue, ref nValue, ref nDataType);// 取人物信息
+                            sValue = sValue + sParam2.Substring(sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) - 1, sParam2.Length - sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) + 1);
+                            if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                                return;
+                            }
+                        }
+                        else
+                        {
+                            if (!SetMovDataValNameValue(PlayObject, sParam1, QuestActionInfo.sParam2, QuestActionInfo.nParam2, nDataType))
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                                return;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                    }
+                    break;
+                default:
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                    break;
+            }
+        }
+
+        private void ActionOfIncInteger(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            int n14;
+            int n3C = 0;
+            string s01 = string.Empty;
+            DynamicVar DynamicVar;
+            Dictionary<string, DynamicVar> DynamicVarList;
+            string sName = string.Empty;
+            bool boVarFound;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            const string sVarFound = "变量{0}不存在，变量类型:{1}";
+            const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
+            int n10 = 0;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
+            }
+            else
+            {
+                sParam1 = QuestActionInfo.sParam1;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref sParam2);
+            }
+            else
+            {
+                sParam2 = QuestActionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = QuestActionInfo.sParam3;
+            }
+            if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2)))
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                return;
+            }
+            if (!string.IsNullOrEmpty(sParam3))
+            {
+                if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
+                {
+                    boVarFound = false;
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
+                    if (DynamicVarList == null)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCode.Inc);
+                        return;
+                    }
+                    if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
+                    {
+                        switch (DynamicVar.VarType)
+                        {
+                            case VarType.Integer:
+                                n3C = DynamicVar.nInternet;
+                                break;
+                            case VarType.String:
+                                s01 = DynamicVar.sString;
+                                break;
+                        }
+                        boVarFound = true;
+                    }
+                    if (!boVarFound)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCode.Inc);
+                        return;
+                    }
+                    n14 = M2Share.GetValNameNo(sParam1);
+                    if (n14 >= 0)
+                    {
+                        if (HUtil32.RangeInDefined(n14, 0, 99))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MNVal[n14] += n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MNVal[n14]++;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 100, 199))
+                        {
+                            if (n3C > 1)
+                            {
+                                M2Share.Config.GlobalVal[n14 - 100] += n3C;
+                            }
+                            else
+                            {
+                                M2Share.Config.GlobalVal[n14 - 100]++;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 200, 299))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MDyVal[n14 - 200] += n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MDyVal[n14 - 200]++;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 300, 399))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MNMval[n14 - 300] += n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MNMval[n14 - 300]++;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 400, 499))
+                        {
+                            if (n3C > 1)
+                            {
+                                M2Share.Config.GlobaDyMval[n14 - 400] += n3C;
+                            }
+                            else
+                            {
+                                M2Share.Config.GlobaDyMval[n14 - 400]++;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 500, 599))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MNInteger[n14 - 500] += n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MNInteger[n14 - 500]++;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 600, 699))
+                        {
+                            PlayObject.MSString[n14 - 600] = PlayObject.MSString[n14 - 600] + s01;
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 700, 799))
+                        {
+                            M2Share.Config.GlobalAVal[n14 - 700] = M2Share.Config.GlobalAVal[n14 - 700] + s01;
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                        {
+                            if (n3C > 1)
+                            {
+                                M2Share.Config.GlobalVal[n14 - 700] += n3C;
+                            }
+                            else
+                            {
+                                M2Share.Config.GlobalVal[n14 - 700]++;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                        {
+                            M2Share.Config.GlobalAVal[n14 - 1100] = M2Share.Config.GlobalAVal[n14 - 1100] + s01;
+                        }
+                        else
+                        {
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                        return;
+                    }
+                    return;
+                }
+                if (HUtil32.IsVarNumber(sParam1) && (!HUtil32.IsVarNumber(sParam2)))
+                {
+                    if ((!string.IsNullOrEmpty(sParam3)) && (!HUtil32.IsStringNumber(sParam3)))
+                    {
+                        n14 = M2Share.GetValNameNo(sParam3);
+                        if (n14 >= 0)
+                        {
+                            if (HUtil32.RangeInDefined(n14, 0, 99))
+                            {
+                                n3C = PlayObject.MNVal[n14];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 100, 199))
+                            {
+                                n3C = M2Share.Config.GlobalVal[n14 - 100];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
+                            {
+                                n3C = PlayObject.MDyVal[n14 - 200];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 300, 399))
+                            {
+                                n3C = PlayObject.MNMval[n14 - 300];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 400, 499))
+                            {
+                                n3C = M2Share.Config.GlobaDyMval[n14 - 400];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 500, 599))
+                            {
+                                n3C = PlayObject.MNInteger[n14 - 500];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 600, 699))
+                            {
+                                s01 = PlayObject.MSString[n14 - 600];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 700, 799))
+                            {
+                                s01 = M2Share.Config.GlobalAVal[n14 - 700];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                            {
+                                n3C = M2Share.Config.GlobalVal[n14 - 700];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                            {
+                                s01 = M2Share.Config.GlobalAVal[n14 - 1100];
+                            }
+                            else
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                            }
+                        }
+                        else
+                        {
+                            s01 = sParam3;
+                        }
+                    }
+                    else
+                    {
+                        n3C = QuestActionInfo.nParam3;
+                    }
+                    boVarFound = false;
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
+                    if (DynamicVarList == null)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCode.Inc);
+                        return;
+                    }
+                    if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
+                    {
+                        switch (DynamicVar.VarType)
+                        {
+                            case VarType.Integer:
+                                if (n3C > 1)
+                                {
+                                    DynamicVar.nInternet += n3C;
+                                }
+                                else
+                                {
+                                    DynamicVar.nInternet++;
+                                }
+                                break;
+                            case VarType.String:
+                                DynamicVar.sString = DynamicVar.sString + s01;
+                                break;
+                        }
+                        boVarFound = true;
+                    }
+                    if (!boVarFound)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCode.Inc);
+                        return;
+                    }
+                    return;
+                }
+                if (n10 == 0)
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                }
+            }
+            else
+            {
+                if (((!string.IsNullOrEmpty(sParam2))) && (!HUtil32.IsStringNumber(sParam2)))
+                {
+                    // 获取第2个变量值
+                    n14 = M2Share.GetValNameNo(sParam2);
+                    if (n14 >= 0)
+                    {
+                        if (HUtil32.RangeInDefined(n14, 0, 99))
+                        {
+                            n3C = PlayObject.MNVal[n14];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 100, 199))
+                        {
+                            n3C = M2Share.Config.GlobalVal[n14 - 100];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 200, 299))
+                        {
+                            n3C = PlayObject.MDyVal[n14 - 200];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 300, 399))
+                        {
+                            n3C = PlayObject.MNMval[n14 - 300];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 400, 499))
+                        {
+                            n3C = M2Share.Config.GlobaDyMval[n14 - 400];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 500, 599))
+                        {
+                            n3C = PlayObject.MNInteger[n14 - 500];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 600, 699))
+                        {
+                            s01 = PlayObject.MSString[n14 - 600];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 700, 799))
+                        {
+                            s01 = M2Share.Config.GlobalAVal[n14 - 700];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                        {
+                            n3C = M2Share.Config.GlobalVal[n14 - 700];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                        {
+                            s01 = M2Share.Config.GlobalAVal[n14 - 1100];
+                        }
+                        else
+                        {
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                        }
+                    }
+                    else
+                    {
+                        n3C = HUtil32.StrToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
+                        s01 = sParam2;
+                    }
+                }
+                else
+                {
+                    n3C = QuestActionInfo.nParam2;
+                }
+                n14 = M2Share.GetValNameNo(sParam1);
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MNVal[n14] += n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MNVal[n14]++;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        if (n3C > 1)
+                        {
+                            M2Share.Config.GlobalVal[n14 - 100] += n3C;
+                        }
+                        else
+                        {
+                            M2Share.Config.GlobalVal[n14 - 100]++;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MDyVal[n14 - 200] += n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MDyVal[n14 - 200]++;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MNMval[n14 - 300] += n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MNMval[n14 - 300]++;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        if (n3C > 1)
+                        {
+                            M2Share.Config.GlobaDyMval[n14 - 400] += n3C;
+                        }
+                        else
+                        {
+                            M2Share.Config.GlobaDyMval[n14 - 400]++;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MNInteger[n14 - 500] += n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MNInteger[n14 - 500]++;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 600, 699))
+                    {
+                        PlayObject.MSString[n14 - 600] = PlayObject.MSString[n14 - 600] + s01;
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 700, 799))
+                    {
+                        M2Share.Config.GlobalAVal[n14 - 700] = M2Share.Config.GlobalAVal[n14 - 700] + s01;
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                    {
+                        if (n3C > 1)
+                        {
+                            M2Share.Config.GlobalVal[n14 - 700] += n3C;
+                        }
+                        else
+                        {
+                            M2Share.Config.GlobalVal[n14 - 700]++;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                    {
+                        M2Share.Config.GlobalAVal[n14 - 1100] = M2Share.Config.GlobalAVal[n14 - 1100] + s01;
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                    }
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                    return;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 变量运算 除法  格式: DIV N1 N2 N3 即N1=N2/N3
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
+        private void ActionOfDivData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            string s34 = string.Empty;
+            int n18 = 0;
+            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            if (n14 < 0)
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        n18 = PlayObject.MNVal[n14];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        n18 = M2Share.Config.GlobalVal[n14 - 100];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        n18 = PlayObject.MDyVal[n14 - 200];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        n18 = PlayObject.MNMval[n14 - 300];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        n18 = M2Share.Config.GlobaDyMval[n14 - 400];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n18 = PlayObject.MNInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
+                    {
+                        n18 = M2Share.Config.GlobalVal[n14 - 700];
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
+                    }
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
+                }
+            }
+            else
+            {
+                n18 = n14;
+            }
+            int n1C = 0;
+            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            if (n14 < 0)
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3);
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        n1C = PlayObject.MNVal[n14];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        n1C = M2Share.Config.GlobalVal[n14 - 100];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        n1C = PlayObject.MDyVal[n14 - 200];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        n1C = PlayObject.MNMval[n14 - 300];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        n1C = M2Share.Config.GlobaDyMval[n14 - 400];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n1C = PlayObject.MNInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
+                    {
+                        n1C = M2Share.Config.GlobalVal[n14 - 700];
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
+                    }
+                }
+                else
+                {
+                    // ScriptActionError(PlayObject,'',QuestActionInfo,sSC_DIV);
+                }
+            }
+            else
+            {
+                n1C = n14;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))//支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    PlayObject.MNVal[n14] = n18 / n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 / n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    PlayObject.MDyVal[n14 - 200] = n18 / n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    PlayObject.MNMval[n14 - 300] = n18 / n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 / n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    PlayObject.MNInteger[n14 - 500] = n18 / n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
+                {
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 / n1C;
+                }
+            }
+        }
+
+        /// <summary>
+        /// 变量运算 乘法  格式: MUL N1 N2 N3 即N1=N2*N3
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
+        private void ActionOfMulData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            string s34 = string.Empty;
+            int n18 = 0;
+            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            if (n14 < 0)
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        n18 = PlayObject.MNVal[n14];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        n18 = M2Share.Config.GlobalVal[n14 - 100];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        n18 = PlayObject.MDyVal[n14 - 200];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        n18 = PlayObject.MNMval[n14 - 300];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        n18 = M2Share.Config.GlobaDyMval[n14 - 400];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n18 = PlayObject.MNInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 600, 699))
+                    {
+                        n18 = HUtil32.StrToInt(PlayObject.MSString[n14 - 600], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 700, 799))
+                    {
+                        n18 = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//A变量
+                    {
+                        n18 = M2Share.Config.GlobalVal[n14 - 700];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 1200, 1599))//G变量
+                    {
+                        n18 = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
+                    }
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
+                }
+            }
+            else
+            {
+                n18 = n14;
+            }
+            int n1C = 0;
+            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            if (n14 < 0)
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3);
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        n1C = PlayObject.MNVal[n14];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        n1C = M2Share.Config.GlobalVal[n14 - 100];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        n1C = PlayObject.MDyVal[n14 - 200];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        n1C = PlayObject.MNMval[n14 - 300];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        n1C = M2Share.Config.GlobaDyMval[n14 - 400];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n1C = PlayObject.MNInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 600, 699))
+                    {
+                        n1C = HUtil32.StrToInt(PlayObject.MSString[n14 - 600], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 700, 799))
+                    {
+                        n1C = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 700], 1);
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199)) //G变量
+                    {
+                        n1C = M2Share.Config.GlobalVal[n14 - 700];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量
+                    {
+                        n1C = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
+                    }
+                }
+                else
+                {
+                    // ScriptActionError(PlayObject,'',QuestActionInfo,sSC_MUL;
+                }
+            }
+            else
+            {
+                n1C = n14;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);// 取第一个变量,并传值给n18
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    PlayObject.MNVal[n14] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    PlayObject.MDyVal[n14 - 200] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    PlayObject.MNMval[n14 - 300] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    PlayObject.MNInteger[n14 - 500] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    PlayObject.MSString[n14 - 600] = (n18 * n1C).ToString();
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    M2Share.Config.GlobalAVal[n14 - 700] = (n18 * n1C).ToString();
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199)) //G变量
+                {
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量(100-499)
+                {
+                    M2Share.Config.GlobalAVal[n14 - 1100] = (n18 * n1C).ToString();
+                }
+            }
+        }
+
+        /// <summary>
+        /// 变量运算 百分比  格式: PERCENT N1 N2 N3 即N1=(N2/N3)*100
+        /// </summary>
+        /// <param name="PlayObject"></param>
+        /// <param name="QuestActionInfo"></param>
+        private void ActionOfPercentData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            string s34 = string.Empty;
+            int n18 = 0;
+            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            if (n14 < 0)
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2); // 取第一个变量,并传值给n18
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        n18 = PlayObject.MNVal[n14];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        n18 = M2Share.Config.GlobalVal[n14 - 100];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        n18 = PlayObject.MDyVal[n14 - 200];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        n18 = PlayObject.MNMval[n14 - 300];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        n18 = M2Share.Config.GlobaDyMval[n14 - 400];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n18 = PlayObject.MNInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
+                    {
+                        n18 = M2Share.Config.GlobalVal[n14 - 700];
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
+                    }
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
+                }
+            }
+            else
+            {
+                n18 = n14;
+            }
+            int n1C = 0;
+            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            if (n14 < 0)
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3); // 取第一个变量,并传值给n1C
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        n1C = PlayObject.MNVal[n14];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        n1C = M2Share.Config.GlobalVal[n14 - 100];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        n1C = PlayObject.MDyVal[n14 - 200];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        n1C = PlayObject.MNMval[n14 - 300];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        n1C = M2Share.Config.GlobaDyMval[n14 - 400];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        n1C = PlayObject.MNInteger[n14 - 500];
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
+                    {
+                        n1C = M2Share.Config.GlobalVal[n14 - 700];
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
+                    }
+                }
+                else
+                {
+                    // ScriptActionError(PlayObject,'',QuestActionInfo,sSC_PERCENT);
+                }
+            }
+            else
+            {
+                n1C = n14;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    PlayObject.MNVal[n14] = n18 * n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 / n1C * 100;
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    PlayObject.MDyVal[n14 - 200] = n18 / n1C * 100;
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    PlayObject.MNMval[n14 - 300] = n18 / n1C * 100;
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 / n1C * 100;
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    PlayObject.MNInteger[n14 - 500] = n18 / n1C * 100;
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    PlayObject.MSString[n14 - 600] = $"{n18 / n1C * 100}%";
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    M2Share.Config.GlobalAVal[n14 - 700] = $"{n18 / n1C * 100}%";
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
+                {
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 / n1C * 100;
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))//A变量
+                {
+                    M2Share.Config.GlobalAVal[n14 - 1100] = $"{n18 / n1C * 100}%";
+                }
+            }
+        }
+
+        private void ActionOfSumData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            int n18 = 0;
+            string s34 = string.Empty;
+            string s44 = string.Empty;
+            string s48 = string.Empty;
+            int n14;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) //  SUM 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    n18 = PlayObject.MNVal[n14];
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    n18 = M2Share.Config.GlobalVal[n14 - 100];
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    n18 = PlayObject.MDyVal[n14 - 200];
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    n18 = PlayObject.MNMval[n14 - 300];
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    n18 = M2Share.Config.GlobaDyMval[n14 - 400];
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    n18 = PlayObject.MNInteger[n14 - 500];
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    s44 = PlayObject.MSString[n14 - 600];
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    s44 = M2Share.Config.GlobalAVal[n14 - 700];
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    n18 = M2Share.Config.GlobalVal[n14 - 700];//G变量
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))
+                {
+                    s44 = M2Share.Config.GlobalAVal[n14 - 1100];//A变量
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Sum);
+                }
+            }
+            else
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Sum);
+            }
+            int n1C = 0;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    n1C = PlayObject.MNVal[n14];
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    n1C = M2Share.Config.GlobalVal[n14 - 100];
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    n1C = PlayObject.MDyVal[n14 - 200];
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    n1C = PlayObject.MNMval[n14 - 300];
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    n1C = M2Share.Config.GlobaDyMval[n14 - 400];
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    n1C = PlayObject.MNInteger[n14 - 500];
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    s48 = PlayObject.MSString[n14 - 600];
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    s48 = M2Share.Config.GlobalAVal[n14 - 700];
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    n1C = M2Share.Config.GlobalVal[n14 - 700];//G变量
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))
+                {
+                    s48 = M2Share.Config.GlobalAVal[n14 - 1100];//A变量
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Sum);
+                }
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) // SUM 支持字符串变量
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                n14 = M2Share.GetValNameNo(s34);
+            }
+            else
+            {
+                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+            }
+            if (n14 >= 0)
+            {
+                if (HUtil32.RangeInDefined(n14, 0, 99))
+                {
+                    PlayObject.MNVal[n14] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 100, 199))
+                {
+                    M2Share.Config.GlobalVal[n14 - 100] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 200, 299))
+                {
+                    PlayObject.MDyVal[n14 - 200] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 300, 399))
+                {
+                    PlayObject.MNMval[n14 - 300] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 400, 499))
+                {
+                    M2Share.Config.GlobaDyMval[n14 - 400] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 500, 599))
+                {
+                    PlayObject.MNInteger[n14 - 500] = n18 + n1C;
+                }
+                else if (HUtil32.RangeInDefined(n14, 600, 699))
+                {
+                    PlayObject.MSString[n14 - 600] = s44 + s48;
+                }
+                else if (HUtil32.RangeInDefined(n14, 700, 799))
+                {
+                    M2Share.Config.GlobalAVal[n14 - 700] = s44 + s48;
+                }
+                else if (HUtil32.RangeInDefined(n14, 800, 1199))
+                {
+                    M2Share.Config.GlobalVal[n14 - 700] = n18 + n1C;//G变量
+                }
+                else if (HUtil32.RangeInDefined(n14, 1200, 1599))
+                {
+                    M2Share.Config.GlobalAVal[n14 - 1100] = s44 + s48;//A变量
+                }
+            }
+        }
+
+        private void ActionOfDecInteger(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        {
+            int n14;
+            int n3C = 0;
+            DynamicVar DynamicVar;
+            Dictionary<string, DynamicVar> DynamicVarList;
+            string sName = string.Empty;
+            string s01 = string.Empty;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            const string sVarFound = "变量{0}不存在，变量类型:{1}";
+            const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
+            int n10 = 0;
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
+            }
+            else
+            {
+                sParam1 = QuestActionInfo.sParam1;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref sParam2);
+            }
+            else
+            {
+                sParam2 = QuestActionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(QuestActionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(QuestActionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = QuestActionInfo.sParam3;
+            }
+            if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2)))
+            {
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                return;
+            }
+            string s02;
+            string s03;
+            if (!string.IsNullOrEmpty(sParam3))
+            {
+                bool boVarFound;
+                if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
+                {
+                    boVarFound = false;
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
+                    if (DynamicVarList == null)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCode.Dec);
+                        return;
+                    }
+                    if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
+                    {
+                        switch (DynamicVar.VarType)
+                        {
+                            case VarType.Integer:
+                                n3C = DynamicVar.nInternet;
+                                break;
+                            case VarType.String:
+                                s01 = DynamicVar.sString;
+                                break;
+                        }
+                        boVarFound = true;
+                    }
+                    if (!boVarFound)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCode.Dec);
+                        return;
+                    }
+                    n14 = M2Share.GetValNameNo(sParam1);
+                    if (n14 >= 0)
+                    {
+                        if (HUtil32.RangeInDefined(n14, 0, 99))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MNVal[n14] -= n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MNVal[n14] -= 1;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 100, 199))
+                        {
+                            if (n3C > 1)
+                            {
+                                M2Share.Config.GlobalVal[n14 - 100] -= n3C;
+                            }
+                            else
+                            {
+                                M2Share.Config.GlobalVal[n14 - 100] -= 1;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 200, 299))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MDyVal[n14 - 200] -= n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MDyVal[n14 - 200] -= 1;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 300, 399))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MNMval[n14 - 300] -= n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MNMval[n14 - 300] -= 1;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 400, 499))
+                        {
+                            if (n3C > 1)
+                            {
+                                M2Share.Config.GlobaDyMval[n14 - 400] -= n3C;
+                            }
+                            else
+                            {
+                                M2Share.Config.GlobaDyMval[n14 - 400] -= 1;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 500, 599))
+                        {
+                            if (n3C > 1)
+                            {
+                                PlayObject.MNInteger[n14 - 500] -= n3C;
+                            }
+                            else
+                            {
+                                PlayObject.MNInteger[n14 - 500] -= 1;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 600, 699))
+                        {
+                            n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            s02 = PlayObject.MSString[n14 - 600][1..n10];
+                            s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
+                            PlayObject.MSString[n14 - 600] = s02 + s03;
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 700, 799))
+                        {
+                            n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            s02 = M2Share.Config.GlobalAVal[n14 - 700][1..n10];
+                            s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
+                            M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                        {
+                            if (n3C > 1)
+                            {
+                                M2Share.Config.GlobalVal[n14 - 700] -= n3C;
+                            }
+                            else
+                            {
+                                M2Share.Config.GlobalVal[n14 - 700] -= 1;
+                            }
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                        {
+                            n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            s02 = M2Share.Config.GlobalAVal[n14 - 1100][1..n10];
+                            s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
+                            M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
+                        }
+                        else
+                        {
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                        }
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                        return;
+                    }
+                    return;
+                }
+                if (HUtil32.IsVarNumber(sParam1) && (!HUtil32.IsVarNumber(sParam2)))
+                {
+                    if ((!string.IsNullOrEmpty(sParam3)) && (!HUtil32.IsStringNumber(sParam3)))
+                    {
+                        n14 = M2Share.GetValNameNo(sParam3);
+                        if (n14 >= 0)
+                        {
+                            if (HUtil32.RangeInDefined(n14, 0, 99))
+                            {
+                                n3C = PlayObject.MNVal[n14];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 100, 199))
+                            {
+                                n3C = M2Share.Config.GlobalVal[n14 - 100];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 200, 299))
+                            {
+                                n3C = PlayObject.MDyVal[n14 - 200];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 300, 399))
+                            {
+                                n3C = PlayObject.MNMval[n14 - 300];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 400, 499))
+                            {
+                                n3C = M2Share.Config.GlobaDyMval[n14 - 400];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 500, 599))
+                            {
+                                n3C = PlayObject.MNInteger[n14 - 500];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 600, 699))
+                            {
+                                s01 = PlayObject.MSString[n14 - 600];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 700, 799))
+                            {
+                                s01 = M2Share.Config.GlobalAVal[n14 - 700];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                            {
+                                n3C = M2Share.Config.GlobalVal[n14 - 700];
+                            }
+                            else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                            {
+                                s01 = M2Share.Config.GlobalAVal[n14 - 1100];
+                            }
+                            else
+                            {
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                            }
+                        }
+                        else
+                        {
+                            s01 = sParam3;
+                        }
+                    }
+                    else
+                    {
+                        n3C = QuestActionInfo.nParam3;
+                    }
+                    boVarFound = false;
+                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
+                    if (DynamicVarList == null)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCode.Dec);
+                        return;
+                    }
+                    if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
+                    {
+                        switch (DynamicVar.VarType)
+                        {
+                            case VarType.Integer:
+                                if (n3C > 1)
+                                {
+                                    DynamicVar.nInternet -= n3C;
+                                }
+                                else
+                                {
+                                    DynamicVar.nInternet -= 1;
+                                }
+                                break;
+                            case VarType.String:
+                                n10 = DynamicVar.sString.AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                                s02 = DynamicVar.sString[..(n10 - 1)];
+                                s03 = DynamicVar.sString.Substring(s01.Length + n10 - 1, DynamicVar.sString.Length);
+                                DynamicVar.sString = s02 + s03;
+                                break;
+                        }
+                        boVarFound = true;
+                    }
+                    if (!boVarFound)
+                    {
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCode.Dec);
+                        return;
+                    }
+                    return;
+                }
+                if (n10 == 0)
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                }
+            }
+            else
+            {
+                if ((!string.IsNullOrEmpty(sParam2)) && (!HUtil32.IsStringNumber(sParam2)))
+                {
+                    // 获取第2个变量值
+                    n14 = M2Share.GetValNameNo(sParam2);
+                    if (n14 >= 0)
+                    {
+                        if (HUtil32.RangeInDefined(n14, 0, 99))
+                        {
+                            n3C = PlayObject.MNVal[n14];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 100, 199))
+                        {
+                            n3C = M2Share.Config.GlobalVal[n14 - 100];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 200, 299))
+                        {
+                            n3C = PlayObject.MDyVal[n14 - 200];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 300, 399))
+                        {
+                            n3C = PlayObject.MNMval[n14 - 300];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 400, 499))
+                        {
+                            n3C = M2Share.Config.GlobaDyMval[n14 - 400];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 500, 599))
+                        {
+                            n3C = PlayObject.MNInteger[n14 - 500];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 600, 699))
+                        {
+                            s01 = PlayObject.MSString[n14 - 600];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 700, 799))
+                        {
+                            s01 = M2Share.Config.GlobalAVal[n14 - 700];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                        {
+                            n3C = M2Share.Config.GlobalVal[n14 - 700];
+                        }
+                        else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                        {
+                            s01 = M2Share.Config.GlobalAVal[n14 - 1100];
+                        }
+                        else
+                        {
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                        }
+                    }
+                    else
+                    {
+                        n3C = HUtil32.StrToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
+                        s01 = sParam2;
+                    }
+                }
+                else
+                {
+                    n3C = QuestActionInfo.nParam2;
+                }
+                n14 = M2Share.GetValNameNo(sParam1);
+                if (n14 >= 0)
+                {
+                    if (HUtil32.RangeInDefined(n14, 0, 99))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MNVal[n14] -= n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MNVal[n14] -= 1;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 100, 199))
+                    {
+                        if (n3C > 1)
+                        {
+                            M2Share.Config.GlobalVal[n14 - 100] -= n3C;
+                        }
+                        else
+                        {
+                            M2Share.Config.GlobalVal[n14 - 100] -= 1;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 200, 299))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MDyVal[n14 - 200] -= n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MDyVal[n14 - 200] -= 1;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 300, 399))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MNMval[n14 - 300] -= n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MNMval[n14 - 300] -= 1;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 400, 499))
+                    {
+                        if (n3C > 1)
+                        {
+                            M2Share.Config.GlobaDyMval[n14 - 400] -= n3C;
+                        }
+                        else
+                        {
+                            M2Share.Config.GlobaDyMval[n14 - 400] -= 1;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 500, 599))
+                    {
+                        if (n3C > 1)
+                        {
+                            PlayObject.MNInteger[n14 - 500] -= n3C;
+                        }
+                        else
+                        {
+                            PlayObject.MNInteger[n14 - 500] -= 1;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 600, 699))
+                    {
+                        n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
+                        s02 = PlayObject.MSString[n14 - 600][1..n10];
+                        s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
+                        PlayObject.MSString[n14 - 600] = s02 + s03;
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 700, 799))
+                    {
+                        n10 = M2Share.Config.GlobalAVal[n14 - 700].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
+                        s02 = M2Share.Config.GlobalAVal[n14 - 700][1..n10];
+                        s03 = M2Share.Config.GlobalAVal[n14 - 700].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 700].Length);
+                        M2Share.Config.GlobalAVal[n14 - 700] = s02 + s03;
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 800, 1199)) // G变量
+                    {
+                        if (n3C > 1)
+                        {
+                            M2Share.Config.GlobalVal[n14 - 700] -= n3C;
+                        }
+                        else
+                        {
+                            M2Share.Config.GlobalVal[n14 - 700] -= 1;
+                        }
+                    }
+                    else if (HUtil32.RangeInDefined(n14, 1200, 1599)) // A变量
+                    {
+                        n10 = M2Share.Config.GlobalAVal[n14 - 1100].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
+                        s02 = M2Share.Config.GlobalAVal[n14 - 1100][1..n10];
+                        s03 = M2Share.Config.GlobalAVal[n14 - 1100].Substring(s01.Length + n10, M2Share.Config.GlobalAVal[n14 - 1100].Length);
+                        M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
+                    }
+                    else
+                    {
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                    }
+                }
+                else
+                {
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                    return;
+                }
+            }
+        }
+
         private void ActionOfExeaction(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n40 = questActionInfo.nParam1;
@@ -197,7 +2048,7 @@ namespace GameSrv.ScriptSystem
 
         private void ActionOfSetOpen(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
-           var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
+            var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
             var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
             playObject.SetQuestUnitOpenStatus(n28, n2C);
         }
@@ -807,7 +2658,7 @@ namespace GameSrv.ScriptSystem
 
         private void ActionOfAutoAddGameGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
-            int nPoint = 0; 
+            int nPoint = 0;
             int nTime = 0;
             if (string.Compare(questActionInfo.sParam1, "START", StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -1860,7 +3711,7 @@ namespace GameSrv.ScriptSystem
                 return;
             }
             var boFoundVar = false;
-            var dynamicVarList = NormNpc.GetDynamicVarMap(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -1979,7 +3830,7 @@ namespace GameSrv.ScriptSystem
                 nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
             }
             var cMethod = sMethod[0];
-            var dynamicVarList = NormNpc.GetDynamicVarMap(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -2281,7 +4132,7 @@ namespace GameSrv.ScriptSystem
             dynamicVar.nInternet = nVarValue;
             dynamicVar.sString = sVarValue;
             var boFoundVar = false;
-            var dynamicVarList = NormNpc.GetDynamicVarMap(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
@@ -2335,7 +4186,7 @@ namespace GameSrv.ScriptSystem
                 return;
             }
             var boFoundVar = false;
-            var dynamicVarList = NormNpc.GetDynamicVarMap(playObject, sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
                 ScriptActionError(playObject, string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);

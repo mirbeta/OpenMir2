@@ -1653,30 +1653,6 @@ namespace GameSrv.Npc {
             Castle = M2Share.CastleMgr.InCastleWarArea(this);
         }
 
-        public static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject PlayObject, string sType, ref string sName) {
-            Dictionary<string, DynamicVar> result = null;
-            if (HUtil32.CompareLStr(sType, "HUMAN", 5)) {
-                result = PlayObject.DynamicVarMap;
-                sName = PlayObject.ChrName;
-            }
-            else if (HUtil32.CompareLStr(sType, "GUILD", 5)) {
-                if (PlayObject.MyGuild == null) {
-                    return null;
-                }
-                result = PlayObject.MyGuild.DynamicVarList;
-                sName = PlayObject.MyGuild.GuildName;
-            }
-            else if (HUtil32.CompareLStr(sType, "GLOBAL", 6)) {
-                result = M2Share.DynamicVarList;
-                sName = "GLOBAL";
-            }
-            else if (HUtil32.CompareLStr(sType, "Account", 7)) {
-                result = PlayObject.DynamicVarMap;
-                sName = PlayObject.UserAccount;
-            }
-            return result;
-        }
-
         private static bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue) {
             bool result = false;
             if (string.IsNullOrEmpty(sMsg)) {
