@@ -698,7 +698,7 @@ namespace GameSrv.Magic
         private static bool MagTamming(PlayObject playObject, MonsterObject targetObject, int nTargetX, int nTargetY, byte magicLevel)
         {
             var result = false;
-            if (targetObject.Race != ActorRace.Play && M2Share.RandomNumber.Random(4 - magicLevel) == 0)
+            if (targetObject.Race > ActorRace.Play && M2Share.RandomNumber.Random(4 - magicLevel) == 0)
             {
                 targetObject.TargetCret = null;
                 if (targetObject.Master == playObject)
@@ -935,13 +935,12 @@ namespace GameSrv.Magic
 
         private static bool MagGroupDeDing(BaseObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, BaseObject targetObject)
         {
-            BaseObject baseObject;
             var result = false;
             IList<BaseObject> objectList = new List<BaseObject>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
-                baseObject = objectList[i];
+                var baseObject = objectList[i];
                 if (baseObject.Death || baseObject.Ghost || playObject == baseObject)
                 {
                     continue;

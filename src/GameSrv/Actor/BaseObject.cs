@@ -2066,8 +2066,8 @@ namespace GameSrv.Actor
             int n14 = 0;
             while (n14 < 13)
             {
-                byte n18 = M2Share.GetNextDirection(nX, nY, targetObject.CurrX, targetObject.CurrY);
-                if (Envir.GetNextPosition(nX, nY, n18, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
+                byte dir = M2Share.GetNextDirection(nX, nY, targetObject.CurrX, targetObject.CurrY);
+                if (Envir.GetNextPosition(nX, nY, dir, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
                 {
                     if ((nX == targetObject.CurrX) && (nY == targetObject.CurrY))
                     {
