@@ -2,7 +2,6 @@
     public static class ScriptConst {
         public const string sMarket_Def = "Market_Def";
         public const string sNpc_def = "Npc_def";
-
         public const string sMAN = "MAN";
         public const string sSUNRAISE = "SUNRAISE";
         public const string sDAY = "DAY";
@@ -18,9 +17,6 @@
         public const string sTHU = "THU";
         public const string sFRI = "FRI";
         public const string sSAT = "SAT";
-     
-    
-        // =================================================================
         /// <summary>
         /// 元宝寄售:出售物品
         /// </summary>
@@ -29,10 +25,10 @@
         /// 元宝寄售
         /// </summary>        
         public const string sybdeal = "@ybdeal";
-
-
+        /// <summary>
+        /// 离线挂机留言
+        /// </summary>
         public const string sOFFLINEMSG = "@@offlinemsg";
-        // 增加挂机
         public const string sSL_SENDMSG = "@@sendmsg";
         /// <summary>
         /// 特殊修理
@@ -83,17 +79,14 @@
         public const string sHIREARCHERNOW = "@hirearchernow";
         public const string sHIREGUARDNOW = "@hireguardnow";
         public const string sHIREGUARDOK = "@hireguardok";
-
         /// <summary>
         /// 人物下线触发
         /// </summary>
         public const string SPLAYOFFLINE = "@PLAYOFFLINE";
-
         /// <summary>
         /// 人物下线触发编号
         /// </summary>
         public const int NPLAYOFFLINE = 0;
-
         public const string SMARRYERROR = "@MARRYERROR";
         public const int NMARRYERROR = 3;
         public const string SMASTERERROR = "@MASTERERROR";
@@ -162,55 +155,44 @@
         public const int NUNMASTEREND = 35;
         public const string SREVUNMASTER = "@REVUNMASTER";
         public const int NREVUNMASTER = 36;
-
         /// <summary>
         /// 请求攻城成功
         /// </summary>
         public const string SSUPREQUEST_OK = "~@REQUEST_OK";
-
         /// <summary>
         /// 请求攻城成功编号
         /// </summary>
         public const int NSUPREQUEST_OK = 37;
-
         public const string SMEMBER = "@MEMBER";
         public const int NMEMBER = 38;
-
         /// <summary>
         /// 人物小退触发
         /// </summary>
         public const string SPLAYRECONNECTION = "@PLAYRECONNECTION";
-
         /// <summary>
         /// 人物小退触发编号
         /// </summary>
         public const int NPLAYRECONNECTION = 39;
-
         public const string SLOGIN = "@LOGIN";
         public const int NLOGIN = 40;
         public const string SPLAYDIE = "@PLAYDIE";
         public const int NPLAYDIE = 41;
-
         /// <summary>
         /// 杀人触发标签
         /// </summary>
         public const string SKILLPLAY = "@KILLPLAY";
-
         /// <summary>
         /// 杀人触发编号
         /// </summary>
         public const int NKILLPLAY = 42;
-
         /// <summary>
         /// 升级触发标签
         /// </summary>
         public const string SPLAYLEVELUP = "@PLAYLEVELUP";
-
         /// <summary>
         /// 升级触发编号
         /// </summary>
         public const int NPLAYLEVELUP = 43;
-
         public const string SSTDMODEFUNC = "@STDMODEFUNC";
         public const int NSTDMODEFUNC = 44;
         public const string SPLAYLEVELUPEX = "@PLAYLEVELUPEX";
@@ -247,77 +229,62 @@
         public const int NJOINGROUP = 60;
         public const string SSPEEDCLOSE = "@SPEEDCLOSE";
         public const int NSPEEDCLOSE = 61;
-
         /// <summary>
         /// 武器升级成功
         /// </summary>
         public const string SUPGRADENOW_OK = "~@UPGRADENOW_OK";
-
         /// <summary>
         /// 武器升级成功编号
         /// </summary>
         public const int NUPGRADENOW_OK = 62;
-
         /// <summary>
         /// 武器正在升级
         /// </summary>
         public const string SUPGRADENOW_ING = "~@UPGRADENOW_ING";
-
         /// <summary>
         /// 武器正在升级编号
         /// </summary>
         public const int NUPGRADENOW_ING = 63;
-
         /// <summary>
         /// 武器升级失败
         /// </summary>
         public const string SUPGRADENOW_FAIL = "~@UPGRADENOW_FAIL";
-
         /// <summary>
         /// 武器升级失败编号
         /// </summary>
         public const int NUPGRADENOW_FAIL = 64;
-
         /// <summary>
         /// 取回武器升级成功
         /// </summary>
         public const string SGETBACKUPGNOW_OK = "~@GETBACKUPGNOW_OK";
-
         /// <summary>
         /// 取回武器升级成功编号
         /// </summary>
         public const int NGETBACKUPGNOW_OK = 65;
-
         /// <summary>
         /// 正在取回武器
         /// </summary>
         public const string SGETBACKUPGNOW_ING = "~@GETBACKUPGNOW_ING";
-
         /// <summary>
         /// 正在取回武器编号
         /// </summary>
         public const int NGETBACKUPGNOW_ING = 66;
-
         /// <summary>
         /// 取回武器失败
         /// </summary>
         public const string SGETBACKUPGNOW_FAIL = "~@GETBACKUPGNOW_FAIL";
-
         /// <summary>
         /// 取回武器失败编号
         /// </summary>
         public const int NGETBACKUPGNOW_FAIL = 67;
-
         /// <summary>
         /// 取回武器升级包裹满
         /// </summary>
         public const string SGETBACKUPGNOW_BAGFULL = "~@getbackupgnow_bagfull";
-
         /// <summary>
         /// 取回武器升级包裹满编号
         /// </summary>
         public const int NGETBACKUPGNOW_BAGFULL = 68;
-
         public const string STAKEONITEMS = "@TAKEONITEM";
         public const int NTAKEONITEMS = 69;
         public const string STAKEOFFITEMS = "@TAKEOFFITEM";
@@ -348,36 +315,11 @@
         public const int NASSEMBLEBOOT = 82;
         public const string SASSEMBLEFAIL = "@ASSEMBLEFAIL";
         public const int NASSEMBLEFAIL = 83;
-
-        // By John 增加英雄创建脚本定义
-        public const string SCREATEHEROFAILEX = "@CREATEHEROFAILEX";
-
-        public const int NCREATEHEROFAILEX = 84;
-        public const string SLOGOUTHEROFIRST = "@LOGOUTHEROFIRST";
-        public const int NLOGOUTHEROFIRST = 85;
-        public const string SNOTHAVEHERO = "@NOTHAVEHERO";
-        public const int NNOTHAVEHERO = 86;
-        public const string SHERONAMEFILTER = "@HERONAMEFILTER";
-        public const int NHERONAMEFILTER = 87;
-        public const string SHAVEHERO = "@HAVEHERO";
-        public const int NHAVEHERO = 88;
-        public const string SCREATEHEROOK = "@CREATEHEROOK";
-        public const int NCREATEHEROOK = 89;
-        public const string SHERONAMEEXISTS = "@HERONAMEEXISTS";
-        public const int NHERONAMEEXISTS = 90;
-        public const string SDELETEHEROOK = "@DELETEHEROOK";
-        public const int NDELETEHEROOK = 91;
-        public const string SDELETEHEROFAIL = "@DELETEHEROFAIL";
-        public const int NDELETEHEROFAIL = 92;
-        public const string SHEROOVERCHRCOUNT = "@HEROOVERCHRCOUNT";
-        public const int NHEROOVERCHRCOUNT = 93;
         public const string SASSEMBLE = "@ASSEMBLE";
         public const string SMAGSELFFUNC = "@MAGSELFFUNC";
         public const string SMAGTAGFUNC = "@MAGTAGFUNC";
         public const string SMAGTAGFUNCEX = "@MAGTAGFUNCEX";
         public const string SMAGMONFUNC = "@MAGMONFUNC";
-
-
         /// <summary>
         /// 重置标签
         /// </summary>

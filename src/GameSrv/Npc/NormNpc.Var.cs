@@ -79,11 +79,11 @@ namespace GameSrv.Npc {
                     }
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOVR);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOVR);
                 }
             }
             else {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOVR);
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOVR);
             }
         }
 
@@ -114,68 +114,68 @@ namespace GameSrv.Npc {
                 sParam3 = QuestActionInfo.sParam3;
             }
             if (string.IsNullOrEmpty(sParam1)) {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                 return;
             }
             switch (GetMovDataType(QuestActionInfo)) {
                 case 0:
                     if (GetMovDataHumanInfoValue(PlayObject, sParam3, ref sValue, ref nValue, ref nDataType)) {
                         if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, sValue, nValue, nDataType)) {
-                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCodeDef.sMOV);
+                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.MOV);
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 case 1:
                     if (GetMovDataValNameValue(PlayObject, sParam3, ref sValue, ref nValue, ref nDataType)) {
                         if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, sValue, nValue, nDataType)) {
-                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCodeDef.sMOV);
+                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.MOV);
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 case 2:
                     if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam3, 1)) {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 case 3:
                     if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam3, 0)) {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 case 4:
                     if (GetMovDataHumanInfoValue(PlayObject, sParam2, ref sValue, ref nValue, ref nDataType)) {
                         if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType)) {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 case 5:
                     if (GetMovDataValNameValue(PlayObject, sParam2, ref sValue, ref nValue, ref nDataType)) {
                         if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType)) {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 case 6:
                     if (GetMovDataDynamicVarValue(PlayObject, sParam2, sParam3, ref sValue, ref nValue, ref nDataType)) {
                         if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType)) {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam3), QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam3), QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 case 7:
@@ -185,23 +185,23 @@ namespace GameSrv.Npc {
                             GetMovDataHumanInfoValue(PlayObject, sParam2, ref sValue, ref nValue, ref nDataType);// 取人物信息
                             sValue = sValue + sParam2.Substring(sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) - 1, sParam2.Length - sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) + 1);
                             if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType)) {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                                 return;
                             }
                         }
                         else {
                             if (!SetMovDataValNameValue(PlayObject, sParam1, QuestActionInfo.sParam2, QuestActionInfo.nParam2, nDataType)) {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                                 return;
                             }
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                     }
                     break;
                 default:
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sMOV);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.MOV);
                     break;
             }
         }
@@ -239,7 +239,7 @@ namespace GameSrv.Npc {
                 sParam3 = QuestActionInfo.sParam3;
             }
             if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2))) {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                 return;
             }
             if (!string.IsNullOrEmpty(sParam3)) {
@@ -247,7 +247,7 @@ namespace GameSrv.Npc {
                     boVarFound = false;
                     DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
                     if (DynamicVarList == null) {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCodeDef.sINC);
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCode.INC);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam3, out DynamicVar)) {
@@ -262,7 +262,7 @@ namespace GameSrv.Npc {
                         boVarFound = true;
                     }
                     if (!boVarFound) {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCodeDef.sINC);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCode.INC);
                         return;
                     }
                     n14 = M2Share.GetValNameNo(sParam1);
@@ -335,11 +335,11 @@ namespace GameSrv.Npc {
                             M2Share.Config.GlobalAVal[n14 - 1100] = M2Share.Config.GlobalAVal[n14 - 1100] + s01;
                         }
                         else {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                         return;
                     }
                     return;
@@ -381,7 +381,7 @@ namespace GameSrv.Npc {
                                 s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                             }
                             else {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                             }
                         }
                         else {
@@ -394,7 +394,7 @@ namespace GameSrv.Npc {
                     boVarFound = false;
                     DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
                     if (DynamicVarList == null) {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCodeDef.sINC);
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCode.INC);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam2, out DynamicVar)) {
@@ -414,13 +414,13 @@ namespace GameSrv.Npc {
                         boVarFound = true;
                     }
                     if (!boVarFound) {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCodeDef.sINC);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCode.INC);
                         return;
                     }
                     return;
                 }
                 if (n10 == 0) {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                 }
             }
             else {
@@ -461,7 +461,7 @@ namespace GameSrv.Npc {
                             s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                         }
                         else {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                         }
                     }
                     else {
@@ -542,11 +542,11 @@ namespace GameSrv.Npc {
                         M2Share.Config.GlobalAVal[n14 - 1100] = M2Share.Config.GlobalAVal[n14 - 1100] + s01;
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                     }
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sINC);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.INC);
                     return;
                 }
             }
@@ -584,7 +584,7 @@ namespace GameSrv.Npc {
                 sParam3 = QuestActionInfo.sParam3;
             }
             if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2))) {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                 return;
             }
             string s02;
@@ -595,7 +595,7 @@ namespace GameSrv.Npc {
                     boVarFound = false;
                     DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
                     if (DynamicVarList == null) {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCodeDef.sDEC);
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCode.DEC);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam3, out DynamicVar)) {
@@ -610,7 +610,7 @@ namespace GameSrv.Npc {
                         boVarFound = true;
                     }
                     if (!boVarFound) {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCodeDef.sDEC);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCode.DEC);
                         return;
                     }
                     n14 = M2Share.GetValNameNo(sParam1);
@@ -692,11 +692,11 @@ namespace GameSrv.Npc {
                             M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
                         }
                         else {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                         }
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                         return;
                     }
                     return;
@@ -738,7 +738,7 @@ namespace GameSrv.Npc {
                                 s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                             }
                             else {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                             }
                         }
                         else {
@@ -751,7 +751,7 @@ namespace GameSrv.Npc {
                     boVarFound = false;
                     DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
                     if (DynamicVarList == null) {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCodeDef.sDEC);
+                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCode.DEC);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam2, out DynamicVar)) {
@@ -774,13 +774,13 @@ namespace GameSrv.Npc {
                         boVarFound = true;
                     }
                     if (!boVarFound) {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCodeDef.sDEC);
+                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCode.DEC);
                         return;
                     }
                     return;
                 }
                 if (n10 == 0) {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                 }
             }
             else {
@@ -821,7 +821,7 @@ namespace GameSrv.Npc {
                             s01 = M2Share.Config.GlobalAVal[n14 - 1100];
                         }
                         else {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                         }
                     }
                     else {
@@ -911,11 +911,11 @@ namespace GameSrv.Npc {
                         M2Share.Config.GlobalAVal[n14 - 1100] = s02 + s03;
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                     }
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sDEC);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.DEC);
                     return;
                 }
             }
@@ -956,11 +956,11 @@ namespace GameSrv.Npc {
                         n18 = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_DIV);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
                     }
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_DIV);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
                 }
             }
             else {
@@ -994,7 +994,7 @@ namespace GameSrv.Npc {
                         n1C = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_DIV);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
                     }
                 }
                 else {
@@ -1083,11 +1083,11 @@ namespace GameSrv.Npc {
                         n18 = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_MUL);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
                     }
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_MUL);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
                 }
             }
             else {
@@ -1131,7 +1131,7 @@ namespace GameSrv.Npc {
                         n1C = HUtil32.StrToInt(M2Share.Config.GlobalAVal[n14 - 1100], 1);
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_MUL);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
                     }
                 }
                 else {
@@ -1220,11 +1220,11 @@ namespace GameSrv.Npc {
                         n18 = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_PERCENT);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
                     }
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_PERCENT);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
                 }
             }
             else {
@@ -1258,7 +1258,7 @@ namespace GameSrv.Npc {
                         n1C = M2Share.Config.GlobalVal[n14 - 700];
                     }
                     else {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSC_PERCENT);
+                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
                     }
                 }
                 else {
@@ -1358,11 +1358,11 @@ namespace GameSrv.Npc {
                     s44 = M2Share.Config.GlobalAVal[n14 - 1100];//A变量
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSUM);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.SUM);
                 }
             }
             else {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSUM);
+                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.SUM);
             }
             int n1C = 0;
             if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
@@ -1405,7 +1405,7 @@ namespace GameSrv.Npc {
                     s48 = M2Share.Config.GlobalAVal[n14 - 1100];//A变量
                 }
                 else {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCodeDef.sSUM);
+                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.SUM);
                 }
             }
             if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) // SUM 支持字符串变量

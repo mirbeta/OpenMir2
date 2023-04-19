@@ -277,7 +277,7 @@ namespace GameSrv.Npc
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, CurrX, CurrY, e.Message, ConditionCodeDef.nCHECK));
+                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, CurrX, CurrY, e.Message, ConditionCode.CHECK));
             }
         }
 

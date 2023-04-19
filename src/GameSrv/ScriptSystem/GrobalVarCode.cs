@@ -3,7 +3,7 @@
     /// <summary>
     /// 全局变量编码定义
     /// </summary>
-    public class GrobalVarCodeDef
+    public class GrobalVarCode
     {
         public const string sVAR_SERVERNAME = "$SERVERNAME";
         public const string tVAR_SERVERNAME = "<$1>";

@@ -18,7 +18,7 @@ namespace GameSrv.ScriptSystem
         public void Initialize()
         {
             ProcessExecutionMessage = new Dictionary<int, HandleExecutionMessage>();
-            ProcessExecutionMessage[ExecutionCodeDef.nSC_RANDOMMOVE] = ActionOfRandomMove;
+            ProcessExecutionMessage[(int)ExecutionCode.RANDOMMOVE] = ActionOfRandomMove;
         }
 
         public bool IsRegister(int cmdCode)

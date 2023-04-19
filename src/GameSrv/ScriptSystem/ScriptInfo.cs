@@ -3,6 +3,17 @@ using GameSrv.Npc;
 
 namespace GameSrv.Script
 {
+    [AttributeUsage(AttributeTargets.Field)]
+    public class ScriptCode : Attribute
+    {
+        public string CommandName { get; private set; }
+
+        public ScriptCode(string codeName)
+        {
+            CommandName = codeName;
+        }
+    }
+
     public class ScriptInfo
     {
         public bool IsQuest;
