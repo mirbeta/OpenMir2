@@ -8,57 +8,57 @@ namespace GameSrv
     public enum ExecutionCode : short
     {
         [ScriptCode("Set")]
-        SET,
+        Set,
         [ScriptCode("Take")]
-        TAKE,
+        Take,
         [ScriptCode("GIVE")]
-        GIVE,
+        Give,
         [ScriptCode("TAKEW")]
-        TAKEW,
+        Takew,
         [ScriptCode("CLOSE")]
-        CLOSE,
+        Close,
         [ScriptCode("RESET")]
-        RESET,
+        ReSet,
         [ScriptCode("SETOPEN")]
-        SETOPEN,
+        SetOpen,
         [ScriptCode("SETUNIT")]
-        SETUNIT,
+        SetUnit,
         [ScriptCode("RESETUNIT")]
-        RESETUNIT,
+        ResetUnit,
         [ScriptCode("BREAK")]
-        BREAK,
+        Break,
         [ScriptCode("TIMERECALL")]
-        TIMERECALL,
+        TimereCall,
         [ScriptCode("PARAM1")]
-        PARAM1,
+        Param1,
         [ScriptCode("PARAM2")]
-        PARAM2,
+        Param2,
         [ScriptCode("PARAM3")]
-        PARAM3,
+        Param3,
         [ScriptCode("PARAM4")]
-        PARAM4,
+        Param4,
         [ScriptCode("EXEACTION")]
-        EXEACTION,
+        Exeaction,
         [ScriptCode("MAPMOVE")]
-        MAPMOVE,
+        MapMove,
         [ScriptCode("MAP")]
-        MAP,
+        Map,
         [ScriptCode("TAKECHECKITEM")]
-        TAKECHECKITEM,
+        TakecheckItem,
         [ScriptCode("MONGEN")]
-        MONGEN,
+        MonGen,
         [ScriptCode("MONGENP")]
-        MONGENP,
+        MonGenp,
         [ScriptCode("MONCLEAR")]
-        MONCLEAR,
+        MonClear,
         [ScriptCode("MOV")]
-        MOV,
+        Mov,
         [ScriptCode("INC")]
-        INC,
+        Inc,
         [ScriptCode("DEC")]
-        DEC,
+        Dec,
         [ScriptCode("SUM")]
-        SUM,
+        Sum,
         [ScriptCode("DIV")]
         Div,
         [ScriptCode("MUL")]
@@ -66,644 +66,628 @@ namespace GameSrv
         [ScriptCode("PERCENT")]
         Percent,
         [ScriptCode("BREAKTIMERECALL")]
-        BREAKTIMERECALL,
+        BreakTimereCall,
         [ScriptCode("SENDMSG")]
-        SENDMSG,
+        SendMsg,
         [ScriptCode("CHANGEMODE")]
-        CHANGEMODE,
+        ChangeMode,
         [ScriptCode("PKPOINT")]
-        PKPOINT,
+        PkPoint,
         [ScriptCode("CHANGEXP")]
-        CHANGEXP,
+        ChangExp,
         [ScriptCode("RECALLMOB")]
-        RECALLMOB,
+        ReCallmob,
         [ScriptCode("MOVR")]
-        MOVR,
+        Movr,
         [ScriptCode("EXCHANGEMAP")]
-        EXCHANGEMAP,
+        ExchangeMap,
         [ScriptCode("RECALLMAP")]
-        RECALLMAP,
+        ReCallMap,
         [ScriptCode("ADDBATCH")]
-        ADDBATCH,
+        Addbatch,
         [ScriptCode("BATCHDELAY")]
-        BATCHDELAY,
+        Batchdelay,
         [ScriptCode("BATCHMOVE")]
-        BATCHMOVE,
+        BatchMove,
         [ScriptCode("PLAYDICE")]
-        PLAYDICE,
+        Playdice,
         [ScriptCode("PASTEMAP")]
-        PASTEMAP,
+        PasteMap,
         [ScriptCode("LOADGEN")]
-        LOADGEN,
+        LoadGen,
         [ScriptCode("ADDNAMELIST")]
-        ADDNAMELIST,
+        AddNameList,
         [ScriptCode("DELNAMELIST")]
-        DELNAMELIST,
+        DelNameList,
         [ScriptCode("ADDGUILDLIST")]
-        ADDGUILDLIST,
+        AddGuildList,
         [ScriptCode("DELGUILDLIST")]
-        DELGUILDLIST,
+        DelGuildList,
         [ScriptCode("ADDACCOUNTLIST")]
-        ADDACCOUNTLIST,
+        AddAccountList,
         [ScriptCode("DELACCOUNTLIST")]
-        DELACCOUNTLIST,
+        DelAccountList,
         [ScriptCode("ADDIPLIST")]
-        ADDIPLIST,
+        AddipList,
         [ScriptCode("DELIPLIST")]
-        DELIPLIST,
+        DelipList,
         [ScriptCode("GOQUEST")]
-        GOQUEST,
+        Goquest,
         [ScriptCode("ENDQUEST")]
-        ENDQUEST,
+        Endquest,
         [ScriptCode("GOTO")]
-        GOTO,
+        Goto,
         [ScriptCode("HAIRCOLOR")]
-        HAIRCOLOR,
+        HairColor,
         [ScriptCode("WEARCOLOR")]
-        WEARCOLOR,
+        WearColor,
         [ScriptCode("HAIRSTYLE")]
-        HAIRSTYLE,
+        Hairstyle,
         [ScriptCode("MONRECALL")]
-        MONRECALL,
+        MonreCall,
         [ScriptCode("HORSECALL")]
-        HORSECALL,
+        HorseCall,
         [ScriptCode("HAIRRNDCOL")]
-        HAIRRNDCOL,
+        Hairrndcol,
         [ScriptCode("RANDSETDAILYQUEST")]
-        RANDSETDAILYQUEST,
+        Randsetdailyquest,
         [ScriptCode("REFINEWEAPON")]
-        REFINEWEAPON,
+        RefineWeapon,
         [ScriptCode("RECALLGROUPMEMBERS")]
-        RECALLGROUPMEMBERS,
+        ReCallgroupMembers,
         [ScriptCode("MAPTING")]
-        MAPTING,
+        Mapting,
         [ScriptCode("WRITEWEAPONNAME")]
-        WRITEWEAPONNAME,
+        WriteWeaponName,
         [ScriptCode("ENABLECMD")]
-        ENABLECMD,
+        EnableCmd,
         [ScriptCode("LINEMSG")]
-        LINEMSG,
+        LineMsg,
         [ScriptCode("EVENTMSG")]
-        EVENTMSG,
+        EventMsg,
         [ScriptCode("SOUNDMSG")]
-        SOUNDMSG,
+        SoundMsg,
         [ScriptCode("SETMISSION")]
-        SETMISSION,
+        SetMission,
         [ScriptCode("CLEARMISSION")]
-        CLEARMISSION,
+        ClearMission,
         [ScriptCode("MONPWR")]
-        MONPWR,
+        Monpwr,
         [ScriptCode("ENTER_OK")]
-        ENTER_OK,
+        EnterOk,
         [ScriptCode("ENTER_FAIL")]
-        ENTER_FAIL,
+        EnterFail,
         [ScriptCode("MONADDITEM")]
-        MONADDITEM,
+        MonAddItem,
         [ScriptCode("CHANGEWEATHER")]
-        CHANGEWEATHER,
+        Changeweather,
         [ScriptCode("CHANGEWEAPONATOM")]
-        CHANGEWEAPONATOM,
+        ChangeWeaponatom,
         [ScriptCode("GETREPAIRCOST")]
-        GETREPAIRCOST,
+        GetrepairCost,
         [ScriptCode("KILLHORSE")]
-        KILLHORSE,
+        KillHorse,
         [ScriptCode("REPAIRITEM")]
-        REPAIRITEM,
+        RepairItem,
         [ScriptCode("USEREMERGENCYCLOSE")]
-        USEREMERGENCYCLOSE,
+        UseremerGencyClose,
         [ScriptCode("BUILDGUILD")]
-        BUILDGUILD,
+        BuildGuild,
         [ScriptCode("GUILDWAR")]
-        GUILDWAR,
+        Guildwar,
         [ScriptCode("CHANGEUSERNAME")]
-        CHANGEUSERNAME,
+        ChangeUserName,
         [ScriptCode("CHANGEMONLEVEL")]
-        CHANGEMONLEVEL,
+        ChangemonLevel,
         [ScriptCode("DROPITEMMAP")]
-        DROPITEMMAP,
+        DropItemMap,
         [ScriptCode("CLEARITEMMAP")]
-        CLEARITEMMAP,
+        ClearItemMap,
         [ScriptCode("PROPOSECASTLEWAR")]
-        PROPOSECASTLEWAR,
+        Proposecastlewar,
         [ScriptCode("FINISHCASTLEWAR")]
-        FINISHCASTLEWAR,
+        Finishcastlewar,
         [ScriptCode("MOVENPC")]
-        MOVENPC,
+        MoveNpc,
         [ScriptCode("SPEAK")]
-        SPEAK,
+        Speak,
         [ScriptCode("SENDCMD")]
-        SENDCMD,
+        SendCmd,
         [ScriptCode("INCFAME")]
-        INCFAME,
+        IncFame,
         [ScriptCode("DECFAME")]
-        DECFAME,
+        DecFame,
         [ScriptCode("CAPTURECASTLEFLAG")]
-        CAPTURECASTLEFLAG,
+        CapturecastleFlag,
         [ScriptCode("MAKESHOOTER")]
-        MAKESHOOTER,
+        MakeShooter,
         [ScriptCode("KILLSHOOTER")]
-        KILLSHOOTER,
+        KillShooter,
         [ScriptCode("LEAVESHOOTER")]
-        LEAVESHOOTER,
+        LeaveShooter,
         [ScriptCode("CHANGEMAPATTR")]
-        CHANGEMAPATTR,
+        ChangeMapAttr,
         [ScriptCode("RESETMAPATTR")]
-        RESETMAPATTR,
+        ResetMapAttr,
         [ScriptCode("MAKECASTLEDOOR")]
-        MAKECASTLEDOOR,
+        MakeCastleDoor,
         [ScriptCode("REPAIRCASTLEDOOR")]
-        REPAIRCASTLEDOOR,
+        RepairCastleDoor,
         [ScriptCode("CHARGESHOOTER")]
-        CHARGESHOOTER,
+        ChargeShooter,
         [ScriptCode("SETAREAATTR")]
-        SETAREAATTR,
+        SetareaAttr,
         [ScriptCode("TESTFLAG")]
-        TESTFLAG,
+        TestFlag,
         [ScriptCode("APPLYFLAG")]
-        APPLYFLAG,
+        ApplyFlag,
         [ScriptCode("PASTEFLAG")]
-        PASTEFLAG,
+        PasteFlag,
         [ScriptCode("GETBACKCASTLEGOLD")]
-        GETBACKCASTLEGOLD,
+        GetBackCastleGold,
         [ScriptCode("GETBACKUPGITEM")]
-        GETBACKUPGITEM,
+        GetBackUpgItem,
         [ScriptCode("TINGWAR")]
-        TINGWAR,
+        TingWar,
         [ScriptCode("SAVEPASSWD")]
-        SAVEPASSWD,
+        SavePasswd,
         [ScriptCode("CREATENPC")]
-        CREATENPC,
+        CreateNpc,
         [ScriptCode("TAKEBONUS")]
-        TAKEBONUS,
+        TakeBonus,
         [ScriptCode("SYSMSG")]
-        SYSMSG,
+        SysMsg,
         [ScriptCode("LOADVALUE")]
-        LOADVALUE,
+        LoadValue,
         [ScriptCode("SAVEVALUE")]
-        SAVEVALUE,
+        SaveValue,
         [ScriptCode("SAVELOG")]
-        SAVELOG,
+        SaveLog,
         [ScriptCode("GETMARRIED")]
-        GETMARRIED,
+        GetMarried,
         [ScriptCode("DIVORCE")]
-        DIVORCE,
+        Divorce,
         [ScriptCode("CAPTURESAYING")]
-        CAPTURESAYING,
+        CaptureSaying,
         [ScriptCode("CANCELMARRIAGERING")]
-        CANCELMARRIAGERING,
+        CancelMarriagering,
         [ScriptCode("OPENUSERMARKET")]
-        OPENUSERMARKET,
+        OpenUserMarket,
         [ScriptCode("SETTYPEUSERMARKET")]
-        SETTYPEUSERMARKET,
+        SettypeUserMarket,
         [ScriptCode("CHECKSOLDITEMSUSERMARKET")]
-        CHECKSOLDITEMSUSERMARKET,
+        CheckSoldItemsUserMarket,
         [ScriptCode("SETGMEMAP")]
-        SETGMEMAP,
+        SetGmeMap,
         [ScriptCode("SETGMEPOINT")]
-        SETGMEPOINT,
+        SetGmePoint,
         [ScriptCode("SETGMETIME")]
-        SETGMETIME,
+        SetGmetTime,
         [ScriptCode("STARTNEWGME")]
-        STARTNEWGME,
+        Startnewgme,
         [ScriptCode("MOVETOGMEMAP")]
-        MOVETOGMEMAP,
+        MoveToGmeMap,
         [ScriptCode("FINISHGME")]
-        FINISHGME,
+        FinishgMe,
         [ScriptCode("CONTINUEGME")]
-        CONTINUEGME,
+        Continuegme,
         [ScriptCode("SETGMEPLAYTIME")]
-        SETGMEPLAYTIME,
+        SetgmeplayTime,
         [ScriptCode("SETGMEPAUSETIME")]
-        SETGMEPAUSETIME,
+        SetgmepauseTime,
         [ScriptCode("SETGMELIMITUSER")]
-        SETGMELIMITUSER,
+        SetgmeLimitUser,
         [ScriptCode("SETEVENTMAP")]
-        SETEVENTMAP,
+        SeteventMap,
         [ScriptCode("RESETEVENTMAP")]
-        RESETEVENTMAP,
+        ReseteventMap,
         [ScriptCode("TESTREFINEPOINTS")]
-        TESTREFINEPOINTS,
+        TestrefinePoints,
         [ScriptCode("RESETREFINEWEAPON")]
-        RESETREFINEWEAPON,
+        ResetrefineWeapon,
         [ScriptCode("TESTREFINEACCESSORIES")]
-        TESTREFINEACCESSORIES,
+        Testrefineaccessories,
         [ScriptCode("REFINEACCESSORIES")]
-        REFINEACCESSORIES,
+        RefineAccessories,
         [ScriptCode("APPLYMONMISSION")]
-        APPLYMONMISSION,
+        ApplyMonMission,
         [ScriptCode("MAPMOVER")]
-        MAPMOVER,
+        MapMover,
         [ScriptCode("ADDSTR")]
-        ADDSTR,
+        AddStr,
         [ScriptCode("SETEVENTDAMAGE")]
-        SETEVENTDAMAGE,
+        SeteventDamage,
         [ScriptCode("FORMATSTR")]
-        FORMATSTR,
+        FormatStr,
         [ScriptCode("CLEARPATH")]
-        CLEARPATH,
+        ClearPath,
         [ScriptCode("ADDPATH")]
-        ADDPATH,
+        AddPath,
         [ScriptCode("APPLYPATH")]
-        APPLYPATH,
+        ApplyPath,
         [ScriptCode("MAPSPELL")]
-        MAPSPELL,
+        MapSpell,
         [ScriptCode("GIVEEXP")]
-        GIVEEXP,
+        GiveExp,
         [ScriptCode("GROUPMOVE")]
-        GROUPMOVE,
+        GroupMove,
         [ScriptCode("GIVEEXPMAP")]
-        GIVEEXPMAP,
+        GiveExpMap,
         [ScriptCode("APPLYMONEX")]
-        APPLYMONEX,
+        ApplyMonex,
         [ScriptCode("CLEARNAMELIST")]
-        CLEARNAMELIST,
+        ClearNameList,
         [ScriptCode("TINGCASTLEVISITOR")]
-        TINGCASTLEVISITOR,
+        TingCastleVisitor,
         [ScriptCode("MAKEHEALZONE")]
-        MAKEHEALZONE,
+        MakeHealZone,
         [ScriptCode("MAKEDAMAGEZONE")]
-        MAKEDAMAGEZONE,
+        MakeDamageZone,
         [ScriptCode("CLEARZONE")]
-        CLEARZONE,
+        ClearZone,
         [ScriptCode("READVALUESQL")]
-        READVALUESQL,
+        ReadValueSql,
         [ScriptCode("READSTRINGSQL")]
-        READSTRINGSQL,
+        ReadStringSql,
         [ScriptCode("WRITEVALUESQL")]
-        WRITEVALUESQL,
+        WriteValueSql,
         [ScriptCode("INCVALUESQL")]
-        INCVALUESQL,
+        IncValueSql,
         [ScriptCode("DECVALUESQL")]
-        DECVALUESQL,
+        DecValueSql,
         [ScriptCode("UPDATEVALUESQL")]
-        UPDATEVALUESQL,
+        UpDateValueSql,
         [ScriptCode("KILLSLAVE")]
-        KILLSLAVE,
+        KillSlave,
         [ScriptCode("SETITEMEVENT")]
-        SETITEMEVENT,
+        SetItemEvent,
         [ScriptCode("REMOVEITEMEVENT")]
-        REMOVEITEMEVENT,
+        ReMoveItemEvent,
         [ScriptCode("RETURN")]
-        RETURN,
+        Return,
         [ScriptCode("CLEARCASTLEOWNER")]
-        CLEARCASTLEOWNER,
+        ClearCastleOwner,
         [ScriptCode("DISSOLUTIONGUILD")]
-        DISSOLUTIONGUILD,
+        DissolutionGuild,
         [ScriptCode("CHANGEGENDER")]
-        CHANGEGENDER,
+        ChangeGender,
         [ScriptCode("SETFAME")]
-        SETFAME,
+        SetFame,
         [ScriptCode("CHANGELEVEL")]
-        CHANGELEVEL,
+        ChangeLevel,
         [ScriptCode("MARRY")]
-        MARRY,
+        Marry,
         [ScriptCode("UNMARRY")]
-        UNMARRY,
+        UnMarry,
         [ScriptCode("GETMARRY")]
-        GETMARRY,
+        GetMarry,
         [ScriptCode("GETMASTER")]
-        GETMASTER,
+        GetMaster,
         [ScriptCode("CLEARSKILL")]
-        CLEARSKILL,
+        ClearSkill,
         [ScriptCode("DELNOJOBSKILL")]
-        DELNOJOBSKILL,
+        DelnoJobSkill,
         [ScriptCode("DELSKILL")]
-        DELSKILL,
+        DelSkill,
         [ScriptCode("ADDSKILL")]
-        ADDSKILL,
+        AddSkill,
         [ScriptCode("SKILLLEVEL")]
-        SKILLLEVEL,
+        Skilllevel,
         [ScriptCode("CHANGEPKPOINT")]
-        CHANGEPKPOINT,
+        ChangePkPoint,
         [ScriptCode("CHANGEEXP")]
-        CHANGEEXP,
+        ChangeExp,
         [ScriptCode("CHANGEJOB")]
-        CHANGEJOB,
+        ChangeJob,
         [ScriptCode("MISSION")]
-        MISSION,
+        Mission,
         [ScriptCode("MOBPLACE")]
-        MOBPLACE,
+        Mobplace,
         [ScriptCode("SETMEMBERTYPE")]
-        SETMEMBERTYPE,
+        SetMemberType,
         [ScriptCode("SETMEMBERLEVEL")]
-        SETMEMBERLEVEL,
+        SetMemberLevel,
         [ScriptCode("GAMEGOLD")]
-        GAMEGOLD,
+        GameGold,
         [ScriptCode("AUTOADDGAMEGOLD")]
-        AUTOADDGAMEGOLD,
+        AutoAddGameGold,
         [ScriptCode("AUTOSUBGAMEGOLD")]
-        AUTOSUBGAMEGOLD,
+        AutoSubGameGold,
         [ScriptCode("CHANGENAMECOLOR")]
-        CHANGENAMECOLOR,
+        ChangeNameColor,
         [ScriptCode("CLEARPASSWORD")]
-        CLEARPASSWORD,
+        ClearPassword,
         [ScriptCode("RENEWLEVEL")]
-        RENEWLEVEL,
+        Renewlevel,
         [ScriptCode("KILLMONEXPRATE")]
-        KILLMONEXPRATE,
+        KillMonExpRate,
         [ScriptCode("POWERRATE")]
-        POWERRATE,
+        PowerRate,
         [ScriptCode("CHANGEPERMISSION")]
-        CHANGEPERMISSION,
+        ChangePerMission,
         [ScriptCode("KILL")]
-        KILL,
+        Kill,
         [ScriptCode("KICK")]
-        KICK,
+        Kick,
         [ScriptCode("BONUSPOINT")]
-        BONUSPOINT,
+        BonusPoint,
         [ScriptCode("RESTRENEWLEVEL")]
-        RESTRENEWLEVEL,
+        Restrenewlevel,
         [ScriptCode("DELMARRY")]
-        DELMARRY,
+        DelMarry,
         [ScriptCode("DELMASTER")]
-        DELMASTER,
+        DelMaster,
         [ScriptCode("MASTER")]
-        MASTER,
+        Master,
         [ScriptCode("UNMASTER")]
-        UNMASTER,
+        UnMaster,
         [ScriptCode("CREDITPOINT")]
-        CREDITPOINT,
+        CreditPoint,
         [ScriptCode("CLEARNEEDITEMS")]
-        CLEARNEEDITEMS,
+        ClearNeedItems,
         [ScriptCode("CLEARMAKEITEMS")]
-        CLEARMAKEITEMS,
+        ClearMakeItems,
         [ScriptCode("SETSENDMSGFLAG")]
-        SETSENDMSGFLAG,
+        SetSendMsgFlag,
         [ScriptCode("UPGRADEITEM")]
-        UPGRADEITEMS,
+        UpgradeItems,
         [ScriptCode("UPGRADEITEMEX")]
-        UPGRADEITEMSEX,
+        UpgradeItemsex,
         [ScriptCode("MONGENEX")]
-        MONGENEX,
+        MonGenex,
         [ScriptCode("CLEARMAPMON")]
-        CLEARMAPMON,
+        ClearMapMon,
         [ScriptCode("SETMPAMODE")]
-        SETMAPMODE,
+        SetMapMode,
         [ScriptCode("GAMEPOINT")]
-        GAMEPOINT,
+        GamePoint,
         [ScriptCode("PKZONE")]
-        PKZONE,
+        PvpZone,
         [ScriptCode("RESTBONUSPOINT")]
-        RESTBONUSPOINT,
+        RestBonusPoint,
         [ScriptCode("TAKECASTLEGOLD")]
-        TAKECASTLEGOLD,
+        TakeCastleGold,
         [ScriptCode("HUMANHP")]
-        HUMANHP,
+        HumanHp,
         [ScriptCode("HUMANMP")]
-        HUMANMP,
+        HumanMp,
         [ScriptCode("GUILDBUILDPOINT")]
-        BUILDPOINT,
+        BuildPoint,
         [ScriptCode("GUILDAURAEPOINT")]
-        AURAEPOINT,
+        AuraePoint,
         [ScriptCode("GUILDSTABILITYPOINT")]
-        STABILITYPOINT,
+        StabilityPoint,
         [ScriptCode("GUILDFLOURISHPOINT")]
-        FLOURISHPOINT,
+        FlourishPoint,
         [ScriptCode("OPENITEMBOX")]
-        OPENMAGICBOX,
+        OpenMagicbox,
         [ScriptCode("SETRANKLEVELNAME")]
-        SETRANKLEVELNAME,
+        SetRankLevelName,
         [ScriptCode("GMEXECUTE")]
-        GMEXECUTE,
+        GmExecute,
         [ScriptCode("GUILDCHIEFITEMCOUNT")]
-        GUILDCHIEFITEMCOUNT,
+        GuildChiefItemCount,
         [ScriptCode("ADDNAMEDATELIST")]
-        ADDNAMEDATELIST,
+        AddNameDateList,
         [ScriptCode("DELNAMEDATELIST")]
-        DELNAMEDATELIST,
+        DelNameDateList,
         [ScriptCode("MOBFIREBURN")]
-        MOBFIREBURN,
+        MobFireburn,
         [ScriptCode("MESSAGEBOX")]
-        MESSAGEBOX,
+        MessageBox,
         [ScriptCode("SETSCRIPTFLAG")]
-        SETSCRIPTFLAG,
+        SetscriptFlag,
         [ScriptCode("SETAUTOGETEXP")]
-        SETAUTOGETEXP,
+        SetautogetExp,
         [ScriptCode("VAR")]
-        VAR,
+        Var,
         [ScriptCode("LOADVAR")]
-        LOADVAR,
+        LoadVar,
         [ScriptCode("SAVEVAR")]
-        SAVEVAR,
+        SaveVar,
         [ScriptCode("CALCVAR")]
-        CALCVAR,
+        CalcVar,
         [ScriptCode("OFFLINEPLAY")]
-        nOFFLINEPLAY,
+        OffLinePlay,
         [ScriptCode("KICKOFFLINE")]
-        nKICKOFFLINE,
+        KickOffline,
         [ScriptCode("STARTTAKEGOLD")]
-        nSTARTTAKEGOLD,
+        StarttakeGold,
         [ScriptCode("CLEARDELAYGOTO")]
-        CLEARDELAYGOTO,
+        ClearDelayGoto,
         [ScriptCode("CHANGERECOMMENDGAMEGOLD")]
-        nCHANGERECOMMENDGAMEGOLD,
+        ChangereCommendGameGold,
         [ScriptCode("ANSIREPLACETEXT")]
-        ANSIREPLACETEXT,
+        AnsirePlaceText,
         [ScriptCode("ENCODETEXT")]
-        ENCODETEXT,
+        EncodeText,
         [ScriptCode("DECODETEXT")]
-        DECODETEXT,
+        DecodeText,
         [ScriptCode("ADDTEXTLIST")]
-        ADDTEXTLIST,
+        AddTextList,
         [ScriptCode("DELTEXTLIST")]
-        DELTEXTLIST,
+        DelTextList,
         [ScriptCode("GROUPMAPMOVE")]
-        GROUPMAPMOVE,
+        GroupMapMove,
         [ScriptCode("RECALLHUMAN")]
-        RECALLHUMAN,
+        ReCallHuman,
         [ScriptCode("REGOTO")]
-        REGOTO,
+        Regoto,
         [ScriptCode("INTTOSTR")]
-        INTTOSTR,
+        IntToStr,
         [ScriptCode("STRTOINT")]
-        STRTOINT,
+        StrToInt,
         [ScriptCode("GUILDMOVE")]
-        GUILDMOVE,
+        GuildMove,
         [ScriptCode("GUILDMAPMOVE")]
-        GUILDMAPMOVE,
+        GuildMapMove,
         [ScriptCode("RANDOMMOVE")]
-        RANDOMMOVE,
+        RandomMove,
         [ScriptCode("USEBONUSPOINT")]
-        USEBONUSPOINT,
+        UseBonusPoint,
         [ScriptCode("TAKEONITEM")]
-        TAKEONITEM,
+        TakeOnItem,
         [ScriptCode("TAKEOFFITEM")]
-        TAKEOFFITEM,
-        [ScriptCode("CREATEHERO")]
-        CREATEHERO,
-        [ScriptCode("DELETEHERO")]
-        DELETEHERO,
+        TakeOffItem,
         [ScriptCode("GIVEEX")]
-        GIVEEX,
+        GiveEx,
         [ScriptCode("TIMEOPEN")]
-        TIMEOPEN,
+        TimeOpen,
         [ScriptCode("TIMECLOSE")]
-        TIMECLOSE,
+        TimeClose,
         [ScriptCode("GUILDMEMBERMAXLIMIT")]
-        GUILDMEMBERMAXLIMIT,
+        GuildMemberMaxLimit,
         [ScriptCode("ADDGUILDNAMEDATELIST")]
-        ADDGUILDNAMEDATELIST,
+        AddGuildNamedateList,
         [ScriptCode("DELGUILDNAMEDATELIST")]
-        DELGUILDNAMEDATELIST,
+        DelGuildNamedateList,
         [ScriptCode("GOHOME")]
-        GOHOME,
+        GoHome,
         [ScriptCode("ADDBLOCKIPLIST")]
-        ADDBLOCKIPLIST,
+        AddBlockIpList,
         [ScriptCode("MOVEDATA")]
-        MOVDATA,
+        MovData,
         [ScriptCode("SENDCOLORMSG")]
-        SENDCOLORMSG,
+        SendColorMsg,
         [ScriptCode("ADDRANDOMMAPGATE")]
-        ADDRANDOMMAPGATE,
+        AddRandomMapGate,
         [ScriptCode("DELRANDOMMAPGATE")]
-        DELRANDOMMAPGATE,
+        DelRandomMapGate,
         [ScriptCode("GETRANDOMMAPGATE")]
-        GETRANDOMMAPGATE,
+        GetRandommApGate,
         [ScriptCode("OPENBOOK")]
-        OPENBOOK,
+        OpenBook,
         [ScriptCode("OPENBOX")]
-        OPENBOX,
+        OpenBox,
         [ScriptCode("CHANGEITEMS")]
-        CHANGEITEMS,
+        ChangeItems,
         [ScriptCode("CLEARREMEMBER")]
-        CLEARREMEMBER,
+        ClearreMember,
         [ScriptCode("SENDMOVEMSG")]
-        SENDMOVEMSG,
-        [ScriptCode("RECALLHERO")]
-        RECALLHERO,
-        [ScriptCode("HEROLOGOUT")]
-        HEROLOGOUT,
+        SendMoveMsg,
         [ScriptCode("SETITEMSLIGHT")]
-        SETITEMSLIGHT,
+        SetItemsLight,
         [ScriptCode("READRANDOMSTR")]
-        READRANDOMSTR,
+        ReadrandomStr,
         [ScriptCode("CHANGERANGEMONPOS")]
-        CHANGERANGEMONPOS,
+        ChangeRangeMonPos,
         [ScriptCode("READ")]
-        READ,
+        Read,
         [ScriptCode("WRITE")]
-        WRITE,
+        Write,
         [ScriptCode("CHANGEITEMNEWADDVALUE")]
-        CHANGEITEMNEWADDVALUE,
+        ChangeItemNewAddValue,
         [ScriptCode("OPENHOMEPAGE")]
-        OPENHOMEPAGE,
+        OpenHomePage,
         [ScriptCode("PKZONEX")]
-        PKZONEX,
+        PvpZoneEx,
         [ScriptCode("SETITEMSLIGHTEX")]
-        SETITEMSLIGHTEX,
+        SetItemslightex,
         [ScriptCode("SPELL")]
-        SPELL,
+        Spell,
         [ScriptCode("ADDMAPMAGICEVENT")]
-        ADDMAPMAGICEVENT,
+        AddMapMagicEvent,
         [ScriptCode("RANDOMADDMAPMAGICEVENT")]
-        RANDOMADDMAPMAGICEVENT,
+        RandomAddMapMagicEvent,
         [ScriptCode("SNOW")]
-        SNOW,
+        SNow,
         [ScriptCode("RANDOMUPGRADEITEM")]
-        RANDOMUPGRADEITEM,
+        RandoMupgradeItem,
         [ScriptCode("LOCK")]
-        LOCK,
+        Lock,
         [ScriptCode("UNLOCK")]
-        UNLOCK,
-        [ScriptCode("CLEARDUELMAP")]
-        CLEARDUELMAP,
+        Unlock,
         [ScriptCode("GETDUELITEMS")]
-        GETDUELITEMS,
-        [ScriptCode("APPDUEL")]
-        APPDUEL,
+        GetdUelItems,
         [ScriptCode("CANUSEITEM")]
-        CANUSEITEM,
+        CanUseItem,
         [ScriptCode("AUTOGOTOXY")]
-        AUTOGOTOXY,
+        AutoGotoxy,
         [ScriptCode("CHANGENEWSTATUS")]
-        CHANGENEWSTATUS,
+        ChangeNewStatus,
         [ScriptCode("SENDDELAYMSG")]
-        SENDDELAYMSG,
+        SendDelayMsg,
         [ScriptCode("ACTVARLIST")]
-        ACTVARLIST,
+        ActvarList,
         [ScriptCode("SETMASKED")]
-        SETMASKED,
+        SetMasked,
         [ScriptCode("SENDCENTERMSG")]
-        SENDCENTERMSG,
+        SendCenterMsg,
         [ScriptCode("CHANGEUSEITEMSTARSLEVEL")]
-        CHANGEUSEITEMSTARSLEVEL,
+        ChangeUseItemStarsLevel,
         [ScriptCode("CHANGEBAGITEMSTARSLEVEL")]
-        CHANGEBAGITEMSTARSLEVEL,
+        ChangeBagItemStarsLevel,
         [ScriptCode("BINDBAGITEM")]
-        BINDBAGITEM,
-        [ScriptCode("HEROGROUP")]
-        HEROGROUP,
-        [ScriptCode("UNHEROGROUP")]
-        UNHEROGROUP,
+        BindbagItem,
         [ScriptCode("SETONTIMER")]
-        SETSCTIMER,
+        SetOnTimer,
         [ScriptCode("SETOFFTIMER")]
-        KILLSCTIMER,
+        KillScTimer,
         [ScriptCode("PLAYSOUND")]
-        PLAYSOUND,
+        PlaySound,
         [ScriptCode("SHOWEFFECT")]
-        SHOWEFFECT,
+        ShowEffect,
         [ScriptCode("CHANGEITEMVALUE")]
-        CHANGEITEMVALUE,
+        ChangeItemvalue,
         [ScriptCode("VIBRATION")]
-        VIBRATION,
+        Vibration,
         [ScriptCode("OPENBIGDIALOGBOX")]
-        OPENBIGDIALOGBOX,
+        OpenbigDialogBox,
         [ScriptCode("CLOSEBIGDIALOGBOX")]
-        CLOSEBIGDIALOGBOX,
+        CloseBigDialogBox,
         [ScriptCode("TAGMAPMOVE")]
-        TAGMAPMOVE,
+        TagMapMove,
         [ScriptCode("TAGMAPINFO")]
-        TAGMAPINFO,
+        TagMapinfo,
         [ScriptCode("AISTART")]
-        AISTART,
+        AiStart,
         [ScriptCode("AISTOP")]
-        AISTOP,
+        AiStop,
         [ScriptCode("CHANGEIPADDRESS")]
-        CHANGEIPADDRESS,
+        ChangeIpAddress,
         [ScriptCode("CHANGEATTATCKMODE")]
-        CHANGEATTATCKMODE,
+        ChangeAttatckMode,
         [ScriptCode("AILOGON")]
-        AILOGON,
+        AiLogon,
         [ScriptCode("AILOGONEX")]
-        AILOGONEX,
+        AiLogonEx,
         [ScriptCode("KICKALL")]
-        KICKALL,
+        KickAll,
         [ScriptCode("TAKEITEMLIST")]
-        TAKEITEMLIST,
+        TakeItemList,
         [ScriptCode("SHOWRANKLEVLNAME")]
-        SHOWRANKLEVLNAME,
+        ShowRankLevlName,
         [ScriptCode("LOADROBOTCONFIG")]
-        LOADROBOTCONFIG,
+        LoadRobotConfig,
         [ScriptCode("ACTMISSION")]
-        ACTMISSION,
+        ActMission,
         [ScriptCode("GUILDRECALL")]
-        GUILDRECALL,
+        GuildReCall,
         [ScriptCode("GROUPADDLIST")]
-        GROUPADDLIST,
+        GroupAddList,
         [ScriptCode("CLEARLIST")]
-        CLEARLIST,
+        ClearList,
         [ScriptCode("GROUPRECALL")]
-        GROUPRECALL,
+        GroupReCall,
         [ScriptCode("GROUPMOVEMAP")]
-        GROUPMOVEMAP,
+        GroupMoveMap,
         [ScriptCode("SAVESLAVES")]
-        SAVESLAVES,
+        SaveSlaves,
         /// <summary>
         // 检查会员时间
         /// </summary>
         [ScriptCode("CHECKUSERDATE")]
-        CHECKUSERDATE,
+        CheckUserDate,
         /// <summary>
         /// 加入会员人物及时间
         /// </summary>
         [ScriptCode("ADDUSERDATE")]
-        ADDUSERDATE,
+        AddUserDate,
         /// <summary>
         /// 删除会员人物及时间
         /// </summary>
         [ScriptCode("DELUSERDATE")]
-        DELUSERDATE,
+        DelUserDate,
         /// <summary>
         /// 挂机
         /// </summary>
@@ -713,66 +697,72 @@ namespace GameSrv
         /// 特修身上所有装备
         /// </summary>
         [ScriptCode("REPAIRALL")]
-        REPAIRALL,
+        RepairAll,
         /// <summary>
         /// 产生一个随机数字
         /// </summary>
         [ScriptCode("SETRANDOMNO")]
-        SETRANDOMNO,
+        SetRandomNo,
         /// <summary>
         /// 刷新包裹物品命令
         /// </summary>
         [ScriptCode("QUERYBAGITEMS")]
-        QUERYBAGITEMS,
+        QueryBagItems,
         /// <summary>
         /// 将指定物品刷新到指定地图坐标范围内
         /// </summary>
         [ScriptCode("THROWITEM")]
-        THROWITEM,
+        ThrowItem,
         /// <summary>
         /// 开通元宝交易
         /// </summary>
         [ScriptCode("OPENYBDEAL")]
-        OPENYBDEAL,
+        OpenYbDeal,
         /// <summary>
-        /// 查询可以的购买物品
+        /// 查询可以购买的物品
         /// </summary>        
         [ScriptCode("QUERYYBSELL")]
-        QUERYYBSELL,
+        QueryYbSell,
+        /// <summary>
+        /// 查询元宝交易
+        /// </summary>
         [ScriptCode("QUERYYBDEAL")]
-        QUERYYBDEAL,
+        QueryYbDeal,
         /// <summary>
         /// 延时跳转
         /// </summary>
         [ScriptCode("DELAYGOTO")]
-        DELAYGOTO,
+        DelayGoto,
+        /// <summary>
+        /// 延时跳转
+        /// </summary>
         [ScriptCode("DELAYCALL")]
-        DELAYCALL,
+        DelayCall,
         /// <summary>
         /// 获取客户端输入值
         /// </summary>
         [ScriptCode("QUERYVALUE")]
-        QUERYVALUE,
+        QueryValue,
         /// <summary>
         /// 杀死所有宠物
         /// </summary>
         [ScriptCode("KILLSLAVENAME")]
-        KILLSLAVENAME,
+        KillSlaveName,
         /// <summary>
         /// 查询物品信息
         /// </summary>
         [ScriptCode("QUERYITEMDLG")]
-        QUERYITEMDLG,
+        QueryItemDlg,
         /// <summary>
         /// 升级对话框中的物品
         /// </summary>
         [ScriptCode("UPGRADEDLGITEM")]
-        UPGRADEDLGITEM,
+        UpgradeDlgItem,
         /// <summary>
         /// 获取装备指定属性到变量中
         /// </summary>
         [ScriptCode("GETDLGITEMVALUE")]
-        GETDLGITEMVALUE,
+        GetDlgItemValue,
         /// <summary>
         /// 回收对话框中的物品
         /// </summary>

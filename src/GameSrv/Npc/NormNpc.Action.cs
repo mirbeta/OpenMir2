@@ -353,7 +353,7 @@ namespace GameSrv.Npc
             }
             else
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ADDSKILL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AddSkill);
             }
         }
 
@@ -375,7 +375,7 @@ namespace GameSrv.Npc
                 playObject.BoIncGameGold = false;
                 return;
             }
-            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AUTOADDGAMEGOLD);
+            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AutoAddGameGold);
         }
 
         // SETAUTOGETEXP 时间 点数 是否安全区 地图号
@@ -392,7 +392,7 @@ namespace GameSrv.Npc
             }
             if (nTime <= 0 || nPoint <= 0 || string.IsNullOrEmpty(sMap) && envir == null)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SETAUTOGETEXP);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SetautogetExp);
                 return;
             }
             playObject.AutoGetExpInSafeZone = boIsSafeZone;
@@ -440,7 +440,7 @@ namespace GameSrv.Npc
                 playObject.BoDecGameGold = false;
                 return;
             }
-            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AUTOSUBGAMEGOLD);
+            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AutoSubGameGold);
         }
 
         private void ActionOfChangeCreditPoint(PlayObject playObject, QuestActionInfo questActionInfo)
@@ -448,7 +448,7 @@ namespace GameSrv.Npc
             var nCreditPoint = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nCreditPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CREDITPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CreditPoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -488,7 +488,7 @@ namespace GameSrv.Npc
                     }
                     break;
                 default:
-                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CREDITPOINT);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CreditPoint);
                     return;
             }
         }
@@ -499,7 +499,7 @@ namespace GameSrv.Npc
             var nExp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nExp < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGEEXP);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangeExp);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -561,7 +561,7 @@ namespace GameSrv.Npc
             }
             else
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.HAIRSTYLE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Hairstyle);
             }
         }
 
@@ -582,7 +582,7 @@ namespace GameSrv.Npc
             }
             if (nJob == PlayJob.None)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGEJOB);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangeJob);
                 return;
             }
             if (playObject.Job != nJob)
@@ -600,7 +600,7 @@ namespace GameSrv.Npc
             var nLevel = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGELEVEL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangeLevel);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -639,7 +639,7 @@ namespace GameSrv.Npc
             var nPkPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nPkPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGEPKPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangePkPoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -724,7 +724,7 @@ namespace GameSrv.Npc
             var magic = M2Share.WorldEngine.FindMagic(questActionInfo.sParam1);
             if (magic == null)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.DELSKILL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.DelSkill);
                 return;
             }
             for (var i = 0; i < playObject.MagicList.Count; i++)
@@ -747,7 +747,7 @@ namespace GameSrv.Npc
             var nGameGold = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GAMEGOLD);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GameGold);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -784,7 +784,7 @@ namespace GameSrv.Npc
             var nGamePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GAMEPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GamePoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -887,7 +887,7 @@ namespace GameSrv.Npc
                     }
                     break;
                 default:
-                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SENDMSG);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SendMsg);
                     break;
             }
         }
@@ -1114,7 +1114,7 @@ namespace GameSrv.Npc
             }
             else
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MISSION);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mission);
             }
         }
 
@@ -1129,7 +1129,7 @@ namespace GameSrv.Npc
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam6, -1);
             if (string.IsNullOrEmpty(sMap) || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MOBFIREBURN);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MobFireburn);
                 return;
             }
             var envir = M2Share.MapMgr.FindMap(sMap);
@@ -1142,7 +1142,7 @@ namespace GameSrv.Npc
                 playObject.Envir = oldEnvir;
                 return;
             }
-            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MOBFIREBURN);
+            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MobFireburn);
         }
 
         private void ActionOfMobPlace(PlayObject playObject, QuestActionInfo questActionInfo, int nX, int nY, int nCount, int nRange)
@@ -1160,7 +1160,7 @@ namespace GameSrv.Npc
                 }
                 else
                 {
-                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MOBPLACE);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mobplace);
                     break;
                 }
             }
@@ -1175,7 +1175,7 @@ namespace GameSrv.Npc
             var sRankLevelName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sRankLevelName))
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SKILLLEVEL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Skilllevel);
                 return;
             }
             playObject.RankLevelName = sRankLevelName;
@@ -1195,7 +1195,7 @@ namespace GameSrv.Npc
                     playObject.BoChangeItemNameFlag = boFlag;
                     break;
                 default:
-                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SETSCRIPTFLAG);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SetscriptFlag);
                     break;
             }
         }
@@ -1205,7 +1205,7 @@ namespace GameSrv.Npc
             var nLevel = HUtil32.StrToInt(questActionInfo.sParam3, 0);
             if (nLevel < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SKILLLEVEL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Skilllevel);
                 return;
             }
             var cMethod = questActionInfo.sParam2[0];
@@ -1259,7 +1259,7 @@ namespace GameSrv.Npc
             var nGold = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGold < 0 || Castle == null)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.TAKECASTLEGOLD);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.TakeCastleGold);
                 return;
             }
             if (nGold <= Castle.TotalGold)
@@ -1400,7 +1400,7 @@ namespace GameSrv.Npc
             sFileName = M2Share.GetEnvirFilePath(sFileName);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName))
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SAVEVAR);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SaveVar);
                 return;
             }
             var boFoundVar = false;
@@ -1408,7 +1408,7 @@ namespace GameSrv.Npc
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
-                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.VAR);
+                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (dynamicVarList.TryGetValue(sVarName, out dynamicVar))
@@ -1429,7 +1429,7 @@ namespace GameSrv.Npc
             }
             if (!boFoundVar)
             {
-                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.SAVEVAR);
+                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.SaveVar);
             }
         }
 
@@ -1480,7 +1480,7 @@ namespace GameSrv.Npc
             var nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || string.IsNullOrEmpty(sMethod))
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CALCVAR);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CalcVar);
                 return;
             }
             var boFoundVar = false;
@@ -1508,7 +1508,7 @@ namespace GameSrv.Npc
                     }
                     if (!boFoundVar)
                     {
-                        ScriptActionError(playObject, string.Format(sVarFound, sVarValue, sType), questActionInfo, ExecutionCode.CALCVAR);
+                        ScriptActionError(playObject, string.Format(sVarFound, sVarValue, sType), questActionInfo, ExecutionCode.CalcVar);
                         return;
                     }
                 }
@@ -1527,7 +1527,7 @@ namespace GameSrv.Npc
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
-                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.CALCVAR);
+                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.CalcVar);
                 return;
             }
 
@@ -1573,7 +1573,7 @@ namespace GameSrv.Npc
             }
             if (!boFoundVar)
             {
-                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.CALCVAR);
+                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.CalcVar);
             }
         }
 
@@ -1657,7 +1657,7 @@ namespace GameSrv.Npc
             }
             if (!boFlag)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GROUPMOVEMAP);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GroupMoveMap);
             }
         }
 
@@ -1669,7 +1669,7 @@ namespace GameSrv.Npc
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam3, -1);
             if (nWhere < 0 || nWhere > playObject.UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.UPGRADEITEMS);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.UpgradeItems);
                 return;
             }
             var userItem = playObject.UseItems[nWhere];
@@ -1720,7 +1720,7 @@ namespace GameSrv.Npc
             var nUpgradeItemStatus = HUtil32.StrToInt(questActionInfo.sParam5, -1);
             if (nValType < 0 || nValType > 14 || nWhere < 0 || nWhere > playObject.UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.UPGRADEITEMSEX);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.UpgradeItemsex);
                 return;
             }
             var userItem = playObject.UseItems[nWhere];
@@ -1803,7 +1803,7 @@ namespace GameSrv.Npc
             }
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || varType == VarType.None)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.VAR);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (string.Compare(questActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
@@ -1816,7 +1816,7 @@ namespace GameSrv.Npc
             }
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || varType == VarType.None)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.VAR);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Var);
                 return;
             }
             var dynamicVar = new DynamicVar();
@@ -1829,7 +1829,7 @@ namespace GameSrv.Npc
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
-                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.VAR);
+                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (dynamicVarList.ContainsKey(sVarName))
@@ -1842,7 +1842,7 @@ namespace GameSrv.Npc
             }
             else
             {
-                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.VAR);
+                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.Var);
             }
         }
 
@@ -1875,14 +1875,14 @@ namespace GameSrv.Npc
             sFileName = M2Share.GetEnvirFilePath(sFileName);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName))
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.LOADVAR);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.LoadVar);
                 return;
             }
             var boFoundVar = false;
             var dynamicVarList = GetDynamicVarMap(playObject, sType, ref sName);
             if (dynamicVarList == null)
             {
-                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.VAR);
+                ScriptActionError(playObject, Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (dynamicVarList.TryGetValue(sVarName, out _))
@@ -1921,7 +1921,7 @@ namespace GameSrv.Npc
             }
             if (!boFoundVar)
             {
-                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.LOADVAR);
+                ScriptActionError(playObject, Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.LoadVar);
             }
         }
 
@@ -1930,7 +1930,7 @@ namespace GameSrv.Npc
             var nNeed = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CLEARNEEDITEMS);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ClearNeedItems);
                 return;
             }
             StdItem stdItem;
@@ -1966,7 +1966,7 @@ namespace GameSrv.Npc
             var boMatchName = questActionInfo.sParam3 == "1";
             if (string.IsNullOrEmpty(sItemName) || nMakeIndex <= 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CLEARMAKEITEMS);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ClearMakeItems);
                 return;
             }
             StdItem stdItem;
@@ -2118,7 +2118,7 @@ namespace GameSrv.Npc
             var envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir == null || string.IsNullOrEmpty(sMapMode))
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SETMAPMODE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SetMapMode);
                 return;
             }
             if (string.Compare(sMapMode, "SAFE", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2480,7 +2480,7 @@ namespace GameSrv.Npc
             var nLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SETMEMBERLEVEL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SetMemberLevel);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -2515,7 +2515,7 @@ namespace GameSrv.Npc
             var nType = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nType < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SETMEMBERTYPE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.SetMemberType);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -2551,7 +2551,7 @@ namespace GameSrv.Npc
             var nItemCount = questActionInfo.nParam2;
             if (string.IsNullOrEmpty(sItemName) || nItemCount <= 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GIVE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Give);
                 return;
             }
             if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -2641,7 +2641,7 @@ namespace GameSrv.Npc
             var nAuraePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nAuraePoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AURAEPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AuraePoint);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2688,7 +2688,7 @@ namespace GameSrv.Npc
             var nBuildPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBuildPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.BUILDPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.BuildPoint);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2735,7 +2735,7 @@ namespace GameSrv.Npc
             var nItemCount = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nItemCount < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GUILDCHIEFITEMCOUNT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.GuildChiefItemCount);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2782,7 +2782,7 @@ namespace GameSrv.Npc
             var nFlourishPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nFlourishPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.FLOURISHPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.FlourishPoint);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2829,7 +2829,7 @@ namespace GameSrv.Npc
             var nStabilityPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nStabilityPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.STABILITYPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.StabilityPoint);
                 return;
             }
             if (playObject.MyGuild == null)
@@ -2876,7 +2876,7 @@ namespace GameSrv.Npc
             var nHp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nHp < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.HUMANHP);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.HumanHp);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -2914,7 +2914,7 @@ namespace GameSrv.Npc
             var nMp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nMp < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.HUMANMP);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.HumanMp);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -2981,7 +2981,7 @@ namespace GameSrv.Npc
             }
             else
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.KILL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Kill);
             }
         }
 
@@ -2990,7 +2990,7 @@ namespace GameSrv.Npc
             var nBonusPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBonusPoint < 0 || nBonusPoint > 10000)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.BONUSPOINT);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.BonusPoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -3042,7 +3042,7 @@ namespace GameSrv.Npc
             var nColor = questActionInfo.nParam1;
             if (nColor < 0 || nColor > 255)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGENAMECOLOR);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangeNameColor);
                 return;
             }
             playObject.NameColor = (byte)nColor;
@@ -3089,7 +3089,7 @@ namespace GameSrv.Npc
             var nBounsuPoint = HUtil32.StrToInt(questActionInfo.sParam3, -1);
             if (nReLevel < 0 || nLevel < 0 || nBounsuPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.RENEWLEVEL);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Renewlevel);
                 return;
             }
             if (playObject.ReLevel + nReLevel <= 255)
@@ -3115,7 +3115,7 @@ namespace GameSrv.Npc
             var nGender = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGender > 1)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGEGENDER);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangeGender);
                 return;
             }
             playObject.Gender = Enum.Parse<PlayGender>(nGender.ToString());
@@ -3137,7 +3137,7 @@ namespace GameSrv.Npc
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nRate < 0 || nTime < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.KILLMONEXPRATE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.KillMonExpRate);
                 return;
             }
             playObject.KillMonExpRate = nRate;
@@ -3158,7 +3158,7 @@ namespace GameSrv.Npc
             var nCount = questActionInfo.nParam6;
             if (string.IsNullOrEmpty(sMapName) || nMapX <= 0 || nMapY <= 0 || string.IsNullOrEmpty(sMapName) || nRange <= 0 || nCount <= 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MONGENEX);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MonGenex);
                 return;
             }
             for (var i = 0; i < nCount; i++)
@@ -3179,7 +3179,7 @@ namespace GameSrv.Npc
             var sMonName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sMonName))
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.OPENMAGICBOX);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.OpenMagicbox);
                 return;
             }
             playObject.GetFrontPosition(ref nX, ref nY);
@@ -3200,7 +3200,7 @@ namespace GameSrv.Npc
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam4, -1);
             if (nRange < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.PKZONE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.PvpZone);
                 return;
             }
             var nMinX = CurrX - nRange;
@@ -3227,7 +3227,7 @@ namespace GameSrv.Npc
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nRate < 0 || nTime < 0)
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.POWERRATE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.PowerRate);
                 return;
             }
             playObject.PowerRate = nRate;
@@ -3298,7 +3298,7 @@ namespace GameSrv.Npc
             }
             else
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGEMODE);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangeMode);
             }
         }
 
@@ -3311,7 +3311,7 @@ namespace GameSrv.Npc
             }
             else
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.CHANGEPERMISSION);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ChangePerMission);
                 return;
             }
             if (M2Share.Config.ShowScriptActionMsg)
@@ -3359,7 +3359,7 @@ namespace GameSrv.Npc
                 }
                 if (string.IsNullOrEmpty(sMap) || nX < 0 || nY < 0 || nRange < 0 || string.IsNullOrEmpty(sItemName) || nCount <= 0)
                 {
-                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.THROWITEM);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ThrowItem);
                     return;
                 }
                 var envir = M2Share.MapMgr.FindMap(sMap);

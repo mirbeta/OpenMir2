@@ -290,7 +290,7 @@ namespace GameSrv
             }
             if (nJob < 0)
             {
-                ScriptConditionError(PlayObject, QuestConditionInfo, ExecutionCode.CHANGEJOB.ToString());
+                ScriptConditionError(PlayObject, QuestConditionInfo, ExecutionCode.ChangeJob.ToString());
                 return;
             }
             if (PlayObject.GroupOwner != 0)

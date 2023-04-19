@@ -392,7 +392,7 @@ namespace GameSrv.Script
             if (ExecutionCodeDefMap.TryGetValue(sCmd, out var code))
             {
                 nCMDCode = code;
-                if (code == (int)ExecutionCode.SET)
+                if (code == (int)ExecutionCode.Set)
                 {
                     nCMDCode = code;
                     HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
@@ -405,7 +405,7 @@ namespace GameSrv.Script
                         nCMDCode = 0;
                     }
                 }
-                else if (code == (int)ExecutionCode.RESET)
+                else if (code == (int)ExecutionCode.ReSet)
                 {
                     nCMDCode = code;
                     HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
@@ -418,7 +418,7 @@ namespace GameSrv.Script
                         nCMDCode = 0;
                     }
                 }
-                else if (code == (int)ExecutionCode.SETOPEN)
+                else if (code == (int)ExecutionCode.SetOpen)
                 {
                     nCMDCode = code;
                     HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
@@ -431,7 +431,7 @@ namespace GameSrv.Script
                         nCMDCode = 0;
                     }
                 }
-                else if (code == (int)ExecutionCode.SETUNIT)
+                else if (code == (int)ExecutionCode.SetUnit)
                 {
                     nCMDCode = code;
                     HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
@@ -444,7 +444,7 @@ namespace GameSrv.Script
                         nCMDCode = 0;
                     }
                 }
-                else if (code == (int)ExecutionCode.RESETUNIT)
+                else if (code == (int)ExecutionCode.ResetUnit)
                 {
                     nCMDCode = code;
                     HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);

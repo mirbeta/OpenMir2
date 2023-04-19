@@ -502,7 +502,7 @@ namespace GameSrv.Npc
 
                 switch (questConditionInfo.CmdCode)
                 {
-                    case (int)ExecutionCode.CHECKUSERDATE:
+                    case (int)ExecutionCode.CheckUserDate:
                         result = QuestCheckConditionCheckUserDateType(playObject, playObject.ChrName, m_sPath + questConditionInfo.sParam1, questConditionInfo.sParam3, questConditionInfo.sParam4, questConditionInfo.sParam5);
                         break;
                     case (int)ConditionCode.CHECKRANDOMNO:
@@ -977,95 +977,95 @@ namespace GameSrv.Npc
                 ExecutionCode executionCode = (ExecutionCode)questActionInfo.nCmdCode;
                 switch (executionCode)
                 {
-                    case ExecutionCode.SET:
+                    case ExecutionCode.Set:
                         var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
                         var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
                         playObject.SetQuestFlagStatus(n28, n2C);
                         break;
-                    case ExecutionCode.TAKE:
+                    case ExecutionCode.Take:
                         GotoLableTakeItem(playObject, questActionInfo.sParam1, questActionInfo.nParam2, ref sC);
                         break;
-                    case ExecutionCode.GIVE:
+                    case ExecutionCode.Give:
                         ActionOfGiveItem(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.TAKEW:
+                    case ExecutionCode.Takew:
                         GotoLableTakeWItem(playObject, questActionInfo.sParam1, questActionInfo.nParam2);
                         break;
-                    case ExecutionCode.CLOSE:
+                    case ExecutionCode.Close:
                         playObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                         break;
-                    case ExecutionCode.RESET:
+                    case ExecutionCode.ReSet:
                         for (int k = 0; k < questActionInfo.nParam2; k++)
                         {
                             playObject.SetQuestFlagStatus(questActionInfo.nParam1 + k, 0);
                         }
                         break;
-                    case ExecutionCode.SETOPEN:
+                    case ExecutionCode.SetOpen:
                         n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
                         n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
                         playObject.SetQuestUnitOpenStatus(n28, n2C);
                         break;
-                    case ExecutionCode.SETUNIT:
+                    case ExecutionCode.SetUnit:
                         n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
                         n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
                         playObject.SetQuestUnitStatus(n28, n2C);
                         break;
-                    case ExecutionCode.RESETUNIT:
+                    case ExecutionCode.ResetUnit:
                         for (int k = 0; k < questActionInfo.nParam2; k++)
                         {
                             playObject.SetQuestUnitStatus(questActionInfo.nParam1 + k, 0);
                         }
                         break;
-                    case ExecutionCode.BREAK:
+                    case ExecutionCode.Break:
                         result = false;
                         break;
-                    case ExecutionCode.TIMERECALL:
+                    case ExecutionCode.TimereCall:
                         playObject.IsTimeRecall = true;
                         playObject.TimeRecallMoveMap = playObject.MapName;
                         playObject.TimeRecallMoveX = playObject.CurrX;
                         playObject.TimeRecallMoveY = playObject.CurrY;
                         playObject.TimeRecallTick = HUtil32.GetTickCount() + (questActionInfo.nParam1 * 60 * 1000);
                         break;
-                    case ExecutionCode.PARAM1:
+                    case ExecutionCode.Param1:
                         n34 = questActionInfo.nParam1;
                         s44 = questActionInfo.sParam1;
                         break;
-                    case ExecutionCode.PARAM2:
+                    case ExecutionCode.Param2:
                         n38 = questActionInfo.nParam1;
                         string s48 = questActionInfo.sParam1;
                         break;
-                    case ExecutionCode.PARAM3:
+                    case ExecutionCode.Param3:
                         n3C = questActionInfo.nParam1;
                         string s4C = questActionInfo.sParam1;
                         break;
-                    case ExecutionCode.PARAM4:
+                    case ExecutionCode.Param4:
                         n40 = questActionInfo.nParam1;
                         break;
-                    case ExecutionCode.EXEACTION:
+                    case ExecutionCode.Exeaction:
                         n40 = questActionInfo.nParam1;
                         ExeAction(playObject, questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.nParam1, questActionInfo.nParam2, questActionInfo.nParam3);
                         break;
-                    case ExecutionCode.MAPMOVE:
+                    case ExecutionCode.MapMove:
                         playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         playObject.SpaceMove(questActionInfo.sParam1, (short)questActionInfo.nParam2, (short)questActionInfo.nParam3, 0);
                         bo11 = true;
                         break;
-                    case ExecutionCode.MAP:
+                    case ExecutionCode.Map:
                         playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                         playObject.MapRandomMove(questActionInfo.sParam1, 0);
                         bo11 = true;
                         break;
-                    case ExecutionCode.TAKECHECKITEM:
+                    case ExecutionCode.TakecheckItem:
                         if (userItem != null)
                         {
                             playObject.QuestTakeCheckItem(userItem);
                         }
                         else
                         {
-                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.TAKECHECKITEM);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.TakecheckItem);
                         }
                         break;
-                    case ExecutionCode.MONGEN:
+                    case ExecutionCode.MonGen:
                         for (int k = 0; k < questActionInfo.nParam2; k++)
                         {
                             var n20X = M2Share.RandomNumber.Random(questActionInfo.nParam3 * 2 + 1) + (n38 - questActionInfo.nParam3);
@@ -1073,7 +1073,7 @@ namespace GameSrv.Npc
                             M2Share.WorldEngine.RegenMonsterByName(s44, (short)n20X, (short)n24Y, questActionInfo.sParam1);
                         }
                         break;
-                    case ExecutionCode.MONCLEAR:
+                    case ExecutionCode.MonClear:
                         var list58 = new List<BaseObject>();
                         M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(questActionInfo.sParam1), list58);
                         for (int k = 0; k < list58.Count; k++)
@@ -1084,16 +1084,16 @@ namespace GameSrv.Npc
                         }
                         list58.Clear();
                         break;
-                    case ExecutionCode.MOV:
+                    case ExecutionCode.Mov:
                         MovData(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.INC:
+                    case ExecutionCode.Inc:
                         IncInteger(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.DEC:
+                    case ExecutionCode.Dec:
                         DecInteger(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SUM:
+                    case ExecutionCode.Sum:
                         SumData(playObject, questActionInfo);
                         break;
                     case ExecutionCode.Div:
@@ -1105,10 +1105,10 @@ namespace GameSrv.Npc
                     case ExecutionCode.Percent:
                         PercentData(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.BREAKTIMERECALL:
+                    case ExecutionCode.BreakTimereCall:
                         playObject.IsTimeRecall = false;
                         break;
-                    case ExecutionCode.PKPOINT:
+                    case ExecutionCode.PkPoint:
                         if (questActionInfo.nParam1 == 0)
                         {
                             playObject.PkPoint = 0;
@@ -1140,18 +1140,18 @@ namespace GameSrv.Npc
                         }
                         playObject.RefNameColor();
                         break;
-                    case ExecutionCode.CHANGEXP:
+                    case ExecutionCode.ChangExp:
                         break;
-                    case ExecutionCode.RECALLMOB:
+                    case ExecutionCode.ReCallmob:
                         ActionOfRecallmob(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.THROWITEM://将指定物品刷新到指定地图坐标范围内
+                    case ExecutionCode.ThrowItem://将指定物品刷新到指定地图坐标范围内
                         ActionOfThrowitem(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MOVR:
+                    case ExecutionCode.Movr:
                         MovrData(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.EXCHANGEMAP:
+                    case ExecutionCode.ExchangeMap:
                         var envir = M2Share.MapMgr.FindMap(questActionInfo.sParam1);
                         if (envir != null)
                         {
@@ -1166,10 +1166,10 @@ namespace GameSrv.Npc
                         }
                         else
                         {
-                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.EXCHANGEMAP);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ExchangeMap);
                         }
                         break;
-                    case ExecutionCode.RECALLMAP:
+                    case ExecutionCode.ReCallMap:
                         var recallEnvir = M2Share.MapMgr.FindMap(questActionInfo.sParam1);
                         if (recallEnvir != null)
                         {
@@ -1187,10 +1187,10 @@ namespace GameSrv.Npc
                         }
                         else
                         {
-                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.RECALLMAP);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.ReCallMap);
                         }
                         break;
-                    case ExecutionCode.ADDBATCH:
+                    case ExecutionCode.Addbatch:
                         if (BatchParamsList == null)
                         {
                             BatchParamsList = new List<ScriptParams>();
@@ -1201,10 +1201,10 @@ namespace GameSrv.Npc
                             nParams = n18
                         });
                         break;
-                    case ExecutionCode.BATCHDELAY:
+                    case ExecutionCode.Batchdelay:
                         n18 = questActionInfo.nParam1 * 1000;
                         break;
-                    case ExecutionCode.BATCHMOVE:
+                    case ExecutionCode.BatchMove:
                         int n20 = 0;
                         for (int k = 0; k < BatchParamsList.Count; k++)
                         {
@@ -1213,314 +1213,314 @@ namespace GameSrv.Npc
                             n20 += batchParam.nParams;
                         }
                         break;
-                    case ExecutionCode.PLAYDICE:
+                    case ExecutionCode.Playdice:
                         playObject.PlayDiceLabel = questActionInfo.sParam2;
                         playObject.SendMsg(this, Messages.RM_PLAYDICE, (short)questActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[0], (ushort)playObject.MDyVal[1]), HUtil32.MakeWord((ushort)playObject.MDyVal[2], (ushort)playObject.MDyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[4], (ushort)playObject.MDyVal[5]), HUtil32.MakeWord((ushort)playObject.MDyVal[6], (ushort)playObject.MDyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[8], (ushort)playObject.MDyVal[9]), 0), questActionInfo.sParam2);
                         bo11 = true;
                         break;
-                    case ExecutionCode.ADDNAMELIST:
+                    case ExecutionCode.AddNameList:
                         GotoLableAddList(playObject.ChrName, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.DELNAMELIST:
+                    case ExecutionCode.DelNameList:
                         GotoLableDelList(playObject.ChrName, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.ADDUSERDATE:
+                    case ExecutionCode.AddUserDate:
                         GotoLableAddUseDateList(playObject.ChrName, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.DELUSERDATE:
+                    case ExecutionCode.DelUserDate:
                         GotoLableDelUseDateList(playObject.ChrName, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.ADDGUILDLIST:
+                    case ExecutionCode.AddGuildList:
                         if (playObject.MyGuild != null)
                         {
                             GotoLableAddList(playObject.MyGuild.GuildName, m_sPath + questActionInfo.sParam1);
                         }
                         break;
-                    case ExecutionCode.DELGUILDLIST:
+                    case ExecutionCode.DelGuildList:
                         if (playObject.MyGuild != null)
                         {
                             GotoLableDelList(playObject.MyGuild.GuildName, m_sPath + questActionInfo.sParam1);
                         }
                         break;
-                    case ExecutionCode.LINEMSG:
-                    case ExecutionCode.SENDMSG:
+                    case ExecutionCode.LineMsg:
+                    case ExecutionCode.SendMsg:
                         ActionOfLineMsg(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.ADDACCOUNTLIST:
+                    case ExecutionCode.AddAccountList:
                         GotoLableAddList(playObject.UserAccount, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.DELACCOUNTLIST:
+                    case ExecutionCode.DelAccountList:
                         GotoLableDelList(playObject.UserAccount, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.ADDIPLIST:
+                    case ExecutionCode.AddipList:
                         GotoLableAddList(playObject.LoginIpAddr, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.DELIPLIST:
+                    case ExecutionCode.DelipList:
                         GotoLableDelList(playObject.LoginIpAddr, m_sPath + questActionInfo.sParam1);
                         break;
-                    case ExecutionCode.GOQUEST:
+                    case ExecutionCode.Goquest:
                         GoToQuest(playObject, questActionInfo.nParam1);
                         break;
-                    case ExecutionCode.ENDQUEST:
+                    case ExecutionCode.Endquest:
                         playObject.MScript = null;
                         break;
-                    case ExecutionCode.GOTO:
+                    case ExecutionCode.Goto:
                         if (!JmpToLable(playObject, questActionInfo.sParam1))
                         {
-                            M2Share.Logger.Error("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ExecutionCode.GOTO + ' ' + questActionInfo.sParam1);
+                            M2Share.Logger.Error("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ExecutionCode.Goto + ' ' + questActionInfo.sParam1);
                             result = false;
                             return result;
                         }
                         break;
-                    case ExecutionCode.HAIRCOLOR:
+                    case ExecutionCode.HairColor:
                         break;
-                    case ExecutionCode.WEARCOLOR:
+                    case ExecutionCode.WearColor:
                         break;
-                    case ExecutionCode.HAIRSTYLE:
+                    case ExecutionCode.Hairstyle:
                         ActionOfChangeHairStyle(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MONRECALL:
+                    case ExecutionCode.MonreCall:
                         break;
-                    case ExecutionCode.HORSECALL:
+                    case ExecutionCode.HorseCall:
                         break;
-                    case ExecutionCode.HAIRRNDCOL:
+                    case ExecutionCode.Hairrndcol:
                         break;
-                    case ExecutionCode.KILLHORSE:
+                    case ExecutionCode.KillHorse:
                         break;
-                    case ExecutionCode.RANDSETDAILYQUEST:
+                    case ExecutionCode.Randsetdailyquest:
                         break;
-                    case ExecutionCode.RECALLGROUPMEMBERS:
+                    case ExecutionCode.ReCallgroupMembers:
                         ActionOfRecallGroupMembers(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARNAMELIST:
+                    case ExecutionCode.ClearNameList:
                         ActionOfClearList(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MAPTING:
+                    case ExecutionCode.Mapting:
                         ActionOfMapTing(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CHANGELEVEL:
+                    case ExecutionCode.ChangeLevel:
                         ActionOfChangeLevel(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MARRY:
+                    case ExecutionCode.Marry:
                         ActionOfMarry(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MASTER:
+                    case ExecutionCode.Master:
                         ActionOfMaster(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.UNMASTER:
+                    case ExecutionCode.UnMaster:
                         ActionOfUnMaster(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.UNMARRY:
+                    case ExecutionCode.UnMarry:
                         ActionOfUnMarry(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GETMARRY:
+                    case ExecutionCode.GetMarry:
                         ActionOfGetMarry(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GETMASTER:
+                    case ExecutionCode.GetMaster:
                         ActionOfGetMaster(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARSKILL:
+                    case ExecutionCode.ClearSkill:
                         ActionOfClearSkill(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.DELNOJOBSKILL:
+                    case ExecutionCode.DelnoJobSkill:
                         ActionOfDelNoJobSkill(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.DELSKILL:
+                    case ExecutionCode.DelSkill:
                         ActionOfDelSkill(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.ADDSKILL:
+                    case ExecutionCode.AddSkill:
                         ActionOfAddSkill(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SKILLLEVEL:
+                    case ExecutionCode.Skilllevel:
                         ActionOfSkillLevel(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CHANGEPKPOINT:
+                    case ExecutionCode.ChangePkPoint:
                         ActionOfChangePkPoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CHANGEEXP:
+                    case ExecutionCode.ChangeExp:
                         ActionOfChangeExp(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CHANGEJOB:
+                    case ExecutionCode.ChangeJob:
                         ActionOfChangeJob(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MISSION:
+                    case ExecutionCode.Mission:
                         ActionOfMission(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MOBPLACE:
+                    case ExecutionCode.Mobplace:
                         ActionOfMobPlace(playObject, questActionInfo, n34, n38, n3C, n40);
                         break;
-                    case ExecutionCode.SETMEMBERTYPE:
+                    case ExecutionCode.SetMemberType:
                         ActionOfSetMemberType(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SETMEMBERLEVEL:
+                    case ExecutionCode.SetMemberLevel:
                         ActionOfSetMemberLevel(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GAMEGOLD:
+                    case ExecutionCode.GameGold:
                         ActionOfGameGold(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GAMEPOINT:
+                    case ExecutionCode.GamePoint:
                         ActionOfGamePoint(playObject, questActionInfo);
                         break;
                     case ExecutionCode.OffLine:
                         ActionOfOffLine(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.AUTOADDGAMEGOLD: // 增加挂机
+                    case ExecutionCode.AutoAddGameGold: // 增加挂机
                         ActionOfAutoAddGameGold(playObject, questActionInfo, n34, n38);
                         break;
-                    case ExecutionCode.AUTOSUBGAMEGOLD:
+                    case ExecutionCode.AutoSubGameGold:
                         ActionOfAutoSubGameGold(playObject, questActionInfo, n34, n38);
                         break;
-                    case ExecutionCode.CHANGENAMECOLOR:
+                    case ExecutionCode.ChangeNameColor:
                         ActionOfChangeNameColor(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARPASSWORD:
+                    case ExecutionCode.ClearPassword:
                         ActionOfClearPassword(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.RENEWLEVEL:
+                    case ExecutionCode.Renewlevel:
                         ActionOfReNewLevel(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.KILLSLAVE:
+                    case ExecutionCode.KillSlave:
                         ActionOfKillSlave(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CHANGEGENDER:
+                    case ExecutionCode.ChangeGender:
                         ActionOfChangeGender(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.KILLMONEXPRATE:
+                    case ExecutionCode.KillMonExpRate:
                         ActionOfKillMonExpRate(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.POWERRATE:
+                    case ExecutionCode.PowerRate:
                         ActionOfPowerRate(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CHANGEPERMISSION:
+                    case ExecutionCode.ChangePerMission:
                         ActionOfChangePerMission(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.BONUSPOINT:
+                    case ExecutionCode.BonusPoint:
                         ActionOfBonusPoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.RESTRENEWLEVEL:
+                    case ExecutionCode.Restrenewlevel:
                         ActionOfRestReNewLevel(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.DELMARRY:
+                    case ExecutionCode.DelMarry:
                         ActionOfDelMarry(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.DELMASTER:
+                    case ExecutionCode.DelMaster:
                         ActionOfDelMaster(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CREDITPOINT:
+                    case ExecutionCode.CreditPoint:
                         ActionOfChangeCreditPoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARNEEDITEMS:
+                    case ExecutionCode.ClearNeedItems:
                         ActionOfClearNeedItems(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARMAKEITEMS:
+                    case ExecutionCode.ClearMakeItems:
                         ActionOfClearMakeItems(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SETSENDMSGFLAG:
+                    case ExecutionCode.SetSendMsgFlag:
                         playObject.BoSendMsgFlag = true;
                         break;
-                    case ExecutionCode.UPGRADEITEMS:
+                    case ExecutionCode.UpgradeItems:
                         ActionOfUpgradeItems(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.UPGRADEITEMSEX:
+                    case ExecutionCode.UpgradeItemsex:
                         ActionOfUpgradeItemsEx(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MONGENEX:
+                    case ExecutionCode.MonGenex:
                         ActionOfMonGenEx(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARMAPMON:
+                    case ExecutionCode.ClearMapMon:
                         ActionOfClearMapMon(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SETMAPMODE:
+                    case ExecutionCode.SetMapMode:
                         ActionOfSetMapMode(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.PKZONE:
+                    case ExecutionCode.PvpZone:
                         ActionOfPkZone(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.RESTBONUSPOINT:
+                    case ExecutionCode.RestBonusPoint:
                         ActionOfRestBonusPoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.TAKECASTLEGOLD:
+                    case ExecutionCode.TakeCastleGold:
                         ActionOfTakeCastleGold(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.HUMANHP:
+                    case ExecutionCode.HumanHp:
                         ActionOfHumanHp(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.HUMANMP:
+                    case ExecutionCode.HumanMp:
                         ActionOfHumanMp(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.BUILDPOINT:
+                    case ExecutionCode.BuildPoint:
                         ActionOfGuildBuildPoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.AURAEPOINT:
+                    case ExecutionCode.AuraePoint:
                         ActionOfGuildAuraePoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.STABILITYPOINT:
+                    case ExecutionCode.StabilityPoint:
                         ActionOfGuildstabilityPoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.FLOURISHPOINT:
+                    case ExecutionCode.FlourishPoint:
                         ActionOfGuildFlourishPoint(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.OPENMAGICBOX:
+                    case ExecutionCode.OpenMagicbox:
                         ActionOfOpenMagicBox(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SETRANKLEVELNAME:
+                    case ExecutionCode.SetRankLevelName:
                         ActionOfSetRankLevelName(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GMEXECUTE:
+                    case ExecutionCode.GmExecute:
                         ActionOfGmExecute(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GUILDCHIEFITEMCOUNT:
+                    case ExecutionCode.GuildChiefItemCount:
                         ActionOfGuildChiefItemCount(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.ADDNAMEDATELIST:
+                    case ExecutionCode.AddNameDateList:
                         ActionOfAddNameDateList(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.DELNAMEDATELIST:
+                    case ExecutionCode.DelNameDateList:
                         ActionOfDelNameDateList(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MOBFIREBURN:
+                    case ExecutionCode.MobFireburn:
                         ActionOfMobFireBurn(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.MESSAGEBOX:
+                    case ExecutionCode.MessageBox:
                         ActionOfMessageBox(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SETSCRIPTFLAG:
+                    case ExecutionCode.SetscriptFlag:
                         ActionOfSetScriptFlag(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SETAUTOGETEXP:
+                    case ExecutionCode.SetautogetExp:
                         ActionOfAutoGetExp(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.VAR:
+                    case ExecutionCode.Var:
                         ActionOfVar(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.LOADVAR:
+                    case ExecutionCode.LoadVar:
                         ActionOfLoadVar(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.SAVEVAR:
+                    case ExecutionCode.SaveVar:
                         ActionOfSaveVar(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CALCVAR:
+                    case ExecutionCode.CalcVar:
                         ActionOfCalcVar(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GUILDRECALL:
+                    case ExecutionCode.GuildReCall:
                         ActionOfGuildRecall(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GROUPADDLIST:
+                    case ExecutionCode.GroupAddList:
                         ActionOfGroupAddList(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARLIST:
+                    case ExecutionCode.ClearList:
                         ActionOfClearList(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GROUPRECALL:
+                    case ExecutionCode.GroupReCall:
                         ActionOfGroupRecall(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GROUPMOVEMAP:
+                    case ExecutionCode.GroupMoveMap:
                         ActionOfGroupMoveMap(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.REPAIRALL:
+                    case ExecutionCode.RepairAll:
                         ActionOfRepairAllItem(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.QUERYBAGITEMS:// 刷新包裹
+                    case ExecutionCode.QueryBagItems:// 刷新包裹
                         if ((HUtil32.GetTickCount() - playObject.QueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
                         {
                             playObject.QueryBagItemsTick = HUtil32.GetTickCount();
@@ -1531,7 +1531,7 @@ namespace GameSrv.Npc
                             playObject.SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                         }
                         break;
-                    case ExecutionCode.SETRANDOMNO:
+                    case ExecutionCode.SetRandomNo:
                         while (true)
                         {
                             n2C = M2Share.RandomNumber.Random(999999);
@@ -1542,45 +1542,45 @@ namespace GameSrv.Npc
                             }
                         }
                         break;
-                    case ExecutionCode.OPENYBDEAL:
+                    case ExecutionCode.OpenYbDeal:
                         ActionOfOpenSaleDeal(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.QUERYYBSELL:
+                    case ExecutionCode.QueryYbSell:
                         ActionOfQuerySaleSell(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.QUERYYBDEAL:
+                    case ExecutionCode.QueryYbDeal:
                         ActionOfQueryTrustDeal(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CLEARDELAYGOTO:
+                    case ExecutionCode.ClearDelayGoto:
                         playObject.IsTimeGoto = false;
                         playObject.TimeGotoLable = "";
                         playObject.TimeGotoNpc = null;
                         break;
-                    case ExecutionCode.QUERYVALUE:
+                    case ExecutionCode.QueryValue:
                         ActionOfQueryValue(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.KILLSLAVENAME:
+                    case ExecutionCode.KillSlaveName:
                         ActionOfKillSlaveName(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.QUERYITEMDLG:
+                    case ExecutionCode.QueryItemDlg:
                         ActionOfQueryItemDlg(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.UPGRADEDLGITEM:
+                    case ExecutionCode.UpgradeDlgItem:
                         ActionOfUpgradeDlgItem(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.CHANGEMODE:
+                    case ExecutionCode.ChangeMode:
                         ActionOfChangeMode(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.KILL:
+                    case ExecutionCode.Kill:
                         ActionOfKill(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.KICK:
+                    case ExecutionCode.Kick:
                         ActionOfKick(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.DELAYGOTO:
+                    case ExecutionCode.DelayGoto:
                         ActionOfDelayCall(playObject, questActionInfo);
                         break;
-                    case ExecutionCode.GETDLGITEMVALUE:
+                    case ExecutionCode.GetDlgItemValue:
 
                         break;
                     case ExecutionCode.TakeDlgItem:
@@ -1610,7 +1610,7 @@ namespace GameSrv.Npc
             string sSlaveName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sSlaveName))
             {
-                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.KILLSLAVENAME);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.KillSlaveName);
                 return;
             }
             if (sSlaveName.Equals("*") || string.Compare(sSlaveName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)
