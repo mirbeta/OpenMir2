@@ -1,7 +1,6 @@
 using System.Collections;
 using GameSrv.Actor;
 using GameSrv.Event.Events;
-using GameSrv.Guild;
 using GameSrv.Items;
 using GameSrv.Maps;
 using GameSrv.Monster;
@@ -11,11 +10,14 @@ using GameSrv.Planes;
 using GameSrv.Player;
 using GameSrv.RobotPlay;
 using GameSrv.Services;
+using M2Server;
 using NLog;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
+using Envirnoment = GameSrv.Maps.Envirnoment;
+using GuildInfo = GameSrv.Guild.GuildInfo;
 
 namespace GameSrv.World
 {

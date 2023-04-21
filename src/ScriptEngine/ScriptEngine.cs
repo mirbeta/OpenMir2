@@ -1,4 +1,5 @@
 ﻿using M2Server;
+using M2Server.Actor;
 using NLog;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -695,7 +696,7 @@ namespace ScriptEngine
                                     }
                                     if (command.Equals(ScriptFlagConst.UseItemName, StringComparison.OrdinalIgnoreCase))
                                     {
-                                        ((Merchant)NPC).IsUseItemName = true;
+                                        ((IMerchant)NPC).IsUseItemName = true;
                                         continue;
                                     }
                                     if (command.Equals(ScriptFlagConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))

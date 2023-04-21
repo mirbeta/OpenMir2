@@ -3,11 +3,11 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server
+namespace M2Server.Actor
 {
-    public interface IActor
+    public interface IPlayerActor : IActor
     {
-        int ActorId { get; }
+         int ActorId { get; }
         
         string ChrName { get; }
 
@@ -935,10 +935,5 @@ namespace M2Server
         void SendMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "");
 
         void SendMsg(IActor baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "");
-    }
-
-    public interface NormNpc
-    {
-
     }
 }

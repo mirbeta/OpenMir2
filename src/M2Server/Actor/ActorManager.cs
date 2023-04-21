@@ -48,14 +48,14 @@ namespace M2Server
             return _actorsMap.ContainsKey(actorId);
         }
 
-        public void Add(IActor actor)
+        public void Add(BaseObject actor)
         {
             _actorsMap.TryAdd(actor.ActorId, actor);
         }
 
-        public IActor Get(int actorId)
+        public BaseObject Get(int actorId)
         {
-            return _actorsMap.TryGetValue(actorId, out var actor) ? (IActor)actor : null;
+            return _actorsMap.TryGetValue(actorId, out var actor) ? (BaseObject)actor : null;
         }
 
         public T Get<T>(int actorId) where T : ActorEntity
