@@ -3,7 +3,7 @@
         public bool UseMagic;
 
         public ElectronicScolpionMon() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
             UseMagic = false;
         }
 
@@ -44,7 +44,7 @@
                     if (UseMagic || nX == 2 || nY == 2) {
                         if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime) {
                             AttackTick = HUtil32.GetTickCount();
-                            byte nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                            byte nAttackDir = GameShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                             LightingAttack(nAttackDir);
                         }
                     }

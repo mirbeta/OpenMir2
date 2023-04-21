@@ -9,10 +9,10 @@ namespace GameSrv.GameCommand.Commands {
     public class ShutupListCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
+            HUtil32.EnterCriticalSection(GameShare.DenySayMsgList);
             try {
-                var nCount = M2Share.DenySayMsgList.Count;
-                if (M2Share.DenySayMsgList.Count <= 0) {
+                var nCount = GameShare.DenySayMsgList.Count;
+                if (GameShare.DenySayMsgList.Count <= 0) {
                     playObject.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
                 }
                 if (nCount > 0) {
@@ -29,7 +29,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
             }
             finally {
-                HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(GameShare.DenySayMsgList);
             }
         }
     }

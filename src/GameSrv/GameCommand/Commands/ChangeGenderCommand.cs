@@ -29,7 +29,7 @@ namespace GameSrv.GameCommand.Commands {
             if (!Enum.TryParse(nSex.ToString(), out PlayGender playSex)) {
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 if (mPlayObject.Gender != playSex) {
                     mPlayObject.Gender = playSex;

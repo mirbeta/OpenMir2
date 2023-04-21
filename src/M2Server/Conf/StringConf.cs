@@ -1,7 +1,6 @@
-﻿using GameSrv.GameCommand;
-using SystemModule.Common;
+﻿using SystemModule.Common;
 
-namespace GameSrv.Conf {
+namespace M2Server.Conf {
     public class StringConf : ConfigFile {
         public StringConf(string fileName) : base(fileName) {
             Load();

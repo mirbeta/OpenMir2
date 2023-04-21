@@ -19,8 +19,8 @@ namespace GameSrv.Monster.Monsters
 
         private void AttackTarger(BaseObject targetObject)
         {
-            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
-            int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            Dir = GameShare.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
+            int nDamage = HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage > 0)
             {
                 nDamage = targetObject.GetHitStruckDamage(this, nDamage);

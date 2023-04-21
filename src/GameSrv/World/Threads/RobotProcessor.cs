@@ -32,14 +32,14 @@ namespace GameSrv.World.Threads
             try
             {
                 ProcessedMonsters = 0;
-                M2Share.WorldEngine.ProcessRobotPlayData();
+                GameShare.WorldEngine.ProcessRobotPlayData();
                 /*foreach (var map in Kernel.MapMgr.GameMaps.Values)
                     ProcessedMonsters += await map.OnTimerAsync();
                 await Kernel.RoleManager.OnRoleTimerAsync();*/
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error("[Exception] RobotProcessor::ExecuteInternal");
+                GameShare.Logger.Error("[Exception] RobotProcessor::ExecuteInternal");
                 logger.Error(ex);
             }
             return Task.CompletedTask;

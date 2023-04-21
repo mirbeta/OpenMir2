@@ -61,7 +61,7 @@ namespace GameSrv.Network
             var dwRunTick = HUtil32.GetTickCount();
             if (GateInfo.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
             {
-                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > M2Share.SocCheckTimeOut) // 2 * 1000
+                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > GameShare.SocCheckTimeOut) // 2 * 1000
                 {
                     GateInfo.nSendChecked = 0;
                     GateInfo.nSendBlockCount = 0;
@@ -75,9 +75,9 @@ namespace GameSrv.Network
                 {
                     return;
                 }
-                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= M2Share.Config.CheckBlock * 10)
+                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= GameShare.Config.CheckBlock * 10)
                 {
-                    if (GateInfo.nSendBlockCount == 0 && M2Share.Config.CheckBlock * 10 <= sendBuffLen)
+                    if (GateInfo.nSendBlockCount == 0 && GameShare.Config.CheckBlock * 10 <= sendBuffLen)
                     {
                         return;
                     }
@@ -91,9 +91,9 @@ namespace GameSrv.Network
                     GateInfo.nSendCount++;
                     GateInfo.nSendBytesCount += sendBuffLen;
                     GateInfo.nSendBlockCount += sendBuffLen;
-                    M2Share.NetworkMonitor.Send(sendBuffLen);
+                    GameShare.NetworkMonitor.Send(sendBuffLen);
                 }
-                if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit)
+                if ((HUtil32.GetTickCount() - dwRunTick) > GameShare.SocLimit)
                 {
                     return;
                 }
@@ -352,7 +352,7 @@ namespace GameSrv.Network
                                     NewUserTick = HUtil32.GetTickCount(),
                                     PlayTime = nPlayTime
                                 };
-                                M2Share.FrontEngine.AddToLoadRcdList(loadRcdInfo);
+                                GameShare.FrontEngine.AddToLoadRcdList(loadRcdInfo);
                             }
                             else
                             {
@@ -491,7 +491,7 @@ namespace GameSrv.Network
                     if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
-                        gateUserInfo.WorldEngine = M2Share.WorldEngine;
+                        gateUserInfo.WorldEngine = GameShare.WorldEngine;
                         gateUserInfo.PlayObject = playObject;
                         break;
                     }
@@ -549,11 +549,11 @@ namespace GameSrv.Network
                         {
                             try
                             {
-                                M2Share.SocketMgr.Send(ConnectionId, buffer);
+                                GameShare.SocketMgr.Send(ConnectionId, buffer);
                             }
                             catch (Exception ex)
                             {
-                                M2Share.Logger.Error(ex.StackTrace);
+                                GameShare.Logger.Error(ex.StackTrace);
                             }
                             //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }

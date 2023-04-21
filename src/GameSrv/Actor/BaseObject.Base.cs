@@ -40,7 +40,7 @@ namespace GameSrv.Actor
                 HealthTick += recoveryTick;
                 SpellTick += recoveryTick;
                 ushort n18;
-                if ((WAbil.HP < WAbil.MaxHP) && (HealthTick >= M2Share.Config.HealthFillTime))
+                if ((WAbil.HP < WAbil.MaxHP) && (HealthTick >= GameShare.Config.HealthFillTime))
                 {
                     n18 = (ushort)((WAbil.MaxHP / 75) + 1);
                     if ((WAbil.HP + n18) < WAbil.MaxHP)
@@ -53,7 +53,7 @@ namespace GameSrv.Actor
                     }
                     HealthSpellChanged();
                 }
-                if ((WAbil.MP < WAbil.MaxMP) && (SpellTick >= M2Share.Config.SpellFillTime))
+                if ((WAbil.MP < WAbil.MaxMP) && (SpellTick >= GameShare.Config.SpellFillTime))
                 {
                     n18 = (ushort)((WAbil.MaxMP / 18) + 1);
                     if ((WAbil.MP + n18) < WAbil.MaxMP)
@@ -70,11 +70,11 @@ namespace GameSrv.Actor
                 {
                     Die();
                 }
-                if (HealthTick >= M2Share.Config.HealthFillTime)
+                if (HealthTick >= GameShare.Config.HealthFillTime)
                 {
                     HealthTick = 0;
                 }
-                if (SpellTick >= M2Share.Config.SpellFillTime)
+                if (SpellTick >= GameShare.Config.SpellFillTime)
                 {
                     SpellTick = 0;
                 }
@@ -83,10 +83,10 @@ namespace GameSrv.Actor
             {
                 if (CanReAlive && MonGen != null)
                 {
-                    int makeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
-                    if (makeGhostTime > M2Share.Config.MakeGhostTime)
+                    int makeGhostTime = HUtil32._MAX(10 * 1000, GameShare.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
+                    if (makeGhostTime > GameShare.Config.MakeGhostTime)
                     {
-                        makeGhostTime = M2Share.Config.MakeGhostTime;
+                        makeGhostTime = GameShare.Config.MakeGhostTime;
                     }
                     if (HUtil32.GetTickCount() - DeathTick > makeGhostTime)
                     {
@@ -95,16 +95,16 @@ namespace GameSrv.Actor
                 }
                 else
                 {
-                    if ((HUtil32.GetTickCount() - DeathTick) > M2Share.Config.MakeGhostTime)// 3 * 60 * 1000
+                    if ((HUtil32.GetTickCount() - DeathTick) > GameShare.Config.MakeGhostTime)// 3 * 60 * 1000
                     {
                         MakeGhost();
                     }
                 }
             }
-            if ((HealthTick < -M2Share.Config.HealthFillTime) && (WAbil.HP > 1))
+            if ((HealthTick < -GameShare.Config.HealthFillTime) && (WAbil.HP > 1))
             {
                 WAbil.HP -= 1;
-                HealthTick += M2Share.Config.HealthFillTime;
+                HealthTick += GameShare.Config.HealthFillTime;
                 HealthSpellChanged();
             }
             // 清理目标对象
@@ -134,7 +134,7 @@ namespace GameSrv.Actor
                 NoItem = true;
                 // 宝宝变色
                 int nInteger;
-                if (AutoChangeColor && (HUtil32.GetTickCount() - AutoChangeColorTick > M2Share.Config.BBMonAutoChangeColorTime))
+                if (AutoChangeColor && (HUtil32.GetTickCount() - AutoChangeColorTick > GameShare.Config.BBMonAutoChangeColorTime))
                 {
                     AutoChangeColorTick = HUtil32.GetTickCount();
                     switch (AutoChangeIdx)
@@ -297,7 +297,7 @@ namespace GameSrv.Actor
                 RecalcAbilitys();
                 SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
             }
-            if ((HUtil32.GetTickCount() - PoisoningTick) > M2Share.Config.PosionDecHealthTime)
+            if ((HUtil32.GetTickCount() - PoisoningTick) > GameShare.Config.PosionDecHealthTime)
             {
                 PoisoningTick = HUtil32.GetTickCount();
                 if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
@@ -473,8 +473,8 @@ namespace GameSrv.Actor
 
         protected virtual void ProcessSayMsg(string sMsg)
         {
-            string sChrName = Race == ActorRace.Play ? ChrName : M2Share.FilterShowName(ChrName);
-            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
+            string sChrName = Race == ActorRace.Play ? ChrName : GameShare.FilterShowName(ChrName);
+            SendRefMsg(Messages.RM_HEAR, 0, GameShare.Config.btHearMsgFColor, GameShare.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
         }
 
         /// <summary>
@@ -510,19 +510,19 @@ namespace GameSrv.Actor
                 {
                     return;
                 }
-                int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 7);
+                int dropWide = HUtil32._MIN(GameShare.Config.DropItemRage, 7);
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(ItemList[i].Index);
+                    var stdItem = GameShare.WorldEngine.GetStdItem(ItemList[i].Index);
                     var boCanNotDrop = false;
                     if (stdItem != null)
                     {
-                        if (M2Share.MonDropLimitLIst.TryGetValue(stdItem.Name, value: out MonsterLimitDrop monDrop))
+                        if (GameShare.MonDropLimitLIst.TryGetValue(stdItem.Name, value: out MonsterLimitDrop monDrop))
                         {
                             if (monDrop.DropCount < monDrop.CountLimit)
                             {
                                 monDrop.DropCount++;
-                                M2Share.MonDropLimitLIst[stdItem.Name] = monDrop;
+                                GameShare.MonDropLimitLIst[stdItem.Name] = monDrop;
                             }
                             else
                             {
@@ -544,7 +544,7 @@ namespace GameSrv.Actor
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(sExceptionMsg);
             }
         }
 
@@ -618,7 +618,7 @@ namespace GameSrv.Actor
                     case Messages.RM_MAGSTRUCK_MINE:
                         if ((processMsg.wIdent == Messages.RM_MAGSTRUCK) && (Race >= ActorRace.Animal) && !RushMode && (WAbil.Level < 50))
                         {
-                            WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
+                            WalkTick = WalkTick + 800 + GameShare.RandomNumber.Random(1000);
                         }
                         var nDamage = GetMagStruckDamage(null, processMsg.nParam1);
                         if (nDamage > 0)
@@ -626,23 +626,23 @@ namespace GameSrv.Actor
                             StruckDamage(nDamage);
                             HealthSpellChanged();
                             SendRefMsg(Messages.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
-                            if (M2Share.Config.MonDelHptoExp)
+                            if (GameShare.Config.MonDelHptoExp)
                             {
-                                targetBaseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
+                                targetBaseObject = GameShare.ActorMgr.Get(processMsg.ActorId);
                                 switch (targetBaseObject.Race)
                                 {
                                     case ActorRace.Play:
-                                        if (targetBaseObject.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                        if (targetBaseObject.WAbil.Level <= GameShare.Config.MonHptoExpLevel)
                                         {
-                                            if (!M2Share.GetNoHptoexpMonList(ChrName))
+                                            if (!GameShare.GetNoHptoexpMonList(ChrName))
                                             {
                                                 if (targetBaseObject.IsRobot)
                                                 {
-                                                    ((RobotPlayer)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    ((RobotPlayer)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * GameShare.Config.MonHptoExpmax);
                                                 }
                                                 else
                                                 {
-                                                    ((PlayObject)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                    ((PlayObject)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * GameShare.Config.MonHptoExpmax);
                                                 }
                                             }
                                         }
@@ -650,17 +650,17 @@ namespace GameSrv.Actor
                                     case ActorRace.PlayClone:
                                         if (targetBaseObject.Master != null)
                                         {
-                                            if (targetBaseObject.Master.WAbil.Level <= M2Share.Config.MonHptoExpLevel)
+                                            if (targetBaseObject.Master.WAbil.Level <= GameShare.Config.MonHptoExpLevel)
                                             {
-                                                if (!M2Share.GetNoHptoexpMonList(ChrName))
+                                                if (!GameShare.GetNoHptoexpMonList(ChrName))
                                                 {
                                                     if (targetBaseObject.Master.IsRobot)
                                                     {
-                                                        ((RobotPlayer)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                        ((RobotPlayer)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * GameShare.Config.MonHptoExpmax);
                                                     }
                                                     else
                                                     {
-                                                        ((PlayObject)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * M2Share.Config.MonHptoExpmax);
+                                                        ((PlayObject)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * GameShare.Config.MonHptoExpmax);
                                                     }
                                                 }
                                             }
@@ -712,7 +712,7 @@ namespace GameSrv.Actor
                         ushort nTargetX = HUtil32.LoWord(processMsg.nParam1);
                         ushort nTargetY = HUtil32.HiWord(processMsg.nParam1);
                         int nRage = processMsg.nParam2;
-                        targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        targetBaseObject = GameShare.ActorMgr.Get(processMsg.nParam3);
                         if ((targetBaseObject != null) && (targetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(targetBaseObject);
@@ -730,14 +730,14 @@ namespace GameSrv.Actor
                         MapRandomMove(processMsg.Msg, processMsg.wParam);
                         break;
                     case Messages.RM_DELAYPUSHED:
-                        targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        targetBaseObject = GameShare.ActorMgr.Get(processMsg.nParam3);
                         if (targetBaseObject != null)
                         {
                             targetBaseObject.CharPushed((byte)processMsg.wParam, (byte)processMsg.nParam2);
                         }
                         break;
                     case Messages.RM_POISON:
-                        targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam2);
+                        targetBaseObject = GameShare.ActorMgr.Get(processMsg.nParam2);
                         if (targetBaseObject != null)
                         {
                             if (IsProperTarget(targetBaseObject))
@@ -769,15 +769,15 @@ namespace GameSrv.Actor
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(e.Message);
             }
             return false;
         }
 
         public virtual string GetShowName()
         {
-            string result = M2Share.FilterShowName(ChrName);
+            string result = GameShare.FilterShowName(ChrName);
             if ((Master != null) && !Master.ObMode)
             {
                 result = result + '(' + Master.ChrName + ')';
@@ -788,10 +788,10 @@ namespace GameSrv.Actor
         public virtual ushort GetHitStruckDamage(BaseObject target, int nDamage)
         {
             int nArmor;
-            int nRnd = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.AC) - HUtil32.LoByte(WAbil.AC)) + 1);
+            int nRnd = HUtil32.LoByte(WAbil.AC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.AC) - HUtil32.LoByte(WAbil.AC)) + 1);
             if (nRnd > 0)
             {
-                nArmor = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(nRnd);
+                nArmor = HUtil32.LoByte(WAbil.AC) + GameShare.RandomNumber.Random(nRnd);
             }
             else
             {
@@ -810,7 +810,7 @@ namespace GameSrv.Actor
 
         public virtual int GetMagStruckDamage(BaseObject baseObject, int nDamage)
         {
-            var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
+            var n14 = HUtil32.LoByte(WAbil.MAC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = (ushort)HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
@@ -834,23 +834,23 @@ namespace GameSrv.Actor
                 switch (((PlayObject)LastHiter).Job)
                 {
                     case PlayJob.Warrior:
-                        nDamage = (ushort)(nDamage * M2Share.Config.WarrMon / 10);
+                        nDamage = (ushort)(nDamage * GameShare.Config.WarrMon / 10);
                         break;
                     case PlayJob.Wizard:
-                        nDamage = (ushort)(nDamage * M2Share.Config.WizardMon / 10);
+                        nDamage = (ushort)(nDamage * GameShare.Config.WizardMon / 10);
                         break;
                     case PlayJob.Taoist:
-                        nDamage = (ushort)(nDamage * M2Share.Config.TaosMon / 10);
+                        nDamage = (ushort)(nDamage * GameShare.Config.TaosMon / 10);
                         break;
                 }
             }
             if ((Race == ActorRace.Play) && (LastHiter != null) && (LastHiter.Master != null)) // 人物下属怪物攻击人
             {
-                nDamage = (ushort)(nDamage * M2Share.Config.MonHum / 10);
+                nDamage = (ushort)(nDamage * GameShare.Config.MonHum / 10);
             }
             if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
-                nDamage = (ushort)HUtil32.Round(nDamage * (M2Share.Config.PosionDamagarmor / 10.0)); // 1.2
+                nDamage = (ushort)HUtil32.Round(nDamage * (GameShare.Config.PosionDamagarmor / 10.0)); // 1.2
             }
             DamageHealth(nDamage);
         }
@@ -869,14 +869,14 @@ namespace GameSrv.Actor
         {
             if (baseObject.Race == ActorRace.NPC) //增加NPC名字颜色单独控制
             {
-                return M2Share.Config.NpcNameColor;
+                return GameShare.Config.NpcNameColor;
             }
             if (baseObject.Master != null)
             {
                 var slaveExpLevel = ((MonsterObject)baseObject).SlaveExpLevel;
                 if (slaveExpLevel <= Grobal2.SlaveMaxLevel)
                 {
-                    return M2Share.Config.SlaveColor[slaveExpLevel];
+                    return GameShare.Config.SlaveColor[slaveExpLevel];
                 }
             }
             return baseObject.GetNameColor();
@@ -888,7 +888,7 @@ namespace GameSrv.Actor
             {
                 power = 0;
             }
-            var result = basePower + M2Share.RandomNumber.Random(power + 1);
+            var result = basePower + GameShare.RandomNumber.Random(power + 1);
             if (AutoChangeColor)
             {
                 result = result * AutoChangeIdx + 1;
@@ -907,7 +907,7 @@ namespace GameSrv.Actor
 
         public virtual int GetFeature(BaseObject baseObject)
         {
-            return M2Share.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
+            return GameShare.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
         }
 
         public virtual void Disappear()

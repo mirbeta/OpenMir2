@@ -16,8 +16,8 @@ namespace GameSrv.GameCommand.Commands {
             }
             var boDelete = false;
             try {
-                for (var i = M2Share.DenyIPAddrList.Count - 1; i >= 0; i--) {
-                    if (M2Share.DenyIPAddrList.Count <= 0) {
+                for (var i = GameShare.DenyIPAddrList.Count - 1; i >= 0; i--) {
+                    if (GameShare.DenyIPAddrList.Count <= 0) {
                         break;
                     }
                     //if ((sIPaddr).CompareTo((Settings.g_DenyIPAddrList[i])) == 0)

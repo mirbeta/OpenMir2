@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using M2Server;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands
@@ -12,7 +13,7 @@ namespace GameSrv.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!GameShare.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -39,7 +40,7 @@ namespace GameSrv.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!GameShare.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -65,7 +66,7 @@ namespace GameSrv.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!GameShare.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -98,12 +99,12 @@ namespace GameSrv.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!GameShare.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (playObject.PwdFailCount > GameShare.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 playObject.IsPasswordLocked = true;
@@ -138,12 +139,12 @@ namespace GameSrv.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!GameShare.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (playObject.PwdFailCount > GameShare.Config.PasswordErrorCountLock)
             {
                 playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 playObject.IsPasswordLocked = true;
@@ -178,7 +179,7 @@ namespace GameSrv.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, PlayObject playObject)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!GameShare.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -217,7 +218,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = GameShare.WorldEngine.GetPlayObject(@params[0]);
             if (playObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);
@@ -252,7 +253,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = GameShare.WorldEngine.GetPlayObject(@params[0]);
             if (playObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);
@@ -287,7 +288,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = GameShare.WorldEngine.GetPlayObject(@params[0]);
             if (playObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);

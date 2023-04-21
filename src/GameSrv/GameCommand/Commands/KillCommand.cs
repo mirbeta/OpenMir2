@@ -16,7 +16,7 @@ namespace GameSrv.GameCommand.Commands {
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             BaseObject baseObject;
             if (!string.IsNullOrEmpty(sHumanName)) {
-                baseObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                baseObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
                 if (baseObject == null) {
                     playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                     return;

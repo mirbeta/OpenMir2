@@ -1,8 +1,10 @@
-﻿using System.Collections.Concurrent;
+﻿using M2Server.Actor;
 using NLog;
+using System.Collections.Concurrent;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace GameSrv.Actor
+namespace M2Server
 {
     /// <summary>
     /// 精灵管理
@@ -46,14 +48,14 @@ namespace GameSrv.Actor
             return _actorsMap.ContainsKey(actorId);
         }
 
-        public void Add(BaseObject actor)
+        public void Add(IActor actor)
         {
             _actorsMap.TryAdd(actor.ActorId, actor);
         }
 
-        public BaseObject Get(int actorId)
+        public IActor Get(int actorId)
         {
-            return _actorsMap.TryGetValue(actorId, out var actor) ? (BaseObject)actor : null;
+            return _actorsMap.TryGetValue(actorId, out var actor) ? (IActor)actor : null;
         }
 
         public T Get<T>(int actorId) where T : ActorEntity

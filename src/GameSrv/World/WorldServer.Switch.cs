@@ -37,7 +37,7 @@ namespace GameSrv.World {
             {
                 if (string.IsNullOrEmpty(switchData.SlaveArr[nCount].SlaveName)) break;
                 int slaveId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
+                GameShare.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
                 playObject.SendSelfDelayMsg(Messages.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
                 if (nCount >= 5) break;
@@ -70,10 +70,10 @@ namespace GameSrv.World {
         private bool SendSwitchData(PlayObject playObject, int nServerIndex) {
             SwitchDataInfo switchData = null;
             MakeSwitchData(playObject, ref switchData);
-            string flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
+            string flName = "$_" + GameShare.ServerIndex + "_$_" + GameShare.ShareFileNameNum + ".shr";
             playObject.SwitchDataTempFile = flName;
             SendServerGroupMsg(Messages.ISM_USERSERVERCHANGE, nServerIndex, flName);//发送消息切换服务器
-            M2Share.ShareFileNameNum++;
+            GameShare.ShareFileNameNum++;
             return true;
         }
 

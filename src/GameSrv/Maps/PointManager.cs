@@ -151,13 +151,13 @@ namespace GameSrv.Maps {
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             if (nStep == 0) {
-                                btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
+                                btDir = GameShare.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 m_nPostion = i;
                             }
                             else {
-                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir) {
+                                if (GameShare.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir) {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
                                     m_nPostion = i;
@@ -198,7 +198,7 @@ namespace GameSrv.Maps {
             byte result = 0;
             switch (btDir) {
                 case Direction.Up:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.UpRight;
                             break;
@@ -214,7 +214,7 @@ namespace GameSrv.Maps {
                     }
                     break;
                 case Direction.UpRight:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.Right;
                             break;
@@ -230,7 +230,7 @@ namespace GameSrv.Maps {
                     }
                     break;
                 case Direction.Right:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.DownRight;
                             break;
@@ -246,7 +246,7 @@ namespace GameSrv.Maps {
                     }
                     break;
                 case Direction.DownRight:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.Down;
                             break;
@@ -262,7 +262,7 @@ namespace GameSrv.Maps {
                     }
                     break;
                 case Direction.Down:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.DownLeft;
                             break;
@@ -278,7 +278,7 @@ namespace GameSrv.Maps {
                     }
                     break;
                 case Direction.DownLeft:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.Left;
                             break;
@@ -294,7 +294,7 @@ namespace GameSrv.Maps {
                     }
                     break;
                 case Direction.Left:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.UpLeft;
                             break;
@@ -310,7 +310,7 @@ namespace GameSrv.Maps {
                     }
                     break;
                 case Direction.UpLeft:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (GameShare.RandomNumber.Random(4)) {
                         case 0:
                             result = Direction.Up;
                             break;
@@ -406,13 +406,13 @@ namespace GameSrv.Maps {
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             if (nStep == 0) {
-                                btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
+                                btDir = GameShare.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 m_nPostion = i;
                             }
                             else {
-                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir) {
+                                if (GameShare.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir) {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
                                     m_nPostion = i;

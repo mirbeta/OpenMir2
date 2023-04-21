@@ -31,22 +31,22 @@ namespace GameSrv.Robots {
                     case Robot.nRODAY:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddDays(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        M2Share.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
+                        GameShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nROHOUR:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddHours(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        M2Share.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
+                        GameShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nROMIN:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddMinutes(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        M2Share.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
+                        GameShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nROSEC:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddSeconds(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        M2Share.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
+                        GameShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nRUNONWEEK:
                         GetWeekTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
@@ -91,7 +91,7 @@ namespace GameSrv.Robots {
                 if (wHour == nHour) {
                     if (wMin == nMin) {
                         if (autoRunInfo.boStatus) return;
-                        M2Share.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
+                        GameShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
                         autoRunInfo.boStatus = true;
                     }
                     else {
@@ -113,7 +113,7 @@ namespace GameSrv.Robots {
                 var wMin = DateTime.Now.Minute;
                 if (wMin == nMin) {
                     if (autoRunInfo.boStatus) return;
-                    M2Share.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
+                    GameShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
                     autoRunInfo.boStatus = true;
                 }
                 else {
@@ -143,7 +143,7 @@ namespace GameSrv.Robots {
                 if ((int)wWeek == nWeek && wHour == nHour) {
                     if (wMin == nMin) {
                         if (autoRunInfo.boStatus) return;
-                        M2Share.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
+                        GameShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2, false);
                         autoRunInfo.boStatus = true;
                     }
                     else {
@@ -169,7 +169,7 @@ namespace GameSrv.Robots {
             var sParam2 = string.Empty;
             var sParam3 = string.Empty;
             var sParam4 = string.Empty;
-            var sFileName = M2Share.GetEnvirFilePath("Robot_def", $"{ScriptFileName}.txt");
+            var sFileName = GameShare.GetEnvirFilePath("Robot_def", $"{ScriptFileName}.txt");
             if (File.Exists(sFileName))
             {
                 using var loadList = new StringList();
@@ -314,7 +314,7 @@ namespace GameSrv.Robots {
 
         public override void Run()
         {
-            if (M2Share.RobotNPC == null)
+            if (GameShare.RobotNPC == null)
             {
                 return;
             }

@@ -27,7 +27,7 @@ namespace GameSrv.GameCommand.Commands
                 return;
             }
             var fireBurnEvent = new FireBurnEvent(playObject, playObject.CurrX, playObject.CurrY, (byte)nInt, nTime, nN);
-            M2Share.EventMgr.AddEvent(fireBurnEvent);
+            GameShare.EventMgr.AddEvent(fireBurnEvent);
         }
     }
 }

@@ -23,12 +23,12 @@ namespace GameSrv.DataSource
             const string sSQLString = "SELECT * FROM stditems";
             try
             {
-                HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-                for (var i = 0; i < M2Share.WorldEngine.StdItemList.Count; i++)
+                HUtil32.EnterCriticalSection(GameShare.ProcessHumanCriticalSection);
+                for (var i = 0; i < GameShare.WorldEngine.StdItemList.Count; i++)
                 {
-                    M2Share.WorldEngine.StdItemList[i] = null;
+                    GameShare.WorldEngine.StdItemList[i] = null;
                 }
-                M2Share.WorldEngine.StdItemList.Clear();
+                GameShare.WorldEngine.StdItemList.Clear();
                 if (!Open())
                 {
                     return result;
@@ -82,9 +82,9 @@ namespace GameSrv.DataSource
                         stdItem.ItemType = dr.GetByte("ITEMTYPE");
                         stdItem.ItemSet = dr.GetUInt16("ITEMSET");
                         stdItem.Reference = dr.GetString("REFERENCE");
-                        if (M2Share.WorldEngine.StdItemList.Count <= idx)
+                        if (GameShare.WorldEngine.StdItemList.Count <= idx)
                         {
-                            M2Share.WorldEngine.StdItemList.Add(stdItem);
+                            GameShare.WorldEngine.StdItemList.Add(stdItem);
                             result = 1;
                         }
                         else
@@ -95,10 +95,10 @@ namespace GameSrv.DataSource
                         }
                     }
                 }
-                M2Share.GameLogGold = M2Share.GetGameLogItemNameList(Grobal2.StringGoldName) == 1;
-                M2Share.GameLogHumanDie = M2Share.GetGameLogItemNameList(CommandHelp.HumanDieEvent) == 1;
-                M2Share.GameLogGameGold = M2Share.GetGameLogItemNameList(M2Share.Config.GameGoldName) == 1;
-                M2Share.GameLogGamePoint = M2Share.GetGameLogItemNameList(M2Share.Config.GamePointName) == 1;
+                GameShare.GameLogGold = GameShare.GetGameLogItemNameList(Grobal2.StringGoldName) == 1;
+                GameShare.GameLogHumanDie = GameShare.GetGameLogItemNameList(CommandHelp.HumanDieEvent) == 1;
+                GameShare.GameLogGameGold = GameShare.GetGameLogItemNameList(GameShare.Config.GameGoldName) == 1;
+                GameShare.GameLogGamePoint = GameShare.GetGameLogItemNameList(GameShare.Config.GamePointName) == 1;
             }
             catch (Exception ex)
             {
@@ -108,7 +108,7 @@ namespace GameSrv.DataSource
             finally
             {
                 Close();
-                HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
+                HUtil32.LeaveCriticalSection(GameShare.ProcessHumanCriticalSection);
             }
             return result;
         }
@@ -117,10 +117,10 @@ namespace GameSrv.DataSource
         {
             const string sSQLString = "select * from magics";
             var result = -1;
-            HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
+            HUtil32.EnterCriticalSection(GameShare.ProcessHumanCriticalSection);
             try
             {
-                M2Share.WorldEngine.SwitchMagicList();
+                GameShare.WorldEngine.SwitchMagicList();
                 if (!Open())
                 {
                     return result;
@@ -155,7 +155,7 @@ namespace GameSrv.DataSource
                     magic.Desc = dr.GetString("Descr");
                     if (magic.MagicId > 0)
                     {
-                        M2Share.WorldEngine.MagicList.Add(magic);
+                        GameShare.WorldEngine.MagicList.Add(magic);
                     }
                     else
                     {
@@ -171,7 +171,7 @@ namespace GameSrv.DataSource
             finally
             {
                 Close();
-                HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
+                HUtil32.LeaveCriticalSection(GameShare.ProcessHumanCriticalSection);
             }
             return result;
         }
@@ -180,10 +180,10 @@ namespace GameSrv.DataSource
         {
             var result = 0;
             const string sSQLString = "select * from monsters";
-            HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
+            HUtil32.EnterCriticalSection(GameShare.ProcessHumanCriticalSection);
             try
             {
-                M2Share.WorldEngine.MonsterList.Clear();
+                GameShare.WorldEngine.MonsterList.Clear();
                 if (!Open())
                 {
                     return result;
@@ -210,15 +210,15 @@ namespace GameSrv.DataSource
                     }
                     else
                     {
-                        monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (M2Share.Config.MonsterPowerRate / 10.0));
+                        monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (GameShare.Config.MonsterPowerRate / 10.0));
                     }
-                    monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (M2Share.Config.MonsterPowerRate / 10.0));
-                    monster.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (M2Share.Config.MonsterPowerRate / 10.0));
-                    monster.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (M2Share.Config.MonsterPowerRate / 10.0));
-                    monster.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (M2Share.Config.MonsterPowerRate / 10.0));
-                    monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (M2Share.Config.MonsterPowerRate / 10.0));
-                    monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (M2Share.Config.MonsterPowerRate / 10.0));
-                    monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (M2Share.Config.MonsterPowerRate / 10.0));
+                    monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (GameShare.Config.MonsterPowerRate / 10.0));
+                    monster.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (GameShare.Config.MonsterPowerRate / 10.0));
+                    monster.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (GameShare.Config.MonsterPowerRate / 10.0));
+                    monster.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (GameShare.Config.MonsterPowerRate / 10.0));
+                    monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (GameShare.Config.MonsterPowerRate / 10.0));
+                    monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (GameShare.Config.MonsterPowerRate / 10.0));
+                    monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (GameShare.Config.MonsterPowerRate / 10.0));
                     monster.Speed = dr.GetByte("SPEED");
                     monster.HitPoint = dr.GetByte("HIT");
                     monster.WalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
@@ -234,8 +234,8 @@ namespace GameSrv.DataSource
                         monster.AttackSpeed = 200;
                     }
                     monster.ItemList = null;
-                    M2Share.LocalDb.LoadMonitems(monster.Name, ref monster.ItemList);
-                    if (M2Share.WorldEngine.MonsterList.ContainsKey(monster.Name))
+                    GameShare.LocalDb.LoadMonitems(monster.Name, ref monster.ItemList);
+                    if (GameShare.WorldEngine.MonsterList.ContainsKey(monster.Name))
                     {
                         logger.Warn($"怪物名称[{monster.Name}]重复,请确认数据是否正常.");
                         continue;
@@ -244,14 +244,14 @@ namespace GameSrv.DataSource
                     {
                         logger.Debug($"怪物[{monster.Name}]爆率文件为空.");
                     }
-                    M2Share.WorldEngine.MonsterList.Add(monster.Name, monster);
+                    GameShare.WorldEngine.MonsterList.Add(monster.Name, monster);
                     result = 1;
                 }
             }
             finally
             {
                 Close();
-                HUtil32.LeaveCriticalSection(M2Share.ProcessHumanCriticalSection);
+                HUtil32.LeaveCriticalSection(GameShare.ProcessHumanCriticalSection);
             }
             return result;
         }
@@ -287,10 +287,10 @@ namespace GameSrv.DataSource
                         DealOffInfo.nSellGold = nSellGold;
                         DealOffInfo.UseItems = JsonSerializer.Deserialize<UserItem[]>(sUseItems);
                         DealOffInfo.Flag = nState;
-                        M2Share.SellOffItemList.Add(DealOffInfo);
+                        GameShare.SellOffItemList.Add(DealOffInfo);
                     }
                 }
-                logger.Info($"读取物品寄售列表成功...[{M2Share.SellOffItemList.Count}]");
+                logger.Info($"读取物品寄售列表成功...[{GameShare.SellOffItemList.Count}]");
             }
             finally
             {
@@ -314,12 +314,12 @@ namespace GameSrv.DataSource
             const string sSQLString = "delete from goldsales";
             try
             {
-                if (M2Share.SellOffItemList.Count > 0)
+                if (GameShare.SellOffItemList.Count > 0)
                 {
                     Execute(sSQLString);
-                    for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
+                    for (var i = 0; i < GameShare.SellOffItemList.Count; i++)
                     {
-                        DealOffInfo = M2Share.SellOffItemList[i];
+                        DealOffInfo = GameShare.SellOffItemList[i];
                         if (DealOffInfo != null)
                         {
                             var command = new MySqlCommand();
@@ -335,7 +335,7 @@ namespace GameSrv.DataSource
                         }
                     }
                 }
-                logger.Info($"保存物品寄售列表成功...[{M2Share.SellOffItemList.Count}]");
+                logger.Info($"保存物品寄售列表成功...[{GameShare.SellOffItemList.Count}]");
             }
             catch (Exception)
             {
@@ -381,20 +381,20 @@ namespace GameSrv.DataSource
             {
                 try
                 {
-                    _dbConnection = new MySqlConnection(M2Share.Config.ConnctionString);
+                    _dbConnection = new MySqlConnection(GameShare.Config.ConnctionString);
                     _dbConnection.Open();
                     return true;
                 }
                 catch (Exception e)
                 {
-                    logger.Error(M2Share.Config.ConnctionString);
+                    logger.Error(GameShare.Config.ConnctionString);
                     logger.Error(e.StackTrace);
                     return false;
                 }
             }
             else if (_dbConnection.State == ConnectionState.Closed)
             {
-                _dbConnection = new MySqlConnection(M2Share.Config.ConnctionString);
+                _dbConnection = new MySqlConnection(GameShare.Config.ConnctionString);
                 _dbConnection.Open();
             }
             return true;

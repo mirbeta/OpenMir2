@@ -199,7 +199,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RoboPlayObject.WizardAttackTarget");
+                GameShare.Logger.Error("RoboPlayObject.WizardAttackTarget");
             }
             return result;
         }
@@ -402,7 +402,7 @@ namespace GameSrv.RobotPlay
                         {
                             AttackTick = HUtil32.GetTickCount();
                             result = UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
-                            if (TargetCret.WAbil.MaxHP >= 700 || !M2Share.Config.boHeroAttackTao)
+                            if (TargetCret.WAbil.MaxHP >= 700 || !GameShare.Config.boHeroAttackTao)
                             {
                                 return result;
                             }
@@ -438,7 +438,7 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private bool AttackLevelTarget()
         {
-            return M2Share.Config.boHeroAttackTarget && Abil.Level < 22;
+            return GameShare.Config.boHeroAttackTarget && Abil.Level < 22;
         }
 
         /// <summary>
@@ -447,7 +447,7 @@ namespace GameSrv.RobotPlay
         /// <returns></returns>
         private bool TaoLevelHitAttack()
         {
-            return M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play;
+            return GameShare.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play;
         }
 
         private bool AttackTarget()
@@ -479,14 +479,14 @@ namespace GameSrv.RobotPlay
                 switch (Job)
                 {
                     case PlayJob.Warrior:
-                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWarrorAttackTime)
+                        if (HUtil32.GetTickCount() - AttackTick > GameShare.Config.nAIWarrorAttackTime)
                         {
                             AutoUseMagic = false;// 是否能躲避
                             result = WarrorAttackTarget();
                         }
                         break;
                     case PlayJob.Wizard:
-                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWizardAttackTime)// 连击也不受间隔控制
+                        if (HUtil32.GetTickCount() - AttackTick > GameShare.Config.nAIWizardAttackTime)// 连击也不受间隔控制
                         {
                             AttackTick = HUtil32.GetTickCount();
                             AutoUseMagic = false;// 是否能躲避
@@ -497,7 +497,7 @@ namespace GameSrv.RobotPlay
                         AutoMagicId = 0;
                         break;
                     case PlayJob.Taoist:
-                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAITaoistAttackTime)
+                        if (HUtil32.GetTickCount() - AttackTick > GameShare.Config.nAITaoistAttackTime)
                         {
                             AttackTick = HUtil32.GetTickCount();
                             AutoUseMagic = false; // 是否能躲避
@@ -511,7 +511,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RoboPlayObject.AttackTarget");
+                GameShare.Logger.Error("RoboPlayObject.AttackTarget");
             }
             return result;
         }

@@ -22,7 +22,7 @@ namespace GameSrv.GameCommand.Commands {
             IList<BaseObject> list10 = new List<BaseObject>();
             IList<PlayObject> list14 = new List<PlayObject>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
-            M2Share.WorldEngine.GetMapRageHuman(playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, ref list10);
+            GameShare.WorldEngine.GetMapRageHuman(playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, ref list10);
             for (var i = 0; i < list10.Count; i++) {
                 mPlayObject = list10[i] as PlayObject;
                 if (!mPlayObject.ObMode || !mPlayObject.AdminMode) {
@@ -43,7 +43,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
             }
             playObject.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
-            M2Share.WorldEngine.CryCry(Messages.RM_CRY, playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- 行会战争已爆发。");
+            GameShare.WorldEngine.CryCry(Messages.RM_CRY, playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, GameShare.Config.CryMsgFColor, GameShare.Config.CryMsgBColor, "- 行会战争已爆发。");
             var s20 = "";
             GuildInfo guild;
             for (var i = 0; i < guildList.Count; i++) {
@@ -57,7 +57,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 s20 = s20 + guild.GuildName + ' ';
             }
-            M2Share.WorldEngine.CryCry(Messages.RM_CRY, playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, " -参加的门派:" + s20);
+            GameShare.WorldEngine.CryCry(Messages.RM_CRY, playObject.Envir, playObject.CurrX, playObject.CurrY, 1000, GameShare.Config.CryMsgFColor, GameShare.Config.CryMsgBColor, " -参加的门派:" + s20);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace GameSrv.Monster.Monsters
         public FireballMonster() : base()
         {
             SpellTick = HUtil32.GetTickCount();
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run()
@@ -22,7 +22,7 @@ namespace GameSrv.Monster.Monsters
                         {
                             if (Math.Abs(TargetX - CurrX) <= 8 && Math.Abs(TargetY - CurrY) <= 8)
                             {
-                                int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+                                int nPower = HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
                                 if (nPower > 0)
                                 {
                                     BaseObject baseObject = GetPoseCreate();

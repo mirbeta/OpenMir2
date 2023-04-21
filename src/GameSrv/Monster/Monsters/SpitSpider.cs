@@ -6,31 +6,31 @@ namespace GameSrv.Monster.Monsters {
         public bool UsePoison;
 
         public SpitSpider() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
             Animal = true;
             UsePoison = true;
         }
 
         private void SpitAttack(byte btDir) {
             Dir = btDir;
-            int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            int nDamage = HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage <= 0) {
                 return;
             }
             SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
             for (int i = 0; i < 5; i++) {
                 for (int k = 0; k < 5; k++) {
-                    if (M2Share.Config.SpitMap[btDir, i, k] == 1) {
+                    if (GameShare.Config.SpitMap[btDir, i, k] == 1) {
                         short nX = (short)(CurrX - 2 + k);
                         short nY = (short)(CurrY - 2 + i);
                         BaseObject baseObject = Envir.GetMovingObject(nX, nY, true);
-                        if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint) {
+                        if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && GameShare.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint) {
                             nDamage = baseObject.GetMagStruckDamage(this, nDamage);
                             if (nDamage > 0) {
                                 baseObject.StruckDamage(nDamage);
                                 baseObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nDamage, WAbil.HP, WAbil.MaxHP, ActorId, "", 300);
                                 if (UsePoison) {
-                                    if (M2Share.RandomNumber.Random(AntiPoison + 20) == 0) {
+                                    if (GameShare.RandomNumber.Random(AntiPoison + 20) == 0) {
                                         baseObject.MakePosion(PoisonState.DECHEALTH, 30, 1);
                                     }
                                 }

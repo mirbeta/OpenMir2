@@ -4,7 +4,7 @@ using SystemModule.Data;
 namespace GameSrv.Monster.Monsters {
     public class CloneMonster : MonsterObject {
         public CloneMonster() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         protected override bool Operate(ProcessMessage processMsg) {
@@ -33,7 +33,7 @@ namespace GameSrv.Monster.Monsters {
             SendRefMsg(Messages.RM_LIGHTING, 1, CurrX, CurrY, TargetCret.ActorId, "");
             if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nSx, ref nSy)) {
                 Envir.GetNextPosition(CurrX, CurrY, nDir, 9, ref nTx, ref nTy);
-                int nPwr = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+                int nPwr = HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
                 MagPassThroughMagic(nSx, nSy, nTx, nTy, nDir, nPwr, true);
             }
             BreakHolySeizeMode();
@@ -52,7 +52,7 @@ namespace GameSrv.Monster.Monsters {
                     SearchTarget();
                 }
                 if ((HUtil32.GetTickCount() - WalkTick) > WalkSpeed && TargetCret != null && Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) <= 4) {
-                    if (Math.Abs(CurrX - TargetCret.CurrX) <= 2 && Math.Abs(CurrY - TargetCret.CurrY) <= 2 && M2Share.RandomNumber.Random(3) != 0) {
+                    if (Math.Abs(CurrX - TargetCret.CurrX) <= 2 && Math.Abs(CurrY - TargetCret.CurrY) <= 2 && GameShare.RandomNumber.Random(3) != 0) {
                         base.Run();
                         return;
                     }
@@ -60,7 +60,7 @@ namespace GameSrv.Monster.Monsters {
                 }
                 if (TargetCret != null && Math.Abs(CurrX - TargetCret.CurrX) < 6 && Math.Abs(CurrY - TargetCret.CurrY) < 6 && (HUtil32.GetTickCount() - AttackTick) > NextHitTime) {
                     AttackTick = HUtil32.GetTickCount();
-                    byte nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                    byte nAttackDir = GameShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                     LightingAttack(nAttackDir);
                 }
             }

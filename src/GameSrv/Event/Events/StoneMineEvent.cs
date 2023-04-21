@@ -15,10 +15,10 @@ namespace GameSrv.Event.Events {
             if (nType is 55 or 56 or 57) {
                 if (envir.AddMineToEvent(nX, nY, this)) {
                     Visible = false;
-                    MineCount = M2Share.RandomNumber.Random(2000) + 300;
+                    MineCount = GameShare.RandomNumber.Random(2000) + 300;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    AddStoneCount = M2Share.RandomNumber.Random(800) + 100;
+                    AddStoneCount = GameShare.RandomNumber.Random(800) + 100;
                 }
                 else {
                     AddToMap = false;
@@ -27,10 +27,10 @@ namespace GameSrv.Event.Events {
             else {
                 if (envir.AddToMapMineEvent(nX, nY, this)) {
                     Visible = false;
-                    MineCount = M2Share.RandomNumber.Random(200) + 1;
+                    MineCount = GameShare.RandomNumber.Random(200) + 1;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    AddStoneCount = M2Share.RandomNumber.Random(80) + 1;
+                    AddStoneCount = GameShare.RandomNumber.Random(80) + 1;
                 }
                 else {
                     AddToMap = false;

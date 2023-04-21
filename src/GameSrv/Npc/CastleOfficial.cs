@@ -2,6 +2,7 @@
 using GameSrv.Monster.Monsters;
 using GameSrv.Player;
 using GameSrv.Script;
+using M2Server;
 using SystemModule.Enums;
 
 namespace GameSrv.Npc {
@@ -55,19 +56,19 @@ namespace GameSrv.Npc {
                         break;
                     }
                 case "$REPAIRDOORGOLD":
-                    sText = M2Share.Config.RepairDoorPrice.ToString();
+                    sText = GameShare.Config.RepairDoorPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$REPAIRDOORGOLD>", sText);
                     break;
                 case "$REPAIRWALLGOLD":
-                    sText = M2Share.Config.RepairWallPrice.ToString();
+                    sText = GameShare.Config.RepairWallPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$REPAIRWALLGOLD>", sText);
                     break;
                 case "$GUARDFEE":
-                    sText = M2Share.Config.HireGuardPrice.ToString();
+                    sText = GameShare.Config.HireGuardPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$GUARDFEE>", sText);
                     break;
                 case "$ARCHERFEE":
-                    sText = M2Share.Config.HireArcherPrice.ToString();
+                    sText = GameShare.Config.HireArcherPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$ARCHERFEE>", sText);
                     break;
                 case "$GUARDRULE":
@@ -213,7 +214,7 @@ namespace GameSrv.Npc {
                 }
             }
             catch {
-                M2Share.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(sExceptionMsg);
             }
         }
 
@@ -222,15 +223,15 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= M2Share.Config.HireGuardPrice) {
+            if (Castle.TotalGold >= GameShare.Config.HireGuardPrice) {
                 int n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCalsteGuard) {
                     if (Castle.Guards[n10].BaseObject == null) {
                         if (!Castle.UnderWar) {
                             ArcherUnit ObjUnit = Castle.Guards[n10];
-                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            ObjUnit.BaseObject = GameShare.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null) {
-                                Castle.TotalGold -= M2Share.Config.HireGuardPrice;
+                                Castle.TotalGold -= GameShare.Config.HireGuardPrice;
                                 ObjUnit.BaseObject.Castle = Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
@@ -258,15 +259,15 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= M2Share.Config.HireArcherPrice) {
+            if (Castle.TotalGold >= GameShare.Config.HireArcherPrice) {
                 int n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCastleArcher) {
                     if (Castle.Archers[n10].BaseObject == null) {
                         if (!Castle.UnderWar) {
                             ArcherUnit ObjUnit = Castle.Archers[n10];
-                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            ObjUnit.BaseObject = GameShare.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null) {
-                                Castle.TotalGold -= M2Share.Config.HireArcherPrice;
+                                Castle.TotalGold -= GameShare.Config.HireArcherPrice;
                                 ObjUnit.BaseObject.Castle = Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
@@ -294,9 +295,9 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= M2Share.Config.RepairDoorPrice) {
+            if (Castle.TotalGold >= GameShare.Config.RepairDoorPrice) {
                 if (Castle.RepairDoor()) {
-                    Castle.TotalGold -= M2Share.Config.RepairDoorPrice;
+                    Castle.TotalGold -= GameShare.Config.RepairDoorPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else {
@@ -313,9 +314,9 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= M2Share.Config.RepairWallPrice) {
+            if (Castle.TotalGold >= GameShare.Config.RepairWallPrice) {
                 if (Castle.RepairWall(nWallIndex)) {
-                    Castle.TotalGold -= M2Share.Config.RepairWallPrice;
+                    Castle.TotalGold -= GameShare.Config.RepairWallPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else {
@@ -328,13 +329,13 @@ namespace GameSrv.Npc {
         }
 
         protected override void SendCustemMsg(PlayObject PlayObject, string sMsg) {
-            if (!M2Share.Config.SubkMasterSendMsg) {
+            if (!GameShare.Config.SubkMasterSendMsg) {
                 PlayObject.SysMsg(Settings.SubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.BoSendMsgFlag) {
                 PlayObject.BoSendMsgFlag = false;
-                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
+                GameShare.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
             }
         }
     }

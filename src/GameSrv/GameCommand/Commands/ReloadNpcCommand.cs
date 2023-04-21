@@ -19,17 +19,17 @@ namespace GameSrv.GameCommand.Commands {
             Merchant merchant;
             NormNpc npc;
             if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0) {
-                M2Share.LocalDb.ReLoadMerchants();
-                M2Share.WorldEngine.ReloadMerchantList();
+                GameShare.LocalDb.ReLoadMerchants();
+                GameShare.WorldEngine.ReloadMerchantList();
                 playObject.SysMsg("交易NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
-                M2Share.WorldEngine.ReloadNpcList();
+                GameShare.WorldEngine.ReloadNpcList();
                 playObject.SysMsg("管理NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             else {
                 IList<BaseObject> tmpMerList = new List<BaseObject>();
                 try {
-                    if (M2Share.WorldEngine.GetMerchantList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpMerList) > 0) {
+                    if (GameShare.WorldEngine.GetMerchantList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpMerList) > 0) {
                         for (var i = 0; i < tmpMerList.Count; i++) {
                             merchant = (Merchant)tmpMerList[i];
                             merchant.ClearScript();
@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands {
                     }
 
                     IList<BaseObject> tmpNorList = new List<BaseObject>();
-                    if (M2Share.WorldEngine.GetNpcList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpNorList) > 0) {
+                    if (GameShare.WorldEngine.GetNpcList(playObject.Envir, playObject.CurrX, playObject.CurrY, 9, tmpNorList) > 0) {
                         for (var i = 0; i < tmpNorList.Count; i++) {
                             npc = tmpNorList[i] as NormNpc;
                             npc.ClearScript();

@@ -19,7 +19,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 if (string.Compare(sMasterName, "无", StringComparison.OrdinalIgnoreCase) == 0) {
                     mPlayObject.MasterName = "";

@@ -1,4 +1,5 @@
 ﻿using GameSrv.Actor;
+using M2Server.Actor;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
@@ -14,7 +15,7 @@ namespace GameSrv.Maps
 
         public MapDoor()
         {
-            DoorId = M2Share.ActorMgr.GetNextIdentity();
+            DoorId = GameShare.ActorMgr.GetNextIdentity();
         }
     }
 
@@ -52,7 +53,7 @@ namespace GameSrv.Maps
         public UserItem UserItem;
 
         public MapItem() {
-            this.ItemId = M2Share.ActorMgr.GetNextIdentity();
+            this.ItemId = GameShare.ActorMgr.GetNextIdentity();
         }
     }
 

@@ -25,7 +25,7 @@ namespace GameSrv.Robots
         {
             var sRobotName = string.Empty;
             var sScriptFileName = string.Empty;
-            var sFileName = M2Share.GetEnvirFilePath("Robot.txt");
+            var sFileName = GameShare.GetEnvirFilePath("Robot.txt");
             if (!File.Exists(sFileName)) return;
             using var LoadList = new StringList();
             LoadList.LoadFromFile(sFileName);

@@ -17,7 +17,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var targerPlayObject = GameShare.WorldEngine.GetPlayObject(sHumName);
             if (targerPlayObject != null) {
                 targerPlayObject.BonusPoint = 0;
                 targerPlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);

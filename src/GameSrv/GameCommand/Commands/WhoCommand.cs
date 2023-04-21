@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
             var offlineCount = 0;
-            playObject.HearMsg($"当前服务器在线人数: {M2Share.WorldEngine.PlayObjectCount}({offlineCount}/{(M2Share.WorldEngine.PlayObjectCount - offlineCount)})");
+            playObject.HearMsg($"当前服务器在线人数: {GameShare.WorldEngine.PlayObjectCount}({offlineCount}/{(GameShare.WorldEngine.PlayObjectCount - offlineCount)})");
         }
     }
 }

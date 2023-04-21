@@ -7,11 +7,11 @@ namespace GameSrv.GameCommand.Commands {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
             try {
-                if (M2Share.DenyChrNameList.Count <= 0) {
+                if (GameShare.DenyChrNameList.Count <= 0) {
                     playObject.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
-                for (var i = 0; i < M2Share.DenyChrNameList.Count; i++) {
+                for (var i = 0; i < GameShare.DenyChrNameList.Count; i++) {
                     //PlayObject.SysMsg(Settings.g_DenyChrNameList[i], MsgColor.c_Green, MsgType.t_Hint);
                 }
             }

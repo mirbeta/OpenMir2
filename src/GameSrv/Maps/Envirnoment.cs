@@ -114,7 +114,7 @@ namespace GameSrv.Maps
                                 CellObject cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellType == CellType.Item)
                                 {
-                                    MapItem cellItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                    MapItem cellItem = GameShare.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                     if (cellItem.ItemId == 0)
                                     {
                                         continue;
@@ -125,7 +125,7 @@ namespace GameSrv.Maps
                                         if (nGoldCount <= 2000)
                                         {
                                             mapItem.Count = nGoldCount;
-                                            mapItem.Looks = M2Share.GetGoldShape(nGoldCount);
+                                            mapItem.Looks = GameShare.GetGoldShape(nGoldCount);
                                             mapItem.AniCount = 0;
                                             mapItem.Reserved = 0;
                                             result = true;
@@ -151,15 +151,15 @@ namespace GameSrv.Maps
                             AddTime = HUtil32.GetTickCount()
                         };
                         cellInfo.Add(cellObject);
-                        M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapItem);
+                        GameShare.CellObjectMgr.Add(cellObject.CellObjId, mapItem);
                         result = true;
                     }
                 }
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(ex);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(ex);
             }
             return result;
         }
@@ -184,7 +184,7 @@ namespace GameSrv.Maps
                     AddTime = HUtil32.GetTickCount()
                 };
                 cellInfo.Add(cellObject);
-                M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapRoute);
+                GameShare.CellObjectMgr.Add(cellObject.CellObjId, mapRoute);
             }
         }
 
@@ -210,7 +210,7 @@ namespace GameSrv.Maps
                 cellInfo.Add(cellObject);
                 if (cellObject.CellType is CellType.Door or CellType.Event)
                 {
-                    M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapDoor);
+                    GameShare.CellObjectMgr.Add(cellObject.CellObjId, mapDoor);
                 }
             }
         }
@@ -239,7 +239,7 @@ namespace GameSrv.Maps
                     AddTime = HUtil32.GetTickCount()
                 };
                 cellInfo.Add(cellObject);
-                M2Share.CellObjectMgr.Add(cellObject.CellObjId, mapEvent);
+                GameShare.CellObjectMgr.Add(cellObject.CellObjId, mapEvent);
             }
         }
 
@@ -287,8 +287,8 @@ namespace GameSrv.Maps
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(ex);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(ex);
             }
             return result;
         }
@@ -353,7 +353,7 @@ namespace GameSrv.Maps
                             CellObject cellObject = cellInfo.ObjList[i];
                             if (cellObject.ActorObject)
                             {
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
                                     if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -423,8 +423,8 @@ namespace GameSrv.Maps
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.StackTrace);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(e.StackTrace);
             }
             return result;
         }
@@ -455,7 +455,7 @@ namespace GameSrv.Maps
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -508,7 +508,7 @@ namespace GameSrv.Maps
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (!boFlag && cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -554,11 +554,11 @@ namespace GameSrv.Maps
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
-                                if (M2Share.Config.boWarDisHumRun && castle != null && castle.UnderWar)
+                                UserCastle castle = GameShare.CastleMgr.InCastleWarArea(baseObject);
+                                if (GameShare.Config.boWarDisHumRun && castle != null && castle.UnderWar)
                                 {
 
                                 }
@@ -568,7 +568,7 @@ namespace GameSrv.Maps
                                     {
                                         case ActorRace.Play:
                                             {
-                                                if (M2Share.Config.boRunHuman || Flag.RunHuman)
+                                                if (GameShare.Config.boRunHuman || Flag.RunHuman)
                                                 {
                                                     continue;
                                                 }
@@ -576,7 +576,7 @@ namespace GameSrv.Maps
                                             }
                                         case ActorRace.NPC:
                                             {
-                                                if (M2Share.Config.boRunNpc)
+                                                if (GameShare.Config.boRunNpc)
                                                 {
                                                     continue;
                                                 }
@@ -585,7 +585,7 @@ namespace GameSrv.Maps
                                         case ActorRace.Guard:
                                         case ActorRace.ArcherGuard:
                                             {
-                                                if (M2Share.Config.boRunGuard)
+                                                if (GameShare.Config.boRunGuard)
                                                 {
                                                     continue;
                                                 }
@@ -593,7 +593,7 @@ namespace GameSrv.Maps
                                             }
                                         default:
                                             {
-                                                if (M2Share.Config.boRunMon || Flag.RunMon)
+                                                if (GameShare.Config.boRunMon || Flag.RunMon)
                                                 {
                                                     continue;
                                                 }
@@ -661,7 +661,7 @@ namespace GameSrv.Maps
                                 }
                                 if (cellType != CellType.Monster)
                                 {
-                                    M2Share.CellObjectMgr.Remove(cellId);//删除物品
+                                    GameShare.CellObjectMgr.Remove(cellId);//删除物品
                                 }
                                 if (cellInfo.Count > 0)
                                 {
@@ -689,7 +689,7 @@ namespace GameSrv.Maps
                 }
                 catch
                 {
-                    M2Share.Logger.Error(string.Format(sExceptionMsg, cellType));
+                    GameShare.Logger.Error(string.Format(sExceptionMsg, cellType));
                 }
             }
             else
@@ -713,7 +713,7 @@ namespace GameSrv.Maps
                     switch (cellObject.CellType)
                     {
                         case CellType.Item:
-                            mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                            mapItem = GameShare.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                             return true;
                         case CellType.MapRoute:
                             ChFlag = false;
@@ -721,7 +721,7 @@ namespace GameSrv.Maps
                         case CellType.Play:
                         case CellType.Monster:
                         case CellType.Merchant:
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null && !baseObject.Death)
                             {
                                 ChFlag = false;
@@ -761,7 +761,7 @@ namespace GameSrv.Maps
                             case CellType.Merchant:
                             case CellType.Play:
                                 {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death)
                                     {
                                         ChFlag = false;
@@ -791,7 +791,7 @@ namespace GameSrv.Maps
                 cellObject.CellObjId = stoneMineEvent.Id;
                 cellObject.AddTime = HUtil32.GetTickCount();
                 cellInfo.Add(cellObject);
-                M2Share.CellObjectMgr.Add(cellObject.CellObjId, stoneMineEvent);
+                GameShare.CellObjectMgr.Add(cellObject.CellObjId, stoneMineEvent);
                 return true;
             }
             return false;
@@ -838,14 +838,14 @@ namespace GameSrv.Maps
                             AddTime = HUtil32.GetTickCount()
                         };
                         cellInfo.Add(cellObject);
-                        M2Share.CellObjectMgr.Add(cellObject.CellObjId, stoneMineEvent);
+                        GameShare.CellObjectMgr.Add(cellObject.CellObjId, stoneMineEvent);
                         return true;
                     }
                 }
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(sExceptionMsg);
             }
             return false;
         }
@@ -894,7 +894,7 @@ namespace GameSrv.Maps
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(sExceptionMsg);
             }
         }
 
@@ -998,7 +998,7 @@ namespace GameSrv.Maps
                     result = true;
                 }
 
-                string pointFileName = M2Share.GetEnvirFilePath("Point", $"{sMapFile}.txt");
+                string pointFileName = GameShare.GetEnvirFilePath("Point", $"{sMapFile}.txt");
                 if (File.Exists(pointFileName))
                 {
                     StringList loadList = new StringList();
@@ -1025,7 +1025,7 @@ namespace GameSrv.Maps
             }
             catch (Exception)
             {
-                M2Share.Logger.Error("[Exception] TEnvirnoment.LoadMapData");
+                GameShare.Logger.Error("[Exception] TEnvirnoment.LoadMapData");
             }
             return result;
         }
@@ -1098,7 +1098,7 @@ namespace GameSrv.Maps
                 IsHide = true,
                 IsQuest = false
             };
-            M2Share.WorldEngine.QuestNpcList.Add(mapMerchant);
+            GameShare.WorldEngine.QuestNpcList.Add(mapMerchant);
             mapQuest.NPC = mapMerchant;
             QuestList.Add(mapQuest);
             return true;
@@ -1115,7 +1115,7 @@ namespace GameSrv.Maps
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1216,7 +1216,7 @@ namespace GameSrv.Maps
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                        MapEvent owinEvent = GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                         if (owinEvent?.Damage > 0)
                         {
                             result = false;
@@ -1256,7 +1256,7 @@ namespace GameSrv.Maps
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null && !baseObject.Ghost)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1383,7 +1383,7 @@ namespace GameSrv.Maps
             int nEndX = nX + nRage;
             int nStartY = nY - nRage;
             int nEndY = nY + nRage;
-            M2Share.Logger.Error("todo GetMapBaseObjects");
+            GameShare.Logger.Error("todo GetMapBaseObjects");
             return true;
         }
 
@@ -1405,7 +1405,7 @@ namespace GameSrv.Maps
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1439,7 +1439,7 @@ namespace GameSrv.Maps
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellType == CellType.Event)
                     {
-                        return M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId); ;
+                        return GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId); ;
                     }
                 }
             }
@@ -1494,7 +1494,7 @@ namespace GameSrv.Maps
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                        BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject.Race == ActorRace.Play)
                         {
                             result = true;

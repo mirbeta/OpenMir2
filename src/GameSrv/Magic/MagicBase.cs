@@ -9,19 +9,19 @@ namespace GameSrv.Magic
     {
         public static int MPow(UserMagic UserMagic)
         {
-            return UserMagic.Magic.Power + M2Share.RandomNumber.Random(UserMagic.Magic.MaxPower - UserMagic.Magic.Power);
+            return UserMagic.Magic.Power + GameShare.RandomNumber.Random(UserMagic.Magic.MaxPower - UserMagic.Magic.Power);
         }
 
         public static int GetPower(int nPower, UserMagic UserMagic)
         {
-            return HUtil32.Round(nPower / (double)(UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1)) + UserMagic.Magic.DefPower + M2Share.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower);
+            return HUtil32.Round(nPower / (double)(UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1)) + UserMagic.Magic.DefPower + GameShare.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower);
         }
 
         public static int GetPower13(int nInt, UserMagic UserMagic)
         {
             double d10 = nInt / 3.0;
             double d18 = nInt - d10;
-            return HUtil32.Round(d18 / (UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1) + d10 + (UserMagic.Magic.DefPower + M2Share.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower)));
+            return HUtil32.Round(d18 / (UserMagic.Magic.TrainLv + 1) * (UserMagic.Level + 1) + d10 + (UserMagic.Magic.DefPower + GameShare.RandomNumber.Random(UserMagic.Magic.DefMaxPower - UserMagic.Magic.DefPower)));
         }
 
         public static ushort GetRPow(int wInt)
@@ -29,7 +29,7 @@ namespace GameSrv.Magic
             ushort result;
             if (HUtil32.HiByte(wInt) > HUtil32.LoByte(wInt))
             {
-                result = (ushort)(M2Share.RandomNumber.Random(HUtil32.HiByte(wInt) - HUtil32.LoByte(wInt) + 1) + HUtil32.LoByte(wInt));
+                result = (ushort)(GameShare.RandomNumber.Random(HUtil32.HiByte(wInt) - HUtil32.LoByte(wInt) + 1) + HUtil32.LoByte(wInt));
             }
             else
             {
@@ -52,7 +52,7 @@ namespace GameSrv.Magic
             StdItem amuletStdItem;
             if (playObject.UseItems[ItemLocation.ArmRingl] != null && playObject.UseItems[ItemLocation.ArmRingl].Index > 0)
             {
-                amuletStdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[ItemLocation.ArmRingl].Index);
+                amuletStdItem = GameShare.WorldEngine.GetStdItem(playObject.UseItems[ItemLocation.ArmRingl].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
@@ -76,7 +76,7 @@ namespace GameSrv.Magic
             }
             if (playObject.UseItems[ItemLocation.Bujuk] != null && playObject.UseItems[ItemLocation.Bujuk].Index > 0)
             {
-                amuletStdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[ItemLocation.Bujuk].Index);
+                amuletStdItem = GameShare.WorldEngine.GetStdItem(playObject.UseItems[ItemLocation.Bujuk].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)

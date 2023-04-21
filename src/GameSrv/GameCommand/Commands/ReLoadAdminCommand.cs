@@ -12,7 +12,7 @@ namespace GameSrv.GameCommand.Commands {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
             LocalDb.LoadAdminList();
-            WorldServer.SendServerGroupMsg(213, M2Share.ServerIndex, "");
+            WorldServer.SendServerGroupMsg(213, GameShare.ServerIndex, "");
             playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }

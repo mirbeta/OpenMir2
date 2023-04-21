@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using M2Server;
 using SystemModule.Enums;
 
 namespace GameSrv.GameCommand.Commands
@@ -16,7 +17,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 return;
             }
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!GameShare.Config.PasswordLockSystem)
             {
                 playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;

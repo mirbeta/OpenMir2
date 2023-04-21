@@ -37,9 +37,9 @@ namespace GameSrv.World.Threads
         {
             Run();
             IdSrvClient.Instance.Run();
-            M2Share.WorldEngine.PrcocessData();
+            GameShare.WorldEngine.PrcocessData();
             ProcessGameRun();
-            if (M2Share.ServerIndex == 0)
+            if (GameShare.ServerIndex == 0)
             {
                 PlanesServer.Instance.Run();
             }
@@ -53,35 +53,35 @@ namespace GameSrv.World.Threads
 
         private void Run()
         {
-            if ((HUtil32.GetTickCount() - ShowOnlineTick) > M2Share.Config.ConsoleShowUserCountTime)
+            if ((HUtil32.GetTickCount() - ShowOnlineTick) > GameShare.Config.ConsoleShowUserCountTime)
             {
                 ShowOnlineTick = HUtil32.GetTickCount();
-                M2Share.NoticeMgr.LoadingNotice();
-                _logger.Info("在线数: " + M2Share.WorldEngine.PlayObjectCount);
-                M2Share.CastleMgr.Save();
+                GameShare.NoticeMgr.LoadingNotice();
+                _logger.Info("在线数: " + GameShare.WorldEngine.PlayObjectCount);
+                GameShare.CastleMgr.Save();
             }
             if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
             {
                 SendOnlineHumTime = HUtil32.GetTickCount();
-                IdSrvClient.Instance.SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
+                IdSrvClient.Instance.SendOnlineHumCountMsg(GameShare.WorldEngine.OnlinePlayObject);
             }
         }
 
         private void ProcessGameRun()
         {
-            HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
+            HUtil32.EnterCriticalSections(GameShare.ProcessHumanCriticalSection);
             try
             {
                 if ((HUtil32.GetTickCount() - RunTimeTick) > 10000)
                 {
                     RunTimeTick = HUtil32.GetTickCount();
-                    M2Share.GuildMgr.Run();
-                    M2Share.CastleMgr.Run();
-                    M2Share.SocketMgr.Run();
-                    if (!M2Share.DenySayMsgList.IsEmpty)
+                    GameShare.GuildMgr.Run();
+                    GameShare.CastleMgr.Run();
+                    GameShare.SocketMgr.Run();
+                    if (!GameShare.DenySayMsgList.IsEmpty)
                     {
-                        List<string> denyList = new List<string>(M2Share.DenySayMsgList.Count);
-                        foreach (KeyValuePair<string, long> item in M2Share.DenySayMsgList)
+                        List<string> denyList = new List<string>(GameShare.DenySayMsgList.Count);
+                        foreach (KeyValuePair<string, long> item in GameShare.DenySayMsgList)
                         {
                             if (HUtil32.GetTickCount() > item.Value)
                             {
@@ -90,9 +90,9 @@ namespace GameSrv.World.Threads
                         }
                         for (int i = 0; i < denyList.Count; i++)
                         {
-                            if (M2Share.DenySayMsgList.TryRemove(denyList[i], out long _))
+                            if (GameShare.DenySayMsgList.TryRemove(denyList[i], out long _))
                             {
-                                M2Share.Logger.Debug($"解除玩家禁言[{denyList[i]}]");
+                                GameShare.Logger.Debug($"解除玩家禁言[{denyList[i]}]");
                             }
                         }
                     }
@@ -100,7 +100,7 @@ namespace GameSrv.World.Threads
             }
             finally
             {
-                HUtil32.LeaveCriticalSections(M2Share.ProcessHumanCriticalSection);
+                HUtil32.LeaveCriticalSections(GameShare.ProcessHumanCriticalSection);
             }
         }
 
@@ -119,16 +119,16 @@ namespace GameSrv.World.Threads
                 case 18:
                 case 19:
                 case 21:
-                    M2Share.GameTime = 1;//白天
+                    GameShare.GameTime = 1;//白天
                     break;
                 case 11:
                 case 23:
                 case 20:
-                    M2Share.GameTime = 2;//日落
+                    GameShare.GameTime = 2;//日落
                     break;
                 case 4:
                 case 15:
-                    M2Share.GameTime = 0;//日出
+                    GameShare.GameTime = 0;//日出
                     break;
                 case 0:
                 case 1:
@@ -138,7 +138,7 @@ namespace GameSrv.World.Threads
                 case 13:
                 case 14:
                 case 22:
-                    M2Share.GameTime = 3;//夜晚
+                    GameShare.GameTime = 3;//夜晚
                     break;
             }
         }

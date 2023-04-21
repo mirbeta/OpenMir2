@@ -21,7 +21,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumName);
             if (mPlayObject != null) {
                 if (mPlayObject.GameGold + nPoint < 2000000) {
                     mPlayObject.GameGold += nPoint;

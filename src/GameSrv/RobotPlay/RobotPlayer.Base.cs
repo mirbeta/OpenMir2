@@ -4,6 +4,7 @@ using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
 using GameSrv.Player;
+using M2Server.Actor;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -57,7 +58,7 @@ namespace GameSrv.RobotPlay
                                 GotoProtectXyCount++;
                                 if (Math.Abs(CurrX - ProtectTargetX) <= 3 && Math.Abs(CurrY - ProtectTargetY) <= 3)
                                 {
-                                    Dir = (byte)M2Share.RandomNumber.Random(8);
+                                    Dir = (byte)GameShare.RandomNumber.Random(8);
                                     ProtectDest = true;
                                     GotoProtectXyCount = 0;// 是向守护坐标的累计数
                                 }
@@ -66,7 +67,7 @@ namespace GameSrv.RobotPlay
                                     if (Math.Abs(CurrX - ProtectTargetX) > 13 || Math.Abs(CurrY - ProtectTargetY) > 13)
                                     {
                                         SpaceMove(ManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);
-                                        Dir = (byte)M2Share.RandomNumber.Random(8);
+                                        Dir = (byte)GameShare.RandomNumber.Random(8);
                                         ProtectDest = true;
                                         GotoProtectXyCount = 0;// 是向守护坐标的累计数
                                     }
@@ -127,7 +128,7 @@ namespace GameSrv.RobotPlay
 
                         if (IsRobot && !Ghost && !Death)
                         {
-                            if (M2Share.Config.boHPAutoMoveMap)
+                            if (GameShare.Config.boHPAutoMoveMap)
                             {
                                 if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - MDwHpToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
@@ -136,7 +137,7 @@ namespace GameSrv.RobotPlay
                                     if (ProtectStatus) // 守护状态
                                     {
                                         SpaceMove(ManagedEnvir.MapName, ProtectTargetX, ProtectTargetY, 1);// 地图移动
-                                        Dir = M2Share.RandomNumber.RandomByte(8);
+                                        Dir = GameShare.RandomNumber.RandomByte(8);
                                         ProtectDest = true;
                                         GotoProtectXyCount = 0; // 是向守护坐标的累计数 
                                     }
@@ -146,7 +147,7 @@ namespace GameSrv.RobotPlay
                                     }
                                 }
                             }
-                            if (M2Share.Config.boAutoRepairItem)
+                            if (GameShare.Config.boAutoRepairItem)
                             {
                                 if (HUtil32.GetTickCount() - AutoRepairItemTick > 15000)
                                 {
@@ -162,14 +163,14 @@ namespace GameSrv.RobotPlay
                                         }
                                         if (UseItems[nWhere].Index <= 0)
                                         {
-                                            stdItem = M2Share.WorldEngine.GetStdItem(UseItemNames[nWhere]);
+                                            stdItem = GameShare.WorldEngine.GetStdItem(UseItemNames[nWhere]);
                                             if (stdItem != null)
                                             {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
+                                                if (GameShare.WorldEngine.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
                                                 {
                                                     boRecalcAbilitys = true;
-                                                    if (M2Share.StdModeMap.Contains(stdItem.StdMode))
+                                                    if (GameShare.StdModeMap.Contains(stdItem.StdMode))
                                                     {
                                                         if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                                         {
@@ -191,7 +192,7 @@ namespace GameSrv.RobotPlay
                                                 userItem = ItemList[j];
                                                 if (userItem != null)
                                                 {
-                                                    stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                                                    stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                                                     if (stdItem != null)
                                                     {
                                                         boFind = false;
@@ -206,7 +207,7 @@ namespace GameSrv.RobotPlay
                                             if (!boFind)
                                             {
                                                 userItem = new UserItem();
-                                                if (M2Share.WorldEngine.CopyToUserItemFromName(BagItemNames[i], ref userItem))
+                                                if (GameShare.WorldEngine.CopyToUserItemFromName(BagItemNames[i], ref userItem))
                                                 {
                                                     if (!AddItemToBag(userItem))
                                                     {
@@ -225,7 +226,7 @@ namespace GameSrv.RobotPlay
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
-                                            stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nWhere].Index);
+                                            stdItem = GameShare.WorldEngine.GetStdItem(UseItems[nWhere].Index);
                                             if (stdItem != null)
                                             {
                                                 if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && stdItem.StdMode != 43)
@@ -245,14 +246,14 @@ namespace GameSrv.RobotPlay
                                     }
                                 }
                             }
-                            if (M2Share.Config.boRenewHealth) // 自动增加HP MP
+                            if (GameShare.Config.boRenewHealth) // 自动增加HP MP
                             {
                                 if (HUtil32.GetTickCount() - AutoAddHealthTick > 5000)
                                 {
                                     AutoAddHealthTick = HUtil32.GetTickCount();
                                     var nPercent = WAbil.HP * 100 / WAbil.MaxHP;
                                     var nValue = WAbil.MaxHP / 10;
-                                    if (nPercent < M2Share.Config.nRenewPercent)
+                                    if (nPercent < GameShare.Config.nRenewPercent)
                                     {
                                         if (WAbil.HP + nValue >= WAbil.MaxHP)
                                         {
@@ -265,7 +266,7 @@ namespace GameSrv.RobotPlay
                                     }
                                     nValue = WAbil.MaxMP / 10;
                                     nPercent = WAbil.MP * 100 / WAbil.MaxMP;
-                                    if (nPercent < M2Share.Config.nRenewPercent)
+                                    if (nPercent < GameShare.Config.nRenewPercent)
                                     {
                                         if (WAbil.MP + nValue >= WAbil.MaxMP)
                                         {
@@ -307,7 +308,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(ex.StackTrace);
+                GameShare.Logger.Error(ex.StackTrace);
             }
             base.Run();
         }
@@ -512,7 +513,7 @@ namespace GameSrv.RobotPlay
                                                 }
                                                 continue;
                                             }
-                                            baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                            baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                                             if (baseObject != null)
                                             {
                                                 if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -527,11 +528,11 @@ namespace GameSrv.RobotPlay
                                         case CellType.Item:
                                             if (Race == ActorRace.Play)
                                             {
-                                                if (HUtil32.GetTickCount() - cellObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
+                                                if (HUtil32.GetTickCount() - cellObject.AddTime > GameShare.Config.ClearDropOnFloorItemTime)
                                                 {
                                                     if (cellObject.CellObjId > 0)
                                                     {
-                                                        M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
+                                                        GameShare.CellObjectMgr.Remove(cellObject.CellObjId);
                                                     }
                                                     cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
@@ -541,7 +542,7 @@ namespace GameSrv.RobotPlay
                                                     }
                                                     continue;
                                                 }
-                                                var mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                                var mapItem = GameShare.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                                 if (mapItem.ItemId == 0)
                                                 {
                                                     continue;
@@ -549,7 +550,7 @@ namespace GameSrv.RobotPlay
                                                 UpdateVisibleItem(nX, nY, mapItem);
                                                 if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                 {
-                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
+                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > GameShare.Config.FloorItemCanPickUpTime)
                                                     {
                                                         mapItem.OfBaseObject = 0;
                                                         mapItem.DropBaseObject = 0;
@@ -558,14 +559,14 @@ namespace GameSrv.RobotPlay
                                                     {
                                                         if (mapItem.OfBaseObject > 0)
                                                         {
-                                                            if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
+                                                            if (GameShare.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
                                                             {
                                                                 mapItem.OfBaseObject = 0;
                                                             }
                                                         }
                                                         if (mapItem.DropBaseObject > 0)
                                                         {
-                                                            if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
+                                                            if (GameShare.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
                                                             {
                                                                 mapItem.DropBaseObject = 0;
                                                             }
@@ -579,7 +580,7 @@ namespace GameSrv.RobotPlay
                                             {
                                                 if (cellObject.CellObjId < 0)
                                                 {
-                                                    mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                                    mapEvent = GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                                     UpdateVisibleEvent(nX, nY, mapEvent);
                                                 }
                                             }
@@ -594,7 +595,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                GameShare.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
             VisibleFlag nVisibleFlag;
@@ -689,7 +690,7 @@ namespace GameSrv.RobotPlay
             }
             catch (Exception)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                GameShare.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
             try
@@ -787,7 +788,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
+                GameShare.Logger.Error(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
                 KickException();
             }
         }
@@ -807,7 +808,7 @@ namespace GameSrv.RobotPlay
                     {
                         if (TargetCret != null && (TargetCret.Race == ActorRace.Play || TargetCret.Master != null && TargetCret.GetMaster().Race == ActorRace.Play))
                         {
-                            if (StruckMinXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
+                            if (StruckMinXY(TargetCret, hiter) == hiter || GameShare.RandomNumber.Random(6) == 0)
                             {
                                 SetTargetCreat(hiter);
                             }
@@ -819,7 +820,7 @@ namespace GameSrv.RobotPlay
                     }
                     else
                     {
-                        if (TargetCret != null && StruckMinXY(TargetCret, hiter) == hiter || M2Share.RandomNumber.Random(6) == 0)
+                        if (TargetCret != null && StruckMinXY(TargetCret, hiter) == hiter || GameShare.RandomNumber.Random(6) == 0)
                         {
                             if (Job > 0 || TargetCret != null && (HUtil32.GetTickCount() - TargetFocusTick) > 1000 * 3)
                             {
@@ -833,7 +834,7 @@ namespace GameSrv.RobotPlay
                 }
                 if (hiter.Race == ActorRace.Play && !hiter.IsRobot && TargetCret == hiter)
                 {
-                    if (M2Share.RandomNumber.Random(8) == 0 && AiSayMsgList.Count > 0)
+                    if (GameShare.RandomNumber.Random(8) == 0 && AiSayMsgList.Count > 0)
                     {
                         if (HUtil32.GetTickCount() >= DisableSayMsgTick)
                         {
@@ -848,14 +849,14 @@ namespace GameSrv.RobotPlay
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + AiSayMsgList[M2Share.RandomNumber.Random(AiSayMsgList.Count)]);
+                            SendRefMsg(Messages.RM_HEAR, 0, GameShare.Config.btHearMsgFColor, GameShare.Config.btHearMsgBColor, 0, ChrName + ':' + AiSayMsgList[GameShare.RandomNumber.Random(AiSayMsgList.Count)]);
                         }
                     }
                 }
             }
             if (Animal)
             {
-                MeatQuality = (ushort)(MeatQuality - M2Share.RandomNumber.Random(300));
+                MeatQuality = (ushort)(MeatQuality - GameShare.RandomNumber.Random(300));
                 if (MeatQuality < 0)
                 {
                     MeatQuality = 0;
@@ -905,17 +906,17 @@ namespace GameSrv.RobotPlay
             var nC = 0;
             while (true)
             {
-                if (M2Share.RandomNumber.Random(nRate) == 0)
+                if (GameShare.RandomNumber.Random(nRate) == 0)
                 {
                     if (UseItems[nC] == null)
                     {
                         nC++;
                         continue;
                     }
-                    int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                    int dropWide = HUtil32._MIN(GameShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[nC], dropWide, true, baseObject, this.ActorId))
                     {
-                        var stdItem = M2Share.WorldEngine.GetStdItem(UseItems[nC].Index);
+                        var stdItem = GameShare.WorldEngine.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -924,7 +925,7 @@ namespace GameSrv.RobotPlay
                                 {
                                     dropItemList.Add(new DeleteItem()
                                     {
-                                        ItemName = M2Share.WorldEngine.GetStdItemName(UseItems[nC].Index),
+                                        ItemName = GameShare.WorldEngine.GetStdItemName(UseItems[nC].Index),
                                         MakeIndex = UseItems[nC].MakeIndex
                                     });
                                 }
@@ -942,7 +943,7 @@ namespace GameSrv.RobotPlay
             if (dropItemList.Count > 0)
             {
                 var objectId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(objectId, dropItemList);
+                GameShare.ActorMgr.AddOhter(objectId, dropItemList);
                 SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
         }

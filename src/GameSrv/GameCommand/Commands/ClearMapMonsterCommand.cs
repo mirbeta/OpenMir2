@@ -44,14 +44,14 @@ namespace GameSrv.GameCommand.Commands
                 boNotItem = false;
             }
             IList<BaseObject> monList = new List<BaseObject>();
-            for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)
+            for (var i = 0; i < GameShare.MapMgr.Maps.Count; i++)
             {
-                envir = M2Share.MapMgr.Maps[i];
+                envir = GameShare.MapMgr.Maps[i];
                 if (envir != null)
                 {
                     if (boKillAllMap || string.Compare(envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        var monsterCount = M2Share.WorldEngine.GetMapMonster(envir, monList);
+                        var monsterCount = GameShare.WorldEngine.GetMapMonster(envir, monList);
                         if (monsterCount > 0)
                         {
                             for (var j = 0; j < monsterCount; j++)

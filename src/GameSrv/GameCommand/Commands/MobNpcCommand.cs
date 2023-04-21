@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands {
             merchant.CurrY = nY;
             merchant.Initialize();
             merchant.OnEnvirnomentChanged();
-            M2Share.WorldEngine.AddMerchant(merchant);
+            GameShare.WorldEngine.AddMerchant(merchant);
         }
     }
 }

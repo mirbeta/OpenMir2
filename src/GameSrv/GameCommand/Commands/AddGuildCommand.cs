@@ -15,7 +15,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             var sGuildName = @params.Length > 0 ? @params[0] : "";
             var sGuildChief = @params.Length > 1 ? @params[1] : "";
-            if (M2Share.ServerIndex != 0) {
+            if (GameShare.ServerIndex != 0) {
                 playObject.SysMsg("这个命令只能使用在主服务器上", MsgColor.Red, MsgType.Hint);
                 return;
             }
@@ -24,20 +24,20 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             var boAddState = false;
-            var chiefObject = M2Share.WorldEngine.GetPlayObject(sGuildChief);
+            var chiefObject = GameShare.WorldEngine.GetPlayObject(sGuildChief);
             if (chiefObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.GuildMgr.MemberOfGuild(sGuildChief) == null) {
-                if (M2Share.GuildMgr.AddGuild(sGuildName, sGuildChief)) {
-                    WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + sGuildChief);
+            if (GameShare.GuildMgr.MemberOfGuild(sGuildChief) == null) {
+                if (GameShare.GuildMgr.AddGuild(sGuildName, sGuildChief)) {
+                    WorldServer.SendServerGroupMsg(Messages.SS_205, GameShare.ServerIndex, sGuildName + '/' + sGuildChief);
                     playObject.SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, MsgColor.Green, MsgType.Hint);
                     boAddState = true;
                 }
             }
             if (boAddState) {
-                chiefObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(chiefObject.ChrName);
+                chiefObject.MyGuild = GameShare.GuildMgr.MemberOfGuild(chiefObject.ChrName);
                 if (chiefObject.MyGuild != null) {
                     chiefObject.GuildRankName = chiefObject.MyGuild.GetRankName(playObject, ref chiefObject.GuildRankNo);
                     chiefObject.RefShowName();

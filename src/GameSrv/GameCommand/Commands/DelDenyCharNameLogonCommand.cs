@@ -16,7 +16,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             var boDelete = false;
             try {
-                for (var i = 0; i < M2Share.DenyChrNameList.Count; i++) {
+                for (var i = 0; i < GameShare.DenyChrNameList.Count; i++) {
                     //if ((sChrName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyChrNameList[i]) != 0)

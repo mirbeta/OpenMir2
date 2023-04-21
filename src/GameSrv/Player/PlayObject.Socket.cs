@@ -66,7 +66,7 @@ namespace GameSrv.Player
             byte[] actionData = new byte[ServerMessage.PacketSize + msgBuff.Length];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, actionData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessage.PacketSize, msgBuff.Length);
-            M2Share.SocketMgr.AddGateBuffer(GateIdx, actionData);
+            GameShare.SocketMgr.AddGateBuffer(GateIdx, actionData);
         }
 
         /// <summary>
@@ -94,7 +94,7 @@ namespace GameSrv.Player
             byte[] sendData = new byte[HeaderLen];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
-            M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
+            GameShare.SocketMgr.AddGateBuffer(GateIdx, sendData);
         }
 
         internal virtual void SendSocket(CommandMessage defMsg, string sMsg)
@@ -124,7 +124,7 @@ namespace GameSrv.Player
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
-            M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
+            GameShare.SocketMgr.AddGateBuffer(GateIdx, sendData);
         }
     }
 }

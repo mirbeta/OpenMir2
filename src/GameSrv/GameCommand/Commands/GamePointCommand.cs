@@ -28,7 +28,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
@@ -46,7 +46,7 @@ namespace GameSrv.GameCommand.Commands {
                     mPlayObject.GamePoint -= (ushort)nPoint;
                     break;
             }
-            if (M2Share.GameLogGamePoint) {
+            if (GameShare.GameLogGamePoint) {
                 //M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GAMEPOINT, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
                 //    m_PlayObject.m_sChrName, Settings.Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));
             }

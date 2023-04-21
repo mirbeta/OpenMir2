@@ -1,16 +1,16 @@
-﻿using GameSrv.GameCommand;
-using GameSrv.Npc;
-using GameSrv.Player;
+﻿using M2Server;
+using ScriptEngine.Processings;
 using System.Text;
+using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSrv
+namespace ScriptEngine
 {
-    internal class ProcessingBase
+    public class ProcessingBase
     {
-        internal bool GetMovDataHumanInfoValue(NormNpc normNpc, PlayObject PlayObject, string sVariable, ref string sValue, ref int nValue, ref int nDataType)
+        internal bool GetMovDataHumanInfoValue(NormNpc normNpc, IActor playObject, string sVariable, ref string sValue, ref int nValue, ref int nDataType)
         {
             string s10 = string.Empty;
             string sVarValue2 = string.Empty;
@@ -129,7 +129,7 @@ namespace GameSrv
                     result = true;
                     return result;
                 case "$USERCOUNT":
-                    sValue = M2Share.WorldEngine.PlayObjectCount.ToString();
+                    sValue = M2Share.WorldEngine.playObjectCount.ToString();
                     nDataType = 0;
                     result = true;
                     return result;
@@ -179,17 +179,17 @@ namespace GameSrv
                         return result;
                     }
                 case "$USERNAME":// 个人信息
-                    sValue = PlayObject.ChrName;
+                    sValue = playObject.ChrName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$KILLER":// 杀人者变量 
                     {
-                        if (PlayObject.Death && (PlayObject.LastHiter != null))
+                        if (playObject.Death && (playObject.LastHiter != null))
                         {
-                            if (PlayObject.LastHiter.Race == ActorRace.Play)
+                            if (playObject.LastHiter.Race == ActorRace.Play)
                             {
-                                sValue = PlayObject.LastHiter.ChrName;
+                                sValue = playObject.LastHiter.ChrName;
                             }
                         }
                         else
@@ -202,11 +202,11 @@ namespace GameSrv
                     }
                 case "$MONKILLER":// 杀人的怪物变量 
                     {
-                        if (PlayObject.Death && (PlayObject.LastHiter != null))
+                        if (playObject.Death && (playObject.LastHiter != null))
                         {
-                            if (PlayObject.LastHiter.Race != ActorRace.Play)
+                            if (playObject.LastHiter.Race != ActorRace.Play)
                             {
-                                sValue = PlayObject.LastHiter.ChrName;
+                                sValue = playObject.LastHiter.ChrName;
                             }
                         }
                         else
@@ -218,12 +218,12 @@ namespace GameSrv
                         return result;
                     }
                 case "$USERALLNAME":// 全名 
-                    sValue = PlayObject.GetShowName();
+                    sValue = playObject.GetShowName();
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$SFNAME":// 师傅名 
-                    sValue = PlayObject.MasterName;
+                    sValue = playObject.MasterName;
                     nDataType = 0;
                     result = true;
                     return result;
@@ -244,35 +244,35 @@ namespace GameSrv
                     result = true;
                     return result;
                 case "$USERID":// 登录账号
-                    sValue = PlayObject.UserAccount;
+                    sValue = playObject.UserAccount;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$IPADDR":// 登录IP
-                    sValue = PlayObject.LoginIpAddr;
+                    sValue = playObject.LoginIpAddr;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$X": // 人物X坐标
-                    nValue = PlayObject.CurrX;
+                    nValue = playObject.CurrX;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$Y": // 人物Y坐标
-                    nValue = PlayObject.CurrY;
+                    nValue = playObject.CurrY;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAP":
-                    sValue = PlayObject.Envir.MapName;
+                    sValue = playObject.Envir.MapName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$GUILDNAME":
                     {
-                        if (PlayObject.MyGuild != null)
+                        if (playObject.MyGuild != null)
                         {
-                            sValue = PlayObject.MyGuild.GuildName;
+                            sValue = playObject.MyGuild.GuildName;
                         }
                         else
                         {
@@ -283,250 +283,250 @@ namespace GameSrv
                         return result;
                     }
                 case "$RANKNAME":
-                    sValue = PlayObject.GuildRankName;
+                    sValue = playObject.GuildRankName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RELEVEL":
-                    nValue = PlayObject.ReLevel;
+                    nValue = playObject.ReLevel;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$LEVEL":
-                    nValue = PlayObject.Abil.Level;
+                    nValue = playObject.Abil.Level;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$HP":
-                    nValue = PlayObject.WAbil.HP;
+                    nValue = playObject.WAbil.HP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXHP":
-                    nValue = PlayObject.WAbil.MaxHP;
+                    nValue = playObject.WAbil.MaxHP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MP":
-                    nValue = PlayObject.WAbil.MP;
+                    nValue = playObject.WAbil.MP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXMP":
-                    nValue = PlayObject.WAbil.MaxMP;
+                    nValue = playObject.WAbil.MaxMP;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$AC":
-                    nValue = HUtil32.LoWord(PlayObject.WAbil.AC);
+                    nValue = HUtil32.LoWord(playObject.WAbil.AC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXAC":
-                    nValue = HUtil32.HiWord(PlayObject.WAbil.AC);
+                    nValue = HUtil32.HiWord(playObject.WAbil.AC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAC":
-                    nValue = HUtil32.LoWord(PlayObject.WAbil.MAC);
+                    nValue = HUtil32.LoWord(playObject.WAbil.MAC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXMAC":
-                    nValue = HUtil32.HiWord(PlayObject.WAbil.MAC);
+                    nValue = HUtil32.HiWord(playObject.WAbil.MAC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$DC":
-                    nValue = HUtil32.LoWord(PlayObject.WAbil.DC);
+                    nValue = HUtil32.LoWord(playObject.WAbil.DC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXDC":
-                    nValue = HUtil32.HiWord(PlayObject.WAbil.DC);
+                    nValue = HUtil32.HiWord(playObject.WAbil.DC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MC":
-                    nValue = HUtil32.LoWord(PlayObject.WAbil.MC);
+                    nValue = HUtil32.LoWord(playObject.WAbil.MC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXMC":
-                    nValue = HUtil32.HiWord(PlayObject.WAbil.MC);
+                    nValue = HUtil32.HiWord(playObject.WAbil.MC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$SC":
-                    nValue = HUtil32.LoWord(PlayObject.WAbil.SC);
+                    nValue = HUtil32.LoWord(playObject.WAbil.SC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXSC":
-                    nValue = HUtil32.HiWord(PlayObject.WAbil.SC);
+                    nValue = HUtil32.HiWord(playObject.WAbil.SC);
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$EXP":
-                    nValue = PlayObject.Abil.Exp;
+                    nValue = playObject.Abil.Exp;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXEXP":
-                    nValue = PlayObject.Abil.MaxExp;
+                    nValue = playObject.Abil.MaxExp;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$PKPOINT":
-                    nValue = PlayObject.PkPoint;
+                    nValue = playObject.PkPoint;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$CREDITPOINT":
-                    nValue = PlayObject.CreditPoint;
+                    nValue = playObject.CreditPoint;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$HW":
-                    nValue = PlayObject.WAbil.HandWeight;
+                    nValue = playObject.WAbil.HandWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXHW":
-                    nValue = PlayObject.WAbil.MaxHandWeight;
+                    nValue = playObject.WAbil.MaxHandWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$BW":
-                    nValue = PlayObject.WAbil.Weight;
+                    nValue = playObject.WAbil.Weight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXBW":
-                    nValue = PlayObject.WAbil.MaxWeight;
+                    nValue = playObject.WAbil.MaxWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$WW":
-                    nValue = PlayObject.WAbil.WearWeight;
+                    nValue = playObject.WAbil.WearWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$MAXWW":
-                    nValue = PlayObject.WAbil.MaxWearWeight;
+                    nValue = playObject.WAbil.MaxWearWeight;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$GOLDCOUNT":
-                    nValue = PlayObject.Gold;
+                    nValue = playObject.Gold;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$GOLDCOUNTX":
-                    nValue = PlayObject.GoldMax;
+                    nValue = playObject.GoldMax;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$GAMEGOLD":
-                    nValue = PlayObject.GameGold;
+                    nValue = playObject.GameGold;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$GAMEPOINT":
-                    nValue = PlayObject.GamePoint;
+                    nValue = playObject.GamePoint;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$HUNGER":
-                    nValue = PlayObject.GetMyStatus();
+                    nValue = playObject.GetMyStatus();
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$LOGINTIME":
-                    sValue = DateTimeOffset.FromUnixTimeMilliseconds(PlayObject.LogonTime).ToString("yyyy-MM-dd HH:mm:ss");
+                    sValue = DateTimeOffset.FromUnixTimeMilliseconds(playObject.LogonTime).ToString("yyyy-MM-dd HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$LOGINLONG":
-                    nValue = (HUtil32.GetTickCount() - PlayObject.LogonTick) / 60000;
+                    nValue = (HUtil32.GetTickCount() - playObject.LogonTick) / 60000;
                     nDataType = 1;
                     result = true;
                     return result;
                 case "$DRESS":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Dress].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEAPON":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Weapon].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RIGHTHAND":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.RighThand].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.RighThand].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$HELMET":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Helmet].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$NECKLACE":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Necklace].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_R":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringr].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_L":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringl].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_R":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingr].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_L":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingl].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BUJUK":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Bujuk].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BELT":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Belt].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BOOTS":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Boots].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CHARM":
-                    sValue = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Charm].Index);
+                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$IPLOCAL":
-                    sValue = PlayObject.LoginIpLocal;
+                    sValue = playObject.LoginIpLocal;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$GUILDBUILDPOINT":
                     {
-                        if (PlayObject.MyGuild != null)
+                        if (playObject.MyGuild != null)
                         {
-                            //nValue = PlayObject.MyGuild.nBuildPoint;
+                            //nValue = playObject.MyGuild.nBuildPoint;
                         }
                         nDataType = 0;
                         result = true;
@@ -534,9 +534,9 @@ namespace GameSrv
                     }
                 case "$GUILDAURAEPOINT":
                     {
-                        if (PlayObject.MyGuild != null)
+                        if (playObject.MyGuild != null)
                         {
-                            nValue = PlayObject.MyGuild.Aurae;
+                            nValue = playObject.MyGuild.Aurae;
                         }
                         nDataType = 0;
                         result = true;
@@ -544,9 +544,9 @@ namespace GameSrv
                     }
                 case "$GUILDSTABILITYPOINT":
                     {
-                        if (PlayObject.MyGuild != null)
+                        if (playObject.MyGuild != null)
                         {
-                            nValue = PlayObject.MyGuild.Stability;
+                            nValue = playObject.MyGuild.Stability;
                         }
                         nDataType = 0;
                         result = true;
@@ -554,9 +554,9 @@ namespace GameSrv
                     }
                 case "$GUILDFLOURISHPOINT":
                     {
-                        if (PlayObject.MyGuild != null)
+                        if (playObject.MyGuild != null)
                         {
-                            nValue = PlayObject.MyGuild.Flourishing;
+                            nValue = playObject.MyGuild.Flourishing;
                         }
                         nDataType = 0;
                         result = true;
@@ -586,7 +586,7 @@ namespace GameSrv
             if (HUtil32.CompareLStr(sVariable, "$HUMAN", 6))//  人物变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (PlayObject.DynamicVarMap.TryGetValue(sVarValue2, out DynamicVar))
+                if (playObject.DynamicVarMap.TryGetValue(sVarValue2, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -606,7 +606,7 @@ namespace GameSrv
             if (HUtil32.CompareLStr(sVariable, "$ACCOUNT", 8)) //  人物变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (PlayObject.DynamicVarMap.TryGetValue(sVarValue2, out DynamicVar))
+                if (playObject.DynamicVarMap.TryGetValue(sVarValue2, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -626,7 +626,7 @@ namespace GameSrv
             return result;
         }
 
-        internal static bool SetMovDataValNameValue(PlayObject PlayObject, string sVarName, string sValue, int nValue, int nDataType)
+        internal static bool SetMovDataValNameValue(IActor playObject, string sVarName, string sValue, int nValue, int nDataType)
         {
             bool result = false;
             int n100 = M2Share.GetValNameNo(sVarName);
@@ -637,7 +637,7 @@ namespace GameSrv
                     case 1:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
                         {
-                            PlayObject.MNVal[n100] = nValue;
+                            playObject.MNVal[n100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
@@ -647,12 +647,12 @@ namespace GameSrv
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
                         {
-                            PlayObject.MDyVal[n100 - 200] = nValue;
+                            playObject.MDyVal[n100 - 200] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 300, 399))
                         {
-                            PlayObject.MNMval[n100 - 300] = nValue;
+                            playObject.MNMval[n100 - 300] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
@@ -662,12 +662,12 @@ namespace GameSrv
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
                         {
-                            PlayObject.MNInteger[n100 - 500] = nValue;
+                            playObject.MNInteger[n100 - 500] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
                         {
-                            PlayObject.MSString[n100 - 600] = nValue.ToString();
+                            playObject.MSString[n100 - 600] = nValue.ToString();
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
@@ -693,7 +693,7 @@ namespace GameSrv
                     case 0:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
                         {
-                            PlayObject.MNVal[n100] = HUtil32.StrToInt(sValue, 0);
+                            playObject.MNVal[n100] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
@@ -703,12 +703,12 @@ namespace GameSrv
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
                         {
-                            PlayObject.MDyVal[n100 - 200] = HUtil32.StrToInt(sValue, 0);
+                            playObject.MDyVal[n100 - 200] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 300, 399))
                         {
-                            PlayObject.MNMval[n100 - 300] = HUtil32.StrToInt(sValue, 0);
+                            playObject.MNMval[n100 - 300] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
@@ -718,12 +718,12 @@ namespace GameSrv
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
                         {
-                            PlayObject.MNInteger[n100 - 500] = HUtil32.StrToInt(sValue, 0);
+                            playObject.MNInteger[n100 - 500] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
                         {
-                            PlayObject.MSString[n100 - 600] = sValue;
+                            playObject.MSString[n100 - 600] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
@@ -749,7 +749,7 @@ namespace GameSrv
                     case 3:
                         if (HUtil32.RangeInDefined(n100, 0, 99))
                         {
-                            PlayObject.MNVal[n100] = nValue;
+                            playObject.MNVal[n100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
@@ -759,12 +759,12 @@ namespace GameSrv
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
                         {
-                            PlayObject.MDyVal[n100 - 200] = nValue;
+                            playObject.MDyVal[n100 - 200] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 300, 399))
                         {
-                            PlayObject.MNMval[n100 - 300] = nValue;
+                            playObject.MNMval[n100 - 300] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
@@ -774,12 +774,12 @@ namespace GameSrv
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
                         {
-                            PlayObject.MNInteger[n100 - 500] = nValue;
+                            playObject.MNInteger[n100 - 500] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 600, 699))
                         {
-                            PlayObject.MSString[n100 - 600] = sValue;
+                            playObject.MSString[n100 - 600] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
@@ -811,7 +811,7 @@ namespace GameSrv
             return result;
         }
 
-        internal static bool GetMovDataValNameValue(PlayObject PlayObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
+        internal static bool GetMovDataValNameValue(IActor playObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
             bool result = false;
             nValue = -1;
@@ -822,7 +822,7 @@ namespace GameSrv
             {
                 if (HUtil32.RangeInDefined(n100, 0, 99))
                 {
-                    nValue = PlayObject.MNVal[n100];
+                    nValue = playObject.MNVal[n100];
                     nDataType = 1;
                     result = true;
                 }
@@ -834,13 +834,13 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n100, 200, 299))
                 {
-                    nValue = PlayObject.MDyVal[n100 - 200];
+                    nValue = playObject.MDyVal[n100 - 200];
                     nDataType = 1;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 300, 399))
                 {
-                    nValue = PlayObject.MNMval[n100 - 300];
+                    nValue = playObject.MNMval[n100 - 300];
                     nDataType = 1;
                     result = true;
                 }
@@ -852,13 +852,13 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n100, 500, 599))
                 {
-                    nValue = PlayObject.MNInteger[n100 - 500];
+                    nValue = playObject.MNInteger[n100 - 500];
                     nDataType = 1;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 600, 699))
                 {
-                    sValue = PlayObject.MSString[n100 - 600];
+                    sValue = playObject.MSString[n100 - 600];
                     nDataType = 0;
                     result = true;
                 }
@@ -888,13 +888,13 @@ namespace GameSrv
             return result;
         }
 
-        internal static bool GetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
+        internal static bool GetMovDataDynamicVarValue(IActor playObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
             string sName = string.Empty;
             sValue = "";
             nValue = -1;
             nDataType = -1;
-            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(playObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return false;
@@ -917,11 +917,11 @@ namespace GameSrv
             return false;
         }
 
-        internal static bool SetMovDataDynamicVarValue(PlayObject PlayObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
+        internal static bool SetMovDataDynamicVarValue(IActor playObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
         {
             string sName = string.Empty;
             bool boVarFound = false;
-            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GetDynamicVarMap(playObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return false;
@@ -948,29 +948,29 @@ namespace GameSrv
             string sParam2 = string.Empty;
             string sParam3 = string.Empty;
             int result = -1;
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref sParam1);
             }
             else
             {
-                sParam1 = QuestActionInfo.sParam1;
+                sParam1 = questActionInfo.sParam1;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam2, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref sParam2);
-            }
-            else
-            {
-                sParam2 = QuestActionInfo.sParam2;
-            }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam3, "<$STR(", 6))
-            {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam3, "(", ")", ref sParam3);
+                HUtil32.ArrestStringEx(questActionInfo.sParam2, "(", ")", ref sParam2);
             }
             else
             {
-                sParam3 = QuestActionInfo.sParam3;
+                sParam2 = questActionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(questActionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(questActionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = questActionInfo.sParam3;
             }
             if (HUtil32.IsVarNumber(sParam1))
             {
@@ -1016,22 +1016,22 @@ namespace GameSrv
             return result;
         }
 
-        public static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject PlayObject, string sType, ref string sName)
+        public static Dictionary<string, DynamicVar> GetDynamicVarMap(IActor playObject, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
             {
-                result = PlayObject.DynamicVarMap;
-                sName = PlayObject.ChrName;
+                result = playObject.DynamicVarMap;
+                sName = playObject.ChrName;
             }
             else if (HUtil32.CompareLStr(sType, "GUILD", 5))
             {
-                if (PlayObject.MyGuild == null)
+                if (playObject.MyGuild == null)
                 {
                     return null;
                 }
-                result = PlayObject.MyGuild.DynamicVarList;
-                sName = PlayObject.MyGuild.GuildName;
+                result = playObject.MyGuild.DynamicVarList;
+                sName = playObject.MyGuild.GuildName;
             }
             else if (HUtil32.CompareLStr(sType, "GLOBAL", 6))
             {
@@ -1040,8 +1040,8 @@ namespace GameSrv
             }
             else if (HUtil32.CompareLStr(sType, "Account", 7))
             {
-                result = PlayObject.DynamicVarMap;
-                sName = PlayObject.UserAccount;
+                result = playObject.DynamicVarMap;
+                sName = playObject.UserAccount;
             }
             return result;
         }
@@ -1050,25 +1050,25 @@ namespace GameSrv
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(PlayObject PlayObject, string sData, ref int nValue)
+        public VarInfo GetVarValue(IActor playObject, string sData, ref int nValue)
         {
             string sVar = string.Empty;
             string sValue = string.Empty;
-            return GetVarValue(PlayObject, sData, ref sVar, ref sValue, ref nValue);
+            return GetVarValue(playObject, sData, ref sVar, ref sValue, ref nValue);
         }
 
         /// <summary>
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(PlayObject PlayObject, string sData, ref string sValue)
+        public VarInfo GetVarValue(IActor playObject, string sData, ref string sValue)
         {
             string sVar = string.Empty;
             int nValue = 0;
-            return GetVarValue(PlayObject, sData, ref sVar, ref sValue, ref nValue);
+            return GetVarValue(playObject, sData, ref sVar, ref sValue, ref nValue);
         }
 
-        public bool GetValValue(PlayObject PlayObject, string sMsg, ref string sValue)
+        public bool GetValValue(IActor playObject, string sMsg, ref string sValue)
         {
             if (string.IsNullOrEmpty(sMsg))
             {
@@ -1080,7 +1080,7 @@ namespace GameSrv
             {
                 if (HUtil32.RangeInDefined(n01, 600, 699))
                 {
-                    sValue = PlayObject.MSString[n01 - 600];
+                    sValue = playObject.MSString[n01 - 600];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 700, 799))
@@ -1095,14 +1095,14 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                 {
-                    sValue = PlayObject.MServerStrVal[n01 - 1600];
+                    sValue = playObject.MServerStrVal[n01 - 1600];
                     result = true;
                 }
             }
             return result;
         }
 
-        public bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)
+        public bool GetValValue(IActor playObject, string sMsg, ref int nValue)
         {
             bool result = false;
             if (string.IsNullOrEmpty(sMsg))
@@ -1114,7 +1114,7 @@ namespace GameSrv
             {
                 if (HUtil32.RangeInDefined(n01, 0, 99))
                 {
-                    nValue = PlayObject.MNVal[n01];
+                    nValue = playObject.MNVal[n01];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 100, 199))
@@ -1124,12 +1124,12 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 200, 299))
                 {
-                    nValue = PlayObject.MDyVal[n01 - 200];
+                    nValue = playObject.MDyVal[n01 - 200];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 300, 399))
                 {
-                    nValue = PlayObject.MNMval[n01 - 300];
+                    nValue = playObject.MNMval[n01 - 300];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 400, 499))
@@ -1139,12 +1139,12 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 500, 599))
                 {
-                    nValue = PlayObject.MNInteger[n01 - 500];
+                    nValue = playObject.MNInteger[n01 - 500];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 600, 699))
                 {
-                    nValue = HUtil32.StrToInt(PlayObject.MSString[n01 - 600], 0);
+                    nValue = HUtil32.StrToInt(playObject.MSString[n01 - 600], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 700, 799))
@@ -1164,12 +1164,12 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                 {
-                    nValue = HUtil32.StrToInt(PlayObject.MServerStrVal[n01 - 1600], 0);
+                    nValue = HUtil32.StrToInt(playObject.MServerStrVal[n01 - 1600], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1700, 1799))
                 {
-                    nValue = PlayObject.MServerIntVal[n01 - 1700];
+                    nValue = playObject.MServerIntVal[n01 - 1700];
                     result = true;
                 }
             }
@@ -1180,7 +1180,7 @@ namespace GameSrv
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(PlayObject PlayObject, string sData, ref string sVar, ref string sValue, ref int nValue)
+        public VarInfo GetVarValue(IActor playObject, string sData, ref string sVar, ref string sValue, ref int nValue)
         {
             long n10;
             sVar = sData;
@@ -1199,25 +1199,25 @@ namespace GameSrv
             if (HUtil32.CompareLStr(sName, "$STR("))// $STR(S0)
             {
                 sVar = '<' + sName + '>';
-                result.VarType = GetValNameValue(PlayObject, sVar, ref sValue, ref nValue);
+                result.VarType = GetValNameValue(playObject, sVar, ref sValue, ref nValue);
                 result.VarAttr = VarAttr.aFixStr;
             }
             else if (HUtil32.CompareLStr(sName, "$HUMAN("))
             {
                 sVar = '<' + sName + '>';
-                result.VarType = GetDynamicValue(PlayObject, sVar, ref sValue, ref nValue);
+                result.VarType = GetDynamicValue(playObject, sVar, ref sValue, ref nValue);
                 result.VarAttr = VarAttr.aDynamic;
             }
             else if (HUtil32.CompareLStr(sName, "$GUILD("))
             {
                 sVar = '<' + sName + '>';
-                result.VarType = GetDynamicValue(PlayObject, sVar, ref sValue, ref nValue);
+                result.VarType = GetDynamicValue(playObject, sVar, ref sValue, ref nValue);
                 result.VarAttr = VarAttr.aDynamic;
             }
             else if (HUtil32.CompareLStr(sName, "$GLOBAL("))
             {
                 sVar = '<' + sName + '>';
-                result.VarType = GetDynamicValue(PlayObject, sVar, ref sValue, ref nValue);
+                result.VarType = GetDynamicValue(playObject, sVar, ref sValue, ref nValue);
                 result.VarAttr = VarAttr.aDynamic;
             }
             else if (sName[0] == '$')
@@ -1227,13 +1227,13 @@ namespace GameSrv
                 if (n10 >= 0)
                 {
                     sVar = "<$STR(" + sName + ")>";
-                    result.VarType = GetValNameValue(PlayObject, sVar, ref sValue, ref nValue);
+                    result.VarType = GetValNameValue(playObject, sVar, ref sValue, ref nValue);
                     result.VarAttr = VarAttr.aFixStr;
                 }
                 else
                 {
                     sVar = "<$" + sName + '>';
-                    sValue = GetLineVariableText(PlayObject, sVar);
+                    sValue = GetLineVariableText(playObject, sVar);
                     if (string.Compare(sValue, sVar, StringComparison.Ordinal) == 0)
                     {
                         sValue = sVarName;
@@ -1257,7 +1257,7 @@ namespace GameSrv
                 if (n10 >= 0)
                 {
                     sVar = "<$STR(" + sName + ")>";
-                    result.VarType = GetValNameValue(PlayObject, sVar, ref sValue, ref nValue);
+                    result.VarType = GetValNameValue(playObject, sVar, ref sValue, ref nValue);
                     result.VarAttr = VarAttr.aFixStr;
                 }
                 else
@@ -1274,7 +1274,7 @@ namespace GameSrv
             return result;
         }
 
-        public VarType GetDynamicValue(PlayObject PlayObject, string sVar, ref string sValue, ref int nValue)
+        public VarType GetDynamicValue(IActor playObject, string sVar, ref string sValue, ref int nValue)
         {
             string sVarName = "";
             string sVarType = "";
@@ -1304,7 +1304,7 @@ namespace GameSrv
             {
                 return result;
             }
-            Dictionary<string, DynamicVar> DynamicVarList = GeDynamicVarList(PlayObject, sVarType, ref sName);
+            Dictionary<string, DynamicVar> DynamicVarList = GeDynamicVarList(playObject, sVarType, ref sName);
             if (DynamicVarList == null)
             {
                 return result;
@@ -1332,7 +1332,7 @@ namespace GameSrv
             return result;
         }
 
-        public VarType GetValNameValue(PlayObject PlayObject, string sVar, ref string sValue, ref int nValue)
+        public VarType GetValNameValue(IActor playObject, string sVar, ref string sValue, ref int nValue)
         {
             var result = VarType.None;
             var sName = string.Empty;
@@ -1370,25 +1370,25 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 1100, 1109))
                 {
-                    nValue = PlayObject.MNVal[n01 - 1100];// P
+                    nValue = playObject.MNVal[n01 - 1100];// P
                     sValue = nValue.ToString();
                     result = VarType.Integer;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1110, 1119))
                 {
-                    nValue = PlayObject.MDyVal[n01 - 1110];// D
+                    nValue = playObject.MDyVal[n01 - 1110];// D
                     sValue = nValue.ToString();
                     result = VarType.Integer;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1200, 1299))
                 {
-                    nValue = PlayObject.MNMval[n01 - 1200];// M
+                    nValue = playObject.MNMval[n01 - 1200];// M
                     sValue = nValue.ToString();
                     result = VarType.Integer;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1300, 1399))
                 {
-                    nValue = PlayObject.MNInteger[n01 - 1300];// N
+                    nValue = playObject.MNInteger[n01 - 1300];// N
                     sValue = nValue.ToString();
                     result = VarType.Integer;
                 }
@@ -1400,41 +1400,41 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 1400, 1499))
                 {
-                    sValue = PlayObject.MSString[n01 - 1400];// S
+                    sValue = playObject.MSString[n01 - 1400];// S
                     nValue = HUtil32.StrToInt(sValue, 0);
                     result = VarType.String;
                 }
             }
             else if (sName != "" && char.ToUpper(sName[0]) == 'S')
             {
-                if (PlayObject.m_StringList.ContainsKey(sName))
+                if (playObject.m_StringList.ContainsKey(sName))
                 {
-                    sValue = PlayObject.m_StringList[sName];
+                    sValue = playObject.m_StringList[sName];
                 }
                 else
                 {
-                    PlayObject.m_StringList.Add(sName, "");
+                    playObject.m_StringList.Add(sName, "");
                     sValue = "";
                 }
                 result = VarType.String;
             }
             else if (sName != "" && char.ToUpper(sName[0]) == 'N')
             {
-                if (PlayObject.m_IntegerList.ContainsKey(sName))
+                if (playObject.m_IntegerList.ContainsKey(sName))
                 {
-                    nValue = PlayObject.m_IntegerList[sName];
+                    nValue = playObject.m_IntegerList[sName];
                 }
                 else
                 {
                     nValue = 0;
-                    PlayObject.m_IntegerList.Add(sName, nValue);
+                    playObject.m_IntegerList.Add(sName, nValue);
                 }
                 result = VarType.Integer;
             }
             return result;
         }
 
-        public string GetLineVariableText(PlayObject PlayObject, string sMsg)
+        public string GetLineVariableText(IActor playObject, string sMsg)
         {
             var nC = 0;
             var sText = string.Empty;
@@ -1448,7 +1448,7 @@ namespace GameSrv
                 tempstr = HUtil32.ArrestStringEx(tempstr, "<", ">", ref sText);
                 if (!string.IsNullOrEmpty(sText) && sText[0] == '$')
                 {
-                    GetVariableText(PlayObject, ref sMsg, sText);
+                    GetVariableText(playObject, ref sMsg, sText);
                 }
                 nC++;
                 if (nC >= 101)
@@ -1459,7 +1459,7 @@ namespace GameSrv
             return sMsg;
         }
 
-        public virtual void GetVariableText(PlayObject PlayObject, ref string sMsg, string sVariable)
+        public virtual void GetVariableText(IActor playObject, ref string sMsg, string sVariable)
         {
             string dynamicName = string.Empty;
             DynamicVar DynamicVar;
@@ -1472,7 +1472,7 @@ namespace GameSrv
                 {
                     return;
                 }
-                GrobalVarProcessingSys.Handler(PlayObject, nIdx, sVariable, ref sMsg);
+                GrobalVarProcessingSys.Handler(playObject, nIdx, sVariable, ref sMsg);
                 return;
             }
             // 个人信息
@@ -1496,7 +1496,7 @@ namespace GameSrv
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref dynamicName);
                 boFoundVar = false;
-                if (PlayObject.DynamicVarMap.TryGetValue(dynamicName, out DynamicVar))
+                if (playObject.DynamicVarMap.TryGetValue(dynamicName, out DynamicVar))
                 {
                     if (string.Compare(DynamicVar.sName, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -1522,13 +1522,13 @@ namespace GameSrv
             }
             if (HUtil32.CompareLStr(sVariable, "$GUILD("))
             {
-                if (PlayObject.MyGuild == null)
+                if (playObject.MyGuild == null)
                 {
                     return;
                 }
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref dynamicName);
                 boFoundVar = false;
-                if (PlayObject.MyGuild.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
+                if (playObject.MyGuild.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
                 {
                     if (string.Compare(DynamicVar.sName, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -1591,15 +1591,15 @@ namespace GameSrv
                     }
                     else if (HUtil32.RangeInDefined(n18, 1100, 1109))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MNVal[n18 - 1100].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MNVal[n18 - 1100].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1110, 1119))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MDyVal[n18 - 1110].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MDyVal[n18 - 1110].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1200, 1299))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MNMval[n18 - 1200].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MNMval[n18 - 1200].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1000, 1099))
                     {
@@ -1607,11 +1607,11 @@ namespace GameSrv
                     }
                     else if (HUtil32.RangeInDefined(n18, 1300, 1399))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MNInteger[n18 - 1300].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MNInteger[n18 - 1300].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1400, 1499))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MSString[n18 - 1400]);
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MSString[n18 - 1400]);
                     }
                     else if (HUtil32.RangeInDefined(n18, 2000, 2499))
                     {
@@ -1620,16 +1620,16 @@ namespace GameSrv
                 }
                 else if (dynamicName != "" && char.ToUpper(dynamicName[1]) == 'S')
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.m_StringList.ContainsKey(dynamicName) ? PlayObject.m_StringList[dynamicName] : "");
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.m_StringList.ContainsKey(dynamicName) ? playObject.m_StringList[dynamicName] : "");
                 }
                 else if (dynamicName != "" && char.ToUpper(dynamicName[1]) == 'N')
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.m_IntegerList.ContainsKey(dynamicName) ? Convert.ToString(PlayObject.m_IntegerList[dynamicName]) : "-1");
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.m_IntegerList.ContainsKey(dynamicName) ? Convert.ToString(playObject.m_IntegerList[dynamicName]) : "-1");
                 }
             }
         }
 
-        public bool SetDynamicValue(PlayObject PlayObject, string sVar, string sValue, int nValue)
+        public bool SetDynamicValue(IActor playObject, string sVar, string sValue, int nValue)
         {
             var result = false;
             var sVarName = "";
@@ -1659,7 +1659,7 @@ namespace GameSrv
             {
                 return false;
             }
-            var dynamicVarList = GeDynamicVarList(PlayObject, sVarType, ref sName);
+            var dynamicVarList = GeDynamicVarList(playObject, sVarType, ref sName);
             if (dynamicVarList == null)
             {
                 return false;
@@ -1681,7 +1681,7 @@ namespace GameSrv
             return result;
         }
 
-        public bool SetValNameValue(PlayObject PlayObject, string sVar, string sValue, int nValue)
+        public bool SetValNameValue(IActor playObject, string sVar, string sValue, int nValue)
         {
             var sName = string.Empty;
             var result = false;
@@ -1717,22 +1717,22 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 1100, 1109))
                 {
-                    PlayObject.MNVal[n01 - 1100] = nValue;// P
+                    playObject.MNVal[n01 - 1100] = nValue;// P
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1110, 1119))
                 {
-                    PlayObject.MDyVal[n01 - 1110] = nValue;// D
+                    playObject.MDyVal[n01 - 1110] = nValue;// D
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1200, 1299))
                 {
-                    PlayObject.MNMval[n01 - 1200] = nValue;// M
+                    playObject.MNMval[n01 - 1200] = nValue;// M
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1300, 1399))
                 {
-                    PlayObject.MNInteger[n01 - 1300] = nValue;// N
+                    playObject.MNInteger[n01 - 1300] = nValue;// N
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 2000, 2499))
@@ -1742,55 +1742,55 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n01, 1400, 1499))
                 {
-                    PlayObject.MSString[n01 - 1400] = sValue;// S
+                    playObject.MSString[n01 - 1400] = sValue;// S
                     result = true;
                 }
             }
             else if (sName != "" && char.ToUpper(sName[0]) == 'S')
             {
-                if (PlayObject.m_StringList.ContainsKey(sName))
+                if (playObject.m_StringList.ContainsKey(sName))
                 {
-                    PlayObject.m_StringList[sName] = sValue;
+                    playObject.m_StringList[sName] = sValue;
                     result = true;
                 }
                 else
                 {
-                    PlayObject.m_StringList.Add(sName, sValue);
+                    playObject.m_StringList.Add(sName, sValue);
                     result = true;
                 }
             }
             else if (sName != "" && char.ToUpper(sName[0]) == 'N')
             {
-                if (PlayObject.m_IntegerList.ContainsKey(sName))
+                if (playObject.m_IntegerList.ContainsKey(sName))
                 {
-                    PlayObject.m_IntegerList[sName] = nValue;
+                    playObject.m_IntegerList[sName] = nValue;
                     result = true;
                 }
                 else
                 {
-                    PlayObject.m_IntegerList.Add(sName, nValue);
+                    playObject.m_IntegerList.Add(sName, nValue);
                     result = true;
                 }
             }
             return result;
         }
 
-        public Dictionary<string, DynamicVar> GeDynamicVarList(PlayObject PlayObject, string sType, ref string sName)
+        public Dictionary<string, DynamicVar> GeDynamicVarList(IActor playObject, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN"))
             {
-                result = PlayObject.DynamicVarMap;
-                sName = PlayObject.ChrName;
+                result = playObject.DynamicVarMap;
+                sName = playObject.ChrName;
             }
             else if (HUtil32.CompareLStr(sType, "GUILD"))
             {
-                if (PlayObject.MyGuild == null)
+                if (playObject.MyGuild == null)
                 {
                     return null;
                 }
-                result = PlayObject.MyGuild.DynamicVarList;
-                sName = PlayObject.MyGuild.GuildName;
+                result = playObject.MyGuild.DynamicVarList;
+                sName = playObject.MyGuild.GuildName;
             }
             else if (HUtil32.CompareLStr(sType, "GLOBAL"))
             {

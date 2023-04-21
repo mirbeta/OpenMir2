@@ -18,7 +18,7 @@ namespace GameSrv.GameCommand.Commands
             var nY = HUtil32.StrToInt16(@params[1], 0);
             if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0)
             {
-                var map = M2Share.MapMgr.FindMap(sMap);
+                var map = GameShare.MapMgr.FindMap(sMap);
                 if (map != null && map.IsValidCell(nX, nY))
                 {
                     ref var cellInfo = ref map.GetCellInfo(nX, nY, out var cellSuccess);

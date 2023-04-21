@@ -4,7 +4,7 @@
     {
         public RunAway() : base()
         {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run()
@@ -39,11 +39,11 @@
                         {
                             if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1)
                             {
-                                WalkTo(M2Share.RandomNumber.RandomByte(4), true, BoFearFire);
+                                WalkTo(GameShare.RandomNumber.RandomByte(4), true, BoFearFire);
                             }
                             else
                             {
-                                WalkTo(M2Share.RandomNumber.RandomByte(7), true, BoFearFire);
+                                WalkTo(GameShare.RandomNumber.RandomByte(7), true, BoFearFire);
                             }
                         }
                         else

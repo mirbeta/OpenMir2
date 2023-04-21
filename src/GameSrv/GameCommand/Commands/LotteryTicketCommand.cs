@@ -6,10 +6,10 @@ namespace GameSrv.GameCommand.Commands {
     public class LotteryTicketCommandL : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandLotteryTicketMsg, M2Share.Config.WinLotteryCount,
-                M2Share.Config.NoWinLotteryCount, M2Share.Config.WinLotteryLevel1, M2Share.Config.WinLotteryLevel2,
-                M2Share.Config.WinLotteryLevel3, M2Share.Config.WinLotteryLevel4, M2Share.Config.WinLotteryLevel5,
-                M2Share.Config.WinLotteryLevel6), MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandLotteryTicketMsg, GameShare.Config.WinLotteryCount,
+                GameShare.Config.NoWinLotteryCount, GameShare.Config.WinLotteryLevel1, GameShare.Config.WinLotteryLevel2,
+                GameShare.Config.WinLotteryLevel3, GameShare.Config.WinLotteryLevel4, GameShare.Config.WinLotteryLevel5,
+                GameShare.Config.WinLotteryLevel6), MsgColor.Green, MsgType.Hint);
         }
     }
 }

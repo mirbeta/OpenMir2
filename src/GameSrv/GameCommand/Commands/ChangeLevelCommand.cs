@@ -1,4 +1,5 @@
 ﻿using GameSrv.Player;
+using M2Server;
 
 namespace GameSrv.GameCommand.Commands {
     /// <summary>
@@ -16,10 +17,10 @@ namespace GameSrv.GameCommand.Commands {
             int nOLevel = playObject.Abil.Level;
             playObject.Abil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
             playObject.HasLevelUp(1);// 等级调整记录日志
-            M2Share.EventSource.AddEventLog(17, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY
+            GameShare.EventSource.AddEventLog(17, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY
                                                 + "\09" + playObject.ChrName + "\09" + playObject.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
-            if (M2Share.Config.ShowMakeItemMsg) {
-                M2Share.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, playObject.ChrName, nOLevel, playObject.Abil.Level));
+            if (GameShare.Config.ShowMakeItemMsg) {
+                GameShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, playObject.ChrName, nOLevel, playObject.Abil.Level));
             }
         }
     }

@@ -84,13 +84,13 @@ namespace GameSrv.World
                             AddToHumanFreeList(robotPlayer);
                             robotPlayer.DealCancelA();
                             SaveHumanRcd(robotPlayer);
-                            M2Share.SocketMgr.CloseUser(robotPlayer.GateIdx, robotPlayer.SocketId);
-                            SendServerGroupMsg(Messages.SS_202, M2Share.ServerIndex, robotPlayer.ChrName);
+                            GameShare.SocketMgr.CloseUser(robotPlayer.GateIdx, robotPlayer.SocketId);
+                            SendServerGroupMsg(Messages.SS_202, GameShare.ServerIndex, robotPlayer.ChrName);
                             continue;
                         }
                     }
                     nIdx++;
-                    if ((HUtil32.GetTickCount() - dwCheckTime) > M2Share.HumLimit)
+                    if ((HUtil32.GetTickCount() - dwCheckTime) > GameShare.HumLimit)
                     {
                         boCheckTimeLimit = true;
                         ProcBotHubIdx = nIdx;
@@ -108,7 +108,7 @@ namespace GameSrv.World
         
         private static RobotPlayer CreateRobotPlayObject(RoBotLogon ai)
         {
-            var envirnoment = M2Share.MapMgr.FindMap(ai.sMapName);
+            var envirnoment = GameShare.MapMgr.FindMap(ai.sMapName);
             if (envirnoment == null)
             {
                 return null;
@@ -118,10 +118,10 @@ namespace GameSrv.World
             cert.MapName = ai.sMapName;
             cert.CurrX = ai.nX;
             cert.CurrY = ai.nY;
-            cert.Dir = (byte)M2Share.RandomNumber.Random(8);
+            cert.Dir = (byte)GameShare.RandomNumber.Random(8);
             cert.ChrName = ai.sChrName;
             cert.WAbil = cert.Abil;
-            if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode)
+            if (GameShare.RandomNumber.Random(100) < cert.CoolEyeCode)
             {
                 cert.CoolEye = true;
             }
@@ -175,14 +175,14 @@ namespace GameSrv.World
                         }
                         else
                         {
-                            cert.CurrX = (byte)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
+                            cert.CurrX = (byte)(GameShare.RandomNumber.Random(cert.Envir.Width / 2) + n24);
                             if (cert.Envir.Height - n24 - 1 > cert.CurrY)
                             {
                                 cert.CurrY += (short)n20;
                             }
                             else
                             {
-                                cert.CurrY = (byte)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
+                                cert.CurrY = (byte)(GameShare.RandomNumber.Random(cert.Envir.Height / 2) + n24);
                             }
                         }
                     }

@@ -1,14 +1,12 @@
 ﻿using GameSrv.Actor;
-using GameSrv.Castle;
-using GameSrv.Event;
 using GameSrv.GameCommand;
-using GameSrv.Guild;
 using GameSrv.Items;
 using GameSrv.Magic;
 using GameSrv.Maps;
 using GameSrv.Npc;
 using GameSrv.RobotPlay;
-using GameSrv.Script;
+using M2Server;
+using M2Server.Actor;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using SystemModule.Consts;
@@ -16,6 +14,11 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
+using Envirnoment = GameSrv.Maps.Envirnoment;
+using GuildInfo = GameSrv.Guild.GuildInfo;
+using MapEvent = GameSrv.Event.MapEvent;
+using UserCastle = GameSrv.Castle.UserCastle;
+using VisibleMapItem = GameSrv.Maps.VisibleMapItem;
 
 namespace GameSrv.Player
 {
@@ -1013,16 +1016,16 @@ namespace GameSrv.Player
             DecPkPointTick = HUtil32.GetTickCount();
             AutoGetExpPoint = 0;
             AutoGetExpEnvir = null;
-            HitIntervalTime = M2Share.Config.HitIntervalTime;// 攻击间隔
-            MagicHitIntervalTime = M2Share.Config.MagicHitIntervalTime;// 魔法间隔
-            RunIntervalTime = M2Share.Config.RunIntervalTime;// 走路间隔
-            WalkIntervalTime = M2Share.Config.WalkIntervalTime;// 走路间隔
-            TurnIntervalTime = M2Share.Config.TurnIntervalTime;// 换方向间隔
-            ActionIntervalTime = M2Share.Config.ActionIntervalTime;// 组合操作间隔
-            RunLongHitIntervalTime = M2Share.Config.RunLongHitIntervalTime;// 组合操作间隔
-            RunHitIntervalTime = M2Share.Config.RunHitIntervalTime;// 组合操作间隔
-            WalkHitIntervalTime = M2Share.Config.WalkHitIntervalTime;// 组合操作间隔
-            RunMagicIntervalTime = M2Share.Config.RunMagicIntervalTime;// 跑位魔法间隔
+            HitIntervalTime = GameShare.Config.HitIntervalTime;// 攻击间隔
+            MagicHitIntervalTime = GameShare.Config.MagicHitIntervalTime;// 魔法间隔
+            RunIntervalTime = GameShare.Config.RunIntervalTime;// 走路间隔
+            WalkIntervalTime = GameShare.Config.WalkIntervalTime;// 走路间隔
+            TurnIntervalTime = GameShare.Config.TurnIntervalTime;// 换方向间隔
+            ActionIntervalTime = GameShare.Config.ActionIntervalTime;// 组合操作间隔
+            RunLongHitIntervalTime = GameShare.Config.RunLongHitIntervalTime;// 组合操作间隔
+            RunHitIntervalTime = GameShare.Config.RunHitIntervalTime;// 组合操作间隔
+            WalkHitIntervalTime = GameShare.Config.WalkHitIntervalTime;// 组合操作间隔
+            RunMagicIntervalTime = GameShare.Config.RunMagicIntervalTime;// 跑位魔法间隔
             DynamicVarMap = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             SessInfo = null;
             TestSpeedMode = false;
@@ -1037,7 +1040,7 @@ namespace GameSrv.Player
             CellType = CellType.Play;
             QueryExpireTick = 60 * 1000;
             AccountExpiredTick = HUtil32.GetTickCount();
-            GoldMax = M2Share.Config.HumanMaxGold;
+            GoldMax = GameShare.Config.HumanMaxGold;
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
@@ -1047,7 +1050,7 @@ namespace GameSrv.Player
             VisibleItems = new List<VisibleMapItem>();
             ItemList = new List<UserItem>(Grobal2.MaxBagItem);
             MapMoveTick = HUtil32.GetTickCount();
-            RandomNo = M2Share.RandomNumber.Random(999999).ToString();
+            RandomNo = GameShare.RandomNumber.Random(999999).ToString();
         }
 
         public override void Initialize()
@@ -1067,7 +1070,7 @@ namespace GameSrv.Player
         {
             //todo 优化
             List<string> loadList = new List<string>();
-            M2Share.NoticeMgr.GetNoticeMsg("Notice", loadList);
+            GameShare.NoticeMgr.GetNoticeMsg("Notice", loadList);
             string sNoticeMsg = string.Empty;
             if (loadList.Count > 0)
             {
@@ -1120,7 +1123,7 @@ namespace GameSrv.Player
                 }
                 catch (Exception)
                 {
-                    M2Share.Logger.Error(sExceptionMsg);
+                    GameShare.Logger.Error(sExceptionMsg);
                 }
             }
         }
@@ -1159,18 +1162,18 @@ namespace GameSrv.Player
             const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
             try
             {
-                if (M2Share.Config.TestServer)
+                if (GameShare.Config.TestServer)
                 {
-                    if (Abil.Level < M2Share.Config.TestLevel)
+                    if (Abil.Level < GameShare.Config.TestLevel)
                     {
-                        Abil.Level = (byte)M2Share.Config.TestLevel;
+                        Abil.Level = (byte)GameShare.Config.TestLevel;
                     }
-                    if (Gold < M2Share.Config.TestGold)
+                    if (Gold < GameShare.Config.TestGold)
                     {
-                        Gold = M2Share.Config.TestGold;
+                        Gold = GameShare.Config.TestGold;
                     }
                 }
-                if (M2Share.Config.TestServer || M2Share.Config.ServiceMode)
+                if (GameShare.Config.TestServer || GameShare.Config.ServiceMode)
                 {
                     PayMent = 3;
                 }
@@ -1190,11 +1193,11 @@ namespace GameSrv.Player
                 {
                     MapRandomMove(Envir.MapName, 0);
                 }
-                if (M2Share.WorldEngine.GetHumPermission(ChrName, ref sIPaddr, ref Permission))
+                if (GameShare.WorldEngine.GetHumPermission(ChrName, ref sIPaddr, ref Permission))
                 {
-                    if (M2Share.Config.PermissionSystem)
+                    if (GameShare.Config.PermissionSystem)
                     {
-                        if (!M2Share.CompareIPaddr(LoginIpAddr, sIPaddr))
+                        if (!GameShare.CompareIPaddr(LoginIpAddr, sIPaddr))
                         {
                             SysMsg(sCheckIPaddrFail, MsgColor.Red, MsgType.Hint);
                             BoEmergencyClose = true;
@@ -1210,7 +1213,7 @@ namespace GameSrv.Player
                 if (IsNewHuman)
                 {
                     userItem = new UserItem();
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.Candle, ref userItem))
+                    if (GameShare.WorldEngine.CopyToUserItemFromName(GameShare.Config.Candle, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1219,7 +1222,7 @@ namespace GameSrv.Player
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.BasicDrug, ref userItem))
+                    if (GameShare.WorldEngine.CopyToUserItemFromName(GameShare.Config.BasicDrug, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1228,7 +1231,7 @@ namespace GameSrv.Player
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(M2Share.Config.WoodenSword, ref userItem))
+                    if (GameShare.WorldEngine.CopyToUserItemFromName(GameShare.Config.WoodenSword, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1238,9 +1241,9 @@ namespace GameSrv.Player
                     }
                     userItem = new UserItem();
                     string sItem = Gender == PlayGender.Man
-                        ? M2Share.Config.ClothsMan
-                        : M2Share.Config.ClothsWoman;
-                    if (M2Share.WorldEngine.CopyToUserItemFromName(sItem, ref userItem))
+                        ? GameShare.Config.ClothsMan
+                        : GameShare.Config.ClothsWoman;
+                    if (GameShare.WorldEngine.CopyToUserItemFromName(sItem, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1252,20 +1255,20 @@ namespace GameSrv.Player
                 // 检查背包中的物品是否合法
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    if (!string.IsNullOrEmpty(M2Share.WorldEngine.GetStdItemName(ItemList[i].Index))) continue;
+                    if (!string.IsNullOrEmpty(GameShare.WorldEngine.GetStdItemName(ItemList[i].Index))) continue;
                     Dispose(ItemList[i]);
                     ItemList.RemoveAt(i);
                 }
                 // 检查人物身上的物品是否符合使用规则
-                if (M2Share.Config.CheckUserItemPlace)
+                if (GameShare.Config.CheckUserItemPlace)
                 {
                     for (int i = 0; i < UseItems.Length; i++)
                     {
                         if (UseItems[i] == null || UseItems[i].Index <= 0) continue;
-                        StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                        StdItem stdItem = GameShare.WorldEngine.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)
                         {
-                            if (!M2Share.CheckUserItems(i, stdItem))
+                            if (!GameShare.CheckUserItems(i, stdItem))
                             {
                                 if (!AddItemToBag(UseItems[i]))
                                 {
@@ -1283,11 +1286,11 @@ namespace GameSrv.Player
                 // 检查背包中是否有复制品
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    string sItemName = M2Share.WorldEngine.GetStdItemName(ItemList[i].Index);
+                    string sItemName = GameShare.WorldEngine.GetStdItemName(ItemList[i].Index);
                     for (int j = i - 1; j >= 0; j--)
                     {
                         UserItem userItem1 = ItemList[j];
-                        if (M2Share.WorldEngine.GetStdItemName(userItem1.Index) == sItemName && ItemList[i].MakeIndex == userItem1.MakeIndex)
+                        if (GameShare.WorldEngine.GetStdItemName(userItem1.Index) == sItemName && ItemList[i].MakeIndex == userItem1.MakeIndex)
                         {
                             ItemList.RemoveAt(j);
                             break;
@@ -1312,13 +1315,13 @@ namespace GameSrv.Player
                     PkPoint = 0;
                     BtB2++;
                 }
-                if (Gold > M2Share.Config.HumanMaxGold * 2 && M2Share.Config.HumanMaxGold > 0)
+                if (Gold > GameShare.Config.HumanMaxGold * 2 && GameShare.Config.HumanMaxGold > 0)
                 {
-                    Gold = M2Share.Config.HumanMaxGold * 2;
+                    Gold = GameShare.Config.HumanMaxGold * 2;
                 }
                 if (!TryPlayMode)
                 {
-                    if (SoftVersionDate < M2Share.Config.SoftVersionDate)//登录版本号验证
+                    if (SoftVersionDate < GameShare.Config.SoftVersionDate)//登录版本号验证
                     {
                         SysMsg(Settings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                         SysMsg(Settings.DownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
@@ -1326,11 +1329,11 @@ namespace GameSrv.Player
                         BoEmergencyClose = true;
                         return;
                     }
-                    if (SoftVersionDateEx == 0 && M2Share.Config.boOldClientShowHiLevel)
+                    if (SoftVersionDateEx == 0 && GameShare.Config.boOldClientShowHiLevel)
                     {
                         SysMsg(Settings.ClientSoftVersionTooOld, MsgColor.Blue, MsgType.Hint);
                         SysMsg(Settings.DownLoadAndUseNewClient, MsgColor.Red, MsgType.Hint);
-                        if (!M2Share.Config.CanOldClientLogon)
+                        if (!GameShare.Config.CanOldClientLogon)
                         {
                             SysMsg(Settings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
                             SysMsg(Settings.DownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
@@ -1364,11 +1367,11 @@ namespace GameSrv.Player
                             break;
                     }
                     SysMsg(Settings.StartChangeAttackModeHelp, MsgColor.Green, MsgType.Hint);// 使用组合快捷键 CTRL-H 更改攻击...
-                    if (M2Share.Config.TestServer)
+                    if (GameShare.Config.TestServer)
                     {
                         SysMsg(Settings.StartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
-                    if (M2Share.WorldEngine.PlayObjectCount > M2Share.Config.TestUserLimit)
+                    if (GameShare.WorldEngine.PlayObjectCount > GameShare.Config.TestUserLimit)
                     {
                         if (Permission < 2)
                         {
@@ -1378,14 +1381,14 @@ namespace GameSrv.Player
                         }
                     }
                 }
-                Bright = M2Share.GameTime;
+                Bright = GameShare.GameTime;
                 SendPriorityMsg(Messages.RM_ABILITY, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
                 SendPriorityMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0);
                 SendPriorityMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
-                MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
+                MyGuild = GameShare.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {
                     GuildRankName = MyGuild.GetRankName(this, ref GuildRankNo);
@@ -1401,10 +1404,10 @@ namespace GameSrv.Player
                     {
                         SysMsg(Settings.YouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
                     }
-                    GoldMax = M2Share.Config.HumanTryModeMaxGold;
-                    if (Abil.Level > M2Share.Config.TryModeLevel)
+                    GoldMax = GameShare.Config.HumanTryModeMaxGold;
+                    if (Abil.Level > GameShare.Config.TryModeLevel)
                     {
-                        SysMsg("测试状态可以使用到第 " + M2Share.Config.TryModeLevel, MsgColor.Red, MsgType.Hint);
+                        SysMsg("测试状态可以使用到第 " + GameShare.Config.TryModeLevel, MsgColor.Red, MsgType.Hint);
                         SysMsg("链接中断，请到以下地址获得收费相关信息。(https://www.mir2.com)", MsgColor.Red, MsgType.Hint);
                         BoEmergencyClose = true;
                     }
@@ -1413,7 +1416,7 @@ namespace GameSrv.Player
                 {
                     SysMsg(Settings.NowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
                 }
-                if (M2Share.Config.VentureServer)
+                if (GameShare.Config.VentureServer)
                 {
                     SysMsg("当前服务器运行于冒险模式.", MsgColor.Green, MsgType.Hint);
                 }
@@ -1430,9 +1433,9 @@ namespace GameSrv.Player
                 {
                     return;
                 }
-                if (M2Share.ManageNPC != null)
+                if (GameShare.ManageNPC != null)
                 {
-                    M2Share.ManageNPC.GotoLable(this, "@Login", false);
+                    GameShare.ManageNPC.GotoLable(this, "@Login", false);
                 }
                 FixedHideMode = false;
                 if (!string.IsNullOrEmpty(DearName))
@@ -1440,28 +1443,28 @@ namespace GameSrv.Player
                     CheckMarry();
                 }
                 CheckMaster();
-                FilterSendMsg = M2Share.GetDisableSendMsgList(ChrName);
+                FilterSendMsg = GameShare.GetDisableSendMsgList(ChrName);
                 // 密码保护系统
-                if (M2Share.Config.PasswordLockSystem)
+                if (GameShare.Config.PasswordLockSystem)
                 {
                     if (IsPasswordLocked)
                     {
-                        IsCanGetBackItem = !M2Share.Config.LockGetBackItemAction;
+                        IsCanGetBackItem = !GameShare.Config.LockGetBackItemAction;
                     }
-                    if (M2Share.Config.LockHumanLogin && IsLockLogon && IsPasswordLocked)
+                    if (GameShare.Config.LockHumanLogin && IsLockLogon && IsPasswordLocked)
                     {
-                        IsCanDeal = !M2Share.Config.LockDealAction;
-                        IsCanDrop = !M2Share.Config.LockDropAction;
-                        BoCanUseItem = !M2Share.Config.LockUserItemAction;
-                        IsCanWalk = !M2Share.Config.LockWalkAction;
-                        IsCanRun = !M2Share.Config.LockRunAction;
-                        IsCanHit = !M2Share.Config.LockHitAction;
-                        IsCanSpell = !M2Share.Config.LockSpellAction;
-                        IsCanSendMsg = !M2Share.Config.LockSendMsgAction;
-                        ObMode = M2Share.Config.LockInObModeAction;
-                        AdminMode = M2Share.Config.LockInObModeAction;
+                        IsCanDeal = !GameShare.Config.LockDealAction;
+                        IsCanDrop = !GameShare.Config.LockDropAction;
+                        BoCanUseItem = !GameShare.Config.LockUserItemAction;
+                        IsCanWalk = !GameShare.Config.LockWalkAction;
+                        IsCanRun = !GameShare.Config.LockRunAction;
+                        IsCanHit = !GameShare.Config.LockHitAction;
+                        IsCanSpell = !GameShare.Config.LockSpellAction;
+                        IsCanSendMsg = !GameShare.Config.LockSendMsgAction;
+                        ObMode = GameShare.Config.LockInObModeAction;
+                        AdminMode = GameShare.Config.LockInObModeAction;
                         SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.LockLogon.CmdName, MsgColor.Red, MsgType.Hint);
-                        SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
+                        SendMsg(GameShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
                     }
                     if (!IsPasswordLocked)
                     {
@@ -1472,7 +1475,7 @@ namespace GameSrv.Player
                         SysMsg(Format(Settings.NotPasswordProtectMode, CommandMgr.GameCommands.LockLogon.CmdName), MsgColor.Red, MsgType.Hint);
                     }
                     SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName, MsgColor.Red, MsgType.Hint);
-                    SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName + '\\' + "加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
+                    SendMsg(GameShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName + '\\' + "加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
                 }
                 // 重置泡点方面计时
                 IncGamePointTick = HUtil32.GetTickCount();
@@ -1482,8 +1485,8 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.StackTrace);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(e.StackTrace);
             }
             // ReadAllBook();
         }
@@ -1499,12 +1502,12 @@ namespace GameSrv.Player
                 return false;
             }
             int nRand = 0;
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+            StdItem stdItem = GameShare.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
             if (stdItem != null)
             {
                 nRand = Math.Abs(HUtil32.HiByte(stdItem.DC) - HUtil32.LoByte(stdItem.DC)) / 5;
             }
-            if (M2Share.RandomNumber.Random(M2Share.Config.WeaponMakeUnLuckRate) == 1)
+            if (GameShare.RandomNumber.Random(GameShare.Config.WeaponMakeUnLuckRate) == 1)
             {
                 MakeWeaponUnlock();
             }
@@ -1517,19 +1520,19 @@ namespace GameSrv.Player
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint1)
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < GameShare.Config.WeaponMakeLuckPoint1)
                 {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + M2Share.Config.WeaponMakeLuckPoint2Rate) == 1)
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < GameShare.Config.WeaponMakeLuckPoint2 && GameShare.RandomNumber.Random(nRand + GameShare.Config.WeaponMakeLuckPoint2Rate) == 1)
                 {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
-                else if (UseItems[ItemLocation.Weapon].Desc[3] < M2Share.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * M2Share.Config.WeaponMakeLuckPoint3Rate) == 1)
+                else if (UseItems[ItemLocation.Weapon].Desc[3] < GameShare.Config.WeaponMakeLuckPoint3 && GameShare.RandomNumber.Random(nRand * GameShare.Config.WeaponMakeLuckPoint3Rate) == 1)
                 {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
                     SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
@@ -1564,7 +1567,7 @@ namespace GameSrv.Player
             {
                 return false;
             }
-            userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / M2Share.Config.RepairItemDecDura);
+            userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / GameShare.Config.RepairItemDecDura);
             ushort nDura = (ushort)HUtil32._MIN(5000, userItem.DuraMax - userItem.Dura);
             if (nDura <= 0) return false;
             userItem.Dura += nDura;
@@ -1622,17 +1625,17 @@ namespace GameSrv.Player
         /// </summary>
         private void KillTargetTrigger(int actorId,int fightExp)
         {
-            var killObject = M2Share.ActorMgr.Get(actorId);
+            var killObject = GameShare.ActorMgr.Get(actorId);
             if (killObject == null)
             {
                 return;
             }
-            if (M2Share.FunctionNPC != null)
+            if (GameShare.FunctionNPC != null)
             {
-                M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
+                GameShare.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
             int monsterExp = CalcGetExp(WAbil.Level, fightExp);
-            if (!M2Share.Config.VentureServer)
+            if (!GameShare.Config.VentureServer)
             {
                 if (IsRobot && ExpHitter != null && ExpHitter.Race == ActorRace.Play)
                 {
@@ -1649,7 +1652,7 @@ namespace GameSrv.Player
                 Merchant QuestNPC;
                 if (GroupOwner != 0)
                 {
-                    PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                    PlayObject groupOwnerPlay = (PlayObject)GameShare.ActorMgr.Get(GroupOwner);
                     for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
                         PlayObject groupHuman = groupOwnerPlay.GroupMembers[i];
@@ -1678,7 +1681,7 @@ namespace GameSrv.Player
             try
             {
                 bool boPK = false;
-                if (!M2Share.Config.VentureServer && !Envir.Flag.FightZone && !Envir.Flag.Fight3Zone)
+                if (!GameShare.Config.VentureServer && !Envir.Flag.FightZone && !Envir.Flag.Fight3Zone)
                 {
                     if (PvpLevel() < 2)
                     {
@@ -1706,7 +1709,7 @@ namespace GameSrv.Player
                     }
                     else
                     {
-                        UserCastle Castle = M2Share.CastleMgr.InCastleWarArea(this);
+                        UserCastle Castle = GameShare.CastleMgr.InCastleWarArea(this);
                         if ((Castle != null && Castle.UnderWar) || (InGuildWarArea))
                         {
                             guildwarkill = true;
@@ -1714,7 +1717,7 @@ namespace GameSrv.Player
                     }
                     if (!guildwarkill)
                     {
-                        if ((M2Share.Config.IsKillHumanWinLevel || M2Share.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP))
+                        if ((GameShare.Config.IsKillHumanWinLevel || GameShare.Config.IsKillHumanWinExp || Envir.Flag.boPKWINLEVEL || Envir.Flag.boPKWINEXP))
                         {
                             PvpDie(targetObject);
                         }
@@ -1722,13 +1725,13 @@ namespace GameSrv.Player
                         {
                             if (!IsGoodKilling(this))
                             {
-                                targetObject.IncPkPoint(M2Share.Config.KillHumanAddPKPoint);
+                                targetObject.IncPkPoint(GameShare.Config.KillHumanAddPKPoint);
                                 targetObject.SysMsg(Settings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
                                 SysMsg(Format(Settings.YouKilledByMsg, targetObject.ChrName), MsgColor.Red, MsgType.Hint);
-                                targetObject.AddBodyLuck(-M2Share.Config.KillHumanDecLuckPoint);
+                                targetObject.AddBodyLuck(-GameShare.Config.KillHumanDecLuckPoint);
                                 if (PvpLevel() < 1)
                                 {
-                                    if (M2Share.RandomNumber.Random(5) == 0)
+                                    if (GameShare.RandomNumber.Random(5) == 0)
                                     {
                                         targetObject.MakeWeaponUnlock();
                                     }
@@ -1769,7 +1772,7 @@ namespace GameSrv.Player
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(ex);
+                GameShare.Logger.Error(ex);
             }
             if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && killObject.Race == ActorRace.Play)
             {
@@ -1782,7 +1785,7 @@ namespace GameSrv.Player
                 {
                     if (AttackBaseObject != null)
                     {
-                        if (M2Share.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || M2Share.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
+                        if (GameShare.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || GameShare.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
                         {
                             killObject.DropUseItems(0);
                         }
@@ -1791,18 +1794,18 @@ namespace GameSrv.Player
                     {
                         killObject.DropUseItems(0);
                     }
-                    if (M2Share.Config.DieScatterBag)
+                    if (GameShare.Config.DieScatterBag)
                     {
                         killObject.ScatterBagItems(0);
                     }
-                    if (M2Share.Config.DieDropGold)
+                    if (GameShare.Config.DieDropGold)
                     {
                         killObject.ScatterGolds(0);
                     }
                 }
                 AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
             }
-            if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
+            if ((GameShare.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
             {
                 if (killObject.Race != ActorRace.Play) //怪杀死玩家
                 {
@@ -1810,11 +1813,11 @@ namespace GameSrv.Player
                     {
                         if (ExpHitter.Race == ActorRace.Play)
                         {
-                            M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            GameShare.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                         if (ExpHitter.Master != null)
                         {
-                            M2Share.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            GameShare.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                     }
                     else
@@ -1823,11 +1826,11 @@ namespace GameSrv.Player
                         {
                             if (LastHiter.Race == ActorRace.Play)
                             {
-                                M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                GameShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                             if (LastHiter.Master != null)
                             {
-                                M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                GameShare.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                         }
                     }
@@ -1836,7 +1839,7 @@ namespace GameSrv.Player
                 {
                     if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                     {
-                        M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                        GameShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
                     }
                 }
             }
@@ -1861,14 +1864,14 @@ namespace GameSrv.Player
                         switch (cellObject.CellType)
                         {
                             case CellType.MapRoute:
-                                MapRouteItem mapRoute = M2Share.CellObjectMgr.Get<MapRouteItem>(cellObject.CellObjId);
+                                MapRouteItem mapRoute = GameShare.CellObjectMgr.Get<MapRouteItem>(cellObject.CellObjId);
                                 if (mapRoute.Envir != null)
                                 {
                                     if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                     {
-                                        if ((!mapRoute.Envir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
+                                        if ((!mapRoute.Envir.Flag.boNEEDHOLE) || (GameShare.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
                                         {
-                                            if (M2Share.ServerIndex == mapRoute.Envir.ServerIndex)
+                                            if (GameShare.ServerIndex == mapRoute.Envir.ServerIndex)
                                             {
                                                 if (!EnterAnotherMap(mapRoute.Envir, mapRoute.X, mapRoute.Y))
                                                 {
@@ -1887,10 +1890,10 @@ namespace GameSrv.Player
                                 break;
                             case CellType.Event:
                                 MapEvent mapEvent = null;
-                                MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                MapEvent owinEvent = GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                 if (owinEvent.OwnBaseObject != null)
                                 {
-                                    mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                    mapEvent = GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                 }
                                 if (mapEvent != null)
                                 {
@@ -1910,8 +1913,8 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                GameShare.Logger.Error(e.Message);
             }
             return result;
         }
@@ -1968,7 +1971,7 @@ namespace GameSrv.Player
             string tStr;
             if (GroupOwner != 0)
             {
-                PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                PlayObject groupOwnerPlay = (PlayObject)GameShare.ActorMgr.Get(GroupOwner);
                 groupOwnerPlay.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
             }
             if (LastHiter != null)
@@ -1986,16 +1989,16 @@ namespace GameSrv.Player
             {
                 tStr = "####";
             }
-            M2Share.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.Fight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
+            GameShare.EventSource.AddEventLog(GameEventLogType.PlayDie, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + "FZ-" + HUtil32.BoolToIntStr(Envir.Flag.FightZone) + "_F3-" + HUtil32.BoolToIntStr(Envir.Flag.Fight3Zone) + "\t" + '0' + "\t" + '1' + "\t" + tStr);
             base.Die();
             SendSelfDelayMsg(Messages.RM_MASTERDIEMUTINY, 0, 0, 0, 0, "", 1000);
         }
 
         protected override void KickException()
         {
-            MapName = M2Share.Config.HomeMap;
-            CurrX = M2Share.Config.HomeX;
-            CurrY = M2Share.Config.HomeY;
+            MapName = GameShare.Config.HomeMap;
+            CurrX = GameShare.Config.HomeX;
+            CurrY = GameShare.Config.HomeY;
             BoEmergencyClose = true;
             SendSelfDelayMsg(Messages.RM_MASTERDIEMUTINY, 0, 0, 0, 0, "", 1000);
         }
@@ -2101,7 +2104,7 @@ namespace GameSrv.Player
                         StdItem stdItem;
                         if (UseItems[i].Dura == 0)
                         {
-                            stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                            stdItem = GameShare.WorldEngine.GetStdItem(UseItems[i].Index);
                             if (stdItem != null)
                             {
                                 if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
@@ -2115,7 +2118,7 @@ namespace GameSrv.Player
                             }
                             continue;
                         }
-                        stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                        stdItem = GameShare.WorldEngine.GetStdItem(UseItems[i].Index);
                         ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
                         ApplyItemParametersEx(UseItems[i], ref WAbil);
                         if (stdItem != null)
@@ -2912,21 +2915,21 @@ namespace GameSrv.Player
             int result = 0;
             if (Luck > 0)
             {
-                if (M2Share.RandomNumber.Random(10 - HUtil32._MIN(9, Luck)) == 0)
+                if (GameShare.RandomNumber.Random(10 - HUtil32._MIN(9, Luck)) == 0)
                 {
                     result = nBasePower + nPower;
                 }
                 else
                 {
-                    result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
+                    result = nBasePower + GameShare.RandomNumber.Random(nPower + 1);
                 }
             }
             else
             {
-                result = nBasePower + M2Share.RandomNumber.Random(nPower + 1);
+                result = nBasePower + GameShare.RandomNumber.Random(nPower + 1);
                 if (Luck <= 0)
                 {
-                    if (M2Share.RandomNumber.Random(10 - HUtil32._MAX(0, -Luck)) == 0)
+                    if (GameShare.RandomNumber.Random(10 - HUtil32._MAX(0, -Luck)) == 0)
                     {
                         result = nBasePower;
                     }
@@ -2951,10 +2954,10 @@ namespace GameSrv.Player
         public override void StruckDamage(int nDamage)
         {
             base.StruckDamage(nDamage);
-            ushort nDam = (ushort)(M2Share.RandomNumber.Random(10) + 5);
+            ushort nDam = (ushort)(GameShare.RandomNumber.Random(10) + 5);
             if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
-                nDam = (ushort)HUtil32.Round(nDam * (M2Share.Config.PosionDamagarmor / 10.0)); // 1.2
+                nDam = (ushort)HUtil32.Round(nDam * (GameShare.Config.PosionDamagarmor / 10.0)); // 1.2
             }
             bool boRecalcAbi = false;
             ushort nDura;
@@ -2967,10 +2970,10 @@ namespace GameSrv.Player
                 if (nDura <= 0)
                 {
                     SendDelItems(UseItems[ItemLocation.Dress]);
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
+                    StdItem stdItem = GameShare.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
+                        GameShare.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
                                                            ChrName + "\t" + stdItem.Name + "\t" +
                                                            UseItems[ItemLocation.Dress].MakeIndex + "\t"
                                                            + HUtil32.BoolToIntStr(Race == ActorRace.Play) +
@@ -2994,7 +2997,7 @@ namespace GameSrv.Player
 
             for (int i = 0; i < UseItems.Length; i++)
             {
-                if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (M2Share.RandomNumber.Random(8) == 0))
+                if ((UseItems[i] != null) && (UseItems[i].Index > 0) && (GameShare.RandomNumber.Random(8) == 0))
                 {
                     nDura = UseItems[i].Dura;
                     nOldDura = HUtil32.Round(nDura / 1000.0);
@@ -3002,10 +3005,10 @@ namespace GameSrv.Player
                     if (nDura <= 0)
                     {
                         SendDelItems(UseItems[i]);
-                        StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                        StdItem stdItem = GameShare.WorldEngine.GetStdItem(UseItems[i].Index);
                         if (stdItem.NeedIdentify == 1)
                         {
-                            M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
+                            GameShare.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
                                                    UseItems[i].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                         }
                         UseItems[i].Index = 0;
@@ -3118,7 +3121,7 @@ namespace GameSrv.Player
                                         //    cellInfo.Clear();
                                         //    break;
                                         //}
-                                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                        BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                                         if (baseObject != null && !baseObject.Invisible)
                                         {
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -3130,7 +3133,7 @@ namespace GameSrv.Player
                                                     {
                                                         if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange))
                                                         {
-                                                            M2Share.ActorMgr.SendMessage(baseObject.ActorId, Messages.RM_UPDATEVIEWRANGE, this.ActorId, 0, 0, 0, "");// 发送消息更新对方的视野
+                                                            GameShare.ActorMgr.SendMessage(baseObject.ActorId, Messages.RM_UPDATEVIEWRANGE, this.ActorId, 0, 0, 0, "");// 发送消息更新对方的视野
                                                         }
                                                     }
                                                 }
@@ -3138,7 +3141,7 @@ namespace GameSrv.Player
                                         }
                                         break;
                                     case CellType.Item:
-                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
+                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) > GameShare.Config.ClearDropOnFloorItemTime)// 60 * 60 * 1000
                                         {
                                             cellInfo.Remove(nIdx);
                                             if (cellInfo.Count > 0)
@@ -3148,7 +3151,7 @@ namespace GameSrv.Player
                                             cellInfo.Clear();
                                             break;
                                         }
-                                        MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                        MapItem mapItem = GameShare.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                         if (mapItem.ItemId == 0)
                                         {
                                             continue;
@@ -3156,23 +3159,23 @@ namespace GameSrv.Player
                                         UpdateVisibleItem(nX, nY, mapItem);
                                         if (mapItem.OfBaseObject > 0 || mapItem.DropBaseObject > 0)
                                         {
-                                            if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > M2Share.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
+                                            if ((HUtil32.GetTickCount() - mapItem.CanPickUpTick) > GameShare.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
                                             {
                                                 mapItem.OfBaseObject = 0;
                                                 mapItem.DropBaseObject = 0;
                                             }
                                             else
                                             {
-                                                if (M2Share.ActorMgr.Get(mapItem.OfBaseObject) != null)
+                                                if (GameShare.ActorMgr.Get(mapItem.OfBaseObject) != null)
                                                 {
-                                                    if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
+                                                    if (GameShare.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
                                                     {
                                                         mapItem.OfBaseObject = 0;
                                                     }
                                                 }
-                                                if (M2Share.ActorMgr.Get(mapItem.DropBaseObject) != null)
+                                                if (GameShare.ActorMgr.Get(mapItem.DropBaseObject) != null)
                                                 {
-                                                    if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
+                                                    if (GameShare.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
                                                     {
                                                         mapItem.DropBaseObject = 0;
                                                     }
@@ -3181,7 +3184,7 @@ namespace GameSrv.Player
                                         }
                                         break;
                                     case CellType.Event:
-                                        MapEvent mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                        MapEvent mapEvent = GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                         if (mapEvent == null)
                                         {
                                             continue;
@@ -3285,7 +3288,7 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(e.StackTrace);
+                GameShare.Logger.Error(e.StackTrace);
                 KickException();
             }
         }
@@ -3306,7 +3309,7 @@ namespace GameSrv.Player
             {
                 if (MyGuild != null)
                 {
-                    UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+                    UserCastle castle = GameShare.CastleMgr.IsCastleMember(this);
                     if (castle != null)
                     {
                         sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
@@ -3315,15 +3318,15 @@ namespace GameSrv.Player
                     }
                     else
                     {
-                        castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
-                        if (M2Share.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea)
+                        castle = GameShare.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
+                        if (GameShare.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea)
                         {
                             sGuildName = Settings.NoCastleGuildName.Replace("%guildname", MyGuild.GuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                         }
                     }
                 }
-                if (!M2Share.Config.ShowRankLevelName)
+                if (!GameShare.Config.ShowRankLevelName)
                 {
                     if (ReLevel > 0)
                     {
@@ -3379,8 +3382,8 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(e.Message);
             }
             return result;
         }
@@ -3395,7 +3398,7 @@ namespace GameSrv.Player
             StdItem stdItem;
             if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) // 衣服
             {
-                stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
+                stdItem = GameShare.WorldEngine.GetStdItem(UseItems[ItemLocation.Dress].Index);
                 if (stdItem != null)
                 {
                     nDress = (byte)(stdItem.Shape * 2);
@@ -3406,14 +3409,14 @@ namespace GameSrv.Player
             byte nWeapon = (byte)playGender;
             if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Index > 0) // 武器
             {
-                stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+                stdItem = GameShare.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                 if (stdItem != null)
                 {
                     nWeapon += (byte)(stdItem.Shape * 2);
                 }
             }
             byte nHair = (byte)(Hair * 2 + (byte)playGender);
-            return M2Share.MakeHumanFeature(0, nDress, nWeapon, nHair);
+            return GameShare.MakeHumanFeature(0, nDress, nWeapon, nHair);
         }
 
         public override void MakeGhost()
@@ -3421,29 +3424,29 @@ namespace GameSrv.Player
             const string sExceptionMsg = "[Exception] PlayObject::MakeGhost";
             try
             {
-                if (M2Share.HighLevelHuman == ActorId)
+                if (GameShare.HighLevelHuman == ActorId)
                 {
-                    M2Share.HighLevelHuman = 0;
+                    GameShare.HighLevelHuman = 0;
                 }
-                if (M2Share.HighPKPointHuman == ActorId)
+                if (GameShare.HighPKPointHuman == ActorId)
                 {
-                    M2Share.HighPKPointHuman = 0;
+                    GameShare.HighPKPointHuman = 0;
                 }
-                if (M2Share.HighDCHuman == ActorId)
+                if (GameShare.HighDCHuman == ActorId)
                 {
-                    M2Share.HighDCHuman = 0;
+                    GameShare.HighDCHuman = 0;
                 }
-                if (M2Share.HighMCHuman == ActorId)
+                if (GameShare.HighMCHuman == ActorId)
                 {
-                    M2Share.HighMCHuman = 0;
+                    GameShare.HighMCHuman = 0;
                 }
-                if (M2Share.HighSCHuman == ActorId)
+                if (GameShare.HighSCHuman == ActorId)
                 {
-                    M2Share.HighSCHuman = 0;
+                    GameShare.HighSCHuman = 0;
                 }
-                if (M2Share.HighOnlineHuman == ActorId)
+                if (GameShare.HighOnlineHuman == ActorId)
                 {
-                    M2Share.HighOnlineHuman = 0;
+                    GameShare.HighOnlineHuman = 0;
                 }
                 // 人物下线后通知配偶，并把对方的相关记录清空
                 string sSayMsg;
@@ -3515,8 +3518,8 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(e.Message);
             }
             base.MakeGhost();
             if (Ghost)
@@ -3538,16 +3541,16 @@ namespace GameSrv.Player
                 if (ItemList.Count > 0)
                 {
                     IList<DeleteItem> delList = new List<DeleteItem>();
-                    bool boDropall = M2Share.Config.DieRedScatterBagAll && PvpLevel() >= 2;
+                    bool boDropall = GameShare.Config.DieRedScatterBagAll && PvpLevel() >= 2;
                     for (int i = ItemList.Count - 1; i >= 0; i--)
                     {
-                        if (boDropall || M2Share.RandomNumber.Random(M2Share.Config.DieScatterBagRate) == 0)
+                        if (boDropall || GameShare.RandomNumber.Random(GameShare.Config.DieScatterBagRate) == 0)
                         {
                             if (DropItemDown(ItemList[i], dropWide, true, itemOfCreat, ActorId))
                             {
                                 delList.Add(new DeleteItem()
                                 {
-                                    ItemName = M2Share.WorldEngine.GetStdItemName(ItemList[i].Index),
+                                    ItemName = GameShare.WorldEngine.GetStdItemName(ItemList[i].Index),
                                     MakeIndex = ItemList[i].MakeIndex
                                 });
                                 Dispose(ItemList[i]);
@@ -3558,14 +3561,14 @@ namespace GameSrv.Player
                     if (delList.Count > 0)
                     {
                         int objectId = HUtil32.Sequence();
-                        M2Share.ActorMgr.AddOhter(objectId, delList);
+                        GameShare.ActorMgr.AddOhter(objectId, delList);
                         SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
                     }
                 }
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(sExceptionMsg);
             }
         }
 
@@ -3576,7 +3579,7 @@ namespace GameSrv.Player
             {
                 return base.GetNameColor();
             }
-            return pvpLevel >= 2 ? M2Share.Config.PKLevel2NameColor : M2Share.Config.PKLevel1NameColor;
+            return pvpLevel >= 2 ? GameShare.Config.PKLevel2NameColor : GameShare.Config.PKLevel1NameColor;
         }
 
         protected override byte GetChrColor(BaseObject baseObject)
@@ -3589,28 +3592,28 @@ namespace GameSrv.Player
                 {
                     if (targetObject.PvpFlag)
                     {
-                        result = M2Share.Config.PKFlagNameColor;
+                        result = GameShare.Config.PKFlagNameColor;
                     }
                     int n10 = GetGuildRelation(this, targetObject);
                     switch (n10)
                     {
                         case 1:
                         case 3:
-                            result = M2Share.Config.AllyAndGuildNameColor;
+                            result = GameShare.Config.AllyAndGuildNameColor;
                             break;
                         case 2:
-                            result = M2Share.Config.WarGuildNameColor;
+                            result = GameShare.Config.WarGuildNameColor;
                             break;
                     }
                     if (targetObject.Envir.Flag.Fight3Zone)
                     {
-                        result = MyGuild == targetObject.MyGuild ? M2Share.Config.AllyAndGuildNameColor : M2Share.Config.WarGuildNameColor;
+                        result = MyGuild == targetObject.MyGuild ? GameShare.Config.AllyAndGuildNameColor : GameShare.Config.WarGuildNameColor;
                     }
                 }
-                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
+                UserCastle castle = GameShare.CastleMgr.InCastleWarArea(targetObject);
                 if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea)
                 {
-                    result = M2Share.Config.InFreePKAreaNameColor;
+                    result = GameShare.Config.InFreePKAreaNameColor;
                     GuildWarArea = true;
                     if (MyGuild == null)
                     {
@@ -3620,13 +3623,13 @@ namespace GameSrv.Player
                     {
                         if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
                         {
-                            result = M2Share.Config.AllyAndGuildNameColor;
+                            result = GameShare.Config.AllyAndGuildNameColor;
                         }
                         else
                         {
                             if (castle.IsAttackGuild(targetObject.MyGuild))
                             {
-                                result = M2Share.Config.WarGuildNameColor;
+                                result = GameShare.Config.WarGuildNameColor;
                             }
                         }
                     }
@@ -3636,13 +3639,13 @@ namespace GameSrv.Player
                         {
                             if ((MyGuild == targetObject.MyGuild) || MyGuild.IsAllyGuild(targetObject.MyGuild))
                             {
-                                result = M2Share.Config.AllyAndGuildNameColor;
+                                result = GameShare.Config.AllyAndGuildNameColor;
                             }
                             else
                             {
                                 if (castle.IsMember(targetObject))
                                 {
-                                    result = M2Share.Config.WarGuildNameColor;
+                                    result = GameShare.Config.WarGuildNameColor;
                                 }
                             }
                         }
@@ -3661,17 +3664,17 @@ namespace GameSrv.Player
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    bonusTick = M2Share.Config.BonusAbilofWarr;
+                    bonusTick = GameShare.Config.BonusAbilofWarr;
                     HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
                     SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
                     break;
                 case PlayJob.Wizard:
-                    bonusTick = M2Share.Config.BonusAbilofWizard;
+                    bonusTick = GameShare.Config.BonusAbilofWizard;
                     HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
                     SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
                     break;
                 case PlayJob.Taoist:
-                    bonusTick = M2Share.Config.BonusAbilofTaos;
+                    bonusTick = GameShare.Config.BonusAbilofTaos;
                     SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
                     break;
             }
@@ -3700,7 +3703,7 @@ namespace GameSrv.Player
                         }
                         HitPlus = (byte)(Settings.DEFHIT + userMagic.Level);
                         AttackSkillCount = (byte)(7 - userMagic.Level);
-                        AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
+                        AttackSkillPointCount = GameShare.RandomNumber.RandomByte(AttackSkillCount);
                         break;
                     case MagicConst.SKILL_FIRESWORD: // 烈火剑法
                         HitDouble = (byte)(4 + userMagic.Level * 4);
@@ -3738,7 +3741,7 @@ namespace GameSrv.Player
                 {
                     return false;
                 }
-                UserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
+                UserCastle castle = GameShare.CastleMgr.IsCastlePalaceEnvir(envir);
                 if ((castle != null))
                 {
                     if (!castle.CheckInPalace(CurrX, CurrY))
@@ -3798,7 +3801,7 @@ namespace GameSrv.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(sExceptionMsg);
             }
             return result;
         }
@@ -3807,59 +3810,59 @@ namespace GameSrv.Player
         {
             int nGold = 0;
             int nWinLevel = 0;
-            int nRate = M2Share.RandomNumber.Random(M2Share.Config.WinLotteryRate);
-            if (nRate >= M2Share.Config.WinLottery6Min && nRate <= M2Share.Config.WinLottery6Max)
+            int nRate = GameShare.RandomNumber.Random(GameShare.Config.WinLotteryRate);
+            if (nRate >= GameShare.Config.WinLottery6Min && nRate <= GameShare.Config.WinLottery6Max)
             {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                if (GameShare.Config.WinLotteryCount < GameShare.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.WinLottery6Gold;
+                    nGold = GameShare.Config.WinLottery6Gold;
                     nWinLevel = 6;
-                    M2Share.Config.WinLotteryLevel6++;
+                    GameShare.Config.WinLotteryLevel6++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery5Min && nRate <= M2Share.Config.WinLottery5Max)
+            else if (nRate >= GameShare.Config.WinLottery5Min && nRate <= GameShare.Config.WinLottery5Max)
             {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                if (GameShare.Config.WinLotteryCount < GameShare.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.WinLottery5Gold;
+                    nGold = GameShare.Config.WinLottery5Gold;
                     nWinLevel = 5;
-                    M2Share.Config.WinLotteryLevel5++;
+                    GameShare.Config.WinLotteryLevel5++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery4Min && nRate <= M2Share.Config.WinLottery4Max)
+            else if (nRate >= GameShare.Config.WinLottery4Min && nRate <= GameShare.Config.WinLottery4Max)
             {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                if (GameShare.Config.WinLotteryCount < GameShare.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.WinLottery4Gold;
+                    nGold = GameShare.Config.WinLottery4Gold;
                     nWinLevel = 4;
-                    M2Share.Config.WinLotteryLevel4++;
+                    GameShare.Config.WinLotteryLevel4++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery3Min && nRate <= M2Share.Config.WinLottery3Max)
+            else if (nRate >= GameShare.Config.WinLottery3Min && nRate <= GameShare.Config.WinLottery3Max)
             {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                if (GameShare.Config.WinLotteryCount < GameShare.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.WinLottery3Gold;
+                    nGold = GameShare.Config.WinLottery3Gold;
                     nWinLevel = 3;
-                    M2Share.Config.WinLotteryLevel3++;
+                    GameShare.Config.WinLotteryLevel3++;
                 }
             }
-            else if (nRate >= M2Share.Config.WinLottery2Min && nRate <= M2Share.Config.WinLottery2Max)
+            else if (nRate >= GameShare.Config.WinLottery2Min && nRate <= GameShare.Config.WinLottery2Max)
             {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                if (GameShare.Config.WinLotteryCount < GameShare.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.WinLottery2Gold;
+                    nGold = GameShare.Config.WinLottery2Gold;
                     nWinLevel = 2;
-                    M2Share.Config.WinLotteryLevel2++;
+                    GameShare.Config.WinLotteryLevel2++;
                 }
             }
-            else if (M2Share.Config.WinLottery1Min + M2Share.Config.WinLottery1Max == nRate)
+            else if (GameShare.Config.WinLottery1Min + GameShare.Config.WinLottery1Max == nRate)
             {
-                if (M2Share.Config.WinLotteryCount < M2Share.Config.NoWinLotteryCount)
+                if (GameShare.Config.WinLotteryCount < GameShare.Config.NoWinLotteryCount)
                 {
-                    nGold = M2Share.Config.WinLottery1Gold;
+                    nGold = GameShare.Config.WinLottery1Gold;
                     nWinLevel = 1;
-                    M2Share.Config.WinLotteryLevel1++;
+                    GameShare.Config.WinLotteryLevel1++;
                 }
             }
             if (nGold > 0)
@@ -3896,7 +3899,7 @@ namespace GameSrv.Player
             }
             else
             {
-                M2Share.Config.NoWinLotteryCount += 500;
+                GameShare.Config.NoWinLotteryCount += 500;
                 SysMsg(Settings.NotWinLotteryMsg, MsgColor.Red, MsgType.Hint);
             }
         }
@@ -3907,10 +3910,10 @@ namespace GameSrv.Player
             switch (nIndex)
             {
                 case 1:
-                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.FireBallSkill);
+                    magic = GameShare.WorldEngine.FindMagic(GameShare.Config.FireBallSkill);
                     break;
                 case 2:
-                    magic = M2Share.WorldEngine.FindMagic(M2Share.Config.HealSkill);
+                    magic = GameShare.WorldEngine.FindMagic(GameShare.Config.HealSkill);
                     break;
             }
             if (magic != null)
@@ -4110,7 +4113,7 @@ namespace GameSrv.Player
             {
                 UserItem useItems = new UserItem(UseItems[ItemLocation.Weapon]);
                 CheckWeaponUpgradeStatus(ref UseItems[ItemLocation.Weapon]);
-                StdItem StdItem = M2Share.WorldEngine.GetStdItem(useItems.Index);
+                StdItem StdItem = GameShare.WorldEngine.GetStdItem(useItems.Index);
                 if (UseItems[ItemLocation.Weapon].Index == 0)
                 {
                     SysMsg(Settings.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
@@ -4118,7 +4121,7 @@ namespace GameSrv.Player
                     SendRefMsg(Messages.RM_BREAKWEAPON, 0, 0, 0, 0, "");
                     if (StdItem?.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(21, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem?.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        GameShare.EventSource.AddEventLog(21, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem?.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     FeatureChanged();
                 }
@@ -4128,7 +4131,7 @@ namespace GameSrv.Player
                     SendUpdateItem(UseItems[ItemLocation.Weapon]);
                     if (StdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        GameShare.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     RecalcAbilitys();
                     SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
@@ -4142,7 +4145,7 @@ namespace GameSrv.Player
         /// </summary>
         private static void CheckWeaponUpgradeStatus(ref UserItem userItem)
         {
-            if ((userItem.Desc[0] + userItem.Desc[1] + userItem.Desc[2]) < M2Share.Config.UpgradeWeaponMaxPoint)
+            if ((userItem.Desc[0] + userItem.Desc[1] + userItem.Desc[2]) < GameShare.Config.UpgradeWeaponMaxPoint)
             {
                 if (userItem.Desc[ItemAttr.WeaponUpgrade] == 1)
                 {
@@ -4353,7 +4356,7 @@ namespace GameSrv.Player
 
         internal void CheckPkStatus()
         {
-            if (PvpFlag && ((HUtil32.GetTickCount() - PvpNameColorTick) > M2Share.Config.dwPKFlagTime)) // 60 * 1000
+            if (PvpFlag && ((HUtil32.GetTickCount() - PvpNameColorTick) > GameShare.Config.dwPKFlagTime)) // 60 * 1000
             {
                 PvpFlag = false;
                 RefNameColor();
@@ -4606,7 +4609,7 @@ namespace GameSrv.Player
 
         internal static void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
         {
-            StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            StdItem item = GameShare.WorldEngine.GetStdItem(uitem.Index);
             if (item != null)
             {
                 ClientItem clientItem = new ClientItem();
@@ -4876,7 +4879,7 @@ namespace GameSrv.Player
 
         private void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std)
         {
-            StdItem item = M2Share.WorldEngine.GetStdItem(uitem.Index);
+            StdItem item = GameShare.WorldEngine.GetStdItem(uitem.Index);
             if (item != null)
             {
                 if ((item.StdMode == 22) && (item.Shape == DragonConst.DRAGON_RING_SHAPE))
@@ -5099,13 +5102,13 @@ namespace GameSrv.Player
                 case 1:
                     if (Job != PlayJob.Wizard)
                     {
-                        DeleteNameSkill(M2Share.Config.FireBallSkill);
+                        DeleteNameSkill(GameShare.Config.FireBallSkill);
                     }
                     break;
                 case 2:
                     if (Job != PlayJob.Taoist)
                     {
-                        DeleteNameSkill(M2Share.Config.HealSkill);
+                        DeleteNameSkill(GameShare.Config.HealSkill);
                     }
                     break;
             }
@@ -5150,7 +5153,7 @@ namespace GameSrv.Player
             {
                 return false;
             }
-            PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+            PlayObject groupOwnerPlay = (PlayObject)GameShare.ActorMgr.Get(GroupOwner);
             for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
                 if (groupOwnerPlay.GroupMembers[i] == target)
@@ -5172,13 +5175,13 @@ namespace GameSrv.Player
 
         public void SendGroupText(string sMsg)
         {
-            sMsg = M2Share.Config.GroupMsgPreFix + sMsg;
+            sMsg = GameShare.Config.GroupMsgPreFix + sMsg;
             if (GroupOwner != 0)
             {
-                PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                PlayObject groupOwnerPlay = (PlayObject)GameShare.ActorMgr.Get(GroupOwner);
                 for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 {
-                    groupOwnerPlay.GroupMembers[i].SendMsg(this, Messages.RM_GROUPMESSAGE, 0, M2Share.Config.GroupMsgFColor, M2Share.Config.GroupMsgBColor, 0, sMsg);
+                    groupOwnerPlay.GroupMembers[i].SendMsg(this, Messages.RM_GROUPMESSAGE, 0, GameShare.Config.GroupMsgFColor, GameShare.Config.GroupMsgBColor, 0, sMsg);
                 }
             }
         }
@@ -5233,9 +5236,9 @@ namespace GameSrv.Player
             RecalcLevelAbilitys();
             RecalcAbilitys();
             SendMsg(Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0);
-            if (M2Share.FunctionNPC != null)
+            if (GameShare.FunctionNPC != null)
             {
-                M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
+                GameShare.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
         }
 
@@ -5246,8 +5249,8 @@ namespace GameSrv.Player
             switch (this.Job)
             {
                 case PlayJob.Taoist:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round((nLevel / (double)M2Share.Config.nLevelValueOfTaosHP + M2Share.Config.nLevelValueOfTaosHPRate) * nLevel));
-                    Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 13 + HUtil32.Round(nLevel / (double)M2Share.Config.nLevelValueOfTaosMP * 2.2 * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round((nLevel / (double)GameShare.Config.nLevelValueOfTaosHP + GameShare.Config.nLevelValueOfTaosHPRate) * nLevel));
+                    Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 13 + HUtil32.Round(nLevel / (double)GameShare.Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4.0 * nLevel));
                     Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, (15 + HUtil32.Round(nLevel / 50.0 * nLevel)));
                     if ((12 + HUtil32.Round(Abil.Level / 13.0 * Abil.Level)) > 255)
@@ -5267,7 +5270,7 @@ namespace GameSrv.Player
                     Abil.MAC = HUtil32.MakeWord((ushort)(n / 2), (ushort)(n + 1));
                     break;
                 case PlayJob.Wizard:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)M2Share.Config.nLevelValueOfWizardHP) + M2Share.Config.nLevelValueOfWizardHPRate) * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)GameShare.Config.nLevelValueOfWizardHP) + GameShare.Config.nLevelValueOfWizardHPRate) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 13 + HUtil32.Round(((nLevel / (double)5) + 2) * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5.0 * nLevel));
                     Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, 15 + HUtil32.Round(nLevel / 100.0 * nLevel));
@@ -5280,7 +5283,7 @@ namespace GameSrv.Player
                     Abil.MAC = 0;
                     break;
                 case PlayJob.Warrior:
-                    Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)M2Share.Config.nLevelValueOfWarrHP) + M2Share.Config.nLevelValueOfWarrHPRate + (nLevel / (double)20)) * nLevel));
+                    Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)GameShare.Config.nLevelValueOfWarrHP) + GameShare.Config.nLevelValueOfWarrHPRate + (nLevel / (double)20)) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3.0 * nLevel));
                     Abil.MaxWearWeight = (byte)HUtil32._MIN(byte.MaxValue, (15 + HUtil32.Round(nLevel / 20.0 * nLevel)));
@@ -5327,7 +5330,7 @@ namespace GameSrv.Player
                 {
                     continue;
                 }
-                string sName = M2Share.WorldEngine.GetStdItemName(UseItems[i].Index);
+                string sName = GameShare.WorldEngine.GetStdItemName(UseItems[i].Index);
                 if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UseItems[i];
@@ -5346,10 +5349,10 @@ namespace GameSrv.Player
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem pSItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    StdItem pSItem = GameShare.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (pSItem != null)
                     {
-                        if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
+                        if (GameShare.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) && GameShare.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
                         {
                             ushort nDura = UseItems[i].Dura;
                             ushort tDura = (ushort)HUtil32.Round(nDura / 1000.0);
@@ -5404,7 +5407,7 @@ namespace GameSrv.Player
                 }
                 if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0))
                 {
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[i].Index);
+                    StdItem stdItem = GameShare.WorldEngine.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if (currentLight < stdItem.Light)

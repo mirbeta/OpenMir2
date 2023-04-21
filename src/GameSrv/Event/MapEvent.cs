@@ -1,5 +1,6 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Maps;
+using M2Server.Actor;
 
 namespace GameSrv.Event
 {
@@ -56,7 +57,7 @@ namespace GameSrv.Event
 
         public MapEvent(Envirnoment envir, short ntX, short ntY, byte nType, int dwETime, bool boVisible)
         {
-            Id = M2Share.ActorMgr.GetNextIdentity();
+            Id = GameShare.ActorMgr.GetNextIdentity();
             OpenStartTick = HUtil32.GetTickCount();
             EventType = nType;
             EventParam = 0;

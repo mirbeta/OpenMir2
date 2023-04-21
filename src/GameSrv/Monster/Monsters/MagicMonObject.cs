@@ -6,7 +6,7 @@
         public bool UseMagic;
 
         public MagicMonObject() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
             UseMagic = false;
         }
 
@@ -36,7 +36,7 @@
                     if (UseMagic || nX == 5 || nY == 5) {
                         if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime) {
                             AttackTick = HUtil32.GetTickCount();
-                            int nAttackDir = M2Share.GetNextDirection(CurrX, CurrY, Master.CurrX, Master.CurrY);
+                            int nAttackDir = GameShare.GetNextDirection(CurrX, CurrY, Master.CurrX, Master.CurrY);
                             LightingAttack(nAttackDir);
                         }
                     }

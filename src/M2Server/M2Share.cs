@@ -1,31 +1,15 @@
-using GameSrv.Actor;
-using GameSrv.Castle;
-using GameSrv.Conf;
-using GameSrv.Conf.Model;
-using GameSrv.DataSource;
-using GameSrv.Event;
-using GameSrv.Guild;
-using GameSrv.Items;
-using GameSrv.Maps;
-using GameSrv.Maps.AutoPath;
-using GameSrv.Network;
-using GameSrv.Notices;
-using GameSrv.Npc;
-using GameSrv.Robots;
-using GameSrv.Script;
-using GameSrv.Services;
-using GameSrv.World;
-using GameSrv.World.Managers;
-using GameSrv.World.Threads;
+using M2Server.Conf;
+using M2Server.Conf.Model;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSrv
+namespace M2Server
 {
     public static class M2Share
     {
@@ -42,49 +26,14 @@ namespace GameSrv
         /// 服务器启动时间
         /// </summary>
         public static long StartTime;
-        public static int ShareFileNameNum = 0;
-        public static int ServerTickDifference = 0;
-        public static readonly WordStatistics Statistics;
         public static readonly ActorMgr ActorMgr;
-        /// <summary>
-        /// 寻路
-        /// </summary>
-        public static readonly FindPath FindPath;
         /// <summary>
         /// 地图对象管理
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
-        public static readonly LocalDb LocalDb;
-        public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
-        public static DBService DataServer = null;
-        public static MarketService MarketService = null;
-        public static ChatChannelService ChatChannel = null;
-        public static ScriptEngine ScriptSystem = null;
-        public static ThreadSocketMgr SocketMgr = null;
-        public static GameEventSource EventSource;
-        public static MapManager MapMgr = null;
-        public static CustomItem CustomItemMgr = null;
-        public static MarketManager MarketManager = null;
-        public static NoticeManager NoticeMgr = null;
-        public static GuildManager GuildMgr = null;
-        public static EventManager EventMgr = null;
-        public static CastleManager CastleMgr = null;
-        public static FrontEngine FrontEngine = null;
-        public static WorldServer WorldEngine = null;
-        public static RobotManage RobotMgr = null;
         public static NormNpc ManageNPC = null;
         public static NormNpc RobotNPC = null;
-        public static Merchant FunctionNPC = null;
-        public static NetworkMonitor NetworkMonitor;
-        public static SystemProcessor SystemProcess;
-        public static UserProcessor UserProcessor;
-        public static RobotProcessor RobotProcessor;
-        public static MerchantProcessor MerchantProcessor;
-        public static GeneratorProcessor GeneratorProcessor;
-        public static EventProcessor EventProcessor;
-        public static StorageProcessor StorageProcessor;
-        public static TimedRobotProcessor TimedRobotProcessor;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -94,7 +43,6 @@ namespace GameSrv
         public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
         public static IList<StartPoint> StartPointList = null;
         public static TRouteInfo[] ServerTableList = null;
-        public static IList<IList<TQDDinfo>> QuestDiaryList = null;
         public static StringList AbuseTextList = null;
         public static ConcurrentDictionary<string, long> DenySayMsgList = null;
         public static ConcurrentDictionary<string, short> MiniMapList = null;
@@ -229,21 +177,8 @@ namespace GameSrv
             GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.GameSettingFileName));
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
-            Statistics = new WordStatistics();
             ActorMgr = new ActorMgr();
-            LocalDb = new LocalDb();
-            CommonDb = new CommonDB();
-            FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
-            NetworkMonitor = new NetworkMonitor();
-            SystemProcess = new SystemProcessor();
-            UserProcessor = new UserProcessor();
-            RobotProcessor = new RobotProcessor();
-            MerchantProcessor = new MerchantProcessor();
-            GeneratorProcessor = new GeneratorProcessor();
-            EventProcessor = new EventProcessor();
-            StorageProcessor = new StorageProcessor();
-            TimedRobotProcessor = new TimedRobotProcessor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

@@ -22,8 +22,8 @@ namespace GameSrv.Maps {
         /// 地图安全区
         /// </summary>
         public void MakeSafePkZone() {
-            for (int i = 0; i < M2Share.StartPointList.Count; i++) {
-                var startPoint = M2Share.StartPointList[i];
+            for (int i = 0; i < GameShare.StartPointList.Count; i++) {
+                var startPoint = GameShare.StartPointList[i];
                 if (string.IsNullOrEmpty(startPoint.MapName) && startPoint.Type > 0) {
                     Envirnoment envir = FindMap(startPoint.MapName);
                     if (envir != null) {
@@ -35,7 +35,7 @@ namespace GameSrv.Maps {
                             for (short nY = nMinY; nY <= nMaxY; nY++) {
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY) {
                                     SafeEvent safeEvent = new SafeEvent(envir, nX, nY, (byte)startPoint.Type);
-                                    M2Share.EventMgr.AddEvent(safeEvent);
+                                    GameShare.EventMgr.AddEvent(safeEvent);
                                 }
                             }
                         }
@@ -75,10 +75,10 @@ namespace GameSrv.Maps {
                 Flag = mapFlag,
                 QuestNpc = questNpc
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap)) {
+            if (GameShare.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap)) {
                 envirnoment.MinMap = minMap;
             }
-            if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.MapDir, sMapFileName + ".map"))) {
+            if (envirnoment.LoadMapData(Path.Combine(GameShare.BasePath, GameShare.Config.MapDir, sMapFileName + ".map"))) {
                 if (!_mapList.ContainsKey(sMapName)) {
                     _mapList.Add(sMapName, envirnoment);
                 }
@@ -110,7 +110,7 @@ namespace GameSrv.Maps {
             {
                 MapRouteItem mapRoute = new MapRouteItem
                 {
-                    RouteId = M2Share.ActorMgr.GetNextIdentity(),
+                    RouteId = GameShare.ActorMgr.GetNextIdentity(),
                     Flag = false,
                     Envir = dEnvir,
                     X = (short)nDMapX,

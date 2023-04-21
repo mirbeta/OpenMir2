@@ -8,7 +8,7 @@
             ThinkTick = HUtil32.GetTickCount();
             ViewRange = 8;
             RunTime = 250;
-            SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
+            SearchTime = 3000 + GameShare.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
             Race = 215;
         }
@@ -32,7 +32,7 @@
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
-                WalkTo(M2Share.RandomNumber.RandomByte(8), false, BoFearFire);
+                WalkTo(GameShare.RandomNumber.RandomByte(8), false, BoFearFire);
                 if (nOldX != CurrX || nOldY != CurrY)
                 {
                     DupMode = false;

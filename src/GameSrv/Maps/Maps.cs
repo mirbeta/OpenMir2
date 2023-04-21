@@ -26,7 +26,7 @@ namespace GameSrv.Maps {
             var sLine = string.Empty;
             var sReConnectMap = string.Empty;
             var result = -1;
-            var sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
+            var sFileName = GameShare.GetEnvirFilePath("MapInfo.txt");
             if (File.Exists(sFileName)) {
                 using var loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
@@ -287,7 +287,7 @@ namespace GameSrv.Maps {
                                 MapFlag.RequestLevel = HUtil32.StrToInt(sCommand[1..], 1);
                             }
                         }
-                        M2Share.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC);
+                        GameShare.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC);
                         result = 1;
                     }
                 }
@@ -308,11 +308,11 @@ namespace GameSrv.Maps {
                         var n1C = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, new[] { ' ', ',', ';', '\t' });
                         var n20 = HUtil32.StrToInt(sCommand, 0);
-                        M2Share.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
+                        GameShare.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
                 }
             }
-            logger.Info($"地图数据加载成功...[{M2Share.MapMgr.Maps.Count}]");
+            logger.Info($"地图数据加载成功...[{GameShare.MapMgr.Maps.Count}]");
             return result;
         }
 
@@ -321,10 +321,10 @@ namespace GameSrv.Maps {
             var sMapNo = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
-            var sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
+            var sFileName = GameShare.GetEnvirFilePath("MiniMap.txt");
             if (File.Exists(sFileName))
             {
-                M2Share.MiniMapList.Clear();
+                GameShare.MiniMapList.Clear();
                 var tMapList = new StringList();
                 tMapList.LoadFromFile(sFileName);
                 for (var i = 0; i < tMapList.Count; i++)
@@ -337,12 +337,12 @@ namespace GameSrv.Maps {
                         var nIdx = (short)HUtil32.StrToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {
-                            if (M2Share.MiniMapList.ContainsKey(sMapNo))
+                            if (GameShare.MiniMapList.ContainsKey(sMapNo))
                             {
-                                M2Share.Logger.Error($"重复小地图配置信息[{sMapNo}]");
+                                GameShare.Logger.Error($"重复小地图配置信息[{sMapNo}]");
                                 continue;
                             }
-                            M2Share.MiniMapList.TryAdd(sMapNo, nIdx);
+                            GameShare.MiniMapList.TryAdd(sMapNo, nIdx);
                         }
                     }
                 }
@@ -357,7 +357,7 @@ namespace GameSrv.Maps {
         private static void MakeStoneMines() {
             var sw = new Stopwatch();
             sw.Start();
-            IList<Envirnoment> mineMapList = M2Share.MapMgr.GetMineMaps();
+            IList<Envirnoment> mineMapList = GameShare.MapMgr.GetMineMaps();
             logger.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
             for (var i = 0; i < mineMapList.Count; i++) {
                 var envir = mineMapList[i];
@@ -365,7 +365,7 @@ namespace GameSrv.Maps {
                     for (short nH = 0; nH < envir.Height; nH++) {
                         var mine = new StoneMineEvent(envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap) {
-                            M2Share.CellObjectMgr.Remove(mine.Id);
+                            GameShare.CellObjectMgr.Remove(mine.Id);
                             mine.Dispose();
                         }
                     }
@@ -387,12 +387,12 @@ namespace GameSrv.Maps {
                 IsHide = true,
                 IsQuest = false
             };
-            M2Share.WorldEngine.QuestNpcList.Add(questNPC);
+            GameShare.WorldEngine.QuestNpcList.Add(questNPC);
             return questNPC;
         }
 
         private static void LoadSubMapInfo(StringList loadList, string sFileName) {
-            var sFileDir = M2Share.GetEnvirFilePath("MapInfo");
+            var sFileDir = GameShare.GetEnvirFilePath("MapInfo");
             if (!Directory.Exists(sFileDir)) {
                 Directory.CreateDirectory(sFileDir);
             }

@@ -38,12 +38,12 @@ namespace GameSrv.GameCommand.Commands {
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = M2Share.MapMgr.FindMap(sMap);
+            var envir = GameShare.MapMgr.FindMap(sMap);
             if (envir != null) {
                 var oldEnvir = playObject.Envir;
                 playObject.Envir = envir;
                 var fireBurnEvent = new FireBurnEvent(playObject, nX, nY, nType, nTime * 1000, nPoint);
-                M2Share.EventMgr.AddEvent(fireBurnEvent);
+                GameShare.EventMgr.AddEvent(fireBurnEvent);
                 playObject.Envir = oldEnvir;
                 return;
             }

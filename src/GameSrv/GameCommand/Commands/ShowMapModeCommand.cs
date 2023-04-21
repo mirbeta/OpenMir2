@@ -18,7 +18,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = GameShare.MapMgr.FindMap(sMapName);
             if (envir == null) {
                 playObject.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;

@@ -148,7 +148,7 @@ namespace GameSrv.Player
                         }
                         if (nSecPwr > 0)
                         {
-                            if (!SwordLongAttack(ref nSecPwr) && M2Share.Config.LimitSwordLong)
+                            if (!SwordLongAttack(ref nSecPwr) && GameShare.Config.LimitSwordLong)
                             {
                                 wHitMode = 0;
                             }
@@ -215,11 +215,11 @@ namespace GameSrv.Player
             {
                 return;
             }
-            if (!targetObject.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(targetObject.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
+            if (!targetObject.UnParalysis && Paralysis && (GameShare.RandomNumber.Random(targetObject.AntiPoison + GameShare.Config.AttackPosionRate) == 0))
             {
-                targetObject.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
+                targetObject.MakePosion(PoisonState.STONE, GameShare.Config.AttackPosionTime, 0);
             }
-            ushort nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
+            ushort nWeaponDamage = (ushort)(GameShare.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
             if ((nWeaponDamage > 0) && (UseItems[ItemLocation.Weapon] != null) && (UseItems[ItemLocation.Weapon].Index > 0))
             {
                 DoDamageWeapon(nWeaponDamage);
@@ -240,7 +240,7 @@ namespace GameSrv.Player
                 attackMagic = GetAttackMagic(MagicConst.SKILL_ILKWANG);
                 if (attackMagic.Level < 3)
                 {
-                    CheckSkillProficiency(M2Share.RandomNumber.Random(3) + 1, attackMagic);
+                    CheckSkillProficiency(GameShare.RandomNumber.Random(3) + 1, attackMagic);
                 }
             }
             if (canHit && (MagicArr[MagicConst.SKILL_YEDO] != null))
@@ -248,7 +248,7 @@ namespace GameSrv.Player
                 attackMagic = GetAttackMagic(MagicConst.SKILL_YEDO);
                 if (attackMagic.Level < 3)
                 {
-                    CheckSkillProficiency(M2Share.RandomNumber.Random(3) + 1, attackMagic);
+                    CheckSkillProficiency(GameShare.RandomNumber.Random(3) + 1, attackMagic);
                 }
             }
             switch (wHitMode)
@@ -278,28 +278,28 @@ namespace GameSrv.Player
                     CheckSkillProficiency(1, attackMagic);
                     break;
             }
-            if (M2Share.Config.MonDelHptoExp)
+            if (GameShare.Config.MonDelHptoExp)
             {
                 switch (Race)
                 {
                     case ActorRace.Play:
                         if (IsRobot)
                         {
-                            if (((RobotPlayer)this).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                            if (((RobotPlayer)this).Abil.Level <= GameShare.Config.MonHptoExpLevel)
                             {
-                                if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
+                                if (!GameShare.GetNoHptoexpMonList(targetObject.ChrName))
                                 {
-                                    ((RobotPlayer)this).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                    ((RobotPlayer)this).GainExp(nPower * GameShare.Config.MonHptoExpmax);
                                 }
                             }
                         }
                         else
                         {
-                            if (Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                            if (Abil.Level <= GameShare.Config.MonHptoExpLevel)
                             {
-                                if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
+                                if (!GameShare.GetNoHptoexpMonList(targetObject.ChrName))
                                 {
-                                    GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                    GainExp(nPower * GameShare.Config.MonHptoExpmax);
                                 }
                             }
                         }
@@ -309,21 +309,21 @@ namespace GameSrv.Player
                         {
                             if (Master.IsRobot)
                             {
-                                if (((RobotPlayer)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if (((RobotPlayer)Master).Abil.Level <= GameShare.Config.MonHptoExpLevel)
                                 {
-                                    if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
+                                    if (!GameShare.GetNoHptoexpMonList(targetObject.ChrName))
                                     {
-                                        ((RobotPlayer)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                        ((RobotPlayer)Master).GainExp(nPower * GameShare.Config.MonHptoExpmax);
                                     }
                                 }
                             }
                             else
                             {
-                                if (((PlayObject)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if (((PlayObject)Master).Abil.Level <= GameShare.Config.MonHptoExpLevel)
                                 {
-                                    if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
+                                    if (!GameShare.GetNoHptoexpMonList(targetObject.ChrName))
                                     {
-                                        ((PlayObject)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                        ((PlayObject)Master).GainExp(nPower * GameShare.Config.MonHptoExpmax);
                                     }
                                 }
                             }
@@ -358,7 +358,7 @@ namespace GameSrv.Player
             {
                 if ((MagicArr[MagicConst.SKILL_ONESWORD].Level < MagicArr[MagicConst.SKILL_ONESWORD].Magic.TrainLv) && (MagicArr[MagicConst.SKILL_ONESWORD].Magic.TrainLevel[MagicArr[MagicConst.SKILL_ONESWORD].Level] <= nCLevel))
                 {
-                    TrainSkill(MagicArr[MagicConst.SKILL_ONESWORD], M2Share.RandomNumber.Random(3) + 1);
+                    TrainSkill(MagicArr[MagicConst.SKILL_ONESWORD], GameShare.RandomNumber.Random(3) + 1);
                     if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_ONESWORD]))
                     {
                         SendSelfDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ONESWORD].Magic.MagicId, MagicArr[MagicConst.SKILL_ONESWORD].Level, MagicArr[MagicConst.SKILL_ONESWORD].TranPoint, "", 3000);
@@ -369,7 +369,7 @@ namespace GameSrv.Player
             {
                 if ((MagicArr[MagicConst.SKILL_ILKWANG].Level < MagicArr[MagicConst.SKILL_ILKWANG].Magic.TrainLv) && (MagicArr[MagicConst.SKILL_ILKWANG].Magic.TrainLevel[MagicArr[MagicConst.SKILL_ILKWANG].Level] <= nCLevel))
                 {
-                    TrainSkill(MagicArr[MagicConst.SKILL_ILKWANG], M2Share.RandomNumber.Random(3) + 1);
+                    TrainSkill(MagicArr[MagicConst.SKILL_ILKWANG], GameShare.RandomNumber.Random(3) + 1);
                     if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_ILKWANG]))
                     {
                         SendSelfDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_ILKWANG].Magic.MagicId, MagicArr[MagicConst.SKILL_ILKWANG].Level, MagicArr[MagicConst.SKILL_ILKWANG].TranPoint, "", 3000);
@@ -382,7 +382,7 @@ namespace GameSrv.Player
                     {
                         if ((MagicArr[MagicConst.SKILL_YEDO].Level < MagicArr[MagicConst.SKILL_YEDO].Magic.TrainLv) && (MagicArr[MagicConst.SKILL_YEDO].Magic.TrainLevel[MagicArr[MagicConst.SKILL_YEDO].Level] <= nCLevel))
                         {
-                            TrainSkill(MagicArr[MagicConst.SKILL_YEDO], M2Share.RandomNumber.Random(3) + 1);
+                            TrainSkill(MagicArr[MagicConst.SKILL_YEDO], GameShare.RandomNumber.Random(3) + 1);
                             if (!CheckMagicLevelUp(MagicArr[MagicConst.SKILL_YEDO]))
                             {
                                 SendSelfDelayMsg(Messages.RM_MAGIC_LVEXP, 0, MagicArr[MagicConst.SKILL_YEDO].Magic.MagicId, MagicArr[MagicConst.SKILL_YEDO].Level, MagicArr[MagicConst.SKILL_YEDO].TranPoint, "", 3000);
@@ -631,7 +631,7 @@ namespace GameSrv.Player
                     {
                         result = true;
                     }
-                    if (M2Share.Config.PveServer)
+                    if (GameShare.Config.PveServer)
                     {
                         return true;
                     }
@@ -692,7 +692,7 @@ namespace GameSrv.Player
                             result = false;
                         }
                     }
-                    if (M2Share.Config.PveServer)
+                    if (GameShare.Config.PveServer)
                     {
                         return true;
                     }
@@ -719,7 +719,7 @@ namespace GameSrv.Player
                             }
                         }
                     }
-                    if (M2Share.Config.PveServer)
+                    if (GameShare.Config.PveServer)
                     {
                         result = true;
                     }
@@ -740,7 +740,7 @@ namespace GameSrv.Player
                             result = ((PlayObject)targetObject).PvpLevel() >= 2;
                         }
                     }
-                    if (M2Share.Config.PveServer)
+                    if (GameShare.Config.PveServer)
                     {
                         result = true;
                     }
@@ -770,35 +770,35 @@ namespace GameSrv.Player
                 PlayObject playObject = (PlayObject)targetObject;
                 if (!playObject.InGuildWarArea)
                 {
-                    if (M2Share.Config.boPKLevelProtect)// 新人保护
+                    if (GameShare.Config.boPKLevelProtect)// 新人保护
                     {
-                        if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
+                        if (Abil.Level > GameShare.Config.nPKProtectLevel)// 如果大于指定等级
                         {
-                            if (!playObject.PvpFlag && targetObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && playObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                            if (!playObject.PvpFlag && targetObject.WAbil.Level <= GameShare.Config.nPKProtectLevel && playObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                             {
                                 return false;
                             }
                         }
-                        if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
+                        if (Abil.Level <= GameShare.Config.nPKProtectLevel)// 如果小于指定等级
                         {
-                            if (!playObject.PvpFlag && targetObject.WAbil.Level > M2Share.Config.nPKProtectLevel && playObject.PvpLevel() < 2)
+                            if (!playObject.PvpFlag && targetObject.WAbil.Level > GameShare.Config.nPKProtectLevel && playObject.PvpLevel() < 2)
                             {
                                 return false;
                             }
                         }
                     }
                     // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                    if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                    if (PvpLevel() >= 2 && Abil.Level > GameShare.Config.nRedPKProtectLevel)
                     {
-                        if (targetObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && playObject.PvpLevel() < 2)
+                        if (targetObject.Abil.Level <= GameShare.Config.nRedPKProtectLevel && playObject.PvpLevel() < 2)
                         {
                             return false;
                         }
                     }
                     // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                    if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
+                    if (Abil.Level <= GameShare.Config.nRedPKProtectLevel && PvpLevel() < 2)
                     {
-                        if (playObject.PvpLevel() >= 2 && targetObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                        if (playObject.PvpLevel() >= 2 && targetObject.Abil.Level > GameShare.Config.nRedPKProtectLevel)
                         {
                             return false;
                         }
@@ -830,7 +830,7 @@ namespace GameSrv.Player
                 {
                     return false;
                 }
-                if (!M2Share.Config.CloseSpeedHackCheck)
+                if (!GameShare.Config.CloseSpeedHackCheck)
                 {
                     if (!boLateDelivery)
                     {
@@ -840,19 +840,19 @@ namespace GameSrv.Player
                             return false;
                         }
                         IsFilterAction = true;
-                        int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ItemSpeed);
+                        int dwAttackTime = HUtil32._MAX(0, GameShare.Config.HitIntervalTime - HitSpeed * GameShare.Config.ItemSpeed);
                         int dwCheckTime = HUtil32.GetTickCount() - AttackTick;
                         if (dwCheckTime < dwAttackTime)
                         {
                             AttackCount++;
                             delayTime = dwAttackTime - dwCheckTime;
-                            if (delayTime > M2Share.Config.DropOverSpeed)
+                            if (delayTime > GameShare.Config.DropOverSpeed)
                             {
                                 if (AttackCount >= 4)
                                 {
                                     AttackTick = HUtil32.GetTickCount();
                                     AttackCount = 0;
-                                    delayTime = M2Share.Config.DropOverSpeed;
+                                    delayTime = GameShare.Config.DropOverSpeed;
                                     if (TestSpeedMode)
                                     {
                                         SysMsg($"攻击忙!!!{delayTime}", MsgColor.Red, MsgType.Hint);
@@ -881,7 +881,7 @@ namespace GameSrv.Player
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
                         {
-                            StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+                            StdItem StdItem = GameShare.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -942,7 +942,7 @@ namespace GameSrv.Player
                         if (AttackSkillCount <= 0)
                         {
                             AttackSkillCount = (byte)(7 - MagicArr[MagicConst.SKILL_YEDO].Level);
-                            AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
+                            AttackSkillPointCount = GameShare.RandomNumber.RandomByte(AttackSkillCount);
                         }
                     }
                     HealthTick -= 30;
@@ -954,8 +954,8 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.StackTrace);
+                GameShare.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(e.StackTrace);
             }
             return result;
         }
@@ -974,7 +974,7 @@ namespace GameSrv.Player
             {
                 return result;
             }
-            if (!M2Share.Config.CloseSpeedHackCheck)
+            if (!GameShare.Config.CloseSpeedHackCheck)
             {
                 if (!boLateDelivery)
                 {
@@ -985,17 +985,17 @@ namespace GameSrv.Player
                     }
                     IsFilterAction = true;
                     dwCheckTime = HUtil32.GetTickCount() - MoveTick;
-                    if (dwCheckTime < M2Share.Config.RunIntervalTime)
+                    if (dwCheckTime < GameShare.Config.RunIntervalTime)
                     {
                         MoveCount++;
-                        delayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
-                        if (delayTime > M2Share.Config.DropOverSpeed)
+                        delayTime = GameShare.Config.RunIntervalTime - dwCheckTime;
+                        if (delayTime > GameShare.Config.DropOverSpeed)
                         {
                             if (MoveCount >= 4)
                             {
                                 MoveTick = HUtil32.GetTickCount();
                                 MoveCount = 0;
-                                delayTime = M2Share.Config.DropOverSpeed;
+                                delayTime = GameShare.Config.DropOverSpeed;
                                 if (TestSpeedMode)
                                 {
                                     SysMsg("马跑步忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
@@ -1020,7 +1020,7 @@ namespace GameSrv.Player
             }
             MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
-            n14 = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            n14 = GameShare.GetNextDirection(CurrX, CurrY, nX, nY);
             if (HorseRunTo(n14, false))
             {
                 if (Transparent && HideMode)
@@ -1061,7 +1061,7 @@ namespace GameSrv.Player
                 return false;
             }
             bool boIsWarrSkill = MagicManager.IsWarrSkill(UserMagic.MagIdx);
-            if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
+            if (!boLateDelivery && !boIsWarrSkill && (!GameShare.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref delayTime))
                 {
@@ -1074,13 +1074,13 @@ namespace GameSrv.Player
                 {
                     MagicAttackCount++;
                     delayTime = MagicAttackInterval - dwCheckTime;
-                    if (delayTime > M2Share.Config.MagicHitIntervalTime / 3)
+                    if (delayTime > GameShare.Config.MagicHitIntervalTime / 3)
                     {
                         if (MagicAttackCount >= 4)
                         {
                             MagicAttackTick = HUtil32.GetTickCount();
                             MagicAttackCount = 0;
-                            delayTime = M2Share.Config.MagicHitIntervalTime / 3;
+                            delayTime = GameShare.Config.MagicHitIntervalTime / 3;
                             if (TestSpeedMode)
                             {
                                 SysMsg("魔法忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
@@ -1103,7 +1103,7 @@ namespace GameSrv.Player
             SpellTick = HUtil32._MAX(0, SpellTick);
             if (!boIsWarrSkill)
             {
-                MagicAttackInterval = UserMagic.Magic.DelayTime + M2Share.Config.MagicHitIntervalTime;
+                MagicAttackInterval = UserMagic.Magic.DelayTime + GameShare.Config.MagicHitIntervalTime;
             }
             MagicAttackTick = HUtil32.GetTickCount();
             ushort nSpellPoint;
@@ -1197,7 +1197,7 @@ namespace GameSrv.Player
                                 {
                                     if (UserMagic.Magic.TrainLevel[UserMagic.Level] < Abil.Level)
                                     {
-                                        TrainSkill(UserMagic, M2Share.RandomNumber.Random(3) + 1);
+                                        TrainSkill(UserMagic, GameShare.RandomNumber.Random(3) + 1);
                                         if (!CheckMagicLevelUp(UserMagic))
                                         {
                                             SendSelfDelayMsg(Messages.RM_MAGIC_LVEXP, 0, UserMagic.Magic.MagicId, UserMagic.Level, UserMagic.TranPoint, "", 1000);
@@ -1260,7 +1260,7 @@ namespace GameSrv.Player
                     result = true;
                     break;
                 default:
-                    Dir = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
+                    Dir = GameShare.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
                     BaseObject spellObject = null;
                     if (CretInNearXy(targetObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {
@@ -1291,7 +1291,7 @@ namespace GameSrv.Player
             {
                 return false;
             }
-            if (nFlag != wIdent && (!M2Share.Config.CloseSpeedHackCheck))
+            if (nFlag != wIdent && (!GameShare.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref delayTime))
                 {
@@ -1300,17 +1300,17 @@ namespace GameSrv.Player
                 }
                 IsFilterAction = true;
                 var dwCheckTime = HUtil32.GetTickCount() - MoveTick;
-                if (dwCheckTime < M2Share.Config.RunIntervalTime)
+                if (dwCheckTime < GameShare.Config.RunIntervalTime)
                 {
                     MoveCount++;
-                    delayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
-                    if (delayTime > M2Share.Config.RunIntervalTime / 3)
+                    delayTime = GameShare.Config.RunIntervalTime - dwCheckTime;
+                    if (delayTime > GameShare.Config.RunIntervalTime / 3)
                     {
                         if (MoveCount >= 4)
                         {
                             MoveTick = HUtil32.GetTickCount();
                             MoveCount = 0;
-                            delayTime = M2Share.Config.RunIntervalTime / 3;
+                            delayTime = GameShare.Config.RunIntervalTime / 3;
                             if (TestSpeedMode)
                             {
                                 SysMsg("跑步忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
@@ -1331,7 +1331,7 @@ namespace GameSrv.Player
             }
             MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
-            nDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            nDir = GameShare.GetNextDirection(CurrX, CurrY, nX, nY);
             if (RunTo(nDir, false, nX, nY))
             {
                 if (Transparent && HideMode)
@@ -1367,7 +1367,7 @@ namespace GameSrv.Player
             {
                 return false; // 防麻
             }
-            if (!boLateDelivery && (!M2Share.Config.CloseSpeedHackCheck))
+            if (!boLateDelivery && (!GameShare.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref delayTime))
                 {
@@ -1376,17 +1376,17 @@ namespace GameSrv.Player
                 }
                 IsFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
-                if (dwCheckTime < M2Share.Config.WalkIntervalTime)
+                if (dwCheckTime < GameShare.Config.WalkIntervalTime)
                 {
                     MoveCount++;
-                    delayTime = M2Share.Config.WalkIntervalTime - dwCheckTime;
-                    if (delayTime > M2Share.Config.WalkIntervalTime / 3)
+                    delayTime = GameShare.Config.WalkIntervalTime - dwCheckTime;
+                    if (delayTime > GameShare.Config.WalkIntervalTime / 3)
                     {
                         if (MoveCount >= 4)
                         {
                             MoveTick = HUtil32.GetTickCount();
                             MoveCount = 0;
-                            delayTime = M2Share.Config.WalkIntervalTime / 3;
+                            delayTime = GameShare.Config.WalkIntervalTime / 3;
                             if (TestSpeedMode)
                             {
                                 SysMsg("走路忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
@@ -1407,7 +1407,7 @@ namespace GameSrv.Player
             }
             MoveTick = HUtil32.GetTickCount();
             SpaceMoved = false;
-            byte nextDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            byte nextDir = GameShare.GetNextDirection(CurrX, CurrY, nX, nY);
             if (WalkTo(nextDir, false))
             {
                 if (SpaceMoved || CurrX == nX && CurrY == nY)
@@ -1442,10 +1442,10 @@ namespace GameSrv.Player
                 if (Race == ActorRace.Play)
                 {
                     this.SendDelItems(UseItems[ItemLocation.Weapon]);
-                    StdItem stdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+                    StdItem stdItem = GameShare.WorldEngine.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
+                        GameShare.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
                                                            UseItems[ItemLocation.Weapon].MakeIndex + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }

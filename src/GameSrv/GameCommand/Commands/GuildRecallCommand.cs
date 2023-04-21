@@ -23,7 +23,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mCastle = M2Share.CastleMgr.InCastleWarArea(playObject);
+            var mCastle = GameShare.CastleMgr.InCastleWarArea(playObject);
             if (mCastle != null && mCastle.UnderWar) {
                 playObject.SysMsg("攻城区域不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -51,7 +51,7 @@ namespace GameSrv.GameCommand.Commands {
                     continue;
                 }
                 for (var j = 0; j < guildRank.MemberList.Count; j++) {
-                    var memberObject = M2Share.WorldEngine.GetPlayObject(guildRank.MemberList[j].MemberName);
+                    var memberObject = GameShare.WorldEngine.GetPlayObject(guildRank.MemberList[j].MemberName);
                     if (memberObject != null) {
                         if (memberObject == playObject) {
                             // Inc(nNoRecallCount);
@@ -75,7 +75,7 @@ namespace GameSrv.GameCommand.Commands {
             }
             playObject.SysMsg($"已传送{nRecallCount}个成员，{nNoRecallCount}个成员未被传送。", MsgColor.Green, MsgType.Hint);
             playObject.GroupRcallTick = HUtil32.GetTickCount();
-            playObject.GroupRcallTime = (short)M2Share.Config.GuildRecallTime;
+            playObject.GroupRcallTime = (short)GameShare.Config.GuildRecallTime;
         }
     }
 }

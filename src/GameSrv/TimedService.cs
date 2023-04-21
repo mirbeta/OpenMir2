@@ -61,15 +61,15 @@ namespace GameSrv
 
         private async Task ExecuteInternal()
         {
-            if (!M2Share.StartReady) return;
+            if (!GameShare.StartReady) return;
             var currentTick = HUtil32.GetTickCount();
             if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
             {
                 _checkIntervalTime = HUtil32.GetTickCount();
-                M2Share.DataServer.CheckConnected();
+                GameShare.DataServer.CheckConnected();
                 IdSrvClient.Instance.CheckConnected();
                 PlanesClient.Instance.CheckConnected();
-                await M2Share.ChatChannel.Ping();
+                await GameShare.ChatChannel.Ping();
             }
             if ((currentTick - _saveIntervalTime) > 60 * 1000) //保存游戏变量等
             {
@@ -79,8 +79,8 @@ namespace GameSrv
             if ((currentTick - _clearIntervalTime) > 60 * 10000) //定时清理游戏对象
             {
                 _clearIntervalTime = HUtil32.GetTickCount();
-                M2Share.Statistics.ShowServerStatus();
-                M2Share.ActorMgr.CleanObject();
+                GameShare.Statistics.ShowServerStatus();
+                GameShare.ActorMgr.CleanObject();
             }
             if ((currentTick - _playerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
             {
@@ -226,12 +226,12 @@ namespace GameSrv
                 return;
             }
             _logger.Debug("定时保存角色数据");
-            if (M2Share.WorldEngine.PlayObjectCount > 0)
+            if (GameShare.WorldEngine.PlayObjectCount > 0)
             {
                 _scheduledSaveData = true;
-                foreach (var play in M2Share.WorldEngine.PlayObjects)
+                foreach (var play in GameShare.WorldEngine.PlayObjects)
                 {
-                    if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
+                    if (GameShare.FrontEngine.InSaveRcdList(play.ChrName))
                     {
                         continue;
                     }

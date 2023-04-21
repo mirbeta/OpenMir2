@@ -1,4 +1,4 @@
-﻿namespace GameSrv {
+﻿namespace M2Server {
     public class Settings {
         public const string sSTATUS_FAIL = "+FL/{0}";
         public const string sSTATUS_GOOD = "+GD/{0}";

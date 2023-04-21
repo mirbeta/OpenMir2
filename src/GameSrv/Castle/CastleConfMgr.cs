@@ -79,12 +79,12 @@ namespace GameSrv.Castle {
         }
 
         public void SaveConfig(UserCastle userCastle) {
-            string filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, userCastle.ConfigDir);
+            string filePath = Path.Combine(GameShare.BasePath, GameShare.Config.CastleDir, userCastle.ConfigDir);
             string sMapList = string.Empty;
             if (!Directory.Exists(filePath)) {
                 Directory.CreateDirectory(filePath);
             }
-            if (M2Share.MapMgr.GetMapOfServerIndex(userCastle.MapName) != M2Share.ServerIndex) return;
+            if (GameShare.MapMgr.GetMapOfServerIndex(userCastle.MapName) != GameShare.ServerIndex) return;
             if (!string.IsNullOrEmpty(userCastle.sName)) {
                 WriteString("Setup", "CastleName", userCastle.sName);
             }

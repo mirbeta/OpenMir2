@@ -16,11 +16,11 @@ namespace GameSrv.DataSource {
             string sIPaddr = string.Empty;
             string sChrName = string.Empty;
             string sData = string.Empty;
-            string sfilename = M2Share.GetEnvirFilePath("AdminList.txt");
+            string sfilename = GameShare.GetEnvirFilePath("AdminList.txt");
             if (!File.Exists(sfilename)) {
                 return false;
             }
-            M2Share.WorldEngine.AdminList.Clear();
+            GameShare.WorldEngine.AdminList.Clear();
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sfilename);
             for (int i = 0; i < loadList.Count; i++) {
@@ -69,7 +69,7 @@ namespace GameSrv.DataSource {
                             ChrName = sChrName,
                             IPaddr = sIPaddr
                         };
-                        M2Share.WorldEngine.AdminList.Add(adminInfo);
+                        GameShare.WorldEngine.AdminList.Add(adminInfo);
                     }
                 }
             }
@@ -88,7 +88,7 @@ namespace GameSrv.DataSource {
                 string cX = string.Empty;
                 string cY = string.Empty;
                 string direction = string.Empty;
-                string sFileName = M2Share.GetEnvirFilePath("GuardList.txt");
+                string sFileName = GameShare.GetEnvirFilePath("GuardList.txt");
                 if (File.Exists(sFileName))
                 {
                     StringList guardList = new StringList();
@@ -109,7 +109,7 @@ namespace GameSrv.DataSource {
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
                             {
-                                BaseObject guard = M2Share.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
+                                BaseObject guard = GameShare.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
                                 if (guard != null)
                                 {
                                     guard.Dir = (byte)HUtil32.StrToInt(direction, 0);
@@ -121,7 +121,7 @@ namespace GameSrv.DataSource {
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(ex.StackTrace);
+                GameShare.Logger.Error(ex.StackTrace);
             }
         }
 
@@ -132,7 +132,7 @@ namespace GameSrv.DataSource {
             string sSubName = string.Empty;
             string sItemName = string.Empty;
             IList<MakeItem> list28 = null;
-            string sFileName = M2Share.GetEnvirFilePath("MakeItem.txt");
+            string sFileName = GameShare.GetEnvirFilePath("MakeItem.txt");
             if (File.Exists(sFileName)) {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
@@ -143,7 +143,7 @@ namespace GameSrv.DataSource {
                     }
                     if (sLine.StartsWith("[")) {
                         if (list28 != null) {
-                            M2Share.MakeItemList.Add(sItemName, list28);
+                            GameShare.MakeItemList.Add(sItemName, list28);
                         }
                         list28 = new List<MakeItem>();
                         HUtil32.ArrestStringEx(sLine, "[", "]", ref sItemName);
@@ -157,15 +157,15 @@ namespace GameSrv.DataSource {
                     }
                 }
                 if (list28 != null) {
-                    M2Share.MakeItemList.Add(sItemName, list28);
+                    GameShare.MakeItemList.Add(sItemName, list28);
                 }
             }
         }
 
         private static void QFunctionNpc() {
             try {
-                string sScriptFile = M2Share.GetEnvirFilePath(ScriptConst.sMarket_Def, "QFunction-0.txt");
-                string sScritpDir = M2Share.GetEnvirFilePath(ScriptConst.sMarket_Def);
+                string sScriptFile = GameShare.GetEnvirFilePath(ScriptConst.sMarket_Def, "QFunction-0.txt");
+                string sScritpDir = GameShare.GetEnvirFilePath(ScriptConst.sMarket_Def);
                 if (!Directory.Exists(sScritpDir)) {
                     Directory.CreateDirectory(sScritpDir);
                 }
@@ -175,7 +175,7 @@ namespace GameSrv.DataSource {
                     saveList.SaveToFile(sScriptFile);
                 }
                 if (File.Exists(sScriptFile)) {
-                    M2Share.FunctionNPC = new Merchant {
+                    GameShare.FunctionNPC = new Merchant {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -187,21 +187,21 @@ namespace GameSrv.DataSource {
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.AddMerchant(M2Share.FunctionNPC);
+                    GameShare.WorldEngine.AddMerchant(GameShare.FunctionNPC);
                 }
                 else {
-                    M2Share.FunctionNPC = null;
+                    GameShare.FunctionNPC = null;
                 }
             }
             catch {
-                M2Share.FunctionNPC = null;
+                GameShare.FunctionNPC = null;
             }
         }
 
         private static void QMangeNpc() {
             try {
-                string sScriptFile = M2Share.GetEnvirFilePath("MapQuest_def", "QManage.txt");
-                string sScritpDir = M2Share.GetEnvirFilePath("MapQuest_def");
+                string sScriptFile = GameShare.GetEnvirFilePath("MapQuest_def", "QManage.txt");
+                string sScritpDir = GameShare.GetEnvirFilePath("MapQuest_def");
                 if (!Directory.Exists(sScritpDir)) {
                     Directory.CreateDirectory(sScritpDir);
                 }
@@ -225,7 +225,7 @@ namespace GameSrv.DataSource {
                     saveList = null;
                 }
                 if (File.Exists(sScriptFile)) {
-                    M2Share.ManageNPC = new Merchant {
+                    GameShare.ManageNPC = new Merchant {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -236,21 +236,21 @@ namespace GameSrv.DataSource {
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
+                    GameShare.WorldEngine.QuestNpcList.Add(GameShare.ManageNPC);
                 }
                 else {
-                    M2Share.ManageNPC = null;
+                    GameShare.ManageNPC = null;
                 }
             }
             catch {
-                M2Share.ManageNPC = null;
+                GameShare.ManageNPC = null;
             }
         }
 
         private static void RobotNpc() {
             try {
-                string sScriptFile = M2Share.GetEnvirFilePath("Robot_def", "RobotManage.txt");
-                string sScritpDir = M2Share.GetEnvirFilePath("Robot_def");
+                string sScriptFile = GameShare.GetEnvirFilePath("Robot_def", "RobotManage.txt");
+                string sScritpDir = GameShare.GetEnvirFilePath("Robot_def");
                 if (!Directory.Exists(sScritpDir)) {
                     Directory.CreateDirectory(sScritpDir);
                 }
@@ -261,7 +261,7 @@ namespace GameSrv.DataSource {
                     tSaveList = null;
                 }
                 if (File.Exists(sScriptFile)) {
-                    M2Share.RobotNPC = new Merchant {
+                    GameShare.RobotNPC = new Merchant {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -272,14 +272,14 @@ namespace GameSrv.DataSource {
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
+                    GameShare.WorldEngine.QuestNpcList.Add(GameShare.RobotNPC);
                 }
                 else {
-                    M2Share.RobotNPC = null;
+                    GameShare.RobotNPC = null;
                 }
             }
             catch {
-                M2Share.RobotNPC = null;
+                GameShare.RobotNPC = null;
             }
         }
 
@@ -297,7 +297,7 @@ namespace GameSrv.DataSource {
             string sQuest = string.Empty;
             string s30 = string.Empty;
             string s34 = string.Empty;
-            string sFileName = M2Share.GetEnvirFilePath("MapQuest.txt");
+            string sFileName = GameShare.GetEnvirFilePath("MapQuest.txt");
             if (File.Exists(sFileName)) {
                 StringList tMapQuestList = new StringList();
                 tMapQuestList.LoadFromFile(sFileName);
@@ -318,7 +318,7 @@ namespace GameSrv.DataSource {
                         tStr = HUtil32.GetValidStr3(tStr, ref sQuest, _textSpitConst);
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, _textSpitConst);
                         if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest)) {
-                            Envirnoment map = M2Share.MapMgr.FindMap(sMap);
+                            Envirnoment map = GameShare.MapMgr.FindMap(sMap);
                             if (map != null) {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
                                 int n38 = HUtil32.StrToInt(s34, 0);
@@ -358,7 +358,7 @@ namespace GameSrv.DataSource {
             string sIsCalste = string.Empty;
             string sCanMove = string.Empty;
             string sMoveTime = string.Empty;
-            string sFileName = M2Share.GetEnvirFilePath("Merchant.txt");
+            string sFileName = GameShare.GetEnvirFilePath("Merchant.txt");
             if (File.Exists(sFileName)) {
                 StringList tMerchantList = new StringList();
                 tMerchantList.LoadFromFile(sFileName);
@@ -395,7 +395,7 @@ namespace GameSrv.DataSource {
                             if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchantNpc.MoveTime > 0) {
                                 merchantNpc.BoCanMove = true;
                             }
-                            M2Share.WorldEngine.AddMerchant(merchantNpc);
+                            GameShare.WorldEngine.AddMerchant(merchantNpc);
                         }
                     }
                 }
@@ -403,7 +403,7 @@ namespace GameSrv.DataSource {
         }
 
         private static void LoadMapGen(StringList monGenList, string sFileName) {
-            string sFileDir = M2Share.GetEnvirFilePath("MonGen");
+            string sFileDir = GameShare.GetEnvirFilePath("MonGen");
             if (!Directory.Exists(sFileDir)) {
                 Directory.CreateDirectory(sFileDir);
             }
@@ -426,7 +426,7 @@ namespace GameSrv.DataSource {
             int i;
             int result = 0;
             mongenCount = 0;
-            string sFileName = M2Share.GetEnvirFilePath("MonGen.txt");
+            string sFileName = GameShare.GetEnvirFilePath("MonGen.txt");
             if (File.Exists(sFileName)) {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
@@ -468,11 +468,11 @@ namespace GameSrv.DataSource {
                         monGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && M2Share.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null) {
+                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && GameShare.MapMgr.GetMapInfo(GameShare.ServerIndex, monGenInfo.MapName) != null) {
                             monGenInfo.CertList = new List<AnimalObject>();
-                            monGenInfo.Envir = M2Share.MapMgr.FindMap(monGenInfo.MapName);
+                            monGenInfo.Envir = GameShare.MapMgr.FindMap(monGenInfo.MapName);
                             if (monGenInfo.Envir != null) {
-                                M2Share.WorldEngine.MonGenList.Add(monGenInfo);
+                                GameShare.WorldEngine.MonGenList.Add(monGenInfo);
                             }
                             else {
                                 monGenInfo = null;
@@ -484,14 +484,14 @@ namespace GameSrv.DataSource {
                     CertList = new List<AnimalObject>(),
                     Envir = null
                 };
-                if (M2Share.WorldEngine.MonGenInfoThreadMap.ContainsKey(0)) {
-                    M2Share.WorldEngine.MonGenInfoThreadMap[0].Add(monGenInfo);
+                if (GameShare.WorldEngine.MonGenInfoThreadMap.ContainsKey(0)) {
+                    GameShare.WorldEngine.MonGenInfoThreadMap[0].Add(monGenInfo);
                 }
                 else {
-                    M2Share.WorldEngine.MonGenInfoThreadMap.Add(0, new List<MonGenInfo>() { monGenInfo });
+                    GameShare.WorldEngine.MonGenInfoThreadMap.Add(0, new List<MonGenInfo>() { monGenInfo });
                 }
                 result = 1;
-                mongenCount = M2Share.WorldEngine.MonGenList.Sum(x => x.Count);
+                mongenCount = GameShare.WorldEngine.MonGenList.Sum(x => x.Count);
             }
             return result;
         }
@@ -503,7 +503,7 @@ namespace GameSrv.DataSource {
         public void LoadMonitems(string monName, ref IList<MonsterDropItem> itemList)
         {
             string sData = string.Empty;
-            string monFileName = M2Share.GetEnvirFilePath("MonItems", $"{monName}.txt");
+            string monFileName = GameShare.GetEnvirFilePath("MonItems", $"{monName}.txt");
             if (File.Exists(monFileName))
             {
                 if (itemList != null)
@@ -567,7 +567,7 @@ namespace GameSrv.DataSource {
             string cY = string.Empty;
             string flag = string.Empty;
             string appr = string.Empty;
-            string sFileName = M2Share.GetEnvirFilePath("Npcs.txt");
+            string sFileName = GameShare.GetEnvirFilePath("Npcs.txt");
             if (File.Exists(sFileName)) {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
@@ -604,7 +604,7 @@ namespace GameSrv.DataSource {
                                 npc.ChrName = chrName;
                                 npc.NpcFlag = HUtil32.StrToInt16(flag, 0);
                                 npc.Appr = (ushort)HUtil32.StrToInt(appr, 0);
-                                M2Share.WorldEngine.QuestNpcList.Add(npc);
+                                GameShare.WorldEngine.QuestNpcList.Add(npc);
                             }
                         }
                     }
@@ -632,10 +632,10 @@ namespace GameSrv.DataSource {
             string s20 = string.Empty;
             bool bo2D = false;
             int nC = 1;
-            M2Share.QuestDiaryList.Clear();
+            GameShare.QuestDiaryList.Clear();
             while (true) {
                 IList<TQDDinfo> qdDinfoList = null;
-                string sFileName = M2Share.GetEnvirFilePath("QuestDiary", LoadQuestDiary_sub_48978C(nC) + ".txt");
+                string sFileName = GameShare.GetEnvirFilePath("QuestDiary", LoadQuestDiary_sub_48978C(nC) + ".txt");
                 if (File.Exists(sFileName)) {
                     s18 = string.Empty;
                     TQDDinfo qdDinfo = null;
@@ -682,10 +682,10 @@ namespace GameSrv.DataSource {
                     }
                 }
                 if (qdDinfoList != null) {
-                    M2Share.QuestDiaryList.Add(qdDinfoList);
+                    GameShare.QuestDiaryList.Add(qdDinfoList);
                 }
                 else {
-                    M2Share.QuestDiaryList.Add(null);
+                    GameShare.QuestDiaryList.Add(null);
                 }
                 nC++;
                 if (nC >= 105) {
@@ -707,9 +707,9 @@ namespace GameSrv.DataSource {
             string type = string.Empty;
             string zone = string.Empty;
             string fire = string.Empty;
-            string sFileName = M2Share.GetEnvirFilePath("StartPoint.txt");
+            string sFileName = GameShare.GetEnvirFilePath("StartPoint.txt");
             if (File.Exists(sFileName)) {
-                M2Share.StartPointList.Clear();
+                GameShare.StartPointList.Clear();
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
                 for (int i = 0; i < loadList.Count; i++) {
@@ -734,7 +734,7 @@ namespace GameSrv.DataSource {
                                 PkZone = HUtil32.StrToInt(zone, 0),
                                 PkFire = HUtil32.StrToInt(fire, 0)
                             };
-                            M2Share.StartPointList.Add(startPoint);
+                            GameShare.StartPointList.Add(startPoint);
                         }
                     }
                 }
@@ -749,7 +749,7 @@ namespace GameSrv.DataSource {
             int result = 0;
             string sData = string.Empty;
             string sItemName = string.Empty;
-            string sFileName = M2Share.GetEnvirFilePath("UnbindList.txt");
+            string sFileName = GameShare.GetEnvirFilePath("UnbindList.txt");
             if (File.Exists(sFileName)) {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
@@ -763,11 +763,11 @@ namespace GameSrv.DataSource {
                         }
                         int n10 = HUtil32.StrToInt(sData, 0);
                         if (n10 > 0) {
-                            if (M2Share.UnbindList.ContainsKey(n10)) {
-                                M2Share.Logger.Warn($"重复解包物品[{sItemName}]...");
+                            if (GameShare.UnbindList.ContainsKey(n10)) {
+                                GameShare.Logger.Warn($"重复解包物品[{sItemName}]...");
                                 continue;
                             }
-                            M2Share.UnbindList.Add(n10, sItemName);
+                            GameShare.UnbindList.Add(n10, sItemName);
                         }
                         else {
                             result = -i;// 需要取负数
@@ -861,13 +861,13 @@ namespace GameSrv.DataSource {
             string sCanMove = string.Empty;
             string sMoveTime = string.Empty;
             Merchant merchant;
-            string sFileName = M2Share.GetEnvirFilePath("Merchant.txt");
+            string sFileName = GameShare.GetEnvirFilePath("Merchant.txt");
             if (!File.Exists(sFileName)) {
                 return;
             }
-            for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
-                merchant = M2Share.WorldEngine.MerchantList[i];
-                if (merchant != M2Share.FunctionNPC) {
+            for (int i = 0; i < GameShare.WorldEngine.MerchantList.Count; i++) {
+                merchant = GameShare.WorldEngine.MerchantList[i];
+                if (merchant != GameShare.FunctionNPC) {
                     merchant.NpcFlag = -1;
                 }
             }
@@ -892,8 +892,8 @@ namespace GameSrv.DataSource {
                     short nX = (short)HUtil32.StrToInt(sX, 0);
                     short nY = (short)HUtil32.StrToInt(sY, 0);
                     bool boNewNpc = true;
-                    for (int j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++) {
-                        merchant = M2Share.WorldEngine.MerchantList[j];
+                    for (int j = 0; j < GameShare.WorldEngine.MerchantList.Count; j++) {
+                        merchant = GameShare.WorldEngine.MerchantList[j];
                         if (merchant.MapName == sMapName && merchant.CurrX == nX && merchant.CurrY == nY) {
                             boNewNpc = false;
                             merchant.ScriptName = sScript;
@@ -917,7 +917,7 @@ namespace GameSrv.DataSource {
                         merchant = new Merchant {
                             MapName = sMapName
                         };
-                        merchant.Envir = M2Share.MapMgr.FindMap(merchant.MapName);
+                        merchant.Envir = GameShare.MapMgr.FindMap(merchant.MapName);
                         if (merchant.Envir != null) {
                             merchant.ScriptName = sScript;
                             merchant.CurrX = nX;
@@ -935,18 +935,18 @@ namespace GameSrv.DataSource {
                             if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchant.MoveTime > 0) {
                                 merchant.BoCanMove = true;
                             }
-                            M2Share.WorldEngine.MerchantList.Add(merchant);
+                            GameShare.WorldEngine.MerchantList.Add(merchant);
                             merchant.Initialize();
                         }
                     }
                 }
             }
-            for (int i = M2Share.WorldEngine.MerchantList.Count - 1; i >= 0; i--) {
-                merchant = M2Share.WorldEngine.MerchantList[i];
+            for (int i = GameShare.WorldEngine.MerchantList.Count - 1; i >= 0; i--) {
+                merchant = GameShare.WorldEngine.MerchantList[i];
                 if (merchant.NpcFlag == -1) {
                     merchant.Ghost = true;
                     merchant.GhostTick = HUtil32.GetTickCount();
-                    M2Share.WorldEngine.MerchantList.RemoveAt(i);
+                    GameShare.WorldEngine.MerchantList.RemoveAt(i);
                 }
             }
         }

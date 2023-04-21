@@ -16,7 +16,7 @@ namespace GameSrv.GameCommand.Commands {
             if (string.IsNullOrEmpty(sHumName)) {
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumName);
             if (mPlayObject != null) {
                 mPlayObject.BoKickFlag = true;
                 mPlayObject.BoEmergencyClose = true;

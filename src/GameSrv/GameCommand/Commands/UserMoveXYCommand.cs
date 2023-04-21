@@ -18,14 +18,14 @@ namespace GameSrv.GameCommand.Commands {
                 var nX = HUtil32.StrToInt16(sX, -1);
                 var nY = HUtil32.StrToInt16(sY, -1);
                 if (!playObject.Envir.Flag.boNOPOSITIONMOVE) {
-                    if (playObject.Envir.CanWalkOfItem(nX, nY, M2Share.Config.boUserMoveCanDupObj, M2Share.Config.boUserMoveCanOnItem)) {
-                        if ((HUtil32.GetTickCount() - playObject.TeleportTick) > M2Share.Config.dwUserMoveTime * 1000) {
+                    if (playObject.Envir.CanWalkOfItem(nX, nY, GameShare.Config.boUserMoveCanDupObj, GameShare.Config.boUserMoveCanOnItem)) {
+                        if ((HUtil32.GetTickCount() - playObject.TeleportTick) > GameShare.Config.dwUserMoveTime * 1000) {
                             playObject.TeleportTick = HUtil32.GetTickCount();
                             playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             playObject.SpaceMove(playObject.MapName, nX, nY, 0);
                         }
                         else {
-                            playObject.SysMsg(M2Share.Config.dwUserMoveTime - (HUtil32.GetTickCount() - playObject.TeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                            playObject.SysMsg(GameShare.Config.dwUserMoveTime - (HUtil32.GetTickCount() - playObject.TeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else {

@@ -30,7 +30,7 @@ namespace GameSrv.GameCommand.Commands
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
                         fireBurnEvent = new FireBurnEvent(playObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
-                        M2Share.EventMgr.AddEvent(fireBurnEvent);
+                        GameShare.EventMgr.AddEvent(fireBurnEvent);
                     }
                 }
             }

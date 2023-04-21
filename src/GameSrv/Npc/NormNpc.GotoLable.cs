@@ -124,7 +124,7 @@ namespace GameSrv.Npc
             int nIndex = 0;
             while (true)
             {
-                if ((scriptInfo.QuestInfo[nIndex].nRandRage > 0) && (M2Share.RandomNumber.Random(scriptInfo.QuestInfo[nIndex].nRandRage) != 0))
+                if ((scriptInfo.QuestInfo[nIndex].nRandRage > 0) && (GameShare.RandomNumber.Random(scriptInfo.QuestInfo[nIndex].nRandRage) != 0))
                 {
                     result = false;
                     break;
@@ -238,7 +238,7 @@ namespace GameSrv.Npc
         private static bool CheckGotoLableStringList(string sHumName, string sListFileName)
         {
             bool result = false;
-            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
+            sListFileName = GameShare.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
                 using StringList loadList = new StringList();
@@ -248,7 +248,7 @@ namespace GameSrv.Npc
                 }
                 catch
                 {
-                    M2Share.Logger.Error("loading fail.... => " + sListFileName);
+                    GameShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -261,14 +261,14 @@ namespace GameSrv.Npc
             }
             else
             {
-                M2Share.Logger.Error("file not found => " + sListFileName);
+                GameShare.Logger.Error("file not found => " + sListFileName);
             }
             return result;
         }
 
         private static void GotoLableQuestCheckConditionSetVal(PlayObject playObject, string sIndex, int nCount)
         {
-            int n14 = M2Share.GetValNameNo(sIndex);
+            int n14 = GameShare.GetValNameNo(sIndex);
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -277,7 +277,7 @@ namespace GameSrv.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 119))
                 {
-                    M2Share.Config.GlobalVal[n14 - 100] = nCount;
+                    GameShare.Config.GlobalVal[n14 - 100] = nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -289,7 +289,7 @@ namespace GameSrv.Npc
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    M2Share.Config.GlobaDyMval[n14 - 400] = (short)nCount;
+                    GameShare.Config.GlobaDyMval[n14 - 400] = (short)nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -327,7 +327,7 @@ namespace GameSrv.Npc
         {
             string name = string.Empty;
             bool result = false;
-            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
+            sListFileName = GameShare.GetEnvirFilePath(sListFileName);
             using StringList loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -337,7 +337,7 @@ namespace GameSrv.Npc
                 }
                 catch
                 {
-                    M2Share.Logger.Error("loading fail.... => " + sListFileName);
+                    GameShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
             }
             int nDay = HUtil32.StrToInt(sDay, 0);
@@ -379,7 +379,7 @@ namespace GameSrv.Npc
                     ConditionScript.Execute(playObject, questConditionInfo, ref result);
                     return result;
                 } 
-                M2Share.Logger.Info($"[QuestCheckCondition] 未处理命令:[{questConditionInfo.CmdCode}]");
+                GameShare.Logger.Info($"[QuestCheckCondition] 未处理命令:[{questConditionInfo.CmdCode}]");
 
                 if (!string.IsNullOrEmpty(questConditionInfo.sParam1))
                 {
@@ -476,7 +476,7 @@ namespace GameSrv.Npc
                             questConditionInfo.sOpName = GetLineVariableText(playObject, questConditionInfo.sOpName);
                         }
                     }
-                    PlayObject human = M2Share.WorldEngine.GetPlayObject(questConditionInfo.sOpName);
+                    PlayObject human = GameShare.WorldEngine.GetPlayObject(questConditionInfo.sOpName);
                     if (human != null)
                     {
                         playObject = human;
@@ -506,7 +506,7 @@ namespace GameSrv.Npc
                         result = QuestCheckConditionCheckUserDateType(playObject, playObject.ChrName, m_sPath + questConditionInfo.sParam1, questConditionInfo.sParam3, questConditionInfo.sParam4, questConditionInfo.sParam5);
                         break;
                     case (int)ConditionCode.CHECKRANDOMNO:
-                        M2Share.Logger.Error("TODO nSC_CHECKRANDOMNO...");
+                        GameShare.Logger.Error("TODO nSC_CHECKRANDOMNO...");
                         //result = GotoLable_QuestCheckCondition_CheckRandomNo(PlayObject, sMsg);
                         break;
                     case (int)ConditionCode.CHECKDIEMON:
@@ -585,7 +585,7 @@ namespace GameSrv.Npc
         private bool JmpToLable(PlayObject playObject, string sLabel)
         {
             playObject.ScriptGotoCount++;
-            if (playObject.ScriptGotoCount > M2Share.Config.ScriptGotoCountLimit)
+            if (playObject.ScriptGotoCount > GameShare.Config.ScriptGotoCountLimit)
             {
                 return false;
             }
@@ -616,9 +616,9 @@ namespace GameSrv.Npc
             {
                 playObject.DecGold(nItemCount);
                 playObject.GoldChanged();
-                if (M2Share.GameLogGold)
+                if (GameShare.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog(10, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
+                    GameShare.EventSource.AddEventLog(10, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
@@ -629,15 +629,15 @@ namespace GameSrv.Npc
                     break;
                 }
                 userItem = playObject.ItemList[i];
-                if (string.Compare(M2Share.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(GameShare.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                    stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(10, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                        GameShare.EventSource.AddEventLog(10, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                     }
                     playObject.SendDelItems(userItem);
-                    sC = M2Share.WorldEngine.GetStdItemName(userItem.Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(userItem.Index);
                     Dispose(userItem);
                     playObject.ItemList.RemoveAt(i);
                     nItemCount -= 1;
@@ -653,13 +653,13 @@ namespace GameSrv.Npc
             {
                 playObject.IncGold(nItemCount);
                 playObject.GoldChanged();
-                if (M2Share.GameLogGold)
+                if (GameShare.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
+                    GameShare.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
-            if (M2Share.WorldEngine.GetStdItemIdx(sItemName) > 0)
+            if (GameShare.WorldEngine.GetStdItemIdx(sItemName) > 0)
             {
                 if (!(nItemCount >= 1 && nItemCount <= 50))
                 {
@@ -670,14 +670,14 @@ namespace GameSrv.Npc
                     if (playObject.IsEnoughBag())
                     {
                         userItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (GameShare.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             playObject.ItemList.Add(userItem);
                             playObject.SendAddItem(userItem);
-                            stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                            stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                                GameShare.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
                         }
                         else
@@ -688,12 +688,12 @@ namespace GameSrv.Npc
                     else
                     {
                         userItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (GameShare.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                            stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                                GameShare.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                             }
                             playObject.DropItemDown(userItem, 3, false, playObject.ActorId, 0);
                         }
@@ -711,7 +711,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Necklace].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Necklace]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
                     playObject.UseItems[ItemLocation.Necklace].Index = 0;
                     return;
                 }
@@ -721,14 +721,14 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Ringl].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Ringl]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
                     playObject.UseItems[ItemLocation.Ringl].Index = 0;
                     return;
                 }
                 if (playObject.UseItems[ItemLocation.Ringr].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Ringr]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
                     playObject.UseItems[ItemLocation.Ringr].Index = 0;
                     return;
                 }
@@ -738,14 +738,14 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.ArmRingl]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
                     playObject.UseItems[ItemLocation.ArmRingl].Index = 0;
                     return;
                 }
                 if (playObject.UseItems[ItemLocation.ArmRingr].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.ArmRingr]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
                     playObject.UseItems[ItemLocation.ArmRingr].Index = 0;
                     return;
                 }
@@ -755,7 +755,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Weapon].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Weapon]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
                     playObject.UseItems[ItemLocation.Weapon].Index = 0;
                     return;
                 }
@@ -765,7 +765,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Helmet].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Helmet]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
                     playObject.UseItems[ItemLocation.Helmet].Index = 0;
                     return;
                 }
@@ -775,7 +775,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Dress].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Dress]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
                     playObject.UseItems[ItemLocation.Dress].Index = 0;
                     return;
                 }
@@ -785,7 +785,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Bujuk].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Bujuk]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
                     playObject.UseItems[ItemLocation.Bujuk].Index = 0;
                     return;
                 }
@@ -795,7 +795,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Belt].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Belt]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
                     playObject.UseItems[ItemLocation.Belt].Index = 0;
                     return;
                 }
@@ -805,7 +805,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Boots].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Boots]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
                     playObject.UseItems[ItemLocation.Boots].Index = 0;
                     return;
                 }
@@ -815,7 +815,7 @@ namespace GameSrv.Npc
                 if (playObject.UseItems[ItemLocation.Charm].Index > 0)
                 {
                     playObject.SendDelItems(playObject.UseItems[ItemLocation.Charm]);
-                    sC = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
+                    sC = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
                     playObject.UseItems[ItemLocation.Charm].Index = 0;
                     return;
                 }
@@ -828,7 +828,7 @@ namespace GameSrv.Npc
                 }
                 if (playObject.UseItems[i].Index > 0)
                 {
-                    string sName = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[i].Index);
+                    string sName = GameShare.WorldEngine.GetStdItemName(playObject.UseItems[i].Index);
                     if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         playObject.SendDelItems(playObject.UseItems[i]);
@@ -856,7 +856,7 @@ namespace GameSrv.Npc
                     ExecutionProcessing.Execute(this, playObject, questActionInfo, ref result);
                     return result;
                 }
-                M2Share.Logger.Info($"[QuestActionProcess] 未处理命令:[{questActionInfo.nCmdCode}]");
+                GameShare.Logger.Info($"[QuestActionProcess] 未处理命令:[{questActionInfo.nCmdCode}]");
 
                 ExecutionCode executionCode = (ExecutionCode)questActionInfo.nCmdCode;
                 switch (executionCode)
@@ -934,7 +934,7 @@ namespace GameSrv.Npc
                     case ExecutionCode.Goto:
                         if (!JmpToLable(playObject, questActionInfo.sParam1))
                         {
-                            M2Share.Logger.Error("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ExecutionCode.Goto + ' ' + questActionInfo.sParam1);
+                            GameShare.Logger.Error("[脚本死循环] NPC:" + ChrName + " 位置:" + MapName + '(' + CurrX + ':' + CurrY + ')' + " 命令:" + ExecutionCode.Goto + ' ' + questActionInfo.sParam1);
                             result = false;
                             return result;
                         }

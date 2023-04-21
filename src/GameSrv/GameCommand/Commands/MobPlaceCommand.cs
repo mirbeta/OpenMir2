@@ -29,25 +29,25 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mEnvir = M2Share.MapMgr.FindMap(M2Share.MissionMap);
-            if (!M2Share.BoMission || mEnvir == null) {
+            var mEnvir = GameShare.MapMgr.FindMap(GameShare.MissionMap);
+            if (!GameShare.BoMission || mEnvir == null) {
                 playObject.SysMsg("还没有设定怪物集中点!!!", MsgColor.Red, MsgType.Hint);
                 playObject.SysMsg("请先用命令" + this.Command.Name + "设置怪物的集中点。", MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = 0; i < nCount; i++) {
-                mon = M2Share.WorldEngine.RegenMonsterByName(M2Share.MissionMap, nX, nY, sMonName);
+                mon = GameShare.WorldEngine.RegenMonsterByName(GameShare.MissionMap, nX, nY, sMonName);
                 if (mon != null) {
                     mon.Mission = true;
-                    mon.MissionX = M2Share.MissionX;
-                    mon.MissionY = M2Share.MissionY;
+                    mon.MissionX = GameShare.MissionX;
+                    mon.MissionY = GameShare.MissionY;
                 }
                 else {
                     break;
                 }
             }
             if (mon?.Race != 136) {
-                playObject.SysMsg(nCount + " 只 " + sMonName + " 已正在往地图 " + M2Share.MissionMap + " " + M2Share.MissionX + ":" + M2Share.MissionY + " 集中。", MsgColor.Green, MsgType.Hint);
+                playObject.SysMsg(nCount + " 只 " + sMonName + " 已正在往地图 " + GameShare.MissionMap + " " + GameShare.MissionX + ":" + GameShare.MissionY + " 集中。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

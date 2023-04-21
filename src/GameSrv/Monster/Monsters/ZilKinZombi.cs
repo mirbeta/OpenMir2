@@ -8,11 +8,11 @@ namespace GameSrv.Monster.Monsters {
 
         public ZilKinZombi() : base() {
             this.ViewRange = 6;
-            this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            this.SearchTime = GameShare.RandomNumber.Random(1500) + 2500;
             this.SearchTick = HUtil32.GetTickCount();
             this.ZilKillCount = 0;
-            if (M2Share.RandomNumber.Random(3) == 0) {
-                ZilKillCount = M2Share.RandomNumber.Random(3) + 1;
+            if (GameShare.RandomNumber.Random(3) == 0) {
+                ZilKillCount = GameShare.RandomNumber.Random(3) + 1;
             }
         }
 
@@ -20,7 +20,7 @@ namespace GameSrv.Monster.Monsters {
             base.Die();
             if (ZilKillCount > 0) {
                 ReAliveTick = HUtil32.GetTickCount();
-                ZilkinDieTick = (M2Share.RandomNumber.Random(20) + 4) * 1000;
+                ZilkinDieTick = (GameShare.RandomNumber.Random(20) + 4) * 1000;
             }
             ZilKillCount -= 1;
         }

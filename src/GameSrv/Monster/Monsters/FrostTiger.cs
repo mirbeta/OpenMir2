@@ -4,7 +4,7 @@ using SystemModule.Consts;
 namespace GameSrv.Monster.Monsters {
     public class FrostTiger : MonsterObject {
         public FrostTiger() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run() {

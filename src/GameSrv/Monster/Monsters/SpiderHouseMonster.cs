@@ -11,7 +11,7 @@ namespace GameSrv.Monster.Monsters
         {
             ViewRange = 9;
             RunTime = 250;
-            SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
             StickMode = true;
             _bbList = new List<BaseObject>();
@@ -34,7 +34,7 @@ namespace GameSrv.Monster.Monsters
                 short n0C = (short)(CurrY + 1);
                 if (Envir.CanWalk(n08, n0C, true))
                 {
-                    BaseObject bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.Spider);
+                    BaseObject bb = GameShare.WorldEngine.RegenMonsterByName(Envir.MapName, n08, n0C, GameShare.Config.Spider);
                     if (bb != null)
                     {
                         bb.SetTargetCreat(TargetCret);

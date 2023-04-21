@@ -36,7 +36,7 @@ namespace GameSrv.Monster.Monsters {
         {
             Dir = dir;
             var wAbil = WAbil;
-            var nDamage = (M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC)) + 1) + HUtil32.LoWord(wAbil.DC));
+            var nDamage = (GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC)) + 1) + HUtil32.LoWord(wAbil.DC));
             if (nDamage <= 0)
             {
                 return;
@@ -50,7 +50,7 @@ namespace GameSrv.Monster.Monsters {
                 if (Envir.GetNextPosition(CurrX, CurrY, Dir, nDamage, ref nX, ref nY))
                 {
                     var baseObject = Envir.GetMovingObject(nX, nY, true);
-                    if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && (M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint))
+                    if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && (GameShare.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint))
                     {
                         nDamage = baseObject.GetMagStruckDamage(this, nDamage);
                         if (nDamage > 0)

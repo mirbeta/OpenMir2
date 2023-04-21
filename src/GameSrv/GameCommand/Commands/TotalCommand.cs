@@ -11,7 +11,7 @@ namespace GameSrv.GameCommand.Commands
         [ExecuteCommand]
         public void Execute(PlayObject playObject)
         {
-            playObject.HearMsg($"总在线数{M2Share.TotalHumCount}");
+            playObject.HearMsg($"总在线数{GameShare.TotalHumCount}");
         }
     }
 }

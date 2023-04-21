@@ -19,14 +19,14 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             var dwExp = HUtil32.StrToInt(sExp, 0);
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 var dwOExp = playObject.Abil.Exp;
                 mPlayObject.Abil.Exp = dwExp;
                 mPlayObject.HasLevelUp(mPlayObject.Abil.Level - 1);
                 playObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
-                if (M2Share.Config.ShowMakeItemMsg) {
-                    M2Share.Logger.Warn("[经验调整] " + playObject.ChrName + '(' + mPlayObject.ChrName + ' ' + dwOExp + " -> " + mPlayObject.Abil.Exp + ')');
+                if (GameShare.Config.ShowMakeItemMsg) {
+                    GameShare.Logger.Warn("[经验调整] " + playObject.ChrName + '(' + mPlayObject.ChrName + ' ' + dwOExp + " -> " + mPlayObject.Abil.Exp + ')');
                 }
             }
             else {

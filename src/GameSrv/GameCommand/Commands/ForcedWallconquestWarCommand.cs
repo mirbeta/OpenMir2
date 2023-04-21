@@ -19,7 +19,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var castle = M2Share.CastleMgr.Find(sCastleName);
+            var castle = GameShare.CastleMgr.Find(sCastleName);
             if (castle != null) {
                 castle.UnderWar = !castle.UnderWar;
                 if (castle.UnderWar) {
@@ -27,10 +27,10 @@ namespace GameSrv.GameCommand.Commands {
                     castle.WarDate = DateTime.Now;
                     castle.StartCastleWarTick = HUtil32.GetTickCount();
                     castle.StartWallconquestWar();
-                    WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+                    WorldServer.SendServerGroupMsg(Messages.SS_212, GameShare.ServerIndex, "");
                     var s20 = "[" + castle.sName + " 攻城战已经开始]";
-                    M2Share.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
-                    WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                    GameShare.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
+                    WorldServer.SendServerGroupMsg(Messages.SS_204, GameShare.ServerIndex, s20);
                     castle.MainDoorControl(true);
                 }
                 else {

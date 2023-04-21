@@ -21,7 +21,7 @@ namespace GameSrv.GameCommand.Commands
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null)
             {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -36,7 +36,7 @@ namespace GameSrv.GameCommand.Commands
                     var userItem = mPlayObject.ItemList[i];
                     delList.Add(new DeleteItem()
                     {
-                        ItemName = M2Share.WorldEngine.GetStdItemName(userItem.Index),
+                        ItemName = GameShare.WorldEngine.GetStdItemName(userItem.Index),
                         MakeIndex = userItem.MakeIndex
                     });
                     mPlayObject.ItemList.RemoveAt(i);
@@ -46,7 +46,7 @@ namespace GameSrv.GameCommand.Commands
             if (delList != null)
             {
                 var objectId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(objectId, delList);
+                GameShare.ActorMgr.AddOhter(objectId, delList);
                 mPlayObject.SendMsg(playObject, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
         }

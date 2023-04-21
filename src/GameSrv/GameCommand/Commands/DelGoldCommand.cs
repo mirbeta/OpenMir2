@@ -17,12 +17,12 @@ namespace GameSrv.GameCommand.Commands {
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0) {
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumName);
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0) {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumName);
             if (mPlayObject != null) {
                 if (mPlayObject.Gold > nCount) {
                     mPlayObject.Gold -= nCount;
@@ -33,18 +33,18 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 mPlayObject.GoldChanged();
                 playObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
-                if (M2Share.GameLogGold) {
-                    M2Share.EventSource.AddEventLog(13, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09"
+                if (GameShare.GameLogGold) {
+                    GameShare.EventSource.AddEventLog(13, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09"
                                                         + playObject.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else {
                 var nServerIndex = 0;
-                if (M2Share.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex)) {
+                if (GameShare.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex)) {
                     playObject.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);
                 }
                 else {
-                    M2Share.FrontEngine.AddChangeGoldList(playObject.ChrName, sHumName, -nCount);
+                    GameShare.FrontEngine.AddChangeGoldList(playObject.ChrName, sHumName, -nCount);
                     playObject.SysMsg(sHumName + "现在不在线，等其上线时金币将自动减少", MsgColor.Green, MsgType.Hint);
                 }
             }

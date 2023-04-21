@@ -30,12 +30,12 @@ namespace GameSrv.World.Threads
         {
             try
             {
-                M2Share.WorldEngine.ProcessHumans();
+                GameShare.WorldEngine.ProcessHumans();
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error("[Exception] UserProcessor::ExecuteInternal");
-                M2Share.Logger.Error(ex);
+                GameShare.Logger.Error("[Exception] UserProcessor::ExecuteInternal");
+                GameShare.Logger.Error(ex);
             }
             return Task.CompletedTask;
         }

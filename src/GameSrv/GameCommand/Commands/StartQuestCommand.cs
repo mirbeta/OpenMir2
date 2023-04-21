@@ -14,7 +14,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            M2Share.WorldEngine.SendQuestMsg(sQuestName);
+            GameShare.WorldEngine.SendQuestMsg(sQuestName);
         }
     }
 }

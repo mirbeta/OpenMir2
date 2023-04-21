@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
-using GameSrv.Conf;
 using GameSrv.Player;
+using M2Server.Conf;
 using NLog;
 using SystemModule.Enums;
 
@@ -12,7 +12,7 @@ namespace GameSrv.GameCommand {
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
 
         static CommandMgr() {
-            CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.CommandFileName));
+            CommandConf = new GameCmdConf(Path.Combine(GameShare.BasePath, ConfConst.CommandFileName));
         }
 
         public static void RegisterCommand()
@@ -72,7 +72,7 @@ namespace GameSrv.GameCommand {
                 var commandAttribute = (CommandAttribute)commands[i].GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandAttribute == null) continue;
                 if (CommandMaps.ContainsKey(commandAttribute.Name)) {
-                    M2Share.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
+                    GameShare.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
                     continue;
                 }
                 var gameCommand = (GameCommand)Activator.CreateInstance(commands[i]);
@@ -87,7 +87,7 @@ namespace GameSrv.GameCommand {
                 }
                 var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null) {
-                    M2Share.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
+                    GameShare.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
                     continue;
                 }
                 gameCommand.Register(commandAttribute, executeMethod);

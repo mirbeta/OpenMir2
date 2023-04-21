@@ -1,6 +1,6 @@
 using GameSrv.Actor;
-using GameSrv.Conf;
 using GameSrv.Items;
+using M2Server.Conf;
 using SystemModule.Common;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -49,7 +49,7 @@ namespace GameSrv.RobotPlay
                     var sMagicName = tempList[i].Trim();
                     if (FindMagic(sMagicName) == null)
                     {
-                        var magic = M2Share.WorldEngine.FindMagic(sMagicName);
+                        var magic = GameShare.WorldEngine.FindMagic(sMagicName);
                         if (magic != null)
                         {
                             if (magic.Job == 99 || magic.Job == (byte)Job)
@@ -75,13 +75,13 @@ namespace GameSrv.RobotPlay
                 for (int i = 0; i < tempList.Count; i++)
                 {
                     var sItemName = tempList[i].Trim();
-                    stdItem = M2Share.WorldEngine.GetStdItem(sItemName);
+                    stdItem = GameShare.WorldEngine.GetStdItem(sItemName);
                     if (stdItem != null)
                     {
                         userItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (GameShare.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            if (M2Share.StdModeMap.Contains(stdItem.StdMode))
+                            if (GameShare.StdModeMap.Contains(stdItem.StdMode))
                             {
                                 if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                 {
@@ -127,13 +127,13 @@ namespace GameSrv.RobotPlay
             {
                 if (!string.IsNullOrEmpty(UseItemNames[i]))
                 {
-                    stdItem = M2Share.WorldEngine.GetStdItem(UseItemNames[i]);
+                    stdItem = GameShare.WorldEngine.GetStdItem(UseItemNames[i]);
                     if (stdItem != null)
                     {
                         userItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(UseItemNames[i], ref userItem))
+                        if (GameShare.WorldEngine.CopyToUserItemFromName(UseItemNames[i], ref userItem))
                         {
-                            if (M2Share.StdModeMap.Contains(stdItem.StdMode))
+                            if (GameShare.StdModeMap.Contains(stdItem.StdMode))
                             {
                                 if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                 {
@@ -177,7 +177,7 @@ namespace GameSrv.RobotPlay
                     {
                         loadList = new StringList();
                         loadList.LoadFromFile(ConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(loadList.Count);
+                        nIndex = GameShare.RandomNumber.Random(loadList.Count);
                         if (nIndex >= 0 && nIndex < loadList.Count)
                         {
                             str = loadList[nIndex];
@@ -205,7 +205,7 @@ namespace GameSrv.RobotPlay
                     {
                         loadList = new StringList();
                         loadList.LoadFromFile(HeroConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(loadList.Count);
+                        nIndex = GameShare.RandomNumber.Random(loadList.Count);
                         if (nIndex >= 0 && nIndex < loadList.Count)
                         {
                             str = loadList[nIndex];

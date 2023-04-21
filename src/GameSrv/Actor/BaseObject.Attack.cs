@@ -35,7 +35,7 @@ namespace GameSrv.Actor
             {
                 if (targetObject.HitPoint > 0)
                 {
-                    if (HitPoint < M2Share.RandomNumber.RandomByte(targetObject.SpeedPoint))
+                    if (HitPoint < GameShare.RandomNumber.RandomByte(targetObject.SpeedPoint))
                     {
                         nPower = 0;
                     }
@@ -69,7 +69,7 @@ namespace GameSrv.Actor
             {
                 if (IsProperTarget(targetObject))
                 {
-                    if (M2Share.RandomNumber.RandomByte(targetObject.SpeedPoint) < HitPoint)
+                    if (GameShare.RandomNumber.RandomByte(targetObject.SpeedPoint) < HitPoint)
                     {
                         targetObject.StruckDamage(nSecPwr);
                         targetObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nSecPwr, targetObject.WAbil.HP, targetObject.WAbil.MaxHP, ActorId, "", 500);

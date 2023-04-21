@@ -17,7 +17,7 @@ namespace GameSrv.Notices {
                 if (string.IsNullOrEmpty(NoticeList[i].sMsg)) {
                     continue;
                 }
-                string fileName = M2Share.GetNoticeFilePath($"{NoticeList[i].sMsg}.txt");
+                string fileName = GameShare.GetNoticeFilePath($"{NoticeList[i].sMsg}.txt");
                 if (!File.Exists(fileName)) continue;
                 try {
                     if (NoticeList[i].sList == null) {
@@ -26,7 +26,7 @@ namespace GameSrv.Notices {
                     NoticeList[i].sList.LoadFromFile(fileName);
                 }
                 catch {
-                    M2Share.Logger.Error("Error in loading notice text. file name is " + fileName);
+                    GameShare.Logger.Error("Error in loading notice text. file name is " + fileName);
                 }
             }
         }
@@ -47,7 +47,7 @@ namespace GameSrv.Notices {
             }
             for (int i = 0; i < NoticeList.Length; i++) {
                 if (string.IsNullOrEmpty(NoticeList[i].sMsg)) {
-                    string fileName = M2Share.GetNoticeFilePath(sStr + ".txt");
+                    string fileName = GameShare.GetNoticeFilePath(sStr + ".txt");
                     if (File.Exists(fileName)) {
                         try {
                             if (NoticeList[i].sList == null) {
@@ -59,7 +59,7 @@ namespace GameSrv.Notices {
                             }
                         }
                         catch (Exception) {
-                            M2Share.Logger.Error("Error in loading notice text. file name is " + fileName);
+                            GameShare.Logger.Error("Error in loading notice text. file name is " + fileName);
                         }
                         NoticeList[i].sMsg = sStr;
                         break;

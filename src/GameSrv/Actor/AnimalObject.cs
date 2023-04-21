@@ -66,8 +66,8 @@ namespace GameSrv.Actor
         {
             TargetX = -1;
             Race = ActorRace.Animal;
-            AttackTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
-            WalkTick = HUtil32.GetTickCount() - M2Share.RandomNumber.Random(3000);
+            AttackTick = HUtil32.GetTickCount() - GameShare.RandomNumber.Random(3000);
+            WalkTick = HUtil32.GetTickCount() - GameShare.RandomNumber.Random(3000);
             SearchEnemyTick = HUtil32.GetTickCount();
             RunAwayMode = false;
             RunAwayStart = HUtil32.GetTickCount();
@@ -110,7 +110,7 @@ namespace GameSrv.Actor
             {
                 case Messages.RM_STRUCK:
                     {
-                        var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        var struckObject = GameShare.ActorMgr.Get(processMsg.nParam3);
                         if (processMsg.ActorId == ActorId && struckObject != null)
                         {
                             SetLastHiter(struckObject);
@@ -212,7 +212,7 @@ namespace GameSrv.Actor
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(nDir, false);
-                var n20 = M2Share.RandomNumber.Random(3);
+                var n20 = GameShare.RandomNumber.Random(3);
                 for (var i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (nOldX == CurrX && nOldY == CurrY)
@@ -244,9 +244,9 @@ namespace GameSrv.Actor
         /// </summary>
         internal void LoadSayMsg()
         {
-            for (int i = 0; i < M2Share.MonSayMsgList.Count; i++)
+            for (int i = 0; i < GameShare.MonSayMsgList.Count; i++)
             {
-                if (M2Share.MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
+                if (GameShare.MonSayMsgList.TryGetValue(ChrName, out SayMsgList))
                 {
                     break;
                 }
@@ -258,7 +258,7 @@ namespace GameSrv.Actor
         /// </summary>
         internal void MonsterSayMessage(BaseObject monsterObject, MonStatus monStatus)
         {
-            if (!M2Share.Config.MonSayMsg)
+            if (!GameShare.Config.MonSayMsg)
             {
                 return;
             }
@@ -290,13 +290,13 @@ namespace GameSrv.Actor
             for (int i = 0; i < SayMsgList.Count; i++)
             {
                 MonsterSayMsg monSayMsg = SayMsgList[i];
-                string sMsg = monSayMsg.sSayMsg.Replace("%s", M2Share.FilterShowName(ChrName));
+                string sMsg = monSayMsg.sSayMsg.Replace("%s", GameShare.FilterShowName(ChrName));
                 sMsg = sMsg.Replace("%d", sAttackName);
-                if ((monSayMsg.State == monStatus) && (M2Share.RandomNumber.Random(monSayMsg.nRate) == 0))
+                if ((monSayMsg.State == monStatus) && (GameShare.RandomNumber.Random(monSayMsg.nRate) == 0))
                 {
                     if (monStatus == MonStatus.MonGen)
                     {
-                        M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
+                        GameShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
                         break;
                     }
                     if (monSayMsg.Color == MsgColor.White)
@@ -332,7 +332,7 @@ namespace GameSrv.Actor
             StruckTick = HUtil32.GetTickCount();
             if (hiter != null)
             {
-                if (TargetCret == null || GetAttackDir(TargetCret, ref btDir) || M2Share.RandomNumber.Random(6) == 0)
+                if (TargetCret == null || GetAttackDir(TargetCret, ref btDir) || GameShare.RandomNumber.Random(6) == 0)
                 {
                     if (IsProperTarget(hiter))
                     {
@@ -342,7 +342,7 @@ namespace GameSrv.Actor
             }
             if (Animal)
             {
-                MeatQuality = (ushort)(MeatQuality - M2Share.RandomNumber.Random(300));
+                MeatQuality = (ushort)(MeatQuality - GameShare.RandomNumber.Random(300));
                 if (MeatQuality < 0)
                 {
                     MeatQuality = 0;
@@ -354,7 +354,7 @@ namespace GameSrv.Actor
         protected void HitMagAttackTarget(BaseObject targetObject, int nHitPower, int nMagPower, bool boFlag)
         {
             IList<BaseObject> baseObjectList = new List<BaseObject>();
-            Dir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
+            Dir = GameShare.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             Envir.GetBaseObjects(targetObject.CurrX, targetObject.CurrY, false, ref baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
             {
@@ -417,10 +417,10 @@ namespace GameSrv.Actor
 
         protected virtual void Wondering()
         {
-            if (M2Share.RandomNumber.Random(20) != 0) return;
-            if (M2Share.RandomNumber.Random(4) == 1)
+            if (GameShare.RandomNumber.Random(20) != 0) return;
+            if (GameShare.RandomNumber.Random(4) == 1)
             {
-                TurnTo(M2Share.RandomNumber.RandomByte(8));
+                TurnTo(GameShare.RandomNumber.RandomByte(8));
             }
             else
             {

@@ -48,7 +48,7 @@ namespace GameSrv.Monster.Monsters
             {
                 AttackTick = HUtil32.GetTickCount();
                 SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
-                int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
+                int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     BaseObject baseObject = VisibleActors[i].BaseObject;
@@ -62,9 +62,9 @@ namespace GameSrv.Monster.Monsters
                         {
                             TargetFocusTick = HUtil32.GetTickCount();
                             SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(baseObject.CurrX, baseObject.CurrY), 2, baseObject.ActorId, "", 600);
-                            if (M2Share.RandomNumber.Random(4) == 0)
+                            if (GameShare.RandomNumber.Random(4) == 0)
                             {
-                                if (M2Share.RandomNumber.Random(3) != 0)
+                                if (GameShare.RandomNumber.Random(3) != 0)
                                 {
                                     baseObject.MakePosion(PoisonState.DECHEALTH, 60, 3);
                                 }

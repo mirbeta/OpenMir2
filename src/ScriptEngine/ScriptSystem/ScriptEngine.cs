@@ -1,9 +1,11 @@
-﻿using GameSrv.Npc;
-using GameSrv.ScriptSystem;
+﻿using GameSrv.ScriptSystem;
+using M2Server;
 using NLog;
+using ScriptEngine;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using SystemModule;
 using SystemModule.Common;
 
 namespace GameSrv.Script
@@ -225,7 +227,7 @@ namespace GameSrv.Script
             return scriptInfo;
         }
 
-        private bool LoadScriptFileQuestCondition(string sText, ref QuestConditionInfo QuestConditionInfo) {
+        private bool LoadScriptFileQuestCondition(string sText, ref QuestConditionInfo questConditionInfo) {
             var result = false;
             var sCmd = string.Empty;
             var sParam1 = string.Empty;
@@ -247,11 +249,11 @@ namespace GameSrv.Script
                 var sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName)) {
-                    QuestConditionInfo.sOpName = sActName;
+                    questConditionInfo.sOpName = sActName;
                     if (".".IndexOf(sCmd, StringComparison.OrdinalIgnoreCase) > -1) {
                         sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                         if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0) {
-                            QuestConditionInfo.sOpHName = "H";
+                            questConditionInfo.sOpHName = "H";
                         }
                     }
                 }
@@ -323,36 +325,36 @@ namespace GameSrv.Script
                 if (!string.IsNullOrEmpty(sParam6) && sParam6[0] == '\"') {
                     HUtil32.ArrestStringEx(sParam6, "\"", "\"", ref sParam6);
                 }
-                QuestConditionInfo.sParam1 = sParam1;
-                QuestConditionInfo.sParam2 = sParam2;
-                QuestConditionInfo.sParam3 = sParam3;
-                QuestConditionInfo.sParam4 = sParam4;
-                QuestConditionInfo.sParam5 = sParam5;
-                QuestConditionInfo.sParam6 = sParam6;
+                questConditionInfo.sParam1 = sParam1;
+                questConditionInfo.sParam2 = sParam2;
+                questConditionInfo.sParam3 = sParam3;
+                questConditionInfo.sParam4 = sParam4;
+                questConditionInfo.sParam5 = sParam5;
+                questConditionInfo.sParam6 = sParam6;
                 if (HUtil32.IsStringNumber(sParam1)) {
-                    QuestConditionInfo.nParam1 = HUtil32.StrToInt(sParam1, 0);
+                    questConditionInfo.nParam1 = HUtil32.StrToInt(sParam1, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam2)) {
-                    QuestConditionInfo.nParam2 = HUtil32.StrToInt(sParam2, 0);
+                    questConditionInfo.nParam2 = HUtil32.StrToInt(sParam2, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam3)) {
-                    QuestConditionInfo.nParam3 = HUtil32.StrToInt(sParam3, 0);
+                    questConditionInfo.nParam3 = HUtil32.StrToInt(sParam3, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam4)) {
-                    QuestConditionInfo.nParam4 = HUtil32.StrToInt(sParam4, 0);
+                    questConditionInfo.nParam4 = HUtil32.StrToInt(sParam4, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam5)) {
-                    QuestConditionInfo.nParam5 = HUtil32.StrToInt(sParam5, 0);
+                    questConditionInfo.nParam5 = HUtil32.StrToInt(sParam5, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam6)) {
-                    QuestConditionInfo.nParam6 = HUtil32.StrToInt(sParam6, 0);
+                    questConditionInfo.nParam6 = HUtil32.StrToInt(sParam6, 0);
                 }
                 result = true;
             }
             return result;
         }
 
-        private bool LoadScriptFileQuestAction(string sText, ref QuestActionInfo QuestActionInfo)
+        private bool LoadScriptFileQuestAction(string sText, ref QuestActionInfo questActionInfo)
         {
             var sCmd = string.Empty;
             var sParam1 = string.Empty;
@@ -376,13 +378,13 @@ namespace GameSrv.Script
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName))
                 {
-                    QuestActionInfo.sOpName = sActName;
+                    questActionInfo.sOpName = sActName;
                     if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1)
                     {
                         sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                         if (string.Compare(sActName, "H", StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            QuestActionInfo.sOpHName = "H";
+                            questActionInfo.sOpHName = "H";
                         }
                     }
                 }
@@ -462,7 +464,7 @@ namespace GameSrv.Script
         L001:
             if (nCMDCode > 0)
             {
-                QuestActionInfo.nCmdCode = nCMDCode;
+                questActionInfo.nCmdCode = nCMDCode;
                 if (!string.IsNullOrEmpty(sParam1) && sParam1[0] == '\"')
                 {
                     HUtil32.ArrestStringEx(sParam1, "\"", "\"", ref sParam1);
@@ -487,35 +489,35 @@ namespace GameSrv.Script
                 {
                     HUtil32.ArrestStringEx(sParam6, "\"", "\"", ref sParam6);
                 }
-                QuestActionInfo.sParam1 = sParam1;
-                QuestActionInfo.sParam2 = sParam2;
-                QuestActionInfo.sParam3 = sParam3;
-                QuestActionInfo.sParam4 = sParam4;
-                QuestActionInfo.sParam5 = sParam5;
-                QuestActionInfo.sParam6 = sParam6;
+                questActionInfo.sParam1 = sParam1;
+                questActionInfo.sParam2 = sParam2;
+                questActionInfo.sParam3 = sParam3;
+                questActionInfo.sParam4 = sParam4;
+                questActionInfo.sParam5 = sParam5;
+                questActionInfo.sParam6 = sParam6;
                 if (HUtil32.IsStringNumber(sParam1))
                 {
-                    QuestActionInfo.nParam1 = HUtil32.StrToInt(sParam1, 0);
+                    questActionInfo.nParam1 = HUtil32.StrToInt(sParam1, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam2))
                 {
-                    QuestActionInfo.nParam2 = HUtil32.StrToInt(sParam2, 1);
+                    questActionInfo.nParam2 = HUtil32.StrToInt(sParam2, 1);
                 }
                 if (HUtil32.IsStringNumber(sParam3))
                 {
-                    QuestActionInfo.nParam3 = HUtil32.StrToInt(sParam3, 1);
+                    questActionInfo.nParam3 = HUtil32.StrToInt(sParam3, 1);
                 }
                 if (HUtil32.IsStringNumber(sParam4))
                 {
-                    QuestActionInfo.nParam4 = HUtil32.StrToInt(sParam4, 0);
+                    questActionInfo.nParam4 = HUtil32.StrToInt(sParam4, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam5))
                 {
-                    QuestActionInfo.nParam5 = HUtil32.StrToInt(sParam5, 0);
+                    questActionInfo.nParam5 = HUtil32.StrToInt(sParam5, 0);
                 }
                 if (HUtil32.IsStringNumber(sParam6))
                 {
-                    QuestActionInfo.nParam6 = HUtil32.StrToInt(sParam6, 0);
+                    questActionInfo.nParam6 = HUtil32.StrToInt(sParam6, 0);
                 }
                 result = true;
             }

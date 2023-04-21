@@ -21,7 +21,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var targerObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (targerObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
@@ -32,10 +32,10 @@ namespace GameSrv.GameCommand.Commands {
                 }
 
                 userItem = targerObject.ItemList[i];
-                s14 = M2Share.WorldEngine.GetStdItemName(userItem.Index);
+                s14 = GameShare.WorldEngine.GetStdItemName(userItem.Index);
                 for (var j = i - 1; j >= 0; j--) {
                     userItem1 = targerObject.ItemList[j];
-                    if (M2Share.WorldEngine.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex) {
+                    if (GameShare.WorldEngine.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex) {
                         playObject.ItemList.RemoveAt(j);
                         break;
                     }
@@ -47,10 +47,10 @@ namespace GameSrv.GameCommand.Commands {
                     break;
                 }
                 userItem = targerObject.StorageItemList[i];
-                s14 = M2Share.WorldEngine.GetStdItemName(userItem.Index);
+                s14 = GameShare.WorldEngine.GetStdItemName(userItem.Index);
                 for (var j = i - 1; j >= 0; j--) {
                     userItem1 = targerObject.StorageItemList[j];
-                    if (M2Share.WorldEngine.GetStdItemName(userItem1.Index) == s14 &&
+                    if (GameShare.WorldEngine.GetStdItemName(userItem1.Index) == s14 &&
                         userItem.MakeIndex == userItem1.MakeIndex) {
                         playObject.StorageItemList.RemoveAt(j);
                         break;

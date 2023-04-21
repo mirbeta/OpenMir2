@@ -39,7 +39,7 @@ namespace GameSrv.GameCommand.Commands
             playObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (var i = 0; i < nCount; i++)
             {
-                var monster = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+                var monster = (MonsterObject)GameShare.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
                 if (monster != null)
                 {
                     monster.SlaveMakeLevel = nLevel;

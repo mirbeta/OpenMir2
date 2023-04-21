@@ -61,7 +61,7 @@ namespace GameSrv.Items {
             var sMakeIndex = string.Empty;
             var sItemIndex = string.Empty;
             var sItemName = string.Empty;
-            var sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
+            var sFileName = GameShare.GetEnvirFilePath("ItemNameList.txt");
             using var loadList = new StringList();
             if (File.Exists(sFileName)) {
                 ItemNameList.Clear();
@@ -93,10 +93,10 @@ namespace GameSrv.Items {
         /// <returns></returns>
         public static string GetItemName(UserItem userItem)
         {
-            var result = M2Share.WorldEngine.GetStdItemName(userItem.Index);
+            var result = GameShare.WorldEngine.GetStdItemName(userItem.Index);
             if (userItem.Desc[13] == 1)
             {
-                result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
+                result = GameShare.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
             }
             return result;
         }
@@ -105,7 +105,7 @@ namespace GameSrv.Items {
         /// 保存自定义物品名称
         /// </summary>
         public void SaveCustomItemName() {
-            var sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
+            var sFileName = GameShare.GetEnvirFilePath("ItemNameList.txt");
             var saveList = new StringList();
             for (var i = ItemNameList.Count - 1; i >= 0; i--) {
                 var itemName = ItemNameList[i];

@@ -119,7 +119,7 @@ namespace GameSrv.Guild
             flourishing = 0;
             chiefItemCount = 0;
             DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
-            var sFileName = Path.Combine(M2Share.Config.GuildDir, string.Concat(sName + ".ini"));
+            var sFileName = Path.Combine(GameShare.Config.GuildDir, string.Concat(sName + ".ini"));
             _guildConf = new GuildConf(sName, sFileName);
         }
 
@@ -208,7 +208,7 @@ namespace GameSrv.Guild
             var s1C = string.Empty;
             var s20 = string.Empty;
             GuildRank guildRank = null;
-            var sFileName = Path.Combine(M2Share.Config.GuildDir, sGuildFileName);
+            var sFileName = Path.Combine(GameShare.Config.GuildDir, sGuildFileName);
             if (!File.Exists(sFileName))
             {
                 return false;
@@ -235,19 +235,19 @@ namespace GameSrv.Guild
                 }
                 if (s18[0] != '+')
                 {
-                    if (s18 == M2Share.Config.GuildNotice)
+                    if (s18 == GameShare.Config.GuildNotice)
                     {
                         n28 = 1;
                     }
-                    if (s18 == M2Share.Config.GuildWar)
+                    if (s18 == GameShare.Config.GuildWar)
                     {
                         n28 = 2;
                     }
-                    if (s18 == M2Share.Config.GuildAll)
+                    if (s18 == GameShare.Config.GuildAll)
                     {
                         n28 = 3;
                     }
-                    if (s18 == M2Share.Config.GuildMember)
+                    if (s18 == GameShare.Config.GuildMember)
                     {
                         n28 = 4;
                     }
@@ -277,7 +277,7 @@ namespace GameSrv.Guild
                             }
                             var guildWar = new WarGuild
                             {
-                                Guild = M2Share.GuildMgr.FindGuild(s1C)
+                                Guild = GameShare.GuildMgr.FindGuild(s1C)
                             };
                             if (guildWar.Guild != null)
                             {
@@ -296,7 +296,7 @@ namespace GameSrv.Guild
                             {
                                 break;
                             }
-                            var guild = M2Share.GuildMgr.FindGuild(s1C);
+                            var guild = GameShare.GuildMgr.FindGuild(s1C);
                             if (guild != null)
                             {
                                 GuildAllList.Add(guild);
@@ -308,7 +308,7 @@ namespace GameSrv.Guild
                         {
                             if (s24.Length > 30)
                             {
-                                s24 = s24[..M2Share.Config.GuildRankNameLen];//限制职倍的长度
+                                s24 = s24[..GameShare.Config.GuildRankNameLen];//限制职倍的长度
                             }
                             if (guildRank == null)
                             {
@@ -327,7 +327,7 @@ namespace GameSrv.Guild
                                 {
                                     break;
                                 }
-                                var playObject = M2Share.WorldEngine.GetPlayObject(s1C);
+                                var playObject = GameShare.WorldEngine.GetPlayObject(s1C);
                                 guildRank.MemberList.Add(new GuildMember()
                                 {
                                     MemberName = s1C,
@@ -362,14 +362,14 @@ namespace GameSrv.Guild
 
         public void SaveGuildInfoFile()
         {
-            if (M2Share.ServerIndex == 0)
+            if (GameShare.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, string.Concat(GuildName, ".txt")));
+                SaveGuildFile(Path.Combine(GameShare.Config.GuildDir, string.Concat(GuildName, ".txt")));
                 SaveGuildConfig();
             }
             else
             {
-                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, GuildName, ".", M2Share.ServerIndex.ToString()));
+                SaveGuildFile(Path.Combine(GameShare.Config.GuildDir, GuildName, ".", GameShare.ServerIndex.ToString()));
             }
         }
 
@@ -381,13 +381,13 @@ namespace GameSrv.Guild
         private void SaveGuildFile(string sFileName)
         {
             var saveList = new StringList();
-            saveList.Add(M2Share.Config.GuildNotice);
+            saveList.Add(GameShare.Config.GuildNotice);
             for (var i = 0; i < NoticeList.Count; i++)
             {
                 saveList.Add("+" + NoticeList[i]);
             }
             saveList.Add(" ");
-            saveList.Add(M2Share.Config.GuildWar);
+            saveList.Add(GameShare.Config.GuildWar);
             for (var i = 0; i < GuildWarList.Count; i++)
             {
                 var warGuild = GuildWarList[i];
@@ -399,13 +399,13 @@ namespace GameSrv.Guild
                 saveList.Add("+" + GuildWarList[i].Guild.GuildName + ' ' + n14);
             }
             saveList.Add(" ");
-            saveList.Add(M2Share.Config.GuildAll);
+            saveList.Add(GameShare.Config.GuildAll);
             for (var i = 0; i < GuildAllList.Count; i++)
             {
                 saveList.Add("+" + GuildAllList[i]);
             }
             saveList.Add(" ");
-            saveList.Add(M2Share.Config.GuildMember);
+            saveList.Add(GameShare.Config.GuildMember);
             for (var i = 0; i < RankList.Count; i++)
             {
                 var guildRank = RankList[i];
@@ -421,7 +421,7 @@ namespace GameSrv.Guild
             }
             catch
             {
-                M2Share.Logger.Error("保存行会信息失败!!! " + sFileName);
+                GameShare.Logger.Error("保存行会信息失败!!! " + sFileName);
             }
         }
 
@@ -429,9 +429,9 @@ namespace GameSrv.Guild
         {
             try
             {
-                if (M2Share.Config.ShowPreFixMsg)
+                if (GameShare.Config.ShowPreFixMsg)
                 {
-                    sMsg = M2Share.Config.GuildMsgPreFix + sMsg;
+                    sMsg = GameShare.Config.GuildMsgPreFix + sMsg;
                 }
                 for (var i = 0; i < RankList.Count; i++)
                 {
@@ -445,15 +445,15 @@ namespace GameSrv.Guild
                         }
                         if (guildMember.BanGuildChat)
                         {
-                            guildMember.SendMsg(guildMember, Messages.RM_GUILDMESSAGE, 0, M2Share.Config.GuildMsgFColor, M2Share.Config.GuildMsgBColor, 0, sMsg);
+                            guildMember.SendMsg(guildMember, Messages.RM_GUILDMESSAGE, 0, GameShare.Config.GuildMsgFColor, GameShare.Config.GuildMsgBColor, 0, sMsg);
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error("[Exceptiion] TGuild.SendGuildMsg GuildName = " + GuildName + " Msg = " + sMsg);
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error("[Exceptiion] TGuild.SendGuildMsg GuildName = " + GuildName + " Msg = " + sMsg);
+                GameShare.Logger.Error(e.Message);
             }
         }
 
@@ -464,10 +464,10 @@ namespace GameSrv.Guild
                 var guildRank = new GuildRank
                 {
                     RankNo = 1,
-                    RankName = M2Share.Config.GuildChief,
+                    RankName = GameShare.Config.GuildChief,
                     MemberList = new List<GuildMember>()
                 };
-                var playObject = M2Share.WorldEngine.GetPlayObject(sChief);
+                var playObject = GameShare.WorldEngine.GetPlayObject(sChief);
                 guildRank.MemberList.Add(new GuildMember()
                 {
                     MemberName = sChief,
@@ -587,9 +587,9 @@ namespace GameSrv.Guild
 
         public void BackupGuildFile()
         {
-            if (M2Share.ServerIndex == 0)
+            if (GameShare.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(M2Share.Config.GuildDir, GuildName, '.' + HUtil32.GetTickCount() + ".bak"));
+                SaveGuildFile(Path.Combine(GameShare.Config.GuildDir, GuildName, '.' + HUtil32.GetTickCount() + ".bak"));
             }
             for (var i = 0; i < RankList.Count; i++)
             {
@@ -634,7 +634,7 @@ namespace GameSrv.Guild
                 guildRank18 = new GuildRank
                 {
                     RankNo = 99,
-                    RankName = M2Share.Config.GuildMemberRank,
+                    RankName = GameShare.Config.GuildMemberRank,
                     MemberList = new List<GuildMember>()
                 };
                 RankList.Add(guildRank18);
@@ -770,7 +770,7 @@ namespace GameSrv.Guild
                     {
                         guildRank.MemberList.Add(new GuildMember()
                         {
-                            PlayObject = M2Share.WorldEngine.GetPlayObject(sMemberName),
+                            PlayObject = GameShare.WorldEngine.GetPlayObject(sMemberName),
                             MemberName = sMemberName
                         });
                     }
@@ -844,7 +844,7 @@ namespace GameSrv.Guild
                     n28 = guildRank.MemberList.Count;
                     for (var i = 0; i < guildRank.MemberList.Count; i++)
                     {
-                        if (M2Share.WorldEngine.GetPlayObject(guildRank.MemberList[i].MemberName) == null)
+                        if (GameShare.WorldEngine.GetPlayObject(guildRank.MemberList[i].MemberName) == null)
                         {
                             n28 -= 1;
                             break;
@@ -969,7 +969,7 @@ namespace GameSrv.Guild
                     guildRank = RankList[i];
                     for (var j = 0; j < guildRank.MemberList.Count; j++)
                     {
-                        var memberObject = M2Share.WorldEngine.GetPlayObject(guildRank.MemberList[j].MemberName);
+                        var memberObject = GameShare.WorldEngine.GetPlayObject(guildRank.MemberList[j].MemberName);
                         if (memberObject != null)
                         {
                             //GuildRank.MemberList[j].PlayObject = PlayObject;
@@ -1026,7 +1026,7 @@ namespace GameSrv.Guild
                         {
                             warGuild = GuildWarList[i];
                             warGuild.dwWarTick = HUtil32.GetTickCount();
-                            warGuild.dwWarTime = M2Share.Config.GuildWarTime;// 10800000
+                            warGuild.dwWarTime = GameShare.Config.GuildWarTime;// 10800000
                             SendGuildMsg("***" + guild.GuildName + "行会战争将持续三个小时。");
                             break;
                         }
@@ -1037,7 +1037,7 @@ namespace GameSrv.Guild
                         {
                             Guild = guild,
                             dwWarTick = HUtil32.GetTickCount(),
-                            dwWarTime = M2Share.Config.GuildWarTime// 10800000
+                            dwWarTime = GameShare.Config.GuildWarTime// 10800000
                         };
                         GuildWarList.Add(warGuild);
                         SendGuildMsg("***" + guild.GuildName + "行会战争开始(三个小时)");
@@ -1062,7 +1062,7 @@ namespace GameSrv.Guild
 
         private bool GetMemgerIsFull()
         {
-            return Count >= M2Share.Config.GuildMemberMaxLimit;
+            return Count >= GameShare.Config.GuildMemberMaxLimit;
         }
 
         public void StartTeamFight()

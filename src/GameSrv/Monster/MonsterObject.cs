@@ -1,4 +1,5 @@
 ﻿using GameSrv.Actor;
+using M2Server.Actor;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -61,7 +62,7 @@ namespace GameSrv.Monster
             ThinkTick = HUtil32.GetTickCount();
             ViewRange = 5;
             RunTime = 250;
-            SearchTime = 3000 + M2Share.RandomNumber.Random(2000);
+            SearchTime = 3000 + GameShare.RandomNumber.Random(2000);
             SearchTick = HUtil32.GetTickCount();
             CheckRoyaltyTick = HUtil32.GetTickCount();
             CrazyMode = false;
@@ -87,18 +88,18 @@ namespace GameSrv.Monster
             int tCount;
             if (SlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
             {
-                tCount = M2Share.Config.MonUpLvNeedKillCount[SlaveExpLevel];
+                tCount = GameShare.Config.MonUpLvNeedKillCount[SlaveExpLevel];
             }
             else
             {
                 tCount = 0;
             }
-            return (Abil.Level * M2Share.Config.MonUpLvRate) - Abil.Level + M2Share.Config.MonUpLvNeedKillBase + tCount;
+            return (Abil.Level * GameShare.Config.MonUpLvRate) - Abil.Level + GameShare.Config.MonUpLvNeedKillBase + tCount;
         }
 
         protected BaseObject MakeClone(string sMonName, MonsterObject OldMon)
         {
-            MonsterObject ElfMon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
+            MonsterObject ElfMon = (MonsterObject)GameShare.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
                 if (OldMon.TargetCret == null)
@@ -139,7 +140,7 @@ namespace GameSrv.Monster
             SearchTick = HUtil32.GetTickCount();
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
-            var baseObject = M2Share.ActorMgr.Get(acrotId);
+            var baseObject = GameShare.ActorMgr.Get(acrotId);
             if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
@@ -203,7 +204,7 @@ namespace GameSrv.Monster
                 }
                 int nOldX = CurrX;
                 int nOldY = CurrY;
-                WalkTo(M2Share.RandomNumber.RandomByte(8), false, BoFearFire);
+                WalkTo(GameShare.RandomNumber.RandomByte(8), false, BoFearFire);
                 if (nOldX != CurrX || nOldY != CurrY)
                 {
                     DupMode = false;
@@ -363,7 +364,7 @@ namespace GameSrv.Monster
                 CheckRoyaltyTick = HUtil32.GetTickCount();
                 if (Master != null)
                 {
-                    if ((M2Share.SpiritMutinyTick > HUtil32.GetTickCount()) && (this.SlaveExpLevel < 5))
+                    if ((GameShare.SpiritMutinyTick > HUtil32.GetTickCount()) && (this.SlaveExpLevel < 5))
                     {
                         MasterRoyaltyTick = 0;
                     }

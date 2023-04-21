@@ -1,7 +1,8 @@
-﻿using SystemModule.Data;
+﻿using SystemModule;
+using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.Conf.Model {
+namespace M2Server.Conf.Model {
     public class GameSvrConf {
         public string sDBType;
         public string ConnctionString;

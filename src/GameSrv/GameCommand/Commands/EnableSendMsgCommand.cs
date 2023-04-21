@@ -17,8 +17,8 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = M2Share.DisableSendMsgList.Count - 1; i >= 0; i--) {
-                if (M2Share.DisableSendMsgList.Count <= 0) {
+            for (var i = GameShare.DisableSendMsgList.Count - 1; i >= 0; i--) {
+                if (GameShare.DisableSendMsgList.Count <= 0) {
                     break;
                 }
                 //if ((sHumanName).CompareTo((Settings.g_DisableSendMsgList[i])) == 0)

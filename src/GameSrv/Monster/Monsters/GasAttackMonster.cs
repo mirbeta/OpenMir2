@@ -7,7 +7,7 @@ namespace GameSrv.Monster.Monsters
     {
         public GasAttackMonster() : base()
         {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
             Animal = true;
         }
 
@@ -15,19 +15,19 @@ namespace GameSrv.Monster.Monsters
         {
             BaseObject result = null;
             Dir = bt05;
-            int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            int nPower = HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0)
             {
                 SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
                 BaseObject baseObject = GetPoseCreate();
-                if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
+                if (baseObject != null && IsProperTarget(baseObject) && GameShare.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                 {
                     nPower = baseObject.GetMagStruckDamage(this, nPower);
                     if (nPower > 0)
                     {
                         baseObject.StruckDamage(nPower);
                         baseObject.SendStruckDelayMsg(Messages.RM_REFMESSAGE, nPower, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, ActorId, "", 300);
-                        if (M2Share.RandomNumber.Random(baseObject.AntiPoison + 20) == 0)
+                        if (GameShare.RandomNumber.Random(baseObject.AntiPoison + 20) == 0)
                         {
                             baseObject.MakePosion(PoisonState.STONE, 5, 0);
                         }

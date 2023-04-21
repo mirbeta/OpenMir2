@@ -19,7 +19,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            var guild = GameShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null) {
                 playObject.SysMsg($"{sGuildName} 的得分为: {guild.ContestPoint}", MsgColor.Green, MsgType.Hint);
             }

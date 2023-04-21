@@ -4,7 +4,7 @@ using SystemModule.Consts;
 namespace GameSrv.Monster.Monsters {
     public class ScultureMonster : MonsterObject {
         public ScultureMonster() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
             ViewRange = 7;
             StoneMode = true;
             CharStatusEx = PoisonState.STONEMODE;

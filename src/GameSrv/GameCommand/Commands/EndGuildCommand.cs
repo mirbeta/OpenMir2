@@ -13,7 +13,7 @@ namespace GameSrv.GameCommand.Commands {
             if (playObject.MyGuild != null) {
                 if (playObject.GuildRankNo > 1) {
                     if (playObject.MyGuild.IsMember(playObject.ChrName) && playObject.MyGuild.DelMember(playObject.ChrName)) {
-                        WorldServer.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, playObject.MyGuild.GuildName);
+                        WorldServer.SendServerGroupMsg(Messages.SS_207, GameShare.ServerIndex, playObject.MyGuild.GuildName);
                         playObject.MyGuild = null;
                         playObject.RefRankInfo(0, "");
                         playObject.RefShowName();

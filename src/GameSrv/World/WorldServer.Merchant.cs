@@ -11,7 +11,7 @@ namespace GameSrv.World
             for (var i = MerchantList.Count - 1; i >= 0; i--)
             {
                 var merchant = MerchantList[i];
-                merchant.Envir = M2Share.MapMgr.FindMap(merchant.MapName);
+                merchant.Envir = GameShare.MapMgr.FindMap(merchant.MapName);
                 if (merchant.Envir != null)
                 {
                     merchant.OnEnvirnomentChanged();
@@ -40,7 +40,7 @@ namespace GameSrv.World
             for (var i = QuestNpcList.Count - 1; i >= 0; i--)
             {
                 var normNpc = QuestNpcList[i];
-                normNpc.Envir = M2Share.MapMgr.FindMap(normNpc.MapName);
+                normNpc.Envir = GameShare.MapMgr.FindMap(normNpc.MapName);
                 if (normNpc.Envir != null)
                 {
                     normNpc.OnEnvirnomentChanged();
@@ -91,7 +91,7 @@ namespace GameSrv.World
                             break;
                         }
                     }
-                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.NpcLimit)
+                    if ((HUtil32.GetTickCount() - dwRunTick) > GameShare.NpcLimit)
                     {
                         MerchantPosition = i;
                         boProcessLimit = true;
@@ -143,7 +143,7 @@ namespace GameSrv.World
                             break;
                         }
                     }
-                    if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.NpcLimit)
+                    if ((HUtil32.GetTickCount() - dwRunTick) > GameShare.NpcLimit)
                     {
                         NpcPosition = i;
                         boProcessLimit = true;
@@ -162,7 +162,7 @@ namespace GameSrv.World
 
         public static T FindMerchant<T>(int merchantId)
         {
-            var normNpc = M2Share.ActorMgr.Get(merchantId);
+            var normNpc = GameShare.ActorMgr.Get(merchantId);
             var npcType = normNpc.GetType();
             if (npcType == typeof(Merchant))
             {
@@ -185,7 +185,7 @@ namespace GameSrv.World
 
         public static T FindNpc<T>(int npcId)
         {
-            var normNpc = M2Share.ActorMgr.Get(npcId);
+            var normNpc = GameShare.ActorMgr.Get(npcId);
             return (T)Convert.ChangeType(normNpc, typeof(T));
         }
 

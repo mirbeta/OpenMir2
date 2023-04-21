@@ -20,13 +20,13 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.Config.ShowMakeItemMsg) {
-                M2Share.Logger.Warn(string.Format(sOutFormatMsg, playObject.ChrName, mPlayObject.ChrName, mPlayObject.Permission, nPerission));
+            if (GameShare.Config.ShowMakeItemMsg) {
+                GameShare.Logger.Warn(string.Format(sOutFormatMsg, playObject.ChrName, mPlayObject.ChrName, mPlayObject.Permission, nPerission));
             }
             mPlayObject.Permission = (byte)nPerission;
             playObject.SysMsg(sHumanName + " 当前权限为: " + mPlayObject.Permission, MsgColor.Red, MsgType.Hint);

@@ -17,7 +17,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sChrName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sChrName);
             if (mPlayObject != null) {
                 if (mPlayObject.WhisperHuman == playObject) {
                     mPlayObject.WhisperHuman = null;

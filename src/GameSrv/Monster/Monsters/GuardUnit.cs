@@ -2,6 +2,7 @@
 using GameSrv.Maps;
 using GameSrv.Npc;
 using GameSrv.Player;
+using M2Server.Actor;
 using SystemModule.Enums;
 
 namespace GameSrv.Monster.Monsters
@@ -160,7 +161,7 @@ namespace GameSrv.Monster.Monsters
                                         cellInfo.Clear();
                                         break;
                                     }
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
                                         if (!baseObject.Death && !baseObject.Invisible)
@@ -186,8 +187,8 @@ namespace GameSrv.Monster.Monsters
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                GameShare.Logger.Error(e.Message);
                 KickException();
             }
             n24 = 2;
@@ -212,7 +213,7 @@ namespace GameSrv.Monster.Monsters
             }
             catch
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                GameShare.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
         }

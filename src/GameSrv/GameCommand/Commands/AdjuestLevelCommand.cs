@@ -18,15 +18,15 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 int nOLevel = mPlayObject.Abil.Level;
                 mPlayObject.HasLevelUp(1);
-                M2Share.EventSource.AddEventLog(17, mPlayObject.MapName + "\09" + mPlayObject.CurrX + "\09" + mPlayObject.CurrY + "\09"
+                GameShare.EventSource.AddEventLog(17, mPlayObject.MapName + "\09" + mPlayObject.CurrX + "\09" + mPlayObject.CurrY + "\09"
                                                     + mPlayObject.ChrName + "\09" + mPlayObject.Abil.Level + "\09" + playObject.ChrName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
                 playObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
-                if (M2Share.Config.ShowMakeItemMsg) {
-                    M2Share.Logger.Warn("[等级调整] " + playObject.ChrName + "(" + mPlayObject.ChrName + " " + nOLevel + " -> " + mPlayObject.Abil.Level + ")");
+                if (GameShare.Config.ShowMakeItemMsg) {
+                    GameShare.Logger.Warn("[等级调整] " + playObject.ChrName + "(" + mPlayObject.ChrName + " " + nOLevel + " -> " + mPlayObject.Abil.Level + ")");
                 }
             }
             else

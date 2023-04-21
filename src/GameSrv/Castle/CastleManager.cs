@@ -51,7 +51,7 @@ namespace GameSrv.Castle {
         public void Initialize() {
             UserCastle castle;
             if (_castleList.Count <= 0) {
-                castle = new UserCastle(M2Share.Config.CastleDir);
+                castle = new UserCastle(GameShare.Config.CastleDir);
                 castle.Initialize();
                 castle.ConfigDir = "0";
                 castle.EnvirList.Add("0151");
@@ -122,7 +122,7 @@ namespace GameSrv.Castle {
         }
 
         public void LoadCastleList() {
-            string castleFile = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
+            string castleFile = Path.Combine(GameShare.BasePath, GameShare.Config.CastleFile);
             if (File.Exists(castleFile)) {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(castleFile);
@@ -141,7 +141,7 @@ namespace GameSrv.Castle {
         }
 
         private void SaveCastleList() {
-            string castleDirPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir);
+            string castleDirPath = Path.Combine(GameShare.BasePath, GameShare.Config.CastleDir);
             if (!Directory.Exists(castleDirPath)) {
                 Directory.CreateDirectory(castleDirPath);
             }
@@ -149,7 +149,7 @@ namespace GameSrv.Castle {
             for (int i = 0; i < _castleList.Count; i++) {
                 loadList.Add(i.ToString());
             }
-            string savePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleFile);
+            string savePath = Path.Combine(GameShare.BasePath, GameShare.Config.CastleFile);
             loadList.SaveToFile(savePath);
         }
 

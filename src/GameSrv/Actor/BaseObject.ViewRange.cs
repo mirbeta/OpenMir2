@@ -1,4 +1,5 @@
 using GameSrv.Maps;
+using M2Server.Actor;
 using SystemModule.Enums;
 
 namespace GameSrv.Actor
@@ -55,7 +56,7 @@ namespace GameSrv.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
             if (Envir == null)
             {
-                M2Share.Logger.Error("SearchViewRange nil PEnvir");
+                GameShare.Logger.Error("SearchViewRange nil PEnvir");
                 return;
             }
             int n24 = 0;
@@ -98,7 +99,7 @@ namespace GameSrv.Actor
                                         cellInfo.Clear();
                                         break;
                                     }
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
                                         if (!baseObject.Death && !baseObject.Invisible)
@@ -121,8 +122,8 @@ namespace GameSrv.Actor
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                GameShare.Logger.Error(e.Message);
                 KickException();
             }
             n24 = 2;
@@ -147,7 +148,7 @@ namespace GameSrv.Actor
             }
             catch
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                GameShare.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
         }
@@ -199,7 +200,7 @@ namespace GameSrv.Actor
                             }
                             if ((cellObject.CellType == CellType.Item) && !Death && (Race > ActorRace.Monster))
                             {
-                                if ((HUtil32.GetTickCount() - cellObject.AddTime) > M2Share.Config.ClearDropOnFloorItemTime)
+                                if ((HUtil32.GetTickCount() - cellObject.AddTime) > GameShare.Config.ClearDropOnFloorItemTime)
                                 {
                                     cellInfo.Remove(i);
                                     if (cellInfo.Count > 0)

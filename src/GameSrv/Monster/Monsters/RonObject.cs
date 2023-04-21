@@ -3,7 +3,7 @@
 namespace GameSrv.Monster.Monsters {
     public class RonObject : MonsterObject {
         public RonObject() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         private void AroundAttack() {

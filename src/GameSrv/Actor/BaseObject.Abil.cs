@@ -1,4 +1,5 @@
 ﻿using GameSrv.Monster;
+using M2Server.Actor;
 using SystemModule.Consts;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;

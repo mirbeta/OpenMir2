@@ -20,7 +20,7 @@ namespace GameSrv.GameCommand.Commands
             var sType = @params.Length > 2 ? @params[2] : "";
             var sLight = @params.Length > 3 ? @params[3] : "";
             var nBind = -1;
-            var nItem = M2Share.GetUseItemIdx(sItem);
+            var nItem = GameShare.GetUseItemIdx(sItem);
             if (string.Compare(sType, "帐号", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 0;
@@ -43,7 +43,7 @@ namespace GameSrv.GameCommand.Commands
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null)
             {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -65,12 +65,12 @@ namespace GameSrv.GameCommand.Commands
                 case 0:
                     boFind = false;
                     sBindName = mPlayObject.UserAccount;
-                    HUtil32.EnterCriticalSection(M2Share.ItemBindAccount);
+                    HUtil32.EnterCriticalSection(GameShare.ItemBindAccount);
                     try
                     {
-                        for (var i = 0; i < M2Share.ItemBindAccount.Count; i++)
+                        for (var i = 0; i < GameShare.ItemBindAccount.Count; i++)
                         {
-                            itemBind = M2Share.ItemBindAccount[i];
+                            itemBind = GameShare.ItemBindAccount[i];
                             if (itemBind.nItemIdx == nItemIdx && itemBind.nMakeIdex == nMakeIdex)
                             {
                                 playObject.SysMsg(string.Format(CommandHelp.GameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
@@ -84,31 +84,31 @@ namespace GameSrv.GameCommand.Commands
                             itemBind.nItemIdx = nItemIdx;
                             itemBind.nMakeIdex = nMakeIdex;
                             itemBind.sBindName = sBindName;
-                            M2Share.ItemBindAccount.Insert(0, itemBind);
+                            GameShare.ItemBindAccount.Insert(0, itemBind);
                         }
                     }
                     finally
                     {
-                        HUtil32.LeaveCriticalSection(M2Share.ItemBindAccount);
+                        HUtil32.LeaveCriticalSection(GameShare.ItemBindAccount);
                     }
                     if (boFind)
                     {
                         return;
                     }
-                    M2Share.SaveItemBindAccount();
-                    playObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mPlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    GameShare.SaveItemBindAccount();
+                    playObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mPlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     mPlayObject.SendMsg(playObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
                 case 1:
                     sBindName = mPlayObject.ChrName;
                     boFind = false;
-                    HUtil32.EnterCriticalSection(M2Share.ItemBindChrName);
+                    HUtil32.EnterCriticalSection(GameShare.ItemBindChrName);
                     try
                     {
-                        for (var i = 0; i < M2Share.ItemBindChrName.Count; i++)
+                        for (var i = 0; i < GameShare.ItemBindChrName.Count; i++)
                         {
-                            itemBind = M2Share.ItemBindChrName[i];
+                            itemBind = GameShare.ItemBindChrName[i];
                             if (itemBind.nItemIdx == nItemIdx && itemBind.nMakeIdex == nMakeIdex)
                             {
                                 playObject.SysMsg(string.Format(CommandHelp.GameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
@@ -122,32 +122,32 @@ namespace GameSrv.GameCommand.Commands
                             itemBind.nItemIdx = nItemIdx;
                             itemBind.nMakeIdex = nMakeIdex;
                             itemBind.sBindName = sBindName;
-                            M2Share.ItemBindChrName.Insert(0, itemBind);
+                            GameShare.ItemBindChrName.Insert(0, itemBind);
                         }
                     }
                     finally
                     {
-                        HUtil32.LeaveCriticalSection(M2Share.ItemBindChrName);
+                        HUtil32.LeaveCriticalSection(GameShare.ItemBindChrName);
                     }
                     if (boFind)
                     {
                         return;
                     }
-                    M2Share.SaveItemBindChrName();
-                    playObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mPlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    GameShare.SaveItemBindChrName();
+                    playObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mPlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     playObject.SendUpdateItem(userItem);
                     mPlayObject.SendMsg(playObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
                 case 2:
                     boFind = false;
                     sBindName = mPlayObject.LoginIpAddr;
-                    HUtil32.EnterCriticalSection(M2Share.ItemBindIPaddr);
+                    HUtil32.EnterCriticalSection(GameShare.ItemBindIPaddr);
                     try
                     {
-                        for (var i = 0; i < M2Share.ItemBindIPaddr.Count; i++)
+                        for (var i = 0; i < GameShare.ItemBindIPaddr.Count; i++)
                         {
-                            itemBind = M2Share.ItemBindIPaddr[i];
+                            itemBind = GameShare.ItemBindIPaddr[i];
                             if (itemBind.nItemIdx == nItemIdx && itemBind.nMakeIdex == nMakeIdex)
                             {
                                 playObject.SysMsg(string.Format(CommandHelp.GameCommandBindUseItemAlreadBindMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
@@ -161,26 +161,26 @@ namespace GameSrv.GameCommand.Commands
                             itemBind.nItemIdx = nItemIdx;
                             itemBind.nMakeIdex = nMakeIdex;
                             itemBind.sBindName = sBindName;
-                            M2Share.ItemBindIPaddr.Insert(0, itemBind);
+                            GameShare.ItemBindIPaddr.Insert(0, itemBind);
                         }
                     }
                     finally
                     {
-                        HUtil32.LeaveCriticalSection(M2Share.ItemBindIPaddr);
+                        HUtil32.LeaveCriticalSection(GameShare.ItemBindIPaddr);
                     }
                     if (boFind)
                     {
                         return;
                     }
-                    M2Share.SaveItemBindIPaddr();
-                    playObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mPlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    GameShare.SaveItemBindIPaddr();
+                    playObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mPlayObject.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     playObject.SendUpdateItem(userItem);
                     mPlayObject.SendMsg(playObject, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
                 case 3:// 人物装备死亡不爆绑定
                     sBindName = playObject.ChrName;
-                    for (var i = 0; i < M2Share.ItemBindDieNoDropName.Count; i++)
+                    for (var i = 0; i < GameShare.ItemBindDieNoDropName.Count; i++)
                     {
                         //ItemBind = Settings.g_ItemBindDieNoDropName[i];
                         //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))
@@ -197,8 +197,8 @@ namespace GameSrv.GameCommand.Commands
                     };
                     //Settings.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
                     //M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
-                    mPlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    playObject.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", M2Share.GetUseItemName(nItem), M2Share.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mPlayObject.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    playObject.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", GameShare.GetUseItemName(nItem), GameShare.WorldEngine.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     break;
             }
         }

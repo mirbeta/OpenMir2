@@ -38,7 +38,7 @@ namespace GameSrv.Monster.Monsters {
                 }
                 if (RunAwayMode && TargetCret != null && (HUtil32.GetTickCount() - WalkTick) >= WalkSpeed) {
                     if (Math.Abs(CurrX - baseObject.CurrX) <= 6 && Math.Abs(CurrX - baseObject.CurrX) <= 6) {
-                        byte n14 = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                        byte n14 = GameShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                         Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, n14, 5, ref TargetX, ref TargetY);
                     }
                 }

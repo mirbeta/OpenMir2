@@ -1,6 +1,7 @@
-﻿using SystemModule.Common;
+﻿using SystemModule;
+using SystemModule.Common;
 
-namespace GameSrv.Conf {
+namespace M2Server.Conf {
     public class ExpsConf : ConfigFile {
         public ExpsConf(string fileName) : base(fileName) {
             Load();

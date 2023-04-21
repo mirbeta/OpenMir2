@@ -36,7 +36,7 @@ namespace GameSrv.GameCommand.Commands
             playObject.RecalcAbilitys();
             playObject.SendMsg(playObject, Messages.RM_ABILITY, 0, 0, 0, 0);
             playObject.SendMsg(playObject, Messages.RM_SUBABILITY, 0, 0, 0, 0);
-            M2Share.Logger.Warn("[武器调整]" + playObject.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
+            GameShare.Logger.Warn("[武器调整]" + playObject.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
         }
     }
 }

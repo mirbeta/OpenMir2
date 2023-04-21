@@ -6,7 +6,7 @@ namespace GameSrv.Monster.Monsters {
         private readonly IList<BaseObject> SlaveObjectList;
 
         public BoneKingMonster() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             Dir = 5;
             DangerLevel = 5;
@@ -17,13 +17,13 @@ namespace GameSrv.Monster.Monsters {
             string[] sMonName = { "BoneCaptain", "BoneArcher", "BoneSpearman" };
             short n10 = 0;
             short n14 = 0;
-            int nC = M2Share.RandomNumber.Random(6) + 6;
+            int nC = GameShare.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref n10, ref n14);
             for (int i = 0; i < nC; i++) {
                 if (SlaveObjectList.Count >= 30) {
                     break;
                 }
-                BaseObject baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
+                BaseObject baseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, n10, n14, sMonName[GameShare.RandomNumber.Random(3)]);
                 if (baseObject != null) {
                     SlaveObjectList.Add(baseObject);
                 }

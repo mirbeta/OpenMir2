@@ -21,7 +21,7 @@ namespace GameSrv.GameCommand.Commands {
             try {
                 if (!string.IsNullOrEmpty(sFixDeny) && sFixDeny[0] == '1') {
                     //Settings.g_DenyIPAddrList.Add(sIPaddr, ((1) as Object));
-                    M2Share.SaveDenyIPAddrList();
+                    GameShare.SaveDenyIPAddrList();
                     playObject.SysMsg(sIPaddr + "已加入禁止登录IP列表", MsgColor.Green, MsgType.Hint);
                 }
                 else {

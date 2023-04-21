@@ -18,12 +18,12 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = GameShare.MapMgr.FindMap(sMapName);
             if (envir == null) {
                 playObject.SysMsg(string.Format(CommandHelp.TheMapNotFound, sMapName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.Permission >= this.Command.PermissionMin || M2Share.CanMoveMap(sMapName)) {
+            if (playObject.Permission >= this.Command.PermissionMin || GameShare.CanMoveMap(sMapName)) {
                 playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 playObject.MapRandomMove(sMapName, 0);
             }

@@ -28,12 +28,12 @@ namespace GameSrv.GameCommand.Commands
             if (nCount > 10) nCount = 10;
             if (playObject.Permission < Command.PermissionMax)
             {
-                if (!M2Share.CanMakeItem(sItemName))
+                if (!GameShare.CanMakeItem(sItemName))
                 {
                     playObject.SysMsg(CommandHelp.GamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (M2Share.CastleMgr.InCastleWarArea(playObject) != null) // 攻城区域，禁止使用此功能
+                if (GameShare.CastleMgr.InCastleWarArea(playObject) != null) // 攻城区域，禁止使用此功能
                 {
                     playObject.SysMsg(CommandHelp.GamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
                     return;
@@ -49,30 +49,30 @@ namespace GameSrv.GameCommand.Commands
             {
                 if (playObject.ItemList.Count >= Grobal2.MaxBagItem) return;
                 UserItem userItem = null;
-                if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                if (GameShare.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
                 {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
-                    if (stdItem.Price >= 15000 && !M2Share.Config.TestServer && playObject.Permission < 5)
+                    var stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
+                    if (stdItem.Price >= 15000 && !GameShare.Config.TestServer && playObject.Permission < 5)
                     {
                         return;
                     }
-                    if (M2Share.RandomNumber.Random(M2Share.Config.MakeRandomAddValue) == 0)
+                    if (GameShare.RandomNumber.Random(GameShare.Config.MakeRandomAddValue) == 0)
                     {
                         ItemSystem.RandomUpgradeItem(stdItem, userItem);
                     }
                     if (playObject.Permission >= Command.PermissionMax)
                     {
-                        userItem.MakeIndex = M2Share.GetItemNumberEx(); // 制造的物品另行取得物品ID
+                        userItem.MakeIndex = GameShare.GetItemNumberEx(); // 制造的物品另行取得物品ID
                     }
                     playObject.ItemList.Add(userItem);
                     playObject.SendAddItem(userItem);
                     if (playObject.Permission >= 6)
                     {
-                        M2Share.Logger.Warn("[制造物品] " + playObject.ChrName + " " + sItemName + "(" + userItem.MakeIndex + ")");
+                        GameShare.Logger.Warn("[制造物品] " + playObject.ChrName + " " + sItemName + "(" + userItem.MakeIndex + ")");
                     }
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(5, playObject.MapName + "\09" + playObject.CurrX +
+                        GameShare.EventSource.AddEventLog(5, playObject.MapName + "\09" + playObject.CurrX +
                            "\09" + playObject.CurrY + "\09" + playObject.ChrName + "\09" + stdItem.Name + "\09" + userItem.MakeIndex + "\09" + "(" +
                            HUtil32.LoByte(stdItem.DC) + "/" + HUtil32.HiByte(stdItem.DC) + ")" + "(" + HUtil32.LoByte(stdItem.MC) + "/" + HUtil32.HiByte(stdItem.MC) + ")" + "(" +
                            HUtil32.LoByte(stdItem.SC) + "/" + HUtil32.HiByte(stdItem.SC) + ")" + "(" + HUtil32.LoByte(stdItem.AC) + "/" +

@@ -22,17 +22,17 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var castle = M2Share.CastleMgr.Find(sCastleName);
+            var castle = GameShare.CastleMgr.Find(sCastleName);
             if (castle == null) {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            var guild = GameShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null) {
-                M2Share.EventSource.AddEventLog(27, castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + playObject.ChrName + "\09" + '0' + "\09" + '1' + "\09" + '0');
+                GameShare.EventSource.AddEventLog(27, castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + playObject.ChrName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 castle.GetCastle(guild);
                 if (boFlag) {
-                    WorldServer.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, sGuildName);
+                    WorldServer.SendServerGroupMsg(Messages.SS_211, GameShare.ServerIndex, sGuildName);
                 }
                 playObject.SysMsg(castle.sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
             }

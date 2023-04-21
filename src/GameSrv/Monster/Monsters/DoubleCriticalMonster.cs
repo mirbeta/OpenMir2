@@ -41,7 +41,7 @@ namespace GameSrv.Monster.Monsters
         private void DoubleAttack(byte btDir)
         {
             Dir = btDir;
-            int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            int nDamage = HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nDamage <= 0)
             {
                 return;
@@ -51,12 +51,12 @@ namespace GameSrv.Monster.Monsters
             {
                 for (int k = 0; k < 4; k++)
                 {
-                    if (M2Share.Config.SpitMap[btDir, i, k] == 1)
+                    if (GameShare.Config.SpitMap[btDir, i, k] == 1)
                     {
                         short nX = (short)(CurrX - 2 + k);
                         short nY = (short)(CurrY - 2 + i);
                         BaseObject baseObject = Envir.GetMovingObject(nX, nY, true);
-                        if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
+                        if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && GameShare.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                         {
                             nDamage = baseObject.GetHitStruckDamage(this, nDamage);
                             if (nDamage > 0)

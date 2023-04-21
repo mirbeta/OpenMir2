@@ -25,8 +25,8 @@ namespace GameSrv.GameCommand.Commands
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var srcEnvir = M2Share.MapMgr.FindMap(sSrcMap);
-            var denEnvir = M2Share.MapMgr.FindMap(sDenMap);
+            var srcEnvir = GameShare.MapMgr.FindMap(sSrcMap);
+            var denEnvir = GameShare.MapMgr.FindMap(sDenMap);
             if (srcEnvir == null)
             {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red,
@@ -40,7 +40,7 @@ namespace GameSrv.GameCommand.Commands
                 return;
             }
             IList<BaseObject> humanList = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
+            GameShare.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
             for (var i = 0; i < humanList.Count; i++)
             {
                 var moveHuman = (PlayObject)humanList[i];

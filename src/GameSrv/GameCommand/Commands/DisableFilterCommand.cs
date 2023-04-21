@@ -9,8 +9,8 @@ namespace GameSrv.GameCommand.Commands {
     public class DisableFilterCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            M2Share.FilterWord = !M2Share.FilterWord;
-            if (M2Share.FilterWord) {
+            GameShare.FilterWord = !GameShare.FilterWord;
+            if (GameShare.FilterWord) {
                 playObject.SysMsg("已启用文字过滤。", MsgColor.Green, MsgType.Hint);
             }
             else {

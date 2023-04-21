@@ -22,10 +22,10 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             var nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 humanList = new List<BaseObject>();
-                M2Share.WorldEngine.GetMapRageHuman(mPlayObject.Envir, mPlayObject.CurrX, mPlayObject.CurrY, nRange, ref humanList);
+                GameShare.WorldEngine.GetMapRageHuman(mPlayObject.Envir, mPlayObject.CurrX, mPlayObject.CurrY, nRange, ref humanList);
                 for (var i = 0; i < humanList.Count; i++) {
                     moveHuman = humanList[i] as PlayObject;
                     if (moveHuman != playObject) {

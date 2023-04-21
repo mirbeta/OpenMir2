@@ -20,7 +20,7 @@ namespace GameSrv.GameCommand.Commands {
             string sShowMsg;
             if (nWhere >= 0 && nWhere <= 12 && nValueType >= 0 && nValueType <= 15 && nValue >= 0 && nValue <= 255) {
                 if (playObject.UseItems[nWhere].Index > 0) {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(playObject.UseItems[nWhere].Index);
+                    var stdItem = GameShare.WorldEngine.GetStdItem(playObject.UseItems[nWhere].Index);
                     if (stdItem == null) {
                         return;
                     }
@@ -54,8 +54,8 @@ namespace GameSrv.GameCommand.Commands {
                         + '/' + playObject.UseItems[nWhere].Desc[9] + '/' + playObject.UseItems[nWhere].Desc[ItemAttr.WeaponUpgrade] + '/' + playObject.UseItems[nWhere].Desc[11]
                         + '/' + playObject.UseItems[nWhere].Desc[12] + '/' + playObject.UseItems[nWhere].Desc[13];
                     playObject.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
-                    if (M2Share.Config.ShowMakeItemMsg) {
-                        M2Share.Logger.Warn("[物品调整] " + playObject.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
+                    if (GameShare.Config.ShowMakeItemMsg) {
+                        GameShare.Logger.Warn("[物品调整] " + playObject.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
                     }
                 }
                 else {

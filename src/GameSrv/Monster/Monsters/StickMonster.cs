@@ -9,7 +9,7 @@ namespace GameSrv.Monster.Monsters {
         public StickMonster() : base() {
             this.ViewRange = 7;
             this.RunTime = 250;
-            this.SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            this.SearchTime = GameShare.RandomNumber.Random(1500) + 2500;
             this.SearchTick = HUtil32.GetTickCount();
             ComeOutValue = 4;
             AttackRange = 4;

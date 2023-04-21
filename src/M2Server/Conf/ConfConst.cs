@@ -1,4 +1,4 @@
-namespace GameSrv.Conf {
+namespace M2Server.Conf {
     public static class ConfConst {
         public const string ServerFileName = "server.conf";
         public const string ExpConfigFileName = "exps.conf";

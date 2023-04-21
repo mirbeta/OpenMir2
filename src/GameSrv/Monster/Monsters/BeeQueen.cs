@@ -8,7 +8,7 @@ namespace GameSrv.Monster.Monsters {
         public BeeQueen() : base() {
             ViewRange = 9;
             RunTime = 250;
-            SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 2500;
             SearchTick = HUtil32.GetTickCount();
             StickMode = true;
             BeeList = new List<BaseObject>();
@@ -26,7 +26,7 @@ namespace GameSrv.Monster.Monsters {
 
         protected override bool Operate(ProcessMessage processMsg) {
             if (processMsg.wIdent == Messages.RM_ZEN_BEE) {
-                BaseObject bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, M2Share.Config.Bee);
+                BaseObject bb = GameShare.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, GameShare.Config.Bee);
                 if (bb != null) {
                     bb.SetTargetCreat(TargetCret);
                     BeeList.Add(bb);

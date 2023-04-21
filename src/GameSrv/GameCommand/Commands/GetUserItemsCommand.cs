@@ -25,7 +25,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
@@ -41,7 +41,7 @@ namespace GameSrv.GameCommand.Commands {
                             break;
                         }
                         userItem = mPlayObject.UseItems[i];
-                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                        stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (!mPlayObject.IsEnoughBag()) {
                                 break;
@@ -70,7 +70,7 @@ namespace GameSrv.GameCommand.Commands {
                             break;
                         }
                         userItem = mPlayObject.ItemList[i];
-                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                        stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (!mPlayObject.IsEnoughBag()) {
                                 break;
@@ -97,7 +97,7 @@ namespace GameSrv.GameCommand.Commands {
                             break;
                         }
                         userItem = mPlayObject.StorageItemList[i];
-                        stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                        stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (!mPlayObject.IsEnoughBag()) {
                                 break;

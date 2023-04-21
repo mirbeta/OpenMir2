@@ -1,7 +1,7 @@
 ﻿namespace GameSrv.Monster.Monsters {
     public class TeleMonster : MonsterObject {
         public TeleMonster() : base() {
-            this.SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            this.SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run() {

@@ -1,11 +1,10 @@
-﻿using GameSrv.Actor;
-using GameSrv.GameCommand;
-using GameSrv.Player;
-using GameSrv.Script;
+﻿using GameSrv;
 using GameSrv.ScriptSystem;
+using M2Server;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace GameSrv
+namespace ScriptEngine.Processings
 {
     /// <summary>
     /// 全局变量脚本处理模块
@@ -17,7 +16,7 @@ namespace GameSrv
         /// </summary>
         private static Dictionary<int, HandleGrobalMessage> ProcessGrobalMessage;
 
-        private delegate void HandleGrobalMessage(PlayObject PlayObject, string sVariable, ref string sMsg);
+        private delegate void HandleGrobalMessage(IActor playObject, string sVariable, ref string sMsg);
 
         /// <summary>
         /// 初始化全局变量脚本处理列表
@@ -127,14 +126,14 @@ namespace GameSrv
         /// 处理脚本
         /// </summary>
         /// <param name="nIdx"></param>
-        public static void Handler(PlayObject PlayObject, int nIdx, string sVariable, ref string sMsg)
+        public static void Handler(IActor playObject, int nIdx, string sVariable, ref string sMsg)
         {
             if (ProcessGrobalMessage.ContainsKey(nIdx))
             {
-                ProcessGrobalMessage[nIdx](PlayObject, sVariable, ref sMsg);
+                ProcessGrobalMessage[nIdx](playObject, sVariable, ref sMsg);
                 //if (nIdx < FProcessGrobalMessage.Count())
                 //{
-                //    FProcessGrobalMessage[nIdx](PlayObject, sVariable, ref sMsg);
+                //    FProcessGrobalMessage[nIdx](playObject, sVariable, ref sMsg);
                 //}
                 //else
                 //{
@@ -143,7 +142,7 @@ namespace GameSrv
             }
         }
 
-        internal void GetGrobalVarStr(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetGrobalVarStr(IActor playObject, string sVariable, ref string sMsg)
         {
             var sIdx = sVariable.Substring(1, sVariable.Length - 1);
             var sID = HUtil32.GetValidStr3(sIdx, ref sIdx, "/");
@@ -156,15 +155,15 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n18, 1100, 1109))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MNVal[n18 - 1100]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MNVal[n18 - 1100]);
                 }
                 else if (HUtil32.RangeInDefined(n18, 1110, 1119))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MDyVal[n18 - 1110]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MDyVal[n18 - 1110]);
                 }
                 else if (HUtil32.RangeInDefined(n18, 1200, 1299))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MNMval[n18 - 1200]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MNMval[n18 - 1200]);
                 }
                 else if (HUtil32.RangeInDefined(n18, 1000, 1099))
                 {
@@ -172,11 +171,11 @@ namespace GameSrv
                 }
                 else if (HUtil32.RangeInDefined(n18, 1300, 1399))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MNInteger[n18 - 1300]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MNInteger[n18 - 1300]);
                 }
                 else if (HUtil32.RangeInDefined(n18, 1400, 1499))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayObject.MSString[n18 - 1400]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playObject.MSString[n18 - 1400]);
                 }
                 else if (HUtil32.RangeInDefined(n18, 2000, 2499))
                 {
@@ -188,12 +187,12 @@ namespace GameSrv
         /// <summary>
         /// 取在线人数
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetUserCount(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetUserCount(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(M2Share.WorldEngine.PlayObjectCount));
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(M2Share.WorldEngine.playObjectCount));
         }
 
         /// <summary>
@@ -201,7 +200,7 @@ namespace GameSrv
         /// </summary>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetServerName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetServerName(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", M2Share.Config.ServerName);
         }
@@ -211,7 +210,7 @@ namespace GameSrv
         /// </summary>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetWebSite(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetWebSite(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", M2Share.Config.sWebSite);
         }
@@ -221,7 +220,7 @@ namespace GameSrv
         /// </summary>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetDateTime(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetDateTime(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", DateTime.Now.ToString("dddddd,dddd,hh:mm:nn"));
         }
@@ -229,25 +228,25 @@ namespace GameSrv
         /// <summary>
         /// 取玩家名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetUserName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetUserName(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", PlayObject.ChrName);
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.ChrName);
         }
 
         /// <summary>
         /// 取行会名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGuilidName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetGuilidName(IActor playObject, string sVariable, ref string sMsg)
         {
-            if (PlayObject.MyGuild != null)
+            if (playObject.MyGuild != null)
             {
-                sMsg = CombineStr(sMsg, string.Format("<0>", sVariable), PlayObject.MyGuild.GuildName);
+                sMsg = CombineStr(sMsg, string.Format("<0>", sVariable), playObject.MyGuild.GuildName);
             }
             else
             {
@@ -258,25 +257,25 @@ namespace GameSrv
         /// <summary>
         /// 取玩行会封号名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGuilidRankName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetGuilidRankName(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", PlayObject.GuildRankName);
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.GuildRankName);
         }
 
         /// <summary>
         /// 查看申请攻城战役行会列表
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetListofWar(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetListofWar(IActor playObject, string sVariable, ref string sMsg)
         {
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                sMsg = PlayObject.Castle.GetAttackWarList();
+                sMsg = playObject.Castle.GetAttackWarList();
             }
             else
             {
@@ -296,20 +295,20 @@ namespace GameSrv
         /// <summary>
         /// 取沙巴克行会攻城列表
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastleWarDate(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCastleWarDate(IActor playObject, string sVariable, ref string sMsg)
         {
-            if (PlayObject.Castle == null)
+            if (playObject.Castle == null)
             {
-                PlayObject.Castle = M2Share.CastleMgr.GetCastle(0);
+                playObject.Castle = M2Share.CastleMgr.GetCastle(0);
             }
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                if (!PlayObject.Castle.UnderWar)
+                if (!playObject.Castle.UnderWar)
                 {
-                    sMsg = PlayObject.Castle.GetWarDate();
+                    sMsg = playObject.Castle.GetWarDate();
                     if (sMsg != "")
                     {
                         sMsg = CombineStr(sMsg, $"<{sVariable}>", sMsg);
@@ -333,13 +332,13 @@ namespace GameSrv
         /// <summary>
         /// 取交易对像
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetDealGoldPlay(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetDealGoldPlay(IActor playObject, string sVariable, ref string sMsg)
         {
-            var PoseHuman = PlayObject.GetPoseCreate();
-            if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == PlayObject) && (PoseHuman.Race == ActorRace.Play))
+            var PoseHuman = playObject.GetPoseCreate();
+            if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == playObject) && (PoseHuman.Race == ActorRace.Play))
             {
                 sMsg = CombineStr(sMsg, $"<{sVariable}>", PoseHuman.ChrName);
             }
@@ -352,10 +351,10 @@ namespace GameSrv
         /// <summary>
         /// 取服务器运行时间
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetServerRunTime(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetServerRunTime(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime).ToString("YYYY-MM-DD HH:mm:ss"));
         }
@@ -363,10 +362,10 @@ namespace GameSrv
         /// <summary>
         /// 取服务器运行天数
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMacrunTime(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMacrunTime(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, string.Format("<{0}>"), Convert.ToString(HUtil32.GetTickCount() / (24 * 60 * 60 * 1000)));
         }
@@ -374,13 +373,13 @@ namespace GameSrv
         /// <summary>
         /// 取最高等级人物信息
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighLevelInfo(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHighLevelInfo(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highLevelPlay = M2Share.ActorMgr.Get<PlayObject>(M2Share.HighLevelHuman);
+            var highLevelPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
             if (highLevelPlay != null)
             {
                 sText = highLevelPlay.GetMyInfo();
@@ -395,13 +394,13 @@ namespace GameSrv
         /// <summary>
         /// 最高PK点数人物信息
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighPkInfo(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHighPkInfo(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highPvpPlay = M2Share.ActorMgr.Get<PlayObject>(M2Share.HighLevelHuman);
+            var highPvpPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
             if (highPvpPlay != null)
             {
                 sText = highPvpPlay.GetMyInfo();
@@ -416,13 +415,13 @@ namespace GameSrv
         /// <summary>
         /// 最高攻击力人物信息
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighDcInfo(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHighDcInfo(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highDcPlay = M2Share.ActorMgr.Get<PlayObject>(M2Share.HighLevelHuman);
+            var highDcPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
             if (highDcPlay != null)
             {
                 sText = highDcPlay.GetMyInfo();
@@ -437,13 +436,13 @@ namespace GameSrv
         /// <summary>
         /// 最高魔法力人物信息
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighMcInfo(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHighMcInfo(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highMcPlay = M2Share.ActorMgr.Get<PlayObject>(M2Share.HighLevelHuman);
+            var highMcPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
             if (highMcPlay != null)
             {
                 sText = highMcPlay.GetMyInfo();
@@ -458,13 +457,13 @@ namespace GameSrv
         /// <summary>
         /// 最高道术人物信息
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighScInfo(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHighScInfo(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highScPlay = M2Share.ActorMgr.Get<PlayObject>(M2Share.HighLevelHuman);
+            var highScPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
             if (highScPlay != null)
             {
                 sText = highScPlay.GetMyInfo();
@@ -479,13 +478,13 @@ namespace GameSrv
         /// <summary>
         /// 最高最长在线时间人物信息
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighOlineInfo(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHighOlineInfo(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highOnlinePlay = M2Share.ActorMgr.Get<PlayObject>(M2Share.HighLevelHuman);
+            var highOnlinePlay = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
             if (highOnlinePlay != null)
             {
                 sText = highOnlinePlay.GetMyInfo();
@@ -500,39 +499,39 @@ namespace GameSrv
         /// <summary>
         /// 取玩家登录时长
         /// </summary>
-        internal void GetLoginLong(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetLoginLong(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = ((HUtil32.GetTickCount() - PlayObject.LogonTick) / 60000) + "分钟";
+            string sText = ((HUtil32.GetTickCount() - playObject.LogonTick) / 60000) + "分钟";
             sMsg = CombineStr(sMsg, string.Format("<0>", sVariable), sText);
         }
 
         /// <summary>
         /// 取玩家登录时间
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetLoginTime(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetLoginTime(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(PlayObject.LogonTime));
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(playObject.LogonTime));
         }
 
         /// <summary>
         /// 取行会建筑度
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildBuildPoint(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GeTGuildBuildPoint(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.MyGuild == null)
+            if (playObject.MyGuild == null)
             {
                 sText = "无";
             }
             else
             {
-                sText = (PlayObject.MyGuild.BuildPoint).ToString();
+                sText = (playObject.MyGuild.BuildPoint).ToString();
             }
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
@@ -540,19 +539,19 @@ namespace GameSrv
         /// <summary>
         /// 行会人气度
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildAuraePoint(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GeTGuildAuraePoint(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.MyGuild == null)
+            if (playObject.MyGuild == null)
             {
                 sText = "无";
             }
             else
             {
-                sText = (PlayObject.MyGuild.Aurae).ToString();
+                sText = (playObject.MyGuild.Aurae).ToString();
             }
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
@@ -560,16 +559,16 @@ namespace GameSrv
         /// <summary>
         /// 取行会安定度
         /// </summary>
-        internal void GeTGuildStabilityPoint(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GeTGuildStabilityPoint(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.MyGuild == null)
+            if (playObject.MyGuild == null)
             {
                 sText = "无";
             }
             else
             {
-                sText = (PlayObject.MyGuild.Stability).ToString();
+                sText = (playObject.MyGuild.Stability).ToString();
             }
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
@@ -577,19 +576,19 @@ namespace GameSrv
         /// <summary>
         /// 取行会繁荣度
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildFlourishPoint(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GeTGuildFlourishPoint(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.MyGuild == null)
+            if (playObject.MyGuild == null)
             {
                 sText = "无";
             }
             else
             {
-                sText = (PlayObject.MyGuild.Flourishing).ToString();
+                sText = (playObject.MyGuild.Flourishing).ToString();
             }
             sMsg = CombineStr(sMsg, string.Format("<{0}>", sVariable), sText);
         }
@@ -597,10 +596,10 @@ namespace GameSrv
         /// <summary>
         /// 取攻城需要的物品
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRequestCastlewarItem(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetRequestCastlewarItem(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", M2Share.Config.ZumaPiece);
         }
@@ -608,15 +607,15 @@ namespace GameSrv
         /// <summary>
         /// 取城保所属行会
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetOwnerGuild(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetOwnerGuild(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                sText = PlayObject.Castle.OwnGuild;
+                sText = playObject.Castle.OwnGuild;
                 if (sText == "")
                 {
                     sText = "游戏管理";
@@ -632,15 +631,15 @@ namespace GameSrv
         /// <summary>
         /// 取城堡名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastleName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCastleName(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                sText = PlayObject.Castle.sName;
+                sText = playObject.Castle.sName;
             }
             else
             {
@@ -653,17 +652,17 @@ namespace GameSrv
         /// <summary>
         /// 城堡所属行会的老大
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetLord(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetLord(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                if (PlayObject.Castle.MasterGuild != null)
+                if (playObject.Castle.MasterGuild != null)
                 {
-                    sText = PlayObject.Castle.MasterGuild.GetChiefName();
+                    sText = playObject.Castle.MasterGuild.GetChiefName();
                 }
                 else
                 {
@@ -680,15 +679,15 @@ namespace GameSrv
         /// <summary>
         /// 取沙巴克占领日期
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastleChangeDate(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCastleChangeDate(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                sText = Convert.ToString(PlayObject.Castle.ChangeDate);
+                sText = Convert.ToString(playObject.Castle.ChangeDate);
             }
             else
             {
@@ -700,15 +699,15 @@ namespace GameSrv
         /// <summary>
         /// 最好一次攻城战役日期
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastlewarLastDate(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCastlewarLastDate(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                sText = Convert.ToString(PlayObject.Castle.WarDate);
+                sText = Convert.ToString(playObject.Castle.WarDate);
             }
             else
             {
@@ -720,15 +719,15 @@ namespace GameSrv
         /// <summary>
         /// 沙巴克占领天数
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastlegetDays(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCastlegetDays(IActor playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            if (PlayObject.Castle != null)
+            if (playObject.Castle != null)
             {
-                sText = (HUtil32.GetDayCount(DateTime.Now, PlayObject.Castle.ChangeDate)).ToString();
+                sText = (HUtil32.GetDayCount(DateTime.Now, playObject.Castle.ChangeDate)).ToString();
             }
             else
             {
@@ -740,367 +739,367 @@ namespace GameSrv
         /// <summary>
         /// 取地图名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMapName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMapName(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", PlayObject.Envir.MapDesc);
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.Envir.MapDesc);
         }
 
         /// <summary>
         /// 取地图文件名
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMapFileName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMapFileName(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", PlayObject.Envir.MapName);
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.Envir.MapName);
         }
 
         /// <summary>
         /// 取当前对象等级
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetLevel(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetLevel(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.Abil.Level).ToString();
+            string sText = (playObject.Abil.Level).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
 
         /// <summary>
         /// 取当前对象血量
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHP(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHP(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = Convert.ToString(PlayObject.WAbil.HP);
+            string sText = Convert.ToString(playObject.WAbil.HP);
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
 
         /// <summary>
         /// 取当前对象最大血量
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxHP(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxHP(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.WAbil.MaxHP).ToString();
+            string sText = (playObject.WAbil.MaxHP).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
 
         /// <summary>
         /// 取当前对象魔法值
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMP(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMP(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.WAbil.MP).ToString();
+            string sText = (playObject.WAbil.MP).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
 
         /// <summary>
         /// 取当前对象最大魔法值
         /// </summary>
-        internal void GetMaxMP(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxMP(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.WAbil.MaxMP).ToString();
+            string sText = (playObject.WAbil.MaxMP).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
         }
 
         /// <summary>
         /// 取当前对象攻击力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetDC(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetDC(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.LoWord(PlayObject.WAbil.DC)).ToString();
+            string sText = (HUtil32.LoWord(playObject.WAbil.DC)).ToString();
             sMsg = CombineStr(sMsg, "<$DC>", sText);
         }
 
         /// <summary>
         /// 取当前对象最大攻击力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxDC(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxDC(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.HiWord(PlayObject.WAbil.DC)).ToString();
+            string sText = (HUtil32.HiWord(playObject.WAbil.DC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXDC>", sText);
         }
 
         /// <summary>
         /// 取当前对象魔法防御
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMac(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMac(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.LoWord(PlayObject.WAbil.MAC)).ToString();
+            string sText = (HUtil32.LoWord(playObject.WAbil.MAC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAC>", sText);
         }
 
         /// <summary>
         /// 取当前对象魔法力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMc(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMc(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.LoWord(PlayObject.WAbil.MC)).ToString();
+            string sText = (HUtil32.LoWord(playObject.WAbil.MC)).ToString();
             sMsg = CombineStr(sMsg, "<$MC>", sText);
         }
 
         /// <summary>
         /// 取当前对象最大魔法力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxMc(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxMc(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.HiWord(PlayObject.WAbil.MC)).ToString();
+            string sText = (HUtil32.HiWord(playObject.WAbil.MC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXMC>", sText);
         }
 
         /// <summary>
         /// 取当前对象道术力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetSc(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetSc(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.LoWord(PlayObject.WAbil.SC)).ToString();
+            string sText = (HUtil32.LoWord(playObject.WAbil.SC)).ToString();
             sMsg = CombineStr(sMsg, "<$SC>", sText);
         }
 
         /// <summary>
         /// 取当前对象最大道术力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxSc(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxSc(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.HiWord(PlayObject.WAbil.SC)).ToString();
+            string sText = (HUtil32.HiWord(playObject.WAbil.SC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXSC>", sText);
         }
 
         /// <summary>
         /// 取当前对象经验值
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetExp(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetExp(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.Abil.Exp).ToString();
+            string sText = (playObject.Abil.Exp).ToString();
             sMsg = CombineStr(sMsg, "<$EXP>", sText);
         }
 
         /// <summary>
         /// 最当前对象最大经验值
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxExp(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxExp(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.Abil.MaxExp).ToString();
+            string sText = (playObject.Abil.MaxExp).ToString();
             sMsg = CombineStr(sMsg, "<$MAXEXP>", sText);
         }
 
         /// <summary>
         /// 取当前最新最大魔法防御力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxMac(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxMac(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (HUtil32.HiWord(PlayObject.WAbil.MAC)).ToString();
+            string sText = (HUtil32.HiWord(playObject.WAbil.MAC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXMAC>", sText);
         }
 
         /// <summary>
         /// 取当前对象最大防御值
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxAc(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxAc(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$MAXAC>", HUtil32.HiWord(PlayObject.WAbil.AC));
+            sMsg = CombineStr(sMsg, "<$MAXAC>", HUtil32.HiWord(playObject.WAbil.AC));
         }
 
         /// <summary>
         /// 取当前对象负重力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHw(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHw(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$HW>", PlayObject.WAbil.HandWeight);
+            sMsg = CombineStr(sMsg, "<$HW>", playObject.WAbil.HandWeight);
         }
 
         /// <summary>
         /// 取当前对象防御
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetAc(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetAc(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$AC>", HUtil32.LoWord(PlayObject.WAbil.AC));
+            sMsg = CombineStr(sMsg, "<$AC>", HUtil32.LoWord(playObject.WAbil.AC));
         }
 
         /// <summary>
         /// 取当前对象最大负重力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxHw(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxHw(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$MAXHW>", PlayObject.WAbil.MaxHandWeight);
+            sMsg = CombineStr(sMsg, "<$MAXHW>", playObject.WAbil.MaxHandWeight);
         }
 
         /// <summary>
         /// 取当前对象腕力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetWW(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetWW(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$WW>", PlayObject.WAbil.WearWeight);
+            sMsg = CombineStr(sMsg, "<$WW>", playObject.WAbil.WearWeight);
         }
 
         /// <summary>
         /// 取当前对象最大腕力
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxWW(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxWW(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$MAXWW>", PlayObject.WAbil.MaxWearWeight);
+            sMsg = CombineStr(sMsg, "<$MAXWW>", playObject.WAbil.MaxWearWeight);
         }
 
         /// <summary>
         /// 取当前对象包裹重量
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBw(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBw(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BW>", PlayObject.WAbil.Weight);
+            sMsg = CombineStr(sMsg, "<$BW>", playObject.WAbil.Weight);
         }
 
         /// <summary>
         /// 取当前对象包裹最大重量
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxBw(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMaxBw(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$MAXBW>", PlayObject.WAbil.MaxWeight);
+            sMsg = CombineStr(sMsg, "<$MAXBW>", playObject.WAbil.MaxWeight);
         }
 
         /// <summary>
         /// 取当前对象怪物经验值
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMonExp(AnimalObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetMonExp(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$MONEXP>", PlayObject.FightExp);
+            sMsg = CombineStr(sMsg, "<$MONEXP>", playObject.FightExp);
         }
 
         /// <summary>
         /// 取当前对象PK点
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetPkPoint(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetPkPoint(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$PKPOINT>", PlayObject.PkPoint);
+            sMsg = CombineStr(sMsg, "<$PKPOINT>", playObject.PkPoint);
         }
 
         /// <summary>
         /// 取当前对象金币数量
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGoldCount(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetGoldCount(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = Convert.ToString(PlayObject.Gold + '/' + PlayObject.GoldMax);
+            string sText = Convert.ToString(playObject.Gold + '/' + playObject.GoldMax);
             sMsg = CombineStr(sMsg, "<$GOLDCOUNT>", sText);
         }
 
         /// <summary>
         /// 取当前对象金币数量
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGameGold(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetGameGold(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.GameGold).ToString();
+            string sText = (playObject.GameGold).ToString();
             sMsg = CombineStr(sMsg, "<$GAMEGOLD>", sText);
         }
 
         /// <summary>
         /// 取当前对象声望点
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGamePoint(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetGamePoint(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.GamePoint).ToString();
+            string sText = (playObject.GamePoint).ToString();
             sMsg = CombineStr(sMsg, "<$GAMEPOINT>", sText);
         }
 
         /// <summary>
         /// 当前对象声望点数
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCreditPoint(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCreditPoint(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.CreditPoint).ToString();
+            string sText = (playObject.CreditPoint).ToString();
             sMsg = CombineStr(sMsg, "<$CREDITPOINT>", sText);
         }
 
         /// <summary>
         /// 取金币名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGameGoldName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetGameGoldName(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$GAMEGOLDNAME>", M2Share.Config.GameGoldName);
         }
@@ -1108,46 +1107,46 @@ namespace GameSrv
         /// <summary>
         /// 取当前对象饥饿程度
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHunGer(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHunGer(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.GetMyStatus()).ToString();
+            string sText = (playObject.GetMyStatus()).ToString();
             sMsg = CombineStr(sMsg, "<$HUNGER>", sText);
         }
 
         /// <summary>
         /// 取当前对象所在地图X坐标
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCurrX(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCurrX(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.CurrX).ToString();
+            string sText = (playObject.CurrX).ToString();
             sMsg = CombineStr(sMsg, "<$CURRX>", sText);
         }
 
         /// <summary>
         /// 取当前对象所在地图X坐标
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCurrY(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCurrY(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.CurrY).ToString();
+            string sText = (playObject.CurrY).ToString();
             sMsg = CombineStr(sMsg, "<$CURRX>", sText);
         }
 
         /// <summary>
         /// 取声望点名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetPointName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetPointName(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$GAMEPOINTNAME>", M2Share.Config.GamePointName);
         }
@@ -1155,34 +1154,34 @@ namespace GameSrv
         /// <summary>
         /// 取当前对象所在IP地址
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetIpAddr(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetIpAddr(IActor playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$IPADDR>", PlayObject.LoginIpAddr);
+            sMsg = CombineStr(sMsg, "<$IPADDR>", playObject.LoginIpAddr);
         }
 
         /// <summary>
         /// 取当前对象所在区域
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetIpLocal(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetIpLocal(IActor playObject, string sVariable, ref string sMsg)
         {
-            //string sText = PlayObject.m_sIPLocal;
-            // GetIPLocal(PlayObject.m_sIPaddr);
+            //string sText = playObject.m_sIPLocal;
+            // GetIPLocal(playObject.m_sIPaddr);
             sMsg = CombineStr(sMsg, "<$IPLOCAL>", "无");
         }
 
         /// <summary>
         /// 行会战金币数
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildWarfee(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GeTGuildWarfee(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$GUILDWARFEE>", (M2Share.Config.GuildWarPrice).ToString());
         }
@@ -1190,10 +1189,10 @@ namespace GameSrv
         /// <summary>
         /// 建立行会所需的金币数
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBuildGuildfee(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBuildGuildfee(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BUILDGUILDFEE>", (M2Share.Config.BuildGuildPrice).ToString());
         }
@@ -1201,10 +1200,10 @@ namespace GameSrv
         /// <summary>
         /// 允许建立行会的物品名字
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRequestBuildGuildItem(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetRequestBuildGuildItem(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$REQUESTBUILDGUILDITEM>", M2Share.Config.WomaHorn);
         }
@@ -1212,10 +1211,10 @@ namespace GameSrv
         /// <summary>
         /// 多少天后攻城
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRequestCastleWarday(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetRequestCastleWarday(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$REQUESTCASTLEWARDAY>", M2Share.Config.ZumaPiece);
         }
@@ -1223,10 +1222,10 @@ namespace GameSrv
         /// <summary>
         /// 取日期命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdDate(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdDate(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
         }
@@ -1234,10 +1233,10 @@ namespace GameSrv
         /// <summary>
         /// 查看接收所有消息命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAllowmsg(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdAllowmsg(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
         }
@@ -1245,10 +1244,10 @@ namespace GameSrv
         /// <summary>
         /// 查看允许群聊命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdletshout(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdletshout(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
         }
@@ -1256,10 +1255,10 @@ namespace GameSrv
         /// <summary>
         /// 查看允许交易命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdLettrade(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdLettrade(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
         }
@@ -1267,10 +1266,10 @@ namespace GameSrv
         /// <summary>
         /// 查看允许加入门派命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdLeTGuild(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdLeTGuild(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_LETGuild>", CommandMgr.GameCommands.LetGuild.CmdName);
         }
@@ -1278,10 +1277,10 @@ namespace GameSrv
         /// <summary>
         /// 查看退出门派命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdEndGuild(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdEndGuild(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
         }
@@ -1289,10 +1288,10 @@ namespace GameSrv
         /// <summary>
         /// 查看允许行会聊天命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdBanGuildChat(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdBanGuildChat(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
         }
@@ -1300,10 +1299,10 @@ namespace GameSrv
         /// <summary>
         /// 查看允许行会联盟命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAuthally(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdAuthally(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
         }
@@ -1311,10 +1310,10 @@ namespace GameSrv
         /// <summary>
         /// 查看行会联盟命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAuth(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdAuth(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
         }
@@ -1322,10 +1321,10 @@ namespace GameSrv
         /// <summary>
         /// 查看取消行会联盟命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAythCcancel(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdAythCcancel(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
         }
@@ -1333,10 +1332,10 @@ namespace GameSrv
         /// <summary>
         /// 查看传送戒指命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdUserMove(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdUserMove(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
         }
@@ -1344,10 +1343,10 @@ namespace GameSrv
         /// <summary>
         /// 查看探测项链命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdSearching(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdSearching(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_SEARCHING>", CommandMgr.GameCommands.Searching.CmdName);
         }
@@ -1355,10 +1354,10 @@ namespace GameSrv
         /// <summary>
         /// 查看组队传送命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdGroupCall(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdGroupCall(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_GROUPRECALLL>", CommandMgr.GameCommands.GroupRecalll.CmdName);
         }
@@ -1366,10 +1365,10 @@ namespace GameSrv
         /// <summary>
         /// 查看允许组队传送命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAllowGroupCall(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdAllowGroupCall(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
         }
@@ -1377,10 +1376,10 @@ namespace GameSrv
         /// <summary>
         /// 查看更改仓库密码命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdStorageChgPassword(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageChgPassword(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
         }
@@ -1388,10 +1387,10 @@ namespace GameSrv
         /// <summary>
         /// 为仓库设定一个4-7位数长的仓库密码命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdStorageSetPassword(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageSetPassword(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
         }
@@ -1399,7 +1398,7 @@ namespace GameSrv
         /// <summary>
         /// 可将仓库锁定命令
         /// </summary>
-        internal void GetCmdStorageLock(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageLock(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
         }
@@ -1407,10 +1406,10 @@ namespace GameSrv
         /// <summary>
         /// 开启仓库命令
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdStorageUnlock(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageUnlock(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
         }
@@ -1418,163 +1417,163 @@ namespace GameSrv
         /// <summary>
         /// 取当前对象武器名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetWeapon(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetWeapon(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Weapon].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
             sMsg = CombineStr(sMsg, "<$WEAPON>", sText);
         }
 
         /// <summary>
         /// 取当前对象衣服名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetDress(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetDress(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Dress].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
             sMsg = CombineStr(sMsg, "<$DRESS>", sText);
         }
 
         /// <summary>
         /// 取当前对象蜡烛名称(勋章)
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetRightHand(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetRightHand(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.RighThand].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.RighThand].Index);
             sMsg = CombineStr(sMsg, "<$RIGHTHAND>", sText);
         }
 
         /// <summary>
         /// 取当前对象头盔名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetHelmet(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetHelmet(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Helmet].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
             sMsg = CombineStr(sMsg, "<$HELMET>", sText);
         }
 
         /// <summary>
         /// 取当前对象项链名称
         /// </summary>
-        internal unsafe void GetNecklace(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetNecklace(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Necklace].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
             sMsg = CombineStr(sMsg, "<$NECKLACE>", sText);
         }
 
         /// <summary>
         /// 取当前对象右戒指名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetRing_R(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetRing_R(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringr].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
             sMsg = CombineStr(sMsg, "<$RING_R>", sText);
         }
 
         /// <summary>
         /// 取当前对象左戒指名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetRing_L(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetRing_L(IActor playObject, string sVariable, ref string sMsg)
         {
-           string  sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringl].Index);
+           string  sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
             sMsg = CombineStr(sMsg, "<$RING_L>", sText);
         }
 
         /// <summary>
         /// 取当前对象右手镯名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetArmring_R(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetArmring_R(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingr].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_R>", sText);
         }
 
         /// <summary>
         /// 取当前对象左手镯名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetArmring_L(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetArmring_L(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingl].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_L>", sText);
         }
 
         /// <summary>
         /// 取当前对象护身符名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetBujuk(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBujuk(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Bujuk].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
             sMsg = CombineStr(sMsg, "<$BUJUK>", sText);
         }
 
         /// <summary>
         /// 取当前对象腰带名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetBelt(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBelt(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Belt].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
             sMsg = CombineStr(sMsg, "<$BELT>", sText);
         }
 
         /// <summary>
         /// 取当前对象鞋子名称 
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetBoots(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBoots(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Boots].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
             sMsg = CombineStr(sMsg, "<$BOOTS>", sText);
         }
 
         /// <summary>
         /// 取当前对象宝石名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal unsafe void GetChrm(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetChrm(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(PlayObject.UseItems[ItemLocation.Charm].Index);
+            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
             sMsg = CombineStr(sMsg, "<$CHARM>", sText);
         }
 
         /// <summary>
         /// 取客服QQ
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetQQ(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetQQ(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$QQ>", M2Share.Config.sQQ);
         }
@@ -1582,10 +1581,10 @@ namespace GameSrv
         /// <summary>
         /// 取客服手机号码
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetPhone(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetPhone(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$PHONE>", M2Share.Config.sPhone);
         }
@@ -1593,10 +1592,10 @@ namespace GameSrv
         /// <summary>
         /// 取服务器IP
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetServerIp(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetServerIp(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$SERVERIP>", M2Share.Config.ServerIPaddr);
         }
@@ -1604,10 +1603,10 @@ namespace GameSrv
         /// <summary>
         /// 取论坛地址
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBbsWeiSite(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBbsWeiSite(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BBSSITE>", M2Share.Config.sBbsSite);
         }
@@ -1615,10 +1614,10 @@ namespace GameSrv
         /// <summary>
         /// 取客户端下载地址
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCilentDownLoad(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetCilentDownLoad(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CLIENTDOWNLOAD>", M2Share.Config.sClientDownload);
         }
@@ -1626,82 +1625,82 @@ namespace GameSrv
         /// <summary>
         /// 取掉落物品名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemName(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = PlayObject.ScatterItemName;
+            string sText = playObject.ScatterItemName;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMNAME>", sText);
         }
 
         /// <summary>
         /// 取物品掉落拥有者名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemownerName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemownerName(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = PlayObject.ScatterItemOwnerName;
+            string sText = playObject.ScatterItemOwnerName;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMOWNERNAME>", sText);
         }
 
         /// <summary>
         /// 取暴物品所在地图文件名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemMapName(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemMapName(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = PlayObject.ScatterItemMapName;
+            string sText = playObject.ScatterItemMapName;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMMAPNAME>", sText);
         }
 
         /// <summary>
         /// 取物品掉落地图名称
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemMapDesc(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemMapDesc(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = PlayObject.ScatterItemMapDesc;
+            string sText = playObject.ScatterItemMapDesc;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMMAPDESC>", sText);
         }
 
         /// <summary>
         /// 取物品掉落所在地图X坐标
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemX(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemX(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.ScatterItemX).ToString();
+            string sText = (playObject.ScatterItemX).ToString();
             sMsg = CombineStr(sMsg, "<$SCATTERITEMX>", sText);
         }
 
         /// <summary>
         /// 取物品掉落所在地图Y坐标
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemY(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemY(IActor playObject, string sVariable, ref string sMsg)
         {
-            string sText = (PlayObject.ScatterItemY).ToString();
+            string sText = (playObject.ScatterItemY).ToString();
             sMsg = CombineStr(sMsg, "<$SCATTERITEMX>", sText);
         }
 
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount0(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount0(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount0);
         }
@@ -1709,10 +1708,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount1(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount1(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount1);
         }
@@ -1720,10 +1719,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount2(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount2(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount2);
         }
@@ -1731,10 +1730,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount3(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount3(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount3);
         }
@@ -1742,10 +1741,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount4(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount4(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount4);
         }
@@ -1753,10 +1752,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount5(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount5(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount5);
         }
@@ -1764,10 +1763,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount6(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount6(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount6);
         }
@@ -1775,10 +1774,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount7(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount7(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount7);
         }
@@ -1786,10 +1785,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount8(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount8(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount8);
         }
@@ -1797,10 +1796,10 @@ namespace GameSrv
         /// <summary>
         /// 取银行帐号
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount9(PlayObject PlayObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount9(IActor playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount9);
         }

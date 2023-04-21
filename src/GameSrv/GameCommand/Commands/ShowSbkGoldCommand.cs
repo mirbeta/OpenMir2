@@ -22,13 +22,13 @@ namespace GameSrv.GameCommand.Commands {
             }
             if (string.IsNullOrEmpty(sCastleName)) {
                 IList<string> list = new List<string>();
-                M2Share.CastleMgr.GetCastleGoldInfo(list);
+                GameShare.CastleMgr.GetCastleGoldInfo(list);
                 for (var i = 0; i < list.Count; i++) {
                     playObject.SysMsg(list[i], MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
-            var castle = M2Share.CastleMgr.Find(sCastleName);
+            var castle = GameShare.CastleMgr.Find(sCastleName);
             if (castle == null) {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;

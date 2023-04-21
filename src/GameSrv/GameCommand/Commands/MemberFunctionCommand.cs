@@ -5,9 +5,9 @@ namespace GameSrv.GameCommand.Commands {
     public class MemberFunctionCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            if (M2Share.ManageNPC != null) {
+            if (GameShare.ManageNPC != null) {
                 playObject.ScriptGotoCount = 0;
-                M2Share.ManageNPC.GotoLable(playObject, "@Member", false);
+                GameShare.ManageNPC.GotoLable(playObject, "@Member", false);
             }
         }
     }

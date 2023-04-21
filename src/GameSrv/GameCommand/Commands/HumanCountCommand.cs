@@ -23,13 +23,13 @@ namespace GameSrv.GameCommand.Commands
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = GameShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 playObject.SysMsg(CommandHelp.GameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandMobCountMonsterCount, M2Share.WorldEngine.GetMapHuman(sMapName)), MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg(string.Format(CommandHelp.GameCommandMobCountMonsterCount, GameShare.WorldEngine.GetMapHuman(sMapName)), MsgColor.Green, MsgType.Hint);
         }
     }
 }

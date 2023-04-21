@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands
             {
                 nNameColor = 255;
             }
-            var mon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+            var mon = (MonsterObject)GameShare.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.Master = playObject;

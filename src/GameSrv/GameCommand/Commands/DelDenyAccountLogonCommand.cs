@@ -16,7 +16,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             var boDelete = false;
-            for (var i = 0; i < M2Share.DenyAccountList.Count; i++) {
+            for (var i = 0; i < GameShare.DenyAccountList.Count; i++) {
                 //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{
                 //    //if (((int)M2Share.g_DenyAccountList[i]) != 0)

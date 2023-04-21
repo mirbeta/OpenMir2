@@ -29,7 +29,7 @@ namespace GameSrv.Services
         private static bool GetDbSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
         {
             bool result = false;
-            HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
+            HUtil32.EnterCriticalSection(GameShare.UserDBCriticalSection);
             try
             {
                 if (ReceivedMap.TryGetValue(queryId, out var respPack))
@@ -52,7 +52,7 @@ namespace GameSrv.Services
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
+                HUtil32.LeaveCriticalSection(GameShare.UserDBCriticalSection);
             }
             return result;
         }
@@ -80,7 +80,7 @@ namespace GameSrv.Services
             {
                 result = true;
             }
-            M2Share.Config.nLoadDBCount++;
+            GameShare.Config.nLoadDBCount++;
             return result;
         }
 
@@ -90,7 +90,7 @@ namespace GameSrv.Services
         /// <returns></returns>
         public static bool SaveHumRcdToDB(SavePlayerRcd saveRcd, ref int queryId)
         {
-            M2Share.Config.nSaveDBCount++;
+            GameShare.Config.nSaveDBCount++;
             return SaveRcd(saveRcd, ref queryId);
         }
 
@@ -99,7 +99,7 @@ namespace GameSrv.Services
             queryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
             SavePlayerDataMessage saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
-            if (M2Share.DataServer.SendRequest(queryId, packet, saveHumData))
+            if (GameShare.DataServer.SendRequest(queryId, packet, saveHumData))
             {
                 SaveProcessList.Enqueue(queryId);
                 return true;
@@ -119,7 +119,7 @@ namespace GameSrv.Services
                 {
                     if (nIdent == Messages.DBR_SAVEHUMANRCD && nRecog == 1)
                     {
-                        M2Share.FrontEngine.RemoveSaveList(queryId);
+                        GameShare.FrontEngine.RemoveSaveList(queryId);
                     }
                     SaveProcessList.TryDequeue(out _);
                 }
@@ -160,7 +160,7 @@ namespace GameSrv.Services
         {
             int nQueryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            if (M2Share.DataServer.SendRequest(nQueryId, packet, loadHuman))
+            if (GameShare.DataServer.SendRequest(nQueryId, packet, loadHuman))
             {
                 QueryProcessList.Enqueue(new QueryPlayData()
                 {
@@ -176,12 +176,12 @@ namespace GameSrv.Services
 
         private static int GetQueryId()
         {
-            M2Share.Config.nDBQueryID++;
-            if (M2Share.Config.nDBQueryID > int.MaxValue - 1)
+            GameShare.Config.nDBQueryID++;
+            if (GameShare.Config.nDBQueryID > int.MaxValue - 1)
             {
-                M2Share.Config.nDBQueryID = 1;
+                GameShare.Config.nDBQueryID = 1;
             }
-            return M2Share.Config.nDBQueryID;
+            return GameShare.Config.nDBQueryID;
         }
     }
 }

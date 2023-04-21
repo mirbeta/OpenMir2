@@ -29,7 +29,7 @@ namespace GameSrv.GameCommand.Commands
             }
             else
             {
-                playObject.CharPushed(M2Share.RandomNumber.RandomByte(nType), nCount);
+                playObject.CharPushed(GameShare.RandomNumber.RandomByte(nType), nCount);
             }
         }
     }

@@ -1,4 +1,4 @@
-namespace GameSrv.Actor {
+namespace M2Server.Actor {
     public record struct SendMessage {
         public int wIdent;
         public int wParam;
@@ -40,10 +40,7 @@ namespace GameSrv.Actor {
         Show = 2
     }
 
-    public enum PlayGender : byte {
-        Man = 0,
-        WoMan = 1
-    }
+
 
     public class DragonConst {
         public const byte DRAGON_RING_SHAPE = 198;

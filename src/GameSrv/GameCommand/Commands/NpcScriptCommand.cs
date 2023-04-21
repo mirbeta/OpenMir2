@@ -14,14 +14,14 @@ namespace GameSrv.GameCommand.Commands {
             var nNpcType = -1;
             var baseObject = playObject.GetPoseCreate();
             if (baseObject != null) {
-                for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
-                    if (M2Share.WorldEngine.MerchantList[i] == baseObject) {
+                for (var i = 0; i < GameShare.WorldEngine.MerchantList.Count; i++) {
+                    if (GameShare.WorldEngine.MerchantList[i] == baseObject) {
                         nNpcType = 0;
                         break;
                     }
                 }
-                for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++) {
-                    if (M2Share.WorldEngine.QuestNpcList[i] == baseObject) {
+                for (var i = 0; i < GameShare.WorldEngine.QuestNpcList.Count; i++) {
+                    if (GameShare.WorldEngine.QuestNpcList[i] == baseObject) {
                         nNpcType = 1;
                         break;
                     }
@@ -33,11 +33,11 @@ namespace GameSrv.GameCommand.Commands {
             }
             if (nNpcType == 0) {
                 var merchant = (Merchant)baseObject;
-                sScriptFileName = M2Share.GetEnvirFilePath(ScriptConst.sMarket_Def + merchant.ScriptName + "-" + merchant.MapName + ".txt");
+                sScriptFileName = GameShare.GetEnvirFilePath(ScriptConst.sMarket_Def + merchant.ScriptName + "-" + merchant.MapName + ".txt");
             }
             if (nNpcType == 1) {
                 var normNpc = (NormNpc)baseObject;
-                sScriptFileName = M2Share.GetEnvirFilePath(ScriptConst.sNpc_def + normNpc.ChrName + "-" + normNpc.MapName + ".txt");
+                sScriptFileName = GameShare.GetEnvirFilePath(ScriptConst.sNpc_def + normNpc.ChrName + "-" + normNpc.MapName + ".txt");
             }
             if (File.Exists(sScriptFileName)) {
                 using var loadList = new StringList();

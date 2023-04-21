@@ -153,18 +153,18 @@ namespace GameSrv.Player
             {
                 if (UseItems.Length >= ItemLocation.Charm && UseItems[ItemLocation.Charm] != null && UseItems[ItemLocation.Charm].Index > 0)
                 {
-                    StdItem StdItem = M2Share.WorldEngine.GetStdItem(UseItems[ItemLocation.Charm].Index);
+                    StdItem StdItem = GameShare.WorldEngine.GetStdItem(UseItems[ItemLocation.Charm].Index);
                     if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
                     {
                         ushort stoneDura;
                         ushort dCount;
                         ushort bCount;
                         // 加HP
-                        if ((IncHealth == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > M2Share.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < M2Share.Config.HPStoneStartRate))
+                        if ((IncHealth == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > GameShare.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < GameShare.Config.HPStoneStartRate))
                         {
                             IncHpStoneTime = HUtil32.GetTickCount();
                             stoneDura = (ushort)(UseItems[ItemLocation.Charm].Dura * 10);
-                            bCount = (ushort)(stoneDura / M2Share.Config.HPStoneAddRate);
+                            bCount = (ushort)(stoneDura / GameShare.Config.HPStoneAddRate);
                             dCount = (ushort)(WAbil.MaxHP - WAbil.HP);
                             if (dCount > bCount)
                             {
@@ -199,11 +199,11 @@ namespace GameSrv.Player
                             }
                         }
                         // 加MP
-                        if ((IncSpell == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > M2Share.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < M2Share.Config.MPStoneStartRate))
+                        if ((IncSpell == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > GameShare.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < GameShare.Config.MPStoneStartRate))
                         {
                             IncMpStoneTime = HUtil32.GetTickCount();
                             stoneDura = (ushort)(UseItems[ItemLocation.Charm].Dura * 10);
-                            bCount = (ushort)(stoneDura / M2Share.Config.MPStoneAddRate);
+                            bCount = (ushort)(stoneDura / GameShare.Config.MPStoneAddRate);
                             dCount = (ushort)(WAbil.MaxMP - WAbil.MP);
                             if (dCount > bCount)
                             {

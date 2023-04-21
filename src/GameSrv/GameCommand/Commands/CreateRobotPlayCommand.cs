@@ -44,18 +44,18 @@ namespace GameSrv.GameCommand.Commands
             }
             for (var i = 0; i < userCount; i++)
             {
-                M2Share.WorldEngine.AddRobotLogon(new RoBotLogon()
+                GameShare.WorldEngine.AddRobotLogon(new RoBotLogon()
                 {
                     sChrName = RandomNumber.GetInstance().GenerateRandomNumber(RandomNumber.GetInstance().Random(4, 8)),
-                    sFilePath = M2Share.Config.EnvirDir,
-                    sConfigListFileName = M2Share.Config.sAIConfigListFileName,
-                    sHeroConfigListFileName = M2Share.Config.sHeroAIConfigListFileName,
+                    sFilePath = GameShare.Config.EnvirDir,
+                    sConfigListFileName = GameShare.Config.sAIConfigListFileName,
+                    sHeroConfigListFileName = GameShare.Config.sHeroAIConfigListFileName,
                     sMapName = sMapName,
                     nX = nX,
                     nY = nY
                 });
             }
-            playObject.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{M2Share.WorldEngine.RobotLogonQueue.Count}],当前共[{M2Share.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
+            playObject.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{GameShare.WorldEngine.RobotLogonQueue.Count}],当前共[{GameShare.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
         }
     }
 }

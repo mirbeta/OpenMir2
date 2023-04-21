@@ -3,7 +3,7 @@
 namespace GameSrv.Monster.Monsters {
     public class Khazard : MonsterObject {
         public Khazard() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run() {
@@ -14,11 +14,11 @@ namespace GameSrv.Monster.Monsters {
                     TargetX = TargetCret.CurrX;
                     TargetY = TargetCret.CurrY;
                     if (Math.Abs(TargetX - CurrX) == 2 && Math.Abs(TargetY - CurrY) == 2) {
-                        if (M2Share.RandomNumber.Random(2) == 0) {
+                        if (GameShare.RandomNumber.Random(2) == 0) {
                             GetFrontPosition(ref nX, ref nY);
                             TargetCret.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
-                            if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6) {
+                            if (GameShare.RandomNumber.Random(1) == 0 && GameShare.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6) {
                                 TargetCret.MakePosion(PoisonState.DECHEALTH, 35, 2);
                                 return;
                             }
@@ -29,7 +29,7 @@ namespace GameSrv.Monster.Monsters {
                             }
                             TargetCret.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             TargetCret.SpaceMove(MapName, nX, nY, 0);
-                            if (M2Share.RandomNumber.Random(1) == 0 && M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6) {
+                            if (GameShare.RandomNumber.Random(1) == 0 && GameShare.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6) {
                                 TargetCret.MakePosion(PoisonState.DECHEALTH, 35, 2);
                                 return;
                             }

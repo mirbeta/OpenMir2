@@ -1,5 +1,6 @@
 ﻿using GameSrv.GameCommand;
 using GameSrv.World;
+using M2Server;
 using SystemModule.Enums;
 
 namespace GameSrv.Player
@@ -14,7 +15,7 @@ namespace GameSrv.Player
         protected virtual void Whisper(string whostr, string saystr)
         {
             int svidx = 0;
-            PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
+            PlayObject PlayObject = GameShare.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
                 if (!PlayObject.BoReadyRun)
@@ -35,38 +36,38 @@ namespace GameSrv.Player
                     }
                     else
                     {
-                        PlayObject.Whisper(ChrName, M2Share.Config.ServerName + '[' + M2Share.Config.ServerIPaddr + "]提示您");
+                        PlayObject.Whisper(ChrName, GameShare.Config.ServerName + '[' + GameShare.Config.ServerIPaddr + "]提示您");
                     }
                     return;
                 }
                 if (Permission > 0)
                 {
-                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=> " + saystr);
+                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, GameShare.Config.btGMWhisperMsgFColor, GameShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=> " + saystr);
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, GameShare.Config.btGMWhisperMsgFColor, GameShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                     if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, GameShare.Config.btGMWhisperMsgFColor, GameShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=> " + saystr);
+                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, GameShare.Config.btWhisperMsgFColor, GameShare.Config.btWhisperMsgBColor, 0, ChrName + "=> " + saystr);
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, GameShare.Config.btWhisperMsgFColor, GameShare.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                     if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, GameShare.Config.btWhisperMsgFColor, GameShare.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                 }
             }
             else
             {
-                if (M2Share.WorldEngine.FindOtherServerUser(whostr, ref svidx))
+                if (GameShare.WorldEngine.FindOtherServerUser(whostr, ref svidx))
                 {
                     WorldServer.SendServerGroupMsg(Messages.ISM_WHISPER, svidx, whostr + '/' + ChrName + "=> " + saystr);
                 }
@@ -86,13 +87,13 @@ namespace GameSrv.Player
                 switch (MsgType)
                 {
                     case 0:
-                        SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btGMWhisperMsgFColor, M2Share.Config.btGMWhisperMsgBColor, 0, SayStr);
+                        SendMsg(Messages.RM_WHISPER, 0, GameShare.Config.btGMWhisperMsgFColor, GameShare.Config.btGMWhisperMsgBColor, 0, SayStr);
                         break;
                     case 1:
-                        SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.btWhisperMsgFColor, M2Share.Config.btWhisperMsgBColor, 0, SayStr);
+                        SendMsg(Messages.RM_WHISPER, 0, GameShare.Config.btWhisperMsgFColor, GameShare.Config.btWhisperMsgBColor, 0, SayStr);
                         break;
                     case 2:
-                        SendMsg(Messages.RM_WHISPER, 0, M2Share.Config.PurpleMsgFColor, M2Share.Config.PurpleMsgBColor, 0, SayStr);
+                        SendMsg(Messages.RM_WHISPER, 0, GameShare.Config.PurpleMsgFColor, GameShare.Config.PurpleMsgBColor, 0, SayStr);
                         break;
                 }
             }
@@ -109,18 +110,18 @@ namespace GameSrv.Player
             const string sExceptionMsg = "[Exception] PlayObject.ProcessSayMsg Msg = {0}";
             try
             {
-                if (sData.Length > M2Share.Config.SayMsgMaxLen)
+                if (sData.Length > GameShare.Config.SayMsgMaxLen)
                 {
-                    sData = sData[..M2Share.Config.SayMsgMaxLen]; // 3 * 1000
+                    sData = sData[..GameShare.Config.SayMsgMaxLen]; // 3 * 1000
                 }
-                if ((HUtil32.GetTickCount() - SayMsgTick) < M2Share.Config.SayMsgTime)
+                if ((HUtil32.GetTickCount() - SayMsgTick) < GameShare.Config.SayMsgTime)
                 {
                     SayMsgCount++;
-                    if (SayMsgCount >= M2Share.Config.SayMsgCount)
+                    if (SayMsgCount >= GameShare.Config.SayMsgCount)
                     {
                         DisableSayMsg = true;
-                        DisableSayMsgTick = HUtil32.GetTickCount() + M2Share.Config.DisableSayMsgTime;// 60 * 1000
-                        SysMsg(Format(Settings.DisableSayMsg, M2Share.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
+                        DisableSayMsgTick = HUtil32.GetTickCount() + GameShare.Config.DisableSayMsgTime;// 60 * 1000
+                        SysMsg(Format(Settings.DisableSayMsg, GameShare.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
@@ -133,7 +134,7 @@ namespace GameSrv.Player
                     DisableSayMsg = false;
                 }
                 boDisableSayMsg = DisableSayMsg;
-                if (M2Share.DenySayMsgList.ContainsKey(this.ChrName))
+                if (GameShare.DenySayMsgList.ContainsKey(this.ChrName))
                 {
                     boDisableSayMsg = true;
                 }
@@ -143,7 +144,7 @@ namespace GameSrv.Player
                     //OldSayMsg = sData;
                     if (sData.StartsWith("@@加速处理"))
                     {
-                        M2Share.FunctionNPC.GotoLable(this, "@加速处理", false);
+                        GameShare.FunctionNPC.GotoLable(this, "@加速处理", false);
                         return;
                     }
                     string sText;
@@ -168,12 +169,12 @@ namespace GameSrv.Player
                                         case '!'://发送组队消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             SendGroupText(ChrName + ": " + sText);
-                                            WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
+                                            WorldServer.SendServerGroupMsg(Messages.SS_208, GameShare.ServerIndex, ChrName + "/:" + sText);
                                             return;
                                         case '~' when MyGuild != null://发送行会消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             MyGuild.SendGuildMsg(ChrName + ": " + sText);
-                                            WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + ChrName + '/' + sText);
+                                            WorldServer.SendServerGroupMsg(Messages.SS_208, GameShare.ServerIndex, MyGuild.GuildName + '/' + ChrName + '/' + sText);
                                             return;
                                     }
                                 }
@@ -181,9 +182,9 @@ namespace GameSrv.Player
                                 {
                                     if ((HUtil32.GetTickCount() - ShoutMsgTick) > 10 * 1000)
                                     {
-                                        if (Abil.Level <= M2Share.Config.CanShoutMsgLevel)
+                                        if (Abil.Level <= GameShare.Config.CanShoutMsgLevel)
                                         {
-                                            SysMsg(Format(Settings.YouNeedLevelMsg, M2Share.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                            SysMsg(Format(Settings.YouNeedLevelMsg, GameShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
@@ -195,7 +196,7 @@ namespace GameSrv.Player
                                         }
                                         else
                                         {
-                                            M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, sCryCryMsg);
+                                            GameShare.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, GameShare.Config.CryMsgFColor, GameShare.Config.CryMsgBColor, sCryCryMsg);
                                         }
                                         return;
                                     }
@@ -208,7 +209,7 @@ namespace GameSrv.Player
                     }
                     if (FilterSendMsg)
                     {
-                        SendMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + sData);// 如果禁止发信息，则只向自己发信息
+                        SendMsg(Messages.RM_HEAR, 0, GameShare.Config.btHearMsgFColor, GameShare.Config.btHearMsgBColor, 0, ChrName + ':' + sData);// 如果禁止发信息，则只向自己发信息
                     }
                     else
                     {
@@ -220,8 +221,8 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, sData));
-                M2Share.Logger.Error(e.StackTrace);
+                GameShare.Logger.Error(Format(sExceptionMsg, sData));
+                GameShare.Logger.Error(e.StackTrace);
             }
         }
 
@@ -284,39 +285,39 @@ namespace GameSrv.Player
                         IsPasswordLocked = false;
                         if (IsUnLockPwd)
                         {
-                            if (M2Share.Config.LockDealAction)
+                            if (GameShare.Config.LockDealAction)
                             {
                                 IsCanDeal = true;
                             }
-                            if (M2Share.Config.LockDropAction)
+                            if (GameShare.Config.LockDropAction)
                             {
                                 IsCanDrop = true;
                             }
-                            if (M2Share.Config.LockWalkAction)
+                            if (GameShare.Config.LockWalkAction)
                             {
                                 IsCanWalk = true;
                             }
-                            if (M2Share.Config.LockRunAction)
+                            if (GameShare.Config.LockRunAction)
                             {
                                 IsCanRun = true;
                             }
-                            if (M2Share.Config.LockHitAction)
+                            if (GameShare.Config.LockHitAction)
                             {
                                 IsCanHit = true;
                             }
-                            if (M2Share.Config.LockSpellAction)
+                            if (GameShare.Config.LockSpellAction)
                             {
                                 IsCanSpell = true;
                             }
-                            if (M2Share.Config.LockSendMsgAction)
+                            if (GameShare.Config.LockSendMsgAction)
                             {
                                 IsCanSendMsg = true;
                             }
-                            if (M2Share.Config.LockUserItemAction)
+                            if (GameShare.Config.LockUserItemAction)
                             {
                                 BoCanUseItem = true;
                             }
-                            if (M2Share.Config.LockInObModeAction)
+                            if (GameShare.Config.LockInObModeAction)
                             {
                                 ObMode = false;
                                 AdminMode = false;
@@ -326,7 +327,7 @@ namespace GameSrv.Player
                         }
                         if (IsUnLockStoragePwd)
                         {
-                            if (M2Share.Config.LockGetBackItemAction)
+                            if (GameShare.Config.LockGetBackItemAction)
                             {
                                 IsCanGetBackItem = true;
                             }
@@ -408,17 +409,17 @@ namespace GameSrv.Player
                 }
                 if (Permission >= 2 && sData.Length > 2)
                 {
-                    if (Permission >= 6 && sData[2] == M2Share.GMRedMsgCmd)
+                    if (Permission >= 6 && sData[2] == GameShare.GMRedMsgCmd)
                     {
                         if (HUtil32.GetTickCount() - SayMsgTick > 2000)
                         {
                             SayMsgTick = HUtil32.GetTickCount();
                             sData = sData.AsSpan()[2..].ToString();
-                            if (sData.Length > M2Share.Config.SayRedMsgMaxLen)
+                            if (sData.Length > GameShare.Config.SayRedMsgMaxLen)
                             {
-                                sData = sData[..M2Share.Config.SayRedMsgMaxLen];
+                                sData = sData[..GameShare.Config.SayRedMsgMaxLen];
                             }
-                            if (M2Share.Config.ShutRedMsgShowGMName)
+                            if (GameShare.Config.ShutRedMsgShowGMName)
                             {
                                 sC = ChrName + ": " + sData;
                             }
@@ -426,7 +427,7 @@ namespace GameSrv.Player
                             {
                                 sC = sData;
                             }
-                            M2Share.WorldEngine.SendBroadCastMsg(sC, MsgType.GameManger);
+                            GameShare.WorldEngine.SendBroadCastMsg(sC, MsgType.GameManger);
                         }
                         return;
                     }
@@ -435,8 +436,8 @@ namespace GameSrv.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, sData));
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error(Format(sExceptionMsg, sData));
+                GameShare.Logger.Error(e.Message);
             }
         }
     }

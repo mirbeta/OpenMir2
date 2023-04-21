@@ -1,5 +1,5 @@
 using System.Collections;
-using GameSrv.Npc;
+using ScriptEngine;
 
 namespace GameSrv.Script
 {

@@ -23,8 +23,8 @@ namespace GameSrv.GameCommand.Commands {
                     playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (playObject.Permission >= this.Command.PermissionMin || M2Share.CanMoveMap(sMapName)) {
-                    envir = M2Share.MapMgr.FindMap(sMapName);
+                if (playObject.Permission >= this.Command.PermissionMin || GameShare.CanMoveMap(sMapName)) {
+                    envir = GameShare.MapMgr.FindMap(sMapName);
                     if (envir != null) {
                         var nX = HUtil32.StrToInt16(sX, 0);
                         var nY = HUtil32.StrToInt16(sY, 0);
@@ -41,8 +41,8 @@ namespace GameSrv.GameCommand.Commands {
                 }
             }
             catch (Exception e) {
-                M2Share.Logger.Error("[Exceptioin] PlayObject.CmdPositionMove");
-                M2Share.Logger.Error(e.Message);
+                GameShare.Logger.Error("[Exceptioin] PlayObject.CmdPositionMove");
+                GameShare.Logger.Error(e.Message);
             }
         }
     }

@@ -6,17 +6,17 @@ namespace GameSrv.GameCommand.Commands {
     public class ReloadManageCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            if (M2Share.ManageNPC != null) {
-                M2Share.ManageNPC.ClearScript();
-                M2Share.ManageNPC.LoadNPCScript();
+            if (GameShare.ManageNPC != null) {
+                GameShare.ManageNPC.ClearScript();
+                GameShare.ManageNPC.LoadNPCScript();
                 playObject.SysMsg("重新加载登录脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else {
                 playObject.SysMsg("重新加载登录脚本失败...", MsgColor.Green, MsgType.Hint);
             }
-            if (M2Share.FunctionNPC != null) {
-                M2Share.FunctionNPC.ClearScript();
-                M2Share.FunctionNPC.LoadNPCScript();
+            if (GameShare.FunctionNPC != null) {
+                GameShare.FunctionNPC.ClearScript();
+                GameShare.FunctionNPC.LoadNPCScript();
                 playObject.SysMsg("重新加载功能脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else {

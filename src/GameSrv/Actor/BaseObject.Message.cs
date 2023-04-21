@@ -1,4 +1,5 @@
 using GameSrv.Maps;
+using M2Server.Actor;
 using Spectre.Console;
 using System.Diagnostics;
 using SystemModule.Data;
@@ -384,7 +385,7 @@ namespace GameSrv.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (Envir == null)
             {
-                M2Share.Logger.Error(ChrName + " SendRefMsg nil PEnvir ");
+                GameShare.Logger.Error(ChrName + " SendRefMsg nil PEnvir ");
                 return;
             }
             if (ObMode || FixedHideMode)
@@ -396,10 +397,10 @@ namespace GameSrv.Actor
             {
                 SendRefMsgTick = HUtil32.GetTickCount();
                 VisibleHumanList.Clear();
-                short nLx = (short)(CurrX - M2Share.Config.SendRefMsgRange); // 12
-                short nHx = (short)(CurrX + M2Share.Config.SendRefMsgRange); // 12
-                short nLy = (short)(CurrY - M2Share.Config.SendRefMsgRange); // 12
-                short nHy = (short)(CurrY + M2Share.Config.SendRefMsgRange); // 12
+                short nLx = (short)(CurrX - GameShare.Config.SendRefMsgRange); // 12
+                short nHx = (short)(CurrX + GameShare.Config.SendRefMsgRange); // 12
+                short nLy = (short)(CurrY - GameShare.Config.SendRefMsgRange); // 12
+                short nHy = (short)(CurrY + GameShare.Config.SendRefMsgRange); // 12
                 for (short nCx = nLx; nCx <= nHx; nCx++)
                 {
                     for (short nCy = nLy; nCy <= nHy; nCy++)
@@ -425,7 +426,7 @@ namespace GameSrv.Actor
                                     //        break;
                                     //    }
                                     //}
-                                    BaseObject targetObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    BaseObject targetObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
                                     if ((targetObject != null) && !targetObject.Ghost)
                                     {
                                         if (targetObject.Race == ActorRace.Play)
@@ -452,7 +453,7 @@ namespace GameSrv.Actor
 
             for (int i = 0; i < VisibleHumanList.Count; i++)
             {
-                BaseObject targetObject = M2Share.ActorMgr.Get(VisibleHumanList[i]);
+                BaseObject targetObject = GameShare.ActorMgr.Get(VisibleHumanList[i]);
                 if (targetObject.Ghost)
                 {
                     continue;

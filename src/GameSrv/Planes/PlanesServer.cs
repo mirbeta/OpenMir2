@@ -33,10 +33,10 @@ namespace GameSrv.Planes
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
-                new IPHost(IPAddress.Parse(M2Share.Config.MasterSrvAddr), M2Share.Config.MasterSrvPort)
+                new IPHost(IPAddress.Parse(GameShare.Config.MasterSrvAddr), GameShare.Config.MasterSrvPort)
             });
             _serverSocket.Setup(touchSocketConfig);
-            M2Share.Logger.Info($"节点数据服务[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]已启动.");
+            GameShare.Logger.Info($"节点数据服务[{GameShare.Config.MasterSrvAddr}:{GameShare.Config.MasterSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr) {
@@ -84,7 +84,7 @@ namespace GameSrv.Planes
                 ps.SocData = BufStr + ps.SocData;
             }
             catch (Exception ex) {
-                M2Share.Logger.Error(ex.StackTrace);
+                GameShare.Logger.Error(ex.StackTrace);
             }
         }
 
@@ -142,7 +142,7 @@ namespace GameSrv.Planes
                     serverMsgInfo.Socket = client.MainSocket;
                     serverMsgInfo.SocData = string.Empty;
                     serverMsgInfo.SocketId = client.ID;
-                    M2Share.Logger.Info($"节点服务器({endPoint})链接成功...");
+                    GameShare.Logger.Info($"节点服务器({endPoint})链接成功...");
                     srvArray[i] = serverMsgInfo;
                     break;
                 }
@@ -163,7 +163,7 @@ namespace GameSrv.Planes
                 {
                     serverMsgInfo.Socket = null;
                     serverMsgInfo.SocData = "";
-                    M2Share.Logger.Error($"节点服务器({client.MainSocket.RemoteEndPoint})断开连接...");
+                    GameShare.Logger.Error($"节点服务器({client.MainSocket.RemoteEndPoint})断开连接...");
                     srvArray[i] = null;
                     break;
                 }
@@ -184,7 +184,7 @@ namespace GameSrv.Planes
                 }
             }
             catch {
-                M2Share.Logger.Error(sExceptionMsg);
+                GameShare.Logger.Error(sExceptionMsg);
             }
         }
     }

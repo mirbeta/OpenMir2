@@ -21,7 +21,7 @@ namespace GameSrv.GameCommand.Commands {
             try {
                 if (!string.IsNullOrEmpty(sFixDeny) && sFixDeny[0] == '1') {
                     //Settings.g_DenyChrNameList.Add(sChrName, ((1) as Object));
-                    M2Share.SaveDenyChrNameList();
+                    GameShare.SaveDenyChrNameList();
                     playObject.SysMsg(sChrName + "已加入禁止人物列表", MsgColor.Green, MsgType.Hint);
                 }
                 else {

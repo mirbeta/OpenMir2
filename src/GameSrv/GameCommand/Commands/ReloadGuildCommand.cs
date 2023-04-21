@@ -21,11 +21,11 @@ namespace GameSrv.GameCommand.Commands {
                     return;
                 }
             }
-            if (M2Share.ServerIndex != 0) {
+            if (GameShare.ServerIndex != 0) {
                 playObject.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = M2Share.GuildMgr.FindGuild(sParam1);
+            var guild = GameShare.GuildMgr.FindGuild(sParam1);
             if (guild == null) {
                 playObject.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
                 return;

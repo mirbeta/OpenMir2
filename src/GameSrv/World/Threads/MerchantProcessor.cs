@@ -30,13 +30,13 @@ namespace GameSrv.World.Threads
         {
             try
             {
-                M2Share.WorldEngine.ProcessNpcs();
-                M2Share.WorldEngine.ProcessMerchants();
+                GameShare.WorldEngine.ProcessNpcs();
+                GameShare.WorldEngine.ProcessMerchants();
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error("[异常] MerchantProcessor::OnElapseAsync error");
-                M2Share.Logger.Error(ex);
+                GameShare.Logger.Error("[异常] MerchantProcessor::OnElapseAsync error");
+                GameShare.Logger.Error(ex);
             }
             return Task.CompletedTask;
         }

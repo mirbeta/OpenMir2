@@ -20,7 +20,7 @@ namespace GameSrv.GameCommand.Commands {
                 }
                 if (HUtil32.GetTickCount() - playObject.ProbeTick > 10000 || playObject.Permission >= 3) {
                     playObject.ProbeTick = HUtil32.GetTickCount();
-                    var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                    var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
                     if (mPlayObject != null) {
                         playObject.SysMsg(sHumanName + " 现在位于 " + mPlayObject.Envir.MapDesc + '(' + mPlayObject.Envir.MapName + ") " + mPlayObject.CurrX + ':'
                             + playObject.CurrY, MsgColor.Blue, MsgType.Hint);

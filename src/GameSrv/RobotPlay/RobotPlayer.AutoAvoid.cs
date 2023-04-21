@@ -74,7 +74,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RoboPlayObject.IsNeedAvoid");
+                GameShare.Logger.Error("RoboPlayObject.IsNeedAvoid");
             }
             return result;
         }
@@ -421,7 +421,7 @@ namespace GameSrv.RobotPlay
                 }
                 nTargetX = nX;
                 nTargetY = nY;
-                nDir = M2Share.RandomNumber.RandomByte(7);
+                nDir = GameShare.RandomNumber.RandomByte(7);
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }
@@ -438,7 +438,7 @@ namespace GameSrv.RobotPlay
             bool result = true;
             if (TargetCret != null && !TargetCret.Death)
             {
-                byte nDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                byte nDir = GameShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 nDir = GetBackDir(nDir);
                 Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref TargetX, ref TargetY);
                 result = GotoTargetXy(TargetX, TargetY, 1);

@@ -14,12 +14,12 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 mPlayObject.FilterSendMsg = true;
             }
-            M2Share.DisableSendMsgList.Add(sHumanName);
-            M2Share.SaveDisableSendMsgList();
+            GameShare.DisableSendMsgList.Add(sHumanName);
+            GameShare.SaveDisableSendMsgList();
             playObject.SysMsg(sHumanName + " 已加入禁言列表。", MsgColor.Green, MsgType.Hint);
         }
     }

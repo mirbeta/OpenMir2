@@ -9,7 +9,7 @@ namespace GameSrv.Monster.Monsters {
 
         protected override BaseObject GasAttack(byte bt05) {
             BaseObject baseObject = base.GasAttack(bt05);
-            if (baseObject != null && M2Share.RandomNumber.Random(3) == 0 && baseObject.HideMode) {
+            if (baseObject != null && GameShare.RandomNumber.Random(3) == 0 && baseObject.HideMode) {
                 baseObject.StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;
             }
             return baseObject;

@@ -12,7 +12,7 @@ namespace GameSrv.Monster.Monsters {
         private int oldWalkTime;
 
         public CowKingMonster() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 500;
             JumpTime = HUtil32.GetTickCount();
             RushMode = true;
             CrazyCount = 0;

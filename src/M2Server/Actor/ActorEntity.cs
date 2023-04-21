@@ -1,6 +1,6 @@
 using SystemModule.Enums;
 
-namespace GameSrv.Actor
+namespace M2Server.Actor
 {
     public class ActorEntity : IDisposable {
         /// <summary>

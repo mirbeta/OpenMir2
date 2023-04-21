@@ -25,8 +25,8 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName)) {
-                M2Share.CustomItemMgr.SaveCustomItemName();
+            if (GameShare.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName)) {
+                GameShare.CustomItemMgr.SaveCustomItemName();
                 playObject.SysMsg("物品名称设置成功。", MsgColor.Green, MsgType.Hint);
                 return;
             }

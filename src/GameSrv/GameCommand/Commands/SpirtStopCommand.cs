@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
     public class SpirtStopCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            M2Share.SpiritMutinyTick = 0;
+            GameShare.SpiritMutinyTick = 0;
             playObject.SysMsg("祈祷叛变已停止。", MsgColor.Green, MsgType.Hint);
         }
     }

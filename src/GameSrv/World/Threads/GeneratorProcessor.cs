@@ -38,19 +38,19 @@ namespace GameSrv.World.Threads
 
         private void GenerateIdThread()
         {
-            if (M2Share.ActorMgr.GetGenerateQueueCount() < 20000)
+            if (GameShare.ActorMgr.GetGenerateQueueCount() < 20000)
             {
                 sw.Reset();
                 sw.Start();
                 for (var i = 0; i < 100000; i++)
                 {
                     var sequence = _standardRandomizer.NextInteger();
-                    if (M2Share.ActorMgr.ContainsKey(sequence))
+                    if (GameShare.ActorMgr.ContainsKey(sequence))
                     {
                         while (true)
                         {
                             sequence = _standardRandomizer.NextInteger();
-                            if (!M2Share.ActorMgr.ContainsKey(sequence))
+                            if (!GameShare.ActorMgr.ContainsKey(sequence))
                             {
                                 break;
                             }
@@ -61,10 +61,10 @@ namespace GameSrv.World.Threads
                         sequence = Environment.TickCount + HUtil32.Sequence();
                         if (sequence > 0) break;
                     }
-                    M2Share.ActorMgr.AddToQueue(sequence);
+                    GameShare.ActorMgr.AddToQueue(sequence);
                 }
                 sw.Stop();
-                _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{M2Share.ActorMgr.GetGenerateQueueCount()}]");
+                _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{GameShare.ActorMgr.GetGenerateQueueCount()}]");
             }
         }
     }

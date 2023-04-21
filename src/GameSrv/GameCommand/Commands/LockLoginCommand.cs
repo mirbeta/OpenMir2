@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
     public class LockLoginCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            if (!M2Share.Config.LockHumanLogin) {
+            if (!GameShare.Config.LockHumanLogin) {
                 playObject.SysMsg("本服务器还没有启用登录锁功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }

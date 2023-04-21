@@ -19,7 +19,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             var nLevel = HUtil32.StrToInt(sLevel, -1);
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject != null) {
                 if (nLevel >= 0 && nLevel <= 255) {
                     mPlayObject.ReLevel = (byte)nLevel;

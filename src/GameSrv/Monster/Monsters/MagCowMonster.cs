@@ -6,13 +6,13 @@ namespace GameSrv.Monster.Monsters
     {
         public MagCowMonster() : base()
         {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         private void MagicAttack(byte btDir)
         {
             Dir = btDir;
-            int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
+            int nPower = HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0)
             {
                 SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");

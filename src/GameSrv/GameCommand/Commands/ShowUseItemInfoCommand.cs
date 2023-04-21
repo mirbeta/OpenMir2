@@ -18,7 +18,7 @@ namespace GameSrv.GameCommand.Commands {
                 playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var mPlayObject = GameShare.WorldEngine.GetPlayObject(sHumanName);
             if (mPlayObject == null) {
                 playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
@@ -28,7 +28,7 @@ namespace GameSrv.GameCommand.Commands {
                 if (userItem.Index == 0) {
                     continue;
                 }
-                playObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", M2Share.GetUseItemName(i), M2Share.WorldEngine.GetStdItemName(userItem.Index), userItem.Index,
+                playObject.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", GameShare.GetUseItemName(i), GameShare.WorldEngine.GetStdItemName(userItem.Index), userItem.Index,
                     userItem.MakeIndex, userItem.Dura, userItem.DuraMax), MsgColor.Blue, MsgType.Hint);
             }
         }

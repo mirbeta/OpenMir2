@@ -20,7 +20,7 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             var dwTime = (uint)HUtil32.StrToInt(sTime, 5);
-            HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
+            HUtil32.EnterCriticalSection(GameShare.DenySayMsgList);
             try {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands {
                 //}
             }
             finally {
-                HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(GameShare.DenySayMsgList);
             }
             playObject.SysMsg(string.Format(CommandHelp.GameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
         }

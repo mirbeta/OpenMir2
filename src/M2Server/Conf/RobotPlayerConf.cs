@@ -1,6 +1,6 @@
 ﻿using SystemModule.Common;
 
-namespace GameSrv.Conf
+namespace M2Server.Conf
 {
     public class RobotPlayerConf : ConfigFile
     {

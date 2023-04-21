@@ -3,7 +3,7 @@
 namespace GameSrv.Monster.Monsters {
     public class RedMonster : MonsterObject {
         public RedMonster() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
         }
 
         public override void Run() {
@@ -12,7 +12,7 @@ namespace GameSrv.Monster.Monsters {
                     TargetX = TargetCret.CurrX;
                     TargetY = TargetCret.CurrY;
                     if (Math.Abs(TargetX - CurrX) == 1 && Math.Abs(TargetY - CurrY) == 1) {
-                        if (M2Share.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.StatusTimeArr[PoisonState.DECHEALTH] == 0) {
+                        if (GameShare.RandomNumber.Random(TargetCret.AntiPoison + 7) <= 6 && TargetCret.StatusTimeArr[PoisonState.DECHEALTH] == 0) {
                             TargetCret.MakePosion(PoisonState.DAMAGEARMOR, 30, 1);
                         }
                     }

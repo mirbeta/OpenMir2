@@ -10,7 +10,7 @@ namespace GameSrv.Monster.Monsters
         {
             ViewRange = 5;
             RunTime = 250;
-            SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
             explosionMakeTime = HUtil32.GetTickCount();
         }
@@ -18,7 +18,7 @@ namespace GameSrv.Monster.Monsters
         private void DoSelfExplosion()
         {
             WAbil.HP = 0;
-            int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
+            int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + GameShare.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
             for (int i = 0; i < VisibleActors.Count; i++)
             {
                 BaseObject baseObject = VisibleActors[i].BaseObject;

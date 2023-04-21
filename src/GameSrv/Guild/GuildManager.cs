@@ -16,7 +16,7 @@ namespace GameSrv.Guild
         public bool AddGuild(string sGuildName, string sChief)
         {
             var result = false;
-            if (M2Share.CheckGuildName(sGuildName) && FindGuild(sGuildName) == null)
+            if (GameShare.CheckGuildName(sGuildName) && FindGuild(sGuildName) == null)
             {
                 var guild = new GuildInfo(sGuildName);
                 guild.SetGuildInfo(sChief);
@@ -75,10 +75,10 @@ namespace GameSrv.Guild
         public void LoadGuildInfo()
         {
             _guildList.Clear();
-            if (File.Exists(M2Share.Config.GuildFile))
+            if (File.Exists(GameShare.Config.GuildFile))
             {
                 using var loadList = new StringList();
-                loadList.LoadFromFile(M2Share.Config.GuildFile);
+                loadList.LoadFromFile(GameShare.Config.GuildFile);
                 for (var i = 0; i < loadList.Count; i++)
                 {
                     var sGuildName = loadList[i].Trim();
@@ -120,7 +120,7 @@ namespace GameSrv.Guild
 
         private void SaveGuildList()
         {
-            if (M2Share.ServerIndex != 0)
+            if (GameShare.ServerIndex != 0)
             {
                 return;
             }
@@ -131,7 +131,7 @@ namespace GameSrv.Guild
             }
             try
             {
-                saveList.SaveToFile(M2Share.Config.GuildFile);
+                saveList.SaveToFile(GameShare.Config.GuildFile);
             }
             catch
             {

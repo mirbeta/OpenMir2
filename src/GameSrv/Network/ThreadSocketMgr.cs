@@ -62,7 +62,7 @@ namespace GameSrv.Network
             var client = (SocketClient)sender;
             if (_gatePermitMap.Contains(HUtil32.IpToInt(client.ServiceIP)))
             {
-                M2Share.SocketMgr.AddGate(client);
+                GameShare.SocketMgr.AddGate(client);
             }
             else
             {
@@ -74,7 +74,7 @@ namespace GameSrv.Network
         private void Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            M2Share.SocketMgr.CloseGate(client.ID, client.ServiceIP);
+            GameShare.SocketMgr.CloseGate(client.ID, client.ServiceIP);
             tcpService.NextId();
         }
 
@@ -83,7 +83,7 @@ namespace GameSrv.Network
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
-                new IPHost(IPAddress.Parse(M2Share.Config.sGateAddr), M2Share.Config.nGatePort)
+                new IPHost(IPAddress.Parse(GameShare.Config.sGateAddr), GameShare.Config.nGatePort)
             }).SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             tcpService.Setup(touchSocketConfig);
             _logger.Info("游戏网关初始化完成...");
@@ -92,7 +92,7 @@ namespace GameSrv.Network
         public void Start()
         {
             tcpService.Start();
-            _logger.Info($"游戏网关[{M2Share.Config.sGateAddr}:{M2Share.Config.nGatePort}]已启动...");
+            _logger.Info($"游戏网关[{GameShare.Config.sGateAddr}:{GameShare.Config.nGatePort}]已启动...");
         }
 
         public async Task StopAsync()
@@ -110,7 +110,7 @@ namespace GameSrv.Network
             {
                 var runAddrList = new StringList();
                 runAddrList.LoadFromFile(sFileName);
-                M2Share.TrimStringList(runAddrList);
+                GameShare.TrimStringList(runAddrList);
                 for (var i = 0; i < runAddrList.Count; i++)
                 {
                     if (!string.IsNullOrEmpty(runAddrList[i]))
@@ -133,7 +133,7 @@ namespace GameSrv.Network
         {
             const string sGateOpen = "游戏网关[{0}]已打开...";
             const string sKickGate = "服务器未就绪: {0}";
-            if (M2Share.StartReady)
+            if (GameShare.StartReady)
             {
                 if (_gameGates.Length > 20)
                 {
@@ -347,7 +347,7 @@ namespace GameSrv.Network
 
         public void Run()
         {
-            if (M2Share.StartReady)
+            if (GameShare.StartReady)
             {
                 if (_gameGates.Length > 0)
                 {

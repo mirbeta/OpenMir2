@@ -65,7 +65,7 @@ namespace GameSrv.Monster.Monsters {
                 return;
             }
             Dir = hiter.Dir;
-            N550 = M2Share.RandomNumber.Random(4) + N550 + 4;
+            N550 = GameShare.RandomNumber.Random(4) + N550 + 4;
             N550 = HUtil32._MIN(20, N550);
             Envir.GetNextPosition(CurrX, CurrY, Dir, N550, ref TargetX, ref TargetY);
         }

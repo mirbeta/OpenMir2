@@ -20,7 +20,7 @@ namespace GameSrv.Monster.Monsters {
                     short nOldY = this.CurrY;
                     byte btOldDir = this.Dir;
                     this.TargetCret.GetBackPosition(ref this.CurrX, ref this.CurrY);
-                    this.Dir = M2Share.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
+                    this.Dir = GameShare.GetNextDirection(this.CurrX, this.CurrY, this.TargetCret.CurrX, this.TargetCret.CurrY);
                     this.SendRefMsg(Messages.RM_HIT, this.Dir, this.CurrX, this.CurrY, 0, "");
                     this._Attack(GetBaseAttackPoewr(), this.TargetCret);
                     this.TargetCret.SetLastHiter(this);

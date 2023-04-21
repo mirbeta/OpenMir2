@@ -13,8 +13,8 @@ namespace GameSrv.GameCommand.Commands {
             const string sDelOk = "删除NPC成功...";
             var baseObject = playObject.GetPoseCreate();
             if (baseObject != null) {
-                for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
-                    if (M2Share.WorldEngine.MerchantList[i] == baseObject) {
+                for (var i = 0; i < GameShare.WorldEngine.MerchantList.Count; i++) {
+                    if (GameShare.WorldEngine.MerchantList[i] == baseObject) {
                         baseObject.Ghost = true;
                         baseObject.GhostTick = HUtil32.GetTickCount();
                         baseObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
@@ -22,8 +22,8 @@ namespace GameSrv.GameCommand.Commands {
                         return;
                     }
                 }
-                for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++) {
-                    if (M2Share.WorldEngine.QuestNpcList[i] == baseObject) {
+                for (var i = 0; i < GameShare.WorldEngine.QuestNpcList.Count; i++) {
+                    if (GameShare.WorldEngine.QuestNpcList[i] == baseObject) {
                         baseObject.Ghost = true;
                         baseObject.GhostTick = HUtil32.GetTickCount();
                         baseObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");

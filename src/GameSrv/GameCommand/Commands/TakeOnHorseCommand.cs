@@ -16,7 +16,7 @@ namespace GameSrv.GameCommand.Commands {
             playObject.OnHorse = true;
             playObject.FeatureChanged();
             if (playObject.OnHorse) {
-                M2Share.FunctionNPC.GotoLable(playObject, "@OnHorse", false);
+                GameShare.FunctionNPC.GotoLable(playObject, "@OnHorse", false);
             }
         }
     }

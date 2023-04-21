@@ -9,7 +9,7 @@ namespace GameSrv.GameCommand.Commands {
     public class ReloadLineNoticeCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(PlayObject playObject) {
-            if (M2Share.LoadLineNotice(M2Share.GetNoticeFilePath("LineNotice.txt"))) {
+            if (GameShare.LoadLineNotice(GameShare.GetNoticeFilePath("LineNotice.txt"))) {
                 playObject.SysMsg(CommandHelp.GameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
             }
             else {

@@ -31,7 +31,7 @@ namespace GameSrv.World.Threads
             const string sExceptionMsg = "[Exception] TimedRobotProcessor::ExecuteInternal";
             try
             {
-                var robotHumanList = M2Share.RobotMgr.Robots;
+                var robotHumanList = GameShare.RobotMgr.Robots;
                 for (var i = robotHumanList.Count - 1; i >= 0; i--)
                 {
                     robotHumanList[i].Run();

@@ -154,7 +154,7 @@ namespace GameSrv.Castle
             WarRangeX = M2Share.Config.CastleWarRangeX;
             WarRangeY = M2Share.Config.CastleWarRangeY;
             EnvirList = new List<string>();
-            string filePath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, ConfigDir);
+            string filePath = Path.Combine(GameShare.BasePath, M2Share.Config.CastleDir, ConfigDir);
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
@@ -180,16 +180,16 @@ namespace GameSrv.Castle
             MapDoor Door;
             LoadConfig();
             LoadAttackSabukWall();
-            if (M2Share.MapMgr.GetMapOfServerIndex(MapName) == M2Share.ServerIndex)
+            if (GameShare.MapMgr.GetMapOfServerIndex(MapName) == GameShare.ServerIndex)
             {
-                PalaceEnvir = M2Share.MapMgr.FindMap(PalaceMap);
+                PalaceEnvir = GameShare.MapMgr.FindMap(PalaceMap);
                 if (PalaceEnvir == null) _logger.Warn($"皇宫地图{PalaceMap}没找到!!!");
-                SecretEnvir = M2Share.MapMgr.FindMap(SecretMap);
+                SecretEnvir = GameShare.MapMgr.FindMap(SecretMap);
                 if (SecretEnvir == null) _logger.Warn($"密道地图{SecretMap}没找到!!!");
-                CastleEnvir = M2Share.MapMgr.FindMap(MapName);
+                CastleEnvir = GameShare.MapMgr.FindMap(MapName);
                 if (CastleEnvir != null)
                 {
-                    MainDoor.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, MainDoor.nX, MainDoor.nY, MainDoor.sName);
+                    MainDoor.BaseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, MainDoor.nX, MainDoor.nY, MainDoor.sName);
                     if (MainDoor.BaseObject != null)
                     {
                         MainDoor.BaseObject.WAbil.HP = MainDoor.nHP;
@@ -203,7 +203,7 @@ namespace GameSrv.Castle
                     {
                         _logger.Warn("[Error] UserCastle.Initialize MainDoor.UnitObj = nil");
                     }
-                    LeftWall.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, LeftWall.nX, LeftWall.nY, LeftWall.sName);
+                    LeftWall.BaseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, LeftWall.nX, LeftWall.nY, LeftWall.sName);
                     if (LeftWall.BaseObject != null)
                     {
                         LeftWall.BaseObject.WAbil.HP = LeftWall.nHP;
@@ -213,7 +213,7 @@ namespace GameSrv.Castle
                     {
                         _logger.Warn("[错误信息] 城堡初始化城门失败，检查怪物数据库里有没城门的设置: " + MainDoor.sName);
                     }
-                    CenterWall.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, CenterWall.nX, CenterWall.nY, CenterWall.sName);
+                    CenterWall.BaseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, CenterWall.nX, CenterWall.nY, CenterWall.sName);
                     if (CenterWall.BaseObject != null)
                     {
                         CenterWall.BaseObject.WAbil.HP = CenterWall.nHP;
@@ -223,7 +223,7 @@ namespace GameSrv.Castle
                     {
                         _logger.Warn("[错误信息] 城堡初始化左城墙失败，检查怪物数据库里有没左城墙的设置: " + LeftWall.sName);
                     }
-                    RightWall.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, RightWall.nX, RightWall.nY, RightWall.sName);
+                    RightWall.BaseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, RightWall.nX, RightWall.nY, RightWall.sName);
                     if (RightWall.BaseObject != null)
                     {
                         RightWall.BaseObject.WAbil.HP = RightWall.nHP;
@@ -237,7 +237,7 @@ namespace GameSrv.Castle
                     {
                         ObjUnit = Archers[i];
                         if (ObjUnit.nHP <= 0) continue;
-                        ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                        ObjUnit.BaseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                         {
                             ObjUnit.BaseObject.WAbil.HP = Archers[i].nHP;
@@ -253,7 +253,7 @@ namespace GameSrv.Castle
                     {
                         ObjUnit = Guards[i];
                         if (ObjUnit.nHP <= 0) continue;
-                        ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                        ObjUnit.BaseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                             ObjUnit.BaseObject.WAbil.HP = Guards[i].nHP;
                         else
@@ -278,7 +278,7 @@ namespace GameSrv.Castle
         private void LoadConfig()
         {
             castleConf.LoadConfig(this);
-            MasterGuild = M2Share.GuildMgr.FindGuild(OwnGuild);
+            MasterGuild = GameShare.GuildMgr.FindGuild(OwnGuild);
         }
 
         private void SaveConfigFile()
@@ -291,7 +291,7 @@ namespace GameSrv.Castle
         /// </summary>
         private void LoadAttackSabukWall()
         {
-            string sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, ConfigDir);
+            string sabukwallPath = Path.Combine(GameShare.BasePath, M2Share.Config.CastleDir, ConfigDir);
             string guildName = string.Empty;
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
@@ -308,7 +308,7 @@ namespace GameSrv.Castle
             {
                 string sData = loadList[i];
                 string s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { ' ', '\t' });
-                GuildInfo guild = M2Share.GuildMgr.FindGuild(guildName);
+                GuildInfo guild = GameShare.GuildMgr.FindGuild(guildName);
                 if (guild == null) continue;
                 AttackerInfo attackerInfo = new AttackerInfo();
                 HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
@@ -331,7 +331,7 @@ namespace GameSrv.Castle
         /// </summary>
         private void SaveAttackSabukWall()
         {
-            string sabukwallPath = Path.Combine(M2Share.BasePath, M2Share.Config.CastleDir, ConfigDir);
+            string sabukwallPath = Path.Combine(GameShare.BasePath, M2Share.Config.CastleDir, ConfigDir);
             if (!Directory.Exists(sabukwallPath))
                 Directory.CreateDirectory(sabukwallPath);
             string sFileName = Path.Combine(sabukwallPath, CastleConst.AttackSabukWallList);
@@ -351,7 +351,7 @@ namespace GameSrv.Castle
             const string sExceptionMsg = "[Exception] TUserCastle::Run";
             try
             {
-                if (M2Share.ServerIndex != M2Share.MapMgr.GetMapOfServerIndex(MapName)) return;
+                if (GameShare.ServerIndex != GameShare.MapMgr.GetMapOfServerIndex(MapName)) return;
                 int Year = DateTime.Now.Year;
                 int Month = DateTime.Now.Month;
                 int Day = DateTime.Now.Day;
@@ -392,10 +392,10 @@ namespace GameSrv.Castle
                             AttackGuildList.Add(MasterGuild);
                             StartWallconquestWar();
                             SaveAttackSabukWall();
-                            WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+                            WorldServer.SendServerGroupMsg(Messages.SS_212, GameShare.ServerIndex, "");
                             string s20 = string.Format(sWarStartMsg, sName);
-                            M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                            GameShare.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
+                            WorldServer.SendServerGroupMsg(Messages.SS_204, GameShare.ServerIndex, s20);
                             _logger.Info(s20);
                             MainDoorControl(true);
                         }
@@ -422,16 +422,16 @@ namespace GameSrv.Castle
                     if (RightWall.BaseObject != null) RightWall.BaseObject.StoneMode = false;
                     if (!ShowOverMsg)
                     {
-                        if ((HUtil32.GetTickCount() - StartCastleWarTick) > (M2Share.Config.CastleWarTime - M2Share.Config.ShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
+                        if ((HUtil32.GetTickCount() - StartCastleWarTick) > (GameShare.Config.CastleWarTime - GameShare.Config.ShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
                         {
                             ShowOverMsg = true;
-                            string s20 = string.Format(sWarStopTimeMsg, sName, M2Share.Config.ShowCastleWarEndMsgTime / (60 * 1000));
-                            M2Share.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
-                            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                            string s20 = string.Format(sWarStopTimeMsg, sName, GameShare.Config.ShowCastleWarEndMsgTime / (60 * 1000));
+                            GameShare.WorldEngine.SendBroadCastMsgExt(s20, MsgType.System);
+                            WorldServer.SendServerGroupMsg(Messages.SS_204, GameShare.ServerIndex, s20);
                             _logger.Warn(s20);
                         }
                     }
-                    if ((HUtil32.GetTickCount() - StartCastleWarTick) > M2Share.Config.CastleWarTime)
+                    if ((HUtil32.GetTickCount() - StartCastleWarTick) > GameShare.Config.CastleWarTime)
                     {
                         StopWallconquestWar();
                     }
@@ -512,12 +512,12 @@ namespace GameSrv.Castle
 
         public bool CanGetCastle(GuildInfo guild)
         {
-            if ((HUtil32.GetTickCount() - StartCastleWarTick) <= M2Share.Config.GetCastleTime)
+            if ((HUtil32.GetTickCount() - StartCastleWarTick) <= GameShare.Config.GetCastleTime)
             {
                 return false;
             }
             IList<BaseObject> playObjectList = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, ref playObjectList);
+            GameShare.WorldEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, ref playObjectList);
             bool result = true;
             for (int i = 0; i < playObjectList.Count; i++)
             {
@@ -549,8 +549,8 @@ namespace GameSrv.Castle
                 MasterGuild.RefMemberName();//刷新旧的行会信息
             }
             string castleMessage = string.Format(sGetCastleMsg, sName, OwnGuild);
-            M2Share.WorldEngine.SendBroadCastMsgExt(castleMessage, MsgType.System);
-            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, castleMessage);
+            GameShare.WorldEngine.SendBroadCastMsgExt(castleMessage, MsgType.System);
+            WorldServer.SendServerGroupMsg(Messages.SS_204, GameShare.ServerIndex, castleMessage);
             _logger.Info(castleMessage);
         }
 
@@ -560,7 +560,7 @@ namespace GameSrv.Castle
         public void StartWallconquestWar()
         {
             IList<BaseObject> playObjectList = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ref playObjectList);
+            GameShare.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ref playObjectList);
             for (int i = 0; i < playObjectList.Count; i++)
             {
                 ((PlayObject)playObjectList[i]).RefShowName();
@@ -576,7 +576,7 @@ namespace GameSrv.Castle
             UnderWar = false;
             AttackGuildList.Clear();
             IList<PlayObject> ListC = new List<PlayObject>();
-            M2Share.WorldEngine.GetMapOfRangeHumanCount(CastleEnvir, HomeX, HomeY, 100);
+            GameShare.WorldEngine.GetMapOfRangeHumanCount(CastleEnvir, HomeX, HomeY, 100);
             for (int i = 0; i < ListC.Count; i++)
             {
                 PlayObject PlayObject = ListC[i];
@@ -587,8 +587,8 @@ namespace GameSrv.Castle
                 }
             }
             string stopMessage = string.Format(sWallWarStop, sName);
-            M2Share.WorldEngine.SendBroadCastMsgExt(stopMessage, MsgType.System);
-            WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, stopMessage);
+            GameShare.WorldEngine.SendBroadCastMsgExt(stopMessage, MsgType.System);
+            WorldServer.SendServerGroupMsg(Messages.SS_204, GameShare.ServerIndex, stopMessage);
             _logger.Info(stopMessage);
         }
 
@@ -621,12 +621,12 @@ namespace GameSrv.Castle
 
         public short GetHomeX()
         {
-            return (short)(HomeX - 4 + M2Share.RandomNumber.Random(9));
+            return (short)(HomeX - 4 + GameShare.RandomNumber.Random(9));
         }
 
         public short GetHomeY()
         {
-            return (short)(HomeY - 4 + M2Share.RandomNumber.Random(9));
+            return (short)(HomeY - 4 + GameShare.RandomNumber.Random(9));
         }
 
         public string GetMapName()
@@ -709,36 +709,36 @@ namespace GameSrv.Castle
         /// </summary>
         public void IncRateGold(int nGold)
         {
-            int nInGold = HUtil32.Round(nGold * (M2Share.Config.CastleTaxRate / 100.0));
-            if (TodayIncome + nInGold <= M2Share.Config.CastleOneDayGold)
+            int nInGold = HUtil32.Round(nGold * (GameShare.Config.CastleTaxRate / 100.0));
+            if (TodayIncome + nInGold <= GameShare.Config.CastleOneDayGold)
             {
                 TodayIncome += nInGold;
             }
             else
             {
-                if (TodayIncome >= M2Share.Config.CastleOneDayGold)
+                if (TodayIncome >= GameShare.Config.CastleOneDayGold)
                 {
                     nInGold = 0;
                 }
                 else
                 {
-                    nInGold = M2Share.Config.CastleOneDayGold - TodayIncome;
-                    TodayIncome = M2Share.Config.CastleOneDayGold;
+                    nInGold = GameShare.Config.CastleOneDayGold - TodayIncome;
+                    TodayIncome = GameShare.Config.CastleOneDayGold;
                 }
             }
             if (nInGold > 0)
             {
-                if (TotalGold + nInGold < M2Share.Config.CastleGoldMax)
+                if (TotalGold + nInGold < GameShare.Config.CastleGoldMax)
                     TotalGold += nInGold;
                 else
-                    TotalGold = M2Share.Config.CastleGoldMax;
+                    TotalGold = GameShare.Config.CastleGoldMax;
             }
             if ((HUtil32.GetTickCount() - SaveTick) > 10 * 60 * 1000)
             {
                 SaveTick = HUtil32.GetTickCount();
-                if (M2Share.GameLogGold)
+                if (GameShare.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog(GameEventLogType.CastleTodayIncome, '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" + Grobal2.StringGoldName + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
+                    GameShare.EventSource.AddEventLog(GameEventLogType.CastleTodayIncome, '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" + Grobal2.StringGoldName + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
                 }
             }
         }
@@ -761,13 +761,13 @@ namespace GameSrv.Castle
             {
                 if (nGold <= TotalGold)
                 {
-                    if (PlayObject.Gold + nGold <= M2Share.Config.HumanMaxGold)
+                    if (PlayObject.Gold + nGold <= GameShare.Config.HumanMaxGold)
                     {
                         TotalGold -= nGold;
                         PlayObject.IncGold(nGold);
-                        if (M2Share.GameLogGold)
+                        if (GameShare.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog(22, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                            GameShare.EventSource.AddEventLog(22, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         }
                         PlayObject.GoldChanged();
                         result = 1;
@@ -797,13 +797,13 @@ namespace GameSrv.Castle
             {
                 if (nGold <= PlayObject.Gold)
                 {
-                    if (TotalGold + nGold <= M2Share.Config.CastleGoldMax)
+                    if (TotalGold + nGold <= GameShare.Config.CastleGoldMax)
                     {
                         PlayObject.Gold -= nGold;
                         TotalGold += nGold;
-                        if (M2Share.GameLogGold)
+                        if (GameShare.GameLogGold)
                         {
-                            M2Share.EventSource.AddEventLog(GameEventLogType.CastleReceiptGolds, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                            GameShare.EventSource.AddEventLog(GameEventLogType.CastleReceiptGolds, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         }
                         PlayObject.GoldChanged();
                         result = 1;
@@ -932,12 +932,12 @@ namespace GameSrv.Castle
         {
             if (InAttackerList(Guild)) return false;
             AttackerInfo AttackerInfo = new AttackerInfo();
-            AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, M2Share.Config.StartCastleWarDays);
+            AttackerInfo.AttackDate = GameShare.AddDateTimeOfDay(DateTime.Now, GameShare.Config.StartCastleWarDays);
             AttackerInfo.sGuildName = Guild.GuildName;
             AttackerInfo.Guild = Guild;
             AttackWarList.Add(AttackerInfo);
             SaveAttackSabukWall();
-            WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+            WorldServer.SendServerGroupMsg(Messages.SS_212, GameShare.ServerIndex, "");
             AttackerInfo.Dispose();
             return true;
         }

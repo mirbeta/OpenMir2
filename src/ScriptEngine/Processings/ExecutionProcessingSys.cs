@@ -1,30 +1,24 @@
-﻿using GameSrv.Actor;
-using GameSrv.Event.Events;
-using GameSrv.GameCommand;
-using GameSrv.Items;
-using GameSrv.Maps;
-using GameSrv.Npc;
-using GameSrv.Player;
+﻿using GameSrv;
 using GameSrv.Script;
-using GameSrv.Services;
-using GameSrv.World;
+using M2Server;
+using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.ScriptSystem
+namespace ScriptEngine.Processings
 {
     /// <summary>
     /// 脚本命令执行处理模块
     /// </summary>
-    internal class ExecutionProcessingSys : ProcessingBase
+    public class ExecutionProcessingSys : ProcessingBase
     {
         /// <summary>
         /// 全局变量消息处理列表
         /// </summary>
         private static Dictionary<int, HandleExecutionMessage> ProcessExecutionMessage;
-        private delegate void HandleExecutionMessage(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool Success);
+        private delegate void HandleExecutionMessage(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success);
 
         public void Initialize()
         {
@@ -169,7 +163,7 @@ namespace GameSrv.ScriptSystem
             return ProcessExecutionMessage.ContainsKey(cmdCode);
         }
 
-        public void Execute(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
+        public void Execute(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             if (ProcessExecutionMessage.ContainsKey(questConditionInfo.nCmdCode))
             {
@@ -181,112 +175,112 @@ namespace GameSrv.ScriptSystem
         /// 取随机值赋给变量
         /// 拓展可以随机参数2到参数3之间的数
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfMovrData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfMovrData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n14;
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
                 n14 = M2Share.GetValNameNo(s34);
             }
             else
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        PlayObject.MNVal[n14] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        playObject.MNVal[n14] = questActionInfo.nParam2 + M2Share.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.MNVal[n14] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        playObject.MNVal[n14] = M2Share.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 119))
                 {
-                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        M2Share.Config.GlobalVal[n14 - 100] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 100] = questActionInfo.nParam2 + M2Share.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        M2Share.Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 100] = M2Share.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        PlayObject.MDyVal[n14 - 200] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        playObject.MDyVal[n14 - 200] = questActionInfo.nParam2 + M2Share.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.MDyVal[n14 - 200] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        playObject.MDyVal[n14 - 200] = M2Share.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        PlayObject.MNMval[n14 - 300] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        playObject.MNMval[n14 - 300] = questActionInfo.nParam2 + M2Share.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.MNMval[n14 - 300] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        playObject.MNMval[n14 - 300] = M2Share.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        M2Share.Config.GlobaDyMval[n14 - 400] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        M2Share.Config.GlobaDyMval[n14 - 400] = questActionInfo.nParam2 + M2Share.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        M2Share.Config.GlobaDyMval[n14 - 400] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        M2Share.Config.GlobaDyMval[n14 - 400] = M2Share.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        PlayObject.MNInteger[n14 - 500] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        playObject.MNInteger[n14 - 500] = questActionInfo.nParam2 + M2Share.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        PlayObject.MNInteger[n14 - 500] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        playObject.MNInteger[n14 - 500] = M2Share.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))
                 {
-                    if (QuestActionInfo.nParam3 > QuestActionInfo.nParam2)
+                    if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        M2Share.Config.GlobalVal[n14 - 700] = QuestActionInfo.nParam2 + M2Share.RandomNumber.Random(QuestActionInfo.nParam3 - QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 700] = questActionInfo.nParam2 + M2Share.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        M2Share.Config.GlobalVal[n14 - 700] = M2Share.RandomNumber.Random(QuestActionInfo.nParam2);
+                        M2Share.Config.GlobalVal[n14 - 700] = M2Share.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Movr);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Movr);
                 }
             }
             else
             {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Movr);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Movr);
             }
         }
 
-        private void ActionOfMovData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfMovData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;
@@ -295,148 +289,148 @@ namespace GameSrv.ScriptSystem
             int nValue = 0;
             int nDataType = 0;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref sParam1);
             }
             else
             {
-                sParam1 = QuestActionInfo.sParam1;
+                sParam1 = questActionInfo.sParam1;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam2, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref sParam2);
-            }
-            else
-            {
-                sParam2 = QuestActionInfo.sParam2;
-            }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam3, "<$STR(", 6))
-            {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam3, "(", ")", ref sParam3);
+                HUtil32.ArrestStringEx(questActionInfo.sParam2, "(", ")", ref sParam2);
             }
             else
             {
-                sParam3 = QuestActionInfo.sParam3;
+                sParam2 = questActionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(questActionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(questActionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = questActionInfo.sParam3;
             }
             if (string.IsNullOrEmpty(sParam1))
             {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                 return;
             }
-            switch (GetMovDataType(QuestActionInfo))
+            switch (GetMovDataType(questActionInfo))
             {
                 case 0:
-                    if (GetMovDataHumanInfoValue(normNpc, PlayObject, sParam3, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataHumanInfoValue(normNpc, playObject, sParam3, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, sValue, nValue, nDataType))
+                        if (!SetMovDataDynamicVarValue(playObject, sParam1, sParam2, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playObject, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 1:
-                    if (GetMovDataValNameValue(PlayObject, sParam3, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataValNameValue(playObject, sParam3, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, sValue, nValue, nDataType))
+                        if (!SetMovDataDynamicVarValue(playObject, sParam1, sParam2, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playObject, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 2:
-                    if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam3, 1))
+                    if (!SetMovDataDynamicVarValue(playObject, sParam1, sParam2, questActionInfo.sParam3, questActionInfo.nParam3, 1))
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 3:
-                    if (!SetMovDataDynamicVarValue(PlayObject, sParam1, sParam2, QuestActionInfo.sParam3, QuestActionInfo.nParam3, 0))
+                    if (!SetMovDataDynamicVarValue(playObject, sParam1, sParam2, questActionInfo.sParam3, questActionInfo.nParam3, 0))
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam1, sParam2), QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 4:
-                    if (GetMovDataHumanInfoValue(normNpc, PlayObject, sParam2, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataHumanInfoValue(normNpc, playObject, sParam2, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                        if (!SetMovDataValNameValue(playObject, sParam1, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 5:
-                    if (GetMovDataValNameValue(PlayObject, sParam2, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataValNameValue(playObject, sParam2, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                        if (!SetMovDataValNameValue(playObject, sParam1, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 6:
-                    if (GetMovDataDynamicVarValue(PlayObject, sParam2, sParam3, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataDynamicVarValue(playObject, sParam2, sParam3, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                        if (!SetMovDataValNameValue(playObject, sParam1, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam3), QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, string.Format(sVarFound, sParam2, sParam3), questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 7:
-                    if (GetMovDataValNameValue(PlayObject, sParam1, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataValNameValue(playObject, sParam1, ref sValue, ref nValue, ref nDataType))
                     {
                         if ((!string.IsNullOrEmpty(sParam2)) && (sParam2[0] == '<') && (sParam2[1] == '$'))//  支持:MOV A14 <$USERALLNAME>\天下第一战士 的传值
                         {
-                            GetMovDataHumanInfoValue(normNpc, PlayObject, sParam2, ref sValue, ref nValue, ref nDataType);// 取人物信息
+                            GetMovDataHumanInfoValue(normNpc, playObject, sParam2, ref sValue, ref nValue, ref nDataType);// 取人物信息
                             sValue = sValue + sParam2.Substring(sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) - 1, sParam2.Length - sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) + 1);
-                            if (!SetMovDataValNameValue(PlayObject, sParam1, sValue, nValue, nDataType))
+                            if (!SetMovDataValNameValue(playObject, sParam1, sValue, nValue, nDataType))
                             {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                                 return;
                             }
                         }
                         else
                         {
-                            if (!SetMovDataValNameValue(PlayObject, sParam1, QuestActionInfo.sParam2, QuestActionInfo.nParam2, nDataType))
+                            if (!SetMovDataValNameValue(playObject, sParam1, questActionInfo.sParam2, questActionInfo.nParam2, nDataType))
                             {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                                 return;
                             }
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 default:
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mov);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mov);
                     break;
             }
         }
 
-        private void ActionOfIncInteger(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfIncInteger(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int n14;
             int n3C = 0;
@@ -451,33 +445,33 @@ namespace GameSrv.ScriptSystem
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             int n10 = 0;
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref sParam1);
             }
             else
             {
-                sParam1 = QuestActionInfo.sParam1;
+                sParam1 = questActionInfo.sParam1;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam2, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref sParam2);
-            }
-            else
-            {
-                sParam2 = QuestActionInfo.sParam2;
-            }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam3, "<$STR(", 6))
-            {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam3, "(", ")", ref sParam3);
+                HUtil32.ArrestStringEx(questActionInfo.sParam2, "(", ")", ref sParam2);
             }
             else
             {
-                sParam3 = QuestActionInfo.sParam3;
+                sParam2 = questActionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(questActionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(questActionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = questActionInfo.sParam3;
             }
             if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2)))
             {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                 return;
             }
             if (!string.IsNullOrEmpty(sParam3))
@@ -485,10 +479,10 @@ namespace GameSrv.ScriptSystem
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playObject, sParam2, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playObject, string.Format(sVarTypeError, sParam2), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
@@ -506,7 +500,7 @@ namespace GameSrv.ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playObject, string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     n14 = M2Share.GetValNameNo(sParam1);
@@ -516,11 +510,11 @@ namespace GameSrv.ScriptSystem
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MNVal[n14] += n3C;
+                                playObject.MNVal[n14] += n3C;
                             }
                             else
                             {
-                                PlayObject.MNVal[n14]++;
+                                playObject.MNVal[n14]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -538,22 +532,22 @@ namespace GameSrv.ScriptSystem
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MDyVal[n14 - 200] += n3C;
+                                playObject.MDyVal[n14 - 200] += n3C;
                             }
                             else
                             {
-                                PlayObject.MDyVal[n14 - 200]++;
+                                playObject.MDyVal[n14 - 200]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MNMval[n14 - 300] += n3C;
+                                playObject.MNMval[n14 - 300] += n3C;
                             }
                             else
                             {
-                                PlayObject.MNMval[n14 - 300]++;
+                                playObject.MNMval[n14 - 300]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -571,16 +565,16 @@ namespace GameSrv.ScriptSystem
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MNInteger[n14 - 500] += n3C;
+                                playObject.MNInteger[n14 - 500] += n3C;
                             }
                             else
                             {
-                                PlayObject.MNInteger[n14 - 500]++;
+                                playObject.MNInteger[n14 - 500]++;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            PlayObject.MSString[n14 - 600] = PlayObject.MSString[n14 - 600] + s01;
+                            playObject.MSString[n14 - 600] = playObject.MSString[n14 - 600] + s01;
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -603,12 +597,12 @@ namespace GameSrv.ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     return;
@@ -622,7 +616,7 @@ namespace GameSrv.ScriptSystem
                         {
                             if (HUtil32.RangeInDefined(n14, 0, 99))
                             {
-                                n3C = PlayObject.MNVal[n14];
+                                n3C = playObject.MNVal[n14];
                             }
                             else if (HUtil32.RangeInDefined(n14, 100, 199))
                             {
@@ -630,11 +624,11 @@ namespace GameSrv.ScriptSystem
                             }
                             else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
-                                n3C = PlayObject.MDyVal[n14 - 200];
+                                n3C = playObject.MDyVal[n14 - 200];
                             }
                             else if (HUtil32.RangeInDefined(n14, 300, 399))
                             {
-                                n3C = PlayObject.MNMval[n14 - 300];
+                                n3C = playObject.MNMval[n14 - 300];
                             }
                             else if (HUtil32.RangeInDefined(n14, 400, 499))
                             {
@@ -642,11 +636,11 @@ namespace GameSrv.ScriptSystem
                             }
                             else if (HUtil32.RangeInDefined(n14, 500, 599))
                             {
-                                n3C = PlayObject.MNInteger[n14 - 500];
+                                n3C = playObject.MNInteger[n14 - 500];
                             }
                             else if (HUtil32.RangeInDefined(n14, 600, 699))
                             {
-                                s01 = PlayObject.MSString[n14 - 600];
+                                s01 = playObject.MSString[n14 - 600];
                             }
                             else if (HUtil32.RangeInDefined(n14, 700, 799))
                             {
@@ -662,7 +656,7 @@ namespace GameSrv.ScriptSystem
                             }
                             else
                             {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                             }
                         }
                         else
@@ -672,13 +666,13 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        n3C = QuestActionInfo.nParam3;
+                        n3C = questActionInfo.nParam3;
                     }
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playObject, sParam1, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playObject, string.Format(sVarTypeError, sParam1), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
@@ -703,14 +697,14 @@ namespace GameSrv.ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playObject, string.Format(sVarFound, sParam2, sParam1), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     return;
                 }
                 if (n10 == 0)
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                 }
             }
             else
@@ -723,7 +717,7 @@ namespace GameSrv.ScriptSystem
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
                         {
-                            n3C = PlayObject.MNVal[n14];
+                            n3C = playObject.MNVal[n14];
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
                         {
@@ -731,11 +725,11 @@ namespace GameSrv.ScriptSystem
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
                         {
-                            n3C = PlayObject.MDyVal[n14 - 200];
+                            n3C = playObject.MDyVal[n14 - 200];
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
-                            n3C = PlayObject.MNMval[n14 - 300];
+                            n3C = playObject.MNMval[n14 - 300];
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
                         {
@@ -743,11 +737,11 @@ namespace GameSrv.ScriptSystem
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
                         {
-                            n3C = PlayObject.MNInteger[n14 - 500];
+                            n3C = playObject.MNInteger[n14 - 500];
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            s01 = PlayObject.MSString[n14 - 600];
+                            s01 = playObject.MSString[n14 - 600];
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -763,18 +757,18 @@ namespace GameSrv.ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                         }
                     }
                     else
                     {
-                        n3C = HUtil32.StrToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
+                        n3C = HUtil32.StrToInt(GetLineVariableText(playObject, sParam2), 0);// 个人变量
                         s01 = sParam2;
                     }
                 }
                 else
                 {
-                    n3C = QuestActionInfo.nParam2;
+                    n3C = questActionInfo.nParam2;
                 }
                 n14 = M2Share.GetValNameNo(sParam1);
                 if (n14 >= 0)
@@ -783,11 +777,11 @@ namespace GameSrv.ScriptSystem
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MNVal[n14] += n3C;
+                            playObject.MNVal[n14] += n3C;
                         }
                         else
                         {
-                            PlayObject.MNVal[n14]++;
+                            playObject.MNVal[n14]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -805,22 +799,22 @@ namespace GameSrv.ScriptSystem
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MDyVal[n14 - 200] += n3C;
+                            playObject.MDyVal[n14 - 200] += n3C;
                         }
                         else
                         {
-                            PlayObject.MDyVal[n14 - 200]++;
+                            playObject.MDyVal[n14 - 200]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MNMval[n14 - 300] += n3C;
+                            playObject.MNMval[n14 - 300] += n3C;
                         }
                         else
                         {
-                            PlayObject.MNMval[n14 - 300]++;
+                            playObject.MNMval[n14 - 300]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -838,16 +832,16 @@ namespace GameSrv.ScriptSystem
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MNInteger[n14 - 500] += n3C;
+                            playObject.MNInteger[n14 - 500] += n3C;
                         }
                         else
                         {
-                            PlayObject.MNInteger[n14 - 500]++;
+                            playObject.MNInteger[n14 - 500]++;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        PlayObject.MSString[n14 - 600] = PlayObject.MSString[n14 - 600] + s01;
+                        playObject.MSString[n14 - 600] = playObject.MSString[n14 - 600] + s01;
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -870,12 +864,12 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                     }
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Inc);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Inc);
                     return;
                 }
             }
@@ -884,21 +878,21 @@ namespace GameSrv.ScriptSystem
         /// <summary>
         /// 变量运算 除法  格式: DIV N1 N2 N3 即N1=N2/N3
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfDivData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfDivData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n18 = 0;
-            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            int n14 = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam2);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n18 = PlayObject.MNVal[n14];
+                        n18 = playObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -906,11 +900,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n18 = PlayObject.MDyVal[n14 - 200];
+                        n18 = playObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n18 = PlayObject.MNMval[n14 - 300];
+                        n18 = playObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -918,7 +912,7 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n18 = PlayObject.MNInteger[n14 - 500];
+                        n18 = playObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -926,12 +920,12 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Div);
                     }
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Div);
                 }
             }
             else
@@ -939,15 +933,15 @@ namespace GameSrv.ScriptSystem
                 n18 = n14;
             }
             int n1C = 0;
-            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam3);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n1C = PlayObject.MNVal[n14];
+                        n1C = playObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -955,11 +949,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n1C = PlayObject.MDyVal[n14 - 200];
+                        n1C = playObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n1C = PlayObject.MNMval[n14 - 300];
+                        n1C = playObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -967,7 +961,7 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n1C = PlayObject.MNInteger[n14 - 500];
+                        n1C = playObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -975,32 +969,32 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Div);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Div);
                     }
                 }
                 else
                 {
-                    // ScriptActionError(PlayObject,'',QuestActionInfo,sSC_DIV);
+                    // ScriptActionError(playObject,'',questActionInfo,sSC_DIV);
                 }
             }
             else
             {
                 n1C = n14;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))//支持字符串变量
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))//支持字符串变量
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
                 n14 = M2Share.GetValNameNo(s34);
             }
             else
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.MNVal[n14] = n18 / n1C;
+                    playObject.MNVal[n14] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1008,11 +1002,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.MDyVal[n14 - 200] = n18 / n1C;
+                    playObject.MDyVal[n14 - 200] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.MNMval[n14 - 300] = n18 / n1C;
+                    playObject.MNMval[n14 - 300] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1020,7 +1014,7 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.MNInteger[n14 - 500] = n18 / n1C;
+                    playObject.MNInteger[n14 - 500] = n18 / n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                 {
@@ -1032,21 +1026,21 @@ namespace GameSrv.ScriptSystem
         /// <summary>
         /// 变量运算 乘法  格式: MUL N1 N2 N3 即N1=N2*N3
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfMulData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfMulData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n18 = 0;
-            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            int n14 = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam2);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n18 = PlayObject.MNVal[n14];
+                        n18 = playObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1054,11 +1048,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n18 = PlayObject.MDyVal[n14 - 200];
+                        n18 = playObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n18 = PlayObject.MNMval[n14 - 300];
+                        n18 = playObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1066,11 +1060,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n18 = PlayObject.MNInteger[n14 - 500];
+                        n18 = playObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n18 = HUtil32.StrToInt(PlayObject.MSString[n14 - 600], 1);
+                        n18 = HUtil32.StrToInt(playObject.MSString[n14 - 600], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -1086,12 +1080,12 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mul);
                     }
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mul);
                 }
             }
             else
@@ -1099,15 +1093,15 @@ namespace GameSrv.ScriptSystem
                 n18 = n14;
             }
             int n1C = 0;
-            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam3);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n1C = PlayObject.MNVal[n14];
+                        n1C = playObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1115,11 +1109,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n1C = PlayObject.MDyVal[n14 - 200];
+                        n1C = playObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n1C = PlayObject.MNMval[n14 - 300];
+                        n1C = playObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1127,11 +1121,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n1C = PlayObject.MNInteger[n14 - 500];
+                        n1C = playObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n1C = HUtil32.StrToInt(PlayObject.MSString[n14 - 600], 1);
+                        n1C = HUtil32.StrToInt(playObject.MSString[n14 - 600], 1);
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -1147,32 +1141,32 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Mul);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Mul);
                     }
                 }
                 else
                 {
-                    // ScriptActionError(PlayObject,'',QuestActionInfo,sSC_MUL;
+                    // ScriptActionError(playObject,'',questActionInfo,sSC_MUL;
                 }
             }
             else
             {
                 n1C = n14;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
                 n14 = M2Share.GetValNameNo(s34);
             }
             else
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);// 取第一个变量,并传值给n18
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam1);// 取第一个变量,并传值给n18
             }
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.MNVal[n14] = n18 * n1C;
+                    playObject.MNVal[n14] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1180,11 +1174,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.MDyVal[n14 - 200] = n18 * n1C;
+                    playObject.MDyVal[n14 - 200] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.MNMval[n14 - 300] = n18 * n1C;
+                    playObject.MNMval[n14 - 300] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1192,11 +1186,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.MNInteger[n14 - 500] = n18 * n1C;
+                    playObject.MNInteger[n14 - 500] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    PlayObject.MSString[n14 - 600] = (n18 * n1C).ToString();
+                    playObject.MSString[n14 - 600] = (n18 * n1C).ToString();
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1216,21 +1210,21 @@ namespace GameSrv.ScriptSystem
         /// <summary>
         /// 变量运算 百分比  格式: PERCENT N1 N2 N3 即N1=(N2/N3)*100
         /// </summary>
-        /// <param name="PlayObject"></param>
+        /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfPercentData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfPercentData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n18 = 0;
-            int n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam2), -1);
+            int n14 = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2); // 取第一个变量,并传值给n18
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam2); // 取第一个变量,并传值给n18
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n18 = PlayObject.MNVal[n14];
+                        n18 = playObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1238,11 +1232,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n18 = PlayObject.MDyVal[n14 - 200];
+                        n18 = playObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n18 = PlayObject.MNMval[n14 - 300];
+                        n18 = playObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1250,7 +1244,7 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n18 = PlayObject.MNInteger[n14 - 500];
+                        n18 = playObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -1258,12 +1252,12 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Percent);
                     }
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Percent);
                 }
             }
             else
@@ -1271,15 +1265,15 @@ namespace GameSrv.ScriptSystem
                 n18 = n14;
             }
             int n1C = 0;
-            n14 = HUtil32.StrToInt(GetLineVariableText(PlayObject, QuestActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(playObject, questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam3); // 取第一个变量,并传值给n1C
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam3); // 取第一个变量,并传值给n1C
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
                     {
-                        n1C = PlayObject.MNVal[n14];
+                        n1C = playObject.MNVal[n14];
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
                     {
@@ -1287,11 +1281,11 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 200, 299))
                     {
-                        n1C = PlayObject.MDyVal[n14 - 200];
+                        n1C = playObject.MDyVal[n14 - 200];
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
-                        n1C = PlayObject.MNMval[n14 - 300];
+                        n1C = playObject.MNMval[n14 - 300];
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
                     {
@@ -1299,7 +1293,7 @@ namespace GameSrv.ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n14, 500, 599))
                     {
-                        n1C = PlayObject.MNInteger[n14 - 500];
+                        n1C = playObject.MNInteger[n14 - 500];
                     }
                     else if (HUtil32.RangeInDefined(n14, 800, 1199))//G变量
                     {
@@ -1307,32 +1301,32 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Percent);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Percent);
                     }
                 }
                 else
                 {
-                    // ScriptActionError(PlayObject,'',QuestActionInfo,sSC_PERCENT);
+                    // ScriptActionError(playObject,'',questActionInfo,sSC_PERCENT);
                 }
             }
             else
             {
                 n1C = n14;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
                 n14 = M2Share.GetValNameNo(s34);
             }
             else
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.MNVal[n14] = n18 * n1C;
+                    playObject.MNVal[n14] = n18 * n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1340,11 +1334,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.MDyVal[n14 - 200] = n18 / n1C * 100;
+                    playObject.MDyVal[n14 - 200] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.MNMval[n14 - 300] = n18 / n1C * 100;
+                    playObject.MNMval[n14 - 300] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1352,11 +1346,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.MNInteger[n14 - 500] = n18 / n1C * 100;
+                    playObject.MNInteger[n14 - 500] = n18 / n1C * 100;
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    PlayObject.MSString[n14 - 600] = $"{n18 / n1C * 100}%";
+                    playObject.MSString[n14 - 600] = $"{n18 / n1C * 100}%";
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1373,27 +1367,27 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfSumData(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfSumData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int n18 = 0;
             string s34 = string.Empty;
             string s44 = string.Empty;
             string s48 = string.Empty;
             int n14;
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) //  SUM 支持字符串变量
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6)) //  SUM 支持字符串变量
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
                 n14 = M2Share.GetValNameNo(s34);
             }
             else
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    n18 = PlayObject.MNVal[n14];
+                    n18 = playObject.MNVal[n14];
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1401,11 +1395,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    n18 = PlayObject.MDyVal[n14 - 200];
+                    n18 = playObject.MDyVal[n14 - 200];
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    n18 = PlayObject.MNMval[n14 - 300];
+                    n18 = playObject.MNMval[n14 - 300];
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1413,11 +1407,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    n18 = PlayObject.MNInteger[n14 - 500];
+                    n18 = playObject.MNInteger[n14 - 500];
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    s44 = PlayObject.MSString[n14 - 600];
+                    s44 = playObject.MSString[n14 - 600];
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1433,28 +1427,28 @@ namespace GameSrv.ScriptSystem
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Sum);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Sum);
                 }
             }
             else
             {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Sum);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Sum);
             }
             int n1C = 0;
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
+            if (HUtil32.CompareLStr(questActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref s34);
+                HUtil32.ArrestStringEx(questActionInfo.sParam2, "(", ")", ref s34);
                 n14 = M2Share.GetValNameNo(s34);
             }
             else
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam2);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam2);
             }
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    n1C = PlayObject.MNVal[n14];
+                    n1C = playObject.MNVal[n14];
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1462,11 +1456,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    n1C = PlayObject.MDyVal[n14 - 200];
+                    n1C = playObject.MDyVal[n14 - 200];
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    n1C = PlayObject.MNMval[n14 - 300];
+                    n1C = playObject.MNMval[n14 - 300];
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1474,11 +1468,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    n1C = PlayObject.MNInteger[n14 - 500];
+                    n1C = playObject.MNInteger[n14 - 500];
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    s48 = PlayObject.MSString[n14 - 600];
+                    s48 = playObject.MSString[n14 - 600];
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1494,23 +1488,23 @@ namespace GameSrv.ScriptSystem
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Sum);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Sum);
                 }
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6)) // SUM 支持字符串变量
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6)) // SUM 支持字符串变量
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref s34);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
                 n14 = M2Share.GetValNameNo(s34);
             }
             else
             {
-                n14 = M2Share.GetValNameNo(QuestActionInfo.sParam1);
+                n14 = M2Share.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
                 {
-                    PlayObject.MNVal[n14] = n18 + n1C;
+                    playObject.MNVal[n14] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 199))
                 {
@@ -1518,11 +1512,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
-                    PlayObject.MDyVal[n14 - 200] = n18 + n1C;
+                    playObject.MDyVal[n14 - 200] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
-                    PlayObject.MNMval[n14 - 300] = n18 + n1C;
+                    playObject.MNMval[n14 - 300] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
@@ -1530,11 +1524,11 @@ namespace GameSrv.ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
-                    PlayObject.MNInteger[n14 - 500] = n18 + n1C;
+                    playObject.MNInteger[n14 - 500] = n18 + n1C;
                 }
                 else if (HUtil32.RangeInDefined(n14, 600, 699))
                 {
-                    PlayObject.MSString[n14 - 600] = s44 + s48;
+                    playObject.MSString[n14 - 600] = s44 + s48;
                 }
                 else if (HUtil32.RangeInDefined(n14, 700, 799))
                 {
@@ -1551,7 +1545,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfDecInteger(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool success)
+        private void ActionOfDecInteger(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int n14;
             int n3C = 0;
@@ -1565,33 +1559,33 @@ namespace GameSrv.ScriptSystem
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             int n10 = 0;
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam1, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam1, "(", ")", ref sParam1);
+                HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref sParam1);
             }
             else
             {
-                sParam1 = QuestActionInfo.sParam1;
+                sParam1 = questActionInfo.sParam1;
             }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam2, "<$STR(", 6))
+            if (HUtil32.CompareLStr(questActionInfo.sParam2, "<$STR(", 6))
             {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam2, "(", ")", ref sParam2);
-            }
-            else
-            {
-                sParam2 = QuestActionInfo.sParam2;
-            }
-            if (HUtil32.CompareLStr(QuestActionInfo.sParam3, "<$STR(", 6))
-            {
-                HUtil32.ArrestStringEx(QuestActionInfo.sParam3, "(", ")", ref sParam3);
+                HUtil32.ArrestStringEx(questActionInfo.sParam2, "(", ")", ref sParam2);
             }
             else
             {
-                sParam3 = QuestActionInfo.sParam3;
+                sParam2 = questActionInfo.sParam2;
+            }
+            if (HUtil32.CompareLStr(questActionInfo.sParam3, "<$STR(", 6))
+            {
+                HUtil32.ArrestStringEx(questActionInfo.sParam3, "(", ")", ref sParam3);
+            }
+            else
+            {
+                sParam3 = questActionInfo.sParam3;
             }
             if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2)))
             {
-                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                 return;
             }
             string s02;
@@ -1602,10 +1596,10 @@ namespace GameSrv.ScriptSystem
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam2, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playObject, sParam2, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam2), QuestActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playObject, string.Format(sVarTypeError, sParam2), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
@@ -1623,7 +1617,7 @@ namespace GameSrv.ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam3, sParam2), QuestActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playObject, string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     n14 = M2Share.GetValNameNo(sParam1);
@@ -1633,11 +1627,11 @@ namespace GameSrv.ScriptSystem
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MNVal[n14] -= n3C;
+                                playObject.MNVal[n14] -= n3C;
                             }
                             else
                             {
-                                PlayObject.MNVal[n14] -= 1;
+                                playObject.MNVal[n14] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -1655,22 +1649,22 @@ namespace GameSrv.ScriptSystem
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MDyVal[n14 - 200] -= n3C;
+                                playObject.MDyVal[n14 - 200] -= n3C;
                             }
                             else
                             {
-                                PlayObject.MDyVal[n14 - 200] -= 1;
+                                playObject.MDyVal[n14 - 200] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MNMval[n14 - 300] -= n3C;
+                                playObject.MNMval[n14 - 300] -= n3C;
                             }
                             else
                             {
-                                PlayObject.MNMval[n14 - 300] -= 1;
+                                playObject.MNMval[n14 - 300] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -1688,19 +1682,19 @@ namespace GameSrv.ScriptSystem
                         {
                             if (n3C > 1)
                             {
-                                PlayObject.MNInteger[n14 - 500] -= n3C;
+                                playObject.MNInteger[n14 - 500] -= n3C;
                             }
                             else
                             {
-                                PlayObject.MNInteger[n14 - 500] -= 1;
+                                playObject.MNInteger[n14 - 500] -= 1;
                             }
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                            s02 = PlayObject.MSString[n14 - 600][1..n10];
-                            s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
-                            PlayObject.MSString[n14 - 600] = s02 + s03;
+                            n10 = playObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                            s02 = playObject.MSString[n14 - 600][1..n10];
+                            s03 = playObject.MSString[n14 - 600].Substring(s01.Length + n10, playObject.MSString[n14 - 600].Length);
+                            playObject.MSString[n14 - 600] = s02 + s03;
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -1729,12 +1723,12 @@ namespace GameSrv.ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                         }
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     return;
@@ -1748,7 +1742,7 @@ namespace GameSrv.ScriptSystem
                         {
                             if (HUtil32.RangeInDefined(n14, 0, 99))
                             {
-                                n3C = PlayObject.MNVal[n14];
+                                n3C = playObject.MNVal[n14];
                             }
                             else if (HUtil32.RangeInDefined(n14, 100, 199))
                             {
@@ -1756,11 +1750,11 @@ namespace GameSrv.ScriptSystem
                             }
                             else if (HUtil32.RangeInDefined(n14, 200, 299))
                             {
-                                n3C = PlayObject.MDyVal[n14 - 200];
+                                n3C = playObject.MDyVal[n14 - 200];
                             }
                             else if (HUtil32.RangeInDefined(n14, 300, 399))
                             {
-                                n3C = PlayObject.MNMval[n14 - 300];
+                                n3C = playObject.MNMval[n14 - 300];
                             }
                             else if (HUtil32.RangeInDefined(n14, 400, 499))
                             {
@@ -1768,11 +1762,11 @@ namespace GameSrv.ScriptSystem
                             }
                             else if (HUtil32.RangeInDefined(n14, 500, 599))
                             {
-                                n3C = PlayObject.MNInteger[n14 - 500];
+                                n3C = playObject.MNInteger[n14 - 500];
                             }
                             else if (HUtil32.RangeInDefined(n14, 600, 699))
                             {
-                                s01 = PlayObject.MSString[n14 - 600];
+                                s01 = playObject.MSString[n14 - 600];
                             }
                             else if (HUtil32.RangeInDefined(n14, 700, 799))
                             {
@@ -1788,7 +1782,7 @@ namespace GameSrv.ScriptSystem
                             }
                             else
                             {
-                                ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                                ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                             }
                         }
                         else
@@ -1798,13 +1792,13 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        n3C = QuestActionInfo.nParam3;
+                        n3C = questActionInfo.nParam3;
                     }
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(PlayObject, sParam1, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playObject, sParam1, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarTypeError, sParam1), QuestActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playObject, string.Format(sVarTypeError, sParam1), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
@@ -1832,14 +1826,14 @@ namespace GameSrv.ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(PlayObject, string.Format(sVarFound, sParam2, sParam1), QuestActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playObject, string.Format(sVarFound, sParam2, sParam1), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     return;
                 }
                 if (n10 == 0)
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                 }
             }
             else
@@ -1852,7 +1846,7 @@ namespace GameSrv.ScriptSystem
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
                         {
-                            n3C = PlayObject.MNVal[n14];
+                            n3C = playObject.MNVal[n14];
                         }
                         else if (HUtil32.RangeInDefined(n14, 100, 199))
                         {
@@ -1860,11 +1854,11 @@ namespace GameSrv.ScriptSystem
                         }
                         else if (HUtil32.RangeInDefined(n14, 200, 299))
                         {
-                            n3C = PlayObject.MDyVal[n14 - 200];
+                            n3C = playObject.MDyVal[n14 - 200];
                         }
                         else if (HUtil32.RangeInDefined(n14, 300, 399))
                         {
-                            n3C = PlayObject.MNMval[n14 - 300];
+                            n3C = playObject.MNMval[n14 - 300];
                         }
                         else if (HUtil32.RangeInDefined(n14, 400, 499))
                         {
@@ -1872,11 +1866,11 @@ namespace GameSrv.ScriptSystem
                         }
                         else if (HUtil32.RangeInDefined(n14, 500, 599))
                         {
-                            n3C = PlayObject.MNInteger[n14 - 500];
+                            n3C = playObject.MNInteger[n14 - 500];
                         }
                         else if (HUtil32.RangeInDefined(n14, 600, 699))
                         {
-                            s01 = PlayObject.MSString[n14 - 600];
+                            s01 = playObject.MSString[n14 - 600];
                         }
                         else if (HUtil32.RangeInDefined(n14, 700, 799))
                         {
@@ -1892,18 +1886,18 @@ namespace GameSrv.ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                            ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                         }
                     }
                     else
                     {
-                        n3C = HUtil32.StrToInt(GetLineVariableText(PlayObject, sParam2), 0);// 个人变量
+                        n3C = HUtil32.StrToInt(GetLineVariableText(playObject, sParam2), 0);// 个人变量
                         s01 = sParam2;
                     }
                 }
                 else
                 {
-                    n3C = QuestActionInfo.nParam2;
+                    n3C = questActionInfo.nParam2;
                 }
                 n14 = M2Share.GetValNameNo(sParam1);
                 if (n14 >= 0)
@@ -1912,11 +1906,11 @@ namespace GameSrv.ScriptSystem
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MNVal[n14] -= n3C;
+                            playObject.MNVal[n14] -= n3C;
                         }
                         else
                         {
-                            PlayObject.MNVal[n14] -= 1;
+                            playObject.MNVal[n14] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 100, 199))
@@ -1934,22 +1928,22 @@ namespace GameSrv.ScriptSystem
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MDyVal[n14 - 200] -= n3C;
+                            playObject.MDyVal[n14 - 200] -= n3C;
                         }
                         else
                         {
-                            PlayObject.MDyVal[n14 - 200] -= 1;
+                            playObject.MDyVal[n14 - 200] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 300, 399))
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MNMval[n14 - 300] -= n3C;
+                            playObject.MNMval[n14 - 300] -= n3C;
                         }
                         else
                         {
-                            PlayObject.MNMval[n14 - 300] -= 1;
+                            playObject.MNMval[n14 - 300] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 400, 499))
@@ -1967,19 +1961,19 @@ namespace GameSrv.ScriptSystem
                     {
                         if (n3C > 1)
                         {
-                            PlayObject.MNInteger[n14 - 500] -= n3C;
+                            playObject.MNInteger[n14 - 500] -= n3C;
                         }
                         else
                         {
-                            PlayObject.MNInteger[n14 - 500] -= 1;
+                            playObject.MNInteger[n14 - 500] -= 1;
                         }
                     }
                     else if (HUtil32.RangeInDefined(n14, 600, 699))
                     {
-                        n10 = PlayObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
-                        s02 = PlayObject.MSString[n14 - 600][1..n10];
-                        s03 = PlayObject.MSString[n14 - 600].Substring(s01.Length + n10, PlayObject.MSString[n14 - 600].Length);
-                        PlayObject.MSString[n14 - 600] = s02 + s03;
+                        n10 = playObject.MSString[n14 - 600].AsSpan().IndexOf(s01, StringComparison.OrdinalIgnoreCase);
+                        s02 = playObject.MSString[n14 - 600][1..n10];
+                        s03 = playObject.MSString[n14 - 600].Substring(s01.Length + n10, playObject.MSString[n14 - 600].Length);
+                        playObject.MSString[n14 - 600] = s02 + s03;
                     }
                     else if (HUtil32.RangeInDefined(n14, 700, 799))
                     {
@@ -2008,37 +2002,37 @@ namespace GameSrv.ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                     }
                 }
                 else
                 {
-                    ScriptActionError(PlayObject, "", QuestActionInfo, ExecutionCode.Dec);
+                    ScriptActionError(playObject, "", questActionInfo, ExecutionCode.Dec);
                     return;
                 }
             }
         }
 
-        private void ActionOfExeaction(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfExeaction(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n40 = questActionInfo.nParam1;
             normNpc.ExeAction(playObject, questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.nParam1, questActionInfo.nParam2, questActionInfo.nParam3);
         }
 
-        private void ActionOfPlayDice(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPlayDice(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.PlayDiceLabel = questActionInfo.sParam2;
             playObject.SendMsg(normNpc, Messages.RM_PLAYDICE, (short)questActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[0], (ushort)playObject.MDyVal[1]), HUtil32.MakeWord((ushort)playObject.MDyVal[2], (ushort)playObject.MDyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[4], (ushort)playObject.MDyVal[5]), HUtil32.MakeWord((ushort)playObject.MDyVal[6], (ushort)playObject.MDyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[8], (ushort)playObject.MDyVal[9]), 0), questActionInfo.sParam2);
         }
 
-        private void ActionOfSet(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSet(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
             var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
             playObject.SetQuestFlagStatus(n28, n2C);
         }
 
-        private void ActionOfReSet(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfReSet(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (int k = 0; k < questActionInfo.nParam2; k++)
             {
@@ -2046,21 +2040,21 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfSetOpen(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetOpen(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
             var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
             playObject.SetQuestUnitOpenStatus(n28, n2C);
         }
 
-        private void ActionOfSetUnit(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetUnit(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
             var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
             playObject.SetQuestUnitStatus(n28, n2C);
         }
 
-        private void ActionOfResetUnit(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfResetUnit(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (int k = 0; k < questActionInfo.nParam2; k++)
             {
@@ -2068,7 +2062,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfPkPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPkPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (questActionInfo.nParam1 == 0)
             {
@@ -2102,12 +2096,12 @@ namespace GameSrv.ScriptSystem
             playObject.RefNameColor();
         }
 
-        private void ActionOfBreakTimereCall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfBreakTimereCall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.IsTimeRecall = false;
         }
 
-        private void ActionOfSetRandomNo(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetRandomNo(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             while (true)
             {
@@ -2120,14 +2114,14 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfClearDelayGoto(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearDelayGoto(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.IsTimeGoto = false;
             playObject.TimeGotoLable = "";
             playObject.TimeGotoNpc = null;
         }
 
-        private void ActionOfTimereCall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfTimereCall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.IsTimeRecall = true;
             playObject.TimeRecallMoveMap = playObject.MapName;
@@ -2136,7 +2130,7 @@ namespace GameSrv.ScriptSystem
             playObject.TimeRecallTick = HUtil32.GetTickCount() + (questActionInfo.nParam1 * 60 * 1000);
         }
 
-        private void ActionOfMonGen(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMonGen(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n3C = questActionInfo.nParam1;
             var n38 = questActionInfo.nParam1;
@@ -2149,7 +2143,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfMonClear(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMonClear(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var list58 = new List<BaseObject>();
             M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(questActionInfo.sParam1), list58);
@@ -2162,33 +2156,33 @@ namespace GameSrv.ScriptSystem
             list58.Clear();
         }
 
-        private void ActionOfMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             playObject.MapRandomMove(questActionInfo.sParam1, 0);
         }
 
-        private void ActionOfMapMove(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMapMove(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             playObject.SpaceMove(questActionInfo.sParam1, (short)questActionInfo.nParam2, (short)questActionInfo.nParam3, 0);
         }
 
-        private void ActionOfClose(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClose(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendMsg(normNpc, Messages.RM_MERCHANTDLGCLOSE, 0, normNpc.ActorId, 0, 0);
         }
 
-        private void ActionOfReCallMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfReCallMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var recallEnvir = M2Share.MapMgr.FindMap(questActionInfo.sParam1);
             if (recallEnvir != null)
             {
-                IList<BaseObject> recallList = new List<BaseObject>();
+                IList<IActor> recallList = new List<IActor>();
                 M2Share.WorldEngine.GetMapRageHuman(recallEnvir, 0, 0, 1000, ref recallList);
                 for (int k = 0; k < recallList.Count; k++)
                 {
-                    var user = (PlayObject)recallList[k];
+                    var user = recallList[k];
                     user.MapRandomMove(recallEnvir.MapName, 0);
                     if (k > 20)
                     {
@@ -2202,7 +2196,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfExchangeMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfExchangeMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var envir = M2Share.MapMgr.FindMap(questActionInfo.sParam1);
             if (envir != null)
@@ -2211,7 +2205,7 @@ namespace GameSrv.ScriptSystem
                 //M2Share.WorldEngine.GetMapRageHuman(envir, 0, 0, 1000, ref exchangeList);
                 //if (exchangeList.Count > 0)
                 //{
-                //    var user = (PlayObject)exchangeList[0];
+                //    var user = exchangeList[0];
                 //    user.MapRandomMove(normNpc.MapName, 0);
                 //}
                 playObject.MapRandomMove(questActionInfo.sParam1, 0);
@@ -2222,12 +2216,12 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfUpgradeDlgItem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUpgradeDlgItem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
 
         }
 
-        private void ActionOfQueryItemDlg(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQueryItemDlg(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.TakeDlgItem = questActionInfo.nParam3 != 0;
             playObject.GotoNpcLabel = questActionInfo.sParam2;
@@ -2236,7 +2230,7 @@ namespace GameSrv.ScriptSystem
             playObject.SendDefMessage(Messages.SM_QUERYITEMDLG, normNpc.ActorId, 0, 0, 0, sHint);
         }
 
-        private void ActionOfKillSlaveName(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKillSlaveName(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string sSlaveName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sSlaveName))
@@ -2262,7 +2256,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfQueryValue(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQueryValue(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int btStrLabel = questActionInfo.nParam1;
             if (btStrLabel < 100)
@@ -2295,30 +2289,30 @@ namespace GameSrv.ScriptSystem
             playObject.SendDefMessage(Messages.SM_QUERYVALUE, 0, HUtil32.MakeWord(btType, (ushort)btLen), 0, 0, sHint);
         }
 
-        private void ActionOfQueryBagItems(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool Success)
+        private void ActionOfQueryBagItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Success = true;
-            if ((HUtil32.GetTickCount() - PlayObject.QueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
+            if ((HUtil32.GetTickCount() - playObject.QueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
             {
-                PlayObject.QueryBagItemsTick = HUtil32.GetTickCount();
-                PlayObject.ClientQueryBagItems();
+                playObject.QueryBagItemsTick = HUtil32.GetTickCount();
+                playObject.ClientQueryBagItems();
             }
             else
             {
-                PlayObject.SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
+                playObject.SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
             }
         }
 
-        private void ActionOfSetSendMsgFlag(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool Success)
+        private void ActionOfSetSendMsgFlag(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Success = true;
-            PlayObject.BoSendMsgFlag = true;
+            playObject.BoSendMsgFlag = true;
         }
 
         /// <summary>
         /// 开通元宝交易
         /// </summary>
-        private void ActionOfOpenSaleDeal(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfOpenSaleDeal(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nGameGold = 0;
             try
@@ -2352,7 +2346,7 @@ namespace GameSrv.ScriptSystem
         /// <summary>
         /// 查询正在出售的物品
         /// </summary>
-        private void ActionOfQuerySaleSell(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQuerySaleSell(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             try
             {
@@ -2457,7 +2451,7 @@ namespace GameSrv.ScriptSystem
         /// <summary>
         /// 查询可以的购买物品
         /// </summary>
-        private void ActionOfQueryTrustDeal(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQueryTrustDeal(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             try
             {
@@ -2561,7 +2555,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfAddNameDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddNameDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
@@ -2598,7 +2592,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfDelNameDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelNameDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
@@ -2627,7 +2621,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfAddSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nLevel = HUtil32._MIN(3, HUtil32.StrToInt(questActionInfo.sParam2, 0));
             var magic = M2Share.WorldEngine.FindMagic(questActionInfo.sParam1);
@@ -2656,7 +2650,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfAutoAddGameGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAutoAddGameGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nPoint = 0;
             int nTime = 0;
@@ -2680,7 +2674,7 @@ namespace GameSrv.ScriptSystem
         }
 
         // SETAUTOGETEXP 时间 点数 是否安全区 地图号
-        private void ActionOfAutoGetExp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAutoGetExp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Envirnoment envir = null;
             var nTime = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -2705,7 +2699,7 @@ namespace GameSrv.ScriptSystem
         /// <summary>
         /// 增加挂机
         /// </summary>
-        private void ActionOfOffLine(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfOffLine(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             const string sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             playObject.ClientMsg = Messages.MakeMessage(Messages.SM_SYSMESSAGE, playObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
@@ -2723,7 +2717,7 @@ namespace GameSrv.ScriptSystem
             playObject.SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
         }
 
-        private void ActionOfAutoSubGameGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAutoSubGameGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nPoint = 0;
             int nTime = 0;
@@ -2746,7 +2740,7 @@ namespace GameSrv.ScriptSystem
             ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AutoSubGameGold);
         }
 
-        private void ActionOfChangeCreditPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeCreditPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nCreditPoint = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nCreditPoint < 0)
@@ -2796,7 +2790,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfChangeExp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeExp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int dwInt;
             var nExp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -2848,13 +2842,13 @@ namespace GameSrv.ScriptSystem
                         }
                     }
                     playObject.Abil.Exp += dwInt;
-                    // PlayObject.GetExp(dwInt);
+                    // playObject.GetExp(dwInt);
                     playObject.SendMsg(playObject, Messages.RM_WINEXP, 0, dwInt, 0, 0);
                     break;
             }
         }
 
-        private void ActionOfChangeHairStyle(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeHairStyle(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nHair = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if ((!string.IsNullOrEmpty(questActionInfo.sParam1)) && nHair >= 0)
@@ -2868,7 +2862,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfChangeJob(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeJob(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nJob = PlayJob.None;
             if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptConst.sWarrior))
@@ -2895,7 +2889,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfChangeLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nLv;
             var boChgOk = false;
@@ -2935,7 +2929,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfChangePkPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangePkPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nPoint;
             var nOldPkLevel = playObject.PvpLevel();
@@ -2969,7 +2963,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfClearMapMon(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearMapMon(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             IList<BaseObject> monList = new List<BaseObject>();
             var monsterCount = M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(questActionInfo.sParam1), monList);
@@ -2990,13 +2984,13 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfClearList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sListFileName = M2Share.GetEnvirFilePath(questActionInfo.sParam1);
             File.WriteAllBytes(sListFileName, Array.Empty<byte>());
         }
 
-        private void ActionOfClearSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (var i = playObject.MagicList.Count - 1; i >= 0; i--)
             {
@@ -3008,7 +3002,7 @@ namespace GameSrv.ScriptSystem
             playObject.RecalcAbilitys();
         }
 
-        private void ActionOfDelNoJobSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelNoJobSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (var i = playObject.MagicList.Count - 1; i >= 0; i--)
             {
@@ -3022,7 +3016,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfDelSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var magic = M2Share.WorldEngine.FindMagic(questActionInfo.sParam1);
             if (magic == null)
@@ -3044,7 +3038,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGameGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGameGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nOldGameGold = playObject.GameGold;
             var nGameGold = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -3081,7 +3075,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGamePoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGamePoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nOldGamePoint = playObject.GamePoint;
             var nGamePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -3118,10 +3112,10 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGetMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGetMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var poseHuman = playObject.GetPoseCreate();
-            if (poseHuman != null && poseHuman.Race == ActorRace.Play && ((PlayObject)poseHuman).Gender != playObject.Gender)
+            if (poseHuman != null && poseHuman.Race == ActorRace.Play && (poseHuman).Gender != playObject.Gender)
             {
                 playObject.DearName = poseHuman.ChrName;
                 playObject.RefShowName();
@@ -3133,10 +3127,10 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGetMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGetMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var poseHuman = playObject.GetPoseCreate();
-            if (poseHuman != null && poseHuman.Race == ActorRace.Play && ((PlayObject)poseHuman).Gender != playObject.Gender)
+            if (poseHuman != null && poseHuman.Race == ActorRace.Play && (poseHuman).Gender != playObject.Gender)
             {
                 playObject.MasterName = poseHuman.ChrName;
                 playObject.RefShowName();
@@ -3148,7 +3142,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfLineMsg(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfLineMsg(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMsg = GetLineVariableText(playObject, questActionInfo.sParam2);
             sMsg = sMsg.Replace("%s", playObject.ChrName);
@@ -3195,19 +3189,19 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfMapTing(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMapTing(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
 
         }
 
-        private void ActionOfMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string sSayMsg;
             if (!string.IsNullOrEmpty(playObject.DearName))
             {
                 return;
             }
-            var poseHuman = (PlayObject)playObject.GetPoseCreate();
+            var poseHuman = playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@MarryCheckDir", false);
@@ -3320,13 +3314,13 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (!string.IsNullOrEmpty(playObject.MasterName))
             {
                 return;
             }
-            var poseHuman = (PlayObject)playObject.GetPoseCreate();
+            var poseHuman = playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@MasterCheckDir", false);
@@ -3402,12 +3396,12 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfMessageBox(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMessageBox(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendMsg(normNpc, Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, GetLineVariableText(playObject, questActionInfo.sParam1));
         }
 
-        private void ActionOfMission(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMission(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (!string.IsNullOrEmpty(questActionInfo.sParam1) && questActionInfo.nParam2 > 0 && questActionInfo.nParam3 > 0)
             {
@@ -3422,7 +3416,7 @@ namespace GameSrv.ScriptSystem
         }
 
         // MOBFIREBURN MAP X Y TYPE TIME POINT
-        private void ActionOfMobFireBurn(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMobFireBurn(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMap = questActionInfo.sParam1;
             var nX = HUtil32.StrToInt16(questActionInfo.sParam2, -1);
@@ -3448,7 +3442,7 @@ namespace GameSrv.ScriptSystem
             ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MobFireburn);
         }
 
-        private void ActionOfMobPlace(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMobPlace(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nX = 0;
             int nY = 0;
@@ -3473,11 +3467,11 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfRecallGroupMembers(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRecallGroupMembers(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
         }
 
-        private void ActionOfSetRankLevelName(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetRankLevelName(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sRankLevelName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sRankLevelName))
@@ -3489,7 +3483,7 @@ namespace GameSrv.ScriptSystem
             playObject.RefShowName();
         }
 
-        private void ActionOfSetScriptFlag(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetScriptFlag(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nWhere = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var boFlag = HUtil32.StrToInt(questActionInfo.sParam2, -1) == 1;
@@ -3507,7 +3501,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfSkillLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSkillLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nLevel = HUtil32.StrToInt(questActionInfo.sParam3, 0);
             if (nLevel < 0)
@@ -3561,7 +3555,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfTakeCastleGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfTakeCastleGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nGold = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGold < 0 || normNpc.Castle == null)
@@ -3579,14 +3573,14 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfUnMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUnMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (string.IsNullOrEmpty(playObject.DearName))
             {
                 normNpc.GotoLable(playObject, "@ExeMarryFail", false);
                 return;
             }
-            var poseHuman = (PlayObject)playObject.GetPoseCreate();
+            var poseHuman = playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@UnMarryCheckDir", false);
@@ -3649,7 +3643,7 @@ namespace GameSrv.ScriptSystem
                     if (string.Compare(questActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         M2Share.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + "]: " + "我宣布" + playObject.ChrName + ' ' + '与' + playObject.DearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", MsgType.Say);
-                        poseHuman = M2Share.WorldEngine.GetPlayObject(playObject.DearName);
+                        poseHuman = M2Share.WorldEngine.GetplayObject(playObject.DearName);
                         if (poseHuman != null)
                         {
                             poseHuman.DearName = string.Empty;
@@ -3664,7 +3658,7 @@ namespace GameSrv.ScriptSystem
                             //{
                             //    LoadList.LoadFromFile(sUnMarryFileName);
                             //}
-                            //LoadList.Add(PlayObject.m_sDearName);
+                            //LoadList.Add(playObject.m_sDearName);
                             //LoadList.SaveToFile(sUnMarryFileName);
                             //LoadList.Free;
                         }
@@ -3683,7 +3677,7 @@ namespace GameSrv.ScriptSystem
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfSaveVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSaveVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             DynamicVar dynamicVar = null;
@@ -3740,7 +3734,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfDelayCall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelayCall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.DelayCall = HUtil32._MAX(1, questActionInfo.nParam1);
             playObject.DelayCallLabel = questActionInfo.sParam2;
@@ -3773,7 +3767,7 @@ namespace GameSrv.ScriptSystem
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfCalcVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfCalcVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             DynamicVar dynamicVar = null;
@@ -3884,15 +3878,15 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGuildRecall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildRecall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.MyGuild != null)
             {
-                // PlayObject.GuildRecall('GuildRecall','');
+                // playObject.GuildRecall('GuildRecall','');
             }
         }
 
-        private void ActionOfGroupAddList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGroupAddList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var ffile = questActionInfo.sParam1;
             if (playObject.GroupOwner != 0)
@@ -3900,16 +3894,16 @@ namespace GameSrv.ScriptSystem
                 for (var i = 0; i < playObject.GroupMembers.Count; i++)
                 {
                     playObject = playObject.GroupMembers[i];
-                    // AddListEx(PlayObject.m_sChrName,ffile);
+                    // AddListEx(playObject.m_sChrName,ffile);
                 }
             }
         }
 
-        private void ActionOfGroupRecall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGroupRecall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.GroupOwner != 0)
             {
-                // PlayObject.GroupRecall('GroupRecall');
+                // playObject.GroupRecall('GroupRecall');
             }
         }
 
@@ -3918,7 +3912,7 @@ namespace GameSrv.ScriptSystem
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfRepairAllItem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRepairAllItem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var boIsHasItem = false;
             for (var i = 0; i < playObject.UseItems.Length; i++)
@@ -3943,7 +3937,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGroupMoveMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGroupMoveMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var boFlag = false;
             if (playObject.GroupOwner != 0)
@@ -3968,7 +3962,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfUpgradeItems(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUpgradeItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nAddPoint;
             var nWhere = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -4017,7 +4011,7 @@ namespace GameSrv.ScriptSystem
             playObject.SysMsg(stdItem.Name + ": " + userItem.Dura + '/' + userItem.DuraMax + '/' + userItem.Desc[0] + '/' + userItem.Desc[1] + '/' + userItem.Desc[2] + '/' + userItem.Desc[3] + '/' + userItem.Desc[4] + '/' + userItem.Desc[5] + '/' + userItem.Desc[6] + '/' + userItem.Desc[7] + '/' + userItem.Desc[8] + '/' + userItem.Desc[9] + '/' + userItem.Desc[ItemAttr.WeaponUpgrade] + '/' + userItem.Desc[11] + '/' + userItem.Desc[12] + '/' + userItem.Desc[13], MsgColor.Blue, MsgType.Hint);
         }
 
-        private void ActionOfUpgradeItemsEx(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUpgradeItemsEx(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nAddPoint;
             var nWhere = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -4090,7 +4084,7 @@ namespace GameSrv.ScriptSystem
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             const string sVarFound = "变量{0}已存在，变量类型:{1}";
@@ -4159,7 +4153,7 @@ namespace GameSrv.ScriptSystem
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfLoadVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfLoadVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
@@ -4232,7 +4226,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfClearNeedItems(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearNeedItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nNeed = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nNeed < 0)
@@ -4265,7 +4259,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfClearMakeItems(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearMakeItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             UserItem userItem;
             var sItemName = questActionInfo.sParam1;
@@ -4321,14 +4315,14 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfUnMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUnMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (string.IsNullOrEmpty(playObject.MasterName))
             {
                 normNpc.GotoLable(playObject, "@ExeMasterFail", false);
                 return;
             }
-            var poseHuman = (PlayObject)playObject.GetPoseCreate();
+            var poseHuman = playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@UnMasterCheckDir", false);
@@ -4398,7 +4392,7 @@ namespace GameSrv.ScriptSystem
                 {
                     sMsg = string.Format(Settings.NPCSayForceUnMasterMsg, normNpc.ChrName, playObject.ChrName, playObject.MasterName);
                     M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
-                    poseHuman = M2Share.WorldEngine.GetPlayObject(playObject.MasterName);
+                    poseHuman = M2Share.WorldEngine.GetplayObject(playObject.MasterName);
                     if (poseHuman != null)
                     {
                         poseHuman.MasterName = "";
@@ -4416,7 +4410,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfSetMapMode(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetMapMode(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMapName = questActionInfo.sParam1;
             var sMapMode = questActionInfo.sParam2;
@@ -4782,7 +4776,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfSetMemberLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetMemberLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nLevel < 0)
@@ -4817,7 +4811,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfSetMemberType(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetMemberType(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nType = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nType < 0)
@@ -4852,7 +4846,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGiveItem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGiveItem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sItemName = questActionInfo.sParam1;
             var nItemCount = questActionInfo.nParam2;
@@ -4918,7 +4912,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGmExecute(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGmExecute(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sParam1 = questActionInfo.sParam1;
             var sParam2 = questActionInfo.sParam2;
@@ -4943,7 +4937,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGuildAuraePoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildAuraePoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nAuraePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nAuraePoint < 0)
@@ -4990,7 +4984,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGuildBuildPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildBuildPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nBuildPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBuildPoint < 0)
@@ -5037,7 +5031,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGuildChiefItemCount(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildChiefItemCount(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nItemCount = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nItemCount < 0)
@@ -5084,7 +5078,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGuildFlourishPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildFlourishPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nFlourishPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nFlourishPoint < 0)
@@ -5131,7 +5125,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfGuildstabilityPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildstabilityPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nStabilityPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nStabilityPoint < 0)
@@ -5178,7 +5172,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfHumanHp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfHumanHp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nHp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nHp < 0)
@@ -5216,7 +5210,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfHumanMp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfHumanMp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nMp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nMp < 0)
@@ -5254,14 +5248,14 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfKick(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKick(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.BoKickFlag = true;
             playObject.BoReconnection = true;
             playObject.BoSoftClose = true;
         }
 
-        private void ActionOfKill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nMode = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nMode >= 0 && nMode <= 3)
@@ -5292,7 +5286,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfBonusPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfBonusPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nBonusPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBonusPoint < 0 || nBonusPoint > 10000)
@@ -5317,19 +5311,19 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfDelMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.DearName = "";
             playObject.RefShowName();
         }
 
-        private void ActionOfDelMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.MasterName = "";
             playObject.RefShowName();
         }
 
-        private void ActionOfRestBonusPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRestBonusPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nTotleUsePoint = playObject.BonusAbil.DC + playObject.BonusAbil.MC + playObject.BonusAbil.SC + playObject.BonusAbil.AC + playObject.BonusAbil.MAC + playObject.BonusAbil.HP + playObject.BonusAbil.MP + playObject.BonusAbil.Hit + playObject.BonusAbil.Speed + playObject.BonusAbil.Reserved;
             playObject.BonusPoint += nTotleUsePoint;
@@ -5338,13 +5332,13 @@ namespace GameSrv.ScriptSystem
             playObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
         }
 
-        private void ActionOfRestReNewLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRestReNewLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.ReLevel = 0;
             playObject.HasLevelUp(0);
         }
 
-        private void ActionOfChangeNameColor(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeNameColor(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nColor = questActionInfo.nParam1;
             if (nColor < 0 || nColor > 255)
@@ -5356,7 +5350,7 @@ namespace GameSrv.ScriptSystem
             playObject.RefNameColor();
         }
 
-        private void ActionOfClearPassword(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearPassword(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.StoragePwd = "";
             playObject.IsPasswordLocked = false;
@@ -5364,9 +5358,9 @@ namespace GameSrv.ScriptSystem
 
         // RECALLMOB 怪物名称 等级 叛变时间 变色(0,1) 固定颜色(1 - 7)
         // 变色为0 时固定颜色才起作用
-        private void ActionOfRecallmob(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRecallmob(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
-            BaseObject mon;
+            IActor mon;
             if (questActionInfo.nParam3 <= 1)
             {
                 mon = playObject.MakeSlave(questActionInfo.sParam1, 3, HUtil32.StrToInt(questActionInfo.sParam2, 0), 100, 10 * 24 * 60 * 60);
@@ -5389,7 +5383,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfReNewLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfReNewLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nReLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var nLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5417,7 +5411,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfChangeGender(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeGender(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nGender = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGender > 1)
@@ -5429,7 +5423,7 @@ namespace GameSrv.ScriptSystem
             playObject.FeatureChanged();
         }
 
-        private void ActionOfKillSlave(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKillSlave(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (var i = 0; i < playObject.SlaveList.Count; i++)
             {
@@ -5438,7 +5432,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfKillMonExpRate(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKillMonExpRate(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nRate = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5455,7 +5449,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfMonGenEx(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMonGenEx(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMapName = questActionInfo.sParam1;
             var nMapX = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5479,7 +5473,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfOpenMagicBox(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfOpenMagicBox(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             short nX = 0;
             short nY = 0;
@@ -5498,7 +5492,7 @@ namespace GameSrv.ScriptSystem
             monster.Die();
         }
 
-        private void ActionOfPkZone(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPkZone(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             FireBurnEvent fireBurnEvent;
             var nRange = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -5528,7 +5522,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfPowerRate(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPowerRate(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nRate = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5545,7 +5539,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfChangeMode(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeMode(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             //switch (questActionInfo.nParam1)
             //{
@@ -5609,7 +5603,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfChangePerMission(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangePerMission(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nPermission = (byte)HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nPermission <= 10)
@@ -5627,7 +5621,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfThrowitem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfThrowitem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMap = string.Empty;
             var sItemName = string.Empty;
@@ -5826,12 +5820,12 @@ namespace GameSrv.ScriptSystem
             return result;
         }
 
-        private void ActionOfRandomMove(NormNpc normNpc, PlayObject PlayObject, QuestActionInfo QuestActionInfo, ref bool Success)
+        private void ActionOfRandomMove(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Success = true;
         }
 
-        private static void ActionOfAddUseDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private static void ActionOfAddUseDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sHumName = playObject.ChrName;
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
@@ -5870,47 +5864,47 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfAddNameList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfAddNameList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfAddList(playObject.ChrName, sListFileName);
         }
 
-        private void ActionOfDelUseDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfDelUseDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfDelList(playObject.ChrName, sListFileName);
         }
 
-        private void ActionOfDelNameList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfDelNameList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfDelList(playObject.ChrName, sListFileName);
         }
 
-        private void ActionOfDelAccountList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfDelAccountList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string playName = playObject.UserAccount;
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfDelList(playObject.UserAccount, sListFileName);
         }
 
-        private void ActionOfAddAccountList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddAccountList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             ActionOfAddList(playObject.UserAccount, normNpc.m_sPath + questActionInfo.sParam1);
         }
 
-        private void ActionOfAddIpList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddIpList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             ActionOfAddList(playObject.LoginIpAddr, normNpc.m_sPath + questActionInfo.sParam1);
         }
 
-        private void ActionOfDelIpList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelIpList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             ActionOfAddList(playObject.LoginIpAddr, normNpc.m_sPath + questActionInfo.sParam1);
         }
 
-        private void ActionOfAddGuildList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddGuildList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.MyGuild != null)
             {
@@ -5918,7 +5912,7 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ActionOfDelGuildList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelGuildList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.MyGuild != null)
             {
@@ -5976,10 +5970,10 @@ namespace GameSrv.ScriptSystem
             }
         }
 
-        private void ScriptActionError(PlayObject PlayObject, string sErrMsg, QuestActionInfo QuestActionInfo, ExecutionCode sCmd)
+        private void ScriptActionError(IActor playObject, string sErrMsg, QuestActionInfo questActionInfo, ExecutionCode sCmd)
         {
             //const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
-            //string sMsg = Format(sOutMessage, sErrMsg, sCmd, ChrName, MapName, CurrX, CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            //string sMsg = Format(sOutMessage, sErrMsg, sCmd, ChrName, MapName, CurrX, CurrY, questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.sParam4, questActionInfo.sParam5, questActionInfo.sParam6);
             //M2Share.Logger.Error(sMsg);
         }
 

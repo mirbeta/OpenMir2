@@ -26,13 +26,13 @@ namespace GameSrv.GameCommand.Commands {
                 return;
             }
             if (nDura <= 0) {
-                nDura = M2Share.RandomNumber.Random(18) + 3;
+                nDura = GameShare.RandomNumber.Random(18) + 3;
             }
             // 如纯度不填,则随机给纯度
             for (var i = 0; i < nMineCount; i++) {
                 var userItem = new UserItem();
-                if (M2Share.WorldEngine.CopyToUserItemFromName(sMineName, ref userItem)) {
-                    var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                if (GameShare.WorldEngine.CopyToUserItemFromName(sMineName, ref userItem)) {
+                    var stdItem = GameShare.WorldEngine.GetStdItem(userItem.Index);
                     if (stdItem != null && stdItem.StdMode == 43) {
                         if (playObject.IsAddWeightAvailable(stdItem.Weight * nMineCount)) {
                             userItem.Dura = Convert.ToUInt16(nDura * 1000);
@@ -42,7 +42,7 @@ namespace GameSrv.GameCommand.Commands {
                             playObject.ItemList.Add(userItem);
                             playObject.SendAddItem(userItem);
                             if (stdItem.NeedIdentify == 1) {
-                                M2Share.EventSource.AddEventLog(5, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09" +
+                                GameShare.EventSource.AddEventLog(5, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09" +
                                                                    playObject.ChrName + "\09" + stdItem.Name + "\09" + userItem.MakeIndex + "\09" + userItem.Dura + "/"
                                                                    + userItem.DuraMax + "\09" + playObject.ChrName);
                             }

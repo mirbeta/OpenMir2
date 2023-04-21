@@ -8,7 +8,7 @@ namespace GameSrv.Monster.Monsters {
         private readonly IList<BaseObject> _mSlaveObjectList;
 
         public ScultureKingMonster() : base() {
-            SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
+            SearchTime = GameShare.RandomNumber.Random(1500) + 1500;
             ViewRange = 8;
             StoneMode = true;
             CharStatusEx = PoisonState.STONEMODE;
@@ -23,19 +23,19 @@ namespace GameSrv.Monster.Monsters {
             SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
             StoneMode = false;
             MapEvent stoneEvent = new MapEvent(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
-            M2Share.EventMgr.AddEvent(stoneEvent);
+            GameShare.EventMgr.AddEvent(stoneEvent);
         }
 
         private void CallSlave() {
             short nX = 0;
             short nY = 0;
-            int nCount = M2Share.RandomNumber.Random(6) + 6;
+            int nCount = GameShare.RandomNumber.Random(6) + 6;
             GetFrontPosition(ref nX, ref nY);
             for (int i = 0; i < nCount; i++) {
                 if (_mSlaveObjectList.Count >= 30) {
                     break;
                 }
-                BaseObject baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, nX, nY, M2Share.Config.Zuma[M2Share.RandomNumber.Random(4)]);
+                BaseObject baseObject = GameShare.WorldEngine.RegenMonsterByName(MapName, nX, nY, GameShare.Config.Zuma[GameShare.RandomNumber.Random(4)]);
                 if (baseObject != null) {
                     _mSlaveObjectList.Add(baseObject);
                 }

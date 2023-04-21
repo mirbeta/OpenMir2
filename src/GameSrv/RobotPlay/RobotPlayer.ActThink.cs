@@ -413,7 +413,7 @@ namespace GameSrv.RobotPlay
                 {
                     if (wMagicID > 0)
                     {
-                        nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
+                        nRange = HUtil32._MAX(GameShare.RandomNumber.Random(3), 2);
                     }
                     else
                     {
@@ -469,7 +469,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("WalkToRightPos:" + ChrName);
+                GameShare.Logger.Error("WalkToRightPos:" + ChrName);
             }
             return false;
         }
@@ -479,7 +479,7 @@ namespace GameSrv.RobotPlay
             short nX = 0;
             short nY = 0;
             MapWalkXY[] WalkStep = null;
-            var nRange = HUtil32._MAX(M2Share.RandomNumber.Random(3), 2);
+            var nRange = HUtil32._MAX(GameShare.RandomNumber.Random(3), 2);
             var boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             MapWalkXY mapWalkXy;
@@ -490,7 +490,7 @@ namespace GameSrv.RobotPlay
                     mapWalkXy = FindGoodPathB(WalkStep, 0);
                     if (mapWalkXy.WalkStep > 0)
                     {
-                        btDir = M2Share.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
+                        btDir = GameShare.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
                         if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                         {
                             if (Race != 108)
@@ -517,7 +517,7 @@ namespace GameSrv.RobotPlay
                     mapWalkXy = FindGoodPathB(WalkStep, 0);
                     if (mapWalkXy.WalkStep > 0)
                     {
-                        btDir = M2Share.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
+                        btDir = GameShare.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
                         if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                         {
                             for (var j = nRange; j >= 1; j--)
@@ -589,7 +589,7 @@ namespace GameSrv.RobotPlay
             }
             if (GetPoseCreate() == TargetCret || TargetCret.GetPoseCreate() == this)
             {
-                var btNewDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                var btNewDir = GameShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, btNewDir, 1, ref nTargetX, ref nTargetY))
                 {
                     if (Envir.CanWalk(nTargetX, nTargetY, true))
@@ -691,7 +691,7 @@ namespace GameSrv.RobotPlay
             var walkStep = new MapWalkXY[2];
             int nRange;
             var result = false;
-            var btDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+            var btDir = GameShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
             var btNewDir1 = RunPosAttackGetNextRunPos(btDir, true);
             var btNewDir2 = RunPosAttackGetNextRunPos(btDir, false);
             if (Job == 0)
@@ -873,7 +873,7 @@ namespace GameSrv.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error(Format("RobotPlayObject::ActThink Name:{0} Code:{1} ", ChrName, nCode));
+                GameShare.Logger.Error(Format("RobotPlayObject::ActThink Name:{0} Code:{1} ", ChrName, nCode));
             }
             return result;
         }
