@@ -1,5 +1,4 @@
 ﻿using GameSrv;
-using GameSrv.Script;
 using M2Server;
 using SystemModule;
 using SystemModule.Common;
@@ -2865,15 +2864,15 @@ namespace ScriptEngine.Processings
         private void ActionOfChangeJob(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nJob = PlayJob.None;
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptConst.sWarrior))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
                 nJob = PlayJob.Warrior;
             }
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptConst.sWizard))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWizard))
             {
                 nJob = PlayJob.Wizard;
             }
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptConst.sTaos))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sTaos))
             {
                 nJob = PlayJob.Taoist;
             }

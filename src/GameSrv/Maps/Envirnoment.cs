@@ -1,17 +1,18 @@
 ﻿using System.Runtime.CompilerServices;
 using System.Text;
 using GameSrv.Actor;
-using GameSrv.Castle;
-using GameSrv.Event;
 using GameSrv.Event.Events;
 using GameSrv.Monster.Monsters;
 using GameSrv.Npc;
 using GameSrv.Player;
+using M2Server;
 using System.Runtime.InteropServices;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.NativeList.Utils;
+using MapEvent = GameSrv.Event.MapEvent;
+using UserCastle = GameSrv.Castle.UserCastle;
 
 namespace GameSrv.Maps
 {

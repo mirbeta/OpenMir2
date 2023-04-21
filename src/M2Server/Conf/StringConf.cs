@@ -258,7 +258,7 @@ namespace M2Server.Conf {
             Settings.YouKilledByMsg = ReadWriteString("String", "YouKilledByMsg", Settings.YouKilledByMsg);
             Settings.YouprotectedByLawOfDefense = ReadWriteString("String", "YouprotectedByLawOfDefense", Settings.YouprotectedByLawOfDefense);
 
-            CommandHelp.EnableDearRecall = ReadWriteString("String", "EnableDearRecall", CommandHelp.EnableDearRecall);
+            /*CommandHelp.EnableDearRecall = ReadWriteString("String", "EnableDearRecall", CommandHelp.EnableDearRecall);
             CommandHelp.DisableDearRecall = ReadWriteString("String", "DisableDearRecall", CommandHelp.DisableDearRecall);
             CommandHelp.EnableMasterRecall = ReadWriteString("String", "EnableMasterRecall", CommandHelp.EnableMasterRecall);
             CommandHelp.DisableMasterRecall = ReadWriteString("String", "DisableMasterRecall", CommandHelp.DisableMasterRecall);
@@ -281,7 +281,7 @@ namespace M2Server.Conf {
             CommandHelp.DisableGuildRecall = ReadWriteString("String", "DisableGuildRecall", CommandHelp.DisableGuildRecall);
             CommandHelp.PleaseInputPassword = ReadWriteString("String", "PleaseInputPassword", CommandHelp.PleaseInputPassword);
             CommandHelp.TheMapDisableMove = ReadWriteString("String", "TheMapDisableMove", CommandHelp.TheMapDisableMove);
-            CommandHelp.TheMapNotFound = ReadWriteString("String", "TheMapNotFound", CommandHelp.TheMapNotFound);
+            CommandHelp.TheMapNotFound = ReadWriteString("String", "TheMapNotFound", CommandHelp.TheMapNotFound);*/
         }
     }
 }

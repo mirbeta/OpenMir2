@@ -1,6 +1,4 @@
-﻿using GameSrv.Script;
-
-namespace GameSrv
+﻿namespace ScriptEngine
 {
     /// <summary>
     /// 条件检测编码定义

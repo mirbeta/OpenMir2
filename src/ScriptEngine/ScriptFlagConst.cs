@@ -1,5 +1,5 @@
-﻿namespace GameSrv.Script {
-    public static class ScriptConst {
+﻿namespace ScriptEngine {
+    public static class ScriptFlagConst {
         public const string sMarket_Def = "Market_Def";
         public const string sNpc_def = "Npc_def";
         public const string sMAN = "MAN";

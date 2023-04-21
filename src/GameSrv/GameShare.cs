@@ -10,15 +10,16 @@ using GameSrv.Network;
 using GameSrv.Notices;
 using GameSrv.Npc;
 using GameSrv.Robots;
-using GameSrv.Script;
 using GameSrv.Services;
 using GameSrv.World;
 using GameSrv.World.Managers;
 using GameSrv.World.Threads;
 using M2Server;
+using M2Server.Actor;
 using M2Server.Conf;
 using M2Server.Conf.Model;
 using NLog;
+using ScriptEngine;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
@@ -29,6 +30,14 @@ using NormNpc = GameSrv.Npc.NormNpc;
 
 namespace GameSrv
 {
+    /// <summary>
+    /// 可见的精灵
+    /// </summary>
+    public class VisibleBaseObject {
+        public BaseObject BaseObject;
+        public VisibleFlag VisibleFlag;
+    }
+    
     public static class GameShare
     {
         public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
@@ -62,7 +71,7 @@ namespace GameSrv
         public static DBService DataServer = null;
         public static MarketService MarketService = null;
         public static ChatChannelService ChatChannel = null;
-        public static ScriptEngine ScriptSystem = null;
+        public static ScriptEngine.ScriptEngine ScriptSystem = null;
         public static ThreadSocketMgr SocketMgr = null;
         public static GameEventSource EventSource;
         public static MapManager MapMgr = null;

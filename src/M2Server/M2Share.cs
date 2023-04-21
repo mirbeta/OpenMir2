@@ -346,89 +346,7 @@ namespace M2Server
             }
             return Direction.Down;
         }
-
-        public static bool CheckUserItems(int nIdx, StdItem StdItem)
-        {
-            var result = false;
-            switch (nIdx)
-            {
-                case ItemLocation.Dress:
-                    if (StdItem.StdMode == 10 || StdItem.StdMode == 11)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Weapon:
-                    if (StdItem.StdMode == 5 || StdItem.StdMode == 6)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.RighThand:
-                    if (StdItem.StdMode == 29 || StdItem.StdMode == 30 || StdItem.StdMode == 28)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Necklace:
-                    if (StdItem.StdMode == 19 || StdItem.StdMode == 20 || StdItem.StdMode == 21)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Helmet:
-                    if (StdItem.StdMode == 15)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.ArmRingl:
-                    if (StdItem.StdMode == 24 || StdItem.StdMode == 25 || StdItem.StdMode == 26)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.ArmRingr:
-                    if (StdItem.StdMode == 24 || StdItem.StdMode == 26)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Ringl:
-                case ItemLocation.Ringr:
-                    if (StdItem.StdMode == 22 || StdItem.StdMode == 23)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Bujuk:
-                    if (StdItem.StdMode == 25 || StdItem.StdMode == 51)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Belt:
-                    if (StdItem.StdMode == 54 || StdItem.StdMode == 64)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Boots:
-                    if (StdItem.StdMode == 52 || StdItem.StdMode == 62)
-                    {
-                        result = true;
-                    }
-                    break;
-                case ItemLocation.Charm:
-                    if (StdItem.StdMode == 53 || StdItem.StdMode == 63)
-                    {
-                        result = true;
-                    }
-                    break;
-            }
-            return result;
-        }
-
+        
         public static DateTime AddDateTimeOfDay(DateTime DateTime, int nDay)
         {
             var result = DateTime.Now;
@@ -801,12 +719,6 @@ namespace M2Server
                 }
             }
             return result;
-        }
-
-        public static bool IsAccessory(ushort nIndex)
-        {
-            var item = WorldEngine.GetStdItem(nIndex);
-            return IsAccessoryMap.Contains(item.StdMode);
         }
 
         public static IList<MakeItem> GetMakeItemInfo(string sItemName)

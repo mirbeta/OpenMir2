@@ -1,7 +1,7 @@
 ﻿using GameSrv.Castle;
 using GameSrv.Player;
-using GameSrv.Script;
 using GameSrv.World;
+using ScriptEngine;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -57,24 +57,24 @@ namespace GameSrv.Npc {
                     if (!boCanJmp) {
                         return;
                     }
-                    if (string.Compare(sLabel, ScriptConst.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0) {
+                    if (string.Compare(sLabel, ScriptFlagConst.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0) {
                         ReQuestBuildGuild(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptConst.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else if (string.Compare(sLabel, ScriptFlagConst.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0) {
                         ReQuestGuildWar(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptConst.sDONATE, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else if (string.Compare(sLabel, ScriptFlagConst.sDONATE, StringComparison.OrdinalIgnoreCase) == 0) {
                         DoNate(PlayObject);
                     }
-                    else if (HUtil32.CompareLStr(sLabel, ScriptConst.sREQUESTCASTLEWAR)) {
-                        ReQuestCastleWar(PlayObject, sLabel[ScriptConst.sREQUESTCASTLEWAR.Length..]);
+                    else if (HUtil32.CompareLStr(sLabel, ScriptFlagConst.sREQUESTCASTLEWAR)) {
+                        ReQuestCastleWar(PlayObject, sLabel[ScriptFlagConst.sREQUESTCASTLEWAR.Length..]);
                     }
-                    else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else if (string.Compare(sLabel, ScriptFlagConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
                         PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                     }
-                    else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else if (string.Compare(sLabel, ScriptFlagConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
                         if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {
-                            PlayObject.ScriptGoBackLable = ScriptConst.sMAIN;
+                            PlayObject.ScriptGoBackLable = ScriptFlagConst.sMAIN;
                         }
                         GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);
                     }

@@ -10,7 +10,7 @@ namespace M2Server.Conf {
         /// 读取自定义命令配置
         /// </summary>
         public void LoadConfig() {
-            GameCommands gameCommands = CommandMgr.GameCommands;
+            /*GameCommands gameCommands = CommandMgr.GameCommands;
             gameCommands.Data.CmdName = ReadWriteString("Command", "Date", gameCommands.Data.CmdName);
             gameCommands.Data.PerMissionMin = ReadWriteByte("Permission", "Date", gameCommands.Data.PerMissionMin);
             gameCommands.PrvMsg.CmdName = ReadWriteString("Command", "PrvMsg", gameCommands.PrvMsg.CmdName);
@@ -347,7 +347,7 @@ namespace M2Server.Conf {
             gameCommands.ClearBag.CmdName = ReadWriteString("Command", "ClearBag", gameCommands.ClearBag.CmdName);
             gameCommands.ClearBag.PerMissionMin = ReadWriteByte("Permission", "ClearBag", gameCommands.ClearBag.PerMissionMin);
             gameCommands.LockLogon.CmdName = ReadWriteString("Command", "LockLogin", gameCommands.LockLogon.CmdName);
-            gameCommands.LockLogon.PerMissionMin = ReadWriteByte("Permission", "LockLogin", gameCommands.LockLogon.PerMissionMin);
+            gameCommands.LockLogon.PerMissionMin = ReadWriteByte("Permission", "LockLogin", gameCommands.LockLogon.PerMissionMin);*/
             M2Share.GMRedMsgCmd = Convert.ToChar(ReadWriteString("Command", "GMRedMsgCmd", M2Share.GMRedMsgCmd.ToString()));
             M2Share.GMREDMSGCMD = ReadWriteByte("Permission", "GMRedMsgCmd", M2Share.GMREDMSGCMD);
         }

@@ -1,9 +1,10 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Maps;
-using GameSrv.Npc;
 using GameSrv.Player;
+using M2Server;
 using M2Server.Actor;
 using SystemModule.Enums;
+using NormNpc = GameSrv.Npc.NormNpc;
 
 namespace GameSrv.Monster.Monsters
 {

@@ -896,11 +896,13 @@ namespace M2Server
 
         void FeatureChanged();
         
-        string GetMyStatus();
+        int GetMyStatus();
         
         IActor GetPoseCreate();
 
         void HasLevelUp(ushort level);
+
+        string GetShowName();
         
         void RefShowName();
 

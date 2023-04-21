@@ -4,8 +4,6 @@ using GameSrv.GameCommand;
 using GameSrv.Maps;
 using GameSrv.Monster;
 using GameSrv.Player;
-using GameSrv.Script;
-using GameSrv.ScriptSystem;
 using M2Server;
 using ScriptEngine;
 using ScriptEngine.Processings;
@@ -1555,7 +1553,7 @@ namespace GameSrv.Npc {
 
         public void LoadNPCScript() {
             if (IsQuest) {
-                m_sPath = ScriptConst.sNpc_def;
+                m_sPath = ScriptFlagConst.sNpc_def;
                 string sScriptName = ChrName + '-' + MapName;
                 GameShare.ScriptSystem.LoadScript(this, FilePath, sScriptName);
             }
@@ -1622,7 +1620,7 @@ namespace GameSrv.Npc {
                 HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                 if (string.Compare(PlayObject.ScriptCurrLable, sLabel, StringComparison.OrdinalIgnoreCase) != 0)
                 {
-                    if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) != 0)
+                    if (string.Compare(sLabel, ScriptFlagConst.sBACK, StringComparison.OrdinalIgnoreCase) != 0)
                     {
                         PlayObject.ScriptGoBackLable = PlayObject.ScriptCurrLable;
                         PlayObject.ScriptCurrLable = sLabel;

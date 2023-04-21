@@ -942,7 +942,7 @@ namespace ScriptEngine
             return boVarFound;
         }
 
-        internal static int GetMovDataType(QuestActionInfo QuestActionInfo)
+        internal static int GetMovDataType(QuestActionInfo questActionInfo)
         {
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;

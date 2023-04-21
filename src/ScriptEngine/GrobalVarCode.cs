@@ -1,4 +1,4 @@
-﻿namespace GameSrv.ScriptSystem
+﻿namespace ScriptEngine
 {
     /// <summary>
     /// 全局变量编码定义

@@ -1,15 +1,6 @@
-using GameSrv.Script;
 
 namespace ScriptEngine
 {
-    public class ScriptInfo
-    {
-        public bool IsQuest;
-        public ScriptQuestInfo[] QuestInfo;
-        public Dictionary<string, SayingRecord> RecordList;
-        public int QuestCount;
-    }
-    
     public struct QuestActionInfo {
         public int nCmdCode;
         public string sParam1;

@@ -1,3 +1,4 @@
+using M2Server;
 using SystemModule.NativeList.Utils;
 
 namespace GameSrv.Maps

@@ -12,11 +12,11 @@ using GameSrv.Network;
 using GameSrv.Notices;
 using GameSrv.Planes;
 using GameSrv.Robots;
-using GameSrv.Script;
 using GameSrv.Services;
 using GameSrv.World;
 using GameSrv.World.Managers;
 using NLog;
+using ScriptEngine;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -93,7 +93,7 @@ namespace GameSrv
             GameShare.DataServer = new DBService();
             GameShare.MarketService = new MarketService();
             GameShare.ChatChannel = new ChatChannelService();
-            GameShare.ScriptSystem = new ScriptEngine();
+            GameShare.ScriptSystem = new ScriptEngine.ScriptEngine();
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
             GameShare.MapMgr = new MapManager();

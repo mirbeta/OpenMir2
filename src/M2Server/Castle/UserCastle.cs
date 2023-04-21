@@ -1,3 +1,4 @@
+using M2Server.Castle;
 using SystemModule.Data;
 
 namespace M2Server

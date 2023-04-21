@@ -3,10 +3,11 @@ using GameSrv.GameCommand;
 using GameSrv.Items;
 using GameSrv.Maps;
 using GameSrv.Player;
-using GameSrv.Script;
+using ScriptEngine;
 using SystemModule.Common;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
+using ScriptInfo = GameSrv.Script.ScriptInfo;
 
 namespace GameSrv.Npc
 {
@@ -602,7 +603,7 @@ namespace GameSrv.Npc
                 {
                     playObject.MScript = script;
                     playObject.LastNpc = this.ActorId;
-                    GotoLable(playObject, ScriptConst.sMAIN, false);
+                    GotoLable(playObject, ScriptFlagConst.sMAIN, false);
                     break;
                 }
             }

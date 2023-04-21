@@ -1,5 +1,4 @@
 ﻿using GameSrv;
-using GameSrv.ScriptSystem;
 using M2Server;
 using SystemModule;
 using SystemModule.Enums;

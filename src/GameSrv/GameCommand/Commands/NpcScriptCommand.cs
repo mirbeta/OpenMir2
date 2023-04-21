@@ -1,7 +1,7 @@
 ﻿using GameSrv.Actor;
 using GameSrv.Npc;
 using GameSrv.Player;
-using GameSrv.Script;
+using ScriptEngine;
 using SystemModule.Common;
 using SystemModule.Enums;
 
@@ -33,11 +33,11 @@ namespace GameSrv.GameCommand.Commands {
             }
             if (nNpcType == 0) {
                 var merchant = (Merchant)baseObject;
-                sScriptFileName = GameShare.GetEnvirFilePath(ScriptConst.sMarket_Def + merchant.ScriptName + "-" + merchant.MapName + ".txt");
+                sScriptFileName = GameShare.GetEnvirFilePath(ScriptFlagConst.sMarket_Def + merchant.ScriptName + "-" + merchant.MapName + ".txt");
             }
             if (nNpcType == 1) {
                 var normNpc = (NormNpc)baseObject;
-                sScriptFileName = GameShare.GetEnvirFilePath(ScriptConst.sNpc_def + normNpc.ChrName + "-" + normNpc.MapName + ".txt");
+                sScriptFileName = GameShare.GetEnvirFilePath(ScriptFlagConst.sNpc_def + normNpc.ChrName + "-" + normNpc.MapName + ".txt");
             }
             if (File.Exists(sScriptFileName)) {
                 using var loadList = new StringList();

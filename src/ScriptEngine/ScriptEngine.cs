@@ -1,14 +1,12 @@
-﻿using GameSrv.ScriptSystem;
-using M2Server;
+﻿using M2Server;
 using NLog;
-using ScriptEngine;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Common;
 
-namespace GameSrv.Script
+namespace ScriptEngine
 {
     public partial class ScriptEngine {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
@@ -61,7 +59,7 @@ namespace GameSrv.Script
 
         public void LoadScript(NormNpc NPC, string sPatch, string sScritpName) {
             if (string.IsNullOrEmpty(sPatch)) {
-                sPatch = ScriptConst.sNpc_def;
+                sPatch = ScriptFlagConst.sNpc_def;
             }
             LoadScriptFile(NPC, sPatch, sScritpName, false); ;
         }
@@ -640,72 +638,72 @@ namespace GameSrv.Script
                                 while (!string.IsNullOrEmpty(line))
                                 {
                                     line = HUtil32.GetValidStr3(line, ref command, HUtil32.Separator);
-                                    if (command.Equals(ScriptConst.sBUY, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsBuy = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSELL, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sSELL, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsSell = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsMakeDrug = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sPRICES, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sPRICES, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsPrices = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSTORAGE, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sSTORAGE, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsStorage = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sGETBACK, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sGETBACK, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsGetback = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsUpgradenow = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsGetBackupgnow = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsRepair = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.SuperRepair, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.SuperRepair, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsSupRepair = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsSendMsg = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.UseItemName, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.UseItemName, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsUseItemName = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((Merchant)NPC).IsOffLineMsg = true;
                                         continue;
                                     }
-                                    if (string.Compare(command, ScriptConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0)
+                                    if (string.Compare(command, ScriptFlagConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0)
                                     {
                                         ((Merchant)NPC).IsYbDeal = true;
                                         continue;
@@ -969,7 +967,7 @@ namespace GameSrv.Script
                         if (HUtil32.CompareLStr(sLabel, "@@", 2)) {
                             if (!boAddResetLabel) {
                                 boAddResetLabel = true;
-                                sMsg = ScriptConst.RESETLABEL + sMsg;
+                                sMsg = ScriptFlagConst.RESETLABEL + sMsg;
                             }
                             continue;
                         }

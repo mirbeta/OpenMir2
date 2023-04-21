@@ -1,8 +1,8 @@
 ﻿using GameSrv.Castle;
 using GameSrv.Monster.Monsters;
 using GameSrv.Player;
-using GameSrv.Script;
 using M2Server;
+using ScriptEngine;
 using SystemModule.Enums;
 
 namespace GameSrv.Npc {
@@ -93,7 +93,7 @@ namespace GameSrv.Npc {
                     PlayObject.ScriptLable = sData;
                     if (Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster()) {
                         bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
+                        if (string.Compare(sLabel, ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (string.IsNullOrEmpty(sMsg)) {
                                 return;
                             }
@@ -104,16 +104,16 @@ namespace GameSrv.Npc {
                         }
                         string s20;
                         string s18 = string.Empty;
-                        if (string.Compare(sLabel, ScriptConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0) {
+                        if (string.Compare(sLabel, ScriptFlagConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (IsOffLineMsg) {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
                             SendCustemMsg(PlayObject, sMsg);
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0) {
                             sMsg = sMsg.Trim();
                             if (!string.IsNullOrEmpty(sMsg)) {
                                 Castle.sName = sMsg;
@@ -126,7 +126,7 @@ namespace GameSrv.Npc {
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0) {
                             switch (Castle.WithDrawalGolds(PlayObject, HUtil32.StrToInt(sMsg, 0))) {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -141,12 +141,12 @@ namespace GameSrv.Npc {
                                     s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                                    GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
                                     break;
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0) {
                             switch (Castle.ReceiptGolds(PlayObject, HUtil32.StrToInt(sMsg, 0))) {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -161,49 +161,49 @@ namespace GameSrv.Npc {
                                     s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                                    GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
                                     break;
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sOPENMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sOPENMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
                             Castle.MainDoorControl(false);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sCLOSEMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sCLOSEMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
                             Castle.MainDoorControl(true);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sREPAIRDOORNOW, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRDOORNOW, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairDoor(PlayObject);
-                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sREPAIRWALLNOW1, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRWALLNOW1, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairWallNow(1, PlayObject);
-                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sREPAIRWALLNOW2, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRWALLNOW2, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairWallNow(2, PlayObject);
-                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sREPAIRWALLNOW3, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRWALLNOW3, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairWallNow(3, PlayObject);
-                            GotoLable(PlayObject, ScriptConst.sMAIN, false);
+                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREGUARDNOW)) {
-                            s20 = sLabel.Substring(ScriptConst.sHIREGUARDNOW.Length, sLabel.Length);
+                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagConst.sHIREGUARDNOW)) {
+                            s20 = sLabel.Substring(ScriptFlagConst.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0);
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptConst.sHIREARCHERNOW)) {
-                            s20 = sLabel.Substring(ScriptConst.sHIREARCHERNOW.Length, sLabel.Length);
+                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagConst.sHIREARCHERNOW)) {
+                            s20 = sLabel.Substring(ScriptFlagConst.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
                             PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                         }
-                        else if (string.Compare(sLabel, ScriptConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {
-                                PlayObject.ScriptGoBackLable = ScriptConst.sMAIN;
+                                PlayObject.ScriptGoBackLable = ScriptFlagConst.sMAIN;
                             }
                             GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);
                         }

@@ -1,5 +1,4 @@
 ﻿using GameSrv;
-using GameSrv.Script;
 using M2Server;
 using SystemModule;
 using SystemModule.Common;
@@ -172,28 +171,28 @@ namespace ScriptEngine.Processings
         private void ConditionOfDayTime(IActor playObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (string.Compare(questConditionInfo.sParam1, ScriptConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (M2Share.GameTime != 0)
                 {
                     success = false;
                 }
             }
-            if (string.Compare(questConditionInfo.sParam1, ScriptConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (M2Share.GameTime != 1)
                 {
                     success = false;
                 }
             }
-            if (string.Compare(questConditionInfo.sParam1, ScriptConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (M2Share.GameTime != 2)
                 {
                     success = false;
                 }
             }
-            if (string.Compare(questConditionInfo.sParam1, ScriptConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (M2Share.GameTime != 3)
                 {
@@ -271,15 +270,15 @@ namespace ScriptEngine.Processings
             int nCount = 0;
             PlayJob nJob = PlayJob.None;
             IActor playObjectEx;
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptConst.sWarrior))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
                 nJob = PlayJob.Warrior;
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptConst.sWizard))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWizard))
             {
                 nJob = PlayJob.Wizard;
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptConst.sTaos))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sTaos))
             {
                 nJob = PlayJob.Taoist;
             }
@@ -4066,21 +4065,21 @@ namespace ScriptEngine.Processings
         private void ConditionOfCheckJob(IActor playObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptConst.sWarrior))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
                 if (playObject.Job != PlayJob.Warrior)
                 {
                     success = false;
                 }
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptConst.sWizard))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWizard))
             {
                 if (playObject.Job != PlayJob.Wizard)
                 {
                     success = false;
                 }
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptConst.sTaos))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sTaos))
             {
                 if (playObject.Job != PlayJob.Taoist)
                 {
@@ -4134,7 +4133,7 @@ namespace ScriptEngine.Processings
         private void ConditionOfGender(IActor playObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (string.Compare(questConditionInfo.sParam1, ScriptConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (playObject.Gender != PlayGender.Man)
                 {

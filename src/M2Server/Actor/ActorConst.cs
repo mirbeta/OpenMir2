@@ -16,15 +16,7 @@ namespace M2Server.Actor {
         public bool LateDelivery;
         public string Buff;
     }
-
-    /// <summary>
-    /// 可见的精灵
-    /// </summary>
-    public class VisibleBaseObject {
-        public BaseObject BaseObject;
-        public VisibleFlag VisibleFlag;
-    }
-
+    
     public enum VisibleFlag : byte {
         /// <summary>
         /// 隐藏
@@ -39,8 +31,6 @@ namespace M2Server.Actor {
         /// </summary>
         Show = 2
     }
-
-
 
     public class DragonConst {
         public const byte DRAGON_RING_SHAPE = 198;

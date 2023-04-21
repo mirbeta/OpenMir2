@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace GameSrv.Maps {
+namespace M2Server {
     public class CellObjectMgr {
         //todo 从当前地图管理对象，而不是统一管理
         private readonly ConcurrentDictionary<int, object> _cellObject = new ConcurrentDictionary<int, object>();

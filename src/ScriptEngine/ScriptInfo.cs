@@ -1,7 +1,6 @@
 using System.Collections;
-using ScriptEngine;
 
-namespace GameSrv.Script
+namespace ScriptEngine
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class ScriptCode : Attribute

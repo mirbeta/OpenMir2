@@ -3,7 +3,7 @@ using GameSrv.Actor;
 using GameSrv.Maps;
 using GameSrv.Monster;
 using GameSrv.Npc;
-using GameSrv.Script;
+using ScriptEngine;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -164,8 +164,8 @@ namespace GameSrv.DataSource {
 
         private static void QFunctionNpc() {
             try {
-                string sScriptFile = GameShare.GetEnvirFilePath(ScriptConst.sMarket_Def, "QFunction-0.txt");
-                string sScritpDir = GameShare.GetEnvirFilePath(ScriptConst.sMarket_Def);
+                string sScriptFile = GameShare.GetEnvirFilePath(ScriptFlagConst.sMarket_Def, "QFunction-0.txt");
+                string sScritpDir = GameShare.GetEnvirFilePath(ScriptFlagConst.sMarket_Def);
                 if (!Directory.Exists(sScritpDir)) {
                     Directory.CreateDirectory(sScritpDir);
                 }
@@ -182,7 +182,7 @@ namespace GameSrv.DataSource {
                         ChrName = "QFunction",
                         NpcFlag = 0,
                         Appr = 0,
-                        FilePath = ScriptConst.sMarket_Def,
+                        FilePath = ScriptFlagConst.sMarket_Def,
                         ScriptName = "QFunction",
                         IsHide = true,
                         IsQuest = false

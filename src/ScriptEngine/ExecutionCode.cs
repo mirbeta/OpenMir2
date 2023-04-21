@@ -1,6 +1,4 @@
-﻿using GameSrv.Script;
-
-namespace GameSrv
+﻿namespace ScriptEngine
 {
     /// <summary>
     /// 执行指令编码定义
