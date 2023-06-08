@@ -79,7 +79,7 @@ namespace M2Server.Actor
         /// <summary>
         /// 状态持续的开始时间
         /// </summary>
-        internal int[] StatusArrTick;
+        public int[] StatusArrTick;
         /// <summary>
         /// 防麻痹
         /// </summary>

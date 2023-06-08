@@ -54,37 +54,37 @@ namespace M2Server.GameCommand.Commands
                 return;
             }
             IList<BaseObject> monList = new List<BaseObject>();
-            if (!boMoveAll)// 指定名称的怪移动
-            {
-                M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 10, monList);// 查指定XY范围内的怪
-                if (monList.Count > 0)
-                {
-                    for (var i = 0; i < monList.Count; i++)
-                    {
-                        var moveMon = monList[i];
-                        if (moveMon != playObject)
-                        {
-                            if (string.Compare(moveMon.ChrName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)// 是否是指定名称的怪
-                            {
-                                moveMon.SpaceMove(newMap, nX, nY, 0);
-                            }
-                        }
-                    }
-                }
-            }
-            else
-            {
-                // 所有怪移动
-                M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 1000, monList);// 查指定XY范围内的怪
-                for (var i = 0; i < monList.Count; i++)
-                {
-                    var moveMon = monList[i];
-                    if (moveMon != playObject)
-                    {
-                        moveMon.SpaceMove(newMap, nX, nY, 0);
-                    }
-                }
-            }
+            //if (!boMoveAll)// 指定名称的怪移动
+            //{
+            //    M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 10, monList);// 查指定XY范围内的怪
+            //    if (monList.Count > 0)
+            //    {
+            //        for (var i = 0; i < monList.Count; i++)
+            //        {
+            //            var moveMon = monList[i];
+            //            if (moveMon != playObject)
+            //            {
+            //                if (string.Compare(moveMon.ChrName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)// 是否是指定名称的怪
+            //                {
+            //                    moveMon.SpaceMove(newMap, nX, nY, 0);
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //else
+            //{
+            //    // 所有怪移动
+            //    M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 1000, monList);// 查指定XY范围内的怪
+            //    for (var i = 0; i < monList.Count; i++)
+            //    {
+            //        var moveMon = monList[i];
+            //        if (moveMon != playObject)
+            //        {
+            //            moveMon.SpaceMove(newMap, nX, nY, 0);
+            //        }
+            //    }
+            //}
         }
     }
 }

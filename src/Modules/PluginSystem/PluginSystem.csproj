@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\M2Server\M2Server.csproj" />
+    <ProjectReference Include="..\..\SystemModule\SystemModule.csproj" />
+  </ItemGroup>
+
 </Project>

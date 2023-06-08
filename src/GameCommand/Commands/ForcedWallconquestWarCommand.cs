@@ -1,10 +1,9 @@
-﻿using M2Server.Castle;
-using M2Server.Player;
-using M2Server.World;
+﻿using M2Server.Player;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace M2Server.GameCommand.Commands
+{
     /// <summary>
     /// 开始工程战役
     /// </summary>
@@ -28,10 +27,10 @@ namespace M2Server.GameCommand.Commands {
                     castle.WarDate = DateTime.Now;
                     castle.StartCastleWarTick = HUtil32.GetTickCount();
                     castle.StartWallconquestWar();
-                    WorldServer.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
                     var s20 = "[" + castle.sName + " 攻城战已经开始]";
                     M2Share.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
-                    WorldServer.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
                     castle.MainDoorControl(true);
                 }
                 else {

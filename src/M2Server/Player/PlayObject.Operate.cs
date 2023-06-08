@@ -1458,7 +1458,7 @@ namespace M2Server.Player
             }
         }
 
-        internal void ClientGuildAlly()
+        public void ClientGuildAlly()
         {
             const string sExceptionMsg = "[Exception] PlayObject::ClientGuildAlly";
             try
@@ -1518,7 +1518,7 @@ namespace M2Server.Player
             }
         }
 
-        internal void ClientGuildBreakAlly(string sGuildName)
+        public void ClientGuildBreakAlly(string sGuildName)
         {
             if (!IsGuildMaster())
             {

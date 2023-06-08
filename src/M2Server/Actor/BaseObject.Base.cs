@@ -352,7 +352,7 @@ namespace M2Server.Actor
             SendRefMsg(Messages.RM_DEATH, Dir, CurrX, CurrY, 1, "");
         }
 
-        internal virtual void ReAlive()
+        public virtual void ReAlive()
         {
             Death = false;
             SendRefMsg(Messages.RM_ALIVE, Dir, CurrX, CurrY, 0, "");

@@ -56,7 +56,7 @@ namespace M2Server.GameCommand.Commands
                 }
                 else
                 {
-                    M2Share.FrontEngine.AddChangeGoldList(playObject.ChrName, sHumName, nCount);
+                    //M2Share.FrontEngine.AddChangeGoldList(playObject.ChrName, sHumName, nCount);
                     playObject.SysMsg(sHumName + " 现在不在线，等其上线时金币将自动增加", MsgColor.Green, MsgType.Hint);
                 }
             }

@@ -1,5 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Maps;
 using M2Server.Player;
 using SystemModule.Enums;
 
@@ -44,40 +43,40 @@ namespace M2Server.GameCommand.Commands
                 boNotItem = false;
             }
             IList<BaseObject> monList = new List<BaseObject>();
-            for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)
-            {
-                envir = M2Share.MapMgr.Maps[i];
-                if (envir != null)
-                {
-                    if (boKillAllMap || string.Compare(envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
-                    {
-                        var monsterCount = M2Share.WorldEngine.GetMapMonster(envir, monList);
-                        if (monsterCount > 0)
-                        {
-                            for (var j = 0; j < monsterCount; j++)
-                            {
-                                var baseObject = monList[j];
-                                if (baseObject != null)
-                                {
-                                    if (baseObject.Master != null && baseObject.Race != 135)// 除135怪外，其它宝宝不清除
-                                    {
-                                        if (baseObject.Master.Race == ActorRace.Play)
-                                        {
-                                            continue;
-                                        }
-                                    }
-                                    if (boKillAll || string.Compare(sMonName, baseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
-                                    {
-                                        baseObject.NoItem = boNotItem;
-                                        baseObject.WAbil.HP = 0;
-                                        nMonCount++;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+            //for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)
+            //{
+            //    envir = M2Share.MapMgr.Maps[i];
+            //    if (envir != null)
+            //    {
+            //        if (boKillAllMap || string.Compare(envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
+            //        {
+            //            var monsterCount = M2Share.WorldEngine.GetMapMonster(envir, monList);
+            //            if (monsterCount > 0)
+            //            {
+            //                for (var j = 0; j < monsterCount; j++)
+            //                {
+            //                    var baseObject = monList[j];
+            //                    if (baseObject != null)
+            //                    {
+            //                        if (baseObject.Master != null && baseObject.Race != 135)// 除135怪外，其它宝宝不清除
+            //                        {
+            //                            if (baseObject.Master.Race == ActorRace.Play)
+            //                            {
+            //                                continue;
+            //                            }
+            //                        }
+            //                        if (boKillAll || string.Compare(sMonName, baseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
+            //                        {
+            //                            baseObject.NoItem = boNotItem;
+            //                            baseObject.WAbil.HP = 0;
+            //                            nMonCount++;
+            //                        }
+            //                    }
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
             if (envir == null)
             {
                 playObject.SysMsg("输入的地图不存在!!!", MsgColor.Red, MsgType.Hint);

@@ -30,20 +30,20 @@ namespace M2Server.GameCommand.Commands {
             }
             short nX = 0;
             short nY = 0;
-            var merchant = new Merchant();
-            merchant.ChrName = sParam1;
-            merchant.MapName = playObject.MapName;
-            merchant.Envir = playObject.Envir;
-            merchant.Appr = (ushort)nAppr;
-            merchant.NpcFlag = 0;
-            merchant.CastleMerchant = boIsCastle;
-            merchant.ScriptName = sParam2;
-            playObject.GetFrontPosition(ref nX, ref nY);
-            merchant.CurrX = nX;
-            merchant.CurrY = nY;
-            merchant.Initialize();
-            merchant.OnEnvirnomentChanged();
-            M2Share.WorldEngine.AddMerchant(merchant);
+            //var merchant = new Merchant();
+            //merchant.ChrName = sParam1;
+            //merchant.MapName = playObject.MapName;
+            //merchant.Envir = playObject.Envir;
+            //merchant.Appr = (ushort)nAppr;
+            //merchant.NpcFlag = 0;
+            //merchant.CastleMerchant = boIsCastle;
+            //merchant.ScriptName = sParam2;
+            //playObject.GetFrontPosition(ref nX, ref nY);
+            //merchant.CurrX = nX;
+            //merchant.CurrY = nY;
+            //merchant.Initialize();
+            //merchant.OnEnvirnomentChanged();
+            //M2Share.WorldEngine.AddMerchant(merchant);
         }
     }
 }

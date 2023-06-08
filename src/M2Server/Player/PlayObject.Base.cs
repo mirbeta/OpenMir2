@@ -1017,7 +1017,7 @@ namespace M2Server.Player
             return false;
         }
 
-        internal void SendUseItems()
+        public void SendUseItems()
         {
             string sSendMsg = string.Empty;
             for (int i = 0; i < UseItems.Length; i++)

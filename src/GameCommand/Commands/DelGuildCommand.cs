@@ -1,9 +1,9 @@
 ﻿using M2Server.Player;
-using M2Server.World;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace M2Server.GameCommand.Commands
+{
     /// <summary>
     /// 删除指定行会名称
     /// </summary>
@@ -24,7 +24,7 @@ namespace M2Server.GameCommand.Commands {
                 return;
             }
             if (M2Share.GuildMgr.DelGuild(sGuildName)) {
-                WorldServer.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, sGuildName);
+                M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, sGuildName);
             }
             else {
                 playObject.SysMsg("没找到" + sGuildName + "这个行会!!!", MsgColor.Red, MsgType.Hint);

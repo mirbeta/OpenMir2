@@ -87,7 +87,7 @@ namespace M2Server.Player
         /// <summary>
         /// 是否允许交易
         /// </summary>
-        internal bool AllowDeal;
+        public bool AllowDeal;
         /// <summary>
         /// 检查重叠人物使用
         /// </summary>
@@ -107,7 +107,7 @@ namespace M2Server.Player
         /// <summary>
         /// 允许加入行会
         /// </summary>        
-        internal bool AllowGuild;
+        public bool AllowGuild;
         /// <summary>
         /// 交易对象
         /// </summary>
