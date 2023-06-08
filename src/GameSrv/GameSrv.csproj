@@ -95,7 +95,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\M2Server\M2Server.csproj" />
-		<ProjectReference Include="..\ScriptEngine\ScriptEngine.csproj" />
 		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
 	</ItemGroup>
 </Project>

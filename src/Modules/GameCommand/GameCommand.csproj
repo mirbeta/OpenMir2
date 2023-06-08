@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Modules\PluginSystem\ModuleFramework.csproj" />
+      <ProjectReference Include="..\PluginSystem\ModuleFramework.csproj" />
     </ItemGroup>
 
 </Project>

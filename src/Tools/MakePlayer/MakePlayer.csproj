@@ -52,7 +52,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+      <ProjectReference Include="..\..\SystemModule\SystemModule.csproj" />
     </ItemGroup>
 
     <ItemGroup>
