@@ -1,4 +1,4 @@
-namespace GameSrv.Robots {
+namespace M2Server.Robots {
     /*;AutoRunRobot.txt 
     #AutoRun NPC SEC 10 @SendRedMsg
     SEC：按秒运行

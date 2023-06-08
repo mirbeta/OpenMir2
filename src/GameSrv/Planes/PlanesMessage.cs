@@ -1,12 +1,13 @@
-﻿using GameSrv.DataSource;
-using GameSrv.GameCommand;
-using GameSrv.Guild;
-using GameSrv.Player;
-using GameSrv.World;
+﻿using M2Server.DataSource;
+using M2Server.Guild;
+using M2Server.Player;
+using M2Server.World;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace GameSrv.Planes {
+namespace M2Server.Planes
+{
     public class PlanesMessage {
         private readonly PlayObject PlayObject = null;
 
@@ -123,7 +124,7 @@ namespace GameSrv.Planes {
                     MsgGetRequestLoverRecall(serverNum, body);
                     break;
                 case Messages.ISM_GRUOPMESSAGE:
-                    GameShare.Logger.Info("跨服消息");
+                    M2Share.Logger.Info("跨服消息");
                     break;
             }
         }
@@ -136,38 +137,38 @@ namespace GameSrv.Planes {
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::MsgGetUserServerChange";
             int shifttime = HUtil32.GetTickCount();
             string ufilename = Body;
-            if (GameShare.ServerIndex == sNum) {
+            if (M2Share.ServerIndex == sNum) {
                 try {
-                    GameShare.WorldEngine.AddSwitchData(new SwitchDataInfo());
-                    WorldServer.SendServerGroupMsg(Messages.ISM_CHANGESERVERRECIEVEOK, GameShare.ServerIndex, ufilename);
+                    M2Shares.WorldEngine.AddSwitchData(new SwitchDataInfo());
+                    WorldServer.SendServerGroupMsg(Messages.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
                 }
                 catch {
-                    GameShare.Logger.Error(sExceptionMsg);
+                    M2Share.Logger.Error(sExceptionMsg);
                 }
             }
         }
 
         private static void MsgGetUserChangeServerRecieveOk(int sNum, string Body) {
             string ufilename = Body;
-            GameShare.WorldEngine.GetIsmChangeServerReceive(ufilename);
+            M2Shares.WorldEngine.GetIsmChangeServerReceive(ufilename);
         }
 
         private static void MsgGetUserLogon(int sNum, string Body) {
             string uname = Body;
-            GameShare.WorldEngine.OtherServerUserLogon(sNum, uname);
+            M2Shares.WorldEngine.OtherServerUserLogon(sNum, uname);
         }
 
         private static void MsgGetUserLogout(int sNum, string Body) {
             string uname = Body;
-            GameShare.WorldEngine.OtherServerUserLogout(sNum, uname);
+            M2Shares.WorldEngine.OtherServerUserLogout(sNum, uname);
         }
 
         private static void MsgGetWhisper(int sNum, string Body) {
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     if (hum.HearWhisper) {
                         hum.WhisperRe(Str, 1);
@@ -178,10 +179,10 @@ namespace GameSrv.Planes {
 
         private static void MsgGetGMWhisper(int sNum, string Body) {
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     if (hum.HearWhisper) {
                         hum.WhisperRe(Str, 0);
@@ -192,10 +193,10 @@ namespace GameSrv.Planes {
 
         private static void MsgGetLoverWhisper(int sNum, string Body) {
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     if (hum.HearWhisper) {
                         hum.WhisperRe(Str, 2);
@@ -205,35 +206,35 @@ namespace GameSrv.Planes {
         }
 
         private static void MsgGetSysopMsg(int sNum, string Body) {
-            GameShare.WorldEngine.SendBroadCastMsg(Body, MsgType.System);
+            M2Shares.WorldEngine.SendBroadCastMsg(Body, MsgType.System);
         }
 
         private static void MsgGetAddGuild(int sNum, string Body) {
             string gname = string.Empty;
             string mname = HUtil32.GetValidStr3(Body, ref gname, HUtil32.Backslash);
-            GameShare.GuildMgr.AddGuild(gname, mname);
+            M2Share.GuildMgr.AddGuild(gname, mname);
         }
 
         private static void MsgGetDelGuild(int sNum, string Body) {
             string gname = Body;
-            GameShare.GuildMgr.DelGuild(gname);
+            M2Share.GuildMgr.DelGuild(gname);
         }
 
         private static void MsgGetReloadGuild(int sNum, string Body) {
             string gname = Body;
             GuildInfo guild;
             if (sNum == 0) {
-                guild = GameShare.GuildMgr.FindGuild(gname);
+                guild = M2Share.GuildMgr.FindGuild(gname);
                 if (guild != null) {
                     guild.LoadGuild();
-                    GameShare.WorldEngine.GuildMemberReGetRankName(guild);
+                    M2Shares.WorldEngine.GuildMemberReGetRankName(guild);
                 }
             }
-            else if (GameShare.ServerIndex != sNum) {
-                guild = GameShare.GuildMgr.FindGuild(gname);
+            else if (M2Share.ServerIndex != sNum) {
+                guild = M2Share.GuildMgr.FindGuild(gname);
                 if (guild != null) {
                     guild.LoadGuildFile(gname + '.' + sNum);
-                    GameShare.WorldEngine.GuildMemberReGetRankName(guild);
+                    M2Shares.WorldEngine.GuildMemberReGetRankName(guild);
                     guild.SaveGuildInfoFile();
                 }
             }
@@ -244,7 +245,7 @@ namespace GameSrv.Planes {
             string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref gname, HUtil32.Backslash);
             if (!string.IsNullOrEmpty(gname)) {
-                GuildInfo g = GameShare.GuildMgr.FindGuild(gname);
+                GuildInfo g = M2Share.GuildMgr.FindGuild(gname);
                 if (g != null) {
                     g.SendGuildMsg(Str);
                 }
@@ -267,21 +268,21 @@ namespace GameSrv.Planes {
                 Str = HUtil32.GetValidStr3(Str, ref StartTime, HUtil32.Backslash);
                 remaintime = Str;
                 if (!string.IsNullOrEmpty(gname) && !string.IsNullOrEmpty(warguildname)) {
-                    g = GameShare.GuildMgr.FindGuild(gname);
-                    WarGuild = GameShare.GuildMgr.FindGuild(warguildname);
+                    g = M2Share.GuildMgr.FindGuild(gname);
+                    WarGuild = M2Share.GuildMgr.FindGuild(warguildname);
                     if (g != null && WarGuild != null) {
                         int currenttick = HUtil32.GetTickCount();
-                        if (GameShare.ServerTickDifference == 0) {
-                            GameShare.ServerTickDifference = Convert.ToInt32(StartTime) - currenttick;
+                        if (M2Share.ServerTickDifference == 0) {
+                            M2Share.ServerTickDifference = Convert.ToInt32(StartTime) - currenttick;
                         }
                         for (int i = 0; i < g.GuildWarList.Count; i++) {
                             pgw = g.GuildWarList[i];
                             if (pgw.dwWarTick > 0) {
                                 if (pgw.Guild == WarGuild) {
                                     pgw.Guild = WarGuild;
-                                    pgw.dwWarTick = Convert.ToInt32(StartTime) - GameShare.ServerTickDifference;
+                                    pgw.dwWarTick = Convert.ToInt32(StartTime) - M2Share.ServerTickDifference;
                                     pgw.dwWarTime = Convert.ToInt32(remaintime);
-                                    GameShare.Logger.Info("[行会战] " + g.GuildName + "<->" + WarGuild.GuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + pgw.dwWarTick + ", 时差: " + GameShare.ServerTickDifference);
+                                    M2Share.Logger.Info("[行会战] " + g.GuildName + "<->" + WarGuild.GuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + pgw.dwWarTick + ", 时差: " + M2Share.ServerTickDifference);
                                     break;
                                 }
                             }
@@ -290,11 +291,11 @@ namespace GameSrv.Planes {
                             if (!g.GuildWarList.Select(x => x.Guild).Contains(WarGuild)) {
                                 pgw = new WarGuild();
                                 pgw.Guild = WarGuild;
-                                pgw.dwWarTick = int.Parse(StartTime) - GameShare.ServerTickDifference;
+                                pgw.dwWarTick = int.Parse(StartTime) - M2Share.ServerTickDifference;
                                 pgw.dwWarTime = int.Parse(remaintime);
                                 g.GuildWarList.Add(pgw);
                             }
-                            GameShare.Logger.Info("[行会战] " + g.GuildName + "<->" + WarGuild.GuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + (Convert.ToUInt32(StartTime) - GameShare.ServerTickDifference) + ", 时差: " + GameShare.ServerTickDifference);
+                            M2Share.Logger.Info("[行会战] " + g.GuildName + "<->" + WarGuild.GuildName + ", 开战: " + StartTime + ", 持久: " + remaintime + ", 现在: " + (Convert.ToUInt32(StartTime) - M2Share.ServerTickDifference) + ", 时差: " + M2Share.ServerTickDifference);
                         }
                         g.RefMemberName();
                         g.UpdateGuildFile();
@@ -303,15 +304,17 @@ namespace GameSrv.Planes {
             }
         }
 
-        private void MsgGetChatProhibition(int sNum, string Body) {
+        private void MsgGetChatProhibition(int sNum, string Body)
+        {
             string whostr = string.Empty;
             string minstr = string.Empty;
             string Str = Body;
             Str = HUtil32.GetValidStr3(Str, ref whostr, HUtil32.Backslash);
             Str = HUtil32.GetValidStr3(Str, ref minstr, HUtil32.Backslash);
-            if (!string.IsNullOrEmpty(whostr)) {
+            if (!string.IsNullOrEmpty(whostr))
+            {
                 //PlayObject.CmdShutup(Settings.g_GameCommand.SHUTUP, whostr, minstr);
-                CommandMgr.Execute(PlayObject, "Shutup");
+                //CommandMgr.Execute(PlayObject, "Shutup");
             }
         }
 
@@ -327,7 +330,7 @@ namespace GameSrv.Planes {
         }
 
         private static void MsgGetReloadCastleAttackers(int sNum) {
-            GameShare.CastleMgr.Initialize();
+            M2Share.CastleMgr.Initialize();
         }
 
         private static void MsgGetReloadAdmin() {
@@ -354,14 +357,14 @@ namespace GameSrv.Planes {
             string dxstr = string.Empty;
             string dystr = string.Empty;
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 short dx = HUtil32.StrToInt16(dxstr, 0);
                 short dy = HUtil32.StrToInt16(dystr, 0);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     if (hum.AllowGuildReCall) {
                         hum.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -381,14 +384,14 @@ namespace GameSrv.Planes {
             string Str;
             string uname = string.Empty;
             string lovername = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref lovername, HUtil32.Backslash);
-                humlover = GameShare.WorldEngine.GetPlayObject(lovername);
+                humlover = M2Shares.WorldEngine.GetPlayObject(lovername);
                 if (humlover != null) {
                     int svidx = 0;
-                    if (GameShare.WorldEngine.FindOtherServerUser(uname, ref svidx)) {
+                    if (M2Shares.WorldEngine.FindOtherServerUser(uname, ref svidx)) {
                         WorldServer.SendServerGroupMsg(Messages.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
                     }
                 }
@@ -398,11 +401,11 @@ namespace GameSrv.Planes {
         private static void MsgGetLoverLogout(int sNum, string Body) {
             string uname = string.Empty;
             const string sLoverFindYouMsg = "正在找你...";
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 string lovername = Str;
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(lovername);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(lovername);
                 if (hum != null) {
                     hum.SysMsg(uname + sLoverFindYouMsg, MsgColor.Red, MsgType.Hint);
                 }
@@ -414,10 +417,10 @@ namespace GameSrv.Planes {
 
         private static void MsgGetLoverKilledMsg(int sNum, string Body) {
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     hum.SysMsg(Str, MsgColor.Red, MsgType.Hint);
                 }
@@ -428,14 +431,14 @@ namespace GameSrv.Planes {
             string dxstr = string.Empty;
             string dystr = string.Empty;
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dxstr, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 short dx = HUtil32.StrToInt16(dxstr, 0);
                 short dy = HUtil32.StrToInt16(dystr, 0);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     hum.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                     hum.SpaceMove(Str, dx, dy, 0);
@@ -445,10 +448,10 @@ namespace GameSrv.Planes {
 
         private static void MsgGetRequestRecall(int sNum, string Body) {
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     hum.RecallHuman(Str);
                 }
@@ -457,10 +460,10 @@ namespace GameSrv.Planes {
 
         private static void MsgGetRequestLoverRecall(int sNum, string Body) {
             string uname = string.Empty;
-            if (sNum == GameShare.ServerIndex) {
+            if (sNum == M2Share.ServerIndex) {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                PlayObject hum = GameShare.WorldEngine.GetPlayObject(uname);
+                PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
                 if (hum != null) {
                     if (!hum.Envir.Flag.NoReCall) {
                         hum.RecallHuman(Str);

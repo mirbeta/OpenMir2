@@ -1,20 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Concurrent;
-using GameSrv.Castle;
-using GameSrv.DataSource;
-using GameSrv.Event;
-using GameSrv.GameCommand;
-using GameSrv.Guild;
-using GameSrv.Items;
-using GameSrv.Magic;
-using GameSrv.Maps;
-using GameSrv.Network;
-using GameSrv.Notices;
-using GameSrv.Planes;
 using GameSrv.Robots;
-using GameSrv.Services;
-using GameSrv.World;
-using GameSrv.World.Managers;
+using M2Server.Castle;
+using M2Server.DataSource;
+using M2Server.Event;
+using M2Server.Guild;
+using M2Server.Items;
+using M2Server.Maps;
+using M2Server.Network;
+using M2Server.Notices;
+using M2Server.Planes;
+using M2Server.Robots;
+using M2Server.Services;
+using M2Server.World;
+using M2Server.World.Managers;
 using NLog;
 using ScriptEngine;
 using SystemModule.Common;
@@ -93,7 +92,7 @@ namespace GameSrv
             GameShare.DataServer = new DBService();
             GameShare.MarketService = new MarketService();
             GameShare.ChatChannel = new ChatChannelService();
-            GameShare.ScriptSystem = new ScriptEngine.ScriptEngine();
+            GameShare.ScriptEngine = new ScriptSystem();
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
             GameShare.MapMgr = new MapManager();
@@ -109,7 +108,7 @@ namespace GameSrv
             GameShare.LoadConfig();
             LoadServerTable();
             _logger.Info("初始化游戏引擎数据配置文件完成...");
-            CommandMgr.RegisterCommand();
+            //CommandMgr.RegisterCommand();
             GameShare.LoadGameLogItemNameList();
             GameShare.LoadDenyIPAddrList();
             GameShare.LoadDenyAccountList();
@@ -122,7 +121,7 @@ namespace GameSrv
                 _logger.Info($"物品数据库加载失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"物品数据库加载成功...[{GameShare.WorldEngine.StdItemList.Count}]");
+            _logger.Info($"物品数据库加载成功...[{ItemSystem.StdItemList.Count}]");
             nCode = Map.LoadMinMap();
             if (nCode < 0)
             {

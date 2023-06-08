@@ -1,8 +1,15 @@
-﻿using SystemModule;
+﻿using M2Server.Event;
+using M2Server.Items;
+using M2Server.Maps;
+using M2Server.Monster;
+using M2Server.Monster.Monsters;
+using M2Server.Player;
+using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
+using UserCastle = M2Server.Castle.UserCastle;
 
 namespace M2Server.Actor
 {
@@ -68,7 +75,7 @@ namespace M2Server.Actor
         /// 4-不能移动(中战连击) 5-麻痹(石化) 6-减血，被连击技能万剑归宗击中后掉血
         /// 7-冰冻(不能跑动，不能魔法) 8-隐身 9-防御力(神圣战甲术) 10-魔御力(幽灵盾) 11-魔法盾
         /// </summary>
-        internal ushort[] StatusTimeArr;
+        public ushort[] StatusTimeArr;
         /// <summary>
         /// 状态持续的开始时间
         /// </summary>
@@ -132,7 +139,7 @@ namespace M2Server.Actor
         /// <summary>
         /// 下属列表
         /// </summary>        
-        internal IList<MonsterObject> SlaveList;
+        public IList<MonsterObject> SlaveList;
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -453,7 +460,7 @@ namespace M2Server.Actor
             FixStatus = -1;
             FastParalysis = false;
             NastyMode = false;
-            GameShare.ActorMgr.Add(this);
+            M2Share.ActorMgr.Add(this);
         }
 
         /// <summary>
@@ -528,7 +535,7 @@ namespace M2Server.Actor
             bool result = false;
             short dx = 0;
             short dy = 0;
-            StdItem stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            StdItem stdItem = ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 if (stdItem.StdMode == 40)
@@ -562,12 +569,11 @@ namespace M2Server.Actor
                 {
                     SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dx, dy, mapItem.Name);
                     int logcap = boDieDrop ? 15 : 7;
-                    if (!GameShare.IsCheapStuff(stdItem.StdMode))
+                    if (!M2Share.IsCheapStuff(stdItem.StdMode))
                     {
                         if (stdItem.NeedIdentify == 1)
                         {
-                            GameShare.EventSource.AddEventLog(logcap, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +
-                                                                    HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                            // M2Share.EventSource.AddEventLog(logcap, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" +HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                         }
                     }
                     result = true;
@@ -685,8 +691,8 @@ namespace M2Server.Actor
             }
             catch (Exception ex)
             {
-                GameShare.Logger.Error(sExceptionMsg);
-                GameShare.Logger.Error(ex.StackTrace);
+                M2Share.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(ex.StackTrace);
             }
             return result;
         }
@@ -706,7 +712,7 @@ namespace M2Server.Actor
         internal int CalcGetExp(int nLevel, int nExp)
         {
             int result;
-            if (GameShare.Config.HighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
+            if (M2Share.Config.HighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
             {
                 result = nExp;
             }
@@ -736,7 +742,7 @@ namespace M2Server.Actor
             {
                 Name = Grobal2.StringGoldName,
                 Count = nGold,
-                Looks = GameShare.GetGoldShape(nGold),
+                Looks = M2Share.GetGoldShape(nGold),
                 OfBaseObject = goldOfCreat,
                 CanPickUpTick = HUtil32.GetTickCount(),
                 DropBaseObject = dropGoldCreat
@@ -755,9 +761,9 @@ namespace M2Server.Actor
                     {
                         s20 = 7;
                     }
-                    if (GameShare.GameLogGold)
+                    if (M2Share.GameLogGold)
                     {
-                        GameShare.EventSource.AddEventLog(s20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                      //  M2Share.EventSource.AddEventLog(s20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -900,7 +906,7 @@ namespace M2Server.Actor
                 {
                     if (IsProperTarget(baseObject))
                     {
-                        if (GameShare.RandomNumber.Random(10) >= baseObject.AntiMagic)
+                        if (M2Share.RandomNumber.Random(10) >= baseObject.AntiMagic)
                         {
                             if (undeadAttack)
                             {
@@ -913,7 +919,7 @@ namespace M2Server.Actor
                 }
                 if (!((Math.Abs(sx - tx) <= 0) && (Math.Abs(sy - ty) <= 0)))
                 {
-                    nDir = GameShare.GetNextDirection(sx, sy, tx, ty);
+                    nDir = M2Share.GetNextDirection(sx, sy, tx, ty);
                     if (!Envir.GetNextPosition(sx, sy, nDir, 1, ref sx, ref sy))
                     {
                         break;
@@ -1078,14 +1084,14 @@ namespace M2Server.Actor
                 }
                 else
                 {
-                    nX = (short)GameShare.RandomNumber.Random(envir.Width);
+                    nX = (short)M2Share.RandomNumber.Random(envir.Width);
                     if (nY < (envir.Height - n1C - 1))
                     {
                         nY += n18;
                     }
                     else
                     {
-                        nY = (short)GameShare.RandomNumber.Random(envir.Height);
+                        nY = (short)M2Share.RandomNumber.Random(envir.Height);
                     }
                 }
                 n14++;
@@ -1099,10 +1105,10 @@ namespace M2Server.Actor
 
         public void SpaceMove(string sMap, short nX, short nY, int nInt)
         {
-            Envirnoment envir = GameShare.MapMgr.FindMap(sMap);
+            Envirnoment envir = M2Share.MapMgr.FindMap(sMap);
             if (envir != null)
             {
-                if (GameShare.ServerIndex == envir.ServerIndex)
+                if (M2Share.ServerIndex == envir.ServerIndex)
                 {
                     Envirnoment oldEnvir = Envir;
                     short nOldX = CurrX;
@@ -1180,7 +1186,7 @@ namespace M2Server.Actor
                 short nX = 0;
                 short nY = 0;
                 GetFrontPosition(ref nX, ref nY);
-                MonsterObject monObj = (MonsterObject)GameShare.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                MonsterObject monObj = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
                 {
                     monObj.Master = this;
@@ -1207,7 +1213,7 @@ namespace M2Server.Actor
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
-            Envirnoment envir = GameShare.MapMgr.FindMap(sMapName);
+            Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
             if (envir != null)
             {
                 if (envir.Height < 150)
@@ -1225,8 +1231,8 @@ namespace M2Server.Actor
                 {
                     nEgdey = 50;
                 }
-                short nX = (short)(GameShare.RandomNumber.Random(envir.Width - nEgdey - 1) + nEgdey);
-                short nY = (short)(GameShare.RandomNumber.Random(envir.Height - nEgdey - 1) + nEgdey);
+                short nX = (short)(M2Share.RandomNumber.Random(envir.Width - nEgdey - 1) + nEgdey);
+                short nY = (short)(M2Share.RandomNumber.Random(envir.Height - nEgdey - 1) + nEgdey);
                 SpaceMove(sMapName, nX, nY, nInt);
             }
         }
@@ -1306,7 +1312,7 @@ namespace M2Server.Actor
         {
             short nX = 0;
             short nY = 0;
-            btDir = GameShare.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
+            btDir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             if (Envir.GetNextPosition(CurrX, CurrY, btDir, nRange, ref nX, ref nY))
             {
                 return targetObject == Envir.GetMovingObject(nX, nY, true);
@@ -1330,8 +1336,8 @@ namespace M2Server.Actor
                 nY += 2;
                 if ((nX >= 0) && (nX <= 4) && (nY >= 0) && (nY <= 4))
                 {
-                    btDir = GameShare.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
-                    if (GameShare.Config.SpitMap[btDir, nY, nX] == 1)
+                    btDir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
+                    if (M2Share.Config.SpitMap[btDir, nY, nX] == 1)
                     {
                         result = true;
                     }
@@ -1348,7 +1354,7 @@ namespace M2Server.Actor
             ushort result = 0;
             for (int i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = GameShare.WorldEngine.GetStdItem(ItemList[i].Index);
+                StdItem stdItem = ItemSystem.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     result += stdItem.Weight;
@@ -1401,11 +1407,11 @@ namespace M2Server.Actor
             int result;
             if (nLevel <= Grobal2.MaxLevel)
             {
-                result = GameShare.Config.NeedExps[nLevel];
+                result = M2Share.Config.NeedExps[nLevel];
             }
             else
             {
-                result = GameShare.Config.NeedExps[GameShare.Config.NeedExps.Length];
+                result = M2Share.Config.NeedExps[M2Share.Config.NeedExps.Length];
             }
             return result;
         }
@@ -1414,7 +1420,7 @@ namespace M2Server.Actor
         {
             if (!string.IsNullOrEmpty(sMsg))
             {
-                SendMsg(null, Messages.RM_HEAR, 0, GameShare.Config.btHearMsgFColor, GameShare.Config.btHearMsgBColor, 0, sMsg);
+                SendMsg(null, Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, sMsg);
             }
         }
 
@@ -1429,12 +1435,12 @@ namespace M2Server.Actor
                 return true;
             }
             bool result = false;
-            for (int i = 0; i < GameShare.StartPointList.Count; i++)
+            for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (string.Compare(GameShare.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    short cX = GameShare.StartPointList[i].CurrX;
-                    short cY = GameShare.StartPointList[i].CurrY;
+                    short cX = M2Share.StartPointList[i].CurrX;
+                    short cY = M2Share.StartPointList[i].CurrY;
                     if ((Math.Abs(CurrX - cX) <= 60) && (Math.Abs(CurrY - cY) <= 60))
                     {
                         result = true;
@@ -1525,7 +1531,7 @@ namespace M2Server.Actor
             bool result = true;
             if (Envir == null)
             {
-                GameShare.Logger.Error("Walk nil PEnvir");
+                M2Share.Logger.Error("Walk nil PEnvir");
                 return true;
             }
             try
@@ -1547,10 +1553,10 @@ namespace M2Server.Actor
                                 break;
                             case CellType.Event:
                                 MapEvent mapEvent = null;
-                                MapEvent owinEvent = GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                MapEvent owinEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                 if (owinEvent.OwnBaseObject != null)
                                 {
-                                    mapEvent = GameShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                    mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                 }
                                 if (mapEvent != null)
                                 {
@@ -1570,8 +1576,8 @@ namespace M2Server.Actor
             }
             catch (Exception e)
             {
-                GameShare.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
-                GameShare.Logger.Error(e.Message);
+                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                M2Share.Logger.Error(e.Message);
             }
             return result;
         }
@@ -1596,9 +1602,9 @@ namespace M2Server.Actor
                         {
                             sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
                             bColor = HUtil32.GetValidStrCap(str, ref fColor, ',');
-                            if (GameShare.Config.ShowPreFixMsg)
+                            if (M2Share.Config.ShowPreFixMsg)
                             {
-                                sMsg = GameShare.Config.LineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
                             SendMsg(Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
@@ -1607,9 +1613,9 @@ namespace M2Server.Actor
                         {
                             sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
                             bColor = HUtil32.GetValidStrCap(str, ref fColor, ',');
-                            if (GameShare.Config.ShowPreFixMsg)
+                            if (M2Share.Config.ShowPreFixMsg)
                             {
-                                sMsg = GameShare.Config.LineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
                             SendMsg(Messages.RM_SYSMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
@@ -1620,9 +1626,9 @@ namespace M2Server.Actor
                             str = HUtil32.GetValidStrCap(str, ref fColor, ',');
                             str = HUtil32.GetValidStrCap(str, ref bColor, ',');
                             str = HUtil32.GetValidStrCap(str, ref nTime, ',');
-                            if (GameShare.Config.ShowPreFixMsg)
+                            if (M2Share.Config.ShowPreFixMsg)
                             {
-                                sMsg = GameShare.Config.LineNoticePreFix + sMsg;
+                                sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                             }
                             SendMsg(Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), HUtil32.StrToUInt16(nTime, 0), sMsg);
                             break;
@@ -1631,25 +1637,25 @@ namespace M2Server.Actor
                         switch (msgColor)
                         {
                             case MsgColor.Red: // 控制公告的颜色
-                                if (GameShare.Config.ShowPreFixMsg)
+                                if (M2Share.Config.ShowPreFixMsg)
                                 {
-                                    sMsg = GameShare.Config.LineNoticePreFix + sMsg;
+                                    sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, GameShare.Config.RedMsgFColor, GameShare.Config.RedMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Green:
-                                if (GameShare.Config.ShowPreFixMsg)
+                                if (M2Share.Config.ShowPreFixMsg)
                                 {
-                                    sMsg = GameShare.Config.LineNoticePreFix + sMsg;
+                                    sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, GameShare.Config.GreenMsgFColor, GameShare.Config.GreenMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Blue:
-                                if (GameShare.Config.ShowPreFixMsg)
+                                if (M2Share.Config.ShowPreFixMsg)
                                 {
-                                    sMsg = GameShare.Config.LineNoticePreFix + sMsg;
+                                    sMsg = M2Share.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, GameShare.Config.BlueMsgFColor, GameShare.Config.BlueMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                                 break;
                         }
                         break;
@@ -1660,19 +1666,19 @@ namespace M2Server.Actor
                 switch (msgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(Messages.RM_SYSMESSAGE, 0, GameShare.Config.GreenMsgFColor, GameShare.Config.GreenMsgBColor, 0, sMsg);
+                        SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.GreenMsgFColor, M2Share.Config.GreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(Messages.RM_SYSMESSAGE, 0, GameShare.Config.BlueMsgFColor, GameShare.Config.BlueMsgBColor, 0, sMsg);
+                        SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.BlueMsgFColor, M2Share.Config.BlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (msgType == MsgType.Cust)
                         {
-                            SendMsg(Messages.RM_SYSMESSAGE, 0, GameShare.Config.CustMsgFColor, GameShare.Config.CustMsgBColor, 0, sMsg);
+                            SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(Messages.RM_SYSMESSAGE, 0, GameShare.Config.RedMsgFColor, GameShare.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(Messages.RM_SYSMESSAGE, 0, M2Share.Config.RedMsgFColor, M2Share.Config.RedMsgBColor, 0, sMsg);
                         }
                         break;
                 }
@@ -1690,7 +1696,7 @@ namespace M2Server.Actor
             }
             for (int i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = GameShare.WorldEngine.GetStdItem(ItemList[i].Index);
+                StdItem stdItem = ItemSystem.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (stdItem.StdMode == 40)
@@ -1714,10 +1720,10 @@ namespace M2Server.Actor
                 I = 0;
                 while (true)
                 {
-                    if (Gold > GameShare.Config.MonOneDropGoldCount)
+                    if (Gold > M2Share.Config.MonOneDropGoldCount)
                     {
-                        nGold = GameShare.Config.MonOneDropGoldCount;
-                        Gold = Gold - GameShare.Config.MonOneDropGoldCount;
+                        nGold = M2Share.Config.MonOneDropGoldCount;
+                        Gold = Gold - M2Share.Config.MonOneDropGoldCount;
                     }
                     else
                     {
@@ -1780,15 +1786,15 @@ namespace M2Server.Actor
             var result = Envir.Flag.SafeArea;
             if (result) //安全区
             {
-                if ((Envir.MapName != GameShare.Config.RedHomeMap) || (Math.Abs(CurrX - GameShare.Config.RedHomeX) > GameShare.Config.SafeZoneSize) || (Math.Abs(CurrY - GameShare.Config.RedHomeY) > GameShare.Config.SafeZoneSize))
+                if ((Envir.MapName != M2Share.Config.RedHomeMap) || (Math.Abs(CurrX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) || (Math.Abs(CurrY - M2Share.Config.RedHomeY) > M2Share.Config.SafeZoneSize))
                 {
-                    for (int i = 0; i < GameShare.StartPointList.Count; i++)
+                    for (int i = 0; i < M2Share.StartPointList.Count; i++)
                     {
-                        if (string.Compare(GameShare.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(M2Share.StartPointList[i].MapName, Envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            short nSafeX = GameShare.StartPointList[i].CurrX;
-                            short nSafeY = GameShare.StartPointList[i].CurrY;
-                            if ((Math.Abs(CurrX - nSafeX) <= GameShare.Config.SafeZoneSize) && (Math.Abs(CurrY - nSafeY) <= GameShare.Config.SafeZoneSize))
+                            short nSafeX = M2Share.StartPointList[i].CurrX;
+                            short nSafeY = M2Share.StartPointList[i].CurrY;
+                            if ((Math.Abs(CurrX - nSafeX) <= M2Share.Config.SafeZoneSize) && (Math.Abs(CurrY - nSafeY) <= M2Share.Config.SafeZoneSize))
                             {
                                 result = true;
                                 break;
@@ -1815,9 +1821,9 @@ namespace M2Server.Actor
             {
                 return true;
             }
-            if ((envir.MapName != GameShare.Config.RedHomeMap) ||
-                (Math.Abs(nX - GameShare.Config.RedHomeX) > GameShare.Config.SafeZoneSize) ||
-                (Math.Abs(nY - GameShare.Config.RedHomeY) > GameShare.Config.SafeZoneSize))
+            if ((envir.MapName != M2Share.Config.RedHomeMap) ||
+                (Math.Abs(nX - M2Share.Config.RedHomeX) > M2Share.Config.SafeZoneSize) ||
+                (Math.Abs(nY - M2Share.Config.RedHomeY) > M2Share.Config.SafeZoneSize))
             {
                 result = false;
             }
@@ -1825,13 +1831,13 @@ namespace M2Server.Actor
             {
                 return true;
             }
-            for (int i = 0; i < GameShare.StartPointList.Count; i++)
+            for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                if (GameShare.StartPointList[i].MapName == envir.MapName)
+                if (M2Share.StartPointList[i].MapName == envir.MapName)
                 {
-                    short nSafeX = GameShare.StartPointList[i].CurrX;
-                    short nSafeY = GameShare.StartPointList[i].CurrY;
-                    if ((Math.Abs(nX - nSafeX) <= GameShare.Config.SafeZoneSize) && (Math.Abs(nY - nSafeY) <= GameShare.Config.SafeZoneSize))
+                    short nSafeX = M2Share.StartPointList[i].CurrX;
+                    short nSafeY = M2Share.StartPointList[i].CurrY;
+                    if ((Math.Abs(nX - nSafeX) <= M2Share.Config.SafeZoneSize) && (Math.Abs(nY - nSafeY) <= M2Share.Config.SafeZoneSize))
                     {
                         result = true;
                     }
@@ -1850,7 +1856,7 @@ namespace M2Server.Actor
             short nY = 0;
             int nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
-            if (string.Compare(sSlaveName, GameShare.Config.Dragon, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sSlaveName, M2Share.Config.Dragon, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nFlag = 1;
             }
@@ -1858,7 +1864,7 @@ namespace M2Server.Actor
             {
                 if (nFlag == 1)
                 {
-                    if ((SlaveList[i].ChrName == GameShare.Config.Dragon) || (SlaveList[i].ChrName == GameShare.Config.Dragon1))
+                    if ((SlaveList[i].ChrName == M2Share.Config.Dragon) || (SlaveList[i].ChrName == M2Share.Config.Dragon1))
                     {
                         SlaveList[i].SpaceMove(Envir.MapName, nX, nY, 1);
                         break;
@@ -2060,7 +2066,7 @@ namespace M2Server.Actor
             int n14 = 0;
             while (n14 < 13)
             {
-                byte dir = GameShare.GetNextDirection(nX, nY, targetObject.CurrX, targetObject.CurrY);
+                byte dir = M2Share.GetNextDirection(nX, nY, targetObject.CurrX, targetObject.CurrY);
                 if (Envir.GetNextPosition(nX, nY, dir, 1, ref nX, ref nY) && Envir.IsValidCell(nX, nY))
                 {
                     if ((nX == targetObject.CurrX) && (nY == targetObject.CurrY))
@@ -2103,7 +2109,7 @@ namespace M2Server.Actor
                             CellObject cellObject = cellInfo.ObjList[i];
                             if ((cellObject.CellObjId > 0) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
                             {
-                                BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
+                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if ((baseObject != null) && (!baseObject.Ghost))
                                 {
                                     if (IsProperFriend(baseObject))
@@ -2182,7 +2188,7 @@ namespace M2Server.Actor
                 {
                     continue;
                 }
-                if (string.Compare(GameShare.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return userItem;
                 }
@@ -2207,7 +2213,7 @@ namespace M2Server.Actor
             {
                 UserItem userItem = ItemList[i];
                 if ((userItem.MakeIndex == nItemIndex) &&
-                    string.Compare(GameShare.WorldEngine.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                    string.Compare(ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);
                     ItemList.RemoveAt(i);
@@ -2244,15 +2250,15 @@ namespace M2Server.Actor
         {
             if (Race == ActorRace.Play)
             {
-                return ((((PlayObject)this).Permission > 9) && GameShare.Config.boGMRunAll);
+                return ((((PlayObject)this).Permission > 9) && M2Share.Config.boGMRunAll);
             }
             return false;
         }
 
         public bool CanRun(short nCurrX, short nCurrY, short nX, short nY, bool boFlag)
         {
-            byte btDir = GameShare.GetNextDirection(nCurrX, nCurrY, nX, nY);
-            bool canWalk = (GameShare.Config.DiableHumanRun || AdminCanRun()) || (GameShare.Config.boSafeAreaLimited && InSafeZone());
+            byte btDir = M2Share.GetNextDirection(nCurrX, nCurrY, nX, nY);
+            bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Direction.Up:
@@ -2318,8 +2324,8 @@ namespace M2Server.Actor
 
         private bool CanRun(short nX, short nY, bool boFlag)
         {
-            byte btDir = GameShare.GetNextDirection(CurrX, CurrY, nX, nY);
-            bool canWalk = (GameShare.Config.DiableHumanRun || AdminCanRun()) || (GameShare.Config.boSafeAreaLimited && InSafeZone());
+            byte btDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
+            bool canWalk = (M2Share.Config.DiableHumanRun || AdminCanRun()) || (M2Share.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Direction.Up:
@@ -2555,48 +2561,48 @@ namespace M2Server.Actor
             
             if (Animal)
             {
-                ((AnimalObject)this).MeatQuality = (ushort)(GameShare.RandomNumber.Random(3500) + 3000);
+                ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
             }
             
             switch (Race)
             {
                 case 51:
-                    ((AnimalObject)this).MeatQuality = (ushort)(GameShare.RandomNumber.Random(3500) + 3000);
+                    ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
                     BodyLeathery = 50;
                     break;
                 case 52:
-                    if (GameShare.RandomNumber.Random(30) == 0)
+                    if (M2Share.RandomNumber.Random(30) == 0)
                     {
-                        ((AnimalObject)this).MeatQuality = (ushort)(GameShare.RandomNumber.Random(20000) + 10000);
+                        ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000);
                         BodyLeathery = 150;
                     }
                     else
                     {
-                        ((AnimalObject)this).MeatQuality = (ushort)(GameShare.RandomNumber.Random(8000) + 8000);
+                        ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
                         BodyLeathery = 150;
                     }
                     break;
                 case 53:
-                    ((AnimalObject)this).MeatQuality = (ushort)(GameShare.RandomNumber.Random(8000) + 8000);
+                    ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000);
                     BodyLeathery = 150;
                     break;
                 case 54:
                     Animal = true;
                     break;
                 case 95:
-                    if (GameShare.RandomNumber.Random(2) == 0)
+                    if (M2Share.RandomNumber.Random(2) == 0)
                     {
                         // m_boSafeWalk = true;
                     }
                     break;
                 case 96:
-                    if (GameShare.RandomNumber.Random(4) == 0)
+                    if (M2Share.RandomNumber.Random(4) == 0)
                     {
                         // m_boSafeWalk = true;
                     }
                     break;
                 case 97:
-                    if (GameShare.RandomNumber.Random(2) == 0)
+                    if (M2Share.RandomNumber.Random(2) == 0)
                     {
                         // m_boSafeWalk = true;
                     }
@@ -2626,8 +2632,8 @@ namespace M2Server.Actor
             {
                 return false;
             }
-            short nX = (short)(monGen.X - monGen.Range + GameShare.RandomNumber.Random(monGen.Range * 2 + 1));
-            short nY = (short)(monGen.Y - monGen.Range + GameShare.RandomNumber.Random(monGen.Range * 2 + 1));
+            short nX = (short)(monGen.X - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
+            short nY = (short)(monGen.Y - monGen.Range + M2Share.RandomNumber.Random(monGen.Range * 2 + 1));
             bool mBoErrorOnInit = true;
             if (Envir.CanWalk(nX, nY, true))
             {
@@ -2683,7 +2689,7 @@ namespace M2Server.Actor
                     }
                     else
                     {
-                        nX = (short)(GameShare.RandomNumber.Random(Envir.Width / 2) + nRange2);
+                        nX = (short)(M2Share.RandomNumber.Random(Envir.Width / 2) + nRange2);
                     }
 
                     if (Envir.Height - nRange2 - 1 > nY)
@@ -2692,7 +2698,7 @@ namespace M2Server.Actor
                     }
                     else
                     {
-                        nY = (short)(GameShare.RandomNumber.Random(Envir.Height / 2) + nRange2);
+                        nY = (short)(M2Share.RandomNumber.Random(Envir.Height / 2) + nRange2);
                     }
                 }
                 else
@@ -2808,7 +2814,7 @@ namespace M2Server.Actor
                                 CellObject cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                                 {
-                                    BaseObject baseObject = GameShare.ActorMgr.Get(cellObject.CellObjId);
+                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
                                     {
                                         objectList.Add(baseObject);
@@ -2821,7 +2827,7 @@ namespace M2Server.Actor
             }
             catch
             {
-                GameShare.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(sExceptionMsg);
             }
         }
 

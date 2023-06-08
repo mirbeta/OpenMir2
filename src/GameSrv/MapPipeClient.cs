@@ -1,5 +1,5 @@
 using System.Text;
-using GameSrv.Maps;
+using M2Server.Maps;
 using NLog;
 
 namespace GameSrv {

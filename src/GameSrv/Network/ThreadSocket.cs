@@ -1,16 +1,17 @@
-﻿using GameSrv.Player;
-using GameSrv.Services;
-using GameSrv.World;
+﻿using M2Server.Player;
+using M2Server.Services;
+using M2Server.World;
 using NLog;
 using System.Buffers;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading.Channels;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace GameSrv.Network
+namespace M2Server.Network
 {
     public class ThreadSocket
     {
@@ -48,7 +49,7 @@ namespace GameSrv.Network
 
         /// <summary>
         /// 添加到网关发送队列
-        /// GameSrv -> GameGate
+        /// M2Server.-> GameGate
         /// </summary>
         /// <returns></returns>
         public void ProcessBufferSend(byte[] sendData)
@@ -61,7 +62,7 @@ namespace GameSrv.Network
             var dwRunTick = HUtil32.GetTickCount();
             if (GateInfo.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
             {
-                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > GameShare.SocCheckTimeOut) // 2 * 1000
+                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > M2Share.SocCheckTimeOut) // 2 * 1000
                 {
                     GateInfo.nSendChecked = 0;
                     GateInfo.nSendBlockCount = 0;
@@ -75,9 +76,9 @@ namespace GameSrv.Network
                 {
                     return;
                 }
-                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= GameShare.Config.CheckBlock * 10)
+                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= M2Share.Config.CheckBlock * 10)
                 {
-                    if (GateInfo.nSendBlockCount == 0 && GameShare.Config.CheckBlock * 10 <= sendBuffLen)
+                    if (GateInfo.nSendBlockCount == 0 && M2Share.Config.CheckBlock * 10 <= sendBuffLen)
                     {
                         return;
                     }
@@ -91,9 +92,9 @@ namespace GameSrv.Network
                     GateInfo.nSendCount++;
                     GateInfo.nSendBytesCount += sendBuffLen;
                     GateInfo.nSendBlockCount += sendBuffLen;
-                    GameShare.NetworkMonitor.Send(sendBuffLen);
+                    M2Share.NetworkMonitor.Send(sendBuffLen);
                 }
-                if ((HUtil32.GetTickCount() - dwRunTick) > GameShare.SocLimit)
+                if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit)
                 {
                     return;
                 }
@@ -352,7 +353,7 @@ namespace GameSrv.Network
                                     NewUserTick = HUtil32.GetTickCount(),
                                     PlayTime = nPlayTime
                                 };
-                                GameShare.FrontEngine.AddToLoadRcdList(loadRcdInfo);
+                                //M2Share.FrontEngine.AddToLoadRcdList(loadRcdInfo);
                             }
                             else
                             {
@@ -537,7 +538,7 @@ namespace GameSrv.Network
 
             /// <summary>
             /// 处理队列数据并发送到GameGate
-            /// GameSrv -> GameGate
+            /// M2Server.-> GameGate
             /// </summary>
             public void ProcessSendQueue(CancellationTokenSource cancellation)
             {
@@ -553,7 +554,7 @@ namespace GameSrv.Network
                             }
                             catch (Exception ex)
                             {
-                                GameShare.Logger.Error(ex.StackTrace);
+                                M2Share.Logger.Error(ex.StackTrace);
                             }
                             //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }

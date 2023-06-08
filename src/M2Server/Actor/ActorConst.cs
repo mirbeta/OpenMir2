@@ -16,7 +16,16 @@ namespace M2Server.Actor {
         public bool LateDelivery;
         public string Buff;
     }
-    
+
+    /// <summary>
+    /// 可见的精灵
+    /// </summary>
+    public class VisibleBaseObject
+    {
+        public BaseObject BaseObject;
+        public VisibleFlag VisibleFlag;
+    }
+
     public enum VisibleFlag : byte {
         /// <summary>
         /// 隐藏

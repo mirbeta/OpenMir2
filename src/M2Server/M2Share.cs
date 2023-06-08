@@ -1,5 +1,14 @@
+using M2Server.Castle;
 using M2Server.Conf;
 using M2Server.Conf.Model;
+using M2Server.DataSource;
+using M2Server.Event;
+using M2Server.Guild;
+using M2Server.Items;
+using M2Server.Maps.AutoPath;
+using M2Server.Notices;
+using M2Server.Npc;
+using M2Server.Word;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -26,14 +35,29 @@ namespace M2Server
         /// 服务器启动时间
         /// </summary>
         public static long StartTime;
+        public static int ShareFileNameNum = 0;
+        public static int ServerTickDifference = 0;
         public static readonly ActorMgr ActorMgr;
+        /// <summary>
+        /// 寻路
+        /// </summary>
+        public static readonly FindPath FindPath;
         /// <summary>
         /// 地图对象管理
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
+        public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
+        public static IMapManager MapMgr;
+        public static CustomItem CustomItemMgr = null;
+        public static NoticeManager NoticeMgr = null;
+        public static GuildManager GuildMgr = null;
+        public static EventManager EventMgr = null;
+        public static CastleManager CastleMgr = null;
         public static NormNpc ManageNPC = null;
         public static NormNpc RobotNPC = null;
+        public static NetworkMonitor NetworkMonitor;
+        public static IWordEngine WorldEngine;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -112,6 +136,8 @@ namespace M2Server
         public static bool GameLogGameGold = true;
         public static bool GameLogGamePoint = true;
         public static bool GameLogHumanDie = true;
+        public static IFrontEngine FrontEngine = null;
+        public static IMerchant FunctionNPC = null;
         /// <summary>
         /// IP过滤列表
         /// </summary>
@@ -178,7 +204,10 @@ namespace M2Server
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
             ActorMgr = new ActorMgr();
+            CommonDb = new CommonDB();
+            FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
+            NetworkMonitor = new NetworkMonitor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
@@ -346,7 +375,89 @@ namespace M2Server
             }
             return Direction.Down;
         }
-        
+
+        public static bool CheckUserItems(int nIdx, StdItem StdItem)
+        {
+            var result = false;
+            switch (nIdx)
+            {
+                case ItemLocation.Dress:
+                    if (StdItem.StdMode == 10 || StdItem.StdMode == 11)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Weapon:
+                    if (StdItem.StdMode == 5 || StdItem.StdMode == 6)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.RighThand:
+                    if (StdItem.StdMode == 29 || StdItem.StdMode == 30 || StdItem.StdMode == 28)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Necklace:
+                    if (StdItem.StdMode == 19 || StdItem.StdMode == 20 || StdItem.StdMode == 21)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Helmet:
+                    if (StdItem.StdMode == 15)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.ArmRingl:
+                    if (StdItem.StdMode == 24 || StdItem.StdMode == 25 || StdItem.StdMode == 26)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.ArmRingr:
+                    if (StdItem.StdMode == 24 || StdItem.StdMode == 26)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Ringl:
+                case ItemLocation.Ringr:
+                    if (StdItem.StdMode == 22 || StdItem.StdMode == 23)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Bujuk:
+                    if (StdItem.StdMode == 25 || StdItem.StdMode == 51)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Belt:
+                    if (StdItem.StdMode == 54 || StdItem.StdMode == 64)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Boots:
+                    if (StdItem.StdMode == 52 || StdItem.StdMode == 62)
+                    {
+                        result = true;
+                    }
+                    break;
+                case ItemLocation.Charm:
+                    if (StdItem.StdMode == 53 || StdItem.StdMode == 63)
+                    {
+                        result = true;
+                    }
+                    break;
+            }
+            return result;
+        }
+
         public static DateTime AddDateTimeOfDay(DateTime DateTime, int nDay)
         {
             var result = DateTime.Now;

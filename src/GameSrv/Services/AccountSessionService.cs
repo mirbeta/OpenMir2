@@ -2,11 +2,12 @@ using System.Collections;
 using System.Net;
 using System.Net.Sockets;
 using NLog;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.SocketComponents.AsyncSocketClient;
 using SystemModule.SocketComponents.Event;
 
-namespace GameSrv.Services {
+namespace M2Server.Services {
     public class AccountSessionService {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<PlayerSession> _sessionList;
@@ -17,7 +18,7 @@ namespace GameSrv.Services {
 
         public AccountSessionService() {
             _sessionList = new List<PlayerSession>();
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(GameShare.Config.sIDSAddr), GameShare.Config.nIDSPort));
+            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.sIDSAddr), M2Share.Config.nIDSPort));
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;
@@ -98,12 +99,12 @@ namespace GameSrv.Services {
 
         public void SendOnlineHumCountMsg(int nCount) {
             const string sFormatMsg = "({0}/{1}/{2}/{3}/{4})";
-            SendSocket(string.Format(sFormatMsg, Messages.SS_SERVERINFO, GameShare.Config.ServerName, GameShare.ServerIndex, nCount, GameShare.Config.PayMentMode));
+            SendSocket(string.Format(sFormatMsg, Messages.SS_SERVERINFO, M2Share.Config.ServerName, M2Share.ServerIndex, nCount, M2Share.Config.PayMentMode));
         }
 
         public void SendUserPlayTime(string account, long playTime) {
             const string sFormatMsg = "({0}/{1}/{2}/{3})";
-            SendSocket(string.Format(sFormatMsg, Messages.ISM_GAMETIMEOFTIMECARDUSER, GameShare.Config.ServerName, account, playTime));
+            SendSocket(string.Format(sFormatMsg, Messages.ISM_GAMETIMEOFTIMECARDUSER, M2Share.Config.ServerName, account, playTime));
         }
 
         public void Run()
@@ -191,18 +192,18 @@ namespace GameSrv.Services {
             string account = string.Empty;
             string certstr = HUtil32.GetValidStr3(sData, ref account, '/');
             int cert = HUtil32.StrToInt(certstr, 0);
-            if (!GameShare.Config.TestServer) {
-                int playTime = GameShare.WorldEngine.GetPlayExpireTime(account);
+            if (!M2Share.Config.TestServer) {
+                int playTime = M2Share.WorldEngine.GetPlayExpireTime(account);
                 if (playTime >= 3600 || playTime < 1800) //大于一个小时或者小于半个小时都不处理
                 {
                     return;
                 }
                 if (cert <= 1800)//小于30分钟一分钟查询一次，否则10分钟或者半个小时同步一次都行
                 {
-                    GameShare.WorldEngine.SetPlayExpireTime(account, cert);
+                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
                 }
                 else {
-                    GameShare.WorldEngine.SetPlayExpireTime(account, cert);
+                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
                 }
             }
         }
@@ -211,8 +212,8 @@ namespace GameSrv.Services {
             string account = string.Empty;
             string certstr = HUtil32.GetValidStr3(sData, ref account, '/');
             int cert = HUtil32.StrToInt(certstr, 0);
-            if (!GameShare.Config.TestServer) {
-                GameShare.WorldEngine.AccountExpired(account);
+            if (!M2Share.Config.TestServer) {
+                M2Share.WorldEngine.AccountExpired(account);
                 DelSession(cert);
             }
         }
@@ -326,14 +327,14 @@ namespace GameSrv.Services {
                     break;
                 }
             }
-            if (GameShare.Config.ViewAdmissionFailure && !boFound) {
+            if (M2Share.Config.ViewAdmissionFailure && !boFound) {
                 _logger.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, nSessionID));
             }
             return result;
         }
 
         private static void SetTotalHumanCount(string sData) {
-            GameShare.TotalHumCount = HUtil32.StrToInt(sData, 0);
+            M2Share.TotalHumCount = HUtil32.StrToInt(sData, 0);
         }
 
         private void GetCancelAdmissionA(string sData) {
@@ -342,8 +343,8 @@ namespace GameSrv.Services {
             try {
                 string sessionId = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                 int sessionID = HUtil32.StrToInt(sessionId, 0);
-                if (!GameShare.Config.TestServer) {
-                    GameShare.WorldEngine.AccountExpired(sAccount);
+                if (!M2Share.Config.TestServer) {
+                    M2Share.WorldEngine.AccountExpired(sAccount);
                     DelSession(sessionID);
                 }
             }
@@ -373,7 +374,7 @@ namespace GameSrv.Services {
         private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e) {
             SocketConnected = true;
             _logger.Info("登录服务器[" + _clientScoket.RemoteEndPoint + "]连接成功...");
-            SendOnlineHumCountMsg(GameShare.WorldEngine.OnlinePlayObject);
+            SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
         }
 
         private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e) {

@@ -1,10 +1,11 @@
 using System.Net;
 using System.Net.Sockets;
 using NLog;
+using SystemModule;
 using SystemModule.SocketComponents.AsyncSocketClient;
 using SystemModule.SocketComponents.Event;
 
-namespace GameSrv.Planes {
+namespace M2Server.Planes {
     /// <summary>
     /// 位面服务器
     /// </summary>
@@ -26,7 +27,7 @@ namespace GameSrv.Planes {
         }
 
         private PlanesClient() {
-            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(GameShare.Config.MasterSrvAddr), GameShare.Config.MasterSrvPort));
+            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.MasterSrvAddr), M2Share.Config.MasterSrvPort));
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.OnReceivedData += MsgClientRead;
             _msgClient.OnError += MsgClientError;
@@ -45,7 +46,7 @@ namespace GameSrv.Planes {
         }
 
         public void CheckConnected() {
-            if (GameShare.Config.nServerNumber > 0) {
+            if (M2Share.Config.nServerNumber > 0) {
                 if (_msgClient.IsConnected) {
                     return;
                 }

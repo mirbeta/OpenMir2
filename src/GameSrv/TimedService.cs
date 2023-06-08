@@ -1,7 +1,6 @@
-using GameSrv.Planes;
-using GameSrv.Player;
-using GameSrv.Services;
-using GameSrv.World;
+using M2Server.Planes;
+using M2Server.Services;
+using M2Server.World;
 using Microsoft.Extensions.Hosting;
 using NLog;
 

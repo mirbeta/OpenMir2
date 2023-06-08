@@ -1,4 +1,8 @@
 ﻿using M2Server;
+using M2Server.Items;
+using M2Server.Npc;
+using M2Server.Player;
+using ScriptEngine.Consts;
 using ScriptEngine.Processings;
 using System.Text;
 using SystemModule;
@@ -10,7 +14,7 @@ namespace ScriptEngine
 {
     public class ProcessingBase
     {
-        internal bool GetMovDataHumanInfoValue(NormNpc normNpc, IActor playObject, string sVariable, ref string sValue, ref int nValue, ref int nDataType)
+        internal bool GetMovDataHumanInfoValue(NormNpc normNpc, PlayObject playObject, string sVariable, ref string sValue, ref int nValue, ref int nDataType)
         {
             string s10 = string.Empty;
             string sVarValue2 = string.Empty;
@@ -129,7 +133,7 @@ namespace ScriptEngine
                     result = true;
                     return result;
                 case "$USERCOUNT":
-                    sValue = M2Share.WorldEngine.playObjectCount.ToString();
+                    sValue = M2Share.WorldEngine.PlayObjectCount.ToString();
                     nDataType = 0;
                     result = true;
                     return result;
@@ -453,67 +457,67 @@ namespace ScriptEngine
                     result = true;
                     return result;
                 case "$DRESS":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEAPON":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RIGHTHAND":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.RighThand].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.RighThand].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$HELMET":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$NECKLACE":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_R":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_L":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_R":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_L":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BUJUK":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BELT":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BOOTS":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CHARM":
-                    sValue = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
+                    sValue = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
                     nDataType = 0;
                     result = true;
                     return result;
@@ -626,7 +630,7 @@ namespace ScriptEngine
             return result;
         }
 
-        internal static bool SetMovDataValNameValue(IActor playObject, string sVarName, string sValue, int nValue, int nDataType)
+        internal static bool SetMovDataValNameValue(PlayObject playObject, string sVarName, string sValue, int nValue, int nDataType)
         {
             bool result = false;
             int n100 = M2Share.GetValNameNo(sVarName);
@@ -811,7 +815,7 @@ namespace ScriptEngine
             return result;
         }
 
-        internal static bool GetMovDataValNameValue(IActor playObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
+        internal static bool GetMovDataValNameValue(PlayObject playObject, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
             bool result = false;
             nValue = -1;
@@ -888,7 +892,7 @@ namespace ScriptEngine
             return result;
         }
 
-        internal static bool GetMovDataDynamicVarValue(IActor playObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
+        internal static bool GetMovDataDynamicVarValue(PlayObject playObject, string sVarType, string sVarName, ref string sValue, ref int nValue, ref int nDataType)
         {
             string sName = string.Empty;
             sValue = "";
@@ -917,7 +921,7 @@ namespace ScriptEngine
             return false;
         }
 
-        internal static bool SetMovDataDynamicVarValue(IActor playObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
+        internal static bool SetMovDataDynamicVarValue(PlayObject playObject, string sVarType, string sVarName, string sValue, int nValue, int nDataType)
         {
             string sName = string.Empty;
             bool boVarFound = false;
@@ -1016,7 +1020,7 @@ namespace ScriptEngine
             return result;
         }
 
-        public static Dictionary<string, DynamicVar> GetDynamicVarMap(IActor playObject, string sType, ref string sName)
+        public static Dictionary<string, DynamicVar> GetDynamicVarMap(PlayObject playObject, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
@@ -1050,7 +1054,7 @@ namespace ScriptEngine
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(IActor playObject, string sData, ref int nValue)
+        public VarInfo GetVarValue(PlayObject playObject, string sData, ref int nValue)
         {
             string sVar = string.Empty;
             string sValue = string.Empty;
@@ -1061,14 +1065,14 @@ namespace ScriptEngine
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(IActor playObject, string sData, ref string sValue)
+        public VarInfo GetVarValue(PlayObject playObject, string sData, ref string sValue)
         {
             string sVar = string.Empty;
             int nValue = 0;
             return GetVarValue(playObject, sData, ref sVar, ref sValue, ref nValue);
         }
 
-        public bool GetValValue(IActor playObject, string sMsg, ref string sValue)
+        public bool GetValValue(PlayObject playObject, string sMsg, ref string sValue)
         {
             if (string.IsNullOrEmpty(sMsg))
             {
@@ -1102,7 +1106,7 @@ namespace ScriptEngine
             return result;
         }
 
-        public bool GetValValue(IActor playObject, string sMsg, ref int nValue)
+        public bool GetValValue(PlayObject playObject, string sMsg, ref int nValue)
         {
             bool result = false;
             if (string.IsNullOrEmpty(sMsg))
@@ -1180,7 +1184,7 @@ namespace ScriptEngine
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(IActor playObject, string sData, ref string sVar, ref string sValue, ref int nValue)
+        public VarInfo GetVarValue(PlayObject playObject, string sData, ref string sVar, ref string sValue, ref int nValue)
         {
             long n10;
             sVar = sData;
@@ -1274,7 +1278,7 @@ namespace ScriptEngine
             return result;
         }
 
-        public VarType GetDynamicValue(IActor playObject, string sVar, ref string sValue, ref int nValue)
+        public VarType GetDynamicValue(PlayObject playObject, string sVar, ref string sValue, ref int nValue)
         {
             string sVarName = "";
             string sVarType = "";
@@ -1332,7 +1336,7 @@ namespace ScriptEngine
             return result;
         }
 
-        public VarType GetValNameValue(IActor playObject, string sVar, ref string sValue, ref int nValue)
+        public VarType GetValNameValue(PlayObject playObject, string sVar, ref string sValue, ref int nValue)
         {
             var result = VarType.None;
             var sName = string.Empty;
@@ -1434,7 +1438,7 @@ namespace ScriptEngine
             return result;
         }
 
-        public string GetLineVariableText(IActor playObject, string sMsg)
+        public string GetLineVariableText(PlayObject playObject, string sMsg)
         {
             var nC = 0;
             var sText = string.Empty;
@@ -1459,7 +1463,7 @@ namespace ScriptEngine
             return sMsg;
         }
 
-        public virtual void GetVariableText(IActor playObject, ref string sMsg, string sVariable)
+        public virtual void GetVariableText(PlayObject playObject, ref string sMsg, string sVariable)
         {
             string dynamicName = string.Empty;
             DynamicVar DynamicVar;
@@ -1475,20 +1479,21 @@ namespace ScriptEngine
                 GrobalVarProcessingSys.Handler(playObject, nIdx, sVariable, ref sMsg);
                 return;
             }
+
             // 个人信息
             if (sVariable == "$CMD_ATTACKMODE")
             {
-                sMsg = CombineStr(sMsg, "<$CMD_ATTACKMODE>", CommandMgr.GameCommands.AttackMode.CmdName);
+              //  sMsg = CombineStr(sMsg, "<$CMD_ATTACKMODE>", CommandMgr.GameCommands.AttackMode.CmdName);
                 return;
             }
             if (sVariable == "$CMD_REST")
             {
-                sMsg = CombineStr(sMsg, "<$CMD_REST>", CommandMgr.GameCommands.Rest.CmdName);
+               // sMsg = CombineStr(sMsg, "<$CMD_REST>", CommandMgr.GameCommands.Rest.CmdName);
                 return;
             }
             if (sVariable == "$CMD_UNLOCK")
             {
-                sMsg = CombineStr(sMsg, "<$CMD_UNLOCK>", CommandMgr.GameCommands.Unlock.CmdName);
+               // sMsg = CombineStr(sMsg, "<$CMD_UNLOCK>", CommandMgr.GameCommands.Unlock.CmdName);
                 return;
             }
 
@@ -1629,7 +1634,7 @@ namespace ScriptEngine
             }
         }
 
-        public bool SetDynamicValue(IActor playObject, string sVar, string sValue, int nValue)
+        public bool SetDynamicValue(PlayObject playObject, string sVar, string sValue, int nValue)
         {
             var result = false;
             var sVarName = "";
@@ -1681,7 +1686,7 @@ namespace ScriptEngine
             return result;
         }
 
-        public bool SetValNameValue(IActor playObject, string sVar, string sValue, int nValue)
+        public bool SetValNameValue(PlayObject playObject, string sVar, string sValue, int nValue)
         {
             var sName = string.Empty;
             var result = false;
@@ -1775,7 +1780,7 @@ namespace ScriptEngine
             return result;
         }
 
-        public Dictionary<string, DynamicVar> GeDynamicVarList(IActor playObject, string sType, ref string sName)
+        public Dictionary<string, DynamicVar> GeDynamicVarList(PlayObject playObject, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN"))

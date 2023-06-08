@@ -1,4 +1,5 @@
 ﻿using M2Server.Actor;
+using M2Server.Npc;
 using NLog;
 using System.Collections.Concurrent;
 using SystemModule;
@@ -61,6 +62,35 @@ namespace M2Server
         public T Get<T>(int actorId) where T : ActorEntity
         {
             return _actorsMap.TryGetValue(actorId, out var actor) ? (T)actor : default;
+        }
+
+        public T FindMerchant<T>(int merchantId)
+        {
+            var normNpc = M2Share.ActorMgr.Get(merchantId);
+            var npcType = normNpc.GetType();
+            //if (npcType == typeof(Merchant))
+            //{
+            //    return (T)Convert.ChangeType(normNpc, typeof(T));
+            //}
+            //if (npcType == typeof(GuildOfficial))
+            //{
+            //    return (T)Convert.ChangeType(normNpc, typeof(T));
+            //}
+            //if (npcType == typeof(CastleOfficial))
+            //{
+            //    return (T)Convert.ChangeType(normNpc, typeof(T));
+            //}
+            if (npcType == typeof(NormNpc))
+            {
+                return (T)Convert.ChangeType(normNpc, typeof(T));
+            }
+            return (T)Convert.ChangeType(normNpc, typeof(T));
+        }
+
+        public static T FindNpc<T>(int npcId)
+        {
+            var normNpc = M2Share.ActorMgr.Get(npcId);
+            return (T)Convert.ChangeType(normNpc, typeof(T));
         }
 
         public void SendMessage(int actorId, SendMessage sendMessage)

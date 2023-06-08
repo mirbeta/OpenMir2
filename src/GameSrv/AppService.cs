@@ -1,4 +1,4 @@
-using GameSrv.World;
+using M2Server.World;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -19,6 +19,7 @@ namespace GameSrv
         private CancellationTokenSource _cancellationTokenSource;
         private readonly CommandLineApplication _application;
         private PeriodicTimer _timer;
+        public static readonly WordStatistics Statistics;
 
         public AppService(IHostApplicationLifetime lifetime, GameApp serverApp, IServiceProvider serviceProvider)
         {

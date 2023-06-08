@@ -1,11 +1,12 @@
 ﻿using System.Diagnostics;
-using GameSrv.Event.Events;
-using GameSrv.Npc;
+using M2Server.Event.Events;
+using M2Server.Npc;
 using NLog;
+using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 
-namespace GameSrv.Maps {
+namespace M2Server.Maps {
     public class Map {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static Thread _makeStoneMinesThread;
@@ -26,7 +27,7 @@ namespace GameSrv.Maps {
             var sLine = string.Empty;
             var sReConnectMap = string.Empty;
             var result = -1;
-            var sFileName = GameShare.GetEnvirFilePath("MapInfo.txt");
+            var sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
             if (File.Exists(sFileName)) {
                 using var loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
@@ -321,10 +322,10 @@ namespace GameSrv.Maps {
             var sMapNo = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
-            var sFileName = GameShare.GetEnvirFilePath("MiniMap.txt");
+            var sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
             if (File.Exists(sFileName))
             {
-                GameShare.MiniMapList.Clear();
+                M2Share.MiniMapList.Clear();
                 var tMapList = new StringList();
                 tMapList.LoadFromFile(sFileName);
                 for (var i = 0; i < tMapList.Count; i++)
@@ -337,12 +338,12 @@ namespace GameSrv.Maps {
                         var nIdx = (short)HUtil32.StrToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {
-                            if (GameShare.MiniMapList.ContainsKey(sMapNo))
+                            if (M2Share.MiniMapList.ContainsKey(sMapNo))
                             {
-                                GameShare.Logger.Error($"重复小地图配置信息[{sMapNo}]");
+                                M2Share.Logger.Error($"重复小地图配置信息[{sMapNo}]");
                                 continue;
                             }
-                            GameShare.MiniMapList.TryAdd(sMapNo, nIdx);
+                            M2Share.MiniMapList.TryAdd(sMapNo, nIdx);
                         }
                     }
                 }
@@ -365,7 +366,7 @@ namespace GameSrv.Maps {
                     for (short nH = 0; nH < envir.Height; nH++) {
                         var mine = new StoneMineEvent(envir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap) {
-                            GameShare.CellObjectMgr.Remove(mine.Id);
+                            M2Share.CellObjectMgr.Remove(mine.Id);
                             mine.Dispose();
                         }
                     }
@@ -392,7 +393,7 @@ namespace GameSrv.Maps {
         }
 
         private static void LoadSubMapInfo(StringList loadList, string sFileName) {
-            var sFileDir = GameShare.GetEnvirFilePath("MapInfo");
+            var sFileDir = M2Share.GetEnvirFilePath("MapInfo");
             if (!Directory.Exists(sFileDir)) {
                 Directory.CreateDirectory(sFileDir);
             }

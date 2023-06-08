@@ -1,7 +1,8 @@
-﻿using GameSrv.Player;
+﻿using M2Server.Player;
 using NLog;
 using System.Net;
 using System.Net.Sockets;
+using SystemModule;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.Data;
@@ -14,7 +15,7 @@ using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 using TcpClient = SystemModule.Sockets.Components.TCP.TcpClient;
 
-namespace GameSrv.Services
+namespace M2Server.Services
 {
     public class MarketService
     {
@@ -32,10 +33,10 @@ namespace GameSrv.Services
 
         public void Start()
         {
-            if (GameShare.Config.EnableMarket)
+            if (M2Share.Config.EnableMarket)
             {
                 var config = new TouchSocketConfig();
-                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GameShare.Config.MarketSrvAddr), GameShare.Config.MarketSrvPort))
+                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(M2Share.Config.MarketSrvAddr), M2Share.Config.MarketSrvPort))
                     .SetBufferLength(4096);
                 config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
                 _clientScoket.Setup(config);
@@ -52,7 +53,7 @@ namespace GameSrv.Services
 
         public void Stop()
         {
-            if (GameShare.Config.EnableMarket)
+            if (M2Share.Config.EnableMarket)
             {
                 _clientScoket.Close();
             }
@@ -62,7 +63,7 @@ namespace GameSrv.Services
 
         public void CheckConnected()
         {
-            if (!GameShare.Config.EnableMarket)
+            if (!M2Share.Config.EnableMarket)
             {
                 return;
             }
@@ -121,13 +122,13 @@ namespace GameSrv.Services
             switch (e.SocketErrorCode)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Error("数据库(拍卖行)服务器[" + GameShare.Config.MarketSrvAddr + ":" + GameShare.Config.MarketSrvPort + "]拒绝链接...");
+                    _logger.Error("数据库(拍卖行)服务器[" + M2Share.Config.MarketSrvAddr + ":" + M2Share.Config.MarketSrvPort + "]拒绝链接...");
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Error("数据库(拍卖行)服务器[" + GameShare.Config.MarketSrvAddr + ":" + GameShare.Config.MarketSrvPort + "]关闭连接...");
+                    _logger.Error("数据库(拍卖行)服务器[" + M2Share.Config.MarketSrvAddr + ":" + M2Share.Config.MarketSrvPort + "]关闭连接...");
                     break;
                 case SocketError.TimedOut:
-                    _logger.Error("数据库(拍卖行)服务器[" + GameShare.Config.MarketSrvAddr + ":" + GameShare.Config.MarketSrvPort + "]链接超时...");
+                    _logger.Error("数据库(拍卖行)服务器[" + M2Share.Config.MarketSrvAddr + ":" + M2Share.Config.MarketSrvPort + "]链接超时...");
                     break;
             }
         }
@@ -142,14 +143,14 @@ namespace GameSrv.Services
                 return;
             }
             var request = new ServerRequestMessage(Messages.DB_LOADMARKET, 0, 0, 0, 0);
-            var requestData = new MarketRegisterMessage() { ServerIndex = GameShare.ServerIndex, ServerName = GameShare.Config.ServerName, GroupId = 1, Token = GameShare.Config.MarketToken };
-            GameShare.MarketService.SendRequest(1, request, requestData);
+            var requestData = new MarketRegisterMessage() { ServerIndex = M2Share.ServerIndex, ServerName = M2Share.Config.ServerName, GroupId = 1, Token = M2Share.Config.MarketToken };
+            //M2Share.MarketService.SendRequest(1, request, requestData);
             IsFirstData = true;
         }
 
         public bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo)
         {
-            if (!GameShare.Config.EnableMarket)
+            if (!M2Share.Config.EnableMarket)
             {
                 return false;
             }
@@ -164,7 +165,7 @@ namespace GameSrv.Services
                 ItemSet = marKetReqInfo.ItemSet,
                 UserMode = marKetReqInfo.UserMode
             };
-            GameShare.MarketService.SendRequest(1, request, requestData);
+            //M2Share.MarketService.SendRequest(1, request, requestData);
             return true;
         }
 
@@ -176,7 +177,7 @@ namespace GameSrv.Services
                 UserName = chrName,
                 MarketNPC = marketNpc
             };
-            GameShare.MarketService.SendRequest(1, request, requestData);
+            //M2Share.MarketService.SendRequest(1, request, requestData);
             _logger.Info($"发送用户[{chrName}]个人拍卖行数据请求");
             return true;
         }
@@ -212,7 +213,7 @@ namespace GameSrv.Services
                     var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                     if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
                     {
-                        GameShare.Config.nLoadDBErrorCount++;
+                        M2Share.Config.nLoadDBErrorCount++;
                         return;
                     }
                     var signatureBuff = BitConverter.GetBytes(queryId);
@@ -223,7 +224,7 @@ namespace GameSrv.Services
                         switch (commandMessage.Ident)
                         {
                             case Messages.DB_LOADMARKETSUCCESS:
-                                GameShare.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                               // M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                                 _logger.Info("加载拍卖行数据成功...");
                                 break;
                             case Messages.DB_LOADMARKETFAIL:
@@ -235,10 +236,10 @@ namespace GameSrv.Services
                                 {
                                     _logger.Info("获取拍卖行数据失败...");
                                 }
-                                GameShare.MarketManager.OnMsgReadData();
+                                //M2Share.MarketManager.OnMsgReadData();
                                 break;
                             case Messages.DB_LOADUSERMARKETSUCCESS:
-                                var user = GameShare.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                var user = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
                                 if (user != null)
                                 {
                                     user.ReadyToSellUserMarket(SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
@@ -251,7 +252,7 @@ namespace GameSrv.Services
                             case Messages.DB_SEARCHMARKETSUCCESS:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = GameShare.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                    var searchUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
                                     if (searchUser != null)
                                     {
                                         searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
@@ -266,7 +267,7 @@ namespace GameSrv.Services
                             case Messages.DB_SRARCHMARKETFAIL:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = GameShare.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                    var searchUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
                                     if (searchUser != null && commandMessage.Param <= 1)
                                     {
                                         //searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
@@ -280,7 +281,7 @@ namespace GameSrv.Services
                                 _logger.Info("搜索拍卖行数据失败...");
                                 break;
                             case Messages.DB_SAVEMARKETSUCCESS:// 保存结果需要返回给玩家
-                                var saveUser = GameShare.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                var saveUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
                                 if (saveUser != null)
                                 {
                                     if (commandMessage.Tag == 1)
@@ -305,7 +306,7 @@ namespace GameSrv.Services
                     else
                     {
                         _logger.Warn("非法拍卖行数据封包，解析失败...");
-                        GameShare.Config.nLoadDBErrorCount++;
+                        M2Share.Config.nLoadDBErrorCount++;
                     }
                 }
             }

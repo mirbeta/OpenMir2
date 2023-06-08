@@ -1,13 +1,14 @@
 using System.Collections;
+using ScriptEngine.Consts;
 
 namespace ScriptEngine
 {
     [AttributeUsage(AttributeTargets.Field)]
-    public class ScriptCode : Attribute
+    public class ScriptDefName : Attribute
     {
         public string CommandName { get; private set; }
 
-        public ScriptCode(string codeName)
+        public ScriptDefName(string codeName)
         {
             CommandName = codeName;
         }

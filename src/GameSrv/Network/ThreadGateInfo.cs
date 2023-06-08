@@ -1,10 +1,10 @@
+using M2Server.Player;
+using M2Server.Services;
 using System.Net.Sockets;
-using GameSrv.Player;
-using GameSrv.Services;
-using GameSrv.World;
+using M2Server.World;
 using SystemModule.Data;
 
-namespace GameSrv.Network
+namespace M2Server.Network
 {
     public class ThreadGateInfo
     {

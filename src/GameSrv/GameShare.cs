@@ -1,32 +1,31 @@
-using GameSrv.Actor;
-using GameSrv.Castle;
-using GameSrv.DataSource;
-using GameSrv.Event;
-using GameSrv.Guild;
-using GameSrv.Items;
-using GameSrv.Maps;
-using GameSrv.Maps.AutoPath;
-using GameSrv.Network;
-using GameSrv.Notices;
-using GameSrv.Npc;
-using GameSrv.Robots;
-using GameSrv.Services;
-using GameSrv.World;
-using GameSrv.World.Managers;
-using GameSrv.World.Threads;
 using M2Server;
 using M2Server.Actor;
+using M2Server.Castle;
 using M2Server.Conf;
 using M2Server.Conf.Model;
+using M2Server.Guild;
+using M2Server.Items;
+using M2Server.Maps;
+using M2Server.Network;
+using M2Server.Notices;
+using M2Server.Services;
+using M2Server.World.Managers;
+using M2Server.World.Threads;
 using NLog;
 using ScriptEngine;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using GameSrv.Robots;
+using M2Server.DataSource;
+using M2Server.Event;
+using M2Server.Maps.AutoPath;
+using M2Server.Npc;
+using M2Server.Robots;
+using M2Server.World;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
-using NormNpc = GameSrv.Npc.NormNpc;
 
 namespace GameSrv
 {
@@ -68,10 +67,10 @@ namespace GameSrv
         public static readonly LocalDb LocalDb;
         public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
+        public static readonly MapQuestManager QuestManager;
         public static DBService DataServer = null;
         public static MarketService MarketService = null;
         public static ChatChannelService ChatChannel = null;
-        public static ScriptEngine.ScriptEngine ScriptSystem = null;
         public static ThreadSocketMgr SocketMgr = null;
         public static GameEventSource EventSource;
         public static MapManager MapMgr = null;
@@ -96,6 +95,7 @@ namespace GameSrv
         public static EventProcessor EventProcessor;
         public static StorageProcessor StorageProcessor;
         public static TimedRobotProcessor TimedRobotProcessor;
+        public static ScriptSystem ScriptEngine;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -881,7 +881,7 @@ namespace GameSrv
 
         public static bool IsAccessory(ushort nIndex)
         {
-            var item = WorldEngine.GetStdItem(nIndex);
+            var item = ItemSystem.GetStdItem(nIndex);
             return IsAccessoryMap.Contains(item.StdMode);
         }
 

@@ -1,5 +1,11 @@
-﻿using GameSrv;
-using M2Server;
+﻿using M2Server;
+using M2Server.Actor;
+using M2Server.Event.Events;
+using M2Server.Items;
+using M2Server.Maps;
+using M2Server.Npc;
+using M2Server.Player;
+using ScriptEngine.Consts;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -17,7 +23,7 @@ namespace ScriptEngine.Processings
         /// 全局变量消息处理列表
         /// </summary>
         private static Dictionary<int, HandleExecutionMessage> ProcessExecutionMessage;
-        private delegate void HandleExecutionMessage(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success);
+        private delegate void HandleExecutionMessage(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success);
 
         public void Initialize()
         {
@@ -162,7 +168,7 @@ namespace ScriptEngine.Processings
             return ProcessExecutionMessage.ContainsKey(cmdCode);
         }
 
-        public void Execute(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
+        public void Execute(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             if (ProcessExecutionMessage.ContainsKey(questConditionInfo.nCmdCode))
             {
@@ -176,7 +182,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfMovrData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMovrData(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n14;
@@ -279,7 +285,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfMovData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMovData(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string sParam1 = string.Empty;
             string sParam2 = string.Empty;
@@ -429,7 +435,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfIncInteger(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfIncInteger(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int n14;
             int n3C = 0;
@@ -879,7 +885,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfDivData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDivData(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n18 = 0;
@@ -1027,7 +1033,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfMulData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMulData(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n18 = 0;
@@ -1211,7 +1217,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="QuestActionInfo"></param>
-        private void ActionOfPercentData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPercentData(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string s34 = string.Empty;
             int n18 = 0;
@@ -1366,7 +1372,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfSumData(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSumData(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int n18 = 0;
             string s34 = string.Empty;
@@ -1544,7 +1550,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfDecInteger(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDecInteger(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int n14;
             int n3C = 0;
@@ -2012,26 +2018,26 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfExeaction(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfExeaction(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n40 = questActionInfo.nParam1;
             normNpc.ExeAction(playObject, questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.nParam1, questActionInfo.nParam2, questActionInfo.nParam3);
         }
 
-        private void ActionOfPlayDice(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPlayDice(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.PlayDiceLabel = questActionInfo.sParam2;
             playObject.SendMsg(normNpc, Messages.RM_PLAYDICE, (short)questActionInfo.nParam1, HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[0], (ushort)playObject.MDyVal[1]), HUtil32.MakeWord((ushort)playObject.MDyVal[2], (ushort)playObject.MDyVal[3])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[4], (ushort)playObject.MDyVal[5]), HUtil32.MakeWord((ushort)playObject.MDyVal[6], (ushort)playObject.MDyVal[7])), HUtil32.MakeLong(HUtil32.MakeWord((ushort)playObject.MDyVal[8], (ushort)playObject.MDyVal[9]), 0), questActionInfo.sParam2);
         }
 
-        private void ActionOfSet(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSet(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
             var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
             playObject.SetQuestFlagStatus(n28, n2C);
         }
 
-        private void ActionOfReSet(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfReSet(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (int k = 0; k < questActionInfo.nParam2; k++)
             {
@@ -2039,21 +2045,21 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfSetOpen(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetOpen(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
             var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
             playObject.SetQuestUnitOpenStatus(n28, n2C);
         }
 
-        private void ActionOfSetUnit(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetUnit(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n28 = HUtil32.StrToInt(questActionInfo.sParam1, 0);
             var n2C = HUtil32.StrToInt(questActionInfo.sParam2, 0);
             playObject.SetQuestUnitStatus(n28, n2C);
         }
 
-        private void ActionOfResetUnit(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfResetUnit(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (int k = 0; k < questActionInfo.nParam2; k++)
             {
@@ -2061,7 +2067,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfPkPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPkPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (questActionInfo.nParam1 == 0)
             {
@@ -2095,12 +2101,12 @@ namespace ScriptEngine.Processings
             playObject.RefNameColor();
         }
 
-        private void ActionOfBreakTimereCall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfBreakTimereCall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.IsTimeRecall = false;
         }
 
-        private void ActionOfSetRandomNo(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetRandomNo(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             while (true)
             {
@@ -2113,14 +2119,14 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfClearDelayGoto(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearDelayGoto(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.IsTimeGoto = false;
             playObject.TimeGotoLable = "";
             playObject.TimeGotoNpc = null;
         }
 
-        private void ActionOfTimereCall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfTimereCall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.IsTimeRecall = true;
             playObject.TimeRecallMoveMap = playObject.MapName;
@@ -2129,7 +2135,7 @@ namespace ScriptEngine.Processings
             playObject.TimeRecallTick = HUtil32.GetTickCount() + (questActionInfo.nParam1 * 60 * 1000);
         }
 
-        private void ActionOfMonGen(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMonGen(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n3C = questActionInfo.nParam1;
             var n38 = questActionInfo.nParam1;
@@ -2142,7 +2148,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfMonClear(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMonClear(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var list58 = new List<BaseObject>();
             M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(questActionInfo.sParam1), list58);
@@ -2155,29 +2161,29 @@ namespace ScriptEngine.Processings
             list58.Clear();
         }
 
-        private void ActionOfMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             playObject.MapRandomMove(questActionInfo.sParam1, 0);
         }
 
-        private void ActionOfMapMove(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMapMove(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
             playObject.SpaceMove(questActionInfo.sParam1, (short)questActionInfo.nParam2, (short)questActionInfo.nParam3, 0);
         }
 
-        private void ActionOfClose(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClose(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendMsg(normNpc, Messages.RM_MERCHANTDLGCLOSE, 0, normNpc.ActorId, 0, 0);
         }
 
-        private void ActionOfReCallMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfReCallMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var recallEnvir = M2Share.MapMgr.FindMap(questActionInfo.sParam1);
             if (recallEnvir != null)
             {
-                IList<IActor> recallList = new List<IActor>();
+                IList<BaseObject> recallList = new List<BaseObject>();
                 M2Share.WorldEngine.GetMapRageHuman(recallEnvir, 0, 0, 1000, ref recallList);
                 for (int k = 0; k < recallList.Count; k++)
                 {
@@ -2195,7 +2201,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfExchangeMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfExchangeMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var envir = M2Share.MapMgr.FindMap(questActionInfo.sParam1);
             if (envir != null)
@@ -2215,12 +2221,12 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfUpgradeDlgItem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUpgradeDlgItem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
 
         }
 
-        private void ActionOfQueryItemDlg(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQueryItemDlg(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.TakeDlgItem = questActionInfo.nParam3 != 0;
             playObject.GotoNpcLabel = questActionInfo.sParam2;
@@ -2229,7 +2235,7 @@ namespace ScriptEngine.Processings
             playObject.SendDefMessage(Messages.SM_QUERYITEMDLG, normNpc.ActorId, 0, 0, 0, sHint);
         }
 
-        private void ActionOfKillSlaveName(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKillSlaveName(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string sSlaveName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sSlaveName))
@@ -2255,7 +2261,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfQueryValue(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQueryValue(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int btStrLabel = questActionInfo.nParam1;
             if (btStrLabel < 100)
@@ -2288,7 +2294,7 @@ namespace ScriptEngine.Processings
             playObject.SendDefMessage(Messages.SM_QUERYVALUE, 0, HUtil32.MakeWord(btType, (ushort)btLen), 0, 0, sHint);
         }
 
-        private void ActionOfQueryBagItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQueryBagItems(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Success = true;
             if ((HUtil32.GetTickCount() - playObject.QueryBagItemsTick) > M2Share.Config.QueryBagItemsTick)
@@ -2302,7 +2308,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfSetSendMsgFlag(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetSendMsgFlag(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Success = true;
             playObject.BoSendMsgFlag = true;
@@ -2311,7 +2317,7 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 开通元宝交易
         /// </summary>
-        private void ActionOfOpenSaleDeal(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfOpenSaleDeal(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nGameGold = 0;
             try
@@ -2345,7 +2351,7 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 查询正在出售的物品
         /// </summary>
-        private void ActionOfQuerySaleSell(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQuerySaleSell(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             try
             {
@@ -2369,7 +2375,7 @@ namespace ScriptEngine.Processings
                                         {
                                             continue;
                                         }
-                                        var stdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                        var stdItem = ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                         if (stdItem == null)
                                         {
                                             // 是金刚石
@@ -2450,7 +2456,7 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 查询可以的购买物品
         /// </summary>
-        private void ActionOfQueryTrustDeal(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfQueryTrustDeal(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             try
             {
@@ -2474,7 +2480,7 @@ namespace ScriptEngine.Processings
                                         {
                                             continue;
                                         }
-                                        var stdItem = M2Share.WorldEngine.GetStdItem(dealOffInfo.UseItems[k].Index);
+                                        var stdItem = ItemSystem.GetStdItem(dealOffInfo.UseItems[k].Index);
                                         if (stdItem == null)
                                         {
                                             // 是金刚石
@@ -2554,7 +2560,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfAddNameDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddNameDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
@@ -2591,7 +2597,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfDelNameDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelNameDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
@@ -2620,7 +2626,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfAddSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nLevel = HUtil32._MIN(3, HUtil32.StrToInt(questActionInfo.sParam2, 0));
             var magic = M2Share.WorldEngine.FindMagic(questActionInfo.sParam1);
@@ -2649,7 +2655,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfAutoAddGameGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAutoAddGameGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nPoint = 0;
             int nTime = 0;
@@ -2673,7 +2679,7 @@ namespace ScriptEngine.Processings
         }
 
         // SETAUTOGETEXP 时间 点数 是否安全区 地图号
-        private void ActionOfAutoGetExp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAutoGetExp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Envirnoment envir = null;
             var nTime = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -2698,11 +2704,11 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 增加挂机
         /// </summary>
-        private void ActionOfOffLine(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfOffLine(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             const string sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             playObject.ClientMsg = Messages.MakeMessage(Messages.SM_SYSMESSAGE, playObject.ActorId, HUtil32.MakeWord(M2Share.Config.CustMsgFColor, M2Share.Config.CustMsgBColor), 0, 1);
-            playObject.SendSocket(playObject.ClientMsg, EDCode.EncodeString(sOffLineStartMsg));
+           // playObject.SendSocket(playObject.ClientMsg, EDCode.EncodeString(sOffLineStartMsg));
             var nTime = HUtil32.StrToInt(questActionInfo.sParam1, 5);
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam2, 500);
             var nKickOffLine = HUtil32.StrToInt(questActionInfo.sParam3, 1440 * 15);
@@ -2712,11 +2718,11 @@ namespace ScriptEngine.Processings
             playObject.AutoGetExpPoint = nPoint;
             playObject.OffLineFlag = true;
             playObject.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
-            IdSrvClient.Instance.SendHumanLogOutMsgA(playObject.UserAccount, playObject.SessionId);
+         //   IdSrvClient.Instance.SendHumanLogOutMsgA(playObject.UserAccount, playObject.SessionId);
             playObject.SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
         }
 
-        private void ActionOfAutoSubGameGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAutoSubGameGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nPoint = 0;
             int nTime = 0;
@@ -2739,7 +2745,7 @@ namespace ScriptEngine.Processings
             ScriptActionError(playObject, "", questActionInfo, ExecutionCode.AutoSubGameGold);
         }
 
-        private void ActionOfChangeCreditPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeCreditPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nCreditPoint = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nCreditPoint < 0)
@@ -2789,7 +2795,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangeExp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeExp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int dwInt;
             var nExp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -2847,7 +2853,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangeHairStyle(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeHairStyle(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nHair = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if ((!string.IsNullOrEmpty(questActionInfo.sParam1)) && nHair >= 0)
@@ -2861,18 +2867,18 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangeJob(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeJob(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nJob = PlayJob.None;
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWarrior))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagCode.sWarrior))
             {
                 nJob = PlayJob.Warrior;
             }
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWizard))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagCode.sWizard))
             {
                 nJob = PlayJob.Wizard;
             }
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sTaos))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagCode.sTaos))
             {
                 nJob = PlayJob.Taoist;
             }
@@ -2888,7 +2894,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangeLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nLv;
             var boChgOk = false;
@@ -2928,7 +2934,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangePkPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangePkPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nPoint;
             var nOldPkLevel = playObject.PvpLevel();
@@ -2962,7 +2968,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfClearMapMon(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearMapMon(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             IList<BaseObject> monList = new List<BaseObject>();
             var monsterCount = M2Share.WorldEngine.GetMapMonster(M2Share.MapMgr.FindMap(questActionInfo.sParam1), monList);
@@ -2983,13 +2989,13 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfClearList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sListFileName = M2Share.GetEnvirFilePath(questActionInfo.sParam1);
             File.WriteAllBytes(sListFileName, Array.Empty<byte>());
         }
 
-        private void ActionOfClearSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (var i = playObject.MagicList.Count - 1; i >= 0; i--)
             {
@@ -3001,7 +3007,7 @@ namespace ScriptEngine.Processings
             playObject.RecalcAbilitys();
         }
 
-        private void ActionOfDelNoJobSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelNoJobSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (var i = playObject.MagicList.Count - 1; i >= 0; i--)
             {
@@ -3015,7 +3021,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfDelSkill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelSkill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var magic = M2Share.WorldEngine.FindMagic(questActionInfo.sParam1);
             if (magic == null)
@@ -3037,7 +3043,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGameGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGameGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nOldGameGold = playObject.GameGold;
             var nGameGold = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -3066,7 +3072,7 @@ namespace ScriptEngine.Processings
             }
             if (M2Share.GameLogGameGold)
             {
-                M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, playObject.MapName, playObject.CurrX, playObject.CurrY, playObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, normNpc.ChrName));
+                // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, playObject.MapName, playObject.CurrX, playObject.CurrY, playObject.ChrName, M2Share.Config.GameGoldName, nGameGold, cMethod, normNpc.ChrName));
             }
             if (nOldGameGold != playObject.GameGold)
             {
@@ -3074,7 +3080,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGamePoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGamePoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nOldGamePoint = playObject.GamePoint;
             var nGamePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -3103,7 +3109,7 @@ namespace ScriptEngine.Processings
             }
             if (M2Share.GameLogGamePoint)
             {
-                M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, string.Format(CommandHelp.GameLogMsg1, playObject.MapName, playObject.CurrX, playObject.CurrY, playObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, normNpc.ChrName));
+              //  M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, string.Format(CommandHelp.GameLogMsg1, playObject.MapName, playObject.CurrX, playObject.CurrY, playObject.ChrName, M2Share.Config.GamePointName, nGamePoint, cMethod, normNpc.ChrName));
             }
             if (nOldGamePoint != playObject.GamePoint)
             {
@@ -3111,9 +3117,9 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGetMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGetMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var poseHuman = playObject.GetPoseCreate();
+            var poseHuman = (PlayObject)playObject.GetPoseCreate();
             if (poseHuman != null && poseHuman.Race == ActorRace.Play && (poseHuman).Gender != playObject.Gender)
             {
                 playObject.DearName = poseHuman.ChrName;
@@ -3126,9 +3132,9 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGetMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGetMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var poseHuman = playObject.GetPoseCreate();
+            var poseHuman = (PlayObject)playObject.GetPoseCreate();
             if (poseHuman != null && poseHuman.Race == ActorRace.Play && (poseHuman).Gender != playObject.Gender)
             {
                 playObject.MasterName = poseHuman.ChrName;
@@ -3141,7 +3147,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfLineMsg(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfLineMsg(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMsg = GetLineVariableText(playObject, questActionInfo.sParam2);
             sMsg = sMsg.Replace("%s", playObject.ChrName);
@@ -3179,7 +3185,7 @@ namespace ScriptEngine.Processings
                     if (playObject.MyGuild != null)
                     {
                         playObject.MyGuild.SendGuildMsg(sMsg);
-                        WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, playObject.MyGuild.GuildName + "/" + playObject.ChrName + "/" + sMsg);
+                        //WorldServer.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, playObject.MyGuild.GuildName + "/" + playObject.ChrName + "/" + sMsg);
                     }
                     break;
                 default:
@@ -3188,19 +3194,19 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfMapTing(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMapTing(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
 
         }
 
-        private void ActionOfMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             string sSayMsg;
             if (!string.IsNullOrEmpty(playObject.DearName))
             {
                 return;
             }
-            var poseHuman = playObject.GetPoseCreate();
+            var poseHuman = (PlayObject)playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@MarryCheckDir", false);
@@ -3313,13 +3319,13 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (!string.IsNullOrEmpty(playObject.MasterName))
             {
                 return;
             }
-            var poseHuman = playObject.GetPoseCreate();
+            var poseHuman = (PlayObject)playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@MasterCheckDir", false);
@@ -3395,12 +3401,12 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfMessageBox(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMessageBox(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.SendMsg(normNpc, Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, GetLineVariableText(playObject, questActionInfo.sParam1));
         }
 
-        private void ActionOfMission(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMission(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (!string.IsNullOrEmpty(questActionInfo.sParam1) && questActionInfo.nParam2 > 0 && questActionInfo.nParam3 > 0)
             {
@@ -3415,7 +3421,7 @@ namespace ScriptEngine.Processings
         }
 
         // MOBFIREBURN MAP X Y TYPE TIME POINT
-        private void ActionOfMobFireBurn(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMobFireBurn(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMap = questActionInfo.sParam1;
             var nX = HUtil32.StrToInt16(questActionInfo.sParam2, -1);
@@ -3441,7 +3447,7 @@ namespace ScriptEngine.Processings
             ScriptActionError(playObject, "", questActionInfo, ExecutionCode.MobFireburn);
         }
 
-        private void ActionOfMobPlace(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMobPlace(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nX = 0;
             int nY = 0;
@@ -3466,11 +3472,11 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfRecallGroupMembers(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRecallGroupMembers(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
         }
 
-        private void ActionOfSetRankLevelName(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetRankLevelName(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sRankLevelName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sRankLevelName))
@@ -3482,7 +3488,7 @@ namespace ScriptEngine.Processings
             playObject.RefShowName();
         }
 
-        private void ActionOfSetScriptFlag(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetScriptFlag(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nWhere = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var boFlag = HUtil32.StrToInt(questActionInfo.sParam2, -1) == 1;
@@ -3500,7 +3506,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfSkillLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSkillLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nLevel = HUtil32.StrToInt(questActionInfo.sParam3, 0);
             if (nLevel < 0)
@@ -3554,7 +3560,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfTakeCastleGold(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfTakeCastleGold(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nGold = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGold < 0 || normNpc.Castle == null)
@@ -3572,14 +3578,14 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfUnMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUnMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (string.IsNullOrEmpty(playObject.DearName))
             {
                 normNpc.GotoLable(playObject, "@ExeMarryFail", false);
                 return;
             }
-            var poseHuman = playObject.GetPoseCreate();
+            var poseHuman = (PlayObject)playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@UnMarryCheckDir", false);
@@ -3642,7 +3648,7 @@ namespace ScriptEngine.Processings
                     if (string.Compare(questActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         M2Share.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + "]: " + "我宣布" + playObject.ChrName + ' ' + '与' + playObject.DearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", MsgType.Say);
-                        poseHuman = M2Share.WorldEngine.GetplayObject(playObject.DearName);
+                        poseHuman = M2Share.WorldEngine.GetPlayObject(playObject.DearName);
                         if (poseHuman != null)
                         {
                             poseHuman.DearName = string.Empty;
@@ -3676,7 +3682,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfSaveVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSaveVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             DynamicVar dynamicVar = null;
@@ -3733,7 +3739,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfDelayCall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelayCall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.DelayCall = HUtil32._MAX(1, questActionInfo.nParam1);
             playObject.DelayCallLabel = questActionInfo.sParam2;
@@ -3766,7 +3772,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfCalcVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfCalcVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             DynamicVar dynamicVar = null;
@@ -3877,7 +3883,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGuildRecall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildRecall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.MyGuild != null)
             {
@@ -3885,7 +3891,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGroupAddList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGroupAddList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var ffile = questActionInfo.sParam1;
             if (playObject.GroupOwner != 0)
@@ -3898,7 +3904,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGroupRecall(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGroupRecall(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.GroupOwner != 0)
             {
@@ -3911,7 +3917,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfRepairAllItem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRepairAllItem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var boIsHasItem = false;
             for (var i = 0; i < playObject.UseItems.Length; i++)
@@ -3920,7 +3926,7 @@ namespace ScriptEngine.Processings
                 {
                     continue;
                 }
-                var sUserItemName = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[i].Index);
+                var sUserItemName = ItemSystem.GetStdItemName(playObject.UseItems[i].Index);
                 if (!(i != ItemLocation.Charm))
                 {
                     playObject.SysMsg(sUserItemName + " 禁止修理...", MsgColor.Red, MsgType.Hint);
@@ -3936,7 +3942,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGroupMoveMap(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGroupMoveMap(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var boFlag = false;
             if (playObject.GroupOwner != 0)
@@ -3961,7 +3967,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfUpgradeItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUpgradeItems(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nAddPoint;
             var nWhere = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -3973,7 +3979,7 @@ namespace ScriptEngine.Processings
                 return;
             }
             var userItem = playObject.UseItems[nWhere];
-            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var stdItem = ItemSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playObject.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
@@ -4010,7 +4016,7 @@ namespace ScriptEngine.Processings
             playObject.SysMsg(stdItem.Name + ": " + userItem.Dura + '/' + userItem.DuraMax + '/' + userItem.Desc[0] + '/' + userItem.Desc[1] + '/' + userItem.Desc[2] + '/' + userItem.Desc[3] + '/' + userItem.Desc[4] + '/' + userItem.Desc[5] + '/' + userItem.Desc[6] + '/' + userItem.Desc[7] + '/' + userItem.Desc[8] + '/' + userItem.Desc[9] + '/' + userItem.Desc[ItemAttr.WeaponUpgrade] + '/' + userItem.Desc[11] + '/' + userItem.Desc[12] + '/' + userItem.Desc[13], MsgColor.Blue, MsgType.Hint);
         }
 
-        private void ActionOfUpgradeItemsEx(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUpgradeItemsEx(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             int nAddPoint;
             var nWhere = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -4024,7 +4030,7 @@ namespace ScriptEngine.Processings
                 return;
             }
             var userItem = playObject.UseItems[nWhere];
-            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+            var stdItem = ItemSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playObject.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
@@ -4083,7 +4089,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             const string sVarFound = "变量{0}已存在，变量类型:{1}";
@@ -4152,7 +4158,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="playObject"></param>
         /// <param name="questActionInfo"></param>
-        private void ActionOfLoadVar(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfLoadVar(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
             const string sVarFound = "变量{0}不存在，变量类型:{1}";
@@ -4225,7 +4231,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfClearNeedItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearNeedItems(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nNeed = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nNeed < 0)
@@ -4238,7 +4244,7 @@ namespace ScriptEngine.Processings
             for (var i = playObject.ItemList.Count - 1; i >= 0; i--)
             {
                 userItem = playObject.ItemList[i];
-                stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                stdItem = ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.Need == nNeed)
                 {
                     playObject.SendDelItems(userItem);
@@ -4249,7 +4255,7 @@ namespace ScriptEngine.Processings
             for (var i = playObject.StorageItemList.Count - 1; i >= 0; i--)
             {
                 userItem = playObject.StorageItemList[i];
-                stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                stdItem = ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.Need == nNeed)
                 {
                     Dispose(userItem);
@@ -4258,7 +4264,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfClearMakeItems(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearMakeItems(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             UserItem userItem;
             var sItemName = questActionInfo.sParam1;
@@ -4277,7 +4283,7 @@ namespace ScriptEngine.Processings
                 {
                     continue;
                 }
-                stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                stdItem = ItemSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.SendDelItems(userItem);
@@ -4292,7 +4298,7 @@ namespace ScriptEngine.Processings
                 {
                     continue;
                 }
-                stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                stdItem = ItemSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);
@@ -4306,7 +4312,7 @@ namespace ScriptEngine.Processings
                 {
                     continue;
                 }
-                stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                stdItem = ItemSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     userItem.Index = 0;
@@ -4314,14 +4320,14 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfUnMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfUnMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (string.IsNullOrEmpty(playObject.MasterName))
             {
                 normNpc.GotoLable(playObject, "@ExeMasterFail", false);
                 return;
             }
-            var poseHuman = playObject.GetPoseCreate();
+            var poseHuman = (PlayObject)playObject.GetPoseCreate();
             if (poseHuman == null)
             {
                 normNpc.GotoLable(playObject, "@UnMasterCheckDir", false);
@@ -4391,7 +4397,7 @@ namespace ScriptEngine.Processings
                 {
                     sMsg = string.Format(Settings.NPCSayForceUnMasterMsg, normNpc.ChrName, playObject.ChrName, playObject.MasterName);
                     M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
-                    poseHuman = M2Share.WorldEngine.GetplayObject(playObject.MasterName);
+                    poseHuman = M2Share.WorldEngine.GetPlayObject(playObject.MasterName);
                     if (poseHuman != null)
                     {
                         poseHuman.MasterName = "";
@@ -4409,7 +4415,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfSetMapMode(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetMapMode(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMapName = questActionInfo.sParam1;
             var sMapMode = questActionInfo.sParam2;
@@ -4775,7 +4781,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfSetMemberLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetMemberLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nLevel < 0)
@@ -4810,7 +4816,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfSetMemberType(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfSetMemberType(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nType = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nType < 0)
@@ -4845,7 +4851,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGiveItem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGiveItem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sItemName = questActionInfo.sParam1;
             var nItemCount = questActionInfo.nParam2;
@@ -4860,11 +4866,11 @@ namespace ScriptEngine.Processings
                 playObject.GoldChanged();
                 if (M2Share.GameLogGold)
                 {
-                    M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + normNpc.ChrName);
+                   // M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + normNpc.ChrName);
                 }
                 return;
             }
-            if (M2Share.WorldEngine.GetStdItemIdx(sItemName) > 0)
+            if (ItemSystem.GetStdItemIdx(sItemName) > 0)
             {
                 if (!(nItemCount >= 1 && nItemCount <= 50))
                 {
@@ -4878,14 +4884,14 @@ namespace ScriptEngine.Processings
                     if (playObject.IsEnoughBag())
                     {
                         userItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             playObject.ItemList.Add(userItem);
                             playObject.SendAddItem(userItem);
-                            stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                            stdItem = ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
+                               // M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
                             }
                         }
                         else
@@ -4896,12 +4902,12 @@ namespace ScriptEngine.Processings
                     else
                     {
                         userItem = new UserItem();
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                            stdItem = ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                                M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
+                               // M2Share.EventSource.AddEventLog(9, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
                             }
                             playObject.DropItemDown(userItem, 3, false, playObject.ActorId, 0);
                         }
@@ -4911,7 +4917,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGmExecute(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGmExecute(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sParam1 = questActionInfo.sParam1;
             var sParam2 = questActionInfo.sParam2;
@@ -4936,7 +4942,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGuildAuraePoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildAuraePoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nAuraePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nAuraePoint < 0)
@@ -4983,7 +4989,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGuildBuildPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildBuildPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nBuildPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBuildPoint < 0)
@@ -5030,7 +5036,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGuildChiefItemCount(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildChiefItemCount(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nItemCount = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nItemCount < 0)
@@ -5077,7 +5083,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGuildFlourishPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildFlourishPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nFlourishPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nFlourishPoint < 0)
@@ -5124,7 +5130,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfGuildstabilityPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfGuildstabilityPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nStabilityPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nStabilityPoint < 0)
@@ -5171,7 +5177,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfHumanHp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfHumanHp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nHp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nHp < 0)
@@ -5209,7 +5215,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfHumanMp(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfHumanMp(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nMp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nMp < 0)
@@ -5247,14 +5253,14 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfKick(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKick(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.BoKickFlag = true;
             playObject.BoReconnection = true;
             playObject.BoSoftClose = true;
         }
 
-        private void ActionOfKill(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKill(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nMode = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nMode >= 0 && nMode <= 3)
@@ -5285,7 +5291,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfBonusPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfBonusPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nBonusPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBonusPoint < 0 || nBonusPoint > 10000)
@@ -5310,19 +5316,19 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfDelMarry(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelMarry(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.DearName = "";
             playObject.RefShowName();
         }
 
-        private void ActionOfDelMaster(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelMaster(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.MasterName = "";
             playObject.RefShowName();
         }
 
-        private void ActionOfRestBonusPoint(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRestBonusPoint(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nTotleUsePoint = playObject.BonusAbil.DC + playObject.BonusAbil.MC + playObject.BonusAbil.SC + playObject.BonusAbil.AC + playObject.BonusAbil.MAC + playObject.BonusAbil.HP + playObject.BonusAbil.MP + playObject.BonusAbil.Hit + playObject.BonusAbil.Speed + playObject.BonusAbil.Reserved;
             playObject.BonusPoint += nTotleUsePoint;
@@ -5331,13 +5337,13 @@ namespace ScriptEngine.Processings
             playObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
         }
 
-        private void ActionOfRestReNewLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRestReNewLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.ReLevel = 0;
             playObject.HasLevelUp(0);
         }
 
-        private void ActionOfChangeNameColor(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeNameColor(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nColor = questActionInfo.nParam1;
             if (nColor < 0 || nColor > 255)
@@ -5349,7 +5355,7 @@ namespace ScriptEngine.Processings
             playObject.RefNameColor();
         }
 
-        private void ActionOfClearPassword(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfClearPassword(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             playObject.StoragePwd = "";
             playObject.IsPasswordLocked = false;
@@ -5357,9 +5363,9 @@ namespace ScriptEngine.Processings
 
         // RECALLMOB 怪物名称 等级 叛变时间 变色(0,1) 固定颜色(1 - 7)
         // 变色为0 时固定颜色才起作用
-        private void ActionOfRecallmob(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRecallmob(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
-            IActor mon;
+            BaseObject mon;
             if (questActionInfo.nParam3 <= 1)
             {
                 mon = playObject.MakeSlave(questActionInfo.sParam1, 3, HUtil32.StrToInt(questActionInfo.sParam2, 0), 100, 10 * 24 * 60 * 60);
@@ -5382,7 +5388,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfReNewLevel(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfReNewLevel(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nReLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var nLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5410,7 +5416,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangeGender(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeGender(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nGender = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGender > 1)
@@ -5422,7 +5428,7 @@ namespace ScriptEngine.Processings
             playObject.FeatureChanged();
         }
 
-        private void ActionOfKillSlave(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKillSlave(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             for (var i = 0; i < playObject.SlaveList.Count; i++)
             {
@@ -5431,7 +5437,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfKillMonExpRate(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfKillMonExpRate(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nRate = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5448,7 +5454,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfMonGenEx(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfMonGenEx(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMapName = questActionInfo.sParam1;
             var nMapX = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5472,7 +5478,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfOpenMagicBox(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfOpenMagicBox(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             short nX = 0;
             short nY = 0;
@@ -5491,7 +5497,7 @@ namespace ScriptEngine.Processings
             monster.Die();
         }
 
-        private void ActionOfPkZone(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPkZone(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             FireBurnEvent fireBurnEvent;
             var nRange = HUtil32.StrToInt(questActionInfo.sParam1, -1);
@@ -5521,7 +5527,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfPowerRate(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfPowerRate(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nRate = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
@@ -5538,7 +5544,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangeMode(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangeMode(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             //switch (questActionInfo.nParam1)
             //{
@@ -5602,7 +5608,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfChangePerMission(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfChangePerMission(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nPermission = (byte)HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nPermission <= 10)
@@ -5620,7 +5626,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfThrowitem(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfThrowitem(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sMap = string.Empty;
             var sItemName = string.Empty;
@@ -5698,9 +5704,9 @@ namespace ScriptEngine.Processings
                 {
                     if (GetActionOfThrowitemDropPosition(envir, nX, nY, nRange, ref dX, ref dY)) // 修正出现在一个坐标上
                     {
-                        if (M2Share.WorldEngine.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            var stdItem = M2Share.WorldEngine.GetStdItem(userItem.Index);
+                            var stdItem = ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem != null)
                             {
                                 if (stdItem.StdMode == 40)
@@ -5819,12 +5825,12 @@ namespace ScriptEngine.Processings
             return result;
         }
 
-        private void ActionOfRandomMove(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfRandomMove(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             Success = true;
         }
 
-        private static void ActionOfAddUseDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private static void ActionOfAddUseDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sHumName = playObject.ChrName;
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
@@ -5863,47 +5869,47 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfAddNameList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfAddNameList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfAddList(playObject.ChrName, sListFileName);
         }
 
-        private void ActionOfDelUseDateList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfDelUseDateList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfDelList(playObject.ChrName, sListFileName);
         }
 
-        private void ActionOfDelNameList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfDelNameList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfDelList(playObject.ChrName, sListFileName);
         }
 
-        private void ActionOfDelAccountList(NormNpc normNpc, IActor playObject, QuestActionInfo questConditionInfo, ref bool success)
+        private void ActionOfDelAccountList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questConditionInfo, ref bool success)
         {
             string playName = playObject.UserAccount;
             string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
             ActionOfDelList(playObject.UserAccount, sListFileName);
         }
 
-        private void ActionOfAddAccountList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddAccountList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             ActionOfAddList(playObject.UserAccount, normNpc.m_sPath + questActionInfo.sParam1);
         }
 
-        private void ActionOfAddIpList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddIpList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             ActionOfAddList(playObject.LoginIpAddr, normNpc.m_sPath + questActionInfo.sParam1);
         }
 
-        private void ActionOfDelIpList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelIpList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             ActionOfAddList(playObject.LoginIpAddr, normNpc.m_sPath + questActionInfo.sParam1);
         }
 
-        private void ActionOfAddGuildList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfAddGuildList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.MyGuild != null)
             {
@@ -5911,7 +5917,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ActionOfDelGuildList(NormNpc normNpc, IActor playObject, QuestActionInfo questActionInfo, ref bool Success)
+        private void ActionOfDelGuildList(NormNpc normNpc, PlayObject playObject, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playObject.MyGuild != null)
             {
@@ -5969,7 +5975,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ScriptActionError(IActor playObject, string sErrMsg, QuestActionInfo questActionInfo, ExecutionCode sCmd)
+        private void ScriptActionError(PlayObject playObject, string sErrMsg, QuestActionInfo questActionInfo, ExecutionCode sCmd)
         {
             //const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             //string sMsg = Format(sOutMessage, sErrMsg, sCmd, ChrName, MapName, CurrX, CurrY, questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.sParam4, questActionInfo.sParam5, questActionInfo.sParam6);

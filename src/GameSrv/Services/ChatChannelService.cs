@@ -2,7 +2,7 @@
 using MQTTnet.Client;
 using NLog;
 
-namespace GameSrv.Services
+namespace M2Server.Services
 {
     /// <summary>
     /// 公共聊天频道服务类
@@ -30,7 +30,7 @@ namespace GameSrv.Services
 
         public bool IsEnableChatServer
         {
-            get { return GameShare.Config.EnableChatServer; }
+            get { return M2Share.Config.EnableChatServer; }
         }
 
         public async Task Start()
@@ -40,7 +40,7 @@ namespace GameSrv.Services
                 return;
             }
             logger.Info("开始链接世界聊天频道...");
-            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(GameShare.Config.ChatSrvAddr, GameShare.Config.ChatSrvPort).Build();
+            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(M2Share.Config.ChatSrvAddr, M2Share.Config.ChatSrvPort).Build();
             try
             {
                 using var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));

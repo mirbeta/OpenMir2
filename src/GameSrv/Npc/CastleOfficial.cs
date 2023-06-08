@@ -1,11 +1,13 @@
-﻿using GameSrv.Castle;
-using GameSrv.Monster.Monsters;
-using GameSrv.Player;
-using M2Server;
-using ScriptEngine;
+﻿using M2Server;
+using M2Server.Castle;
+using M2Server.Monster.Monsters;
+using M2Server.Npc;
+using M2Server.Player;
+using ScriptEngine.Consts;
 using SystemModule.Enums;
 
-namespace GameSrv.Npc {
+namespace GameSrv.Npc
+{
     /// <summary>
     /// 沙城NPC类
     /// 沙城管理人员如：沙城管理员 沙城老人
@@ -56,19 +58,19 @@ namespace GameSrv.Npc {
                         break;
                     }
                 case "$REPAIRDOORGOLD":
-                    sText = GameShare.Config.RepairDoorPrice.ToString();
+                    sText = M2Share.Config.RepairDoorPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$REPAIRDOORGOLD>", sText);
                     break;
                 case "$REPAIRWALLGOLD":
-                    sText = GameShare.Config.RepairWallPrice.ToString();
+                    sText = M2Share.Config.RepairWallPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$REPAIRWALLGOLD>", sText);
                     break;
                 case "$GUARDFEE":
-                    sText = GameShare.Config.HireGuardPrice.ToString();
+                    sText = M2Share.Config.HireGuardPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$GUARDFEE>", sText);
                     break;
                 case "$ARCHERFEE":
-                    sText = GameShare.Config.HireArcherPrice.ToString();
+                    sText = M2Share.Config.HireArcherPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$ARCHERFEE>", sText);
                     break;
                 case "$GUARDRULE":
@@ -93,27 +95,27 @@ namespace GameSrv.Npc {
                     PlayObject.ScriptLable = sData;
                     if (Castle.IsMasterGuild(PlayObject.MyGuild) && PlayObject.IsGuildMaster()) {
                         bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                        if (string.Compare(sLabel, ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
+                        if (string.Compare(sLabel, ScriptFlagCode.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (string.IsNullOrEmpty(sMsg)) {
                                 return;
                             }
                         }
-                        GotoLable(PlayObject, sLabel, !boCanJmp);
+                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, sLabel, !boCanJmp);
                         if (!boCanJmp) {
                             return;
                         }
                         string s20;
                         string s18 = string.Empty;
-                        if (string.Compare(sLabel, ScriptFlagConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0) {
+                        if (string.Compare(sLabel, ScriptFlagCode.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (IsOffLineMsg) {
                                 SetOffLineMsg(PlayObject, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0) {
                             SendCustemMsg(PlayObject, sMsg);
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sCASTLENAME, StringComparison.OrdinalIgnoreCase) == 0) {
                             sMsg = sMsg.Trim();
                             if (!string.IsNullOrEmpty(sMsg)) {
                                 Castle.sName = sMsg;
@@ -126,7 +128,7 @@ namespace GameSrv.Npc {
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sWITHDRAWAL, StringComparison.OrdinalIgnoreCase) == 0) {
                             switch (Castle.WithDrawalGolds(PlayObject, HUtil32.StrToInt(sMsg, 0))) {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -141,12 +143,12 @@ namespace GameSrv.Npc {
                                     s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
+                                    GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN, false);
                                     break;
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sRECEIPTS, StringComparison.OrdinalIgnoreCase) == 0) {
                             switch (Castle.ReceiptGolds(PlayObject, HUtil32.StrToInt(sMsg, 0))) {
                                 case -4:
                                     s18 = "输入的金币数不正确!!!";
@@ -161,51 +163,51 @@ namespace GameSrv.Npc {
                                     s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
+                                    GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN, false);
                                     break;
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sOPENMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sOPENMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
                             Castle.MainDoorControl(false);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sCLOSEMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sCLOSEMAINDOOR, StringComparison.OrdinalIgnoreCase) == 0) {
                             Castle.MainDoorControl(true);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRDOORNOW, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRDOORNOW, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairDoor(PlayObject);
-                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
+                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRWALLNOW1, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRWALLNOW1, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairWallNow(1, PlayObject);
-                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
+                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRWALLNOW2, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRWALLNOW2, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairWallNow(2, PlayObject);
-                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
+                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN, false);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIRWALLNOW3, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRWALLNOW3, StringComparison.OrdinalIgnoreCase) == 0) {
                             RepairWallNow(3, PlayObject);
-                            GotoLable(PlayObject, ScriptFlagConst.sMAIN, false);
+                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN, false);
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagConst.sHIREGUARDNOW)) {
-                            s20 = sLabel.Substring(ScriptFlagConst.sHIREGUARDNOW.Length, sLabel.Length);
+                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagCode.sHIREGUARDNOW)) {
+                            s20 = sLabel.Substring(ScriptFlagCode.sHIREGUARDNOW.Length, sLabel.Length);
                             HireGuard(s20, PlayObject);
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0);
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagConst.sHIREARCHERNOW)) {
-                            s20 = sLabel.Substring(ScriptFlagConst.sHIREARCHERNOW.Length, sLabel.Length);
+                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagCode.sHIREARCHERNOW)) {
+                            s20 = sLabel.Substring(ScriptFlagCode.sHIREARCHERNOW.Length, sLabel.Length);
                             HireArcher(s20, PlayObject);
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
                             PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
+                        else if (string.Compare(sLabel, ScriptFlagCode.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
                             if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {
-                                PlayObject.ScriptGoBackLable = ScriptFlagConst.sMAIN;
+                                PlayObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
                             }
-                            GotoLable(PlayObject, PlayObject.ScriptGoBackLable, false);
+                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable, false);
                         }
                     }
                 }
@@ -214,7 +216,7 @@ namespace GameSrv.Npc {
                 }
             }
             catch {
-                GameShare.Logger.Error(sExceptionMsg);
+                M2Share.Logger.Error(sExceptionMsg);
             }
         }
 
@@ -223,15 +225,15 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= GameShare.Config.HireGuardPrice) {
+            if (Castle.TotalGold >= M2Share.Config.HireGuardPrice) {
                 int n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCalsteGuard) {
                     if (Castle.Guards[n10].BaseObject == null) {
                         if (!Castle.UnderWar) {
                             ArcherUnit ObjUnit = Castle.Guards[n10];
-                            ObjUnit.BaseObject = GameShare.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            ObjUnit.BaseObject = M2Shares.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null) {
-                                Castle.TotalGold -= GameShare.Config.HireGuardPrice;
+                                Castle.TotalGold -= M2Share.Config.HireGuardPrice;
                                 ObjUnit.BaseObject.Castle = Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
@@ -259,15 +261,15 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= GameShare.Config.HireArcherPrice) {
+            if (Castle.TotalGold >= M2Share.Config.HireArcherPrice) {
                 int n10 = HUtil32.StrToInt(sIndex, 0) - 1;
                 if (n10 <= CastleConst.MaxCastleArcher) {
                     if (Castle.Archers[n10].BaseObject == null) {
                         if (!Castle.UnderWar) {
                             ArcherUnit ObjUnit = Castle.Archers[n10];
-                            ObjUnit.BaseObject = GameShare.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            ObjUnit.BaseObject = M2Shares.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null) {
-                                Castle.TotalGold -= GameShare.Config.HireArcherPrice;
+                                Castle.TotalGold -= M2Share.Config.HireArcherPrice;
                                 ObjUnit.BaseObject.Castle = Castle;
                                 ((GuardUnit)ObjUnit.BaseObject).GuardDirection = 3;
                                 PlayObject.SysMsg("雇佣成功.", MsgColor.Green, MsgType.Hint);
@@ -295,9 +297,9 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= GameShare.Config.RepairDoorPrice) {
+            if (Castle.TotalGold >= M2Share.Config.RepairDoorPrice) {
                 if (Castle.RepairDoor()) {
-                    Castle.TotalGold -= GameShare.Config.RepairDoorPrice;
+                    Castle.TotalGold -= M2Share.Config.RepairDoorPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else {
@@ -314,9 +316,9 @@ namespace GameSrv.Npc {
                 PlayObject.SysMsg("NPC不属于城堡!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (Castle.TotalGold >= GameShare.Config.RepairWallPrice) {
+            if (Castle.TotalGold >= M2Share.Config.RepairWallPrice) {
                 if (Castle.RepairWall(nWallIndex)) {
-                    Castle.TotalGold -= GameShare.Config.RepairWallPrice;
+                    Castle.TotalGold -= M2Share.Config.RepairWallPrice;
                     PlayObject.SysMsg("修理成功。", MsgColor.Green, MsgType.Hint);
                 }
                 else {
@@ -329,13 +331,13 @@ namespace GameSrv.Npc {
         }
 
         protected override void SendCustemMsg(PlayObject PlayObject, string sMsg) {
-            if (!GameShare.Config.SubkMasterSendMsg) {
+            if (!M2Share.Config.SubkMasterSendMsg) {
                 PlayObject.SysMsg(Settings.SubkMasterMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.BoSendMsgFlag) {
                 PlayObject.BoSendMsgFlag = false;
-                GameShare.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
+                M2Shares.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
             }
         }
     }

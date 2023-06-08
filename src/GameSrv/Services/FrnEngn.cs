@@ -1,7 +1,8 @@
 using NLog;
+using SystemModule;
 using SystemModule.Data;
 
-namespace GameSrv.Services
+namespace M2Server.Services
 {
     public class FrontEngine
     {
@@ -76,7 +77,7 @@ namespace GameSrv.Services
             }
         }
 
-        internal void ProcessGameDate()
+        public void ProcessGameDate()
         {
             IList<GoldChangeInfo> changeGoldList = null;
             HUtil32.EnterCriticalSection(UserCriticalSection);

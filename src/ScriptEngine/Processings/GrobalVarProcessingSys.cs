@@ -1,5 +1,7 @@
-﻿using GameSrv;
-using M2Server;
+﻿using M2Server;
+using M2Server.Items;
+using M2Server.Player;
+using ScriptEngine.Consts;
 using SystemModule;
 using SystemModule.Enums;
 
@@ -15,7 +17,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         private static Dictionary<int, HandleGrobalMessage> ProcessGrobalMessage;
 
-        private delegate void HandleGrobalMessage(IActor playObject, string sVariable, ref string sMsg);
+        private delegate void HandleGrobalMessage(PlayObject playObject, string sVariable, ref string sMsg);
 
         /// <summary>
         /// 初始化全局变量脚本处理列表
@@ -125,7 +127,7 @@ namespace ScriptEngine.Processings
         /// 处理脚本
         /// </summary>
         /// <param name="nIdx"></param>
-        public static void Handler(IActor playObject, int nIdx, string sVariable, ref string sMsg)
+        public static void Handler(PlayObject playObject, int nIdx, string sVariable, ref string sMsg)
         {
             if (ProcessGrobalMessage.ContainsKey(nIdx))
             {
@@ -141,7 +143,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        internal void GetGrobalVarStr(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetGrobalVarStr(PlayObject playObject, string sVariable, ref string sMsg)
         {
             var sIdx = sVariable.Substring(1, sVariable.Length - 1);
             var sID = HUtil32.GetValidStr3(sIdx, ref sIdx, "/");
@@ -189,9 +191,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetUserCount(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetUserCount(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(M2Share.WorldEngine.playObjectCount));
+           // sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(M2Share.WorldEngine.playObjectCount));
         }
 
         /// <summary>
@@ -199,7 +201,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetServerName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetServerName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", M2Share.Config.ServerName);
         }
@@ -209,7 +211,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetWebSite(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetWebSite(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", M2Share.Config.sWebSite);
         }
@@ -219,7 +221,7 @@ namespace ScriptEngine.Processings
         /// </summary>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetDateTime(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetDateTime(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", DateTime.Now.ToString("dddddd,dddd,hh:mm:nn"));
         }
@@ -230,7 +232,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetUserName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetUserName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.ChrName);
         }
@@ -241,7 +243,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGuilidName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetGuilidName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             if (playObject.MyGuild != null)
             {
@@ -259,7 +261,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGuilidRankName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetGuilidRankName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.GuildRankName);
         }
@@ -270,7 +272,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetListofWar(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetListofWar(PlayObject playObject, string sVariable, ref string sMsg)
         {
             if (playObject.Castle != null)
             {
@@ -297,7 +299,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastleWarDate(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCastleWarDate(PlayObject playObject, string sVariable, ref string sMsg)
         {
             if (playObject.Castle == null)
             {
@@ -334,7 +336,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetDealGoldPlay(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetDealGoldPlay(PlayObject playObject, string sVariable, ref string sMsg)
         {
             var PoseHuman = playObject.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == playObject) && (PoseHuman.Race == ActorRace.Play))
@@ -353,7 +355,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetServerRunTime(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetServerRunTime(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime).ToString("YYYY-MM-DD HH:mm:ss"));
         }
@@ -364,7 +366,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMacrunTime(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMacrunTime(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, string.Format("<{0}>"), Convert.ToString(HUtil32.GetTickCount() / (24 * 60 * 60 * 1000)));
         }
@@ -375,10 +377,10 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighLevelInfo(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHighLevelInfo(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highLevelPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
+            var highLevelPlay = (PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
             if (highLevelPlay != null)
             {
                 sText = highLevelPlay.GetMyInfo();
@@ -396,10 +398,10 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighPkInfo(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHighPkInfo(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highPvpPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
+            var highPvpPlay = (PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
             if (highPvpPlay != null)
             {
                 sText = highPvpPlay.GetMyInfo();
@@ -417,10 +419,10 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighDcInfo(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHighDcInfo(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highDcPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
+            var highDcPlay = (PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
             if (highDcPlay != null)
             {
                 sText = highDcPlay.GetMyInfo();
@@ -438,10 +440,10 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighMcInfo(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHighMcInfo(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highMcPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
+            var highMcPlay = (PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
             if (highMcPlay != null)
             {
                 sText = highMcPlay.GetMyInfo();
@@ -459,10 +461,10 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighScInfo(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHighScInfo(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highScPlay = M2Share.ActorMgr.Get<playObject>(M2Share.HighLevelHuman);
+            var highScPlay = (PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
             if (highScPlay != null)
             {
                 sText = highScPlay.GetMyInfo();
@@ -480,10 +482,10 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHighOlineInfo(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHighOlineInfo(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highOnlinePlay = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
+            var highOnlinePlay = (PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
             if (highOnlinePlay != null)
             {
                 sText = highOnlinePlay.GetMyInfo();
@@ -498,7 +500,7 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 取玩家登录时长
         /// </summary>
-        internal void GetLoginLong(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetLoginLong(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = ((HUtil32.GetTickCount() - playObject.LogonTick) / 60000) + "分钟";
             sMsg = CombineStr(sMsg, string.Format("<0>", sVariable), sText);
@@ -510,7 +512,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetLoginTime(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetLoginTime(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(playObject.LogonTime));
         }
@@ -521,7 +523,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildBuildPoint(IActor playObject, string sVariable, ref string sMsg)
+        internal void GeTGuildBuildPoint(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.MyGuild == null)
@@ -541,7 +543,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildAuraePoint(IActor playObject, string sVariable, ref string sMsg)
+        internal void GeTGuildAuraePoint(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.MyGuild == null)
@@ -558,7 +560,7 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 取行会安定度
         /// </summary>
-        internal void GeTGuildStabilityPoint(IActor playObject, string sVariable, ref string sMsg)
+        internal void GeTGuildStabilityPoint(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.MyGuild == null)
@@ -578,7 +580,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildFlourishPoint(IActor playObject, string sVariable, ref string sMsg)
+        internal void GeTGuildFlourishPoint(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.MyGuild == null)
@@ -598,7 +600,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRequestCastlewarItem(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetRequestCastlewarItem(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", M2Share.Config.ZumaPiece);
         }
@@ -609,7 +611,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetOwnerGuild(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetOwnerGuild(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.Castle != null)
@@ -633,7 +635,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastleName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCastleName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.Castle != null)
@@ -654,7 +656,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetLord(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetLord(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.Castle != null)
@@ -681,7 +683,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastleChangeDate(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCastleChangeDate(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.Castle != null)
@@ -701,7 +703,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastlewarLastDate(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCastlewarLastDate(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.Castle != null)
@@ -721,7 +723,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCastlegetDays(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCastlegetDays(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
             if (playObject.Castle != null)
@@ -741,7 +743,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMapName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMapName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.Envir.MapDesc);
         }
@@ -752,7 +754,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMapFileName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMapFileName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, $"<{sVariable}>", playObject.Envir.MapName);
         }
@@ -763,7 +765,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetLevel(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetLevel(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.Abil.Level).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
@@ -775,7 +777,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHP(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHP(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = Convert.ToString(playObject.WAbil.HP);
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
@@ -787,7 +789,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxHP(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxHP(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.WAbil.MaxHP).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
@@ -799,7 +801,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMP(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMP(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.WAbil.MP).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
@@ -808,7 +810,7 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 取当前对象最大魔法值
         /// </summary>
-        internal void GetMaxMP(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxMP(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.WAbil.MaxMP).ToString();
             sMsg = CombineStr(sMsg, $"<{sVariable}>", sText);
@@ -820,7 +822,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetDC(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetDC(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.LoWord(playObject.WAbil.DC)).ToString();
             sMsg = CombineStr(sMsg, "<$DC>", sText);
@@ -832,7 +834,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxDC(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxDC(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.HiWord(playObject.WAbil.DC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXDC>", sText);
@@ -844,7 +846,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMac(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMac(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.LoWord(playObject.WAbil.MAC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAC>", sText);
@@ -856,7 +858,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMc(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMc(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.LoWord(playObject.WAbil.MC)).ToString();
             sMsg = CombineStr(sMsg, "<$MC>", sText);
@@ -868,7 +870,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxMc(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxMc(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.HiWord(playObject.WAbil.MC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXMC>", sText);
@@ -880,7 +882,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetSc(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetSc(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.LoWord(playObject.WAbil.SC)).ToString();
             sMsg = CombineStr(sMsg, "<$SC>", sText);
@@ -892,7 +894,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxSc(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxSc(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.HiWord(playObject.WAbil.SC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXSC>", sText);
@@ -904,7 +906,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetExp(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetExp(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.Abil.Exp).ToString();
             sMsg = CombineStr(sMsg, "<$EXP>", sText);
@@ -916,7 +918,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxExp(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxExp(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.Abil.MaxExp).ToString();
             sMsg = CombineStr(sMsg, "<$MAXEXP>", sText);
@@ -928,7 +930,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxMac(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxMac(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (HUtil32.HiWord(playObject.WAbil.MAC)).ToString();
             sMsg = CombineStr(sMsg, "<$MAXMAC>", sText);
@@ -940,7 +942,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxAc(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxAc(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$MAXAC>", HUtil32.HiWord(playObject.WAbil.AC));
         }
@@ -951,7 +953,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHw(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHw(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$HW>", playObject.WAbil.HandWeight);
         }
@@ -962,7 +964,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetAc(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetAc(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$AC>", HUtil32.LoWord(playObject.WAbil.AC));
         }
@@ -973,7 +975,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxHw(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxHw(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$MAXHW>", playObject.WAbil.MaxHandWeight);
         }
@@ -984,7 +986,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetWW(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetWW(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$WW>", playObject.WAbil.WearWeight);
         }
@@ -995,7 +997,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxWW(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxWW(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$MAXWW>", playObject.WAbil.MaxWearWeight);
         }
@@ -1006,7 +1008,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBw(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBw(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BW>", playObject.WAbil.Weight);
         }
@@ -1017,7 +1019,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMaxBw(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMaxBw(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$MAXBW>", playObject.WAbil.MaxWeight);
         }
@@ -1028,7 +1030,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetMonExp(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetMonExp(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$MONEXP>", playObject.FightExp);
         }
@@ -1039,7 +1041,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetPkPoint(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetPkPoint(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$PKPOINT>", playObject.PkPoint);
         }
@@ -1050,7 +1052,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGoldCount(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetGoldCount(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = Convert.ToString(playObject.Gold + '/' + playObject.GoldMax);
             sMsg = CombineStr(sMsg, "<$GOLDCOUNT>", sText);
@@ -1062,7 +1064,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGameGold(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetGameGold(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.GameGold).ToString();
             sMsg = CombineStr(sMsg, "<$GAMEGOLD>", sText);
@@ -1074,7 +1076,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGamePoint(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetGamePoint(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.GamePoint).ToString();
             sMsg = CombineStr(sMsg, "<$GAMEPOINT>", sText);
@@ -1086,7 +1088,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCreditPoint(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCreditPoint(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.CreditPoint).ToString();
             sMsg = CombineStr(sMsg, "<$CREDITPOINT>", sText);
@@ -1098,7 +1100,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetGameGoldName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetGameGoldName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$GAMEGOLDNAME>", M2Share.Config.GameGoldName);
         }
@@ -1109,7 +1111,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHunGer(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHunGer(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.GetMyStatus()).ToString();
             sMsg = CombineStr(sMsg, "<$HUNGER>", sText);
@@ -1121,7 +1123,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCurrX(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCurrX(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.CurrX).ToString();
             sMsg = CombineStr(sMsg, "<$CURRX>", sText);
@@ -1133,7 +1135,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCurrY(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCurrY(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.CurrY).ToString();
             sMsg = CombineStr(sMsg, "<$CURRX>", sText);
@@ -1145,7 +1147,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetPointName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetPointName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$GAMEPOINTNAME>", M2Share.Config.GamePointName);
         }
@@ -1156,7 +1158,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetIpAddr(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetIpAddr(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$IPADDR>", playObject.LoginIpAddr);
         }
@@ -1167,7 +1169,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetIpLocal(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetIpLocal(PlayObject playObject, string sVariable, ref string sMsg)
         {
             //string sText = playObject.m_sIPLocal;
             // GetIPLocal(playObject.m_sIPaddr);
@@ -1180,7 +1182,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GeTGuildWarfee(IActor playObject, string sVariable, ref string sMsg)
+        internal void GeTGuildWarfee(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$GUILDWARFEE>", (M2Share.Config.GuildWarPrice).ToString());
         }
@@ -1191,7 +1193,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBuildGuildfee(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBuildGuildfee(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BUILDGUILDFEE>", (M2Share.Config.BuildGuildPrice).ToString());
         }
@@ -1202,7 +1204,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRequestBuildGuildItem(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetRequestBuildGuildItem(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$REQUESTBUILDGUILDITEM>", M2Share.Config.WomaHorn);
         }
@@ -1213,7 +1215,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRequestCastleWarday(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetRequestCastleWarday(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$REQUESTCASTLEWARDAY>", M2Share.Config.ZumaPiece);
         }
@@ -1224,9 +1226,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdDate(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdDate(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
         }
 
         /// <summary>
@@ -1235,9 +1237,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAllowmsg(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdAllowmsg(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
         }
 
         /// <summary>
@@ -1246,9 +1248,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdletshout(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdletshout(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
         }
 
         /// <summary>
@@ -1257,9 +1259,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdLettrade(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdLettrade(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
+          //  sMsg = CombineStr(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
         }
 
         /// <summary>
@@ -1268,9 +1270,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdLeTGuild(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdLeTGuild(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_LETGuild>", CommandMgr.GameCommands.LetGuild.CmdName);
+          //  sMsg = CombineStr(sMsg, "<$CMD_LETGuild>", CommandMgr.GameCommands.LetGuild.CmdName);
         }
 
         /// <summary>
@@ -1279,9 +1281,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdEndGuild(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdEndGuild(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
         }
 
         /// <summary>
@@ -1290,9 +1292,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdBanGuildChat(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdBanGuildChat(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
         }
 
         /// <summary>
@@ -1301,9 +1303,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAuthally(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdAuthally(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
+          //  sMsg = CombineStr(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
         }
 
         /// <summary>
@@ -1312,9 +1314,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAuth(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdAuth(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
         }
 
         /// <summary>
@@ -1323,9 +1325,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAythCcancel(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdAythCcancel(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
         }
 
         /// <summary>
@@ -1334,9 +1336,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdUserMove(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdUserMove(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
+          //  sMsg = CombineStr(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
         }
 
         /// <summary>
@@ -1345,9 +1347,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdSearching(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdSearching(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_SEARCHING>", CommandMgr.GameCommands.Searching.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_SEARCHING>", CommandMgr.GameCommands.Searching.CmdName);
         }
 
         /// <summary>
@@ -1356,9 +1358,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdGroupCall(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdGroupCall(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_GROUPRECALLL>", CommandMgr.GameCommands.GroupRecalll.CmdName);
+            //sMsg = CombineStr(sMsg, "<$CMD_GROUPRECALLL>", CommandMgr.GameCommands.GroupRecalll.CmdName);
         }
 
         /// <summary>
@@ -1367,9 +1369,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdAllowGroupCall(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdAllowGroupCall(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
         }
 
         /// <summary>
@@ -1378,9 +1380,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdStorageChgPassword(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageChgPassword(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
+           // sMsg = CombineStr(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
         }
 
         /// <summary>
@@ -1389,17 +1391,17 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdStorageSetPassword(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageSetPassword(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
+          //  sMsg = CombineStr(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
         }
 
         /// <summary>
         /// 可将仓库锁定命令
         /// </summary>
-        internal void GetCmdStorageLock(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageLock(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
+          //  sMsg = CombineStr(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
         }
 
         /// <summary>
@@ -1408,9 +1410,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCmdStorageUnlock(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCmdStorageUnlock(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
+          //  sMsg = CombineStr(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
         }
 
         /// <summary>
@@ -1419,9 +1421,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetWeapon(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetWeapon(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
             sMsg = CombineStr(sMsg, "<$WEAPON>", sText);
         }
 
@@ -1431,9 +1433,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetDress(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetDress(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Dress].Index);
             sMsg = CombineStr(sMsg, "<$DRESS>", sText);
         }
 
@@ -1443,9 +1445,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRightHand(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetRightHand(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.RighThand].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.RighThand].Index);
             sMsg = CombineStr(sMsg, "<$RIGHTHAND>", sText);
         }
 
@@ -1455,18 +1457,18 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetHelmet(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetHelmet(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Helmet].Index);
             sMsg = CombineStr(sMsg, "<$HELMET>", sText);
         }
 
         /// <summary>
         /// 取当前对象项链名称
         /// </summary>
-        internal void GetNecklace(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetNecklace(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Necklace].Index);
             sMsg = CombineStr(sMsg, "<$NECKLACE>", sText);
         }
 
@@ -1476,9 +1478,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRing_R(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetRing_R(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Ringr].Index);
             sMsg = CombineStr(sMsg, "<$RING_R>", sText);
         }
 
@@ -1488,9 +1490,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetRing_L(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetRing_L(PlayObject playObject, string sVariable, ref string sMsg)
         {
-           string  sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
+           string  sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Ringl].Index);
             sMsg = CombineStr(sMsg, "<$RING_L>", sText);
         }
 
@@ -1500,9 +1502,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetArmring_R(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetArmring_R(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingr].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_R>", sText);
         }
 
@@ -1512,9 +1514,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetArmring_L(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetArmring_L(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.ArmRingl].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_L>", sText);
         }
 
@@ -1524,9 +1526,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBujuk(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBujuk(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Bujuk].Index);
             sMsg = CombineStr(sMsg, "<$BUJUK>", sText);
         }
 
@@ -1536,9 +1538,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBelt(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBelt(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Belt].Index);
             sMsg = CombineStr(sMsg, "<$BELT>", sText);
         }
 
@@ -1548,9 +1550,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBoots(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBoots(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Boots].Index);
             sMsg = CombineStr(sMsg, "<$BOOTS>", sText);
         }
 
@@ -1560,9 +1562,9 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetChrm(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetChrm(PlayObject playObject, string sVariable, ref string sMsg)
         {
-            string sText = M2Share.WorldEngine.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
+            string sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Charm].Index);
             sMsg = CombineStr(sMsg, "<$CHARM>", sText);
         }
 
@@ -1572,7 +1574,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetQQ(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetQQ(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$QQ>", M2Share.Config.sQQ);
         }
@@ -1583,7 +1585,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetPhone(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetPhone(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$PHONE>", M2Share.Config.sPhone);
         }
@@ -1594,7 +1596,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetServerIp(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetServerIp(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$SERVERIP>", M2Share.Config.ServerIPaddr);
         }
@@ -1605,7 +1607,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBbsWeiSite(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBbsWeiSite(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BBSSITE>", M2Share.Config.sBbsSite);
         }
@@ -1616,7 +1618,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetCilentDownLoad(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetCilentDownLoad(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$CLIENTDOWNLOAD>", M2Share.Config.sClientDownload);
         }
@@ -1627,7 +1629,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = playObject.ScatterItemName;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMNAME>", sText);
@@ -1639,7 +1641,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemownerName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemownerName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = playObject.ScatterItemOwnerName;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMOWNERNAME>", sText);
@@ -1651,7 +1653,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemMapName(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemMapName(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = playObject.ScatterItemMapName;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMMAPNAME>", sText);
@@ -1663,7 +1665,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemMapDesc(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemMapDesc(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = playObject.ScatterItemMapDesc;
             sMsg = CombineStr(sMsg, "<$SCATTERITEMMAPDESC>", sText);
@@ -1675,7 +1677,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemX(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemX(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.ScatterItemX).ToString();
             sMsg = CombineStr(sMsg, "<$SCATTERITEMX>", sText);
@@ -1687,7 +1689,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetScatterItemY(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetScatterItemY(PlayObject playObject, string sVariable, ref string sMsg)
         {
             string sText = (playObject.ScatterItemY).ToString();
             sMsg = CombineStr(sMsg, "<$SCATTERITEMX>", sText);
@@ -1699,7 +1701,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount0(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount0(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount0);
         }
@@ -1710,7 +1712,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount1(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount1(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount1);
         }
@@ -1721,7 +1723,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount2(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount2(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount2);
         }
@@ -1732,7 +1734,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount3(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount3(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount3);
         }
@@ -1743,7 +1745,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount4(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount4(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount4);
         }
@@ -1754,7 +1756,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount5(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount5(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount5);
         }
@@ -1765,7 +1767,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount6(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount6(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount6);
         }
@@ -1776,7 +1778,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount7(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount7(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount7);
         }
@@ -1787,7 +1789,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount8(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount8(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount8);
         }
@@ -1798,7 +1800,7 @@ namespace ScriptEngine.Processings
         /// <param name="playObject"></param>
         /// <param name="sVariable"></param>
         /// <param name="sMsg"></param>
-        internal void GetBankAccount9(IActor playObject, string sVariable, ref string sMsg)
+        internal void GetBankAccount9(PlayObject playObject, string sVariable, ref string sMsg)
         {
             sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", M2Share.Config.sBankAccount9);
         }
