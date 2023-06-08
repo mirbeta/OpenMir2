@@ -48,6 +48,7 @@ namespace M2Server
         public static readonly CellObjectMgr CellObjectMgr;
         public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
+        //public static ScriptSystem ScriptSystem;
         public static IMapManager MapMgr;
         public static CustomItem CustomItemMgr = null;
         public static NoticeManager NoticeMgr = null;

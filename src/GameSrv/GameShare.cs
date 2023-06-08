@@ -26,6 +26,7 @@ using M2Server.World;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
+using ScriptEngine.Consts;
 
 namespace GameSrv
 {

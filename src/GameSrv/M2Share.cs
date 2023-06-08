@@ -20,11 +20,11 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
 using GameSrv.Robots;
-using ScriptEngine;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
+using ScriptEngine.Consts;
 
 namespace M2Server
 {

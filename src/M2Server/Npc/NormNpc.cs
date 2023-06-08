@@ -1,6 +1,5 @@
 ﻿using M2Server.Actor;
 using M2Server.Items;
-using M2Server.Monster;
 using M2Server.Player;
 using System.Text;
 using SystemModule;
@@ -20,6 +19,7 @@ namespace M2Server.Npc
         /// </summary>
         public short NpcFlag = 0;
         public string FilePath;
+        //private readonly ScriptSystem scriptSystem;
         /// <summary>
         /// 此NPC是否是隐藏的，不显示在地图中
         /// </summary>

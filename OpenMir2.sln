@@ -71,7 +71,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Markets", "src\Modules\Mark
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{3C36129B-CFD1-4E59-9E5D-79FAEEB78912}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PluginSystem", "src\Modules\PluginSystem\PluginSystem.csproj", "{67FE14BD-76C3-475C-86AA-4D981F355C41}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ModuleFramework", "src\Modules\PluginSystem\ModuleFramework.csproj", "{67FE14BD-76C3-475C-86AA-4D981F355C41}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

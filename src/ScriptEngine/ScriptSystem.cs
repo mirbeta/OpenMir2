@@ -1,5 +1,6 @@
 using M2Server;
 using M2Server.Items;
+using M2Server.Npc;
 using M2Server.Player;
 using ScriptEngine.Consts;
 using ScriptEngine.Processings;
@@ -33,20 +34,22 @@ namespace ScriptEngine
             SayingRecord sayingRecord;
             UserItem userItem = null;
             string sC = string.Empty;
-            //if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
-            //{
-            //    for (int i = 0; i < m_ScriptList.Count; i++)
-            //    {
-            //        ScriptInfo script3C = m_ScriptList[i];
-            //        if (script3C.RecordList.TryGetValue(sLabel, out _))
-            //        {
-            //            script = script3C;
-            //            playObject.MScript = script;
-            //            playObject.LastNpc = this.ActorId;
-            //            break;
-            //        }
-            //    }
-            //}
+            if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                //var npc = M2Share.ActorMgr.Get<NormNpc>(npcId);
+                
+                //for (int i = 0; i < m_ScriptList.Count; i++)
+                //{
+                //    ScriptInfo script3C = m_ScriptList[i];
+                //    if (script3C.RecordList.TryGetValue(sLabel, out _))
+                //    {
+                //        script = script3C;
+                //        playObject.MScript = script;
+                //        playObject.LastNpc = this.ActorId;
+                //        break;
+                //    }
+                //}
+            }
             //if (script == null)
             //{
             //    if (playObject.MScript != null)

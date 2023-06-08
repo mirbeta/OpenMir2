@@ -16,6 +16,7 @@ using M2Server.World;
 using M2Server.World.Managers;
 using NLog;
 using ScriptEngine;
+using ScriptEngine.Consts;
 using SystemModule.Common;
 using SystemModule.Data;
 

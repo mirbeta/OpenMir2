@@ -3,7 +3,6 @@ using M2Server.Actor;
 using M2Server.Monster;
 using M2Server.Npc;
 using System.Collections;
-using ScriptEngine;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;

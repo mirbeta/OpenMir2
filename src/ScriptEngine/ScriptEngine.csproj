@@ -7,8 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\M2Server\M2Server.csproj" />
-      <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+      <ProjectReference Include="..\Modules\PluginSystem\ModuleFramework.csproj" />
     </ItemGroup>
 
 </Project>
