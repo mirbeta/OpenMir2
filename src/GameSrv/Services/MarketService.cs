@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
-using NLog;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
-using SystemModule;
+using M2Server;
+using M2Server.Player;
+using NLog;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.Data;
@@ -15,7 +15,7 @@ using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 using TcpClient = SystemModule.Sockets.Components.TCP.TcpClient;
 
-namespace M2Server.Services
+namespace GameSrv.Services
 {
     public class MarketService
     {

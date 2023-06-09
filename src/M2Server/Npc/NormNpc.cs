@@ -19,7 +19,6 @@ namespace M2Server.Npc
         /// </summary>
         public short NpcFlag = 0;
         public string FilePath;
-        //private readonly ScriptSystem scriptSystem;
         /// <summary>
         /// 此NPC是否是隐藏的，不显示在地图中
         /// </summary>
@@ -28,8 +27,6 @@ namespace M2Server.Npc
         /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
         public bool IsQuest;
-        public string m_sPath = string.Empty;
-        public int ProcessRefillIndex;
 
         public NormNpc() : base()
         {

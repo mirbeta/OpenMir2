@@ -1,4 +1,5 @@
-﻿namespace SystemModule{
+﻿namespace SystemModule
+{
     /// <summary>
     /// 守卫
     /// </summary>

@@ -1,7 +1,7 @@
-﻿using NLog;
-using SystemModule;
+﻿using M2Server;
+using NLog;
 
-namespace M2Server.World.Threads
+namespace GameSrv.Word.Threads
 {
     public class MerchantProcessor : TimerScheduledService
     {

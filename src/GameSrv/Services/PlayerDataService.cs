@@ -1,10 +1,10 @@
 using System.Collections.Concurrent;
+using M2Server;
 using NLog;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 
-namespace M2Server.Services
+namespace GameSrv.Services
 {
     public class QueryPlayData
     {

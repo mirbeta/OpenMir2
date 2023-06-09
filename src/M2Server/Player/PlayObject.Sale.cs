@@ -236,7 +236,7 @@ namespace M2Server.Player
                             M2Share.SellOffItemList.RemoveAt(i);
                             Dispose(dealOffInfo);
                             this.SendMsg(Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "取消寄售成功!");
-                            M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
+                           // M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                         }
                     }
                 }
@@ -328,7 +328,7 @@ namespace M2Server.Player
                                         //}
                                     }
                                 }
-                                M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
+                                //M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (int j = 0; j <= 9; j++)
                                 {
                                     StdItem stdItem = ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
@@ -573,7 +573,7 @@ namespace M2Server.Player
                 }
                 this.SendMsg(Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "[成功] 系统已经成功接受您的申请");
                 bo11 = true;
-                M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表 
+                //M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表 
                 SellOffConfirm = false;
                 SellOffItemList.Clear();
             }

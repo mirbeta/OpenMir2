@@ -1,6 +1,6 @@
 ﻿using SystemModule.Enums;
 
-namespace SystemModule
+namespace SystemModule.Events
 {
     public class MapEvent : IDisposable
     {

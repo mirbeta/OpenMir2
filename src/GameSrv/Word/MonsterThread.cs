@@ -1,6 +1,4 @@
-﻿using SystemModule;
-
-namespace M2Server.World {
+﻿namespace GameSrv.Word {
     public class MonsterThread {
         /// <summary>
         /// 线程ID

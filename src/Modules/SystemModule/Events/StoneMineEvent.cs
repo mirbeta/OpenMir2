@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Events;
+
+namespace SystemModule
 {
     /// <summary>
     /// 矿石事件

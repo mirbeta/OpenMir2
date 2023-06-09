@@ -1,12 +1,9 @@
-﻿using M2Server.DataSource;
-using M2Server.Guild;
+﻿using GameSrv.DataSource;
+using M2Server;
 using M2Server.Player;
-using M2Server.World;
-using SystemModule;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace M2Server.Planes
+namespace GameSrv.Planes
 {
     public class PlanesMessage
     {

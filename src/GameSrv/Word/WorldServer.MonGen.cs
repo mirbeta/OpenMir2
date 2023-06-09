@@ -1,15 +1,14 @@
-﻿using M2Server.Actor;
+﻿using M2Server;
+using M2Server.Actor;
 using M2Server.Items;
-using M2Server.Maps;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
 using M2Server.Npc;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.World {
+namespace GameSrv.Word {
     public partial class WorldServer {
         /// <summary>
         /// 怪物刷新列表
@@ -452,13 +451,13 @@ namespace M2Server.World {
                                     if (stdItem == null) continue;
                                     if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(ModuleShare.Config.MonRandomAddValue) == 0) //极品掉落几率
                                     {
-                                        Items.ItemSystem.RandomUpgradeItem(stdItem, userItem);
+                                        M2Server.Items.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                                     }
                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                                     {
                                         if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                         {
-                                            Items.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
+                                            M2Server.Items.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
                                         }
                                     }
                                     mon.ItemList.Add(userItem);

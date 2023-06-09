@@ -66,7 +66,8 @@ namespace SystemModule
         void SendServerGroupMsg(int nCode, int nServerIdx, string sMsg);
 
         bool FindOtherServerUser(string mapName, ref int srvIdx);
-        int GetMonstersZenTime(long time);
+
+        int GetMonstersZenTime(int time);
 
         int GetMapHuman(string mapName);
 
@@ -79,6 +80,8 @@ namespace SystemModule
         void AddMonGenInfoThreadMap(int threadId, MonGenInfo monGenInfo);
 
         void CreateMonGenInfoThreadMap(int threadId, IList<MonGenInfo> monGenInfo);
+
+        void AddMonsterList(MonsterInfo monsterInfo);
 
         void PrcocessData();
         void ProcessNpcs();

@@ -1,15 +1,15 @@
+using System.Data;
+using System.Text.Json;
+using M2Server;
 using M2Server.Items;
 using MySqlConnector;
 using NLog;
-using System.Data;
-using System.Text.Json;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Extensions;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.DataSource
+namespace GameSrv.DataSource
 {
     public class CommonDB
     {
@@ -233,7 +233,7 @@ namespace M2Server.DataSource
                         monster.AttackSpeed = 200;
                     }
                     monster.ItemList = null;
-                    //M2Share.LocalDb.LoadMonitems(monster.Name, ref monster.ItemList);
+                    GameShare.LocalDb.LoadMonitems(monster.Name, ref monster.ItemList);
                     //if (M2Share.WorldEngine.MonsterList.ContainsKey(monster.Name))
                     //{
                     //    logger.Warn($"怪物名称[{monster.Name}]重复,请确认数据是否正常.");
@@ -243,7 +243,7 @@ namespace M2Server.DataSource
                     //{
                     //    logger.Debug($"怪物[{monster.Name}]爆率文件为空.");
                     //}
-                    //M2Share.WorldEngine.MonsterList.Add(monster.Name, monster);
+                    M2Share.WorldEngine.AddMonsterList(monster);
                     result = 1;
                 }
             }

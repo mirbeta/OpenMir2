@@ -1,22 +1,16 @@
 using System.Collections;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.Events;
 using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule
 {
     public interface IPlayerActor : IActor
     {
-        bool ObMode { get; set; }
-        bool AdminMode { get; set; }
-        bool SuperMan { get; set; }
         AttackMode AttatckMode { get; set; }
         UserItem[] UseItems { get; set; }
-        IList<UserItem> ItemList { get; set; }
         bool IsEnoughBag { get; }
-        bool AutoChangeColor { get; set; }
-        bool FixColor { get; set; }
-        byte FixColorIdx { get; set; }
         /// <summary>
         /// 性别
         /// </summary>
@@ -673,159 +667,237 @@ namespace SystemModule
         /// 转生等级
         /// </summary>
         byte ReLevel { get; set; }
+
         byte ReColorIdx { get; set; }
+
         int ReColorTick { get; set; }
+
         /// <summary>
         /// 杀怪经验倍数
         /// </summary>
         int MNKillMonExpMultiple { get; set; }
+
         /// <summary>
         /// 处理消息循环时间控制
         /// </summary>        
         int GetMessageTick { get; set; }
+
         bool IsSetStoragePwd { get; set; }
+
         bool IsReConfigPwd { get; set; }
+
         bool IsCheckOldPwd { get; set; }
+
         bool IsUnLockPwd { get; set; }
+
         bool IsUnLockStoragePwd { get; set; }
+
         /// <summary>
         /// 锁密码
         /// </summary>
         bool IsPasswordLocked { get; set; }
+
         byte PwdFailCount { get; set; }
         /// <summary>
         /// 是否启用锁登录功能
         /// </summary>
         bool IsLockLogon { get; set; }
+
         /// <summary>
         /// 是否打开登录锁
         /// </summary>        
         bool IsLockLogoned { get; set; }
+
         string MSTempPwd { get; set; }
+
         string StoragePwd { get; set; }
+
         bool IsStartMarry { get; set; }
+
         bool IsStartMaster { get; set; }
+
         bool IsStartUnMarry { get; set; }
+
         bool IsStartUnMaster { get; set; }
+
         /// <summary>
         /// 禁止发方字(发的文字只能自己看到)
         /// </summary>
         bool FilterSendMsg { get; set; }
+
         /// <summary>
         /// 杀怪经验倍数(此数除以 100 为真正倍数)
         /// </summary>        
         int KillMonExpRate { get; set; }
+
         /// <summary>
         /// 人物攻击力倍数(此数除以 100 为真正倍数)
         /// </summary>        
         int PowerRate { get; set; }
+
         int KillMonExpRateTime { get; set; }
+
         int PowerRateTime { get; set; }
+
         int ExpRateTick { get; set; }
+
         /// <summary>
         /// 技巧项链
         /// </summary>
         bool FastTrain { get; set; }
+
         /// <summary>
         /// 是否允许使用物品
         /// </summary>
         bool BoCanUseItem { get; set; }
+
         /// <summary>
         /// 是否允许交易物品
         /// </summary>
         bool IsCanDeal { get; set; }
+
         bool IsCanDrop { get; set; }
+
         bool IsCanGetBackItem { get; set; }
+
         bool IsCanWalk { get; set; }
+
         bool IsCanRun { get; set; }
+
         bool IsCanHit { get; set; }
+
         bool IsCanSpell { get; set; }
+
         bool IsCanSendMsg { get; set; }
+
         /// <summary>
         /// 会员类型
         /// </summary>
         int MemberType { get; set; }
+
         /// <summary>
         /// 会员等级
         /// </summary> 
         byte MemberLevel { get; set; }
+
         /// <summary>
         /// 发祝福语标志
         /// </summary> 
         bool BoSendMsgFlag { get; set; }
+
         bool BoChangeItemNameFlag { get; set; }
+
         /// <summary>
         /// 游戏币
         /// </summary>
         int GameGold { get; set; }
+
         /// <summary>
         /// 是否自动减游戏币
         /// </summary>        
         bool BoDecGameGold { get; set; }
+
         int DecGameGoldTime { get; set; }
+
         int DecGameGoldTick { get; set; }
+
         int DecGameGold { get; set; }
+
         // 一次减点数
         bool BoIncGameGold { get; set; }
+
         // 是否自动加游戏币
         int IncGameGoldTime { get; set; }
+
         int IncGameGoldTick { get; set; }
+
         int IncGameGold { get; set; }
+
         // 一次减点数
         int GamePoint { get; set; }
+
         // 游戏点数
         int IncGamePointTick { get; set; }
+
         int PayMentPoint { get; set; }
+
         int PayMentPointTick { get; set; }
+
         int DecHpTick { get; set; }
+
         int IncHpTick { get; set; }
+
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
         int PkDieLostExp { get; set; }
+
         /// <summary>
         /// PK 死亡掉等级
         /// </summary>
         byte PkDieLostLevel { get; set; }
+
         /// <summary>
         /// 私聊对象
         /// </summary>
         IActor WhisperHuman { get; set; }
+
         /// <summary>
         /// 清理无效对象间隔
         /// </summary>
         int ClearInvalidObjTick { get; set; }
+
         short Contribution { get; set; }
+
+
         string RankLevelName { get; set; }
+
         bool IsFilterAction { get; set; }
+
         int AutoGetExpTick { get; set; }
+
         int AutoGetExpTime { get; set; }
+
         int AutoGetExpPoint { get; set; }
+
         IEnvirnoment AutoGetExpEnvir { get; set; }
+
         bool AutoGetExpInSafeZone { get; set; }
+
         Dictionary<string, DynamicVar> DynamicVarMap { get; set; }
+
         short ClientTick { get; set; }
+
         /// <summary>
         /// 进入速度测试模式
         /// </summary>
         bool TestSpeedMode { get; set; }
+
         string RandomNo { get; set; }
+
         /// <summary>
         /// 刷新包裹间隔
         /// </summary>
         int QueryBagItemsTick { get; set; }
+
         bool IsTimeGoto { get; set; }
+
         int TimeGotoTick { get; set; }
+
         string TimeGotoLable { get; set; }
+
         IActor TimeGotoNpc { get; set; }
+
         /// <summary>
         /// 个人定时器
         /// </summary>
         int[] AutoTimerTick { get; set; }
+
         /// <summary>
         /// 个人定时器 时间间隔
         /// </summary>
         int[] AutoTimerStatus { get; set; }
+
         /// <summary>
         /// 0-攻击力增加 1-魔法增加  2-道术增加(无极真气) 3-攻击速度 4-HP增加(酒气护体)
         /// 5-增加MP上限 6-减攻击力 7-减魔法 8-减道术 9-减HP 10-减MP 11-敏捷 12-增加防
@@ -834,7 +906,9 @@ namespace SystemModule
         /// 22-移动减速 23-定身(十步一杀)
         /// </summary>
         ushort[] ExtraAbil { get; set; }
+
         byte[] ExtraAbilFlag { get; set; }
+
         /// <summary>
         /// 0-攻击力增加 1-魔法增加  2-道术增加(无极真气) 3-攻击速度 4-HP增加(酒气护体)
         /// 5-增加MP上限 6-减攻击力 7-减魔法 8-减道术 9-减HP 10-减MP 11-敏捷 12-增加防
@@ -843,48 +917,44 @@ namespace SystemModule
         /// 22-移动减速 23-定身(十步一杀)
         /// </summary>
         int[] ExtraAbilTimes { get; set; }
+
         /// <summary>
         /// 点击NPC时间
         /// </summary>
         int ClickNpcTime { get; set; }
+
         /// <summary>
         /// 是否开通元宝交易服务
         /// </summary>
         bool SaleDeal { get; set; }
+
         /// <summary>
         /// 确认元宝寄售标志
         /// </summary>
         bool SellOffConfirm { get; set; }
+
         /// <summary>
         /// 元宝寄售物品列表
         /// </summary>
         IList<UserItem> SellOffItemList { get; set; }
+
         byte[] QuestUnitOpen { get; set; }
+
         byte[] QuestUnit { get; set; }
+
         byte[] QuestFlag { get; set; }
+
         MarketUser MarketUser { get; set; }
+
         bool FlagReadyToSellCheck { get; set; }
+
         int FightExp { get; set; }
-
-        IUserCastle Castle { get; set; }
-
-        IList<IActor> SlaveList { get; set; }
 
         void FeatureChanged();
 
         int GetMyStatus();
 
-        IActor GetPoseCreate();
-
         void HasLevelUp(ushort level);
-
-        string GetShowName();
-
-        void RefShowName();
-
-        void RefNameColor();
-
-        void RecalcAbilitys();
 
         bool IsAddWeightAvailable(int nWeight);
 
@@ -900,17 +970,9 @@ namespace SystemModule
 
         void SetQuestUnitStatus(int nFlag, int nValue);
 
-        void SpaceMove(string sMap, short nX, short nY, int nInt);
-
         IActor MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec);
 
-        void SendRefMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg);
-
         void SysMsg(string sMsg, MsgColor msgColor, MsgType msgType);
-
-        void SendMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "");
-
-        void SendMsg(IActor baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "");
 
         string GetMyInfo();
 
@@ -926,13 +988,13 @@ namespace SystemModule
 
         int GetQuestFalgStatus(int nFlag);
 
-        bool InSafeZone();
-
-        void Die();
-
         void SendDelItems(UserItem userItem);
 
         void SendAddItem(UserItem userItem);
+
+        void DelBagItem(UserItem userItem);
+
+        void DelBagItem(int makeIndex, string itemName);
 
         void SendUpdateItem(UserItem userItem);
 
@@ -986,6 +1048,8 @@ namespace SystemModule
 
         bool AddItemToBag(UserItem userItem);
 
-        bool CheckItems(string itemName);
+        UserItem CheckItems(string itemName);
+
+        void ReQuestGuildWar(string guildName);
     }
 }

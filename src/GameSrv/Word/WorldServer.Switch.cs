@@ -1,9 +1,8 @@
-﻿using M2Server.Monster;
+﻿using M2Server;
 using M2Server.Player;
-using SystemModule;
 using SystemModule.Data;
 
-namespace M2Server.World {
+namespace GameSrv.Word {
     public partial class WorldServer {
         private SwitchDataInfo GetSwitchData(string sChrName, int nCode) {
             SwitchDataInfo result = null;

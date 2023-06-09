@@ -1,20 +1,24 @@
-﻿using M2Server.DataSource;
+﻿using GameSrv.DataSource;
+using GameSrv.Word.Managers;
+using M2Server;
 using M2Server.Items;
+using M2Server.Npc;
 using M2Server.Player;
-using M2Server.World.Managers;
 using ScriptModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.Npc
+namespace GameSrv.NPC
 {
     /// <summary>
     /// 交易NPC类
     /// 普通商人 如：药店和杂货店都在此实现
     /// </summary>
-    public class Merchant : NormNpc,IMerchant
+    public class Merchant : NormNpc, IMerchant
     {
+        public string m_sPath { get; set; }
+        public int ProcessRefillIndex { get; set; }
         /// <summary>
         /// 脚本路径
         /// </summary>
@@ -169,11 +173,6 @@ namespace M2Server.Npc
                 M2Share.Logger.Error(e.Message);
             }
             base.Run();
-        }
-
-        protected override bool Operate(ProcessMessage processMsg)
-        {
-            return base.Operate(processMsg);
         }
 
         private void AddItemPrice(ushort nIndex, double nPrice)
@@ -770,18 +769,18 @@ namespace M2Server.Npc
         /// <returns></returns>
         private int GetUserPrice(IPlayerActor playObject, double nPrice)
         {
-            int result = HUtil32.Round(nPrice / 100.0 * PriceRate);
+            int result = 0;
             if (CastleMerchant)
             {
-                //if (Castle != null && Castle.IsMasterGuild(playObject.MyGuild)) //沙巴克成员修复物品打折
-                //{
-                //    var n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (SystemShare.Config.CastleMemberPriceRate / 100.0)));//80%
-                //    result = HUtil32.Round(nPrice / 100.0 * n14);
-                //}
-                //else
-                //{
-                //    result = HUtil32.Round(nPrice / 100.0 * PriceRate);
-                //}
+                if (Castle != null && Castle.IsMasterGuild(playObject.MyGuild)) //沙巴克成员修复物品打折
+                {
+                    var n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (ModuleShare.Config.CastleMemberPriceRate / 100.0)));//80%
+                    result = HUtil32.Round(nPrice / 100.0 * n14);
+                }
+                else
+                {
+                    result = HUtil32.Round(nPrice / 100.0 * PriceRate);
+                }
             }
             else
             {
@@ -789,9 +788,6 @@ namespace M2Server.Npc
             }
             return result;
         }
-
-        public string m_sPath { get; set; }
-        public int ProcessRefillIndex { get; set; }
 
         public override void UserSelect(IPlayerActor playObject, string sData)
         {

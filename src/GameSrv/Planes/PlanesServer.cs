@@ -1,6 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
-using SystemModule;
+using M2Server;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.Sockets.Common;
@@ -9,7 +9,7 @@ using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace M2Server.Planes
+namespace GameSrv.Planes
 {
     /// <summary>
     /// 位面服务器

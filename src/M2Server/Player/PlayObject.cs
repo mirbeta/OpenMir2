@@ -8,6 +8,7 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.Events;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using GuildInfo = M2Server.Guild.GuildInfo;

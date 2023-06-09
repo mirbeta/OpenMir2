@@ -1,8 +1,8 @@
-﻿using M2Server.Npc;
+﻿using GameSrv.NPC;
 using M2Server.Player;
 using SystemModule.Data;
 
-namespace M2Server.Maps
+namespace GameSrv.Maps
 {
     public class MapQuestManager
     {

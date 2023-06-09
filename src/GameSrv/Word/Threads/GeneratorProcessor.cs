@@ -1,9 +1,9 @@
 using System.Diagnostics;
+using M2Server;
 using NLog;
-using SystemModule;
 using SystemModule.Generation.Entities;
 
-namespace M2Server.World.Threads
+namespace GameSrv.Word.Threads
 {
     public class GeneratorProcessor : TimerScheduledService
     {

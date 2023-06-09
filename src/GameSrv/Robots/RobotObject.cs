@@ -1,9 +1,10 @@
-﻿using M2Server.Player;
+﻿using M2Server;
+using M2Server.Player;
 using NLog;
 using SystemModule.Common;
 using SystemModule.Enums;
 
-namespace M2Server.Robots
+namespace GameSrv.Robots
 {
     public class RobotObject : PlayObject {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();

@@ -1,8 +1,8 @@
-﻿using SystemModule;
-using SystemModule.Data;
+﻿using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
-namespace SystemModule{
+namespace SystemModule
+{
     public class GameSvrConf
     {
         public string sDBType;

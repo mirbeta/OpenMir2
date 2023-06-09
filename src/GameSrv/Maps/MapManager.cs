@@ -1,9 +1,10 @@
-﻿using M2Server.Event.Events;
-using M2Server.Npc;
+﻿using GameSrv.NPC;
+using M2Server;
+using M2Server.Event.Events;
 using NLog;
 using SystemModule.Data;
 
-namespace M2Server.Maps
+namespace GameSrv.Maps
 {
     public class MapManager
     {

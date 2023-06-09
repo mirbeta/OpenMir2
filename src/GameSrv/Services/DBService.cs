@@ -1,12 +1,12 @@
 ﻿using System.Net;
 using System.Net.Sockets;
+using M2Server;
 using NLog;
-using SystemModule;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.SocketComponents.AsyncSocketClient;
 using SystemModule.SocketComponents.Event;
 
-namespace M2Server.Services
+namespace GameSrv.Services
 {
     public class DBService
     {

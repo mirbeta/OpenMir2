@@ -548,7 +548,7 @@ namespace M2Server.Castle
             return guild == MasterGuild;
         }
 
-        public bool IsMasterGuild(GuildInfo guild)
+        public bool IsMasterGuild(IGuild guild)
         {
             return MasterGuild != null && MasterGuild == guild;
         }

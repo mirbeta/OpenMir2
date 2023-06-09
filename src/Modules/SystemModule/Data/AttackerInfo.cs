@@ -1,6 +1,5 @@
-﻿using System;
-
-namespace SystemModule{
+﻿namespace SystemModule
+{
     public struct AttackerInfo : IDisposable
     {
         public DateTime AttackDate;

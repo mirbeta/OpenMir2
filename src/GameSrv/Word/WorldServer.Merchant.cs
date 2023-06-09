@@ -1,6 +1,7 @@
-﻿using M2Server.Actor;
+﻿using M2Server;
+using M2Server.Actor;
 
-namespace M2Server.World
+namespace GameSrv.Word
 {
     public partial class WorldServer
     {

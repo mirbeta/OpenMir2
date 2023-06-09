@@ -40,7 +40,7 @@ namespace SystemModule
         int SaveTick { get; set; }
         int StartCastleWarTick { get; set; }
         IList<string> EnvirList { get; set; }
-        ArcherUnit[] Guards{ get; set; }
+        ArcherUnit[] Guards { get; set; }
         DateTime IncomeToday { get; set; }
         ArcherUnit LeftWall { get; set; }
         ArcherUnit MainDoor { get; set; }
@@ -137,7 +137,7 @@ namespace SystemModule
         bool IsAttackGuild(IGuild Guild);
         bool IsDefenseAllyGuild(IGuild guild);
         bool IsDefenseGuild(IGuild guild);
-        bool IsMasterGuild(GuildInfo guild);
+        bool IsMasterGuild(IGuild guild);
         bool IsMember(IPlayerActor member);
         void MainDoorControl(bool boClose);
         int ReceiptGolds(IPlayerActor PlayObject, int nGold);

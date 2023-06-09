@@ -1,6 +1,7 @@
 using SystemModule.Common;
 
-namespace SystemModule{
+namespace SystemModule
+{
     public class GlobalConf : ConfigFile
     {
         public GlobalConf(string fileName) : base(fileName)

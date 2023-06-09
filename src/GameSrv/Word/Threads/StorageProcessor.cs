@@ -1,10 +1,9 @@
-using M2Server.Player;
-using M2Server.Services;
+using GameSrv.Services;
+using M2Server;
 using NLog;
-using SystemModule;
 using SystemModule.Data;
 
-namespace M2Server.World.Threads
+namespace GameSrv.Word.Threads
 {
     public class StorageProcessor : TimerScheduledService
     {

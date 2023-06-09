@@ -1,9 +1,9 @@
-﻿using M2Server.RobotPlay;
-using SystemModule;
+﻿using M2Server;
+using M2Server.RobotPlay;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace M2Server.World
+namespace GameSrv.Word
 {
     public partial class WorldServer
     {

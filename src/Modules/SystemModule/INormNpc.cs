@@ -3,8 +3,11 @@
     public interface INormNpc : IActor
     {
         bool IsHide { get; set; }
+
         string m_sPath { get; set; }
+
         int ProcessRefillIndex { get; set; }
+
         void SendSayMsg(string sText);
 
         void UserSelect(IPlayerActor actor, string sText);

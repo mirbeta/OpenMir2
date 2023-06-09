@@ -1,8 +1,7 @@
 using NLog;
-using SystemModule;
 using SystemModule.Data;
 
-namespace M2Server.Services
+namespace GameSrv.Services
 {
     public class FrontEngine
     {

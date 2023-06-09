@@ -2,7 +2,7 @@
 using MQTTnet.Client;
 using NLog;
 
-namespace M2Server.Services
+namespace GameSrv.Services
 {
     /// <summary>
     /// 公共聊天频道服务类

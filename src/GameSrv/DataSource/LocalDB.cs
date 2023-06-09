@@ -1,12 +1,12 @@
-using GameSrv.Npc;
-using M2Server.Actor;
-using M2Server.Npc;
 using System.Collections;
+using GameSrv.NPC;
+using M2Server;
+using M2Server.Npc;
 using ScriptModule;
 using SystemModule.Common;
 using SystemModule.Data;
 
-namespace M2Server.DataSource
+namespace GameSrv.DataSource
 {
     public class LocalDb {
         private readonly char[] _textSpitConst = { ' ', '\t' };

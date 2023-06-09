@@ -1,9 +1,9 @@
-using M2Server.Planes;
-using M2Server.Services;
+using GameSrv.Planes;
+using GameSrv.Services;
+using M2Server;
 using NLog;
-using SystemModule;
 
-namespace M2Server.World.Threads
+namespace GameSrv.Word.Threads
 {
     public class SystemProcessor : TimerScheduledService
     {

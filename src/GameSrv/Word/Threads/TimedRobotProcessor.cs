@@ -1,7 +1,6 @@
 using NLog;
-using SystemModule;
 
-namespace M2Server.World.Threads
+namespace GameSrv.Word.Threads
 {
     public class TimedRobotProcessor : TimerScheduledService
     {

@@ -54,7 +54,7 @@ namespace SystemModule
 
         public IActor Get(int actorId)
         {
-            return _actorsMap.TryGetValue(actorId, out var actor) ? (IActor)actor : null;
+            return _actorsMap.TryGetValue(actorId, out var actor) ? actor : null;
         }
 
         public T Get<T>(int actorId) where T : IActor
@@ -97,7 +97,7 @@ namespace SystemModule
         {
             if (_actorsMap.TryGetValue(actorId, out var actor))
             {
-               // actor.AddMessage(sendMessage);
+                // actor.AddMessage(sendMessage);
             }
         }
 
@@ -142,7 +142,7 @@ namespace SystemModule
             {
                 if (_actorsMap.TryRemove(actorId, out var actor))
                 {
-                    if (((IActor)actor).Race != ActorRace.Play)
+                    if (actor.Race != ActorRace.Play)
                     {
                         MonsterDisposeCount++;
                     }

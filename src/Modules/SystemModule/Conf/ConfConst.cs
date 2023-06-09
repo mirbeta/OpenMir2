@@ -1,4 +1,5 @@
-namespace SystemModule{
+namespace SystemModule
+{
     public static class ConfConst
     {
         public const string ServerFileName = "server.conf";

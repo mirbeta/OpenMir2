@@ -1,11 +1,10 @@
 using System.Net;
 using System.Net.Sockets;
 using NLog;
-using SystemModule;
 using SystemModule.SocketComponents.AsyncSocketClient;
 using SystemModule.SocketComponents.Event;
 
-namespace M2Server.Planes {
+namespace GameSrv.Planes {
     /// <summary>
     /// 位面服务器
     /// </summary>

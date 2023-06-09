@@ -1,19 +1,20 @@
+using System.Collections;
+using GameSrv.Planes;
+using GameSrv.Services;
+using M2Server;
 using M2Server.Actor;
 using M2Server.Event.Events;
 using M2Server.Npc;
-using M2Server.Planes;
 using M2Server.Player;
 using M2Server.RobotPlay;
-using M2Server.Services;
 using NLog;
-using System.Collections;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using GuildInfo = M2Server.Guild.GuildInfo;
 
-namespace M2Server.World
+namespace GameSrv.Word
 {
     public partial class WorldServer : IWorldEngine
     {
@@ -120,7 +121,7 @@ namespace M2Server.World
         public int LoadPlayCount => GetLoadPlayCount();
         public int RobotPlayerCount => BotPlayObjectList.Count;
         public IEnumerable<IPlayerActor> PlayObjects { get { return PlayObjectList; } }
-        public int MonsterCount { get { return MonGenList.Count; } }
+        public int MonsterCount { get { return MonsterList.Count; } }
         public int MagicCount { get { return MagicList.Count; } }
         public int MonGenCount => MonGenList.Sum(x => x.Count);
 
@@ -130,6 +131,11 @@ namespace M2Server.World
             MerchantInitialize();
             NpCinitialize();
             _logger.Info("初始化NPC脚本完成...");
+        }
+
+        public void AddMonsterList(MonsterInfo monsterInfo)
+        {
+            MonsterList.Add(monsterInfo.Name, monsterInfo);
         }
 
         public void PrcocessData()
@@ -729,11 +735,6 @@ namespace M2Server.World
                 return true;
             }
             return false;
-        }
-
-        public int GetMonstersZenTime(long time)
-        {
-            throw new NotImplementedException();
         }
 
         public void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)

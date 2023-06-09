@@ -6,6 +6,7 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.Events;
 using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Actor

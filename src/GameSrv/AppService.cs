@@ -1,5 +1,5 @@
+using GameSrv.Word;
 using M2Server;
-using M2Server.World;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

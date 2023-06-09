@@ -1,4 +1,5 @@
 ﻿using SystemModule.Data;
+using SystemModule.Events;
 
 namespace SystemModule
 {

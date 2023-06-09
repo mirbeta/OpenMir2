@@ -1,4 +1,5 @@
-﻿namespace SystemModule{
+﻿namespace SystemModule
+{
     public enum CellType : byte
     {
         /// <summary>

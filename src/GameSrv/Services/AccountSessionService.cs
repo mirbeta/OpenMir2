@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
+using M2Server;
 using NLog;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.SocketComponents.AsyncSocketClient;
 using SystemModule.SocketComponents.Event;
 
-namespace M2Server.Services {
+namespace GameSrv.Services {
     public class AccountSessionService {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<PlayerSession> _sessionList;

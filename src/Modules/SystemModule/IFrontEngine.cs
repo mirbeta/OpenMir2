@@ -1,4 +1,5 @@
-﻿namespace SystemModule{
+﻿namespace SystemModule
+{
     public class IFrontEngine
     {
         public bool IsFull()

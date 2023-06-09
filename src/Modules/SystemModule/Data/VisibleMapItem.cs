@@ -1,6 +1,7 @@
-﻿namespace SystemModule{
+﻿namespace SystemModule
+{
     public class VisibleMapItem
     {
-    
+
     }
 }

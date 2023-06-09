@@ -1,9 +1,8 @@
 using NLog;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 
-namespace M2Server.World.Managers
+namespace GameSrv.Word.Managers
 {
     public static class MarketConst
     {

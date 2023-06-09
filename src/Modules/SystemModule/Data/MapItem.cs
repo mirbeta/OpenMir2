@@ -1,7 +1,9 @@
 ﻿using SystemModule.Packets.ClientPackets;
 
-namespace SystemModule{
-    public record struct MapItem {
+namespace SystemModule
+{
+    public record struct MapItem
+    {
         /// <summary>
         /// 物品唯一ID
         /// </summary>
@@ -34,8 +36,9 @@ namespace SystemModule{
         public int CanPickUpTick;
         public UserItem UserItem;
 
-        public MapItem() {
-           // this.ItemId = M2Share.ActorMgr.GetNextIdentity();
+        public MapItem()
+        {
+            // this.ItemId = M2Share.ActorMgr.GetNextIdentity();
         }
     }
 }

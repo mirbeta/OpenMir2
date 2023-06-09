@@ -1,20 +1,21 @@
 ﻿using GameSrv.Robots;
 using M2Server.Castle;
-using M2Server.DataSource;
 using M2Server.Event;
 using M2Server.Guild;
 using M2Server.Items;
 using M2Server.Maps;
-using M2Server.Network;
 using M2Server.Notices;
-using M2Server.Planes;
-using M2Server.Services;
-using M2Server.World;
-using M2Server.World.Managers;
 using NLog;
 using ScriptModule;
 using System.Collections;
 using System.Collections.Concurrent;
+using GameSrv.DataSource;
+using GameSrv.Maps;
+using GameSrv.Network;
+using GameSrv.Planes;
+using GameSrv.Services;
+using GameSrv.Word;
+using GameSrv.Word.Managers;
 using M2Server;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -254,7 +255,7 @@ namespace GameSrv
                 }
                 IdSrvClient.Instance.Initialize();
                 GameShare.GuildMgr.LoadGuildInfo();
-                //GameShare.CastleMgr.LoadCastleList();
+                GameShare.CastleMgr.LoadCastleList();
                 //GameShare.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
             }

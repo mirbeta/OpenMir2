@@ -1,5 +1,4 @@
 using M2Server.Castle;
-using M2Server.DataSource;
 using M2Server.Event;
 using M2Server.Guild;
 using M2Server.Items;
@@ -43,7 +42,6 @@ namespace M2Server
         /// 地图对象管理
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
-        public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
         public static IMapManager MapMgr;
         public static CustomItem CustomItemMgr = null;
@@ -190,11 +188,12 @@ namespace M2Server
             BasePath = AppContext.BaseDirectory;
             RandomNumber = RandomNumber.GetInstance();
             ActorMgr = new ActorMgr();
-            CommonDb = new CommonDB();
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
             NetworkMonitor = new NetworkMonitor();
             EventMgr = new EventManager();
+            CastleMgr = new CastleManager();
+            GuildMgr = new GuildManager();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             ProcessHumanCriticalSection = new object();
             UserDBCriticalSection = new object();

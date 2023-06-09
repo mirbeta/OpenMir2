@@ -1,5 +1,6 @@
 ﻿using M2Server.Actor;
 using SystemModule;
+using SystemModule.Events;
 
 namespace M2Server.Event.Events
 {

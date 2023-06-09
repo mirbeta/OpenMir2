@@ -1,5 +1,4 @@
 using SystemModule.Data;
-using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule
@@ -417,11 +416,11 @@ namespace SystemModule
         int GetMagStruckDamage(IActor baseObject, int nDamage);
 
         bool DefenceUp(int nSec);
-        
+
         bool MagDefenceUp(int nSec);
 
         ushort GetFeatureEx();
-        
+
         void WinExp(int exp);
 
         void ApplyMeatQuality();
@@ -431,7 +430,7 @@ namespace SystemModule
         void SetLastHiter(IActor actor);
 
         void SetTargetCreat(IActor actor);
-        
+
         IActor GetPoseCreate();
     }
 }

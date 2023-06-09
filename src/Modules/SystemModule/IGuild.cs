@@ -1,6 +1,7 @@
 ﻿using SystemModule.Data;
 
-namespace SystemModule{
+namespace SystemModule
+{
     public interface IGuild
     {
         string GuildName { get; set; }

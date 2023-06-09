@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
-using M2Server.Services;
-using M2Server.World;
-using NLog;
-using System.Buffers;
+﻿using System.Buffers;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading.Channels;
-using SystemModule;
+using GameSrv.Services;
+using GameSrv.Word;
+using M2Server;
+using M2Server.Player;
+using NLog;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace M2Server.Network
+namespace GameSrv.Network
 {
     public class ThreadSocket
     {

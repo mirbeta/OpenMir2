@@ -1,10 +1,10 @@
-﻿using M2Server.Player;
-using M2Server.Services;
-using NLog;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
-using SystemModule;
+using GameSrv.Services;
+using M2Server;
+using M2Server.Player;
+using NLog;
 using SystemModule.ByteManager;
 using SystemModule.Common;
 using SystemModule.Core.Config;
@@ -18,7 +18,7 @@ using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace M2Server.Network
+namespace GameSrv.Network
 {
     public class ThreadSocketMgr
     {

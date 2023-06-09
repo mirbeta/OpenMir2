@@ -1,4 +1,5 @@
 ﻿using SystemModule;
+using SystemModule.Events;
 
 namespace M2Server.Monster.Monsters
 {

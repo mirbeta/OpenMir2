@@ -25,9 +25,10 @@ namespace SystemModule
         /// </summary>
         public int AddTime { get; set; }
     }
-    
 
-    public enum CellAttribute : byte {
+
+    public enum CellAttribute : byte
+    {
         /// <summary>
         /// 可以走动
         /// </summary>

@@ -1,11 +1,11 @@
-﻿using M2Server.Castle;
-using M2Server.Player;
-using M2Server.World;
+﻿using M2Server;
+using M2Server.Castle;
+using M2Server.Npc;
 using ScriptModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.Npc
+namespace GameSrv.NPC
 {
     /// <summary>
     /// 行会NPC类
@@ -17,11 +17,6 @@ namespace M2Server.Npc
         {
             RaceImg = ActorRace.Merchant;
             Appr = 8;
-        }
-
-        public override void Click(IPlayerActor PlayObject)
-        {
-            base.Click(PlayObject);
         }
 
         protected override void GetVariableText(IPlayerActor PlayObject, string sVariable, ref string sMsg)
@@ -127,11 +122,11 @@ namespace M2Server.Npc
             {
                 if (PlayObject.Gold >= ModuleShare.Config.BuildGuildPrice)
                 {
-                    //UserItem = PlayObject.CheckItems(SystemShare.Config.WomaHorn);
-                    //if (UserItem == null)
-                    //{
-                    //    result = -3;// '你没有准备好需要的全部物品。'
-                    //}
+                    UserItem = PlayObject.CheckItems(ModuleShare.Config.WomaHorn);
+                    if (UserItem == null)
+                    {
+                        result = -3;// '你没有准备好需要的全部物品。'
+                    }
                 }
                 else
                 {
@@ -146,17 +141,19 @@ namespace M2Server.Npc
             {
                 if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
                 {
-                    //WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
-                    //PlayObject.SendDelItems(UserItem);
-                    //PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.WomaHorn);
-                    //PlayObject.DecGold(SystemShare.Config.BuildGuildPrice);
-                    //PlayObject.GoldChanged();
-                    //PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
-                    //if (PlayObject.MyGuild != null)
-                    //{
-                    //    PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref PlayObject.GuildRankNo);
-                    //    RefShowName();
-                    //}
+                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
+                    PlayObject.SendDelItems(UserItem);
+                    PlayObject.DelBagItem(UserItem.MakeIndex, ModuleShare.Config.WomaHorn);
+                    PlayObject.DecGold(ModuleShare.Config.BuildGuildPrice);
+                    PlayObject.GoldChanged();
+                    PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
+                    if (PlayObject.MyGuild != null)
+                    {
+                        short rankNo = 0;
+                        PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref rankNo);
+                        PlayObject.GuildRankNo = rankNo;
+                        RefShowName();
+                    }
                 }
                 else
                 {
@@ -188,7 +185,7 @@ namespace M2Server.Npc
                 {
                     PlayObject.DecGold(ModuleShare.Config.GuildWarPrice);
                     PlayObject.GoldChanged();
-                   // PlayObject.ReQuestGuildWar(sGuildName);
+                    PlayObject.ReQuestGuildWar(sGuildName);
                 }
                 else
                 {
@@ -216,34 +213,29 @@ namespace M2Server.Npc
             UserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
             {
-                //UserItem UserItem = PlayObject.CheckItems(SystemShare.Config.ZumaPiece);
-                //if (UserItem != null)
-                //{
-                //    if (Castle.AddAttackerInfo(PlayObject.MyGuild))
-                //    {
-                //        PlayObject.SendDelItems(UserItem);
-                //        PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.ZumaPiece);
-                //        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok", false);
-                //    }
-                //    else
-                //    {
-                //        PlayObject.SysMsg("你现在无法请求攻城!!!", MsgColor.Red, MsgType.Hint);
-                //    }
-                //}
-                //else
-                //{
-                //    PlayObject.SysMsg("你没有" + SystemShare.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
-                //}
+                UserItem UserItem = PlayObject.CheckItems(ModuleShare.Config.ZumaPiece);
+                if (UserItem != null)
+                {
+                    if (Castle.AddAttackerInfo(PlayObject.MyGuild))
+                    {
+                        PlayObject.SendDelItems(UserItem);
+                        PlayObject.DelBagItem(UserItem.MakeIndex, ModuleShare.Config.ZumaPiece);
+                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok", false);
+                    }
+                    else
+                    {
+                        PlayObject.SysMsg("你现在无法请求攻城!!!", MsgColor.Red, MsgType.Hint);
+                    }
+                }
+                else
+                {
+                    PlayObject.SysMsg("你没有" + ModuleShare.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
+                }
             }
             else
             {
                 PlayObject.SysMsg("你的请求被取消!!!", MsgColor.Red, MsgType.Hint);
             }
-        }
-
-        protected override void SendCustemMsg(IPlayerActor PlayObject, string sMsg)
-        {
-            base.SendCustemMsg(PlayObject, sMsg);
         }
     }
 }

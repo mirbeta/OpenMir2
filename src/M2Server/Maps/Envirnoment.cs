@@ -8,6 +8,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.Events;
 using SystemModule.NativeList.Utils;
 
 namespace M2Server

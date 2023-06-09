@@ -1,6 +1,7 @@
 ﻿using SystemModule.NativeList.Utils;
 
-namespace SystemModule{
+namespace SystemModule
+{
     public struct MapCellInfo
     {
         /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace M2Server.Robots {
+﻿namespace GameSrv.Robots {
     public class AutoRunInfo {
         /// <summary>
         /// 上一次运行时间记录

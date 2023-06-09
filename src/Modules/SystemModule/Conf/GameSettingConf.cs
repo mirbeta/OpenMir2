@@ -1,6 +1,7 @@
 ﻿using SystemModule.Common;
 
-namespace SystemModule{
+namespace SystemModule
+{
     public class GameSettingConf : ConfigFile
     {
         public GameSettingConf(string fileName) : base(fileName)

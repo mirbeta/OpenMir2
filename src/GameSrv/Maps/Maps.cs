@@ -1,12 +1,11 @@
 ﻿using System.Diagnostics;
-using M2Server.Event.Events;
-using M2Server.Npc;
+using GameSrv.NPC;
+using M2Server;
 using NLog;
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 
-namespace M2Server.Maps {
+namespace GameSrv.Maps {
     public class Map {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static Thread _makeStoneMinesThread;
