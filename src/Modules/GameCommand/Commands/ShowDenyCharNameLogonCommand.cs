@@ -7,11 +7,11 @@ namespace CommandSystem {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
             try {
-                if (SystemShare.DenyChrNameList.Count <= 0) {
+                if (ModuleShare.DenyChrNameList.Count <= 0) {
                     PlayerActor.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
-                for (var i = 0; i < SystemShare.DenyChrNameList.Count; i++) {
+                for (var i = 0; i < ModuleShare.DenyChrNameList.Count; i++) {
                     //PlayerActor.SysMsg(Settings.g_DenyChrNameList[i], MsgColor.c_Green, MsgType.t_Hint);
                 }
             }

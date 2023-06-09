@@ -11,7 +11,7 @@ namespace CommandSystem
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            PlayerActor.HearMsg($"总在线数{SystemShare.TotalHumCount}");
+            PlayerActor.HearMsg($"总在线数{ModuleShare.TotalHumCount}");
         }
     }
 }

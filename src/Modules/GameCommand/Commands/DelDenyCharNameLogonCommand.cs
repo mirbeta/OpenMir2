@@ -16,7 +16,7 @@ namespace CommandSystem {
             }
             var boDelete = false;
             try {
-                for (var i = 0; i < SystemShare.DenyChrNameList.Count; i++) {
+                for (var i = 0; i < ModuleShare.DenyChrNameList.Count; i++) {
                     //if ((sChrName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyChrNameList[i]) != 0)

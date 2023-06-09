@@ -76,10 +76,10 @@ namespace M2Server.Guild
         public void LoadGuildInfo()
         {
             _guildList.Clear();
-            if (File.Exists(SystemShare.Config.GuildFile))
+            if (File.Exists(ModuleShare.Config.GuildFile))
             {
                 using var loadList = new StringList();
-                loadList.LoadFromFile(SystemShare.Config.GuildFile);
+                loadList.LoadFromFile(ModuleShare.Config.GuildFile);
                 for (var i = 0; i < loadList.Count; i++)
                 {
                     var sGuildName = loadList[i].Trim();
@@ -132,7 +132,7 @@ namespace M2Server.Guild
             }
             try
             {
-                saveList.SaveToFile(SystemShare.Config.GuildFile);
+                saveList.SaveToFile(ModuleShare.Config.GuildFile);
             }
             catch
             {

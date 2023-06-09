@@ -23,13 +23,13 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            var envir = ModuleShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 PlayerActor.SysMsg(CommandHelp.GameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobCountMonsterCount, SystemShare.WorldEngine.GetMapHuman(sMapName)), MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobCountMonsterCount, ModuleShare.WorldEngine.GetMapHuman(sMapName)), MsgColor.Green, MsgType.Hint);
         }
     }
 }

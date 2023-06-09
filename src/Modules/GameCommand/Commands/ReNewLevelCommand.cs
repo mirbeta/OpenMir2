@@ -20,7 +20,7 @@ namespace CommandSystem {
                 return;
             }
             var nLevel = HUtil32.StrToInt(sLevel, -1);
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null) {
                 if (nLevel >= 0 && nLevel <= 255) {
                     mIPlayerActor.ReLevel = (byte)nLevel;

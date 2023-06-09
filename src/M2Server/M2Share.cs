@@ -521,7 +521,7 @@ namespace M2Server
         public static bool CheckGuildName(string sGuildName)
         {
             var result = true;
-            if (sGuildName.Length > SystemShare.Config.GuildNameLen)
+            if (sGuildName.Length > ModuleShare.Config.GuildNameLen)
             {
                 return false;
             }
@@ -538,26 +538,26 @@ namespace M2Server
 
         public static int GetItemNumber()
         {
-            SystemShare. Config.ItemNumber++;
-            if (SystemShare.Config.ItemNumber > int.MaxValue / 2 - 1)
+            ModuleShare. Config.ItemNumber++;
+            if (ModuleShare.Config.ItemNumber > int.MaxValue / 2 - 1)
             {
-                SystemShare. Config.ItemNumber = 1;
+                ModuleShare. Config.ItemNumber = 1;
             }
-            return SystemShare.Config.ItemNumber + HUtil32.GetTickCount();
+            return ModuleShare.Config.ItemNumber + HUtil32.GetTickCount();
         }
 
         public static int GetItemNumberEx()
         {
-            SystemShare.Config.ItemNumberEx++;
-            if (SystemShare.Config.ItemNumberEx < int.MaxValue / 2)
+            ModuleShare.Config.ItemNumberEx++;
+            if (ModuleShare.Config.ItemNumberEx < int.MaxValue / 2)
             {
-                SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
+                ModuleShare.Config.ItemNumberEx = int.MaxValue / 2;
             }
-            if (SystemShare.Config.ItemNumberEx > int.MaxValue - 1)
+            if (ModuleShare.Config.ItemNumberEx > int.MaxValue - 1)
             {
-                SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
+                ModuleShare.Config.ItemNumberEx = int.MaxValue / 2;
             }
-            return SystemShare.Config.ItemNumberEx + HUtil32.GetTickCount();
+            return ModuleShare.Config.ItemNumberEx + HUtil32.GetTickCount();
         }
 
         public static string FilterShowName(string sName)
@@ -2078,27 +2078,27 @@ namespace M2Server
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath);
+            return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath);
         }
 
         public static string GetEnvirFilePath(string dirPath, string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, dirPath, filePath);
+            return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, dirPath, filePath);
         }
 
         public static string GetNoticeFilePath(string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, SystemShare.Config.NoticeDir, filePath);
+            return Path.Combine(BasePath, ModuleShare.Config.NoticeDir, filePath);
         }
     }
 }

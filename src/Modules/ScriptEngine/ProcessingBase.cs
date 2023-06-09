@@ -32,102 +32,102 @@ namespace ScriptModule
             switch (sVariable)
             {
                 case "$SERVERNAME":
-                    sValue = SystemShare.Config.ServerName;
+                    sValue = ModuleShare.Config.ServerName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$SERVERIP":
-                    sValue = SystemShare.Config.ServerIPaddr;
+                    sValue = ModuleShare.Config.ServerIPaddr;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEBSITE":
-                    sValue = SystemShare.Config.sWebSite;
+                    sValue = ModuleShare.Config.sWebSite;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BBSSITE":
-                    sValue = SystemShare.Config.sBbsSite;
+                    sValue = ModuleShare.Config.sBbsSite;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CLIENTDOWNLOAD":
-                    sValue = SystemShare.Config.sClientDownload;
+                    sValue = ModuleShare.Config.sClientDownload;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$QQ":
-                    sValue = SystemShare.Config.sQQ;
+                    sValue = ModuleShare.Config.sQQ;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$PHONE":
-                    sValue = SystemShare.Config.sPhone;
+                    sValue = ModuleShare.Config.sPhone;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT0":
-                    sValue = SystemShare.Config.sBankAccount0;
+                    sValue = ModuleShare.Config.sBankAccount0;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT1":
-                    sValue = SystemShare.Config.sBankAccount1;
+                    sValue = ModuleShare.Config.sBankAccount1;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT2":
-                    sValue = SystemShare.Config.sBankAccount2;
+                    sValue = ModuleShare.Config.sBankAccount2;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT3":
-                    sValue = SystemShare.Config.sBankAccount3;
+                    sValue = ModuleShare.Config.sBankAccount3;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT4":
-                    sValue = SystemShare.Config.sBankAccount4;
+                    sValue = ModuleShare.Config.sBankAccount4;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT5":
-                    sValue = SystemShare.Config.sBankAccount5;
+                    sValue = ModuleShare.Config.sBankAccount5;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT6":
-                    sValue = SystemShare.Config.sBankAccount6;
+                    sValue = ModuleShare.Config.sBankAccount6;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT7":
-                    sValue = SystemShare.Config.sBankAccount7;
+                    sValue = ModuleShare.Config.sBankAccount7;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT8":
-                    sValue = SystemShare.Config.sBankAccount8;
+                    sValue = ModuleShare.Config.sBankAccount8;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BANKACCOUNT9":
-                    sValue = SystemShare.Config.sBankAccount9;
+                    sValue = ModuleShare.Config.sBankAccount9;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$GAMEGOLDNAME":
-                    sValue = SystemShare.Config.GameGoldName;
+                    sValue = ModuleShare.Config.GameGoldName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$GAMEPOINTNAME":
-                    sValue = SystemShare.Config.GamePointName;
+                    sValue = ModuleShare.Config.GamePointName;
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$USERCOUNT":
-                    sValue = SystemShare.WorldEngine.PlayObjectCount.ToString();
+                    sValue = ModuleShare.WorldEngine.PlayObjectCount.ToString();
                     nDataType = 0;
                     result = true;
                     return result;
@@ -137,7 +137,7 @@ namespace ScriptModule
                     result = true;
                     return result;
                 case "$SERVERRUNTIME":
-                    sValue = DateTimeOffset.FromUnixTimeMilliseconds(SystemShare.StartTime).ToString("YYYY-MM-DD HH:mm:ss");
+                    sValue = DateTimeOffset.FromUnixTimeMilliseconds(ModuleShare.StartTime).ToString("YYYY-MM-DD HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;
@@ -226,18 +226,18 @@ namespace ScriptModule
                     result = true;
                     return result;
                 case "$STATSERVERTIME":// 显示M2启动时间
-                    DateTimeOffset.FromUnixTimeMilliseconds(SystemShare.StartTime).ToString("YYYY-MM-DD HH:mm:ss");
+                    DateTimeOffset.FromUnixTimeMilliseconds(ModuleShare.StartTime).ToString("YYYY-MM-DD HH:mm:ss");
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RUNDATETIME":// 开区间隔时间 显示为XX小时。
-                    var ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(SystemShare.StartTime);
+                    var ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(ModuleShare.StartTime);
                     sValue = $"服务器运行:[{ts.Days}天{ts.Hours}小时{ts.Minutes}分{ts.Seconds}秒]";
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RANDOMNO":// 随机值变量
-                    nValue = SystemShare.RandomNumber.Random(int.MaxValue);
+                    nValue = ModuleShare.RandomNumber.Random(int.MaxValue);
                     nDataType = 1;
                     result = true;
                     return result;
@@ -451,67 +451,67 @@ namespace ScriptModule
                     result = true;
                     return result;
                 case "$DRESS":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEAPON":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RIGHTHAND":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$HELMET":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$NECKLACE":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_R":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_L":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_R":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_L":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BUJUK":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BELT":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BOOTS":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CHARM":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
+                    sValue = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
                     nDataType = 0;
                     result = true;
                     return result;
@@ -564,7 +564,7 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(sVariable, "$GLOBAL", 6))//  全局变量
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref sVarValue2);
-                if (SystemShare.DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
+                if (ModuleShare.DynamicVarList.TryGetValue(sVarValue2, out DynamicVar))
                 {
                     switch (DynamicVar.VarType)
                     {
@@ -627,7 +627,7 @@ namespace ScriptModule
         internal static bool SetMovDataValNameValue(IPlayerActor playerActor, string sVarName, string sValue, int nValue, int nDataType)
         {
             bool result = false;
-            int n100 = SystemShare.GetValNameNo(sVarName);
+            int n100 = ModuleShare.GetValNameNo(sVarName);
             if (n100 >= 0)
             {
                 switch (nDataType)
@@ -640,7 +640,7 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
                         {
-                            SystemShare.Config.GlobalVal[n100 - 100] = nValue;
+                            ModuleShare.Config.GlobalVal[n100 - 100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
@@ -655,7 +655,7 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
                         {
-                            SystemShare.Config.GlobaDyMval[n100 - 400] = nValue;
+                            ModuleShare.Config.GlobaDyMval[n100 - 400] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
@@ -670,17 +670,17 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
                         {
-                            SystemShare.Config.GlobalAVal[n100 - 700] = nValue.ToString();
+                            ModuleShare.Config.GlobalAVal[n100 - 700] = nValue.ToString();
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
                         {
-                            SystemShare.Config.GlobalVal[n100 - 700] = nValue;
+                            ModuleShare.Config.GlobalVal[n100 - 700] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量
                         {
-                            SystemShare.Config.GlobalAVal[n100 - 1100] = nValue.ToString();
+                            ModuleShare.Config.GlobalAVal[n100 - 1100] = nValue.ToString();
                             result = true;
                         }
                         else
@@ -696,7 +696,7 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
                         {
-                            SystemShare.Config.GlobalVal[n100 - 100] = HUtil32.StrToInt(sValue, 0);
+                            ModuleShare.Config.GlobalVal[n100 - 100] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
@@ -711,7 +711,7 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
                         {
-                            SystemShare.Config.GlobaDyMval[n100 - 400] = HUtil32.StrToInt(sValue, 0);
+                            ModuleShare.Config.GlobaDyMval[n100 - 400] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
@@ -726,17 +726,17 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
                         {
-                            SystemShare.Config.GlobalAVal[n100 - 700] = sValue;
+                            ModuleShare.Config.GlobalAVal[n100 - 700] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
                         {
-                            SystemShare.Config.GlobalVal[n100 - 700] = HUtil32.StrToInt(sValue, 0);
+                            ModuleShare.Config.GlobalVal[n100 - 700] = HUtil32.StrToInt(sValue, 0);
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量
                         {
-                            SystemShare.Config.GlobalAVal[n100 - 1100] = sValue;
+                            ModuleShare.Config.GlobalAVal[n100 - 1100] = sValue;
                             result = true;
                         }
                         else
@@ -752,7 +752,7 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 100, 199))
                         {
-                            SystemShare.Config.GlobalVal[n100 - 100] = nValue;
+                            ModuleShare.Config.GlobalVal[n100 - 100] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 200, 299))
@@ -767,7 +767,7 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 400, 499))
                         {
-                            SystemShare.Config.GlobaDyMval[n100 - 400] = nValue;
+                            ModuleShare.Config.GlobaDyMval[n100 - 400] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 500, 599))
@@ -782,17 +782,17 @@ namespace ScriptModule
                         }
                         else if (HUtil32.RangeInDefined(n100, 700, 799))
                         {
-                            SystemShare.Config.GlobalAVal[n100 - 700] = sValue;
+                            ModuleShare.Config.GlobalAVal[n100 - 700] = sValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 800, 1199)) // G变量
                         {
-                            SystemShare.Config.GlobalVal[n100 - 700] = nValue;
+                            ModuleShare.Config.GlobalVal[n100 - 700] = nValue;
                             result = true;
                         }
                         else if (HUtil32.RangeInDefined(n100, 1200, 1599)) // A变量
                         {
-                            SystemShare.Config.GlobalAVal[n100 - 1100] = sValue;
+                            ModuleShare.Config.GlobalAVal[n100 - 1100] = sValue;
                             result = true;
                         }
                         else
@@ -815,7 +815,7 @@ namespace ScriptModule
             nValue = -1;
             sValue = "";
             nDataType = -1;
-            int n100 = SystemShare.GetValNameNo(sVarName);
+            int n100 = ModuleShare.GetValNameNo(sVarName);
             if (n100 >= 0)
             {
                 if (HUtil32.RangeInDefined(n100, 0, 99))
@@ -826,7 +826,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n100, 100, 199))
                 {
-                    nValue = SystemShare.Config.GlobalVal[n100 - 100];
+                    nValue = ModuleShare.Config.GlobalVal[n100 - 100];
                     nDataType = 1;
                     result = true;
                 }
@@ -844,7 +844,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n100, 400, 499))
                 {
-                    nValue = SystemShare.Config.GlobaDyMval[n100 - 400];
+                    nValue = ModuleShare.Config.GlobaDyMval[n100 - 400];
                     nDataType = 1;
                     result = true;
                 }
@@ -862,19 +862,19 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n100, 700, 799))
                 {
-                    sValue = SystemShare.Config.GlobalAVal[n100 - 700];
+                    sValue = ModuleShare.Config.GlobalAVal[n100 - 700];
                     nDataType = 0;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 800, 1199))//G变量
                 {
-                    nValue = SystemShare.Config.GlobalVal[n100 - 700];
+                    nValue = ModuleShare.Config.GlobalVal[n100 - 700];
                     nDataType = 1;
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n100, 1200, 1599))//A变量
                 {
-                    sValue = SystemShare.Config.GlobalAVal[n100 - 1100];
+                    sValue = ModuleShare.Config.GlobalAVal[n100 - 1100];
                     nDataType = 0;
                     result = true;
                 }
@@ -976,7 +976,7 @@ namespace ScriptModule
                 {
                     result = 0;
                 }
-                else if ((!string.IsNullOrEmpty(sParam3)) && (SystemShare.GetValNameNo(sParam3) >= 0))
+                else if ((!string.IsNullOrEmpty(sParam3)) && (ModuleShare.GetValNameNo(sParam3) >= 0))
                 {
                     result = 1;
                 }
@@ -990,14 +990,14 @@ namespace ScriptModule
                 }
                 return result;
             }
-            int n01 = SystemShare.GetValNameNo(sParam1);
+            int n01 = ModuleShare.GetValNameNo(sParam1);
             if (n01 >= 0)
             {
                 if (((!string.IsNullOrEmpty(sParam2))) && (sParam2[0] == '<') && (sParam2[^1] == '>'))
                 {
                     result = 4;
                 }
-                else if (((!string.IsNullOrEmpty(sParam2))) && (SystemShare.GetValNameNo(sParam2) >= 0))
+                else if (((!string.IsNullOrEmpty(sParam2))) && (ModuleShare.GetValNameNo(sParam2) >= 0))
                 {
                     result = 5;
                 }
@@ -1033,7 +1033,7 @@ namespace ScriptModule
             }
             else if (HUtil32.CompareLStr(sType, "GLOBAL", 6))
             {
-                result = SystemShare.DynamicVarList;
+                result = ModuleShare.DynamicVarList;
                 sName = "GLOBAL";
             }
             else if (HUtil32.CompareLStr(sType, "Account", 7))
@@ -1073,7 +1073,7 @@ namespace ScriptModule
                 return false;
             }
             bool result = false;
-            var n01 = SystemShare.GetValNameNo(sMsg);
+            var n01 = ModuleShare.GetValNameNo(sMsg);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 600, 699))
@@ -1083,12 +1083,12 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n01, 700, 799))
                 {
-                    sValue = SystemShare.Config.GlobalAVal[n01 - 700];
+                    sValue = ModuleShare.Config.GlobalAVal[n01 - 700];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                 {
-                    sValue = SystemShare.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
+                    sValue = ModuleShare.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
@@ -1107,7 +1107,7 @@ namespace ScriptModule
             {
                 return false;
             }
-            int n01 = SystemShare.GetValNameNo(sMsg);
+            int n01 = ModuleShare.GetValNameNo(sMsg);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 0, 99))
@@ -1117,7 +1117,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n01, 100, 199))
                 {
-                    nValue = SystemShare.Config.GlobalVal[n01 - 100];
+                    nValue = ModuleShare.Config.GlobalVal[n01 - 100];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 200, 299))
@@ -1132,7 +1132,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n01, 400, 499))
                 {
-                    nValue = SystemShare.Config.GlobaDyMval[n01 - 400];
+                    nValue = ModuleShare.Config.GlobaDyMval[n01 - 400];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 500, 599))
@@ -1147,17 +1147,17 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n01, 700, 799))
                 {
-                    nValue = HUtil32.StrToInt(SystemShare.Config.GlobalAVal[n01 - 700], 0);
+                    nValue = HUtil32.StrToInt(ModuleShare.Config.GlobalAVal[n01 - 700], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 800, 1199))
                 {
-                    nValue = SystemShare.Config.GlobalVal[n01 - 700];
+                    nValue = ModuleShare.Config.GlobalVal[n01 - 700];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                 {
-                    nValue = HUtil32.StrToInt(SystemShare.Config.GlobalAVal[n01 - 1100], 0);
+                    nValue = HUtil32.StrToInt(ModuleShare.Config.GlobalAVal[n01 - 1100], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
@@ -1221,7 +1221,7 @@ namespace ScriptModule
             else if (sName[0] == '$')
             {
                 sName = sName.Substring(2 - 1, sName.Length - 1);
-                n10 = SystemShare.GetValNameNo(sName);
+                n10 = ModuleShare.GetValNameNo(sName);
                 if (n10 >= 0)
                 {
                     sVar = "<$STR(" + sName + ")>";
@@ -1251,7 +1251,7 @@ namespace ScriptModule
             }
             else
             {
-                n10 = SystemShare.GetValNameNo(sName);
+                n10 = ModuleShare.GetValNameNo(sName);
                 if (n10 >= 0)
                 {
                     sVar = "<$STR(" + sName + ")>";
@@ -1351,18 +1351,18 @@ namespace ScriptModule
             {
                 sName = sName.Substring(1, sName.Length - 1);// $S0
             }
-            var n01 = SystemShare.GetValNameNo(sName);
+            var n01 = ModuleShare.GetValNameNo(sName);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 0, 99))
                 {
-                    nValue = SystemShare.Config.GlobalVal[n01];// G
+                    nValue = ModuleShare.Config.GlobalVal[n01];// G
                     sValue = nValue.ToString();
                     result = VarType.Integer;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1000, 1099))
                 {
-                    nValue = SystemShare.Config.GlobaDyMval[n01 - 1000];// I
+                    nValue = ModuleShare.Config.GlobaDyMval[n01 - 1000];// I
                     sValue = nValue.ToString();
                     result = VarType.Integer;
                 }
@@ -1392,7 +1392,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n01, 2000, 2499))
                 {
-                    sValue = SystemShare.Config.GlobalAVal[n01 - 2000];// A
+                    sValue = ModuleShare.Config.GlobalAVal[n01 - 2000];// A
                     nValue = HUtil32.StrToInt(sValue, 0);
                     result = VarType.String;
                 }
@@ -1555,7 +1555,7 @@ namespace ScriptModule
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref dynamicName);
                 boFoundVar = false;
-                if (SystemShare.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
+                if (ModuleShare.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
                 {
                     if (string.Compare(DynamicVar.sName, dynamicName, StringComparison.Ordinal) == 0)
                     {
@@ -1581,12 +1581,12 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(sVariable, "$STR("))
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref dynamicName);
-                int n18 = SystemShare.GetValNameNo(dynamicName);
+                int n18 = ModuleShare.GetValNameNo(dynamicName);
                 if (n18 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n18, 0, 499))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', SystemShare.Config.GlobalVal[n18].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', ModuleShare.Config.GlobalVal[n18].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1100, 1109))
                     {
@@ -1602,7 +1602,7 @@ namespace ScriptModule
                     }
                     else if (HUtil32.RangeInDefined(n18, 1000, 1099))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', SystemShare.Config.GlobaDyMval[n18 - 1000].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', ModuleShare.Config.GlobaDyMval[n18 - 1000].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1300, 1399))
                     {
@@ -1614,7 +1614,7 @@ namespace ScriptModule
                     }
                     else if (HUtil32.RangeInDefined(n18, 2000, 2499))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', SystemShare.Config.GlobalAVal[n18 - 2000]);
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', ModuleShare.Config.GlobalAVal[n18 - 2000]);
                     }
                 }
                 else if (dynamicName != "" && char.ToUpper(dynamicName[1]) == 'S')
@@ -1701,17 +1701,17 @@ namespace ScriptModule
             {
                 sName = sName.Substring(1, sName.Length - 1);
             }
-            var n01 = SystemShare.GetValNameNo(sName);
+            var n01 = ModuleShare.GetValNameNo(sName);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 0, 499))
                 {
-                    SystemShare.Config.GlobalVal[n01] = nValue;// G
+                    ModuleShare.Config.GlobalVal[n01] = nValue;// G
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1000, 1099))
                 {
-                    SystemShare.Config.GlobaDyMval[n01 - 1000] = nValue;// I
+                    ModuleShare.Config.GlobaDyMval[n01 - 1000] = nValue;// I
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1100, 1109))
@@ -1736,7 +1736,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n01, 2000, 2499))
                 {
-                    SystemShare.Config.GlobalAVal[n01 - 2000] = sValue;// A
+                    ModuleShare.Config.GlobalAVal[n01 - 2000] = sValue;// A
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1400, 1499))
@@ -1793,7 +1793,7 @@ namespace ScriptModule
             }
             else if (HUtil32.CompareLStr(sType, "GLOBAL"))
             {
-                result = SystemShare.DynamicVarList;
+                result = ModuleShare.DynamicVarList;
                 sName = "GLOBAL";
             }
             return result;
@@ -1824,7 +1824,7 @@ namespace ScriptModule
         {
             bool result = false;
             StringList LoadList;
-            sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
+            sListFileName = ModuleShare.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
                 LoadList = new StringList();
@@ -1834,7 +1834,7 @@ namespace ScriptModule
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    ModuleShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < LoadList.Count; i++)
                 {
@@ -1848,7 +1848,7 @@ namespace ScriptModule
             }
             else
             {
-                SystemShare.Logger.Error("file not found => " + sListFileName);
+                ModuleShare.Logger.Error("file not found => " + sListFileName);
             }
             return result;
         }

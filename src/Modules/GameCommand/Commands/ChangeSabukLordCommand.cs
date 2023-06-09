@@ -25,20 +25,20 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var castle = SystemShare.CastleMgr.Find(sCastleName);
+            var castle = ModuleShare.CastleMgr.Find(sCastleName);
             if (castle == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = SystemShare.GuildMgr.FindGuild(sGuildName);
+            var guild = ModuleShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
                 //M2Share.EventSource.AddEventLog(27, castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayerActor.ChrName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 castle.GetCastle(guild);
                 if (boFlag)
                 {
-                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_211, SystemShare.ServerIndex, sGuildName);
+                    ModuleShare.WorldEngine.SendServerGroupMsg(Messages.SS_211, ModuleShare.ServerIndex, sGuildName);
                 }
                 PlayerActor.SysMsg(castle.sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
             }

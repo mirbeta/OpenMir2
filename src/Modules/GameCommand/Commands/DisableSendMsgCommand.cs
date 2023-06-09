@@ -14,12 +14,12 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null) {
                 mIPlayerActor.FilterSendMsg = true;
             }
-            SystemShare.DisableSendMsgList.Add(sHumanName);
-            SystemShare.SaveDisableSendMsgList();
+            ModuleShare.DisableSendMsgList.Add(sHumanName);
+            ModuleShare.SaveDisableSendMsgList();
             PlayerActor.SysMsg(sHumanName + " 已加入禁言列表。", MsgColor.Green, MsgType.Hint);
         }
     }

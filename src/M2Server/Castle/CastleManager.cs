@@ -61,7 +61,7 @@ namespace M2Server.Castle
             UserCastle castle;
             if (CastleList.Count <= 0)
             {
-                castle = new UserCastle(SystemShare.Config.CastleDir);
+                castle = new UserCastle(ModuleShare.Config.CastleDir);
                 castle.Initialize();
                 castle.ConfigDir = "0";
                 castle.EnvirList.Add("0151");
@@ -149,7 +149,7 @@ namespace M2Server.Castle
 
         public void LoadCastleList()
         {
-            string castleFile = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleFile);
+            string castleFile = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleFile);
             if (File.Exists(castleFile))
             {
                 using StringList loadList = new StringList();
@@ -173,7 +173,7 @@ namespace M2Server.Castle
 
         private void SaveCastleList()
         {
-            string castleDirPath = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleDir);
+            string castleDirPath = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleDir);
             if (!Directory.Exists(castleDirPath))
             {
                 Directory.CreateDirectory(castleDirPath);
@@ -183,7 +183,7 @@ namespace M2Server.Castle
             {
                 loadList.Add(i.ToString());
             }
-            string savePath = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleFile);
+            string savePath = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleFile);
             loadList.SaveToFile(savePath);
         }
 

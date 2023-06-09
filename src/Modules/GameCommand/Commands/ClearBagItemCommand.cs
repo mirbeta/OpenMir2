@@ -22,7 +22,7 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -47,7 +47,7 @@ namespace CommandSystem
             if (delList != null)
             {
                 var objectId = HUtil32.Sequence();
-                SystemShare.ActorMgr.AddOhter(objectId, delList);
+                ModuleShare.ActorMgr.AddOhter(objectId, delList);
                 mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
         }

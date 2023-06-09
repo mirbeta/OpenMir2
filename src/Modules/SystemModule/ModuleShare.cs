@@ -8,7 +8,7 @@ using SystemModule.Enums;
 
 namespace SystemModule
 {
-    public static class SystemShare
+    public static class ModuleShare
     {
         public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
@@ -169,7 +169,7 @@ namespace SystemModule
         private static readonly GlobalConf GlobalConf;
         private static readonly GameSettingConf GameSetting;
 
-        static SystemShare()
+        static ModuleShare()
         {
             BasePath = AppContext.BaseDirectory;
             ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.ServerFileName));

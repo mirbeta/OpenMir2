@@ -11,7 +11,7 @@ namespace CommandSystem
     public class ReloadMagicDbCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            SystemShare.CommonDb.LoadMagicDB();
+            ModuleShare.CommonDb.LoadMagicDB();
             PlayerActor.SysMsg("魔法数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
         }
     }

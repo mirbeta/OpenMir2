@@ -351,8 +351,8 @@ namespace SystemModule{
             gameCommands.ClearBag.PerMissionMin = ReadWriteByte("Permission", "ClearBag", gameCommands.ClearBag.PerMissionMin);
             gameCommands.LockLogon.CmdName = ReadWriteString("Command", "LockLogin", gameCommands.LockLogon.CmdName);
             gameCommands.LockLogon.PerMissionMin = ReadWriteByte("Permission", "LockLogin", gameCommands.LockLogon.PerMissionMin);*/
-            SystemShare.GMRedMsgCmd = Convert.ToChar(ReadWriteString("Command", "GMRedMsgCmd", SystemShare.GMRedMsgCmd.ToString()));
-            SystemShare.GMREDMSGCMD = ReadWriteByte("Permission", "GMRedMsgCmd", SystemShare.GMREDMSGCMD);
+            ModuleShare.GMRedMsgCmd = Convert.ToChar(ReadWriteString("Command", "GMRedMsgCmd", ModuleShare.GMRedMsgCmd.ToString()));
+            ModuleShare.GMREDMSGCMD = ReadWriteByte("Permission", "GMRedMsgCmd", ModuleShare.GMREDMSGCMD);
         }
     }
 }

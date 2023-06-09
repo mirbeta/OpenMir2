@@ -6,9 +6,9 @@ namespace CommandSystem {
     public class ReloadRobotManageCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            if (SystemShare.RobotNPC != null) {
-                SystemShare.RobotNPC.ClearScript();
-                SystemShare.RobotNPC.LoadNPCScript();
+            if (ModuleShare.RobotNPC != null) {
+                ModuleShare.RobotNPC.ClearScript();
+                ModuleShare.RobotNPC.LoadNPCScript();
                 PlayerActor.SysMsg("重新加载机器人专用脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else {

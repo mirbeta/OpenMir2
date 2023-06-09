@@ -16,7 +16,7 @@ namespace CommandSystem {
                 return;
             }
             var boDelete = false;
-            for (var i = 0; i < SystemShare.DenyAccountList.Count; i++) {
+            for (var i = 0; i < ModuleShare.DenyAccountList.Count; i++) {
                 //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{
                 //    //if (((int)M2Share.g_DenyAccountList[i]) != 0)

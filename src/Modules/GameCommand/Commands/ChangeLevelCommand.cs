@@ -23,9 +23,9 @@ namespace CommandSystem
             PlayerActor.SysMsgAbil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
             PlayerActor.SysMsgHasLevelUp(1);// 等级调整记录日志
             //   M2Share.EventSource.AddEventLog(17, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + PlayerActor.SysMsgAbil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
-            if (SystemShare.Config.ShowMakeItemMsg)
+            if (ModuleShare.Config.ShowMakeItemMsg)
             {
-                SystemShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.SysMsgAbil.Level));
+                ModuleShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.SysMsgAbil.Level));
             }
         }
     }

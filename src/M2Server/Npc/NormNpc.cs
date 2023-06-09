@@ -270,61 +270,61 @@ namespace M2Server.Npc
             switch (sVariable)
             {
                 case "$SERVERNAME":
-                    sMsg = ReplaceVariableText(sMsg, "<$SERVERNAME>", SystemShare.Config.ServerName);
+                    sMsg = ReplaceVariableText(sMsg, "<$SERVERNAME>", ModuleShare.Config.ServerName);
                     return;
                 case "$SERVERIP":
-                    sMsg = ReplaceVariableText(sMsg, "<$SERVERIP>", SystemShare.Config.ServerIPaddr);
+                    sMsg = ReplaceVariableText(sMsg, "<$SERVERIP>", ModuleShare.Config.ServerIPaddr);
                     return;
                 case "$WEBSITE":
-                    sMsg = ReplaceVariableText(sMsg, "<$WEBSITE>", SystemShare.Config.sWebSite);
+                    sMsg = ReplaceVariableText(sMsg, "<$WEBSITE>", ModuleShare.Config.sWebSite);
                     return;
                 case "$BBSSITE":
-                    sMsg = ReplaceVariableText(sMsg, "<$BBSSITE>", SystemShare.Config.sBbsSite);
+                    sMsg = ReplaceVariableText(sMsg, "<$BBSSITE>", ModuleShare.Config.sBbsSite);
                     return;
                 case "$CLIENTDOWNLOAD":
-                    sMsg = ReplaceVariableText(sMsg, "<$CLIENTDOWNLOAD>", SystemShare.Config.sClientDownload);
+                    sMsg = ReplaceVariableText(sMsg, "<$CLIENTDOWNLOAD>", ModuleShare.Config.sClientDownload);
                     return;
                 case "$QQ":
-                    sMsg = ReplaceVariableText(sMsg, "<$QQ>", SystemShare.Config.sQQ);
+                    sMsg = ReplaceVariableText(sMsg, "<$QQ>", ModuleShare.Config.sQQ);
                     return;
                 case "$PHONE":
-                    sMsg = ReplaceVariableText(sMsg, "<$PHONE>", SystemShare.Config.sPhone);
+                    sMsg = ReplaceVariableText(sMsg, "<$PHONE>", ModuleShare.Config.sPhone);
                     return;
                 case "$BANKACCOUNT0":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount0);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount0);
                     return;
                 case "$BANKACCOUNT1":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT1>", SystemShare.Config.sBankAccount1);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT1>", ModuleShare.Config.sBankAccount1);
                     return;
                 case "$BANKACCOUNT2":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT2>", SystemShare.Config.sBankAccount2);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT2>", ModuleShare.Config.sBankAccount2);
                     return;
                 case "$BANKACCOUNT3":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT3>", SystemShare.Config.sBankAccount3);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT3>", ModuleShare.Config.sBankAccount3);
                     return;
                 case "$BANKACCOUNT4":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT4>", SystemShare.Config.sBankAccount4);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT4>", ModuleShare.Config.sBankAccount4);
                     return;
                 case "$BANKACCOUNT5":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT5>", SystemShare.Config.sBankAccount5);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT5>", ModuleShare.Config.sBankAccount5);
                     return;
                 case "$BANKACCOUNT6":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT6>", SystemShare.Config.sBankAccount6);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT6>", ModuleShare.Config.sBankAccount6);
                     return;
                 case "$BANKACCOUNT7":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT7>", SystemShare.Config.sBankAccount7);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT7>", ModuleShare.Config.sBankAccount7);
                     return;
                 case "$BANKACCOUNT8":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT8>", SystemShare.Config.sBankAccount8);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT8>", ModuleShare.Config.sBankAccount8);
                     return;
                 case "$BANKACCOUNT9":
-                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT9>", SystemShare.Config.sBankAccount9);
+                    sMsg = ReplaceVariableText(sMsg, "<$BANKACCOUNT9>", ModuleShare.Config.sBankAccount9);
                     return;
                 case "$GAMEGOLDNAME":
-                    sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLDNAME>", SystemShare.Config.GameGoldName);
+                    sMsg = ReplaceVariableText(sMsg, "<$GAMEGOLDNAME>", ModuleShare.Config.GameGoldName);
                     return;
                 case "$GAMEPOINTNAME":
-                    sMsg = ReplaceVariableText(sMsg, "<$GAMEPOINTNAME>", SystemShare.Config.GamePointName);
+                    sMsg = ReplaceVariableText(sMsg, "<$GAMEPOINTNAME>", ModuleShare.Config.GamePointName);
                     return;
                 case "$USERCOUNT":
                     sText = M2Share.WorldEngine.PlayObjectCount.ToString();
@@ -724,15 +724,15 @@ namespace M2Server.Npc
                         return;
                     }
                 case "$REQUESTCASTLEWARITEM":
-                    sText = SystemShare.Config.ZumaPiece;
+                    sText = ModuleShare.Config.ZumaPiece;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", sText);
                     return;
                 case "$REQUESTCASTLEWARDAY":
-                    sText = SystemShare.Config.ZumaPiece;
+                    sText = ModuleShare.Config.ZumaPiece;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARDAY>", sText);
                     return;
                 case "$REQUESTBUILDGUILDITEM":
-                    sText = SystemShare.Config.WomaHorn;
+                    sText = ModuleShare.Config.WomaHorn;
                     sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", sText);
                     return;
                 case "$OWNERGUILD":
@@ -786,10 +786,10 @@ namespace M2Server.Npc
                         return;
                     }
                 case "$GUILDWARFEE":
-                    sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", SystemShare.Config.GuildWarPrice.ToString());
+                    sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", ModuleShare.Config.GuildWarPrice.ToString());
                     return;
                 case "$BUILDGUILDFEE":
-                    sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", SystemShare.Config.BuildGuildPrice.ToString());
+                    sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", ModuleShare.Config.BuildGuildPrice.ToString());
                     return;
                 case "$CASTLEWARDATE":
                     {
@@ -1415,28 +1415,28 @@ namespace M2Server.Npc
             }
             if (sVariable == "$REQUESTCASTLEWARITEM") // 祖玛头像
             {
-                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", SystemShare.Config.ZumaPiece);
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARITEM>", ModuleShare.Config.ZumaPiece);
                 return;
             }
             if (sVariable == "$REQUESTCASTLEWARDAY")// 几天后开始攻城
             {
-                sText = SystemShare.Config.StartCastleWarDays.ToString();
+                sText = ModuleShare.Config.StartCastleWarDays.ToString();
                 sMsg = ReplaceVariableText(sMsg, "<$REQUESTCASTLEWARDAY>", sText);
                 return;
             }
             if (sVariable == "$REQUESTBUILDGUILDITEM")// 沃玛号角
             {
-                sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", SystemShare.Config.WomaHorn);
+                sMsg = ReplaceVariableText(sMsg, "<$REQUESTBUILDGUILDITEM>", ModuleShare.Config.WomaHorn);
                 return;
             }
             if (sVariable == "$GUILDWARFEE") // 行会战金币数
             {
-                sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", SystemShare.Config.GuildWarPrice.ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$GUILDWARFEE>", ModuleShare.Config.GuildWarPrice.ToString());
                 return;
             }
             if (sVariable == "$BUILDGUILDFEE")// 建立行会所需的金币数
             {
-                sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", SystemShare.Config.BuildGuildPrice.ToString());
+                sMsg = ReplaceVariableText(sMsg, "<$BUILDGUILDFEE>", ModuleShare.Config.BuildGuildPrice.ToString());
                 return;
             }
             if (HUtil32.CompareLStr(sVariable, "$HUMAN("))
@@ -1530,7 +1530,7 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 100, 199))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", SystemShare.Config.GlobalVal[nVarValue - 100].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", ModuleShare.Config.GlobalVal[nVarValue - 100].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 200, 299))
                     {
@@ -1542,7 +1542,7 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 400, 499))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", SystemShare.Config.GlobaDyMval[nVarValue - 400].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", ModuleShare.Config.GlobaDyMval[nVarValue - 400].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 500, 599))
                     {
@@ -1554,15 +1554,15 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 700, 799))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", SystemShare.Config.GlobalAVal[nVarValue - 700]);
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", ModuleShare.Config.GlobalAVal[nVarValue - 700]);
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 800, 1199))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", SystemShare.Config.GlobalVal[nVarValue - 700].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", ModuleShare.Config.GlobalVal[nVarValue - 700].ToString());
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1200, 1599))
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", SystemShare.Config.GlobalAVal[nVarValue - 1100]);
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", ModuleShare.Config.GlobalAVal[nVarValue - 1100]);
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1600, 1699)) //个人服务器字符串变量E
                     {
@@ -1651,7 +1651,7 @@ namespace M2Server.Npc
 
         protected virtual void SendCustemMsg(IPlayerActor PlayObject, string sMsg)
         {
-            if (!SystemShare.Config.SendCustemMsg)
+            if (!ModuleShare.Config.SendCustemMsg)
             {
                 PlayObject.SysMsg(Settings.SendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -1686,7 +1686,7 @@ namespace M2Server.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 100, 199))
                 {
-                    nValue = SystemShare.Config.GlobalVal[n01 - 100];
+                    nValue = ModuleShare.Config.GlobalVal[n01 - 100];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 200, 299))
@@ -1701,7 +1701,7 @@ namespace M2Server.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 400, 499))
                 {
-                    nValue = SystemShare.Config.GlobaDyMval[n01 - 400];
+                    nValue = ModuleShare.Config.GlobaDyMval[n01 - 400];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 500, 599))
@@ -1716,17 +1716,17 @@ namespace M2Server.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 700, 799))
                 {
-                    nValue = HUtil32.StrToInt(SystemShare.Config.GlobalAVal[n01 - 700], 0);
+                    nValue = HUtil32.StrToInt(ModuleShare.Config.GlobalAVal[n01 - 700], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 800, 1199))
                 {
-                    nValue = SystemShare.Config.GlobalVal[n01 - 700];
+                    nValue = ModuleShare.Config.GlobalVal[n01 - 700];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                 {
-                    nValue = HUtil32.StrToInt(SystemShare.Config.GlobalAVal[n01 - 1100], 0);
+                    nValue = HUtil32.StrToInt(ModuleShare.Config.GlobalAVal[n01 - 1100], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
@@ -1760,12 +1760,12 @@ namespace M2Server.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 700, 799))
                 {
-                    sValue = SystemShare.Config.GlobalAVal[n01 - 700];
+                    sValue = ModuleShare.Config.GlobalAVal[n01 - 700];
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                 {
-                    sValue = SystemShare.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
+                    sValue = ModuleShare.Config.GlobalAVal[n01 - 1100];// A变量(100-499)
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
@@ -1797,7 +1797,7 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(n01, 100, 199))
                     {
-                        SystemShare.Config.GlobalVal[n01 - 100] = nValue;
+                        ModuleShare.Config.GlobalVal[n01 - 100] = nValue;
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 200, 299))
@@ -1812,7 +1812,7 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(n01, 400, 499))
                     {
-                        SystemShare.Config.GlobaDyMval[n01 - 400] = nValue;
+                        ModuleShare.Config.GlobaDyMval[n01 - 400] = nValue;
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 500, 599))
@@ -1822,7 +1822,7 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(n01, 800, 1199))
                     {
-                        SystemShare.Config.GlobalVal[n01 - 700] = nValue;//G变量
+                        ModuleShare.Config.GlobalVal[n01 - 700] = nValue;//G变量
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 1700, 1799))
@@ -1859,12 +1859,12 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(n01, 700, 799))
                     {
-                        SystemShare.Config.GlobalAVal[n01 - 700] = sValue;
+                        ModuleShare.Config.GlobalAVal[n01 - 700] = sValue;
                         result = true;
                     }
                     else if (HUtil32.RangeInDefined(n01, 1200, 1599))
                     {
-                        SystemShare.Config.GlobalAVal[n01 - 1100] = sValue;// A变量(100-499)
+                        ModuleShare.Config.GlobalAVal[n01 - 1100] = sValue;// A变量(100-499)
                         result = true;
                     }
                 }

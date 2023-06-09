@@ -236,7 +236,7 @@ namespace M2Server.World
             {
                 playObject = new PlayObject();
                 SwitchDataInfo switchDataInfo;
-                if (!SystemShare.Config.VentureServer)
+                if (!ModuleShare.Config.VentureServer)
                 {
                     userOpenInfo.ChrName = string.Empty;
                     userOpenInfo.LoadUser.SessionID = 0;
@@ -337,9 +337,9 @@ namespace M2Server.World
                         }
                         else
                         {
-                            playObject.MapName = SystemShare.Config.RedDieHomeMap;// '3'
-                            playObject.CurrX = (short)(M2Share.RandomNumber.Random(13) + SystemShare.Config.RedDieHomeX);// 839
-                            playObject.CurrY = (short)(M2Share.RandomNumber.Random(13) + SystemShare.Config.RedDieHomeY);// 668
+                            playObject.MapName = ModuleShare.Config.RedDieHomeMap;// '3'
+                            playObject.CurrX = (short)(M2Share.RandomNumber.Random(13) + ModuleShare.Config.RedDieHomeX);// 839
+                            playObject.CurrY = (short)(M2Share.RandomNumber.Random(13) + ModuleShare.Config.RedDieHomeY);// 668
                         }
                         playObject.Abil.HP = 14;
                     }
@@ -376,10 +376,10 @@ namespace M2Server.World
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
                         _logger.Warn(string.Format(sChangeServerFail2, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                        playObject.MapName = SystemShare.Config.HomeMap;
-                        envir = GameShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
-                        playObject.CurrX = SystemShare.Config.HomeX;
-                        playObject.CurrY = SystemShare.Config.HomeY;
+                        playObject.MapName = ModuleShare.Config.HomeMap;
+                        envir = GameShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
+                        playObject.CurrX = ModuleShare.Config.HomeX;
+                        playObject.CurrY = ModuleShare.Config.HomeY;
                     }
                     playObject.Envir = envir;
                     playObject.OnEnvirnomentChanged();
@@ -406,20 +406,20 @@ namespace M2Server.World
                     if (envir != null)
                     {
                         _logger.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                        playObject.MapName = SystemShare.Config.HomeMap;
-                        envir = GameShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
-                        playObject.CurrX = SystemShare.Config.HomeX;
-                        playObject.CurrY = SystemShare.Config.HomeY;
+                        playObject.MapName = ModuleShare.Config.HomeMap;
+                        envir = GameShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
+                        playObject.CurrX = ModuleShare.Config.HomeX;
+                        playObject.CurrY = ModuleShare.Config.HomeY;
                     }
                     else
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
                             _logger.Warn(string.Format(sChangeServerFail4, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                            playObject.MapName = SystemShare.Config.HomeMap;
-                            envir = GameShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
-                            playObject.CurrX = SystemShare.Config.HomeX;
-                            playObject.CurrY = SystemShare.Config.HomeY;
+                            playObject.MapName = ModuleShare.Config.HomeMap;
+                            envir = GameShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
+                            playObject.CurrX = ModuleShare.Config.HomeX;
+                            playObject.CurrY = ModuleShare.Config.HomeY;
                         }
                         playObject.AbilCopyToWAbil();
                         playObject.Envir = envir;
@@ -568,7 +568,7 @@ namespace M2Server.World
                 for (var i = 0; i < PlayObjectFreeList.Count; i++)
                 {
                     playObject = PlayObjectFreeList[i];
-                    if ((HUtil32.GetTickCount() - playObject.GhostTick) > SystemShare.Config.HumanFreeDelayTime)// 5 * 60 * 1000
+                    if ((HUtil32.GetTickCount() - playObject.GhostTick) > ModuleShare.Config.HumanFreeDelayTime)// 5 * 60 * 1000
                     {
                         PlayObjectFreeList[i] = null;
                         PlayObjectFreeList.RemoveAt(i);
@@ -647,7 +647,7 @@ namespace M2Server.World
                                         //playObject.SearchViewRange();//搜索对像
                                         //playObject.GameTimeChanged();//游戏时间改变
                                     }
-                                    if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > SystemShare.Config.ShowLineNoticeTime)
+                                    if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > ModuleShare.Config.ShowLineNoticeTime)
                                     {
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
@@ -665,7 +665,7 @@ namespace M2Server.World
                                                     playObject.SysMsg(lineNoticeMsg.AsSpan()[1..].ToString(), MsgColor.Blue, MsgType.Notice);
                                                     break;
                                                 default:
-                                                    playObject.SysMsg(lineNoticeMsg, (MsgColor)SystemShare.Config.LineNoticeColor, MsgType.Notice);
+                                                    playObject.SysMsg(lineNoticeMsg, (MsgColor)ModuleShare.Config.LineNoticeColor, MsgType.Notice);
                                                     break;
                                             }
                                         }
@@ -764,7 +764,7 @@ namespace M2Server.World
             switch (defMsg.Ident)
             {
                 case Messages.CM_SPELL:
-                    if (SystemShare.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (ModuleShare.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendUpdateMsg(defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series), "");
                     }
@@ -824,7 +824,7 @@ namespace M2Server.World
                 case Messages.CM_TWINHIT:
                 case Messages.CM_WIDEHIT:
                 case Messages.CM_FIREHIT:
-                    if (SystemShare.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (ModuleShare.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendActionMsg(defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), 0, "");
                     }
@@ -1000,7 +1000,7 @@ namespace M2Server.World
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission)
         {
             var result = false;
-            btPermission = SystemShare.Config.StartPermission;
+            btPermission = ModuleShare.Config.StartPermission;
             for (var i = 0; i < AdminList.Count; i++)
             {
                 var adminInfo = AdminList[i];
@@ -1366,17 +1366,17 @@ namespace M2Server.World
             int I;
             if (M2Share.StartPointList.Count > 0)
             {
-                if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
-                    I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
+                if (M2Share.StartPointList.Count > ModuleShare.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(ModuleShare.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
             {
-                result = SystemShare.Config.HomeMap;
-                nX = SystemShare.Config.HomeX;
-                nX = SystemShare.Config.HomeY;
+                result = ModuleShare.Config.HomeMap;
+                nX = ModuleShare.Config.HomeX;
+                nX = ModuleShare.Config.HomeY;
             }
             return result;
         }
@@ -1532,7 +1532,7 @@ namespace M2Server.World
         {
             var result = 0;
             if (envir == null) return result;
-            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < ModuleShare.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
@@ -1643,31 +1643,31 @@ namespace M2Server.World
 
         public void SendBroadCastMsg(string sMsg, MsgType msgType)
         {
-            if (SystemShare.Config.ShowPreFixMsg)
+            if (ModuleShare.Config.ShowPreFixMsg)
             {
                 switch (msgType)
                 {
                     case MsgType.Mon:
-                        sMsg = SystemShare.Config.MonSayMsgPreFix + sMsg;
+                        sMsg = ModuleShare.Config.MonSayMsgPreFix + sMsg;
                         break;
                     case MsgType.Hint:
-                        sMsg = SystemShare.Config.HintMsgPreFix + sMsg;
+                        sMsg = ModuleShare.Config.HintMsgPreFix + sMsg;
                         break;
                     case MsgType.GameManger:
-                        sMsg = SystemShare.Config.GameManagerRedMsgPreFix + sMsg;
+                        sMsg = ModuleShare.Config.GameManagerRedMsgPreFix + sMsg;
                         break;
                     case MsgType.System:
-                        sMsg = SystemShare.Config.SysMsgPreFix + sMsg;
+                        sMsg = ModuleShare.Config.SysMsgPreFix + sMsg;
                         break;
                     case MsgType.Cust:
-                        sMsg = SystemShare.Config.CustMsgPreFix + sMsg;
+                        sMsg = ModuleShare.Config.CustMsgPreFix + sMsg;
                         break;
                     case MsgType.Castle:
-                        sMsg = SystemShare.Config.CastleMsgPreFix + sMsg;
+                        sMsg = ModuleShare.Config.CastleMsgPreFix + sMsg;
                         break;
                 }
             }
-            if (SystemShare.Config.EnableChatServer)
+            if (ModuleShare.Config.EnableChatServer)
             {
                 //M2Share.ChatChannel.SendPubChannelMessage(sMsg);
             }
@@ -1693,7 +1693,7 @@ namespace M2Server.World
 
         public void ClearMonSayMsg()
         {
-            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < ModuleShare.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
@@ -1713,17 +1713,17 @@ namespace M2Server.World
             if (M2Share.StartPointList.Count > 0)
             {
                 int I;
-                if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
-                    I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
+                if (M2Share.StartPointList.Count > ModuleShare.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(ModuleShare.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
             {
-                result = SystemShare.Config.HomeMap;
-                nX = SystemShare.Config.HomeX;
-                nX = SystemShare.Config.HomeY;
+                result = ModuleShare.Config.HomeMap;
+                nX = ModuleShare.Config.HomeX;
+                nX = ModuleShare.Config.HomeY;
             }
             return result;
         }

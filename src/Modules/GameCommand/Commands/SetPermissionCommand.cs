@@ -21,13 +21,13 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null) {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (SystemShare.Config.ShowMakeItemMsg) {
-                SystemShare.Logger.Warn(string.Format(sOutFormatMsg, PlayerActor.ChrName, mIPlayerActor.ChrName, mIPlayerActor.Permission, nPerission));
+            if (ModuleShare.Config.ShowMakeItemMsg) {
+                ModuleShare.Logger.Warn(string.Format(sOutFormatMsg, PlayerActor.ChrName, mIPlayerActor.ChrName, mIPlayerActor.Permission, nPerission));
             }
             mIPlayerActor.Permission = (byte)nPerission;
             PlayerActor.SysMsg(sHumanName + " 当前权限为: " + mIPlayerActor.Permission, MsgColor.Red, MsgType.Hint);

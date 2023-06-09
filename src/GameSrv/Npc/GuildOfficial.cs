@@ -125,7 +125,7 @@ namespace M2Server.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                if (PlayObject.Gold >= SystemShare.Config.BuildGuildPrice)
+                if (PlayObject.Gold >= ModuleShare.Config.BuildGuildPrice)
                 {
                     //UserItem = PlayObject.CheckItems(SystemShare.Config.WomaHorn);
                     //if (UserItem == null)
@@ -184,9 +184,9 @@ namespace M2Server.Npc
         {
             if (M2Share.GuildMgr.FindGuild(sGuildName) != null)
             {
-                if (PlayObject.Gold >= SystemShare.Config.GuildWarPrice)
+                if (PlayObject.Gold >= ModuleShare.Config.GuildWarPrice)
                 {
-                    PlayObject.DecGold(SystemShare.Config.GuildWarPrice);
+                    PlayObject.DecGold(ModuleShare.Config.GuildWarPrice);
                     PlayObject.GoldChanged();
                    // PlayObject.ReQuestGuildWar(sGuildName);
                 }

@@ -21,7 +21,7 @@ namespace CommandSystem {
                 }
                 if (HUtil32.GetTickCount() - PlayerActor.SysMsgProbeTick > 10000 || PlayerActor.Permission >= 3) {
                     PlayerActor.SysMsgProbeTick = HUtil32.GetTickCount();
-                    var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+                    var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
                     if (mIPlayerActor != null) {
                         PlayerActor.SysMsg(sHumanName + " 现在位于 " + mIPlayerActor.Envir.MapDesc + '(' + mIPlayerActor.Envir.MapName + ") " + mIPlayerActor.CurrX + ':'
                             + PlayerActor.CurrY, MsgColor.Blue, MsgType.Hint);

@@ -118,7 +118,7 @@ namespace M2Server.Guild
             flourishing = 0;
             chiefItemCount = 0;
             DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
-            var sFileName = Path.Combine(SystemShare.Config.GuildDir, string.Concat(sName + ".ini"));
+            var sFileName = Path.Combine(ModuleShare.Config.GuildDir, string.Concat(sName + ".ini"));
             _guildConf = new GuildConf(sName, sFileName);
         }
 
@@ -207,7 +207,7 @@ namespace M2Server.Guild
             var s1C = string.Empty;
             var s20 = string.Empty;
             GuildRank guildRank = null;
-            var sFileName = Path.Combine(SystemShare.Config.GuildDir, sGuildFileName);
+            var sFileName = Path.Combine(ModuleShare.Config.GuildDir, sGuildFileName);
             if (!File.Exists(sFileName))
             {
                 return false;
@@ -234,19 +234,19 @@ namespace M2Server.Guild
                 }
                 if (s18[0] != '+')
                 {
-                    if (s18 == SystemShare.Config.GuildNotice)
+                    if (s18 == ModuleShare.Config.GuildNotice)
                     {
                         n28 = 1;
                     }
-                    if (s18 == SystemShare.Config.GuildWar)
+                    if (s18 == ModuleShare.Config.GuildWar)
                     {
                         n28 = 2;
                     }
-                    if (s18 == SystemShare.Config.GuildAll)
+                    if (s18 == ModuleShare.Config.GuildAll)
                     {
                         n28 = 3;
                     }
-                    if (s18 == SystemShare.Config.GuildMember)
+                    if (s18 == ModuleShare.Config.GuildMember)
                     {
                         n28 = 4;
                     }
@@ -307,7 +307,7 @@ namespace M2Server.Guild
                         {
                             if (s24.Length > 30)
                             {
-                                s24 = s24[..SystemShare.Config.GuildRankNameLen];//限制职倍的长度
+                                s24 = s24[..ModuleShare.Config.GuildRankNameLen];//限制职倍的长度
                             }
                             if (guildRank == null)
                             {
@@ -363,12 +363,12 @@ namespace M2Server.Guild
         {
             if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(SystemShare.Config.GuildDir, string.Concat(GuildName, ".txt")));
+                SaveGuildFile(Path.Combine(ModuleShare.Config.GuildDir, string.Concat(GuildName, ".txt")));
                 SaveGuildConfig();
             }
             else
             {
-                SaveGuildFile(Path.Combine(SystemShare.Config.GuildDir, GuildName, ".", M2Share.ServerIndex.ToString()));
+                SaveGuildFile(Path.Combine(ModuleShare.Config.GuildDir, GuildName, ".", M2Share.ServerIndex.ToString()));
             }
         }
 
@@ -380,13 +380,13 @@ namespace M2Server.Guild
         private void SaveGuildFile(string sFileName)
         {
             var saveList = new StringList();
-            saveList.Add(SystemShare.Config.GuildNotice);
+            saveList.Add(ModuleShare.Config.GuildNotice);
             for (var i = 0; i < NoticeList.Count; i++)
             {
                 saveList.Add("+" + NoticeList[i]);
             }
             saveList.Add(" ");
-            saveList.Add(SystemShare.Config.GuildWar);
+            saveList.Add(ModuleShare.Config.GuildWar);
             for (var i = 0; i < GuildWarList.Count; i++)
             {
                 var warGuild = GuildWarList[i];
@@ -398,13 +398,13 @@ namespace M2Server.Guild
                 saveList.Add("+" + GuildWarList[i].Guild.GuildName + ' ' + n14);
             }
             saveList.Add(" ");
-            saveList.Add(SystemShare.Config.GuildAll);
+            saveList.Add(ModuleShare.Config.GuildAll);
             for (var i = 0; i < GuildAllList.Count; i++)
             {
                 saveList.Add("+" + GuildAllList[i]);
             }
             saveList.Add(" ");
-            saveList.Add(SystemShare.Config.GuildMember);
+            saveList.Add(ModuleShare.Config.GuildMember);
             for (var i = 0; i < RankList.Count; i++)
             {
                 var guildRank = RankList[i];
@@ -428,9 +428,9 @@ namespace M2Server.Guild
         {
             try
             {
-                if (SystemShare.Config.ShowPreFixMsg)
+                if (ModuleShare.Config.ShowPreFixMsg)
                 {
-                    sMsg = SystemShare.Config.GuildMsgPreFix + sMsg;
+                    sMsg = ModuleShare.Config.GuildMsgPreFix + sMsg;
                 }
                 for (var i = 0; i < RankList.Count; i++)
                 {
@@ -444,7 +444,7 @@ namespace M2Server.Guild
                         }
                         if (guildMember.BanGuildChat)
                         {
-                            guildMember.SendMsg(guildMember, Messages.RM_GUILDMESSAGE, 0, SystemShare.Config.GuildMsgFColor, SystemShare.Config.GuildMsgBColor, 0, sMsg);
+                            guildMember.SendMsg(guildMember, Messages.RM_GUILDMESSAGE, 0, ModuleShare.Config.GuildMsgFColor, ModuleShare.Config.GuildMsgBColor, 0, sMsg);
                         }
                     }
                 }
@@ -463,7 +463,7 @@ namespace M2Server.Guild
                 var guildRank = new GuildRank
                 {
                     RankNo = 1,
-                    RankName = SystemShare.Config.GuildChief,
+                    RankName = ModuleShare.Config.GuildChief,
                     MemberList = new List<GuildMember>()
                 };
                 var playObject = M2Share.WorldEngine.GetPlayObject(sChief);
@@ -588,7 +588,7 @@ namespace M2Server.Guild
         {
             if (M2Share.ServerIndex == 0)
             {
-                SaveGuildFile(Path.Combine(SystemShare.Config.GuildDir, GuildName, '.' + HUtil32.GetTickCount() + ".bak"));
+                SaveGuildFile(Path.Combine(ModuleShare.Config.GuildDir, GuildName, '.' + HUtil32.GetTickCount() + ".bak"));
             }
             for (var i = 0; i < RankList.Count; i++)
             {
@@ -633,7 +633,7 @@ namespace M2Server.Guild
                 guildRank18 = new GuildRank
                 {
                     RankNo = 99,
-                    RankName = SystemShare.Config.GuildMemberRank,
+                    RankName = ModuleShare.Config.GuildMemberRank,
                     MemberList = new List<GuildMember>()
                 };
                 RankList.Add(guildRank18);
@@ -1060,7 +1060,7 @@ namespace M2Server.Guild
 
         private bool GetMemgerIsFull()
         {
-            return Count >= SystemShare.Config.GuildMemberMaxLimit;
+            return Count >= ModuleShare.Config.GuildMemberMaxLimit;
         }
 
         public void StartTeamFight()

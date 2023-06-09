@@ -21,7 +21,7 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            SystemShare.Config.UserFull = nCount;
+            ModuleShare.Config.UserFull = nCount;
             PlayerActor.SysMsg($"服务器上线人数限制: {nCount}", MsgColor.Green, MsgType.Hint);
         }
     }

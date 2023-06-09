@@ -16,7 +16,7 @@ namespace CommandSystem {
             if (string.IsNullOrEmpty(sHumName)) {
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null) {
                 mIPlayerActor.BoKickFlag = true;
                 mIPlayerActor.BoEmergencyClose = true;

@@ -54,7 +54,7 @@ namespace M2Server.World.Threads
 
         private void Run()
         {
-            if ((HUtil32.GetTickCount() - ShowOnlineTick) > SystemShare.Config.ConsoleShowUserCountTime)
+            if ((HUtil32.GetTickCount() - ShowOnlineTick) > ModuleShare.Config.ConsoleShowUserCountTime)
             {
                 ShowOnlineTick = HUtil32.GetTickCount();
                 M2Share.NoticeMgr.LoadingNotice();

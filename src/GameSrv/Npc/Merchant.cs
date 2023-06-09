@@ -394,7 +394,7 @@ namespace M2Server.Npc
             for (var i = itemList.Count - 1; i >= 0; i--)
             {
                 var userItem = itemList[i];
-                if (ItemSystem.GetStdItemName(userItem.Index) == SystemShare.Config.BlackStone)
+                if (ItemSystem.GetStdItemName(userItem.Index) == ModuleShare.Config.BlackStone)
                 {
                     duraList.Add(Math.Round(userItem.Dura / 1.0e3));
                     if (delItemList == null)
@@ -404,7 +404,7 @@ namespace M2Server.Npc
                     delItemList.Add(new DeleteItem()
                     {
                         MakeIndex = userItem.MakeIndex,
-                        ItemName = SystemShare.Config.BlackStone
+                        ItemName = ModuleShare.Config.BlackStone
                     });
                     DisPose(userItem);
                     itemList.RemoveAt(i);
@@ -542,19 +542,19 @@ namespace M2Server.Npc
                     return;
                 }
             }
-            if (user.UseItems[ItemLocation.Weapon] != null && user.UseItems[ItemLocation.Weapon].Index != 0 && user.Gold >= SystemShare.Config.UpgradeWeaponPrice
-                && user.CheckItems(SystemShare.Config.BlackStone) != null)
+            if (user.UseItems[ItemLocation.Weapon] != null && user.UseItems[ItemLocation.Weapon].Index != 0 && user.Gold >= ModuleShare.Config.UpgradeWeaponPrice
+                && user.CheckItems(ModuleShare.Config.BlackStone) != null)
             {
-                user.DecGold(SystemShare.Config.UpgradeWeaponPrice);
-                if (CastleMerchant || SystemShare.Config.GetAllNpcTax)
+                user.DecGold(ModuleShare.Config.UpgradeWeaponPrice);
+                if (CastleMerchant || ModuleShare.Config.GetAllNpcTax)
                 {
                     if (Castle != null)
                     {
-                        Castle.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                        Castle.IncRateGold(ModuleShare.Config.UpgradeWeaponPrice);
                     }
-                    else if (SystemShare.Config.GetAllNpcTax)
+                    else if (ModuleShare.Config.GetAllNpcTax)
                     {
-                        M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                        M2Share.CastleMgr.IncRateGold(ModuleShare.Config.UpgradeWeaponPrice);
                     }
                 }
                 user.GoldChanged();
@@ -608,7 +608,7 @@ namespace M2Server.Npc
                 if (string.Compare(UpgradeWeaponList[i].UserName, user.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     nFlag = 1;
-                    if (((HUtil32.GetTickCount() - UpgradeWeaponList[i].GetBackTick) > SystemShare.Config.UPgradeWeaponGetBackTime) || user.Permission >= 4)
+                    if (((HUtil32.GetTickCount() - UpgradeWeaponList[i].GetBackTick) > ModuleShare.Config.UPgradeWeaponGetBackTime) || user.Permission >= 4)
                     {
                         upgradeInfo = UpgradeWeaponList[i];
                         UpgradeWeaponList.RemoveAt(i);
@@ -680,14 +680,14 @@ namespace M2Server.Npc
                 {
                     n90 = HUtil32._MIN(11, upgradeInfo.Dc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + upgradeInfo.UserItem.Desc[3] - upgradeInfo.UserItem.Desc[4] + user.BodyLuckLevel);
-                    if (M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponDCRate) < n10)
+                    if (M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponDCRate) < n10)
                     {
                         upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 10;
-                        if (n10 > 63 && M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponDCTwoPointRate) == 0)
+                        if (n10 > 63 && M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponDCTwoPointRate) == 0)
                         {
                             upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 11;
                         }
-                        if (n10 > 79 && M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponDCThreePointRate) == 0)
+                        if (n10 > 79 && M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponDCThreePointRate) == 0)
                         {
                             upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 12;
                         }
@@ -701,14 +701,14 @@ namespace M2Server.Npc
                 {
                     n90 = HUtil32._MIN(11, upgradeInfo.Mc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + upgradeInfo.UserItem.Desc[3] - upgradeInfo.UserItem.Desc[4] + user.BodyLuckLevel);
-                    if (M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponMCRate) < n10)
+                    if (M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponMCRate) < n10)
                     {
                         upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 20;
-                        if (n10 > 63 && M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponMCTwoPointRate) == 0)
+                        if (n10 > 63 && M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponMCTwoPointRate) == 0)
                         {
                             upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 21;
                         }
-                        if (n10 > 79 && M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponMCThreePointRate) == 0)
+                        if (n10 > 79 && M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponMCThreePointRate) == 0)
                         {
                             upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 22;
                         }
@@ -722,14 +722,14 @@ namespace M2Server.Npc
                 {
                     n90 = HUtil32._MIN(11, upgradeInfo.Mc);
                     n10 = HUtil32._MIN(85, (n90 << 3 - n90) + 10 + upgradeInfo.UserItem.Desc[3] - upgradeInfo.UserItem.Desc[4] + user.BodyLuckLevel);
-                    if (M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponSCRate) < n10)
+                    if (M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponSCRate) < n10)
                     {
                         upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 30;
-                        if (n10 > 63 && M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponSCTwoPointRate) == 0)
+                        if (n10 > 63 && M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponSCTwoPointRate) == 0)
                         {
                             upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 31;
                         }
-                        if (n10 > 79 && M2Share.RandomNumber.Random(SystemShare.Config.UpgradeWeaponSCThreePointRate) == 0)
+                        if (n10 > 79 && M2Share.RandomNumber.Random(ModuleShare.Config.UpgradeWeaponSCThreePointRate) == 0)
                         {
                             upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 32;
                         }
@@ -966,7 +966,7 @@ namespace M2Server.Npc
             {
                 case MarketConst.USERMARKET_MODE_BUY:
                 case MarketConst.USERMARKET_MODE_INQUIRY:
-                    RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
+                    RequireLoadUserMarket(user, ModuleShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
                     break;
                 case MarketConst.USERMARKET_MODE_SELL:
                     SendUserMarketSellReady(user);
@@ -1034,7 +1034,7 @@ namespace M2Server.Npc
 
         private void SendUserMarketSellReady(IPlayerActor user)
         {
-            if (!SystemShare.Config.EnableMarket)
+            if (!ModuleShare.Config.EnableMarket)
             {
                 SysMsg("寄售商人功能无法使用。", MsgColor.Red, MsgType.Hint);
             }
@@ -1100,7 +1100,7 @@ namespace M2Server.Npc
                 var stdItem = ItemSystem.GetStdItem(GoodsList[i][0].Index);
                 if (stdItem != null)
                 {
-                    sSendMsg = sSendMsg + stdItem.Name + '/' + 0 + '/' + SystemShare.Config.MakeDurgPrice + '/' + 1 + '/';
+                    sSendMsg = sSendMsg + stdItem.Name + '/' + 0 + '/' + ModuleShare.Config.MakeDurgPrice + '/' + 1 + '/';
                 }
             }
             if (!string.IsNullOrEmpty(sSendMsg))
@@ -1171,7 +1171,7 @@ namespace M2Server.Npc
             for (var i = UpgradeWeaponList.Count - 1; i >= 0; i--)
             {
                 var upgradeInfo = UpgradeWeaponList[i];
-                if ((DateTime.Now - upgradeInfo.UpgradeTime).TotalDays >= SystemShare.Config.ClearExpireUpgradeWeaponDays)
+                if ((DateTime.Now - upgradeInfo.UpgradeTime).TotalDays >= ModuleShare.Config.ClearExpireUpgradeWeaponDays)
                 {
                     Dispose(upgradeInfo);
                     UpgradeWeaponList.RemoveAt(i);
@@ -1203,7 +1203,7 @@ namespace M2Server.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$PRICERATE>", sText);
                     break;
                 case "$UPGRADEWEAPONFEE":
-                    sText = SystemShare.Config.UpgradeWeaponPrice.ToString();
+                    sText = ModuleShare.Config.UpgradeWeaponPrice.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
                     break;
                 case "$USERWEAPON":
@@ -1342,15 +1342,15 @@ namespace M2Server.Npc
                                         if (playObject.AddItemToBag(userItem))
                                         {
                                             playObject.Gold -= nPrice;
-                                            if (CastleMerchant || SystemShare.Config.GetAllNpcTax)
+                                            if (CastleMerchant || ModuleShare.Config.GetAllNpcTax)
                                             {
                                                 if (Castle != null)
                                                 {
                                                     Castle.IncRateGold(nPrice);
                                                 }
-                                                else if (SystemShare.Config.GetAllNpcTax)
+                                                else if (ModuleShare.Config.GetAllNpcTax)
                                                 {
-                                                    M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                                                    M2Share.CastleMgr.IncRateGold(ModuleShare.Config.UpgradeWeaponPrice);
                                                 }
                                             }
                                             playObject.SendAddItem(userItem);
@@ -1477,15 +1477,15 @@ namespace M2Server.Npc
             {
                 if (playObject.IncGold(nPrice))
                 {
-                    if (CastleMerchant || SystemShare.Config.GetAllNpcTax)
+                    if (CastleMerchant || ModuleShare.Config.GetAllNpcTax)
                     {
                         if (Castle != null)
                         {
                             Castle.IncRateGold(nPrice);
                         }
-                        else if (SystemShare.Config.GetAllNpcTax)
+                        else if (ModuleShare.Config.GetAllNpcTax)
                         {
-                            M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                            M2Share.CastleMgr.IncRateGold(ModuleShare.Config.UpgradeWeaponPrice);
                         }
                     }
                     playObject.SendMsg(Messages.RM_USERSELLITEM_OK, 0, playObject.Gold, 0, 0);
@@ -1602,7 +1602,7 @@ namespace M2Server.Npc
                 var stdItem = ItemSystem.GetStdItem(makeItem.Index);
                 if (stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (playObject.Gold >= SystemShare.Config.MakeDurgPrice)
+                    if (playObject.Gold >= ModuleShare.Config.MakeDurgPrice)
                     {
                         if (ClientMakeDrugCheckNeedItem(playObject, sItemName))
                         {
@@ -1610,7 +1610,7 @@ namespace M2Server.Npc
                             ItemSystem.CopyToUserItemFromName(sItemName, ref userItem);
                             if (playObject.AddItemToBag(userItem))
                             {
-                                playObject.Gold -= SystemShare.Config.MakeDurgPrice;
+                                playObject.Gold -= ModuleShare.Config.MakeDurgPrice;
                                 playObject.SendAddItem(userItem);
                                 stdItem = ItemSystem.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
@@ -1665,7 +1665,7 @@ namespace M2Server.Npc
                 {
                     if (IsSupRepair)
                     {
-                        nRepairPrice = nRepairPrice * SystemShare.Config.SuperRepairPriceRate;
+                        nRepairPrice = nRepairPrice * ModuleShare.Config.SuperRepairPriceRate;
                     }
                     else
                     {
@@ -1711,7 +1711,7 @@ namespace M2Server.Npc
             var nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
             if (supRepair)
             {
-                nPrice = nPrice * SystemShare.Config.SuperRepairPriceRate;
+                nPrice = nPrice * ModuleShare.Config.SuperRepairPriceRate;
             }
             var stdItem = ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
@@ -1729,15 +1729,15 @@ namespace M2Server.Npc
                     }
                     if (playObject.DecGold(nRepairPrice))
                     {
-                        if (CastleMerchant || SystemShare.Config.GetAllNpcTax)
+                        if (CastleMerchant || ModuleShare.Config.GetAllNpcTax)
                         {
                             if (Castle != null)
                             {
                                 Castle.IncRateGold(nRepairPrice);
                             }
-                            else if (SystemShare.Config.GetAllNpcTax)
+                            else if (ModuleShare.Config.GetAllNpcTax)
                             {
-                                M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                                M2Share.CastleMgr.IncRateGold(ModuleShare.Config.UpgradeWeaponPrice);
                             }
                         }
                         if (supRepair)
@@ -1748,7 +1748,7 @@ namespace M2Server.Npc
                         }
                         else
                         {
-                            userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / SystemShare.Config.RepairItemDecDura);
+                            userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / ModuleShare.Config.RepairItemDecDura);
                             userItem.Dura = userItem.DuraMax;
                             playObject.SendMsg(Messages.RM_USERREPAIRITEM_OK, 0, playObject.Gold, userItem.Dura, userItem.DuraMax);
                             GameShare.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagCode.sREPAIROK, false);

@@ -68,7 +68,7 @@ namespace M2Server.Monster.Monsters
                 }
                 if (boChangeFace)
                 {
-                    BaseObject elfMon = MakeClone(SystemShare.Config.Dragon1, this);
+                    BaseObject elfMon = MakeClone(ModuleShare.Config.Dragon1, this);
                     if (elfMon != null)
                     {
                         elfMon.AutoChangeColor = AutoChangeColor;

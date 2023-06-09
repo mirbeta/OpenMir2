@@ -19,7 +19,7 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var castle = SystemShare.CastleMgr.Find(sCastleName);
+            var castle = ModuleShare.CastleMgr.Find(sCastleName);
             if (castle != null) {
                 castle.UnderWar = !castle.UnderWar;
                 if (castle.UnderWar) {
@@ -27,10 +27,10 @@ namespace CommandSystem
                     castle.WarDate = DateTime.Now;
                     castle.StartCastleWarTick = HUtil32.GetTickCount();
                     castle.StartWallconquestWar();
-                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_212, SystemShare.ServerIndex, "");
+                    ModuleShare.WorldEngine.SendServerGroupMsg(Messages.SS_212, ModuleShare.ServerIndex, "");
                     var s20 = "[" + castle.sName + " 攻城战已经开始]";
-                    SystemShare.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
-                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_204, SystemShare.ServerIndex, s20);
+                    ModuleShare.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
+                    ModuleShare.WorldEngine.SendServerGroupMsg(Messages.SS_204, ModuleShare.ServerIndex, s20);
                     castle.MainDoorControl(true);
                 }
                 else {

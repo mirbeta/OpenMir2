@@ -10,7 +10,7 @@ namespace CommandSystem {
     public class ReloadGameItemCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            SystemShare.CommonDb.LoadItemsDB();
+            ModuleShare.CommonDb.LoadItemsDB();
             PlayerActor.SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
         }
     }

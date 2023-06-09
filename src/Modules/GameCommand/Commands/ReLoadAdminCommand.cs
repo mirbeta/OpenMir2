@@ -13,7 +13,7 @@ namespace CommandSystem
         public void Execute(IPlayerActor PlayerActor)
         {
             //LocalDb.LoadAdminList();
-            SystemShare.WorldEngine.SendServerGroupMsg(213, SystemShare.ServerIndex, "");
+            ModuleShare.WorldEngine.SendServerGroupMsg(213, ModuleShare.ServerIndex, "");
             PlayerActor.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }

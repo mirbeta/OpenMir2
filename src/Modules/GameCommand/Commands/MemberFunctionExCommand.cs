@@ -5,8 +5,8 @@ namespace CommandSystem {
     public class MemberFunctionExCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            if (SystemShare.FunctionNPC != null) {
-                SystemShare.FunctionNPC.GotoLable(IPlayerActor, "@Member", false);
+            if (ModuleShare.FunctionNPC != null) {
+                ModuleShare.FunctionNPC.GotoLable(IPlayerActor, "@Member", false);
             }
         }
     }

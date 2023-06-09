@@ -16,7 +16,7 @@ namespace CommandSystem {
             PlayerActor.OnHorse = true;
             PlayerActor.FeatureChanged();
             if (PlayerActor.OnHorse) {
-                SystemShare.FunctionNPC.GotoLable(PlayerActor, "@OnHorse", false);
+                ModuleShare.FunctionNPC.GotoLable(PlayerActor, "@OnHorse", false);
             }
         }
     }

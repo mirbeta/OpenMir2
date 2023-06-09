@@ -12,7 +12,7 @@ namespace CommandSystem
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
 
         static CommandMgr() {
-            CommandConf = new GameCmdConf(Path.Combine(SystemShare.BasePath, ConfConst.CommandFileName));
+            CommandConf = new GameCmdConf(Path.Combine(ModuleShare.BasePath, ConfConst.CommandFileName));
         }
 
         public static void RegisterCommand()
@@ -72,7 +72,7 @@ namespace CommandSystem
                 var commandAttribute = (CommandAttribute)commands[i].GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandAttribute == null) continue;
                 if (CommandMaps.ContainsKey(commandAttribute.Name)) {
-                    SystemShare.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
+                    ModuleShare.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
                     continue;
                 }
                 var gameCommand = (GameCommand)Activator.CreateInstance(commands[i]);
@@ -87,7 +87,7 @@ namespace CommandSystem
                 }
                 var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null) {
-                    SystemShare.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
+                    ModuleShare.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
                     continue;
                 }
                 gameCommand.Register(commandAttribute, executeMethod);

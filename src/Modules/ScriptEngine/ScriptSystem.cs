@@ -131,7 +131,7 @@ namespace ScriptModule
             int nIndex = 0;
             while (true)
             {
-                if ((scriptInfo.QuestInfo[nIndex].nRandRage > 0) && (SystemShare.RandomNumber.Random(scriptInfo.QuestInfo[nIndex].nRandRage) != 0))
+                if ((scriptInfo.QuestInfo[nIndex].nRandRage > 0) && (ModuleShare.RandomNumber.Random(scriptInfo.QuestInfo[nIndex].nRandRage) != 0))
                 {
                     result = false;
                     break;
@@ -245,7 +245,7 @@ namespace ScriptModule
         private static bool CheckGotoLableStringList(string sHumName, string sListFileName)
         {
             bool result = false;
-            sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
+            sListFileName = ModuleShare.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
                 using StringList loadList = new StringList();
@@ -255,7 +255,7 @@ namespace ScriptModule
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    ModuleShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -268,14 +268,14 @@ namespace ScriptModule
             }
             else
             {
-                SystemShare.Logger.Error("file not found => " + sListFileName);
+                ModuleShare.Logger.Error("file not found => " + sListFileName);
             }
             return result;
         }
 
         private static void GotoLableQuestCheckConditionSetVal(IPlayerActor playerActor, string sIndex, int nCount)
         {
-            int n14 = SystemShare.GetValNameNo(sIndex);
+            int n14 = ModuleShare.GetValNameNo(sIndex);
             if (n14 >= 0)
             {
                 if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -284,7 +284,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 119))
                 {
-                    SystemShare.Config.GlobalVal[n14 - 100] = nCount;
+                    ModuleShare.Config.GlobalVal[n14 - 100] = nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
@@ -296,7 +296,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
-                    SystemShare.Config.GlobaDyMval[n14 - 400] = (short)nCount;
+                    ModuleShare.Config.GlobaDyMval[n14 - 400] = (short)nCount;
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
@@ -334,7 +334,7 @@ namespace ScriptModule
         {
             string name = string.Empty;
             bool result = false;
-            sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
+            sListFileName = ModuleShare.GetEnvirFilePath(sListFileName);
             using StringList loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -344,7 +344,7 @@ namespace ScriptModule
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    ModuleShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
             }
             int nDay = HUtil32.StrToInt(sDay, 0);
@@ -508,7 +508,7 @@ namespace ScriptModule
                       //  result = QuestCheckConditionCheckUserDateType(playerActor,playerActor.ChrName, m_sPath + questConditionInfo.sParam1, questConditionInfo.sParam3, questConditionInfo.sParam4, questConditionInfo.sParam5);
                         break;
                     case (int)ConditionCode.CHECKRANDOMNO:
-                        SystemShare.Logger.Error("TODO nSC_CHECKRANDOMNO...");
+                        ModuleShare.Logger.Error("TODO nSC_CHECKRANDOMNO...");
                         //result = GotoLable_QuestCheckCondition_CheckRandomNo(playerActor,sMsg);
                         break;
                     case (int)ConditionCode.CHECKDIEMON:
@@ -587,7 +587,7 @@ namespace ScriptModule
         private bool JmpToLable(IPlayerActor playerActor, string sLabel)
         {
             playerActor.ScriptGotoCount++;
-            if (playerActor.ScriptGotoCount > SystemShare.Config.ScriptGotoCountLimit)
+            if (playerActor.ScriptGotoCount > ModuleShare.Config.ScriptGotoCountLimit)
             {
                 return false;
             }
@@ -618,7 +618,7 @@ namespace ScriptModule
             {
                 playerActor.DecGold(nItemCount);
                 playerActor.GoldChanged();
-                if (SystemShare.GameLogGold)
+                if (ModuleShare.GameLogGold)
                 {
                     // M2Share.EventSource.AddEventLog(10, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
@@ -631,15 +631,15 @@ namespace ScriptModule
                     break;
                 }
                 userItem = playerActor.ItemList[i];
-                if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                        // M2Share.EventSource.AddEventLog(10, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                     }
                     playerActor.SendDelItems(userItem);
-                    sC = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
                     Dispose(userItem);
                     playerActor.ItemList.RemoveAt(i);
                     nItemCount -= 1;
@@ -655,13 +655,13 @@ namespace ScriptModule
             {
                 playerActor.IncGold(nItemCount);
                 playerActor.GoldChanged();
-                if (SystemShare.GameLogGold)
+                if (ModuleShare.GameLogGold)
                 {
                    // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + ChrName);
                 }
                 return;
             }
-            if (SystemShare.ItemSystem.GetStdItemIdx(sItemName) > 0)
+            if (ModuleShare.ItemSystem.GetStdItemIdx(sItemName) > 0)
             {
                 if (!(nItemCount >= 1 && nItemCount <= 50))
                 {
@@ -672,11 +672,11 @@ namespace ScriptModule
                     if (playerActor.IsEnoughBag)
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             playerActor.ItemList.Add(userItem);
                             playerActor.SendAddItem(userItem);
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 //M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -690,9 +690,9 @@ namespace ScriptModule
                     else
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -713,7 +713,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Necklace].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Necklace]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
                     playerActor.UseItems[ItemLocation.Necklace].Index = 0;
                     return;
                 }
@@ -723,14 +723,14 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Ringl].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Ringl]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
                     playerActor.UseItems[ItemLocation.Ringl].Index = 0;
                     return;
                 }
                 if (playerActor.UseItems[ItemLocation.Ringr].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Ringr]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
                     playerActor.UseItems[ItemLocation.Ringr].Index = 0;
                     return;
                 }
@@ -740,14 +740,14 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.ArmRingl]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
                     playerActor.UseItems[ItemLocation.ArmRingl].Index = 0;
                     return;
                 }
                 if (playerActor.UseItems[ItemLocation.ArmRingr].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.ArmRingr]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
                     playerActor.UseItems[ItemLocation.ArmRingr].Index = 0;
                     return;
                 }
@@ -757,7 +757,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Weapon].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Weapon]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
                     playerActor.UseItems[ItemLocation.Weapon].Index = 0;
                     return;
                 }
@@ -767,7 +767,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Helmet].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Helmet]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
                     playerActor.UseItems[ItemLocation.Helmet].Index = 0;
                     return;
                 }
@@ -777,7 +777,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Dress].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Dress]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
                     playerActor.UseItems[ItemLocation.Dress].Index = 0;
                     return;
                 }
@@ -787,7 +787,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Bujuk].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Bujuk]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
                     playerActor.UseItems[ItemLocation.Bujuk].Index = 0;
                     return;
                 }
@@ -797,7 +797,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Belt].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Belt]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
                     playerActor.UseItems[ItemLocation.Belt].Index = 0;
                     return;
                 }
@@ -807,7 +807,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Boots].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Boots]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
                     playerActor.UseItems[ItemLocation.Boots].Index = 0;
                     return;
                 }
@@ -817,7 +817,7 @@ namespace ScriptModule
                 if (playerActor.UseItems[ItemLocation.Charm].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Charm]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
+                    sC = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
                     playerActor.UseItems[ItemLocation.Charm].Index = 0;
                     return;
                 }
@@ -830,7 +830,7 @@ namespace ScriptModule
                 }
                 if (playerActor.UseItems[i].Index > 0)
                 {
-                    string sName = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[i].Index);
+                    string sName = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[i].Index);
                     if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         playerActor.SendDelItems(playerActor.UseItems[i]);

@@ -18,10 +18,10 @@
                 if (envir.AddMineToEvent(nX, nY, this))
                 {
                     Visible = false;
-                    MineCount = SystemShare.RandomNumber.Random(2000) + 300;
+                    MineCount = ModuleShare.RandomNumber.Random(2000) + 300;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    AddStoneCount = SystemShare.RandomNumber.Random(800) + 100;
+                    AddStoneCount = ModuleShare.RandomNumber.Random(800) + 100;
                 }
                 else
                 {
@@ -33,10 +33,10 @@
                 if (envir.AddToMapMineEvent(nX, nY, this))
                 {
                     Visible = false;
-                    MineCount = SystemShare.RandomNumber.Random(200) + 1;
+                    MineCount = ModuleShare.RandomNumber.Random(200) + 1;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    AddStoneCount = SystemShare.RandomNumber.Random(80) + 1;
+                    AddStoneCount = ModuleShare.RandomNumber.Random(80) + 1;
                 }
                 else
                 {

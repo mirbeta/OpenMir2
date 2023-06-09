@@ -17,7 +17,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sChrName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sChrName);
             if (mIPlayerActor != null) {
                 if (mIPlayerActor.WhisperHuman == PlayerActor) {
                     mIPlayerActor.WhisperHuman = null;

@@ -5,9 +5,9 @@ namespace CommandSystem {
     public class MemberFunctionCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            if (SystemShare.ManageNPC != null) {
+            if (ModuleShare.ManageNPC != null) {
                 PlayerActor.ScriptGotoCount = 0;
-                SystemShare.ManageNPC.GotoLable(PlayerActor, "@Member", false);
+                ModuleShare.ManageNPC.GotoLable(PlayerActor, "@Member", false);
             }
         }
     }

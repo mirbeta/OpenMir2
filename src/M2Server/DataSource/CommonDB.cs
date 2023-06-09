@@ -96,8 +96,8 @@ namespace M2Server.DataSource
                 }
                 M2Share.GameLogGold = M2Share.GetGameLogItemNameList(Grobal2.StringGoldName) == 1;
                 // M2Share.GameLogHumanDie = M2Share.GetGameLogItemNameList(CommandHelp.HumanDieEvent) == 1;
-                M2Share.GameLogGameGold = M2Share.GetGameLogItemNameList(SystemShare.Config.GameGoldName) == 1;
-                M2Share.GameLogGamePoint = M2Share.GetGameLogItemNameList(SystemShare.Config.GamePointName) == 1;
+                M2Share.GameLogGameGold = M2Share.GetGameLogItemNameList(ModuleShare.Config.GameGoldName) == 1;
+                M2Share.GameLogGamePoint = M2Share.GetGameLogItemNameList(ModuleShare.Config.GamePointName) == 1;
             }
             catch (Exception ex)
             {
@@ -209,15 +209,15 @@ namespace M2Server.DataSource
                     }
                     else
                     {
-                        monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (SystemShare.Config.MonsterPowerRate / 10.0));
+                        monster.HP = (ushort)HUtil32.Round(dr.GetInt32("HP") * (ModuleShare.Config.MonsterPowerRate / 10.0));
                     }
-                    monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (SystemShare.Config.MonsterPowerRate / 10.0));
-                    monster.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (SystemShare.Config.MonsterPowerRate / 10.0));
-                    monster.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (SystemShare.Config.MonsterPowerRate / 10.0));
-                    monster.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (SystemShare.Config.MonsterPowerRate / 10.0));
-                    monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (SystemShare.Config.MonsterPowerRate / 10.0));
-                    monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (SystemShare.Config.MonsterPowerRate / 10.0));
-                    monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (SystemShare.Config.MonsterPowerRate / 10.0));
+                    monster.MP = (ushort)HUtil32.Round(dr.GetInt32("MP") * (ModuleShare.Config.MonsterPowerRate / 10.0));
+                    monster.AC = (ushort)HUtil32.Round(dr.GetInt32("AC") * (ModuleShare.Config.MonsterPowerRate / 10.0));
+                    monster.MAC = (ushort)HUtil32.Round(dr.GetInt32("MAC") * (ModuleShare.Config.MonsterPowerRate / 10.0));
+                    monster.DC = (ushort)HUtil32.Round(dr.GetInt32("DC") * (ModuleShare.Config.MonsterPowerRate / 10.0));
+                    monster.MaxDC = (ushort)HUtil32.Round(dr.GetInt32("DCMAX") * (ModuleShare.Config.MonsterPowerRate / 10.0));
+                    monster.MC = (ushort)HUtil32.Round(dr.GetInt32("MC") * (ModuleShare.Config.MonsterPowerRate / 10.0));
+                    monster.SC = (ushort)HUtil32.Round(dr.GetInt32("SC") * (ModuleShare.Config.MonsterPowerRate / 10.0));
                     monster.Speed = dr.GetByte("SPEED");
                     monster.HitPoint = dr.GetByte("HIT");
                     monster.WalkSpeed = (ushort)HUtil32._MAX(200, dr.GetInt32("WALK_SPD"));
@@ -380,20 +380,20 @@ namespace M2Server.DataSource
             {
                 try
                 {
-                    _dbConnection = new MySqlConnection(SystemShare.Config.ConnctionString);
+                    _dbConnection = new MySqlConnection(ModuleShare.Config.ConnctionString);
                     _dbConnection.Open();
                     return true;
                 }
                 catch (Exception e)
                 {
-                    logger.Error(SystemShare.Config.ConnctionString);
+                    logger.Error(ModuleShare.Config.ConnctionString);
                     logger.Error(e.StackTrace);
                     return false;
                 }
             }
             else if (_dbConnection.State == ConnectionState.Closed)
             {
-                _dbConnection = new MySqlConnection(SystemShare.Config.ConnctionString);
+                _dbConnection = new MySqlConnection(ModuleShare.Config.ConnctionString);
                 _dbConnection.Open();
             }
             return true;

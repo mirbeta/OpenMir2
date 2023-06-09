@@ -18,7 +18,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null) {
                 if (string.Compare(sDearName, "无", StringComparison.OrdinalIgnoreCase) == 0) {
                     mIPlayerActor.DearName = "";

@@ -47,7 +47,7 @@ namespace CommandSystem
                     break;
                 }
                 PlayerActor.GetFrontPosition(ref nX, ref nY);
-                MonsterObject mon = (MonsterObject)SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+                MonsterObject mon = (MonsterObject)ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (mon != null)
                 {
                     mon.Master = IPlayerActor;

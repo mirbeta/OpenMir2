@@ -9,7 +9,7 @@ namespace CommandSystem {
     public class LockLoginCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            if (!SystemShare.Config.LockHumanLogin) {
+            if (!ModuleShare.Config.LockHumanLogin) {
                 PlayerActor.SysMsg("本服务器还没有启用登录锁功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }

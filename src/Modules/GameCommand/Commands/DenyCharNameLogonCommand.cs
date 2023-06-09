@@ -21,7 +21,7 @@ namespace CommandSystem {
             try {
                 if (!string.IsNullOrEmpty(sFixDeny) && sFixDeny[0] == '1') {
                     //Settings.g_DenyChrNameList.Add(sChrName, ((1) as Object));
-                    SystemShare.SaveDenyChrNameList();
+                    ModuleShare.SaveDenyChrNameList();
                     PlayerActor.SysMsg(sChrName + "已加入禁止人物列表", MsgColor.Green, MsgType.Hint);
                 }
                 else {

@@ -8,12 +8,12 @@ namespace CommandSystem {
         public void Execute(IPlayerActor PlayerActor) {
             int nCount;
             try {
-                nCount = SystemShare.DenyIPAddrList.Count;
-                if (SystemShare.DenyIPAddrList.Count <= 0) {
+                nCount = ModuleShare.DenyIPAddrList.Count;
+                if (ModuleShare.DenyIPAddrList.Count <= 0) {
                     PlayerActor.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                 }
                 if (nCount > 0) {
-                    for (var i = 0; i < SystemShare.DenyIPAddrList.Count; i++) {
+                    for (var i = 0; i < ModuleShare.DenyIPAddrList.Count; i++) {
                         //PlayerActor.SysMsg(Settings.g_DenyIPAddrList[i], MsgColor.c_Green, MsgType.t_Hint);
                     }
                 }

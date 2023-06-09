@@ -143,12 +143,12 @@ namespace ScriptModule
         {
             var sIdx = sVariable.Substring(1, sVariable.Length - 1);
             var sID = HUtil32.GetValidStr3(sIdx, ref sIdx, "/");
-            var n18 = SystemShare.GetValNameNo(sID);
+            var n18 = ModuleShare.GetValNameNo(sID);
             if (n18 >= 0)
             {
                 if (HUtil32.RangeInDefined(n18, 0, 499))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', SystemShare.Config.GlobalVal[n18]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', ModuleShare.Config.GlobalVal[n18]);
                 }
                 else if (HUtil32.RangeInDefined(n18, 1100, 1109))
                 {
@@ -164,7 +164,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n18, 1000, 1099))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', SystemShare.Config.GlobaDyMval[n18 - 1000]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', ModuleShare.Config.GlobaDyMval[n18 - 1000]);
                 }
                 else if (HUtil32.RangeInDefined(n18, 1300, 1399))
                 {
@@ -176,7 +176,7 @@ namespace ScriptModule
                 }
                 else if (HUtil32.RangeInDefined(n18, 2000, 2499))
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', SystemShare.Config.GlobalAVal[n18 - 2000]);
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', ModuleShare.Config.GlobalAVal[n18 - 2000]);
                 }
             }
         }
@@ -199,7 +199,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetServerName(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", SystemShare.Config.ServerName);
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", ModuleShare.Config.ServerName);
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetWebSite(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", SystemShare.Config.sWebSite);
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", ModuleShare.Config.sWebSite);
         }
 
         /// <summary>
@@ -353,7 +353,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetServerRunTime(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", DateTimeOffset.FromUnixTimeMilliseconds(SystemShare.StartTime).ToString("YYYY-MM-DD HH:mm:ss"));
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", DateTimeOffset.FromUnixTimeMilliseconds(ModuleShare.StartTime).ToString("YYYY-MM-DD HH:mm:ss"));
         }
 
         /// <summary>
@@ -376,7 +376,7 @@ namespace ScriptModule
         internal void GetHighLevelInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highLevelPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            var highLevelPlay = (IPlayerActor)ModuleShare.ActorMgr.Get(ModuleShare.HighLevelHuman);
             if (highLevelPlay != null)
             {
                 sText = highLevelPlay.GetMyInfo();
@@ -397,7 +397,7 @@ namespace ScriptModule
         internal void GetHighPkInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highPvpPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            var highPvpPlay = (IPlayerActor)ModuleShare.ActorMgr.Get(ModuleShare.HighLevelHuman);
             if (highPvpPlay != null)
             {
                 sText = highPvpPlay.GetMyInfo();
@@ -418,7 +418,7 @@ namespace ScriptModule
         internal void GetHighDcInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highDcPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            var highDcPlay = (IPlayerActor)ModuleShare.ActorMgr.Get(ModuleShare.HighLevelHuman);
             if (highDcPlay != null)
             {
                 sText = highDcPlay.GetMyInfo();
@@ -439,7 +439,7 @@ namespace ScriptModule
         internal void GetHighMcInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highMcPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            var highMcPlay = (IPlayerActor)ModuleShare.ActorMgr.Get(ModuleShare.HighLevelHuman);
             if (highMcPlay != null)
             {
                 sText = highMcPlay.GetMyInfo();
@@ -460,7 +460,7 @@ namespace ScriptModule
         internal void GetHighScInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highScPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            var highScPlay = (IPlayerActor)ModuleShare.ActorMgr.Get(ModuleShare.HighLevelHuman);
             if (highScPlay != null)
             {
                 sText = highScPlay.GetMyInfo();
@@ -481,7 +481,7 @@ namespace ScriptModule
         internal void GetHighOlineInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highOnlinePlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            var highOnlinePlay = (IPlayerActor)ModuleShare.ActorMgr.Get(ModuleShare.HighLevelHuman);
             if (highOnlinePlay != null)
             {
                 sText = highOnlinePlay.GetMyInfo();
@@ -598,7 +598,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetRequestCastlewarItem(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, $"<{sVariable}>", SystemShare.Config.ZumaPiece);
+            sMsg = CombineStr(sMsg, $"<{sVariable}>", ModuleShare.Config.ZumaPiece);
         }
 
         /// <summary>
@@ -1098,7 +1098,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetGameGoldName(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$GAMEGOLDNAME>", SystemShare.Config.GameGoldName);
+            sMsg = CombineStr(sMsg, "<$GAMEGOLDNAME>", ModuleShare.Config.GameGoldName);
         }
 
         /// <summary>
@@ -1145,7 +1145,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetPointName(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$GAMEPOINTNAME>", SystemShare.Config.GamePointName);
+            sMsg = CombineStr(sMsg, "<$GAMEPOINTNAME>", ModuleShare.Config.GamePointName);
         }
 
         /// <summary>
@@ -1180,7 +1180,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GeTGuildWarfee(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$GUILDWARFEE>", (SystemShare.Config.GuildWarPrice).ToString());
+            sMsg = CombineStr(sMsg, "<$GUILDWARFEE>", (ModuleShare.Config.GuildWarPrice).ToString());
         }
         
         /// <summary>
@@ -1191,7 +1191,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBuildGuildfee(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BUILDGUILDFEE>", (SystemShare.Config.BuildGuildPrice).ToString());
+            sMsg = CombineStr(sMsg, "<$BUILDGUILDFEE>", (ModuleShare.Config.BuildGuildPrice).ToString());
         }
 
         /// <summary>
@@ -1202,7 +1202,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetRequestBuildGuildItem(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$REQUESTBUILDGUILDITEM>", SystemShare.Config.WomaHorn);
+            sMsg = CombineStr(sMsg, "<$REQUESTBUILDGUILDITEM>", ModuleShare.Config.WomaHorn);
         }
         
         /// <summary>
@@ -1213,7 +1213,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetRequestCastleWarday(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$REQUESTCASTLEWARDAY>", SystemShare.Config.ZumaPiece);
+            sMsg = CombineStr(sMsg, "<$REQUESTCASTLEWARDAY>", ModuleShare.Config.ZumaPiece);
         }
 
         /// <summary>
@@ -1419,7 +1419,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetWeapon(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
             sMsg = CombineStr(sMsg, "<$WEAPON>", sText);
         }
 
@@ -1431,7 +1431,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetDress(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
             sMsg = CombineStr(sMsg, "<$DRESS>", sText);
         }
 
@@ -1443,7 +1443,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetRightHand(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
             sMsg = CombineStr(sMsg, "<$RIGHTHAND>", sText);
         }
 
@@ -1455,7 +1455,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetHelmet(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
             sMsg = CombineStr(sMsg, "<$HELMET>", sText);
         }
 
@@ -1464,7 +1464,7 @@ namespace ScriptModule
         /// </summary>
         internal void GetNecklace(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
             sMsg = CombineStr(sMsg, "<$NECKLACE>", sText);
         }
 
@@ -1476,7 +1476,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetRing_R(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
             sMsg = CombineStr(sMsg, "<$RING_R>", sText);
         }
 
@@ -1488,7 +1488,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetRing_L(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           string  sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
+           string  sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
             sMsg = CombineStr(sMsg, "<$RING_L>", sText);
         }
 
@@ -1500,7 +1500,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetArmring_R(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_R>", sText);
         }
 
@@ -1512,7 +1512,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetArmring_L(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_L>", sText);
         }
 
@@ -1524,7 +1524,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBujuk(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
             sMsg = CombineStr(sMsg, "<$BUJUK>", sText);
         }
 
@@ -1536,7 +1536,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBelt(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
             sMsg = CombineStr(sMsg, "<$BELT>", sText);
         }
 
@@ -1548,7 +1548,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBoots(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
             sMsg = CombineStr(sMsg, "<$BOOTS>", sText);
         }
 
@@ -1560,7 +1560,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetChrm(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
+            string sText = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
             sMsg = CombineStr(sMsg, "<$CHARM>", sText);
         }
 
@@ -1572,7 +1572,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetQQ(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$QQ>", SystemShare.Config.sQQ);
+            sMsg = CombineStr(sMsg, "<$QQ>", ModuleShare.Config.sQQ);
         }
 
         /// <summary>
@@ -1583,7 +1583,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetPhone(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$PHONE>", SystemShare.Config.sPhone);
+            sMsg = CombineStr(sMsg, "<$PHONE>", ModuleShare.Config.sPhone);
         }
 
         /// <summary>
@@ -1594,7 +1594,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetServerIp(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$SERVERIP>", SystemShare.Config.ServerIPaddr);
+            sMsg = CombineStr(sMsg, "<$SERVERIP>", ModuleShare.Config.ServerIPaddr);
         }
 
         /// <summary>
@@ -1605,7 +1605,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBbsWeiSite(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BBSSITE>", SystemShare.Config.sBbsSite);
+            sMsg = CombineStr(sMsg, "<$BBSSITE>", ModuleShare.Config.sBbsSite);
         }
 
         /// <summary>
@@ -1616,7 +1616,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetCilentDownLoad(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$CLIENTDOWNLOAD>", SystemShare.Config.sClientDownload);
+            sMsg = CombineStr(sMsg, "<$CLIENTDOWNLOAD>", ModuleShare.Config.sClientDownload);
         }
 
         /// <summary>
@@ -1699,7 +1699,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount0(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount0);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount0);
         }
 
         /// <summary>
@@ -1710,7 +1710,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount1(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount1);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount1);
         }
 
         /// <summary>
@@ -1721,7 +1721,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount2(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount2);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount2);
         }
 
         /// <summary>
@@ -1732,7 +1732,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount3(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount3);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount3);
         }
 
         /// <summary>
@@ -1743,7 +1743,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount4(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount4);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount4);
         }
 
         /// <summary>
@@ -1754,7 +1754,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount5(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount5);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount5);
         }
 
         /// <summary>
@@ -1765,7 +1765,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount6(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount6);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount6);
         }
 
         /// <summary>
@@ -1776,7 +1776,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount7(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount7);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount7);
         }
 
         /// <summary>
@@ -1787,7 +1787,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount8(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount8);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount8);
         }
 
         /// <summary>
@@ -1798,7 +1798,7 @@ namespace ScriptModule
         /// <param name="sMsg"></param>
         internal void GetBankAccount9(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", SystemShare.Config.sBankAccount9);
+            sMsg = CombineStr(sMsg, "<$BANKACCOUNT0>", ModuleShare.Config.sBankAccount9);
         }
 
         /// <summary>

@@ -393,10 +393,10 @@ namespace M2Server.Actor
             {
                 SendRefMsgTick = HUtil32.GetTickCount();
                 VisibleHumanList.Clear();
-                short nLx = (short)(CurrX - SystemShare.Config.SendRefMsgRange); // 12
-                short nHx = (short)(CurrX + SystemShare.Config.SendRefMsgRange); // 12
-                short nLy = (short)(CurrY - SystemShare.Config.SendRefMsgRange); // 12
-                short nHy = (short)(CurrY + SystemShare.Config.SendRefMsgRange); // 12
+                short nLx = (short)(CurrX - ModuleShare.Config.SendRefMsgRange); // 12
+                short nHx = (short)(CurrX + ModuleShare.Config.SendRefMsgRange); // 12
+                short nLy = (short)(CurrY - ModuleShare.Config.SendRefMsgRange); // 12
+                short nHy = (short)(CurrY + ModuleShare.Config.SendRefMsgRange); // 12
                 for (short nCx = nLx; nCx <= nHx; nCx++)
                 {
                     for (short nCy = nLy; nCy <= nHy; nCy++)

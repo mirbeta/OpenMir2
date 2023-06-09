@@ -33,7 +33,7 @@ namespace CommandSystem
             }
             if (nDura <= 0)
             {
-                nDura = SystemShare.RandomNumber.Random(18) + 3;
+                nDura = ModuleShare.RandomNumber.Random(18) + 3;
             }
             // 如纯度不填,则随机给纯度
             for (var i = 0; i < nMineCount; i++)

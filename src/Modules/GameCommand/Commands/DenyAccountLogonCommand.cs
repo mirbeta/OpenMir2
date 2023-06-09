@@ -18,7 +18,7 @@ namespace CommandSystem {
             try {
                 if (!string.IsNullOrEmpty(sFixDeny) && sFixDeny[0] == '1') {
                     //Settings.g_DenyAccountList.Add(sAccount, ((1) as Object));
-                    SystemShare.SaveDenyAccountList();
+                    ModuleShare.SaveDenyAccountList();
                     PlayerActor.SysMsg(sAccount + "已加入禁止登录帐号列表", MsgColor.Green, MsgType.Hint);
                 }
                 else {

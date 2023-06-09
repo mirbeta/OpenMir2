@@ -24,7 +24,7 @@ namespace CommandSystem
                 return;
             }
 
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            var envir = ModuleShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 PlayerActor.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);

@@ -88,13 +88,13 @@ namespace M2Server.Monster
             int tCount;
             if (SlaveExpLevel < Grobal2.SlaveMaxLevel - 2)
             {
-                tCount = SystemShare.Config.MonUpLvNeedKillCount[SlaveExpLevel];
+                tCount = ModuleShare.Config.MonUpLvNeedKillCount[SlaveExpLevel];
             }
             else
             {
                 tCount = 0;
             }
-            return (Abil.Level * SystemShare.Config.MonUpLvRate) - Abil.Level + SystemShare.Config.MonUpLvNeedKillBase + tCount;
+            return (Abil.Level * ModuleShare.Config.MonUpLvRate) - Abil.Level + ModuleShare.Config.MonUpLvNeedKillBase + tCount;
         }
 
         protected BaseObject MakeClone(string sMonName, MonsterObject OldMon)

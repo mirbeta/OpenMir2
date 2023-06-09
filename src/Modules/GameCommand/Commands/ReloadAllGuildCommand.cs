@@ -9,11 +9,11 @@ namespace CommandSystem {
     public class ReloadAllGuildCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            if (SystemShare.ServerIndex != 0) {
+            if (ModuleShare.ServerIndex != 0) {
                 PlayerActor.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            SystemShare.GuildMgr.LoadGuildInfo();
+            ModuleShare.GuildMgr.LoadGuildInfo();
             PlayerActor.SysMsg("重新加载行会信息完成.", MsgColor.Red, MsgType.Hint);
         }
     }

@@ -16,7 +16,7 @@ namespace CommandSystem {
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             BaseObject baseObject;
             if (!string.IsNullOrEmpty(sHumanName)) {
-                baseObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+                baseObject = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
                 if (baseObject == null) {
                     PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                     return;

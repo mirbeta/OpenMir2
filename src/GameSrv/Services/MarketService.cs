@@ -33,10 +33,10 @@ namespace M2Server.Services
 
         public void Start()
         {
-            if (SystemShare.Config.EnableMarket)
+            if (ModuleShare.Config.EnableMarket)
             {
                 var config = new TouchSocketConfig();
-                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort))
+                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(ModuleShare.Config.MarketSrvAddr), ModuleShare.Config.MarketSrvPort))
                     .SetBufferLength(4096);
                 config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
                 _clientScoket.Setup(config);
@@ -53,7 +53,7 @@ namespace M2Server.Services
 
         public void Stop()
         {
-            if (SystemShare.Config.EnableMarket)
+            if (ModuleShare.Config.EnableMarket)
             {
                 _clientScoket.Close();
             }
@@ -63,7 +63,7 @@ namespace M2Server.Services
 
         public void CheckConnected()
         {
-            if (!SystemShare.Config.EnableMarket)
+            if (!ModuleShare.Config.EnableMarket)
             {
                 return;
             }
@@ -122,13 +122,13 @@ namespace M2Server.Services
             switch (e.SocketErrorCode)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]拒绝链接...");
+                    _logger.Error("数据库(拍卖行)服务器[" + ModuleShare.Config.MarketSrvAddr + ":" + ModuleShare.Config.MarketSrvPort + "]拒绝链接...");
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]关闭连接...");
+                    _logger.Error("数据库(拍卖行)服务器[" + ModuleShare.Config.MarketSrvAddr + ":" + ModuleShare.Config.MarketSrvPort + "]关闭连接...");
                     break;
                 case SocketError.TimedOut:
-                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]链接超时...");
+                    _logger.Error("数据库(拍卖行)服务器[" + ModuleShare.Config.MarketSrvAddr + ":" + ModuleShare.Config.MarketSrvPort + "]链接超时...");
                     break;
             }
         }
@@ -143,14 +143,14 @@ namespace M2Server.Services
                 return;
             }
             var request = new ServerRequestMessage(Messages.DB_LOADMARKET, 0, 0, 0, 0);
-            var requestData = new MarketRegisterMessage() { ServerIndex = M2Share.ServerIndex, ServerName = SystemShare.Config.ServerName, GroupId = 1, Token = SystemShare.Config.MarketToken };
+            var requestData = new MarketRegisterMessage() { ServerIndex = M2Share.ServerIndex, ServerName = ModuleShare.Config.ServerName, GroupId = 1, Token = ModuleShare.Config.MarketToken };
             //M2Share.MarketService.SendRequest(1, request, requestData);
             IsFirstData = true;
         }
 
         public bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo)
         {
-            if (!SystemShare.Config.EnableMarket)
+            if (!ModuleShare.Config.EnableMarket)
             {
                 return false;
             }
@@ -213,7 +213,7 @@ namespace M2Server.Services
                     var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                     if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
                     {
-                        SystemShare.Config.nLoadDBErrorCount++;
+                        ModuleShare.Config.nLoadDBErrorCount++;
                         return;
                     }
                     var signatureBuff = BitConverter.GetBytes(queryId);
@@ -306,7 +306,7 @@ namespace M2Server.Services
                     else
                     {
                         _logger.Warn("非法拍卖行数据封包，解析失败...");
-                        SystemShare.Config.nLoadDBErrorCount++;
+                        ModuleShare.Config.nLoadDBErrorCount++;
                     }
                 }
             }

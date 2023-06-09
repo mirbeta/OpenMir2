@@ -26,7 +26,7 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var targerObject = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (targerObject == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

@@ -188,11 +188,11 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))
             {
                 HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
-                n14 = SystemShare.GetValNameNo(s34);
+                n14 = ModuleShare.GetValNameNo(s34);
             }
             else
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam1);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
@@ -200,77 +200,77 @@ namespace ScriptModule
                 {
                     if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        playerActor.MNVal[n14] = questActionInfo.nParam2 + SystemShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
+                        playerActor.MNVal[n14] = questActionInfo.nParam2 + ModuleShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        playerActor.MNVal[n14] = SystemShare.RandomNumber.Random(questActionInfo.nParam2);
+                        playerActor.MNVal[n14] = ModuleShare.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 100, 119))
                 {
                     if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        configuration.Config.GlobalVal[n14 - 100] = questActionInfo.nParam2 + SystemShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
+                        configuration.Config.GlobalVal[n14 - 100] = questActionInfo.nParam2 + ModuleShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        configuration.Config.GlobalVal[n14 - 100] = SystemShare.RandomNumber.Random(questActionInfo.nParam2);
+                        configuration.Config.GlobalVal[n14 - 100] = ModuleShare.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 200, 299))
                 {
                     if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        playerActor.MDyVal[n14 - 200] = questActionInfo.nParam2 + SystemShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
+                        playerActor.MDyVal[n14 - 200] = questActionInfo.nParam2 + ModuleShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        playerActor.MDyVal[n14 - 200] = SystemShare.RandomNumber.Random(questActionInfo.nParam2);
+                        playerActor.MDyVal[n14 - 200] = ModuleShare.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 300, 399))
                 {
                     if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        playerActor.MNMval[n14 - 300] = questActionInfo.nParam2 + SystemShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
+                        playerActor.MNMval[n14 - 300] = questActionInfo.nParam2 + ModuleShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        playerActor.MNMval[n14 - 300] = SystemShare.RandomNumber.Random(questActionInfo.nParam2);
+                        playerActor.MNMval[n14 - 300] = ModuleShare.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 400, 499))
                 {
                     if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        configuration.Config.GlobaDyMval[n14 - 400] = questActionInfo.nParam2 + SystemShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
+                        configuration.Config.GlobaDyMval[n14 - 400] = questActionInfo.nParam2 + ModuleShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        configuration.Config.GlobaDyMval[n14 - 400] = SystemShare.RandomNumber.Random(questActionInfo.nParam2);
+                        configuration.Config.GlobaDyMval[n14 - 400] = ModuleShare.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 500, 599))
                 {
                     if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        playerActor.MNInteger[n14 - 500] = questActionInfo.nParam2 + SystemShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
+                        playerActor.MNInteger[n14 - 500] = questActionInfo.nParam2 + ModuleShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        playerActor.MNInteger[n14 - 500] = SystemShare.RandomNumber.Random(questActionInfo.nParam2);
+                        playerActor.MNInteger[n14 - 500] = ModuleShare.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else if (HUtil32.RangeInDefined(n14, 800, 1199))
                 {
                     if (questActionInfo.nParam3 > questActionInfo.nParam2)
                     {
-                        configuration.Config.GlobalVal[n14 - 700] = questActionInfo.nParam2 + SystemShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
+                        configuration.Config.GlobalVal[n14 - 700] = questActionInfo.nParam2 + ModuleShare.RandomNumber.Random(questActionInfo.nParam3 - questActionInfo.nParam2);
                     }
                     else
                     {
-                        configuration.Config.GlobalVal[n14 - 700] = SystemShare.RandomNumber.Random(questActionInfo.nParam2);
+                        configuration.Config.GlobalVal[n14 - 700] = ModuleShare.RandomNumber.Random(questActionInfo.nParam2);
                     }
                 }
                 else
@@ -507,7 +507,7 @@ namespace ScriptModule
                         ScriptActionError(playerActor,string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
-                    n14 = SystemShare.GetValNameNo(sParam1);
+                    n14 = ModuleShare.GetValNameNo(sParam1);
                     if (n14 >= 0)
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -615,7 +615,7 @@ namespace ScriptModule
                 {
                     if ((!string.IsNullOrEmpty(sParam3)) && (!HUtil32.IsStringNumber(sParam3)))
                     {
-                        n14 = SystemShare.GetValNameNo(sParam3);
+                        n14 = ModuleShare.GetValNameNo(sParam3);
                         if (n14 >= 0)
                         {
                             if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -716,7 +716,7 @@ namespace ScriptModule
                 if (((!string.IsNullOrEmpty(sParam2))) && (!HUtil32.IsStringNumber(sParam2)))
                 {
                     // 获取第2个变量值
-                    n14 = SystemShare.GetValNameNo(sParam2);
+                    n14 = ModuleShare.GetValNameNo(sParam2);
                     if (n14 >= 0)
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -774,7 +774,7 @@ namespace ScriptModule
                 {
                     n3C = questActionInfo.nParam2;
                 }
-                n14 = SystemShare.GetValNameNo(sParam1);
+                n14 = ModuleShare.GetValNameNo(sParam1);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -891,7 +891,7 @@ namespace ScriptModule
             int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam2);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam2);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -940,7 +940,7 @@ namespace ScriptModule
             n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam3);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam3);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -988,11 +988,11 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))//支持字符串变量
             {
                 HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
-                n14 = SystemShare.GetValNameNo(s34);
+                n14 = ModuleShare.GetValNameNo(s34);
             }
             else
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam1);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
@@ -1039,7 +1039,7 @@ namespace ScriptModule
             int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam2);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam2);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -1100,7 +1100,7 @@ namespace ScriptModule
             n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam3);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam3);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -1160,11 +1160,11 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
             {
                 HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
-                n14 = SystemShare.GetValNameNo(s34);
+                n14 = ModuleShare.GetValNameNo(s34);
             }
             else
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam1);// 取第一个变量,并传值给n18
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam1);// 取第一个变量,并传值给n18
             }
             if (n14 >= 0)
             {
@@ -1223,7 +1223,7 @@ namespace ScriptModule
             int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam2); // 取第一个变量,并传值给n18
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam2); // 取第一个变量,并传值给n18
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -1272,7 +1272,7 @@ namespace ScriptModule
             n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam3); // 取第一个变量,并传值给n1C
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam3); // 取第一个变量,并传值给n1C
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -1320,11 +1320,11 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6))// 支持字符串变量
             {
                 HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
-                n14 = SystemShare.GetValNameNo(s34);
+                n14 = ModuleShare.GetValNameNo(s34);
             }
             else
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam1);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
@@ -1381,11 +1381,11 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6)) //  SUM 支持字符串变量
             {
                 HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
-                n14 = SystemShare.GetValNameNo(s34);
+                n14 = ModuleShare.GetValNameNo(s34);
             }
             else
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam1);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
@@ -1442,11 +1442,11 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(questActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
             {
                 HUtil32.ArrestStringEx(questActionInfo.sParam2, "(", ")", ref s34);
-                n14 = SystemShare.GetValNameNo(s34);
+                n14 = ModuleShare.GetValNameNo(s34);
             }
             else
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam2);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam2);
             }
             if (n14 >= 0)
             {
@@ -1498,11 +1498,11 @@ namespace ScriptModule
             if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6)) // SUM 支持字符串变量
             {
                 HUtil32.ArrestStringEx(questActionInfo.sParam1, "(", ")", ref s34);
-                n14 = SystemShare.GetValNameNo(s34);
+                n14 = ModuleShare.GetValNameNo(s34);
             }
             else
             {
-                n14 = SystemShare.GetValNameNo(questActionInfo.sParam1);
+                n14 = ModuleShare.GetValNameNo(questActionInfo.sParam1);
             }
             if (n14 >= 0)
             {
@@ -1624,7 +1624,7 @@ namespace ScriptModule
                         ScriptActionError(playerActor,string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
-                    n14 = SystemShare.GetValNameNo(sParam1);
+                    n14 = ModuleShare.GetValNameNo(sParam1);
                     if (n14 >= 0)
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -1741,7 +1741,7 @@ namespace ScriptModule
                 {
                     if ((!string.IsNullOrEmpty(sParam3)) && (!HUtil32.IsStringNumber(sParam3)))
                     {
-                        n14 = SystemShare.GetValNameNo(sParam3);
+                        n14 = ModuleShare.GetValNameNo(sParam3);
                         if (n14 >= 0)
                         {
                             if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -1845,7 +1845,7 @@ namespace ScriptModule
                 if ((!string.IsNullOrEmpty(sParam2)) && (!HUtil32.IsStringNumber(sParam2)))
                 {
                     // 获取第2个变量值
-                    n14 = SystemShare.GetValNameNo(sParam2);
+                    n14 = ModuleShare.GetValNameNo(sParam2);
                     if (n14 >= 0)
                     {
                         if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -1903,7 +1903,7 @@ namespace ScriptModule
                 {
                     n3C = questActionInfo.nParam2;
                 }
-                n14 = SystemShare.GetValNameNo(sParam1);
+                n14 = ModuleShare.GetValNameNo(sParam1);
                 if (n14 >= 0)
                 {
                     if (HUtil32.RangeInDefined(n14, 0, 99))
@@ -2109,7 +2109,7 @@ namespace ScriptModule
         {
             while (true)
             {
-                var n2C = SystemShare.RandomNumber.Random(999999);
+                var n2C = ModuleShare.RandomNumber.Random(999999);
                 if ((n2C >= 1000) && (n2C.ToString() != playerActor.RandomNo))
                 {
                     playerActor.RandomNo = n2C.ToString();
@@ -2141,16 +2141,16 @@ namespace ScriptModule
             var sMap = questActionInfo.sParam1;
             for (int k = 0; k < questActionInfo.nParam2; k++)
             {
-                var n20X = SystemShare.RandomNumber.Random(questActionInfo.nParam3 * 2 + 1) + (n38 - questActionInfo.nParam3);
-                var n24Y = SystemShare.RandomNumber.Random(questActionInfo.nParam3 * 2 + 1) + (n3C - questActionInfo.nParam3);
-                SystemShare.WorldEngine.RegenMonsterByName(sMap, (short)n20X, (short)n24Y, questActionInfo.sParam1);
+                var n20X = ModuleShare.RandomNumber.Random(questActionInfo.nParam3 * 2 + 1) + (n38 - questActionInfo.nParam3);
+                var n24Y = ModuleShare.RandomNumber.Random(questActionInfo.nParam3 * 2 + 1) + (n3C - questActionInfo.nParam3);
+                ModuleShare.WorldEngine.RegenMonsterByName(sMap, (short)n20X, (short)n24Y, questActionInfo.sParam1);
             }
         }
 
         private void ActionOfMonClear(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var list58 = new List<IActor>();
-            SystemShare.WorldEngine.GetMapMonster(SystemShare.MapMgr.FindMap(questActionInfo.sParam1), list58);
+            ModuleShare.WorldEngine.GetMapMonster(ModuleShare.MapMgr.FindMap(questActionInfo.sParam1), list58);
             for (int k = 0; k < list58.Count; k++)
             {
                 list58[k].NoItem = true;
@@ -2179,11 +2179,11 @@ namespace ScriptModule
 
         private void ActionOfReCallMap(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var recallEnvir = SystemShare.MapMgr.FindMap(questActionInfo.sParam1);
+            var recallEnvir = ModuleShare.MapMgr.FindMap(questActionInfo.sParam1);
             if (recallEnvir != null)
             {
                 IList<IActor> recallList = new List<IActor>();
-                SystemShare.WorldEngine.GetMapRageHuman(recallEnvir, 0, 0, 1000, ref recallList);
+                ModuleShare.WorldEngine.GetMapRageHuman(recallEnvir, 0, 0, 1000, ref recallList);
                 for (int k = 0; k < recallList.Count; k++)
                 {
                     var user = (IPlayerActor)recallList[k];
@@ -2202,7 +2202,7 @@ namespace ScriptModule
 
         private void ActionOfExchangeMap(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var envir = SystemShare.MapMgr.FindMap(questActionInfo.sParam1);
+            var envir = ModuleShare.MapMgr.FindMap(questActionInfo.sParam1);
             if (envir != null)
             {
                 //IList<BaseObject> exchangeList = new List<BaseObject>();
@@ -2343,7 +2343,7 @@ namespace ScriptModule
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfOPENYBDEAL");
+                ModuleShare.Logger.Error("{异常} TNormNpc.ActionOfOPENYBDEAL");
             }
         }
 
@@ -2359,13 +2359,13 @@ namespace ScriptModule
                 {
                     if (playerActor.SellOffInTime(0))
                     {
-                        if (SystemShare.SellOffItemList.Count > 0)
+                        if (ModuleShare.SellOffItemList.Count > 0)
                         {
                             var sClientDealOffInfo = new ClientDealOffInfo();
                             sClientDealOffInfo.UseItems = new ClientItem[9];
-                            for (var i = 0; i < SystemShare.SellOffItemList.Count; i++)
+                            for (var i = 0; i < ModuleShare.SellOffItemList.Count; i++)
                             {
-                                var dealOffInfo = SystemShare.SellOffItemList[i];
+                                var dealOffInfo = ModuleShare.SellOffItemList[i];
                                 if (string.Compare(dealOffInfo.sDealChrName, playerActor.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.Flag == 0 || dealOffInfo.Flag == 3))
                                 {
                                     for (var j = 0; j < 9; j++)
@@ -2374,7 +2374,7 @@ namespace ScriptModule
                                         {
                                             continue;
                                         }
-                                        var stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                        var stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                         if (stdItem == null)
                                         {
                                             // 是金刚石
@@ -2448,7 +2448,7 @@ namespace ScriptModule
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfQUERYYBSELL");
+                ModuleShare.Logger.Error("{异常} TNormNpc.ActionOfQUERYYBSELL");
             }
         }
 
@@ -2464,13 +2464,13 @@ namespace ScriptModule
                 {
                     if (playerActor.SellOffInTime(1))
                     {
-                        if (SystemShare.SellOffItemList.Count > 0)
+                        if (ModuleShare.SellOffItemList.Count > 0)
                         {
                             var sClientDealOffInfo = new ClientDealOffInfo();
                             sClientDealOffInfo.UseItems = new ClientItem[9];
-                            for (var i = 0; i < SystemShare.SellOffItemList.Count; i++)
+                            for (var i = 0; i < ModuleShare.SellOffItemList.Count; i++)
                             {
-                                var dealOffInfo = SystemShare.SellOffItemList[i];
+                                var dealOffInfo = ModuleShare.SellOffItemList[i];
                                 if (string.Compare(dealOffInfo.sBuyChrName, playerActor.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                                 {
                                     for (var k = 0; k < 9; k++)
@@ -2479,7 +2479,7 @@ namespace ScriptModule
                                         {
                                             continue;
                                         }
-                                        var stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[k].Index);
+                                        var stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[k].Index);
                                         if (stdItem == null)
                                         {
                                             // 是金刚石
@@ -2555,7 +2555,7 @@ namespace ScriptModule
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfQueryTrustDeal");
+                ModuleShare.Logger.Error("{异常} TNormNpc.ActionOfQueryTrustDeal");
             }
         }
 
@@ -2563,7 +2563,7 @@ namespace ScriptModule
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.m_sPath, questActionInfo.sParam1);
+            var sListFileName = ModuleShare.GetEnvirFilePath(normNpc.m_sPath, questActionInfo.sParam1);
             using var loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -2592,7 +2592,7 @@ namespace ScriptModule
             }
             catch
             {
-                SystemShare.Logger.Error("saving fail.... => " + sListFileName);
+                ModuleShare.Logger.Error("saving fail.... => " + sListFileName);
             }
         }
 
@@ -2600,7 +2600,7 @@ namespace ScriptModule
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.m_sPath, questActionInfo.sParam1);
+            var sListFileName = ModuleShare.GetEnvirFilePath(normNpc.m_sPath, questActionInfo.sParam1);
             using var loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -2628,7 +2628,7 @@ namespace ScriptModule
         private void ActionOfAddSkill(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nLevel = HUtil32._MIN(3, HUtil32.StrToInt(questActionInfo.sParam2, 0));
-            var magic = SystemShare.WorldEngine.FindMagic(questActionInfo.sParam1);
+            var magic = ModuleShare.WorldEngine.FindMagic(questActionInfo.sParam1);
             if (magic != null)
             {
                 if (!playerActor.IsTrainingSkill(magic.MagicId))
@@ -2687,7 +2687,7 @@ namespace ScriptModule
             var sMap = questActionInfo.sParam4;
             if (string.IsNullOrEmpty(sMap))
             {
-                envir = SystemShare.MapMgr.FindMap(sMap);
+                envir = ModuleShare.MapMgr.FindMap(sMap);
             }
             if (nTime <= 0 || nPoint <= 0 || string.IsNullOrEmpty(sMap) && envir == null)
             {
@@ -2970,7 +2970,7 @@ namespace ScriptModule
         private void ActionOfClearMapMon(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             IList<IActor> monList = new List<IActor>();
-            var monsterCount = SystemShare.WorldEngine.GetMapMonster(SystemShare.MapMgr.FindMap(questActionInfo.sParam1), monList);
+            var monsterCount = ModuleShare.WorldEngine.GetMapMonster(ModuleShare.MapMgr.FindMap(questActionInfo.sParam1), monList);
             for (var i = 0; i < monsterCount; i++)
             {
                 var mon = monList[i];
@@ -2978,7 +2978,7 @@ namespace ScriptModule
                 {
                     continue;
                 }
-                if (SystemShare.GetNoClearMonList(mon.ChrName))
+                if (ModuleShare.GetNoClearMonList(mon.ChrName))
                 {
                     continue;
                 }
@@ -2990,7 +2990,7 @@ namespace ScriptModule
 
         private void ActionOfClearList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var sListFileName = SystemShare.GetEnvirFilePath(questActionInfo.sParam1);
+            var sListFileName = ModuleShare.GetEnvirFilePath(questActionInfo.sParam1);
             File.WriteAllBytes(sListFileName, Array.Empty<byte>());
         }
 
@@ -3022,7 +3022,7 @@ namespace ScriptModule
 
         private void ActionOfDelSkill(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var magic = SystemShare.WorldEngine.FindMagic(questActionInfo.sParam1);
+            var magic = ModuleShare.WorldEngine.FindMagic(questActionInfo.sParam1);
             if (magic == null)
             {
                 ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.DelSkill);
@@ -3069,7 +3069,7 @@ namespace ScriptModule
                     playerActor.GameGold = nGameGold;
                     break;
             }
-            if (SystemShare.GameLogGameGold)
+            if (ModuleShare.GameLogGameGold)
             {
                 // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, playerActor.MapName, playerActor.CurrX, playerActor.CurrY, playerActor.ChrName, configuration.Config.GameGoldName, nGameGold, cMethod, normNpc.ChrName));
             }
@@ -3106,7 +3106,7 @@ namespace ScriptModule
                     playerActor.GamePoint = nGamePoint;
                     break;
             }
-            if (SystemShare.GameLogGamePoint)
+            if (ModuleShare.GameLogGamePoint)
             {
               //  M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, string.Format(CommandHelp.GameLogMsg1, playerActor.MapName, playerActor.CurrX, playerActor.CurrY, playerActor.ChrName, configuration.Config.GamePointName, nGamePoint, cMethod, normNpc.ChrName));
             }
@@ -3154,16 +3154,16 @@ namespace ScriptModule
             switch (questActionInfo.nParam1)
             {
                 case 0:
-                    SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
+                    ModuleShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
                     break;
                 case 1:
-                    SystemShare.WorldEngine.SendBroadCastMsg("(*) " + sMsg, MsgType.System);
+                    ModuleShare.WorldEngine.SendBroadCastMsg("(*) " + sMsg, MsgType.System);
                     break;
                 case 2:
-                    SystemShare.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + ']' + sMsg, MsgType.System);
+                    ModuleShare.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + ']' + sMsg, MsgType.System);
                     break;
                 case 3:
-                    SystemShare.WorldEngine.SendBroadCastMsg('[' + playerActor.ChrName + ']' + sMsg, MsgType.System);
+                    ModuleShare.WorldEngine.SendBroadCastMsg('[' + playerActor.ChrName + ']' + sMsg, MsgType.System);
                     break;
                 case 4:
                     normNpc.SendSayMsg(sMsg);
@@ -3227,16 +3227,16 @@ namespace ScriptModule
                         if (playerActor.Gender == PlayGender.Man && poseHuman.Gender == PlayGender.WoMan)
                         {
                             sSayMsg = string.Format(Settings.StartMarryManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             sSayMsg = string.Format(Settings.StartMarryManAskQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         else if (playerActor.Gender == PlayGender.WoMan && poseHuman.Gender == PlayGender.Man)
                         {
                             sSayMsg = string.Format(Settings.StartMarryWoManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             sSayMsg = string.Format(Settings.StartMarryWoManAskQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         playerActor.IsStartMarry = true;
                         poseHuman.IsStartMarry = true;
@@ -3264,11 +3264,11 @@ namespace ScriptModule
                         sSayMsg = Settings.MarryManAnswerQuestionMsg.Replace("%n", normNpc.ChrName);
                         sSayMsg = sSayMsg.Replace("%s", playerActor.ChrName);
                         sSayMsg = sSayMsg.Replace("%d", poseHuman.ChrName);
-                        SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                        ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         sSayMsg = Settings.MarryManAskQuestionMsg.Replace("%n", normNpc.ChrName);
                         sSayMsg = sSayMsg.Replace("%s", playerActor.ChrName);
                         sSayMsg = sSayMsg.Replace("%d", poseHuman.ChrName);
-                        SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                        ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         normNpc.GotoLable(playerActor,"@WateMarry", false);
                         normNpc.GotoLable(poseHuman, "@RevMarry", false);
                     }
@@ -3285,9 +3285,9 @@ namespace ScriptModule
                         if (playerActor.IsStartMarry && poseHuman.IsStartMarry)
                         {
                             sSayMsg = string.Format(Settings.MarryWoManAnswerQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             sSayMsg = string.Format(Settings.MarryWoManGetMarryMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             normNpc.GotoLable(playerActor,"@EndMarry", false);
                             normNpc.GotoLable(poseHuman, "@EndMarry", false);
                             playerActor.IsStartMarry = false;
@@ -3309,9 +3309,9 @@ namespace ScriptModule
                             playerActor.IsStartMarry = false;
                             poseHuman.IsStartMarry = false;
                             sSayMsg = string.Format(Settings.MarryWoManDenyMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             sSayMsg = string.Format(Settings.MarryWoManCancelMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                     }
                 }
@@ -3409,9 +3409,9 @@ namespace ScriptModule
         {
             if (!string.IsNullOrEmpty(questActionInfo.sParam1) && questActionInfo.nParam2 > 0 && questActionInfo.nParam3 > 0)
             {
-                SystemShare.MissionMap = questActionInfo.sParam1;
-                SystemShare.MissionX = (short)questActionInfo.nParam2;
-                SystemShare.MissionY = (short)questActionInfo.nParam3;
+                ModuleShare.MissionMap = questActionInfo.sParam1;
+                ModuleShare.MissionX = (short)questActionInfo.nParam2;
+                ModuleShare.MissionY = (short)questActionInfo.nParam3;
             }
             else
             {
@@ -3454,14 +3454,14 @@ namespace ScriptModule
             int nRange = 0;
             for (var i = 0; i < nCount; i++)
             {
-                var nRandX = (short)(SystemShare.RandomNumber.Random(nRange * 2 + 1) + (nX - nRange));
-                var nRandY = (short)(SystemShare.RandomNumber.Random(nRange * 2 + 1) + (nY - nRange));
-                var mon = SystemShare.WorldEngine.RegenMonsterByName(SystemShare.MissionMap, nRandX, nRandY, questActionInfo.sParam1);
+                var nRandX = (short)(ModuleShare.RandomNumber.Random(nRange * 2 + 1) + (nX - nRange));
+                var nRandY = (short)(ModuleShare.RandomNumber.Random(nRange * 2 + 1) + (nY - nRange));
+                var mon = ModuleShare.WorldEngine.RegenMonsterByName(ModuleShare.MissionMap, nRandX, nRandY, questActionInfo.sParam1);
                 if (mon != null)
                 {
                     mon.Mission = true;
-                    mon.MissionX = SystemShare.MissionX;
-                    mon.MissionY = SystemShare.MissionY;
+                    mon.MissionX = ModuleShare.MissionX;
+                    mon.MissionY = ModuleShare.MissionY;
                 }
                 else
                 {
@@ -3514,7 +3514,7 @@ namespace ScriptModule
                 return;
             }
             var cMethod = questActionInfo.sParam2[0];
-            var magic = SystemShare.WorldEngine.FindMagic(questActionInfo.sParam1);
+            var magic = ModuleShare.WorldEngine.FindMagic(questActionInfo.sParam1);
             if (magic != null)
             {
                 for (var i = 0; i < playerActor.MagicList.Count; i++)
@@ -3622,7 +3622,7 @@ namespace ScriptModule
                             // sUnMarryMsg8
                             // sMarryMsg0
                             // sUnMarryMsg9
-                            SystemShare.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + "]: " + "我宣布" + poseHuman.ChrName + ' ' + '与' + playerActor.ChrName + ' ' + ' ' + "正式脱离夫妻关系。", MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + "]: " + "我宣布" + poseHuman.ChrName + ' ' + '与' + playerActor.ChrName + ' ' + ' ' + "正式脱离夫妻关系。", MsgType.Say);
                             playerActor.DearName = "";
                             poseHuman.DearName = "";
                             playerActor.MarryCount++;
@@ -3646,8 +3646,8 @@ namespace ScriptModule
                     // 强行离婚
                     if (string.Compare(questActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        SystemShare.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + "]: " + "我宣布" + playerActor.ChrName + ' ' + '与' + playerActor.DearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", MsgType.Say);
-                        poseHuman = SystemShare.WorldEngine.GetPlayObject(playerActor.DearName);
+                        ModuleShare.WorldEngine.SendBroadCastMsg('[' + normNpc.ChrName + "]: " + "我宣布" + playerActor.ChrName + ' ' + '与' + playerActor.DearName + ' ' + ' ' + "已经正式脱离夫妻关系!!!", MsgType.Say);
+                        poseHuman = ModuleShare.WorldEngine.GetPlayObject(playerActor.DearName);
                         if (poseHuman != null)
                         {
                             poseHuman.DearName = string.Empty;
@@ -3702,7 +3702,7 @@ namespace ScriptModule
             {
                 sFileName = sFileName[3..];
             }
-            sFileName = SystemShare.GetEnvirFilePath(sFileName);
+            sFileName = ModuleShare.GetEnvirFilePath(sFileName);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName))
             {
                 ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SaveVar);
@@ -3925,7 +3925,7 @@ namespace ScriptModule
                 {
                     continue;
                 }
-                var sUserItemName = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[i].Index);
+                var sUserItemName = ModuleShare.ItemSystem.GetStdItemName(playerActor.UseItems[i].Index);
                 if (!(i != ItemLocation.Charm))
                 {
                     playerActor.SysMsg(sUserItemName + " 禁止修理...", MsgColor.Red, MsgType.Hint);
@@ -3946,7 +3946,7 @@ namespace ScriptModule
             var boFlag = false;
             if (playerActor.GroupOwner != 0)
             {
-                var envir = SystemShare.MapMgr.FindMap(questActionInfo.sParam1);
+                var envir = ModuleShare.MapMgr.FindMap(questActionInfo.sParam1);
                 if (envir != null)
                 {
                     if (envir.CanWalk(questActionInfo.nParam2, questActionInfo.nParam3, true))
@@ -3978,15 +3978,15 @@ namespace ScriptModule
                 return;
             }
             var userItem = playerActor.UseItems[nWhere];
-            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playerActor.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            nRate = SystemShare.RandomNumber.Random(nRate);
-            nPoint = SystemShare.RandomNumber.Random(nPoint);
-            var nValType = SystemShare.RandomNumber.Random(14);
+            nRate = ModuleShare.RandomNumber.Random(nRate);
+            nPoint = ModuleShare.RandomNumber.Random(nPoint);
+            var nValType = ModuleShare.RandomNumber.Random(14);
             if (nRate != 0)
             {
                 playerActor.SysMsg("装备升级失败!!!", MsgColor.Red, MsgType.Hint);
@@ -4029,14 +4029,14 @@ namespace ScriptModule
                 return;
             }
             var userItem = playerActor.UseItems[nWhere];
-            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playerActor.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nRatePoint = SystemShare.RandomNumber.Random(nRate * 10);
-            nPoint = HUtil32._MAX(1, SystemShare.RandomNumber.Random(nPoint));
+            var nRatePoint = ModuleShare.RandomNumber.Random(nRate * 10);
+            nPoint = HUtil32._MAX(1, ModuleShare.RandomNumber.Random(nPoint));
             if (!(nRatePoint >= 0 && nRatePoint <= 10))
             {
                 switch (nUpgradeItemStatus)
@@ -4177,7 +4177,7 @@ namespace ScriptModule
             {
                 sFileName = sFileName[3..];
             }
-            sFileName = SystemShare.GetEnvirFilePath(sFileName);
+            sFileName = ModuleShare.GetEnvirFilePath(sFileName);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName))
             {
                 ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.LoadVar);
@@ -4243,7 +4243,7 @@ namespace ScriptModule
             for (var i = playerActor.ItemList.Count - 1; i >= 0; i--)
             {
                 userItem = playerActor.ItemList[i];
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.Need == nNeed)
                 {
                     playerActor.SendDelItems(userItem);
@@ -4254,7 +4254,7 @@ namespace ScriptModule
             for (var i = playerActor.StorageItemList.Count - 1; i >= 0; i--)
             {
                 userItem = playerActor.StorageItemList[i];
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.Need == nNeed)
                 {
                     Dispose(userItem);
@@ -4282,7 +4282,7 @@ namespace ScriptModule
                 {
                     continue;
                 }
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playerActor.SendDelItems(userItem);
@@ -4297,7 +4297,7 @@ namespace ScriptModule
                 {
                     continue;
                 }
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);
@@ -4311,7 +4311,7 @@ namespace ScriptModule
                 {
                     continue;
                 }
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     userItem.Index = 0;
@@ -4373,7 +4373,7 @@ namespace ScriptModule
                         if (playerActor.IsStartUnMaster && poseHuman.IsStartUnMaster)
                         {
                             sMsg = string.Format(Settings.NPCSayUnMasterOKMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
-                            SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
+                            ModuleShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                             playerActor.MasterName = "";
                             poseHuman.MasterName = "";
                             playerActor.IsStartUnMaster = false;
@@ -4395,7 +4395,7 @@ namespace ScriptModule
                 if (string.Compare(questActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     sMsg = string.Format(Settings.NPCSayForceUnMasterMsg, normNpc.ChrName, playerActor.ChrName, playerActor.MasterName);
-                    SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
+                    ModuleShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                     //poseHuman = M2Share.WorldEngine.GetIPlayerActor(playerActor.MasterName);
                     //if (poseHuman != null)
                     //{
@@ -4420,7 +4420,7 @@ namespace ScriptModule
             var sMapMode = questActionInfo.sParam2;
             var sParam1 = questActionInfo.sParam3;
             var sParam2 = questActionInfo.sParam4;
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            var envir = ModuleShare.MapMgr.FindMap(sMapName);
             if (envir == null || string.IsNullOrEmpty(sMapMode))
             {
                 ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SetMapMode);
@@ -4863,13 +4863,13 @@ namespace ScriptModule
             {
                 playerActor.IncGold(nItemCount);
                 playerActor.GoldChanged();
-                if (SystemShare.GameLogGold)
+                if (ModuleShare.GameLogGold)
                 {
                    // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + normNpc.ChrName);
                 }
                 return;
             }
-            if (SystemShare.ItemSystem.GetStdItemIdx(sItemName) > 0)
+            if (ModuleShare.ItemSystem.GetStdItemIdx(sItemName) > 0)
             {
                 if (!(nItemCount >= 1 && nItemCount <= 50))
                 {
@@ -4883,11 +4883,11 @@ namespace ScriptModule
                     if (playerActor.IsEnoughBag)
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             playerActor.ItemList.Add(userItem);
                             playerActor.SendAddItem(userItem);
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
@@ -4901,9 +4901,9 @@ namespace ScriptModule
                     else
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
@@ -5468,9 +5468,9 @@ namespace ScriptModule
             }
             for (var i = 0; i < nCount; i++)
             {
-                var nRandX = (short)(SystemShare.RandomNumber.Random(nRange * 2 + 1) + (nMapX - nRange));
-                var nRandY = (short)(SystemShare.RandomNumber.Random(nRange * 2 + 1) + (nMapY - nRange));
-                if (SystemShare.WorldEngine.RegenMonsterByName(sMapName, nRandX, nRandY, sMonName) == null)
+                var nRandX = (short)(ModuleShare.RandomNumber.Random(nRange * 2 + 1) + (nMapX - nRange));
+                var nRandY = (short)(ModuleShare.RandomNumber.Random(nRange * 2 + 1) + (nMapY - nRange));
+                if (ModuleShare.WorldEngine.RegenMonsterByName(sMapName, nRandX, nRandY, sMonName) == null)
                 {
                     break;
                 }
@@ -5488,7 +5488,7 @@ namespace ScriptModule
                 return;
             }
             playerActor.GetFrontPosition(ref nX, ref nY);
-            var monster = SystemShare.WorldEngine.RegenMonsterByName(playerActor.Envir.MapName, nX, nY, sMonName);
+            var monster = ModuleShare.WorldEngine.RegenMonsterByName(playerActor.Envir.MapName, nX, nY, sMonName);
             if (monster == null)
             {
                 return;
@@ -5667,7 +5667,7 @@ namespace ScriptModule
                     ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ThrowItem);
                     return;
                 }
-                var envir = SystemShare.MapMgr.FindMap(sMap);
+                var envir = ModuleShare.MapMgr.FindMap(sMap);
                 if (envir == null)
                 {
                     return;
@@ -5684,7 +5684,7 @@ namespace ScriptModule
                         mapItem = new MapItem();
                         mapItem.Name = Grobal2.StringGoldName;
                         mapItem.Count = nCount;
-                        mapItem.Looks = SystemShare.GetGoldShape(nCount);
+                        mapItem.Looks = ModuleShare.GetGoldShape(nCount);
                         mapItem.OfBaseObject = playerActor.ActorId;
                         mapItem.CanPickUpTick = HUtil32.GetTickCount();
                         mapItem.DropBaseObject = playerActor.ActorId;
@@ -5703,9 +5703,9 @@ namespace ScriptModule
                 {
                     if (GetActionOfThrowitemDropPosition(envir, nX, nY, nRange, ref dX, ref dY)) // 修正出现在一个坐标上
                     {
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem != null)
                             {
                                 if (stdItem.StdMode == 40)
@@ -5732,7 +5732,7 @@ namespace ScriptModule
                                 mapItem.Looks = stdItem.Looks;
                                 if (stdItem.StdMode == 45)
                                 {
-                                    mapItem.Looks = (ushort)SystemShare.GetRandomLook(mapItem.Looks, stdItem.Shape);
+                                    mapItem.Looks = (ushort)ModuleShare.GetRandomLook(mapItem.Looks, stdItem.Shape);
                                 }
                                 mapItem.AniCount = stdItem.AniCount;
                                 mapItem.Reserved = 0;
@@ -5761,7 +5761,7 @@ namespace ScriptModule
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfTHROWITEM");
+                ModuleShare.Logger.Error("{异常} TNormNpc.ActionOfTHROWITEM");
             }
         }
 
@@ -5836,7 +5836,7 @@ namespace ScriptModule
             string s10 = string.Empty;
             string sText;
             bool bo15;
-            sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
+            sListFileName = ModuleShare.GetEnvirFilePath(sListFileName);
             using StringList loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -5863,7 +5863,7 @@ namespace ScriptModule
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("saving fail.... => " + sListFileName);
+                    ModuleShare.Logger.Error("saving fail.... => " + sListFileName);
                 }
             }
         }
@@ -5926,7 +5926,7 @@ namespace ScriptModule
 
         private void ActionOfAddList(string val, string fileName)
         {
-            var sListFileName = SystemShare.GetEnvirFilePath(fileName);
+            var sListFileName = ModuleShare.GetEnvirFilePath(fileName);
             using StringList loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -5951,7 +5951,7 @@ namespace ScriptModule
 
         private void ActionOfDelList(string val, string fileName)
         {
-            var sListFileName = SystemShare.GetEnvirFilePath(fileName);
+            var sListFileName = ModuleShare.GetEnvirFilePath(fileName);
             using StringList loadList = new StringList();
             if (File.Exists(sListFileName))
             {

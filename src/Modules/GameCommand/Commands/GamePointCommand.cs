@@ -28,7 +28,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null) {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
@@ -46,7 +46,7 @@ namespace CommandSystem {
                     mIPlayerActor.GamePoint -= (ushort)nPoint;
                     break;
             }
-            if (SystemShare.GameLogGamePoint) {
+            if (ModuleShare.GameLogGamePoint) {
                 //M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GAMEPOINT, m_IPlayerActor.MapName, m_IPlayerActor.CurrX, m_IPlayerActor.CurrY,
                 //    m_IPlayerActor.m_sChrName, Settings.Config.sGamePointName, nPoint, sCtr[1], m_IPlayerActor.m_sChrName));
             }

@@ -21,7 +21,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg("此命令用于清除人物的任务标志。", MsgColor.Blue, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null) {
                 PlayerActor.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
                 return;

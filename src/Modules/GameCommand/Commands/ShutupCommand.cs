@@ -21,7 +21,7 @@ namespace CommandSystem {
                 return;
             }
             var dwTime = (uint)HUtil32.StrToInt(sTime, 5);
-            HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
+            HUtil32.EnterCriticalSection(ModuleShare.DenySayMsgList);
             try {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
@@ -43,7 +43,7 @@ namespace CommandSystem {
                 //}
             }
             finally {
-                HUtil32.LeaveCriticalSection(SystemShare.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(ModuleShare.DenySayMsgList);
             }
             PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
         }

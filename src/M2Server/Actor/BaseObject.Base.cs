@@ -42,7 +42,7 @@ namespace M2Server.Actor
                 HealthTick += recoveryTick;
                 SpellTick += recoveryTick;
                 ushort n18;
-                if ((WAbil.HP < WAbil.MaxHP) && (HealthTick >= SystemShare.Config.HealthFillTime))
+                if ((WAbil.HP < WAbil.MaxHP) && (HealthTick >= ModuleShare.Config.HealthFillTime))
                 {
                     n18 = (ushort)((WAbil.MaxHP / 75) + 1);
                     if ((WAbil.HP + n18) < WAbil.MaxHP)
@@ -55,7 +55,7 @@ namespace M2Server.Actor
                     }
                     HealthSpellChanged();
                 }
-                if ((WAbil.MP < WAbil.MaxMP) && (SpellTick >= SystemShare.Config.SpellFillTime))
+                if ((WAbil.MP < WAbil.MaxMP) && (SpellTick >= ModuleShare.Config.SpellFillTime))
                 {
                     n18 = (ushort)((WAbil.MaxMP / 18) + 1);
                     if ((WAbil.MP + n18) < WAbil.MaxMP)
@@ -72,11 +72,11 @@ namespace M2Server.Actor
                 {
                     Die();
                 }
-                if (HealthTick >= SystemShare.Config.HealthFillTime)
+                if (HealthTick >= ModuleShare.Config.HealthFillTime)
                 {
                     HealthTick = 0;
                 }
-                if (SpellTick >= SystemShare.Config.SpellFillTime)
+                if (SpellTick >= ModuleShare.Config.SpellFillTime)
                 {
                     SpellTick = 0;
                 }
@@ -86,9 +86,9 @@ namespace M2Server.Actor
                 if (CanReAlive && MonGen != null)
                 {
                     int makeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
-                    if (makeGhostTime > SystemShare.Config.MakeGhostTime)
+                    if (makeGhostTime > ModuleShare.Config.MakeGhostTime)
                     {
-                        makeGhostTime = SystemShare.Config.MakeGhostTime;
+                        makeGhostTime = ModuleShare.Config.MakeGhostTime;
                     }
                     if (HUtil32.GetTickCount() - DeathTick > makeGhostTime)
                     {
@@ -97,16 +97,16 @@ namespace M2Server.Actor
                 }
                 else
                 {
-                    if ((HUtil32.GetTickCount() - DeathTick) > SystemShare.Config.MakeGhostTime)// 3 * 60 * 1000
+                    if ((HUtil32.GetTickCount() - DeathTick) > ModuleShare.Config.MakeGhostTime)// 3 * 60 * 1000
                     {
                         MakeGhost();
                     }
                 }
             }
-            if ((HealthTick < -SystemShare.Config.HealthFillTime) && (WAbil.HP > 1))
+            if ((HealthTick < -ModuleShare.Config.HealthFillTime) && (WAbil.HP > 1))
             {
                 WAbil.HP -= 1;
-                HealthTick += SystemShare.Config.HealthFillTime;
+                HealthTick += ModuleShare.Config.HealthFillTime;
                 HealthSpellChanged();
             }
             // 清理目标对象
@@ -136,7 +136,7 @@ namespace M2Server.Actor
                 NoItem = true;
                 // 宝宝变色
                 int nInteger;
-                if (AutoChangeColor && (HUtil32.GetTickCount() - AutoChangeColorTick > SystemShare.Config.BBMonAutoChangeColorTime))
+                if (AutoChangeColor && (HUtil32.GetTickCount() - AutoChangeColorTick > ModuleShare.Config.BBMonAutoChangeColorTime))
                 {
                     AutoChangeColorTick = HUtil32.GetTickCount();
                     switch (AutoChangeIdx)
@@ -299,7 +299,7 @@ namespace M2Server.Actor
                 RecalcAbilitys();
                 SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
             }
-            if ((HUtil32.GetTickCount() - PoisoningTick) > SystemShare.Config.PosionDecHealthTime)
+            if ((HUtil32.GetTickCount() - PoisoningTick) > ModuleShare.Config.PosionDecHealthTime)
             {
                 PoisoningTick = HUtil32.GetTickCount();
                 if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
@@ -476,7 +476,7 @@ namespace M2Server.Actor
         protected virtual void ProcessSayMsg(string sMsg)
         {
             string sChrName = Race == ActorRace.Play ? ChrName : M2Share.FilterShowName(ChrName);
-            SendRefMsg(Messages.RM_HEAR, 0, SystemShare.Config.btHearMsgFColor, SystemShare.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
+            SendRefMsg(Messages.RM_HEAR, 0, ModuleShare.Config.btHearMsgFColor, ModuleShare.Config.btHearMsgBColor, 0, sChrName + ':' + sMsg);
         }
 
         /// <summary>
@@ -512,7 +512,7 @@ namespace M2Server.Actor
                 {
                     return;
                 }
-                int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 7);
+                int dropWide = HUtil32._MIN(ModuleShare.Config.DropItemRage, 7);
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
                     var stdItem = ItemSystem.GetStdItem(ItemList[i].Index);
@@ -628,23 +628,23 @@ namespace M2Server.Actor
                             StruckDamage(nDamage);
                             HealthSpellChanged();
                             SendRefMsg(Messages.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
-                            if (SystemShare.Config.MonDelHptoExp)
+                            if (ModuleShare.Config.MonDelHptoExp)
                             {
                                 targetBaseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
                                 switch (targetBaseObject.Race)
                                 {
                                     case ActorRace.Play:
-                                        if (targetBaseObject.WAbil.Level <= SystemShare.Config.MonHptoExpLevel)
+                                        if (targetBaseObject.WAbil.Level <= ModuleShare.Config.MonHptoExpLevel)
                                         {
                                             if (!M2Share.GetNoHptoexpMonList(ChrName))
                                             {
                                                 if (targetBaseObject.IsRobot)
                                                 {
-                                                    ((RobotPlayer)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                    ((RobotPlayer)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * ModuleShare.Config.MonHptoExpmax);
                                                 }
                                                 else
                                                 {
-                                                    ((PlayObject)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                    ((PlayObject)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * ModuleShare.Config.MonHptoExpmax);
                                                 }
                                             }
                                         }
@@ -652,17 +652,17 @@ namespace M2Server.Actor
                                     case ActorRace.PlayClone:
                                         if (targetBaseObject.Master != null)
                                         {
-                                            if (targetBaseObject.Master.WAbil.Level <= SystemShare.Config.MonHptoExpLevel)
+                                            if (targetBaseObject.Master.WAbil.Level <= ModuleShare.Config.MonHptoExpLevel)
                                             {
                                                 if (!M2Share.GetNoHptoexpMonList(ChrName))
                                                 {
                                                     if (targetBaseObject.Master.IsRobot)
                                                     {
-                                                        ((RobotPlayer)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                        ((RobotPlayer)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * ModuleShare.Config.MonHptoExpmax);
                                                     }
                                                     else
                                                     {
-                                                        ((PlayObject)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                        ((PlayObject)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * ModuleShare.Config.MonHptoExpmax);
                                                     }
                                                 }
                                             }
@@ -836,23 +836,23 @@ namespace M2Server.Actor
                 switch (((PlayObject)LastHiter).Job)
                 {
                     case PlayJob.Warrior:
-                        nDamage = (ushort)(nDamage * SystemShare.Config.WarrMon / 10);
+                        nDamage = (ushort)(nDamage * ModuleShare.Config.WarrMon / 10);
                         break;
                     case PlayJob.Wizard:
-                        nDamage = (ushort)(nDamage * SystemShare.Config.WizardMon / 10);
+                        nDamage = (ushort)(nDamage * ModuleShare.Config.WizardMon / 10);
                         break;
                     case PlayJob.Taoist:
-                        nDamage = (ushort)(nDamage * SystemShare.Config.TaosMon / 10);
+                        nDamage = (ushort)(nDamage * ModuleShare.Config.TaosMon / 10);
                         break;
                 }
             }
             if ((Race == ActorRace.Play) && (LastHiter != null) && (LastHiter.Master != null)) // 人物下属怪物攻击人
             {
-                nDamage = (ushort)(nDamage * SystemShare.Config.MonHum / 10);
+                nDamage = (ushort)(nDamage * ModuleShare.Config.MonHum / 10);
             }
             if (StatusTimeArr[PoisonState.DAMAGEARMOR] > 0)
             {
-                nDamage = (ushort)HUtil32.Round(nDamage * (SystemShare.Config.PosionDamagarmor / 10.0)); // 1.2
+                nDamage = (ushort)HUtil32.Round(nDamage * (ModuleShare.Config.PosionDamagarmor / 10.0)); // 1.2
             }
             DamageHealth(nDamage);
         }
@@ -871,14 +871,14 @@ namespace M2Server.Actor
         {
             if (baseObject.Race == ActorRace.NPC) //增加NPC名字颜色单独控制
             {
-                return SystemShare.Config.NpcNameColor;
+                return ModuleShare.Config.NpcNameColor;
             }
             if (baseObject.Master != null)
             {
                 var slaveExpLevel = ((MonsterObject)baseObject).SlaveExpLevel;
                 if (slaveExpLevel <= Grobal2.SlaveMaxLevel)
                 {
-                    return SystemShare.Config.SlaveColor[slaveExpLevel];
+                    return ModuleShare.Config.SlaveColor[slaveExpLevel];
                 }
             }
             return baseObject.GetNameColor();

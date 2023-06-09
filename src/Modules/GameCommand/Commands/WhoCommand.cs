@@ -9,7 +9,7 @@ namespace CommandSystem {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
             var offlineCount = 0;
-            PlayerActor.HearMsg($"当前服务器在线人数: {SystemShare.WorldEngine.PlayObjectCount}({offlineCount}/{(SystemShare.WorldEngine.PlayObjectCount - offlineCount)})");
+            PlayerActor.HearMsg($"当前服务器在线人数: {ModuleShare.WorldEngine.PlayObjectCount}({offlineCount}/{(ModuleShare.WorldEngine.PlayObjectCount - offlineCount)})");
         }
     }
 }

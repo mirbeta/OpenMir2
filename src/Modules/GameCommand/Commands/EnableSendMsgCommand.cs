@@ -17,8 +17,8 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = SystemShare.DisableSendMsgList.Count - 1; i >= 0; i--) {
-                if (SystemShare.DisableSendMsgList.Count <= 0) {
+            for (var i = ModuleShare.DisableSendMsgList.Count - 1; i >= 0; i--) {
+                if (ModuleShare.DisableSendMsgList.Count <= 0) {
                     break;
                 }
                 //if ((sHumanName).CompareTo((Settings.g_DisableSendMsgList[i])) == 0)

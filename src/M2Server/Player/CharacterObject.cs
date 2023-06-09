@@ -162,11 +162,11 @@ namespace M2Server.Player
                         ushort dCount;
                         ushort bCount;
                         // 加HP
-                        if ((IncHealth == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > SystemShare.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < SystemShare.Config.HPStoneStartRate))
+                        if ((IncHealth == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncHpStoneTime) > ModuleShare.Config.HPStoneIntervalTime) && ((WAbil.HP / WAbil.MaxHP * 100) < ModuleShare.Config.HPStoneStartRate))
                         {
                             IncHpStoneTime = HUtil32.GetTickCount();
                             stoneDura = (ushort)(UseItems[ItemLocation.Charm].Dura * 10);
-                            bCount = (ushort)(stoneDura / SystemShare.Config.HPStoneAddRate);
+                            bCount = (ushort)(stoneDura / ModuleShare.Config.HPStoneAddRate);
                             dCount = (ushort)(WAbil.MaxHP - WAbil.HP);
                             if (dCount > bCount)
                             {
@@ -201,11 +201,11 @@ namespace M2Server.Player
                             }
                         }
                         // 加MP
-                        if ((IncSpell == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > SystemShare.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < SystemShare.Config.MPStoneStartRate))
+                        if ((IncSpell == 0) && (UseItems[ItemLocation.Charm].Index > 0) && ((HUtil32.GetTickCount() - IncMpStoneTime) > ModuleShare.Config.MpStoneIntervalTime) && ((WAbil.MP / WAbil.MaxMP * 100) < ModuleShare.Config.MPStoneStartRate))
                         {
                             IncMpStoneTime = HUtil32.GetTickCount();
                             stoneDura = (ushort)(UseItems[ItemLocation.Charm].Dura * 10);
-                            bCount = (ushort)(stoneDura / SystemShare.Config.MPStoneAddRate);
+                            bCount = (ushort)(stoneDura / ModuleShare.Config.MPStoneAddRate);
                             dCount = (ushort)(WAbil.MaxMP - WAbil.MP);
                             if (dCount > bCount)
                             {

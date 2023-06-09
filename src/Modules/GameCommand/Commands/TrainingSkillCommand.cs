@@ -23,7 +23,7 @@ namespace CommandSystem {
                 return;
             }
             nLevel = HUtil32._MIN(3, nLevel);
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null) {
                 PlayerActor.SysMsg($"{sHumanName}不在线，或在其它服务器上!!", MsgColor.Red, MsgType.Hint);
                 return;

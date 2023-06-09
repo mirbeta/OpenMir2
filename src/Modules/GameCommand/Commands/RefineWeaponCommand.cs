@@ -35,7 +35,7 @@ namespace CommandSystem
             PlayerActor.RecalcAbilitys();
             PlayerActor.SendMsg(IPlayerActor, Messages.RM_ABILITY, 0, 0, 0, 0);
             PlayerActor.SendMsg(IPlayerActor, Messages.RM_SUBABILITY, 0, 0, 0, 0);
-            SystemShare.Logger.Warn("[武器调整]" + PlayerActor.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
+            ModuleShare.Logger.Warn("[武器调整]" + PlayerActor.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
         }
     }
 }

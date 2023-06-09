@@ -76,9 +76,9 @@ namespace M2Server.Network
                 {
                     return;
                 }
-                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= SystemShare.Config.CheckBlock * 10)
+                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= ModuleShare.Config.CheckBlock * 10)
                 {
-                    if (GateInfo.nSendBlockCount == 0 && SystemShare.Config.CheckBlock * 10 <= sendBuffLen)
+                    if (GateInfo.nSendBlockCount == 0 && ModuleShare.Config.CheckBlock * 10 <= sendBuffLen)
                     {
                         return;
                     }

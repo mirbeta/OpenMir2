@@ -127,7 +127,7 @@ namespace M2Server.RobotPlay
 
         public RobotPlayer()
         {
-            SoftVersionDate = SystemShare.Config.SoftVersionDate;
+            SoftVersionDate = ModuleShare.Config.SoftVersionDate;
             SoftVersionDateEx = Grobal2.ClientVersionNumber;
             AbilCopyToWAbil();
             IsRobot = true;
@@ -204,14 +204,14 @@ namespace M2Server.RobotPlay
 
         private void WinExp(int dwExp)
         {
-            if (Abil.Level > SystemShare.Config.LimitExpLevel)
+            if (Abil.Level > ModuleShare.Config.LimitExpLevel)
             {
-                dwExp = SystemShare.Config.LimitExpValue;
+                dwExp = ModuleShare.Config.LimitExpValue;
                 GetExp(dwExp);
             }
             else if (dwExp > 0)
             {
-                dwExp = SystemShare.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
+                dwExp = ModuleShare.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
                 dwExp = MNKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
                 dwExp = HUtil32.Round(KillMonExpRate / 100.0 * dwExp); // 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
@@ -265,28 +265,28 @@ namespace M2Server.RobotPlay
                 }
                 if (Permission > 0)
                 {
-                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
+                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
                     // 取得私聊信息
                     // m_GetWhisperHuman 侦听私聊对象
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                     if (playObject.WhisperHuman != null && !playObject.WhisperHuman.Ghost)
                     {
-                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btGMWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                 }
                 else
                 {
-                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
+                    playObject.SendMsg(playObject, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2}", ChrName, Abil.Level, saystr));
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                     if (playObject.WhisperHuman != null && !playObject.WhisperHuman.Ghost)
                     {
-                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
+                        playObject.WhisperHuman.SendMsg(playObject.WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btWhisperMsgBColor, 0, Format("{0}[{1}级]=> {2} {3}", ChrName, Abil.Level, playObject.ChrName, saystr));
                     }
                 }
             }
@@ -302,9 +302,9 @@ namespace M2Server.RobotPlay
             try
             {
                 var sParam1 = string.Empty;
-                if (sData.Length > SystemShare.Config.SayMsgMaxLen)
+                if (sData.Length > ModuleShare.Config.SayMsgMaxLen)
                 {
-                    sData = sData[..SystemShare.Config.SayMsgMaxLen];
+                    sData = sData[..ModuleShare.Config.SayMsgMaxLen];
                 }
                 if (HUtil32.GetTickCount() >= DisableSayMsgTick)
                 {
@@ -354,9 +354,9 @@ namespace M2Server.RobotPlay
                         {
                             if ((HUtil32.GetTickCount() - ShoutMsgTick) > 10 * 1000)
                             {
-                                if (Abil.Level <= SystemShare.Config.CanShoutMsgLevel)
+                                if (Abil.Level <= ModuleShare.Config.CanShoutMsgLevel)
                                 {
-                                    SysMsg(Format(Settings.YouNeedLevelMsg, SystemShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(Settings.YouNeedLevelMsg, ModuleShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
@@ -368,7 +368,7 @@ namespace M2Server.RobotPlay
                                 }
                                 else
                                 {
-                                    M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, sCryCryMsg);
+                                    M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, ModuleShare.Config.CryMsgFColor, ModuleShare.Config.CryMsgBColor, sCryCryMsg);
                                 }
                                 return;
                             }
@@ -380,7 +380,7 @@ namespace M2Server.RobotPlay
                     }
                     if (!FilterSendMsg)
                     {
-                        SendRefMsg(Messages.RM_HEAR, 0, SystemShare.Config.btHearMsgFColor, SystemShare.Config.btHearMsgBColor, 0, ChrName + ':' + sData);
+                        SendRefMsg(Messages.RM_HEAR, 0, ModuleShare.Config.btHearMsgFColor, ModuleShare.Config.btHearMsgBColor, 0, ChrName + ':' + sData);
                     }
                 }
             }
@@ -423,7 +423,7 @@ namespace M2Server.RobotPlay
         private bool RunToNext(short nX, short nY)
         {
             var result = false;
-            if ((HUtil32.GetTickCount() - RunIntervalTick) > SystemShare.Config.nAIRunIntervalTime)
+            if ((HUtil32.GetTickCount() - RunIntervalTick) > ModuleShare.Config.nAIRunIntervalTime)
             {
                 result = RobotRunTo(M2Share.GetNextDirection(CurrX, CurrY, nX, nY), false, nX, nY);
                 RunIntervalTick = HUtil32.GetTickCount();
@@ -435,7 +435,7 @@ namespace M2Server.RobotPlay
         private bool WalkToNext(short nX, short nY)
         {
             var result = false;
-            if (HUtil32.GetTickCount() - WalkIntervalTick > SystemShare.Config.nAIWalkIntervalTime)
+            if (HUtil32.GetTickCount() - WalkIntervalTick > ModuleShare.Config.nAIWalkIntervalTime)
             {
                 result = WalkTo(M2Share.GetNextDirection(CurrX, CurrY, nX, nY), false);
                 if (result)
@@ -1931,7 +1931,7 @@ namespace M2Server.RobotPlay
             var result = false;
             try
             {
-                if (SystemShare.Config.RobotAutoPickUpItem)//&& (g_AllowAIPickUpItemList.Count > 0)
+                if (ModuleShare.Config.RobotAutoPickUpItem)//&& (g_AllowAIPickUpItemList.Count > 0)
                 {
                     if (SearchPickUpItem(500))
                     {
@@ -2013,7 +2013,7 @@ namespace M2Server.RobotPlay
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, (int)SystemShare.Config.dwHeroWarrorAttackTime - HitSpeed * SystemShare.Config.ItemSpeed); // 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, (int)ModuleShare.Config.dwHeroWarrorAttackTime - HitSpeed * ModuleShare.Config.ItemSpeed); // 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
                                         HitMode = 4;
@@ -2050,7 +2050,7 @@ namespace M2Server.RobotPlay
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) <= 4 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) <= 4 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 3 && Math.Abs(CurrY - TargetCret.CurrY) == 3 || Math.Abs(CurrX - TargetCret.CurrX) == 4 && Math.Abs(CurrY - TargetCret.CurrY) == 4)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, (int)SystemShare.Config.dwHeroWarrorAttackTime - HitSpeed * SystemShare.Config.ItemSpeed);// 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, (int)ModuleShare.Config.dwHeroWarrorAttackTime - HitSpeed * ModuleShare.Config.ItemSpeed);// 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
                                         HitMode = 9;
@@ -2081,7 +2081,7 @@ namespace M2Server.RobotPlay
                             {
                                 if (Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 0 || Math.Abs(CurrX - TargetCret.CurrX) == 0 && Math.Abs(CurrY - TargetCret.CurrY) == 2 || Math.Abs(CurrX - TargetCret.CurrX) == 2 && Math.Abs(CurrY - TargetCret.CurrY) == 2)
                                 {
-                                    dwAttackTime = HUtil32._MAX(0, (int)SystemShare.Config.dwHeroWarrorAttackTime - HitSpeed * SystemShare.Config.ItemSpeed);// 防止负数出错
+                                    dwAttackTime = HUtil32._MAX(0, (int)ModuleShare.Config.dwHeroWarrorAttackTime - HitSpeed * ModuleShare.Config.ItemSpeed);// 防止负数出错
                                     if (HUtil32.GetTickCount() - AttackTick > dwAttackTime)
                                     {
                                         HitMode = 9;
@@ -2319,7 +2319,7 @@ namespace M2Server.RobotPlay
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 Dir = btDir;
-                var canWalk = SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll || SystemShare.Config.boSafeAreaLimited && InSafeZone();
+                var canWalk = ModuleShare.Config.DiableHumanRun || Permission > 9 && ModuleShare.Config.boGMRunAll || ModuleShare.Config.boSafeAreaLimited && InSafeZone();
                 switch (btDir)
                 {
                     case Direction.Up:
@@ -2605,7 +2605,7 @@ namespace M2Server.RobotPlay
                         switch (M2Share.RandomNumber.Random(3))// 被怪物包围
                         {
                             case 0:
-                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || SystemShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || ModuleShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
                                     return 41;
                                 }
@@ -2647,7 +2647,7 @@ namespace M2Server.RobotPlay
                                 }
                                 break;
                             case 1:
-                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || SystemShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || ModuleShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
                                     return 41;
                                 }
@@ -2689,7 +2689,7 @@ namespace M2Server.RobotPlay
                                 }
                                 break;
                             case 2:
-                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || SystemShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                                if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || ModuleShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                                 {
                                     return 41;
                                 }
@@ -2838,7 +2838,7 @@ namespace M2Server.RobotPlay
                             return MagicConst.SKILL_MOOTEBO;
                         }
                     }
-                    if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || SystemShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
+                    if (AllowUseMagic(41) && CheckMagicInterval(41, 10000) && TargetCret.Abil.Level < Abil.Level && (TargetCret.Race != ActorRace.Play || ModuleShare.Config.GroupMbAttackPlayObject) && Math.Abs(TargetCret.CurrX - CurrX) <= 3 && Math.Abs(TargetCret.CurrY - CurrY) <= 3)
                     {
                         return 41;
                     }
@@ -2902,7 +2902,7 @@ namespace M2Server.RobotPlay
                             }
                         }
                     }
-                    if (AllowUseMagic(MagicConst.SKILL_KILLUNDEAD) && CheckMagicInterval(MagicConst.SKILL_KILLUNDEAD, 10000) && TargetCret.Abil.Level < SystemShare.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1) // 目标为不死系
+                    if (AllowUseMagic(MagicConst.SKILL_KILLUNDEAD) && CheckMagicInterval(MagicConst.SKILL_KILLUNDEAD, 10000) && TargetCret.Abil.Level < ModuleShare.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1) // 目标为不死系
                     {
                         return MagicConst.SKILL_KILLUNDEAD;
                     }
@@ -3346,7 +3346,7 @@ namespace M2Server.RobotPlay
                     {
                         return MagicConst.SKILL_SNOWWIND;
                     }
-                    if (AllowUseMagic(32) && TargetCret.Abil.Level < SystemShare.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)// 目标为不死系
+                    if (AllowUseMagic(32) && TargetCret.Abil.Level < ModuleShare.Config.MagTurnUndeadLevel && TargetCret.LifeAttrib == Grobal2.LA_UNDEAD && TargetCret.Abil.Level < Abil.Level - 1)// 目标为不死系
                     {
                         return 32;// 圣言术
                     }
@@ -3433,7 +3433,7 @@ namespace M2Server.RobotPlay
                         }
                     }
                     // 绿毒
-                    if (TargetCret.StatusTimeArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (SystemShare.Config.btHeroSkillMode || !SystemShare.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
+                    if (TargetCret.StatusTimeArr[PoisonState.DECHEALTH] == 0 && GetUserItemList(2, 1) >= 0 && (ModuleShare.Config.btHeroSkillMode || !ModuleShare.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
                                                                                                                                                      || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))// 对于血量超过800的怪用 不毒城墙
                     {
@@ -3485,7 +3485,7 @@ namespace M2Server.RobotPlay
                                 break;
                         }
                     }
-                    if (TargetCret.StatusTimeArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (SystemShare.Config.btHeroSkillMode || !SystemShare.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
+                    if (TargetCret.StatusTimeArr[PoisonState.DAMAGEARMOR] == 0 && GetUserItemList(2, 2) >= 0 && (ModuleShare.Config.btHeroSkillMode || !ModuleShare.Config.btHeroSkillMode && TargetCret.WAbil.HP >= 700
                             || TargetCret.Race == ActorRace.Play) && (Math.Abs(TargetCret.CurrX - CurrX) < 7 || Math.Abs(TargetCret.CurrY - CurrY) < 7)
                         && !M2Share.RobotPlayRaceMap.Contains(TargetCret.Race))// 对于血量超过700的怪用 不毒城墙
                     {
@@ -3699,7 +3699,7 @@ namespace M2Server.RobotPlay
                     switch (nMode)
                     {
                         case MagicConst.SKILL_BANWOL:
-                            n10 = (Dir + SystemShare.Config.WideAttack[nC]) % 8;
+                            n10 = (Dir + ModuleShare.Config.WideAttack[nC]) % 8;
                             break;
                     }
                     if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))

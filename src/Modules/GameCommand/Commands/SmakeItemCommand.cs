@@ -55,8 +55,8 @@ namespace CommandSystem {
                         + '/' + PlayerActor.UseItems[nWhere].Desc[9] + '/' + PlayerActor.UseItems[nWhere].Desc[ItemAttr.WeaponUpgrade] + '/' + PlayerActor.UseItems[nWhere].Desc[11]
                         + '/' + PlayerActor.UseItems[nWhere].Desc[12] + '/' + PlayerActor.UseItems[nWhere].Desc[13];
                     PlayerActor.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
-                    if (SystemShare.Config.ShowMakeItemMsg) {
-                        SystemShare.Logger.Warn("[物品调整] " + PlayerActor.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
+                    if (ModuleShare.Config.ShowMakeItemMsg) {
+                        ModuleShare.Logger.Warn("[物品调整] " + PlayerActor.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
                     }
                 }
                 else {

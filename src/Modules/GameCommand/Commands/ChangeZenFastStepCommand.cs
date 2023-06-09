@@ -20,7 +20,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            SystemShare.Config.ZenFastStep = nFastStep;
+            ModuleShare.Config.ZenFastStep = nFastStep;
             PlayerActor.SysMsg($"怪物行动速度: {nFastStep}", MsgColor.Green, MsgType.Hint);
         }
     }

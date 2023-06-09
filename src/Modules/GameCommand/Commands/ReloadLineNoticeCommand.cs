@@ -9,7 +9,7 @@ namespace CommandSystem {
     public class ReloadLineNoticeCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            if (SystemShare.LoadLineNotice(SystemShare.GetNoticeFilePath("LineNotice.txt"))) {
+            if (ModuleShare.LoadLineNotice(ModuleShare.GetNoticeFilePath("LineNotice.txt"))) {
                 PlayerActor.SysMsg(CommandHelp.GameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
             }
             else {

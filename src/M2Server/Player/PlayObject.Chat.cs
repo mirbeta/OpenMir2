@@ -34,32 +34,32 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        PlayObject.Whisper(ChrName, SystemShare.Config.ServerName + '[' + SystemShare.Config.ServerIPaddr + "]提示您");
+                        PlayObject.Whisper(ChrName, ModuleShare.Config.ServerName + '[' + ModuleShare.Config.ServerIPaddr + "]提示您");
                     }
                     return;
                 }
                 if (Permission > 0)
                 {
-                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=> " + saystr);
+                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=> " + saystr);
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                     if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btGMWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                 }
                 else
                 {
-                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, SystemShare.Config.btWhisperMsgFColor, SystemShare.Config.btWhisperMsgBColor, 0, ChrName + "=> " + saystr);
+                    PlayObject.SendMsg(PlayObject, Messages.RM_WHISPER, 0, ModuleShare.Config.btWhisperMsgFColor, ModuleShare.Config.btWhisperMsgBColor, 0, ChrName + "=> " + saystr);
                     if (WhisperHuman != null && !WhisperHuman.Ghost)
                     {
-                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btWhisperMsgFColor, SystemShare.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        WhisperHuman.SendMsg(WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btWhisperMsgFColor, ModuleShare.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                     if (PlayObject.WhisperHuman != null && !PlayObject.WhisperHuman.Ghost)
                     {
-                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, SystemShare.Config.btWhisperMsgFColor, SystemShare.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
+                        PlayObject.WhisperHuman.SendMsg(PlayObject.WhisperHuman, Messages.RM_WHISPER, 0, ModuleShare.Config.btWhisperMsgFColor, ModuleShare.Config.btWhisperMsgBColor, 0, ChrName + "=>" + PlayObject.ChrName + ' ' + saystr);
                     }
                 }
             }
@@ -85,13 +85,13 @@ namespace M2Server.Player
                 switch (MsgType)
                 {
                     case 0:
-                        SendMsg(Messages.RM_WHISPER, 0, SystemShare.Config.btGMWhisperMsgFColor, SystemShare.Config.btGMWhisperMsgBColor, 0, SayStr);
+                        SendMsg(Messages.RM_WHISPER, 0, ModuleShare.Config.btGMWhisperMsgFColor, ModuleShare.Config.btGMWhisperMsgBColor, 0, SayStr);
                         break;
                     case 1:
-                        SendMsg(Messages.RM_WHISPER, 0, SystemShare.Config.btWhisperMsgFColor, SystemShare.Config.btWhisperMsgBColor, 0, SayStr);
+                        SendMsg(Messages.RM_WHISPER, 0, ModuleShare.Config.btWhisperMsgFColor, ModuleShare.Config.btWhisperMsgBColor, 0, SayStr);
                         break;
                     case 2:
-                        SendMsg(Messages.RM_WHISPER, 0, SystemShare.Config.PurpleMsgFColor, SystemShare.Config.PurpleMsgBColor, 0, SayStr);
+                        SendMsg(Messages.RM_WHISPER, 0, ModuleShare.Config.PurpleMsgFColor, ModuleShare.Config.PurpleMsgBColor, 0, SayStr);
                         break;
                 }
             }
@@ -108,18 +108,18 @@ namespace M2Server.Player
             const string sExceptionMsg = "[Exception] PlayObject.ProcessSayMsg Msg = {0}";
             try
             {
-                if (sData.Length > SystemShare.Config.SayMsgMaxLen)
+                if (sData.Length > ModuleShare.Config.SayMsgMaxLen)
                 {
-                    sData = sData[..SystemShare.Config.SayMsgMaxLen]; // 3 * 1000
+                    sData = sData[..ModuleShare.Config.SayMsgMaxLen]; // 3 * 1000
                 }
-                if ((HUtil32.GetTickCount() - SayMsgTick) < SystemShare.Config.SayMsgTime)
+                if ((HUtil32.GetTickCount() - SayMsgTick) < ModuleShare.Config.SayMsgTime)
                 {
                     SayMsgCount++;
-                    if (SayMsgCount >= SystemShare.Config.SayMsgCount)
+                    if (SayMsgCount >= ModuleShare.Config.SayMsgCount)
                     {
                         DisableSayMsg = true;
-                        DisableSayMsgTick = HUtil32.GetTickCount() + SystemShare.Config.DisableSayMsgTime;// 60 * 1000
-                        SysMsg(Format(Settings.DisableSayMsg, SystemShare.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
+                        DisableSayMsgTick = HUtil32.GetTickCount() + ModuleShare.Config.DisableSayMsgTime;// 60 * 1000
+                        SysMsg(Format(Settings.DisableSayMsg, ModuleShare.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
@@ -180,9 +180,9 @@ namespace M2Server.Player
                                 {
                                     if ((HUtil32.GetTickCount() - ShoutMsgTick) > 10 * 1000)
                                     {
-                                        if (Abil.Level <= SystemShare.Config.CanShoutMsgLevel)
+                                        if (Abil.Level <= ModuleShare.Config.CanShoutMsgLevel)
                                         {
-                                            SysMsg(Format(Settings.YouNeedLevelMsg, SystemShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                            SysMsg(Format(Settings.YouNeedLevelMsg, ModuleShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
@@ -194,7 +194,7 @@ namespace M2Server.Player
                                         }
                                         else
                                         {
-                                            M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, sCryCryMsg);
+                                            M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, ModuleShare.Config.CryMsgFColor, ModuleShare.Config.CryMsgBColor, sCryCryMsg);
                                         }
                                         return;
                                     }
@@ -207,7 +207,7 @@ namespace M2Server.Player
                     }
                     if (FilterSendMsg)
                     {
-                        SendMsg(Messages.RM_HEAR, 0, SystemShare.Config.btHearMsgFColor, SystemShare.Config.btHearMsgBColor, 0, ChrName + ':' + sData);// 如果禁止发信息，则只向自己发信息
+                        SendMsg(Messages.RM_HEAR, 0, ModuleShare.Config.btHearMsgFColor, ModuleShare.Config.btHearMsgBColor, 0, ChrName + ':' + sData);// 如果禁止发信息，则只向自己发信息
                     }
                     else
                     {
@@ -283,39 +283,39 @@ namespace M2Server.Player
                         IsPasswordLocked = false;
                         if (IsUnLockPwd)
                         {
-                            if (SystemShare.Config.LockDealAction)
+                            if (ModuleShare.Config.LockDealAction)
                             {
                                 IsCanDeal = true;
                             }
-                            if (SystemShare.Config.LockDropAction)
+                            if (ModuleShare.Config.LockDropAction)
                             {
                                 IsCanDrop = true;
                             }
-                            if (SystemShare.Config.LockWalkAction)
+                            if (ModuleShare.Config.LockWalkAction)
                             {
                                 IsCanWalk = true;
                             }
-                            if (SystemShare.Config.LockRunAction)
+                            if (ModuleShare.Config.LockRunAction)
                             {
                                 IsCanRun = true;
                             }
-                            if (SystemShare.Config.LockHitAction)
+                            if (ModuleShare.Config.LockHitAction)
                             {
                                 IsCanHit = true;
                             }
-                            if (SystemShare.Config.LockSpellAction)
+                            if (ModuleShare.Config.LockSpellAction)
                             {
                                 IsCanSpell = true;
                             }
-                            if (SystemShare.Config.LockSendMsgAction)
+                            if (ModuleShare.Config.LockSendMsgAction)
                             {
                                 IsCanSendMsg = true;
                             }
-                            if (SystemShare.Config.LockUserItemAction)
+                            if (ModuleShare.Config.LockUserItemAction)
                             {
                                 BoCanUseItem = true;
                             }
-                            if (SystemShare.Config.LockInObModeAction)
+                            if (ModuleShare.Config.LockInObModeAction)
                             {
                                 ObMode = false;
                                 AdminMode = false;
@@ -325,7 +325,7 @@ namespace M2Server.Player
                         }
                         if (IsUnLockStoragePwd)
                         {
-                            if (SystemShare.Config.LockGetBackItemAction)
+                            if (ModuleShare.Config.LockGetBackItemAction)
                             {
                                 IsCanGetBackItem = true;
                             }
@@ -413,11 +413,11 @@ namespace M2Server.Player
                         {
                             SayMsgTick = HUtil32.GetTickCount();
                             sData = sData.AsSpan()[2..].ToString();
-                            if (sData.Length > SystemShare.Config.SayRedMsgMaxLen)
+                            if (sData.Length > ModuleShare.Config.SayRedMsgMaxLen)
                             {
-                                sData = sData[..SystemShare.Config.SayRedMsgMaxLen];
+                                sData = sData[..ModuleShare.Config.SayRedMsgMaxLen];
                             }
-                            if (SystemShare.Config.ShutRedMsgShowGMName)
+                            if (ModuleShare.Config.ShutRedMsgShowGMName)
                             {
                                 sC = ChrName + ": " + sData;
                             }

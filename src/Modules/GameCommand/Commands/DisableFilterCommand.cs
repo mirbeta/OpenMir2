@@ -9,8 +9,8 @@ namespace CommandSystem {
     public class DisableFilterCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            SystemShare.FilterWord = !SystemShare.FilterWord;
-            if (SystemShare.FilterWord) {
+            ModuleShare.FilterWord = !ModuleShare.FilterWord;
+            if (ModuleShare.FilterWord) {
                 PlayerActor.SysMsg("已启用文字过滤。", MsgColor.Green, MsgType.Hint);
             }
             else {

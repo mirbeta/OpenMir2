@@ -31,7 +31,7 @@ namespace CommandSystem
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
                         fireBurnEvent = new FireBurnEvent(IPlayerActor, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
-                        SystemShare.EventMgr.AddEvent(fireBurnEvent);
+                        ModuleShare.EventMgr.AddEvent(fireBurnEvent);
                     }
                 }
             }

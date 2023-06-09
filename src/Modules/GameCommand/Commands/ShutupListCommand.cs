@@ -10,10 +10,10 @@ namespace CommandSystem {
     public class ShutupListCommand : GameCommand {
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor) {
-            HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
+            HUtil32.EnterCriticalSection(ModuleShare.DenySayMsgList);
             try {
-                var nCount = SystemShare.DenySayMsgList.Count;
-                if (SystemShare.DenySayMsgList.Count <= 0) {
+                var nCount = ModuleShare.DenySayMsgList.Count;
+                if (ModuleShare.DenySayMsgList.Count <= 0) {
                     PlayerActor.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
                 }
                 if (nCount > 0) {
@@ -30,7 +30,7 @@ namespace CommandSystem {
                 }
             }
             finally {
-                HUtil32.LeaveCriticalSection(SystemShare.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(ModuleShare.DenySayMsgList);
             }
         }
     }

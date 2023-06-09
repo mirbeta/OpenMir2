@@ -19,7 +19,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null) {
                 if (mIPlayerActor.GameGold > nPoint) {
                     mIPlayerActor.GameGold -= nPoint;

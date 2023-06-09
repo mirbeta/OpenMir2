@@ -16,7 +16,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
+            HUtil32.EnterCriticalSection(ModuleShare.DenySayMsgList);
             try {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
@@ -36,7 +36,7 @@ namespace CommandSystem {
                 //}
             }
             finally {
-                HUtil32.LeaveCriticalSection(SystemShare.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(ModuleShare.DenySayMsgList);
             }
         }
     }

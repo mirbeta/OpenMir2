@@ -30,7 +30,7 @@ namespace CommandSystem
             }
             else
             {
-                PlayerActor.SysMsgCharPushed(SystemShare.RandomNumber.RandomByte(nType), nCount);
+                PlayerActor.SysMsgCharPushed(ModuleShare.RandomNumber.RandomByte(nType), nCount);
             }
         }
     }

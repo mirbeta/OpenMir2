@@ -20,9 +20,9 @@ namespace CommandSystem {
                 dwTime = nTime * 1000;
             }
             else {
-                dwTime = SystemShare.Config.SpiritMutinyTime;
+                dwTime = ModuleShare.Config.SpiritMutinyTime;
             }
-            SystemShare.SpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
+            ModuleShare.SpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
             PlayerActor.SysMsg("祈祷叛变已开始。持续时长 " + dwTime / 1000 + " 秒。", MsgColor.Green, MsgType.Hint);
         }
     }

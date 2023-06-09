@@ -710,7 +710,7 @@ namespace M2Server.Actor
         internal int CalcGetExp(int nLevel, int nExp)
         {
             int result;
-            if (SystemShare.Config.HighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
+            if (ModuleShare.Config.HighLevelKillMonFixExp || (Abil.Level < (nLevel + 10)))
             {
                 result = nExp;
             }
@@ -1336,7 +1336,7 @@ namespace M2Server.Actor
                 if ((nX >= 0) && (nX <= 4) && (nY >= 0) && (nY <= 4))
                 {
                     btDir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
-                    if (SystemShare.Config.SpitMap[btDir, nY, nX] == 1)
+                    if (ModuleShare.Config.SpitMap[btDir, nY, nX] == 1)
                     {
                         result = true;
                     }
@@ -1406,11 +1406,11 @@ namespace M2Server.Actor
             int result;
             if (nLevel <= Grobal2.MaxLevel)
             {
-                result = SystemShare.Config.NeedExps[nLevel];
+                result = ModuleShare.Config.NeedExps[nLevel];
             }
             else
             {
-                result = SystemShare.Config.NeedExps[SystemShare.Config.NeedExps.Length];
+                result = ModuleShare.Config.NeedExps[ModuleShare.Config.NeedExps.Length];
             }
             return result;
         }
@@ -1419,7 +1419,7 @@ namespace M2Server.Actor
         {
             if (!string.IsNullOrEmpty(sMsg))
             {
-                SendMsg(null, Messages.RM_HEAR, 0, SystemShare.Config.btHearMsgFColor, SystemShare.Config.btHearMsgBColor, 0, sMsg);
+                SendMsg(null, Messages.RM_HEAR, 0, ModuleShare.Config.btHearMsgFColor, ModuleShare.Config.btHearMsgBColor, 0, sMsg);
             }
         }
 
@@ -1601,9 +1601,9 @@ namespace M2Server.Actor
                         {
                             sMsg = HUtil32.ArrestStringEx(sMsg, "[", "]", ref str);
                             bColor = HUtil32.GetValidStrCap(str, ref fColor, ',');
-                            if (SystemShare.Config.ShowPreFixMsg)
+                            if (ModuleShare.Config.ShowPreFixMsg)
                             {
-                                sMsg = SystemShare.Config.LineNoticePreFix + sMsg;
+                                sMsg = ModuleShare.Config.LineNoticePreFix + sMsg;
                             }
                             SendMsg(Messages.RM_MOVEMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
@@ -1612,9 +1612,9 @@ namespace M2Server.Actor
                         {
                             sMsg = HUtil32.ArrestStringEx(sMsg, "<", ">", ref str);
                             bColor = HUtil32.GetValidStrCap(str, ref fColor, ',');
-                            if (SystemShare.Config.ShowPreFixMsg)
+                            if (ModuleShare.Config.ShowPreFixMsg)
                             {
-                                sMsg = SystemShare.Config.LineNoticePreFix + sMsg;
+                                sMsg = ModuleShare.Config.LineNoticePreFix + sMsg;
                             }
                             SendMsg(Messages.RM_SYSMESSAGE, 0, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), 0, sMsg);
                             break;
@@ -1625,9 +1625,9 @@ namespace M2Server.Actor
                             str = HUtil32.GetValidStrCap(str, ref fColor, ',');
                             str = HUtil32.GetValidStrCap(str, ref bColor, ',');
                             str = HUtil32.GetValidStrCap(str, ref nTime, ',');
-                            if (SystemShare.Config.ShowPreFixMsg)
+                            if (ModuleShare.Config.ShowPreFixMsg)
                             {
-                                sMsg = SystemShare.Config.LineNoticePreFix + sMsg;
+                                sMsg = ModuleShare.Config.LineNoticePreFix + sMsg;
                             }
                             SendMsg(Messages.RM_MOVEMESSAGE, 1, HUtil32.StrToUInt16(fColor, 255), HUtil32.StrToUInt16(bColor, 255), HUtil32.StrToUInt16(nTime, 0), sMsg);
                             break;
@@ -1636,25 +1636,25 @@ namespace M2Server.Actor
                         switch (msgColor)
                         {
                             case MsgColor.Red: // 控制公告的颜色
-                                if (SystemShare.Config.ShowPreFixMsg)
+                                if (ModuleShare.Config.ShowPreFixMsg)
                                 {
-                                    sMsg = SystemShare.Config.LineNoticePreFix + sMsg;
+                                    sMsg = ModuleShare.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, SystemShare.Config.RedMsgFColor, SystemShare.Config.RedMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, ModuleShare.Config.RedMsgFColor, ModuleShare.Config.RedMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Green:
-                                if (SystemShare.Config.ShowPreFixMsg)
+                                if (ModuleShare.Config.ShowPreFixMsg)
                                 {
-                                    sMsg = SystemShare.Config.LineNoticePreFix + sMsg;
+                                    sMsg = ModuleShare.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, SystemShare.Config.GreenMsgFColor, SystemShare.Config.GreenMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, ModuleShare.Config.GreenMsgFColor, ModuleShare.Config.GreenMsgBColor, 0, sMsg);
                                 break;
                             case MsgColor.Blue:
-                                if (SystemShare.Config.ShowPreFixMsg)
+                                if (ModuleShare.Config.ShowPreFixMsg)
                                 {
-                                    sMsg = SystemShare.Config.LineNoticePreFix + sMsg;
+                                    sMsg = ModuleShare.Config.LineNoticePreFix + sMsg;
                                 }
-                                SendMsg(Messages.RM_SYSMESSAGE, 0, SystemShare.Config.BlueMsgFColor, SystemShare.Config.BlueMsgBColor, 0, sMsg);
+                                SendMsg(Messages.RM_SYSMESSAGE, 0, ModuleShare.Config.BlueMsgFColor, ModuleShare.Config.BlueMsgBColor, 0, sMsg);
                                 break;
                         }
                         break;
@@ -1665,19 +1665,19 @@ namespace M2Server.Actor
                 switch (msgColor)
                 {
                     case MsgColor.Green:
-                        SendMsg(Messages.RM_SYSMESSAGE, 0, SystemShare.Config.GreenMsgFColor, SystemShare.Config.GreenMsgBColor, 0, sMsg);
+                        SendMsg(Messages.RM_SYSMESSAGE, 0, ModuleShare.Config.GreenMsgFColor, ModuleShare.Config.GreenMsgBColor, 0, sMsg);
                         break;
                     case MsgColor.Blue:
-                        SendMsg(Messages.RM_SYSMESSAGE, 0, SystemShare.Config.BlueMsgFColor, SystemShare.Config.BlueMsgBColor, 0, sMsg);
+                        SendMsg(Messages.RM_SYSMESSAGE, 0, ModuleShare.Config.BlueMsgFColor, ModuleShare.Config.BlueMsgBColor, 0, sMsg);
                         break;
                     default:
                         if (msgType == MsgType.Cust)
                         {
-                            SendMsg(Messages.RM_SYSMESSAGE, 0, SystemShare.Config.CustMsgFColor, SystemShare.Config.CustMsgBColor, 0, sMsg);
+                            SendMsg(Messages.RM_SYSMESSAGE, 0, ModuleShare.Config.CustMsgFColor, ModuleShare.Config.CustMsgBColor, 0, sMsg);
                         }
                         else
                         {
-                            SendMsg(Messages.RM_SYSMESSAGE, 0, SystemShare.Config.RedMsgFColor, SystemShare.Config.RedMsgBColor, 0, sMsg);
+                            SendMsg(Messages.RM_SYSMESSAGE, 0, ModuleShare.Config.RedMsgFColor, ModuleShare.Config.RedMsgBColor, 0, sMsg);
                         }
                         break;
                 }
@@ -1719,10 +1719,10 @@ namespace M2Server.Actor
                 I = 0;
                 while (true)
                 {
-                    if (Gold > SystemShare.Config.MonOneDropGoldCount)
+                    if (Gold > ModuleShare.Config.MonOneDropGoldCount)
                     {
-                        nGold = SystemShare.Config.MonOneDropGoldCount;
-                        Gold = Gold - SystemShare.Config.MonOneDropGoldCount;
+                        nGold = ModuleShare.Config.MonOneDropGoldCount;
+                        Gold = Gold - ModuleShare.Config.MonOneDropGoldCount;
                     }
                     else
                     {
@@ -1785,7 +1785,7 @@ namespace M2Server.Actor
             var result = Envir.Flag.SafeArea;
             if (result) //安全区
             {
-                if ((Envir.MapName != SystemShare.Config.RedHomeMap) || (Math.Abs(CurrX - SystemShare.Config.RedHomeX) > SystemShare.Config.SafeZoneSize) || (Math.Abs(CurrY - SystemShare.Config.RedHomeY) > SystemShare.Config.SafeZoneSize))
+                if ((Envir.MapName != ModuleShare.Config.RedHomeMap) || (Math.Abs(CurrX - ModuleShare.Config.RedHomeX) > ModuleShare.Config.SafeZoneSize) || (Math.Abs(CurrY - ModuleShare.Config.RedHomeY) > ModuleShare.Config.SafeZoneSize))
                 {
                     for (int i = 0; i < M2Share.StartPointList.Count; i++)
                     {
@@ -1793,7 +1793,7 @@ namespace M2Server.Actor
                         {
                             short nSafeX = M2Share.StartPointList[i].CurrX;
                             short nSafeY = M2Share.StartPointList[i].CurrY;
-                            if ((Math.Abs(CurrX - nSafeX) <= SystemShare.Config.SafeZoneSize) && (Math.Abs(CurrY - nSafeY) <= SystemShare.Config.SafeZoneSize))
+                            if ((Math.Abs(CurrX - nSafeX) <= ModuleShare.Config.SafeZoneSize) && (Math.Abs(CurrY - nSafeY) <= ModuleShare.Config.SafeZoneSize))
                             {
                                 result = true;
                                 break;
@@ -1820,9 +1820,9 @@ namespace M2Server.Actor
             {
                 return true;
             }
-            if ((envir.MapName != SystemShare.Config.RedHomeMap) ||
-                (Math.Abs(nX - SystemShare.Config.RedHomeX) > SystemShare.Config.SafeZoneSize) ||
-                (Math.Abs(nY - SystemShare.Config.RedHomeY) > SystemShare.Config.SafeZoneSize))
+            if ((envir.MapName != ModuleShare.Config.RedHomeMap) ||
+                (Math.Abs(nX - ModuleShare.Config.RedHomeX) > ModuleShare.Config.SafeZoneSize) ||
+                (Math.Abs(nY - ModuleShare.Config.RedHomeY) > ModuleShare.Config.SafeZoneSize))
             {
                 result = false;
             }
@@ -1836,7 +1836,7 @@ namespace M2Server.Actor
                 {
                     short nSafeX = M2Share.StartPointList[i].CurrX;
                     short nSafeY = M2Share.StartPointList[i].CurrY;
-                    if ((Math.Abs(nX - nSafeX) <= SystemShare.Config.SafeZoneSize) && (Math.Abs(nY - nSafeY) <= SystemShare.Config.SafeZoneSize))
+                    if ((Math.Abs(nX - nSafeX) <= ModuleShare.Config.SafeZoneSize) && (Math.Abs(nY - nSafeY) <= ModuleShare.Config.SafeZoneSize))
                     {
                         result = true;
                     }
@@ -1855,7 +1855,7 @@ namespace M2Server.Actor
             short nY = 0;
             int nFlag = -1;
             GetFrontPosition(ref nX, ref nY);
-            if (string.Compare(sSlaveName, SystemShare.Config.Dragon, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sSlaveName, ModuleShare.Config.Dragon, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nFlag = 1;
             }
@@ -1863,7 +1863,7 @@ namespace M2Server.Actor
             {
                 if (nFlag == 1)
                 {
-                    if ((SlaveList[i].ChrName == SystemShare.Config.Dragon) || (SlaveList[i].ChrName == SystemShare.Config.Dragon1))
+                    if ((SlaveList[i].ChrName == ModuleShare.Config.Dragon) || (SlaveList[i].ChrName == ModuleShare.Config.Dragon1))
                     {
                         SlaveList[i].SpaceMove(Envir.MapName, nX, nY, 1);
                         break;
@@ -2249,7 +2249,7 @@ namespace M2Server.Actor
         {
             if (Race == ActorRace.Play)
             {
-                return ((((PlayObject)this).Permission > 9) && SystemShare.Config.boGMRunAll);
+                return ((((PlayObject)this).Permission > 9) && ModuleShare.Config.boGMRunAll);
             }
             return false;
         }
@@ -2257,7 +2257,7 @@ namespace M2Server.Actor
         public bool CanRun(short nCurrX, short nCurrY, short nX, short nY, bool boFlag)
         {
             byte btDir = M2Share.GetNextDirection(nCurrX, nCurrY, nX, nY);
-            bool canWalk = (SystemShare.Config.DiableHumanRun || AdminCanRun()) || (SystemShare.Config.boSafeAreaLimited && InSafeZone());
+            bool canWalk = (ModuleShare.Config.DiableHumanRun || AdminCanRun()) || (ModuleShare.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Direction.Up:
@@ -2324,7 +2324,7 @@ namespace M2Server.Actor
         private bool CanRun(short nX, short nY, bool boFlag)
         {
             byte btDir = M2Share.GetNextDirection(CurrX, CurrY, nX, nY);
-            bool canWalk = (SystemShare.Config.DiableHumanRun || AdminCanRun()) || (SystemShare.Config.boSafeAreaLimited && InSafeZone());
+            bool canWalk = (ModuleShare.Config.DiableHumanRun || AdminCanRun()) || (ModuleShare.Config.boSafeAreaLimited && InSafeZone());
             switch (btDir)
             {
                 case Direction.Up:

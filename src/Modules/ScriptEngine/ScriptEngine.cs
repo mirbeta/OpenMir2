@@ -151,7 +151,7 @@ namespace ScriptModule
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
                     var sCallScriptFile = GetCallScriptPath(sLable.Trim());
                     var sLabName = sLine.Trim();
-                    var sFileName = SystemShare.GetEnvirFilePath("QuestDiary", sCallScriptFile);
+                    var sFileName = ModuleShare.GetEnvirFilePath("QuestDiary", sCallScriptFile);
                     if (CallScriptDict.ContainsKey(sFileName))
                     {
                         callCount--;
@@ -211,7 +211,7 @@ namespace ScriptModule
                     if (HUtil32.CompareLStr(line, "#INCLUDE"))
                     {
                         var definesFile = HUtil32.GetValidStr3(line, ref defFile, TextSpitConst).Trim();
-                        definesFile = SystemShare.GetEnvirFilePath("Defines", definesFile);
+                        definesFile = ModuleShare.GetEnvirFilePath("Defines", definesFile);
                         if (File.Exists(definesFile))
                         {
                             using var LoadStrList = new StringList();
@@ -576,7 +576,7 @@ namespace ScriptModule
             SayingProcedure SayingProcedure = null;
             var scriptType = 0;
             var questCount = 0;
-            var sScritpFileName = SystemShare.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
+            var sScritpFileName = ModuleShare.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
             if (File.Exists(sScritpFileName))
             {
                 CallScriptDict.Clear();
@@ -816,8 +816,8 @@ namespace ScriptModule
                         if (line.Equals("[goods]", StringComparison.OrdinalIgnoreCase))
                         {
                             scriptType = 20;
-                            NPC.ProcessRefillIndex = SystemShare.CurrentMerchantIndex;
-                            SystemShare.CurrentMerchantIndex++;
+                            NPC.ProcessRefillIndex = ModuleShare.CurrentMerchantIndex;
+                            ModuleShare.CurrentMerchantIndex++;
                             continue;
                         }
                         line = HUtil32.ArrestStringEx(line, "[", "]", ref slabName);
@@ -835,7 +835,7 @@ namespace ScriptModule
                         SayingRecord.ProcedureList.Add(SayingProcedure);
                         if (Script.RecordList.ContainsKey(SayingRecord.sLabel))
                         {
-                            SayingRecord.sLabel += SystemShare.RandomNumber.GetRandomNumber(1, 200);
+                            SayingRecord.sLabel += ModuleShare.RandomNumber.GetRandomNumber(1, 200);
                         }
                         Script.RecordList.Add(SayingRecord.sLabel, SayingRecord);
                         continue;
@@ -945,7 +945,7 @@ namespace ScriptModule
                                 RefillTime = HUtil32.StrToInt(sItemRefillTime, 0),
                                 RefillTick = 0
                             };
-                            if (SystemShare.CanSellItem(sItemName))
+                            if (ModuleShare.CanSellItem(sItemName))
                             {
                                 ((IMerchant)NPC).RefillGoodsList.Add(goods);
                             }

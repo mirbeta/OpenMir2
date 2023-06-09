@@ -43,7 +43,7 @@ namespace CommandSystem
             {
                 nNameColor = 255;
             }
-            var mon = (MonsterObject)SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+            var mon = (MonsterObject)ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.Master = IPlayerActor;

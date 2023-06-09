@@ -39,12 +39,12 @@ namespace CommandSystem {
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = SystemShare.MapMgr.FindMap(sMap);
+            var envir = ModuleShare.MapMgr.FindMap(sMap);
             if (envir != null) {
                 var oldEnvir = PlayerActor.Envir;
                 PlayerActor.Envir = envir;
                 var fireBurnEvent = new FireBurnEvent(IPlayerActor, nX, nY, nType, nTime * 1000, nPoint);
-                SystemShare.EventMgr.AddEvent(fireBurnEvent);
+                ModuleShare.EventMgr.AddEvent(fireBurnEvent);
                 PlayerActor.Envir = oldEnvir;
                 return;
             }

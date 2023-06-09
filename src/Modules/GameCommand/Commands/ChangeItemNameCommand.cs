@@ -32,9 +32,9 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (SystemShare.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
+            if (ModuleShare.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
             {
-                SystemShare.CustomItemMgr.SaveCustomItemName();
+                ModuleShare.CustomItemMgr.SaveCustomItemName();
                 PlayerActor.SysMsg("物品名称设置成功。", MsgColor.Green, MsgType.Hint);
                 return;
             }

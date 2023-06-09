@@ -53,38 +53,7 @@ namespace M2Server
         public static readonly LocalDb LocalDb;
         public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
-        public static DBService DataServer = null;
-        public static MarketService MarketService = null;
-        public static ChatChannelService ChatChannel = null;
-        public static ThreadSocketMgr SocketMgr = null;
-        public static MapManager MapMgr = null;
-        public static CustomItem CustomItemMgr = null;
-        public static MarketManager MarketManager = null;
-        public static NoticeManager NoticeMgr = null;
-        public static GuildManager GuildMgr = null;
-        public static EventManager EventMgr = null;
-        public static CastleManager CastleMgr = null;
-        public static FrontEngine FrontEngine = null;
         public static WorldServer WorldEngine = null;
-        public static RobotManage RobotMgr = null;
-        public static NormNpc ManageNPC = null;
-        public static NormNpc RobotNPC = null;
-        public static Merchant FunctionNPC = null;
-        public static NetworkMonitor NetworkMonitor;
-        public static SystemProcessor SystemProcess;
-        public static UserProcessor UserProcessor;
-        public static RobotProcessor RobotProcessor;
-        public static MerchantProcessor MerchantProcessor;
-        public static GeneratorProcessor GeneratorProcessor;
-        public static EventProcessor EventProcessor;
-        public static StorageProcessor StorageProcessor;
-        public static TimedRobotProcessor TimedRobotProcessor;
-        public static int HighLevelHuman;
-        public static int HighPKPointHuman;
-        public static int HighDCHuman;
-        public static int HighMCHuman;
-        public static int HighSCHuman;
-        public static int HighOnlineHuman;
         public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
         public static IList<StartPoint> StartPointList = null;
         public static TRouteInfo[] ServerTableList = null;
@@ -94,62 +63,17 @@ namespace M2Server
         public static ConcurrentDictionary<string, short> MiniMapList = null;
         public static IList<DealOffInfo> SellOffItemList = null;
         public static ArrayList LogonCostLogList = null;
-        public static int TotalHumCount = 0;
-        public static bool BoMission = false;
-        public static string MissionMap = string.Empty;
-        public static short MissionX = 0;
-        public static short MissionY = 0;
-        public static bool StartReady = false;
-        public static bool FilterWord = false;
-        public static int HumLimit = 30;
-        public static int MonLimit = 30;
-        public static int ZenLimit = 5;
-        public static int NpcLimit = 5;
-        public static int SocLimit = 10;
-        public static int SocCheckTimeOut = 50;
-        public static int DecLimit = 20;
-        public static byte GameTime = 0;
-        public static char GMRedMsgCmd = '!';
-        public static byte GMREDMSGCMD = 6;
-        public static int SendOnlineTick = 0;
-        public static int SpiritMutinyTick = 0;
-        public static int[] OldNeedExps = new int[Grobal2.MaxChangeLevel];
-        public static int CurrentMerchantIndex = 0;
-        public static readonly HashSet<byte> ItemDamageRevivalMap = new HashSet<byte>() { 114, 160, 161, 162 };
         public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
-        public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
-        public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
-        public static readonly ServerConf ServerConf;
-        public static readonly GameSvrConf Config;
-        private static readonly StringConf StringConf;
-        private static readonly ExpsConf ExpConf;
-        private static readonly GlobalConf GlobalConf;
-        private static readonly GameSettingConf GameSetting;
 
         static M2Shares()
         {
             BasePath = AppContext.BaseDirectory;
-            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.ServerFileName));
-            StringConf = new StringConf(Path.Combine(BasePath, ConfConst.StringFileName));
-            ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.ExpConfigFileName));
-            GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.GlobalConfigFileName));
-            GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.GameSettingFileName));
-            Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
             ActorMgr = new ActorMgr();
             LocalDb = new LocalDb();
             CommonDb = new CommonDB();
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
-            NetworkMonitor = new NetworkMonitor();
-            SystemProcess = new SystemProcessor();
-            UserProcessor = new UserProcessor();
-            RobotProcessor = new RobotProcessor();
-            MerchantProcessor = new MerchantProcessor();
-            GeneratorProcessor = new GeneratorProcessor();
-            EventProcessor = new EventProcessor();
-            StorageProcessor = new StorageProcessor();
-            TimedRobotProcessor = new TimedRobotProcessor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
@@ -440,48 +364,6 @@ namespace M2Server
         public static int GetRandomLook(int nBaseLook, int nRage)
         {
             return nBaseLook + RandomNumber.Random(nRage);
-        }
-
-        public static bool CheckGuildName(string sGuildName)
-        {
-            var result = true;
-            if (sGuildName.Length > Config.GuildNameLen)
-            {
-                return false;
-            }
-            for (var i = 0; i < sGuildName.Length - 1; i++)
-            {
-                if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
-                    || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
-                {
-                    result = false;
-                }
-            }
-            return result;
-        }
-
-        public static int GetItemNumber()
-        {
-            Config.ItemNumber++;
-            if (Config.ItemNumber > int.MaxValue / 2 - 1)
-            {
-                Config.ItemNumber = 1;
-            }
-            return Config.ItemNumber + HUtil32.GetTickCount();
-        }
-
-        public static int GetItemNumberEx()
-        {
-            Config.ItemNumberEx++;
-            if (Config.ItemNumberEx < int.MaxValue / 2)
-            {
-                Config.ItemNumberEx = int.MaxValue / 2;
-            }
-            if (Config.ItemNumberEx > int.MaxValue - 1)
-            {
-                Config.ItemNumberEx = int.MaxValue / 2;
-            }
-            return Config.ItemNumberEx + HUtil32.GetTickCount();
         }
 
         public static string FilterShowName(string sName)
@@ -1358,27 +1240,27 @@ namespace M2Server
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, Config.EnvirDir, filePath);
+            return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath);
         }
 
         public static string GetEnvirFilePath(string dirPath, string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, Config.EnvirDir, dirPath, filePath);
+            return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, dirPath, filePath);
         }
 
         public static string GetNoticeFilePath(string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, Config.NoticeDir, filePath);
+            return Path.Combine(BasePath, ModuleShare.Config.NoticeDir, filePath);
         }
     }
 }

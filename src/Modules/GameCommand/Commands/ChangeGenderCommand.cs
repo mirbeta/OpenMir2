@@ -37,7 +37,7 @@ namespace CommandSystem
             {
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.Gender != playSex)

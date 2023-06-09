@@ -35,7 +35,7 @@ namespace M2Server.Monster.Monsters
                 short n0C = (short)(CurrY + 1);
                 if (Envir.CanWalk(n08, n0C, true))
                 {
-                    IActor bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, n08, n0C, SystemShare.Config.Spider);
+                    IActor bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, n08, n0C, ModuleShare.Config.Spider);
                     if (bb != null)
                     {
                         bb.SetTargetCreat(TargetCret);

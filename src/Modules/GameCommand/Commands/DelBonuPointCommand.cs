@@ -18,7 +18,7 @@ namespace CommandSystem {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            var targerIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
             if (targerIPlayerActor != null) {
                 targerIPlayerActor.BonusPoint = 0;
                 targerIPlayerActor.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);

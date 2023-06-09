@@ -41,7 +41,7 @@ namespace M2Server.Monster.Monsters
                 {
                     break;
                 }
-                IActor baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, nX, nY, SystemShare.Config.Zuma[M2Share.RandomNumber.Random(4)]);
+                IActor baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, nX, nY, ModuleShare.Config.Zuma[M2Share.RandomNumber.Random(4)]);
                 if (baseObject != null)
                 {
                     _mSlaveObjectList.Add(baseObject);

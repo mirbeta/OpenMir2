@@ -21,11 +21,11 @@ namespace CommandSystem {
                     return;
                 }
             }
-            if (SystemShare.ServerIndex != 0) {
+            if (ModuleShare.ServerIndex != 0) {
                 PlayerActor.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = SystemShare.GuildMgr.FindGuild(sParam1);
+            var guild = ModuleShare.GuildMgr.FindGuild(sParam1);
             if (guild == null) {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);
                 return;
