@@ -1,5 +1,7 @@
-﻿namespace GameSrv.Word {
-    public class MonsterThread {
+﻿namespace GameSrv.Word
+{
+    public class MonsterThread
+    {
         /// <summary>
         /// 线程ID
         /// </summary>
@@ -31,7 +33,8 @@
         /// </summary>
         public int MonsterCount;
 
-        public MonsterThread() {
+        public MonsterThread()
+        {
             RegenMonstersTick = HUtil32.GetTickCount();
         }
     }

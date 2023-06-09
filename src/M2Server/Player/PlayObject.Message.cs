@@ -401,7 +401,7 @@ namespace M2Server.Player
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem stdItem = ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if (!CheckItemsNeed(stdItem))
@@ -2163,7 +2163,7 @@ namespace M2Server.Player
                     {
                         continue;
                     }
-                    stdItem = ItemSystem.GetStdItem(UseItems[i].Index);
+                    stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if ((stdItem.ItemDesc & 8) != 0)
@@ -2192,7 +2192,7 @@ namespace M2Server.Player
                     int dropWide = HUtil32._MIN(ModuleShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[i], dropWide, true, baseObject, ActorId))
                     {
-                        stdItem = ItemSystem.GetStdItem(UseItems[i].Index);
+                        stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -2201,7 +2201,7 @@ namespace M2Server.Player
                                 {
                                     dropItemList.Add(new DeleteItem()
                                     {
-                                        ItemName = ItemSystem.GetStdItemName(UseItems[i].Index),
+                                        ItemName = ModuleShare.ItemSystem.GetStdItemName(UseItems[i].Index),
                                         MakeIndex = UseItems[i].MakeIndex
                                     });
                                 }
@@ -2234,7 +2234,7 @@ namespace M2Server.Player
             {
                 if (UseItems[ItemLocation.RighThand] != null && UseItems[ItemLocation.RighThand].Index > 0)
                 {
-                    StdItem stdItem = ItemSystem.GetStdItem(UseItems[ItemLocation.RighThand].Index);
+                    StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[ItemLocation.RighThand].Index);
                     if ((stdItem == null) || (stdItem.SpecialPwr != 0))
                     {
                         return;

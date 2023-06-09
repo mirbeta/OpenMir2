@@ -92,7 +92,7 @@ namespace M2Server.Player
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = ItemSystem.GetStdItemName(userItem.Index);
+                            sUserItemName = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && SellOffItemList.Count < 9)
                         {
@@ -158,7 +158,7 @@ namespace M2Server.Player
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = ItemSystem.GetStdItemName(userItem.Index);
+                            sUserItemName = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -207,7 +207,7 @@ namespace M2Server.Player
                                 {
                                     continue;
                                 }
-                                StdItem stdItem = ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                 if (stdItem != null)
                                 {
                                     UserItem userItem = dealOffInfo.UseItems[j];
@@ -236,7 +236,7 @@ namespace M2Server.Player
                             M2Share.SellOffItemList.RemoveAt(i);
                             Dispose(dealOffInfo);
                             this.SendMsg(Messages.RM_MENU_OK, 0, this.ActorId, 0, 0, "取消寄售成功!");
-                           // M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
+                            // M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                         }
                     }
                 }
@@ -331,7 +331,7 @@ namespace M2Server.Player
                                 //M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (int j = 0; j <= 9; j++)
                                 {
-                                    StdItem stdItem = ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                    StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                     if (stdItem != null)
                                     {
                                         //UserItem = new TUserItem();
@@ -527,7 +527,7 @@ namespace M2Server.Player
                     for (int i = 0; i < SellOffItemList.Count; i++)
                     {
                         var userItem = SellOffItemList[i];
-                        stdItem = ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && userItem != null && userItem.MakeIndex > 0)
                         {
                             dealOffInfo.UseItems[i] = userItem;
@@ -540,7 +540,7 @@ namespace M2Server.Player
                     {
                         continue;
                     }
-                    stdItem = ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                    stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                     if (stdItem == null && nGameDiamond > 0 && nGameDiamond < 10000 && nCode == short.MaxValue)// 物品是金刚石
                     {
                         if (nGameDiamond > Gold) // 金刚石数量大于玩家的数量时则反回失败

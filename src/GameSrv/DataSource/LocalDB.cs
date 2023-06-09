@@ -1,70 +1,88 @@
-using System.Collections;
 using GameSrv.NPC;
 using M2Server;
 using M2Server.Npc;
 using ScriptSystem;
+using System.Collections;
 using SystemModule.Common;
 using SystemModule.Data;
 
 namespace GameSrv.DataSource
 {
-    public class LocalDb {
+    public class LocalDb
+    {
         private readonly char[] _textSpitConst = { ' ', '\t' };
         private readonly char[] _monsterSpitConst = { ' ', '/', '\t' };
 
-        public static bool LoadAdminList() {
+        public static bool LoadAdminList()
+        {
             string sIPaddr = string.Empty;
             string sChrName = string.Empty;
             string sData = string.Empty;
             string sfilename = M2Share.GetEnvirFilePath("AdminList.txt");
-            if (!File.Exists(sfilename)) {
+            if (!File.Exists(sfilename))
+            {
                 return false;
             }
             M2Share.WorldEngine.AdminList.Clear();
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sfilename);
-            for (int i = 0; i < loadList.Count; i++) {
+            for (int i = 0; i < loadList.Count; i++)
+            {
                 string sLineText = loadList[i];
                 int nLv = -1;
-                if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';') {
-                    if (sLineText[0] == '*') {
+                if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
+                {
+                    if (sLineText[0] == '*')
+                    {
                         nLv = 10;
                     }
-                    else if (sLineText[0] == '1') {
+                    else if (sLineText[0] == '1')
+                    {
                         nLv = 9;
                     }
-                    else if (sLineText[0] == '2') {
+                    else if (sLineText[0] == '2')
+                    {
                         nLv = 8;
                     }
-                    else if (sLineText[0] == '3') {
+                    else if (sLineText[0] == '3')
+                    {
                         nLv = 7;
                     }
-                    else if (sLineText[0] == '4') {
+                    else if (sLineText[0] == '4')
+                    {
                         nLv = 6;
                     }
-                    else if (sLineText[0] == '5') {
+                    else if (sLineText[0] == '5')
+                    {
                         nLv = 5;
                     }
-                    else if (sLineText[0] == '6') {
+                    else if (sLineText[0] == '6')
+                    {
                         nLv = 4;
                     }
-                    else if (sLineText[0] == '7') {
+                    else if (sLineText[0] == '7')
+                    {
                         nLv = 3;
                     }
-                    else if (sLineText[0] == '8') {
+                    else if (sLineText[0] == '8')
+                    {
                         nLv = 2;
                     }
-                    else if (sLineText[0] == '9') {
+                    else if (sLineText[0] == '9')
+                    {
                         nLv = 1;
                     }
-                    if (nLv > 0) {
+                    if (nLv > 0)
+                    {
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { "/", "\\", " ", "\t" });
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sChrName, new[] { "/", "\\", " ", "\t" });
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new[] { "/", "\\", " ", "\t" });
-                        if (string.IsNullOrEmpty(sChrName) || string.IsNullOrEmpty(sIPaddr)) {
+                        if (string.IsNullOrEmpty(sChrName) || string.IsNullOrEmpty(sIPaddr))
+                        {
                             continue;
                         }
-                        AdminInfo adminInfo = new AdminInfo {
+                        AdminInfo adminInfo = new AdminInfo
+                        {
                             Level = (byte)nLv,
                             ChrName = sChrName,
                             IPaddr = sIPaddr
@@ -128,54 +146,69 @@ namespace GameSrv.DataSource
         /// <summary>
         /// 读取物品合成配置
         /// </summary>
-        public void LoadMakeItem() {
+        public void LoadMakeItem()
+        {
             string sSubName = string.Empty;
             string sItemName = string.Empty;
             IList<MakeItem> list28 = null;
             string sFileName = M2Share.GetEnvirFilePath("MakeItem.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++) {
+                for (int i = 0; i < loadList.Count; i++)
+                {
                     string sLine = loadList[i].Trim();
-                    if (string.IsNullOrEmpty(sLine) || sLine.StartsWith(";")) {
+                    if (string.IsNullOrEmpty(sLine) || sLine.StartsWith(";"))
+                    {
                         continue;
                     }
-                    if (sLine.StartsWith("[")) {
-                        if (list28 != null) {
+                    if (sLine.StartsWith("["))
+                    {
+                        if (list28 != null)
+                        {
                             M2Share.MakeItemList.Add(sItemName, list28);
                         }
                         list28 = new List<MakeItem>();
                         HUtil32.ArrestStringEx(sLine, "[", "]", ref sItemName);
                     }
-                    else {
-                        if (list28 != null) {
+                    else
+                    {
+                        if (list28 != null)
+                        {
                             sLine = HUtil32.GetValidStr3(sLine, ref sSubName, _textSpitConst);
                             int nItemCount = HUtil32.StrToInt(sLine.Trim(), 1);
                             list28.Add(new MakeItem() { ItemName = sSubName, ItemCount = nItemCount });
                         }
                     }
                 }
-                if (list28 != null) {
+                if (list28 != null)
+                {
                     M2Share.MakeItemList.Add(sItemName, list28);
                 }
             }
         }
 
-        private static void QFunctionNpc() {
-            try {
+        private static void QFunctionNpc()
+        {
+            try
+            {
                 string sScriptFile = M2Share.GetEnvirFilePath(ScriptFlagCode.sMarket_Def, "QFunction-0.txt");
                 string sScritpDir = M2Share.GetEnvirFilePath(ScriptFlagCode.sMarket_Def);
-                if (!Directory.Exists(sScritpDir)) {
+                if (!Directory.Exists(sScritpDir))
+                {
                     Directory.CreateDirectory(sScritpDir);
                 }
-                if (!File.Exists(sScriptFile)) {
+                if (!File.Exists(sScriptFile))
+                {
                     using StringList saveList = new StringList();
                     saveList.Add(";此脚为功能脚本，用于实现各种与脚本有关的功能");
                     saveList.SaveToFile(sScriptFile);
                 }
-                if (File.Exists(sScriptFile)) {
-                    GameShare.FunctionNPC = new Merchant {
+                if (File.Exists(sScriptFile))
+                {
+                    GameShare.FunctionNPC = new Merchant
+                    {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -189,23 +222,29 @@ namespace GameSrv.DataSource
                     };
                     M2Share.WorldEngine.AddMerchant(GameShare.FunctionNPC);
                 }
-                else {
+                else
+                {
                     GameShare.FunctionNPC = null;
                 }
             }
-            catch {
+            catch
+            {
                 GameShare.FunctionNPC = null;
             }
         }
 
-        private static void QMangeNpc() {
-            try {
+        private static void QMangeNpc()
+        {
+            try
+            {
                 string sScriptFile = M2Share.GetEnvirFilePath("MapQuest_def", "QManage.txt");
                 string sScritpDir = M2Share.GetEnvirFilePath("MapQuest_def");
-                if (!Directory.Exists(sScritpDir)) {
+                if (!Directory.Exists(sScritpDir))
+                {
                     Directory.CreateDirectory(sScritpDir);
                 }
-                if (!File.Exists(sScriptFile)) {
+                if (!File.Exists(sScriptFile))
+                {
                     string sShowFile = HUtil32.ReplaceChar(sScriptFile, '\\', '/');
                     StringList saveList = new StringList();
                     saveList.Add(";此脚为登录脚本，人物每次登录时都会执行此脚本，所有人物初始设置都可以放在此脚本中。");
@@ -224,8 +263,10 @@ namespace GameSrv.DataSource
                     saveList.SaveToFile(sScriptFile);
                     saveList = null;
                 }
-                if (File.Exists(sScriptFile)) {
-                    ModuleShare.ManageNPC = new Merchant {
+                if (File.Exists(sScriptFile))
+                {
+                    ModuleShare.ManageNPC = new Merchant
+                    {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -236,32 +277,40 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                   // M2Share.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
+                    // M2Share.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
                 }
-                else {
+                else
+                {
                     ModuleShare.ManageNPC = null;
                 }
             }
-            catch {
+            catch
+            {
                 ModuleShare.ManageNPC = null;
             }
         }
 
-        private static void RobotNpc() {
-            try {
+        private static void RobotNpc()
+        {
+            try
+            {
                 string sScriptFile = M2Share.GetEnvirFilePath("Robot_def", "RobotManage.txt");
                 string sScritpDir = M2Share.GetEnvirFilePath("Robot_def");
-                if (!Directory.Exists(sScritpDir)) {
+                if (!Directory.Exists(sScritpDir))
+                {
                     Directory.CreateDirectory(sScritpDir);
                 }
-                if (!File.Exists(sScriptFile)) {
+                if (!File.Exists(sScriptFile))
+                {
                     StringList tSaveList = new StringList();
                     tSaveList.Add(";此脚为机器人专用脚本，用于机器人处理功能用的脚本。");
                     tSaveList.SaveToFile(sScriptFile);
                     tSaveList = null;
                 }
-                if (File.Exists(sScriptFile)) {
-                    ModuleShare.RobotNPC = new Merchant {
+                if (File.Exists(sScriptFile))
+                {
+                    ModuleShare.RobotNPC = new Merchant
+                    {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -272,13 +321,15 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                   // M2Share.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
+                    // M2Share.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
                 }
-                else {
+                else
+                {
                     ModuleShare.RobotNPC = null;
                 }
             }
-            catch {
+            catch
+            {
                 ModuleShare.RobotNPC = null;
             }
         }
@@ -287,7 +338,8 @@ namespace GameSrv.DataSource
         /// 读取地图任务配置
         /// </summary>
         /// <returns></returns>
-        public int LoadMapQuest() {
+        public int LoadMapQuest()
+        {
             int result = 1;
             string sMap = string.Empty;
             string s1C = string.Empty;
@@ -298,41 +350,51 @@ namespace GameSrv.DataSource
             string s30 = string.Empty;
             string s34 = string.Empty;
             string sFileName = M2Share.GetEnvirFilePath("MapQuest.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 StringList tMapQuestList = new StringList();
                 tMapQuestList.LoadFromFile(sFileName);
-                for (int i = 0; i < tMapQuestList.Count; i++) {
+                for (int i = 0; i < tMapQuestList.Count; i++)
+                {
                     string tStr = tMapQuestList[i];
-                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';') {
+                    if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
+                    {
                         tStr = HUtil32.GetValidStr3(tStr, ref sMap, _textSpitConst);
                         tStr = HUtil32.GetValidStr3(tStr, ref s1C, _textSpitConst);
                         tStr = HUtil32.GetValidStr3(tStr, ref s20, _textSpitConst);
                         tStr = HUtil32.GetValidStr3(tStr, ref sMonName, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sMonName) && sMonName[0] == '\"') {
+                        if (!string.IsNullOrEmpty(sMonName) && sMonName[0] == '\"')
+                        {
                             HUtil32.ArrestStringEx(sMonName, "\"", "\"", ref sMonName);
                         }
                         tStr = HUtil32.GetValidStr3(tStr, ref sItem, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sItem) && sItem[0] == '\"') {
+                        if (!string.IsNullOrEmpty(sItem) && sItem[0] == '\"')
+                        {
                             HUtil32.ArrestStringEx(sItem, "\"", "\"", ref sItem);
                         }
                         tStr = HUtil32.GetValidStr3(tStr, ref sQuest, _textSpitConst);
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest)) {
+                        if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest))
+                        {
                             Envirnoment map = GameShare.MapMgr.FindMap(sMap);
-                            if (map != null) {
+                            if (map != null)
+                            {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
                                 int n38 = HUtil32.StrToInt(s34, 0);
                                 int n3C = HUtil32.StrToInt(s20, 0);
                                 bool boGrouped = HUtil32.CompareLStr(s30, "GROUP");
-                                if (!GameShare.QuestManager.CreateQuest(n38, n3C, sMonName, sItem, sQuest, boGrouped)) {
+                                if (!GameShare.QuestManager.CreateQuest(n38, n3C, sMonName, sItem, sQuest, boGrouped))
+                                {
                                     result = -i;
                                 }
                             }
-                            else {
+                            else
+                            {
                                 result = -i;
                             }
                         }
-                        else {
+                        else
+                        {
                             result = -i;
                         }
                     }
@@ -347,7 +409,8 @@ namespace GameSrv.DataSource
         /// <summary>
         /// 读取交易商人配置
         /// </summary>
-        public void LoadMerchant() {
+        public void LoadMerchant()
+        {
             string sScript = string.Empty;
             string sMapName = string.Empty;
             string sX = string.Empty;
@@ -359,18 +422,22 @@ namespace GameSrv.DataSource
             string sCanMove = string.Empty;
             string sMoveTime = string.Empty;
             string sFileName = M2Share.GetEnvirFilePath("Merchant.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 StringList tMerchantList = new StringList();
                 tMerchantList.LoadFromFile(sFileName);
-                for (int i = 0; i < tMerchantList.Count; i++) {
+                for (int i = 0; i < tMerchantList.Count; i++)
+                {
                     string sLineText = tMerchantList[i].Trim();
-                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';') {
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
+                    {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, _textSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, _textSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sX, _textSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sY, _textSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sName, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sName) && sName[0] == '\"') {
+                        if (!string.IsNullOrEmpty(sName) && sName[0] == '\"')
+                        {
                             HUtil32.ArrestStringEx(sName, "\"", "\"", ref sName);
                         }
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, _textSpitConst);
@@ -388,13 +455,15 @@ namespace GameSrv.DataSource
                                 CurrY = HUtil32.StrToInt16(sY, 0),
                                 ChrName = sName,
                                 NpcFlag = HUtil32.StrToInt16(sFlag, 0),
-                                Appr = (ushort) HUtil32.StrToInt(sAppr, 0),
+                                Appr = (ushort)HUtil32.StrToInt(sAppr, 0),
                                 MoveTime = HUtil32.StrToInt(sMoveTime, 0)
                             };
-                            if (HUtil32.StrToInt(sIsCalste, 0) != 0) {
+                            if (HUtil32.StrToInt(sIsCalste, 0) != 0)
+                            {
                                 merchantOldNpc.CastleMerchant = true;
                             }
-                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchantOldNpc.MoveTime > 0) {
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchantOldNpc.MoveTime > 0)
+                            {
                                 merchantOldNpc.BoCanMove = true;
                             }
                             M2Share.WorldEngine.AddMerchant(merchantOldNpc);
@@ -404,16 +473,19 @@ namespace GameSrv.DataSource
             }
         }
 
-        private static void LoadMapGen(StringList monGenList, string sFileName) {
+        private static void LoadMapGen(StringList monGenList, string sFileName)
+        {
             string sFileDir = M2Share.GetEnvirFilePath("MonGen");
-            if (!Directory.Exists(sFileDir)) {
+            if (!Directory.Exists(sFileDir))
+            {
                 Directory.CreateDirectory(sFileDir);
             }
             string sFilePatchName = sFileDir + sFileName;
             if (!File.Exists(sFilePatchName)) return;
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sFilePatchName);
-            for (int i = 0; i < loadList.Count; i++) {
+            for (int i = 0; i < loadList.Count; i++)
+            {
                 monGenList.Add(loadList[i]);
             }
         }
@@ -422,34 +494,42 @@ namespace GameSrv.DataSource
         /// 读取怪物刷新配置信息
         /// </summary>
         /// <returns></returns>
-        public int LoadMonGen(out int mongenCount) {
+        public int LoadMonGen(out int mongenCount)
+        {
             string sLineText = string.Empty;
             string sData = string.Empty;
             int i;
             int result = 0;
             mongenCount = 0;
             string sFileName = M2Share.GetEnvirFilePath("MonGen.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
                 i = 0;
-                while (true) {
-                    if (i >= loadList.Count) {
+                while (true)
+                {
+                    if (i >= loadList.Count)
+                    {
                         break;
                     }
-                    if (HUtil32.CompareLStr("loadgen", loadList[i])) {
+                    if (HUtil32.CompareLStr("loadgen", loadList[i]))
+                    {
                         string sMapGenFile = HUtil32.GetValidStr3(loadList[i], ref sLineText, _textSpitConst);
                         loadList.RemoveAt(i);
-                        if (!string.IsNullOrEmpty(sMapGenFile)) {
+                        if (!string.IsNullOrEmpty(sMapGenFile))
+                        {
                             LoadMapGen(loadList, sMapGenFile);
                         }
                     }
                     i++;
                 }
                 MonGenInfo monGenInfo = null;
-                for (i = 0; i < loadList.Count; i++) {
+                for (i = 0; i < loadList.Count; i++)
+                {
                     sLineText = loadList[i];
-                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';') {
+                    if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
+                    {
                         monGenInfo = new MonGenInfo();
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MapName = sData;
@@ -458,7 +538,8 @@ namespace GameSrv.DataSource
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.Y = HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sData) && sData[0] == '\"') {
+                        if (!string.IsNullOrEmpty(sData) && sData[0] == '\"')
+                        {
                             HUtil32.ArrestStringEx(sData, "\"", "\"", ref sData);
                         }
                         monGenInfo.MonName = sData;
@@ -470,20 +551,24 @@ namespace GameSrv.DataSource
                         monGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && GameShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null) {
-                            monGenInfo.CertList = new List<IActor>();
+                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && GameShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
+                        {
+                            monGenInfo.CertList = new List<IMonsterActor>();
                             monGenInfo.Envir = GameShare.MapMgr.FindMap(monGenInfo.MapName);
-                            if (monGenInfo.Envir != null) {
+                            if (monGenInfo.Envir != null)
+                            {
                                 M2Share.WorldEngine.AddMonGenList(monGenInfo);
                             }
-                            else {
+                            else
+                            {
                                 monGenInfo = null;
                             }
                         }
                     }
                 }
-                monGenInfo = new MonGenInfo {
-                    CertList = new List<IActor>(),
+                monGenInfo = new MonGenInfo
+                {
+                    CertList = new List<IMonsterActor>(),
                     Envir = null
                 };
                 if (M2Share.WorldEngine.CheckMonGenInfoThreadMap(0))
@@ -492,7 +577,7 @@ namespace GameSrv.DataSource
                 }
                 else
                 {
-                    M2Share.WorldEngine.CreateMonGenInfoThreadMap(0, new List<MonGenInfo>() {monGenInfo});
+                    M2Share.WorldEngine.CreateMonGenInfoThreadMap(0, new List<MonGenInfo>() { monGenInfo });
                 }
                 result = 1;
                 mongenCount = M2Share.WorldEngine.MonGenCount;
@@ -563,7 +648,8 @@ namespace GameSrv.DataSource
         /// <summary>
         /// 读取管理NPC配置
         /// </summary>
-        public void LoadNpcs() {
+        public void LoadNpcs()
+        {
             string chrName = string.Empty;
             string type = string.Empty;
             string mapName = string.Empty;
@@ -572,14 +658,18 @@ namespace GameSrv.DataSource
             string flag = string.Empty;
             string appr = string.Empty;
             string sFileName = M2Share.GetEnvirFilePath("Npcs.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++) {
+                for (int i = 0; i < loadList.Count; i++)
+                {
                     string sData = loadList[i].Trim();
-                    if (!string.IsNullOrEmpty(sData) && sData[0] != ';') {
+                    if (!string.IsNullOrEmpty(sData) && sData[0] != ';')
+                    {
                         sData = HUtil32.GetValidStrCap(sData, ref chrName, _textSpitConst);
-                        if (!string.IsNullOrEmpty(chrName) && chrName[0] == '\"') {
+                        if (!string.IsNullOrEmpty(chrName) && chrName[0] == '\"')
+                        {
                             HUtil32.ArrestStringEx(chrName, "\"", "\"", ref chrName);
                         }
                         sData = HUtil32.GetValidStr3(sData, ref type, _textSpitConst);
@@ -588,9 +678,11 @@ namespace GameSrv.DataSource
                         sData = HUtil32.GetValidStr3(sData, ref cY, _textSpitConst);
                         sData = HUtil32.GetValidStr3(sData, ref flag, _textSpitConst);
                         sData = HUtil32.GetValidStr3(sData, ref appr, _textSpitConst);
-                        if (!string.IsNullOrEmpty(chrName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(appr)) {
+                        if (!string.IsNullOrEmpty(chrName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(appr))
+                        {
                             NormNpc npc = null;
-                            switch (HUtil32.StrToInt(type, 0)) {
+                            switch (HUtil32.StrToInt(type, 0))
+                            {
                                 case 0:
                                     npc = new Merchant();
                                     break;
@@ -601,7 +693,8 @@ namespace GameSrv.DataSource
                                     npc = new CastleOfficial();
                                     break;
                             }
-                            if (npc != null) {
+                            if (npc != null)
+                            {
                                 npc.MapName = mapName;
                                 npc.CurrX = HUtil32.StrToInt16(cX, 0);
                                 npc.CurrY = HUtil32.StrToInt16(cY, 0);
@@ -616,13 +709,16 @@ namespace GameSrv.DataSource
             }
         }
 
-        private static string LoadQuestDiaryList(int nIndex) {
+        private static string LoadQuestDiaryList(int nIndex)
+        {
             string result;
-            if (nIndex >= 1000) {
+            if (nIndex >= 1000)
+            {
                 result = nIndex.ToString();
                 return result;
             }
-            if (nIndex >= 100) {
+            if (nIndex >= 100)
+            {
                 result = nIndex.ToString() + '0';
                 return result;
             }
@@ -630,29 +726,37 @@ namespace GameSrv.DataSource
             return result;
         }
 
-        public int LoadQuestDiary() {
+        public int LoadQuestDiary()
+        {
             int result = 1;
             string s18 = string.Empty;
             string s20 = string.Empty;
             bool bo2D = false;
             int nC = 1;
             //M2Share.QuestDiaryList.Clear();
-            while (true) {
+            while (true)
+            {
                 IList<TQDDinfo> qdDinfoList = null;
                 string sFileName = M2Share.GetEnvirFilePath("QuestDiary", LoadQuestDiaryList(nC) + ".txt");
-                if (File.Exists(sFileName)) {
+                if (File.Exists(sFileName))
+                {
                     s18 = string.Empty;
                     TQDDinfo qdDinfo = null;
                     using StringList loadList = new StringList();
                     loadList.LoadFromFile(sFileName);
-                    for (int i = 0; i < loadList.Count; i++) {
+                    for (int i = 0; i < loadList.Count; i++)
+                    {
                         string s1C = loadList[i];
-                        if (!string.IsNullOrEmpty(s1C) && s1C[0] != ';') {
-                            if (s1C[0] == '[' && s1C.Length > 2) {
-                                if (string.IsNullOrEmpty(s18)) {
+                        if (!string.IsNullOrEmpty(s1C) && s1C[0] != ';')
+                        {
+                            if (s1C[0] == '[' && s1C.Length > 2)
+                            {
+                                if (string.IsNullOrEmpty(s18))
+                                {
                                     HUtil32.ArrestStringEx(s1C, "[", "]", ref s18);
                                     qdDinfoList = new List<TQDDinfo>();
-                                    qdDinfo = new TQDDinfo {
+                                    qdDinfo = new TQDDinfo
+                                    {
                                         n00 = nC,
                                         s04 = s18,
                                         sList = new ArrayList()
@@ -660,11 +764,14 @@ namespace GameSrv.DataSource
                                     qdDinfoList.Add(qdDinfo);
                                     bo2D = true;
                                 }
-                                else {
-                                    if (s1C[0] != '@') {
+                                else
+                                {
+                                    if (s1C[0] != '@')
+                                    {
                                         s1C = HUtil32.GetValidStr3(s1C, ref s20, _textSpitConst);
                                         HUtil32.ArrestStringEx(s20, "[", "]", ref s20);
-                                        qdDinfo = new TQDDinfo {
+                                        qdDinfo = new TQDDinfo
+                                        {
                                             n00 = HUtil32.StrToInt(s20, 0),
                                             s04 = s1C,
                                             sList = new ArrayList()
@@ -672,27 +779,33 @@ namespace GameSrv.DataSource
                                         qdDinfoList.Add(qdDinfo);
                                         bo2D = true;
                                     }
-                                    else {
+                                    else
+                                    {
                                         bo2D = false;
                                     }
                                 }
                             }
-                            else {
-                                if (bo2D) {
+                            else
+                            {
+                                if (bo2D)
+                                {
                                     qdDinfo.sList.Add(s1C);
                                 }
                             }
                         }
                     }
                 }
-                if (qdDinfoList != null) {
-                   // M2Share.QuestDiaryList.Add(qdDinfoList);
+                if (qdDinfoList != null)
+                {
+                    // M2Share.QuestDiaryList.Add(qdDinfoList);
                 }
-                else {
+                else
+                {
                     //M2Share.QuestDiaryList.Add(null);
                 }
                 nC++;
-                if (nC >= 105) {
+                if (nC >= 105)
+                {
                     break;
                 }
             }
@@ -702,7 +815,8 @@ namespace GameSrv.DataSource
         /// <summary>
         /// 读取安全区配置
         /// </summary>
-        public void LoadStartPoint() {
+        public void LoadStartPoint()
+        {
             string mapName = string.Empty;
             string cX = string.Empty;
             string cY = string.Empty;
@@ -712,13 +826,16 @@ namespace GameSrv.DataSource
             string zone = string.Empty;
             string fire = string.Empty;
             string sFileName = M2Share.GetEnvirFilePath("StartPoint.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 M2Share.StartPointList.Clear();
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++) {
+                for (int i = 0; i < loadList.Count; i++)
+                {
                     string sLine = loadList[i].Trim();
-                    if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';') {
+                    if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';')
+                    {
                         sLine = HUtil32.GetValidStr3(sLine, ref mapName, _textSpitConst);
                         sLine = HUtil32.GetValidStr3(sLine, ref cX, _textSpitConst);
                         sLine = HUtil32.GetValidStr3(sLine, ref cY, _textSpitConst);
@@ -727,8 +844,10 @@ namespace GameSrv.DataSource
                         sLine = HUtil32.GetValidStr3(sLine, ref type, _textSpitConst);
                         sLine = HUtil32.GetValidStr3(sLine, ref zone, _textSpitConst);
                         sLine = HUtil32.GetValidStr3(sLine, ref fire, _textSpitConst);
-                        if (!string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(cX) && !string.IsNullOrEmpty(cY)) {
-                            StartPoint startPoint = new StartPoint {
+                        if (!string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(cX) && !string.IsNullOrEmpty(cY))
+                        {
+                            StartPoint startPoint = new StartPoint
+                            {
                                 MapName = mapName,
                                 CurrX = HUtil32.StrToInt16(cX, 0),
                                 CurrY = HUtil32.StrToInt16(cY, 0),
@@ -749,31 +868,39 @@ namespace GameSrv.DataSource
         /// 读取解包物品配置
         /// </summary>
         /// <returns></returns>
-        public int LoadUnbindList() {
+        public int LoadUnbindList()
+        {
             int result = 0;
             string sData = string.Empty;
             string sItemName = string.Empty;
             string sFileName = M2Share.GetEnvirFilePath("UnbindList.txt");
-            if (File.Exists(sFileName)) {
+            if (File.Exists(sFileName))
+            {
                 using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
-                for (int i = 0; i < loadList.Count; i++) {
+                for (int i = 0; i < loadList.Count; i++)
+                {
                     string readLine = loadList[i];
-                    if (!string.IsNullOrEmpty(readLine) && readLine[0] != ';') {
+                    if (!string.IsNullOrEmpty(readLine) && readLine[0] != ';')
+                    {
                         readLine = HUtil32.GetValidStr3(readLine, ref sData, _textSpitConst);
                         readLine = HUtil32.GetValidStrCap(readLine, ref sItemName, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sItemName) && sItemName[0] == '\"') {
+                        if (!string.IsNullOrEmpty(sItemName) && sItemName[0] == '\"')
+                        {
                             HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                         }
                         int n10 = HUtil32.StrToInt(sData, 0);
-                        if (n10 > 0) {
-                            if (M2Share.UnbindList.ContainsKey(n10)) {
+                        if (n10 > 0)
+                        {
+                            if (M2Share.UnbindList.ContainsKey(n10))
+                            {
                                 M2Share.Logger.Warn($"重复解包物品[{sItemName}]...");
                                 continue;
                             }
                             M2Share.UnbindList.Add(n10, sItemName);
                         }
-                        else {
+                        else
+                        {
                             result = -i;// 需要取负数
                             break;
                         }
@@ -783,7 +910,8 @@ namespace GameSrv.DataSource
             return result;
         }
 
-        public static int SaveGoodRecord(Merchant npc, string sFile) {
+        public static int SaveGoodRecord(Merchant npc, string sFile)
+        {
             int result = -1;
             string sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
             //if (File.Exists(sFileName))
@@ -820,7 +948,8 @@ namespace GameSrv.DataSource
             return result;
         }
 
-        public static int SaveGoodPriceRecord(Merchant npc, string sFile) {
+        public static int SaveGoodPriceRecord(Merchant npc, string sFile)
+        {
             int result = -1;
             string sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";
             //if (File.Exists(sFileName))
@@ -849,11 +978,13 @@ namespace GameSrv.DataSource
             return result;
         }
 
-        public static void ReLoadNpc() {
+        public static void ReLoadNpc()
+        {
 
         }
 
-        public void ReLoadMerchants() {
+        public void ReLoadMerchants()
+        {
             string sScript = string.Empty;
             string sMapName = string.Empty;
             string sX = string.Empty;
@@ -866,26 +997,32 @@ namespace GameSrv.DataSource
             string sMoveTime = string.Empty;
             IMerchant merchant;
             string sFileName = M2Share.GetEnvirFilePath("Merchant.txt");
-            if (!File.Exists(sFileName)) {
+            if (!File.Exists(sFileName))
+            {
                 return;
             }
-            for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
+            for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
+            {
                 merchant = M2Share.WorldEngine.MerchantList[i];
-                if (merchant != GameShare.FunctionNPC) {
+                if (merchant != GameShare.FunctionNPC)
+                {
                     merchant.NpcFlag = -1;
                 }
             }
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sFileName);
-            for (int i = 0; i < loadList.Count; i++) {
+            for (int i = 0; i < loadList.Count; i++)
+            {
                 string sLineText = loadList[i].Trim();
-                if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';') {
+                if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
+                {
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, _textSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, _textSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sX, _textSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sY, _textSpitConst);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sChrName, _textSpitConst);
-                    if (!string.IsNullOrEmpty(sChrName) && sChrName[0] == '\"') {
+                    if (!string.IsNullOrEmpty(sChrName) && sChrName[0] == '\"')
+                    {
                         HUtil32.ArrestStringEx(sChrName, "\"", "\"", ref sChrName);
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, _textSpitConst);
@@ -896,33 +1033,41 @@ namespace GameSrv.DataSource
                     short nX = (short)HUtil32.StrToInt(sX, 0);
                     short nY = (short)HUtil32.StrToInt(sY, 0);
                     bool boNewNpc = true;
-                    for (int j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++) {
+                    for (int j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++)
+                    {
                         merchant = M2Share.WorldEngine.MerchantList[j];
-                        if (merchant.MapName == sMapName && merchant.CurrX == nX && merchant.CurrY == nY) {
+                        if (merchant.MapName == sMapName && merchant.CurrX == nX && merchant.CurrY == nY)
+                        {
                             boNewNpc = false;
                             merchant.ScriptName = sScript;
                             merchant.ChrName = sChrName;
                             merchant.NpcFlag = HUtil32.StrToInt16(sFlag, 0);
                             merchant.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
                             merchant.MoveTime = HUtil32.StrToInt(sMoveTime, 0);
-                            if (HUtil32.StrToInt(sCastle, 0) != 1) {
+                            if (HUtil32.StrToInt(sCastle, 0) != 1)
+                            {
                                 merchant.CastleMerchant = true;
                             }
-                            else {
+                            else
+                            {
                                 merchant.CastleMerchant = false;
                             }
-                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchant.MoveTime > 0) {
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchant.MoveTime > 0)
+                            {
                                 merchant.BoCanMove = true;
                             }
                             break;
                         }
                     }
-                    if (boNewNpc) {
-                        merchant = new Merchant {
+                    if (boNewNpc)
+                    {
+                        merchant = new Merchant
+                        {
                             MapName = sMapName
                         };
                         merchant.Envir = GameShare.MapMgr.FindMap(merchant.MapName);
-                        if (merchant.Envir != null) {
+                        if (merchant.Envir != null)
+                        {
                             merchant.ScriptName = sScript;
                             merchant.CurrX = nX;
                             merchant.CurrY = nY;
@@ -930,13 +1075,16 @@ namespace GameSrv.DataSource
                             merchant.NpcFlag = HUtil32.StrToInt16(sFlag, 0);
                             merchant.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
                             merchant.MoveTime = HUtil32.StrToInt(sMoveTime, 0);
-                            if (HUtil32.StrToInt(sCastle, 0) != 1) {
+                            if (HUtil32.StrToInt(sCastle, 0) != 1)
+                            {
                                 merchant.CastleMerchant = true;
                             }
-                            else {
+                            else
+                            {
                                 merchant.CastleMerchant = false;
                             }
-                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchant.MoveTime > 0) {
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchant.MoveTime > 0)
+                            {
                                 merchant.BoCanMove = true;
                             }
                             M2Share.WorldEngine.MerchantList.Add(merchant);
@@ -945,9 +1093,11 @@ namespace GameSrv.DataSource
                     }
                 }
             }
-            for (int i = M2Share.WorldEngine.MerchantList.Count - 1; i >= 0; i--) {
+            for (int i = M2Share.WorldEngine.MerchantList.Count - 1; i >= 0; i--)
+            {
                 merchant = M2Share.WorldEngine.MerchantList[i];
-                if (merchant.NpcFlag == -1) {
+                if (merchant.NpcFlag == -1)
+                {
                     merchant.Ghost = true;
                     merchant.GhostTick = HUtil32.GetTickCount();
                     M2Share.WorldEngine.MerchantList.RemoveAt(i);
@@ -955,7 +1105,8 @@ namespace GameSrv.DataSource
             }
         }
 
-        public static int LoadGoodRecord(Merchant npc, string sFile) {
+        public static int LoadGoodRecord(Merchant npc, string sFile)
+        {
             int result = -1;
             string sFileName = ".\\Envir\\Market_Saved\\" + sFile + ".sav";
             //if (File.Exists(sFileName))
@@ -1005,7 +1156,8 @@ namespace GameSrv.DataSource
             return result;
         }
 
-        public static int LoadGoodPriceRecord(Merchant npc, string sFile) {
+        public static int LoadGoodPriceRecord(Merchant npc, string sFile)
+        {
             int result = -1;
             string sFileName = ".\\Envir\\Market_Prices\\" + sFile + ".prc";
             //if (File.Exists(sFileName))

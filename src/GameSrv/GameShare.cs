@@ -1,4 +1,10 @@
+using GameSrv.DataSource;
+using GameSrv.Maps;
+using GameSrv.Network;
 using GameSrv.Robots;
+using GameSrv.Services;
+using GameSrv.Word.Managers;
+using GameSrv.Word.Threads;
 using M2Server;
 using M2Server.Castle;
 using M2Server.Event;
@@ -8,14 +14,8 @@ using M2Server.Maps.AutoPath;
 using M2Server.Notices;
 using M2Server.Npc;
 using NLog;
-using System.Text.RegularExpressions;
-using GameSrv.DataSource;
-using GameSrv.Maps;
-using GameSrv.Network;
-using GameSrv.Services;
-using GameSrv.Word.Managers;
-using GameSrv.Word.Threads;
 using ScriptSystem;
+using System.Text.RegularExpressions;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -735,7 +735,7 @@ namespace GameSrv
 
         public static bool IsAccessory(ushort nIndex)
         {
-            var item = ItemSystem.GetStdItem(nIndex);
+            var item = ModuleShare.ItemSystem.GetStdItem(nIndex);
             return IsAccessoryMap.Contains(item.StdMode);
         }
 
@@ -1000,7 +1000,7 @@ namespace GameSrv
             //}
             return true;
         }
-        
+
         public static string GetUseItemName(int nIndex)
         {
             var result = string.Empty;

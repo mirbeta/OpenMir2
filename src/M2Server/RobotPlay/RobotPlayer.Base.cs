@@ -161,11 +161,11 @@ namespace M2Server.RobotPlay
                                         }
                                         if (UseItems[nWhere].Index <= 0)
                                         {
-                                            stdItem = ItemSystem.GetStdItem(UseItemNames[nWhere]);
+                                            stdItem = ModuleShare.ItemSystem.GetStdItem(UseItemNames[nWhere]);
                                             if (stdItem != null)
                                             {
                                                 userItem = new UserItem();
-                                                if (ItemSystem.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
+                                                if (ModuleShare.ItemSystem.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
                                                 {
                                                     boRecalcAbilitys = true;
                                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
@@ -190,7 +190,7 @@ namespace M2Server.RobotPlay
                                                 userItem = ItemList[j];
                                                 if (userItem != null)
                                                 {
-                                                    stdItem = ItemSystem.GetStdItem(userItem.Index);
+                                                    stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                                                     if (stdItem != null)
                                                     {
                                                         boFind = false;
@@ -205,7 +205,7 @@ namespace M2Server.RobotPlay
                                             if (!boFind)
                                             {
                                                 userItem = new UserItem();
-                                                if (ItemSystem.CopyToUserItemFromName(BagItemNames[i], ref userItem))
+                                                if (ModuleShare.ItemSystem.CopyToUserItemFromName(BagItemNames[i], ref userItem))
                                                 {
                                                     if (!AddItemToBag(userItem))
                                                     {
@@ -224,7 +224,7 @@ namespace M2Server.RobotPlay
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
-                                            stdItem = ItemSystem.GetStdItem(UseItems[nWhere].Index);
+                                            stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[nWhere].Index);
                                             if (stdItem != null)
                                             {
                                                 if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && stdItem.StdMode != 43)
@@ -914,7 +914,7 @@ namespace M2Server.RobotPlay
                     int dropWide = HUtil32._MIN(ModuleShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[nC], dropWide, true, baseObject, this.ActorId))
                     {
-                        var stdItem = ItemSystem.GetStdItem(UseItems[nC].Index);
+                        var stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -923,7 +923,7 @@ namespace M2Server.RobotPlay
                                 {
                                     dropItemList.Add(new DeleteItem()
                                     {
-                                        ItemName = ItemSystem.GetStdItemName(UseItems[nC].Index),
+                                        ItemName = ModuleShare.ItemSystem.GetStdItemName(UseItems[nC].Index),
                                         MakeIndex = UseItems[nC].MakeIndex
                                     });
                                 }

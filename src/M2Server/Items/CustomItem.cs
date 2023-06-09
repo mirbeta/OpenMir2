@@ -111,7 +111,7 @@ namespace M2Server.Items
         /// <returns></returns>
         public static string GetItemName(UserItem userItem)
         {
-            var result = ItemSystem.GetStdItemName(userItem.Index);
+            var result = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
             if (userItem.Desc[13] == 1)
             {
                 result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
@@ -174,7 +174,7 @@ namespace M2Server.Items
             //     }
             //     else
             //     {
-            //         StdItem = ItemSystem.GetStdItem(UserItem.Index);
+            //         StdItem = ModuleShare.ItemSystem.GetStdItem(UserItem.Index);
             //         if (StdItem != null)
             //         {
             //             switch(StdItem.StdMode)
@@ -219,7 +219,7 @@ namespace M2Server.Items
             // }
             // else
             // {
-            //     StdItem = ItemSystem.GetStdItem(UserItem.Index);
+            //     StdItem = ModuleShare.ItemSystem.GetStdItem(UserItem.Index);
             //     if (StdItem != null)
             //     {
             //         if (StdItem.NameColor != 0)

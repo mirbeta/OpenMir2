@@ -24,7 +24,7 @@ namespace GameSrv.Word
                 BotPlayObjectList.Add(playObject);
             }
         }
-        
+
         public void ProcessRobotPlayData()
         {
             const string sExceptionMsg = "[Exception] WorldServer::ProcessRobotPlayData";
@@ -106,7 +106,7 @@ namespace GameSrv.Word
                 _logger.Error(ex.StackTrace);
             }
         }
-        
+
         private static RobotPlayer CreateRobotPlayObject(RoBotLogon ai)
         {
             var envirnoment = GameShare.MapMgr.FindMap(ai.sMapName);

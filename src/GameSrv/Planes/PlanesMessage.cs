@@ -419,7 +419,6 @@ namespace GameSrv.Planes
 
         private static void MsgGetLoverLogin(int sNum, string Body)
         {
-            PlayObject humlover;
             string Str;
             string uname = string.Empty;
             string lovername = string.Empty;
@@ -441,7 +440,6 @@ namespace GameSrv.Planes
         private static void MsgGetLoverLogout(int sNum, string Body)
         {
             string uname = string.Empty;
-            const string sLoverFindYouMsg = "正在找你...";
             if (sNum == M2Share.ServerIndex)
             {
                 string Str = Body;

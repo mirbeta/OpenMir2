@@ -1,6 +1,5 @@
 ﻿using GameSrv.Maps;
 using M2Server;
-using M2Server.Maps;
 using NLog;
 using SystemModule.Enums;
 
@@ -12,7 +11,7 @@ namespace GameSrv
 
         protected ServerBase()
         {
-            
+
         }
 
         public async Task StartUp(CancellationToken stoppingToken)

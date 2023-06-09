@@ -4,7 +4,6 @@ using M2Server.Guild;
 using M2Server.Items;
 using M2Server.Maps.AutoPath;
 using M2Server.Notices;
-using M2Server.Npc;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -51,6 +50,7 @@ namespace M2Server
         public static CastleManager CastleMgr = null;
         public static NetworkMonitor NetworkMonitor;
         public static IWorldEngine WorldEngine;
+        public static IItemSystem ItemSystem = null;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -191,19 +191,20 @@ namespace M2Server
             EventMgr = new EventManager();
             CastleMgr = new CastleManager();
             GuildMgr = new GuildManager();
+            ItemSystem = new ItemSystem();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             ProcessHumanCriticalSection = new object();
             UserDBCriticalSection = new object();
         }
 
         public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
-            
+
         public static bool IsAccessory(ushort nIndex)
         {
-            var item = ItemSystem.GetStdItem(nIndex);
+            var item = ModuleShare.ItemSystem.GetStdItem(nIndex);
             return IsAccessoryMap.Contains(item.StdMode);
         }
-        
+
         public static bool LoadLineNotice(string FileName)
         {
             var result = false;
@@ -540,10 +541,10 @@ namespace M2Server
 
         public static int GetItemNumber()
         {
-            ModuleShare. Config.ItemNumber++;
+            ModuleShare.Config.ItemNumber++;
             if (ModuleShare.Config.ItemNumber > int.MaxValue / 2 - 1)
             {
-                ModuleShare. Config.ItemNumber = 1;
+                ModuleShare.Config.ItemNumber = 1;
             }
             return ModuleShare.Config.ItemNumber + HUtil32.GetTickCount();
         }
@@ -1405,7 +1406,7 @@ namespace M2Server
             }
             return result;
         }
-        
+
         public static bool LoadDisableSendMsgList()
         {
             var sFileName = GetEnvirFilePath("DisableSendMsgList.txt");

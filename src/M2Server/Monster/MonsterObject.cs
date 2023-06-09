@@ -5,7 +5,7 @@ using SystemModule.Enums;
 
 namespace M2Server.Monster
 {
-    public class MonsterObject : AnimalObject
+    public class MonsterObject : AnimalObject, IMonsterActor
     {
         /// <summary>
         /// 杀怪计数

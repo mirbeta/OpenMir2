@@ -609,55 +609,55 @@ namespace M2Server.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$LOGINLONG>", sText);
                     return;
                 case "$DRESS":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Dress].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Dress].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$DRESS>", sText);
                     return;
                 case "$WEAPON":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Weapon].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Weapon].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$WEAPON>", sText);
                     return;
                 case "$RIGHTHAND":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.RighThand].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.RighThand].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RIGHTHAND>", sText);
                     return;
                 case "$HELMET":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Helmet].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Helmet].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$HELMET>", sText);
                     return;
                 case "$NECKLACE":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Necklace].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Necklace].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$NECKLACE>", sText);
                     return;
                 case "$RING_R":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringr].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringr].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_R>", sText);
                     return;
                 case "$RING_L":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringl].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Ringl].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$RING_L>", sText);
                     return;
                 case "$ARMRING_R":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingr].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingr].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_R>", sText);
                     return;
                 case "$ARMRING_L":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingl].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.ArmRingl].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$ARMRING_L>", sText);
                     return;
                 case "$BUJUK":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Bujuk].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Bujuk].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BUJUK>", sText);
                     return;
                 case "$BELT":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Belt].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Belt].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BELT>", sText);
                     return;
                 case "$BOOTS":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Boots].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Boots].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$BOOTS>", sText);
                     return;
                 case "$CHARM":
-                    sText = ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Charm].Index);
+                    sText = ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[ItemLocation.Charm].Index);
                     sMsg = ReplaceVariableText(sMsg, "<$CHARM>", sText);
                     return;
                 case "$IPADDR":
@@ -1329,7 +1329,7 @@ namespace M2Server.Npc
                 int n18 = HUtil32.StrToInt(s14, -1);
                 if (n18 >= 0 && n18 <= 15 && PlayObject.UseItems[n18] != null && PlayObject.UseItems[n18].Index > 0)
                 {
-                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", ItemSystem.GetStdItemName(PlayObject.UseItems[n18].Index));
+                    sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", ModuleShare.ItemSystem.GetStdItemName(PlayObject.UseItems[n18].Index));
                 }
                 else
                 {

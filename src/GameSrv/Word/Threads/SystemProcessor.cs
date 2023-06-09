@@ -21,7 +21,7 @@ namespace GameSrv.Word.Threads
         {
             throw new NotImplementedException();
         }
-        
+
         protected override void Startup(CancellationToken stoppingToken)
         {
             RunTimeTick = HUtil32.GetTickCount();
@@ -31,7 +31,7 @@ namespace GameSrv.Word.Threads
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            
+
         }
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)

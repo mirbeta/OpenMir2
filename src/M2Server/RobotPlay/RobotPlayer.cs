@@ -564,15 +564,15 @@ namespace M2Server.RobotPlay
             else
             {
                 // 捡物品
-                var stdItem = ItemSystem.GetStdItem(mapItem.UserItem.Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(mapItem.UserItem.Index);
                 if (stdItem != null)
                 {
                     UserItem userItem = null;
                     if (Envir.DeleteFromMap(nX, nY, CellType.Item, mapItem.ItemId, null) == 1)
                     {
                         userItem = mapItem.UserItem;
-                        stdItem = ItemSystem.GetStdItem(userItem.Index);
-                        if (stdItem != null && IsAddWeightAvailable(ItemSystem.GetStdItemWeight(userItem.Index)))
+                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                        if (stdItem != null && IsAddWeightAvailable(ModuleShare.ItemSystem.GetStdItemWeight(userItem.Index)))
                         {
                             //if (GetCheckItemList(18, StdItem.Name))
                             //{
@@ -684,7 +684,7 @@ namespace M2Server.RobotPlay
                                     var mapItem = visibleMapItem.MapItem;
                                     if (mapItem.ItemId > 0)
                                     {
-                                        if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(ItemSystem.GetStdItemWeight(mapItem.UserItem.Index)))
+                                        if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(ModuleShare.ItemSystem.GetStdItemWeight(mapItem.UserItem.Index)))
                                         {
                                             if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == ActorId || (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Master == this))
                                             {
@@ -1474,7 +1474,7 @@ namespace M2Server.RobotPlay
             if (UseItems[ItemLocation.ArmRingl] != null && UseItems[ItemLocation.ArmRingl].Index > 0 &&
                 Math.Round(Convert.ToDouble(UseItems[ItemLocation.ArmRingl].Dura / 100)) >= nCount)
             {
-                var stdItem = ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                 if (stdItem != null)
                 {
                     result = CheckItemType(nItemType, stdItem);
@@ -1490,7 +1490,7 @@ namespace M2Server.RobotPlay
             var result = -1;
             for (var i = 0; i < ItemList.Count; i++)
             {
-                var stdItem = ItemSystem.GetStdItem(ItemList[i].Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (CheckItemType(nItemType, stdItem) && HUtil32.Round(ItemList[i].Dura / 100.0) >= nCount)
@@ -1512,7 +1512,7 @@ namespace M2Server.RobotPlay
                 var userItem = ItemList[nIndex];
                 if (UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
-                    var stdItem = ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                    var stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (stdItem != null)
                     {
                         if (CheckItemType(nItemType, stdItem))
@@ -3774,7 +3774,7 @@ namespace M2Server.RobotPlay
             {
                 if (UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
-                    amuletStdItem = ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                    amuletStdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (amuletStdItem != null)
                     {
                         if (amuletStdItem.StdMode == 25)
@@ -3801,7 +3801,7 @@ namespace M2Server.RobotPlay
                 }
                 if (UseItems[ItemLocation.Bujuk] != null && UseItems[ItemLocation.Bujuk].Index > 0)
                 {
-                    amuletStdItem = ItemSystem.GetStdItem(UseItems[ItemLocation.Bujuk].Index);
+                    amuletStdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Bujuk].Index);
                     if (amuletStdItem != null)
                     {
                         if (amuletStdItem.StdMode == 25)
@@ -3835,7 +3835,7 @@ namespace M2Server.RobotPlay
                         var userItem = ItemList[i];
                         if (userItem != null)
                         {
-                            amuletStdItem = ItemSystem.GetStdItem(userItem.Index);
+                            amuletStdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (amuletStdItem != null)
                             {
                                 if (amuletStdItem.StdMode == 25)

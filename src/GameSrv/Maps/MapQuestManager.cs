@@ -56,7 +56,7 @@ namespace GameSrv.Maps
             QuestList.Add(mapQuest);
             return true;
         }
-        
+
         public Merchant GetQuestNpc(PlayObject baseObject, string sChrName, string itemName, bool boFlag)
         {
             for (int i = 0; i < QuestList.Count; i++)

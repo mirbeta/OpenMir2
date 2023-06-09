@@ -432,5 +432,7 @@ namespace SystemModule
         void SetTargetCreat(IActor actor);
 
         IActor GetPoseCreate();
+
+        void OnEnvirnomentChanged();
     }
 }

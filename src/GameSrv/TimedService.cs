@@ -43,7 +43,7 @@ namespace GameSrv
             {
                 while (await _timer.WaitForNextTickAsync(stoppingToken))
                 {
-                   await ExecuteInternal();
+                    await ExecuteInternal();
                 }
             }
             catch (OperationCanceledException)

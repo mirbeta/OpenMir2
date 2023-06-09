@@ -75,11 +75,11 @@ namespace M2Server.RobotPlay
                 for (int i = 0; i < tempList.Count; i++)
                 {
                     var sItemName = tempList[i].Trim();
-                    stdItem = ItemSystem.GetStdItem(sItemName);
+                    stdItem = ModuleShare.ItemSystem.GetStdItem(sItemName);
                     if (stdItem != null)
                     {
                         userItem = new UserItem();
-                        if (ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                             {
@@ -127,11 +127,11 @@ namespace M2Server.RobotPlay
             {
                 if (!string.IsNullOrEmpty(UseItemNames[i]))
                 {
-                    stdItem = ItemSystem.GetStdItem(UseItemNames[i]);
+                    stdItem = ModuleShare.ItemSystem.GetStdItem(UseItemNames[i]);
                     if (stdItem != null)
                     {
                         userItem = new UserItem();
-                        if (ItemSystem.CopyToUserItemFromName(UseItemNames[i], ref userItem))
+                        if (ModuleShare.ItemSystem.CopyToUserItemFromName(UseItemNames[i], ref userItem))
                         {
                             if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                             {

@@ -1,6 +1,4 @@
 ﻿using M2Server;
-using M2Server.Actor;
-using M2Server.Items;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
 using M2Server.Npc;
@@ -8,8 +6,10 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.Word {
-    public partial class WorldServer {
+namespace GameSrv.Word
+{
+    public partial class WorldServer
+    {
         /// <summary>
         /// 怪物刷新列表
         /// Key:线程ID
@@ -276,41 +276,41 @@ namespace GameSrv.Word {
                                 {
                                     if ((dwCurrentTick - monster.RunTick) > monster.RunTime)
                                     {
-                                        //monster.RunTick = dwRunTick;
-                                        //if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
-                                        //{
-                                        //    if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
-                                        //    {
-                                        //        if (monster.ReAliveEx(monster.MonGen))
-                                        //        {
-                                        //            monster.ProcessRunCount = 0;
-                                        //            monster.ReAliveTick = HUtil32.GetTickCount();
-                                        //        }
-                                        //    }
-                                        //}
-                                        //if (!monster.IsVisibleActive && (monster.ProcessRunCount < SystemShare.Config.ProcessMonsterInterval))
-                                        //{
-                                        //    monster.ProcessRunCount++;
-                                        //}
-                                        //else
-                                        //{
-                                        //    if (monster.IsSlave || (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster))// 守卫和下属主动搜索附近的精灵
-                                        //    {
-                                        //        if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
-                                        //        {
-                                        //            monster.SearchTick = HUtil32.GetTickCount();
-                                        //            //怪物主动搜索视觉范围，修改为人物视野被动激活，从而大幅度降低CPU使用率
-                                        //            //区分哪些怪物是主动攻击，哪些怪物是被动攻击
-                                        //            //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
-                                        //            //其余怪物均为主动攻击
-                                        //            //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
-                                        //            //由玩家找出附近的怪物，然后添加到怪物视野范围
-                                        //            monster.SearchViewRange();
-                                        //        }
-                                        //    }
-                                        //   // monster.ProcessRunCount = 0;
-                                        //   // monster.Run();
-                                        //}
+                                        monster.RunTick = dwRunTick;
+                                        if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
+                                        {
+                                            if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
+                                            {
+                                                if (monster.ReAliveEx(monster.MonGen))
+                                                {
+                                                    monster.ProcessRunCount = 0;
+                                                    monster.ReAliveTick = HUtil32.GetTickCount();
+                                                }
+                                            }
+                                        }
+                                        if (!monster.IsVisibleActive && (monster.ProcessRunCount < ModuleShare.Config.ProcessMonsterInterval))
+                                        {
+                                            monster.ProcessRunCount++;
+                                        }
+                                        else
+                                        {
+                                            if (monster.IsSlave || (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster))// 守卫和下属主动搜索附近的精灵
+                                            {
+                                                if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
+                                                {
+                                                    monster.SearchTick = HUtil32.GetTickCount();
+                                                    //怪物主动搜索视觉范围，修改为人物视野被动激活，从而大幅度降低CPU使用率
+                                                    //区分哪些怪物是主动攻击，哪些怪物是被动攻击
+                                                    //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
+                                                    //其余怪物均为主动攻击
+                                                    //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
+                                                    //由玩家找出附近的怪物，然后添加到怪物视野范围
+                                                    monster.SearchViewRange();
+                                                }
+                                            }
+                                            monster.ProcessRunCount = 0;
+                                            monster.Run();
+                                        }
                                     }
                                     monsterThread.MonsterProcessPostion++;
                                 }
@@ -359,23 +359,29 @@ namespace GameSrv.Word {
         /// </summary>
         /// <param name="monGen"></param>
         /// <returns></returns>
-        private static int GetGenMonCount(MonGenInfo monGen) {
+        private static int GetGenMonCount(MonGenInfo monGen)
+        {
             var nCount = 0;
-            for (var i = 0; i < monGen.CertList.Count; i++) {
+            for (var i = 0; i < monGen.CertList.Count; i++)
+            {
                 var baseObject = monGen.CertList[i];
-                if (!baseObject.Death && !baseObject.Ghost) {
+                if (!baseObject.Death && !baseObject.Ghost)
+                {
                     nCount++;
                 }
             }
             return nCount;
         }
 
-        public IActor RegenMonsterByName(string sMap, short nX, short nY, string sMonName) {
+        public IActor RegenMonsterByName(string sMap, short nX, short nY, string sMonName)
+        {
             var nRace = GetMonRace(sMonName);
             var baseObject = CreateMonster(sMap, nX, nY, nRace, sMonName);
-            if (baseObject != null) {
+            if (baseObject != null)
+            {
                 var threadId = GetMonsterThreadId(sMonName);
-                if (threadId >= 0) {
+                if (threadId >= 0)
+                {
                     var MonGenInfo = new MonGenInfo();
                     MonGenInfo.MapName = sMap;
                     MonGenInfo.X = nX;
@@ -385,9 +391,10 @@ namespace GameSrv.Word {
                     MonGenInfo.Count = 1;
                     MonGenInfo.ZenTime = 0;
                     MonGenInfo.MissionGenRate = 0;// 集中座标刷新机率 1 -100
-                    MonGenInfo.CertList = new List<IActor>();
+                    MonGenInfo.CertList = new List<IMonsterActor>();
                     MonGenInfo.Envir = GameShare.MapMgr.FindMap(MonGenInfo.MapName);
-                    if (MonGenInfo.TryAdd(baseObject)) {
+                    if (MonGenInfo.TryAdd(baseObject))
+                    {
                         MonGenInfo.CertCount++;
                     }
                     MonGenInfoThreadMap[threadId].Add(MonGenInfo);
@@ -410,7 +417,8 @@ namespace GameSrv.Word {
                     baseObject.Envir.AddObject(baseObject);
                     baseObject.AddToMaped = true;
                 }
-                else {
+                else
+                {
                     return null;
                 }
             }
@@ -422,7 +430,7 @@ namespace GameSrv.Word {
         /// 即创建怪物对象的时候已经算好要掉落的物品和属性
         /// </summary>
         /// <returns></returns>
-        private void MonGetRandomItems(BaseObject mon)
+        private void MonGetRandomItems(IMonsterActor mon)
         {
             var itemName = string.Empty;
             if (MonsterList.TryGetValue(mon.ChrName, out var monster))
@@ -444,20 +452,20 @@ namespace GameSrv.Word {
                             {
                                 if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
                                 UserItem userItem = null;
-                                if (ItemSystem.CopyToUserItemFromName(itemName, ref userItem))
+                                if (ModuleShare.ItemSystem.CopyToUserItemFromName(itemName, ref userItem))
                                 {
                                     userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100.0 * (20 + M2Share.RandomNumber.Random(80)));
-                                    var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                                    var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                                     if (stdItem == null) continue;
                                     if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(ModuleShare.Config.MonRandomAddValue) == 0) //极品掉落几率
                                     {
-                                        M2Server.Items.ItemSystem.RandomUpgradeItem(stdItem, userItem);
+                                        ModuleShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                                     }
                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                                     {
                                         if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                         {
-                                            M2Server.Items.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
+                                            ModuleShare.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
                                         }
                                     }
                                     mon.ItemList.Add(userItem);
@@ -473,11 +481,13 @@ namespace GameSrv.Word {
         /// 创建对象
         /// </summary>
         /// <returns></returns>
-        private AnimalObject CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName) {
-            AnimalObject cert = null;
+        private IMonsterActor CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName)
+        {
+            IMonsterActor cert = null;
             var map = GameShare.MapMgr.FindMap(sMapName);
             if (map == null) return null;
-            switch (nMonRace) {
+            switch (nMonRace)
+            {
                 case ActorRace.Supreguard:
                     cert = new SuperGuard();
                     break;
@@ -488,22 +498,27 @@ namespace GameSrv.Word {
                     cert = new ArcherPolice();
                     break;
                 case ActorRace.AnimalChicken:
-                    cert = new MonsterObject {
+                    cert = new MonsterObject
+                    {
                         Animal = true,
                         MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000),
                         BodyLeathery = 50
                     };
                     break;
                 case ActorRace.AnimalDeer:
-                    if (M2Share.RandomNumber.Random(30) == 0) {
-                        cert = new ChickenDeer {
+                    if (M2Share.RandomNumber.Random(30) == 0)
+                    {
+                        cert = new ChickenDeer
+                        {
                             Animal = true,
                             MeatQuality = (ushort)(M2Share.RandomNumber.Random(20000) + 10000),
                             BodyLeathery = 150
                         };
                     }
-                    else {
-                        cert = new MonsterObject() {
+                    else
+                    {
+                        cert = new MonsterObject()
+                        {
                             Animal = true,
                             MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
                             BodyLeathery = 150
@@ -511,7 +526,8 @@ namespace GameSrv.Word {
                     }
                     break;
                 case ActorRace.AnimalWolf:
-                    cert = new AtMonster {
+                    cert = new AtMonster
+                    {
                         Animal = true,
                         MeatQuality = (ushort)(M2Share.RandomNumber.Random(8000) + 8000),
                         BodyLeathery = 150
@@ -581,7 +597,8 @@ namespace GameSrv.Word {
                     cert = new WhiteSkeleton();
                     break;
                 case ActorRace.MonsterSculture:
-                    cert = new ScultureMonster {
+                    cert = new ScultureMonster
+                    {
                         BoFearFire = true
                     };
                     break;
@@ -694,7 +711,8 @@ namespace GameSrv.Word {
             MonGetRandomItems(cert);
             if (M2Share.RandomNumber.Random(100) < cert.CoolEyeCode) cert.CoolEye = true;
             cert.Initialize();
-            if (cert.AddtoMapSuccess) {
+            if (cert.AddtoMapSuccess)
+            {
                 bool outofrange = false;
                 short n20 = cert.Envir.Width < 50 ? (short)2 : (short)3;
                 short n24;
@@ -707,12 +725,16 @@ namespace GameSrv.Word {
                     n24 = 50;
                 }
                 int n1C = 0;
-                while (true) {
-                    if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false)) {
-                        if ((cert.Envir.Width - n24 - 1) > cert.CurrX) {
+                while (true)
+                {
+                    if (!cert.Envir.CanWalk(cert.CurrX, cert.CurrY, false))
+                    {
+                        if ((cert.Envir.Width - n24 - 1) > cert.CurrX)
+                        {
                             cert.CurrX += n20;
                         }
-                        else {
+                        else
+                        {
                             cert.CurrX = (short)(M2Share.RandomNumber.Random(cert.Envir.Width / 2) + n24);
                             if (cert.Envir.Height - n24 - 1 > cert.CurrY)
                                 cert.CurrY += n20;
@@ -720,14 +742,16 @@ namespace GameSrv.Word {
                                 cert.CurrY = (short)(M2Share.RandomNumber.Random(cert.Envir.Height / 2) + n24);
                         }
                     }
-                    else {
+                    else
+                    {
                         outofrange = cert.Envir.AddMapObject(cert.CurrX, cert.CurrY, CellType.Monster, cert.ActorId, cert);
                         break;
                     }
                     n1C++;
                     if (n1C >= 31) break;
                 }
-                if (!outofrange) {
+                if (!outofrange)
+                {
                     //_logger.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
                     return null;
                 }
@@ -742,7 +766,7 @@ namespace GameSrv.Word {
         /// <returns></returns>
         private bool RegenMonsters(MonGenInfo monGen, int nCount)
         {
-            AnimalObject cert;
+            IMonsterActor cert;
             const string sExceptionMsg = "[Exception] WorldEngine::RegenMonsters";
             var result = true;
             var dwStartTick = HUtil32.GetTickCount();
@@ -809,7 +833,8 @@ namespace GameSrv.Word {
             return result;
         }
 
-        private void ApplyMonsterAbility(AnimalObject baseObject, string sMonName) {
+        private void ApplyMonsterAbility(IMonsterActor baseObject, string sMonName)
+        {
             if (!MonsterList.TryGetValue(sMonName, out var monster)) return;
             baseObject.Race = monster.Race;
             baseObject.RaceImg = monster.RaceImg;

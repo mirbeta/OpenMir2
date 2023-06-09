@@ -16,7 +16,7 @@ namespace GameSrv.Word.Threads
         {
             throw new NotImplementedException();
         }
-        
+
         protected override void Startup(CancellationToken stoppingToken)
         {
             _logger.Info("事件管理线程初始化完成...");

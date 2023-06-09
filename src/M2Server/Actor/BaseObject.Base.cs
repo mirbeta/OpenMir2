@@ -515,7 +515,7 @@ namespace M2Server.Actor
                 int dropWide = HUtil32._MIN(ModuleShare.Config.DropItemRage, 7);
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    var stdItem = ItemSystem.GetStdItem(ItemList[i].Index);
+                    var stdItem = ModuleShare.ItemSystem.GetStdItem(ItemList[i].Index);
                     var boCanNotDrop = false;
                     if (stdItem != null)
                     {

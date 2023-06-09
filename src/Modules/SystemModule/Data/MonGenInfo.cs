@@ -29,7 +29,7 @@
         /// <summary>
         /// 对象列表
         /// </summary>
-        public IList<IActor> CertList;
+        public IList<IMonsterActor> CertList;
         public int CertCount;
         public IEnvirnoment Envir;
         public int Race;
@@ -49,7 +49,7 @@
         /// </summary>
         /// <param name="baseObject"></param>
         /// <returns></returns>
-        public bool TryAdd(IActor baseObject)
+        public bool TryAdd(IMonsterActor baseObject)
         {
             if (CertList.Count > MonGenConst.ThreadMonLimit)
             {

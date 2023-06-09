@@ -1053,7 +1053,7 @@ namespace SystemModule
 
         void RefRankInfo(short nRankNo, string sRankName);
 
-        void  ReAlive();
+        void ReAlive();
 
         void LeaveGroup();
 
@@ -1086,7 +1086,7 @@ namespace SystemModule
         byte GetBackDir(byte dir);
 
         void ClientGuildAlly();
-        
+
         void ClientGuildBreakAlly(string guildName);
     }
 }

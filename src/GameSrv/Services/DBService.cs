@@ -1,7 +1,7 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using M2Server;
+﻿using M2Server;
 using NLog;
+using System.Net;
+using System.Net.Sockets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.SocketComponents.AsyncSocketClient;
 using SystemModule.SocketComponents.Event;

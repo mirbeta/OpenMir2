@@ -1,4 +1,13 @@
-﻿using GameSrv.Robots;
+﻿using GameSrv.DataSource;
+using GameSrv.Maps;
+using GameSrv.Network;
+using GameSrv.NPC;
+using GameSrv.Planes;
+using GameSrv.Robots;
+using GameSrv.Services;
+using GameSrv.Word;
+using GameSrv.Word.Managers;
+using M2Server;
 using M2Server.Castle;
 using M2Server.Event;
 using M2Server.Guild;
@@ -7,15 +16,6 @@ using M2Server.Notices;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
-using GameSrv.DataSource;
-using GameSrv.Maps;
-using GameSrv.Network;
-using GameSrv.NPC;
-using GameSrv.Planes;
-using GameSrv.Services;
-using GameSrv.Word;
-using GameSrv.Word.Managers;
-using M2Server;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -124,7 +124,7 @@ namespace GameSrv
                 _logger.Info($"物品数据库加载失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"物品数据库加载成功...[{ItemSystem.StdItemList.Count}]");
+            _logger.Info($"物品数据库加载成功...[{ModuleShare.ItemSystem.ItemCount}]");
             nCode = Map.LoadMinMap();
             if (nCode < 0)
             {

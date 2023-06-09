@@ -6,12 +6,12 @@ using SystemModule.Enums;
 
 namespace M2Server.Actor
 {
-    public class AnimalObject : BaseObject
+    public class AnimalObject : BaseObject, IMonsterActor
     {
         /// <summary>
         /// 经验值
         /// </summary>
-        public int FightExp = 0;
+        public int FightExp { get; set; }
         internal short TargetX;
         internal short TargetY;
         public bool RunAwayMode;
@@ -21,8 +21,8 @@ namespace M2Server.Actor
         /// <summary>
         /// 行走步伐
         /// </summary>
-        public int WalkStep = 0;
-        public int WalkWait = 0;
+        public int WalkStep { get; set; }
+        public int WalkWait { get; set; }
         protected int WalkCount;
         protected int WalkWaitTick;
         /// <summary>
@@ -36,7 +36,7 @@ namespace M2Server.Actor
         /// <summary>
         /// 当前处理数量
         /// </summary>
-        public int ProcessRunCount;
+        public int ProcessRunCount { get; set; }
         /// <summary>
         /// 非攻击模式 F-可攻击 T-不攻击
         /// </summary>
@@ -44,7 +44,7 @@ namespace M2Server.Actor
         /// <summary>
         /// 是否属于召唤怪物(宝宝)
         /// </summary>
-        public bool IsSlave;
+        public bool IsSlave { get; set; }
         /// <summary>
         /// 说话信息列表
         /// </summary>

@@ -201,7 +201,7 @@ namespace GameSrv.NPC
                     return;
                 }
             }
-            var stdItem = ItemSystem.GetStdItem(nIndex);
+            var stdItem = ModuleShare.ItemSystem.GetStdItem(nIndex);
             if (stdItem != null)
             {
                 AddItemPrice(nIndex, HUtil32.Round(stdItem.Price * 1.1));
@@ -225,7 +225,7 @@ namespace GameSrv.NPC
                     if ((HUtil32.GetTickCount() - goods.RefillTick) > (goods.RefillTime * 60 * 1000))
                     {
                         goods.RefillTick = HUtil32.GetTickCount();
-                        nIndex = ItemSystem.GetStdItemIdx(goods.ItemName);
+                        nIndex = ModuleShare.ItemSystem.GetStdItemIdx(goods.ItemName);
                         if (nIndex > 0)
                         {
                             IList<UserItem> refillList = GetRefillList(nIndex);
@@ -256,7 +256,7 @@ namespace GameSrv.NPC
                         for (var j = 0; j < RefillGoodsList.Count; j++)
                         {
                             goods = RefillGoodsList[j];
-                            nIndex = ItemSystem.GetStdItemIdx(goods.ItemName);
+                            nIndex = ModuleShare.ItemSystem.GetStdItemIdx(goods.ItemName);
                             if (refillList20[0].Index == nIndex)
                             {
                                 bo21 = true;
@@ -310,7 +310,7 @@ namespace GameSrv.NPC
             for (var i = 0; i < nInt; i++)
             {
                 var goodItem = new UserItem();
-                if (ItemSystem.CopyToUserItemFromName(sItemName, ref goodItem))
+                if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref goodItem))
                 {
                     list.Insert(0, goodItem);
                 }
@@ -363,7 +363,7 @@ namespace GameSrv.NPC
             }
             if (result < 0)
             {
-                var stdItem = ItemSystem.GetStdItem(nIndex);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(nIndex);
                 if (stdItem != null)
                 {
                     if (CheckItemType(stdItem.StdMode))
@@ -394,7 +394,7 @@ namespace GameSrv.NPC
             for (var i = itemList.Count - 1; i >= 0; i--)
             {
                 var userItem = itemList[i];
-                if (ItemSystem.GetStdItemName(userItem.Index) == ModuleShare.Config.BlackStone)
+                if (ModuleShare.ItemSystem.GetStdItemName(userItem.Index) == ModuleShare.Config.BlackStone)
                 {
                     duraList.Add(Math.Round(userItem.Dura / 1.0e3));
                     if (delItemList == null)
@@ -413,10 +413,10 @@ namespace GameSrv.NPC
                 {
                     if (M2Share.IsAccessory(userItem.Index))
                     {
-                        var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                        var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
-                            ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                            ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                             //StdItem.GetItemAddValue(UserItem, ref StdItem80);
                             nDc = 0;
                             nSc = 0;
@@ -563,7 +563,7 @@ namespace GameSrv.NPC
                     UserName = user.ChrName,
                     UserItem = new UserItem(user.UseItems[ItemLocation.Weapon])
                 };
-                var stdItem = ItemSystem.GetStdItem(user.UseItems[ItemLocation.Weapon].Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(user.UseItems[ItemLocation.Weapon].Index);
                 if (stdItem.NeedIdentify == 1)
                 {
                     //  M2Share.EventSource.AddEventLog(25, user.MapName + "\t" + user.CurrX + "\t" + user.CurrY + "\t" + user.ChrName + "\t" + stdItem.Name + "\t" + user.UseItems[ItemLocation.Weapon].MakeIndex + "\t" + '1' + "\t" + '0');
@@ -740,7 +740,7 @@ namespace GameSrv.NPC
                     }
                 }
                 var userItem = upgradeInfo.UserItem;
-                var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem.NeedIdentify == 1)
                 {
                     //  M2Share.EventSource.AddEventLog(24, user.MapName + "\t" + user.CurrX + "\t" + user.CurrY + "\t" + user.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -1070,7 +1070,7 @@ namespace GameSrv.NPC
             {
                 IList<UserItem> goods = GoodsList[i];
                 var userItem = goods[0];
-                var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
                     var sName = CustomItem.GetItemName(userItem);
@@ -1107,7 +1107,7 @@ namespace GameSrv.NPC
             var sSendMsg = string.Empty;
             for (var i = 0; i < GoodsList.Count; i++)
             {
-                var stdItem = ItemSystem.GetStdItem(GoodsList[i][0].Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(GoodsList[i][0].Index);
                 if (stdItem != null)
                 {
                     sSendMsg = sSendMsg + stdItem.Name + '/' + 0 + '/' + ModuleShare.Config.MakeDurgPrice + '/' + 1 + '/';
@@ -1220,7 +1220,7 @@ namespace GameSrv.NPC
                     {
                         if (playObject.UseItems[ItemLocation.Weapon] != null && playObject.UseItems[ItemLocation.Weapon].Index != 0)
                         {
-                            sText = ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
+                            sText = ModuleShare.ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
                         }
                         else
                         {
@@ -1237,7 +1237,7 @@ namespace GameSrv.NPC
             var itemPrice = GetItemPrice(userItem.Index);
             if (itemPrice > 0)
             {
-                var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.StdMode > 4 && stdItem.DuraMax > 0 && userItem.DuraMax > 0)
                 {
                     double n20;
@@ -1333,7 +1333,7 @@ namespace GameSrv.NPC
                 }
                 IList<UserItem> list20 = GoodsList[i];
                 var userItem = list20[0];
-                var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
                     var sUserItemName = CustomItem.GetItemName(userItem);
@@ -1418,7 +1418,7 @@ namespace GameSrv.NPC
                     continue;
                 }
                 var userItem = list20[0];
-                var item = ItemSystem.GetStdItem(userItem.Index);
+                var item = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (item != null && item.Name == sItemName)
                 {
                     if (list20.Count - 1 < nInt)
@@ -1429,7 +1429,7 @@ namespace GameSrv.NPC
                     {
                         userItem = list20[j];
                         var clientItem = new ClientItem();
-                        ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
+                        ModuleShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Dura = userItem.Dura;
                         clientItem.DuraMax = (ushort)GetUserPrice(playObject, GetUserItemPrice(userItem));
@@ -1468,7 +1468,7 @@ namespace GameSrv.NPC
         private static bool ClientSellItem_sub_4A1C84(UserItem userItem)
         {
             var result = true;
-            var stdItem = ItemSystem.GetStdItem(userItem.Index);
+            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null && (stdItem.StdMode == 25 || stdItem.StdMode == 30))
             {
                 if (userItem.Dura < 4000)
@@ -1500,7 +1500,7 @@ namespace GameSrv.NPC
                     }
                     playObject.SendMsg(Messages.RM_USERSELLITEM_OK, 0, playObject.Gold, 0, 0);
                     AddItemToGoodsList(userItem);
-                    var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                    var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         // M2Share.EventSource.AddEventLog(10, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -1550,7 +1550,7 @@ namespace GameSrv.NPC
                 n1C = list10[i].ItemCount;
                 for (var j = 0; j < playObject.ItemList.Count; j++)
                 {
-                    if (ItemSystem.GetStdItemName(playObject.ItemList[j].Index) == s20)
+                    if (ModuleShare.ItemSystem.GetStdItemName(playObject.ItemList[j].Index) == s20)
                     {
                         n1C -= 1;
                     }
@@ -1575,7 +1575,7 @@ namespace GameSrv.NPC
                             break;
                         }
                         var userItem = playObject.ItemList[j];
-                        if (ItemSystem.GetStdItemName(userItem.Index) == s20)
+                        if (ModuleShare.ItemSystem.GetStdItemName(userItem.Index) == s20)
                         {
                             if (list28 == null)
                             {
@@ -1609,7 +1609,7 @@ namespace GameSrv.NPC
             {
                 IList<UserItem> list1C = GoodsList[i];
                 var makeItem = list1C[0];
-                var stdItem = ItemSystem.GetStdItem(makeItem.Index);
+                var stdItem = ModuleShare.ItemSystem.GetStdItem(makeItem.Index);
                 if (stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (playObject.Gold >= ModuleShare.Config.MakeDurgPrice)
@@ -1617,12 +1617,12 @@ namespace GameSrv.NPC
                         if (ClientMakeDrugCheckNeedItem(playObject, sItemName))
                         {
                             var userItem = new UserItem();
-                            ItemSystem.CopyToUserItemFromName(sItemName, ref userItem);
+                            ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem);
                             if (playObject.AddItemToBag(userItem))
                             {
                                 playObject.Gold -= ModuleShare.Config.MakeDurgPrice;
                                 playObject.SendAddItem(userItem);
-                                stdItem = ItemSystem.GetStdItem(userItem.Index);
+                                stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
                                 {
                                     //  M2Share.EventSource.AddEventLog(2, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -1723,7 +1723,7 @@ namespace GameSrv.NPC
             {
                 nPrice = nPrice * ModuleShare.Config.SuperRepairPriceRate;
             }
-            var stdItem = ItemSystem.GetStdItem(userItem.Index);
+            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 if (nPrice > 0 && userItem.DuraMax > userItem.Dura && stdItem.StdMode != 43)

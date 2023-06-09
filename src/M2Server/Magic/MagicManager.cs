@@ -225,7 +225,7 @@ namespace M2Server.Magic
                     {
                         if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx))
                         {
-                            var stdItem = ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                            var stdItem = ModuleShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                             if (stdItem != null)
                             {
                                 MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);
@@ -904,7 +904,7 @@ namespace M2Server.Magic
                 {
                     if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx))
                     {
-                        var stdItem = ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                        var stdItem = ModuleShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                         if (stdItem != null)
                         {
                             MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);

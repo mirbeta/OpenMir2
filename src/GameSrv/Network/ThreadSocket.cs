@@ -1,12 +1,12 @@
-﻿using System.Buffers;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
-using System.Threading.Channels;
-using GameSrv.Services;
+﻿using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
 using M2Server.Player;
 using NLog;
+using System.Buffers;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
+using System.Threading.Channels;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -21,7 +21,7 @@ namespace GameSrv.Network
         private readonly object runSocketSection;
         private readonly CancellationTokenSource _cancellation;
         private CommandMessage mesaagePacket;
-        public string ConnectionId { get;  }
+        public string ConnectionId { get; }
 
         public ThreadSocket(ThreadGateInfo gateInfo)
         {
@@ -120,7 +120,7 @@ namespace GameSrv.Network
             //data.CopyTo(sendData.Memory);
             _sendQueue.SendMessage(data);
         }
-        
+
         static ArraySegment<byte> GetArraySegment(ref ReadOnlySequence<byte> input)
         {
             if (input.IsSingleSegment && MemoryMarshal.TryGetArray(input.First, out var segment))
@@ -244,14 +244,14 @@ namespace GameSrv.Network
                         break;
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error(sExceptionMsg);
                 _logger.Error(ex);
             }
         }
 
-        private bool GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionId, ref int nVersion, ref bool boFlag, ref byte[] tHwid,ref int gateId)
+        private bool GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionId, ref int nVersion, ref bool boFlag, ref byte[] tHwid, ref int gateId)
         {
             var result = false;
             var sCodeStr = string.Empty;
@@ -296,7 +296,7 @@ namespace GameSrv.Network
                     _logger.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.Error(sExceptionMsg);
                 _logger.Error(ex);
@@ -327,7 +327,7 @@ namespace GameSrv.Network
                     {
                         HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
                         var packetMsg = sMsg.AsSpan()[1..].ToString();
-                        if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid,ref gateIdx))
+                        if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
                         {
                             sessInfo = IdSrvClient.Instance.GetAdmission(sAccount, gateUser.sIPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (sessInfo != null && nPayMent > 0)

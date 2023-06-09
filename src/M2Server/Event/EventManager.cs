@@ -3,7 +3,7 @@ using SystemModule.Events;
 
 namespace M2Server.Event
 {
-    public class EventManager 
+    public class EventManager
     {
         private readonly IList<MapEvent> _eventList;
         private readonly IList<MapEvent> _closedEventList;

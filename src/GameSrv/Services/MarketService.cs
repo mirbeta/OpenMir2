@@ -1,8 +1,8 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using M2Server;
+﻿using M2Server;
 using M2Server.Player;
 using NLog;
+using System.Net;
+using System.Net.Sockets;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.Data;
@@ -224,7 +224,7 @@ namespace GameSrv.Services
                         switch (commandMessage.Ident)
                         {
                             case Messages.DB_LOADMARKETSUCCESS:
-                               // M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                // M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                                 _logger.Info("加载拍卖行数据成功...");
                                 break;
                             case Messages.DB_LOADMARKETFAIL:

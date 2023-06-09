@@ -536,7 +536,7 @@ namespace M2Server.Actor
             bool result = false;
             short dx = 0;
             short dy = 0;
-            StdItem stdItem = ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 if (stdItem.StdMode == 40)
@@ -1356,7 +1356,7 @@ namespace M2Server.Actor
             ushort result = 0;
             for (int i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = ItemSystem.GetStdItem(ItemList[i].Index);
+                StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     result += stdItem.Weight;
@@ -1698,7 +1698,7 @@ namespace M2Server.Actor
             }
             for (int i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = ItemSystem.GetStdItem(ItemList[i].Index);
+                StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (stdItem.StdMode == 40)
@@ -2190,7 +2190,7 @@ namespace M2Server.Actor
                 {
                     continue;
                 }
-                if (string.Compare(ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     return userItem;
                 }
@@ -2215,7 +2215,7 @@ namespace M2Server.Actor
             {
                 UserItem userItem = ItemList[i];
                 if ((userItem.MakeIndex == nItemIndex) &&
-                    string.Compare(ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                    string.Compare(ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);
                     ItemList.RemoveAt(i);

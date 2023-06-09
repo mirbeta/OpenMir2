@@ -8,14 +8,14 @@ namespace GameSrv.Word.Threads
 
         public TimedRobotProcessor() : base(TimeSpan.FromMilliseconds(20), "TimedRobotProcessor")
         {
-            
+
         }
-        
+
         public override void Initialize(CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
-        
+
         protected override void Startup(CancellationToken stoppingToken)
         {
             _logger.Info("脚本机器人线程启动...");

@@ -119,7 +119,7 @@ namespace GameSrv
             });
 
             _appLifetime.ApplicationStopping.Register(OnShutdown);
-            
+
             return Task.CompletedTask;
         }
 
@@ -184,7 +184,7 @@ namespace GameSrv
                                 {
                                     continue;
                                 }
-                               // playObject.TransferPlanesServer(sIPaddr, nPort);
+                                // playObject.TransferPlanesServer(sIPaddr, nPort);
                             }
                         }
                         break;//转移结束后跳出循环

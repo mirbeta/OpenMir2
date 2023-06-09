@@ -1,4 +1,3 @@
-using System.Collections;
 using GameSrv.Planes;
 using GameSrv.Services;
 using M2Server;
@@ -8,6 +7,7 @@ using M2Server.Npc;
 using M2Server.Player;
 using M2Server.RobotPlay;
 using NLog;
+using System.Collections;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -637,7 +637,7 @@ namespace GameSrv.Word
                         {
                             if (!playObject.LoginNoticeOk)
                             {
-                                 playObject.RunNotice();
+                                playObject.RunNotice();
                             }
                             else
                             {
@@ -746,16 +746,6 @@ namespace GameSrv.Word
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
                     playObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
             }
-        }
-
-        public void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int GetMapOfRangeHumanCount(IEnvirnoment envir, int nX, int nY, int nRange)
-        {
-            throw new NotImplementedException();
         }
 
         public static void ProcessUserMessage(PlayObject playObject, CommandMessage defMsg, string buff)
@@ -982,7 +972,7 @@ namespace GameSrv.Word
         /// 获取指定地图范围对象数
         /// </summary>
         /// <returns></returns>
-        public int GetMapOfRangeHumanCount(Envirnoment envir, int nX, int nY, int nRange)
+        public int GetMapOfRangeHumanCount(IEnvirnoment envir, int nX, int nY, int nRange)
         {
             var result = 0;
             for (var i = 0; i < PlayObjectList.Count; i++)
@@ -1529,7 +1519,7 @@ namespace GameSrv.Word
             }
             return null;
         }
-        
+
         public void AddMerchant(IMerchant merchant)
         {
             if (merchant != null)
@@ -1608,7 +1598,7 @@ namespace GameSrv.Word
             return result;
         }
 
-        public void GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false)
+        public void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false)
         {
             for (var i = 0; i < PlayObjectList.Count; i++)
             {

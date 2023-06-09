@@ -54,7 +54,7 @@ namespace M2Server.Magic
             StdItem amuletStdItem;
             if (playObject.UseItems[ItemLocation.ArmRingl] != null && playObject.UseItems[ItemLocation.ArmRingl].Index > 0)
             {
-                amuletStdItem = ItemSystem.GetStdItem(playObject.UseItems[ItemLocation.ArmRingl].Index);
+                amuletStdItem = ModuleShare.ItemSystem.GetStdItem(playObject.UseItems[ItemLocation.ArmRingl].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)
@@ -78,7 +78,7 @@ namespace M2Server.Magic
             }
             if (playObject.UseItems[ItemLocation.Bujuk] != null && playObject.UseItems[ItemLocation.Bujuk].Index > 0)
             {
-                amuletStdItem = ItemSystem.GetStdItem(playObject.UseItems[ItemLocation.Bujuk].Index);
+                amuletStdItem = ModuleShare.ItemSystem.GetStdItem(playObject.UseItems[ItemLocation.Bujuk].Index);
                 if (amuletStdItem != null && amuletStdItem.StdMode == 25)
                 {
                     switch (nType)

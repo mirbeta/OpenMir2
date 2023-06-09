@@ -22,7 +22,7 @@ namespace GameSrv.Services
             m_LoadRcdTempList = new List<LoadDBInfo>();
             m_SaveRcdTempList = new List<SavePlayerRcd>();
         }
-        
+
         public bool IsIdle()
         {
             bool result = false;

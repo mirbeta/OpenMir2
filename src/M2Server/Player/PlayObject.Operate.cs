@@ -36,11 +36,11 @@ namespace M2Server.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
-                var item = ItemSystem.GetStdItem(userItem.Index);
+                var item = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                 if (item != null)
                 {
                     var clientItem = new ClientItem();
-                    ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
+                    ModuleShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
@@ -84,13 +84,13 @@ namespace M2Server.Player
             {
                 if (playObject.UseItems[i].Index > 0)
                 {
-                    var stdItem = ItemSystem.GetStdItem(playObject.UseItems[i].Index);
+                    var stdItem = ModuleShare.ItemSystem.GetStdItem(playObject.UseItems[i].Index);
                     if (stdItem == null)
                     {
                         continue;
                     }
                     var clientItem = new ClientItem();
-                    ItemSystem.GetUpgradeStdItem(stdItem, playObject.UseItems[i], ref clientItem);
+                    ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, playObject.UseItems[i], ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(playObject.UseItems[i]);
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
@@ -269,7 +269,7 @@ namespace M2Server.Player
                     var userItem = ItemList[i];
                     if (userItem != null && userItem.MakeIndex == nItemIdx)
                     {
-                        var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                        var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem == null)
                         {
                             continue;
@@ -382,7 +382,7 @@ namespace M2Server.Player
                 userItem = ItemList[i];
                 if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
-                    stdItem = ItemSystem.GetStdItem(userItem.Index);
+                    stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                     var sUserItemName = CustomItem.GetItemName(userItem);
                     if (stdItem != null)
                     {
@@ -399,7 +399,7 @@ namespace M2Server.Player
             {
                 if (M2Share.CheckUserItems(btWhere, stdItem))
                 {
-                    ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                    ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref clientItem) && CheckItemBindUse(userItem))
                     {
@@ -408,7 +408,7 @@ namespace M2Server.Player
                         {
                             if (UseItems[btWhere] != null && UseItems[btWhere].Index > 0)
                             {
-                                var stdItem20 = ItemSystem.GetStdItem(UseItems[btWhere].Index);
+                                var stdItem20 = ModuleShare.ItemSystem.GetStdItem(UseItems[btWhere].Index);
                                 if (stdItem20 != null && M2Share.StdModeMap.Contains(stdItem20.StdMode))
                                 {
                                     if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
@@ -501,7 +501,7 @@ namespace M2Server.Player
                 {
                     if (UseItems[btWhere].MakeIndex == nItemIdx)
                     {
-                        var stdItem = ItemSystem.GetStdItem(UseItems[btWhere].Index);
+                        var stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[btWhere].Index);
                         if (stdItem != null && M2Share.StdModeMap.Contains(stdItem.StdMode))
                         {
                             if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
@@ -581,7 +581,7 @@ namespace M2Server.Player
             for (var i = 0; i < nCount; i++)
             {
                 var userItem = new UserItem();
-                if (ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                 {
                     ItemList.Add(userItem);
                     SendAddItem(userItem);
@@ -609,7 +609,7 @@ namespace M2Server.Player
                         if (userItem != null && userItem.MakeIndex == nItemIdx)
                         {
                             itemIndex = userItem.MakeIndex;
-                            stdItem = ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem != null)
                             {
                                 switch (stdItem.StdMode)
@@ -1123,7 +1123,7 @@ namespace M2Server.Player
                         userItem = DealItemList[i];
                         DealCreat.AddItemToBag(userItem);
                         DealCreat.SendAddItem(userItem);
-                        stdItem = ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
                             if (!M2Share.IsCheapStuff(stdItem.StdMode))
@@ -1149,7 +1149,7 @@ namespace M2Server.Player
                         userItem = DealCreat.DealItemList[i];
                         AddItemToBag(userItem);
                         this.SendAddItem(userItem);
-                        stdItem = ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
                             if (!M2Share.IsCheapStuff(stdItem.StdMode))
@@ -1628,7 +1628,7 @@ namespace M2Server.Player
                             ItemList.RemoveAt(i);
                             WeightChanged();
                             SendDefMessage(Messages.SM_STORAGE_OK, 0, 0, 0, 0);
-                            var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 // M2Share.EventSource.AddEventLog(1, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -1673,7 +1673,7 @@ namespace M2Server.Player
                 var sUserItemName = CustomItem.GetItemName(userItem);
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (IsAddWeightAvailable(ItemSystem.GetStdItemWeight(userItem.Index)))// 检查NPC是否允许取物品
+                    if (IsAddWeightAvailable(ModuleShare.ItemSystem.GetStdItemWeight(userItem.Index)))// 检查NPC是否允许取物品
                     {
                         if (merchant.IsGetback && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == ModuleShare.FunctionNPC))
                         {
@@ -1682,7 +1682,7 @@ namespace M2Server.Player
                                 SendAddItem(userItem);
                                 StorageItemList.RemoveAt(i);
                                 SendDefMessage(Messages.SM_TAKEBACKSTORAGEITEM_OK, nItemIdx, 0, 0, 0);
-                                var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                                var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
                                 {
                                     // M2Share.EventSource.AddEventLog(0, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');

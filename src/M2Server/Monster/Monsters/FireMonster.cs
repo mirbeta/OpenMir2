@@ -1,5 +1,4 @@
-﻿using M2Server.Event.Events;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Events;
 
 namespace M2Server.Monster.Monsters

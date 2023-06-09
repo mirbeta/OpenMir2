@@ -2,13 +2,18 @@
 using M2Server.Player;
 using SystemModule.Data;
 
-namespace GameSrv.Word {
-    public partial class WorldServer {
-        private SwitchDataInfo GetSwitchData(string sChrName, int nCode) {
+namespace GameSrv.Word
+{
+    public partial class WorldServer
+    {
+        private SwitchDataInfo GetSwitchData(string sChrName, int nCode)
+        {
             SwitchDataInfo result = null;
-            for (int i = 0; i < ChangeServerList.Count; i++) {
+            for (int i = 0; i < ChangeServerList.Count; i++)
+            {
                 SwitchDataInfo switchData = ChangeServerList[i];
-                if (string.Compare(switchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && switchData.nCode == nCode) {
+                if (string.Compare(switchData.sChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0 && switchData.nCode == nCode)
+                {
                     result = switchData;
                     break;
                 }
@@ -52,22 +57,27 @@ namespace GameSrv.Word {
             }
         }
 
-        public void AddSwitchData(SwitchDataInfo switchData) {
+        public void AddSwitchData(SwitchDataInfo switchData)
+        {
             switchData.dwWaitTime = HUtil32.GetTickCount();
             ChangeServerList.Add(switchData);
         }
 
-        private void DelSwitchData(SwitchDataInfo switchData) {
-            for (int i = 0; i < ChangeServerList.Count; i++) {
+        private void DelSwitchData(SwitchDataInfo switchData)
+        {
+            for (int i = 0; i < ChangeServerList.Count; i++)
+            {
                 SwitchDataInfo switchDataInfo = ChangeServerList[i];
-                if (switchDataInfo == switchData) {
+                if (switchDataInfo == switchData)
+                {
                     ChangeServerList.RemoveAt(i);
                     break;
                 }
             }
         }
 
-        private bool SendSwitchData(IPlayerActor playObject, int nServerIndex) {
+        private bool SendSwitchData(IPlayerActor playObject, int nServerIndex)
+        {
             SwitchDataInfo switchData = null;
             MakeSwitchData(playObject, ref switchData);
             string flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
@@ -77,7 +87,8 @@ namespace GameSrv.Word {
             return true;
         }
 
-        private static void MakeSwitchData(IPlayerActor playObject, ref SwitchDataInfo switchData) {
+        private static void MakeSwitchData(IPlayerActor playObject, ref SwitchDataInfo switchData)
+        {
             switchData = new SwitchDataInfo();
             switchData.sChrName = playObject.ChrName;
             switchData.sMap = playObject.MapName;
@@ -91,13 +102,16 @@ namespace GameSrv.Word {
             switchData.boBanGuildChat = playObject.BanGuildChat;
             switchData.boAdminMode = playObject.AdminMode;
             switchData.boObMode = playObject.ObMode;
-            for (int i = 0; i < playObject.LockWhisperList.Count; i++) {
+            for (int i = 0; i < playObject.LockWhisperList.Count; i++)
+            {
                 switchData.BlockWhisperArr.Add(playObject.LockWhisperList[i]);
             }
 
-            for (int i = 0; i < playObject.SlaveList.Count; i++) {
+            for (int i = 0; i < playObject.SlaveList.Count; i++)
+            {
                 IActor baseObject = playObject.SlaveList[i];
-                if (i <= 4) {
+                if (i <= 4)
+                {
                     //switchData.SlaveArr[i].SlaveName = baseObject.ChrName;
                     //switchData.SlaveArr[i].KillCount = baseObject.KillMonCount;
                     //switchData.SlaveArr[i].SalveLevel = baseObject.SlaveMakeLevel;
@@ -107,17 +121,22 @@ namespace GameSrv.Word {
                     //switchData.SlaveArr[i].nMP = baseObject.Abil.MP;
                 }
             }
-            for (int i = 0; i < playObject.ExtraAbil.Length; i++) {
-                if (playObject.ExtraAbil[i] > 0) {
+            for (int i = 0; i < playObject.ExtraAbil.Length; i++)
+            {
+                if (playObject.ExtraAbil[i] > 0)
+                {
                     switchData.StatusValue[i] = playObject.ExtraAbil[i];
                     switchData.StatusTimeOut[i] = playObject.ExtraAbilTimes[i];
                 }
             }
         }
 
-        public void CheckSwitchServerTimeOut() {
-            for (int i = ChangeServerList.Count - 1; i >= 0; i--) {
-                if ((HUtil32.GetTickCount() - ChangeServerList[i].dwWaitTime) > 30 * 1000) {
+        public void CheckSwitchServerTimeOut()
+        {
+            for (int i = ChangeServerList.Count - 1; i >= 0; i--)
+            {
+                if ((HUtil32.GetTickCount() - ChangeServerList[i].dwWaitTime) > 30 * 1000)
+                {
                     ChangeServerList[i] = null;
                     ChangeServerList.RemoveAt(i);
                 }

@@ -1,6 +1,6 @@
+using M2Server;
 using System.Net;
 using System.Net.Sockets;
-using M2Server;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.Sockets.Common;
@@ -14,14 +14,16 @@ namespace GameSrv.Planes
     /// <summary>
     /// 位面服务器
     /// </summary>
-    public class PlanesServer {
+    public class PlanesServer
+    {
         private readonly TServerMsgInfo[] srvArray;
         private readonly TcpService _serverSocket;
         private readonly PlanesMessage _groupMessageHandle;
         private static PlanesServer instance;
         public static PlanesServer Instance => instance ??= new PlanesServer();
 
-        private PlanesServer() {
+        private PlanesServer()
+        {
             srvArray = new TServerMsgInfo[10];
             _serverSocket = new TcpService();
             _serverSocket.Connected += Connecting;
@@ -30,7 +32,8 @@ namespace GameSrv.Planes
             _groupMessageHandle = new PlanesMessage();
         }
 
-        public void StartPlanesServer() {
+        public void StartPlanesServer()
+        {
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
@@ -40,37 +43,47 @@ namespace GameSrv.Planes
             M2Share.Logger.Info($"节点数据服务[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]已启动.");
         }
 
-        private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr) {
-            for (int i = 0; i < srvArray.Length; i++) {
+        private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)
+        {
+            for (int i = 0; i < srvArray.Length; i++)
+            {
                 TServerMsgInfo serverMsgInfo = srvArray[i];
-                if (serverMsgInfo == null) {
+                if (serverMsgInfo == null)
+                {
                     continue;
                 }
                 if (serverMsgInfo.Socket == null) continue;
-                if (serverMsgInfo.SocketId != ps.SocketId) {
+                if (serverMsgInfo.SocketId != ps.SocketId)
+                {
                     SendSocket(serverMsgInfo.Socket, msgstr);
                 }
             }
         }
 
-        private void DecodeSocStr(TServerMsgInfo ps) {
+        private void DecodeSocStr(TServerMsgInfo ps)
+        {
             string Str = string.Empty;
             string sNumStr = string.Empty;
             string Head = string.Empty;
             int Ident;
             int sNum;
-            if (string.IsNullOrEmpty(ps.SocData)) {
+            if (string.IsNullOrEmpty(ps.SocData))
+            {
                 return;
             }
-            if (ps.SocData.IndexOf(')') <= 0) {
+            if (ps.SocData.IndexOf(')') <= 0)
+            {
                 return;
             }
-            try {
+            try
+            {
                 string BufStr = ps.SocData;
                 ps.SocData = "";
-                while (BufStr.IndexOf(')') > 0) {
+                while (BufStr.IndexOf(')') > 0)
+                {
                     BufStr = HUtil32.ArrestStringEx(BufStr, "(", ")", ref Str);
-                    if (!string.IsNullOrEmpty(Str)) {
+                    if (!string.IsNullOrEmpty(Str))
+                    {
                         DecodeSocStr_SendOtherServer(ps, Str);
                         string Body = HUtil32.GetValidStr3(Str, ref Head, HUtil32.Backslash);
                         Body = HUtil32.GetValidStr3(Body, ref sNumStr, HUtil32.Backslash);
@@ -78,19 +91,23 @@ namespace GameSrv.Planes
                         sNum = HUtil32.StrToInt(sNumStr, -1);
                         _groupMessageHandle.ProcessData(Ident, sNum, Body);
                     }
-                    else {
+                    else
+                    {
                         break;
                     }
                 }
                 ps.SocData = BufStr + ps.SocData;
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 M2Share.Logger.Error(ex.StackTrace);
             }
         }
 
-        private static void SendSocket(Socket Socket, string sMsg) {
-            if (Socket.Connected) {
+        private static void SendSocket(Socket Socket, string sMsg)
+        {
+            if (Socket.Connected)
+            {
                 byte[] buffer = HUtil32.GetBytes("(" + sMsg + ")");
                 Socket.Send(buffer);
             }
@@ -170,33 +187,41 @@ namespace GameSrv.Planes
                 }
             }
         }
-        
-        public void Run() {
+
+        public void Run()
+        {
             const string sExceptionMsg = "[Exception] TFrmSrvMsg::Run";
-            try {
-                for (int i = 0; i < srvArray.Length; i++) {
+            try
+            {
+                for (int i = 0; i < srvArray.Length; i++)
+                {
                     TServerMsgInfo ps = srvArray[i];
-                    if (ps == null) {
+                    if (ps == null)
+                    {
                         continue;
                     }
-                    if (ps.Socket != null) {
+                    if (ps.Socket != null)
+                    {
                         DecodeSocStr(ps);
                     }
                 }
             }
-            catch {
+            catch
+            {
                 M2Share.Logger.Error(sExceptionMsg);
             }
         }
     }
 
-    public class TServerMsgInfo {
+    public class TServerMsgInfo
+    {
         public Socket Socket;
         public string SocData;
         public string SocketId;
     }
 
-    public struct ServerGruopInfo {
+    public struct ServerGruopInfo
+    {
         public int nServerIdx;
         public string sChrName;
     }

@@ -4,19 +4,19 @@ using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Items
 {
-    public static class ItemSystem
+    public class ItemSystem : IItemSystem
     {
         /// <summary>
         /// 物品列表
         /// </summary>
-        public static readonly IList<StdItem> StdItemList;
+        public readonly IList<StdItem> StdItemList;
 
-        static ItemSystem()
+       public ItemSystem()
         {
             StdItemList = new List<StdItem>();
         }
 
-        public static StdItem GetStdItem(ushort nItemIdx)
+        public StdItem GetStdItem(ushort nItemIdx)
         {
             StdItem result = null;
             nItemIdx -= 1;
@@ -28,7 +28,7 @@ namespace M2Server.Items
             return result;
         }
 
-        public static StdItem GetStdItem(string sItemName)
+        public StdItem GetStdItem(string sItemName)
         {
             StdItem result = null;
             if (string.IsNullOrEmpty(sItemName)) return null;
@@ -44,7 +44,7 @@ namespace M2Server.Items
             return result;
         }
 
-        public static int GetStdItemWeight(int nItemIdx)
+        public int GetStdItemWeight(int nItemIdx)
         {
             var result = 0;
             nItemIdx -= 1;
@@ -55,7 +55,23 @@ namespace M2Server.Items
             return result;
         }
 
-        public static string GetStdItemName(int nItemIdx)
+        public void AddItem(StdItem stdItem)
+        {
+            StdItemList.Add(stdItem);
+        }
+
+        public void Clear()
+        {
+            for (var i = 0; i < StdItemList.Count; i++)
+            {
+                StdItemList[i] = null;
+            }
+            StdItemList.Clear();
+        }
+
+        public int ItemCount => StdItemList.Count;
+
+        public string GetStdItemName(int nItemIdx)
         {
             var result = string.Empty;
             nItemIdx -= 1;
@@ -66,7 +82,7 @@ namespace M2Server.Items
             return result;
         }
 
-        public static ushort GetStdItemIdx(string sItemName)
+        public ushort GetStdItemIdx(string sItemName)
         {
             ushort result = 0;
             if (string.IsNullOrEmpty(sItemName)) return result;
@@ -82,7 +98,7 @@ namespace M2Server.Items
             return result;
         }
 
-        public static bool CopyToUserItemFromName(string sItemName, ref UserItem item)
+        public bool CopyToUserItemFromName(string sItemName, ref UserItem item)
         {
             if (string.IsNullOrEmpty(sItemName)) return false;
             for (var i = 0; i < StdItemList.Count; i++)
@@ -99,7 +115,7 @@ namespace M2Server.Items
             return false;
         }
 
-        private static int GetUpgrade(int count, int ran)
+        private int GetUpgrade(int count, int ran)
         {
             var result = 0;
             for (var i = 0; i < count; i++)
@@ -116,7 +132,7 @@ namespace M2Server.Items
             return result;
         }
 
-        public static int GetUpgrade2(int x, int a)
+        public int GetUpgrade2(int x, int a)
         {
             int iProb;
             var result = 0;
@@ -139,7 +155,7 @@ namespace M2Server.Items
             return result;
         }
 
-        private static void UpgradeRandomWeapon(UserItem pu)
+        private void UpgradeRandomWeapon(UserItem pu)
         {
             var up = GetUpgrade(12, 15);
             if (M2Share.RandomNumber.Random(15) == 0)
@@ -191,7 +207,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void UpgradeRandomDress(UserItem pu)
+        private void UpgradeRandomDress(UserItem pu)
         {
             var up = GetUpgrade(6, 15);
             if (M2Share.RandomNumber.Random(30) == 0)
@@ -227,7 +243,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void UpgradeRandomNecklace(UserItem pu)
+        private void UpgradeRandomNecklace(UserItem pu)
         {
             var up = GetUpgrade(6, 30);
             if (M2Share.RandomNumber.Random(60) == 0)
@@ -263,7 +279,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void UpgradeRandomBarcelet(UserItem pu)
+        private void UpgradeRandomBarcelet(UserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(20) == 0)
@@ -299,7 +315,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void UpgradeRandomNecklace19(UserItem pu)
+        private void UpgradeRandomNecklace19(UserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
@@ -335,7 +351,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void UpgradeRandomRings(UserItem pu)
+        private void UpgradeRandomRings(UserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(30) == 0)
@@ -361,7 +377,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void UpgradeRandomRings23(UserItem pu)
+        private void UpgradeRandomRings23(UserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
@@ -397,7 +413,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void UpgradeRandomHelmet(UserItem pu)
+        private void UpgradeRandomHelmet(UserItem pu)
         {
             var up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
@@ -433,7 +449,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void RandomSetUnknownHelmet(UserItem pu)
+        private void RandomSetUnknownHelmet(UserItem pu)
         {
             var up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
             if (up > 0)
@@ -507,7 +523,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void RandomSetUnknownRing(UserItem pu)
+        private void RandomSetUnknownRing(UserItem pu)
         {
             var up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
             if (up > 0)
@@ -563,7 +579,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void RandomSetUnknownBracelet(UserItem pu)
+        private void RandomSetUnknownBracelet(UserItem pu)
         {
             var up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
             if (up > 0)
@@ -637,7 +653,7 @@ namespace M2Server.Items
             }
         }
 
-        private static void CopyItemToClientItem(StdItem stdItem, ref ClientItem clientStdItem)
+        private void CopyItemToClientItem(StdItem stdItem, ref ClientItem clientStdItem)
         {
             if (clientStdItem == null)
             {
@@ -688,7 +704,7 @@ namespace M2Server.Items
             clientStdItem.Item.Reference = stdItem.Reference;
         }
 
-        public static int GetUpgradeStdItem(StdItem stdItem, UserItem userItem, ref ClientItem clientItem)
+        public int GetUpgradeStdItem(StdItem stdItem, UserItem userItem, ref ClientItem clientItem)
         {
             CopyItemToClientItem(stdItem, ref clientItem);
             var count = 0;
@@ -1097,7 +1113,7 @@ namespace M2Server.Items
             return count;
         }
 
-        public static int RealAttackSpeed(short wAtkSpd)
+        public int RealAttackSpeed(short wAtkSpd)
         {
             int result;
             if (wAtkSpd <= 10)
@@ -1125,7 +1141,7 @@ namespace M2Server.Items
             return result;
         }
 
-        private static byte GetAttackSpeed(byte bStdAtkSpd, byte bUserAtkSpd)
+        private byte GetAttackSpeed(byte bStdAtkSpd, byte bUserAtkSpd)
         {
             var iTemp = RealAttackSpeed(bStdAtkSpd) + RealAttackSpeed(bUserAtkSpd);
             return (byte)NaturalAttackSpeed(iTemp);
@@ -1135,13 +1151,13 @@ namespace M2Server.Items
         /// 攻击速度升级
         /// </summary>
         /// <returns></returns>
-        public static byte UpgradeAttackSpeed(byte bUserAtkSpd, int iUpValue)
+        public byte UpgradeAttackSpeed(byte bUserAtkSpd, int iUpValue)
         {
             var iTemp = RealAttackSpeed(bUserAtkSpd) + iUpValue;
             return (byte)NaturalAttackSpeed(iTemp);
         }
 
-        public static void RandomUpgradeItem(StdItem stdItem, UserItem pu)
+        public void RandomUpgradeItem(StdItem stdItem, UserItem pu)
         {
             if (stdItem != null)
             {
@@ -1179,7 +1195,7 @@ namespace M2Server.Items
             }
         }
 
-        public static void RandomSetUnknownItem(StdItem stdItem, UserItem pu)
+        public void RandomSetUnknownItem(StdItem stdItem, UserItem pu)
         {
             if (stdItem != null)
             {

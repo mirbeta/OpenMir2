@@ -26,7 +26,7 @@ namespace GameSrv.Word.Threads
         {
             _logger.Info("商人管理线程停止ֹ...");
         }
-        
+
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             try

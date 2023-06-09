@@ -882,7 +882,7 @@ namespace M2Server.Player
                     {
                         if (GetFrontPosition(ref n14, ref n18) && !Envir.CanWalk(n14, n18, false))
                         {
-                            StdItem StdItem = ItemSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+                            StdItem StdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                             if (StdItem != null && StdItem.Shape == 19)
                             {
                                 if (PileStones(n14, n18))
@@ -1443,7 +1443,7 @@ namespace M2Server.Player
                 if (Race == ActorRace.Play)
                 {
                     this.SendDelItems(UseItems[ItemLocation.Weapon]);
-                    StdItem stdItem = ItemSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+                    StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         //M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +

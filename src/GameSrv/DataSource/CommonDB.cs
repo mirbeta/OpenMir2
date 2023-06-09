@@ -1,9 +1,8 @@
-using System.Data;
-using System.Text.Json;
 using M2Server;
-using M2Server.Items;
 using MySqlConnector;
 using NLog;
+using System.Data;
+using System.Text.Json;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Extensions;
@@ -23,11 +22,7 @@ namespace GameSrv.DataSource
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-                for (var i = 0; i < ItemSystem.StdItemList.Count; i++)
-                {
-                    ItemSystem.StdItemList[i] = null;
-                }
-                ItemSystem.StdItemList.Clear();
+                ModuleShare.ItemSystem.Clear();
                 if (!Open())
                 {
                     return result;
@@ -81,9 +76,9 @@ namespace GameSrv.DataSource
                         stdItem.ItemType = dr.GetByte("ITEMTYPE");
                         stdItem.ItemSet = dr.GetUInt16("ITEMSET");
                         stdItem.Reference = dr.GetString("REFERENCE");
-                        if (ItemSystem.StdItemList.Count <= idx)
+                        if (ModuleShare.ItemSystem.ItemCount <= idx)
                         {
-                            ItemSystem.StdItemList.Add(stdItem);
+                            ModuleShare.ItemSystem.AddItem(stdItem);
                             result = 1;
                         }
                         else
