@@ -217,12 +217,12 @@ namespace M2Server.Player
 
         private void ClientDropGold(int nGold)
         {
-            if (M2Share.Config.InSafeDisableDrop && InSafeZone())
+            if (SystemShare.Config.InSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return;
             }
-            if (M2Share.Config.ControlDropItem && nGold < M2Share.Config.CanDropGold)
+            if (SystemShare.Config.ControlDropItem && nGold < SystemShare.Config.CanDropGold)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
                 return;
@@ -247,7 +247,7 @@ namespace M2Server.Player
         private bool ClientDropItem(string sItemName, int nItemIdx)
         {
             var result = false;
-            if (M2Share.Config.InSafeDisableDrop && InSafeZone())
+            if (SystemShare.Config.InSafeDisableDrop && InSafeZone())
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return false;
@@ -277,14 +277,14 @@ namespace M2Server.Player
                         var sUserItemName = CustomItem.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (M2Share.Config.ControlDropItem && stdItem.Price < M2Share.Config.CanDropPrice)
+                            if (SystemShare.Config.ControlDropItem && stdItem.Price < SystemShare.Config.CanDropPrice)
                             {
                                 Dispose(userItem);
                                 ItemList.RemoveAt(i);
                                 result = true;
                                 break;
                             }
-                            int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                            int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                             if (DropItemDown(userItem, dropWide, false, 0, this.ActorId))
                             {
                                 Dispose(userItem);
@@ -315,12 +315,12 @@ namespace M2Server.Player
                 return false;
             }
             IsFilterAction = true;
-            if (!M2Share.Config.CloseSpeedHackCheck)
+            if (!SystemShare.Config.CloseSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - TurnTick;
-                if (dwCheckTime < M2Share.Config.TurnIntervalTime)
+                if (dwCheckTime < SystemShare.Config.TurnIntervalTime)
                 {
-                    dwDelayTime = M2Share.Config.TurnIntervalTime - dwCheckTime;
+                    dwDelayTime = SystemShare.Config.TurnIntervalTime - dwCheckTime;
                     return false;
                 }
             }
@@ -342,12 +342,12 @@ namespace M2Server.Player
             {
                 return false;
             }
-            if (!M2Share.Config.CloseSpeedHackCheck)
+            if (!SystemShare.Config.CloseSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - TurnTick;
-                if (dwCheckTime < M2Share.Config.TurnIntervalTime)
+                if (dwCheckTime < SystemShare.Config.TurnIntervalTime)
                 {
-                    dwDelayTime = M2Share.Config.TurnIntervalTime - dwCheckTime;
+                    dwDelayTime = SystemShare.Config.TurnIntervalTime - dwCheckTime;
                     return false;
                 }
                 TurnTick = HUtil32.GetTickCount();
@@ -699,12 +699,12 @@ namespace M2Server.Player
         {
             dwDelayTime = 0;
             var baseObject = M2Share.ActorMgr.Get(charId);
-            if (!M2Share.Config.CloseSpeedHackCheck)
+            if (!SystemShare.Config.CloseSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - TurnTick;
-                if (dwCheckTime < HUtil32._MAX(150, M2Share.Config.TurnIntervalTime - 150))
+                if (dwCheckTime < HUtil32._MAX(150, SystemShare.Config.TurnIntervalTime - 150))
                 {
-                    dwDelayTime = HUtil32._MAX(150, M2Share.Config.TurnIntervalTime - 150) - dwCheckTime;
+                    dwDelayTime = HUtil32._MAX(150, SystemShare.Config.TurnIntervalTime - 150) - dwCheckTime;
                     return false;
                 }
                 TurnTick = HUtil32.GetTickCount();
@@ -848,7 +848,7 @@ namespace M2Server.Player
                 SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0);
                 return;
             }
-            if (GroupMembers.Count > M2Share.Config.GroupMembersMax)
+            if (GroupMembers.Count > SystemShare.Config.GroupMembersMax)
             {
                 SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -5, 0, 0, 0);
                 return;
@@ -906,7 +906,7 @@ namespace M2Server.Player
 
         private void ClientDealTry(string sHumName)
         {
-            if (M2Share.Config.DisableDeal)
+            if (SystemShare.Config.DisableDeal)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DisableDealItemsMsg);
                 return;
@@ -915,7 +915,7 @@ namespace M2Server.Player
             {
                 return;
             }
-            if ((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.TryDealTime)
+            if ((HUtil32.GetTickCount() - DealLastTick) < SystemShare.Config.TryDealTime)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.PleaseTryDealLaterMsg);
                 return;
@@ -996,7 +996,7 @@ namespace M2Server.Player
 
         private void ClientDelDealItem(int nItemIdx, string sItemName)
         {
-            if (M2Share.Config.CanNotGetBackDeal)
+            if (SystemShare.Config.CanNotGetBackDeal)
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
                 SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
@@ -1044,7 +1044,7 @@ namespace M2Server.Player
 
         private void ClientChangeDealGold(int nGold)
         {
-            if (DealGolds > 0 && M2Share.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
+            if (DealGolds > 0 && SystemShare.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
                 SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
                 SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
@@ -1085,7 +1085,7 @@ namespace M2Server.Player
             {
                 return;
             }
-            if (((HUtil32.GetTickCount() - DealLastTick) < M2Share.Config.DealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < M2Share.Config.DealOKTime))
+            if (((HUtil32.GetTickCount() - DealLastTick) < SystemShare.Config.DealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < SystemShare.Config.DealOKTime))
             {
                 SysMsg(Settings.DealOKTooFast, MsgColor.Red, MsgType.Hint);
                 DealCancel();
@@ -1608,7 +1608,7 @@ namespace M2Server.Player
             {
                 HUtil32.GetValidStr3(sMsg, ref sMsg, ' ');
             }
-            if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)
+            if (PayMent == 1 && !SystemShare.Config.TryModeUseStorage)
             {
                 SysMsg(Settings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
@@ -1657,7 +1657,7 @@ namespace M2Server.Player
             {
                 return;
             }
-            if (PayMent == 1 && !M2Share.Config.TryModeUseStorage)// '试玩模式不可以使用仓库功能!!!'
+            if (PayMent == 1 && !SystemShare.Config.TryModeUseStorage)// '试玩模式不可以使用仓库功能!!!'
             {
                 SysMsg(Settings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;

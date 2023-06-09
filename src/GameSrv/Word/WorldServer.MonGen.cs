@@ -52,7 +52,7 @@ namespace M2Server.World {
 
             if (monsterGenMap.Count <= 0)
             {
-                for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+                for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
                 {
                     if (MonGenInfoThreadMap.ContainsKey(i))
                     {
@@ -66,7 +66,7 @@ namespace M2Server.World {
                 var monsterNames = monsterGenMap.Keys.ToArray();
                 for (var i = 0; i < monsterNames.Length; i++)
                 {
-                    var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                    var threadId = M2Share.RandomNumber.Random(SystemShare.Config.ProcessMonsterMultiThreadLimit);
                     var monName = monsterNames[i];
                     if (MonGenInfoThreadMap.ContainsKey(threadId))
                     {
@@ -94,7 +94,7 @@ namespace M2Server.World {
             var monsterName = MonsterList.Values.ToList();
             for (var i = 0; i < monsterName.Count; i++)
             {
-                var threadId = M2Share.RandomNumber.Random(M2Share.Config.ProcessMonsterMultiThreadLimit);
+                var threadId = M2Share.RandomNumber.Random(SystemShare.Config.ProcessMonsterMultiThreadLimit);
                 if (!MonsterThreadMap.ContainsKey(MonsterList[monsterName[i].Name].Name))
                 {
                     MonsterThreadMap.Add(MonsterList[monsterName[i].Name].Name, threadId);
@@ -140,9 +140,9 @@ namespace M2Server.World {
         /// </summary>
         public void InitializationMonsterThread()
         {
-            _logger.Debug($"Run monster threads:[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
+            _logger.Debug($"Run monster threads:[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
 
-            int monsterThreads = M2Share.Config.ProcessMonsterMultiThreadLimit;//处理线程+预留线程
+            int monsterThreads = SystemShare.Config.ProcessMonsterMultiThreadLimit;//处理线程+预留线程
 
             MobThreads = new MonsterThread[monsterThreads];
             MobThreading = new Thread[monsterThreads];
@@ -161,7 +161,7 @@ namespace M2Server.World {
                 };
                 MobThreading[i].Start();
             }
-            _logger.Info($"怪物线程初始化完成...[{M2Share.Config.ProcessMonsterMultiThreadLimit}]");
+            _logger.Info($"怪物线程初始化完成...[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
         }
 
         /// <summary>
@@ -172,7 +172,7 @@ namespace M2Server.World {
         {
             if (dwTime < 30 * 60 * 1000)
             {
-                var d10 = (PlayObjectCount - M2Share.Config.UserFull) / HUtil32._MAX(1, M2Share.Config.ZenFastStep);
+                var d10 = (PlayObjectCount - SystemShare.Config.UserFull) / HUtil32._MAX(1, SystemShare.Config.ZenFastStep);
                 if (d10 > 0)
                 {
                     if (d10 > 6)
@@ -207,7 +207,7 @@ namespace M2Server.World {
             while (true)
             {
                 MonGenInfo monGen = null;
-                if ((HUtil32.GetTickCount() - monsterThread.RegenMonstersTick) > M2Share.Config.RegenMonstersTime)
+                if ((HUtil32.GetTickCount() - monsterThread.RegenMonstersTick) > SystemShare.Config.RegenMonstersTime)
                 {
                     monsterThread.RegenMonstersTick = HUtil32.GetTickCount();
                     if (monsterThread.CurrMonGenIdx < mongenList.Count)
@@ -226,13 +226,13 @@ namespace M2Server.World {
                     {
                         monsterThread.CurrMonGenIdx = 0;
                     }
-                    if (monGen != null && !string.IsNullOrEmpty(monGen.MonName) && !M2Share.Config.VentureServer)
+                    if (monGen != null && !string.IsNullOrEmpty(monGen.MonName) && !SystemShare.Config.VentureServer)
                     {
                         if (monGen.StartTick == 0 || ((HUtil32.GetTickCount() - monGen.StartTick) > GetMonstersZenTime(monGen.ZenTime)))
                         {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (M2Share.Config.MonGenRate / 10.0)));//所需刷的怪总数
+                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (SystemShare.Config.MonGenRate / 10.0)));//所需刷的怪总数
                             var map = GameShare.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
@@ -277,41 +277,41 @@ namespace M2Server.World {
                                 {
                                     if ((dwCurrentTick - monster.RunTick) > monster.RunTime)
                                     {
-                                        monster.RunTick = dwRunTick;
-                                        if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
-                                        {
-                                            if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
-                                            {
-                                                if (monster.ReAliveEx(monster.MonGen))
-                                                {
-                                                    monster.ProcessRunCount = 0;
-                                                    monster.ReAliveTick = HUtil32.GetTickCount();
-                                                }
-                                            }
-                                        }
-                                        if (!monster.IsVisibleActive && (monster.ProcessRunCount < M2Share.Config.ProcessMonsterInterval))
-                                        {
-                                            monster.ProcessRunCount++;
-                                        }
-                                        else
-                                        {
-                                            if (monster.IsSlave || (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster))// 守卫和下属主动搜索附近的精灵
-                                            {
-                                                if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
-                                                {
-                                                    monster.SearchTick = HUtil32.GetTickCount();
-                                                    //怪物主动搜索视觉范围，修改为人物视野被动激活，从而大幅度降低CPU使用率
-                                                    //区分哪些怪物是主动攻击，哪些怪物是被动攻击
-                                                    //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
-                                                    //其余怪物均为主动攻击
-                                                    //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
-                                                    //由玩家找出附近的怪物，然后添加到怪物视野范围
-                                                    monster.SearchViewRange();
-                                                }
-                                            }
-                                            monster.ProcessRunCount = 0;
-                                            monster.Run();
-                                        }
+                                        //monster.RunTick = dwRunTick;
+                                        //if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
+                                        //{
+                                        //    if ((HUtil32.GetTickCount() - monster.ReAliveTick) > GetMonstersZenTime(monster.MonGen.ZenTime))
+                                        //    {
+                                        //        if (monster.ReAliveEx(monster.MonGen))
+                                        //        {
+                                        //            monster.ProcessRunCount = 0;
+                                        //            monster.ReAliveTick = HUtil32.GetTickCount();
+                                        //        }
+                                        //    }
+                                        //}
+                                        //if (!monster.IsVisibleActive && (monster.ProcessRunCount < SystemShare.Config.ProcessMonsterInterval))
+                                        //{
+                                        //    monster.ProcessRunCount++;
+                                        //}
+                                        //else
+                                        //{
+                                        //    if (monster.IsSlave || (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster))// 守卫和下属主动搜索附近的精灵
+                                        //    {
+                                        //        if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
+                                        //        {
+                                        //            monster.SearchTick = HUtil32.GetTickCount();
+                                        //            //怪物主动搜索视觉范围，修改为人物视野被动激活，从而大幅度降低CPU使用率
+                                        //            //区分哪些怪物是主动攻击，哪些怪物是被动攻击
+                                        //            //被动攻击怪物主要代表为 鹿 鸡 祖玛雕像（石化状态）
+                                        //            //其余怪物均为主动攻击
+                                        //            //修改为被动攻击后，由玩家或者下属才执行SearchViewRange方法,找到怪物之后加入到怪物视野范围
+                                        //            //由玩家找出附近的怪物，然后添加到怪物视野范围
+                                        //            monster.SearchViewRange();
+                                        //        }
+                                        //    }
+                                        //   // monster.ProcessRunCount = 0;
+                                        //   // monster.Run();
+                                        //}
                                     }
                                     monsterThread.MonsterProcessPostion++;
                                 }
@@ -371,7 +371,7 @@ namespace M2Server.World {
             return nCount;
         }
 
-        public BaseObject RegenMonsterByName(string sMap, short nX, short nY, string sMonName) {
+        public IActor RegenMonsterByName(string sMap, short nX, short nY, string sMonName) {
             var nRace = GetMonRace(sMonName);
             var baseObject = CreateMonster(sMap, nX, nY, nRace, sMonName);
             if (baseObject != null) {
@@ -386,7 +386,7 @@ namespace M2Server.World {
                     MonGenInfo.Count = 1;
                     MonGenInfo.ZenTime = 0;
                     MonGenInfo.MissionGenRate = 0;// 集中座标刷新机率 1 -100
-                    MonGenInfo.CertList = new List<AnimalObject>();
+                    MonGenInfo.CertList = new List<IActor>();
                     MonGenInfo.Envir = GameShare.MapMgr.FindMap(MonGenInfo.MapName);
                     if (MonGenInfo.TryAdd(baseObject)) {
                         MonGenInfo.CertCount++;
@@ -404,7 +404,7 @@ namespace M2Server.World {
                     //    }
                     //    else
                     //    {
-                    //        threadId = M2Share.Config.ProcessMonsterMultiThreadLimit + 1;
+                    //        threadId = SystemShare.Config.ProcessMonsterMultiThreadLimit + 1;
                     //        MonGenInfoThreadMap.Add(threadId, new List<MonGenInfo> { monGen.Clone() });//todo 启动线程
                     //    }
                     //}
@@ -450,7 +450,7 @@ namespace M2Server.World {
                                     userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100.0 * (20 + M2Share.RandomNumber.Random(80)));
                                     var stdItem = ItemSystem.GetStdItem(userItem.Index);
                                     if (stdItem == null) continue;
-                                    if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(M2Share.Config.MonRandomAddValue) == 0) //极品掉落几率
+                                    if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(SystemShare.Config.MonRandomAddValue) == 0) //极品掉落几率
                                     {
                                         Items.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                                     }

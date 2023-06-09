@@ -27,7 +27,7 @@ namespace M2Server.Planes {
         }
 
         private PlanesClient() {
-            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(M2Share.Config.MasterSrvAddr), M2Share.Config.MasterSrvPort));
+            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort));
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.OnReceivedData += MsgClientRead;
             _msgClient.OnError += MsgClientError;
@@ -46,7 +46,7 @@ namespace M2Server.Planes {
         }
 
         public void CheckConnected() {
-            if (M2Share.Config.nServerNumber > 0) {
+            if (SystemShare.Config.nServerNumber > 0) {
                 if (_msgClient.IsConnected) {
                     return;
                 }

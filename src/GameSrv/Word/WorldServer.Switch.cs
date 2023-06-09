@@ -68,7 +68,7 @@ namespace M2Server.World {
             }
         }
 
-        private bool SendSwitchData(PlayObject playObject, int nServerIndex) {
+        private bool SendSwitchData(IPlayerActor playObject, int nServerIndex) {
             SwitchDataInfo switchData = null;
             MakeSwitchData(playObject, ref switchData);
             string flName = "$_" + M2Share.ServerIndex + "_$_" + M2Share.ShareFileNameNum + ".shr";
@@ -78,7 +78,7 @@ namespace M2Server.World {
             return true;
         }
 
-        private static void MakeSwitchData(PlayObject playObject, ref SwitchDataInfo switchData) {
+        private static void MakeSwitchData(IPlayerActor playObject, ref SwitchDataInfo switchData) {
             switchData = new SwitchDataInfo();
             switchData.sChrName = playObject.ChrName;
             switchData.sMap = playObject.MapName;
@@ -97,15 +97,15 @@ namespace M2Server.World {
             }
 
             for (int i = 0; i < playObject.SlaveList.Count; i++) {
-                MonsterObject baseObject = playObject.SlaveList[i];
+                IActor baseObject = playObject.SlaveList[i];
                 if (i <= 4) {
-                    switchData.SlaveArr[i].SlaveName = baseObject.ChrName;
-                    switchData.SlaveArr[i].KillCount = baseObject.KillMonCount;
-                    switchData.SlaveArr[i].SalveLevel = baseObject.SlaveMakeLevel;
-                    switchData.SlaveArr[i].SlaveExpLevel = baseObject.SlaveExpLevel;
-                    switchData.SlaveArr[i].RoyaltySec = (baseObject.MasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
-                    switchData.SlaveArr[i].nHP = baseObject.Abil.HP;
-                    switchData.SlaveArr[i].nMP = baseObject.Abil.MP;
+                    //switchData.SlaveArr[i].SlaveName = baseObject.ChrName;
+                    //switchData.SlaveArr[i].KillCount = baseObject.KillMonCount;
+                    //switchData.SlaveArr[i].SalveLevel = baseObject.SlaveMakeLevel;
+                    //switchData.SlaveArr[i].SlaveExpLevel = baseObject.SlaveExpLevel;
+                    //switchData.SlaveArr[i].RoyaltySec = (baseObject.MasterRoyaltyTick - HUtil32.GetTickCount()) / 1000;
+                    //switchData.SlaveArr[i].nHP = baseObject.Abil.HP;
+                    //switchData.SlaveArr[i].nMP = baseObject.Abil.MP;
                 }
             }
             for (int i = 0; i < playObject.ExtraAbil.Length; i++) {

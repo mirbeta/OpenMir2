@@ -125,13 +125,13 @@ namespace M2Server.Npc
             }
             if (PlayObject.MyGuild == null)
             {
-                if (PlayObject.Gold >= M2Share.Config.BuildGuildPrice)
+                if (PlayObject.Gold >= SystemShare.Config.BuildGuildPrice)
                 {
-                    UserItem = PlayObject.CheckItems(M2Share.Config.WomaHorn);
-                    if (UserItem == null)
-                    {
-                        result = -3;// '你没有准备好需要的全部物品。'
-                    }
+                    //UserItem = PlayObject.CheckItems(SystemShare.Config.WomaHorn);
+                    //if (UserItem == null)
+                    //{
+                    //    result = -3;// '你没有准备好需要的全部物品。'
+                    //}
                 }
                 else
                 {
@@ -146,17 +146,17 @@ namespace M2Server.Npc
             {
                 if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
                 {
-                    WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
-                    PlayObject.SendDelItems(UserItem);
-                    PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.WomaHorn);
-                    PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
-                    PlayObject.GoldChanged();
-                    PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
-                    if (PlayObject.MyGuild != null)
-                    {
-                        PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref PlayObject.GuildRankNo);
-                        RefShowName();
-                    }
+                    //WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
+                    //PlayObject.SendDelItems(UserItem);
+                    //PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.WomaHorn);
+                    //PlayObject.DecGold(SystemShare.Config.BuildGuildPrice);
+                    //PlayObject.GoldChanged();
+                    //PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
+                    //if (PlayObject.MyGuild != null)
+                    //{
+                    //    PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref PlayObject.GuildRankNo);
+                    //    RefShowName();
+                    //}
                 }
                 else
                 {
@@ -184,11 +184,11 @@ namespace M2Server.Npc
         {
             if (M2Share.GuildMgr.FindGuild(sGuildName) != null)
             {
-                if (PlayObject.Gold >= M2Share.Config.GuildWarPrice)
+                if (PlayObject.Gold >= SystemShare.Config.GuildWarPrice)
                 {
-                    PlayObject.DecGold(M2Share.Config.GuildWarPrice);
+                    PlayObject.DecGold(SystemShare.Config.GuildWarPrice);
                     PlayObject.GoldChanged();
-                    PlayObject.ReQuestGuildWar(sGuildName);
+                   // PlayObject.ReQuestGuildWar(sGuildName);
                 }
                 else
                 {
@@ -216,24 +216,24 @@ namespace M2Server.Npc
             UserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
             {
-                UserItem UserItem = PlayObject.CheckItems(M2Share.Config.ZumaPiece);
-                if (UserItem != null)
-                {
-                    if (Castle.AddAttackerInfo(PlayObject.MyGuild))
-                    {
-                        PlayObject.SendDelItems(UserItem);
-                        PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.ZumaPiece);
-                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok", false);
-                    }
-                    else
-                    {
-                        PlayObject.SysMsg("你现在无法请求攻城!!!", MsgColor.Red, MsgType.Hint);
-                    }
-                }
-                else
-                {
-                    PlayObject.SysMsg("你没有" + M2Share.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
-                }
+                //UserItem UserItem = PlayObject.CheckItems(SystemShare.Config.ZumaPiece);
+                //if (UserItem != null)
+                //{
+                //    if (Castle.AddAttackerInfo(PlayObject.MyGuild))
+                //    {
+                //        PlayObject.SendDelItems(UserItem);
+                //        PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.ZumaPiece);
+                //        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok", false);
+                //    }
+                //    else
+                //    {
+                //        PlayObject.SysMsg("你现在无法请求攻城!!!", MsgColor.Red, MsgType.Hint);
+                //    }
+                //}
+                //else
+                //{
+                //    PlayObject.SysMsg("你没有" + SystemShare.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
+                //}
             }
             else
             {

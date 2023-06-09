@@ -4,7 +4,27 @@ using SystemModule.Enums;
 namespace SystemModule{
     public interface IWorldEngine
     {
+        void Initialize();
+
+        void InitializationMonsterThread();
+
+        void InitializeMonster();
+
         IPlayerActor GetPlayObject(string chrName);
+
+        IEnumerable<IPlayerActor> PlayObjects { get; }
+
+        int MonsterCount { get; }
+
+        int MagicCount { get; }
+
+        int OfflinePlayCount { get; }
+
+        int RobotPlayerCount { get; }
+
+        int RobotLogonQueueCount { get; }
+
+        int MonGenCount { get; }
 
         void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg);
 
@@ -44,6 +64,14 @@ namespace SystemModule{
         int GetMapHuman(string mapName);
 
         int GetMapMonster(IEnvirnoment envir, IList<IActor> list);
+
+        void AddMonGenList(MonGenInfo monGenInfo);
+
+        bool CheckMonGenInfoThreadMap(int threadId);
+
+        void AddMonGenInfoThreadMap(int threadId, MonGenInfo monGenInfo);
+
+        void CreateMonGenInfoThreadMap(int threadId, IList<MonGenInfo> monGenInfo);
     }
 
 }

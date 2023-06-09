@@ -81,7 +81,7 @@ namespace M2Server.Services
             {
                 result = true;
             }
-            M2Share.Config.nLoadDBCount++;
+            SystemShare.Config.nLoadDBCount++;
             return result;
         }
 
@@ -91,7 +91,7 @@ namespace M2Server.Services
         /// <returns></returns>
         public static bool SaveHumRcdToDB(SavePlayerRcd saveRcd, ref int queryId)
         {
-            M2Share.Config.nSaveDBCount++;
+            SystemShare.Config.nSaveDBCount++;
             return SaveRcd(saveRcd, ref queryId);
         }
 
@@ -177,12 +177,12 @@ namespace M2Server.Services
 
         private static int GetQueryId()
         {
-            M2Share.Config.nDBQueryID++;
-            if (M2Share.Config.nDBQueryID > int.MaxValue - 1)
+            SystemShare.Config.nDBQueryID++;
+            if (SystemShare.Config.nDBQueryID > int.MaxValue - 1)
             {
-                M2Share.Config.nDBQueryID = 1;
+                SystemShare.Config.nDBQueryID = 1;
             }
-            return M2Share.Config.nDBQueryID;
+            return SystemShare.Config.nDBQueryID;
         }
     }
 }

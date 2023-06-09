@@ -97,6 +97,5 @@
 		<ProjectReference Include="..\M2Server\M2Server.csproj" />
 		<ProjectReference Include="..\Modules\ScriptEngine\ScriptSystem.csproj" />
 		<ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
-		<ProjectReference Include="..\SystemModule\OpenMir2.csproj" />
 	</ItemGroup>
 </Project>

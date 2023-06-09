@@ -15,6 +15,7 @@ using NLog;
 using ScriptModule;
 using System.Collections;
 using System.Collections.Concurrent;
+using M2Server;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -48,40 +49,41 @@ namespace GameSrv
             GameShare.Config.WinLotteryLevel4 = 0;
             GameShare.Config.WinLotteryLevel5 = 0;
             GameShare.Config.WinLotteryLevel6 = 0;
-            GameShare.LogonCostLogList = new ArrayList();
-            GameShare.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
-            GameShare.StartPointList = new List<StartPoint>();
-            GameShare.ServerTableList = new TRouteInfo[20];
-            GameShare.DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
-            GameShare.MiniMapList = new ConcurrentDictionary<string, short>(StringComparer.OrdinalIgnoreCase);
-            GameShare.UnbindList = new Dictionary<int, string>();
-            GameShare.LineNoticeList = new List<string>();
-            GameShare.QuestDiaryList = new List<IList<TQDDinfo>>();
-            GameShare.AbuseTextList = new StringList();
-            GameShare.MonSayMsgList = new Dictionary<string, IList<MonsterSayMsg>>(StringComparer.OrdinalIgnoreCase);
-            GameShare.DisableMakeItemList = new List<string>();
-            GameShare.EnableMakeItemList = new List<string>();
-            GameShare.DisableSellOffList = new List<string>();
-            GameShare.DisableMoveMapList = new StringList();
-            GameShare.DisableSendMsgList = new List<string>();
-            GameShare.MonDropLimitLIst = new ConcurrentDictionary<string, MonsterLimitDrop>(StringComparer.OrdinalIgnoreCase);
-            GameShare.DisableTakeOffList = new Dictionary<int, string>();
-            GameShare.UnMasterList = new List<string>();
-            GameShare.UnForceMasterList = new List<string>();
-            GameShare.GameLogItemNameList = new List<string>();
-            GameShare.DenyIPAddrList = new List<string>();
-            GameShare.DenyChrNameList = new List<string>();
-            GameShare.DenyAccountList = new List<string>();
-            GameShare.NoClearMonLIst = new List<string>();
-            GameShare.NoHptoexpMonLIst = new List<string>();
-            GameShare.ItemBindIPaddr = new List<ItemBind>();
-            GameShare.ItemBindAccount = new List<ItemBind>();
-            GameShare.ItemBindChrName = new List<ItemBind>();
-            GameShare.ProcessMsgCriticalSection = new object();
-            GameShare.ProcessHumanCriticalSection = new object();
-            GameShare.UserDBCriticalSection = new object();
-            GameShare.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
-            GameShare.SellOffItemList = new List<DealOffInfo>();
+            M2Share.LogonCostLogList = new ArrayList();
+            
+            M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
+            M2Share.StartPointList = new List<StartPoint>();
+            M2Share.ServerTableList = new TRouteInfo[20];
+            M2Share.DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
+            M2Share.MiniMapList = new ConcurrentDictionary<string, short>(StringComparer.OrdinalIgnoreCase);
+            //M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
+            M2Share.AbuseTextList = new StringList();
+            M2Share.SellOffItemList = new List<DealOffInfo>();
+            M2Share.UnbindList = new Dictionary<int, string>();
+            M2Share.LineNoticeList = new List<string>();
+            M2Share.MonSayMsgList = new Dictionary<string, IList<MonsterSayMsg>>(StringComparer.OrdinalIgnoreCase);
+            M2Share.DisableMakeItemList = new List<string>();
+            M2Share.EnableMakeItemList = new List<string>();
+            M2Share.DisableSellOffList = new List<string>();
+            M2Share.DisableMoveMapList = new StringList();
+            M2Share.DisableSendMsgList = new List<string>();
+            M2Share.MonDropLimitLIst = new ConcurrentDictionary<string, MonsterLimitDrop>(StringComparer.OrdinalIgnoreCase);
+            M2Share.DisableTakeOffList = new Dictionary<int, string>();
+            M2Share.UnMasterList = new List<string>();
+            M2Share.UnForceMasterList = new List<string>();
+            M2Share.GameLogItemNameList = new List<string>();
+            M2Share.DenyIPAddrList = new List<string>();
+            M2Share.DenyChrNameList = new List<string>();
+            M2Share.DenyAccountList = new List<string>();
+            M2Share.NoClearMonLIst = new List<string>();
+            M2Share.NoHptoexpMonLIst = new List<string>();
+            M2Share.ItemBindIPaddr = new List<ItemBind>();
+            M2Share.ItemBindAccount = new List<ItemBind>();
+            M2Share.ItemBindChrName = new List<ItemBind>();
+            M2Share.ProcessMsgCriticalSection = new object();
+            M2Share.ProcessHumanCriticalSection = new object();
+            M2Share.UserDBCriticalSection = new object();
+            M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
         }
 
         public void Initialize(CancellationToken stoppingToken)
@@ -101,17 +103,17 @@ namespace GameSrv
             GameShare.EventMgr = new EventManager();
             GameShare.CastleMgr = new CastleManager();
             GameShare.FrontEngine = new FrontEngine();
-            GameShare.WorldEngine = new WorldServer();
+            M2Share.WorldEngine = new WorldServer();
             GameShare.RobotMgr = new RobotManage();
             GameShare.LoadConfig();
             LoadServerTable();
             _logger.Info("初始化游戏引擎数据配置文件完成...");
             //CommandMgr.RegisterCommand();
-            GameShare.LoadGameLogItemNameList();
+            M2Share.LoadGameLogItemNameList();
             GameShare.LoadDenyIPAddrList();
-            GameShare.LoadDenyAccountList();
+            M2Share.LoadDenyAccountList();
             GameShare.LoadDenyChrNameList();
-            GameShare.LoadNoClearMonList();
+            M2Share.LoadNoClearMonList();
             _logger.Info("正在加载物品数据库...");
             var nCode = GameShare.CommonDb.LoadItemsDB();
             if (nCode < 0)
@@ -139,7 +141,7 @@ namespace GameSrv
                 _logger.Info($"加载怪物数据库失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"加载怪物数据库成功...[{GameShare.WorldEngine.MonsterList.Count}]");
+            _logger.Info($"加载怪物数据库成功...[{M2Share.WorldEngine.MonsterCount}]");
             _logger.Info("正在加载技能数据库...");
             nCode = GameShare.CommonDb.LoadMagicDB();
             if (nCode < 0)
@@ -147,7 +149,7 @@ namespace GameSrv
                 _logger.Info($"加载技能数据库失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"加载技能数据库成功...[{GameShare.WorldEngine.MagicList.Count}]");
+            _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicCount}]");
             _logger.Info("正在加载怪物刷新配置信息...");
             nCode = GameShare.LocalDb.LoadMonGen(out var mongenCount);
             if (nCode < 0)
@@ -157,24 +159,24 @@ namespace GameSrv
             }
             _logger.Info($"加载怪物刷新配置信息成功...[{mongenCount}]");
             _logger.Info("初始化怪物处理线程...");
-            GameShare.WorldEngine.InitializeMonster();
+            M2Share.WorldEngine.InitializeMonster();
             _logger.Info("初始化怪物处理完成...");
             _logger.Info("正加载怪物说话配置信息...");
-            GameShare.LoadMonSayMsg();
-            _logger.Info($"加载怪物说话配置信息成功...[{GameShare.MonSayMsgList.Count}]");
-            GameShare.LoadDisableTakeOffList();
-            GameShare.LoadMonDropLimitList();
+            M2Share.LoadMonSayMsg();
+            _logger.Info($"加载怪物说话配置信息成功...[{M2Share.MonSayMsgList.Count}]");
+            M2Share.LoadDisableTakeOffList();
+            M2Share.LoadMonDropLimitList();
             GameShare.LoadDisableMakeItem();
             GameShare.LoadEnableMakeItem();
-            GameShare.LoadAllowSellOffItem();
-            GameShare.LoadDisableMoveMap();
+            M2Share.LoadAllowSellOffItem();
+            M2Share.LoadDisableMoveMap();
             GameShare.CustomItemMgr.LoadCustomItemName();
             GameShare.LoadDisableSendMsgList();
-            GameShare.LoadItemBindIPaddr();
-            GameShare.LoadItemBindAccount();
-            GameShare.LoadItemBindChrName();
+            M2Share.LoadItemBindIPaddr();
+            M2Share.LoadItemBindAccount();
+            M2Share.LoadItemBindChrName();
             GameShare.LoadUnMasterList();
-            GameShare.LoadUnForceMasterList();
+            M2Share.LoadUnForceMasterList();
             _logger.Info("正在加载捆装物品信息...");
             nCode = GameShare.LocalDb.LoadUnbindList();
             if (nCode < 0)
@@ -206,7 +208,7 @@ namespace GameSrv
                 _logger.Info("加载文字过滤信息成功...");
             }
             _logger.Info("正在加载公告提示信息...");
-            if (!GameShare.LoadLineNotice(GameShare.GetNoticeFilePath("LineNotice.txt")))
+            if (!M2Share.LoadLineNotice(GameShare.GetNoticeFilePath("LineNotice.txt")))
             {
                 _logger.Info("加载公告提示信息失败!!!");
             }
@@ -233,7 +235,7 @@ namespace GameSrv
                 _logger.Info("正在初始安全区光圈...");
                 GameShare.MapMgr.MakeSafePkZone();
                 _logger.Info("安全区光圈初始化成功...");
-                GameShare.WorldEngine.InitializationMonsterThread();
+                M2Share.WorldEngine.InitializationMonsterThread();
                 if (!GameShare.Config.VentureServer)
                 {
                     LocalDb.LoadGuardList();
@@ -254,7 +256,7 @@ namespace GameSrv
                 GameShare.GuildMgr.LoadGuildInfo();
                 GameShare.CastleMgr.LoadCastleList();
                 GameShare.CastleMgr.Initialize();
-                GameShare.WorldEngine.Initialize();
+                M2Share.WorldEngine.Initialize();
             }
             catch (Exception ex)
             {
@@ -285,25 +287,25 @@ namespace GameSrv
                         {
                             continue;
                         }
-                        if (GameShare.ServerTableList[nRouteIdx] == null)
+                        if (M2Share.ServerTableList[nRouteIdx] == null)
                         {
-                            GameShare.ServerTableList[nRouteIdx] = new TRouteInfo();
+                            M2Share.ServerTableList[nRouteIdx] = new TRouteInfo();
                         }
-                        GameShare.ServerTableList[nRouteIdx].GateCount = 0;
-                        GameShare.ServerTableList[nRouteIdx].ServerIdx = HUtil32.StrToInt(sIdx, 0);
-                        GameShare.ServerTableList[nRouteIdx].SelGateIP = sSelGateIPaddr.Trim();
+                        M2Share.ServerTableList[nRouteIdx].GateCount = 0;
+                        M2Share.ServerTableList[nRouteIdx].ServerIdx = HUtil32.StrToInt(sIdx, 0);
+                        M2Share.ServerTableList[nRouteIdx].SelGateIP = sSelGateIPaddr.Trim();
                         int nGateIdx = 0;
                         while (!string.IsNullOrEmpty(sGameGate))
                         {
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
-                            GameShare.ServerTableList[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
-                            GameShare.ServerTableList[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
+                            M2Share.ServerTableList[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
+                            M2Share.ServerTableList[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
                             nGateIdx++;
                         }
-                        GameShare.ServerTableList[nRouteIdx].GateCount = nGateIdx;
+                        M2Share.ServerTableList[nRouteIdx].GateCount = nGateIdx;
                         nRouteIdx++;
-                        if (nRouteIdx > GameShare.ServerTableList.Length)
+                        if (nRouteIdx > M2Share.ServerTableList.Length)
                         {
                             break;
                         }
@@ -323,18 +325,18 @@ namespace GameSrv
             bool result = false;
             if (File.Exists(fileName))
             {
-                GameShare.AbuseTextList.Clear();
-                GameShare.AbuseTextList.LoadFromFile(fileName);
+                M2Share.AbuseTextList.Clear();
+                M2Share.AbuseTextList.LoadFromFile(fileName);
                 while (true)
                 {
-                    if (GameShare.AbuseTextList.Count <= lineCount)
+                    if (M2Share.AbuseTextList.Count <= lineCount)
                     {
                         break;
                     }
-                    string sText = GameShare.AbuseTextList[lineCount].Trim();
+                    string sText = M2Share.AbuseTextList[lineCount].Trim();
                     if (string.IsNullOrEmpty(sText))
                     {
-                        GameShare.AbuseTextList.RemoveAt(lineCount);
+                        M2Share.AbuseTextList.RemoveAt(lineCount);
                         continue;
                     }
                     lineCount++;

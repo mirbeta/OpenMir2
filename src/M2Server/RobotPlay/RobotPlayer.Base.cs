@@ -125,7 +125,7 @@ namespace M2Server.RobotPlay
 
                         if (IsRobot && !Ghost && !Death)
                         {
-                            if (M2Share.Config.boHPAutoMoveMap)
+                            if (SystemShare.Config.boHPAutoMoveMap)
                             {
                                 if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - MDwHpToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
@@ -144,7 +144,7 @@ namespace M2Server.RobotPlay
                                     }
                                 }
                             }
-                            if (M2Share.Config.boAutoRepairItem)
+                            if (SystemShare.Config.boAutoRepairItem)
                             {
                                 if (HUtil32.GetTickCount() - AutoRepairItemTick > 15000)
                                 {
@@ -243,14 +243,14 @@ namespace M2Server.RobotPlay
                                     }
                                 }
                             }
-                            if (M2Share.Config.boRenewHealth) // 自动增加HP MP
+                            if (SystemShare.Config.boRenewHealth) // 自动增加HP MP
                             {
                                 if (HUtil32.GetTickCount() - AutoAddHealthTick > 5000)
                                 {
                                     AutoAddHealthTick = HUtil32.GetTickCount();
                                     var nPercent = WAbil.HP * 100 / WAbil.MaxHP;
                                     var nValue = WAbil.MaxHP / 10;
-                                    if (nPercent < M2Share.Config.nRenewPercent)
+                                    if (nPercent < SystemShare.Config.nRenewPercent)
                                     {
                                         if (WAbil.HP + nValue >= WAbil.MaxHP)
                                         {
@@ -263,7 +263,7 @@ namespace M2Server.RobotPlay
                                     }
                                     nValue = WAbil.MaxMP / 10;
                                     nPercent = WAbil.MP * 100 / WAbil.MaxMP;
-                                    if (nPercent < M2Share.Config.nRenewPercent)
+                                    if (nPercent < SystemShare.Config.nRenewPercent)
                                     {
                                         if (WAbil.MP + nValue >= WAbil.MaxMP)
                                         {
@@ -525,7 +525,7 @@ namespace M2Server.RobotPlay
                                         case CellType.Item:
                                             if (Race == ActorRace.Play)
                                             {
-                                                if (HUtil32.GetTickCount() - cellObject.AddTime > M2Share.Config.ClearDropOnFloorItemTime)
+                                                if (HUtil32.GetTickCount() - cellObject.AddTime > SystemShare.Config.ClearDropOnFloorItemTime)
                                                 {
                                                     if (cellObject.CellObjId > 0)
                                                     {
@@ -547,7 +547,7 @@ namespace M2Server.RobotPlay
                                                 UpdateVisibleItem(nX, nY, mapItem);
                                                 if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                 {
-                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > M2Share.Config.FloorItemCanPickUpTime)
+                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > SystemShare.Config.FloorItemCanPickUpTime)
                                                     {
                                                         mapItem.OfBaseObject = 0;
                                                         mapItem.DropBaseObject = 0;
@@ -846,7 +846,7 @@ namespace M2Server.RobotPlay
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Messages.RM_HEAR, 0, M2Share.Config.btHearMsgFColor, M2Share.Config.btHearMsgBColor, 0, ChrName + ':' + AiSayMsgList[M2Share.RandomNumber.Random(AiSayMsgList.Count)]);
+                            SendRefMsg(Messages.RM_HEAR, 0, SystemShare.Config.btHearMsgFColor, SystemShare.Config.btHearMsgBColor, 0, ChrName + ':' + AiSayMsgList[M2Share.RandomNumber.Random(AiSayMsgList.Count)]);
                         }
                     }
                 }
@@ -910,7 +910,7 @@ namespace M2Server.RobotPlay
                         nC++;
                         continue;
                     }
-                    int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                    int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[nC], dropWide, true, baseObject, this.ActorId))
                     {
                         var stdItem = ItemSystem.GetStdItem(UseItems[nC].Index);

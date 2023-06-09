@@ -45,7 +45,6 @@ namespace M2Server
         public static readonly CellObjectMgr CellObjectMgr;
         public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
-        //public static ScriptSystem ScriptSystem;
         public static IMapManager MapMgr;
         public static CustomItem CustomItemMgr = null;
         public static NoticeManager NoticeMgr = null;
@@ -70,6 +69,7 @@ namespace M2Server
         public static ConcurrentDictionary<string, short> MiniMapList = null;
         public static IList<DealOffInfo> SellOffItemList = null;
         public static ArrayList LogonCostLogList = null;
+        //public static List<IList<TQDDinfo>> QuestDiaryList =null;
         /// <summary>
         /// 解包物品列表
         /// </summary>
@@ -184,22 +184,11 @@ namespace M2Server
         public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
-        public static readonly ServerConf ServerConf;
-        public static readonly GameSvrConf Config;
-        private static readonly StringConf StringConf;
-        private static readonly ExpsConf ExpConf;
-        private static readonly GlobalConf GlobalConf;
-        private static readonly GameSettingConf GameSetting;
+ 
 
         static M2Share()
         {
             BasePath = AppContext.BaseDirectory;
-            ServerConf = new ServerConf(Path.Combine(BasePath, ConfConst.ServerFileName));
-            StringConf = new StringConf(Path.Combine(BasePath, ConfConst.StringFileName));
-            ExpConf = new ExpsConf(Path.Combine(BasePath, ConfConst.ExpConfigFileName));
-            GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.GlobalConfigFileName));
-            GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.GameSettingFileName));
-            Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
             ActorMgr = new ActorMgr();
             CommonDb = new CommonDB();
@@ -207,6 +196,8 @@ namespace M2Server
             CellObjectMgr = new CellObjectMgr();
             NetworkMonitor = new NetworkMonitor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            ProcessHumanCriticalSection = new object();
+            UserDBCriticalSection = new object();
         }
 
         public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
@@ -530,7 +521,7 @@ namespace M2Server
         public static bool CheckGuildName(string sGuildName)
         {
             var result = true;
-            if (sGuildName.Length > Config.GuildNameLen)
+            if (sGuildName.Length > SystemShare.Config.GuildNameLen)
             {
                 return false;
             }
@@ -547,26 +538,26 @@ namespace M2Server
 
         public static int GetItemNumber()
         {
-            Config.ItemNumber++;
-            if (Config.ItemNumber > int.MaxValue / 2 - 1)
+            SystemShare. Config.ItemNumber++;
+            if (SystemShare.Config.ItemNumber > int.MaxValue / 2 - 1)
             {
-                Config.ItemNumber = 1;
+                SystemShare. Config.ItemNumber = 1;
             }
-            return Config.ItemNumber + HUtil32.GetTickCount();
+            return SystemShare.Config.ItemNumber + HUtil32.GetTickCount();
         }
 
         public static int GetItemNumberEx()
         {
-            Config.ItemNumberEx++;
-            if (Config.ItemNumberEx < int.MaxValue / 2)
+            SystemShare.Config.ItemNumberEx++;
+            if (SystemShare.Config.ItemNumberEx < int.MaxValue / 2)
             {
-                Config.ItemNumberEx = int.MaxValue / 2;
+                SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
             }
-            if (Config.ItemNumberEx > int.MaxValue - 1)
+            if (SystemShare.Config.ItemNumberEx > int.MaxValue - 1)
             {
-                Config.ItemNumberEx = int.MaxValue / 2;
+                SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
             }
-            return Config.ItemNumberEx + HUtil32.GetTickCount();
+            return SystemShare.Config.ItemNumberEx + HUtil32.GetTickCount();
         }
 
         public static string FilterShowName(string sName)
@@ -2027,11 +2018,11 @@ namespace M2Server
 
         public static void LoadConfig()
         {
-            ServerConf.LoadConfig();
+            /*ServerConf.LoadConfig();
             StringConf.LoadString();
             ExpConf.LoadConfig();
             GlobalConf.LoadConfig();
-            GameSetting.LoadConfig();
+            GameSetting.LoadConfig();*/
         }
 
         public static string GetIPLocal(string sIPaddr)
@@ -2087,27 +2078,27 @@ namespace M2Server
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, Config.EnvirDir, filePath);
+            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath);
         }
 
         public static string GetEnvirFilePath(string dirPath, string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, Config.EnvirDir, dirPath, filePath);
+            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, dirPath, filePath);
         }
 
         public static string GetNoticeFilePath(string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, Config.NoticeDir, filePath);
+            return Path.Combine(BasePath, SystemShare.Config.NoticeDir, filePath);
         }
     }
 }

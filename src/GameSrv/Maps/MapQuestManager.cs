@@ -51,7 +51,7 @@ namespace M2Server.Maps
                 IsHide = true,
                 IsQuest = false
             };
-            GameShare.WorldEngine.QuestNpcList.Add(mapMerchantOld);
+            //M2Share.WorldEngine.QuestNpcList.Add(mapMerchantOld);
             mapQuest.NPC = mapMerchantOld;
             QuestList.Add(mapQuest);
             return true;

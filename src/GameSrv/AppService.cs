@@ -1,3 +1,4 @@
+using M2Server;
 using M2Server.World;
 using McMaster.Extensions.CommandLineUtils;
 using Microsoft.Extensions.DependencyInjection;
@@ -140,10 +141,10 @@ namespace GameSrv
 
         private void SavePlayer()
         {
-            if (GameShare.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
+            if (M2Share.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 _logger.Debug("保存玩家数据");
-                foreach (var play in GameShare.WorldEngine.PlayObjects)
+                foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
                     WorldServer.SaveHumanRcd(play);
                 }
@@ -156,7 +157,7 @@ namespace GameSrv
 
         private async Task StopService(string sIPaddr, int nPort, bool isTransfer)
         {
-            var playerCount = GameShare.WorldEngine.PlayObjectCount;
+            var playerCount = M2Share.WorldEngine.PlayObjectCount;
             if (playerCount == 0)
             {
                 _logger.Info("没有玩家在线，游戏引擎服务已停止...Bye!");
@@ -177,18 +178,18 @@ namespace GameSrv
                     {
                         if (isTransfer)
                         {
-                            foreach (var playObject in GameShare.WorldEngine.PlayObjects)
+                            foreach (var playObject in M2Share.WorldEngine.PlayObjects)
                             {
                                 if (playObject.Ghost || playObject.Death)//死亡或者下线的玩家不进行转移
                                 {
                                     continue;
                                 }
-                                playObject.TransferPlanesServer(sIPaddr, nPort);
+                               // playObject.TransferPlanesServer(sIPaddr, nPort);
                             }
                         }
                         break;//转移结束后跳出循环
                     }
-                    foreach (var playObject in GameShare.WorldEngine.PlayObjects)
+                    foreach (var playObject in M2Share.WorldEngine.PlayObjects)
                     {
                         var closeMsg = isTransfer ? string.Format(CloseTransferMessgae, shutdownSeconds) : string.Format(CloseServerMessage, shutdownSeconds);
                         playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);
@@ -294,10 +295,10 @@ namespace GameSrv
                     while (await _timer.WaitForNextTickAsync(cancellationToken))
                     {
                         var monsterCount = 0;
-                        for (var i = 0; i < GameShare.WorldEngine.MobThreads.Length; i++)
+                        /*for (var i = 0; i < M2Share.WorldEngine.MobThreads.Length; i++)
                         {
-                            monsterCount += GameShare.WorldEngine.MobThreads[i].MonsterCount;
-                        }
+                            monsterCount += M2Share.WorldEngine.MobThreads[i].MonsterCount;
+                        }*/
                         AnsiConsole.MarkupLine($"Monsters:{monsterCount}");
                         GameShare.Statistics.ShowServerStatus();
                         ctx.Refresh();

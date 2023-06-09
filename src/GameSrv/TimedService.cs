@@ -1,3 +1,4 @@
+using M2Server;
 using M2Server.Planes;
 using M2Server.Services;
 using M2Server.World;
@@ -225,10 +226,10 @@ namespace GameSrv
                 return;
             }
             _logger.Debug("定时保存角色数据");
-            if (GameShare.WorldEngine.PlayObjectCount > 0)
+            if (M2Share.WorldEngine.PlayObjectCount > 0)
             {
                 _scheduledSaveData = true;
-                foreach (var play in GameShare.WorldEngine.PlayObjects)
+                foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
                     if (GameShare.FrontEngine.InSaveRcdList(play.ChrName))
                     {

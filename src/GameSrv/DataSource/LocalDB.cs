@@ -109,7 +109,7 @@ namespace M2Server.DataSource
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
                             {
-                                BaseObject guard = M2Shares.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
+                                IActor guard = M2Shares.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
                                 if (guard != null)
                                 {
                                     guard.Dir = (byte)HUtil32.StrToInt(direction, 0);
@@ -469,10 +469,10 @@ namespace M2Server.DataSource
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
                         if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && GameShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null) {
-                            monGenInfo.CertList = new List<AnimalObject>();
+                            monGenInfo.CertList = new List<IActor>();
                             monGenInfo.Envir = GameShare.MapMgr.FindMap(monGenInfo.MapName);
                             if (monGenInfo.Envir != null) {
-                                M2Shares.WorldEngine.MonGenList.Add(monGenInfo);
+                                M2Share.WorldEngine.AddMonGenList(monGenInfo);
                             }
                             else {
                                 monGenInfo = null;
@@ -481,17 +481,19 @@ namespace M2Server.DataSource
                     }
                 }
                 monGenInfo = new MonGenInfo {
-                    CertList = new List<AnimalObject>(),
+                    CertList = new List<IActor>(),
                     Envir = null
                 };
-                if (M2Shares.WorldEngine.MonGenInfoThreadMap.ContainsKey(0)) {
-                    M2Shares.WorldEngine.MonGenInfoThreadMap[0].Add(monGenInfo);
+                if (M2Share.WorldEngine.CheckMonGenInfoThreadMap(0))
+                {
+                    M2Share.WorldEngine.AddMonGenInfoThreadMap(0, monGenInfo);
                 }
-                else {
-                    M2Shares.WorldEngine.MonGenInfoThreadMap.Add(0, new List<MonGenInfo>() { monGenInfo });
+                else
+                {
+                    M2Share.WorldEngine.CreateMonGenInfoThreadMap(0, new List<MonGenInfo>() {monGenInfo});
                 }
                 result = 1;
-                mongenCount = M2Shares.WorldEngine.MonGenList.Sum(x => x.Count);
+                mongenCount = M2Share.WorldEngine.MonGenCount;
             }
             return result;
         }
@@ -612,7 +614,7 @@ namespace M2Server.DataSource
             }
         }
 
-        private static string LoadQuestDiary_sub_48978C(int nIndex) {
+        private static string LoadQuestDiaryList(int nIndex) {
             string result;
             if (nIndex >= 1000) {
                 result = nIndex.ToString();
@@ -632,10 +634,10 @@ namespace M2Server.DataSource
             string s20 = string.Empty;
             bool bo2D = false;
             int nC = 1;
-            GameShare.QuestDiaryList.Clear();
+            //M2Share.QuestDiaryList.Clear();
             while (true) {
                 IList<TQDDinfo> qdDinfoList = null;
-                string sFileName = M2Share.GetEnvirFilePath("QuestDiary", LoadQuestDiary_sub_48978C(nC) + ".txt");
+                string sFileName = M2Share.GetEnvirFilePath("QuestDiary", LoadQuestDiaryList(nC) + ".txt");
                 if (File.Exists(sFileName)) {
                     s18 = string.Empty;
                     TQDDinfo qdDinfo = null;
@@ -682,10 +684,10 @@ namespace M2Server.DataSource
                     }
                 }
                 if (qdDinfoList != null) {
-                    GameShare.QuestDiaryList.Add(qdDinfoList);
+                   // M2Share.QuestDiaryList.Add(qdDinfoList);
                 }
                 else {
-                    GameShare.QuestDiaryList.Add(null);
+                    //M2Share.QuestDiaryList.Add(null);
                 }
                 nC++;
                 if (nC >= 105) {

@@ -403,7 +403,7 @@ namespace M2Server.RobotPlay
                         {
                             AttackTick = HUtil32.GetTickCount();
                             result = UseSpell(UserMagic, TargetCret.CurrX, TargetCret.CurrY, TargetCret); // 使用魔法
-                            if (TargetCret.WAbil.MaxHP >= 700 || !M2Share.Config.boHeroAttackTao)
+                            if (TargetCret.WAbil.MaxHP >= 700 || !SystemShare.Config.boHeroAttackTao)
                             {
                                 return result;
                             }
@@ -439,7 +439,7 @@ namespace M2Server.RobotPlay
         /// <returns></returns>
         private bool AttackLevelTarget()
         {
-            return M2Share.Config.boHeroAttackTarget && Abil.Level < 22;
+            return SystemShare.Config.boHeroAttackTarget && Abil.Level < 22;
         }
 
         /// <summary>
@@ -448,7 +448,7 @@ namespace M2Server.RobotPlay
         /// <returns></returns>
         private bool TaoLevelHitAttack()
         {
-            return M2Share.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play;
+            return SystemShare.Config.boHeroAttackTao && TargetCret.Race != ActorRace.Play;
         }
 
         private bool AttackTarget()
@@ -480,14 +480,14 @@ namespace M2Server.RobotPlay
                 switch (Job)
                 {
                     case PlayJob.Warrior:
-                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWarrorAttackTime)
+                        if (HUtil32.GetTickCount() - AttackTick > SystemShare.Config.nAIWarrorAttackTime)
                         {
                             AutoUseMagic = false;// 是否能躲避
                             result = WarrorAttackTarget();
                         }
                         break;
                     case PlayJob.Wizard:
-                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAIWizardAttackTime)// 连击也不受间隔控制
+                        if (HUtil32.GetTickCount() - AttackTick > SystemShare.Config.nAIWizardAttackTime)// 连击也不受间隔控制
                         {
                             AttackTick = HUtil32.GetTickCount();
                             AutoUseMagic = false;// 是否能躲避
@@ -498,7 +498,7 @@ namespace M2Server.RobotPlay
                         AutoMagicId = 0;
                         break;
                     case PlayJob.Taoist:
-                        if (HUtil32.GetTickCount() - AttackTick > M2Share.Config.nAITaoistAttackTime)
+                        if (HUtil32.GetTickCount() - AttackTick > SystemShare.Config.nAITaoistAttackTime)
                         {
                             AttackTick = HUtil32.GetTickCount();
                             AutoUseMagic = false; // 是否能躲避

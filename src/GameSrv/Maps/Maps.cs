@@ -388,7 +388,7 @@ namespace M2Server.Maps {
                 IsHide = true,
                 IsQuest = false
             };
-            GameShare.WorldEngine.QuestNpcList.Add(questNPC);
+            //M2Share.WorldEngine.QuestNpcList.Add(questNPC);
             return questNPC;
         }
 

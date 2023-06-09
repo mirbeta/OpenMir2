@@ -30,7 +30,7 @@ namespace M2Server.Services
 
         public bool IsEnableChatServer
         {
-            get { return M2Share.Config.EnableChatServer; }
+            get { return SystemShare.Config.EnableChatServer; }
         }
 
         public async Task Start()
@@ -40,7 +40,7 @@ namespace M2Server.Services
                 return;
             }
             logger.Info("开始链接世界聊天频道...");
-            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(M2Share.Config.ChatSrvAddr, M2Share.Config.ChatSrvPort).Build();
+            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(SystemShare.Config.ChatSrvAddr, SystemShare.Config.ChatSrvPort).Build();
             try
             {
                 using var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));

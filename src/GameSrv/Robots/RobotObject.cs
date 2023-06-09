@@ -2,9 +2,9 @@
 using NLog;
 using SystemModule.Common;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.Robots {
+namespace M2Server.Robots
+{
     public class RobotObject : PlayObject {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly char[] LoadSriptSpitConst = new[] { ' ', '/', '\t' };
@@ -28,26 +28,26 @@ namespace M2Server.Robots {
             {
                 switch (autoRunInfo.Moethod)
                 {
-                    case Robot.nRODAY:
-                        autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddDays(1).ToUnixTimeMilliseconds();
-                        autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
-                        break;
-                    case Robot.nROHOUR:
-                        autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddHours(1).ToUnixTimeMilliseconds();
-                        autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
-                        break;
-                    case Robot.nROMIN:
-                        autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddMinutes(1).ToUnixTimeMilliseconds();
-                        autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
-                        break;
-                    case Robot.nROSEC:
-                        autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddSeconds(1).ToUnixTimeMilliseconds();
-                        autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
-                        break;
+                    //case Robot.nRODAY:
+                    //    autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddDays(1).ToUnixTimeMilliseconds();
+                    //    autoRunInfo.RunTick = HUtil32.GetTimestamp();
+                    //    GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                    //    break;
+                    //case Robot.nROHOUR:
+                    //    autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddHours(1).ToUnixTimeMilliseconds();
+                    //    autoRunInfo.RunTick = HUtil32.GetTimestamp();
+                    //    GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                    //    break;
+                    //case Robot.nROMIN:
+                    //    autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddMinutes(1).ToUnixTimeMilliseconds();
+                    //    autoRunInfo.RunTick = HUtil32.GetTimestamp();
+                    //    GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                    //    break;
+                    //case Robot.nROSEC:
+                    //    autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddSeconds(1).ToUnixTimeMilliseconds();
+                    //    autoRunInfo.RunTick = HUtil32.GetTimestamp();
+                    //    GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                    //    break;
                     case Robot.nRUNONWEEK:
                         GetWeekTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
@@ -91,7 +91,7 @@ namespace M2Server.Robots {
                 if (wHour == nHour) {
                     if (wMin == nMin) {
                         if (autoRunInfo.boStatus) return;
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                       // GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         autoRunInfo.boStatus = true;
                     }
                     else {
@@ -113,7 +113,7 @@ namespace M2Server.Robots {
                 var wMin = DateTime.Now.Minute;
                 if (wMin == nMin) {
                     if (autoRunInfo.boStatus) return;
-                    GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                  //  GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                     autoRunInfo.boStatus = true;
                 }
                 else {
@@ -143,7 +143,7 @@ namespace M2Server.Robots {
                 if ((int)wWeek == nWeek && wHour == nHour) {
                     if (wMin == nMin) {
                         if (autoRunInfo.boStatus) return;
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                       // GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         autoRunInfo.boStatus = true;
                     }
                     else {

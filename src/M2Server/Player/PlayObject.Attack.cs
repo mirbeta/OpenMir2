@@ -149,7 +149,7 @@ namespace M2Server.Player
                         }
                         if (nSecPwr > 0)
                         {
-                            if (!SwordLongAttack(ref nSecPwr) && M2Share.Config.LimitSwordLong)
+                            if (!SwordLongAttack(ref nSecPwr) && SystemShare.Config.LimitSwordLong)
                             {
                                 wHitMode = 0;
                             }
@@ -216,9 +216,9 @@ namespace M2Server.Player
             {
                 return;
             }
-            if (!targetObject.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(targetObject.AntiPoison + M2Share.Config.AttackPosionRate) == 0))
+            if (!targetObject.UnParalysis && Paralysis && (M2Share.RandomNumber.Random(targetObject.AntiPoison + SystemShare.Config.AttackPosionRate) == 0))
             {
-                targetObject.MakePosion(PoisonState.STONE, M2Share.Config.AttackPosionTime, 0);
+                targetObject.MakePosion(PoisonState.STONE, SystemShare.Config.AttackPosionTime, 0);
             }
             ushort nWeaponDamage = (ushort)(M2Share.RandomNumber.Random(5) + 2 - AddAbil.WeaponStrong);
             if ((nWeaponDamage > 0) && (UseItems[ItemLocation.Weapon] != null) && (UseItems[ItemLocation.Weapon].Index > 0))
@@ -279,28 +279,28 @@ namespace M2Server.Player
                     CheckSkillProficiency(1, attackMagic);
                     break;
             }
-            if (M2Share.Config.MonDelHptoExp)
+            if (SystemShare.Config.MonDelHptoExp)
             {
                 switch (Race)
                 {
                     case ActorRace.Play:
                         if (IsRobot)
                         {
-                            if (((RobotPlayer)this).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                            if (((RobotPlayer)this).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
                             {
                                 if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                 {
-                                    ((RobotPlayer)this).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                    ((RobotPlayer)this).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
                                 }
                             }
                         }
                         else
                         {
-                            if (Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                            if (Abil.Level <= SystemShare.Config.MonHptoExpLevel)
                             {
                                 if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                 {
-                                    GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                    GainExp(nPower * SystemShare.Config.MonHptoExpmax);
                                 }
                             }
                         }
@@ -310,21 +310,21 @@ namespace M2Server.Player
                         {
                             if (Master.IsRobot)
                             {
-                                if (((RobotPlayer)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if (((RobotPlayer)Master).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                     {
-                                        ((RobotPlayer)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                        ((RobotPlayer)Master).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
                                     }
                                 }
                             }
                             else
                             {
-                                if (((PlayObject)Master).Abil.Level <= M2Share.Config.MonHptoExpLevel)
+                                if (((PlayObject)Master).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                     {
-                                        ((PlayObject)Master).GainExp(nPower * M2Share.Config.MonHptoExpmax);
+                                        ((PlayObject)Master).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
                                     }
                                 }
                             }
@@ -632,7 +632,7 @@ namespace M2Server.Player
                     {
                         result = true;
                     }
-                    if (M2Share.Config.PveServer)
+                    if (SystemShare.Config.PveServer)
                     {
                         return true;
                     }
@@ -693,7 +693,7 @@ namespace M2Server.Player
                             result = false;
                         }
                     }
-                    if (M2Share.Config.PveServer)
+                    if (SystemShare.Config.PveServer)
                     {
                         return true;
                     }
@@ -720,7 +720,7 @@ namespace M2Server.Player
                             }
                         }
                     }
-                    if (M2Share.Config.PveServer)
+                    if (SystemShare.Config.PveServer)
                     {
                         result = true;
                     }
@@ -741,7 +741,7 @@ namespace M2Server.Player
                             result = ((PlayObject)targetObject).PvpLevel() >= 2;
                         }
                     }
-                    if (M2Share.Config.PveServer)
+                    if (SystemShare.Config.PveServer)
                     {
                         result = true;
                     }
@@ -771,35 +771,35 @@ namespace M2Server.Player
                 PlayObject playObject = (PlayObject)targetObject;
                 if (!playObject.InGuildWarArea)
                 {
-                    if (M2Share.Config.boPKLevelProtect)// 新人保护
+                    if (SystemShare.Config.boPKLevelProtect)// 新人保护
                     {
-                        if (Abil.Level > M2Share.Config.nPKProtectLevel)// 如果大于指定等级
+                        if (Abil.Level > SystemShare.Config.nPKProtectLevel)// 如果大于指定等级
                         {
-                            if (!playObject.PvpFlag && targetObject.WAbil.Level <= M2Share.Config.nPKProtectLevel && playObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
+                            if (!playObject.PvpFlag && targetObject.WAbil.Level <= SystemShare.Config.nPKProtectLevel && playObject.PvpLevel() < 2)// 被攻击的人物小指定等级没有红名，则不可以攻击。
                             {
                                 return false;
                             }
                         }
-                        if (Abil.Level <= M2Share.Config.nPKProtectLevel)// 如果小于指定等级
+                        if (Abil.Level <= SystemShare.Config.nPKProtectLevel)// 如果小于指定等级
                         {
-                            if (!playObject.PvpFlag && targetObject.WAbil.Level > M2Share.Config.nPKProtectLevel && playObject.PvpLevel() < 2)
+                            if (!playObject.PvpFlag && targetObject.WAbil.Level > SystemShare.Config.nPKProtectLevel && playObject.PvpLevel() < 2)
                             {
                                 return false;
                             }
                         }
                     }
                     // 大于指定级别的红名人物不可以杀指定级别未红名的人物。
-                    if (PvpLevel() >= 2 && Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                    if (PvpLevel() >= 2 && Abil.Level > SystemShare.Config.nRedPKProtectLevel)
                     {
-                        if (targetObject.Abil.Level <= M2Share.Config.nRedPKProtectLevel && playObject.PvpLevel() < 2)
+                        if (targetObject.Abil.Level <= SystemShare.Config.nRedPKProtectLevel && playObject.PvpLevel() < 2)
                         {
                             return false;
                         }
                     }
                     // 小于指定级别的非红名人物不可以杀指定级别红名人物。
-                    if (Abil.Level <= M2Share.Config.nRedPKProtectLevel && PvpLevel() < 2)
+                    if (Abil.Level <= SystemShare.Config.nRedPKProtectLevel && PvpLevel() < 2)
                     {
-                        if (playObject.PvpLevel() >= 2 && targetObject.Abil.Level > M2Share.Config.nRedPKProtectLevel)
+                        if (playObject.PvpLevel() >= 2 && targetObject.Abil.Level > SystemShare.Config.nRedPKProtectLevel)
                         {
                             return false;
                         }
@@ -831,7 +831,7 @@ namespace M2Server.Player
                 {
                     return false;
                 }
-                if (!M2Share.Config.CloseSpeedHackCheck)
+                if (!SystemShare.Config.CloseSpeedHackCheck)
                 {
                     if (!boLateDelivery)
                     {
@@ -841,19 +841,19 @@ namespace M2Server.Player
                             return false;
                         }
                         IsFilterAction = true;
-                        int dwAttackTime = HUtil32._MAX(0, M2Share.Config.HitIntervalTime - HitSpeed * M2Share.Config.ItemSpeed);
+                        int dwAttackTime = HUtil32._MAX(0, SystemShare.Config.HitIntervalTime - HitSpeed * SystemShare.Config.ItemSpeed);
                         int dwCheckTime = HUtil32.GetTickCount() - AttackTick;
                         if (dwCheckTime < dwAttackTime)
                         {
                             AttackCount++;
                             delayTime = dwAttackTime - dwCheckTime;
-                            if (delayTime > M2Share.Config.DropOverSpeed)
+                            if (delayTime > SystemShare.Config.DropOverSpeed)
                             {
                                 if (AttackCount >= 4)
                                 {
                                     AttackTick = HUtil32.GetTickCount();
                                     AttackCount = 0;
-                                    delayTime = M2Share.Config.DropOverSpeed;
+                                    delayTime = SystemShare.Config.DropOverSpeed;
                                     if (TestSpeedMode)
                                     {
                                         SysMsg($"攻击忙!!!{delayTime}", MsgColor.Red, MsgType.Hint);
@@ -975,7 +975,7 @@ namespace M2Server.Player
             {
                 return result;
             }
-            if (!M2Share.Config.CloseSpeedHackCheck)
+            if (!SystemShare.Config.CloseSpeedHackCheck)
             {
                 if (!boLateDelivery)
                 {
@@ -986,17 +986,17 @@ namespace M2Server.Player
                     }
                     IsFilterAction = true;
                     dwCheckTime = HUtil32.GetTickCount() - MoveTick;
-                    if (dwCheckTime < M2Share.Config.RunIntervalTime)
+                    if (dwCheckTime < SystemShare.Config.RunIntervalTime)
                     {
                         MoveCount++;
-                        delayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
-                        if (delayTime > M2Share.Config.DropOverSpeed)
+                        delayTime = SystemShare.Config.RunIntervalTime - dwCheckTime;
+                        if (delayTime > SystemShare.Config.DropOverSpeed)
                         {
                             if (MoveCount >= 4)
                             {
                                 MoveTick = HUtil32.GetTickCount();
                                 MoveCount = 0;
-                                delayTime = M2Share.Config.DropOverSpeed;
+                                delayTime = SystemShare.Config.DropOverSpeed;
                                 if (TestSpeedMode)
                                 {
                                     SysMsg("马跑步忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
@@ -1062,7 +1062,7 @@ namespace M2Server.Player
                 return false;
             }
             bool boIsWarrSkill = MagicManager.IsWarrSkill(UserMagic.MagIdx);
-            if (!boLateDelivery && !boIsWarrSkill && (!M2Share.Config.CloseSpeedHackCheck))
+            if (!boLateDelivery && !boIsWarrSkill && (!SystemShare.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref delayTime))
                 {
@@ -1075,13 +1075,13 @@ namespace M2Server.Player
                 {
                     MagicAttackCount++;
                     delayTime = MagicAttackInterval - dwCheckTime;
-                    if (delayTime > M2Share.Config.MagicHitIntervalTime / 3)
+                    if (delayTime > SystemShare.Config.MagicHitIntervalTime / 3)
                     {
                         if (MagicAttackCount >= 4)
                         {
                             MagicAttackTick = HUtil32.GetTickCount();
                             MagicAttackCount = 0;
-                            delayTime = M2Share.Config.MagicHitIntervalTime / 3;
+                            delayTime = SystemShare.Config.MagicHitIntervalTime / 3;
                             if (TestSpeedMode)
                             {
                                 SysMsg("魔法忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
@@ -1104,7 +1104,7 @@ namespace M2Server.Player
             SpellTick = HUtil32._MAX(0, SpellTick);
             if (!boIsWarrSkill)
             {
-                MagicAttackInterval = UserMagic.Magic.DelayTime + M2Share.Config.MagicHitIntervalTime;
+                MagicAttackInterval = UserMagic.Magic.DelayTime + SystemShare.Config.MagicHitIntervalTime;
             }
             MagicAttackTick = HUtil32.GetTickCount();
             ushort nSpellPoint;
@@ -1292,7 +1292,7 @@ namespace M2Server.Player
             {
                 return false;
             }
-            if (nFlag != wIdent && (!M2Share.Config.CloseSpeedHackCheck))
+            if (nFlag != wIdent && (!SystemShare.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref delayTime))
                 {
@@ -1301,17 +1301,17 @@ namespace M2Server.Player
                 }
                 IsFilterAction = true;
                 var dwCheckTime = HUtil32.GetTickCount() - MoveTick;
-                if (dwCheckTime < M2Share.Config.RunIntervalTime)
+                if (dwCheckTime < SystemShare.Config.RunIntervalTime)
                 {
                     MoveCount++;
-                    delayTime = M2Share.Config.RunIntervalTime - dwCheckTime;
-                    if (delayTime > M2Share.Config.RunIntervalTime / 3)
+                    delayTime = SystemShare.Config.RunIntervalTime - dwCheckTime;
+                    if (delayTime > SystemShare.Config.RunIntervalTime / 3)
                     {
                         if (MoveCount >= 4)
                         {
                             MoveTick = HUtil32.GetTickCount();
                             MoveCount = 0;
-                            delayTime = M2Share.Config.RunIntervalTime / 3;
+                            delayTime = SystemShare.Config.RunIntervalTime / 3;
                             if (TestSpeedMode)
                             {
                                 SysMsg("跑步忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);
@@ -1368,7 +1368,7 @@ namespace M2Server.Player
             {
                 return false; // 防麻
             }
-            if (!boLateDelivery && (!M2Share.Config.CloseSpeedHackCheck))
+            if (!boLateDelivery && (!SystemShare.Config.CloseSpeedHackCheck))
             {
                 if (!CheckActionStatus(wIdent, ref delayTime))
                 {
@@ -1377,17 +1377,17 @@ namespace M2Server.Player
                 }
                 IsFilterAction = true;
                 int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
-                if (dwCheckTime < M2Share.Config.WalkIntervalTime)
+                if (dwCheckTime < SystemShare.Config.WalkIntervalTime)
                 {
                     MoveCount++;
-                    delayTime = M2Share.Config.WalkIntervalTime - dwCheckTime;
-                    if (delayTime > M2Share.Config.WalkIntervalTime / 3)
+                    delayTime = SystemShare.Config.WalkIntervalTime - dwCheckTime;
+                    if (delayTime > SystemShare.Config.WalkIntervalTime / 3)
                     {
                         if (MoveCount >= 4)
                         {
                             MoveTick = HUtil32.GetTickCount();
                             MoveCount = 0;
-                            delayTime = M2Share.Config.WalkIntervalTime / 3;
+                            delayTime = SystemShare.Config.WalkIntervalTime / 3;
                             if (TestSpeedMode)
                             {
                                 SysMsg("走路忙复位!!!" + delayTime, MsgColor.Red, MsgType.Hint);

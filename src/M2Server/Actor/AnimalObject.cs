@@ -258,7 +258,7 @@ namespace M2Server.Actor
         /// </summary>
         internal void MonsterSayMessage(IActor monsterObject, MonStatus monStatus)
         {
-            if (!M2Share.Config.MonSayMsg)
+            if (!SystemShare.Config.MonSayMsg)
             {
                 return;
             }

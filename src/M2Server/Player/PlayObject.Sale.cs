@@ -294,9 +294,9 @@ namespace M2Server.Player
                             && string.Compare(dealOffInfo.sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                         {
                             dealOffInfo.Flag = 4;
-                            if (GameGold >= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
+                            if (GameGold >= dealOffInfo.nSellGold + SystemShare.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
                             {
-                                GameGold -= dealOffInfo.nSellGold + M2Share.Config.DecUserGameGold; // 扣出元宝
+                                GameGold -= dealOffInfo.nSellGold + SystemShare.Config.DecUserGameGold; // 扣出元宝
                                 if (GameGold < 0)
                                 {
                                     GameGold = 0;
@@ -321,10 +321,10 @@ namespace M2Server.Player
                                         dealOffInfo.Flag = 2; // 交易结束
                                         playObject.GameGold += dealOffInfo.nSellGold;
                                         playObject.GameGoldChanged();
-                                        //playObject.SysMsg(string.Format(CommandHelp.GetSellOffGlod, dealOffInfo.nSellGold, M2Share.Config.GameGoldName), MsgColor.Red, MsgType.Hint);
+                                        //playObject.SysMsg(string.Format(CommandHelp.GetSellOffGlod, dealOffInfo.nSellGold, SystemShare.Config.GameGoldName), MsgColor.Red, MsgType.Hint);
                                         //if (M2Share.GameLogGameGold)
                                         //{
-                                        //    M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, playObject.MapName, playObject.CurrX, playObject.CurrY, playObject.ChrName, M2Share.Config.GameGoldName, playObject.GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
+                                        //    M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, playObject.MapName, playObject.CurrX, playObject.CurrY, playObject.ChrName, SystemShare.Config.GameGoldName, playObject.GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', this.ChrName));
                                         //}
                                     }
                                 }
@@ -408,10 +408,10 @@ namespace M2Server.Player
                             // sSellOffItemList.Add(DealOffInfo);
                             GameGold += dealOffInfo.nSellGold;
                             this.GameGoldChanged();
-                            //this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, dealOffInfo.nSellGold, M2Share.Config.GameGoldName), MsgColor.Red, MsgType.Hint);
+                            //this.SysMsg(string.Format(CommandHelp.GetSellOffGlod, dealOffInfo.nSellGold, SystemShare.Config.GameGoldName), MsgColor.Red, MsgType.Hint);
                             //if (M2Share.GameLogGameGold)
                             //{
-                            //    M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, M2Share.Config.GameGoldName, GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
+                            //    M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, this.MapName, this.CurrX, this.CurrY, this.ChrName, SystemShare.Config.GameGoldName, GameGold, "寄售获得(" + dealOffInfo.nSellGold + ')', dealOffInfo.sBuyChrName));
                             //}
                             break;
                         }
@@ -438,7 +438,7 @@ namespace M2Server.Player
         /// <returns></returns>
         public string SelectSellDate()
         {
-            string result = "您未开通" + M2Share.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
+            string result = "您未开通" + SystemShare.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
             if (SaleDeal)
             {
                 // 已开通元宝服务
@@ -451,12 +451,12 @@ namespace M2Server.Player
                         {
                             if (string.Compare(dealOffInfo.sDealChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 2)
                             {
-                                result = "最后一笔出售记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sBuyChrName + "交易成功,获得了" + dealOffInfo.nSellGold + '个' + M2Share.Config.GameGoldName + "。\\ \\<返回/@main>";
+                                result = "最后一笔出售记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sBuyChrName + "交易成功,获得了" + dealOffInfo.nSellGold + '个' + SystemShare.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
                             }
                             else if (string.Compare(dealOffInfo.sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.Flag == 1 || dealOffInfo.Flag == 2))
                             {
-                                result = "最后一笔购买记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sDealChrName + "交易成功,支付了" + dealOffInfo.nSellGold + '个' + M2Share.Config.GameGoldName + "。\\ \\<返回/@main>";
+                                result = "最后一笔购买记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sDealChrName + "交易成功,支付了" + dealOffInfo.nSellGold + '个' + SystemShare.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
                             }
                         }
@@ -566,7 +566,7 @@ namespace M2Server.Player
                 dealOffInfo.Flag = 0; // 标识
                 M2Share.SellOffItemList.Add(dealOffInfo); // 增加到元宝寄售列表中
                 this.SendMsg(Messages.RM_SELLOFFEND_OK, 0, 0, 0, 0);
-                GameGold -= M2Share.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
+                GameGold -= SystemShare.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
                 if (GameGold < 0)
                 {
                     GameGold = 0;

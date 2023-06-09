@@ -31,7 +31,7 @@ namespace M2Server.Player
                         DealCancel();
                     }
                 }
-                if (M2Share.Config.PayMentMode == 3)
+                if (SystemShare.Config.PayMentMode == 3)
                 {
                     if (HUtil32.GetTickCount() - AccountExpiredTick > QueryExpireTick)//一分钟查询一次账号游戏到期时间
                     {
@@ -243,17 +243,17 @@ namespace M2Server.Player
                         // normNpc.GotoLable(this, DelayCallLabel, false);
                     }
                 }
-                if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
+                if ((HUtil32.GetTickCount() - DecPkPointTick) > SystemShare.Config.DecPkPointTime)// 减少PK值
                 {
                     DecPkPointTick = HUtil32.GetTickCount();
                     if (PkPoint > 0)
                     {
-                        DecPkPoint(M2Share.Config.DecPkPointCount);
+                        DecPkPoint(SystemShare.Config.DecPkPointCount);
                     }
                 }
-                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > M2Share.Config.DecLightItemDrugTime)
+                if ((HUtil32.GetTickCount() - DecLightItemDrugTick) > SystemShare.Config.DecLightItemDrugTime)
                 {
-                    DecLightItemDrugTick += M2Share.Config.DecLightItemDrugTime;
+                    DecLightItemDrugTick += SystemShare.Config.DecLightItemDrugTime;
                     UseLamp();
                     CheckPkStatus();
                 }
@@ -292,7 +292,7 @@ namespace M2Server.Player
                     int wMin = DateTime.Now.Minute;
                     int wSec = DateTime.Now.Second;
                     int wMSec = DateTime.Now.Millisecond;
-                    if (M2Share.Config.DiscountForNightTime && (wHour == M2Share.Config.HalfFeeStart || wHour == M2Share.Config.HalfFeeEnd))
+                    if (SystemShare.Config.DiscountForNightTime && (wHour == SystemShare.Config.HalfFeeStart || wHour == SystemShare.Config.HalfFeeEnd))
                     {
                         if (wMin == 0 && wSec <= 30 && (HUtil32.GetTickCount() - LogonTick) > 60000)
                         {
@@ -354,7 +354,7 @@ namespace M2Server.Player
             try
             {
                 GetMessageTick = HUtil32.GetTickCount();
-                while (((HUtil32.GetTickCount() - GetMessageTick) < M2Share.Config.HumanGetMsgTime) && GetMessage(GetMessageTick, ref processMsg))
+                while (((HUtil32.GetTickCount() - GetMessageTick) < SystemShare.Config.HumanGetMsgTime) && GetMessage(GetMessageTick, ref processMsg))
                 {
                     if (!Operate(processMsg))
                     {
@@ -416,7 +416,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                                int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                                 if (DropItemDown(UseItems[i], dropWide, false, 0, ActorId))
                                 {
                                     boTakeItem = true;
@@ -454,7 +454,7 @@ namespace M2Server.Player
                 }
                 if (M2Share.GameLogGameGold)
                 {
-                    // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
+                    // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, SystemShare.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (BoIncGameGold && (HUtil32.GetTickCount() - IncGameGoldTick) > IncGameGoldTime)
@@ -473,7 +473,7 @@ namespace M2Server.Player
                 }
                 if (M2Share.GameLogGameGold)
                 {
-                    //M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
+                    //M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, SystemShare.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (!BoDecGameGold && Envir.Flag.boDECGAMEGOLD)
@@ -495,7 +495,7 @@ namespace M2Server.Player
                     }
                     if (M2Share.GameLogGameGold)
                     {
-                        //M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Map"));
+                        //M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, SystemShare.Config.GameGoldName, nInteger, '-', "Map"));
                     }
                 }
             }
@@ -516,7 +516,7 @@ namespace M2Server.Player
                     }
                     if (M2Share.GameLogGameGold)
                     {
-                        // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
+                        // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, SystemShare.Config.GameGoldName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -538,7 +538,7 @@ namespace M2Server.Player
                     {
                         lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
                         string tStr = lastHiterPlay.MyGuild.GuildName + ':' + lastHiterPlay.MyGuild.ContestPoint + "  " + MyGuild.GuildName + ':' + MyGuild.ContestPoint;
-                        M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, M2Share.Config.CryMsgFColor, M2Share.Config.CryMsgBColor, "- " + tStr);
+                        M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, "- " + tStr);
                     }
                 }
             }
@@ -559,7 +559,7 @@ namespace M2Server.Player
                     }
                     if (M2Share.GameLogGamePoint)
                     {
-                        //M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GamePointName, nInteger, '+', "Map"));
+                        //M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, SystemShare.Config.GamePointName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -590,7 +590,7 @@ namespace M2Server.Player
                 HealthSpellChanged();
             }
             // 降饥饿点
-            if (M2Share.Config.HungerSystem)
+            if (SystemShare.Config.HungerSystem)
             {
                 if ((HUtil32.GetTickCount() - DecHungerPointTick) > 1000)
                 {
@@ -606,7 +606,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        if (M2Share.Config.HungerDecHP)
+                        if (SystemShare.Config.HungerDecHP)
                         {
                             // 减少涨HP，MP
                             HealthTick -= 60;
@@ -652,15 +652,15 @@ namespace M2Server.Player
                     }
                 }
             }
-            if (M2Share.Config.ReNewChangeColor && ReLevel > 0 && (HUtil32.GetTickCount() - ReColorTick) > M2Share.Config.ReNewNameColorTime)
+            if (SystemShare.Config.ReNewChangeColor && ReLevel > 0 && (HUtil32.GetTickCount() - ReColorTick) > SystemShare.Config.ReNewNameColorTime)
             {
                 ReColorTick = HUtil32.GetTickCount();
                 ReColorIdx++;
-                if (ReColorIdx >= M2Share.Config.ReNewNameColor.Length)
+                if (ReColorIdx >= SystemShare.Config.ReNewNameColor.Length)
                 {
                     ReColorIdx = 0;
                 }
-                NameColor = M2Share.Config.ReNewNameColor[ReColorIdx];
+                NameColor = SystemShare.Config.ReNewNameColor[ReColorIdx];
                 RefNameColor();
             }
             // 检测侦听私聊对像
@@ -747,7 +747,7 @@ namespace M2Server.Player
                 {
                     if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival))
                     {
-                        if (Race == ActorRace.Play && Revival && ((HUtil32.GetTickCount() - RevivalTick) > M2Share.Config.RevivalTime))
+                        if (Race == ActorRace.Play && Revival && ((HUtil32.GetTickCount() - RevivalTick) > SystemShare.Config.RevivalTime))
                         {
                             RevivalTick = HUtil32.GetTickCount();
                             ItemDamageRevivalRing();
@@ -829,17 +829,17 @@ namespace M2Server.Player
                         if (delayTime != 0)
                         {
                             nMsgCount = GetDigUpMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxDigUpMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxDigUpMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         //M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -848,7 +848,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (delayTime < M2Share.Config.DropOverSpeed)
+                                if (delayTime < SystemShare.Config.DropOverSpeed)
                                 {
                                     if (TestSpeedMode)
                                     {
@@ -1017,17 +1017,17 @@ namespace M2Server.Player
                         else
                         {
                             nMsgCount = GetTurnMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxTurnMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxTurnMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         //M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -1036,7 +1036,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (delayTime < M2Share.Config.DropOverSpeed)
+                                if (delayTime < SystemShare.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (TestSpeedMode)
@@ -1068,17 +1068,17 @@ namespace M2Server.Player
                         else
                         {
                             nMsgCount = GetWalkMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxWalkMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxWalkMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         //M2Share.Logger.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -1091,7 +1091,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > SystemShare.Config.DropOverSpeed && SystemShare.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
@@ -1127,17 +1127,17 @@ namespace M2Server.Player
                         else
                         {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxRunMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         // M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -1175,17 +1175,17 @@ namespace M2Server.Player
                         else
                         {
                             nMsgCount = GetRunMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxRunMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxRunMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         //M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -1194,7 +1194,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > SystemShare.Config.DropOverSpeed && SystemShare.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
@@ -1238,17 +1238,17 @@ namespace M2Server.Player
                         else
                         {
                             nMsgCount = GetHitMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxHitMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxHitMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         //M2Share.Logger.Warn(Format(CommandHelp.HitOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -1257,7 +1257,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > SystemShare.Config.DropOverSpeed && SystemShare.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (TestSpeedMode)
@@ -1293,17 +1293,17 @@ namespace M2Server.Player
                         else
                         {
                             nMsgCount = GetSiteDownMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxSitDonwMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxSitDonwMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         // M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -1312,7 +1312,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (delayTime < M2Share.Config.DropOverSpeed)
+                                if (delayTime < SystemShare.Config.DropOverSpeed)
                                 {
                                     SendSocket(M2Share.GetGoodTick);
                                     if (TestSpeedMode)
@@ -1348,17 +1348,17 @@ namespace M2Server.Player
                         else
                         {
                             nMsgCount = GetSpellMsgCount();
-                            if (nMsgCount >= M2Share.Config.MaxSpellMsgCount)
+                            if (nMsgCount >= SystemShare.Config.MaxSpellMsgCount)
                             {
                                 OverSpeedCount++;
-                                if (OverSpeedCount > M2Share.Config.OverSpeedKickCount)
+                                if (OverSpeedCount > SystemShare.Config.OverSpeedKickCount)
                                 {
-                                    if (M2Share.Config.KickOverSpeed)
+                                    if (SystemShare.Config.KickOverSpeed)
                                     {
                                         SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
-                                    if (M2Share.Config.ViewHackMessage)
+                                    if (SystemShare.Config.ViewHackMessage)
                                     {
                                         // M2Share.Logger.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
@@ -1367,7 +1367,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (delayTime > M2Share.Config.DropOverSpeed && M2Share.Config.SpeedControlMode == 1 && IsFilterAction)
+                                if (delayTime > SystemShare.Config.DropOverSpeed && SystemShare.Config.SpeedControlMode == 1 && IsFilterAction)
                                 {
                                     SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");
                                     if (TestSpeedMode)
@@ -1589,7 +1589,7 @@ namespace M2Server.Player
                         }
                         if (processMsg.ActorId != 0)
                         {
-                            if (processMsg.ActorId == ActorId && M2Share.Config.DisableSelfStruck || baseObject.Race == ActorRace.Play && M2Share.Config.DisableStruck)
+                            if (processMsg.ActorId == ActorId && SystemShare.Config.DisableSelfStruck || baseObject.Race == ActorRace.Play && SystemShare.Config.DisableStruck)
                             {
                                 baseObject.SendRefMsg(Messages.RM_HEALTHSPELLCHANGED, 0, 0, 0, 0, "");
                             }
@@ -1684,7 +1684,7 @@ namespace M2Server.Player
                     RefUserState();
                     SendMapDescription();
                     SendGoldInfo(true);
-                    ClientMsg = Messages.MakeMessage(Messages.SM_VERSION_FAIL, M2Share.Config.nClientFile1_CRC, HUtil32.LoWord(M2Share.Config.nClientFile2_CRC), HUtil32.HiWord(M2Share.Config.nClientFile2_CRC), 0);
+                    ClientMsg = Messages.MakeMessage(Messages.SM_VERSION_FAIL, SystemShare.Config.nClientFile1_CRC, HUtil32.LoWord(SystemShare.Config.nClientFile2_CRC), HUtil32.HiWord(SystemShare.Config.nClientFile2_CRC), 0);
                     SendSocket(ClientMsg, "<<<<<<");
                     break;
                 case Messages.RM_HEAR:
@@ -1834,7 +1834,7 @@ namespace M2Server.Player
                     SendGoldInfo(false);
                     break;
                 case Messages.RM_CHANGELIGHT:
-                    SendDefMessage(Messages.SM_CHANGELIGHT, processMsg.ActorId, baseObject.Light, (short)M2Share.Config.nClientKey, 0);
+                    SendDefMessage(Messages.SM_CHANGELIGHT, processMsg.ActorId, baseObject.Light, (short)SystemShare.Config.nClientKey, 0);
                     break;
                 case Messages.RM_LAMPCHANGEDURA:
                     SendDefMessage(Messages.SM_LAMPCHANGEDURA, processMsg.nParam1, 0, 0, 0);
@@ -2177,7 +2177,7 @@ namespace M2Server.Player
                         }
                     }
                 }
-                int nRate = PvpLevel() > 2 ? M2Share.Config.DieRedDropUseItemRate : M2Share.Config.DieDropUseItemRate;
+                int nRate = PvpLevel() > 2 ? SystemShare.Config.DieRedDropUseItemRate : SystemShare.Config.DieDropUseItemRate;
                 for (int i = 0; i < UseItems.Length; i++)
                 {
                     if (M2Share.RandomNumber.Random(nRate) != 0)
@@ -2189,7 +2189,7 @@ namespace M2Server.Player
                         continue;
                     }
                     // 检查是否在禁止取下列表,如果在列表中则不掉此物品
-                    int dropWide = HUtil32._MIN(M2Share.Config.DropItemRage, 3);
+                    int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[i], dropWide, true, baseObject, ActorId))
                     {
                         stdItem = ItemSystem.GetStdItem(UseItems[i].Index);
@@ -2241,7 +2241,7 @@ namespace M2Server.Player
                     }
                     int nOldDura = HUtil32.Round((ushort)(UseItems[ItemLocation.RighThand].Dura / 1000.0));
                     ushort nDura;
-                    if (M2Share.Config.DecLampDura)
+                    if (SystemShare.Config.DecLampDura)
                     {
                         nDura = (ushort)(UseItems[ItemLocation.RighThand].Dura - 1);
                     }

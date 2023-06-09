@@ -981,5 +981,11 @@ namespace SystemModule
         void Whisper(string sName, string sText);
 
         void ProcessUserLineMsg(string sText);
+
+        bool LableIsCanJmp(string sText);
+
+        bool AddItemToBag(UserItem userItem);
+
+        bool CheckItems(string itemName);
     }
 }

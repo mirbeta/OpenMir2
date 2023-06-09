@@ -95,7 +95,7 @@ namespace M2Server.Maps
             {
                 envirnoment.MinMap = minMap;
             }
-            if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, M2Share.Config.MapDir, sMapFileName + ".map")))
+            if (envirnoment.LoadMapData(Path.Combine(M2Share.BasePath, SystemShare.Config.MapDir, sMapFileName + ".map")))
             {
                 if (!_mapList.ContainsKey(sMapName))
                 {

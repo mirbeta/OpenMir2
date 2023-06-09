@@ -55,8 +55,8 @@ namespace GameSrv
             if (GameShare.Config.SendOnlineCount && (HUtil32.GetTickCount() - GameShare.SendOnlineTick) > GameShare.Config.SendOnlineTime)
             {
                 GameShare.SendOnlineTick = HUtil32.GetTickCount();
-                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(GameShare.WorldEngine.OnlinePlayObject * (GameShare.Config.SendOnlineCountRate / 10.0)));
-                GameShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
+                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (GameShare.Config.SendOnlineCountRate / 10.0)));
+                M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }
 

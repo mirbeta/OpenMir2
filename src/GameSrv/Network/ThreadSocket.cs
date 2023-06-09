@@ -76,9 +76,9 @@ namespace M2Server.Network
                 {
                     return;
                 }
-                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= M2Share.Config.CheckBlock * 10)
+                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= SystemShare.Config.CheckBlock * 10)
                 {
-                    if (GateInfo.nSendBlockCount == 0 && M2Share.Config.CheckBlock * 10 <= sendBuffLen)
+                    if (GateInfo.nSendBlockCount == 0 && SystemShare.Config.CheckBlock * 10 <= sendBuffLen)
                     {
                         return;
                     }
@@ -492,7 +492,7 @@ namespace M2Server.Network
                     if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
-                        gateUserInfo.WorldEngine = GameShare.WorldEngine;
+                        gateUserInfo.WorldEngine = (WorldServer)M2Share.WorldEngine;
                         gateUserInfo.PlayObject = playObject;
                         break;
                     }

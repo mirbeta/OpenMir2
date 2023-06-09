@@ -1,8 +1,5 @@
 using M2Server.Actor;
 using M2Server.Event.Events;
-using M2Server.Items;
-using M2Server.Maps;
-using M2Server.Monster;
 using M2Server.Npc;
 using M2Server.Planes;
 using M2Server.Player;
@@ -10,7 +7,6 @@ using M2Server.RobotPlay;
 using M2Server.Services;
 using NLog;
 using System.Collections;
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -19,7 +15,7 @@ using GuildInfo = M2Server.Guild.GuildInfo;
 
 namespace M2Server.World
 {
-    public partial class WorldServer
+    public partial class WorldServer : IWorldEngine
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int ProcessMapDoorTick { get; set; }
@@ -61,7 +57,7 @@ namespace M2Server.World
         public IList<MagicInfo> MagicList;
         public readonly IList<Merchant> MerchantList;
         protected readonly IList<IPlayerActor> NewHumanList;
-        protected readonly IList<PlayObject> PlayObjectFreeList;
+        protected readonly IList<IPlayerActor> PlayObjectFreeList;
         protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
         protected readonly IList<IPlayerActor> PlayObjectList;
         protected readonly IList<RobotPlayer> BotPlayObjectList;
@@ -76,13 +72,15 @@ namespace M2Server.World
         /// 假人列表
         /// </summary>
         public readonly Queue<RoBotLogon> RobotLogonQueue;
+        public int RobotLogonQueueCount => RobotLogonQueue.Count;
+
 
         public WorldServer()
         {
             LoadPlaySection = new object();
             LoadPlayList = new List<UserOpenInfo>();
             PlayObjectList = new List<IPlayerActor>();
-            PlayObjectFreeList = new List<PlayObject>();
+            PlayObjectFreeList = new List<IPlayerActor>();
             ChangeHumanDbGoldList = new List<GoldChangeInfo>();
             ProcessMapDoorTick = HUtil32.GetTickCount();
             ProcessMissionsTime = HUtil32.GetTickCount();
@@ -117,10 +115,13 @@ namespace M2Server.World
 
         public int OnlinePlayObject => GetOnlineHumCount();
         public int PlayObjectCount => GetUserCount();
-        public int OfflinePlayCount = 0;
+        public int OfflinePlayCount => 0;
         public int LoadPlayCount => GetLoadPlayCount();
         public int RobotPlayerCount => BotPlayObjectList.Count;
-        public IEnumerable<IPlayerActor> PlayObjects => PlayObjectList;
+        public IEnumerable<IPlayerActor> PlayObjects { get { return PlayObjectList; } }
+        public int MonsterCount { get { return MonGenList.Count; } }
+        public int MagicCount { get { return MagicList.Count; } }
+        public int MonGenCount => MonGenList.Sum(x => x.Count);
 
         public void Initialize()
         {
@@ -222,7 +223,7 @@ namespace M2Server.World
 
         private IPlayerActor ProcessHumansMakeNewHuman(UserOpenInfo userOpenInfo)
         {
-            PlayObject result = null;
+            IPlayerActor result = null;
             PlayObject playObject = null;
             const string sExceptionMsg = "[Exception] WorldServer::MakeNewHuman";
             const string sChangeServerFail1 = "chg-server-fail-1 [{0}] -> [{1}] [{2}]";
@@ -230,12 +231,12 @@ namespace M2Server.World
             const string sChangeServerFail3 = "chg-server-fail-3 [{0}] -> [{1}] [{2}]";
             const string sChangeServerFail4 = "chg-server-fail-4 [{0}] -> [{1}] [{2}]";
             const string sErrorEnvirIsNil = "[Error] PlayObject.PEnvir = nil";
-        ReGetMap:
+            ReGetMap:
             try
             {
                 playObject = new PlayObject();
                 SwitchDataInfo switchDataInfo;
-                if (!M2Share.Config.VentureServer)
+                if (!SystemShare.Config.VentureServer)
                 {
                     userOpenInfo.ChrName = string.Empty;
                     userOpenInfo.LoadUser.SessionID = 0;
@@ -336,9 +337,9 @@ namespace M2Server.World
                         }
                         else
                         {
-                            playObject.MapName = M2Share.Config.RedDieHomeMap;// '3'
-                            playObject.CurrX = (short)(M2Share.RandomNumber.Random(13) + M2Share.Config.RedDieHomeX);// 839
-                            playObject.CurrY = (short)(M2Share.RandomNumber.Random(13) + M2Share.Config.RedDieHomeY);// 668
+                            playObject.MapName = SystemShare.Config.RedDieHomeMap;// '3'
+                            playObject.CurrX = (short)(M2Share.RandomNumber.Random(13) + SystemShare.Config.RedDieHomeX);// 839
+                            playObject.CurrY = (short)(M2Share.RandomNumber.Random(13) + SystemShare.Config.RedDieHomeY);// 668
                         }
                         playObject.Abil.HP = 14;
                     }
@@ -356,8 +357,8 @@ namespace M2Server.World
                         {
                             _logger.Warn(string.Format(sChangeServerFail1, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         }
-                        SendSwitchData(playObject, playObject.ServerIndex);
-                        SendChangeServer(playObject, playObject.ServerIndex);
+                        //SendSwitchData(playObject, playObject.ServerIndex);
+                        //SendChangeServer(playObject, playObject.ServerIndex);
                         playObject.SetSocket();
                         playObject = null;
                         return result;
@@ -375,10 +376,10 @@ namespace M2Server.World
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
                         _logger.Warn(string.Format(sChangeServerFail2, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                        playObject.MapName = M2Share.Config.HomeMap;
-                        envir = GameShare.MapMgr.FindMap(M2Share.Config.HomeMap);
-                        playObject.CurrX = M2Share.Config.HomeX;
-                        playObject.CurrY = M2Share.Config.HomeY;
+                        playObject.MapName = SystemShare.Config.HomeMap;
+                        envir = GameShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
+                        playObject.CurrX = SystemShare.Config.HomeX;
+                        playObject.CurrY = SystemShare.Config.HomeY;
                     }
                     playObject.Envir = envir;
                     playObject.OnEnvirnomentChanged();
@@ -405,20 +406,20 @@ namespace M2Server.World
                     if (envir != null)
                     {
                         _logger.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                        playObject.MapName = M2Share.Config.HomeMap;
-                        envir = GameShare.MapMgr.FindMap(M2Share.Config.HomeMap);
-                        playObject.CurrX = M2Share.Config.HomeX;
-                        playObject.CurrY = M2Share.Config.HomeY;
+                        playObject.MapName = SystemShare.Config.HomeMap;
+                        envir = GameShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
+                        playObject.CurrX = SystemShare.Config.HomeX;
+                        playObject.CurrY = SystemShare.Config.HomeY;
                     }
                     else
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
                             _logger.Warn(string.Format(sChangeServerFail4, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                            playObject.MapName = M2Share.Config.HomeMap;
-                            envir = GameShare.MapMgr.FindMap(M2Share.Config.HomeMap);
-                            playObject.CurrX = M2Share.Config.HomeX;
-                            playObject.CurrY = M2Share.Config.HomeY;
+                            playObject.MapName = SystemShare.Config.HomeMap;
+                            envir = GameShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
+                            playObject.CurrX = SystemShare.Config.HomeX;
+                            playObject.CurrY = SystemShare.Config.HomeY;
                         }
                         playObject.AbilCopyToWAbil();
                         playObject.Envir = envir;
@@ -452,7 +453,7 @@ namespace M2Server.World
                 playObject.SoftVersionDate = userOpenInfo.LoadUser.SoftVersionDate;
                 playObject.SoftVersionDateEx = userOpenInfo.LoadUser.SoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.SetSocket();
-                result = playObject;
+                // result = playObject;
             }
             catch (Exception ex)
             {
@@ -534,7 +535,7 @@ namespace M2Server.World
                             playObject = GetPlayObject(goldChangeInfo.sGameMasterName);
                             if (playObject != null)
                             {
-                                playObject.GoldChange(goldChangeInfo.sGetGoldUser, goldChangeInfo.nGold);
+                                //  playObject.GoldChange(goldChangeInfo.sGetGoldUser, goldChangeInfo.nGold);
                             }
                         }
                         ChangeHumanDbGoldList.Clear();
@@ -546,7 +547,7 @@ namespace M2Server.World
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
-                        GameShare.SocketMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
+                        //GameShare.SocketMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
                     for (var i = 0; i < ListOfGateIdx.Count; i++)
@@ -567,7 +568,7 @@ namespace M2Server.World
                 for (var i = 0; i < PlayObjectFreeList.Count; i++)
                 {
                     playObject = PlayObjectFreeList[i];
-                    if ((HUtil32.GetTickCount() - playObject.GhostTick) > M2Share.Config.HumanFreeDelayTime)// 5 * 60 * 1000
+                    if ((HUtil32.GetTickCount() - playObject.GhostTick) > SystemShare.Config.HumanFreeDelayTime)// 5 * 60 * 1000
                     {
                         PlayObjectFreeList[i] = null;
                         PlayObjectFreeList.RemoveAt(i);
@@ -629,24 +630,24 @@ namespace M2Server.World
                         {
                             if (!playObject.LoginNoticeOk)
                             {
-                                playObject.RunNotice();
+                                // playObject.RunNotice();
                             }
                             else
                             {
                                 if (!playObject.BoReadyRun)
                                 {
                                     playObject.BoReadyRun = true;
-                                    playObject.UserLogon();
+                                    //playObject.UserLogon();
                                 }
                                 else
                                 {
                                     if ((HUtil32.GetTickCount() - playObject.SearchTick) > playObject.SearchTime)
                                     {
                                         playObject.SearchTick = HUtil32.GetTickCount();
-                                        playObject.SearchViewRange();//搜索对像
-                                        playObject.GameTimeChanged();//游戏时间改变
+                                        //playObject.SearchViewRange();//搜索对像
+                                        //playObject.GameTimeChanged();//游戏时间改变
                                     }
-                                    if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > M2Share.Config.ShowLineNoticeTime)
+                                    if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > SystemShare.Config.ShowLineNoticeTime)
                                     {
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
@@ -664,7 +665,7 @@ namespace M2Server.World
                                                     playObject.SysMsg(lineNoticeMsg.AsSpan()[1..].ToString(), MsgColor.Blue, MsgType.Notice);
                                                     break;
                                                 default:
-                                                    playObject.SysMsg(lineNoticeMsg, (MsgColor)M2Share.Config.LineNoticeColor, MsgType.Notice);
+                                                    playObject.SysMsg(lineNoticeMsg, (MsgColor)SystemShare.Config.LineNoticeColor, MsgType.Notice);
                                                     break;
                                             }
                                         }
@@ -674,22 +675,22 @@ namespace M2Server.World
                                             playObject.ShowLineNoticeIdx = 0;
                                         }
                                     }
-                                    playObject.Run();
-                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.SaveRcdTick) > M2Share.Config.SaveHumanRcdTime)
-                                    {
-                                        playObject.SaveRcdTick = HUtil32.GetTickCount();
-                                        playObject.DealCancelA();
-                                        SaveHumanRcd(playObject);
-                                    }
+                                    //playObject.Run();
+                                    //if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.SaveRcdTick) > SystemShare.Config.SaveHumanRcdTime)
+                                    //{
+                                    //    playObject.SaveRcdTick = HUtil32.GetTickCount();
+                                    //    playObject.DealCancelA();
+                                    //    SaveHumanRcd(playObject);
+                                    //}
                                 }
                             }
                         }
                         else
                         {
                             PlayObjectList.Remove(playObject);
-                            playObject.Disappear();
-                            AddToHumanFreeList(playObject);
-                            playObject.DealCancelA();
+                            //playObject.Disappear();
+                            //AddToHumanFreeList(playObject);
+                            //playObject.DealCancelA();
                             SaveHumanRcd(playObject);
                             GameShare.SocketMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
                             SendServerGroupMsg(Messages.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
@@ -729,15 +730,30 @@ namespace M2Server.World
             return false;
         }
 
-        public void CryCry(short wIdent, Envirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
+        public int GetMonstersZenTime(long time)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                PlayObject playObject = PlayObjectList[i];
+                IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
                     playObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
             }
+        }
+
+        public void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetMapOfRangeHumanCount(IEnvirnoment envir, int nX, int nY, int nRange)
+        {
+            throw new NotImplementedException();
         }
 
         public static void ProcessUserMessage(PlayObject playObject, CommandMessage defMsg, string buff)
@@ -748,7 +764,7 @@ namespace M2Server.World
             switch (defMsg.Ident)
             {
                 case Messages.CM_SPELL:
-                    if (M2Share.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (SystemShare.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendUpdateMsg(defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series), "");
                     }
@@ -808,7 +824,7 @@ namespace M2Server.World
                 case Messages.CM_TWINHIT:
                 case Messages.CM_WIDEHIT:
                 case Messages.CM_FIREHIT:
-                    if (M2Share.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (SystemShare.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendActionMsg(defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), 0, "");
                     }
@@ -845,7 +861,7 @@ namespace M2Server.World
             }
         }
 
-        public static void SendServerGroupMsg(int nCode, int nServerIdx, string sMsg)
+        public void SendServerGroupMsg(int nCode, int nServerIdx, string sMsg)
         {
             if (M2Share.ServerIndex == 0)
             {
@@ -938,9 +954,9 @@ namespace M2Server.World
             }
         }
 
-        public PlayObject GetPlayObjectEx(string sName)
+        public IPlayerActor GetPlayObjectEx(string sName)
         {
-            PlayObject result = null;
+            IPlayerActor result = null;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -984,7 +1000,7 @@ namespace M2Server.World
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission)
         {
             var result = false;
-            btPermission = M2Share.Config.StartPermission;
+            btPermission = SystemShare.Config.StartPermission;
             for (var i = 0; i < AdminList.Count; i++)
             {
                 var adminInfo = AdminList[i];
@@ -1051,10 +1067,10 @@ namespace M2Server.World
                 PlayObject = playObject
             };
             saveRcd.HumanRcd = MakeSaveRcd(playObject);
-           // M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
+            // M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
         }
 
-        private void AddToHumanFreeList(PlayObject playObject)
+        private void AddToHumanFreeList(IPlayerActor playObject)
         {
             playObject.GhostTick = HUtil32.GetTickCount();
             PlayObjectFreeList.Add(playObject);
@@ -1191,7 +1207,7 @@ namespace M2Server.World
             }
         }
 
-        private static PlayerDataInfo MakeSaveRcd(PlayObject playObject)
+        private static PlayerDataInfo MakeSaveRcd(IPlayerActor playObject)
         {
             var humanRcd = new PlayerDataInfo();
             var playerInfo = humanRcd.Data;
@@ -1239,9 +1255,9 @@ namespace M2Server.World
             playerInfo.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
             playerInfo.btF9 = playObject.BtB2;
             playerInfo.AttatckMode = (byte)playObject.AttatckMode;
-            playerInfo.IncHealth = (byte)playObject.IncHealth;
-            playerInfo.IncSpell = (byte)playObject.IncSpell;
-            playerInfo.IncHealing = (byte)playObject.IncHealing;
+            //playerInfo.IncHealth = (byte)playObject.IncHealth;
+            //playerInfo.IncSpell = (byte)playObject.IncSpell;
+            //playerInfo.IncHealing = (byte)playObject.IncHealing;
             playerInfo.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
             playerInfo.Account = playObject.UserAccount;
             playerInfo.LockLogon = playObject.IsLockLogon;
@@ -1350,17 +1366,17 @@ namespace M2Server.World
             int I;
             if (M2Share.StartPointList.Count > 0)
             {
-                if (M2Share.StartPointList.Count > M2Share.Config.StartPointSize)
-                    I = M2Share.RandomNumber.Random(M2Share.Config.StartPointSize);
+                if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
             {
-                result = M2Share.Config.HomeMap;
-                nX = M2Share.Config.HomeX;
-                nX = M2Share.Config.HomeY;
+                result = SystemShare.Config.HomeMap;
+                nX = SystemShare.Config.HomeX;
+                nX = SystemShare.Config.HomeY;
             }
             return result;
         }
@@ -1375,7 +1391,12 @@ namespace M2Server.World
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeY - 2));
         }
 
-        private MagicInfo FindMagic(int nMagIdx)
+        public INormNpc FindNpc(int npcId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MagicInfo FindMagic(int nMagIdx)
         {
             MagicInfo result = null;
             for (var i = 0; i < MagicList.Count; i++)
@@ -1511,7 +1532,7 @@ namespace M2Server.World
         {
             var result = 0;
             if (envir == null) return result;
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
@@ -1533,7 +1554,7 @@ namespace M2Server.World
             return result;
         }
 
-        public int GetMapMonster(Envirnoment envir, IList<IActor> list)
+        public int GetMapMonster(IEnvirnoment envir, IList<IActor> list)
         {
             if (list == null)
             {
@@ -1601,7 +1622,7 @@ namespace M2Server.World
                 }
             }
         }
-        
+
         /// <summary>
         /// 向每个人物发送消息
         /// </summary>
@@ -1615,33 +1636,38 @@ namespace M2Server.World
             }
         }
 
+        public IMerchant FindMerchant(int npcId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void SendBroadCastMsg(string sMsg, MsgType msgType)
         {
-            if (M2Share.Config.ShowPreFixMsg)
+            if (SystemShare.Config.ShowPreFixMsg)
             {
                 switch (msgType)
                 {
                     case MsgType.Mon:
-                        sMsg = M2Share.Config.MonSayMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.MonSayMsgPreFix + sMsg;
                         break;
                     case MsgType.Hint:
-                        sMsg = M2Share.Config.HintMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.HintMsgPreFix + sMsg;
                         break;
                     case MsgType.GameManger:
-                        sMsg = M2Share.Config.GameManagerRedMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.GameManagerRedMsgPreFix + sMsg;
                         break;
                     case MsgType.System:
-                        sMsg = M2Share.Config.SysMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.SysMsgPreFix + sMsg;
                         break;
                     case MsgType.Cust:
-                        sMsg = M2Share.Config.CustMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.CustMsgPreFix + sMsg;
                         break;
                     case MsgType.Castle:
-                        sMsg = M2Share.Config.CastleMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.CastleMsgPreFix + sMsg;
                         break;
                 }
             }
-            if (M2Share.Config.EnableChatServer)
+            if (SystemShare.Config.EnableChatServer)
             {
                 //M2Share.ChatChannel.SendPubChannelMessage(sMsg);
             }
@@ -1667,7 +1693,7 @@ namespace M2Server.World
 
         public void ClearMonSayMsg()
         {
-            for (var i = 0; i < M2Share.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
@@ -1675,7 +1701,7 @@ namespace M2Server.World
                     for (var k = 0; k < monGen.CertList.Count; k++)
                     {
                         var monBaseObject = monGen.CertList[k];
-                        monBaseObject.SayMsgList = null;
+                        //monBaseObject.SayMsgList = null;
                     }
                 }
             }
@@ -1687,17 +1713,17 @@ namespace M2Server.World
             if (M2Share.StartPointList.Count > 0)
             {
                 int I;
-                if (M2Share.StartPointList.Count > M2Share.Config.StartPointSize)
-                    I = M2Share.RandomNumber.Random(M2Share.Config.StartPointSize);
+                if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
             {
-                result = M2Share.Config.HomeMap;
-                nX = M2Share.Config.HomeX;
-                nX = M2Share.Config.HomeY;
+                result = SystemShare.Config.HomeMap;
+                nX = SystemShare.Config.HomeX;
+                nX = SystemShare.Config.HomeY;
             }
             return result;
         }
@@ -1783,10 +1809,33 @@ namespace M2Server.World
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    PlayObjectList[i].SetExpiredTime(5);
+                    //  PlayObjectList[i].SetExpiredTime(5);
                     break;
                 }
             }
+        }
+
+        public void AddMonGenList(MonGenInfo monGenInfo)
+        {
+            MonGenList.Add(monGenInfo);
+        }
+
+        public bool CheckMonGenInfoThreadMap(int threadId)
+        {
+            return MonGenInfoThreadMap.ContainsKey(threadId);
+        }
+
+        public void AddMonGenInfoThreadMap(int threadId, MonGenInfo monGenInfo)
+        {
+            if (MonGenInfoThreadMap.ContainsKey(threadId))
+            {
+                MonGenInfoThreadMap[threadId].Add(monGenInfo);
+            }
+        }
+
+        public void CreateMonGenInfoThreadMap(int threadId, IList<MonGenInfo> monGenInfo)
+        {
+            MonGenInfoThreadMap.Add(threadId, monGenInfo);
         }
     }
 }

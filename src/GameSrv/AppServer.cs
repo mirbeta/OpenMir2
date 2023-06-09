@@ -1,12 +1,12 @@
-﻿using M2Server;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Spectre.Console;
 using SystemModule.Hosts;
 
-namespace GameSrv {
+namespace GameSrv
+{
     public class AppServer : ServiceHost {
         private static readonly PeriodicTimer _timer;
 

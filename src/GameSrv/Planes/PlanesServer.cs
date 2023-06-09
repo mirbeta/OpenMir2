@@ -34,10 +34,10 @@ namespace M2Server.Planes
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
-                new IPHost(IPAddress.Parse(M2Share.Config.MasterSrvAddr), M2Share.Config.MasterSrvPort)
+                new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort)
             });
             _serverSocket.Setup(touchSocketConfig);
-            M2Share.Logger.Info($"节点数据服务[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]已启动.");
+            M2Share.Logger.Info($"节点数据服务[{SystemShare.Config.MasterSrvAddr}:{SystemShare.Config.MasterSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr) {
