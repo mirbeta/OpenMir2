@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace ScriptModule{
+namespace ScriptSystem{
     [AttributeUsage(AttributeTargets.Field)]
     public class ScriptDefName : Attribute
     {
@@ -26,7 +26,7 @@ namespace ScriptModule{
         public byte btValue;
         public int nRandRage;
     }
-
+    
     public class DefineInfo
     {
         public string Name;

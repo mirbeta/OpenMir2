@@ -1,4 +1,4 @@
-﻿namespace ScriptModule{
+﻿namespace ScriptSystem{
     /// <summary>
     /// 执行指令编码定义
     /// </summary>

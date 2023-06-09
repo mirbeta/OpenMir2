@@ -1,7 +1,7 @@
 ﻿using M2Server;
 using M2Server.Castle;
 using M2Server.Monster.Monsters;
-using ScriptModule;
+using ScriptSystem;
 using SystemModule.Enums;
 
 namespace GameSrv.NPC

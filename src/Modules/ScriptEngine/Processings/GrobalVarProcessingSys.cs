@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace ScriptModule
+namespace ScriptSystem
 {
     /// <summary>
     /// 全局变量脚本处理模块

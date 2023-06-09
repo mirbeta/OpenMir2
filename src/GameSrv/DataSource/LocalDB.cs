@@ -2,7 +2,7 @@ using System.Collections;
 using GameSrv.NPC;
 using M2Server;
 using M2Server.Npc;
-using ScriptModule;
+using ScriptSystem;
 using SystemModule.Common;
 using SystemModule.Data;
 

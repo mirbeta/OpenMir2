@@ -1,4 +1,4 @@
-﻿namespace ScriptModule{
+﻿namespace ScriptSystem{
     /// <summary>
     /// 条件检测编码定义
     /// </summary>

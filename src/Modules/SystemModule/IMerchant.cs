@@ -29,6 +29,9 @@ namespace SystemModule
         /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
         /// </summary>
         IList<int> ItemTypeList { get; set; }
+        /// <summary>
+        /// 补充商品列表
+        /// </summary>
         IList<Goods> RefillGoodsList { get; set; }
         /// <summary>
         /// 商品列表

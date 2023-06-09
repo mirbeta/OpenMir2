@@ -4,7 +4,7 @@ using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace ScriptModule
+namespace ScriptSystem
 {
     public class ProcessingBase
     {

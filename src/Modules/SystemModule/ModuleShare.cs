@@ -802,32 +802,42 @@ namespace SystemModule
             //}
             return result;
         }
-
+        
+        /// <summary>
+        /// 检查地图是否可以移动 
+        /// </summary>
+        /// <param name="sMapName"></param>
+        /// <returns></returns>
         public static bool CanMoveMap(string sMapName)
         {
             var result = true;
-            for (var i = 0; i < DisableMoveMapList.Count; i++)
+            /*for (var i = 0; i < DisableMoveMapList.Count; i++)
             {
-                //if ((g_DisableMoveMapList[I]).CompareTo((sMapName)) == 0)
-                //{
-                //    result = false;
-                //    break;
-                //}
-            }
+                 if ((g_DisableMoveMapList[I]).CompareTo((sMapName)) == 0)
+                 {
+                     result = false;
+                     break;
+                 }
+            }*/
             return result;
         }
 
+        /// <summary>
+        /// 检查商品是否可以出售
+        /// </summary>
+        /// <param name="sItemName"></param>
+        /// <returns></returns>
         public static bool CanSellItem(string sItemName)
         {
             var result = true;
-            for (var i = 0; i < DisableSellOffList.Count; i++)
+            /*for (var i = 0; i < DisableSellOffList.Count; i++)
             {
-                //if ((g_DisableSellOffList[i]).CompareTo((sItemName)) == 0)
-                //{
-                //    result = false;
-                //    break;
-                //}
-            }
+                 if ((g_DisableSellOffList[i]).CompareTo((sItemName)) == 0)
+                 {
+                     result = false;
+                     break;
+                 }
+            }*/
             return result;
         }
 

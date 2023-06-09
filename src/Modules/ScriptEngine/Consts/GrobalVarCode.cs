@@ -1,4 +1,4 @@
-﻿namespace ScriptModule{
+﻿namespace ScriptSystem{
     /// <summary>
     /// 全局变量编码定义
     /// </summary>

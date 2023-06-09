@@ -4,7 +4,7 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace ScriptModule
+namespace ScriptSystem
 {
     /// <summary>
     /// 脚本命令检查处理模块

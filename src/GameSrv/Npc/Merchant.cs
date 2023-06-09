@@ -4,7 +4,7 @@ using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
 using M2Server.Player;
-using ScriptModule;
+using ScriptSystem;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
@@ -1194,7 +1194,7 @@ namespace GameSrv.NPC
             ItemTypeList.Clear();
             m_sPath = ScriptFlagCode.sMarket_Def;
             var scriptPath = ScriptName + '-' + MapName;
-            //M2Share.ScriptSystem.LoadScriptFile(this, ScriptFlagConst.sMarket_Def, scriptPath, true);
+            GameShare.ScriptParsers.LoadScriptFile(this, "Market_Def", scriptPath, true);
         }
 
         public override void Click(IPlayerActor playObject)

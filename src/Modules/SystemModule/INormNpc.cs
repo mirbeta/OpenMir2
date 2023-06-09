@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Data;
+
+namespace SystemModule
 {
     public interface INormNpc : IActor
     {
@@ -7,6 +9,8 @@
         string m_sPath { get; set; }
 
         int ProcessRefillIndex { get; set; }
+
+        //IList<ScriptInfo> GetScriptList();
 
         void SendSayMsg(string sText);
 

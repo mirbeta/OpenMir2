@@ -1,4 +1,4 @@
-namespace ScriptModule{
+namespace ScriptSystem{
     public struct QuestActionInfo
     {
         public int nCmdCode;
