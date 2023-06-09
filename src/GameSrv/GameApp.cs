@@ -254,8 +254,8 @@ namespace GameSrv
                 }
                 IdSrvClient.Instance.Initialize();
                 GameShare.GuildMgr.LoadGuildInfo();
-                GameShare.CastleMgr.LoadCastleList();
-                GameShare.CastleMgr.Initialize();
+                //GameShare.CastleMgr.LoadCastleList();
+                //GameShare.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
             }
             catch (Exception ex)

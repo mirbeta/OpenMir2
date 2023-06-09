@@ -184,7 +184,6 @@ namespace M2Server
         public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
- 
 
         static M2Share()
         {
@@ -195,6 +194,7 @@ namespace M2Server
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
             NetworkMonitor = new NetworkMonitor();
+            EventMgr = new EventManager();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
             ProcessHumanCriticalSection = new object();
             UserDBCriticalSection = new object();

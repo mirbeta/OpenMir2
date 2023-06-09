@@ -408,6 +408,8 @@ namespace M2Server.Actor
             IsVisibleActive = false;
             Castle = null;
             Master = null;
+            WAbil = new Ability();
+            AddAbil = new AddAbility();
             Abil = new Ability();
             Abil = new Ability
             {

@@ -1,5 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Npc;
 
 namespace M2Server.World
 {
