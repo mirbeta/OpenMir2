@@ -1,5 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Items;
 using M2Server.Player;
 using System.Text;
 using SystemModule;
@@ -12,7 +11,7 @@ namespace M2Server.Npc
     /// 管理类NPC
     /// 如 月老
     /// </summary>
-    public partial class NormNpc : AnimalObject
+    public class NormNpc : AnimalObject
     {
         /// <summary>
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)

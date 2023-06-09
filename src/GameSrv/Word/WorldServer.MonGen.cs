@@ -1,4 +1,5 @@
-﻿using M2Server;
+﻿using GameSrv.NPC;
+using M2Server;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
 using M2Server.Npc;

@@ -1,7 +1,7 @@
-﻿using M2Server.Player;
+﻿using M2Server.Npc;
+using M2Server.Player;
 using SystemModule;
 using SystemModule.Enums;
-using NormNpc = M2Server.Npc.NormNpc;
 
 namespace M2Server.Monster.Monsters
 {

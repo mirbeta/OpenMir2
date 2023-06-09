@@ -1,7 +1,7 @@
-﻿using SystemModule;
+﻿using M2Server.Npc;
 using SystemModule.Data;
 
-namespace M2Server.Npc
+namespace GameSrv.NPC
 {
     /// <summary>
     /// 练功师
