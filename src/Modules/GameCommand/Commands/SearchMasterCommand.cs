@@ -1,42 +1,42 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using M2Server;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 查询师徒当前所在位置
     /// </summary>
     [Command("SearchMaster", "查询师徒当前所在位置")]
     public class SearchMasterCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (string.IsNullOrEmpty(playObject.MasterName)) {
-                playObject.SysMsg(Settings.YouAreNotMasterMsg, MsgColor.Red, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            if (string.IsNullOrEmpty(PlayerActor.MasterName)) {
+                PlayerActor.SysMsg(Settings.YouAreNotMasterMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.IsMaster) {
-                if (playObject.MasterList.Count <= 0) {
-                    playObject.SysMsg(Settings.YourMasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+            if (PlayerActor.IsMaster) {
+                if (PlayerActor.MasterList.Count <= 0) {
+                    PlayerActor.SysMsg(Settings.YourMasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                playObject.SysMsg(Settings.YourMasterListNowLocateMsg, MsgColor.Green, MsgType.Hint);
-                for (var i = 0; i < playObject.MasterList.Count; i++) {
-                    var human = playObject.MasterList[i];
-                    playObject.SysMsg(human.ChrName + " " + human.Envir.MapDesc + "(" + human.CurrX + ":" + human.CurrY + ")", MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.YourMasterListNowLocateMsg, MsgColor.Green, MsgType.Hint);
+                for (var i = 0; i < PlayerActor.MasterList.Count; i++) {
+                    var human = (IPlayerActor)PlayerActor.MasterList[i];
+                    PlayerActor.SysMsg(human.ChrName + " " + human.Envir.MapDesc + "(" + human.CurrX + ":" + human.CurrY + ")", MsgColor.Green, MsgType.Hint);
                     human.SysMsg(Settings.YourMasterSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                    human.SysMsg(playObject.ChrName + " " + playObject.Envir.MapDesc + "(" + playObject.CurrX + ":" + playObject.CurrY + ")", MsgColor.Green, MsgType.Hint);
+                    human.SysMsg(PlayerActor.ChrName + " " + PlayerActor.Envir.MapDesc + "(" + PlayerActor.CurrX + ":" + PlayerActor.CurrY + ")", MsgColor.Green, MsgType.Hint);
                 }
             }
             else {
-                if (playObject.MasterHuman == null) {
-                    playObject.SysMsg(Settings.YourMasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                if (PlayerActor.MasterHuman == null) {
+                    PlayerActor.SysMsg(Settings.YourMasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                playObject.SysMsg(Settings.YourMasterNowLocateMsg, MsgColor.Red, MsgType.Hint);
-                playObject.SysMsg(playObject.MasterHuman.ChrName + " " + playObject.MasterHuman.Envir.MapDesc + "(" + playObject.MasterHuman.CurrX + ":"
-                    + playObject.MasterHuman.CurrY + ")", MsgColor.Green, MsgType.Hint);
-                playObject.MasterHuman.SysMsg(Settings.YourMasterListSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                playObject.MasterHuman.SysMsg(playObject.ChrName + " " + playObject.Envir.MapDesc + "(" + playObject.CurrX + ":" + playObject.CurrY + ")",
+                PlayerActor.SysMsg(Settings.YourMasterNowLocateMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(PlayerActor.MasterHuman.ChrName + " " + PlayerActor.MasterHuman.Envir.MapDesc + "(" + PlayerActor.MasterHuman.CurrX + ":"
+                    + PlayerActor.MasterHuman.CurrY + ")", MsgColor.Green, MsgType.Hint);
+                PlayerActor.MasterHuman.SysMsg(Settings.YourMasterListSearchLocateMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.MasterHuman.SysMsg(PlayerActor.ChrName + " " + PlayerActor.Envir.MapDesc + "(" + PlayerActor.CurrX + ":" + PlayerActor.CurrY + ")",
                     MsgColor.Green, MsgType.Hint);
             }
         }

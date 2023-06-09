@@ -1,47 +1,9 @@
-namespace M2Server.Actor {
-    public record struct SendMessage {
-        public int wIdent;
-        public int wParam;
-        public int nParam1;
-        public int nParam2;
-        public int nParam3;
-        /// <summary>
-        /// 延时时间
-        /// </summary>
-        public int DeliveryTime;
-        /// <summary>
-        /// 对象唯一ID
-        /// </summary>
-        public int ActorId;
-        public bool LateDelivery;
-        public string Buff;
-    }
+namespace M2Server.Actor
+{
 
-    /// <summary>
-    /// 可见的精灵
-    /// </summary>
-    public class VisibleBaseObject
+
+    public class DragonConst
     {
-        public BaseObject BaseObject;
-        public VisibleFlag VisibleFlag;
-    }
-
-    public enum VisibleFlag : byte {
-        /// <summary>
-        /// 隐藏
-        /// </summary>
-        Hidden = 0,
-        /// <summary>
-        /// 不可见
-        /// </summary>
-        Invisible = 1,
-        /// <summary>
-        /// 可见
-        /// </summary>
-        Show = 2
-    }
-
-    public class DragonConst {
         public const byte DRAGON_RING_SHAPE = 198;
         public const byte DRAGON_BRACELET_SHAPE = 199;
         public const byte DRAGON_NECKLACE_SHAPE = 200;
@@ -52,7 +14,8 @@ namespace M2Server.Actor {
         public const byte DRAGON_BELT_SHAPE = 204;
     }
 
-    public class ShapeConst {
+    public class ShapeConst
+    {
         public const byte LOLLIPOP_SHAPE = 1;
         public const byte GOLDMEDAL_SHAPE = 2;
         public const byte SILVERMEDAL_SHAPE = 3;
@@ -60,7 +23,8 @@ namespace M2Server.Actor {
         public const byte SHAPE_OF_LUCKYLADLE = 5;
     }
 
-    public class AbilConst {
+    public class AbilConst
+    {
         public const byte EABIL_DCUP = 0;
         public const byte EABIL_MCUP = 1;
         public const byte EABIL_SCUP = 2;
@@ -70,7 +34,8 @@ namespace M2Server.Actor {
         public const byte EABIL_PWRRATE = 6;
     }
 
-    public class EfftypeConst {
+    public class EfftypeConst
+    {
         public const byte EFFTYPE_TWOHAND_WEHIGHT_ADD = 1;
         public const byte EFFTYPE_EQUIP_WHEIGHT_ADD = 2;
         public const byte EFFTYPE_LUCK_ADD = 3;
@@ -80,7 +45,8 @@ namespace M2Server.Actor {
         public const byte EFFECTIVE_HIGHLEVEL = 50;
     }
 
-    public class ItemShapeConst {
+    public class ItemShapeConst
+    {
         public const byte SHAPE_OF_LUCKYLADLE = 5;
         /// <summary>
         /// 隐身属性

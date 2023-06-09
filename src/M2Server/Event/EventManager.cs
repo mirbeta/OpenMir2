@@ -1,11 +1,9 @@
-using M2Server.Maps;
-using NLog;
+using SystemModule;
 
 namespace M2Server.Event
 {
     public class EventManager
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<MapEvent> _eventList;
         private readonly IList<MapEvent> _closedEventList;
 
@@ -17,8 +15,8 @@ namespace M2Server.Event
 
         public IList<MapEvent> Events => _eventList;
         public IList<MapEvent> ClosedEvents => _closedEventList;
-        
-        public MapEvent GetEvent(Envirnoment envir, int nX, int nY, int nType)
+
+        public MapEvent GetEvent(IEnvirnoment envir, int nX, int nY, int nType)
         {
             for (int i = _eventList.Count - 1; i >= 0; i--)
             {

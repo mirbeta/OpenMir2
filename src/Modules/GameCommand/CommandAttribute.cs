@@ -1,4 +1,5 @@
-﻿namespace M2Server.GameCommand {
+﻿namespace CommandSystem
+{
     /// <summary>
     /// 命令定义
     /// </summary>

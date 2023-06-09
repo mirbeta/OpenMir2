@@ -1,6 +1,4 @@
 ﻿using System.Collections;
-using M2Server.Actor;
-using M2Server.Player;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -10,7 +8,7 @@ namespace M2Server.Guild
     /// <summary>
     /// 公会系统
     /// </summary>
-    public class GuildInfo
+    public class GuildInfo : IGuild
     {
         public int Count => GetMemberCount();
 
@@ -49,7 +47,7 @@ namespace M2Server.Guild
         /// <summary>
         /// 行会名称
         /// </summary>
-        public string GuildName;
+        public string GuildName { get; set; }
         /// <summary>
         /// 行会公告
         /// </summary>
@@ -72,7 +70,7 @@ namespace M2Server.Guild
         /// <summary>
         /// 行会变量
         /// </summary>
-        public Dictionary<string, DynamicVar> DynamicVarList;
+        public Dictionary<string, DynamicVar> DynamicVarList { get; set; }
         /// <summary>
         /// 建筑度
         /// </summary>
@@ -124,7 +122,7 @@ namespace M2Server.Guild
             _guildConf = new GuildConf(sName, sFileName);
         }
 
-        public bool DelAllyGuild(GuildInfo guild)
+        public bool DelAllyGuild(IGuild guild)
         {
             var result = false;
             for (var i = 0; i < GuildAllList.Count; i++)
@@ -141,7 +139,7 @@ namespace M2Server.Guild
             return result;
         }
 
-        public bool IsAllyGuild(GuildInfo guild)
+        public bool IsAllyGuild(IGuild guild)
         {
             var result = false;
             for (var i = 0; i < GuildAllList.Count; i++)
@@ -176,7 +174,7 @@ namespace M2Server.Guild
             return false;
         }
 
-        public bool IsWarGuild(GuildInfo guild)
+        public bool IsWarGuild(IGuild guild)
         {
             var result = false;
             for (var i = 0; i < GuildWarList.Count; i++)
@@ -203,7 +201,7 @@ namespace M2Server.Guild
         }
 
         private readonly char[] guildSplit = new char[] { ' ', ',' };
-        
+
         public bool LoadGuildFile(string sGuildFileName)
         {
             var s1C = string.Empty;
@@ -300,7 +298,7 @@ namespace M2Server.Guild
                             var guild = M2Share.GuildMgr.FindGuild(s1C);
                             if (guild != null)
                             {
-                                GuildAllList.Add(guild);
+                                //GuildAllList.Add(guild);
                             }
                         }
                         break;
@@ -352,7 +350,7 @@ namespace M2Server.Guild
                 var guildRank = RankList[i];
                 for (var j = 0; j < guildRank.MemberList.Count; j++)
                 {
-                    BaseObject baseObject = guildRank.MemberList[j].PlayObject;
+                    IPlayerActor baseObject = guildRank.MemberList[j].PlayObject;
                     if (baseObject != null)
                     {
                         baseObject.RefShowName();
@@ -480,7 +478,7 @@ namespace M2Server.Guild
             return true;
         }
 
-        public string GetRankName(PlayObject playObject, ref short nRankNo)
+        public string GetRankName(IPlayerActor playObject, ref short nRankNo)
         {
             var result = string.Empty;
             for (var i = 0; i < RankList.Count; i++)
@@ -529,7 +527,7 @@ namespace M2Server.Guild
             }
         }
 
-        public void DelHumanObj(PlayObject playObject)
+        public void DelHumanObj(IPlayerActor playObject)
         {
             CheckSaveGuildFile();
             for (var i = 0; i < RankList.Count; i++)
@@ -618,7 +616,7 @@ namespace M2Server.Guild
             SaveGuildInfoFile();
         }
 
-        public void AddMember(PlayObject playObject)
+        public void AddMember(IPlayerActor playObject)
         {
             GuildRank guildRank18 = null;
             for (var i = 0; i < RankList.Count; i++)
@@ -988,7 +986,7 @@ namespace M2Server.Guild
             return result;
         }
 
-        public bool IsNotWarGuild(GuildInfo guild)
+        public bool IsNotWarGuild(IGuild guild)
         {
             for (var i = 0; i < GuildWarList.Count; i++)
             {
@@ -1000,7 +998,7 @@ namespace M2Server.Guild
             return true;
         }
 
-        public void AllyGuild(GuildInfo guild)
+        public void AllyGuild(IGuild guild)
         {
             for (var i = 0; i < GuildAllList.Count; i++)
             {
@@ -1009,49 +1007,48 @@ namespace M2Server.Guild
                     return;
                 }
             }
-            GuildAllList.Add(guild);
+            //GuildAllList.Add(guild);
             SaveGuildInfoFile();
         }
 
-        public WarGuild AddWarGuild(GuildInfo guild)
+        public WarGuild AddWarGuild(WarGuild guild)
         {
             WarGuild result = default;
-            WarGuild warGuild = default;
             if (guild != null)
             {
-                if (!IsAllyGuild(guild))
-                {
-                    for (var i = 0; i < GuildWarList.Count; i++)
-                    {
-                        if (GuildWarList[i].Guild == guild)
-                        {
-                            warGuild = GuildWarList[i];
-                            warGuild.dwWarTick = HUtil32.GetTickCount();
-                            warGuild.dwWarTime = M2Share.Config.GuildWarTime;// 10800000
-                            SendGuildMsg("***" + guild.GuildName + "行会战争将持续三个小时。");
-                            break;
-                        }
-                    }
-                    if (warGuild.dwWarTime > 0)
-                    {
-                        warGuild = new WarGuild
-                        {
-                            Guild = guild,
-                            dwWarTick = HUtil32.GetTickCount(),
-                            dwWarTime = M2Share.Config.GuildWarTime// 10800000
-                        };
-                        GuildWarList.Add(warGuild);
-                        SendGuildMsg("***" + guild.GuildName + "行会战争开始(三个小时)");
-                    }
-                    result = warGuild;
-                }
+                //if (!IsAllyGuild(guild))
+                //{
+                //    for (var i = 0; i < GuildWarList.Count; i++)
+                //    {
+                //        if (GuildWarList[i].Guild == guild)
+                //        {
+                //            warGuild = GuildWarList[i];
+                //            warGuild.dwWarTick = HUtil32.GetTickCount();
+                //            warGuild.dwWarTime = M2Share.Config.GuildWarTime;// 10800000
+                //            SendGuildMsg("***" + guild.GuildName + "行会战争将持续三个小时。");
+                //            break;
+                //        }
+                //    }
+                //    if (warGuild.dwWarTime > 0)
+                //    {
+                //        warGuild = new WarGuild
+                //        {
+                //            Guild = guild,
+                //            dwWarTick = HUtil32.GetTickCount(),
+                //            dwWarTime = M2Share.Config.GuildWarTime// 10800000
+                //        };
+                //        GuildWarList.Add(warGuild);
+                //        SendGuildMsg("***" + guild.GuildName + "行会战争开始(三个小时)");
+                //    }
+                //    result = warGuild;
+                //}
             }
             RefMemberName();
             UpdateGuildFile();
             return result;
         }
 
-        public void EndGuildWar(GuildInfo guild)
+        public void EndGuildWar(IGuild guild)
         {
             SendGuildMsg("***" + guild.GuildName + "行会战争结束");
         }
@@ -1113,5 +1110,9 @@ namespace M2Server.Guild
             BoChanged = true;
         }
 
+        public SystemModule.WarGuild AddWarGuild(SystemModule.WarGuild guild)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

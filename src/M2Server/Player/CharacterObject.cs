@@ -2,6 +2,7 @@
 using M2Server.Items;
 using SystemModule;
 using SystemModule.Consts;
+using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -114,7 +115,7 @@ namespace M2Server.Player
         /// 获取攻击伤害点数
         /// </summary>
         /// <returns></returns>
-        public override ushort GetHitStruckDamage(BaseObject target, int nDamage)
+        public override ushort GetHitStruckDamage(IActor target, int nDamage)
         {
             ushort damage = base.GetHitStruckDamage(target, nDamage);
             if (nDamage > 0 && AbilMagBubbleDefence)
@@ -129,7 +130,7 @@ namespace M2Server.Player
         /// 获取魔法伤害点数
         /// </summary>
         /// <returns></returns>
-        public override int GetMagStruckDamage(BaseObject baseObject, int nDamage)
+        public override int GetMagStruckDamage(IActor baseObject, int nDamage)
         {
             var damage = base.GetMagStruckDamage(baseObject, nDamage);
             if ((damage > 0) && AbilMagBubbleDefence)

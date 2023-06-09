@@ -1,5 +1,4 @@
-﻿using M2Server.Actor;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Consts;
 
 namespace M2Server.Monster.Monsters
@@ -22,7 +21,7 @@ namespace M2Server.Monster.Monsters
             bool result = false;
             for (int i = 0; i < VisibleActors.Count; i++)
             {
-                BaseObject baseObject = VisibleActors[i].BaseObject;
+                IActor baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death)
                 {
                     continue;
@@ -52,7 +51,7 @@ namespace M2Server.Monster.Monsters
                 int nPower = HUtil32._MAX(0, HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1));
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    BaseObject baseObject = VisibleActors[i].BaseObject;
+                    IActor baseObject = VisibleActors[i].BaseObject;
                     if (baseObject.Death)
                     {
                         continue;
@@ -101,7 +100,7 @@ namespace M2Server.Monster.Monsters
                         {
                             for (int i = 0; i < VisibleActors.Count; i++)
                             {
-                                BaseObject baseObject = VisibleActors[i].BaseObject;
+                                IActor baseObject = VisibleActors[i].BaseObject;
                                 if (baseObject.Death)
                                 {
                                     continue;

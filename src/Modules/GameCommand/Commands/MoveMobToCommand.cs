@@ -1,9 +1,7 @@
-﻿using M2Server.Actor;
-using M2Server.Player;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 将指定坐标的怪物移动到新坐标，名称为ALL则移动该坐标所有怪物
@@ -12,7 +10,7 @@ namespace M2Server.GameCommand.Commands
     public class MoveMobToCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -27,7 +25,7 @@ namespace M2Server.GameCommand.Commands
             var y = (short)(@params[6] == null ? 0 : HUtil32.StrToInt(@params[6], 0));
             if (string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(oleMap) || string.IsNullOrEmpty(newMap) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boMoveAll = sMonName == "ALL";
@@ -47,8 +45,8 @@ namespace M2Server.GameCommand.Commands
             {
                 y = 0;
             }
-            var srcEnvir = M2Share.MapMgr.FindMap(oleMap);// 原地图
-            var denEnvir = M2Share.MapMgr.FindMap(newMap);// 新地图
+            var srcEnvir = SystemShare.MapMgr.FindMap(oleMap);// 原地图
+            var denEnvir = SystemShare.MapMgr.FindMap(newMap);// 新地图
             if (srcEnvir == null || denEnvir == null)
             {
                 return;
@@ -62,7 +60,7 @@ namespace M2Server.GameCommand.Commands
             //        for (var i = 0; i < monList.Count; i++)
             //        {
             //            var moveMon = monList[i];
-            //            if (moveMon != playObject)
+            //            if (moveMon != IPlayerActor)
             //            {
             //                if (string.Compare(moveMon.ChrName, sMonName, StringComparison.OrdinalIgnoreCase) == 0)// 是否是指定名称的怪
             //                {
@@ -79,7 +77,7 @@ namespace M2Server.GameCommand.Commands
             //    for (var i = 0; i < monList.Count; i++)
             //    {
             //        var moveMon = monList[i];
-            //        if (moveMon != playObject)
+            //        if (moveMon != IPlayerActor)
             //        {
             //            moveMon.SpaceMove(newMap, nX, nY, 0);
             //        }

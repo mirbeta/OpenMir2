@@ -1,18 +1,18 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 此命令允许公会取消联盟
     /// </summary>
     [Command("AuthCancel", "")]
     public class AuthCancelCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null || @params.Length <= 0) {
                 return;
             }
-            if (playObject.IsGuildMaster()) {
-                playObject.ClientGuildBreakAlly(@params[0]);
+            if (PlayerActor.IsGuildMaster()) {
+                PlayerActor.SysMsgClientGuildBreakAlly(@params[0]);
             }
         }
     }

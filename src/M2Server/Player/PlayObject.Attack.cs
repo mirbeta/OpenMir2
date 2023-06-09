@@ -1,9 +1,9 @@
-using M2Server.Actor;
 using M2Server.Items;
 using M2Server.Magic;
 using M2Server.RobotPlay;
 using SystemModule;
 using SystemModule.Consts;
+using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -19,9 +19,9 @@ namespace M2Server.Player
             return (ushort)HUtil32.Round(userMagic.Magic.Spell / 4.0 * (userMagic.Level + 1));
         }
 
-        protected void AttackDir(BaseObject targetObject, short wHitMode, byte nDir)
+        protected void AttackDir(IActor targetObject, short wHitMode, byte nDir)
         {
-            BaseObject attackTarget = targetObject ?? GetPoseCreate();
+            IActor attackTarget = targetObject ?? GetPoseCreate();
             if (UseItems[ItemLocation.Weapon] != null && (UseItems[ItemLocation.Weapon].Index > 0) && UseItems[ItemLocation.Weapon].Desc[ItemAttr.WeaponUpgrade] > 0)
             {
                 if (attackTarget != null)
@@ -210,7 +210,7 @@ namespace M2Server.Player
             }
         }
 
-        private void AttackSuccess(short wHitMode, int nPower, bool canHit, BaseObject targetObject)
+        private void AttackSuccess(short wHitMode, int nPower, bool canHit, IActor targetObject)
         {
             if (targetObject == null)
             {
@@ -574,7 +574,7 @@ namespace M2Server.Player
             }
         }
 
-        protected int GetAttackPowerHit(short wHitMode, int nPower, BaseObject targetObject, ref bool canHit)
+        protected int GetAttackPowerHit(short wHitMode, int nPower, IActor targetObject, ref bool canHit)
         {
             canHit = false;
             if (targetObject != null)
@@ -622,7 +622,7 @@ namespace M2Server.Player
             return nPower;
         }
 
-        protected override bool IsAttackTarget(BaseObject targetObject)
+        protected override bool IsAttackTarget(IActor targetObject)
         {
             var result = false;
             switch (AttatckMode)
@@ -750,7 +750,7 @@ namespace M2Server.Player
             return result;
         }
 
-        public override bool IsProperFriend(BaseObject targetObject)
+        public override bool IsProperFriend(IActor targetObject)
         {
             if (targetObject.Race == ActorRace.Play)
             {
@@ -1045,7 +1045,7 @@ namespace M2Server.Player
             return result;
         }
 
-        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, BaseObject targetObject, bool boLateDelivery, ref int delayTime)
+        private bool ClientSpellXY(int wIdent, int nKey, short nTargetX, short nTargetY, IActor targetObject, bool boLateDelivery, ref int delayTime)
         {
             delayTime = 0;
             if (!IsCanSpell)
@@ -1262,7 +1262,7 @@ namespace M2Server.Player
                     break;
                 default:
                     Dir = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY); ;
-                    BaseObject spellObject = null;
+                    IActor spellObject = null;
                     if (CretInNearXy(targetObject, nTargetX, nTargetY)) // 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
                     {
                         spellObject = targetObject;

@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 复活指定玩家
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class ReAliveCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -20,20 +20,20 @@ namespace M2Server.GameCommand.Commands
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null)
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null)
             {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            mPlayObject.ReAlive();
-            mPlayObject.WAbil.HP = mPlayObject.WAbil.MaxHP;
-            mPlayObject.SendMsg(playObject, Messages.RM_ABILITY, 0, 0, 0, 0);
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandReAliveMsg, sHumanName), MsgColor.Green, MsgType.Hint);
-            playObject.SysMsg(sHumanName + " 已获重生。", MsgColor.Green, MsgType.Hint);
+            mIPlayerActor.ReAlive();
+            mIPlayerActor.WAbil.HP = mIPlayerActor.WAbil.MaxHP;
+            mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_ABILITY, 0, 0, 0, 0);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandReAliveMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(sHumanName + " 已获重生。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

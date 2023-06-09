@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 此命令用于允许或禁止编组传送功能
     /// </summary>
     [Command("GameGird", "调整指定玩家灵符", 10)]
     public class GameGirdCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             //string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             //string sCtr = @Params.Length > 1 ? @Params[1] : "";
             //int nGameGird = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2],0) : 0;
-            //PlayObject m_PlayObject;
+            //IPlayerActor m_IPlayerActor;
             //char Ctr = '1';
             //if ((sCtr != ""))
             //{
@@ -21,40 +21,40 @@ namespace M2Server.GameCommand.Commands {
             //{
             //    if (Settings.Config.boGMShowFailMsg)
             //    {
-            //        PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandGameGirdHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
+            //        PlayerActor.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandGameGirdHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
             //    }
             //    return;
             //}
-            //m_PlayObject = M2Share.WorldEngine.GePlayObject(sHumanName);
-            //if (m_PlayObject == null)
+            //m_IPlayerActor = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
+            //if (m_IPlayerActor == null)
             //{
-            //    PlayObject.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, new string[] { sHumanName }), MsgColor.c_Red, MsgType.t_Hint);
+            //    PlayerActor.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, new string[] { sHumanName }), MsgColor.c_Red, MsgType.t_Hint);
             //    return;
             //}
             //switch (sCtr[1])
             //{
             //    case '=':
-            //        m_PlayObject.m_nGAMEGIRD = nGameGird;
+            //        m_IPlayerActor.m_nGAMEGIRD = nGameGird;
             //        break;
             //    case '+':
-            //        m_PlayObject.m_nGAMEGIRD += nGameGird;
+            //        m_IPlayerActor.m_nGAMEGIRD += nGameGird;
             //        break;
             //    case '-':
-            //        m_PlayObject.m_nGAMEGIRD -= nGameGird;
-            //        m_PlayObject.m_UseGameGird = nGameGird;
+            //        m_IPlayerActor.m_nGAMEGIRD -= nGameGird;
+            //        m_IPlayerActor.m_UseGameGird = nGameGird;
             //        if (M2Share.g_FunctionNPC != null)  // 灵符使用计数
             //        {
-            //            M2Share.g_FunctionNPC.GotoLable(m_PlayObject, "@USEGAMEGIRD", false);
+            //            M2Share.g_FunctionNPC.GotoLable(m_IPlayerActor, "@USEGAMEGIRD", false);
             //        }
             //        break;
             //}
             //if (Settings.g_boGameLogGameGird)
             //{
-            //    M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GameGird, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY, m_PlayObject.m_sChrName, Settings.Config.sGameGird, m_PlayObject.m_nGAMEGIRD, sCtr[1] + "(" + (nGameGird).ToString() + ")", PlayObject.m_sChrName));
+            //    M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GameGird, m_IPlayerActor.MapName, m_IPlayerActor.CurrX, m_IPlayerActor.CurrY, m_IPlayerActor.m_sChrName, Settings.Config.sGameGird, m_IPlayerActor.m_nGAMEGIRD, sCtr[1] + "(" + (nGameGird).ToString() + ")", PlayerActor.SysMsgm_sChrName));
             //}
-            //PlayObject.GameGoldChanged();
-            //m_PlayObject.SysMsg(string.Format(Settings.GameCommandGameGirdHumanMsg, Settings.Config.sGameGird, nGameGird, m_PlayObject.m_nGAMEGIRD, Settings.Config.sGameGird), MsgColor.c_Green, MsgType.t_Hint);
-            //PlayObject.SysMsg(string.Format(Settings.GameCommandGameGirdGMMsg, sHumanName, Settings.Config.sGameGird, nGameGird, m_PlayObject.m_nGAMEGIRD, Settings.Config.sGameGird), MsgColor.c_Green, MsgType.t_Hint);
+            //PlayerActor.GameGoldChanged();
+            //m_IPlayerActor.SysMsg(string.Format(Settings.GameCommandGameGirdHumanMsg, Settings.Config.sGameGird, nGameGird, m_IPlayerActor.m_nGAMEGIRD, Settings.Config.sGameGird), MsgColor.c_Green, MsgType.t_Hint);
+            //PlayerActor.SysMsg(string.Format(Settings.GameCommandGameGirdGMMsg, sHumanName, Settings.Config.sGameGird, nGameGird, m_IPlayerActor.m_nGAMEGIRD, Settings.Config.sGameGird), MsgColor.c_Green, MsgType.t_Hint);
         }
     }
 }

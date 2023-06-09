@@ -1,8 +1,8 @@
 ﻿using M2Server.Actor;
-using M2Server.Player;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 将指定地图所有玩家随机移动
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class MapMoveHumanCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -22,29 +22,29 @@ namespace M2Server.GameCommand.Commands
             if (string.IsNullOrEmpty(sDenMap) || string.IsNullOrEmpty(sSrcMap) ||
                 !string.IsNullOrEmpty(sSrcMap) && sSrcMap[0] == '?')
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var srcEnvir = M2Share.MapMgr.FindMap(sSrcMap);
-            var denEnvir = M2Share.MapMgr.FindMap(sDenMap);
+            var srcEnvir = SystemShare.MapMgr.FindMap(sSrcMap);
+            var denEnvir = SystemShare.MapMgr.FindMap(sDenMap);
             if (srcEnvir == null)
             {
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red,
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red,
                     MsgType.Hint);
                 return;
             }
             if (denEnvir == null)
             {
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red,
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sDenMap), MsgColor.Red,
                     MsgType.Hint);
                 return;
             }
             IList<BaseObject> humanList = new List<BaseObject>();
-            M2Share.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
+            SystemShare.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
             for (var i = 0; i < humanList.Count; i++)
             {
-                var moveHuman = (PlayObject)humanList[i];
-                if (moveHuman != playObject)
+                var moveHuman = (IPlayerActor)humanList[i];
+                if (moveHuman != IPlayerActor)
                 {
                     moveHuman.MapRandomMove(sDenMap, 0);
                 }

@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("GameDiaMond", "调整玩家金刚石", 10)]
     public class GameDiaMondCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";
             //int nGameDiaMond = @Params.Length > 2 ? HUtil32.StrToInt(@Params[3]) : 0;
             //var Ctr = '1';
-            //if ((PlayObject.m_btPermission < this.Attributes.nPermissionMin))
+            //if ((PlayerActor.SysMsgm_btPermission < this.Attributes.nPermissionMin))
             //{
-            //    PlayObject.SysMsg(Settings.GameCommandPermissionTooLow, MsgColor.c_Red, MsgType.t_Hint); // 权限不够
+            //    PlayerActor.SysMsg(Settings.GameCommandPermissionTooLow, MsgColor.c_Red, MsgType.t_Hint); // 权限不够
             //    return;
             //}
             //if ((sCtr != ""))
@@ -23,16 +23,16 @@ namespace M2Server.GameCommand.Commands {
             //{
             //    if (Settings.Config.boGMShowFailMsg)
             //    {
-            //        PlayObject.SysMsg(
+            //        PlayerActor.SysMsg(
             //            string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name,
             //                Settings.GameCommandGameDiaMondHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
             //    }
             //    return;
             //}
-            //PlayObject TargetObject = M2Share.WorldEngine.GePlayObject(sHumanName);
+            //IPlayerActor TargetObject = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
             //if (TargetObject == null)
             //{
-            //    PlayObject.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.c_Red,
+            //    PlayerActor.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.c_Red,
             //        MsgType.t_Hint);
             //    return;
             //}
@@ -55,15 +55,15 @@ namespace M2Server.GameCommand.Commands {
             //        TargetObject.CurrX, TargetObject.CurrY, TargetObject.m_sChrName,
             //        Settings.Config.sGameDiaMond,
             //        TargetObject.m_nGAMEDIAMOND, sCtr[1] + "(" + (nGameDiaMond).ToString() + ")",
-            //        PlayObject.m_sChrName));
+            //        PlayerActor.SysMsgm_sChrName));
             //}
             //TargetObject.GameGoldChanged();
             //TargetObject.SysMsg(
             //    string.Format(Settings.GameCommandGameDiaMondHumanMsg, Settings.Config.sGameDiaMond, nGameDiaMond,
-            //        PlayObject.m_nGAMEDIAMOND, Settings.Config.sGameDiaMond), MsgColor.c_Green, MsgType.t_Hint);
-            //PlayObject.SysMsg(
+            //        PlayerActor.SysMsgm_nGAMEDIAMOND, Settings.Config.sGameDiaMond), MsgColor.c_Green, MsgType.t_Hint);
+            //PlayerActor.SysMsg(
             //    string.Format(Settings.GameCommandGameDiaMondGMMsg, sHumanName, Settings.Config.sGameDiaMond,
-            //        nGameDiaMond, PlayObject.m_nGAMEDIAMOND, Settings.Config.sGameDiaMond), MsgColor.c_Green,
+            //        nGameDiaMond, PlayerActor.SysMsgm_nGAMEDIAMOND, Settings.Config.sGameDiaMond), MsgColor.c_Green,
             //    MsgType.t_Hint);
         }
     }

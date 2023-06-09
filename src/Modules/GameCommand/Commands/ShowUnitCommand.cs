@@ -1,4 +1,4 @@
-﻿namespace M2Server.GameCommand.Commands {
+﻿namespace CommandSystem {
 
     [Command("ShowUnit", "", "", 10)]
     public class ShowUnitCommand : GameCommand {

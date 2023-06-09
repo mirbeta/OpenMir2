@@ -1,8 +1,9 @@
 ﻿using System.Reflection;
-using M2Server.Player;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand {
+namespace CommandSystem
+{
     public class GameCommand {
         public CommandAttribute Command { get; private set; }
 
@@ -23,13 +24,13 @@ namespace M2Server.GameCommand {
         /// 处理命令
         /// </summary>
         /// <returns></returns>
-        public virtual string Handle(string parameters, PlayObject playObject = null) {
-            if (playObject != null) {
+        public virtual string Handle(string parameters, IPlayerActor PlayerActor = null) {
+            if (IPlayerActor != null) {
 #if DEBUG
-                playObject.Permission = 10;
-                playObject.SysMsg("当前运行调试模式,权限等级：10", MsgColor.Red, MsgType.Hint);
+                PlayerActor.Permission = 10;
+                PlayerActor.SysMsg("当前运行调试模式,权限等级：10", MsgColor.Red, MsgType.Hint);
 #endif
-                if (playObject.Permission < this.Command.PermissionMin)// 检查用户是否有权限来调用命令。
+                if (PlayerActor.Permission < this.Command.PermissionMin)// 检查用户是否有权限来调用命令。
                 {
                     return CommandHelp.GameCommandPermissionTooLow;
                 }
@@ -37,12 +38,12 @@ namespace M2Server.GameCommand {
             switch (MethodParameterCount) {
                 case 2: {
                         string[] @params = parameters.Split(' ');
-                        return (string)CommandMethod.Invoke(this, new object[] { @params, playObject });
+                        return (string)CommandMethod.Invoke(this, new object[] { @params, IPlayerActor });
                     }
                 case 1:
-                    return (string)CommandMethod.Invoke(this, new object[] { playObject });
+                    return (string)CommandMethod.Invoke(this, new object[] { IPlayerActor });
                 default:
-                    return (string)CommandMethod.Invoke(this, new object[] { null, playObject });
+                    return (string)CommandMethod.Invoke(this, new object[] { null, IPlayerActor });
             }
         }
 
@@ -50,10 +51,10 @@ namespace M2Server.GameCommand {
         /// 取可以使用的命令列表
         /// </summary>
         /// <param name="params"></param>
-        /// <param name="PlayObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <returns></returns>
         [ExecuteCommand]
-        public virtual string Fallback(string[] @params = null, PlayObject PlayObject = null) {
+        public virtual string Fallback(string[] @params = null, IPlayerActor PlayerActor = null) {
             return string.Empty;
         }
     }

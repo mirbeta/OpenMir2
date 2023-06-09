@@ -1,9 +1,9 @@
 ﻿using M2Server.Monster;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 召唤指定怪物为宠物，宝宝等级直接为1级
@@ -12,7 +12,7 @@ namespace M2Server.GameCommand.Commands
     public class ReCallMobExCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -24,7 +24,7 @@ namespace M2Server.GameCommand.Commands
             var nY = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[3], 0) : 0);
             if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nX < 0)
@@ -43,17 +43,17 @@ namespace M2Server.GameCommand.Commands
             {
                 nNameColor = 255;
             }
-            var mon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+            var mon = (MonsterObject)SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
-                mon.Master = playObject;
+                mon.Master = IPlayerActor;
                 mon.MasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
                 mon.SlaveMakeLevel = 3;
                 mon.SlaveExpLevel = 1;
                 mon.NameColor = (byte)nNameColor;
                 mon.RecalcAbilitys();
                 mon.RefNameColor();
-                playObject.SlaveList.Add(mon);
+                PlayerActor.SlaveList.Add(mon);
             }
         }
     }

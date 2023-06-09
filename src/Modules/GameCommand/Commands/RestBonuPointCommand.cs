@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整指定玩家属性的复位
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class RestBonuPointCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -21,23 +21,23 @@ namespace M2Server.GameCommand.Commands
             int nTotleUsePoint;
             if (string.IsNullOrEmpty(sHumName))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (mPlayObject != null)
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            if (mIPlayerActor != null)
             {
-                nTotleUsePoint = mPlayObject.BonusAbil.DC + mPlayObject.BonusAbil.MC + mPlayObject.BonusAbil.SC + mPlayObject.BonusAbil.AC + mPlayObject.BonusAbil.MAC
-                    + mPlayObject.BonusAbil.HP + mPlayObject.BonusAbil.MP + mPlayObject.BonusAbil.Hit + mPlayObject.BonusAbil.Speed + mPlayObject.BonusAbil.Reserved;
-                mPlayObject.BonusPoint += nTotleUsePoint;
-                mPlayObject.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
-                mPlayObject.HasLevelUp(0);
-                mPlayObject.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
-                playObject.SysMsg(sHumName + " 的分配点数已复位.", MsgColor.Green, MsgType.Hint);
+                nTotleUsePoint = mIPlayerActor.BonusAbil.DC + mIPlayerActor.BonusAbil.MC + mIPlayerActor.BonusAbil.SC + mIPlayerActor.BonusAbil.AC + mIPlayerActor.BonusAbil.MAC
+                    + mIPlayerActor.BonusAbil.HP + mIPlayerActor.BonusAbil.MP + mIPlayerActor.BonusAbil.Hit + mIPlayerActor.BonusAbil.Speed + mIPlayerActor.BonusAbil.Reserved;
+                mIPlayerActor.BonusPoint += nTotleUsePoint;
+                mIPlayerActor.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
+                mIPlayerActor.HasLevelUp(0);
+                mIPlayerActor.SysMsg("分配点数已复位!!!", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(sHumName + " 的分配点数已复位.", MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

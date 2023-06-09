@@ -1,5 +1,4 @@
-﻿namespace ScriptEngine.Consts
-{
+﻿namespace ScriptModule{
     /// <summary>
     /// 全局变量编码定义
     /// </summary>

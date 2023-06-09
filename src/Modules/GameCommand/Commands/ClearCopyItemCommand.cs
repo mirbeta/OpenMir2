@@ -1,9 +1,8 @@
-﻿using M2Server.Items;
-using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 清除游戏中指定玩家复制物品
@@ -12,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class ClearCopyItemCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -24,13 +23,13 @@ namespace M2Server.GameCommand.Commands
             string s14;
             if (string.IsNullOrEmpty(sHumanName))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+            var targerObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (targerObject == null)
             {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             for (var i = targerObject.ItemList.Count - 1; i >= 0; i--)
@@ -47,7 +46,7 @@ namespace M2Server.GameCommand.Commands
                     userItem1 = targerObject.ItemList[j];
                     if (ItemSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
                     {
-                        playObject.ItemList.RemoveAt(j);
+                        PlayerActor.ItemList.RemoveAt(j);
                         break;
                     }
                 }
@@ -67,7 +66,7 @@ namespace M2Server.GameCommand.Commands
                     if (ItemSystem.GetStdItemName(userItem1.Index) == s14 &&
                         userItem.MakeIndex == userItem1.MakeIndex)
                     {
-                        playObject.StorageItemList.RemoveAt(j);
+                        PlayerActor.StorageItemList.RemoveAt(j);
                         break;
                     }
                 }

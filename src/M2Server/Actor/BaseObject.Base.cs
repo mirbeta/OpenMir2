@@ -358,7 +358,7 @@ namespace M2Server.Actor
             SendRefMsg(Messages.RM_ALIVE, Dir, CurrX, CurrY, 0, "");
         }
 
-        protected bool IsProtectTarget(BaseObject targetObject)
+        protected bool IsProtectTarget(IActor targetObject)
         {
             if (targetObject == null)
             {
@@ -375,7 +375,7 @@ namespace M2Server.Actor
         /// 是否可以攻击的目标
         /// </summary>
         /// <returns></returns>
-        protected virtual bool IsAttackTarget(BaseObject targetObject)
+        protected virtual bool IsAttackTarget(IActor targetObject)
         {
             bool result = false;
             if ((targetObject == null) || (targetObject == this))
@@ -433,7 +433,7 @@ namespace M2Server.Actor
                     }
                     else
                     {
-                       ((MonsterObject)this).BreakCrazyMode();
+                        ((MonsterObject)this).BreakCrazyMode();
                     }
                 }
                 else
@@ -468,7 +468,7 @@ namespace M2Server.Actor
         /// 检查对象是否可以被攻击
         /// </summary>
         /// <returns></returns>
-        public virtual bool IsProperTarget(BaseObject baseObject)
+        public virtual bool IsProperTarget(IActor baseObject)
         {
             return IsAttackTarget(baseObject);
         }
@@ -499,7 +499,7 @@ namespace M2Server.Actor
         /// <summary>
         /// 散落包裹物品
         /// </summary>
-        internal virtual void ScatterBagItems(int itemOfCreat)
+        public virtual void ScatterBagItems(int itemOfCreat)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::ScatterBagItems";
             try
@@ -550,12 +550,12 @@ namespace M2Server.Actor
             }
         }
 
-        internal virtual void DropUseItems(int baseObject)
+        public virtual void DropUseItems(int baseObject)
         {
 
         }
 
-        public virtual void SetTargetCreat(BaseObject baseObject)
+        public virtual void SetTargetCreat(IActor baseObject)
         {
             TargetCret = baseObject;
             TargetFocusTick = HUtil32.GetTickCount();
@@ -566,7 +566,7 @@ namespace M2Server.Actor
             TargetCret = null;
         }
 
-        protected void ClearTargetCreat(BaseObject baseObject)
+        protected void ClearTargetCreat(IActor baseObject)
         {
             if (VisibleActors.Count > 0)
             {
@@ -586,7 +586,7 @@ namespace M2Server.Actor
             DelTargetCreat();
         }
 
-        public virtual bool IsProperFriend(BaseObject attackTarget)
+        public virtual bool IsProperFriend(IActor attackTarget)
         {
             bool result = false;
             if (attackTarget == null)
@@ -613,7 +613,7 @@ namespace M2Server.Actor
             const string sExceptionMsg = "[Exception] BaseObject::Operate ";
             try
             {
-                BaseObject targetBaseObject;
+                IActor targetBaseObject;
                 switch (processMsg.wIdent)
                 {
                     case Messages.RM_MAGSTRUCK:
@@ -787,7 +787,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        public virtual ushort GetHitStruckDamage(BaseObject target, int nDamage)
+        public virtual ushort GetHitStruckDamage(IActor target, int nDamage)
         {
             int nArmor;
             int nRnd = HUtil32.LoByte(WAbil.AC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.AC) - HUtil32.LoByte(WAbil.AC)) + 1);
@@ -810,7 +810,7 @@ namespace M2Server.Actor
             return (ushort)nDamage;
         }
 
-        public virtual int GetMagStruckDamage(BaseObject baseObject, int nDamage)
+        public virtual int GetMagStruckDamage(IActor baseObject, int nDamage)
         {
             var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = (ushort)HUtil32._MAX(0, nDamage - n14);
@@ -867,7 +867,7 @@ namespace M2Server.Actor
                          HUtil32.LoByte(WAbil.MAC) + '-' + HUtil32.HiByte(WAbil.MAC) + ' ' + "准确:" + HitPoint + ' ' + "敏捷:" + SpeedPoint;
         }
 
-        protected virtual byte GetChrColor(BaseObject baseObject)
+        protected virtual byte GetChrColor(IActor baseObject)
         {
             if (baseObject.Race == ActorRace.NPC) //增加NPC名字颜色单独控制
             {
@@ -902,12 +902,12 @@ namespace M2Server.Actor
             return result;
         }
 
-        protected virtual byte GetNameColor()
+        public virtual byte GetNameColor()
         {
             return NameColor;
         }
 
-        public virtual int GetFeature(BaseObject baseObject)
+        public virtual int GetFeature(IActor baseObject)
         {
             return M2Share.MakeMonsterFeature(RaceImg, MonsterWeapon, Appr);
         }

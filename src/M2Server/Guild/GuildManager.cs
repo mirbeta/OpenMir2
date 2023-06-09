@@ -7,11 +7,11 @@ namespace M2Server.Guild
     public class GuildManager
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<GuildInfo> _guildList;
+        private readonly IList<IGuild> _guildList;
 
         public GuildManager()
         {
-            _guildList = new List<GuildInfo>();
+            _guildList = new List<IGuild>();
         }
 
         public bool AddGuild(string sGuildName, string sChief)
@@ -37,10 +37,10 @@ namespace M2Server.Guild
                 var guild = _guildList[i];
                 if (string.Compare(guild.GuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    if (guild.RankList.Count > 1)
-                    {
-                        break;
-                    }
+                    //if (guild.RankList.Count > 1)
+                    //{
+                    //    break;
+                    //}
                     guild.BackupGuildFile();
                     _guildList.RemoveAt(i);
                     SaveGuildList();
@@ -61,7 +61,7 @@ namespace M2Server.Guild
             _guildList.Clear();
         }
 
-        public GuildInfo FindGuild(string sGuildName)
+        public IGuild FindGuild(string sGuildName)
         {
             for (var i = 0; i < _guildList.Count; i++)
             {
@@ -111,10 +111,10 @@ namespace M2Server.Guild
         {
             for (var i = 0; i < _guildList.Count; i++)
             {
-                if (_guildList[i].IsMember(sName))
-                {
-                    return _guildList[i];
-                }
+                //if (_guildList[i].IsMember(sName))
+                //{
+                //    return _guildList[i];
+                //}
             }
             return null;
         }
@@ -146,16 +146,16 @@ namespace M2Server.Guild
             {
                 var guild = _guildList[i];
                 var boChanged = false;
-                for (var j = guild.GuildWarList.Count - 1; j >= 0; j--)
-                {
-                    var warGuild = guild.GuildWarList[j];
-                    if ((HUtil32.GetTickCount() - warGuild.dwWarTick) > warGuild.dwWarTime) //行会战时间到
-                    {
-                        guild.EndGuildWar(warGuild.Guild);
-                        guild.GuildWarList.RemoveAt(j);
-                        boChanged = true;
-                    }
-                }
+                //for (var j = guild.GuildWarList.Count - 1; j >= 0; j--)
+                //{
+                //    var warGuild = guild.GuildWarList[j];
+                //    if ((HUtil32.GetTickCount() - warGuild.dwWarTick) > warGuild.dwWarTime) //行会战时间到
+                //    {
+                //        guild.EndGuildWar(warGuild.Guild);
+                //        guild.GuildWarList.RemoveAt(j);
+                //        boChanged = true;
+                //    }
+                //}
                 if (boChanged)
                 {
                     guild.UpdateGuildFile();

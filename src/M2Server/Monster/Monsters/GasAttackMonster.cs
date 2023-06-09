@@ -1,5 +1,4 @@
-﻿using M2Server.Actor;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Consts;
 
 namespace M2Server.Monster.Monsters
@@ -12,15 +11,15 @@ namespace M2Server.Monster.Monsters
             Animal = true;
         }
 
-        protected virtual BaseObject GasAttack(byte bt05)
+        protected virtual IActor GasAttack(byte bt05)
         {
-            BaseObject result = null;
+            IActor result = null;
             Dir = bt05;
             int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
             if (nPower > 0)
             {
                 SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
-                BaseObject baseObject = GetPoseCreate();
+                IActor baseObject = GetPoseCreate();
                 if (baseObject != null && IsProperTarget(baseObject) && M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint)
                 {
                     nPower = baseObject.GetMagStruckDamage(this, nPower);

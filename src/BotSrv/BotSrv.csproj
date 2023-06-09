@@ -50,7 +50,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+        <ProjectReference Include="..\SystemModule\OpenMir2.csproj" />
     </ItemGroup>
  
 	<ItemGroup>

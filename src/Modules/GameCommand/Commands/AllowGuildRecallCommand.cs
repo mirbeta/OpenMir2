@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("Allowguildrecall", "", "")]
     public class AllowGuildRecallCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            playObject.AllowGuildReCall = !playObject.AllowGuildReCall;
-            if (playObject.AllowGuildReCall) {
-                playObject.SysMsg(CommandHelp.EnableGuildRecall, MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            PlayerActor.AllowGuildReCall = !PlayerActor.AllowGuildReCall;
+            if (PlayerActor.AllowGuildReCall) {
+                PlayerActor.SysMsg(CommandHelp.EnableGuildRecall, MsgColor.Green, MsgType.Hint);
             }
             else {
-                playObject.SysMsg(CommandHelp.DisableGuildRecall, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(CommandHelp.DisableGuildRecall, MsgColor.Green, MsgType.Hint);
             }
         }
     }

@@ -1,8 +1,9 @@
-﻿using M2Server.Actor;
-using SystemModule;
+﻿using SystemModule;
 
-namespace M2Server.Monster.Monsters {
-    public class CowKingMonster : AtMonster {
+namespace M2Server.Monster.Monsters
+{
+    public class CowKingMonster : AtMonster
+    {
         private int JumpTime;
         private bool CrazyReadyMode;
         private bool CrazyKingMode;
@@ -12,7 +13,8 @@ namespace M2Server.Monster.Monsters {
         private int oldHitTime;
         private int oldWalkTime;
 
-        public CowKingMonster() : base() {
+        public CowKingMonster() : base()
+        {
             SearchTime = M2Share.RandomNumber.Random(1500) + 500;
             JumpTime = HUtil32.GetTickCount();
             RushMode = true;
@@ -21,25 +23,31 @@ namespace M2Server.Monster.Monsters {
             CrazyKingMode = false;
         }
 
-        protected override void Attack(BaseObject targetBaseObject, byte nDir) {
-             var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+        protected override void Attack(IActor targetBaseObject, byte nDir)
+        {
+            var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             HitMagAttackTarget(targetBaseObject, nPower / 2, nPower / 2, true);
         }
 
-        public override void Initialize() {
+        public override void Initialize()
+        {
             oldHitTime = NextHitTime;
             oldWalkTime = WalkSpeed;
             base.Initialize();
         }
 
-        public override void Run() {
-            if (!Death && !Ghost && (HUtil32.GetTickCount() - JumpTime) > (30 * 1000)) {
+        public override void Run()
+        {
+            if (!Death && !Ghost && (HUtil32.GetTickCount() - JumpTime) > (30 * 1000))
+            {
                 short nX = 0;
                 short nY = 0;
                 JumpTime = HUtil32.GetTickCount();
-                if (TargetCret != null && SiegeLockCount() >= 5) {
+                if (TargetCret != null && SiegeLockCount() >= 5)
+                {
                     TargetCret.GetBackPosition(ref nX, ref nY);
-                    if (Envir.CanWalk(nX, nY, false)) {
+                    if (Envir.CanWalk(nX, nY, false))
+                    {
                         SpaceMove(Envir.MapName, nX, nY, 0);
                         return;
                     }
@@ -48,26 +56,33 @@ namespace M2Server.Monster.Monsters {
                 }
                 var oldCrazyCount = CrazyCount;
                 CrazyCount = 7 - WAbil.HP / (WAbil.MaxHP / 7);
-                if (CrazyCount >= 2 && CrazyCount != oldCrazyCount) {
+                if (CrazyCount >= 2 && CrazyCount != oldCrazyCount)
+                {
                     CrazyReadyMode = true;
                     CrazyReady = HUtil32.GetTickCount();
                 }
-                if (CrazyReadyMode) {
-                    if ((HUtil32.GetTickCount() - CrazyReady) < 8000) {
+                if (CrazyReadyMode)
+                {
+                    if ((HUtil32.GetTickCount() - CrazyReady) < 8000)
+                    {
                         NextHitTime = 10000;
                     }
-                    else {
+                    else
+                    {
                         CrazyReadyMode = false;
                         CrazyKingMode = true;
                         CrazyTime = HUtil32.GetTickCount();
                     }
                 }
-                if (CrazyKingMode) {
-                    if ((HUtil32.GetTickCount() - CrazyTime) < 8000) {
+                if (CrazyKingMode)
+                {
+                    if ((HUtil32.GetTickCount() - CrazyTime) < 8000)
+                    {
                         NextHitTime = 500;
                         WalkSpeed = 400;
                     }
-                    else {
+                    else
+                    {
                         CrazyKingMode = false;
                         NextHitTime = oldHitTime;
                         WalkSpeed = oldWalkTime;
@@ -77,15 +92,20 @@ namespace M2Server.Monster.Monsters {
             base.Run();
         }
 
-        private int SiegeLockCount() {
+        private int SiegeLockCount()
+        {
             int result = 0;
             int nC = -1;
             int n10;
-            while (nC != 2) {
+            while (nC != 2)
+            {
                 n10 = -1;
-                while (n10 != 2) {
-                    if (!Envir.CanWalk(CurrX + nC, CurrY + n10, false)) {
-                        if ((nC != 0) || (n10 != 0)) {
+                while (n10 != 2)
+                {
+                    if (!Envir.CanWalk(CurrX + nC, CurrY + n10, false))
+                    {
+                        if ((nC != 0) || (n10 != 0))
+                        {
                             result++;
                         }
                     }

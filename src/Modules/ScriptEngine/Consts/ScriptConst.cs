@@ -1,5 +1,4 @@
-namespace ScriptEngine.Consts
-{
+namespace ScriptModule{
     public struct QuestActionInfo
     {
         public int nCmdCode;

@@ -1,5 +1,4 @@
-﻿namespace ScriptEngine.Consts
-{
+﻿namespace ScriptModule{
     public static class ScriptFlagCode
     {
         public const string sMarket_Def = "Market_Def";

@@ -1,0 +1,49 @@
+﻿using SystemModule.Data;
+using SystemModule.Enums;
+
+namespace SystemModule{
+    public interface IWorldEngine
+    {
+        IPlayerActor GetPlayObject(string chrName);
+
+        void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg);
+
+        void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false);
+
+        int GetMapOfRangeHumanCount(IEnvirnoment envir, int nX, int nY, int nRange);
+
+        IActor RegenMonsterByName(string sMap, short nX, short nY, string sMonName);
+
+        void SendBroadCastMsg(string sMsg, MsgType msgType);
+
+        void SendBroadCastMsgExt(string sMsg, MsgType msgType);
+
+        IMerchant FindMerchant(int npcId);
+
+        INormNpc FindNpc(int npcId);
+
+        MagicInfo FindMagic(int nMagIdx);
+
+        MagicInfo FindMagic(string sMagicName);
+
+        int PlayObjectCount { get; }
+
+        int OnlinePlayObject { get; }
+
+        int GetPlayExpireTime(string account);
+
+        void SetPlayExpireTime(string account, int expiredTime);
+
+        void AccountExpired(string account);
+
+        void SendServerGroupMsg(int nCode, int nServerIdx, string sMsg);
+
+        bool FindOtherServerUser(string mapName, ref int srvIdx);
+        int GetMonstersZenTime(long time);
+
+        int GetMapHuman(string mapName);
+
+        int GetMapMonster(IEnvirnoment envir, IList<IActor> list);
+    }
+
+}

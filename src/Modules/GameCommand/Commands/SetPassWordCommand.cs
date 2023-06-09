@@ -1,9 +1,7 @@
-﻿using M2Server.Player;
-using M2Server;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 设置密码
@@ -12,22 +10,22 @@ namespace M2Server.GameCommand.Commands
     public class SetPassWordCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
-                playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (string.IsNullOrEmpty(playObject.StoragePwd))
+            if (string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                playObject.IsSetStoragePwd = true;
-                playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
+                PlayerActor.IsSetStoragePwd = true;
+                PlayerActor.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(Settings.AlreadySetPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.AlreadySetPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -39,21 +37,21 @@ namespace M2Server.GameCommand.Commands
     public class UnPasswWordCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
-                playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!playObject.IsPasswordLocked)
+            if (!PlayerActor.IsPasswordLocked)
             {
-                playObject.StoragePwd = "";
-                playObject.SysMsg(Settings.OldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.StoragePwd = "";
+                PlayerActor.SysMsg(Settings.OldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(Settings.PleaseUnLockPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.PleaseUnLockPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -65,28 +63,28 @@ namespace M2Server.GameCommand.Commands
     public class ChgpassWordCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
-                playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.PwdFailCount > 3)
+            if (PlayerActor.PwdFailCount > 3)
             {
-                playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.IsPasswordLocked = true;
+                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.IsPasswordLocked = true;
                 return;
             }
-            if (!string.IsNullOrEmpty(playObject.StoragePwd))
+            if (!string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                playObject.IsCheckOldPwd = true;
-                playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
+                PlayerActor.IsCheckOldPwd = true;
+                PlayerActor.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(Settings.NoPasswordSetMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordSetMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -98,35 +96,35 @@ namespace M2Server.GameCommand.Commands
     public class UnlockStorageCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
-                playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (PlayerActor.PwdFailCount > SystemShare.Config.PasswordErrorCountLock)
             {
-                playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.IsPasswordLocked = true;
+                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.IsPasswordLocked = true;
                 return;
             }
-            if (!string.IsNullOrEmpty(playObject.StoragePwd))
+            if (!string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
-                if (!playObject.IsUnLockStoragePwd)
+                if (!PlayerActor.IsUnLockStoragePwd)
                 {
-                    playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                    playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
-                    playObject.IsUnLockStoragePwd = true;
+                    PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
+                    PlayerActor.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.IsUnLockStoragePwd = true;
                 }
                 else
                 {
-                    playObject.SysMsg(Settings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(Settings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                playObject.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -138,35 +136,35 @@ namespace M2Server.GameCommand.Commands
     public class UnLockCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
-                playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (playObject.PwdFailCount > M2Share.Config.PasswordErrorCountLock)
+            if (PlayerActor.PwdFailCount > SystemShare.Config.PasswordErrorCountLock)
             {
-                playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.IsPasswordLocked = true;
+                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.IsPasswordLocked = true;
                 return;
             }
-            if (!string.IsNullOrEmpty(playObject.StoragePwd))
+            if (!string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
-                if (!playObject.IsUnLockPwd)
+                if (!PlayerActor.IsUnLockPwd)
                 {
-                    playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                    playObject.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
-                    playObject.IsUnLockPwd = true;
+                    PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
+                    PlayerActor.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.IsUnLockPwd = true;
                 }
                 else
                 {
-                    playObject.SysMsg(Settings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(Settings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                playObject.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -178,29 +176,29 @@ namespace M2Server.GameCommand.Commands
     public class LockCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
-                playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!playObject.IsPasswordLocked)
+            if (!PlayerActor.IsPasswordLocked)
             {
-                if (!string.IsNullOrEmpty(playObject.StoragePwd))
+                if (!string.IsNullOrEmpty(PlayerActor.StoragePwd))
                 {
-                    playObject.IsPasswordLocked = true;
-                    playObject.IsCanGetBackItem = false;
-                    playObject.SysMsg(Settings.LockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.IsPasswordLocked = true;
+                    PlayerActor.IsCanGetBackItem = false;
+                    PlayerActor.SysMsg(Settings.LockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                playObject.SysMsg(Settings.StorageAlreadyLockMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.StorageAlreadyLockMsg, MsgColor.Red, MsgType.Hint);
             }
             return;
         }
@@ -213,25 +211,25 @@ namespace M2Server.GameCommand.Commands
     public class SetFlagCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null || @params.Length <= 0)
             {
                 return;
             }
-            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
-            if (playObject != null)
+            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
+            if (targetObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);
                 var nValue = HUtil32.StrToInt(@params[2], 0);
-                playObject.SetQuestFlagStatus(nFlag, nValue);
-                if (playObject.GetQuestFalgStatus(nFlag) == 1)
+                PlayerActor.SetQuestFlagStatus(nFlag, nValue);
+                if (PlayerActor.GetQuestFalgStatus(nFlag) == 1)
                 {
-                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(PlayerActor.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(PlayerActor.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
@@ -248,25 +246,25 @@ namespace M2Server.GameCommand.Commands
     public class SetOpenCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null || @params.Length <= 0)
             {
                 return;
             }
-            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
-            if (playObject != null)
+            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
+            if (targetObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);
                 var nValue = HUtil32.StrToInt(@params[2], 0);
-                playObject.SetQuestUnitOpenStatus(nFlag, nValue);
-                if (playObject.GetQuestUnitOpenStatus(nFlag) == 1)
+                PlayerActor.SetQuestUnitOpenStatus(nFlag, nValue);
+                if (PlayerActor.GetQuestUnitOpenStatus(nFlag) == 1)
                 {
-                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(PlayerActor.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(PlayerActor.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else
@@ -283,25 +281,25 @@ namespace M2Server.GameCommand.Commands
     public class SetUnitCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null || @params.Length <= 0)
             {
                 return;
             }
-            var targetObject = M2Share.WorldEngine.GetPlayObject(@params[0]);
-            if (playObject != null)
+            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
+            if (targetObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);
                 var nValue = HUtil32.StrToInt(@params[2], 0);
-                playObject.SetQuestUnitStatus(nFlag, nValue);
-                if (playObject.GetQuestUnitStatus(nFlag) == 1)
+                PlayerActor.SetQuestUnitStatus(nFlag, nValue);
+                if (PlayerActor.GetQuestUnitStatus(nFlag) == 1)
                 {
-                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(PlayerActor.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    targetObject.SysMsg(playObject.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
+                    targetObject.SysMsg(PlayerActor.ChrName + ": [" + nFlag + "] = OFF", MsgColor.Green, MsgType.Hint);
                 }
             }
             else

@@ -1,15 +1,15 @@
 ﻿using System.Text;
-using M2Server.Player;
+using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("ServerInfo", "查看服务器信息", 10)]
     public class ServerInfoCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             var sb = new StringBuilder();
             //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", M2Share.WorldEngine.MonsterCount,
-            //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, M2Share.WorldEngine.OnlinePlayObject,
-            //       M2Share.WorldEngine.PlayObjectCount, M2Share.WorldEngine.LoadPlayCount, M2Share.WorldEngine.m_PlayObjectFreeList.Count));
+            //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, M2Share.WorldEngine.OnlineIPlayerActor,
+            //       M2Share.WorldEngine.IPlayerActorCount, M2Share.WorldEngine.LoadPlayCount, M2Share.WorldEngine.m_IPlayerActorFreeList.Count));
             //sb.AppendLine(string.Format("Run({0}/{1}) Soc({2}/{3}) Usr({4}/{5})", M2Share.nRunTimeMin, M2Share.nRunTimeMax, Settings.g_nSockCountMin,
             //        Settings.g_nSockCountMax, Settings.g_nUsrTimeMin, Settings.g_nUsrTimeMax));
             //sb.AppendLine(string.Format("Hum{0}/{1} Usr{2}/{3} Mer{4}/{5} Npc{6}/{7}", Settings.g_nHumCountMin, Settings.g_nHumCountMax,

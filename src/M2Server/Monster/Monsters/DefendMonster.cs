@@ -1,11 +1,15 @@
-﻿namespace M2Server.Monster.Monsters {
-    public class DefendMonster : MonsterObject {
+﻿namespace M2Server.Monster.Monsters
+{
+    public class DefendMonster : MonsterObject
+    {
         public DefendMonster()
-            : base() {
+            : base()
+        {
             SearchTime = M2Share.RandomNumber.Random(1500) + 1500;
         }
 
-        public override void Run() {
+        public override void Run()
+        {
             base.Run();
         }
     }

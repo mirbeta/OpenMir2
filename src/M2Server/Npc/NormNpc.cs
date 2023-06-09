@@ -23,7 +23,7 @@ namespace M2Server.Npc
         /// <summary>
         /// 此NPC是否是隐藏的，不显示在地图中
         /// </summary>
-        public bool IsHide;
+        public bool IsHide { get; set; }
         /// <summary>
         /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
@@ -54,12 +54,12 @@ namespace M2Server.Npc
             //m_ScriptList.Clear();
         }
 
-        public virtual void Click(PlayObject PlayObject)
+        public virtual void Click(IPlayerActor PlayObject)
         {
             PlayObject.ScriptGotoCount = 0;
             PlayObject.ScriptGoBackLable = "";
             PlayObject.ScriptCurrLable = "";
-            //GotoLable(PlayObject, "@main", false);
+            GotoLable(PlayObject, "@main", false);
         }
 
         public void SendSayMsg(string msg)
@@ -231,7 +231,7 @@ namespace M2Server.Npc
             }
         }
 
-        public string GetLineVariableText(PlayObject PlayObject, string sMsg)
+        public string GetLineVariableText(IPlayerActor PlayObject, string sMsg)
         {
             int nCount = 0;
             string sVariable = string.Empty;
@@ -261,7 +261,7 @@ namespace M2Server.Npc
         /// <summary>
         /// 获取全局变量信息
         /// </summary>
-        protected virtual void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg)
+        protected virtual void GetVariableText(IPlayerActor PlayObject, string sVariable, ref string sMsg)
         {
             string s14 = string.Empty;
             DynamicVar DynamicVar;
@@ -997,69 +997,69 @@ namespace M2Server.Npc
                         sMsg = ReplaceVariableText(sMsg, "<$TARGETNAME>", sText);
                         return;
                     }
-                //case "$CMD_DATE":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
-                //    return;
-                //case "$CMD_ALLOWMSG":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
-                //    return;
-                //case "$CMD_LETSHOUT":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
-                //    return;
-                //case "$CMD_LETTRADE":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
-                //    return;
-                //case "$CMD_LETGUILD":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", CommandMgr.GameCommands.LetGuild.CmdName);
-                //    return;
-                //case "$CMD_ENDGUILD":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
-                //    return;
-                //case "$CMD_BANGUILDCHAT":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
-                //    return;
-                //case "$CMD_AUTHALLY":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
-                //    return;
-                //case "$CMD_AUTH":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
-                //    return;
-                //case "$CMD_AUTHCANCEL":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
-                //    return;
-                //case "$CMD_USERMOVE":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
-                //    return;
-                //case "$CMD_SEARCHING":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_SEARCHING>", CommandMgr.GameCommands.Searching.CmdName);
-                //    return;
-                //case "$CMD_ALLOWGROUPCALL":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
-                //    return;
-                //case "$CMD_GROUPRECALLL":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_GROUPRECALLL>", CommandMgr.GameCommands.GroupRecalll.CmdName);
-                //    return;
-                //case "$CMD_ATTACKMODE":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ATTACKMODE>", CommandMgr.GameCommands.AttackMode.CmdName);
-                //    return;
-                //case "$CMD_REST":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_REST>", CommandMgr.GameCommands.Rest.CmdName);
-                //    return;
-                //case "$CMD_STORAGESETPASSWORD":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
-                //    return;
-                //case "$CMD_STORAGECHGPASSWORD":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
-                //    return;
-                //case "$CMD_STORAGELOCK":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
-                //    return;
-                //case "$CMD_STORAGEUNLOCK":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
-                //    return;
-                //case "$CMD_UNLOCK":
-                //    sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", CommandMgr.GameCommands.Unlock.CmdName);
-                //    return;
+                    //case "$CMD_DATE":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
+                    //    return;
+                    //case "$CMD_ALLOWMSG":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
+                    //    return;
+                    //case "$CMD_LETSHOUT":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
+                    //    return;
+                    //case "$CMD_LETTRADE":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
+                    //    return;
+                    //case "$CMD_LETGUILD":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_LETGUILD>", CommandMgr.GameCommands.LetGuild.CmdName);
+                    //    return;
+                    //case "$CMD_ENDGUILD":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
+                    //    return;
+                    //case "$CMD_BANGUILDCHAT":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
+                    //    return;
+                    //case "$CMD_AUTHALLY":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
+                    //    return;
+                    //case "$CMD_AUTH":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
+                    //    return;
+                    //case "$CMD_AUTHCANCEL":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
+                    //    return;
+                    //case "$CMD_USERMOVE":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
+                    //    return;
+                    //case "$CMD_SEARCHING":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_SEARCHING>", CommandMgr.GameCommands.Searching.CmdName);
+                    //    return;
+                    //case "$CMD_ALLOWGROUPCALL":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
+                    //    return;
+                    //case "$CMD_GROUPRECALLL":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_GROUPRECALLL>", CommandMgr.GameCommands.GroupRecalll.CmdName);
+                    //    return;
+                    //case "$CMD_ATTACKMODE":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_ATTACKMODE>", CommandMgr.GameCommands.AttackMode.CmdName);
+                    //    return;
+                    //case "$CMD_REST":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_REST>", CommandMgr.GameCommands.Rest.CmdName);
+                    //    return;
+                    //case "$CMD_STORAGESETPASSWORD":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
+                    //    return;
+                    //case "$CMD_STORAGECHGPASSWORD":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
+                    //    return;
+                    //case "$CMD_STORAGELOCK":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
+                    //    return;
+                    //case "$CMD_STORAGEUNLOCK":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
+                    //    return;
+                    //case "$CMD_UNLOCK":
+                    //    sMsg = ReplaceVariableText(sMsg, "<$CMD_UNLOCK>", CommandMgr.GameCommands.Unlock.CmdName);
+                    //    return;
             }
 
             //if (HUtil32.CompareLStr(sVariable, "$MAPMONSTERCOUNT[")) // 地图怪物数量
@@ -1600,7 +1600,7 @@ namespace M2Server.Npc
             base.Run();
         }
 
-        protected void SendMsgToUser(PlayObject PlayObject, string sMsg)
+        protected void SendMsgToUser(IPlayerActor PlayObject, string sMsg)
         {
             PlayObject.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
         }
@@ -1620,7 +1620,7 @@ namespace M2Server.Npc
             return sMsg;
         }
 
-        public virtual void UserSelect(PlayObject PlayObject, string sData)
+        public virtual void UserSelect(IPlayerActor PlayObject, string sData)
         {
             string sLabel = string.Empty;
             PlayObject.ScriptGotoCount = 0;
@@ -1649,7 +1649,7 @@ namespace M2Server.Npc
             }
         }
 
-        protected virtual void SendCustemMsg(PlayObject PlayObject, string sMsg)
+        protected virtual void SendCustemMsg(IPlayerActor PlayObject, string sMsg)
         {
             if (!M2Share.Config.SendCustemMsg)
             {
@@ -1876,7 +1876,7 @@ namespace M2Server.Npc
             return result;
         }
 
-        public void GotoLable(PlayObject playObject, string lab, bool s)
+        public void GotoLable(IPlayerActor playObject, string lab, bool s)
         {
 
         }

@@ -1,9 +1,9 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using M2Server;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 密码锁定
@@ -12,35 +12,35 @@ namespace M2Server.GameCommand.Commands
     public class PasswordLockCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null || @params.Length <= 0)
             {
                 return;
             }
-            if (!M2Share.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
-                playObject.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (string.IsNullOrEmpty(playObject.StoragePwd))
+            if (string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                playObject.IsSetStoragePwd = true;
-                playObject.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
+                PlayerActor.IsSetStoragePwd = true;
+                PlayerActor.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                 return;
             }
-            if (playObject.PwdFailCount > 3)
+            if (PlayerActor.PwdFailCount > 3)
             {
-                playObject.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
-                playObject.IsPasswordLocked = true;
+                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.IsPasswordLocked = true;
                 return;
             }
-            if (!string.IsNullOrEmpty(playObject.StoragePwd))
+            if (!string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
-                playObject.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                playObject.IsCheckOldPwd = true;
-                playObject.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
+                PlayerActor.IsCheckOldPwd = true;
+                PlayerActor.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
         }
     }

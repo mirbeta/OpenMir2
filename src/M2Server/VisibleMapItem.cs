@@ -1,11 +1,8 @@
-using M2Server.Actor;
-using M2Server.Maps;
+using SystemModule;
+using SystemModule.Enums;
 
 namespace M2Server
 {
-    /// <summary>
-    /// µÿÕºŒÔ∆∑
-    /// </summary>
     public class VisibleMapItem
     {
         public short nX;

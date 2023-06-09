@@ -1,11 +1,11 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
     public class ClearItemMapCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -15,7 +15,7 @@ namespace M2Server.GameCommand.Commands {
             var nY = @params.Length > 3 ? HUtil32.StrToInt(@params[3],0) : 0;
             var nRange = @params.Length > 4 ? HUtil32.StrToInt(@params[4],0) : 0;
             if (string.IsNullOrEmpty(sMap) || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?') {
-                //PlayObject.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
+                //PlayerActor.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
                 return;
             }
             if (sItemName == "ALL") {

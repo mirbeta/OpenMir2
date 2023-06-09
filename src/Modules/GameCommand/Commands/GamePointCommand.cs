@@ -1,15 +1,15 @@
 ﻿using System.Collections;
-using M2Server.Player;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 调整指定玩家声望
     /// </summary>
     [Command("GamePoint", "调整指定玩家声望", CommandHelp.GameCommandGamePointHelpMsg, 10)]
     public class GamePointCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -25,34 +25,34 @@ namespace M2Server.GameCommand.Commands {
             }
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new[] { '=', '+', '-' }).Contains(ctr) || nPoint < 0 || nPoint > 100000000
                 || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null) {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null) {
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[1]) {
                 case '=':
-                    mPlayObject.GamePoint = (ushort)nPoint;
+                    mIPlayerActor.GamePoint = (ushort)nPoint;
                     break;
 
                 case '+':
-                    mPlayObject.GamePoint += (ushort)nPoint;
+                    mIPlayerActor.GamePoint += (ushort)nPoint;
                     break;
 
                 case '-':
-                    mPlayObject.GamePoint -= (ushort)nPoint;
+                    mIPlayerActor.GamePoint -= (ushort)nPoint;
                     break;
             }
-            if (M2Share.GameLogGamePoint) {
-                //M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GAMEPOINT, m_PlayObject.MapName, m_PlayObject.CurrX, m_PlayObject.CurrY,
-                //    m_PlayObject.m_sChrName, Settings.Config.sGamePointName, nPoint, sCtr[1], m_PlayObject.m_sChrName));
+            if (SystemShare.GameLogGamePoint) {
+                //M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GAMEPOINT, m_IPlayerActor.MapName, m_IPlayerActor.CurrX, m_IPlayerActor.CurrY,
+                //    m_IPlayerActor.m_sChrName, Settings.Config.sGamePointName, nPoint, sCtr[1], m_IPlayerActor.m_sChrName));
             }
-            playObject.GameGoldChanged();
-            mPlayObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointHumanMsg, nPoint, mPlayObject.GamePoint), MsgColor.Green, MsgType.Hint);
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandGamePointGMMsg, sHumanName, nPoint, mPlayObject.GamePoint), MsgColor.Green, MsgType.Hint);
+            PlayerActor.GameGoldChanged();
+            mIPlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGamePointHumanMsg, nPoint, mIPlayerActor.GamePoint), MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGamePointGMMsg, sHumanName, nPoint, mIPlayerActor.GamePoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

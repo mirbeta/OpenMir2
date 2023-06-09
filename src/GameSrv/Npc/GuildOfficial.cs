@@ -1,8 +1,7 @@
 ﻿using M2Server.Castle;
 using M2Server.Player;
 using M2Server.World;
-using ScriptEngine.Consts;
-using SystemModule;
+using ScriptModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -12,23 +11,29 @@ namespace M2Server.Npc
     /// 行会NPC类
     /// 行会管理NPC 如：比奇国王
     /// </summary>
-    public class GuildOfficial : NormNpc {
-        public GuildOfficial() : base() {
+    public class GuildOfficial : NormNpc
+    {
+        public GuildOfficial() : base()
+        {
             RaceImg = ActorRace.Merchant;
             Appr = 8;
         }
 
-        public override void Click(PlayObject PlayObject) {
+        public override void Click(IPlayerActor PlayObject)
+        {
             base.Click(PlayObject);
         }
 
-        protected override void GetVariableText(PlayObject PlayObject, string sVariable, ref string sMsg) {
+        protected override void GetVariableText(IPlayerActor PlayObject, string sVariable, ref string sMsg)
+        {
             base.GetVariableText(PlayObject, sVariable, ref sMsg);
-            if (sVariable == "$REQUESTCASTLELIST") {
+            if (sVariable == "$REQUESTCASTLELIST")
+            {
                 string sText = "";
                 IList<string> List = new List<string>();
                 M2Share.CastleMgr.GetCastleNameList(List);
-                for (int i = 0; i < List.Count; i++) {
+                for (int i = 0; i < List.Count; i++)
+                {
                     sText = sText + Format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i, sText);
                 }
                 sText = sText + "\\ \\";
@@ -36,53 +41,69 @@ namespace M2Server.Npc
             }
         }
 
-        public override void Run() {
-            if (M2Share.RandomNumber.Random(40) == 0) {
+        public override void Run()
+        {
+            if (M2Share.RandomNumber.Random(40) == 0)
+            {
                 TurnTo(M2Share.RandomNumber.RandomByte(8));
             }
-            else {
-                if (M2Share.RandomNumber.Random(30) == 0) {
+            else
+            {
+                if (M2Share.RandomNumber.Random(30) == 0)
+                {
                     SendRefMsg(Messages.RM_HIT, Dir, CurrX, CurrY, 0, "");
                 }
             }
             base.Run();
         }
 
-        public override void UserSelect(PlayObject PlayObject, string sData) {
+        public override void UserSelect(IPlayerActor PlayObject, string sData)
+        {
             string sLabel = string.Empty;
             base.UserSelect(PlayObject, sData);
-            try {
-                if (!string.IsNullOrEmpty(sData) && sData.StartsWith("@")) {
+            try
+            {
+                if (!string.IsNullOrEmpty(sData) && sData.StartsWith("@"))
+                {
                     string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                     bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
                     GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, sLabel, !boCanJmp);
-                    if (!boCanJmp) {
+                    if (!boCanJmp)
+                    {
                         return;
                     }
-                    if (string.Compare(sLabel, ScriptFlagCode.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0) {
+                    if (string.Compare(sLabel, ScriptFlagCode.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
                         ReQuestBuildGuild(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else if (string.Compare(sLabel, ScriptFlagCode.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
                         ReQuestGuildWar(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sDONATE, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else if (string.Compare(sLabel, ScriptFlagCode.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
                         DoNate(PlayObject);
                     }
-                    else if (HUtil32.CompareLStr(sLabel, ScriptFlagCode.sREQUESTCASTLEWAR)) {
+                    else if (HUtil32.CompareLStr(sLabel, ScriptFlagCode.sREQUESTCASTLEWAR))
+                    {
                         ReQuestCastleWar(PlayObject, sLabel[ScriptFlagCode.sREQUESTCASTLEWAR.Length..]);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sEXIT, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else if (string.Compare(sLabel, ScriptFlagCode.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
                         PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sBACK, StringComparison.OrdinalIgnoreCase) == 0) {
-                        if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable)) {
+                    else if (string.Compare(sLabel, ScriptFlagCode.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable))
+                        {
                             PlayObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
                         }
                         GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable, false);
                     }
                 }
             }
-            catch (Exception ex) {
+            catch (Exception ex)
+            {
                 M2Share.Logger.Error(ex);
             }
         }
@@ -93,48 +114,61 @@ namespace M2Server.Npc
         /// <param name="PlayObject"></param>
         /// <param name="sGuildName"></param>
         /// <returns></returns>
-        private int ReQuestBuildGuild(PlayObject PlayObject, string sGuildName) {
+        private int ReQuestBuildGuild(IPlayerActor PlayObject, string sGuildName)
+        {
             int result = 0;
             sGuildName = sGuildName.Trim();
             UserItem UserItem = null;
-            if (string.IsNullOrEmpty(sGuildName)) {
+            if (string.IsNullOrEmpty(sGuildName))
+            {
                 result = -4;
             }
-            if (PlayObject.MyGuild == null) {
-                if (PlayObject.Gold >= M2Share.Config.BuildGuildPrice) {
+            if (PlayObject.MyGuild == null)
+            {
+                if (PlayObject.Gold >= M2Share.Config.BuildGuildPrice)
+                {
                     UserItem = PlayObject.CheckItems(M2Share.Config.WomaHorn);
-                    if (UserItem == null) {
+                    if (UserItem == null)
+                    {
                         result = -3;// '你没有准备好需要的全部物品。'
                     }
                 }
-                else {
+                else
+                {
                     result = -2;// '缺少创建费用。'
                 }
             }
-            else {
+            else
+            {
                 result = -1;// '您已经加入其它行会。'
             }
-            if (result == 0) {
-                if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName)) {
+            if (result == 0)
+            {
+                if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
+                {
                     WorldServer.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.WomaHorn);
                     PlayObject.DecGold(M2Share.Config.BuildGuildPrice);
                     PlayObject.GoldChanged();
                     PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
-                    if (PlayObject.MyGuild != null) {
+                    if (PlayObject.MyGuild != null)
+                    {
                         PlayObject.GuildRankName = PlayObject.MyGuild.GetRankName(PlayObject, ref PlayObject.GuildRankNo);
                         RefShowName();
                     }
                 }
-                else {
+                else
+                {
                     result = -4;
                 }
             }
-            if (result >= 0) {
+            if (result >= 0)
+            {
                 PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_OK, 0, 0, 0, 0);
             }
-            else {
+            else
+            {
                 PlayObject.SendMsg(this, Messages.RM_BUILDGUILD_FAIL, 0, result, 0, 0);
             }
             return result;
@@ -146,54 +180,69 @@ namespace M2Server.Npc
         /// <param name="PlayObject"></param>
         /// <param name="sGuildName"></param>
         /// <returns></returns>
-        private static void ReQuestGuildWar(PlayObject PlayObject, string sGuildName) {
-            if (M2Share.GuildMgr.FindGuild(sGuildName) != null) {
-                if (PlayObject.Gold >= M2Share.Config.GuildWarPrice) {
+        private static void ReQuestGuildWar(IPlayerActor PlayObject, string sGuildName)
+        {
+            if (M2Share.GuildMgr.FindGuild(sGuildName) != null)
+            {
+                if (PlayObject.Gold >= M2Share.Config.GuildWarPrice)
+                {
                     PlayObject.DecGold(M2Share.Config.GuildWarPrice);
                     PlayObject.GoldChanged();
                     PlayObject.ReQuestGuildWar(sGuildName);
                 }
-                else {
+                else
+                {
                     PlayObject.SysMsg("你没有足够的金币!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
-            else {
+            else
+            {
                 PlayObject.SysMsg("行会 " + sGuildName + " 不存在!!!", MsgColor.Red, MsgType.Hint);
             }
         }
 
-        private void DoNate(PlayObject PlayObject) {
+        private void DoNate(IPlayerActor PlayObject)
+        {
             PlayObject.SendMsg(this, Messages.RM_DONATE_OK, 0, 0, 0, 0);
         }
 
-        private void ReQuestCastleWar(PlayObject PlayObject, string sIndex) {
+        private void ReQuestCastleWar(IPlayerActor PlayObject, string sIndex)
+        {
             int nIndex = HUtil32.StrToInt(sIndex, -1);
-            if (nIndex < 0) {
+            if (nIndex < 0)
+            {
                 nIndex = 0;
             }
             UserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
-            if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject)) {
+            if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
+            {
                 UserItem UserItem = PlayObject.CheckItems(M2Share.Config.ZumaPiece);
-                if (UserItem != null) {
-                    if (Castle.AddAttackerInfo(PlayObject.MyGuild)) {
+                if (UserItem != null)
+                {
+                    if (Castle.AddAttackerInfo(PlayObject.MyGuild))
+                    {
                         PlayObject.SendDelItems(UserItem);
                         PlayObject.DelBagItem(UserItem.MakeIndex, M2Share.Config.ZumaPiece);
                         GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok", false);
                     }
-                    else {
+                    else
+                    {
                         PlayObject.SysMsg("你现在无法请求攻城!!!", MsgColor.Red, MsgType.Hint);
                     }
                 }
-                else {
+                else
+                {
                     PlayObject.SysMsg("你没有" + M2Share.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
-            else {
+            else
+            {
                 PlayObject.SysMsg("你的请求被取消!!!", MsgColor.Red, MsgType.Hint);
             }
         }
 
-        protected override void SendCustemMsg(PlayObject PlayObject, string sMsg) {
+        protected override void SendCustemMsg(IPlayerActor PlayObject, string sMsg)
+        {
             base.SendCustemMsg(PlayObject, sMsg);
         }
     }

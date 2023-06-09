@@ -1,25 +1,33 @@
 using M2Server.Actor;
 using SystemModule;
 
-namespace M2Server.Monster.Monsters {
-    public class SoccerBall : AnimalObject {
+namespace M2Server.Monster.Monsters
+{
+    public class SoccerBall : AnimalObject
+    {
         public int N550;
 
-        public SoccerBall() : base() {
+        public SoccerBall() : base()
+        {
             Animal = false;
             SuperMan = true;
             N550 = 0;
             TargetX = -1;
         }
 
-        public override void Run() {
+        public override void Run()
+        {
             short n08 = 0;
             short n0C = 0;
             bool bo0D = false;
-            if (N550 > 0) {
-                if (Envir.GetNextPosition(CurrX, CurrY, Dir, 1, ref n08, ref n0C)) {
-                    if (Envir.CanWalk(n08, n0C, bo0D)) {
-                        switch (Dir) {
+            if (N550 > 0)
+            {
+                if (Envir.GetNextPosition(CurrX, CurrY, Dir, 1, ref n08, ref n0C))
+                {
+                    if (Envir.CanWalk(n08, n0C, bo0D))
+                    {
+                        switch (Dir)
+                        {
                             case 0:
                                 Dir = 4;
                                 break;
@@ -49,20 +57,25 @@ namespace M2Server.Monster.Monsters {
                     }
                 }
             }
-            else {
+            else
+            {
                 TargetX = -1;
             }
-            if (TargetX != -1) {
+            if (TargetX != -1)
+            {
                 GotoTargetXY();
-                if (TargetX == CurrX && TargetY == CurrY) {
+                if (TargetX == CurrX && TargetY == CurrY)
+                {
                     N550 = 0;
                 }
             }
             base.Run();
         }
 
-        public override void Struck(BaseObject hiter) {
-            if (hiter == null) {
+        public override void Struck(IActor hiter)
+        {
+            if (hiter == null)
+            {
                 return;
             }
             Dir = hiter.Dir;
@@ -72,4 +85,3 @@ namespace M2Server.Monster.Monsters {
         }
     }
 }
-

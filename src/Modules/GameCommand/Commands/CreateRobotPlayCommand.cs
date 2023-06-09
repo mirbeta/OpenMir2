@@ -1,9 +1,7 @@
-﻿using M2Server.Player;
-using SystemModule;
-using SystemModule.Data;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 增加AI玩家
@@ -12,7 +10,7 @@ namespace M2Server.GameCommand.Commands
     public class CreateRobotPlayCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -20,7 +18,7 @@ namespace M2Server.GameCommand.Commands
             }
             if (@params[0] == "?")
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var userCount = HUtil32.StrToInt(@params[0], 1);
@@ -34,7 +32,7 @@ namespace M2Server.GameCommand.Commands
             //    nY = HUtil32.StrToInt16(@params[3], 0);
             //    if (string.IsNullOrEmpty(sMapName) || (nX == 0 || nY == 0))
             //    {
-            //        playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+            //        PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
             //        return;
             //    }
             //}
@@ -55,7 +53,7 @@ namespace M2Server.GameCommand.Commands
             //        nY = nY
             //    });
             //}
-            //playObject.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{M2Share.WorldEngine.RobotLogonQueue.Count}],当前共[{M2Share.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
+            //PlayerActor.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{M2Share.WorldEngine.RobotLogonQueue.Count}],当前共[{M2Share.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
 
         }
     }

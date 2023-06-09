@@ -12,7 +12,7 @@ namespace M2Server.Event.Events
         /// 火墙运行时间
         /// </summary>
         protected int FireRunTick;
-        private IList<BaseObject> ObjectList = new List<BaseObject>();
+        private IList<IActor> ObjectList = new List<IActor>();
 
         public FireBurnEvent(BaseObject creat, short nX, short nY, byte nType, int nTime, int nDamage) : base(creat.Envir, nX, nY, nType, nTime, true)
         {
@@ -30,7 +30,7 @@ namespace M2Server.Event.Events
                     Envirnoment.GetBaseObjects(nX, nY, true, ref ObjectList);
                     for (int i = 0; i < ObjectList.Count; i++)
                     {
-                        BaseObject targetBaseObject = ObjectList[i];
+                        IActor targetBaseObject = ObjectList[i];
                         if (targetBaseObject != null && OwnBaseObject != null && OwnBaseObject.IsProperTarget(targetBaseObject))
                         {
                             targetBaseObject.SendMsg(OwnBaseObject, Messages.RM_MAGSTRUCK_MINE, 0, Damage, 0, 0);

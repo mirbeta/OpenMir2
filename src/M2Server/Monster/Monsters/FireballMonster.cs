@@ -1,5 +1,4 @@
-﻿using M2Server.Actor;
-using SystemModule;
+﻿using SystemModule;
 
 namespace M2Server.Monster.Monsters
 {
@@ -26,7 +25,7 @@ namespace M2Server.Monster.Monsters
                                 int nPower = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
                                 if (nPower > 0)
                                 {
-                                    BaseObject baseObject = GetPoseCreate();
+                                    IActor baseObject = GetPoseCreate();
                                     if (baseObject != null && IsProperTarget(baseObject) && AntiMagic > 0)
                                     {
                                         nPower = baseObject.GetMagStruckDamage(this, nPower);

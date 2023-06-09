@@ -1,18 +1,18 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("DisableSendMsgList", "", 10)]
     public class DisableSendMsgListCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (M2Share.DisableSendMsgList.Count <= 0) {
-                playObject.SysMsg("禁言列表为空!!!", MsgColor.Red, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            if (SystemShare.DisableSendMsgList.Count <= 0) {
+                PlayerActor.SysMsg("禁言列表为空!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            playObject.SysMsg("禁言列表:", MsgColor.Blue, MsgType.Hint);
-            for (var i = 0; i < M2Share.DisableSendMsgList.Count; i++) {
-                //PlayObject.SysMsg(Settings.g_DisableSendMsgList[i], MsgColor.c_Green, MsgType.t_Hint);
+            PlayerActor.SysMsg("禁言列表:", MsgColor.Blue, MsgType.Hint);
+            for (var i = 0; i < SystemShare.DisableSendMsgList.Count; i++) {
+                //PlayerActor.SysMsg(Settings.g_DisableSendMsgList[i], MsgColor.c_Green, MsgType.t_Hint);
             }
         }
     }

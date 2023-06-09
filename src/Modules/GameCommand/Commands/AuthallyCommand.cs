@@ -1,18 +1,24 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem
+{
     [Command("Authally", "", "")]
-    internal class AuthallyCommand : GameCommand {
+    internal class AuthallyCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (playObject.IsGuildMaster()) {
-                playObject.MyGuild.EnableAuthAlly = !playObject.MyGuild.EnableAuthAlly;
-                if (playObject.MyGuild.EnableAuthAlly) {
-                    playObject.SysMsg(CommandHelp.EnableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            if (PlayerActor.IsGuildMaster())
+            {
+                PlayerActor.MyGuild.EnableAuthAlly = !PlayerActor.MyGuild.EnableAuthAlly;
+                if (PlayerActor.MyGuild.EnableAuthAlly)
+                {
+                    PlayerActor.SysMsg(CommandHelp.EnableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                 }
-                else {
-                    playObject.SysMsg(CommandHelp.DisableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
+                else
+                {
+                    PlayerActor.SysMsg(CommandHelp.DisableAuthAllyGuild, MsgColor.Green, MsgType.Hint);
                 }
             }
             return;

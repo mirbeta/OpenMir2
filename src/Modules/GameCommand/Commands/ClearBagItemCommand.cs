@@ -1,16 +1,16 @@
 ﻿using M2Server.Items;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     [Command("ClearBagItem", "清理包裹物品", "人物名称", 10)]
     public class ClearBagItemCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -19,36 +19,36 @@ namespace M2Server.GameCommand.Commands
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null)
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null)
             {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             IList<DeleteItem> delList = null;
-            if (mPlayObject.ItemList.Count > 0)
+            if (mIPlayerActor.ItemList.Count > 0)
             {
                 delList = new List<DeleteItem>();
-                for (var i = mPlayObject.ItemList.Count - 1; i >= 0; i--)
+                for (var i = mIPlayerActor.ItemList.Count - 1; i >= 0; i--)
                 {
-                    var userItem = mPlayObject.ItemList[i];
+                    var userItem = mIPlayerActor.ItemList[i];
                     delList.Add(new DeleteItem()
                     {
                         ItemName = ItemSystem.GetStdItemName(userItem.Index),
                         MakeIndex = userItem.MakeIndex
                     });
-                    mPlayObject.ItemList.RemoveAt(i);
+                    mIPlayerActor.ItemList.RemoveAt(i);
                 }
-                mPlayObject.ItemList.Clear();
+                mIPlayerActor.ItemList.Clear();
             }
             if (delList != null)
             {
                 var objectId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(objectId, delList);
-                mPlayObject.SendMsg(playObject, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
+                SystemShare.ActorMgr.AddOhter(objectId, delList);
+                mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
         }
     }

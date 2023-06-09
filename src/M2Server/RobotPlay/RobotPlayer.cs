@@ -27,7 +27,7 @@ namespace M2Server.RobotPlay
         /// <summary>
         /// 挂机地图
         /// </summary>
-        public Envirnoment ManagedEnvir;
+        public IEnvirnoment ManagedEnvir;
         public PointManager PointManager;
         public PointInfo[] MPath;
         public int MNPostion;
@@ -125,7 +125,7 @@ namespace M2Server.RobotPlay
         /// </summary>
         public bool Resurrection;
 
-        public RobotPlayer() 
+        public RobotPlayer()
         {
             SoftVersionDate = M2Share.Config.SoftVersionDate;
             SoftVersionDateEx = Grobal2.ClientVersionNumber;
@@ -181,7 +181,7 @@ namespace M2Server.RobotPlay
                 if (M2Share.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                   // M2Share.FunctionNPC.GotoLable(this, "@AIStart", false);
+                    // M2Share.FunctionNPC.GotoLable(this, "@AIStart", false);
                 }
             }
         }
@@ -197,7 +197,7 @@ namespace M2Server.RobotPlay
                 if (M2Share.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                   // M2Share.FunctionNPC.GotoLable(this, "@AIStop", false);
+                    // M2Share.FunctionNPC.GotoLable(this, "@AIStop", false);
                 }
             }
         }
@@ -625,7 +625,7 @@ namespace M2Server.RobotPlay
                 if (IsEnoughBag() && TargetCret == null)
                 {
                     var boFound = false;
-                    if (MSelMapItem.ItemId>0)
+                    if (MSelMapItem.ItemId > 0)
                     {
                         CanPickIng = true;
                         for (var i = 0; i < VisibleItems.Count; i++)
@@ -1054,7 +1054,7 @@ namespace M2Server.RobotPlay
             }
         }
 
-        private BaseObject StruckMinXY(BaseObject aObject, BaseObject bObject)
+        private IActor StruckMinXY(IActor aObject, IActor bObject)
         {
             var nA = Math.Abs(CurrX - aObject.CurrX) + Math.Abs(CurrY - aObject.CurrY);
             var nB = Math.Abs(CurrX - bObject.CurrX) + Math.Abs(CurrY - bObject.CurrY);
@@ -1627,7 +1627,7 @@ namespace M2Server.RobotPlay
             return result;
         }
 
-        private bool CanAttack(short nCurrX, short nCurrY, BaseObject targetObject, int nRange, ref byte btDir)
+        private bool CanAttack(short nCurrX, short nCurrY, IActor targetObject, int nRange, ref byte btDir)
         {
             var result = false;
             short nX = 0;
@@ -1648,7 +1648,7 @@ namespace M2Server.RobotPlay
             return result;
         }
 
-        private bool CanAttack(BaseObject targetObject, int nRange, ref byte btDir)
+        private bool CanAttack(IActor targetObject, int nRange, ref byte btDir)
         {
             short nX = 0;
             short nY = 0;
@@ -1759,7 +1759,7 @@ namespace M2Server.RobotPlay
             return result;
         }
 
-        private bool UseSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetObject)
+        private bool UseSpell(UserMagic userMagic, short nTargetX, short nTargetY, IActor targetObject)
         {
             var result = false;
             if (!IsCanSpell)
@@ -1824,8 +1824,10 @@ namespace M2Server.RobotPlay
                     if ((HUtil32.GetTickCount() - DoMotaeboTick) > 3000)
                     {
                         DoMotaeboTick = HUtil32.GetTickCount();
-                        if (GetAttackDir(targetObject, ref Dir))
+                        byte attDir = 0;
+                        if (GetAttackDir(targetObject, ref attDir))
                         {
+                            Dir = attDir;
                             DoMotaebo(Dir, userMagic.Level);
                         }
                     }
@@ -1836,7 +1838,7 @@ namespace M2Server.RobotPlay
                 default:
                     int n14 = M2Share.GetNextDirection(CurrX, CurrY, nTargetX, nTargetY);
                     Dir = (byte)n14;
-                    BaseObject baseObject = null;
+                    IActor baseObject = null;
                     if (userMagic.MagIdx >= 60 && userMagic.MagIdx <= 65)
                     {
                         if (CretInNearXy(targetObject, nTargetX, nTargetY))// 检查目标角色，与目标座标误差范围，如果在误差范围内则修正目标座标
@@ -1899,7 +1901,7 @@ namespace M2Server.RobotPlay
             return result;
         }
 
-        private bool AutoSpell(UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetObject)
+        private bool AutoSpell(UserMagic userMagic, short nTargetX, short nTargetY, IActor targetObject)
         {
             var result = false;
             try
@@ -2147,7 +2149,7 @@ namespace M2Server.RobotPlay
         /// 走向目标
         /// </summary>
         /// <returns></returns>
-        private bool GetGotoXy(BaseObject baseObject, byte nCode)
+        private bool GetGotoXy(IActor baseObject, byte nCode)
         {
             var result = false;
             switch (nCode)
@@ -3543,7 +3545,7 @@ namespace M2Server.RobotPlay
                     {
                         switch (M2Share.RandomNumber.Random(3))// 使用符的魔法
                         {
-                            case 0: 
+                            case 0:
                                 if (AllowUseMagic(94))// 英雄四级噬血术
                                 {
                                     return 94;
@@ -3580,7 +3582,7 @@ namespace M2Server.RobotPlay
                                 {
                                     return 59;
                                 }
-                                if (AllowUseMagic(MagicConst.SKILL_FIRECHARM) &&CheckMagicInterval(13, 3000))
+                                if (AllowUseMagic(MagicConst.SKILL_FIRECHARM) && CheckMagicInterval(13, 3000))
                                 {
                                     return MagicConst.SKILL_FIRECHARM;
                                 }

@@ -1,6 +1,3 @@
-using M2Server.Maps;
-using M2Server;
-using M2Server.Actor;
 using SystemModule;
 using SystemModule.Enums;
 
@@ -8,7 +5,7 @@ namespace M2Server.Actor
 {
     public partial class BaseObject
     {
-        protected virtual void UpdateVisibleGay(BaseObject baseObject)
+        public virtual void UpdateVisibleGay(IActor baseObject)
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
@@ -101,7 +98,7 @@ namespace M2Server.Actor
                                         cellInfo.Clear();
                                         break;
                                     }
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
                                         if (!baseObject.Death && !baseObject.Invisible)
@@ -168,7 +165,8 @@ namespace M2Server.Actor
             IsVisibleActive = false;
             for (int i = 0; i < VisibleActors.Count; i++)
             {
-                if (VisibleActors[i] == null) {
+                if (VisibleActors[i] == null)
+                {
                     continue;
                 }
                 VisibleActors[i].VisibleFlag = VisibleFlag.Hidden;

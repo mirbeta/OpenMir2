@@ -1,8 +1,7 @@
-﻿using M2Server.Player;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整指定玩家经验值
@@ -11,7 +10,7 @@ namespace M2Server.GameCommand.Commands
     public class AdjuestExpCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -21,25 +20,25 @@ namespace M2Server.GameCommand.Commands
             var sExp = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var dwExp = HUtil32.StrToInt(sExp, 0);
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject != null)
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor != null)
             {
-                var dwOExp = playObject.Abil.Exp;
-                mPlayObject.Abil.Exp = dwExp;
-                mPlayObject.HasLevelUp(mPlayObject.Abil.Level - 1);
-                playObject.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
-                if (M2Share.Config.ShowMakeItemMsg)
+                var dwOExp = PlayerActor.Abil.Exp;
+                mIPlayerActor.Abil.Exp = dwExp;
+                mIPlayerActor.HasLevelUp(mIPlayerActor.Abil.Level - 1);
+                PlayerActor.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
+                if (SystemShare.Config.ShowMakeItemMsg)
                 {
-                    M2Share.Logger.Warn("[经验调整] " + playObject.ChrName + '(' + mPlayObject.ChrName + ' ' + dwOExp + " -> " + mPlayObject.Abil.Exp + ')');
+                    SystemShare.Logger.Warn("[经验调整] " + PlayerActor.ChrName + '(' + mIPlayerActor.ChrName + ' ' + dwOExp + " -> " + mIPlayerActor.Abil.Exp + ')');
                 }
             }
             else
             {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

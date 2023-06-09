@@ -1,41 +1,41 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 搜索指定玩家所在地图XY坐标
     /// </summary>
     [Command("SearchHuman", "搜索指定玩家所在地图XY坐标", "人物名称")]
     public class SearchHumanCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
-            if (playObject.ProbeNecklace || playObject.Permission >= 6) {
+            if (PlayerActor.SysMsgProbeNecklace || PlayerActor.Permission >= 6) {
                 if (string.IsNullOrEmpty(sHumanName)) {
-                    playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (HUtil32.GetTickCount() - playObject.ProbeTick > 10000 || playObject.Permission >= 3) {
-                    playObject.ProbeTick = HUtil32.GetTickCount();
-                    var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-                    if (mPlayObject != null) {
-                        playObject.SysMsg(sHumanName + " 现在位于 " + mPlayObject.Envir.MapDesc + '(' + mPlayObject.Envir.MapName + ") " + mPlayObject.CurrX + ':'
-                            + playObject.CurrY, MsgColor.Blue, MsgType.Hint);
+                if (HUtil32.GetTickCount() - PlayerActor.SysMsgProbeTick > 10000 || PlayerActor.Permission >= 3) {
+                    PlayerActor.SysMsgProbeTick = HUtil32.GetTickCount();
+                    var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+                    if (mIPlayerActor != null) {
+                        PlayerActor.SysMsg(sHumanName + " 现在位于 " + mIPlayerActor.Envir.MapDesc + '(' + mIPlayerActor.Envir.MapName + ") " + mIPlayerActor.CurrX + ':'
+                            + PlayerActor.CurrY, MsgColor.Blue, MsgType.Hint);
                     }
                     else {
-                        playObject.SysMsg(sHumanName + " 现在不在线，或位于其它服务器上!!!", MsgColor.Red, MsgType.Hint);
+                        PlayerActor.SysMsg(sHumanName + " 现在不在线，或位于其它服务器上!!!", MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else {
-                    playObject.SysMsg((HUtil32.GetTickCount() - playObject.ProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg((HUtil32.GetTickCount() - PlayerActor.SysMsgProbeTick) / 1000 - 10 + " 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else {
-                playObject.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

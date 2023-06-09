@@ -1,17 +1,17 @@
 ﻿using M2Server.Items;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 调整身上装备附加属性
     /// </summary>
     [Command("SmakeItem", "调整身上装备附加属性", 10)]
     public class SmakeItemCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -20,47 +20,47 @@ namespace M2Server.GameCommand.Commands {
             var nValue = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
             string sShowMsg;
             if (nWhere >= 0 && nWhere <= 12 && nValueType >= 0 && nValueType <= 15 && nValue >= 0 && nValue <= 255) {
-                if (playObject.UseItems[nWhere].Index > 0) {
-                    var stdItem = ItemSystem.GetStdItem(playObject.UseItems[nWhere].Index);
+                if (PlayerActor.UseItems[nWhere].Index > 0) {
+                    var stdItem = ItemSystem.GetStdItem(PlayerActor.UseItems[nWhere].Index);
                     if (stdItem == null) {
                         return;
                     }
-                    playObject.UseItems[nWhere].Desc[9] = (byte)HUtil32._MIN(255, playObject.UseItems[nWhere].Desc[9] + 1);// 累积升级次数
+                    PlayerActor.UseItems[nWhere].Desc[9] = (byte)HUtil32._MIN(255, PlayerActor.UseItems[nWhere].Desc[9] + 1);// 累积升级次数
                     if (nValueType == 16 && stdItem.Shape == 188)// 吸伤属性
                     {
-                        playObject.UseItems[nWhere].Desc[20] = Convert.ToByte(nValue);
-                        if (playObject.UseItems[nWhere].Desc[20] > 100) {
-                            playObject.UseItems[nWhere].Desc[20] = 100;
+                        PlayerActor.UseItems[nWhere].Desc[20] = Convert.ToByte(nValue);
+                        if (PlayerActor.UseItems[nWhere].Desc[20] > 100) {
+                            PlayerActor.UseItems[nWhere].Desc[20] = 100;
                         }
                     }
                     else if (nValueType > 13 && nValueType < 16) {
                         nValue = HUtil32._MIN(65, nValue);
                         if (nValueType == 14) {
-                            playObject.UseItems[nWhere].Dura = Convert.ToUInt16(nValue * 1000);
+                            PlayerActor.UseItems[nWhere].Dura = Convert.ToUInt16(nValue * 1000);
                         }
                         if (nValueType == 15) {
-                            playObject.UseItems[nWhere].DuraMax = Convert.ToUInt16(nValue * 1000);
+                            PlayerActor.UseItems[nWhere].DuraMax = Convert.ToUInt16(nValue * 1000);
                         }
                     }
                     else {
-                        playObject.UseItems[nWhere].Desc[nValueType] = Convert.ToByte(nValue);
+                        PlayerActor.UseItems[nWhere].Desc[nValueType] = Convert.ToByte(nValue);
                     }
-                    playObject.RecalcAbilitys();
-                    playObject.SendUpdateItem(playObject.UseItems[nWhere]);
-                    sShowMsg = playObject.UseItems[nWhere].Index.ToString() + '-' + playObject.UseItems[nWhere].MakeIndex + ' ' + playObject.UseItems[nWhere].Dura + '/'
-                        + playObject.UseItems[nWhere].DuraMax + ' ' + playObject.UseItems[nWhere].Desc[0] + '/'
-                        + playObject.UseItems[nWhere].Desc[1] + '/' + playObject.UseItems[nWhere].Desc[2] + '/'
-                        + playObject.UseItems[nWhere].Desc[3] + '/' + playObject.UseItems[nWhere].Desc[4] + '/' + playObject.UseItems[nWhere].Desc[5]
-                        + '/' + playObject.UseItems[nWhere].Desc[6] + '/' + playObject.UseItems[nWhere].Desc[7] + '/' + playObject.UseItems[nWhere].Desc[8]
-                        + '/' + playObject.UseItems[nWhere].Desc[9] + '/' + playObject.UseItems[nWhere].Desc[ItemAttr.WeaponUpgrade] + '/' + playObject.UseItems[nWhere].Desc[11]
-                        + '/' + playObject.UseItems[nWhere].Desc[12] + '/' + playObject.UseItems[nWhere].Desc[13];
-                    playObject.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
-                    if (M2Share.Config.ShowMakeItemMsg) {
-                        M2Share.Logger.Warn("[物品调整] " + playObject.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
+                    PlayerActor.RecalcAbilitys();
+                    PlayerActor.SendUpdateItem(PlayerActor.UseItems[nWhere]);
+                    sShowMsg = PlayerActor.UseItems[nWhere].Index.ToString() + '-' + PlayerActor.UseItems[nWhere].MakeIndex + ' ' + PlayerActor.UseItems[nWhere].Dura + '/'
+                        + PlayerActor.UseItems[nWhere].DuraMax + ' ' + PlayerActor.UseItems[nWhere].Desc[0] + '/'
+                        + PlayerActor.UseItems[nWhere].Desc[1] + '/' + PlayerActor.UseItems[nWhere].Desc[2] + '/'
+                        + PlayerActor.UseItems[nWhere].Desc[3] + '/' + PlayerActor.UseItems[nWhere].Desc[4] + '/' + PlayerActor.UseItems[nWhere].Desc[5]
+                        + '/' + PlayerActor.UseItems[nWhere].Desc[6] + '/' + PlayerActor.UseItems[nWhere].Desc[7] + '/' + PlayerActor.UseItems[nWhere].Desc[8]
+                        + '/' + PlayerActor.UseItems[nWhere].Desc[9] + '/' + PlayerActor.UseItems[nWhere].Desc[ItemAttr.WeaponUpgrade] + '/' + PlayerActor.UseItems[nWhere].Desc[11]
+                        + '/' + PlayerActor.UseItems[nWhere].Desc[12] + '/' + PlayerActor.UseItems[nWhere].Desc[13];
+                    PlayerActor.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
+                    if (SystemShare.Config.ShowMakeItemMsg) {
+                        SystemShare.Logger.Warn("[物品调整] " + PlayerActor.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
                     }
                 }
                 else {
-                    playObject.SysMsg(CommandHelp.GamecommandSuperMakeHelpMsg, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(CommandHelp.GamecommandSuperMakeHelpMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }

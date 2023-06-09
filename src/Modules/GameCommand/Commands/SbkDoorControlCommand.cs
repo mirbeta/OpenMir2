@@ -1,10 +1,10 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("SbkDoorControl", "", 10)]
     public class SbkDoorControlCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
+        public void Execute(IPlayerActor PlayerActor) {
         }
     }
 }

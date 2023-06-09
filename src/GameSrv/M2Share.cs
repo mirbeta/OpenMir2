@@ -1,6 +1,5 @@
+using GameSrv.Robots;
 using M2Server.Castle;
-using M2Server.Conf;
-using M2Server.Conf.Model;
 using M2Server.DataSource;
 using M2Server.Event;
 using M2Server.Guild;
@@ -10,7 +9,6 @@ using M2Server.Maps.AutoPath;
 using M2Server.Network;
 using M2Server.Notices;
 using M2Server.Npc;
-using M2Server.Robots;
 using M2Server.Services;
 using M2Server.World;
 using M2Server.World.Managers;
@@ -19,12 +17,9 @@ using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
-using GameSrv.Robots;
-using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
-using ScriptEngine.Consts;
 
 namespace M2Server
 {

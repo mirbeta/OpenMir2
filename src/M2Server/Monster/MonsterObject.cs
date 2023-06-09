@@ -1,5 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Actor;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -15,7 +14,7 @@ namespace M2Server.Monster
         /// <summary>
         /// 宝宝等级(1-7)
         /// </summary>
-        public byte SlaveExpLevel;
+        public byte SlaveExpLevel { get; set; }
         /// <summary>
         /// 召唤等级
         /// </summary>
@@ -68,7 +67,7 @@ namespace M2Server.Monster
             CheckRoyaltyTick = HUtil32.GetTickCount();
             CrazyMode = false;
         }
-        
+
         private void GainSlaveExp(byte nLevel)
         {
             KillMonCount += nLevel;
@@ -83,7 +82,7 @@ namespace M2Server.Monster
                 }
             }
         }
-        
+
         private int GainSlaveUpKillCount()
         {
             int tCount;
@@ -394,7 +393,7 @@ namespace M2Server.Monster
             }
         }
 
-        protected bool GetLongAttackDirDis(BaseObject baseObject, int dis, ref byte dir)
+        protected bool GetLongAttackDirDis(IActor baseObject, int dis, ref byte dir)
         {
             var result = false;
             var nC = 0;
@@ -476,8 +475,8 @@ namespace M2Server.Monster
                 RefNameColor();
             }
         }
-        
-        protected override byte GetChrColor(BaseObject baseObject)
+
+        protected override byte GetChrColor(IActor baseObject)
         {
             if (baseObject.ActorId == this.ActorId && this.CrazyMode)
             {

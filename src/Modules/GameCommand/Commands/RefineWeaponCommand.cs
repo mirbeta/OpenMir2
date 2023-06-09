@@ -1,8 +1,6 @@
-﻿using M2Server.Player;
-using SystemModule;
-using SystemModule.Enums;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整物品属性
@@ -11,7 +9,7 @@ namespace M2Server.GameCommand.Commands
     public class RefineWeaponCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -25,19 +23,19 @@ namespace M2Server.GameCommand.Commands
             {
                 return;
             }
-            if (playObject.UseItems[ItemLocation.Weapon] == null || playObject.UseItems[ItemLocation.Weapon].Index <= 0)
+            if (PlayerActor.UseItems[ItemLocation.Weapon] == null || PlayerActor.UseItems[ItemLocation.Weapon].Index <= 0)
             {
                 return;
             }
-            playObject.UseItems[ItemLocation.Weapon].Desc[0] = (byte)nDc;
-            playObject.UseItems[ItemLocation.Weapon].Desc[1] = (byte)nMc;
-            playObject.UseItems[ItemLocation.Weapon].Desc[2] = (byte)nSc;
-            playObject.UseItems[ItemLocation.Weapon].Desc[5] = (byte)nHit;
-            playObject.SendUpdateItem(playObject.UseItems[ItemLocation.Weapon]);
-            playObject.RecalcAbilitys();
-            playObject.SendMsg(playObject, Messages.RM_ABILITY, 0, 0, 0, 0);
-            playObject.SendMsg(playObject, Messages.RM_SUBABILITY, 0, 0, 0, 0);
-            M2Share.Logger.Warn("[武器调整]" + playObject.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
+            PlayerActor.UseItems[ItemLocation.Weapon].Desc[0] = (byte)nDc;
+            PlayerActor.UseItems[ItemLocation.Weapon].Desc[1] = (byte)nMc;
+            PlayerActor.UseItems[ItemLocation.Weapon].Desc[2] = (byte)nSc;
+            PlayerActor.UseItems[ItemLocation.Weapon].Desc[5] = (byte)nHit;
+            PlayerActor.SendUpdateItem(PlayerActor.UseItems[ItemLocation.Weapon]);
+            PlayerActor.RecalcAbilitys();
+            PlayerActor.SendMsg(IPlayerActor, Messages.RM_ABILITY, 0, 0, 0, 0);
+            PlayerActor.SendMsg(IPlayerActor, Messages.RM_SUBABILITY, 0, 0, 0, 0);
+            SystemShare.Logger.Warn("[武器调整]" + PlayerActor.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
         }
     }
 }

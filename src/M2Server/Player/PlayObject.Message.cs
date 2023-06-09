@@ -1,14 +1,12 @@
 ﻿using M2Server.Actor;
 using M2Server.Items;
 using M2Server.Monster.Monsters;
-using M2Server.Npc;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using NormNpc = M2Server.Npc.NormNpc;
 using UserCastle = M2Server.Castle.UserCastle;
 
 namespace M2Server.Player
@@ -228,7 +226,7 @@ namespace M2Server.Player
                 if (IsTimeGoto && (HUtil32.GetTickCount() > TimeGotoTick)) //Delaygoto延时跳转
                 {
                     IsTimeGoto = false;
-                   // ((Merchant)TimeGotoNpc)?.GotoLable(this, TimeGotoLable, false);
+                    // ((Merchant)TimeGotoNpc)?.GotoLable(this, TimeGotoLable, false);
                 }
                 // 增加挂机
                 if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick)
@@ -239,10 +237,10 @@ namespace M2Server.Player
                 if (IsDelayCall && (HUtil32.GetTickCount() - DelayCallTick) > DelayCall)
                 {
                     IsDelayCall = false;
-                    NormNpc normNpc = M2Share.WorldEngine.FindMerchant(DelayCallNpc) ?? M2Share.WorldEngine.FindNpc(DelayCallNpc);
+                    INormNpc normNpc = M2Share.WorldEngine.FindMerchant(DelayCallNpc) ?? M2Share.WorldEngine.FindNpc(DelayCallNpc);
                     if (normNpc != null)
                     {
-                       // normNpc.GotoLable(this, DelayCallLabel, false);
+                        // normNpc.GotoLable(this, DelayCallLabel, false);
                     }
                 }
                 if ((HUtil32.GetTickCount() - DecPkPointTick) > M2Share.Config.DecPkPointTime)// 减少PK值
@@ -456,7 +454,7 @@ namespace M2Server.Player
                 }
                 if (M2Share.GameLogGameGold)
                 {
-                   // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
+                    // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '-', "Auto"));
                 }
             }
             if (BoIncGameGold && (HUtil32.GetTickCount() - IncGameGoldTick) > IncGameGoldTime)
@@ -518,7 +516,7 @@ namespace M2Server.Player
                     }
                     if (M2Share.GameLogGameGold)
                     {
-                       // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
+                        // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, Format(CommandHelp.GameLogMsg1, MapName, CurrX, CurrY, ChrName, M2Share.Config.GameGoldName, nInteger, '+', "Map"));
                     }
                 }
             }
@@ -714,7 +712,7 @@ namespace M2Server.Player
                     {
                         for (int i = GroupMembers.Count - 1; i >= 0; i--)
                         {
-                            BaseObject baseObject = GroupMembers[i];
+                            IActor baseObject = GroupMembers[i];
                             if (baseObject.Death || baseObject.Ghost)
                             {
                                 GroupMembers.RemoveAt(i);
@@ -770,7 +768,7 @@ namespace M2Server.Player
             int delayTime = 0;
             int nMsgCount;
             bool result = true;
-            BaseObject baseObject = null;
+            IActor baseObject = null;
             if (processMsg.ActorId > 0)
             {
                 baseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
@@ -1141,7 +1139,7 @@ namespace M2Server.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                       // M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
+                                        // M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
@@ -1307,7 +1305,7 @@ namespace M2Server.Player
                                     }
                                     if (M2Share.Config.ViewHackMessage)
                                     {
-                                       // M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
+                                        // M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1634,7 +1632,7 @@ namespace M2Server.Player
                         {
                             if (M2Share.FunctionNPC != null)
                             {
-                               // M2Share.FunctionNPC.GotoLable(this, "@OnDeath", false);
+                                // M2Share.FunctionNPC.GotoLable(this, "@OnDeath", false);
                             }
                         }
                     }
@@ -1670,7 +1668,7 @@ namespace M2Server.Player
                     ClientMsg = Messages.MakeMessage(Messages.SM_LEVELUP, Abil.Exp, Abil.Level, 0, 0);
                     SendSocket(ClientMsg);
                     ClientMsg = Messages.MakeMessage(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
-                    SendSocket(ClientMsg, EDCode.EncodePacket(WAbil));
+                    SendSocket(ClientMsg, EDCode.EncodeMessage(WAbil));
                     SendDefMessage(Messages.SM_SUBABILITY, HUtil32.MakeLong(HUtil32.MakeWord(AntiMagic, 0), 0), HUtil32.MakeWord(HitPoint, SpeedPoint), HUtil32.MakeWord(AntiPoison, PoisonRecover), HUtil32.MakeWord(HealthRecover, SpellRecover));
                     break;
                 case Messages.RM_CHANGENAMECOLOR:
@@ -1730,7 +1728,7 @@ namespace M2Server.Player
                     break;
                 case Messages.RM_ABILITY:
                     ClientMsg = Messages.MakeMessage(Messages.SM_ABILITY, Gold, HUtil32.MakeWord((byte)Job, 99), HUtil32.LoWord(GameGold), HUtil32.HiWord(GameGold));
-                    SendSocket(ClientMsg, EDCode.EncodePacket(WAbil));
+                    SendSocket(ClientMsg, EDCode.EncodeMessage(WAbil));
                     break;
                 case Messages.RM_HEALTHSPELLCHANGED:
                     ClientMsg = Messages.MakeMessage(Messages.SM_HEALTHSPELLCHANGED, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MP, baseObject.WAbil.MaxHP);
@@ -2138,17 +2136,17 @@ namespace M2Server.Player
             if (GroupOwner != 0)
             {
                 PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                groupOwnerPlay.DelMember(this);
+                groupOwnerPlay.DelMember((IPlayerActor)this);
             }
             if (MyGuild != null)
             {
-                MyGuild.DelHumanObj(this);
+                MyGuild.DelHumanObj((IPlayerActor)this);
             }
             LogonTimcCost();
             base.Disappear();
         }
 
-        internal override void DropUseItems(int baseObject)
+        public override void DropUseItems(int baseObject)
         {
             const string sExceptionMsg = "[Exception] PlayObject::DropUseItems";
             try

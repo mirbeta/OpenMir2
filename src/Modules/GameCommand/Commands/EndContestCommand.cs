@@ -1,56 +1,56 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 结束行会争霸赛
     /// </summary>
     [Command("EndContest", "结束行会争霸赛", 10)]
     public class EndContestCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             //string sParam1 = @Params.Length > 0 ? @Params[0] : "";
-            //List<PlayObject> List10;
+            //List<IPlayerActor> List10;
             //ArrayList List14;
-            //PlayObject m_PlayObject;
-            //PlayObject PlayObjectA;
+            //IPlayerActor m_IPlayerActor;
+            //IPlayerActor IPlayerActorA;
             //bool bo19;
             //string s20;
             //TGUild Guild;
             //if (((if(!string.IsNullOrEmpty(sParam1))) && (sParam1[0] == '?')))
             //{
-            //    PlayObject.SysMsg("结束行会争霸赛。", MsgColor.c_Red, MsgType.t_Hint);
-            //    PlayObject.SysMsg(string.Format("命令格式: @{0}", this.Attributes.Name), MsgColor.c_Red, MsgType.t_Hint);
+            //    PlayerActor.SysMsg("结束行会争霸赛。", MsgColor.c_Red, MsgType.t_Hint);
+            //    PlayerActor.SysMsg(string.Format("命令格式: @{0}", this.Attributes.Name), MsgColor.c_Red, MsgType.t_Hint);
             //    return;
             //}
-            //if (!PlayObject.m_PEnvir.m_boFight3Zone)
+            //if (!PlayerActor.SysMsgm_PEnvir.m_boFight3Zone)
             //{
-            //    PlayObject.SysMsg("此命令不能在当前地图中使用!!!", MsgColor.c_Red, MsgType.t_Hint);
+            //    PlayerActor.SysMsg("此命令不能在当前地图中使用!!!", MsgColor.c_Red, MsgType.t_Hint);
             //    return;
             //}
-            //List10 = new List<PlayObject>();
+            //List10 = new List<IPlayerActor>();
             //List14 = new ArrayList();
-            //M2Share.WorldEngine.GetMapRageHuman(PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 1000, List10);
+            //M2Share.WorldEngine.GetMapRageHuman(PlayerActor.SysMsgm_PEnvir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, List10);
             //for (int i = 0; i < List10.Count; i++)
             //{
-            //    m_PlayObject = List10[i];
-            //    if (!m_PlayObject.m_boObMode || !m_PlayObject.m_boAdminMode)
+            //    m_IPlayerActor = List10[i];
+            //    if (!m_IPlayerActor.m_boObMode || !m_IPlayerActor.m_boAdminMode)
             //    {
-            //        if (m_PlayObject.MyGuild == null)
+            //        if (m_IPlayerActor.MyGuild == null)
             //        {
             //            continue;
             //        }
             //        bo19 = false;
             //        for (int II = 0; II < List14.Count; II++)
             //        {
-            //            PlayObjectA = ((List14[II]) as PlayObject);
-            //            if (m_PlayObject.MyGuild == PlayObjectA.MyGuild)
+            //            IPlayerActorA = ((List14[II]) as IPlayerActor);
+            //            if (m_IPlayerActor.MyGuild == IPlayerActorA.MyGuild)
             //            {
             //                bo19 = true;
             //            }
             //        }
             //        if (!bo19)
             //        {
-            //            List14.Add(m_PlayObject.MyGuild);
+            //            List14.Add(m_IPlayerActor.MyGuild);
             //        }
             //    }
             //}
@@ -58,7 +58,7 @@ namespace M2Server.GameCommand.Commands {
             //{
             //    Guild = ((TGUild)(List14[i]));
             //    Guild.EndTeamFight();
-            //    M2Share.WorldEngine.CryCry(Messages.RM_CRY, PlayObject.m_PEnvir, PlayObject.CurrX, PlayObject.CurrY, 1000, Settings.Config.btCryMsgFColor,
+            //    M2Share.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.SysMsgm_PEnvir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, Settings.Config.btCryMsgFColor,
             //        Settings.Config.btCryMsgBColor, string.Format(" - {0} 行会争霸赛已结束。", Guild.sGuildName));
             //}
             //HUtil32.Dispose(List10);

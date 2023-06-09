@@ -1,31 +1,31 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 清除指定玩家PK值
     /// </summary>
     [Command("FreePenalty", "清除指定玩家PK值", "人物名称", 10)]
     public class FreePenaltyCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?') {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null) {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null) {
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            mPlayObject.PkPoint = 0;
-            mPlayObject.RefNameColor();
-            mPlayObject.SysMsg(CommandHelp.GameCommandFreePKHumanMsg, MsgColor.Green, MsgType.Hint);
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandFreePKMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+            mIPlayerActor.PkPoint = 0;
+            mIPlayerActor.RefNameColor();
+            mIPlayerActor.SysMsg(CommandHelp.GameCommandFreePKHumanMsg, MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandFreePKMsg, sHumanName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

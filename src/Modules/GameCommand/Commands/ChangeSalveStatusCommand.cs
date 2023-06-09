@@ -1,8 +1,7 @@
-﻿using M2Server.Player;
-using M2Server;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整当前玩家属下状态
@@ -11,22 +10,22 @@ namespace M2Server.GameCommand.Commands
     public class ChangeSalveStatusCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
+        public void Execute(IPlayerActor PlayerActor)
         {
-            if (playObject.SlaveList == null)
+            if (PlayerActor.SlaveList == null)
             {
                 return;
             }
-            playObject.SlaveRelax = !playObject.SlaveRelax;
-            if (playObject.SlaveList.Count > 0)
+            PlayerActor.SlaveRelax = !PlayerActor.SlaveRelax;
+            if (PlayerActor.SlaveList.Count > 0)
             {
-                if (playObject.SlaveRelax)
+                if (PlayerActor.SlaveRelax)
                 {
-                    playObject.SysMsg(Settings.PetRest, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(Settings.PetRest, MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    playObject.SysMsg(Settings.PetAttack, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(Settings.PetAttack, MsgColor.Green, MsgType.Hint);
                 }
             }
         }

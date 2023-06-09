@@ -1,15 +1,15 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("LotteryTicket", "", 10)]
     public class LotteryTicketCommandL : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandLotteryTicketMsg, M2Share.Config.WinLotteryCount,
-                M2Share.Config.NoWinLotteryCount, M2Share.Config.WinLotteryLevel1, M2Share.Config.WinLotteryLevel2,
-                M2Share.Config.WinLotteryLevel3, M2Share.Config.WinLotteryLevel4, M2Share.Config.WinLotteryLevel5,
-                M2Share.Config.WinLotteryLevel6), MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandLotteryTicketMsg, SystemShare.Config.WinLotteryCount,
+                SystemShare.Config.NoWinLotteryCount, SystemShare.Config.WinLotteryLevel1, SystemShare.Config.WinLotteryLevel2,
+                SystemShare.Config.WinLotteryLevel3, SystemShare.Config.WinLotteryLevel4, SystemShare.Config.WinLotteryLevel5,
+                SystemShare.Config.WinLotteryLevel6), MsgColor.Green, MsgType.Hint);
         }
     }
 }

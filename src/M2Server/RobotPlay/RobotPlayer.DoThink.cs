@@ -1,5 +1,5 @@
-using System.Collections;
 using M2Server.Magic;
+using System.Collections;
 using SystemModule.Enums;
 
 namespace M2Server.RobotPlay
@@ -53,7 +53,7 @@ namespace M2Server.RobotPlay
             bool result = false;
             short nTargetX = 0;
             short nTargetY = 0;
-            if (magicId == MagicConst.SKILL_MOOTEBO && Master != null && TargetCret != null && AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && CheckMagicInterval(27,  1000 * 10))
+            if (magicId == MagicConst.SKILL_MOOTEBO && Master != null && TargetCret != null && AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && CheckMagicInterval(27, 1000 * 10))
             {
                 var btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))

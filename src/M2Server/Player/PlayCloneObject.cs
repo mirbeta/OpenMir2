@@ -1,11 +1,13 @@
-﻿using M2Server.Maps;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Data;
 
-namespace M2Server.Player {
-    public class PlayCloneObject : PlayObject {
+namespace M2Server.Player
+{
+    public class PlayCloneObject : PlayObject
+    {
 
-        public PlayCloneObject(PlayObject PlayObject) : base() {
+        public PlayCloneObject(PlayObject PlayObject) : base()
+        {
             this.ChrName = "Clone";
             this.CurrX = PlayObject.CurrX;
             this.CurrY = PlayObject.CurrY;
@@ -17,7 +19,8 @@ namespace M2Server.Player {
             this.SendRefMsg(Messages.RM_TURN, this.Dir, this.CurrX, this.CurrY, 0, this.ChrName);
         }
 
-        protected override bool Operate(ProcessMessage ProcessMsg) {
+        protected override bool Operate(ProcessMessage ProcessMsg)
+        {
             return base.Operate(ProcessMsg);
         }
     }

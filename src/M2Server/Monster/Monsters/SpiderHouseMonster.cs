@@ -6,7 +6,7 @@ namespace M2Server.Monster.Monsters
 {
     public class SpiderHouseMonster : AnimalObject
     {
-        private readonly IList<BaseObject> _bbList;
+        private readonly IList<IActor> _bbList;
 
         public SpiderHouseMonster() : base()
         {
@@ -15,7 +15,7 @@ namespace M2Server.Monster.Monsters
             SearchTime = M2Share.RandomNumber.Random(1500) + 2500;
             SearchTick = 0;
             StickMode = true;
-            _bbList = new List<BaseObject>();
+            _bbList = new List<IActor>();
         }
 
         private void GenBb()
@@ -35,7 +35,7 @@ namespace M2Server.Monster.Monsters
                 short n0C = (short)(CurrY + 1);
                 if (Envir.CanWalk(n08, n0C, true))
                 {
-                    BaseObject bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.Spider);
+                    IActor bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, n08, n0C, M2Share.Config.Spider);
                     if (bb != null)
                     {
                         bb.SetTargetCreat(TargetCret);
@@ -64,7 +64,7 @@ namespace M2Server.Monster.Monsters
                     }
                     for (int i = _bbList.Count - 1; i >= 0; i--)
                     {
-                        BaseObject bb = _bbList[i];
+                        IActor bb = _bbList[i];
                         if (bb.Death || bb.Ghost)
                         {
                             _bbList.RemoveAt(i);

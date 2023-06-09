@@ -1,6 +1,6 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 总在线数
@@ -9,9 +9,9 @@ namespace M2Server.GameCommand.Commands
     public class TotalCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
+        public void Execute(IPlayerActor PlayerActor)
         {
-            playObject.HearMsg($"总在线数{M2Share.TotalHumCount}");
+            PlayerActor.HearMsg($"总在线数{SystemShare.TotalHumCount}");
         }
     }
 }

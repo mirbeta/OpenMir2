@@ -1,14 +1,9 @@
-using M2Server.Maps;
-using M2Server.Npc;
+using M2Server.Actor;
+using M2Server.Castle;
+using M2Server.Monster.Monsters;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
-using M2Server.Actor;
-using M2Server.Castle;
-using M2Server.Event;
-using M2Server.Event.Events;
-using M2Server.Monster.Monsters;
-using M2Server.Player;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -17,7 +12,7 @@ using SystemModule.NativeList.Utils;
 
 namespace M2Server
 {
-    public class Envirnoment : IDisposable
+    public class Envirnoment : IEnvirnoment, IDisposable
     {
         /// <summary>
         /// 怪物数量
@@ -27,20 +22,20 @@ namespace M2Server
         /// 玩家数量
         /// </summary>
         public int HumCount => humCount;
-        public short Width;
-        public short Height;
-        public string MapFileName = string.Empty;
-        public string MapName = string.Empty;
-        public string MapDesc = string.Empty;
+        public short Width { get; set; }
+        public short Height { get; set; }
+        public string MapFileName { get; set; }
+        public string MapName { get; set; }
+        public string MapDesc { get; set; }
         private MapCellInfo[] _cellArray;
-        public short MinMap;
-        public byte ServerIndex;
+        public short MinMap { get; set; }
+        public byte ServerIndex { get; set; }
         /// <summary>
         /// 进入本地图所需等级
         /// </summary>
-        public readonly int EnterLevel = 0;
-        public MapInfoFlag Flag;
-        public bool ChFlag;
+        public int EnterLevel { get; }
+        public MapInfoFlag Flag { get; set; }
+        public bool ChFlag { get; set; }
         /// <summary>
         /// 门
         /// </summary>
@@ -51,7 +46,7 @@ namespace M2Server
         private readonly IList<MapQuestInfo> QuestList;
         private int monCount;
         private int humCount;
-        public readonly IList<PointInfo> PointList;
+        public IList<PointInfo> PointList { get; set; }
 
         public Envirnoment()
         {
@@ -248,7 +243,7 @@ namespace M2Server
         /// 添加对象到地图
         /// </summary>
         /// <returns></returns>
-        public bool AddMapObject(int nX, int nY, CellType cellType, int cellId, BaseObject mapObject)
+        public bool AddMapObject(int nX, int nY, CellType cellType, int cellId, IActor mapObject)
         {
             if (mapObject == null)
             {
@@ -333,7 +328,7 @@ namespace M2Server
             return ref _cellArray[0];
         }
 
-        public bool MoveToMovingObject(int nCx, int nCy, BaseObject cert, int nX, int nY, bool boFlag)
+        public bool MoveToMovingObject(int nCx, int nCy, IActor cert, int nX, int nY, bool boFlag)
         {
             if (!CellMatch(nX, nY))
             {
@@ -354,7 +349,7 @@ namespace M2Server
                             CellObject cellObject = cellInfo.ObjList[i];
                             if (cellObject.ActorObject)
                             {
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
                                     if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -456,7 +451,7 @@ namespace M2Server
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -509,7 +504,7 @@ namespace M2Server
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (!boFlag && cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -555,7 +550,7 @@ namespace M2Server
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject)
                         {
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 UserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
@@ -631,7 +626,7 @@ namespace M2Server
         /// </summary>
         /// <returns></returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, BaseObject mapObject)
+        public int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, IActor mapObject)
         {
             const string sExceptionMsg = "[Exception] TEnvirnoment::DeleteFromMap -> Except {0}";
             int result = -1;
@@ -722,7 +717,7 @@ namespace M2Server
                         case CellType.Play:
                         case CellType.Monster:
                         case CellType.Merchant:
-                            BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null && !baseObject.Death)
                             {
                                 ChFlag = false;
@@ -762,7 +757,7 @@ namespace M2Server
                             case CellType.Merchant:
                             case CellType.Play:
                                 {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death)
                                     {
                                         ChFlag = false;
@@ -854,7 +849,7 @@ namespace M2Server
         /// <summary>
         /// 刷新在地图上位置的时间
         /// </summary>
-        public void VerifyMapTime(int nX, int nY, BaseObject baseObject)
+        public void VerifyMapTime(int nX, int nY, IActor baseObject)
         {
             bool boVerify = false;
             const string sExceptionMsg = "[Exception] TEnvirnoment::VerifyMapTime";
@@ -1056,7 +1051,7 @@ namespace M2Server
                 _cellArray = GC.AllocateArray<MapCellInfo>(nWidth * nHeight);
             }
         }
-        
+
         public int GetXYObjCount(int nX, int nY)
         {
             int result = 0;
@@ -1068,7 +1063,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1198,9 +1193,9 @@ namespace M2Server
             return result;
         }
 
-        public BaseObject GetMovingObject(short nX, short nY, bool boFlag)
+        public IActor GetMovingObject(short nX, short nY, bool boFlag)
         {
-            BaseObject result = null;
+            IActor result = null;
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
@@ -1209,7 +1204,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null && !baseObject.Ghost)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1235,7 +1230,7 @@ namespace M2Server
 
             return result;
         }
-        
+
         public bool GetDoor(int nX, int nY, ref MapDoor door)
         {
             for (int i = 0; i < DoorList.Count; i++)
@@ -1249,7 +1244,7 @@ namespace M2Server
             return false;
         }
 
-        public bool IsValidObject(int nX, int nY, int nRage, BaseObject baseObject)
+        public bool IsValidObject(int nX, int nY, int nRage, IActor baseObject)
         {
             for (int nXx = nX - nRage; nXx <= nX + nRage; nXx++)
             {
@@ -1272,7 +1267,7 @@ namespace M2Server
             return false;
         }
 
-        public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<BaseObject> baseObjectList)
+        public int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<IActor> baseObjectList)
         {
             for (int nXx = nX - nRage; nXx <= nX + nRage; nXx++)
             {
@@ -1306,7 +1301,7 @@ namespace M2Server
         /// <param name="boFlag">是否包括死亡对象 FALSE 包括死亡对象 TRUE  不包括死亡对象</param>
         /// <param name="baseObjectList"></param>
         /// <returns></returns>
-        public void GetBaseObjects(int nX, int nY, bool boFlag, ref IList<BaseObject> baseObjectList)
+        public void GetBaseObjects(int nX, int nY, bool boFlag, ref IList<IActor> baseObjectList)
         {
             ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
@@ -1316,7 +1311,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1405,7 +1400,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject.Race == ActorRace.Play)
                         {
                             result = true;
@@ -1445,7 +1440,7 @@ namespace M2Server
             return messgae.ToString();
         }
 
-        public void AddObject(BaseObject baseObject)
+        public void AddObject(IActor baseObject)
         {
             switch (baseObject.Race)
             {
@@ -1458,7 +1453,7 @@ namespace M2Server
             }
         }
 
-        public void DelObjectCount(BaseObject baseObject)
+        public void DelObjectCount(IActor baseObject)
         {
             switch (baseObject.Race)
             {

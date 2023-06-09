@@ -60,10 +60,10 @@ namespace M2Server.World
         public readonly IList<MagicEvent> MagicEventList;
         public IList<MagicInfo> MagicList;
         public readonly IList<Merchant> MerchantList;
-        protected readonly IList<PlayObject> NewHumanList;
+        protected readonly IList<IPlayerActor> NewHumanList;
         protected readonly IList<PlayObject> PlayObjectFreeList;
         protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
-        protected readonly IList<PlayObject> PlayObjectList;
+        protected readonly IList<IPlayerActor> PlayObjectList;
         protected readonly IList<RobotPlayer> BotPlayObjectList;
         protected readonly List<int> LoadPlayerQueue = new List<int>();
         private readonly ArrayList OldMagicList;
@@ -81,7 +81,7 @@ namespace M2Server.World
         {
             LoadPlaySection = new object();
             LoadPlayList = new List<UserOpenInfo>();
-            PlayObjectList = new List<PlayObject>();
+            PlayObjectList = new List<IPlayerActor>();
             PlayObjectFreeList = new List<PlayObject>();
             ChangeHumanDbGoldList = new List<GoldChangeInfo>();
             ProcessMapDoorTick = HUtil32.GetTickCount();
@@ -106,7 +106,7 @@ namespace M2Server.World
             ProcessMerchantTimeMax = 0;
             ProcessNpcTimeMin = 0;
             ProcessNpcTimeMax = 0;
-            NewHumanList = new List<PlayObject>();
+            NewHumanList = new List<IPlayerActor>();
             ListOfGateIdx = new List<int>();
             ListOfSocket = new List<int>();
             OldMagicList = new ArrayList();
@@ -120,7 +120,7 @@ namespace M2Server.World
         public int OfflinePlayCount = 0;
         public int LoadPlayCount => GetLoadPlayCount();
         public int RobotPlayerCount => BotPlayObjectList.Count;
-        public IEnumerable<PlayObject> PlayObjects => PlayObjectList;
+        public IEnumerable<IPlayerActor> PlayObjects => PlayObjectList;
 
         public void Initialize()
         {
@@ -220,7 +220,7 @@ namespace M2Server.World
             return result;
         }
 
-        private PlayObject ProcessHumansMakeNewHuman(UserOpenInfo userOpenInfo)
+        private IPlayerActor ProcessHumansMakeNewHuman(UserOpenInfo userOpenInfo)
         {
             PlayObject result = null;
             PlayObject playObject = null;
@@ -467,7 +467,7 @@ namespace M2Server.World
             const string sExceptionMsg1 = "[Exception] WorldServer::ProcessHumans -> Ready, Save, Load...";
             const string sExceptionMsg3 = "[Exception] WorldServer::ProcessHumans ClosePlayer.Delete";
             var dwCheckTime = HUtil32.GetTickCount();
-            PlayObject playObject;
+            IPlayerActor playObject;
             if ((HUtil32.GetTickCount() - ProcessLoadPlayTick) > 200)
             {
                 ProcessLoadPlayTick = HUtil32.GetTickCount();
@@ -897,9 +897,9 @@ namespace M2Server.World
             // }
         }
 
-        public PlayObject GetPlayObject(string sName)
+        public IPlayerActor GetPlayObject(string sName)
         {
-            PlayObject result = null;
+            IPlayerActor result = null;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -1025,7 +1025,7 @@ namespace M2Server.World
             }
         }
 
-        private static void SendChangeServer(PlayObject playObject, byte nServerIndex)
+        private static void SendChangeServer(IPlayerActor playObject, byte nServerIndex)
         {
             var sIPaddr = string.Empty;
             var nPort = 0;
@@ -1037,7 +1037,7 @@ namespace M2Server.World
             }
         }
 
-        public static void SaveHumanRcd(PlayObject playObject)
+        public static void SaveHumanRcd(IPlayerActor playObject)
         {
             if (playObject.IsRobot) //Bot玩家不保存数据
             {
@@ -1507,7 +1507,7 @@ namespace M2Server.World
             return null;
         }
 
-        public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> list)
+        public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<IActor> list)
         {
             var result = 0;
             if (envir == null) return result;
@@ -1533,11 +1533,11 @@ namespace M2Server.World
             return result;
         }
 
-        public int GetMapMonster(Envirnoment envir, IList<BaseObject> list)
+        public int GetMapMonster(Envirnoment envir, IList<IActor> list)
         {
             if (list == null)
             {
-                list = new List<BaseObject>();
+                list = new List<IActor>();
             }
             var result = 0;
             if (envir == null) return result;
@@ -1577,7 +1577,7 @@ namespace M2Server.World
             return result;
         }
 
-        public void GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, ref IList<BaseObject> list, bool botPlay = false)
+        public void GetMapRageHuman(Envirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false)
         {
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
@@ -1706,7 +1706,7 @@ namespace M2Server.World
         {
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                PlayObject playObject = PlayObjectList[i];
+                IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
                 {
                     //GameShare.ScriptEngine.GotoLable(playObject, sQuestName, false);

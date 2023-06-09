@@ -1,15 +1,15 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 此命令用于开始祈祷生效宝宝叛变
     /// </summary>
     [Command("SpirtStart", "此命令用于开始祈祷生效宝宝叛变", 10)]
     public class SpirtStartCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -20,10 +20,10 @@ namespace M2Server.GameCommand.Commands {
                 dwTime = nTime * 1000;
             }
             else {
-                dwTime = M2Share.Config.SpiritMutinyTime;
+                dwTime = SystemShare.Config.SpiritMutinyTime;
             }
-            M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
-            playObject.SysMsg("祈祷叛变已开始。持续时长 " + dwTime / 1000 + " 秒。", MsgColor.Green, MsgType.Hint);
+            SystemShare.SpiritMutinyTick = HUtil32.GetTickCount() + dwTime;
+            PlayerActor.SysMsg("祈祷叛变已开始。持续时长 " + dwTime / 1000 + " 秒。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

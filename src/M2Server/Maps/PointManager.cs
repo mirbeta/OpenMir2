@@ -1,20 +1,24 @@
 ﻿using M2Server.Actor;
 using M2Server.Player;
+using SystemModule;
+using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace M2Server.Maps {
-    public class PointManager 
+namespace M2Server.Maps
+{
+    public class PointManager
     {
         public short CurrX;
         public short CurrY;
         public int m_nPostion;
         public byte m_btDirection;
         public int m_nTurnCount;
-        public Envirnoment m_PEnvir;
+        public IEnvirnoment m_PEnvir;
         public FindPathType PathType;
         private readonly BaseObject FBaseObject;
 
-        public PointManager(BaseObject baseObject) {
+        public PointManager(BaseObject baseObject)
+        {
             CurrX = -1;
             CurrY = -1;
             m_nPostion = -1;
@@ -23,14 +27,17 @@ namespace M2Server.Maps {
             m_PEnvir = null;
         }
 
-        public void Initialize(Envirnoment Envir) {
+        public void Initialize(IEnvirnoment Envir)
+        {
             m_PEnvir = Envir;
             m_nPostion = 0;
         }
 
-        private static byte GetNextDir(byte btDir) {
+        private static byte GetNextDir(byte btDir)
+        {
             byte result = 0;
-            switch (btDir) {
+            switch (btDir)
+            {
                 case Direction.Up:
                     result = Direction.UpRight;
                     break;
@@ -59,7 +66,8 @@ namespace M2Server.Maps {
             return result;
         }
 
-        public bool GetPoint(ref short nX, ref short nY) {
+        public bool GetPoint(ref short nX, ref short nY)
+        {
             short nMX = 0;
             short nMY = 0;
             int nC;
@@ -70,16 +78,21 @@ namespace M2Server.Maps {
             byte btDir = 0;
             int nStep;
             bool result = false;
-            if (PathType == FindPathType.Dynamic) {
+            if (PathType == FindPathType.Dynamic)
+            {
                 CurrX = nX;
                 CurrY = nY;
-                if (FBaseObject.Dir > 8) {
+                if (FBaseObject.Dir > 8)
+                {
                     FBaseObject.Dir = 4;
                 }
                 m_btDirection = FBaseObject.Dir;
-                for (int i = 2; i >= 1; i--) {
-                    if (FBaseObject.Envir.GetNextPosition(CurrX, CurrY, m_btDirection, i, ref nMX, ref nMY)) {
-                        if (FBaseObject.CanMove(nMX, nMY, false)) {
+                for (int i = 2; i >= 1; i--)
+                {
+                    if (FBaseObject.Envir.GetNextPosition(CurrX, CurrY, m_btDirection, i, ref nMX, ref nMY))
+                    {
+                        if (FBaseObject.CanMove(nMX, nMY, false))
+                        {
                             m_nTurnCount = 0;
                             nX = nMX;
                             nY = nMY;
@@ -90,11 +103,15 @@ namespace M2Server.Maps {
                 }
                 nC = 0;
                 btDir = m_btDirection;
-                while (true) {
+                while (true)
+                {
                     btDir = GetNextDir(btDir);
-                    for (int i = 2; i >= 1; i--) {
-                        if (FBaseObject.Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY)) {
-                            if (FBaseObject.CanMove(nMX, nMY, false)) {
+                    for (int i = 2; i >= 1; i--)
+                    {
+                        if (FBaseObject.Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY))
+                        {
+                            if (FBaseObject.CanMove(nMX, nMY, false))
+                            {
                                 nX = nMX;
                                 nY = nMY;
                                 result = true;
@@ -103,15 +120,18 @@ namespace M2Server.Maps {
                         }
                     }
                     nC++;
-                    if (nC >= 8) {
+                    if (nC >= 8)
+                    {
                         break;
                     }
                 }
             }
-            else {
+            else
+            {
                 nMX = 0;
                 nMY = 0;
-                if (((PlayObject)FBaseObject).Envir != m_PEnvir) {
+                if (((PlayObject)FBaseObject).Envir != m_PEnvir)
+                {
                     m_PEnvir = ((PlayObject)FBaseObject).Envir;
                     m_nPostion = 0;
                     CurrX = nX;
@@ -119,66 +139,82 @@ namespace M2Server.Maps {
                 }
                 nIndex = m_PEnvir.PointList.Count;
                 n10 = 99999;
-                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && CurrX == nX && CurrY == nY)) {
+                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && CurrX == nX && CurrY == nY))
+                {
                     m_nPostion = 0;
                 }
                 PointInfo Pt;
-                for (int i = m_nPostion; i < m_PEnvir.PointList.Count; i++) {
+                for (int i = m_nPostion; i < m_PEnvir.PointList.Count; i++)
+                {
                     Pt = m_PEnvir.PointList[i];
                     nCurrX = Pt.nX;
                     nCurrY = Pt.nY;
                     nC = Math.Abs(nX - nCurrX) + Math.Abs(nY - nCurrY);
-                    if (nC < n10) {
+                    if (nC < n10)
+                    {
                         n10 = nC;
                         nMX = nCurrX;
                         nMY = nCurrY;
                         nIndex = i;
                         m_nPostion = i;
                         result = true;
-                        if (n10 <= 0) {
+                        if (n10 <= 0)
+                        {
                             break;
                         }
                     }
                 }
-                if (nIndex >= m_PEnvir.PointList.Count - 1) {
+                if (nIndex >= m_PEnvir.PointList.Count - 1)
+                {
                     result = false;
                 }
-                else {
-                    if (n10 <= 0 && nIndex >= 0) {
+                else
+                {
+                    if (n10 <= 0 && nIndex >= 0)
+                    {
                         nStep = 0;
-                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++) {
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
-                            if (nStep == 0) {
+                            if (nStep == 0)
+                            {
                                 btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 m_nPostion = i;
                             }
-                            else {
-                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir) {
+                            else
+                            {
+                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir)
+                                {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
                                     m_nPostion = i;
                                 }
-                                else {
+                                else
+                                {
                                     break;
                                 }
                             }
                             nStep = nStep + 1;
-                            if (nStep >= 2) {
+                            if (nStep >= 2)
+                            {
                                 break;
                             }
                         }
                     }
-                    if (!FBaseObject.CanRun(nX, nY, nMX, nMY, false)) {
-                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++) {
+                    if (!FBaseObject.CanRun(nX, nY, nMX, nMY, false))
+                    {
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             m_nPostion = i;
-                            if (m_PEnvir.CanWalkEx(nCurrX, nCurrY, false)) {
+                            if (m_PEnvir.CanWalkEx(nCurrX, nCurrY, false))
+                            {
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 break;
@@ -194,11 +230,14 @@ namespace M2Server.Maps {
             return result;
         }
 
-        private static byte GetPoint1_GetNextDir(byte btDir) {
+        private static byte GetPoint1_GetNextDir(byte btDir)
+        {
             byte result = 0;
-            switch (btDir) {
+            switch (btDir)
+            {
                 case Direction.Up:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.UpRight;
                             break;
@@ -214,7 +253,8 @@ namespace M2Server.Maps {
                     }
                     break;
                 case Direction.UpRight:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.Right;
                             break;
@@ -230,7 +270,8 @@ namespace M2Server.Maps {
                     }
                     break;
                 case Direction.Right:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.DownRight;
                             break;
@@ -246,7 +287,8 @@ namespace M2Server.Maps {
                     }
                     break;
                 case Direction.DownRight:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.Down;
                             break;
@@ -262,7 +304,8 @@ namespace M2Server.Maps {
                     }
                     break;
                 case Direction.Down:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.DownLeft;
                             break;
@@ -278,7 +321,8 @@ namespace M2Server.Maps {
                     }
                     break;
                 case Direction.DownLeft:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.Left;
                             break;
@@ -294,7 +338,8 @@ namespace M2Server.Maps {
                     }
                     break;
                 case Direction.Left:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.UpLeft;
                             break;
@@ -310,7 +355,8 @@ namespace M2Server.Maps {
                     }
                     break;
                 case Direction.UpLeft:
-                    switch (M2Share.RandomNumber.Random(4)) {
+                    switch (M2Share.RandomNumber.Random(4))
+                    {
                         case 0:
                             result = Direction.Up;
                             break;
@@ -329,7 +375,8 @@ namespace M2Server.Maps {
             return result;
         }
 
-        public bool GetPoint1(ref short nX, ref short nY) {
+        public bool GetPoint1(ref short nX, ref short nY)
+        {
             bool result = false;
             short nMX = 0;
             short nMY = 0;
@@ -340,16 +387,21 @@ namespace M2Server.Maps {
             short nCurrY;
             byte btDir = 0;
             int nStep;
-            if (PathType == FindPathType.Dynamic) {
+            if (PathType == FindPathType.Dynamic)
+            {
                 CurrX = nX;
                 CurrY = nY;
                 nC = 0;
                 btDir = ((PlayObject)FBaseObject).Dir;
-                while (true) {
+                while (true)
+                {
                     btDir = GetPoint1_GetNextDir(btDir);
-                    for (int i = 2; i >= 1; i--) {
-                        if (((PlayObject)FBaseObject).Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY)) {
-                            if (((PlayObject)FBaseObject).CanMove(nMX, nMY, false)) {
+                    for (int i = 2; i >= 1; i--)
+                    {
+                        if (((PlayObject)FBaseObject).Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY))
+                        {
+                            if (((PlayObject)FBaseObject).CanMove(nMX, nMY, false))
+                            {
                                 nX = nMX;
                                 nY = nMY;
                                 result = true;
@@ -358,15 +410,18 @@ namespace M2Server.Maps {
                         }
                     }
                     nC++;
-                    if (nC >= 8) {
+                    if (nC >= 8)
+                    {
                         break;
                     }
                 }
             }
-            else {
+            else
+            {
                 nMX = 0;
                 nMY = 0;
-                if (((PlayObject)FBaseObject).Envir != m_PEnvir) {
+                if (((PlayObject)FBaseObject).Envir != m_PEnvir)
+                {
                     m_PEnvir = ((PlayObject)FBaseObject).Envir;
                     m_nPostion = 0;
                     CurrX = nX;
@@ -374,66 +429,82 @@ namespace M2Server.Maps {
                 }
                 nIndex = m_PEnvir.PointList.Count;
                 n10 = 99999;
-                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && CurrX == nX && CurrY == nY)) {
+                if (!(m_nPostion >= 0 && m_nPostion < m_PEnvir.PointList.Count && CurrX == nX && CurrY == nY))
+                {
                     m_nPostion = 0;
                 }
                 PointInfo Pt;
-                for (int i = m_nPostion; i < m_PEnvir.PointList.Count; i++) {
+                for (int i = m_nPostion; i < m_PEnvir.PointList.Count; i++)
+                {
                     Pt = m_PEnvir.PointList[i];
                     nCurrX = Pt.nX;
                     nCurrY = Pt.nY;
                     nC = Math.Abs(nX - nCurrX) + Math.Abs(nY - nCurrY);
-                    if (nC < n10) {
+                    if (nC < n10)
+                    {
                         n10 = nC;
                         nMX = nCurrX;
                         nMY = nCurrY;
                         nIndex = i;
                         m_nPostion = i;
                         result = true;
-                        if (n10 <= 0) {
+                        if (n10 <= 0)
+                        {
                             break;
                         }
                     }
                 }
-                if (nIndex >= m_PEnvir.PointList.Count - 1) {
+                if (nIndex >= m_PEnvir.PointList.Count - 1)
+                {
                     result = false;
                 }
-                else {
-                    if (n10 <= 0 && nIndex >= 0) {
+                else
+                {
+                    if (n10 <= 0 && nIndex >= 0)
+                    {
                         nStep = 0;
-                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++) {
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
-                            if (nStep == 0) {
+                            if (nStep == 0)
+                            {
                                 btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 m_nPostion = i;
                             }
-                            else {
-                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir) {
+                            else
+                            {
+                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir)
+                                {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
                                     m_nPostion = i;
                                 }
-                                else {
+                                else
+                                {
                                     break;
                                 }
                             }
                             nStep = nStep + 1;
-                            if (nStep >= 2) {
+                            if (nStep >= 2)
+                            {
                                 break;
                             }
                         }
                     }
-                    if (!((PlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false)) {
-                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++) {
+                    if (!((PlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
+                    {
+                        for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
+                        {
                             Pt = m_PEnvir.PointList[i];
                             nCurrX = Pt.nX;
                             nCurrY = Pt.nY;
                             m_nPostion = i;
-                            if (m_PEnvir.CanWalkEx(nCurrX, nCurrY, false)) {
+                            if (m_PEnvir.CanWalkEx(nCurrX, nCurrY, false))
+                            {
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 break;

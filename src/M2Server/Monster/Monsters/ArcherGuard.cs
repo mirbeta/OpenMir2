@@ -1,5 +1,4 @@
-﻿using M2Server.Actor;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
 namespace M2Server.Monster.Monsters
@@ -18,7 +17,7 @@ namespace M2Server.Monster.Monsters
             Race = ActorRace.ArcherGuard;
         }
 
-        private void AttackTarger(BaseObject targetObject)
+        private void AttackTarger(IActor targetObject)
         {
             Dir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             int nDamage = HUtil32.LoByte(WAbil.DC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)) + 1);
@@ -39,7 +38,7 @@ namespace M2Server.Monster.Monsters
         public override void Run()
         {
             int nRage = 9999;
-            BaseObject targetBaseObject = null;
+            IActor targetBaseObject = null;
             if (CanMove())
             {
                 if ((HUtil32.GetTickCount() - WalkTick) >= WalkSpeed)
@@ -47,7 +46,7 @@ namespace M2Server.Monster.Monsters
                     WalkTick = HUtil32.GetTickCount();
                     for (int i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject baseObject = VisibleActors[i].BaseObject;
+                        IActor baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)
                         {
                             continue;

@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("Letshout", "", "")]
     public class LetShoutCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            playObject.BanShout = !playObject.BanShout;
-            if (playObject.BanShout) {
-                playObject.SysMsg(CommandHelp.EnableShoutMsg, MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            PlayerActor.SysMsgBanShout = !PlayerActor.SysMsgBanShout;
+            if (PlayerActor.SysMsgBanShout) {
+                PlayerActor.SysMsg(CommandHelp.EnableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
             else {
-                playObject.SysMsg(CommandHelp.DisableShoutMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(CommandHelp.DisableShoutMsg, MsgColor.Green, MsgType.Hint);
             }
         }
     }

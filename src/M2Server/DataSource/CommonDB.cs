@@ -1,5 +1,4 @@
 using M2Server.Items;
-using M2Server.Npc;
 using MySqlConnector;
 using NLog;
 using System.Data;
@@ -96,7 +95,7 @@ namespace M2Server.DataSource
                     }
                 }
                 M2Share.GameLogGold = M2Share.GetGameLogItemNameList(Grobal2.StringGoldName) == 1;
-               // M2Share.GameLogHumanDie = M2Share.GetGameLogItemNameList(CommandHelp.HumanDieEvent) == 1;
+                // M2Share.GameLogHumanDie = M2Share.GetGameLogItemNameList(CommandHelp.HumanDieEvent) == 1;
                 M2Share.GameLogGameGold = M2Share.GetGameLogItemNameList(M2Share.Config.GameGoldName) == 1;
                 M2Share.GameLogGamePoint = M2Share.GetGameLogItemNameList(M2Share.Config.GamePointName) == 1;
             }
@@ -155,7 +154,7 @@ namespace M2Server.DataSource
                     magic.Desc = dr.GetString("Descr");
                     if (magic.MagicId > 0)
                     {
-                     //   M2Share.WorldEngine.MagicList.Add(magic);
+                        //   M2Share.WorldEngine.MagicList.Add(magic);
                     }
                     else
                     {

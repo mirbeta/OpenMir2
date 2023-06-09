@@ -1,9 +1,7 @@
-﻿using M2Server.Actor;
-using M2Server.Player;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 删除对面面NPC
@@ -12,10 +10,10 @@ namespace M2Server.GameCommand.Commands
     public class DelNpcCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
+        public void Execute(IPlayerActor PlayerActor)
         {
             const string sDelOk = "删除NPC成功...";
-            var baseObject = playObject.GetPoseCreate();
+            var baseObject = PlayerActor.GetPoseCreate();
             if (baseObject != null)
             {
                 //for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
@@ -25,7 +23,7 @@ namespace M2Server.GameCommand.Commands
                 //        baseObject.Ghost = true;
                 //        baseObject.GhostTick = HUtil32.GetTickCount();
                 //        baseObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
-                //        playObject.SysMsg(sDelOk, MsgColor.Red, MsgType.Hint);
+                //        PlayerActor.SysMsg(sDelOk, MsgColor.Red, MsgType.Hint);
                 //        return;
                 //    }
                 //}
@@ -36,12 +34,12 @@ namespace M2Server.GameCommand.Commands
                 //        baseObject.Ghost = true;
                 //        baseObject.GhostTick = HUtil32.GetTickCount();
                 //        baseObject.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");
-                //        playObject.SysMsg(sDelOk, MsgColor.Red, MsgType.Hint);
+                //        PlayerActor.SysMsg(sDelOk, MsgColor.Red, MsgType.Hint);
                 //        return;
                 //    }
                 //}
             }
-            playObject.SysMsg(CommandHelp.GameCommandDelNpcMsg, MsgColor.Red, MsgType.Hint);
+            PlayerActor.SysMsg(CommandHelp.GameCommandDelNpcMsg, MsgColor.Red, MsgType.Hint);
         }
     }
 }

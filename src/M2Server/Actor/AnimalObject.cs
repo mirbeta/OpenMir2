@@ -1,5 +1,4 @@
-﻿using M2Server.Maps;
-using M2Server.Player;
+﻿using M2Server.Player;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -158,7 +157,7 @@ namespace M2Server.Actor
             return !Ghost && !Death && StatusTimeArr[PoisonState.STONE] == 0;
         }
 
-        protected virtual void Attack(BaseObject targetObject, byte nDir)
+        protected virtual void Attack(IActor targetObject, byte nDir)
         {
             var nPower = GetBaseAttackPoewr();
             AttackDir(targetObject, nPower, nDir);
@@ -253,11 +252,11 @@ namespace M2Server.Actor
                 }
             }
         }
-        
+
         /// <summary>
         /// 怪物说话
         /// </summary>
-        internal void MonsterSayMessage(BaseObject monsterObject, MonStatus monStatus)
+        internal void MonsterSayMessage(IActor monsterObject, MonStatus monStatus)
         {
             if (!M2Share.Config.MonSayMsg)
             {
@@ -306,13 +305,13 @@ namespace M2Server.Actor
                     }
                     else
                     {
-                        monsterObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
+                        //monsterObject.SysMsg(sMsg, monSayMsg.Color, MsgType.Mon);
                     }
                     break;
                 }
             }
         }
-        
+
         private void OpenHolySeizeMode(int dwInterval)
         {
             HolySeize = true;
@@ -327,7 +326,7 @@ namespace M2Server.Actor
             RefNameColor();
         }
 
-        public virtual void Struck(BaseObject hiter)
+        public virtual void Struck(IActor hiter)
         {
             byte btDir = 0;
             StruckTick = HUtil32.GetTickCount();
@@ -352,9 +351,9 @@ namespace M2Server.Actor
             AttackTick = AttackTick + (150 - HUtil32._MIN(130, Abil.Level * 4));
         }
 
-        protected void HitMagAttackTarget(BaseObject targetObject, int nHitPower, int nMagPower, bool boFlag)
+        protected void HitMagAttackTarget(IActor targetObject, int nHitPower, int nMagPower, bool boFlag)
         {
-            IList<BaseObject> baseObjectList = new List<BaseObject>();
+            IList<IActor> baseObjectList = new List<IActor>();
             Dir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             Envir.GetBaseObjects(targetObject.CurrX, targetObject.CurrY, false, ref baseObjectList);
             for (var i = 0; i < baseObjectList.Count; i++)
@@ -381,7 +380,7 @@ namespace M2Server.Actor
         /// </summary>
         protected virtual void SearchTarget()
         {
-            BaseObject searchTarget = null;
+            IActor searchTarget = null;
             var n10 = 999;
             for (var i = 0; i < VisibleActors.Count; i++)
             {

@@ -1,18 +1,18 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("ShowDenyChrNameLogon", "", 10)]
     public class ShowDenyChrNameLogonCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
+        public void Execute(IPlayerActor PlayerActor) {
             try {
-                if (M2Share.DenyChrNameList.Count <= 0) {
-                    playObject.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
+                if (SystemShare.DenyChrNameList.Count <= 0) {
+                    PlayerActor.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
-                for (var i = 0; i < M2Share.DenyChrNameList.Count; i++) {
-                    //PlayObject.SysMsg(Settings.g_DenyChrNameList[i], MsgColor.c_Green, MsgType.t_Hint);
+                for (var i = 0; i < SystemShare.DenyChrNameList.Count; i++) {
+                    //PlayerActor.SysMsg(Settings.g_DenyChrNameList[i], MsgColor.c_Green, MsgType.t_Hint);
                 }
             }
             finally {

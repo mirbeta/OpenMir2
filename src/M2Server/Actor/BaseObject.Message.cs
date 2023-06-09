@@ -1,8 +1,3 @@
-using M2Server.Maps;
-using M2Server;
-using M2Server.Actor;
-using Spectre.Console;
-using System.Diagnostics;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -97,7 +92,7 @@ namespace M2Server.Actor
             }
         }
 
-        public void SendMsg(BaseObject baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "")
+        public void SendMsg(IActor baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "")
         {
             var boSend = false;
             if (IsRobot)
@@ -384,7 +379,6 @@ namespace M2Server.Actor
         /// </summary>
         public void SendRefMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg)
         {
-            const string sExceptionMsg = "[Exception] TBaseObject::SendRefMsg Name = {0}";
             if (Envir == null)
             {
                 M2Share.Logger.Error(ChrName + " SendRefMsg nil PEnvir ");
@@ -428,7 +422,7 @@ namespace M2Server.Actor
                                     //        break;
                                     //    }
                                     //}
-                                    BaseObject targetObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor targetObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if ((targetObject != null) && !targetObject.Ghost)
                                     {
                                         if (targetObject.Race == ActorRace.Play)
@@ -455,7 +449,7 @@ namespace M2Server.Actor
 
             for (int i = 0; i < VisibleHumanList.Count; i++)
             {
-                BaseObject targetObject = M2Share.ActorMgr.Get(VisibleHumanList[i]);
+                IActor targetObject = M2Share.ActorMgr.Get(VisibleHumanList[i]);
                 if (targetObject.Ghost)
                 {
                     continue;

@@ -1,13 +1,11 @@
 using M2Server.Actor;
 using M2Server.Items;
 using M2Server.Magic;
-using M2Server.Maps;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
-using NormNpc = M2Server.Npc.NormNpc;
 
 namespace M2Server.Player
 {
@@ -42,7 +40,7 @@ namespace M2Server.Player
                 if (item != null)
                 {
                     var clientItem = new ClientItem();
-                    ItemSystem.GetUpgradeStdItem(item,userItem, ref clientItem);
+                    ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
@@ -122,7 +120,7 @@ namespace M2Server.Player
             }
             if (npc.Envir == Envir && IsWithinSight(npc) || npc.IsHide)
             {
-                npc.UserSelect(this, sMsg.Trim());
+                npc.UserSelect((IPlayerActor)this, sMsg.Trim());
             }
         }
 
@@ -153,7 +151,7 @@ namespace M2Server.Player
             }
             if (merchant.Envir == Envir && merchant.IsSell && IsWithinSight(merchant))
             {
-               // merchant.ClientQuerySellPrice(this, userItem18);
+                // merchant.ClientQuerySellPrice(this, userItem18);
             }
         }
 
@@ -368,7 +366,7 @@ namespace M2Server.Player
             var castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
             if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, this))
             {
-               // M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
+                // M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
             }
         }
 
@@ -487,7 +485,7 @@ namespace M2Server.Player
                     n18 = -1;
                 }
             }
-        FailExit:
+            FailExit:
             if (n18 <= 0)
             {
                 SendDefMessage(Messages.SM_TAKEON_FAIL, n18, 0, 0, 0);
@@ -546,7 +544,7 @@ namespace M2Server.Player
                                 FeatureChanged();
                                 if (M2Share.FunctionNPC != null)
                                 {
-                                  //  M2Share.FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
+                                    //  M2Share.FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
                                 }
                             }
                             else
@@ -566,7 +564,7 @@ namespace M2Server.Player
             {
                 n10 = -1;
             }
-        FailExit:
+            FailExit:
             if (n10 <= 0)
             {
                 SendDefMessage(Messages.SM_TAKEOFF_FAIL, n10, 0, 0, 0);
@@ -688,7 +686,7 @@ namespace M2Server.Player
                 SendDefMessage(Messages.SM_EAT_OK, 0, 0, 0, 0);
                 if (stdItem.NeedIdentify == 1)
                 {
-                   // M2Share.EventSource.AddEventLog(11, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + itemIndex + "\t" + '1' + "\t" + '0');
+                    // M2Share.EventSource.AddEventLog(11, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + itemIndex + "\t" + '1' + "\t" + '0');
                 }
             }
             else
@@ -748,7 +746,7 @@ namespace M2Server.Player
             return false;
         }
 
-        private bool TakeBagItems(BaseObject baseObject)
+        private bool TakeBagItems(IActor baseObject)
         {
             var result = false;
             while (true)
@@ -792,7 +790,7 @@ namespace M2Server.Player
             if (GroupOwner != this.ActorId)
             {
                 var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                groupOwnerPlay.DelMember(this);
+                groupOwnerPlay.DelMember((IPlayerActor)this);
                 AllowGroup = false;
             }
             else
@@ -829,16 +827,16 @@ namespace M2Server.Player
                 return;
             }
             GroupMembers.Clear();
-            this.GroupMembers.Add(this);
+            this.GroupMembers.Add((IPlayerActor)this);
             this.GroupMembers.Add(playObject);
             JoinGroup(this);
-            playObject.JoinGroup(this);
+            playObject.JoinGroup((IPlayerActor)this);
             AllowGroup = true;
             SendDefMessage(Messages.SM_CREATEGROUP_OK, 0, 0, 0, 0);
             SendGroupMembers();
             if (M2Share.FunctionNPC != null)
             {
-               // M2Share.FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
+                // M2Share.FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
             }
         }
 
@@ -871,7 +869,7 @@ namespace M2Server.Player
                 return;
             }
             this.GroupMembers.Add(playObject);
-            playObject.JoinGroup(this);
+            playObject.JoinGroup((IPlayerActor)this);
             SendDefMessage(Messages.SM_GROUPADDMEM_OK, 0, 0, 0, 0);
             SendGroupMembers();
             if (M2Share.FunctionNPC != null)
@@ -902,7 +900,7 @@ namespace M2Server.Player
             SendDefMessage(Messages.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
             if (M2Share.FunctionNPC != null)
             {
-              //  M2Share.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
+                //  M2Share.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
             }
         }
 
@@ -1132,7 +1130,7 @@ namespace M2Server.Player
                             {
                                 if (stdItem.NeedIdentify == 1)
                                 {
-                                  //  M2Share.EventSource.AddEventLog(8, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + DealCreat.ChrName);
+                                    //  M2Share.EventSource.AddEventLog(8, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + DealCreat.ChrName);
                                 }
                             }
                         }
@@ -1143,7 +1141,7 @@ namespace M2Server.Player
                         DealCreat.GoldChanged();
                         if (M2Share.GameLogGold)
                         {
-                          //  M2Share.EventSource.AddEventLog(8, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + Gold + "\t" + '1' + "\t" + DealCreat.ChrName);
+                            //  M2Share.EventSource.AddEventLog(8, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + Gold + "\t" + '1' + "\t" + DealCreat.ChrName);
                         }
                     }
                     for (var i = 0; i < DealCreat.DealItemList.Count; i++)
@@ -1158,7 +1156,7 @@ namespace M2Server.Player
                             {
                                 if (stdItem.NeedIdentify == 1)
                                 {
-                                 //   M2Share.EventSource.AddEventLog(8, DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
+                                    //   M2Share.EventSource.AddEventLog(8, DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                                 }
                             }
                         }
@@ -1169,7 +1167,7 @@ namespace M2Server.Player
                         GoldChanged();
                         if (M2Share.GameLogGold)
                         {
-                          //  M2Share.EventSource.AddEventLog(8, DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + Grobal2.StringGoldName + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + ChrName);
+                            //  M2Share.EventSource.AddEventLog(8, DealCreat.MapName + "\t" + DealCreat.CurrX + "\t" + DealCreat.CurrY + "\t" + DealCreat.ChrName + "\t" + Grobal2.StringGoldName + "\t" + DealCreat.Gold + "\t" + '1' + "\t" + ChrName);
                         }
                     }
                     DealCreat.SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
@@ -1220,7 +1218,7 @@ namespace M2Server.Player
             }
             if (merchant.Envir == Envir && IsWithinSight(merchant))
             {
-              //  merchant.ClientMakeDrugItem(this, nItemName);
+                //  merchant.ClientMakeDrugItem(this, nItemName);
             }
         }
 
@@ -1321,7 +1319,9 @@ namespace M2Server.Player
                                     MyGuild.AddMember(playObject);
                                     M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
                                     playObject.MyGuild = MyGuild;
-                                    playObject.GuildRankName = MyGuild.GetRankName(playObject, ref playObject.GuildRankNo);
+                                    short rankNo = 0;
+                                    playObject.GuildRankName = MyGuild.GetRankName(playObject, ref rankNo);
+                                    playObject.GuildRankNo = rankNo;
                                     playObject.RefShowName();
                                     playObject.SysMsg("你已加入行会: " + MyGuild.GuildName + " 当前封号为: " + playObject.GuildRankName, MsgColor.Green, MsgType.Hint);
                                     nC = 0;
@@ -1339,7 +1339,7 @@ namespace M2Server.Player
                         else
                         {
                             nC = 5; // '对方不允许加入行会。'
-                           // playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + CommandMgr.GameCommands.LetGuild.CmdName + ']', MsgColor.Red, MsgType.Hint);
+                                    // playObject.SysMsg("你拒绝加入行会。 [允许命令为 @" + CommandMgr.GameCommands.LetGuild.CmdName + ']', MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
@@ -1574,7 +1574,7 @@ namespace M2Server.Player
             var merchant = M2Share.WorldEngine.FindMerchant(actorId);
             if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
-               // merchant.ClientQueryRepairCost(this, userItemA);
+                // merchant.ClientQueryRepairCost(this, userItemA);
             }
         }
 
@@ -1597,7 +1597,7 @@ namespace M2Server.Player
             var merchant = M2Share.WorldEngine.FindMerchant(actorId);
             if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
-               // merchant.ClientRepairItem(this, userItem);
+                // merchant.ClientRepairItem(this, userItem);
             }
         }
 
@@ -1631,7 +1631,7 @@ namespace M2Server.Player
                             var stdItem = ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                               // M2Share.EventSource.AddEventLog(1, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                // M2Share.EventSource.AddEventLog(1, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
                             }
                         }
                         else
@@ -1685,7 +1685,7 @@ namespace M2Server.Player
                                 var stdItem = ItemSystem.GetStdItem(userItem.Index);
                                 if (stdItem.NeedIdentify == 1)
                                 {
-                                   // M2Share.EventSource.AddEventLog(0, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
+                                    // M2Share.EventSource.AddEventLog(0, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
                                 }
                             }
                             else
@@ -1708,7 +1708,7 @@ namespace M2Server.Player
             }
         }
 
-        private bool IsWithinSight(BaseObject merchant)
+        private bool IsWithinSight(IActor merchant)
         {
             return Math.Abs(merchant.CurrX - CurrX) < 15 && Math.Abs(merchant.CurrY - CurrY) < 15;
         }

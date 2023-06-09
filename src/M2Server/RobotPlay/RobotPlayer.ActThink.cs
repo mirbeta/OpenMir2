@@ -1,5 +1,5 @@
-using System.Collections;
 using M2Server.Magic;
+using System.Collections;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -69,7 +69,7 @@ namespace M2Server.RobotPlay
                     }
                 }
             }
-            if (MapWalkXY.WalkStep>0 && Master != null)
+            if (MapWalkXY.WalkStep > 0 && Master != null)
             {
                 var nMonCount = MapWalkXY.MonCount;
                 var nMastrRange = MapWalkXY.MastrRange;

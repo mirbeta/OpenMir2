@@ -1,5 +1,4 @@
-﻿namespace ScriptEngine.Consts
-{
+﻿namespace ScriptModule{
     /// <summary>
     /// 执行指令编码定义
     /// </summary>

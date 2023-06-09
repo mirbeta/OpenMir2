@@ -162,9 +162,9 @@ namespace M2Server.World
             if (ProcessNpcTimeMin > ProcessNpcTimeMax) ProcessNpcTimeMax = ProcessNpcTimeMin;
         }
 
-        public void AddMerchant(Merchant merchant)
+        public void AddMerchant(Merchant merchantOld)
         {
-            MerchantList.Add(merchant);
+            MerchantList.Add(merchantOld);
         }
 
         public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)

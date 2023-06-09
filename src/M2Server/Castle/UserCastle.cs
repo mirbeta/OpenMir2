@@ -1,136 +1,23 @@
-﻿using M2Server.Actor;
-using M2Server.Guild;
-using M2Server.Maps;
-using M2Server.Monster.Monsters;
+﻿using M2Server.Monster.Monsters;
 using M2Server.Player;
 using NLog;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
+using GuildInfo = M2Server.Guild.GuildInfo;
 
 namespace M2Server.Castle
 {
-    public class UserCastle
+    public class UserCastle : IUserCastle
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        /// <summary>
-        /// 守卫列表
-        /// </summary>
-        public readonly ArcherUnit[] Archers = new ArcherUnit[CastleConst.MaxCastleArcher];
-        /// <summary>
-        /// 攻城行会列表
-        /// </summary>
-        private readonly IList<GuildInfo> AttackGuildList;
-        /// <summary>
-        /// 攻城列表
-        /// </summary>
-        private readonly IList<AttackerInfo> AttackWarList;
-        /// <summary>
-        /// 是否显示攻城战役结束消息
-        /// </summary>
-        public bool ShowOverMsg;
-        /// <summary>
-        /// 是否开始攻城
-        /// </summary>
-        private bool IsStartWar;
-        /// <summary>
-        /// 正在沙巴克战役
-        /// </summary>
-        public bool UnderWar;
-        public ArcherUnit CenterWall;
-        public DateTime ChangeDate;
-        /// <summary>
-        /// 城门状态
-        /// </summary>
-        public DoorStatus DoorStatus;
-        /// <summary>
-        /// 是否已显示攻城结束信息
-        /// </summary>
-        private int SaveTick;
-        public int StartCastleWarTick;
-        public IList<string> EnvirList;
-        public ArcherUnit[] Guards = new ArcherUnit[4];
-        public DateTime IncomeToday;
-        public ArcherUnit LeftWall;
-        public ArcherUnit MainDoor;
-        /// <summary>
-        /// 城堡地图
-        /// </summary>
-        public Envirnoment CastleEnvir;
-        /// <summary>
-        /// 皇宫地图
-        /// </summary>
-        public Envirnoment PalaceEnvir;
-        /// <summary>
-        /// 密道地图
-        /// </summary>
-        public Envirnoment SecretEnvir;
-        /// <summary>
-        /// 所属行会名称
-        /// </summary>
-        public GuildInfo MasterGuild;
-        /// <summary>
-        /// 行会回城点X
-        /// </summary>
-        public int HomeX;
-        /// <summary>
-        /// 行会回城点Y
-        /// </summary>
-        public int HomeY;
-        public int PalaceDoorX;
-        public int PalaceDoorY;
         private int _power;
         /// <summary>
         /// 科技等级
         /// </summary>
         private int _techLevel;
-        /// <summary>
-        /// 今日收入
-        /// </summary>
-        public int TodayIncome;
-        /// <summary>
-        /// 收入多少金币
-        /// </summary>
-        public int TotalGold;
-        public int WarRangeX;
-        public int WarRangeY;
-        /// <summary>
-        /// 皇宫右城墙
-        /// </summary>
-        public ArcherUnit RightWall;
-        /// <summary>
-        /// 皇宫门状态
-        /// </summary>
-        public string ConfigDir = string.Empty;
-        /// <summary>
-        /// 行会回城点地图
-        /// </summary>
-        public string HomeMap = string.Empty;
-        /// <summary>
-        /// 城堡所在地图名
-        /// </summary>
-        public string MapName = string.Empty;
-        /// <summary>
-        /// 城堡名称
-        /// </summary>
-        public string sName = string.Empty;
-        /// <summary>
-        /// 所属行会
-        /// </summary>
-        public string OwnGuild = string.Empty;
-        /// <summary>
-        /// 皇宫地图名称
-        /// </summary>
-        public string PalaceMap = string.Empty;
-        /// <summary>
-        /// 密道地图名称
-        /// </summary>
-        public string SecretMap = string.Empty;
-        /// <summary>
-        /// 攻城日期
-        /// </summary>
-        public DateTime WarDate;
+
         private readonly CastleConfMgr castleConf;
 
         public UserCastle(string sCastleDir)
@@ -149,7 +36,7 @@ namespace M2Server.Castle
             UnderWar = false;
             ShowOverMsg = false;
             AttackWarList = new List<AttackerInfo>();
-            AttackGuildList = new List<GuildInfo>();
+            AttackGuildList = new List<IGuild>();
             SaveTick = 0;
             WarRangeX = M2Share.Config.CastleWarRangeX;
             WarRangeY = M2Share.Config.CastleWarRangeY;
@@ -168,6 +55,44 @@ namespace M2Server.Castle
             set { SetTechLevel(value); }
         }
 
+        public ArcherUnit[] Archers { get; set; }
+        public IList<IGuild> AttackGuildList { get; set; }
+        public IList<AttackerInfo> AttackWarList { get; set; }
+        public bool ShowOverMsg { get; set; }
+        public bool IsStartWar { get; set; }
+        public bool UnderWar { get; set; }
+        public ArcherUnit CenterWall { get; set; }
+        public DateTime ChangeDate { get; set; }
+        public DoorStatus DoorStatus { get; set; }
+        public int SaveTick { get; set; }
+        public int StartCastleWarTick { get; set; }
+        public IList<string> EnvirList { get; set; }
+        public ArcherUnit[] Guards { get; set; }
+        public DateTime IncomeToday { get; set; }
+        public ArcherUnit LeftWall { get; set; }
+        public ArcherUnit MainDoor { get; set; }
+        public IEnvirnoment CastleEnvir { get; set; }
+        public IEnvirnoment PalaceEnvir { get; set; }
+        public IEnvirnoment SecretEnvir { get; set; }
+        public IGuild MasterGuild { get; set; }
+        public int HomeX { get; set; }
+        public int HomeY { get; set; }
+        public int PalaceDoorX { get; set; }
+        public int PalaceDoorY { get; set; }
+        public int TodayIncome { get; set; }
+        public int TotalGold { get; set; }
+        public int WarRangeX { get; set; }
+        public int WarRangeY { get; set; }
+        public ArcherUnit RightWall { get; set; }
+        public string ConfigDir { get; set; }
+        public string HomeMap { get; set; }
+        public string MapName { get; set; }
+        public string sName { get; set; }
+        public string OwnGuild { get; set; }
+        public string PalaceMap { get; set; }
+        public string SecretMap { get; set; }
+        public DateTime WarDate { get; set; }
+
         public int Power
         {
             get { return _power; }
@@ -177,7 +102,6 @@ namespace M2Server.Castle
         public void Initialize()
         {
             ArcherUnit ObjUnit;
-            MapDoor Door;
             LoadConfig();
             LoadAttackSabukWall();
             if (M2Share.MapMgr.GetMapOfServerIndex(MapName) == M2Share.ServerIndex)
@@ -259,14 +183,14 @@ namespace M2Server.Castle
                         else
                             _logger.Warn("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
                     }
-                    for (int i = 0; i < CastleEnvir.DoorList.Count; i++)
-                    {
-                        Door = CastleEnvir.DoorList[i];
-                        if (Math.Abs(Door.nX - PalaceDoorX) <= 3 && Math.Abs(Door.nY - PalaceDoorY) <= 3)
-                        {
-                            DoorStatus = Door.Status;
-                        }
-                    }
+                    //for (int i = 0; i < CastleEnvir.DoorList.Count; i++)
+                    //{
+                    //    Door = CastleEnvir.DoorList[i];
+                    //    if (Math.Abs(Door.nX - PalaceDoorX) <= 3 && Math.Abs(Door.nY - PalaceDoorY) <= 3)
+                    //    {
+                    //        DoorStatus = Door.Status;
+                    //    }
+                    //}
                 }
                 else
                 {
@@ -308,7 +232,7 @@ namespace M2Server.Castle
             {
                 string sData = loadList[i];
                 string s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { ' ', '\t' });
-                GuildInfo guild = M2Share.GuildMgr.FindGuild(guildName);
+                IGuild guild = M2Share.GuildMgr.FindGuild(guildName);
                 if (guild == null) continue;
                 AttackerInfo attackerInfo = new AttackerInfo();
                 HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
@@ -484,7 +408,7 @@ namespace M2Server.Castle
             bool result = false;
             for (int i = 0; i < AttackGuildList.Count; i++)
             {
-                GuildInfo AttackGuild = AttackGuildList[i];
+                IGuild AttackGuild = AttackGuildList[i];
                 if (AttackGuild != MasterGuild && AttackGuild.IsAllyGuild(Guild))
                 {
                     result = true;
@@ -500,7 +424,7 @@ namespace M2Server.Castle
             bool result = false;
             for (int i = 0; i < AttackGuildList.Count; i++)
             {
-                GuildInfo AttackGuild = AttackGuildList[i];
+                IGuild AttackGuild = AttackGuildList[i];
                 if (AttackGuild != MasterGuild && AttackGuild == Guild)
                 {
                     result = true;
@@ -516,7 +440,7 @@ namespace M2Server.Castle
             {
                 return false;
             }
-            IList<BaseObject> playObjectList = new List<BaseObject>();
+            IList<IActor> playObjectList = new List<IActor>();
             M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, ref playObjectList);
             bool result = true;
             for (int i = 0; i < playObjectList.Count; i++)
@@ -535,7 +459,7 @@ namespace M2Server.Castle
         public void GetCastle(GuildInfo Guild)
         {
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
-            GuildInfo OldGuild = MasterGuild;
+            IGuild OldGuild = MasterGuild;
             MasterGuild = Guild;
             OwnGuild = Guild.GuildName;
             ChangeDate = DateTime.Now;
@@ -559,7 +483,7 @@ namespace M2Server.Castle
         /// </summary>
         public void StartWallconquestWar()
         {
-            IList<BaseObject> playObjectList = new List<BaseObject>();
+            IList<IActor> playObjectList = new List<IActor>();
             M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ref playObjectList);
             for (int i = 0; i < playObjectList.Count; i++)
             {
@@ -592,9 +516,19 @@ namespace M2Server.Castle
             _logger.Info(stopMessage);
         }
 
+        public int WithDrawalGolds(IPlayerActor PlayObject, int nGold)
+        {
+            throw new NotImplementedException();
+        }
+
         public int InPalaceGuildCount()
         {
             return AttackGuildList.Count;
+        }
+
+        public bool IsMember(IPlayerActor member)
+        {
+            throw new NotImplementedException();
         }
 
         public bool IsDefenseAllyGuild(GuildInfo guild)
@@ -619,6 +553,11 @@ namespace M2Server.Castle
             return MasterGuild != null && MasterGuild == guild;
         }
 
+        public void GetCastle(IGuild Guild)
+        {
+            throw new NotImplementedException();
+        }
+
         public short GetHomeX()
         {
             return (short)(HomeX - 4 + M2Share.RandomNumber.Random(9));
@@ -640,6 +579,16 @@ namespace M2Server.Castle
             return result ? result : CheckInPalace(nX, nY);
         }
 
+        public bool AddAttackerInfo(IGuild Guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanGetCastle(IGuild guild)
+        {
+            throw new NotImplementedException();
+        }
+
         public bool CheckInPalace(int nX, int nY)
         {
             bool result = false;
@@ -655,6 +604,11 @@ namespace M2Server.Castle
             return result;
         }
 
+        public bool CheckInPalace(int nX, int nY, IPlayerActor targetObject)
+        {
+            throw new NotImplementedException();
+        }
+
         public string GetWarDate()
         {
             const string WarDateMsg = "{0}年{1}月{2}日";
@@ -665,6 +619,11 @@ namespace M2Server.Castle
             int Month = AttackerInfo.AttackDate.Month;
             int Day = AttackerInfo.AttackDate.Day;
             return string.Format(WarDateMsg, Year, Month, Day);
+        }
+
+        public bool InCastleWarArea(IEnvirnoment envir, int nX, int nY)
+        {
+            throw new NotImplementedException();
         }
 
         public string GetAttackWarList()
@@ -738,7 +697,7 @@ namespace M2Server.Castle
                 SaveTick = HUtil32.GetTickCount();
                 if (M2Share.GameLogGold)
                 {
-                  //  M2Share.EventSource.AddEventLog(GameEventLogType.CastleTodayIncome, '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" + Grobal2.StringGoldName + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
+                    //  M2Share.EventSource.AddEventLog(GameEventLogType.CastleTodayIncome, '0' + "\t" + '0' + "\t" + '0' + "\t" + "autosave" + "\t" + Grobal2.StringGoldName + "\t" + TotalGold + "\t" + '1' + "\t" + '0');
                 }
             }
         }
@@ -767,7 +726,7 @@ namespace M2Server.Castle
                         PlayObject.IncGold(nGold);
                         if (M2Share.GameLogGold)
                         {
-                           // M2Share.EventSource.AddEventLog(22, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                            // M2Share.EventSource.AddEventLog(22, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         }
                         PlayObject.GoldChanged();
                         result = 1;
@@ -803,7 +762,7 @@ namespace M2Server.Castle
                         TotalGold += nGold;
                         if (M2Share.GameLogGold)
                         {
-                           // M2Share.EventSource.AddEventLog(GameEventLogType.CastleReceiptGolds, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
+                            // M2Share.EventSource.AddEventLog(GameEventLogType.CastleReceiptGolds, PlayObject.MapName + "\t" + PlayObject.CurrX + "\t" + PlayObject.CurrY + "\t" + PlayObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + '1' + "\t" + '0');
                         }
                         PlayObject.GoldChanged();
                         result = 1;
@@ -844,6 +803,11 @@ namespace M2Server.Castle
                     }
                 }
             }
+        }
+
+        public int ReceiptGolds(IPlayerActor PlayObject, int nGold)
+        {
+            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -889,7 +853,7 @@ namespace M2Server.Castle
         public bool RepairWall(int nWallIndex)
         {
             bool result = false;
-            BaseObject Wall = null;
+            IActor Wall = null;
             switch (nWallIndex)
             {
                 case 1:
@@ -964,6 +928,51 @@ namespace M2Server.Castle
         private void SetTechLevel(int nLevel)
         {
             _techLevel = nLevel;
+        }
+
+        public bool IsAttackAllyGuild(SystemModule.GuildInfo Guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAttackGuild(SystemModule.GuildInfo Guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDefenseAllyGuild(SystemModule.GuildInfo guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDefenseGuild(SystemModule.GuildInfo guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsMasterGuild(SystemModule.GuildInfo guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAttackAllyGuild(IGuild Guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsAttackGuild(IGuild Guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDefenseAllyGuild(IGuild guild)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsDefenseGuild(IGuild guild)
+        {
+            throw new NotImplementedException();
         }
     }
 }

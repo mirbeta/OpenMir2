@@ -1,8 +1,4 @@
-﻿using M2Server.Actor;
-using M2Server.Maps;
-using M2Server.Player;
-using M2Server;
-using M2Server.Actor;
+﻿using M2Server.Player;
 using SystemModule;
 using SystemModule.Enums;
 using NormNpc = M2Server.Npc.NormNpc;
@@ -23,7 +19,7 @@ namespace M2Server.Monster.Monsters
             Race = ActorRace.Guard;
         }
 
-        public override void Struck(BaseObject hiter)
+        public override void Struck(IActor hiter)
         {
             base.Struck(hiter);
             if (Castle != null)
@@ -33,7 +29,7 @@ namespace M2Server.Monster.Monsters
             }
         }
 
-        public override bool IsProperTarget(BaseObject baseObject)
+        public override bool IsProperTarget(IActor baseObject)
         {
             if (Castle != null)
             {
@@ -163,7 +159,7 @@ namespace M2Server.Monster.Monsters
                                         cellInfo.Clear();
                                         break;
                                     }
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
                                         if (!baseObject.Death && !baseObject.Invisible)
@@ -175,7 +171,7 @@ namespace M2Server.Monster.Monsters
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                             {
                                                 if (((Math.Abs(baseObject.CurrX - CurrX) <= 6) && (Math.Abs(baseObject.CurrY - CurrY) <= 6)))
-                                                {                                                    
+                                                {
                                                     UpdateVisibleGay(baseObject);
                                                 }
                                             }
@@ -219,14 +215,14 @@ namespace M2Server.Monster.Monsters
                 KickException();
             }
         }
-        
+
         /// <summary>
         /// 是否被动攻击怪物类型
         /// Race:小于52属于一些不会主动攻击角色的怪物类型
         /// 如：鹿 鸡 羊
         /// </summary>
         /// <returns></returns>
-        private static bool CanPassiveAttack(BaseObject monsterObject)
+        private static bool CanPassiveAttack(IActor monsterObject)
         {
             return monsterObject.Race <= 52 || monsterObject.Race == 112;
         }

@@ -1,15 +1,15 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("TakeOffHorse", desc: "下马命令，在骑马状态输入此命令下马。", 10)]
     public class TakeOffHorseCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (!playObject.OnHorse) {
+        public void Execute(IPlayerActor PlayerActor) {
+            if (!PlayerActor.OnHorse) {
                 return;
             }
-            playObject.OnHorse = false;
-            playObject.FeatureChanged();
+            PlayerActor.OnHorse = false;
+            PlayerActor.SysMsgFeatureChanged();
         }
     }
 }

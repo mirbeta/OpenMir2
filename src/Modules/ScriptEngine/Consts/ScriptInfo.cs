@@ -1,7 +1,6 @@
 using System.Collections;
 
-namespace ScriptEngine.Consts
-{
+namespace ScriptModule{
     [AttributeUsage(AttributeTargets.Field)]
     public class ScriptDefName : Attribute
     {

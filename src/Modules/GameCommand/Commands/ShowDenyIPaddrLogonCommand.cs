@@ -1,20 +1,20 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("ShowDenyIPaddrLogon", "", 10)]
     public class ShowDenyIPaddrLogonCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
+        public void Execute(IPlayerActor PlayerActor) {
             int nCount;
             try {
-                nCount = M2Share.DenyIPAddrList.Count;
-                if (M2Share.DenyIPAddrList.Count <= 0) {
-                    playObject.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
+                nCount = SystemShare.DenyIPAddrList.Count;
+                if (SystemShare.DenyIPAddrList.Count <= 0) {
+                    PlayerActor.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                 }
                 if (nCount > 0) {
-                    for (var i = 0; i < M2Share.DenyIPAddrList.Count; i++) {
-                        //PlayObject.SysMsg(Settings.g_DenyIPAddrList[i], MsgColor.c_Green, MsgType.t_Hint);
+                    for (var i = 0; i < SystemShare.DenyIPAddrList.Count; i++) {
+                        //PlayerActor.SysMsg(Settings.g_DenyIPAddrList[i], MsgColor.c_Green, MsgType.t_Hint);
                     }
                 }
             }

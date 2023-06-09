@@ -1,16 +1,16 @@
 ﻿using System.Collections;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 调整指定玩家游戏币
     /// </summary>
     [Command("GameGold", "调整指定玩家游戏币", CommandHelp.GameCommandGameGoldHelpMsg, 10)]
     public class GameGoldCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -22,32 +22,32 @@ namespace M2Server.GameCommand.Commands {
                 ctr = sCtr[0];
             }
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new[] { '=', '+', '-' }).Contains(ctr) || nGold < 0 || nGold > 200000000 || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null) {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null) {
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[0]) {
                 case '=':
-                    mPlayObject.GameGold = nGold;
+                    mIPlayerActor.GameGold = nGold;
                     break;
                 case '+':
-                    mPlayObject.GameGold += nGold;
+                    mIPlayerActor.GameGold += nGold;
                     break;
                 case '-':
-                    mPlayObject.GameGold -= nGold;
+                    mIPlayerActor.GameGold -= nGold;
                     break;
             }
-            if (M2Share.GameLogGameGold) {
-               // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, mPlayObject.MapName, mPlayObject.CurrX, mPlayObject.CurrY,
-               //     mPlayObject.ChrName, M2Share.Config.GameGoldName, nGold, sCtr[1], playObject.ChrName));
+            if (SystemShare.GameLogGameGold) {
+               // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, mIPlayerActor.MapName, mIPlayerActor.CurrX, mIPlayerActor.CurrY,
+               //     mIPlayerActor.ChrName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayerActor.ChrName));
             }
-            playObject.GameGoldChanged();
-            mPlayObject.SysMsg(string.Format(CommandHelp.GameCommandGameGoldHumanMsg, M2Share.Config.GameGoldName, nGold, mPlayObject.GameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandGameGoldGMMsg, sHumanName, M2Share.Config.GameGoldName, nGold, mPlayObject.GameGold, M2Share.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
+            PlayerActor.GameGoldChanged();
+            mIPlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGameGoldHumanMsg, SystemShare.Config.GameGoldName, nGold, mIPlayerActor.GameGold, SystemShare.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGameGoldGMMsg, sHumanName, SystemShare.Config.GameGoldName, nGold, mIPlayerActor.GameGold, SystemShare.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

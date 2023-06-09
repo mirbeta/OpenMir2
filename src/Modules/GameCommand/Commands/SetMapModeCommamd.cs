@@ -1,13 +1,13 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 设置地图模式
     /// </summary>
     [Command("SetMapMode", "设置地图模式", 10)]
     public class SetMapModeCommamd : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -15,7 +15,7 @@ namespace M2Server.GameCommand.Commands {
             var sMapMode = @params.Length > 1 ? @params[1] : "";
             var sParam1 = @params.Length > 2 ? @params[2] : "";
             var sParam2 = @params.Length > 3 ? @params[3] : "";
-            if (playObject.Permission < 6) {
+            if (PlayerActor.Permission < 6) {
                 return;
             }
 
@@ -23,14 +23,14 @@ namespace M2Server.GameCommand.Commands {
             //{
             //    if (Settings.Config.boGMShowFailMsg)
             //    {
-            //        PlayObject.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号 模式", MsgColor.c_Red, MsgType.t_Hint);
+            //        PlayerActor.SysMsg("命令格式: @" + this.Attributes.Name + " 地图号 模式", MsgColor.c_Red, MsgType.t_Hint);
             //    }
             //    return;
             //}
             //Envir = Settings.g_MapMgr.FindMap(sMapName);
             //if ((Envir == null))
             //{
-            //    PlayObject.   SysMsg(sMapName + " 不存在!!!", MsgColor.c_Red, MsgType.t_Hint);
+            //    PlayerActor.SysMsg   SysMsg(sMapName + " 不存在!!!", MsgColor.c_Red, MsgType.t_Hint);
             //    return;
             //}
             //if ((sMapMode).CompareTo(("SAFE")) == 0)
@@ -468,7 +468,7 @@ namespace M2Server.GameCommand.Commands {
             //    }
             //}
             //sMsg = "地图模式: " + Envir.GetEnvirInfo();
-            //PlayObject.SysMsg(sMsg, MsgColor.c_Blue, MsgType.t_Hint);
+            //PlayerActor.SysMsg(sMsg, MsgColor.c_Blue, MsgType.t_Hint);
         }
     }
 }

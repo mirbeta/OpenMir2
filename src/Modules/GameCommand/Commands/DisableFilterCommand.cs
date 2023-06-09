@@ -1,20 +1,20 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 启用/禁止文字过滤功能
     /// </summary>
     [Command("DisableFilter", "启用/禁止文字过滤功能", 10)]
     public class DisableFilterCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            M2Share.FilterWord = !M2Share.FilterWord;
-            if (M2Share.FilterWord) {
-                playObject.SysMsg("已启用文字过滤。", MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            SystemShare.FilterWord = !SystemShare.FilterWord;
+            if (SystemShare.FilterWord) {
+                PlayerActor.SysMsg("已启用文字过滤。", MsgColor.Green, MsgType.Hint);
             }
             else {
-                playObject.SysMsg("已禁止文字过滤。", MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg("已禁止文字过滤。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

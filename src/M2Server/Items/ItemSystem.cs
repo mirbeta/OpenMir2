@@ -1,4 +1,5 @@
 ﻿using SystemModule;
+using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Items
@@ -8,7 +9,7 @@ namespace M2Server.Items
         /// <summary>
         /// 物品列表
         /// </summary>
-        public readonly static IList<StdItem> StdItemList;
+        public static readonly IList<StdItem> StdItemList;
 
         static ItemSystem()
         {

@@ -1,4 +1,4 @@
-﻿using M2Server.Maps;
+﻿using SystemModule;
 
 namespace M2Server.Event.Events
 {
@@ -7,7 +7,7 @@ namespace M2Server.Event.Events
     /// </summary>
     public class HolyCurtainEvent : MapEvent
     {
-        public HolyCurtainEvent(Envirnoment envir, short nX, short nY, byte nType, int nTime) : base(envir, nX, nY, nType, nTime, true)
+        public HolyCurtainEvent(IEnvirnoment envir, short nX, short nY, byte nType, int nTime) : base(envir, nX, nY, nType, nTime, true)
         {
 
         }

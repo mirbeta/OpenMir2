@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
-using GameSrv.Robots;
+﻿using GameSrv.Robots;
 using M2Server.Castle;
 using M2Server.DataSource;
 using M2Server.Event;
@@ -10,13 +8,13 @@ using M2Server.Maps;
 using M2Server.Network;
 using M2Server.Notices;
 using M2Server.Planes;
-using M2Server.Robots;
 using M2Server.Services;
 using M2Server.World;
 using M2Server.World.Managers;
 using NLog;
-using ScriptEngine;
-using ScriptEngine.Consts;
+using ScriptModule;
+using System.Collections;
+using System.Collections.Concurrent;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -93,7 +91,6 @@ namespace GameSrv
             GameShare.DataServer = new DBService();
             GameShare.MarketService = new MarketService();
             GameShare.ChatChannel = new ChatChannelService();
-            GameShare.ScriptEngine = new ScriptSystem();
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
             GameShare.MapMgr = new MapManager();

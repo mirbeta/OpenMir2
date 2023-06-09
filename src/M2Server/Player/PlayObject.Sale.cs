@@ -302,7 +302,7 @@ namespace M2Server.Player
                                     GameGold = 0;
                                 }
                                 this.GameGoldChanged(); // 更新元宝数量
-                                PlayObject playObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
+                                IPlayerActor playObject = M2Share.WorldEngine.GetPlayObject(dealOffInfo.sDealChrName);
                                 if (playObject == null)// 出售人不在线
                                 {
                                     dealOffInfo.Flag = 1; // 物品已出售,出售人未得到元宝

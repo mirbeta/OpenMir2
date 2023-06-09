@@ -1,13 +1,13 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// ShowOpen
     /// </summary>
     [Command("ShowOpen", "", "", 10)]
     public class ShowHumanUnitOpenCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
 
         }
     }

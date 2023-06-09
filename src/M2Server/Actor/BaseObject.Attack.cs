@@ -5,7 +5,7 @@ namespace M2Server.Actor
 {
     public partial class BaseObject
     {
-        protected bool AttackDir(BaseObject attackTarget, int nPower, byte nDir)
+        protected bool AttackDir(IActor attackTarget, int nPower, byte nDir)
         {
             Dir = nDir;
             if (_Attack(nPower, attackTarget))
@@ -25,7 +25,7 @@ namespace M2Server.Actor
             return GetAttackPower(HUtil32.LoByte(WAbil.DC), (sbyte)(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
         }
 
-        internal bool _Attack(int nPower, BaseObject targetObject)
+        internal bool _Attack(int nPower, IActor targetObject)
         {
             if (targetObject == null)
             {
@@ -63,7 +63,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        private bool AttackDirect(BaseObject targetObject, int nSecPwr)
+        private bool AttackDirect(IActor targetObject, int nSecPwr)
         {
             var result = false;
             if ((Race == ActorRace.Play) || (targetObject.Race == ActorRace.Play) || !(InSafeZone() && targetObject.InSafeZone()))

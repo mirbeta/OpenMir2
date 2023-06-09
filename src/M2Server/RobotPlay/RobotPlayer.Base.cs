@@ -1,10 +1,6 @@
-using M2Server.Actor;
-using M2Server.Event;
 using M2Server.Items;
 using M2Server.Magic;
-using M2Server.Maps;
 using M2Server.Player;
-using M2Server.Actor;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -314,7 +310,7 @@ namespace M2Server.RobotPlay
             base.Run();
         }
 
-        public override bool IsProperTarget(BaseObject baseObject)
+        public override bool IsProperTarget(IActor baseObject)
         {
             var result = false;
             if (baseObject != null)
@@ -438,14 +434,14 @@ namespace M2Server.RobotPlay
             return result;
         }
 
-        public override bool IsProperFriend(BaseObject baseObject)
+        public override bool IsProperFriend(IActor baseObject)
         {
             return base.IsProperFriend(baseObject);
         }
 
         public override void SearchViewRange()
         {
-            BaseObject baseObject;
+            IActor baseObject;
             const string sExceptionMsg = "RoboPlayObject::SearchViewRange 1-{0} {1} {2} {3} {4}";
             if (Ghost)
             {
@@ -794,7 +790,7 @@ namespace M2Server.RobotPlay
             }
         }
 
-        public override void Struck(BaseObject hiter)
+        public override void Struck(IActor hiter)
         {
             StruckTick = HUtil32.GetTickCount();
             if (hiter != null)
@@ -895,7 +891,7 @@ namespace M2Server.RobotPlay
             base.Die();
         }
 
-        internal override void DropUseItems(int baseObject)
+        public override void DropUseItems(int baseObject)
         {
             const byte maxUseItem = 8;
             if (NoDropUseItem)

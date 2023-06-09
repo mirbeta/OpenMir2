@@ -1,6 +1,7 @@
 using M2Server.Items;
 using M2Server.Player;
 using SystemModule;
+using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 

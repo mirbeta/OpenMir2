@@ -1,9 +1,12 @@
-﻿namespace M2Server.Monster.Monsters {
+﻿namespace M2Server.Monster.Monsters
+{
     /// <summary>
     /// 巡逻类
     /// </summary>
-    public class ArcherPolice : ArcherGuard {
-        public ArcherPolice() : base() {
+    public class ArcherPolice : ArcherGuard
+    {
+        public ArcherPolice() : base()
+        {
             Race = 20;
         }
     }

@@ -1,8 +1,8 @@
 ﻿using M2Server.Actor;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 推开范围内对象
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class BackStepCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -19,18 +19,18 @@ namespace M2Server.GameCommand.Commands
             }
             var nType = (byte)(@params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0);
             var nCount = (byte)(@params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0);
-            if (playObject.Permission < 6)
+            if (PlayerActor.Permission < 6)
             {
                 return;
             }
             nType = (byte)HUtil32._MIN(nType, 8);
             if (nType == 0)
             {
-                playObject.CharPushed(BaseObject.GetBackDir(playObject.Dir), nCount);
+                PlayerActor.SysMsgCharPushed(BaseObject.GetBackDir(PlayerActor.SysMsgDir), nCount);
             }
             else
             {
-                playObject.CharPushed(M2Share.RandomNumber.RandomByte(nType), nCount);
+                PlayerActor.SysMsgCharPushed(SystemShare.RandomNumber.RandomByte(nType), nCount);
             }
         }
     }

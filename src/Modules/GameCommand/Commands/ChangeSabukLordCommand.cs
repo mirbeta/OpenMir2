@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整沙巴克所属行会
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class ChangeSabukLordCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -22,29 +22,29 @@ namespace M2Server.GameCommand.Commands
             var boFlag = @params.Length > 2 && bool.Parse(@params[2]);
             if (string.IsNullOrEmpty(sCastleName) || string.IsNullOrEmpty(sGuildName))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var castle = M2Share.CastleMgr.Find(sCastleName);
+            var castle = SystemShare.CastleMgr.Find(sCastleName);
             if (castle == null)
             {
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            var guild = SystemShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
-                //M2Share.EventSource.AddEventLog(27, castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + playObject.ChrName + "\09" + '0' + "\09" + '1' + "\09" + '0');
+                //M2Share.EventSource.AddEventLog(27, castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayerActor.ChrName + "\09" + '0' + "\09" + '1' + "\09" + '0');
                 castle.GetCastle(guild);
                 if (boFlag)
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, sGuildName);
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_211, SystemShare.ServerIndex, sGuildName);
                 }
-                playObject.SysMsg(castle.sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(castle.sName + " 所属行会已经更改为 " + sGuildName, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg("行会 " + sGuildName + "还没建立!!!", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg("行会 " + sGuildName + "还没建立!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

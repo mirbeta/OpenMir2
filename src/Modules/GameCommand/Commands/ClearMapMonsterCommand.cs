@@ -1,8 +1,7 @@
-﻿using M2Server.Actor;
-using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 清楚指定地图怪物
@@ -11,7 +10,7 @@ namespace M2Server.GameCommand.Commands
     public class ClearMapMonsterCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -22,14 +21,14 @@ namespace M2Server.GameCommand.Commands
             var sItems = @params.Length > 2 ? @params[2] : "";
             if (string.IsNullOrEmpty(sMapName) || string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(sItems))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boKillAll = false;
             var boKillAllMap = false;
             var boNotItem = true;
             var nMonCount = 0;
-            Envirnoment envir = null;
+            IEnvirnoment envir = null;
             if (sMonName == "*")
             {
                 boKillAll = true;
@@ -42,7 +41,7 @@ namespace M2Server.GameCommand.Commands
             {
                 boNotItem = false;
             }
-            IList<BaseObject> monList = new List<BaseObject>();
+            IList<IActor> monList = new List<IActor>();
             //for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)
             //{
             //    envir = M2Share.MapMgr.Maps[i];
@@ -79,10 +78,10 @@ namespace M2Server.GameCommand.Commands
             //}
             if (envir == null)
             {
-                playObject.SysMsg("输入的地图不存在!!!", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg("输入的地图不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            playObject.SysMsg("已清除怪物数: " + nMonCount, MsgColor.Red, MsgType.Hint);
+            PlayerActor.SysMsg("已清除怪物数: " + nMonCount, MsgColor.Red, MsgType.Hint);
         }
     }
 }

@@ -1,15 +1,15 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 此命令允许或禁止公会联盟
     /// </summary>
     [Command("Auth", "")]
     public class AuthCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (playObject.IsGuildMaster()) {
-                playObject.ClientGuildAlly();
+        public void Execute(IPlayerActor PlayerActor) {
+            if (PlayerActor.IsGuildMaster()) {
+                PlayerActor.ClientGuildAlly();
             }
         }
     }

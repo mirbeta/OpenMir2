@@ -1,22 +1,22 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     [Command("Lettrade", "", "")]
     public class LetTradeCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
+        public void Execute(IPlayerActor PlayerActor)
         {
-            playObject.AllowDeal = !playObject.AllowDeal;
-            if (playObject.AllowDeal)
+            PlayerActor.SysMsgAllowDeal = !PlayerActor.SysMsgAllowDeal;
+            if (PlayerActor.SysMsgAllowDeal)
             {
-                playObject.SysMsg(CommandHelp.EnableDealMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(CommandHelp.EnableDealMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                playObject.SysMsg(CommandHelp.DisableDealMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(CommandHelp.DisableDealMsg, MsgColor.Green, MsgType.Hint);
             }
         }
     }

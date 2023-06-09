@@ -1,4 +1,3 @@
-using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 
@@ -12,17 +11,13 @@ namespace M2Server.Player
             {
                 return;
             }
-            var cnt = 0;
             var page = 0;
-            var bFirstSend = 0;
             if (nextPage == 0)
             {
-                bFirstSend = 1;
                 page = 1;
             }
             else
             {
-                bFirstSend = 0;
             }
             if (nextPage == 1)
             {

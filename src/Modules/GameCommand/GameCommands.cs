@@ -1,6 +1,7 @@
 using M2Server.GameCommand.Commands;
 
-namespace M2Server.GameCommand {
+namespace CommandSystem
+{
     public class GameCommands {
         public readonly GameCmd Testserverconfig;
         public readonly GameCmd Serverstatus;

@@ -1,7 +1,7 @@
-using M2Server.Player;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 重新加载管理员列表
@@ -10,11 +10,11 @@ namespace M2Server.GameCommand.Commands
     public class ReLoadAdminCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
+        public void Execute(IPlayerActor PlayerActor)
         {
             //LocalDb.LoadAdminList();
-            M2Share.WorldEngine.SendServerGroupMsg(213, M2Share.ServerIndex, "");
-            playObject.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
+            SystemShare.WorldEngine.SendServerGroupMsg(213, SystemShare.ServerIndex, "");
+            PlayerActor.SysMsg("管理员列表重新加载成功...", MsgColor.Green, MsgType.Hint);
         }
     }
 }

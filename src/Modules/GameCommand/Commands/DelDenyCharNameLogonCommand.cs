@@ -1,22 +1,22 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("DelDenyChrNameLogon", "", "人物名称", 10)]
     public class DelDenyChrNameLogonCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
             var sChrName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sChrName)) {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boDelete = false;
             try {
-                for (var i = 0; i < M2Share.DenyChrNameList.Count; i++) {
+                for (var i = 0; i < SystemShare.DenyChrNameList.Count; i++) {
                     //if ((sChrName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyChrNameList[i]) != 0)
@@ -24,7 +24,7 @@ namespace M2Server.GameCommand.Commands {
                     //    //    M2Share.SaveDenyChrNameList();
                     //    //}
                     //    M2Share.g_DenyChrNameList.RemoveAt(i);
-                    //    PlayObject.SysMsg(sChrName + "已从禁止登录人物列表中删除。", MsgColor.c_Green, MsgType.t_Hint);
+                    //    PlayerActor.SysMsg(sChrName + "已从禁止登录人物列表中删除。", MsgColor.c_Green, MsgType.t_Hint);
                     //    boDelete = true;
                     //    break;
                     //}
@@ -33,7 +33,7 @@ namespace M2Server.GameCommand.Commands {
             finally {
             }
             if (!boDelete) {
-                playObject.SysMsg(sChrName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(sChrName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }
     }

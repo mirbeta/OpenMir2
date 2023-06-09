@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整指定物品名称
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class ChangeItemNameCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -22,23 +22,23 @@ namespace M2Server.GameCommand.Commands
             var sItemName = @params.Length > 2 ? @params[2] : "";
             if (string.IsNullOrEmpty(sMakeIndex) || string.IsNullOrEmpty(sItemIndex) || string.IsNullOrEmpty(sItemName))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
             var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
             if (nMakeIndex <= 0 || nItemIndex < 0)
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
+            if (SystemShare.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
             {
-                M2Share.CustomItemMgr.SaveCustomItemName();
-                playObject.SysMsg("物品名称设置成功。", MsgColor.Green, MsgType.Hint);
+                SystemShare.CustomItemMgr.SaveCustomItemName();
+                PlayerActor.SysMsg("物品名称设置成功。", MsgColor.Green, MsgType.Hint);
                 return;
             }
-            playObject.SysMsg("此物品，已经设置了其它的名称!!!", MsgColor.Red, MsgType.Hint);
+            PlayerActor.SysMsg("此物品，已经设置了其它的名称!!!", MsgColor.Red, MsgType.Hint);
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿namespace M2Server.Magic {
-    public static class MagicConst {
+﻿namespace M2Server.Magic
+{
+    public static class MagicConst
+    {
         /// <summary>
         /// 火球术
         /// </summary>

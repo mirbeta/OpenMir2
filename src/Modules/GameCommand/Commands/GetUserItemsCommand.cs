@@ -1,17 +1,17 @@
-﻿using M2Server.Items;
-using M2Server.Player;
-using SystemModule;
+﻿using SystemModule;
+using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem
+{
     /// <summary>
     /// 取指定玩家物品
     /// </summary>
     [Command("GetUserItems", "取指定玩家物品", "人物名称 物品名称 数量 类型(0,1,2)", 10)]
     public class GetUserItemsCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -23,12 +23,12 @@ namespace M2Server.GameCommand.Commands {
             int nItemCount;
             StdItem stdItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName) || string.IsNullOrEmpty(sItemCount) || string.IsNullOrEmpty(sType)) {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null) {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null) {
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nCount = HUtil32.StrToInt(sItemCount, 0);
@@ -37,49 +37,49 @@ namespace M2Server.GameCommand.Commands {
             switch (nType) {
                 case 0:
                     nItemCount = 0;
-                    for (var i = 0; i < mPlayObject.UseItems.Length; i++) {
-                        if (mPlayObject.ItemList.Count >= 46) {
+                    for (var i = 0; i < mIPlayerActor.UseItems.Length; i++) {
+                        if (mIPlayerActor.ItemList.Count >= 46) {
                             break;
                         }
-                        userItem = mPlayObject.UseItems[i];
+                        userItem = mIPlayerActor.UseItems[i];
                         stdItem = ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (!mPlayObject.IsEnoughBag()) {
+                            if (!mIPlayerActor.IsEnoughBag()) {
                                 break;
                             }
                             userItem = new UserItem(); ;
-                            userItem = mPlayObject.UseItems[i];
-                            mPlayObject.ItemList.Add(userItem);
-                            mPlayObject.SendAddItem(userItem);
-                            mPlayObject.UseItems[i].Index = 0;
+                            userItem = mIPlayerActor.UseItems[i];
+                            mIPlayerActor.ItemList.Add(userItem);
+                            mIPlayerActor.SendAddItem(userItem);
+                            mIPlayerActor.UseItems[i].Index = 0;
                             nItemCount++;
                             if (nItemCount >= nCount) {
                                 break;
                             }
                         }
                     }
-                    mPlayObject.SendUseItems();
+                    mIPlayerActor.SendUseItems();
                     break;
 
                 case 1:
                     nItemCount = 0;
-                    for (var i = mPlayObject.ItemList.Count - 1; i >= 0; i--) {
-                        if (mPlayObject.ItemList.Count >= 46) {
+                    for (var i = mIPlayerActor.ItemList.Count - 1; i >= 0; i--) {
+                        if (mIPlayerActor.ItemList.Count >= 46) {
                             break;
                         }
-                        if (mPlayObject.ItemList.Count <= 0) {
+                        if (mIPlayerActor.ItemList.Count <= 0) {
                             break;
                         }
-                        userItem = mPlayObject.ItemList[i];
+                        userItem = mIPlayerActor.ItemList[i];
                         stdItem = ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (!mPlayObject.IsEnoughBag()) {
+                            if (!mIPlayerActor.IsEnoughBag()) {
                                 break;
                             }
-                            mPlayObject.SendDelItems(userItem);
-                            mPlayObject.ItemList.RemoveAt(i);
-                            mPlayObject.ItemList.Add(userItem);
-                            mPlayObject.SendAddItem(userItem);
+                            mIPlayerActor.SendDelItems(userItem);
+                            mIPlayerActor.ItemList.RemoveAt(i);
+                            mIPlayerActor.ItemList.Add(userItem);
+                            mIPlayerActor.SendAddItem(userItem);
                             nItemCount++;
                             if (nItemCount >= nCount) {
                                 break;
@@ -90,22 +90,22 @@ namespace M2Server.GameCommand.Commands {
 
                 case 2:
                     nItemCount = 0;
-                    for (var i = mPlayObject.StorageItemList.Count - 1; i >= 0; i--) {
-                        if (mPlayObject.ItemList.Count >= 46) {
+                    for (var i = mIPlayerActor.StorageItemList.Count - 1; i >= 0; i--) {
+                        if (mIPlayerActor.ItemList.Count >= 46) {
                             break;
                         }
-                        if (mPlayObject.StorageItemList.Count <= 0) {
+                        if (mIPlayerActor.StorageItemList.Count <= 0) {
                             break;
                         }
-                        userItem = mPlayObject.StorageItemList[i];
+                        userItem = mIPlayerActor.StorageItemList[i];
                         stdItem = ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0) {
-                            if (!mPlayObject.IsEnoughBag()) {
+                            if (!mIPlayerActor.IsEnoughBag()) {
                                 break;
                             }
-                            mPlayObject.StorageItemList.RemoveAt(i);
-                            mPlayObject.ItemList.Add(userItem);
-                            mPlayObject.SendAddItem(userItem);
+                            mIPlayerActor.StorageItemList.RemoveAt(i);
+                            mIPlayerActor.ItemList.Add(userItem);
+                            mIPlayerActor.SendAddItem(userItem);
                             nItemCount++;
                             if (nItemCount >= nCount) {
                                 break;

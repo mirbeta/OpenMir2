@@ -1,20 +1,20 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 此命令用于允许或禁止师徒传送
     /// </summary>
     [Command("AllowMasterRecall", "此命令用于允许或禁止师徒传送")]
     public class AllowMasterRecallCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            playObject.CanMasterRecall = !playObject.CanMasterRecall;
-            if (playObject.CanMasterRecall) {
-                playObject.SysMsg(CommandHelp.EnableMasterRecall, MsgColor.Blue, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            PlayerActor.CanMasterRecall = !PlayerActor.CanMasterRecall;
+            if (PlayerActor.CanMasterRecall) {
+                PlayerActor.SysMsg(CommandHelp.EnableMasterRecall, MsgColor.Blue, MsgType.Hint);
             }
             else {
-                playObject.SysMsg(CommandHelp.DisableMasterRecall, MsgColor.Blue, MsgType.Hint);
+                PlayerActor.SysMsg(CommandHelp.DisableMasterRecall, MsgColor.Blue, MsgType.Hint);
             }
         }
     }

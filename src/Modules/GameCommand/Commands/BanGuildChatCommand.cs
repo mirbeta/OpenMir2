@@ -1,17 +1,22 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem
+{
     [Command("Banguildchat", "", "")]
-    public class BanGuildChatCommand : GameCommand {
+    public class BanGuildChatCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            playObject.BanGuildChat = !playObject.BanGuildChat;
-            if (playObject.BanGuildChat) {
-                playObject.SysMsg(CommandHelp.EnableGuildChat, MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            PlayerActor.SysMsgBanGuildChat = !PlayerActor.SysMsgBanGuildChat;
+            if (PlayerActor.SysMsgBanGuildChat)
+            {
+                PlayerActor.SysMsg(CommandHelp.EnableGuildChat, MsgColor.Green, MsgType.Hint);
             }
-            else {
-                playObject.SysMsg(CommandHelp.DisableGuildChat, MsgColor.Green, MsgType.Hint);
+            else
+            {
+                PlayerActor.SysMsg(CommandHelp.DisableGuildChat, MsgColor.Green, MsgType.Hint);
             }
         }
     }

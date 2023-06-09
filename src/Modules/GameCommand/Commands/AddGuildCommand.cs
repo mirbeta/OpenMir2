@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 创建行会
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class AddGuildCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -19,38 +19,38 @@ namespace M2Server.GameCommand.Commands
             }
             var sGuildName = @params.Length > 0 ? @params[0] : "";
             var sGuildChief = @params.Length > 1 ? @params[1] : "";
-            if (M2Share.ServerIndex != 0)
+            if (SystemShare.ServerIndex != 0)
             {
-                playObject.SysMsg("这个命令只能使用在主服务器上", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg("这个命令只能使用在主服务器上", MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (string.IsNullOrEmpty(sGuildName) || string.IsNullOrEmpty(sGuildChief))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boAddState = false;
-            var chiefObject = M2Share.WorldEngine.GetPlayObject(sGuildChief);
+            var chiefObject = SystemShare.WorldEngine.GetPlayObject(sGuildChief);
             if (chiefObject == null)
             {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sGuildChief), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (M2Share.GuildMgr.MemberOfGuild(sGuildChief) == null)
+            if (SystemShare.GuildMgr.MemberOfGuild(sGuildChief) == null)
             {
-                if (M2Share.GuildMgr.AddGuild(sGuildName, sGuildChief))
+                if (SystemShare.GuildMgr.AddGuild(sGuildName, sGuildChief))
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + sGuildChief);
-                    playObject.SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, MsgColor.Green, MsgType.Hint);
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_205, SystemShare.ServerIndex, sGuildName + '/' + sGuildChief);
+                    PlayerActor.SysMsg("行会名称: " + sGuildName + " 掌门人: " + sGuildChief, MsgColor.Green, MsgType.Hint);
                     boAddState = true;
                 }
             }
             if (boAddState)
             {
-                chiefObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(chiefObject.ChrName);
+                chiefObject.MyGuild = SystemShare.GuildMgr.MemberOfGuild(chiefObject.ChrName);
                 if (chiefObject.MyGuild != null)
                 {
-                    chiefObject.GuildRankName = chiefObject.MyGuild.GetRankName(playObject, ref chiefObject.GuildRankNo);
+                    chiefObject.GuildRankName = chiefObject.MyGuild.GetRankName(IPlayerActor, ref chiefObject.GuildRankNo);
                     chiefObject.RefShowName();
                 }
             }

@@ -39,7 +39,7 @@ namespace M2Server.Maps
                 sQuest = "";
             }
             mapQuest.Grouped = boGrouped;
-            Merchant mapMerchant = new Merchant
+            Merchant mapMerchantOld = new Merchant
             {
                 MapName = "0",
                 CurrX = 0,
@@ -51,8 +51,8 @@ namespace M2Server.Maps
                 IsHide = true,
                 IsQuest = false
             };
-            GameShare.WorldEngine.QuestNpcList.Add(mapMerchant);
-            mapQuest.NPC = mapMerchant;
+            GameShare.WorldEngine.QuestNpcList.Add(mapMerchantOld);
+            mapQuest.NPC = mapMerchantOld;
             QuestList.Add(mapQuest);
             return true;
         }

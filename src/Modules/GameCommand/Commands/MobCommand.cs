@@ -1,9 +1,9 @@
 ﻿using M2Server.Monster;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 刷指定怪物
@@ -12,7 +12,7 @@ namespace M2Server.GameCommand.Commands
     public class MobCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -25,7 +25,7 @@ namespace M2Server.GameCommand.Commands
             var nLevel = @params.Length > 2 ? (byte)HUtil32.StrToInt(@params[2], 0) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName))
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (nCount <= 0)
@@ -37,10 +37,10 @@ namespace M2Server.GameCommand.Commands
                 nLevel = 0;
             }
             nCount = (byte)HUtil32._MIN(64, nCount);
-            playObject.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
+            PlayerActor.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (var i = 0; i < nCount; i++)
             {
-                var monster = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(playObject.Envir.MapName, nX, nY, sMonName);
+                var monster = (MonsterObject)SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (monster != null)
                 {
                     monster.SlaveMakeLevel = nLevel;
@@ -50,7 +50,7 @@ namespace M2Server.GameCommand.Commands
                 }
                 else
                 {
-                    playObject.SysMsg(CommandHelp.GameCommandMobMsg, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(CommandHelp.GameCommandMobMsg, MsgColor.Red, MsgType.Hint);
                     break;
                 }
             }

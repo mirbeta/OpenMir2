@@ -1,5 +1,4 @@
-﻿namespace ScriptEngine.Consts
-{
+﻿namespace ScriptModule{
     /// <summary>
     /// 条件检测编码定义
     /// </summary>

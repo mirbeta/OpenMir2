@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("GameGlory", "调整玩家灵符", 10)]
     public class GameGloryCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";
             //int nGameGlory = @Params.Length > 2 ? HUtil32.StrToInt(@Params[3]) : 0;
             //var Ctr = '1';
-            //if ((PlayObject.m_btPermission < this.Attributes.nPermissionMin))
+            //if ((PlayerActor.SysMsgm_btPermission < this.Attributes.nPermissionMin))
             //{
-            //    PlayObject.SysMsg(Settings.GameCommandPermissionTooLow, MsgColor.c_Red, MsgType.t_Hint); // 权限不够
+            //    PlayerActor.SysMsg(Settings.GameCommandPermissionTooLow, MsgColor.c_Red, MsgType.t_Hint); // 权限不够
             //    return;
             //}
 
@@ -24,16 +24,16 @@ namespace M2Server.GameCommand.Commands {
             //    (nGameGlory < 0) || (nGameGlory > 255) || ((!string.IsNullOrEmpty(sHumanName)) && (sHumanName[0] == '?')))
             //{
             //    {
-            //        PlayObject.SysMsg(
+            //        PlayerActor.SysMsg(
             //            string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name,
             //                Settings.GameCommandGameGloryHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
             //        return;
             //    }
 
-            //    var TargerObject = M2Share.WorldEngine.GePlayObject(sHumanName);
+            //    var TargerObject = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
             //    if (TargerObject == null)
             //    {
-            //        PlayObject.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, new string[] { sHumanName }),
+            //        PlayerActor.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, new string[] { sHumanName }),
             //            MsgColor.c_Red, MsgType.t_Hint);
             //        return;
             //    }
@@ -56,14 +56,14 @@ namespace M2Server.GameCommand.Commands {
             //        M2Share.ItemEventSource.AddGameLog(string.Format(Settings.GameLogMsg1, M2Share.LOG_GameGlory,
             //            TargerObject.MapName, TargerObject.CurrX, TargerObject.CurrY, TargerObject.m_sChrName,
             //            Settings.Config.sGameGlory, TargerObject.m_btGameGlory,
-            //            sCtr[1] + "(" + (nGameGlory).ToString() + ")", PlayObject.m_sChrName));
+            //            sCtr[1] + "(" + (nGameGlory).ToString() + ")", PlayerActor.SysMsgm_sChrName));
             //    }
 
             //    TargerObject.GameGloryChanged();
             //    TargerObject.SysMsg(
             //        string.Format(Settings.GameCommandGameGirdHumanMsg, Settings.Config.sGameGlory, nGameGlory,
             //            TargerObject.m_btGameGlory, Settings.Config.sGameGlory), MsgColor.c_Green, MsgType.t_Hint);
-            //    PlayObject.SysMsg(
+            //    PlayerActor.SysMsg(
             //        string.Format(Settings.GameCommandGameGirdGMMsg, sHumanName, Settings.Config.sGameGlory,
             //            nGameGlory, TargerObject.m_btGameGlory, Settings.Config.sGameGlory), MsgColor.c_Green,
             //        MsgType.t_Hint);

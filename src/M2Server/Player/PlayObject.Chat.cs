@@ -13,7 +13,7 @@ namespace M2Server.Player
         protected virtual void Whisper(string whostr, string saystr)
         {
             int svidx = 0;
-            PlayObject PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
+            IPlayerActor PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
                 if (!PlayObject.BoReadyRun)

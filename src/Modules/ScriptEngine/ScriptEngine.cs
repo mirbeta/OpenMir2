@@ -1,13 +1,11 @@
-﻿using M2Server;
-using M2Server.Npc;
-using NLog;
-using ScriptEngine.Consts;
+﻿using NLog;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Common;
+using SystemModule.Data;
 
-namespace ScriptEngine
+namespace ScriptModule
 {
     public class ScriptEngine
     {
@@ -59,7 +57,7 @@ namespace ScriptEngine
             _logger.Info("初始化脚本编码定义成功...");
         }
 
-        public void LoadScript(NormNpc NPC, string sPatch, string scriptName)
+        public void LoadScript(INormNpc NPC, string sPatch, string scriptName)
         {
             if (string.IsNullOrEmpty(sPatch))
             {
@@ -153,7 +151,7 @@ namespace ScriptEngine
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
                     var sCallScriptFile = GetCallScriptPath(sLable.Trim());
                     var sLabName = sLine.Trim();
-                    var sFileName = M2Share.GetEnvirFilePath("QuestDiary", sCallScriptFile);
+                    var sFileName = SystemShare.GetEnvirFilePath("QuestDiary", sCallScriptFile);
                     if (CallScriptDict.ContainsKey(sFileName))
                     {
                         callCount--;
@@ -213,7 +211,7 @@ namespace ScriptEngine
                     if (HUtil32.CompareLStr(line, "#INCLUDE"))
                     {
                         var definesFile = HUtil32.GetValidStr3(line, ref defFile, TextSpitConst).Trim();
-                        definesFile = M2Share.GetEnvirFilePath("Defines", definesFile);
+                        definesFile = SystemShare.GetEnvirFilePath("Defines", definesFile);
                         if (File.Exists(definesFile))
                         {
                             using var LoadStrList = new StringList();
@@ -232,7 +230,7 @@ namespace ScriptEngine
             return result;
         }
 
-        private static ScriptInfo LoadMakeNewScript(NormNpc NPC)
+        private static ScriptInfo LoadMakeNewScript(INormNpc NPC)
         {
             var scriptInfo = new ScriptInfo
             {
@@ -566,7 +564,7 @@ namespace ScriptEngine
         /// 加载NPC脚本
         /// </summary>
         /// <returns></returns>
-        public void LoadScriptFile(NormNpc NPC, string sPatch, string sScritpName, bool boFlag)
+        public void LoadScriptFile(INormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
             var command = string.Empty;
             var questName = string.Empty;
@@ -578,7 +576,7 @@ namespace ScriptEngine
             SayingProcedure SayingProcedure = null;
             var scriptType = 0;
             var questCount = 0;
-            var sScritpFileName = M2Share.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
+            var sScritpFileName = SystemShare.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
             if (File.Exists(sScritpFileName))
             {
                 CallScriptDict.Clear();
@@ -818,8 +816,8 @@ namespace ScriptEngine
                         if (line.Equals("[goods]", StringComparison.OrdinalIgnoreCase))
                         {
                             scriptType = 20;
-                            NPC.ProcessRefillIndex = M2Share.CurrentMerchantIndex;
-                            M2Share.CurrentMerchantIndex++;
+                            NPC.ProcessRefillIndex = SystemShare.CurrentMerchantIndex;
+                            SystemShare.CurrentMerchantIndex++;
                             continue;
                         }
                         line = HUtil32.ArrestStringEx(line, "[", "]", ref slabName);
@@ -837,7 +835,7 @@ namespace ScriptEngine
                         SayingRecord.ProcedureList.Add(SayingProcedure);
                         if (Script.RecordList.ContainsKey(SayingRecord.sLabel))
                         {
-                            SayingRecord.sLabel += M2Share.RandomNumber.GetRandomNumber(1, 200);
+                            SayingRecord.sLabel += SystemShare.RandomNumber.GetRandomNumber(1, 200);
                         }
                         Script.RecordList.Add(SayingRecord.sLabel, SayingRecord);
                         continue;
@@ -947,7 +945,7 @@ namespace ScriptEngine
                                 RefillTime = HUtil32.StrToInt(sItemRefillTime, 0),
                                 RefillTick = 0
                             };
-                            if (M2Share.CanSellItem(sItemName))
+                            if (SystemShare.CanSellItem(sItemName))
                             {
                                 ((IMerchant)NPC).RefillGoodsList.Add(goods);
                             }

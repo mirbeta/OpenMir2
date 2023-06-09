@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using M2Server;
 using SystemModule;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整自己的等级
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class ChangeLevelCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -19,13 +19,13 @@ namespace M2Server.GameCommand.Commands
             }
             var sParam1 = @params.Length > 0 ? @params[0] : "";
             var nLevel = HUtil32.StrToInt(sParam1, 1);
-            int nOLevel = playObject.Abil.Level;
-            playObject.Abil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
-            playObject.HasLevelUp(1);// 等级调整记录日志
-            //   M2Share.EventSource.AddEventLog(17, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY+ "\09" + playObject.ChrName + "\09" + playObject.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
-            if (M2Share.Config.ShowMakeItemMsg)
+            int nOLevel = PlayerActor.SysMsgAbil.Level;
+            PlayerActor.SysMsgAbil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
+            PlayerActor.SysMsgHasLevelUp(1);// 等级调整记录日志
+            //   M2Share.EventSource.AddEventLog(17, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + PlayerActor.SysMsgAbil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
+            if (SystemShare.Config.ShowMakeItemMsg)
             {
-                M2Share.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, playObject.ChrName, nOLevel, playObject.Abil.Level));
+                SystemShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.SysMsgAbil.Level));
             }
         }
     }

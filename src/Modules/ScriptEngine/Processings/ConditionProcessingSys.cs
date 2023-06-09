@@ -1,25 +1,17 @@
-﻿using M2Server;
-using M2Server.Actor;
-using M2Server.Castle;
-using M2Server.Guild;
-using M2Server.Items;
-using M2Server.Monster.Monsters;
-using M2Server.Player;
-using ScriptEngine.Consts;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace ScriptEngine.Processings
+namespace ScriptModule
 {
     /// <summary>
     /// 脚本命令检查处理模块
     /// </summary>
     public class ConditionProcessingSys : ProcessingBase
     {
-        private delegate void ScriptCondition(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success);
+        private delegate void ScriptCondition(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success);
         /// <summary>
         /// 脚本条件检查列表
         /// </summary>
@@ -45,11 +37,11 @@ namespace ScriptEngine.Processings
             return _conditionMap.ContainsKey(cmdCode);
         }
 
-        public void Execute(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        public void Execute(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             if (_conditionMap.ContainsKey(questConditionInfo.CmdCode))
             {
-                _conditionMap[questConditionInfo.CmdCode](playObject, questConditionInfo, ref success);
+                _conditionMap[questConditionInfo.CmdCode](playerActor,questConditionInfo, ref success);
             }
         }
 
@@ -169,50 +161,50 @@ namespace ScriptEngine.Processings
             _conditionMap[(int)ConditionCode.CHECKSKILL] = ConditionOfCheckSkill;
         }
 
-        private void ConditionOfCheckLuckyPoint(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckLuckyPoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = playObject.BodyLuckLevel < questConditionInfo.nParam1;
+            success = playerActor.BodyLuckLevel < questConditionInfo.nParam1;
         }
 
-        private void ConditionOfDayTime(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfDayTime(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (M2Share.GameTime != 0)
+                if (SystemShare.GameTime != 0)
                 {
                     success = false;
                 }
             }
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (M2Share.GameTime != 1)
+                if (SystemShare.GameTime != 1)
                 {
                     success = false;
                 }
             }
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (M2Share.GameTime != 2)
+                if (SystemShare.GameTime != 2)
                 {
                     success = false;
                 }
             }
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (M2Share.GameTime != 3)
+                if (SystemShare.GameTime != 3)
                 {
                     success = false;
                 }
             }
         }
 
-        private void ConditionOfCheckOpen(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckOpen(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
             var n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
-            var n10 = playObject.GetQuestUnitOpenStatus(n14);
+            var n10 = playerActor.GetQuestUnitOpenStatus(n14);
             if (n10 == 0)
             {
                 if (n18 != 0)
@@ -229,53 +221,53 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckSlaveListCount(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckSlaveListCount(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (playObject.SlaveList.Count < questConditionInfo.nParam1)
+            if (playerActor.SlaveList.Count < questConditionInfo.nParam1)
             {
                 success = false;
             }
         }
 
-        private void ConditionOfIsHigh(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIsHigh(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             if (string.IsNullOrEmpty(questConditionInfo.sParam1))
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.ISHIGH);
+                ScriptConditionError(playerActor, questConditionInfo, ConditionCode.ISHIGH);
                 return;
             }
             char cMode = questConditionInfo.sParam1[0];
             switch (cMode)
             {
                 case 'L':
-                    success = M2Share.HighLevelHuman == playObject.ActorId;
+                    success = SystemShare.HighLevelHuman == playerActor.ActorId;
                     break;
                 case 'P':
-                    success = M2Share.HighPKPointHuman == playObject.ActorId;
+                    success = SystemShare.HighPKPointHuman == playerActor.ActorId;
                     break;
                 case 'D':
-                    success = M2Share.HighDCHuman == playObject.ActorId;
+                    success = SystemShare.HighDCHuman == playerActor.ActorId;
                     break;
                 case 'M':
-                    success = M2Share.HighMCHuman == playObject.ActorId;
+                    success = SystemShare.HighMCHuman == playerActor.ActorId;
                     break;
                 case 'S':
-                    success = M2Share.HighSCHuman == playObject.ActorId;
+                    success = SystemShare.HighSCHuman == playerActor.ActorId;
                     break;
                 default:
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.ISHIGH);
+                    ScriptConditionError(playerActor, questConditionInfo, ConditionCode.ISHIGH);
                     break;
             }
         }
 
-        private void ConditionOfCheckGroupClass(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGroupClass(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nCount = 0;
             PlayJob nJob = PlayJob.None;
-            PlayObject playObjectEx;
+            IPlayerActor IPlayerActorEx;
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sWarrior))
             {
                 nJob = PlayJob.Warrior;
@@ -290,15 +282,15 @@ namespace ScriptEngine.Processings
             }
             if (nJob < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ExecutionCode.ChangeJob.ToString());
+                ScriptConditionError(playerActor, questConditionInfo, ExecutionCode.ChangeJob.ToString());
                 return;
             }
-            if (playObject.GroupOwner != 0)
+            if (playerActor.GroupOwner != 0)
             {
-                for (int i = 0; i < playObject.GroupMembers.Count; i++)
+                for (int i = 0; i < playerActor.GroupMembers.Count; i++)
                 {
-                    playObjectEx = playObject.GroupMembers[i];
-                    if (playObjectEx.Job == nJob)
+                    IPlayerActorEx = (IPlayerActor)playerActor.GroupMembers[i];
+                    if (IPlayerActorEx.Job == nJob)
                     {
                         nCount++;
                     }
@@ -335,13 +327,13 @@ namespace ScriptEngine.Processings
         }
 
 
-        private void ConditionOfCheckMagicLvl(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMagicLvl(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             UserMagic UserMagic;
-            for (int i = 0; i < playObject.MagicList.Count; i++)
+            for (int i = 0; i < playerActor.MagicList.Count; i++)
             {
-                UserMagic = playObject.MagicList[i];
+                UserMagic = playerActor.MagicList[i];
                 if (string.Compare(UserMagic.Magic.MagicName, questConditionInfo.sParam1, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (UserMagic.Level == questConditionInfo.nParam2)
@@ -353,7 +345,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfReviveSlave(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfReviveSlave(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string s18;
@@ -362,7 +354,7 @@ namespace ScriptEngine.Processings
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = M2Share.GetEnvirFilePath("PetData", playObject.ChrName + ".txt");
+            string sFileName = SystemShare.GetEnvirFilePath("PetData", playerActor.ChrName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -375,7 +367,7 @@ namespace ScriptEngine.Processings
                         s18 = HUtil32.GetValidStr3(s18, ref Petname, HUtil32.Backslash);
                         s18 = HUtil32.GetValidStr3(s18, ref lvl, HUtil32.Backslash);
                         s18 = HUtil32.GetValidStr3(s18, ref lvlexp, HUtil32.Backslash);
-                        // playObject.ReviveSlave(PetName,StrToInt(lvl,0),StrToInt(lvlexp,0),nslavecount,10 * 24 * 60 * 60);
+                        // playerActor.ReviveSlave(PetName,StrToInt(lvl,0),StrToInt(lvlexp,0),nslavecount,10 * 24 * 60 * 60);
                     }
                 }
                 if (LoadList.Count > 0)
@@ -388,12 +380,12 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPos(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPos(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nX = questConditionInfo.nParam2;
             int nY = questConditionInfo.nParam3;
-            if ((questConditionInfo.sParam1 == playObject.MapName) && (nX == playObject.CurrX) && (nY == playObject.CurrY))
+            if ((questConditionInfo.sParam1 == playerActor.MapName) && (nX == playerActor.CurrX) && (nY == playerActor.CurrY))
             {
                 success = true;
             }
@@ -403,18 +395,18 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckItemAddValue(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckItemAddValue(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nWhere = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
             char cMethod = questConditionInfo.sParam2[0];
             int nAddValue = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
-            if (!(nWhere >= 0 && nWhere <= playObject.UseItems.Length) || (nAddValue < 0))
+            if (!(nWhere >= 0 && nWhere <= playerActor.UseItems.Length) || (nAddValue < 0))
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKITEMADDVALUE);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKITEMADDVALUE);
                 return;
             }
-            UserItem UserItem = playObject.UseItems[nWhere];
+            UserItem UserItem = playerActor.UseItems[nWhere];
             if (UserItem.Index == 0)
             {
                 return;
@@ -454,30 +446,30 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckIsOnMap(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsOnMap(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            if (playObject.MapFileName == questConditionInfo.sParam1 || playObject.MapName == questConditionInfo.sParam1)
+            if (playerActor.MapFileName == questConditionInfo.sParam1 || playerActor.MapName == questConditionInfo.sParam1)
             {
                 success = true;
             }
             success = false;
         }
 
-        private void ConditionOfCheckBagGage(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckBagGage(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            if (playObject.IsEnoughBag())
+            if (playerActor.IsEnoughBag)
             {
                 if ((!string.IsNullOrEmpty(questConditionInfo.sParam1)))
                 {
                     success = false;
-                    StdItem stdItem = ItemSystem.GetStdItem(questConditionInfo.sParam1);
-                    if (stdItem != null)
-                    {
-                        if (playObject.IsAddWeightAvailable(stdItem.Weight))
-                        {
-                            success = true;
-                        }
-                    }
+                    //StdItem stdItem = SystemShare.ItemSystem.GetStdItem(questConditionInfo.sParam1);
+                    //if (stdItem != null)
+                    //{
+                    //    if (playerActor.IsAddWeightAvailable(stdItem.Weight))
+                    //    {
+                    //        success = true;
+                    //    }
+                    //}
                 }
             }
             else
@@ -487,41 +479,41 @@ namespace ScriptEngine.Processings
         }
 
 
-        private void ConditionOfCheckOfGuild(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckOfGuild(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             string sGuildName;
             success = false;
             if (string.IsNullOrEmpty(questConditionInfo.sParam1))
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKOFGUILD);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKOFGUILD);
                 return;
             }
-            if (playObject.MyGuild != null)
+            if (playerActor.MyGuild != null)
             {
                 sGuildName = questConditionInfo.sParam1;
-                GetVarValue(playObject, questConditionInfo.sParam1, ref sGuildName);
-                if (String.Compare(playObject.MyGuild.GuildName, sGuildName, StringComparison.Ordinal) == 0)
+                GetVarValue(playerActor,questConditionInfo.sParam1, ref sGuildName);
+                if (String.Compare(playerActor.MyGuild.GuildName, sGuildName, StringComparison.Ordinal) == 0)
                 {
                     success = true;
                 }
             }
         }
 
-        private void ConditionOfCheckOnlineLongMin(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckOnlineLongMin(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             var nOnlineMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nOnlineMin < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nOnlineMin);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nOnlineMin);
                 if (nOnlineMin < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.ONLINELONGMIN);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.ONLINELONGMIN);
                     return;
                 }
             }
-            long nOnlineTime = (HUtil32.GetTickCount() - playObject.LogonTick) / 60000;
+            long nOnlineTime = (HUtil32.GetTickCount() - playerActor.LogonTick) / 60000;
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -552,17 +544,17 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPasswordErrorCount(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckPasswordErrorCount(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             var nErrorCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nErrorCount < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nErrorCount);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nErrorCount);
                 if (nErrorCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.PASSWORDERRORCOUNT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.PASSWORDERRORCOUNT);
                     return;
                 }
             }
@@ -570,25 +562,25 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.PwdFailCount == nErrorCount)
+                    if (playerActor.PwdFailCount == nErrorCount)
                     {
                         success = true;
                     }
                     break;
                 case '>':
-                    if (playObject.PwdFailCount > nErrorCount)
+                    if (playerActor.PwdFailCount > nErrorCount)
                     {
                         success = true;
                     }
                     break;
                 case '<':
-                    if (playObject.PwdFailCount < nErrorCount)
+                    if (playerActor.PwdFailCount < nErrorCount)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.PwdFailCount >= nErrorCount)
+                    if (playerActor.PwdFailCount >= nErrorCount)
                     {
                         success = true;
                     }
@@ -596,39 +588,39 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfIsLockPassword(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfIsLockPassword(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
-            success = playObject.IsPasswordLocked;
+            success = playerActor.IsPasswordLocked;
         }
 
-        private void ConditionOfIsLockStorage(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfIsLockStorage(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
-            success = !playObject.IsCanGetBackItem;
+            success = !playerActor.IsCanGetBackItem;
         }
 
-        private void ConditionOfCheckPayMent(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckPayMent(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             var payMent = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
             if (payMent < 1)
             {
-                GetVarValue(playObject, questConditionInfo.sParam1, ref payMent);
+                GetVarValue(playerActor,questConditionInfo.sParam1, ref payMent);
                 if (payMent < 1)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKPAYMENT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKPAYMENT);
                     return;
                 }
             }
-            if (playObject.PayMent == payMent)
+            if (playerActor.PayMent == payMent)
             {
                 success = true;
             }
         }
 
-        private void ConditionOfCheckNameDateList(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckNameDateList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             StringList loadList;
@@ -647,10 +639,10 @@ namespace ScriptEngine.Processings
             var cMethod = questConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKNAMEDATELIST);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKNAMEDATELIST);
                 return;
             }
-            var sListFileName = M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
             if (File.Exists(sListFileName))
             {
                 loadList = new StringList();
@@ -660,14 +652,14 @@ namespace ScriptEngine.Processings
                 }
                 catch
                 {
-                    M2Share.Logger.Error("loading fail.... => " + sListFileName);
+                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
                     sLineText = loadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\09" });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\09" });
-                    if (string.Compare(sHumName, playObject.ChrName, StringComparison.Ordinal) == 0 ||
+                    if (string.Compare(sHumName, playerActor.ChrName, StringComparison.Ordinal) == 0 ||
                         boNoCompareHumanName)
                     {
                         nDay = int.MaxValue;
@@ -704,34 +696,34 @@ namespace ScriptEngine.Processings
                                 }
                                 break;
                         }
-                        varInfo = GetVarValue(playObject, questConditionInfo.sParam4, ref sVar, ref sValue, ref nValue);
+                        varInfo = GetVarValue(playerActor,questConditionInfo.sParam4, ref sVar, ref sValue, ref nValue);
                         switch (varInfo.VarAttr)
                         {
                             case VarAttr.aNone:
                             case VarAttr.aConst:
-                                ScriptConditionError(playObject, questConditionInfo,
+                                ScriptConditionError(playerActor,questConditionInfo,
                                     ConditionCode.CHECKNAMEDATELIST);
                                 break;
                             case VarAttr.aFixStr:
-                                SetValNameValue(playObject, sVar, sValue, nDay);
+                                SetValNameValue(playerActor,sVar, sValue, nDay);
                                 break;
                             case VarAttr.aDynamic:
-                                SetDynamicValue(playObject, sVar, sValue, nDay);
+                                SetDynamicValue(playerActor,sVar, sValue, nDay);
                                 break;
                         }
-                        varInfo = GetVarValue(playObject, questConditionInfo.sParam5, ref sVar, ref sValue, ref nValue);
+                        varInfo = GetVarValue(playerActor,questConditionInfo.sParam5, ref sVar, ref sValue, ref nValue);
                         switch (varInfo.VarAttr)
                         {
                             case VarAttr.aNone:
                             case VarAttr.aConst:
-                                ScriptConditionError(playObject, questConditionInfo,
+                                ScriptConditionError(playerActor,questConditionInfo,
                                     ConditionCode.CHECKNAMEDATELIST);
                                 break;
                             case VarAttr.aFixStr:
-                                SetValNameValue(playObject, sVar, sValue, nDayCount - nDay);
+                                SetValNameValue(playerActor,sVar, sValue, nDayCount - nDay);
                                 break;
                             case VarAttr.aDynamic:
-                                SetDynamicValue(playObject, sVar, sValue, nDayCount - nDay);
+                                SetDynamicValue(playerActor,sVar, sValue, nDayCount - nDay);
                                 break;
                         }
                         if (!success)
@@ -745,7 +737,7 @@ namespace ScriptEngine.Processings
                                 }
                                 catch
                                 {
-                                    M2Share.Logger.Error("Save fail.... => " + sListFileName);
+                                    SystemShare.Logger.Error("Save fail.... => " + sListFileName);
                                 }
                             }
                         }
@@ -756,11 +748,11 @@ namespace ScriptEngine.Processings
             }
             else
             {
-                M2Share.Logger.Error("file not found => " + sListFileName);
+                SystemShare.Logger.Error("file not found => " + sListFileName);
             }
         }
 
-        private void ConditionOfCheckGuildNameDateList(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckGuildNameDateList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             StringList loadList;
@@ -778,7 +770,7 @@ namespace ScriptEngine.Processings
             int nValue = 0;
             VarInfo varInfo;
             success = false;
-            if (playObject.MyGuild != null)
+            if (playerActor.MyGuild != null)
             {
                 nDayCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
                 boDeleteExprie = string.Compare(questConditionInfo.sParam6, "清理", StringComparison.Ordinal) == 0;
@@ -786,10 +778,10 @@ namespace ScriptEngine.Processings
                 cMethod = questConditionInfo.sParam2[1];
                 if (nDayCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKGUILDNAMEDATELIST);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKGUILDNAMEDATELIST);
                     return;
                 }
-                sListFileName = M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1);
+                sListFileName = SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
                 if (File.Exists(sListFileName))
                 {
                     loadList = new StringList();
@@ -799,14 +791,14 @@ namespace ScriptEngine.Processings
                     }
                     catch
                     {
-                        M2Share.Logger.Error("loading fail.... => " + sListFileName);
+                        SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                     }
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         sLineText = loadList[i].Trim();
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sHumName, new string[] { " ", "\09" });
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sDate, new string[] { " ", "\09" });
-                        if (string.Compare(sHumName, playObject.MyGuild.GuildName, StringComparison.Ordinal) == 0 ||
+                        if (string.Compare(sHumName, playerActor.MyGuild.GuildName, StringComparison.Ordinal) == 0 ||
                             boNoCompareHumanName)
                         {
                             nDay = int.MaxValue;
@@ -846,41 +838,41 @@ namespace ScriptEngine.Processings
                             }
                             if (questConditionInfo.sParam4 != "")
                             {
-                                varInfo = GetVarValue(playObject, questConditionInfo.sParam4, ref sVar, ref sValue, ref nValue);
+                                varInfo = GetVarValue(playerActor,questConditionInfo.sParam4, ref sVar, ref sValue, ref nValue);
                                 switch (varInfo.VarAttr)
                                 {
                                     case VarAttr.aNone:
                                     case VarAttr.aConst:
-                                        ScriptConditionError(playObject, questConditionInfo,
+                                        ScriptConditionError(playerActor,questConditionInfo,
                                             ConditionCode.CHECKGUILDNAMEDATELIST);
                                         break;
 
                                     case VarAttr.aFixStr:
-                                        SetValNameValue(playObject, sVar, sValue, nDay);
+                                        SetValNameValue(playerActor,sVar, sValue, nDay);
                                         break;
 
                                     case VarAttr.aDynamic:
-                                        SetDynamicValue(playObject, sVar, sValue, nDay);
+                                        SetDynamicValue(playerActor,sVar, sValue, nDay);
                                         break;
                                 }
                             }
                             if (questConditionInfo.sParam5 != "")
                             {
-                                varInfo = GetVarValue(playObject, questConditionInfo.sParam5, ref sVar, ref sValue, ref nValue);
+                                varInfo = GetVarValue(playerActor,questConditionInfo.sParam5, ref sVar, ref sValue, ref nValue);
                                 switch (varInfo.VarAttr)
                                 {
                                     case VarAttr.aNone:
                                     case VarAttr.aConst:
-                                        ScriptConditionError(playObject, questConditionInfo,
+                                        ScriptConditionError(playerActor,questConditionInfo,
                                             ConditionCode.CHECKGUILDNAMEDATELIST);
                                         break;
 
                                     case VarAttr.aFixStr:
-                                        SetValNameValue(playObject, sVar, sValue, nDayCount - nDay);
+                                        SetValNameValue(playerActor,sVar, sValue, nDayCount - nDay);
                                         break;
 
                                     case VarAttr.aDynamic:
-                                        SetDynamicValue(playObject, sVar, sValue, nDayCount - nDay);
+                                        SetDynamicValue(playerActor,sVar, sValue, nDayCount - nDay);
                                         break;
                                 }
                             }
@@ -895,7 +887,7 @@ namespace ScriptEngine.Processings
                                     }
                                     catch
                                     {
-                                        M2Share.Logger.Error("Save fail.... => " + sListFileName);
+                                        SystemShare.Logger.Error("Save fail.... => " + sListFileName);
                                     }
                                 }
                             }
@@ -906,13 +898,13 @@ namespace ScriptEngine.Processings
                 }
                 else
                 {
-                    M2Share.Logger.Error("file not found => " + sListFileName);
+                    SystemShare.Logger.Error("file not found => " + sListFileName);
                 }
             }
         }
 
         // CHECKMAPHUMANCOUNT MAP = COUNT
-        private void ConditionOfCheckMapHumanCount(PlayObject baseObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckMapHumanCount(IPlayerActor baseObject, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
@@ -935,18 +927,18 @@ namespace ScriptEngine.Processings
                 }
             }
             var sMapName = questConditionInfo.sParam1;
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
-                envir = M2Share.MapMgr.FindMap(sMapName);
+                envir = SystemShare.MapMgr.FindMap(sMapName);
             }
             if (envir == null)
             {
                 ScriptConditionError(baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
                 return;
             }
-            var nHumanCount = M2Share.WorldEngine.GetMapHuman(envir.MapName);
+            var nHumanCount = SystemShare.WorldEngine.GetMapHuman(envir.MapName);
             var cMethod = questConditionInfo.sParam2[1];
             switch (cMethod)
             {
@@ -979,12 +971,12 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckMapMonCount(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMapMonCount(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             string sMapName = questConditionInfo.sParam1;
-            Envirnoment envir = M2Share.MapMgr.FindMap(sMapName);
+            IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
             if (baseObject.Race == ActorRace.Play)
             {
                 if (nCount < 0)
@@ -994,7 +986,7 @@ namespace ScriptEngine.Processings
                 if (envir == null)
                 {
                     GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
-                    envir = M2Share.MapMgr.FindMap(sMapName);
+                    envir = SystemShare.MapMgr.FindMap(sMapName);
                 }
             }
             if (nCount < 0 || envir == null)
@@ -1002,7 +994,7 @@ namespace ScriptEngine.Processings
                 ScriptConditionError(baseObject, questConditionInfo, ConditionCode.CHECKMAPMONCOUNT);
                 return;
             }
-            var nMonCount = M2Share.WorldEngine.GetMapMonster(envir, null);
+            var nMonCount = SystemShare.WorldEngine.GetMapMonster(envir, null);
             var cMethod = questConditionInfo.sParam2[1];
             switch (cMethod)
             {
@@ -1040,54 +1032,55 @@ namespace ScriptEngine.Processings
         /// 格式:ISONMAP 地图
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfIosnMap(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIosnMap(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string sMapName = string.Empty;
             if (questConditionInfo.sParam6 == "88")
             {
-                playObject = M2Share.WorldEngine.GetPlayObject(GetLineVariableText(playObject, questConditionInfo.sParam7));
-                if (playObject == null)
-                {
-                }
+                //playerActor = M2Share.WorldEngine.GetPlayObject(GetLineVariableText(playerActor, questConditionInfo.sParam7));
+                //if (playerActor == null)
+                //{
+
+                //}
             }
-            GetVarValue(playObject, questConditionInfo.sParam1, ref sMapName);
-            sMapName = GetLineVariableText(playObject, questConditionInfo.sParam1); // 地图支持变量
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            GetVarValue(playerActor, questConditionInfo.sParam1, ref sMapName);
+            sMapName = GetLineVariableText(playerActor, questConditionInfo.sParam1); // 地图支持变量
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.ISONMAP);
+                ScriptConditionError(playerActor, questConditionInfo, ConditionCode.ISONMAP);
             }
-            if (playObject.Envir == envir)
+            if (playerActor.Envir == envir)
             {
                 success = true;
             }
         }
 
-        private void ConditionOfCheckMonMapCount(PlayObject baseObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckMonMapCount(IPlayerActor baseObject, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
-            BaseObject aObject;
+            IActor aObject;
             string sMapName = questConditionInfo.sParam1;
             int nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nCount);
             }
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
-                envir = M2Share.MapMgr.FindMap(sMapName);
+                envir = SystemShare.MapMgr.FindMap(sMapName);
             }
             if (envir == null || nCount < 0)
             {
                 ScriptConditionError(baseObject, questConditionInfo, ConditionCode.CHECKMONMAP);
                 return;
             }
-            var monList = new List<BaseObject>();
-            int nMapRangeCount = M2Share.WorldEngine.GetMapMonster(envir, monList);
+            var monList = new List<IActor>();
+            int nMapRangeCount = SystemShare.WorldEngine.GetMapMonster(envir, monList);
             for (int i = monList.Count - 1; i >= 0; i--)
             {
                 if (monList.Count <= 0)
@@ -1110,10 +1103,10 @@ namespace ScriptEngine.Processings
             Dispose(monList);
         }
 
-        private void ConditionOfCheckRangeMonCount(PlayObject baseObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckRangeMonCount(IPlayerActor baseObject, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
-            BaseObject aObject;
+            IActor aObject;
             success = false;
             var sMapName = questConditionInfo.sParam1;
             var nX = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
@@ -1137,13 +1130,13 @@ namespace ScriptEngine.Processings
             {
                 GetVarValue(baseObject, questConditionInfo.sParam6, ref nCount);
             }
-            var envir = M2Share.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null || nX < 0 || nY < 0 || nRange < 0 || nCount < 0)
             {
                 ScriptConditionError(baseObject, questConditionInfo, ConditionCode.CHECKRANGEMONCOUNT);
                 return;
             }
-            var monList = new List<BaseObject >();
+            var monList = new List<IActor>();
             int nMapRangeCount = envir.GetRangeBaseObject(nX, nY, nRange, true, monList);
             for (int i = monList.Count - 1; i >= 0; i--)
             {
@@ -1191,7 +1184,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckRangeGroupCount(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckRangeGroupCount(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
@@ -1199,8 +1192,8 @@ namespace ScriptEngine.Processings
             int nCount;
             char cMethod = ' ';
             int nMapRangeCount;
-            var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(playObject.GroupOwner);
-            if (playObject.GroupOwner != 0 && groupOwnerPlay != null)
+            var groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(playerActor.GroupOwner);
+            if (playerActor.GroupOwner != 0 && groupOwnerPlay != null)
             {
                 nRange = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
                 if (questConditionInfo.sParam2 != "")
@@ -1210,25 +1203,25 @@ namespace ScriptEngine.Processings
                 nCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
                 if (nRange < 0)
                 {
-                    GetVarValue(playObject, questConditionInfo.sParam1, ref nRange);
+                    GetVarValue(playerActor,questConditionInfo.sParam1, ref nRange);
                 }
                 if (nCount < 0)
                 {
-                    GetVarValue(playObject, questConditionInfo.sParam3, ref nCount);
+                    GetVarValue(playerActor,questConditionInfo.sParam3, ref nCount);
                 }
                 if (nRange < 0 || nCount < 0 || cMethod == ' ')
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKRANGEROUPCOUNT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKRANGEROUPCOUNT);
                     return;
                 }
                 nMapRangeCount = 0;
                 for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 {
                     var groupHuman = groupOwnerPlay.GroupMembers[i];
-                    if (groupHuman.Envir == playObject.Envir)
+                    if (groupHuman.Envir == playerActor.Envir)
                     {
-                        if (Math.Abs(playObject.CurrX - groupHuman.CurrX) <= nRange &&
-                            Math.Abs(playObject.CurrY - groupHuman.CurrY) <= nRange)
+                        if (Math.Abs(playerActor.CurrX - groupHuman.CurrX) <= nRange &&
+                            Math.Abs(playerActor.CurrY - groupHuman.CurrY) <= nRange)
                         {
                             nMapRangeCount++;
                         }
@@ -1266,50 +1259,50 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckOnLinePlayCount(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckOnLinePlayCount(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             if (questConditionInfo.sParam1 == "" || questConditionInfo.sParam2 == "")
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKONLINEPLAYCOUNT);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKONLINEPLAYCOUNT);
                 return;
             }
             var cMethod = questConditionInfo.sParam1[0];
             var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nCount);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nCount);
             }
             if (nCount < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKONLINEPLAYCOUNT);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKONLINEPLAYCOUNT);
                 return;
             }
             switch (cMethod)
             {
                 case '=':
-                    if (M2Share.WorldEngine.PlayObjectCount == nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount == nCount)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (M2Share.WorldEngine.PlayObjectCount > nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount > nCount)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (M2Share.WorldEngine.PlayObjectCount < nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount < nCount)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (M2Share.WorldEngine.PlayObjectCount >= nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount >= nCount)
                     {
                         success = true;
                     }
@@ -1317,33 +1310,33 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private bool ConditionOfCheckItemBindUse(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private bool ConditionOfCheckItemBindUse(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             UserItem userItem = null;
             int nWhere = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
             if (nWhere < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam1, ref nWhere); // 增加变量支持
+                GetVarValue(playerActor,questConditionInfo.sParam1, ref nWhere); // 增加变量支持
             }
             if (nWhere < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKUSEITEMBIND);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKUSEITEMBIND);
                 return false;
             }
-            userItem = playObject.UseItems[nWhere];
-            var stdItem = ItemSystem.GetStdItem(userItem.Index);
+            userItem = playerActor.UseItems[nWhere];
+            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
-                playObject.SysMsg("你身上没有戴指定物品！！！", MsgColor.Red, MsgType.Hint);
+                playerActor.SysMsg("你身上没有戴指定物品！！！", MsgColor.Red, MsgType.Hint);
                 return false;
             }
-            return playObject.CheckItemBindUse(userItem);
+            return playerActor.CheckItemBindUse(userItem);
         }
 
         public bool ConditionOfCheckMemoryItemIsRememberItem(UserItem userItem)
         {
-            StdItem stdItem = ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem == null)
             {
                 return false;
@@ -1351,17 +1344,17 @@ namespace ScriptEngine.Processings
             return stdItem.StdMode == 31 && stdItem.AniCount != 0 && stdItem.Shape == 1;
         }
 
-        private void ConditionOfCheckReNewLevel(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckReNewLevel(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nLevel);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nLevel);
                 if (nLevel < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKLEVELEX);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKLEVELEX);
                     return;
                 }
             }
@@ -1369,27 +1362,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.ReLevel == nLevel)
+                    if (playerActor.ReLevel == nLevel)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.ReLevel > nLevel)
+                    if (playerActor.ReLevel > nLevel)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.ReLevel < nLevel)
+                    if (playerActor.ReLevel < nLevel)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.ReLevel >= nLevel)
+                    if (playerActor.ReLevel >= nLevel)
                     {
                         success = true;
                     }
@@ -1397,12 +1390,12 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckSlaveLevel(PlayObject baseObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckSlaveLevel(IPlayerActor baseObject, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             int nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
-            BaseObject aObject;
+            IActor aObject;
             if (!(nLevel >= 0 && nLevel <= 7))
             {
                 if (baseObject.Race == ActorRace.Play)
@@ -1455,11 +1448,11 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckSlaveRange(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckSlaveRange(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nSlavenRange;
-            BaseObject aObject;
+            IActor aObject;
             var sChrName = questConditionInfo.sParam1;
             var nRange = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             if (nRange < 0)
@@ -1526,7 +1519,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckVar(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckVar(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
@@ -1539,14 +1532,14 @@ namespace ScriptEngine.Processings
             var sVarValue = questConditionInfo.sParam4;
             if (sType == "" || sVarName == "" || sMethod == "")
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKVAR);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKVAR);
                 return;
             }
             var cMethod = sMethod[1];
-            Dictionary<string, DynamicVar> dynamicVarList = GeDynamicVarList(playObject, sType, ref sName);
+            Dictionary<string, DynamicVar> dynamicVarList = GeDynamicVarList(playerActor,sType, ref sName);
             if (dynamicVarList == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKVAR);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKVAR);
                 return;
             }
             else
@@ -1600,26 +1593,26 @@ namespace ScriptEngine.Processings
                 }
                 if (!boFoundVar)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKVAR);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKVAR);
                 }
             }
         }
 
-        private void ConditionOfHaveMaster(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfHaveMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
-            if (!string.IsNullOrEmpty(playObject.MasterName))
+            if (!string.IsNullOrEmpty(playerActor.MasterName))
             {
                 success = true;
             }
         }
 
-        private void ConditionOfPoseHaveMaster(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfPoseHaveMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
-            PlayObject poseHuman = (PlayObject)playObject.GetPoseCreate();
+            IPlayerActor poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman != null && poseHuman.Race == ActorRace.Play)
             {
                 if ((poseHuman).MasterName != "")
@@ -1629,45 +1622,45 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckCastleGold(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckCastleGold(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             var nGold = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nGold < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nGold);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nGold);
             }
-            if (nGold < 0 || playObject.Castle == null)
+            if (nGold < 0 || playerActor.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKCASTLEGOLD);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKCASTLEGOLD);
                 return;
             }
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.Castle.TotalGold == nGold)
+                    if (playerActor.Castle.TotalGold == nGold)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.Castle.TotalGold > nGold)
+                    if (playerActor.Castle.TotalGold > nGold)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.Castle.TotalGold < nGold)
+                    if (playerActor.Castle.TotalGold < nGold)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.Castle.TotalGold >= nGold)
+                    if (playerActor.Castle.TotalGold >= nGold)
                     {
                         success = true;
                     }
@@ -1675,17 +1668,17 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckContribution(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckContribution(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             var nContribution = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nContribution < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nContribution);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nContribution);
                 if (nContribution < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKCONTRIBUTION);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKCONTRIBUTION);
                     return;
                 }
             }
@@ -1693,27 +1686,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.Contribution == nContribution)
+                    if (playerActor.Contribution == nContribution)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.Contribution > nContribution)
+                    if (playerActor.Contribution > nContribution)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.Contribution < nContribution)
+                    if (playerActor.Contribution < nContribution)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.Contribution >= nContribution)
+                    if (playerActor.Contribution >= nContribution)
                     {
                         success = true;
                     }
@@ -1721,17 +1714,17 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckCreditPoint(PlayObject playObject, QuestConditionInfo questConditionInfo,
+        private void ConditionOfCheckCreditPoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo,
             ref bool success)
         {
             success = false;
             var nCreditPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCreditPoint < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nCreditPoint);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nCreditPoint);
                 if (nCreditPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKCREDITPOINT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKCREDITPOINT);
                     return;
                 }
             }
@@ -1739,27 +1732,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.CreditPoint == nCreditPoint)
+                    if (playerActor.CreditPoint == nCreditPoint)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.CreditPoint > nCreditPoint)
+                    if (playerActor.CreditPoint > nCreditPoint)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.CreditPoint < nCreditPoint)
+                    if (playerActor.CreditPoint < nCreditPoint)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.CreditPoint >= nCreditPoint)
+                    if (playerActor.CreditPoint >= nCreditPoint)
                     {
                         success = true;
                     }
@@ -1768,7 +1761,7 @@ namespace ScriptEngine.Processings
         }
 
 
-        private void ConditionOfCheckAccountIpList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckAccountIpList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             string sChrName;
             string sCharAccount;
@@ -1780,13 +1773,13 @@ namespace ScriptEngine.Processings
             StringList loadList = null;
             try
             {
-                sChrName = playObject.ChrName;
-                sCharAccount = playObject.UserAccount;
-                sCharIPaddr = playObject.LoginIpAddr;
-                if (File.Exists(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                sChrName = playerActor.ChrName;
+                sCharAccount = playerActor.UserAccount;
+                sCharIPaddr = playerActor.LoginIpAddr;
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
                     loadList = new StringList();
-                    loadList.LoadFromFile(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         sLine = loadList[i];
@@ -1805,7 +1798,7 @@ namespace ScriptEngine.Processings
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKACCOUNTIPLIST);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKACCOUNTIPLIST);
                 }
             }
             finally
@@ -1814,7 +1807,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckBagSize(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckBagSize(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nSize = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
@@ -1833,16 +1826,16 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckBonusPoint(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckBonusPoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nTotlePoint = playObject.BonusAbil.DC + playObject.BonusAbil.MC + playObject.BonusAbil.SC + playObject.BonusAbil.AC + playObject.BonusAbil.MAC + playObject.BonusAbil.HP + playObject.BonusAbil.MP + playObject.BonusAbil.Hit + playObject.BonusAbil.Speed;
-            nTotlePoint = nTotlePoint + playObject.BonusPoint;
+            var nTotlePoint = playerActor.BonusAbil.DC + playerActor.BonusAbil.MC + playerActor.BonusAbil.SC + playerActor.BonusAbil.AC + playerActor.BonusAbil.MAC + playerActor.BonusAbil.HP + playerActor.BonusAbil.MP + playerActor.BonusAbil.Hit + playerActor.BonusAbil.Speed;
+            nTotlePoint = nTotlePoint + playerActor.BonusPoint;
             var cMethod = questConditionInfo.sParam1[0];
             var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nCount);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nCount);
             }
             switch (cMethod)
             {
@@ -1875,7 +1868,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private bool ConditionOfCheckHP_CheckHigh(char cMethodMax, BaseObject baseObject, long nMax)
+        private bool ConditionOfCheckHP_CheckHigh(char cMethodMax, IActor baseObject, long nMax)
         {
             bool success = false;
             switch (cMethodMax)
@@ -1910,7 +1903,7 @@ namespace ScriptEngine.Processings
             return success;
         }
 
-        private void ConditionOfCheckHp(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckHp(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var cMethodMin = questConditionInfo.sParam1[0];
@@ -1961,7 +1954,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        public bool ConditionOfCheckMP_CheckHigh(char cMethodMax, BaseObject baseObject, long nMax)
+        public bool ConditionOfCheckMP_CheckHigh(char cMethodMax, IActor baseObject, long nMax)
         {
             var success = false;
             switch (cMethodMax)
@@ -1996,7 +1989,7 @@ namespace ScriptEngine.Processings
             return success;
         }
 
-        private void ConditionOfCheckMp(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMp(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var cMethodMin = questConditionInfo.sParam1[0];
@@ -2047,7 +2040,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private bool ConditionOfCheckDC_CheckHigh(char cMethodMax, BaseObject baseObject, long nMax)
+        private bool ConditionOfCheckDC_CheckHigh(char cMethodMax, IActor baseObject, long nMax)
         {
             bool success = false;
             switch (cMethodMax)
@@ -2080,7 +2073,7 @@ namespace ScriptEngine.Processings
             return success;
         }
 
-        private void ConditionOfCheckDc(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckDc(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var cMethodMin = questConditionInfo.sParam1[0];
@@ -2131,7 +2124,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckMC(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMC(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             char cMethodMin = questConditionInfo.sParam1[0];
@@ -2140,39 +2133,39 @@ namespace ScriptEngine.Processings
             int nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
             if ((nMin < 0) || (nMax < 0))
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKMC);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKMC);
                 return;
             }
             switch (cMethodMin)
             {
                 case '=':
-                    if (HUtil32.LoWord(playObject.WAbil.MC) == nMin)
+                    if (HUtil32.LoWord(playerActor.WAbil.MC) == nMin)
                     {
-                        success = ConditionOfCheckMC_CheckHigh(playObject, cMethodMax, nMax);
+                        success = ConditionOfCheckMC_CheckHigh(playerActor,cMethodMax, nMax);
                     }
                     break;
                 case '>':
-                    if (HUtil32.LoWord(playObject.WAbil.MC) > nMin)
+                    if (HUtil32.LoWord(playerActor.WAbil.MC) > nMin)
                     {
-                        success = ConditionOfCheckMC_CheckHigh(playObject, cMethodMax, nMax);
+                        success = ConditionOfCheckMC_CheckHigh(playerActor,cMethodMax, nMax);
                     }
                     break;
                 case '<':
-                    if (HUtil32.LoWord(playObject.WAbil.MC) < nMin)
+                    if (HUtil32.LoWord(playerActor.WAbil.MC) < nMin)
                     {
-                        success = ConditionOfCheckMC_CheckHigh(playObject, cMethodMax, nMax);
+                        success = ConditionOfCheckMC_CheckHigh(playerActor,cMethodMax, nMax);
                     }
                     break;
                 default:
-                    if (HUtil32.LoWord(playObject.WAbil.MC) >= nMin)
+                    if (HUtil32.LoWord(playerActor.WAbil.MC) >= nMin)
                     {
-                        success = ConditionOfCheckMC_CheckHigh(playObject, cMethodMax, nMax);
+                        success = ConditionOfCheckMC_CheckHigh(playerActor,cMethodMax, nMax);
                     }
                     break;
             }
         }
 
-        public bool ConditionOfCheckMC_CheckHigh(BaseObject baseObject, char cMethodMax, long nMax)
+        public bool ConditionOfCheckMC_CheckHigh(IActor baseObject, char cMethodMax, long nMax)
         {
             var success = false;
             switch (cMethodMax)
@@ -2207,7 +2200,7 @@ namespace ScriptEngine.Processings
             return success;
         }
 
-        private bool ConditionOfCheckSC_CheckHigh(char cMethodMax, BaseObject baseObject, long nMax)
+        private bool ConditionOfCheckSC_CheckHigh(char cMethodMax, IActor baseObject, long nMax)
         {
             var success = false;
             switch (cMethodMax)
@@ -2242,7 +2235,7 @@ namespace ScriptEngine.Processings
             return success;
         }
 
-        private void ConditionOfCheckSc(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckSc(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var cMethodMin = questConditionInfo.sParam1[0];
@@ -2293,7 +2286,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckExp(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckExp(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var dwExp = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
@@ -2338,24 +2331,24 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckFlourishPoint(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckFlourishPoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKFLOURISHPOINT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKFLOURISHPOINT);
                     return;
                 }
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            var guild = playObject.MyGuild;
+            var guild = playerActor.MyGuild;
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2388,20 +2381,20 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckChiefItemCount(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckChiefItemCount(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             long nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKFLOURISHPOINT);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKFLOURISHPOINT);
                 return;
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            GuildInfo guild = playObject.MyGuild;
+            IGuild guild = playerActor.MyGuild;
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2434,24 +2427,24 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckGuildAuraePoint(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGuildAuraePoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKAURAEPOINT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKAURAEPOINT);
                     return;
                 }
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            var guild = playObject.MyGuild;
+            var guild = playerActor.MyGuild;
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2484,24 +2477,24 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckGuildBuildPoint(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGuildBuildPoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKBUILDPOINT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKBUILDPOINT);
                     return;
                 }
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            var guild = playObject.MyGuild;
+            var guild = playerActor.MyGuild;
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2534,24 +2527,24 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckStabilityPoint(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckStabilityPoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nPoint);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nPoint);
                 if (nPoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKSTABILITYPOINT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKSTABILITYPOINT);
                     return;
                 }
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            var guild = playObject.MyGuild;
+            var guild = playerActor.MyGuild;
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2584,16 +2577,16 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckGameGold(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGameGold(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nGameGold = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nGameGold);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nGameGold);
                 if (nGameGold < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKGAMEGOLD);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKGAMEGOLD);
                     return;
                 }
             }
@@ -2601,27 +2594,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.GameGold == nGameGold)
+                    if (playerActor.GameGold == nGameGold)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.GameGold > nGameGold)
+                    if (playerActor.GameGold > nGameGold)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.GameGold < nGameGold)
+                    if (playerActor.GameGold < nGameGold)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.GameGold >= nGameGold)
+                    if (playerActor.GameGold >= nGameGold)
                     {
                         success = true;
                     }
@@ -2629,16 +2622,16 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckGamePoint(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGamePoint(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nGamePoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nGamePoint);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nGamePoint);
                 if (nGamePoint < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKGAMEPOINT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKGAMEPOINT);
                     return;
                 }
             }
@@ -2646,27 +2639,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.GamePoint == nGamePoint)
+                    if (playerActor.GamePoint == nGamePoint)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.GamePoint > nGamePoint)
+                    if (playerActor.GamePoint > nGamePoint)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.GamePoint < nGamePoint)
+                    if (playerActor.GamePoint < nGamePoint)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.GamePoint >= nGamePoint)
+                    if (playerActor.GamePoint >= nGamePoint)
                     {
                         success = true;
                     }
@@ -2677,79 +2670,79 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查组队成员数
         /// </summary>
-        private void ConditionOfCheckGroupCount(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGroupCount(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (playObject.GroupOwner == 0)
+            if (playerActor.GroupOwner == 0)
             {
                 return;
             }
             var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nCount);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nCount);
                 if (nCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKGROUPCOUNT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKGROUPCOUNT);
                     return;
                 }
             }
             var cMethod = questConditionInfo.sParam1[0];
-            var groupOwner = (PlayObject)M2Share.ActorMgr.Get(playObject.GroupOwner);
-            switch (cMethod)
-            {
-                case '=':
-                    if (groupOwner.GroupMembers.Count == nCount)
-                    {
-                        success = true;
-                    }
-                    break;
+            //var groupOwner = (IPlayerActor)M2Share.ActorMgr.Get(playerActor.GroupOwner);
+            //switch (cMethod)
+            //{
+            //    case '=':
+            //        if (groupOwner.GroupMembers.Count == nCount)
+            //        {
+            //            success = true;
+            //        }
+            //        break;
 
-                case '>':
-                    if (groupOwner.GroupMembers.Count > nCount)
-                    {
-                        success = true;
-                    }
-                    break;
+            //    case '>':
+            //        if (groupOwner.GroupMembers.Count > nCount)
+            //        {
+            //            success = true;
+            //        }
+            //        break;
 
-                case '<':
-                    if (groupOwner.GroupMembers.Count < nCount)
-                    {
-                        success = true;
-                    }
-                    break;
-                default:
-                    if (groupOwner.GroupMembers.Count >= nCount)
-                    {
-                        success = true;
-                    }
-                    break;
-            }
+            //    case '<':
+            //        if (groupOwner.GroupMembers.Count < nCount)
+            //        {
+            //            success = true;
+            //        }
+            //        break;
+            //    default:
+            //        if (groupOwner.GroupMembers.Count >= nCount)
+            //        {
+            //            success = true;
+            //        }
+            //        break;
+            //}
         }
 
         /// <summary>
         /// 是否加入行会
         /// </summary>
-        private void ConditionOfCheckHaveGuild(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckHaveGuild(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = playObject.MyGuild != null;
+            success = playerActor.MyGuild != null;
         }
 
         /// <summary>
         /// 是否为攻城方
         /// </summary>
-        private void ConditionOfCheckIsAttackGuild(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsAttackGuild(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            if (playObject.Castle == null)
+            if (playerActor.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.ISATTACKGUILD);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.ISATTACKGUILD);
                 return;
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            success = playObject.Castle.IsAttackGuild(playObject.MyGuild);
+            success = playerActor.Castle.IsAttackGuild(playerActor.MyGuild);
         }
 
         /// <summary>
@@ -2757,20 +2750,20 @@ namespace ScriptEngine.Processings
         /// 格式：CASTLECHANGEDAY 空字符（>） (天数)7 
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckCastleChageDay(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckCastleChageDay(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nDay < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nDay);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nDay);
             }
-            if (nDay < 0 || playObject.Castle == null)
+            if (nDay < 0 || playerActor.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CASTLECHANGEDAY);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CASTLECHANGEDAY);
                 return;
             }
-            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, playObject.Castle.ChangeDate);
+            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, playerActor.Castle.ChangeDate);
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2807,20 +2800,20 @@ namespace ScriptEngine.Processings
         /// 检查上次攻城到现在的天数
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckCastleWarDay(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckCastleWarDay(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nDay < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nDay);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nDay);
             }
-            if (nDay < 0 || playObject.Castle == null)
+            if (nDay < 0 || playerActor.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CASTLEWARDAY);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CASTLEWARDAY);
                 return;
             }
-            var nWarDay = HUtil32.GetDayCount(DateTime.Now, playObject.Castle.WarDate);
+            var nWarDay = HUtil32.GetDayCount(DateTime.Now, playerActor.Castle.WarDate);
             var cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
@@ -2855,13 +2848,13 @@ namespace ScriptEngine.Processings
         /// 检查沙巴克城门状态
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckCastleDoorStatus(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckCastleDoorStatus(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nDay < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nDay);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nDay);
             }
             var nDoorStatus = -1;
             if (string.Compare(questConditionInfo.sParam1, "损坏", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2876,129 +2869,131 @@ namespace ScriptEngine.Processings
             {
                 nDoorStatus = 2;
             }
-            if (nDay < 0 || playObject.Castle == null || nDoorStatus < 0)
+            if (nDay < 0 || playerActor.Castle == null || nDoorStatus < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKCASTLEDOOR);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKCASTLEDOOR);
                 return;
             }
-            CastleDoor castleDoor = (CastleDoor)playObject.Castle.MainDoor.BaseObject;
-            switch (nDoorStatus)
-            {
-                case 0:
-                    if (castleDoor.Death)
-                    {
-                        success = true;
-                    }
-                    break;
-                case 1:
-                    if (castleDoor.IsOpened)
-                    {
-                        success = true;
-                    }
-                    break;
-                case 2:
-                    if (!castleDoor.IsOpened)
-                    {
-                        success = true;
-                    }
-                    break;
-            }
+            //CastleDoor castleDoor = (CastleDoor)playerActor.Castle.MainDoor.BaseObject;
+            //switch (nDoorStatus)
+            //{
+            //    case 0:
+            //        if (castleDoor.Death)
+            //        {
+            //            success = true;
+            //        }
+            //        break;
+            //    case 1:
+            //        if (castleDoor.IsOpened)
+            //        {
+            //            success = true;
+            //        }
+            //        break;
+            //    case 2:
+            //        if (!castleDoor.IsOpened)
+            //        {
+            //            success = true;
+            //        }
+            //        break;
+            //}
         }
 
-        private void ConditionOfCheckIsAttackAllyGuild(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsAttackAllyGuild(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (playObject.Castle == null)
+            if (playerActor.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.ISATTACKALLYGUILD);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.ISATTACKALLYGUILD);
                 return;
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            success = playObject.Castle.IsAttackAllyGuild(playObject.MyGuild);
+            success = playerActor.Castle.IsAttackAllyGuild(playerActor.MyGuild);
         }
 
         /// <summary>
         /// 检查当前行会是否为守城方联盟行会
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckIsDefenseAllyGuild(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsDefenseAllyGuild(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (playObject.Castle == null)
+            if (playerActor.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.ISDEFENSEALLYGUILD);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.ISDEFENSEALLYGUILD);
                 return;
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            success = playObject.Castle.IsDefenseAllyGuild(playObject.MyGuild);
+            success = playerActor.Castle.IsDefenseAllyGuild(playerActor.MyGuild);
         }
 
         /// <summary>
         /// 检查当前行会是否为守城方行会
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckIsDefenseGuild(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsDefenseGuild(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (playObject.Castle == null)
+            if (playerActor.Castle == null)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.ISDEFENSEGUILD);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.ISDEFENSEGUILD);
                 return;
             }
-            if (playObject.MyGuild == null)
+            if (playerActor.MyGuild == null)
             {
                 return;
             }
-            success = playObject.Castle.IsDefenseGuild(playObject.MyGuild);
+            success = playerActor.Castle.IsDefenseGuild(playerActor.MyGuild);
         }
 
         /// <summary>
         /// 检查当前行会是否属于沙巴克
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckIsCastleaGuild(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsCastleaGuild(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = M2Share.CastleMgr.IsCastleMember != null;
+            success = false;
+            //success = M2Share.CastleMgr.IsCastleMember != null;
         }
 
         /// <summary>
         /// 检查玩家是否是沙巴克城主
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckIsCastleMaster(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsCastleMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = playObject.IsGuildMaster() && M2Share.CastleMgr.IsCastleMember != null;
+            success = false;
+            //success = playerActor.IsGuildMaster() && M2Share.CastleMgr.IsCastleMember != null;
         }
 
         /// <summary>
         /// 检查玩家是否是行会掌门人
         /// </summary>
         /// <returns></returns>
-        private void ConditionOfCheckIsGuildMaster(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsGuildMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = playObject.IsGuildMaster();
+            success = playerActor.IsGuildMaster();
         }
 
         /// <summary>
         /// 检查玩家是否是别人师傅
         /// </summary>
-        private void ConditionOfCheckIsMaster(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIsMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = !string.IsNullOrEmpty(playObject.MasterName) && playObject.IsMaster;
+            success = !string.IsNullOrEmpty(playerActor.MasterName) && playerActor.IsMaster;
         }
 
-        private void ConditionOfCheckListCount(BaseObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckListCount(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
         }
 
-        private void ConditionOfCheckItemType(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckItemType(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nWhere = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
@@ -3021,14 +3016,14 @@ namespace ScriptEngine.Processings
             {
                 success = false;
             }
-            var stdItem = ItemSystem.GetStdItem(userItem.Index);
+            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null && stdItem.StdMode == nType)
             {
                 success = true;
             }
         }
 
-        private void ConditionOfCheckLevelEx(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckLevelEx(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
@@ -3073,14 +3068,14 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckBagItemInList(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckBagItemInList(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string sLineText;
             string sVar = string.Empty;
             string sValue = string.Empty;
             int nValue = 0;
-            var sListFileName = M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
             var nItemCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             var loadList = new StringList();
             if (File.Exists(sListFileName))
@@ -3091,12 +3086,12 @@ namespace ScriptEngine.Processings
                 }
                 catch
                 {
-                    M2Share.Logger.Error("loading fail.... => " + sListFileName);
+                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
             }
             else
             {
-                M2Share.Logger.Info("file not found => " + sListFileName);
+                SystemShare.Logger.Info("file not found => " + sListFileName);
             }
             if (nItemCount < 0 && baseObject.Race == ActorRace.Play)
             {
@@ -3122,7 +3117,7 @@ namespace ScriptEngine.Processings
                 for (int j = 0; j < baseObject.ItemList.Count; j++)
                 {
                     var userItem = baseObject.ItemList[j];
-                    if (string.Compare(ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.Ordinal) == 0)
+                    if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.Ordinal) == 0)
                     {
                         nItemCount -= 1;
                         if (nItemCount <= 0)
@@ -3160,25 +3155,25 @@ namespace ScriptEngine.Processings
             Dispose(loadList);
         }
 
-        private void ConditionOfCheckMarry(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMarry(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (!string.IsNullOrEmpty(playObject.DearName))
+            if (!string.IsNullOrEmpty(playerActor.DearName))
             {
                 success = true;
             }
         }
 
-        private void ConditionOfCheckMarryCount(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMarryCount(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nCount);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nCount);
                 if (nCount < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKMARRYCOUNT);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKMARRYCOUNT);
                     return;
                 }
             }
@@ -3186,27 +3181,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.MarryCount == nCount)
+                    if (playerActor.MarryCount == nCount)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.MarryCount > nCount)
+                    if (playerActor.MarryCount > nCount)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.MarryCount < nCount)
+                    if (playerActor.MarryCount < nCount)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.MarryCount >= nCount)
+                    if (playerActor.MarryCount >= nCount)
                     {
                         success = true;
                     }
@@ -3214,21 +3209,21 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckMaster(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = !string.IsNullOrEmpty(playObject.MasterName) && !playObject.IsMaster;
+            success = !string.IsNullOrEmpty(playerActor.MasterName) && !playerActor.IsMaster;
         }
 
-        private void ConditionOfCheckMemBerLevel(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMemBerLevel(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nLevel);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nLevel);
                 if (nLevel < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKMEMBERLEVEL);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKMEMBERLEVEL);
                     return;
                 }
             }
@@ -3236,27 +3231,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.MemberLevel == nLevel)
+                    if (playerActor.MemberLevel == nLevel)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.MemberLevel > nLevel)
+                    if (playerActor.MemberLevel > nLevel)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.MemberLevel < nLevel)
+                    if (playerActor.MemberLevel < nLevel)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.MemberLevel >= nLevel)
+                    if (playerActor.MemberLevel >= nLevel)
                     {
                         success = true;
                     }
@@ -3264,16 +3259,16 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckMemberType(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMemberType(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nType = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nType < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam2, ref nType);
+                GetVarValue(playerActor,questConditionInfo.sParam2, ref nType);
                 if (nType < 0)
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKMEMBERTYPE);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKMEMBERTYPE);
                     return;
                 }
             }
@@ -3281,27 +3276,27 @@ namespace ScriptEngine.Processings
             switch (cMethod)
             {
                 case '=':
-                    if (playObject.MemberType == nType)
+                    if (playerActor.MemberType == nType)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (playObject.MemberType > nType)
+                    if (playerActor.MemberType > nType)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (playObject.MemberType < nType)
+                    if (playerActor.MemberType < nType)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (playObject.MemberType >= nType)
+                    if (playerActor.MemberType >= nType)
                     {
                         success = true;
                     }
@@ -3309,18 +3304,18 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckNameIpList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckNameIpList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string sName = string.Empty;
             var loadList = new StringList();
             try
             {
-                var sChrName = playObject.ChrName;
-                var sCharIPaddr = playObject.LoginIpAddr;
-                if (File.Exists(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                var sChrName = playerActor.ChrName;
+                var sCharIPaddr = playerActor.LoginIpAddr;
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
-                    loadList.LoadFromFile(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         var sLine = loadList[i];
@@ -3339,7 +3334,7 @@ namespace ScriptEngine.Processings
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKNAMEIPLIST);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKNAMEIPLIST);
                 }
             }
             finally
@@ -3348,10 +3343,10 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPoseDir(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPoseDir(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            PlayObject poseHuman = (PlayObject)baseObject.GetPoseCreate();
+            IPlayerActor poseHuman = (IPlayerActor)baseObject.GetPoseCreate();
             if (poseHuman != null && poseHuman.GetPoseCreate() == baseObject)
             {
                 switch (questConditionInfo.nParam1)
@@ -3375,7 +3370,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPoseGender(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPoseGender(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             byte btSex = 0;
@@ -3395,7 +3390,7 @@ namespace ScriptEngine.Processings
             {
                 btSex = 1;
             }
-            var poseHuman = (PlayObject)baseObject.GetPoseCreate();
+            var poseHuman = (IPlayerActor)baseObject.GetPoseCreate();
             if (poseHuman != null)
             {
                 if (poseHuman.Gender == (PlayGender)btSex)
@@ -3405,10 +3400,10 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPoseIsMaster(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPoseIsMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            PlayObject poseHuman = (PlayObject)playObject.GetPoseCreate();
+            IPlayerActor poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman != null && poseHuman.Race == ActorRace.Play)
             {
                 if ((poseHuman).MasterName != "" && (poseHuman).IsMaster)
@@ -3418,7 +3413,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPoseLevel(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPoseLevel(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
@@ -3440,7 +3435,7 @@ namespace ScriptEngine.Processings
                 }
             }
             var cMethod = questConditionInfo.sParam1[0];
-            BaseObject poseHuman = baseObject.GetPoseCreate();
+            IActor poseHuman = baseObject.GetPoseCreate();
             if (poseHuman != null)
             {
                 switch (cMethod)
@@ -3475,10 +3470,10 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPoseMarry(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPoseMarry(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            PlayObject poseHuman = (PlayObject)playObject.GetPoseCreate();
+            IPlayerActor poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman != null && poseHuman.Race == ActorRace.Play)
             {
                 if ((poseHuman).DearName != "")
@@ -3488,10 +3483,10 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckPoseMaster(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPoseMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            PlayObject poseHuman = (PlayObject)playObject.GetPoseCreate();
+            IPlayerActor poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman != null && poseHuman.Race == ActorRace.Play)
             {
                 if ((poseHuman).MasterName != "" && !(poseHuman).IsMaster)
@@ -3501,16 +3496,16 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckServerName(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckServerName(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (questConditionInfo.sParam1 == M2Share.Config.ServerName)
+            if (questConditionInfo.sParam1 == SystemShare.Config.ServerName)
             {
                 success = true;
             }
         }
 
-        private void ConditionOfCheckSlaveCount(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckSlaveCount(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
@@ -3569,17 +3564,17 @@ namespace ScriptEngine.Processings
         /// <param name="baseObject"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckSafeZone(BaseObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckSafeZone(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = baseObject.InSafeZone();
         }
 
-        private void ConditionOfCheckMapName(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckMapName(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var sChrName = baseObject.ChrName;
             var sMapName = questConditionInfo.sParam1;
-            if (M2Share.MapMgr.FindMap(sMapName) == null)
+            if (SystemShare.MapMgr.FindMap(sMapName) == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
             }
@@ -3589,7 +3584,7 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfCheckSkill(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckSkill(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var nSkillLevel = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
@@ -3645,29 +3640,29 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfAnsiContainsText(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfAnsiContainsText(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var sValue1 = questConditionInfo.sParam1;
             var sValue2 = questConditionInfo.sParam2;
-            sValue1 = GetLineVariableText(playObject, questConditionInfo.sParam1);
-            sValue2 = GetLineVariableText(playObject, questConditionInfo.sParam2);
-            GetVarValue(playObject, sValue1, ref sValue1);
-            GetVarValue(playObject, sValue2, ref sValue2);
+            sValue1 = GetLineVariableText(playerActor,questConditionInfo.sParam1);
+            sValue2 = GetLineVariableText(playerActor,questConditionInfo.sParam2);
+            GetVarValue(playerActor,sValue1, ref sValue1);
+            GetVarValue(playerActor,sValue2, ref sValue2);
             success = sValue1.IndexOf(sValue2, StringComparison.OrdinalIgnoreCase) != -1;
         }
 
-        private void ConditionOfCompareText(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCompareText(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var sValue1 = GetLineVariableText(playObject, questConditionInfo.sParam1);
-            var sValue2 = GetLineVariableText(playObject, questConditionInfo.sParam2);
-            GetVarValue(playObject, sValue1, ref sValue1);
-            GetVarValue(playObject, sValue2, ref sValue2);
+            var sValue1 = GetLineVariableText(playerActor,questConditionInfo.sParam1);
+            var sValue2 = GetLineVariableText(playerActor,questConditionInfo.sParam2);
+            GetVarValue(playerActor,sValue1, ref sValue1);
+            GetVarValue(playerActor,sValue2, ref sValue2);
             success = string.Compare(sValue1, sValue2, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
-        private void ConditionOfCheckPkPoint(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckPkPoint(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             var pvpPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
@@ -3712,48 +3707,48 @@ namespace ScriptEngine.Processings
             }
         }
 
-        private void ConditionOfIsUnderWar(BaseObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIsUnderWar(IActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            UserCastle userCastle;
-            string sCastleName = questConditionInfo.sParam1;
-            if (sCastleName != "")
-            {
-                HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-                try
-                {
-                    for (int i = 0; i < M2Share.CastleMgr.CastleList.Count; i++)
-                    {
-                        userCastle = M2Share.CastleMgr.CastleList[i];
-                        if (string.Compare(userCastle.sName, sCastleName, StringComparison.Ordinal) == 0)
-                        {
-                            success = userCastle.UnderWar;
-                            break;
-                        }
-                    }
-                }
-                finally
-                {
-                    HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
-                }
-            }
+            //UserCastle userCastle;
+            //string sCastleName = questConditionInfo.sParam1;
+            //if (sCastleName != "")
+            //{
+            //    HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+            //    try
+            //    {
+            //        for (int i = 0; i < M2Share.CastleMgr.CastleList.Count; i++)
+            //        {
+            //            userCastle = M2Share.CastleMgr.CastleList[i];
+            //            if (string.Compare(userCastle.sName, sCastleName, StringComparison.Ordinal) == 0)
+            //            {
+            //                success = userCastle.UnderWar;
+            //                break;
+            //            }
+            //        }
+            //    }
+            //    finally
+            //    {
+            //        HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+            //    }
+            //}
         }
 
-        private void ConditionOfInCastleWarArea(BaseObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfInCastleWarArea(IActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
-            try
-            {
-                success = M2Share.CastleMgr.InCastleWarArea(baseObject.Envir, baseObject.CurrX, baseObject.CurrY) != null;
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
-            }
+            //HUtil32.EnterCriticalSection(M2Share.ProcessMsgCriticalSection);
+            //try
+            //{
+            //    success = M2Share.CastleMgr.InCastleWarArea(baseObject.Envir, baseObject.CurrX, baseObject.CurrY) != null;
+            //}
+            //finally
+            //{
+            //    HUtil32.LeaveCriticalSection(M2Share.ProcessMsgCriticalSection);
+            //}
         }
 
-        private void ConditionOfCheckInCurrRect(PlayObject baseObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckInCurrRect(IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nX = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
@@ -3795,38 +3790,38 @@ namespace ScriptEngine.Processings
             //success = baseObject.CurrX >= currRect.Left && baseObject.CurrY >= currRect.Top && baseObject.CurrX <= currRect.Right && baseObject.CurrY <= currRect.Bottom;
         }
 
-        private void ConditionOfCheckGuildMember(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGuildMember(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (playObject.MyGuild != null)
+            if (playerActor.MyGuild != null)
             {
                 var sChrName = questConditionInfo.sParam1;
-                sChrName = GetLineVariableText(playObject, sChrName);
-                GetVarValue(playObject, sChrName, ref sChrName);
-                success = playObject.MyGuild.IsMember(sChrName);
+                sChrName = GetLineVariableText(playerActor,sChrName);
+                GetVarValue(playerActor,sChrName, ref sChrName);
+                success = playerActor.MyGuild.IsMember(sChrName);
             }
         }
 
-        private void ConditionOfIndexOf(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIndexOf(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string sVar = string.Empty;
             string sValue = string.Empty;
             int nValue = 0;
             var nPostion = -1;
-            GetVarValue(playObject, questConditionInfo.sParam2, ref sValue);
+            GetVarValue(playerActor,questConditionInfo.sParam2, ref sValue);
             var loadList = new StringList();
             try
             {
-                if (File.Exists(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
-                    loadList.LoadFromFile(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     nPostion = loadList.IndexOf(sValue);
                     success = nPostion >= 0;
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.INDEXOF);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.INDEXOF);
                 }
             }
             finally
@@ -3835,39 +3830,39 @@ namespace ScriptEngine.Processings
             }
             if (questConditionInfo.sParam3 != "")
             {
-                var varInfo = GetVarValue(playObject, questConditionInfo.sParam3, ref sVar, ref sValue, ref nValue);
+                var varInfo = GetVarValue(playerActor,questConditionInfo.sParam3, ref sVar, ref sValue, ref nValue);
                 switch (varInfo.VarAttr)
                 {
                     case VarAttr.aNone:
                     case VarAttr.aConst:
-                        ScriptConditionError(playObject, questConditionInfo, ConditionCode.INDEXOF);
+                        ScriptConditionError(playerActor,questConditionInfo, ConditionCode.INDEXOF);
                         break;
                     case VarAttr.aFixStr:
-                        SetValNameValue(playObject, sVar, sValue, nPostion);
+                        SetValNameValue(playerActor,sVar, sValue, nPostion);
                         break;
                     case VarAttr.aDynamic:
-                        SetDynamicValue(playObject, sVar, sValue, nPostion);
+                        SetDynamicValue(playerActor,sVar, sValue, nPostion);
                         break;
                 }
             }
             else
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.INDEXOF);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.INDEXOF);
             }
         }
 
         /// <summary>
         /// 检查指定变量是否大于指定参数
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfLapge(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfLapge(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int n14 = 0;
             int n18 = 0;
-            if (CheckVarNameNo(playObject, questConditionInfo, n14, n18) && n14 > n18)
+            if (CheckVarNameNo(playerActor,questConditionInfo, n14, n18) && n14 > n18)
             {
                 success = true;
             }
@@ -3876,15 +3871,15 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查指定变量是否小于指定参数
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfSmall(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfSmall(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int n14 = 0;
             int n18 = 0;
-            if (CheckVarNameNo(playObject, questConditionInfo, n14, n18) && n14 < n18)
+            if (CheckVarNameNo(playerActor,questConditionInfo, n14, n18) && n14 < n18)
             {
                 success = true;
             }
@@ -3893,13 +3888,13 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家权限是否大于4
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfIssysop(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIssysop(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!(playObject.Permission >= 4))
+            if (!(playerActor.Permission >= 4))
             {
                 success = false;
             }
@@ -3908,13 +3903,13 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家权限是否大于6
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfIsAdmin(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIsAdmin(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!(playObject.Permission >= 6))
+            if (!(playerActor.Permission >= 6))
             {
                 success = false;
             }
@@ -3923,10 +3918,10 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查小时是否相等
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfHour(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfHour(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             if (questConditionInfo.nParam1 != 0 && questConditionInfo.nParam2 == 0)
@@ -3946,10 +3941,10 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查分钟是否相等
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfMin(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfMin(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             if (questConditionInfo.nParam1 != 0 && questConditionInfo.nParam2 == 0)
@@ -3969,10 +3964,10 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查日期是否相等
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfDayOfWeek(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfDayOfWeek(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, "SUN", 3))
@@ -4029,13 +4024,13 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查物品持久
         /// </summary>
-        private void ConditionOfCheckDura(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckDura(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             var n1C = 0;
             var nMaxDura = 0;
             var nDura = 0;
-            playObject.QuestCheckItem(questConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
+            playerActor.QuestCheckItem(questConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
             if (HUtil32.Round(nDura / 1000.0) < questConditionInfo.nParam2)
             {
                 success = false;
@@ -4045,18 +4040,18 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查游戏物品
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="playerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckItem(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckItem(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             var n1C = 0;
             var nMaxDura = 0;
             var nDura = 0;
             var s01 = questConditionInfo.sParam1;
-            GetVarValue(playObject, questConditionInfo.sParam1, ref s01);
-            playObject.QuestCheckItem(s01, ref n1C, ref nMaxDura, ref nDura);
+            GetVarValue(playerActor, questConditionInfo.sParam1, ref s01);
+            playerActor.QuestCheckItem(s01, ref n1C, ref nMaxDura, ref nDura);
             if (n1C < questConditionInfo.nParam2)
             {
                 success = false;
@@ -4066,29 +4061,29 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家职业
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckJob(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckJob(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sWarrior))
             {
-                if (playObject.Job != PlayJob.Warrior)
+                if (playerActor.Job != PlayJob.Warrior)
                 {
                     success = false;
                 }
             }
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sWizard))
             {
-                if (playObject.Job != PlayJob.Wizard)
+                if (playerActor.Job != PlayJob.Wizard)
                 {
                     success = false;
                 }
             }
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sTaos))
             {
-                if (playObject.Job != PlayJob.Taoist)
+                if (playerActor.Job != PlayJob.Taoist)
                 {
                     success = false;
                 }
@@ -4098,23 +4093,23 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家等级
         /// </summary>
-        /// <param name="playObject">玩家对象</param>
+        /// <param name="IPlayerActor">玩家对象</param>
         /// <param name="questConditionInfo">脚本参数</param>
         /// <param name="success">返回结果</param>
-        private void ConditionOfCheckLevel(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckLevel(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            if (playObject.Abil.Level < questConditionInfo.nParam1)
+            if (playerActor.Abil.Level < questConditionInfo.nParam1)
             {
                 success = false;
             }
         }
 
-        private void ConditionCheckUnit(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionCheckUnit(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
             var n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
-            var n10 = playObject.GetQuestUnitStatus(n14);
+            var n10 = playerActor.GetQuestUnitStatus(n14);
             if (n10 == 0)
             {
                 if (n18 != 0)
@@ -4134,57 +4129,57 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家性别
         /// </summary>
-        /// <param name="playObject">玩家对象</param>
+        /// <param name="IPlayerActor">玩家对象</param>
         /// <param name="questConditionInfo">脚本参数</param>
         /// <param name="success">返回结果</param>
-        private void ConditionOfGender(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfGender(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (playObject.Gender != PlayGender.Man)
+                if (playerActor.Gender != PlayGender.Man)
                 {
                     success = false;
                 }
             }
             else
             {
-                if (playObject.Gender != PlayGender.WoMan)
+                if (playerActor.Gender != PlayGender.WoMan)
                 {
                     success = false;
                 }
             }
         }
 
-        private void ConditionOfRandom(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfRandom(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (M2Share.RandomNumber.Random(questConditionInfo.nParam1) != 0)
+            if (SystemShare.RandomNumber.Random(questConditionInfo.nParam1) != 0)
             {
                 success = false;
             }
         }
 
-        private void ConditionOfCheckGold(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGold(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
             if (n14 < 0)
             {
-                GetVarValue(playObject, questConditionInfo.sParam1, ref n14);
+                GetVarValue(playerActor,questConditionInfo.sParam1, ref n14);
             }
-            if (playObject.Gold < n14)
+            if (playerActor.Gold < n14)
             {
                 success = false;
             }
         }
 
-        private void ConditionOfCheck(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheck(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
             var n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
-            var n10 = playObject.GetQuestFalgStatus(n14);
+            var n10 = playerActor.GetQuestFalgStatus(n14);
             if (n10 == 0)
             {
                 if (n18 != 0)
@@ -4204,21 +4199,21 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家是否是新玩家
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfIsNewHuman(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIsNewHuman(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            success = playObject.IsNewHuman;
+            success = playerActor.IsNewHuman;
         }
 
         /// <summary>
         /// 检查人物名字在文件中的位置
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckNameListPostion(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckNameListPostion(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string sChrName;
@@ -4230,11 +4225,11 @@ namespace ScriptEngine.Processings
             StringList loadList = null;
             try
             {
-                sChrName = playObject.ChrName;
-                if (File.Exists(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                sChrName = playerActor.ChrName;
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
                     loadList = new StringList();
-                    loadList.LoadFromFile(M2Share.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         string sLine = loadList[i].Trim();
@@ -4251,7 +4246,7 @@ namespace ScriptEngine.Processings
                 }
                 else
                 {
-                    ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKNAMELISTPOSITION);
+                    ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKNAMELISTPOSITION);
                 }
             }
             finally
@@ -4260,27 +4255,27 @@ namespace ScriptEngine.Processings
             }
             var cMethod = questConditionInfo.sParam2[1];
             long nPostion = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
-            if (questConditionInfo.sParam4 != "" && playObject.Race == ActorRace.Play)
+            if (questConditionInfo.sParam4 != "" && playerActor.Race == ActorRace.Play)
             {
-                varInfo = GetVarValue(playObject, questConditionInfo.sParam4, ref sVar, ref sValue, ref nValue);
+                varInfo = GetVarValue(playerActor,questConditionInfo.sParam4, ref sVar, ref sValue, ref nValue);
                 switch (varInfo.VarAttr)
                 {
                     case VarAttr.aNone:
                     case VarAttr.aConst:
-                        ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKNAMELISTPOSITION);
+                        ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKNAMELISTPOSITION);
                         return;
                     case VarAttr.aFixStr:
-                        SetValNameValue(playObject, sVar, sValue, nNamePostion);
+                        SetValNameValue(playerActor,sVar, sValue, nNamePostion);
                         break;
 
                     case VarAttr.aDynamic:
-                        SetDynamicValue(playObject, sVar, sValue, nNamePostion);
+                        SetDynamicValue(playerActor,sVar, sValue, nNamePostion);
                         break;
                 }
             }
             if (nPostion < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKNAMELISTPOSITION);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKNAMELISTPOSITION);
                 return;
             }
             switch (cMethod)
@@ -4317,15 +4312,15 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查行会是否在列表中
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckGuildList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckGuildList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (playObject.MyGuild != null)
+            if (playerActor.MyGuild != null)
             {
-                if (!GotoLableCheckStringList(playObject.MyGuild.GuildName, Path + questConditionInfo.sParam1))
+                if (!GotoLableCheckStringList(playerActor.MyGuild.GuildName, Path + questConditionInfo.sParam1))
                 {
                     success = false;
                 }
@@ -4339,24 +4334,24 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查宝宝的名字
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="playerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckSlaveName(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckSlaveName(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             if (questConditionInfo.sParam1 == "")
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKSLAVENAME);
+                ScriptConditionError(playerActor, questConditionInfo, ConditionCode.CHECKSLAVENAME);
             }
             var sSlaveName = questConditionInfo.sParam1;
-            if (playObject.Race == ActorRace.Play)
+            if (playerActor.Race == ActorRace.Play)
             {
-                GetVarValue(playObject, questConditionInfo.sParam1, ref sSlaveName);
+                GetVarValue(playerActor, questConditionInfo.sParam1, ref sSlaveName);
             }
-            for (var i = 0; i < playObject.SlaveList.Count; i++)
+            for (var i = 0; i < playerActor.SlaveList.Count; i++)
             {
-                BaseObject aObject = playObject.SlaveList[i];
+                IActor aObject = playerActor.SlaveList[i];
                 if (string.Compare(sSlaveName, aObject.ChrName, StringComparison.Ordinal) == 0)
                 {
                     success = true;
@@ -4369,26 +4364,26 @@ namespace ScriptEngine.Processings
         /// 检查人物身上指定物品位置是否佩带指定物品名称（为空则检查人物身上指定位置是否佩带物品）
         /// 格式:CHECKUSEITEM 物品位置(0-13) 物品名称
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckUseItem(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckUseItem(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int nWhere = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
-            if (playObject.Race == ActorRace.Play)
+            if (playerActor.Race == ActorRace.Play)
             {
                 if (nWhere < 0)
                 {
-                    GetVarValue(playObject, questConditionInfo.sParam1, ref nWhere);
+                    GetVarValue(playerActor,questConditionInfo.sParam1, ref nWhere);
                 }
             }
-            if (nWhere < 0 || nWhere > playObject.UseItems.GetUpperBound(0))
+            if (nWhere < 0 || nWhere > playerActor.UseItems.GetUpperBound(0))
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKUSEITEM);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKUSEITEM);
                 return;
             }
-            if (playObject.UseItems[nWhere].Index > 0)
+            if (playerActor.UseItems[nWhere].Index > 0)
             {
                 success = true;
             }
@@ -4397,41 +4392,41 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检测是否在同一地图范围内
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <returns></returns>
-        private void ConditionOfCheckInMapRange(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckInMapRange(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string sMapName = questConditionInfo.sParam1;
             int nX = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             int nY = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             int nRange = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
-            if (playObject.Race == ActorRace.Play)
+            if (playerActor.Race == ActorRace.Play)
             {
                 if (nX < 0)
                 {
-                    GetVarValue(playObject, questConditionInfo.sParam2, ref nX);
+                    GetVarValue(playerActor,questConditionInfo.sParam2, ref nX);
                 }
                 if (nY < 0)
                 {
-                    GetVarValue(playObject, questConditionInfo.sParam3, ref nY);
+                    GetVarValue(playerActor,questConditionInfo.sParam3, ref nY);
                 }
                 if (nRange < 0)
                 {
-                    GetVarValue(playObject, questConditionInfo.sParam4, ref nRange);
+                    GetVarValue(playerActor,questConditionInfo.sParam4, ref nRange);
                 }
             }
             if (sMapName == "" || nX < 0 || nY < 0 || nRange < 0)
             {
-                ScriptConditionError(playObject, questConditionInfo, ConditionCode.CHECKINMAPRANGE);
+                ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKINMAPRANGE);
                 return;
             }
-            if (string.Compare(playObject.MapName, sMapName, StringComparison.Ordinal) != 0)
+            if (string.Compare(playerActor.MapName, sMapName, StringComparison.Ordinal) != 0)
             {
                 return;
             }
-            if (Math.Abs(playObject.CurrX - nX) <= nRange && Math.Abs(playObject.CurrY - nY) <= nRange)
+            if (Math.Abs(playerActor.CurrX - nX) <= nRange && Math.Abs(playerActor.CurrY - nY) <= nRange)
             {
                 success = true;
             }
@@ -4440,13 +4435,13 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查字符串是否在指定文件中
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckTextList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckTextList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             string s01 = questConditionInfo.sParam1;
-            string s02 = GetLineVariableText(playObject, questConditionInfo.sParam2);// 路径支持变量
+            string s02 = GetLineVariableText(playerActor,questConditionInfo.sParam2);// 路径支持变量
             if (s02[0] == '\\')
             {
                 s02 = s02.Substring(1, s02.Length - 1);
@@ -4468,14 +4463,14 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查当前玩家是否队伍队长
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfIsGroupMaster(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIsGroupMaster(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            if (playObject.GroupOwner != 0)
+            if (playerActor.GroupOwner != 0)
             {
-                if (playObject.GroupOwner != playObject.ActorId)
+                if (playerActor.GroupOwner != playerActor.ActorId)
                 {
                     success = false;
                 }
@@ -4489,14 +4484,14 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 判断字符串包含在文件里
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheCkContAinsTextList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheCkContAinsTextList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             string s02 = string.Empty;
             string s01 = questConditionInfo.sParam1;
-            GetValValue(playObject, questConditionInfo.sParam1, ref s01);
+            GetValValue(playerActor,questConditionInfo.sParam1, ref s01);
             if (questConditionInfo.sParam2[0] == '\\')
             {
                 s02 = questConditionInfo.sParam2.Substring(1, questConditionInfo.sParam2.Length - 1);
@@ -4509,7 +4504,7 @@ namespace ScriptEngine.Processings
             {
                 s02 = questConditionInfo.sParam2.Substring(3, questConditionInfo.sParam2.Length - 3);
             }
-            s02 = GetLineVariableText(playObject, s02);
+            s02 = GetLineVariableText(playerActor,s02);
             if (!GotoLable_CheckAnsiContainsTextList(s01, s02))
             {
                 success = false;
@@ -4520,7 +4515,7 @@ namespace ScriptEngine.Processings
         {
             bool success = false;
             StringList loadList;
-            sListFileName = M2Share.GetEnvirFilePath(sListFileName);
+            sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
                 loadList = new StringList();
@@ -4530,7 +4525,7 @@ namespace ScriptEngine.Processings
                 }
                 catch
                 {
-                    M2Share.Logger.Error("loading fail.... => " + sListFileName);
+                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -4544,7 +4539,7 @@ namespace ScriptEngine.Processings
             }
             else
             {
-                M2Share.Logger.Error("file not found => " + sListFileName);
+                SystemShare.Logger.Error("file not found => " + sListFileName);
             }
             return success;
         }
@@ -4552,22 +4547,22 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家是否在线
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckOnLine(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckOnLine(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             string s01 = questConditionInfo.sParam1;
             if ((s01 != "") && (s01[0] == '<') && (s01[1] == '$'))
             {
-                s01 = GetLineVariableText(playObject, questConditionInfo.sParam1);
+                s01 = GetLineVariableText(playerActor,questConditionInfo.sParam1);
             }
             else
             {
-                GetValValue(playObject, questConditionInfo.sParam1, ref s01);
+                GetValValue(playerActor,questConditionInfo.sParam1, ref s01);
             }
-            if ((string.IsNullOrEmpty(s01)) || (M2Share.WorldEngine.GetPlayObject(s01) == null))
+            if ((string.IsNullOrEmpty(s01)) || (SystemShare.WorldEngine.GetPlayObject(s01) == null))
             {
                 success = false;
             }
@@ -4576,14 +4571,14 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查人物是否重叠
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfIsDupMode(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfIsDupMode(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            if (playObject.Envir != null)
+            if (playerActor.Envir != null)
             {
-                if (playObject.Envir.GetXYObjCount(playObject.CurrX, playObject.CurrY) <= 1)
+                if (playerActor.Envir.GetXYObjCount(playerActor.CurrX, playerActor.CurrY) <= 1)
                 {
                     success = false;
                 }
@@ -4597,18 +4592,18 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查指定地图玩家数量
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckHum(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckHum(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
             int n14 = 0;
-            if (!GetValValue(playObject, questConditionInfo.sParam2, ref n14))
+            if (!GetValValue(playerActor,questConditionInfo.sParam2, ref n14))
             {
                 n14 = questConditionInfo.nParam2;
             }
-            if (M2Share.WorldEngine.GetMapHuman(questConditionInfo.sParam1) < n14)
+            if (SystemShare.WorldEngine.GetMapHuman(questConditionInfo.sParam1) < n14)
             {
                 success = false;
             }
@@ -4617,13 +4612,13 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家姓名是否存在指定文本中
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckNameList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckNameList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!GotoLableCheckStringList(playObject.ChrName, Path + questConditionInfo.sParam1))
+            if (!GotoLableCheckStringList(playerActor.ChrName, Path + questConditionInfo.sParam1))
             {
                 success = false;
             }
@@ -4632,13 +4627,13 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家帐号是否存在指定文本中
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckAccountList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckAccountList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!GotoLableCheckStringList(playObject.UserAccount, Path + questConditionInfo.sParam1))
+            if (!GotoLableCheckStringList(playerActor.UserAccount, Path + questConditionInfo.sParam1))
             {
                 success = false;
             }
@@ -4647,13 +4642,13 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查玩家IP是否存在指定文本中
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfCheckIpList(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfCheckIpList(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!GotoLableCheckStringList(playObject.LoginIpAddr, Path + questConditionInfo.sParam1))
+            if (!GotoLableCheckStringList(playerActor.LoginIpAddr, Path + questConditionInfo.sParam1))
             {
                 success = false;
             }
@@ -4662,60 +4657,60 @@ namespace ScriptEngine.Processings
         /// <summary>
         /// 检查指定变量是否相等
         /// </summary>
-        /// <param name="playObject"></param>
+        /// <param name="IPlayerActor"></param>
         /// <param name="questConditionInfo"></param>
         /// <param name="success"></param>
-        private void ConditionOfEqual(PlayObject playObject, QuestConditionInfo questConditionInfo, ref bool success)
+        private void ConditionOfEqual(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
             int n14 = 0;
             int n18 = 0;
-            if (CheckVarNameNo(playObject, questConditionInfo, n14, n18) && n14 == n18)
+            if (CheckVarNameNo(playerActor,questConditionInfo, n14, n18) && n14 == n18)
             {
                 success = true;
             }
         }
 
-        private bool CheckVarNameNo(PlayObject playObject, QuestConditionInfo questConditionInfo, int n140, int n180)
+        private bool CheckVarNameNo(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, int n140, int n180)
         {
             bool success = false;
             n140 = -1;
             n180 = questConditionInfo.nParam2;
-            var n100 = M2Share.GetValNameNo(questConditionInfo.sParam1);
+            var n100 = SystemShare.GetValNameNo(questConditionInfo.sParam1);
             if (n100 <= 0) return success;
             if (HUtil32.RangeInDefined(n100, 0, 99))
             {
-                n140 = M2Share.Config.GlobalVal[n100];// G
+                n140 = SystemShare.Config.GlobalVal[n100];// G
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 1000, 1099))
             {
-                n140 = M2Share.Config.GlobaDyMval[n100 - 1000];// I
+                n140 = SystemShare.Config.GlobaDyMval[n100 - 1000];// I
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 1100, 1109))
             {
-                n140 = playObject.MNVal[n100 - 1100];// P
+                n140 = playerActor.MNVal[n100 - 1100];// P
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 1110, 1119))
             {
-                n140 = playObject.MDyVal[n100 - 1110];// D
+                n140 = playerActor.MDyVal[n100 - 1110];// D
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 1200, 1299))
             {
-                n140 = playObject.MNMval[n100 - 1200];// M
+                n140 = playerActor.MNMval[n100 - 1200];// M
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 1300, 1399))
             {
-                n140 = playObject.MNInteger[n100 - 1300];// N
+                n140 = playerActor.MNInteger[n100 - 1300];// N
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 2000, 2499))
             {
-                if (String.Compare(M2Share.Config.GlobalAVal[n100 - 2000], questConditionInfo.sParam2, StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(SystemShare.Config.GlobalAVal[n100 - 2000], questConditionInfo.sParam2, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     n140 = 0;
                     n180 = 0;
@@ -4724,7 +4719,7 @@ namespace ScriptEngine.Processings
             }
             else if (HUtil32.RangeInDefined(n100, 1400, 1499))
             {
-                if (String.Compare(playObject.MSString[n100 - 1400], questConditionInfo.sParam2, StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(playerActor.MSString[n100 - 1400], questConditionInfo.sParam2, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     n140 = 0;
                     n180 = 0;
@@ -4734,20 +4729,20 @@ namespace ScriptEngine.Processings
             return success;
         }
 
-        private void ScriptConditionError(BaseObject baseObject, QuestConditionInfo questConditionInfo, ConditionCode sCmd)
+        private void ScriptConditionError(IActor baseObject, QuestConditionInfo questConditionInfo, ConditionCode sCmd)
         {
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + _chrName + " 地图:" + _mMapName + " 座标:" + X + ':' + Y + " 参数1:"
                   + questConditionInfo.sParam1 + " 参数2:" + questConditionInfo.sParam2 + " 参数3:" + questConditionInfo.sParam3 + " 参数4:" + questConditionInfo.sParam4 + " 参数5:"
                   + questConditionInfo.sParam5;
-            M2Share.Logger.Error("[脚本参数不正确] " + sMsg);
+            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
         }
 
-        private void ScriptConditionError(BaseObject baseObject, QuestConditionInfo questConditionInfo, string sCmd)
+        private void ScriptConditionError(IActor baseObject, QuestConditionInfo questConditionInfo, string sCmd)
         {
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + _chrName + " 地图:" + _mMapName + " 座标:" + X + ':' + Y + " 参数1:"
                   + questConditionInfo.sParam1 + " 参数2:" + questConditionInfo.sParam2 + " 参数3:" + questConditionInfo.sParam3 + " 参数4:" + questConditionInfo.sParam4 + " 参数5:"
                   + questConditionInfo.sParam5;
-            M2Share.Logger.Error("[脚本参数不正确] " + sMsg);
+            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
         }
 
         private void Dispose(object obj)

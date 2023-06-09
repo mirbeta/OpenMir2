@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 调整指定玩家技能
     /// </summary>
     [Command("TrainingMagic", "调整指定玩家技能", "人物名称  技能名称 修炼等级(0-3)", 10)]
     public class TrainingMagicCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -19,23 +19,23 @@ namespace M2Server.GameCommand.Commands {
             var sSkillName = @params.Length > 1 ? @params[1] : "";
             var nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3)) {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null) {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null) {
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var magic = M2Share.WorldEngine.FindMagic(sSkillName);
+            var magic = SystemShare.WorldEngine.FindMagic(sSkillName);
             if (magic == null) {
 
-                playObject.SysMsg($"{sSkillName} 技能名称不正确!!!", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg($"{sSkillName} 技能名称不正确!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (mPlayObject.IsTrainingSkill(magic.MagicId)) {
+            if (mIPlayerActor.IsTrainingSkill(magic.MagicId)) {
 
-                playObject.SysMsg($"{sSkillName} 技能已修炼过了!!!", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg($"{sSkillName} 技能已修炼过了!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             var userMagic = new UserMagic();
@@ -44,10 +44,10 @@ namespace M2Server.GameCommand.Commands {
             userMagic.Level = (byte)nLevel;
             userMagic.Key = (char)0;
             userMagic.TranPoint = 0;
-            mPlayObject.MagicList.Add(userMagic);
-            mPlayObject.SendAddMagic(userMagic);
-            mPlayObject.RecalcAbilitys();
-            playObject.SysMsg($"{sHumanName} 的 {sSkillName} 技能修炼成功!!!", MsgColor.Green, MsgType.Hint);
+            mIPlayerActor.MagicList.Add(userMagic);
+            mIPlayerActor.SendAddMagic(userMagic);
+            mIPlayerActor.RecalcAbilitys();
+            PlayerActor.SysMsg($"{sHumanName} 的 {sSkillName} 技能修炼成功!!!", MsgColor.Green, MsgType.Hint);
         }
     }
 }

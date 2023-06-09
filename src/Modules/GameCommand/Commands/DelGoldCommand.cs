@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 调整指定玩家游戏币
@@ -11,7 +11,7 @@ namespace M2Server.GameCommand.Commands
     public class DelGoldCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -23,43 +23,43 @@ namespace M2Server.GameCommand.Commands
             {
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0)
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumName);
-            if (mPlayObject != null)
+            mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            if (mIPlayerActor != null)
             {
-                if (mPlayObject.Gold > nCount)
+                if (mIPlayerActor.Gold > nCount)
                 {
-                    mPlayObject.Gold -= nCount;
+                    mIPlayerActor.Gold -= nCount;
                 }
                 else
                 {
-                    nCount = mPlayObject.Gold;
-                    mPlayObject.Gold = 0;
+                    nCount = mIPlayerActor.Gold;
+                    mIPlayerActor.Gold = 0;
                 }
-                mPlayObject.GoldChanged();
-                playObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
-                if (M2Share.GameLogGold)
+                mIPlayerActor.GoldChanged();
+                PlayerActor.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
+                if (SystemShare.GameLogGold)
                 {
-                    // M2Share.EventSource.AddEventLog(13, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09"
-                    //                                     + playObject.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
+                    // M2Share.EventSource.AddEventLog(13, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY + "\09"
+                    //                                     + PlayerActor.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else
             {
                 var nServerIndex = 0;
-                if (M2Share.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
+                if (SystemShare.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
-                    playObject.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    //M2Share.FrontEngine.AddChangeGoldList(playObject.ChrName, sHumName, -nCount);
-                    playObject.SysMsg(sHumName + "现在不在线，等其上线时金币将自动减少", MsgColor.Green, MsgType.Hint);
+                    //M2Share.FrontEngine.AddChangeGoldList(PlayerActor.ChrName, sHumName, -nCount);
+                    PlayerActor.SysMsg(sHumName + "现在不在线，等其上线时金币将自动减少", MsgColor.Green, MsgType.Hint);
                 }
             }
         }

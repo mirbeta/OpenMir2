@@ -1,15 +1,15 @@
 ﻿using M2Server.Event.Events;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     [Command("FireBurn", "", 10)]
     public class FireBurnCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -18,17 +18,17 @@ namespace M2Server.GameCommand.Commands
             var nInt = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
             var nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             var nN = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
-            if (playObject.Permission < 6)
+            if (PlayerActor.Permission < 6)
             {
                 return;
             }
             if (nInt == 0 || nTime == 0 || nN == 0)
             {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var fireBurnEvent = new FireBurnEvent(playObject, playObject.CurrX, playObject.CurrY, (byte)nInt, nTime, nN);
-            M2Share.EventMgr.AddEvent(fireBurnEvent);
+            var fireBurnEvent = new FireBurnEvent(IPlayerActor, PlayerActor.CurrX, PlayerActor.CurrY, (byte)nInt, nTime, nN);
+            SystemShare.EventMgr.AddEvent(fireBurnEvent);
         }
     }
 }

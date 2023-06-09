@@ -1,6 +1,4 @@
-﻿using M2Server.Event;
-using M2Server.Items;
-using M2Server.Maps;
+﻿using M2Server.Items;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
 using M2Server.Player;
@@ -9,365 +7,365 @@ using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
-using UserCastle = M2Server.Castle.UserCastle;
 
 namespace M2Server.Actor
 {
-    public partial class BaseObject : ActorEntity
+    public partial class BaseObject : ActorEntity, IActor
     {
         /// <summary>
         /// 名称
         /// </summary>
-        public string ChrName;
+        public string ChrName { get; set; }
         /// <summary>
         /// 人物名字的颜色
         /// </summary>        
-        public byte NameColor;
+        public byte NameColor { get; set; }
         /// <summary>
         /// 所在座标X
         /// </summary>
-        public short CurrX;
+        public short CurrX { get; set; }
         /// <summary>
         /// 所在座标Y
         /// </summary>
-        public short CurrY;
+        public short CurrY { get; set; }
         /// <summary>
         /// 所在方向
         /// </summary>
-        public byte Dir;
+        public byte Dir { get; set; }
         /// <summary>
         /// 所在地图名称
         /// </summary>
-        public string MapName;
+        public string MapName { get; set; }
         /// <summary>
         /// 地图文件名称
         /// </summary>
-        public string MapFileName;
+        public string MapFileName { get; set; }
         /// <summary>
         /// 人物金币数
         /// </summary>
-        public int Gold;
+        public int Gold { get; set; }
         /// <summary>
         /// 状态值
         /// </summary>
-        public int CharStatus;
-        protected int CharStatusEx;
-        public MonGenInfo MonGen;
+        public int CharStatus { get; set; }
+        public int CharStatusEx { get; set; }
+        public MonGenInfo MonGen { get; set; }
         /// <summary>
         /// 基本属性
         /// </summary>
-        public Ability Abil;
+        public Ability Abil { get; set; }
         /// <summary>
         /// 属性
         /// </summary>
-        public Ability WAbil;
+        public Ability WAbil { get; set; }
         /// <summary>
         /// 附加属性
         /// </summary>
-        internal AddAbility AddAbil;
+        public AddAbility AddAbil { get; set; }
         /// <summary>
         /// 视觉范围大小
         /// </summary>
-        public byte ViewRange;
+        public byte ViewRange { get; set; }
         /// <summary>
         /// 状态属性值结束时间
         /// 0-绿毒(减HP) 1-红毒(减MP) 2-防、魔防为0(唯我独尊3级) 3-不能跑动(中蛛网)
         /// 4-不能移动(中战连击) 5-麻痹(石化) 6-减血，被连击技能万剑归宗击中后掉血
         /// 7-冰冻(不能跑动，不能魔法) 8-隐身 9-防御力(神圣战甲术) 10-魔御力(幽灵盾) 11-魔法盾
         /// </summary>
-        public ushort[] StatusTimeArr;
+        public ushort[] StatusTimeArr { get; set; }
         /// <summary>
         /// 状态持续的开始时间
         /// </summary>
-        public int[] StatusArrTick;
+        public int[] StatusArrTick { get; set; }
         /// <summary>
         /// 防麻痹
         /// </summary>
-        internal bool UnParalysis = false;
+        public bool UnParalysis { get; set; }
         /// <summary>
         /// 外观代码
         /// </summary>
-        public ushort Appr;
+        public ushort Appr { get; set; }
         /// <summary>
         /// 种族类型
         /// </summary>
-        public byte Race;
+        public byte Race { get; set; }
         /// <summary>
         /// 在地图上的类型
         /// </summary>
-        public CellType CellType;
+        public CellType CellType { get; set; }
         /// <summary>
         /// 角色外形
         /// </summary>
-        public byte RaceImg;
+        public byte RaceImg { get; set; }
         /// <summary>
         /// 人物攻击准确度
         /// </summary>
-        public byte HitPoint;
+        public byte HitPoint { get; set; }
         /// <summary>
         /// 中毒躲避
         /// </summary>
-        public byte AntiPoison;
+        public byte AntiPoison { get; set; }
         /// <summary>
         /// 魔法躲避
         /// </summary>
-        public ushort AntiMagic;
+        public ushort AntiMagic { get; set; }
         /// <summary>
         /// 中绿毒降HP点数
         /// </summary>
-        private byte GreenPoisoningPoint;
+        public byte GreenPoisoningPoint { get; set; }
         /// <summary>
         /// 敏捷度
         /// </summary>
-        public byte SpeedPoint;
+        public byte SpeedPoint { get; set; }
         /// <summary>
         /// 否可以看到隐身人物(视线范围) 
         /// </summary>
-        public byte CoolEyeCode = 0;
+        public byte CoolEyeCode { get; set; }
         /// <summary>
         /// 是否可以看到隐身人物
         /// </summary>
-        public bool CoolEye;
+        public bool CoolEye { get; set; }
         /// <summary>
         /// 是否被召唤(主人)
         /// </summary>
-        public BaseObject Master;
+        public IActor Master { get; set; }
         /// <summary>
         /// 不死系,1为不死系
         /// </summary>
-        public byte LifeAttrib;
+        public byte LifeAttrib { get; set; }
         /// <summary>
         /// 下属列表
         /// </summary>        
-        public IList<MonsterObject> SlaveList;
+        public IList<IActor> SlaveList { get; set; }
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
-        public bool SlaveRelax = false;
+        public bool SlaveRelax { get; set; }
         /// <summary>
         /// 亮度
         /// </summary>
-        public byte Light;
+        public byte Light { get; set; }
         /// <summary>
         /// 所属城堡
         /// </summary>
-        public UserCastle Castle;
+        public IUserCastle Castle { get; set; }
         /// <summary>
         /// 无敌模式
         /// </summary>
-        public bool SuperMan;
+        public bool SuperMan { get; set; }
         /// <summary>
         /// 是否是动物
         /// </summary>
-        public bool Animal;
+        public bool Animal { get; set; }
         /// <summary>
         /// 死亡是否不掉物品
         /// </summary>
-        public bool NoItem;
+        public bool NoItem { get; set; }
         /// <summary>
         /// 固定隐身模式
         /// </summary>
-        public bool FixedHideMode;
+        public bool FixedHideMode { get; set; }
         /// <summary>
         /// 不能冲撞模式(即敌人不能使用野蛮冲撞技能攻击)
         /// </summary>
-        public bool StickMode;
+        public bool StickMode { get; set; }
         /// <summary>
         /// 被打到是否减慢行走速度,等级小于50的怪 false-减慢 true-不减慢
         /// </summary>
-        public bool RushMode;
-        public bool NoTame;
+        public bool RushMode { get; set; }
+        public bool NoTame { get; set; }
         /// <summary>
         /// 尸体
         /// </summary>
-        public bool Skeleton;
+        public bool Skeleton { get; set; }
         /// <summary>
         /// 身体坚韧性
         /// </summary>
-        public byte BodyLeathery;
+        public byte BodyLeathery { get; set; }
         /// <summary>
         /// 心灵启示
         /// </summary>
-        public bool ShowHp;
+        public bool ShowHp { get; set; }
         /// <summary>
         /// 心灵启示检查时间
         /// </summary>
-        public int ShowHpTick = 0;
+        public int ShowHpTick { get; set; }
         /// <summary>
         /// 心灵启示有效时长
         /// </summary>
-        public int ShowHpInterval = 0;
-        public Envirnoment Envir;
+        public int ShowHpInterval { get; set; }
+        public IEnvirnoment Envir { get; set; }
         /// <summary>
         /// 尸体清除
         /// </summary>
-        public bool Ghost;
+        public bool Ghost { get; set; }
         /// <summary>
         /// 尸体清除时间
         /// </summary>
-        public int GhostTick;
+        public int GhostTick { get; set; }
         /// <summary>
         /// 死亡
         /// </summary>
-        public bool Death;
+        public bool Death { get; set; }
         /// <summary>
         /// 死亡时间
         /// </summary>
-        public int DeathTick;
-        public bool Invisible;
+        public int DeathTick { get; set; }
+        public bool Invisible { get; set; }
         /// <summary>
         /// 是否可以复活
         /// </summary>
-        public bool CanReAlive;
+        public bool CanReAlive { get; set; }
         /// <summary>
         /// 复活时间
         /// </summary>
-        public int ReAliveTick = 0;
+        public int ReAliveTick { get; set; }
         /// <summary>
         /// 怪物所拿的武器
         /// </summary>
-        public byte MonsterWeapon = 0;
+        public byte MonsterWeapon { get; set; }
         /// <summary>
         /// 受攻击间隔
         /// </summary>
-        public int StruckTick = 0;
+        public int StruckTick { get; set; }
         /// <summary>
         /// 刷新消息
         /// </summary>
-        protected bool WantRefMsg;
+        public bool WantRefMsg { get; set; }
         /// <summary>
         /// 增加到地图是否成功
         /// </summary>
-        public bool AddtoMapSuccess;
+        public bool AddtoMapSuccess { get; set; }
         /// <summary>
         /// 换地图时，跑走不考虑坐标
         /// </summary>
-        internal bool SpaceMoved;
-        public bool Mission;
-        public short MissionX = 0;
-        public short MissionY = 0;
+        public bool SpaceMoved { get; set; }
+        public bool Mission { get; set; }
+        public short MissionX { get; set; }
+        public short MissionY { get; set; }
         /// <summary>
         /// 隐身戒指
         /// </summary>
-        public bool HideMode;
+        public bool HideMode { get; set; }
         /// <summary>
         /// 石像化
         /// </summary>
-        public bool StoneMode;
+        public bool StoneMode { get; set; }
         /// <summary>
         /// 魔法隐身(隐身术)
         /// </summary>
-        public bool Transparent;
+        public bool Transparent { get; set; }
         /// <summary>
         /// 管理模式
         /// </summary>
-        public bool AdminMode;
+        public bool AdminMode { get; set; }
         /// <summary>
         /// 隐身模式（GM模式）
         /// </summary>
-        public bool ObMode;
+        public bool ObMode { get; set; }
         /// <summary>
         /// 视觉搜索时间间隔
         /// </summary>
-        public int SearchTime;
+        public int SearchTime { get; set; }
         /// <summary>
         /// 视觉搜索间隔
         /// </summary>
-        public int SearchTick;
+        public int SearchTick { get; set; }
         /// <summary>
         /// 上次运行时间
         /// </summary>
-        public int RunTick;
+        public int RunTick { get; set; }
         /// <summary>
         /// 运行时间
         /// </summary>
-        public int RunTime;
+        public int RunTime { get; set; }
         /// <summary>
         /// 特别指定为 此类型  加血间隔
         /// </summary>
-        protected int HealthTick;
-        protected int SpellTick;
-        public BaseObject TargetCret;
-        public int TargetFocusTick = 0;
+        public int HealthTick { get; set; }
+        public int SpellTick { get; set; }
+        public IActor TargetCret { get; set; }
+        public int TargetFocusTick { get; set; }
         /// <summary>
         /// 被对方杀害时对方对象
         /// </summary>
-        public BaseObject LastHiter;
-        public int LastHiterTick;
-        public BaseObject ExpHitter;
-        protected int ExpHitterTick;
+        public IActor LastHiter { get; set; }
+        public int LastHiterTick { get; set; }
+        public IActor ExpHitter { get; set; }
+        public int ExpHitterTick { get; set; }
         /// <summary>
         /// 中毒处理间隔时间
         /// </summary>
-        protected int PoisoningTick;
-        protected int VerifyTick;
+        public int PoisoningTick { get; set; }
+        public int VerifyTick { get; set; }
         /// <summary>
         /// 恢复血量和魔法间隔
         /// </summary>
-        private int AutoRecoveryTick;
+        public int AutoRecoveryTick { get; set; }
         /// <summary>
         /// 可视范围内的人物列表
         /// </summary>
-        protected readonly IList<int> VisibleHumanList;
+        public IList<int> VisibleHumanList { get; set; }
         /// <summary>
         /// 是否在可视范围内有人物,及宝宝
         /// </summary>
-        public bool IsVisibleActive;
+        public bool IsVisibleActive { get; set; }
         /// <summary>
         /// 可视范围内的精灵列表
         /// </summary>
-        public readonly IList<VisibleBaseObject> VisibleActors;
+        public IList<VisibleBaseObject> VisibleActors { get; set; }
         /// <summary>
         /// 玩家包裹物品列表或怪物物品掉落列表
         /// </summary>
-        public IList<UserItem> ItemList;
-        private int SendRefMsgTick;
+        public IList<UserItem> ItemList { get; set; }
+        public int SendRefMsgTick { get; set; }
         /// <summary>
         /// 攻击间隔
         /// </summary>
-        protected int AttackTick = 0;
+        public int AttackTick { get; set; }
         /// <summary>
         /// 走路间隔
         /// </summary>
-        protected int WalkTick;
+        public int WalkTick { get; set; }
         /// <summary>
         /// 走路速度
         /// </summary>
-        public int WalkSpeed;
+        public int WalkSpeed { get; set; }
         /// <summary>
         /// 下次攻击时间
         /// </summary>
-        public int NextHitTime;
+        public int NextHitTime { get; set; }
         /// <summary>
         /// 是否刷新在地图上信息
         /// </summary>
-        protected bool DenyRefStatus;
+        public bool DenyRefStatus { get; set; }
         /// <summary>
         /// 是否增加地图计数
         /// </summary>
-        public bool AddToMaped;
+        public bool AddToMaped { get; set; }
         /// <summary>
         /// 是否从地图中删除计数
         /// </summary>
-        public bool DelFormMaped = false;
-        public bool AutoChangeColor;
-        protected int AutoChangeColorTick;
-        protected byte AutoChangeIdx;
+        public bool DelFormMaped { get; set; }
+        public bool AutoChangeColor { get; set; }
+        public int AutoChangeColorTick { get; set; }
+        public byte AutoChangeIdx { get; set; }
         /// <summary>
         /// 固定颜色
         /// </summary>
-        public bool FixColor;
-        public byte FixColorIdx;
-        protected int FixStatus;
+        public bool FixColor { get; set; }
+        public byte FixColorIdx { get; set; }
+        public int FixStatus { get; set; }
         /// <summary>
         /// 快速麻痹，受攻击后麻痹立即消失
         /// </summary>
-        protected bool FastParalysis;
-        public bool NastyMode;
+        public bool FastParalysis { get; set; }
+        public bool NastyMode { get; set; }
         /// <summary>
         /// 是否机器人
         /// </summary>
-        public bool IsRobot;
+        public bool IsRobot { get; set; }
+        public byte SlaveExpLevel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         protected BaseObject()
         {
@@ -737,7 +735,6 @@ namespace M2Server.Actor
             bool result = false;
             short nX = 0;
             short nY = 0;
-            int s20;
             MapItem mapItem = new MapItem
             {
                 Name = Grobal2.StringGoldName,
@@ -755,15 +752,13 @@ namespace M2Server.Actor
                 {
                     if (boFalg)
                     {
-                        s20 = 15;
                     }
                     else
                     {
-                        s20 = 7;
                     }
                     if (M2Share.GameLogGold)
                     {
-                      //  M2Share.EventSource.AddEventLog(s20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
+                        //  M2Share.EventSource.AddEventLog(s20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + Grobal2.StringGoldName + "\t" + nGold + "\t" + HUtil32.BoolToIntStr(Race == ActorRace.Play) + "\t" + '0');
                     }
                 }
                 result = true;
@@ -901,7 +896,7 @@ namespace M2Server.Actor
             int tcount = 0;
             for (int i = 0; i < 12; i++)
             {
-                BaseObject baseObject = Envir.GetMovingObject(sx, sy, true);
+                IActor baseObject = Envir.GetMovingObject(sx, sy, true);
                 if (baseObject != null)
                 {
                     if (IsProperTarget(baseObject))
@@ -979,7 +974,7 @@ namespace M2Server.Actor
 
         public bool GetFrontPosition(ref short nX, ref short nY)
         {
-            Envirnoment envir = Envir;
+            IEnvirnoment envir = Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Dir)
@@ -1040,7 +1035,7 @@ namespace M2Server.Actor
             return true;
         }
 
-        private static bool SpaceMoveGetRandXY(Envirnoment envir, ref short nX, ref short nY)
+        private static bool SpaceMoveGetRandXY(IEnvirnoment envir, ref short nX, ref short nY)
         {
             int n14;
             short n18;
@@ -1110,7 +1105,7 @@ namespace M2Server.Actor
             {
                 if (M2Share.ServerIndex == envir.ServerIndex)
                 {
-                    Envirnoment oldEnvir = Envir;
+                    IEnvirnoment oldEnvir = Envir;
                     short nOldX = CurrX;
                     short nOldY = CurrY;
                     bool moveSuccess = false;
@@ -1126,8 +1121,12 @@ namespace M2Server.Actor
                     MapFileName = envir.MapFileName;
                     CurrX = nX;
                     CurrY = nY;
-                    if (SpaceMoveGetRandXY(Envir, ref CurrX, ref CurrY))
+                    short tempX = 0;
+                    short tempY = 0;
+                    if (SpaceMoveGetRandXY(Envir, ref tempX, ref tempY))
                     {
+                        CurrX = tempX;
+                        CurrY = tempY;
                         Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
                         SendMsg(Messages.RM_CLEAROBJECTS, 0, 0, 0, 0);
                         SendMsg(Messages.RM_CHANGEMAP, 0, 0, 0, 0, MapFileName);
@@ -1179,7 +1178,7 @@ namespace M2Server.Actor
         {
             if (SlaveList == null)
             {
-                SlaveList = new List<MonsterObject>();
+                SlaveList = new List<IActor>();
             }
             if (SlaveList.Count < nMaxMob)
             {
@@ -1246,7 +1245,7 @@ namespace M2Server.Actor
             return true;
         }
 
-        public BaseObject GetPoseCreate()
+        public IActor GetPoseCreate()
         {
             short nX = 0;
             short nY = 0;
@@ -1257,7 +1256,7 @@ namespace M2Server.Actor
             return null;
         }
 
-        protected bool GetAttackDir(BaseObject targetObject, ref byte btDir)
+        protected bool GetAttackDir(IActor targetObject, ref byte btDir)
         {
             bool result = false;
             if ((CurrX - 1 <= targetObject.CurrX) && (CurrX + 1 >= targetObject.CurrX) && (CurrY - 1 <= targetObject.CurrY) && (CurrY + 1 >= targetObject.CurrY) && ((CurrX != targetObject.CurrX) || (CurrY != targetObject.CurrY)))
@@ -1308,7 +1307,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        protected bool GetAttackDir(BaseObject targetObject, int nRange, ref byte btDir)
+        protected bool GetAttackDir(IActor targetObject, int nRange, ref byte btDir)
         {
             short nX = 0;
             short nY = 0;
@@ -1320,7 +1319,7 @@ namespace M2Server.Actor
             return false;
         }
 
-        protected bool TargetInSpitRange(BaseObject targetObject, ref byte btDir)
+        protected bool TargetInSpitRange(IActor targetObject, ref byte btDir)
         {
             bool result = false;
             if ((Math.Abs(targetObject.CurrX - CurrX) <= 2) && (Math.Abs(targetObject.CurrY - CurrY) <= 2))
@@ -1684,11 +1683,11 @@ namespace M2Server.Actor
                 }
             }
         }
-        
+
         /// <summary>
         /// 设置肉的品质
         /// </summary>
-        internal void ApplyMeatQuality()
+        public void ApplyMeatQuality()
         {
             if (!Animal)
             {
@@ -1711,7 +1710,7 @@ namespace M2Server.Actor
         /// 散落金币
         /// </summary>
         /// <param name="goldOfCreat"></param>
-        internal void ScatterGolds(int goldOfCreat)
+        public void ScatterGolds(int goldOfCreat)
         {
             int I;
             int nGold;
@@ -1753,7 +1752,7 @@ namespace M2Server.Actor
             }
         }
 
-        public void SetLastHiter(BaseObject baseObject)
+        public void SetLastHiter(IActor baseObject)
         {
             LastHiter = baseObject;
             LastHiterTick = HUtil32.GetTickCount();
@@ -1810,7 +1809,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        public bool InSafeZone(Envirnoment envir, int nX, int nY)
+        public bool InSafeZone(IEnvirnoment envir, int nX, int nY)
         {
             if (Envir == null)
             {
@@ -1845,7 +1844,7 @@ namespace M2Server.Actor
             }
             return result;
         }
-        
+
         /// <summary>
         /// 召唤属下
         /// </summary>
@@ -1880,7 +1879,7 @@ namespace M2Server.Actor
 
         public bool GetBackPosition(ref short nX, ref short nY)
         {
-            Envirnoment envir = Envir;
+            IEnvirnoment envir = Envir;
             nX = CurrX;
             nY = CurrY;
             switch (Dir)
@@ -2055,7 +2054,7 @@ namespace M2Server.Actor
             }
         }
 
-        public bool MagCanHitTarget(short nX, short nY, BaseObject targetObject)
+        public bool MagCanHitTarget(short nX, short nY, IActor targetObject)
         {
             bool result = false;
             if (targetObject == null)
@@ -2109,7 +2108,7 @@ namespace M2Server.Actor
                             CellObject cellObject = cellInfo.ObjList[i];
                             if ((cellObject.CellObjId > 0) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
                             {
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if ((baseObject != null) && (!baseObject.Ghost))
                                 {
                                     if (IsProperFriend(baseObject))
@@ -2133,7 +2132,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        private bool DefenceUp(int nSec)
+        public bool DefenceUp(int nSec)
         {
             bool result = false;
             if (StatusTimeArr[PoisonState.DefenceUP] > 0)
@@ -2156,7 +2155,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        private bool MagDefenceUp(int nSec)
+        public bool MagDefenceUp(int nSec)
         {
             bool result = false;
             if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
@@ -2390,11 +2389,11 @@ namespace M2Server.Actor
             return false;
         }
 
-        public BaseObject GetMaster()
+        public IActor GetMaster()
         {
             if (Race != ActorRace.Play)
             {
-                BaseObject masterObject = Master;
+                IActor masterObject = Master;
                 if (masterObject != null)
                 {
                     while (true)
@@ -2558,12 +2557,12 @@ namespace M2Server.Actor
             //m_nBodyLeathery = m_nPerBodyLeathery;
             //m_nPushedCount = 0;
             //m_nBodyState = 0;
-            
+
             if (Animal)
             {
                 ((AnimalObject)this).MeatQuality = (ushort)(M2Share.RandomNumber.Random(3500) + 3000);
             }
-            
+
             switch (Race)
             {
                 case 51:
@@ -2793,7 +2792,7 @@ namespace M2Server.Actor
             //}
         }
 
-        public static void GetMapBaseObjects(Envirnoment envir, int nX, int nY, int nRage, ref IList<BaseObject> objectList)
+        public static void GetMapBaseObjects(IEnvirnoment envir, int nX, int nY, int nRage, ref IList<IActor> objectList)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::GetMapBaseObjects";
             try
@@ -2814,7 +2813,7 @@ namespace M2Server.Actor
                                 CellObject cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                                 {
-                                    BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
                                     {
                                         objectList.Add(baseObject);
@@ -2839,6 +2838,11 @@ namespace M2Server.Actor
         protected static string Format(string str, params object[] par)
         {
             return string.Format(str, par);
+        }
+
+        public void WinExp(int exp)
+        {
+            throw new NotImplementedException();
         }
     }
 }

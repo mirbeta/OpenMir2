@@ -1,30 +1,38 @@
-﻿using M2Server.Maps;
-using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem
+{
     /// <summary>
     /// 显示指定地图信息
     /// </summary>
     [Command("ShowMapMode", "显示指定地图信息", "地图号", 10)]
-    public class ShowMapModeCommand : GameCommand {
+    public class ShowMapModeCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
+
             var sMapName = @params.Length > 0 ? @params[0] : "";
-            if (string.IsNullOrEmpty(sMapName)) {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+            if (string.IsNullOrEmpty(sMapName))
+            {
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = M2Share.MapMgr.FindMap(sMapName);
-            if (envir == null) {
-                playObject.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);
+
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            if (envir == null)
+            {
+                PlayerActor.SysMsg(sMapName + " 不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
+
             var sMsg = "地图模式: " + envir.GetEnvirInfo();
-            playObject.SysMsg(sMsg, MsgColor.Blue, MsgType.Hint);
+            PlayerActor.SysMsg(sMsg, MsgColor.Blue, MsgType.Hint);
         }
     }
 }

@@ -1,53 +1,68 @@
-﻿using M2Server.Player;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem
+{
     /// <summary>
     /// 组队传送
     /// </summary>
     [Command("GroupRecall", "组队传送")]
-    public class GroupRecallCommand : GameCommand {
+    public class GroupRecallCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (playObject.RecallSuite || playObject.Permission >= 6) {
-                var dwValue = (short)((HUtil32.GetTickCount() - playObject.GroupRcallTick) / 1000);
-                playObject.GroupRcallTick = playObject.GroupRcallTick + dwValue * 1000;
-                if (playObject.Permission >= 6) {
-                    playObject.GroupRcallTime = 0;
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            if (PlayerActor.RecallSuite || PlayerActor.Permission >= 6)
+            {
+                var dwValue = (short)((HUtil32.GetTickCount() - PlayerActor.GroupRcallTick) / 1000);
+                PlayerActor.GroupRcallTick = PlayerActor.GroupRcallTick + dwValue * 1000;
+                if (PlayerActor.Permission >= 6)
+                {
+                    PlayerActor.GroupRcallTime = 0;
                 }
-                if (playObject.GroupRcallTime > dwValue) {
-                    playObject.GroupRcallTime -= dwValue;
+                if (PlayerActor.GroupRcallTime > dwValue)
+                {
+                    PlayerActor.GroupRcallTime -= dwValue;
                 }
-                else {
-                    playObject.GroupRcallTime = 0;
+                else
+                {
+                    PlayerActor.GroupRcallTime = 0;
                 }
-                if (playObject.GroupRcallTime == 0) {
-                    if (playObject.GroupOwner == playObject.ActorId) {
-                        for (var i = 0; i < playObject.GroupMembers.Count; i++) {
-                            var mPlayObject = playObject.GroupMembers[i];
-                            if (mPlayObject.AllowGroupReCall) {
-                                if (mPlayObject.Envir.Flag.NoReCall) {
-                                    playObject.SysMsg($"{mPlayObject.ChrName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
+                if (PlayerActor.GroupRcallTime == 0)
+                {
+                    if (PlayerActor.GroupOwner == PlayerActor.ActorId)
+                    {
+                        for (var i = 0; i < PlayerActor.GroupMembers.Count; i++)
+                        {
+                            var mIPlayerActor = PlayerActor.GroupMembers[i];
+                            if (mIPlayerActor.AllowGroupReCall)
+                            {
+                                if (mIPlayerActor.Envir.Flag.NoReCall)
+                                {
+                                    PlayerActor.SysMsg($"{mIPlayerActor.ChrName} 所在的地图不允许传送。", MsgColor.Red, MsgType.Hint);
                                 }
-                                else {
-                                    playObject.RecallHuman(mPlayObject.ChrName);
+                                else
+                                {
+                                    PlayerActor.RecallHuman(mIPlayerActor.ChrName);
                                 }
                             }
-                            else {
-                                playObject.SysMsg($"{mPlayObject.ChrName} 不允许天地合一!!!", MsgColor.Red, MsgType.Hint);
+                            else
+                            {
+                                PlayerActor.SysMsg($"{mIPlayerActor.ChrName} 不允许天地合一!!!", MsgColor.Red, MsgType.Hint);
                             }
                         }
-                        playObject.GroupRcallTick = HUtil32.GetTickCount();
-                        playObject.GroupRcallTime = M2Share.Config.GroupRecallTime;
+                        PlayerActor.GroupRcallTick = HUtil32.GetTickCount();
+                        PlayerActor.GroupRcallTime = SystemShare.Config.GroupRecallTime;
                     }
                 }
-                else {
-                    playObject.SysMsg($"{playObject.GroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                else
+                {
+                    PlayerActor.SysMsg($"{PlayerActor.GroupRcallTime} 秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
-            else {
-                playObject.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
+            else
+            {
+                PlayerActor.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

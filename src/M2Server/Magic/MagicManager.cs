@@ -50,7 +50,7 @@ namespace M2Server.Magic
         private static bool MagBigHealing(PlayObject playObject, int nPower, int nX, int nY)
         {
             var result = false;
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nX, nY, 1, ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
@@ -138,7 +138,7 @@ namespace M2Server.Magic
             }
         }
 
-        public static bool DoSpell(PlayObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetObject)
+        public static bool DoSpell(PlayObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, IActor targetObject)
         {
             short n14 = 0;
             short n18 = 0;
@@ -672,7 +672,7 @@ namespace M2Server.Magic
             {
                 return false;
             }
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, 9, ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
@@ -820,7 +820,7 @@ namespace M2Server.Magic
             return result;
         }
 
-        private static bool MagTurnUndead(PlayObject playObject, BaseObject targetObject, int nTargetX, int nTargetY, byte magicLevel)
+        private static bool MagTurnUndead(PlayObject playObject, IActor targetObject, int nTargetX, int nTargetY, byte magicLevel)
         {
             var result = false;
             if (targetObject.SuperMan || targetObject.LifeAttrib != Grobal2.LA_UNDEAD)
@@ -886,11 +886,11 @@ namespace M2Server.Magic
             return result;
         }
 
-        private static bool MagGroupAmyounsul(PlayObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, BaseObject targetObject)
+        private static bool MagGroupAmyounsul(PlayObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, IActor targetObject)
         {
             short nAmuletIdx = 0;
             var result = false;
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
@@ -935,10 +935,10 @@ namespace M2Server.Magic
             return result;
         }
 
-        private static bool MagGroupDeDing(BaseObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, BaseObject targetObject)
+        private static bool MagGroupDeDing(BaseObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, IActor targetObject)
         {
             var result = false;
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
@@ -974,11 +974,11 @@ namespace M2Server.Magic
             return result;
         }
 
-        private static bool MagGroupLightening(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, BaseObject targetObject, ref bool boSpellFire)
+        private static bool MagGroupLightening(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, IActor targetObject, ref bool boSpellFire)
         {
             var result = false;
             boSpellFire = false;
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
             playObject.SendRefMsg(Messages.RM_MAGICFIRE, 0, HUtil32.MakeWord(userMagic.Magic.EffectType, userMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), targetObject.ActorId, "");
             for (var i = 0; i < objectList.Count; i++)
@@ -1013,7 +1013,7 @@ namespace M2Server.Magic
             return result;
         }
 
-        private static bool MagHbFireBall(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, ref BaseObject targetObject)
+        private static bool MagHbFireBall(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, ref IActor targetObject)
         {
             var result = false;
             if (!playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetObject))
@@ -1096,7 +1096,7 @@ namespace M2Server.Magic
         private static bool MagBigExplosion(BaseObject baseObject, int nPower, int nX, int nY, int nRage)
         {
             var result = false;
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, nRage, ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
@@ -1115,7 +1115,7 @@ namespace M2Server.Magic
         private static bool MagElecBlizzard(BaseObject baseObject, int nPower)
         {
             var result = false;
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, M2Share.Config.ElecBlizzardRange, ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
@@ -1144,7 +1144,7 @@ namespace M2Server.Magic
             var result = 0;
             if (baseObject.Envir.CanWalk(nX, nY, true))
             {
-                IList<BaseObject> objectList = new List<BaseObject>();
+                IList<IActor> objectList = new List<IActor>();
                 BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref objectList);
                 if (!objectList.Any())
                 {
@@ -1152,7 +1152,7 @@ namespace M2Server.Magic
                 }
                 MagicEvent magicEvent = new MagicEvent
                 {
-                    ObjectList = new List<BaseObject>(),
+                    ObjectList = new List<IActor>(),
                     StartTick = HUtil32.GetTickCount(),
                     Time = nPower * 1000
                 };
@@ -1196,7 +1196,7 @@ namespace M2Server.Magic
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX + 1), (short)(nY + 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     M2Share.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[7] = holyCurtainEvent;
-                   // M2Share.WorldEngine.MagicEventList.Add(magicEvent);
+                    // M2Share.WorldEngine.MagicEventList.Add(magicEvent);
                 }
             }
             return result;
@@ -1205,7 +1205,7 @@ namespace M2Server.Magic
         private static bool MagMakeGroupTransparent(BaseObject baseObject, int nX, int nY, int nHTime)
         {
             var result = false;
-            IList<BaseObject> objectList = new List<BaseObject>();
+            IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref objectList);
             for (var i = 0; i < objectList.Count; i++)
             {
@@ -1223,7 +1223,7 @@ namespace M2Server.Magic
             return result;
         }
 
-        private static bool MabMabe(PlayObject playObject, BaseObject targetObject, int nPower, int nLevel, short nTargetX, short nTargetY)
+        private static bool MabMabe(PlayObject playObject, IActor targetObject, int nPower, int nLevel, short nTargetX, short nTargetY)
         {
             var result = false;
             if (playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetObject))

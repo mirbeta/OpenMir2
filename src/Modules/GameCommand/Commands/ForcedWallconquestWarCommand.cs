@@ -1,8 +1,8 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     /// <summary>
     /// 开始工程战役
@@ -10,16 +10,16 @@ namespace M2Server.GameCommand.Commands
     [Command("ForcedWallconquestWar", "开始攻城战役", "城堡名称", 10)]
     public class ForcedWallconquestWarCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
             var sCastleName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sCastleName)) {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var castle = M2Share.CastleMgr.Find(sCastleName);
+            var castle = SystemShare.CastleMgr.Find(sCastleName);
             if (castle != null) {
                 castle.UnderWar = !castle.UnderWar;
                 if (castle.UnderWar) {
@@ -27,10 +27,10 @@ namespace M2Server.GameCommand.Commands
                     castle.WarDate = DateTime.Now;
                     castle.StartCastleWarTick = HUtil32.GetTickCount();
                     castle.StartWallconquestWar();
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_212, M2Share.ServerIndex, "");
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_212, SystemShare.ServerIndex, "");
                     var s20 = "[" + castle.sName + " 攻城战已经开始]";
-                    M2Share.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, s20);
+                    SystemShare.WorldEngine.SendBroadCastMsg(s20, MsgType.System);
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_204, SystemShare.ServerIndex, s20);
                     castle.MainDoorControl(true);
                 }
                 else {
@@ -38,7 +38,7 @@ namespace M2Server.GameCommand.Commands
                 }
             }
             else {
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

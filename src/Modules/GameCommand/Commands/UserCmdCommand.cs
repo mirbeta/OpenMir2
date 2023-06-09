@@ -1,25 +1,25 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 自定义命令
     /// </summary>
     [Command("UserCmd", "自定义命令", 10)]
     public class UserCmdCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             // string sLable = @Params.Length > 0 ? @Params[0] : "";
             // byte Flag = 0;
-            // if (PlayObject.m_nUserCmdNPC == M2Share.g_FunctionNPC)
+            // if (PlayerActor.SysMsgm_nUserCmdNPC == M2Share.g_FunctionNPC)
             // {
-            //     M2Share.g_FunctionNPC.GotoLable(PlayObject, sLable, false);
+            //     M2Share.g_FunctionNPC.GotoLable(IPlayerActor, sLable, false);
             //     Flag = 8;
             // }
             // if (Flag != 8)
             // {
-            //     M2Share.g_FunctionNPC.GotoLable(PlayObject, sLable, false);// 执行默认脚本  修复不能执行自定义脚本问题
+            //     M2Share.g_FunctionNPC.GotoLable(IPlayerActor, sLable, false);// 执行默认脚本  修复不能执行自定义脚本问题
             // }
-            // PlayObject.m_nUserCmdNPC = null;
+            // PlayerActor.SysMsgm_nUserCmdNPC = null;
         }
     }
 }

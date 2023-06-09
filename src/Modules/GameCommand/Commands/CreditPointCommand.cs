@@ -1,16 +1,16 @@
 ﻿using System.Collections;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 调整指定玩家声望点
     /// </summary>
     [Command("CreditPoint", "调整指定玩家声望点", "人物名称 控制符(+,-,=) 声望点数(0-255)", 10)]
     public class CreditPointCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -24,37 +24,37 @@ namespace M2Server.GameCommand.Commands {
             }
             if (string.IsNullOrEmpty(sHumanName) || !new ArrayList(new[] { '=', '+', '-' }).Contains(ctr) || nPoint < 0 || nPoint > int.MaxValue
                 || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?') {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject == null) {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor == null) {
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             switch (sCtr[0]) {
                 case '=':
                     if (nPoint >= 0) {
-                        mPlayObject.CreditPoint = (byte)nPoint;
+                        mIPlayerActor.CreditPoint = (byte)nPoint;
                     }
                     break;
 
                 case '+':
-                    nCreditPoint = mPlayObject.CreditPoint + nPoint;
+                    nCreditPoint = mIPlayerActor.CreditPoint + nPoint;
                     if (nPoint >= 0) {
-                        mPlayObject.CreditPoint = (byte)nCreditPoint;
+                        mIPlayerActor.CreditPoint = (byte)nCreditPoint;
                     }
                     break;
 
                 case '-':
-                    nCreditPoint = mPlayObject.CreditPoint - nPoint;
+                    nCreditPoint = mIPlayerActor.CreditPoint - nPoint;
                     if (nPoint >= 0) {
-                        mPlayObject.CreditPoint = (byte)nCreditPoint;
+                        mIPlayerActor.CreditPoint = (byte)nCreditPoint;
                     }
                     break;
             }
-            mPlayObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointHumanMsg, nPoint, mPlayObject.CreditPoint), MsgColor.Green, MsgType.Hint);
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandCreditPointGMMsg, sHumanName, nPoint, mPlayObject.CreditPoint), MsgColor.Green, MsgType.Hint);
+            mIPlayerActor.SysMsg(string.Format(CommandHelp.GameCommandCreditPointHumanMsg, nPoint, mIPlayerActor.CreditPoint), MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandCreditPointGMMsg, sHumanName, nPoint, mIPlayerActor.CreditPoint), MsgColor.Green, MsgType.Hint);
         }
     }
 }

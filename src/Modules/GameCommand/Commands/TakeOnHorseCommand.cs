@@ -1,22 +1,22 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("TakeOnHorse", "", 10)]
     public class TakeOnHorseCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (playObject.OnHorse) {
+        public void Execute(IPlayerActor PlayerActor) {
+            if (PlayerActor.OnHorse) {
                 return;
             }
-            if (playObject.HorseType == 0) {
-                playObject.SysMsg("骑马必须先戴上马牌!!!", MsgColor.Red, MsgType.Hint);
+            if (PlayerActor.HorseType == 0) {
+                PlayerActor.SysMsg("骑马必须先戴上马牌!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            playObject.OnHorse = true;
-            playObject.FeatureChanged();
-            if (playObject.OnHorse) {
-                M2Share.FunctionNPC.GotoLable(playObject, "@OnHorse", false);
+            PlayerActor.OnHorse = true;
+            PlayerActor.FeatureChanged();
+            if (PlayerActor.OnHorse) {
+                SystemShare.FunctionNPC.GotoLable(PlayerActor, "@OnHorse", false);
             }
         }
     }

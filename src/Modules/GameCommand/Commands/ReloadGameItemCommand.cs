@@ -1,7 +1,7 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 重新加载物品数据库
     /// </summary>
@@ -9,9 +9,9 @@ namespace M2Server.GameCommand.Commands {
 
     public class ReloadGameItemCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            M2Share.CommonDb.LoadItemsDB();
-            playObject.SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            SystemShare.CommonDb.LoadItemsDB();
+            PlayerActor.SysMsg("物品数据库重新加载完成。", MsgColor.Green, MsgType.Hint);
         }
     }
 }

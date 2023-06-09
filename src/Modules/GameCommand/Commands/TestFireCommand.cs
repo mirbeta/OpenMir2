@@ -1,14 +1,14 @@
 ﻿using M2Server.Event.Events;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     [Command("TestFire", "", 10)]
     public class TestFireCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject)
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             if (@params == null)
             {
@@ -20,18 +20,18 @@ namespace M2Server.GameCommand.Commands
             var nPoint = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 0;
 
             FireBurnEvent fireBurnEvent;
-            var nMinX = playObject.CurrX - nRange;
-            var nMaxX = playObject.CurrX + nRange;
-            var nMinY = playObject.CurrY - nRange;
-            var nMaxY = playObject.CurrY + nRange;
+            var nMinX = PlayerActor.CurrX - nRange;
+            var nMaxX = PlayerActor.CurrX + nRange;
+            var nMinY = PlayerActor.CurrY - nRange;
+            var nMaxY = PlayerActor.CurrY + nRange;
             for (var nX = nMinX; nX <= nMaxX; nX++)
             {
                 for (var nY = nMinY; nY <= nMaxY; nY++)
                 {
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
-                        fireBurnEvent = new FireBurnEvent(playObject, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
-                        M2Share.EventMgr.AddEvent(fireBurnEvent);
+                        fireBurnEvent = new FireBurnEvent(IPlayerActor, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
+                        SystemShare.EventMgr.AddEvent(fireBurnEvent);
                     }
                 }
             }

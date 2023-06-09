@@ -1,21 +1,21 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("ShowDenyAccountLogon", "", 10)]
     public class ShowDenyAccountLogonCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            if (playObject.Permission < 6) {
+        public void Execute(IPlayerActor PlayerActor) {
+            if (PlayerActor.Permission < 6) {
                 return;
             }
             try {
-                if (M2Share.DenyAccountList.Count <= 0) {
-                    playObject.SysMsg("禁止登录帐号列表为空。", MsgColor.Green, MsgType.Hint);
+                if (SystemShare.DenyAccountList.Count <= 0) {
+                    PlayerActor.SysMsg("禁止登录帐号列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
-                for (var i = 0; i < M2Share.DenyAccountList.Count; i++) {
-                    //PlayObject.SysMsg(Settings.g_DenyAccountList[i], MsgColor.c_Green, MsgType.t_Hint);
+                for (var i = 0; i < SystemShare.DenyAccountList.Count; i++) {
+                    //PlayerActor.SysMsg(Settings.g_DenyAccountList[i], MsgColor.c_Green, MsgType.t_Hint);
                 }
             }
             finally {

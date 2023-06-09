@@ -3,7 +3,6 @@ using M2Server.Castle;
 using M2Server.Monster.Monsters;
 using M2Server.Npc;
 using M2Server.Player;
-using ScriptEngine.Consts;
 using SystemModule.Enums;
 
 namespace GameSrv.Npc

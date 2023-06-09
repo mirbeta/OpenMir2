@@ -20,7 +20,8 @@
     </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+      <ProjectReference Include="..\Modules\SystemModule\SystemModule.csproj" />
+      <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
     </ItemGroup>
 
 </Project>

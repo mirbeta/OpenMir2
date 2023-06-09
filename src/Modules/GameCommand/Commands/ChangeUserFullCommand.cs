@@ -1,15 +1,15 @@
-﻿using M2Server.Player;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem
+{
     /// <summary>
     /// 调整服务器最高上线人数
     /// </summary>
     [Command("ChangeUserFull", "调整服务器最高上限人数", "人数", 10)]
     public class ChangeUserFullCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -17,12 +17,12 @@ namespace M2Server.GameCommand.Commands {
             var nCount = HUtil32.StrToInt(sUserCount, -1);
             if (string.IsNullOrEmpty(sUserCount) || nCount < 1 || !string.IsNullOrEmpty(sUserCount))
             {
-                playObject.SysMsg("设置服务器最高上线人数。", MsgColor.Red, MsgType.Hint);
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg("设置服务器最高上线人数。", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            M2Share.Config.UserFull = nCount;
-            playObject.SysMsg($"服务器上线人数限制: {nCount}", MsgColor.Green, MsgType.Hint);
+            SystemShare.Config.UserFull = nCount;
+            PlayerActor.SysMsg($"服务器上线人数限制: {nCount}", MsgColor.Green, MsgType.Hint);
         }
     }
 }

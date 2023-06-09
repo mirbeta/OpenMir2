@@ -1,20 +1,20 @@
 ﻿using M2Server.Npc;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands
+namespace CommandSystem
 {
     [Command("NpcScript", "重新读取面对面NPC脚本", "重新读取面对面NPC脚本", 10)]
     public class NpcScriptCommand : GameCommand
     {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject)
+        public void Execute(IPlayerActor PlayerActor)
         {
             var sScriptFileName = string.Empty;
             var nNpcType = -1;
-            var baseObject = playObject.GetPoseCreate();
+            var baseObject = PlayerActor.GetPoseCreate();
             //if (baseObject != null)
             //{
             //    for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
@@ -36,7 +36,7 @@ namespace M2Server.GameCommand.Commands
             //}
             //if (nNpcType < 0)
             //{
-            //    playObject.SysMsg("命令使用方法不正确，必须与NPC面对面，才能使用此命令!!!", MsgColor.Red, MsgType.Hint);
+            //    PlayerActor.SysMsg("命令使用方法不正确，必须与NPC面对面，才能使用此命令!!!", MsgColor.Red, MsgType.Hint);
             //    return;
             //}
             //if (nNpcType == 0)
@@ -58,13 +58,13 @@ namespace M2Server.GameCommand.Commands
                 }
                 catch
                 {
-                    playObject.SysMsg("读取脚本文件错误: " + sScriptFileName, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg("读取脚本文件错误: " + sScriptFileName, MsgColor.Red, MsgType.Hint);
                 }
                 for (var i = 0; i < loadList.Count; i++)
                 {
                     var sScriptLine = loadList[i].Trim();
                     sScriptLine = HUtil32.ReplaceChar(sScriptLine, ' ', ',');
-                    playObject.SysMsg(i + "," + sScriptLine, MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(i + "," + sScriptLine, MsgColor.Blue, MsgType.Hint);
                 }
             }
         }

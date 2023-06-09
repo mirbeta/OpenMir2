@@ -1,40 +1,40 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 调整指定玩家职业
     /// </summary>
     [Command("ChangeJob", "调整指定玩家职业", CommandHelp.GameCommandChangeJobHelpMsg, 10)]
     public class ChangeJobCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             var sJobName = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sJobName)) {
-                playObject.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mPlayObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
-            if (mPlayObject != null) {
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            if (mIPlayerActor != null) {
                 if (string.Compare(sJobName, "Warr", StringComparison.OrdinalIgnoreCase) == 0) {
-                    mPlayObject.Job = PlayJob.Warrior;
+                    mIPlayerActor.Job = PlayJob.Warrior;
                 }
                 if (string.Compare(sJobName, "Wizard", StringComparison.OrdinalIgnoreCase) == 0) {
-                    mPlayObject.Job = PlayJob.Wizard;
+                    mIPlayerActor.Job = PlayJob.Wizard;
                 }
                 if (string.Compare(sJobName, "Taos", StringComparison.OrdinalIgnoreCase) == 0) {
-                    mPlayObject.Job = PlayJob.Taoist;
+                    mIPlayerActor.Job = PlayJob.Taoist;
                 }
-                mPlayObject.HasLevelUp(1);
-                mPlayObject.SysMsg(CommandHelp.GameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
+                mIPlayerActor.HasLevelUp(1);
+                mIPlayerActor.SysMsg(CommandHelp.GameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandChangeJobMsg, sHumanName), MsgColor.Green, MsgType.Hint);
             }
             else {
-                playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
             }
         }
     }

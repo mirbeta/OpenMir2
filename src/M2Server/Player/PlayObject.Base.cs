@@ -1,9 +1,7 @@
 ﻿using M2Server.Actor;
 using M2Server.Event.Events;
-using M2Server.Guild;
 using M2Server.Items;
 using M2Server.Magic;
-using M2Server.Maps;
 using M2Server.Monster;
 using System.Text.RegularExpressions;
 using SystemModule;
@@ -11,8 +9,6 @@ using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
-using GuildInfo = M2Server.Guild.GuildInfo;
-using NormNpc = M2Server.Npc.NormNpc;
 using UserCastle = M2Server.Castle.UserCastle;
 
 namespace M2Server.Player
@@ -124,7 +120,7 @@ namespace M2Server.Player
             }
         }
 
-        private void WinExp(int dwExp)
+        public void WinExp(int dwExp)
         {
             if (Abil.Level > M2Share.Config.LimitExpLevel)
             {
@@ -683,7 +679,7 @@ namespace M2Server.Player
             if (HUtil32.GetTickCount() - ClickNpcTime > M2Share.Config.ClickNpcTime)
             {
                 ClickNpcTime = HUtil32.GetTickCount();
-                NormNpc normNpc = M2Share.WorldEngine.FindMerchant(actorId) ?? M2Share.WorldEngine.FindNpc(actorId);
+                INormNpc normNpc = M2Share.WorldEngine.FindMerchant(actorId) ?? M2Share.WorldEngine.FindNpc(actorId);
                 if (normNpc != null)
                 {
                     if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
@@ -761,7 +757,7 @@ namespace M2Server.Player
 
         public void GainExp(int dwExp)
         {
-            PlayObject playObject;
+            IActor playObject;
             const string sExceptionMsg = "[Exception] PlayObject::GainExp";
             double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
             try
@@ -861,16 +857,13 @@ namespace M2Server.Player
 
         public void GoldChange(string sChrName, int nGold)
         {
-            int s10;
             string s14;
             if (nGold > 0)
             {
-                s10 = 14;
                 s14 = "增加完成";
             }
             else
             {
-                s10 = 13;
                 s14 = "以删减";
             }
             SysMsg(sChrName + " 的金币 " + nGold + " 金币" + s14, MsgColor.Green, MsgType.Hint);
@@ -895,7 +888,7 @@ namespace M2Server.Player
             SendDefMessage(Messages.SM_MAPDESCRIPTION, nMusicid, 0, 0, 0, Envir.MapDesc);
         }
 
-        public void ChangeSpaceMove(Envirnoment envir, short nX, short nY)
+        public void ChangeSpaceMove(IEnvirnoment envir, short nX, short nY)
         {
             SwitchMapName = envir.MapName;
             SwitchMapX = nX;
@@ -982,7 +975,7 @@ namespace M2Server.Player
         // 检查角色的座标是否在指定误差范围以内
         // targetBaseObject 为要检查的角色，nX,nY 为比较的座标
         // 检查角色是否在指定座标的1x1 范围以内，如果在则返回True 否则返回 False
-        protected bool CretInNearXy(BaseObject targeBaseObject, int nX, int nY)
+        protected bool CretInNearXy(IActor targeBaseObject, int nX, int nY)
         {
             if (Envir == null)
             {
@@ -1001,7 +994,7 @@ namespace M2Server.Player
                             CellObject cellObject = cellInfo.ObjList[i];
                             if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                             {
-                                BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
                                     if (!baseObject.Ghost && baseObject == targeBaseObject)
@@ -1349,7 +1342,7 @@ namespace M2Server.Player
 
         private void SendGroupMembers()
         {
-            PlayObject playObject;
+            IPlayerActor playObject;
             string sSendMsg = "";
             for (int i = 0; i < GroupMembers.Count; i++)
             {
@@ -1368,7 +1361,7 @@ namespace M2Server.Player
             return (ushort)(HUtil32.Round(userMagic.Magic.Spell / 4.0 * (userMagic.Level + 1)) + userMagic.Magic.DefSpell);
         }
 
-        private bool DoMotaeboCanMotaebo(BaseObject baseObject, int nMagicLevel)
+        private bool DoMotaeboCanMotaebo(IActor baseObject, int nMagicLevel)
         {
             if (Abil.Level > baseObject.Abil.Level && !baseObject.StickMode) //当前玩家等级大于目标等级，并且目标可以被冲撞
             {
@@ -1387,7 +1380,7 @@ namespace M2Server.Player
         protected bool DoMotaebo(byte nDir, byte nMagicLevel)
         {
             int nDmg;
-            BaseObject baseObject34 = null;
+            IActor baseObject34 = null;
             short nX = 0;
             short nY = 0;
             bool result = false;
@@ -1395,7 +1388,7 @@ namespace M2Server.Player
             byte n24 = (byte)(nMagicLevel + 1);
             byte n28 = n24;
             Dir = nDir;
-            BaseObject poseCreate = GetPoseCreate();
+            IActor poseCreate = GetPoseCreate();
             if (poseCreate != null)
             {
                 for (int i = 0; i < HUtil32._MAX(2, nMagicLevel + 1); i++)
@@ -1412,7 +1405,7 @@ namespace M2Server.Player
                         {
                             if (Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref nX, ref nY))
                             {
-                                BaseObject baseObject30 = Envir.GetMovingObject(nX, nY, true);
+                                IActor baseObject30 = Envir.GetMovingObject(nX, nY, true);
                                 if (baseObject30 != null && DoMotaeboCanMotaebo(baseObject30, nMagicLevel))
                                 {
                                     baseObject30.CharPushed(Dir, 1);
@@ -1499,7 +1492,7 @@ namespace M2Server.Player
             return result;
         }
 
-        private bool DoSpell(UserMagic userMagic, short targetX, short targetY, BaseObject targetObject)
+        private bool DoSpell(UserMagic userMagic, short targetX, short targetY, IActor targetObject)
         {
             bool result = false;
             try
@@ -2322,7 +2315,7 @@ namespace M2Server.Player
             {
                 MapRandomMove(sMap, 0);
             }
-            Envirnoment envir = Envir;
+            IEnvirnoment envir = Envir;
             if (envir != Envir && Race == ActorRace.Play)
             {
                 IsTimeRecall = false;
@@ -2968,7 +2961,7 @@ namespace M2Server.Player
             {
                 if (Abil.Level >= M2Share.Config.MasterOKLevel)
                 {
-                    PlayObject human = M2Share.WorldEngine.GetPlayObject(MasterName);
+                    IPlayerActor human = M2Share.WorldEngine.GetPlayObject(MasterName);
                     if (human != null && !human.Death && !human.Ghost)
                     {
                         sSayMsg = string.Format(Settings.YourMasterListUnMasterOKMsg, ChrName);
@@ -3313,7 +3306,7 @@ namespace M2Server.Player
             short nY = 0;
             short n18 = 0;
             short n1C = 0;
-            PlayObject playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
             if (playObject != null)
             {
                 if (GetFrontPosition(ref nX, ref nY))
@@ -3331,7 +3324,7 @@ namespace M2Server.Player
             }
             else
             {
-               // SysMsg(Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
+                // SysMsg(Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -3347,25 +3340,25 @@ namespace M2Server.Player
                 SysMsg("这个命令不能在本服务器上使用!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            GuildInfo guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            IGuild guild = M2Share.GuildMgr.FindGuild(sGuildName);
             if (guild == null)
             {
                 SysMsg("行会不存在!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             bool boReQuestOk = false;
-            WarGuild warGuild = MyGuild.AddWarGuild(guild);
-            if (warGuild.dwWarTick > 0)
-            {
-                if (guild.AddWarGuild(MyGuild).Guild != null)
-                {
-                    warGuild.dwWarTick = 0;
-                }
-                else
-                {
-                    boReQuestOk = true;
-                }
-            }
+            //WarGuild warGuild = MyGuild.AddWarGuild(guild);
+            //if (warGuild.dwWarTick > 0)
+            //{
+            //    if (guild.AddWarGuild(MyGuild).Guild != null)
+            //    {
+            //        warGuild.dwWarTick = 0;
+            //    }
+            //    else
+            //    {
+            //        boReQuestOk = true;
+            //    }
+            //}
             if (boReQuestOk)
             {
                 M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
@@ -3408,7 +3401,7 @@ namespace M2Server.Player
 
         private void ProcessQueryValue(int npc, string sData)
         {
-            NormNpc normNpc;
+            INormNpc normNpc;
             string sRefMsg = string.Empty;
             if (!Ghost && !string.IsNullOrEmpty(GotoNpcLabel))
             {
@@ -3453,7 +3446,7 @@ namespace M2Server.Player
                 case 2:
                     if (M2Share.ManageNPC != null)
                     {
-                       // M2Share.ManageNPC.GotoLable(this, GotoNpcLabel, false);
+                        // M2Share.ManageNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
             }
@@ -3469,7 +3462,7 @@ namespace M2Server.Player
                 {
                     return;
                 }
-                NormNpc npc = M2Share.WorldEngine.FindMerchant(nParam1) ?? M2Share.WorldEngine.FindNpc(nParam1);
+                INormNpc npc = M2Share.WorldEngine.FindMerchant(nParam1) ?? M2Share.WorldEngine.FindNpc(nParam1);
                 if (npc != null)
                 {
                     LastNpc = npc.ActorId;

@@ -1,10 +1,10 @@
-﻿using System.Reflection;
-using M2Server.Player;
-using M2Server.Conf;
-using NLog;
+﻿using NLog;
+using System.Reflection;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand {
+namespace CommandSystem
+{
     public static class CommandMgr {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly GameCmdConf CommandConf;
@@ -12,7 +12,7 @@ namespace M2Server.GameCommand {
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
 
         static CommandMgr() {
-            CommandConf = new GameCmdConf(Path.Combine(M2Share.BasePath, ConfConst.CommandFileName));
+            CommandConf = new GameCmdConf(Path.Combine(SystemShare.BasePath, ConfConst.CommandFileName));
         }
 
         public static void RegisterCommand()
@@ -72,7 +72,7 @@ namespace M2Server.GameCommand {
                 var commandAttribute = (CommandAttribute)commands[i].GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandAttribute == null) continue;
                 if (CommandMaps.ContainsKey(commandAttribute.Name)) {
-                    M2Share.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
+                    SystemShare.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
                     continue;
                 }
                 var gameCommand = (GameCommand)Activator.CreateInstance(commands[i]);
@@ -87,7 +87,7 @@ namespace M2Server.GameCommand {
                 }
                 var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null) {
-                    M2Share.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
+                    SystemShare.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
                     continue;
                 }
                 gameCommand.Register(commandAttribute, executeMethod);
@@ -98,12 +98,12 @@ namespace M2Server.GameCommand {
         /// <summary>
         /// 执行游戏命令
         /// </summary>
-        /// <param name="playObject">命令对象</param>
+        /// <param name="IPlayerActor">命令对象</param>
         /// <param name="line">命令字符串</param>
         /// <returns><see cref="bool"/></returns>
-        public static bool Execute(PlayObject playObject,string line) {
-            if (playObject == null)
-                throw new ArgumentException("PlayObject");
+        public static bool Execute(IPlayerActor PlayerActor,string line) {
+            if (IPlayerActor == null)
+                throw new ArgumentException("IPlayerActor");
 
             if (!ExtractCommandAndParameters(line, out var commandName, out var parameters))
                 return false;
@@ -112,7 +112,7 @@ namespace M2Server.GameCommand {
             var found = false;
 
             if (CommandMaps.TryGetValue(commandName, out var command)) {
-                output = command.Handle(parameters, playObject);
+                output = command.Handle(parameters, IPlayerActor);
                 found = true;
             }
 
@@ -122,7 +122,7 @@ namespace M2Server.GameCommand {
 
             //把返回结果给玩家
             if (!string.IsNullOrEmpty(output)) {
-                playObject.SysMsg(output, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(output, MsgColor.Red, MsgType.Hint);
             }
             return found;
         }
@@ -175,11 +175,11 @@ namespace M2Server.GameCommand {
 
             }
 
-            public override string Fallback(string[] parameters = null, PlayObject PlayObject = null) {
+            public override string Fallback(string[] parameters = null, IPlayerActor PlayerActor = null) {
                 var output = "Available commands: ";
                 var commandList = CommandMaps.Values.ToList();
                 foreach (var pair in commandList) {
-                    if (PlayObject != null && pair.Command.PermissionMin > PlayObject.Permission) continue;
+                    if (IPlayerActor != null && pair.Command.PermissionMin > PlayerActor.Permission) continue;
                     output += pair.Command.Name + ", ";
                 }
                 output = output[..^2] + ".";
@@ -193,11 +193,11 @@ namespace M2Server.GameCommand {
 
             }
 
-            public override string Fallback(string[] parameters = null, PlayObject PlayObject = null) {
+            public override string Fallback(string[] parameters = null, IPlayerActor PlayerActor = null) {
                 return "usage: help <command>";
             }
 
-            public override string Handle(string parameters, PlayObject PlayObject = null) {
+            public override string Handle(string parameters, IPlayerActor PlayerActor = null) {
                 if (parameters == string.Empty)
                     return this.Fallback();
                 var @params = parameters.Split(' ');

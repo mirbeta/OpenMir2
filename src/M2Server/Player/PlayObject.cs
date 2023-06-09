@@ -1,9 +1,6 @@
 ﻿using M2Server.Actor;
-using M2Server.Event;
 using M2Server.Items;
 using M2Server.Magic;
-using M2Server.Maps;
-using M2Server.Npc;
 using M2Server.RobotPlay;
 using System.Collections;
 using System.Runtime.CompilerServices;
@@ -583,7 +580,7 @@ namespace M2Server.Player
         /// <summary>
         /// 组成员
         /// </summary>
-        public IList<PlayObject> GroupMembers;
+        public IList<IPlayerActor> GroupMembers;
         public string PlayDiceLabel = string.Empty;
         public bool IsTimeRecall;
         public int TimeRecallTick = 0;
@@ -641,7 +638,7 @@ namespace M2Server.Player
         /// 配偶名称
         /// </summary>
         public string DearName;
-        public PlayObject DearHuman;
+        public IPlayerActor DearHuman;
         /// <summary>
         /// 是否允许夫妻传送
         /// </summary>
@@ -656,8 +653,8 @@ namespace M2Server.Player
         /// 师徒名称
         /// </summary>
         public string MasterName;
-        public PlayObject MasterHuman;
-        public IList<PlayObject> MasterList;
+        public IPlayerActor MasterHuman;
+        public IList<IPlayerActor> MasterList;
         public bool IsMaster = false;
         /// <summary>
         /// 对面玩家
@@ -976,7 +973,7 @@ namespace M2Server.Player
             PayMentPoint = 0;
             DearHuman = null;
             MasterHuman = null;
-            MasterList = new List<PlayObject>();
+            MasterList = new List<IPlayerActor>();
             BoSendMsgFlag = false;
             BoChangeItemNameFlag = false;
             CanMasterRecall = false;
@@ -1039,7 +1036,7 @@ namespace M2Server.Player
             QuestUnit = new byte[128];
             QuestFlag = new byte[128];
             MagicArr = new UserMagic[50];
-            GroupMembers = new List<PlayObject>();
+            GroupMembers = new List<IPlayerActor>();
             VisibleEvents = new List<MapEvent>();
             VisibleItems = new List<VisibleMapItem>();
             ItemList = new List<UserItem>(Grobal2.MaxBagItem);
@@ -1151,9 +1148,7 @@ namespace M2Server.Player
         /// </summary>
         public void UserLogon()
         {
-            string sIPaddr = "127.0.0.1";
             const string sExceptionMsg = "[Exception] PlayObject::UserLogon";
-            const string sCheckIPaddrFail = "登录IP地址不匹配!!!";
             try
             {
                 if (M2Share.Config.TestServer)
@@ -1385,7 +1380,7 @@ namespace M2Server.Player
                 MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {
-                    GuildRankName = MyGuild.GetRankName(this, ref GuildRankNo);
+                    GuildRankName = MyGuild.GetRankName((IPlayerActor)this, ref GuildRankNo);
                     for (int i = MyGuild.GuildWarList.Count - 1; i >= 0; i--)
                     {
                         SysMsg(MyGuild.GuildWarList[i] + " 正在与本行会进行行会战.", MsgColor.Green, MsgType.Hint);
@@ -1457,19 +1452,19 @@ namespace M2Server.Player
                         IsCanSendMsg = !M2Share.Config.LockSendMsgAction;
                         ObMode = M2Share.Config.LockInObModeAction;
                         AdminMode = M2Share.Config.LockInObModeAction;
-                       // SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.LockLogon.CmdName, MsgColor.Red, MsgType.Hint);
-                      //  SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
+                        // SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.LockLogon.CmdName, MsgColor.Red, MsgType.Hint);
+                        //  SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
                     }
                     if (!IsPasswordLocked)
                     {
-                      //  SysMsg(Format(Settings.PasswordNotSetMsg, CommandMgr.GameCommands.PasswordLock.CmdName), MsgColor.Red, MsgType.Hint);
+                        //  SysMsg(Format(Settings.PasswordNotSetMsg, CommandMgr.GameCommands.PasswordLock.CmdName), MsgColor.Red, MsgType.Hint);
                     }
                     if (!IsLockLogon && IsPasswordLocked)
                     {
-                      //  SysMsg(Format(Settings.NotPasswordProtectMode, CommandMgr.GameCommands.LockLogon.CmdName), MsgColor.Red, MsgType.Hint);
+                        //  SysMsg(Format(Settings.NotPasswordProtectMode, CommandMgr.GameCommands.LockLogon.CmdName), MsgColor.Red, MsgType.Hint);
                     }
                     //SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName, MsgColor.Red, MsgType.Hint);
-                   // SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName + '\\' + "加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
+                    // SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName + '\\' + "加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
                 }
                 // 重置泡点方面计时
                 IncGamePointTick = HUtil32.GetTickCount();
@@ -1617,7 +1612,7 @@ namespace M2Server.Player
         /// <summary>
         /// 角色杀死目标触发
         /// </summary>
-        private void KillTargetTrigger(int actorId,int fightExp)
+        private void KillTargetTrigger(int actorId, int fightExp)
         {
             var killObject = M2Share.ActorMgr.Get(actorId);
             if (killObject == null)
@@ -1626,7 +1621,7 @@ namespace M2Server.Player
             }
             if (M2Share.FunctionNPC != null)
             {
-               // M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
+                // M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
             int monsterExp = CalcGetExp(WAbil.Level, fightExp);
             if (!M2Share.Config.VentureServer)
@@ -1770,7 +1765,7 @@ namespace M2Server.Player
             }
             if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && killObject.Race == ActorRace.Play)
             {
-                BaseObject AttackBaseObject = killObject;
+                IActor AttackBaseObject = killObject;
                 if (killObject.Master != null)
                 {
                     AttackBaseObject = killObject.Master;
@@ -1807,7 +1802,7 @@ namespace M2Server.Player
                     {
                         if (ExpHitter.Race == ActorRace.Play)
                         {
-                           // M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            // M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                         if (ExpHitter.Master != null)
                         {
@@ -1820,11 +1815,11 @@ namespace M2Server.Player
                         {
                             if (LastHiter.Race == ActorRace.Play)
                             {
-                              //  M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                //  M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                             if (LastHiter.Master != null)
                             {
-                              //  M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                //  M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                         }
                     }
@@ -1833,7 +1828,7 @@ namespace M2Server.Player
                 {
                     if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                     {
-                      //  M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                        //  M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
                     }
                 }
             }
@@ -1913,7 +1908,7 @@ namespace M2Server.Player
             return result;
         }
 
-        public override bool IsProperTarget(BaseObject baseObject)
+        public override bool IsProperTarget(IActor baseObject)
         {
             if (baseObject == null || baseObject.ActorId == this.ActorId)
             {
@@ -1966,7 +1961,7 @@ namespace M2Server.Player
             if (GroupOwner != 0)
             {
                 PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                groupOwnerPlay.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
+                groupOwnerPlay.DelMember((IPlayerActor)this);// 人物死亡立即退组，以防止组队刷经验
             }
             if (LastHiter != null)
             {
@@ -2113,8 +2108,12 @@ namespace M2Server.Player
                             continue;
                         }
                         stdItem = ItemSystem.GetStdItem(UseItems[i].Index);
-                        ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
-                        ApplyItemParametersEx(UseItems[i], ref WAbil);
+                        AddAbility addAbilTemp = AddAbil;
+                        Ability abilityTemp = WAbil;
+                        ApplyItemParameters(UseItems[i], stdItem, ref addAbilTemp);
+                        ApplyItemParametersEx(UseItems[i], ref abilityTemp);
+                        AddAbil = addAbilTemp;
+                        WAbil = abilityTemp;
                         if (stdItem != null)
                         {
                             if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
@@ -3033,7 +3032,7 @@ namespace M2Server.Player
         /// 更新玩家自身可见的玩家和怪物
         /// </summary>
         /// <param name="baseObject"></param>
-        protected override void UpdateVisibleGay(BaseObject baseObject)
+        public override void UpdateVisibleGay(IActor baseObject)
         {
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
@@ -3115,7 +3114,7 @@ namespace M2Server.Player
                                         //    cellInfo.Clear();
                                         //    break;
                                         //}
-                                        BaseObject baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                                         if (baseObject != null && !baseObject.Invisible)
                                         {
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -3204,7 +3203,7 @@ namespace M2Server.Player
                     VisibleBaseObject visibleBaseObject = VisibleActors[n18];
                     if (visibleBaseObject.VisibleFlag == VisibleFlag.Hidden)
                     {
-                        BaseObject baseObject = visibleBaseObject.BaseObject;
+                        IActor baseObject = visibleBaseObject.BaseObject;
                         if (!baseObject.FixedHideMode && !baseObject.Ghost)//防止人物退出时发送重复的消息占用带宽，人物进入隐身模式时人物不消失问题
                         {
                             SendMsg(baseObject, Messages.RM_DISAPPEAR, 0, 0, 0, 0);
@@ -3215,7 +3214,7 @@ namespace M2Server.Player
                     }
                     if (visibleBaseObject.VisibleFlag == VisibleFlag.Show)
                     {
-                        BaseObject baseObject = visibleBaseObject.BaseObject;
+                        IActor baseObject = visibleBaseObject.BaseObject;
                         if (baseObject != this)
                         {
                             if (baseObject.Death)
@@ -3386,7 +3385,7 @@ namespace M2Server.Player
         /// 计算角色外形代码
         /// </summary>
         /// <returns></returns>
-        public override int GetFeature(BaseObject baseObject)
+        public override int GetFeature(IActor baseObject)
         {
             byte nDress = 0;
             StdItem stdItem;
@@ -3473,7 +3472,7 @@ namespace M2Server.Player
                     {
                         for (int i = MasterList.Count - 1; i >= 0; i--)
                         {
-                            PlayObject human = MasterList[i];
+                            IPlayerActor human = MasterList[i];
                             sSayMsg = Settings.MasterLongOutMasterListOnlineMsg.Replace("%s", ChrName);
                             sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                             sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
@@ -3522,7 +3521,7 @@ namespace M2Server.Player
             }
         }
 
-        internal override void ScatterBagItems(int itemOfCreat)
+        public override void ScatterBagItems(int itemOfCreat)
         {
             const int dropWide = 2;
             if (AngryRing || NoDropItem || Envir.Flag.NoDropItem)
@@ -3566,7 +3565,7 @@ namespace M2Server.Player
             }
         }
 
-        protected override byte GetNameColor()
+        public override byte GetNameColor()
         {
             byte pvpLevel = PvpLevel();
             if (pvpLevel == 0)
@@ -3576,7 +3575,7 @@ namespace M2Server.Player
             return pvpLevel >= 2 ? M2Share.Config.PKLevel2NameColor : M2Share.Config.PKLevel1NameColor;
         }
 
-        protected override byte GetChrColor(BaseObject baseObject)
+        protected override byte GetChrColor(IActor baseObject)
         {
             if (baseObject.Race == ActorRace.Play)
             {
@@ -3709,7 +3708,7 @@ namespace M2Server.Player
         /// <summary>
         /// 切换地图
         /// </summary>
-        internal bool EnterAnotherMap(Envirnoment envir, short nDMapX, short nDMapY)
+        internal bool EnterAnotherMap(IEnvirnoment envir, short nDMapX, short nDMapY)
         {
             bool result = false;
             const string sExceptionMsg = "[Exception] BaseObject::EnterAnotherMap";
@@ -3747,7 +3746,7 @@ namespace M2Server.Player
                 {
                     OnHorse = false;
                 }
-                Envirnoment oldEnvir = Envir;
+                IEnvirnoment oldEnvir = Envir;
                 short nOldX = CurrX;
                 short nOldY = CurrY;
                 DisappearA();
@@ -4115,7 +4114,7 @@ namespace M2Server.Player
                     SendRefMsg(Messages.RM_BREAKWEAPON, 0, 0, 0, 0, "");
                     if (StdItem?.NeedIdentify == 1)
                     {
-                       // M2Share.EventSource.AddEventLog(21, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem?.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        // M2Share.EventSource.AddEventLog(21, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem?.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     FeatureChanged();
                 }
@@ -4125,7 +4124,7 @@ namespace M2Server.Player
                     SendUpdateItem(UseItems[ItemLocation.Weapon]);
                     if (StdItem.NeedIdentify == 1)
                     {
-                       // M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
+                        // M2Share.EventSource.AddEventLog(20, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + StdItem.Name + "\t" + useItems.MakeIndex + "\t" + '1' + "\t" + '0');
                     }
                     RecalcAbilitys();
                     SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
@@ -4177,7 +4176,7 @@ namespace M2Server.Player
             }
             return null;
         }
-        
+
         public UserMagic GetMagicInfo(string sMagicName)
         {
             UserMagic result = null;
@@ -4193,7 +4192,7 @@ namespace M2Server.Player
             return result;
         }
 
-        private bool IsProperIsFriend(BaseObject cret)
+        private bool IsProperIsFriend(IActor cret)
         {
             bool result = false;
             if (cret.Race == ActorRace.Play)
@@ -4317,7 +4316,7 @@ namespace M2Server.Player
             BodyLuckLevel = n;
         }
 
-        public void SetPkFlag(BaseObject baseObject)
+        public void SetPkFlag(IActor baseObject)
         {
             if (baseObject.Race == ActorRace.Play)
             {
@@ -5108,7 +5107,7 @@ namespace M2Server.Player
             }
         }
 
-        private void DelMember(PlayObject baseObject)
+        private void DelMember(IPlayerActor baseObject)
         {
             if (GroupOwner != baseObject.ActorId)
             {
@@ -5140,7 +5139,7 @@ namespace M2Server.Player
             }
         }
 
-        private bool IsGroupMember(BaseObject target)
+        private bool IsGroupMember(IActor target)
         {
             bool result = false;
             if (GroupOwner == 0)
@@ -5232,7 +5231,7 @@ namespace M2Server.Player
             SendMsg(Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0);
             if (M2Share.FunctionNPC != null)
             {
-               // M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
+                // M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
         }
 

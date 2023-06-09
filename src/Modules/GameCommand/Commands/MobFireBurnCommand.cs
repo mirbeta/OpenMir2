@@ -1,10 +1,10 @@
 ﻿using M2Server.Event.Events;
 using M2Server.Maps;
-using M2Server.Player;
+using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 调整安全去光环
     /// MOBFIREBURN  3 329 329 3 60 0
@@ -12,7 +12,7 @@ namespace M2Server.GameCommand.Commands {
     [Command("MobFireBurn", "调整安全去光环", 10)]
     public class MobFireBurnCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -23,7 +23,7 @@ namespace M2Server.GameCommand.Commands {
             var sTime = @params.Length > 4 ? @params[4] : "";//持续时间
             var sPoint = @params.Length > 5 ? @params[5] : "";//未知
             if (string.IsNullOrEmpty(sMap) || sMap != "" && sMap[1] == '?') {
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var nX = (short)HUtil32.StrToInt(sX, -1);
@@ -35,20 +35,20 @@ namespace M2Server.GameCommand.Commands {
                 nPoint = 1;
             }
             if (string.IsNullOrEmpty(sMap ) || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0) {
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY,
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY,
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = M2Share.MapMgr.FindMap(sMap);
+            var envir = SystemShare.MapMgr.FindMap(sMap);
             if (envir != null) {
-                var oldEnvir = playObject.Envir;
-                playObject.Envir = envir;
-                var fireBurnEvent = new FireBurnEvent(playObject, nX, nY, nType, nTime * 1000, nPoint);
-                M2Share.EventMgr.AddEvent(fireBurnEvent);
-                playObject.Envir = oldEnvir;
+                var oldEnvir = PlayerActor.Envir;
+                PlayerActor.Envir = envir;
+                var fireBurnEvent = new FireBurnEvent(IPlayerActor, nX, nY, nType, nTime * 1000, nPoint);
+                SystemShare.EventMgr.AddEvent(fireBurnEvent);
+                PlayerActor.Envir = oldEnvir;
                 return;
             }
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnMapNotFountMsg, this.Command.Name, sMap), MsgColor.Red, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnMapNotFountMsg, this.Command.Name, sMap), MsgColor.Red, MsgType.Hint);
         }
     }
 }

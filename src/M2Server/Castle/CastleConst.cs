@@ -1,8 +1,9 @@
 ﻿using M2Server.Actor;
-using M2Server.Guild;
 
-namespace M2Server.Castle {
-    public class CastleConst {
+namespace M2Server.Castle
+{
+    public class CastleConst
+    {
         /// <summary>
         /// 最大守卫次数
         /// </summary>
@@ -21,22 +22,8 @@ namespace M2Server.Castle {
         public const string SabukWFileName = "SabukW.txt";
     }
 
-
-    public struct AttackerInfo : IDisposable
+    public struct DefenseUnit
     {
-        public DateTime AttackDate;
-        public string sGuildName;
-        public GuildInfo Guild;
-
-        /// <summary>执行与释放或重置非托管资源关联的应用程序定义的任务。</summary>
-        public void Dispose()
-        {
-            //通知垃圾回收器不再调用终结器
-            GC.SuppressFinalize(this);
-        }
-    }
-
-    public struct DefenseUnit {
         public int nMainDoorX;
         public int nMainDoorY;
         public string sMainDoorName;
@@ -47,18 +34,6 @@ namespace M2Server.Castle {
         public BaseObject CenterWall;
         public BaseObject RightWall;
         public BaseObject Archer;
-    }
-
-    /// <summary>
-    /// 守卫
-    /// </summary>
-    public struct ArcherUnit {
-        public short nX;
-        public short nY;
-        public string sName;
-        public bool nStatus;
-        public ushort nHP;
-        public BaseObject BaseObject;
     }
 }
 

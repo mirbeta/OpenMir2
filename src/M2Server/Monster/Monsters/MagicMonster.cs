@@ -1,11 +1,14 @@
 ﻿using SystemModule;
 
-namespace M2Server.Monster.Monsters {
-    public class MagicMonster : MonsterObject {
+namespace M2Server.Monster.Monsters
+{
+    public class MagicMonster : MonsterObject
+    {
 
         //public int SpellTick = 0;
 
-        public MagicMonster() : base() {
+        public MagicMonster() : base()
+        {
             DupMode = false;
             ThinkTick = HUtil32.GetTickCount();
             ViewRange = 8;
@@ -44,26 +47,35 @@ namespace M2Server.Monster.Monsters {
             return result;
         }
 
-        protected virtual bool AttackTarget() {
+        protected virtual bool AttackTarget()
+        {
             bool result = false;
             byte dir = 0;
-            if (TargetCret != null) {
-                if (TargetCret == Master) {
+            if (TargetCret != null)
+            {
+                if (TargetCret == Master)
+                {
                     TargetCret = null;
                 }
-                else {
-                    if (GetAttackDir(TargetCret, ref dir)) {
-                        if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime) {
+                else
+                {
+                    if (GetAttackDir(TargetCret, ref dir))
+                    {
+                        if ((HUtil32.GetTickCount() - AttackTick) > NextHitTime)
+                        {
                             AttackTick = HUtil32.GetTickCount();
                             TargetFocusTick = HUtil32.GetTickCount();
                         }
                         result = true;
                     }
-                    else {
-                        if (TargetCret.Envir == Envir) {
+                    else
+                    {
+                        if (TargetCret.Envir == Envir)
+                        {
                             SetTargetXy(TargetCret.CurrX, TargetCret.CurrY);
                         }
-                        else {
+                        else
+                        {
                             DelTargetCreat();
                         }
                     }
@@ -72,77 +84,102 @@ namespace M2Server.Monster.Monsters {
             return result;
         }
 
-        public override void Run() {
+        public override void Run()
+        {
             short nX = 0;
             short nY = 0;
-            if (CanMove() && !FixedHideMode && !StoneMode) {
-                if (Think()) {
+            if (CanMove() && !FixedHideMode && !StoneMode)
+            {
+                if (Think())
+                {
                     base.Run();
                     return;
                 }
-                if (WalkWaitLocked) {
-                    if ((HUtil32.GetTickCount() - WalkWaitTick) > WalkWait) {
+                if (WalkWaitLocked)
+                {
+                    if ((HUtil32.GetTickCount() - WalkWaitTick) > WalkWait)
+                    {
                         WalkWaitLocked = false;
                     }
                 }
-                if (!WalkWaitLocked && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed) {
+                if (!WalkWaitLocked && (HUtil32.GetTickCount() - WalkTick) > WalkSpeed)
+                {
                     WalkTick = HUtil32.GetTickCount();
                     WalkCount++;
-                    if (WalkCount > WalkStep) {
+                    if (WalkCount > WalkStep)
+                    {
                         WalkCount = 0;
                         WalkWaitLocked = true;
                         WalkWaitTick = HUtil32.GetTickCount();
                     }
-                    if (!RunAwayMode) {
-                        if (!NoAttackMode) {
-                            if (TargetCret != null) {
-                                if (AttackTarget()) {
+                    if (!RunAwayMode)
+                    {
+                        if (!NoAttackMode)
+                        {
+                            if (TargetCret != null)
+                            {
+                                if (AttackTarget())
+                                {
                                     base.Run();
                                     return;
                                 }
                             }
-                            else {
+                            else
+                            {
                                 TargetX = -1;
-                                if (Mission) {
+                                if (Mission)
+                                {
                                     TargetX = MissionX;
                                     TargetY = MissionY;
                                 }
                             }
                         }
-                        if (Master != null) {
-                            if (TargetCret == null) {
+                        if (Master != null)
+                        {
+                            if (TargetCret == null)
+                            {
                                 Master.GetBackPosition(ref nX, ref nY);
-                                if (Math.Abs(TargetX - nX) > 1 || Math.Abs(TargetY - nY) > 1) {
+                                if (Math.Abs(TargetX - nX) > 1 || Math.Abs(TargetY - nY) > 1)
+                                {
                                     TargetX = nX;
                                     TargetY = nY;
-                                    if (Math.Abs(CurrX - nX) <= 2 && Math.Abs(CurrY - nY) <= 2) {
-                                        if (Envir.GetMovingObject(nX, nY, true) != null) {
+                                    if (Math.Abs(CurrX - nX) <= 2 && Math.Abs(CurrY - nY) <= 2)
+                                    {
+                                        if (Envir.GetMovingObject(nX, nY, true) != null)
+                                        {
                                             TargetX = CurrX;
                                             TargetY = CurrY;
                                         }
                                     }
                                 }
                             }
-                            if (!Master.SlaveRelax && (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20)) {
+                            if (!Master.SlaveRelax && (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20))
+                            {
                                 SpaceMove(Master.Envir.MapName, TargetX, TargetY, 1);
                             }
                         }
                     }
-                    else {
-                        if (RunAwayTime > 0 && (HUtil32.GetTickCount() - RunAwayStart) > RunAwayTime) {
+                    else
+                    {
+                        if (RunAwayTime > 0 && (HUtil32.GetTickCount() - RunAwayStart) > RunAwayTime)
+                        {
                             RunAwayMode = false;
                             RunAwayTime = 0;
                         }
                     }
-                    if (Master != null && Master.SlaveRelax) {
+                    if (Master != null && Master.SlaveRelax)
+                    {
                         base.Run();
                         return;
                     }
-                    if (TargetX != -1) {
+                    if (TargetX != -1)
+                    {
                         GotoTargetXY();
                     }
-                    else {
-                        if (TargetCret == null) {
+                    else
+                    {
+                        if (TargetCret == null)
+                        {
                             Wondering();
                         }
                     }

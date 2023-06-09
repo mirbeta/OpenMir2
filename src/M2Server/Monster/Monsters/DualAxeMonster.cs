@@ -1,5 +1,4 @@
-﻿using M2Server.Actor;
-using SystemModule;
+﻿using SystemModule;
 
 namespace M2Server.Monster.Monsters
 {
@@ -11,7 +10,7 @@ namespace M2Server.Monster.Monsters
         /// </summary>
         protected int AttackMax;
 
-        private void FlyAxeAttack(BaseObject target)
+        private void FlyAxeAttack(IActor target)
         {
             if (Envir.CanFly(CurrX, CurrY, target.CurrX, target.CurrY))
             {
@@ -84,7 +83,7 @@ namespace M2Server.Monster.Monsters
         public override void Run()
         {
             int nRage = 9999;
-            BaseObject targetBaseObject = null;
+            IActor targetBaseObject = null;
             if (CanMove())
             {
                 if ((HUtil32.GetTickCount() - SearchEnemyTick) >= 5000)
@@ -92,7 +91,7 @@ namespace M2Server.Monster.Monsters
                     SearchEnemyTick = HUtil32.GetTickCount();
                     for (int i = 0; i < VisibleActors.Count; i++)
                     {
-                        BaseObject baseObject = VisibleActors[i].BaseObject;
+                        IActor baseObject = VisibleActors[i].BaseObject;
                         if (baseObject.Death)
                         {
                             continue;

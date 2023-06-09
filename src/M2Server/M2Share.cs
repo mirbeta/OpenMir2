@@ -1,6 +1,4 @@
 using M2Server.Castle;
-using M2Server.Conf;
-using M2Server.Conf.Model;
 using M2Server.DataSource;
 using M2Server.Event;
 using M2Server.Guild;
@@ -8,7 +6,6 @@ using M2Server.Items;
 using M2Server.Maps.AutoPath;
 using M2Server.Notices;
 using M2Server.Npc;
-using M2Server.Word;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -58,7 +55,7 @@ namespace M2Server
         public static NormNpc ManageNPC = null;
         public static NormNpc RobotNPC = null;
         public static NetworkMonitor NetworkMonitor;
-        public static IWordEngine WorldEngine;
+        public static IWorldEngine WorldEngine;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;

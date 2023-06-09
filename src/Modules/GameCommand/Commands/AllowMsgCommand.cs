@@ -1,17 +1,17 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     [Command("Allowmsg", "", "")]
     public class AllowMsgCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(PlayObject playObject) {
-            playObject.HearWhisper = !playObject.HearWhisper;
-            if (playObject.HearWhisper) {
-                playObject.SysMsg(CommandHelp.EnableHearWhisper, MsgColor.Green, MsgType.Hint);
+        public void Execute(IPlayerActor PlayerActor) {
+            PlayerActor.HearWhisper = !PlayerActor.HearWhisper;
+            if (PlayerActor.HearWhisper) {
+                PlayerActor.SysMsg(CommandHelp.EnableHearWhisper, MsgColor.Green, MsgType.Hint);
             }
             else {
-                playObject.SysMsg(CommandHelp.DisableHearWhisper, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(CommandHelp.DisableHearWhisper, MsgColor.Green, MsgType.Hint);
             }
         }
     }

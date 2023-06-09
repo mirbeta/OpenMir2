@@ -33,16 +33,19 @@
 // 将地图数据的读取和估价函数封装成一个类使用。
 // *******************************************************************************)
 
-namespace M2Server.Maps.AutoPath {
+namespace M2Server.Maps.AutoPath
+{
     // 路径数组
-    public class PathcellSuccess {
+    public class PathcellSuccess
+    {
         // 路径图元
         public int Distance;
         // 离起点的距离
         public int Direction;
     }
 
-    public struct WaveCell {
+    public struct WaveCell
+    {
         // 路线点
         public short X;
         public short Y;
@@ -50,7 +53,8 @@ namespace M2Server.Maps.AutoPath {
         public int Direction;
     }
 
-    public class Wave {
+    public class Wave
+    {
         public WaveCell Item => GetItem();
         public int MinCost => _fMinCost;
 
@@ -59,44 +63,53 @@ namespace M2Server.Maps.AutoPath {
         private int _fCount;
         private int _fMinCost;
 
-        public Wave() {
+        public Wave()
+        {
             Clear();
         }
 
-        ~Wave() {
+        ~Wave()
+        {
             _fData = null;
         }
 
-        private WaveCell GetItem() {
+        private WaveCell GetItem()
+        {
             return _fData[_fPos];
         }
 
-        public void Add(short newX, short newY, int newCost, int newDirection) {
-            if (_fCount >= _fData.Length) {
+        public void Add(short newX, short newY, int newCost, int newDirection)
+        {
+            if (_fCount >= _fData.Length)
+            {
                 _fData = new WaveCell[_fData.Length + 30];
             }
             _fData[_fCount].X = newX;
             _fData[_fCount].Y = newY;
             _fData[_fCount].Cost = newCost;
             _fData[_fCount].Direction = newDirection;
-            if (newCost < _fMinCost) {
+            if (newCost < _fMinCost)
+            {
                 _fMinCost = newCost;
             }
             _fCount++;
         }
 
-        public void Clear() {
+        public void Clear()
+        {
             _fPos = 0;
             _fCount = 0;
             _fMinCost = int.MaxValue;
         }
 
-        public bool Start() {
+        public bool Start()
+        {
             _fPos = 0;
             return _fCount > 0; ;
         }
 
-        public bool Next() {
+        public bool Next()
+        {
             _fPos++;
             return _fPos < _fCount;
         }

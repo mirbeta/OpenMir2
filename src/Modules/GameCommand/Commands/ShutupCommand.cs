@@ -1,15 +1,15 @@
-﻿using M2Server.Player;
+﻿using SystemModule;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 将指定人物禁言(支持权限分配)
     /// </summary>
     [Command("Shutup", "将指定人物禁言", CommandHelp.GameCommandShutupHelpMsg, 10)]
     public class ShutupCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
@@ -17,11 +17,11 @@ namespace M2Server.GameCommand.Commands {
             var sTime = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sTime) || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?') {
-                playObject.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var dwTime = (uint)HUtil32.StrToInt(sTime, 5);
-            HUtil32.EnterCriticalSection(M2Share.DenySayMsgList);
+            HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
             try {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
@@ -43,9 +43,9 @@ namespace M2Server.GameCommand.Commands {
                 //}
             }
             finally {
-                HUtil32.LeaveCriticalSection(M2Share.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(SystemShare.DenySayMsgList);
             }
-            playObject.SysMsg(string.Format(CommandHelp.GameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandShutupHumanMsg, sHumanName, dwTime), MsgColor.Red, MsgType.Hint);
         }
     }
 }

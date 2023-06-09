@@ -1,31 +1,31 @@
 ﻿using M2Server.Actor;
-using M2Server.Player;
+using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.GameCommand.Commands {
+namespace CommandSystem {
     /// <summary>
     /// 剔除制定玩家下线
     /// </summary>
     [Command("Kill", "剔除面对面玩家下线", "玩家名称", 10)]
     public class KillCommand : GameCommand {
         [ExecuteCommand]
-        public void Execute(string[] @params, PlayObject playObject) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor) {
             if (@params == null) {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             BaseObject baseObject;
             if (!string.IsNullOrEmpty(sHumanName)) {
-                baseObject = M2Share.WorldEngine.GetPlayObject(sHumanName);
+                baseObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
                 if (baseObject == null) {
-                    playObject.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
             else {
-                baseObject = playObject.GetPoseCreate();
+                baseObject = PlayerActor.GetPoseCreate();
                 if (baseObject == null) {
-                    playObject.SysMsg("命令使用方法不正确，必须与角色面对面站好!!!", MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg("命令使用方法不正确，必须与角色面对面站好!!!", MsgColor.Red, MsgType.Hint);
                     return;
                 }
             }
