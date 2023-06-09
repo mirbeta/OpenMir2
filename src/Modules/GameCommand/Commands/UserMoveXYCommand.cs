@@ -1,43 +1,54 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 移动地图指定座标(需要戴传送装备)
     /// </summary>
     [Command("UserMoveXY", "移动地图指定座标(需要戴传送装备)")]
-    public class UserMoveXyCommand : GameCommand {
+    public class UserMoveXyCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sX = @params.Length > 0 ? @params[0] : "";
             var sY = @params.Length > 1 ? @params[1] : "";
-            if (PlayerActor.Teleport) {
+            if (PlayerActor.Teleport)
+            {
                 var nX = HUtil32.StrToInt16(sX, -1);
                 var nY = HUtil32.StrToInt16(sY, -1);
-                if (!PlayerActor.Envir.Flag.boNOPOSITIONMOVE) {
-                    if (PlayerActor.Envir.CanWalkOfItem(nX, nY, ModuleShare.Config.boUserMoveCanDupObj, ModuleShare.Config.boUserMoveCanOnItem)) {
-                        if ((HUtil32.GetTickCount() - PlayerActor.TeleportTick) > ModuleShare.Config.dwUserMoveTime * 1000) {
+                if (!PlayerActor.Envir.Flag.boNOPOSITIONMOVE)
+                {
+                    if (PlayerActor.Envir.CanWalkOfItem(nX, nY, ModuleShare.Config.boUserMoveCanDupObj, ModuleShare.Config.boUserMoveCanOnItem))
+                    {
+                        if ((HUtil32.GetTickCount() - PlayerActor.TeleportTick) > ModuleShare.Config.dwUserMoveTime * 1000)
+                        {
                             PlayerActor.TeleportTick = HUtil32.GetTickCount();
                             PlayerActor.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                             PlayerActor.SpaceMove(PlayerActor.MapName, nX, nY, 0);
                         }
-                        else {
+                        else
+                        {
                             PlayerActor.SysMsg(ModuleShare.Config.dwUserMoveTime - (HUtil32.GetTickCount() - PlayerActor.TeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
-                    else {
+                    else
+                    {
                         PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandPositionMoveCanotMoveToMap, PlayerActor.MapName, sX, sY), MsgColor.Green, MsgType.Hint);
                     }
                 }
-                else {
+                else
+                {
                     PlayerActor.SysMsg("此地图禁止使用此命令!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
-            else {
+            else
+            {
                 PlayerActor.SysMsg("您现在还无法使用此功能!!!", MsgColor.Red, MsgType.Hint);
             }
         }

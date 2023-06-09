@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 增加AI玩家
@@ -22,9 +22,6 @@ namespace CommandSystem
                 return;
             }
             var userCount = HUtil32.StrToInt(@params[0], 1);
-            string sMapName;
-            short nX = 0;
-            short nY = 0;
             //if (@params.Length >= 3)
             //{
             //    sMapName = string.IsNullOrEmpty(@params[1]) ? "" : @params[1];

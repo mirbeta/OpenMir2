@@ -1,9 +1,7 @@
-﻿using M2Server.Monster;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 召唤指定怪物为宠物，宝宝等级直接为1级
@@ -43,12 +41,12 @@ namespace CommandSystem
             {
                 nNameColor = 255;
             }
-            var mon = (MonsterObject)ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+            var mon = ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
-                mon.Master = IPlayerActor;
-                mon.MasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
-                mon.SlaveMakeLevel = 3;
+                mon.Master = PlayerActor;
+                //mon.MasterRoyaltyTick = 86400000;// 24 * 60 * 60 * 1000
+                //mon.SlaveMakeLevel = 3;
                 mon.SlaveExpLevel = 1;
                 mon.NameColor = (byte)nNameColor;
                 mon.RecalcAbilitys();

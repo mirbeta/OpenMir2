@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 将指定人物召唤到身边(支持权限分配)

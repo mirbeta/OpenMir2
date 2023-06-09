@@ -20,6 +20,12 @@ namespace SystemModule
 
         public static IMapSystem MapMgr { get; private set; }
 
+        public static IGuildSystem GuildMgr { get; private set; }
+
+        public static ICastleSystem CastleMgr { get; private set; }
+
+        public static IEventSystem EventMgr { get; private set; }
+
         /// <summary>
         /// 启动路径
         /// </summary>
@@ -42,6 +48,9 @@ namespace SystemModule
         public static int HighMCHuman;
         public static int HighSCHuman;
         public static int HighOnlineHuman;
+        public static INormNpc ManageNPC = null;
+        public static INormNpc RobotNPC = null;
+        public static IMerchant FunctionNPC = null;
         public static Dictionary<string, IList<MakeItem>> MakeItemList = null;
         public static IList<StartPoint> StartPointList = null;
         public static TRouteInfo[] ServerTableList = null;
@@ -1826,6 +1835,112 @@ namespace SystemModule
             ExpConf.LoadConfig();
             GlobalConf.LoadConfig();
             GameSetting.LoadConfig();
+        }
+
+        public static int GetUseItemIdx(string sName)
+        {
+            var result = -1;
+            if (string.Compare(sName, Settings.DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 0;
+            }
+            else if (string.Compare(sName, Settings.WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 1;
+            }
+            else if (string.Compare(sName, Settings.RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 2;
+            }
+            else if (string.Compare(sName, Settings.NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 3;
+            }
+            else if (string.Compare(sName, Settings.HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 4;
+            }
+            else if (string.Compare(sName, Settings.ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 5;
+            }
+            else if (string.Compare(sName, Settings.ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 6;
+            }
+            else if (string.Compare(sName, Settings.RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 7;
+            }
+            else if (string.Compare(sName, Settings.RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 8;
+            }
+            else if (string.Compare(sName, Settings.BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 9;
+            }
+            else if (string.Compare(sName, Settings.BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 10;
+            }
+            else if (string.Compare(sName, Settings.BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 11;
+            }
+            else if (string.Compare(sName, Settings.CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            {
+                result = 12;
+            }
+            return result;
+        }
+
+        public static string GetUseItemName(int nIndex)
+        {
+            var result = string.Empty;
+            switch (nIndex)
+            {
+                case 0:
+                    result = Settings.DRESSNAME;
+                    break;
+                case 1:
+                    result = Settings.WEAPONNAME;
+                    break;
+                case 2:
+                    result = Settings.RIGHTHANDNAME;
+                    break;
+                case 3:
+                    result = Settings.NECKLACENAME;
+                    break;
+                case 4:
+                    result = Settings.HELMETNAME;
+                    break;
+                case 5:
+                    result = Settings.ARMRINGLNAME;
+                    break;
+                case 6:
+                    result = Settings.ARMRINGRNAME;
+                    break;
+                case 7:
+                    result = Settings.RINGLNAME;
+                    break;
+                case 8:
+                    result = Settings.RINGRNAME;
+                    break;
+                case 9:
+                    result = Settings.BUJUKNAME;
+                    break;
+                case 10:
+                    result = Settings.BELTNAME;
+                    break;
+                case 11:
+                    result = Settings.BOOTSNAME;
+                    break;
+                case 12:
+                    result = Settings.CHARMNAME;
+                    break;
+            }
+            return result;
         }
 
         public static string GetIPLocal(string sIPaddr)

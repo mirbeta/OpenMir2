@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 将指定坐标的怪物移动到新坐标，名称为ALL则移动该坐标所有怪物
@@ -51,7 +51,7 @@ namespace CommandSystem
             {
                 return;
             }
-            IList<BaseObject> monList = new List<BaseObject>();
+            IList<IActor> monList = new List<IActor>();
             //if (!boMoveAll)// 指定名称的怪移动
             //{
             //    M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 10, monList);// 查指定XY范围内的怪

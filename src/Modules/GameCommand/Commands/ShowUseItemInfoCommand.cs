@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 显示物品信息
@@ -35,7 +35,7 @@ namespace CommandSystem
                 {
                     continue;
                 }
-                PlayerActor.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", ModuleShare.GetUseItemName(i), ItemSystem.GetStdItemName(userItem.Index), userItem.Index,
+                PlayerActor.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", ModuleShare.GetUseItemName(i), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index,
                     userItem.MakeIndex, userItem.Dura, userItem.DuraMax), MsgColor.Blue, MsgType.Hint);
             }
         }

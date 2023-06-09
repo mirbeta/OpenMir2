@@ -1,22 +1,28 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("DelDenyAccountLogon", "", "登录帐号", 10)]
-    public class DelDenyAccountLogonCommand : GameCommand {
+    public class DelDenyAccountLogonCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sAccount = @params.Length > 0 ? @params[0] : "";
             var sFixDeny = @params.Length > 1 ? @params[1] : "";
-            if (string.IsNullOrEmpty(sAccount)) {
+            if (string.IsNullOrEmpty(sAccount))
+            {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boDelete = false;
-            for (var i = 0; i < ModuleShare.DenyAccountList.Count; i++) {
+            for (var i = 0; i < ModuleShare.DenyAccountList.Count; i++)
+            {
                 //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{
                 //    //if (((int)M2Share.g_DenyAccountList[i]) != 0)
@@ -29,7 +35,8 @@ namespace CommandSystem {
                 //    break;
                 //}
             }
-            if (!boDelete) {
+            if (!boDelete)
+            {
                 PlayerActor.SysMsg(sAccount + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }

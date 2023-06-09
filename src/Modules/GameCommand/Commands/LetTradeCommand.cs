@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     [Command("Lettrade", "", "")]
     public class LetTradeCommand : GameCommand
@@ -9,8 +9,8 @@ namespace CommandSystem
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            PlayerActor.SysMsgAllowDeal = !PlayerActor.SysMsgAllowDeal;
-            if (PlayerActor.SysMsgAllowDeal)
+            PlayerActor.AllowDeal = !PlayerActor.AllowDeal;
+            if (PlayerActor.AllowDeal)
             {
                 PlayerActor.SysMsg(CommandHelp.EnableDealMsg, MsgColor.Green, MsgType.Hint);
             }

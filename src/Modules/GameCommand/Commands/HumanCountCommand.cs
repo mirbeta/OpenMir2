@@ -1,8 +1,7 @@
-﻿using M2Server.Maps;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 取指定地图玩家数量

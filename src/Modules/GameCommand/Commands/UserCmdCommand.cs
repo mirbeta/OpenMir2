@@ -1,13 +1,16 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 自定义命令
     /// </summary>
     [Command("UserCmd", "自定义命令", 10)]
-    public class UserCmdCommand : GameCommand {
+    public class UserCmdCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
             // string sLable = @Params.Length > 0 ? @Params[0] : "";
             // byte Flag = 0;
             // if (PlayerActor.SysMsgm_nUserCmdNPC == M2Share.g_FunctionNPC)

@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 组队传送
@@ -34,7 +34,7 @@ namespace CommandSystem
                     {
                         for (var i = 0; i < PlayerActor.GroupMembers.Count; i++)
                         {
-                            var mIPlayerActor = PlayerActor.GroupMembers[i];
+                            var mIPlayerActor = (IPlayerActor)PlayerActor.GroupMembers[i];
                             if (mIPlayerActor.AllowGroupReCall)
                             {
                                 if (mIPlayerActor.Envir.Flag.NoReCall)

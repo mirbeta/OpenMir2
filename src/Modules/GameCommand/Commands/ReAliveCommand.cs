@@ -1,8 +1,7 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 复活指定玩家
@@ -31,7 +30,7 @@ namespace CommandSystem
             }
             mIPlayerActor.ReAlive();
             mIPlayerActor.WAbil.HP = mIPlayerActor.WAbil.MaxHP;
-            mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_ABILITY, 0, 0, 0, 0);
+            mIPlayerActor.SendMsg(PlayerActor, Messages.RM_ABILITY, 0, 0, 0, 0);
             PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandReAliveMsg, sHumanName), MsgColor.Green, MsgType.Hint);
             PlayerActor.SysMsg(sHumanName + " 已获重生。", MsgColor.Green, MsgType.Hint);
         }

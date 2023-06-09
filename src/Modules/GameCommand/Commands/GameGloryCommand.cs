@@ -1,10 +1,13 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("GameGlory", "调整玩家灵符", 10)]
-    public class GameGloryCommand : GameCommand {
+    public class GameGloryCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
             //string sHumanName = @Params.Length > 0 ? @Params[1] : "";
             //string sCtr = @Params.Length > 1 ? @Params[2] : "";
             //int nGameGlory = @Params.Length > 2 ? HUtil32.StrToInt(@Params[3]) : 0;

@@ -2,15 +2,19 @@
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 删除指定玩家技能
     /// </summary>
     [Command("DelSkill", "删除指定玩家技能", "人物名称 技能名称", 10)]
-    public class DelSkillCommand : GameCommand {
+    public class DelSkillCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
@@ -18,32 +22,42 @@ namespace CommandSystem {
             var herostr = @params.Length > 2 ? @params[2] : "";
             bool boDelAll;
             UserMagic userMagic;
-            if (string.IsNullOrEmpty(sHumanName) || (string.IsNullOrEmpty(sSkillName))) {
+            if (string.IsNullOrEmpty(sHumanName) || (string.IsNullOrEmpty(sSkillName)))
+            {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (string.Compare(sSkillName, "All", StringComparison.OrdinalIgnoreCase) == 0) {
+            if (string.Compare(sSkillName, "All", StringComparison.OrdinalIgnoreCase) == 0)
+            {
                 boDelAll = true;
             }
-            else {
+            else
+            {
                 boDelAll = false;
             }
             var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
-            if (mIPlayerActor == null) {
+            if (mIPlayerActor == null)
+            {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = mIPlayerActor.MagicList.Count - 1; i >= 0; i--) {
-                if (mIPlayerActor.MagicList.Count <= 0) {
+            for (var i = mIPlayerActor.MagicList.Count - 1; i >= 0; i--)
+            {
+                if (mIPlayerActor.MagicList.Count <= 0)
+                {
                     break;
                 }
                 userMagic = mIPlayerActor.MagicList[i];
-                if (userMagic != null) {
-                    if (boDelAll) {
+                if (userMagic != null)
+                {
+                    if (boDelAll)
+                    {
                         mIPlayerActor.MagicList.RemoveAt(i);
                     }
-                    else {
-                        if (string.Compare(userMagic.Magic.Desc, sSkillName, StringComparison.OrdinalIgnoreCase) == 0) {
+                    else
+                    {
+                        if (string.Compare(userMagic.Magic.Desc, sSkillName, StringComparison.OrdinalIgnoreCase) == 0)
+                        {
                             mIPlayerActor.SendDelMagic(userMagic);
                             mIPlayerActor.MagicList.RemoveAt(i);
                             mIPlayerActor.SysMsg($"技能{sSkillName}已删除。", MsgColor.Green, MsgType.Hint);

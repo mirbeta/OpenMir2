@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定玩家经验值
@@ -29,7 +29,7 @@ namespace CommandSystem
             {
                 var dwOExp = PlayerActor.Abil.Exp;
                 mIPlayerActor.Abil.Exp = dwExp;
-                mIPlayerActor.HasLevelUp(mIPlayerActor.Abil.Level - 1);
+                mIPlayerActor.HasLevelUp((ushort)(mIPlayerActor.Abil.Level - 1));
                 PlayerActor.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
                 if (ModuleShare.Config.ShowMakeItemMsg)
                 {

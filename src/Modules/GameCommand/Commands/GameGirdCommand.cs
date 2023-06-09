@@ -1,13 +1,16 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 此命令用于允许或禁止编组传送功能
     /// </summary>
     [Command("GameGird", "调整指定玩家灵符", 10)]
-    public class GameGirdCommand : GameCommand {
+    public class GameGirdCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
             //string sHumanName = @Params.Length > 0 ? @Params[0] : "";
             //string sCtr = @Params.Length > 1 ? @Params[1] : "";
             //int nGameGird = @Params.Length > 2 ? HUtil32.StrToInt(@Params[2],0) : 0;

@@ -1067,11 +1067,11 @@ namespace M2Server.Npc
             //    string MonsterName = s14;
             //    if (MapName.StartsWith("$")) // $MAPMOSTERCOUNT[怪物名字/地图号]
             //    {
-            //        MapName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
+            //        MapName = ModuleShare.ManageNPC.GetLineVariableText(PlayObject, "<" + MapName + ">"); // 替换变量
             //    }
             //    if (MonsterName.StartsWith("$"))
             //    {
-            //        MonsterName = M2Share.ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
+            //        MonsterName = ModuleShare.ManageNPC.GetLineVariableText(PlayObject, "<" + MonsterName + ">"); // 替换变量
             //    }
             //    MonGenInfo MonGen;
             //    BaseObject BaseObject;

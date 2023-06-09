@@ -49,8 +49,6 @@ namespace M2Server
         public static GuildManager GuildMgr = null;
         public static EventManager EventMgr = null;
         public static CastleManager CastleMgr = null;
-        public static NormNpc ManageNPC = null;
-        public static NormNpc RobotNPC = null;
         public static NetworkMonitor NetworkMonitor;
         public static IWorldEngine WorldEngine;
         public static int HighLevelHuman;
@@ -133,7 +131,6 @@ namespace M2Server
         public static bool GameLogGamePoint = true;
         public static bool GameLogHumanDie = true;
         public static IFrontEngine FrontEngine = null;
-        public static IMerchant FunctionNPC = null;
         /// <summary>
         /// IP过滤列表
         /// </summary>
@@ -1408,55 +1405,7 @@ namespace M2Server
             }
             return result;
         }
-
-        public static string GetUseItemName(int nIndex)
-        {
-            var result = string.Empty;
-            switch (nIndex)
-            {
-                case 0:
-                    result = Settings.DRESSNAME;
-                    break;
-                case 1:
-                    result = Settings.WEAPONNAME;
-                    break;
-                case 2:
-                    result = Settings.RIGHTHANDNAME;
-                    break;
-                case 3:
-                    result = Settings.NECKLACENAME;
-                    break;
-                case 4:
-                    result = Settings.HELMETNAME;
-                    break;
-                case 5:
-                    result = Settings.ARMRINGLNAME;
-                    break;
-                case 6:
-                    result = Settings.ARMRINGRNAME;
-                    break;
-                case 7:
-                    result = Settings.RINGLNAME;
-                    break;
-                case 8:
-                    result = Settings.RINGRNAME;
-                    break;
-                case 9:
-                    result = Settings.BUJUKNAME;
-                    break;
-                case 10:
-                    result = Settings.BELTNAME;
-                    break;
-                case 11:
-                    result = Settings.BOOTSNAME;
-                    break;
-                case 12:
-                    result = Settings.CHARMNAME;
-                    break;
-            }
-            return result;
-        }
-
+        
         public static bool LoadDisableSendMsgList()
         {
             var sFileName = GetEnvirFilePath("DisableSendMsgList.txt");

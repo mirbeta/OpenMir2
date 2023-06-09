@@ -1,16 +1,21 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("Letguild", "加入公会", "")]
-    public class LetGuildCommand : GameCommand {
+    public class LetGuildCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
-            PlayerActor.SysMsgAllowGuild = !PlayerActor.SysMsgAllowGuild;
-            if (PlayerActor.SysMsgAllowGuild) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            PlayerActor.AllowGuild = !PlayerActor.AllowGuild;
+            if (PlayerActor.AllowGuild)
+            {
                 PlayerActor.SysMsg(CommandHelp.EnableJoinGuild, MsgColor.Green, MsgType.Hint);
             }
-            else {
+            else
+            {
                 PlayerActor.SysMsg(CommandHelp.DisableJoinGuild, MsgColor.Green, MsgType.Hint);
             }
             return;

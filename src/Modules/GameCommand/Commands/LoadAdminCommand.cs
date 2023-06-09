@@ -1,15 +1,19 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 重新加载管理员列表
     /// </summary>
     [Command("LoadAdmin", "重新加载管理员列表", 10)]
-    public class LoadAdminCommand : GameCommand {
+    public class LoadAdminCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
-            if (PlayerActor.Permission < 6) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            if (PlayerActor.Permission < 6)
+            {
                 return;
             }
             //LocalDB.GetInstance().LoadAdminList();

@@ -1,8 +1,7 @@
 ﻿using SystemModule;
-using M2Server;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 此命令用于查询配偶当前所在位置

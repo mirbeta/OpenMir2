@@ -1,22 +1,29 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("DelDenyChrNameLogon", "", "人物名称", 10)]
-    public class DelDenyChrNameLogonCommand : GameCommand {
+    public class DelDenyChrNameLogonCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sChrName = @params.Length > 0 ? @params[0] : "";
-            if (string.IsNullOrEmpty(sChrName)) {
+            if (string.IsNullOrEmpty(sChrName))
+            {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var boDelete = false;
-            try {
-                for (var i = 0; i < ModuleShare.DenyChrNameList.Count; i++) {
+            try
+            {
+                for (var i = 0; i < ModuleShare.DenyChrNameList.Count; i++)
+                {
                     //if ((sChrName).CompareTo((M2Share.g_DenyChrNameList[i])) == 0)
                     //{
                     //    //if (((int)M2Share.g_DenyChrNameList[i]) != 0)
@@ -30,9 +37,11 @@ namespace CommandSystem {
                     //}
                 }
             }
-            finally {
+            finally
+            {
             }
-            if (!boDelete) {
+            if (!boDelete)
+            {
                 PlayerActor.SysMsg(sChrName + "没有被禁止登录。", MsgColor.Green, MsgType.Hint);
             }
         }

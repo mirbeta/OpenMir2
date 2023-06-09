@@ -1,10 +1,13 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("ReloadAbuse", "无用", 10)]
-    public class ReloadAbuseCommand : GameCommand {
+    public class ReloadAbuseCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
 
         }
     }

@@ -1,11 +1,15 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("MemberFunction", "", help: "打开会员功能窗口")]
-    public class MemberFunctionCommand : GameCommand {
+    public class MemberFunctionCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
-            if (ModuleShare.ManageNPC != null) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            if (ModuleShare.ManageNPC != null)
+            {
                 PlayerActor.ScriptGotoCount = 0;
                 ModuleShare.ManageNPC.GotoLable(PlayerActor, "@Member", false);
             }

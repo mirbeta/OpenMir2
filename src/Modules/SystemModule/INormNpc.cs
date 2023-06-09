@@ -25,5 +25,13 @@ namespace SystemModule
         void OnEnvirnomentChanged();
 
         void LoadNpcData();
+
+        void LoadNPCScript();
+
+        void ClearScript();
+
+        void ClearData();
+
+        string GetLineVariableText(IPlayerActor PlayObject, string sMsg);
     }
 }

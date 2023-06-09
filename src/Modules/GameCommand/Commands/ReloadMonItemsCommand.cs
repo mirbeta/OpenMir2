@@ -1,16 +1,19 @@
 ﻿using SystemModule;
-using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 重新加载怪物爆率文件
     /// </summary>
     [Command("ReloadMonItems", "重新加载怪物爆率文件", 10)]
-    public class ReloadMonItemsCommand : GameCommand {
+    public class ReloadMonItemsCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
-            try {
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            try
+            {
                 //var keyList = M2Share.WorldEngine.MonsterList.Keys.ToList();
                 //for (var i = 0; i < keyList.Count; i++) {
                 //    var monster = M2Share.WorldEngine.MonsterList[keyList[i]];
@@ -18,7 +21,8 @@ namespace CommandSystem {
                 //}
                 PlayerActor.SysMsg("怪物爆物品列表重加载完成...", MsgColor.Green, MsgType.Hint);
             }
-            catch {
+            catch
+            {
                 PlayerActor.SysMsg("怪物爆物品列表重加载失败!!!", MsgColor.Green, MsgType.Hint);
             }
         }

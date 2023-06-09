@@ -1,8 +1,6 @@
 ﻿using SystemModule;
-using M2Server;
-using SystemModule;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整自己的等级
@@ -19,13 +17,13 @@ namespace CommandSystem
             }
             var sParam1 = @params.Length > 0 ? @params[0] : "";
             var nLevel = HUtil32.StrToInt(sParam1, 1);
-            int nOLevel = PlayerActor.SysMsgAbil.Level;
-            PlayerActor.SysMsgAbil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
-            PlayerActor.SysMsgHasLevelUp(1);// 等级调整记录日志
-            //   M2Share.EventSource.AddEventLog(17, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + PlayerActor.SysMsgAbil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
+            int nOLevel = PlayerActor.Abil.Level;
+            PlayerActor.Abil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
+            PlayerActor.HasLevelUp(1);// 等级调整记录日志
+            //   M2Share.EventSource.AddEventLog(17, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + PlayerActor.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
             if (ModuleShare.Config.ShowMakeItemMsg)
             {
-                ModuleShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.SysMsgAbil.Level));
+                ModuleShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.Abil.Level));
             }
         }
     }

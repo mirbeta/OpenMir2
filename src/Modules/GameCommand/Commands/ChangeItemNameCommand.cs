@@ -1,8 +1,7 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定物品名称
@@ -32,12 +31,12 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (ModuleShare.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
-            {
-                ModuleShare.CustomItemMgr.SaveCustomItemName();
-                PlayerActor.SysMsg("物品名称设置成功。", MsgColor.Green, MsgType.Hint);
-                return;
-            }
+            //if (ModuleShare.CustomItemMgr.AddCustomItemName(nMakeIndex, nItemIndex, sItemName))
+            //{
+            //    ModuleShare.CustomItemMgr.SaveCustomItemName();
+            //    PlayerActor.SysMsg("物品名称设置成功。", MsgColor.Green, MsgType.Hint);
+            //    return;
+            //}
             PlayerActor.SysMsg("此物品，已经设置了其它的名称!!!", MsgColor.Red, MsgType.Hint);
         }
     }

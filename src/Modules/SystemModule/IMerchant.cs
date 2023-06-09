@@ -78,10 +78,6 @@ namespace SystemModule
 
         void LoadMerchantScript();
 
-        void ClearScript();
-
-        void ClearData();
-
         void Run();
     }
 }

@@ -1,8 +1,4 @@
-﻿using M2Server.Actor;
-using SystemModule;
-using SystemModule.Events;
-
-namespace M2Server.Event.Events
+﻿namespace SystemModule.Events
 {
     /// <summary>
     /// 火墙
@@ -15,7 +11,7 @@ namespace M2Server.Event.Events
         protected int FireRunTick;
         private IList<IActor> ObjectList = new List<IActor>();
 
-        public FireBurnEvent(BaseObject creat, short nX, short nY, byte nType, int nTime, int nDamage) : base(creat.Envir, nX, nY, nType, nTime, true)
+        public FireBurnEvent(IActor creat, short nX, short nY, byte nType, int nTime, int nDamage) : base(creat.Envir, nX, nY, nType, nTime, true)
         {
             Damage = nDamage;
             OwnBaseObject = creat;

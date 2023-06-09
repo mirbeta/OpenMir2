@@ -1423,9 +1423,9 @@ namespace M2Server.Player
                 {
                     return;
                 }
-                if (M2Share.ManageNPC != null)
+                if (ModuleShare.ManageNPC != null)
                 {
-                    //M2Share.ManageNPC.GotoLable(this, "@Login", false);
+                    //ModuleShare.ManageNPC.GotoLable(this, "@Login", false);
                 }
                 FixedHideMode = false;
                 if (!string.IsNullOrEmpty(DearName))
@@ -1454,7 +1454,7 @@ namespace M2Server.Player
                         ObMode = ModuleShare.Config.LockInObModeAction;
                         AdminMode = ModuleShare.Config.LockInObModeAction;
                         // SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.LockLogon.CmdName, MsgColor.Red, MsgType.Hint);
-                        //  SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
+                        //  SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "密码命令: @" + CommandMgr.GameCommands.PasswordLock.CmdName);
                     }
                     if (!IsPasswordLocked)
                     {
@@ -1465,7 +1465,7 @@ namespace M2Server.Player
                         //  SysMsg(Format(Settings.NotPasswordProtectMode, CommandMgr.GameCommands.LockLogon.CmdName), MsgColor.Red, MsgType.Hint);
                     }
                     //SysMsg(Settings.ActionIsLockedMsg + " 开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName, MsgColor.Red, MsgType.Hint);
-                    // SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName + '\\' + "加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
+                    // SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.ActionIsLockedMsg + "\\ \\" + "开锁命令: @" + CommandMgr.GameCommands.Unlock.CmdName + '\\' + "加锁命令: @" + CommandMgr.GameCommands.Lock.CmdName + '\\' + "设置密码命令: @" + CommandMgr.GameCommands.SetPassword.CmdName + '\\' + "修改密码命令: @" + CommandMgr.GameCommands.ChgPassword.CmdName);
                 }
                 // 重置泡点方面计时
                 IncGamePointTick = HUtil32.GetTickCount();
@@ -1620,9 +1620,9 @@ namespace M2Server.Player
             {
                 return;
             }
-            if (M2Share.FunctionNPC != null)
+            if (ModuleShare.FunctionNPC != null)
             {
-                // M2Share.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
+                // ModuleShare.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
             int monsterExp = CalcGetExp(WAbil.Level, fightExp);
             if (!ModuleShare.Config.VentureServer)
@@ -1795,7 +1795,7 @@ namespace M2Server.Player
                 }
                 AddBodyLuck(-(50 - (50 - WAbil.Level * 5)));
             }
-            if ((M2Share.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
+            if ((ModuleShare.FunctionNPC != null) && (Envir != null) && Envir.Flag.boKILLFUNC)
             {
                 if (killObject.Race != ActorRace.Play) //怪杀死玩家
                 {
@@ -1803,11 +1803,11 @@ namespace M2Server.Player
                     {
                         if (ExpHitter.Race == ActorRace.Play)
                         {
-                            // M2Share.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            // ModuleShare.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                         if (ExpHitter.Master != null)
                         {
-                            //M2Share.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            //ModuleShare.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                     }
                     else
@@ -1816,11 +1816,11 @@ namespace M2Server.Player
                         {
                             if (LastHiter.Race == ActorRace.Play)
                             {
-                                //  M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                //  ModuleShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                             if (LastHiter.Master != null)
                             {
-                                //  M2Share.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                //  ModuleShare.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                         }
                     }
@@ -1829,7 +1829,7 @@ namespace M2Server.Player
                 {
                     if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                     {
-                        //  M2Share.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                        //  ModuleShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
                     }
                 }
             }
@@ -5230,9 +5230,9 @@ namespace M2Server.Player
             RecalcLevelAbilitys();
             RecalcAbilitys();
             SendMsg(Messages.RM_LEVELUP, 0, Abil.Exp, 0, 0);
-            if (M2Share.FunctionNPC != null)
+            if (ModuleShare.FunctionNPC != null)
             {
-                // M2Share.FunctionNPC.GotoLable(this, "@LevelUp", false);
+                // ModuleShare.FunctionNPC.GotoLable(this, "@LevelUp", false);
             }
         }
 

@@ -178,10 +178,10 @@ namespace M2Server.RobotPlay
                 PointManager.Initialize(Envir);
                 RobotStart = true;
                 MoveFailCount = 0;
-                if (M2Share.FunctionNPC != null)
+                if (ModuleShare.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                    // M2Share.FunctionNPC.GotoLable(this, "@AIStart", false);
+                    // ModuleShare.FunctionNPC.GotoLable(this, "@AIStart", false);
                 }
             }
         }
@@ -194,10 +194,10 @@ namespace M2Server.RobotPlay
                 MoveFailCount = 0;
                 MPath = null;
                 MNPostion = -1;
-                if (M2Share.FunctionNPC != null)
+                if (ModuleShare.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                    // M2Share.FunctionNPC.GotoLable(this, "@AIStop", false);
+                    // ModuleShare.FunctionNPC.GotoLable(this, "@AIStop", false);
                 }
             }
         }

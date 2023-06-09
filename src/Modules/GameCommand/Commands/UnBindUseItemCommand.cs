@@ -1,14 +1,18 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 解除指定玩家物品绑定属性
     /// </summary>
     [Command("UnBindUseItem", "解除指定玩家物品绑定属性", 10)]
-    public class UnBindUseItemCommand : GameCommand {
+    public class UnBindUseItemCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";

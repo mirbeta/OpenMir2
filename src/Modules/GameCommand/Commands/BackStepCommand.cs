@@ -1,8 +1,6 @@
-﻿using M2Server.Actor;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 推开范围内对象
@@ -26,11 +24,11 @@ namespace CommandSystem
             nType = (byte)HUtil32._MIN(nType, 8);
             if (nType == 0)
             {
-                PlayerActor.SysMsgCharPushed(BaseObject.GetBackDir(PlayerActor.SysMsgDir), nCount);
+                PlayerActor.CharPushed(PlayerActor.GetBackDir(PlayerActor.Dir), nCount);
             }
             else
             {
-                PlayerActor.SysMsgCharPushed(ModuleShare.RandomNumber.RandomByte(nType), nCount);
+                PlayerActor.CharPushed(ModuleShare.RandomNumber.RandomByte(nType), nCount);
             }
         }
     }

@@ -1,8 +1,7 @@
-﻿using M2Server.Event.Events;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
+using SystemModule.Events;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     [Command("TestFire", "", 10)]
     public class TestFireCommand : GameCommand
@@ -30,7 +29,7 @@ namespace CommandSystem
                 {
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
-                        fireBurnEvent = new FireBurnEvent(IPlayerActor, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
+                        fireBurnEvent = new FireBurnEvent(PlayerActor, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
                         ModuleShare.EventMgr.AddEvent(fireBurnEvent);
                     }
                 }

@@ -1,7 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     [Command("BindUseItem", "", CommandHelp.GameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : GameCommand
@@ -94,9 +95,9 @@ namespace CommandSystem
                         return;
                     }
                     ModuleShare.SaveItemBindAccount();
-                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
+                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
                 case 1:
                     sBindName = mIPlayerActor.ChrName;
@@ -132,10 +133,10 @@ namespace CommandSystem
                         return;
                     }
                     ModuleShare.SaveItemBindChrName();
-                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayerActor.SendUpdateItem(userItem);
-                    mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
+                    mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
                 case 2:
                     boFind = false;
@@ -171,10 +172,10 @@ namespace CommandSystem
                         return;
                     }
                     ModuleShare.SaveItemBindIPaddr();
-                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayerActor.SendUpdateItem(userItem);
-                    mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
+                    mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
                 case 3:// 人物装备死亡不爆绑定
                     sBindName = PlayerActor.ChrName;
@@ -195,8 +196,8 @@ namespace CommandSystem
                     };
                     //Settings.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
                     //M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
-                    mIPlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    PlayerActor.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", ModuleShare.GetUseItemName(nItem), ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     break;
             }
         }

@@ -1,7 +1,8 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
+using SystemModule.Packets.ClientPackets;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)
@@ -31,7 +32,7 @@ namespace CommandSystem
                     PlayerActor.SysMsg(CommandHelp.GamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (ModuleShare.CastleMgr.InCastleWarArea(IPlayerActor) != null) // 攻城区域，禁止使用此功能
+                if (ModuleShare.CastleMgr.InCastleWarArea(PlayerActor) != null) // 攻城区域，禁止使用此功能
                 {
                     PlayerActor.SysMsg(CommandHelp.GamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
                     return;
@@ -47,16 +48,16 @@ namespace CommandSystem
             {
                 if (PlayerActor.ItemList.Count >= Grobal2.MaxBagItem) return;
                 UserItem userItem = null;
-                if (ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                 {
-                    var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                    var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem.Price >= 15000 && !ModuleShare.Config.TestServer && PlayerActor.Permission < 5)
                     {
                         return;
                     }
                     if (ModuleShare.RandomNumber.Random(ModuleShare.Config.MakeRandomAddValue) == 0)
                     {
-                        ItemSystem.RandomUpgradeItem(stdItem, userItem);
+                       // ModuleShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                     }
                     if (PlayerActor.Permission >= Command.PermissionMax)
                     {

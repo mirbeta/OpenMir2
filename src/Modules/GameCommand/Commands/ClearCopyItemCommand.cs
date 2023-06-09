@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 清除游戏中指定玩家复制物品
@@ -40,11 +40,11 @@ namespace CommandSystem
                 }
 
                 userItem = targerObject.ItemList[i];
-                s14 = ItemSystem.GetStdItemName(userItem.Index);
+                s14 = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
                 for (var j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.ItemList[j];
-                    if (ItemSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
+                    if (ModuleShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
                     {
                         PlayerActor.ItemList.RemoveAt(j);
                         break;
@@ -59,11 +59,11 @@ namespace CommandSystem
                     break;
                 }
                 userItem = targerObject.StorageItemList[i];
-                s14 = ItemSystem.GetStdItemName(userItem.Index);
+                s14 = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
                 for (var j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.StorageItemList[j];
-                    if (ItemSystem.GetStdItemName(userItem1.Index) == s14 &&
+                    if (ModuleShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 &&
                         userItem.MakeIndex == userItem1.MakeIndex)
                     {
                         PlayerActor.StorageItemList.RemoveAt(j);

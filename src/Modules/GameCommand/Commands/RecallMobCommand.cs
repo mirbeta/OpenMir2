@@ -1,9 +1,7 @@
-﻿using M2Server.Monster;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 召唤指定怪物为宠物
@@ -47,13 +45,13 @@ namespace CommandSystem
                     break;
                 }
                 PlayerActor.GetFrontPosition(ref nX, ref nY);
-                MonsterObject mon = (MonsterObject)ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+                IActor mon = ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (mon != null)
                 {
-                    mon.Master = IPlayerActor;
-                    mon.IsSlave = true;
-                    mon.MasterRoyaltyTick = nTick;
-                    mon.SlaveMakeLevel = 3;
+                    mon.Master = PlayerActor;
+                    //mon.IsSlave = true;
+                    //mon.MasterRoyaltyTick = nTick;
+                    //mon.SlaveMakeLevel = 3;
                     mon.SlaveExpLevel = (byte)nLevel;
                     if (nAutoChangeColor == 1)
                     {

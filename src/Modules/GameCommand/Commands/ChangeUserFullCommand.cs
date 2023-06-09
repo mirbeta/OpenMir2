@@ -1,16 +1,19 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整服务器最高上线人数
     /// </summary>
     [Command("ChangeUserFull", "调整服务器最高上限人数", "人数", 10)]
-    public class ChangeUserFullCommand : GameCommand {
+    public class ChangeUserFullCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sUserCount = @params.Length > 0 ? @params[0] : "";

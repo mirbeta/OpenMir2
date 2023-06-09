@@ -1,14 +1,18 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 播放特效
     /// </summary>
     [Command("ShowEffect", "播放特效", 10)]
-    public class ShowEffectCommand : GameCommand {
+    public class ShowEffectCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sEffect = @params.Length > 0 ? @params[0] : "";

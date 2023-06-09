@@ -1,9 +1,6 @@
-﻿using M2Server.Actor;
-using M2Server.Npc;
-using SystemModule;
-using SystemModule.Enums;
+﻿using SystemModule;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 重新加载当前12格范围内NPC

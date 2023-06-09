@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 给指定纯度的矿石
@@ -39,9 +39,9 @@ namespace CommandSystem
             for (var i = 0; i < nMineCount; i++)
             {
                 var userItem = new UserItem();
-                if (ItemSystem.CopyToUserItemFromName(sMineName, ref userItem))
+                if (ModuleShare.ItemSystem.CopyToUserItemFromName(sMineName, ref userItem))
                 {
-                    var stdItem = ItemSystem.GetStdItem(userItem.Index);
+                    var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem != null && stdItem.StdMode == 43)
                     {
                         if (PlayerActor.IsAddWeightAvailable(stdItem.Weight * nMineCount))

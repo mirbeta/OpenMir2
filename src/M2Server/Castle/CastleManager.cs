@@ -5,7 +5,7 @@ using SystemModule.Common;
 
 namespace M2Server.Castle
 {
-    public class CastleManager
+    public class CastleManager 
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         public readonly IList<UserCastle> CastleList;

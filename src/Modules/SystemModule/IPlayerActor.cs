@@ -8,6 +8,8 @@ namespace SystemModule
 {
     public interface IPlayerActor : IActor
     {
+        bool OnHorse { get; set; }
+        byte HorseType { get; set; }
         AttackMode AttatckMode { get; set; }
         UserItem[] UseItems { get; set; }
         bool IsEnoughBag { get; }
@@ -633,11 +635,14 @@ namespace SystemModule
         /// 配偶名称
         /// </summary>
         string DearName { get; set; }
-        IActor DearHuman { get; set; }
+        IPlayerActor DearHuman { get; set; }
         /// <summary>
         /// 是否允许夫妻传送
         /// </summary>
         bool CanDearRecall { get; set; }
+        /// <summary>
+        /// 是否允许师徒传送
+        /// </summary>
         bool CanMasterRecall { get; set; }
         /// <summary>
         /// 夫妻传送时间
@@ -648,7 +653,7 @@ namespace SystemModule
         /// 师徒名称
         /// </summary>
         string MasterName { get; set; }
-        IActor MasterHuman { get; set; }
+        IPlayerActor MasterHuman { get; set; }
         IList<IActor> MasterList { get; set; }
         bool IsMaster { get; set; }
         /// <summary>
@@ -952,6 +957,20 @@ namespace SystemModule
 
         void FeatureChanged();
 
+        void RunNotice();
+
+        void UserLogon();
+
+        void SearchViewRange();
+
+        void GameTimeChanged();
+
+        void Run();
+
+        void Disappear();
+
+        void DealCancelA();
+
         int GetMyStatus();
 
         void HasLevelUp(ushort level);
@@ -1034,6 +1053,8 @@ namespace SystemModule
 
         void RefRankInfo(short nRankNo, string sRankName);
 
+        void  ReAlive();
+
         void LeaveGroup();
 
         void JoinGroup(IPlayerActor actor);
@@ -1051,5 +1072,21 @@ namespace SystemModule
         UserItem CheckItems(string itemName);
 
         void ReQuestGuildWar(string guildName);
+
+        void RecallHuman(string chrName);
+
+        void SendUseItems();
+
+        void StatusChanged();
+
+        int GetCharStatus();
+
+        void RefMyStatus();
+
+        byte GetBackDir(byte dir);
+
+        void ClientGuildAlly();
+        
+        void ClientGuildBreakAlly(string guildName);
     }
 }

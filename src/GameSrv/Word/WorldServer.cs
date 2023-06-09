@@ -637,29 +637,29 @@ namespace GameSrv.Word
                         {
                             if (!playObject.LoginNoticeOk)
                             {
-                                // playObject.RunNotice();
+                                 playObject.RunNotice();
                             }
                             else
                             {
                                 if (!playObject.BoReadyRun)
                                 {
                                     playObject.BoReadyRun = true;
-                                    //playObject.UserLogon();
+                                    playObject.UserLogon();
                                 }
                                 else
                                 {
                                     if ((HUtil32.GetTickCount() - playObject.SearchTick) > playObject.SearchTime)
                                     {
                                         playObject.SearchTick = HUtil32.GetTickCount();
-                                        //playObject.SearchViewRange();//搜索对像
-                                        //playObject.GameTimeChanged();//游戏时间改变
+                                        playObject.SearchViewRange();//搜索对像
+                                        playObject.GameTimeChanged();//游戏时间改变
                                     }
                                     if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > ModuleShare.Config.ShowLineNoticeTime)
                                     {
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
                                         {
-                                            var lineNoticeMsg = M2Share.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
+                                            var lineNoticeMsg = ModuleShare.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
@@ -682,22 +682,22 @@ namespace GameSrv.Word
                                             playObject.ShowLineNoticeIdx = 0;
                                         }
                                     }
-                                    //playObject.Run();
-                                    //if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.SaveRcdTick) > SystemShare.Config.SaveHumanRcdTime)
-                                    //{
-                                    //    playObject.SaveRcdTick = HUtil32.GetTickCount();
-                                    //    playObject.DealCancelA();
-                                    //    SaveHumanRcd(playObject);
-                                    //}
+                                    playObject.Run();
+                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.SaveRcdTick) > ModuleShare.Config.SaveHumanRcdTime)
+                                    {
+                                        playObject.SaveRcdTick = HUtil32.GetTickCount();
+                                        playObject.DealCancelA();
+                                        SaveHumanRcd(playObject);
+                                    }
                                 }
                             }
                         }
                         else
                         {
                             PlayObjectList.Remove(playObject);
-                            //playObject.Disappear();
+                            playObject.Disappear();
                             //AddToHumanFreeList(playObject);
-                            //playObject.DealCancelA();
+                            playObject.DealCancelA();
                             SaveHumanRcd(playObject);
                             GameShare.SocketMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
                             SendServerGroupMsg(Messages.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);

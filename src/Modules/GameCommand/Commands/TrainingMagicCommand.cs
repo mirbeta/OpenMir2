@@ -1,39 +1,45 @@
 ﻿using SystemModule;
-using SystemModule;
-using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 调整指定玩家技能
     /// </summary>
     [Command("TrainingMagic", "调整指定玩家技能", "人物名称  技能名称 修炼等级(0-3)", 10)]
-    public class TrainingMagicCommand : GameCommand {
+    public class TrainingMagicCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             var sSkillName = @params.Length > 1 ? @params[1] : "";
-            var nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
-            if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3)) {
+            var nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
+            {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
-            if (mIPlayerActor == null) {
+            if (mIPlayerActor == null)
+            {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
             var magic = ModuleShare.WorldEngine.FindMagic(sSkillName);
-            if (magic == null) {
+            if (magic == null)
+            {
 
                 PlayerActor.SysMsg($"{sSkillName} 技能名称不正确!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (mIPlayerActor.IsTrainingSkill(magic.MagicId)) {
+            if (mIPlayerActor.IsTrainingSkill(magic.MagicId))
+            {
 
                 PlayerActor.SysMsg($"{sSkillName} 技能已修炼过了!!!", MsgColor.Red, MsgType.Hint);
                 return;

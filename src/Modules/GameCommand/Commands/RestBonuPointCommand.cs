@@ -1,8 +1,7 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定玩家属性的复位

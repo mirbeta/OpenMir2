@@ -1,8 +1,9 @@
-using M2Server.GameCommand.Commands;
+using CommandModule.Commands;
 
-namespace CommandSystem
+namespace CommandModule
 {
-    public class GameCommands {
+    public class GameCommands
+    {
         public readonly GameCmd Testserverconfig;
         public readonly GameCmd Serverstatus;
         public readonly GameCmd Testgetbagitem;
@@ -357,7 +358,8 @@ namespace CommandSystem
         [RegisterCommand(typeof(LockLoginCommand))]
         public readonly GameCmd LockLogon;
 
-        public GameCommands() {
+        public GameCommands()
+        {
             Data = new GameCmd { CmdName = "Data", PerMissionMin = 10, PerMissionMax = 10 };
             PrvMsg = new GameCmd { CmdName = "PrvMsg", PerMissionMin = 10, PerMissionMax = 10 };
             AllowMsg = new GameCmd { CmdName = "AllowMsg", PerMissionMin = 10, PerMissionMax = 10 };
@@ -554,7 +556,8 @@ namespace CommandSystem
         }
     }
 
-    public class GameCmd {
+    public class GameCmd
+    {
         /// <summary>
         /// 命令名称
         /// </summary>
@@ -568,11 +571,13 @@ namespace CommandSystem
         /// </summary>
         public byte PerMissionMax { get; set; }
 
-        public GameCmd() {
+        public GameCmd()
+        {
 
         }
 
-        public GameCmd(string cmdName, byte perMissionMin, byte perMissionMax) {
+        public GameCmd(string cmdName, byte perMissionMin, byte perMissionMax)
+        {
             CmdName = cmdName;
             PerMissionMin = perMissionMin;
             PerMissionMax = perMissionMax;

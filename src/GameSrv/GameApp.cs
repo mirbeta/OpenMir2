@@ -10,6 +10,7 @@ using System.Collections.Concurrent;
 using GameSrv.DataSource;
 using GameSrv.Maps;
 using GameSrv.Network;
+using GameSrv.NPC;
 using GameSrv.Planes;
 using GameSrv.Services;
 using GameSrv.Word;
@@ -83,6 +84,9 @@ namespace GameSrv
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
+            ModuleShare.ManageNPC = new Merchant();
+            ModuleShare.RobotNPC = new Merchant();
+            ModuleShare.FunctionNPC = new Merchant();
         }
 
         public void Initialize(CancellationToken stoppingToken)

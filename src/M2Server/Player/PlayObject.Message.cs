@@ -143,11 +143,11 @@ namespace M2Server.Player
                     {
                         if ((HUtil32.GetTickCount() - AutoTimerTick[i]) > AutoTimerStatus[i])
                         {
-                            if (M2Share.ManageNPC != null)
+                            if (ModuleShare.ManageNPC != null)
                             {
                                 AutoTimerTick[i] = HUtil32.GetTickCount();
                                 ScriptGotoCount = 0;
-                                //M2Share.ManageNPC.GotoLable(this, "@OnTimer" + i, false);
+                                //ModuleShare.ManageNPC.GotoLable(this, "@OnTimer" + i, false);
                             }
                         }
                     }
@@ -1630,9 +1630,9 @@ namespace M2Server.Player
                         ClientMsg = Messages.MakeMessage(Messages.SM_NOWDEATH, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
                         if (processMsg.ActorId == ActorId)
                         {
-                            if (M2Share.FunctionNPC != null)
+                            if (ModuleShare.FunctionNPC != null)
                             {
-                                // M2Share.FunctionNPC.GotoLable(this, "@OnDeath", false);
+                                // ModuleShare.FunctionNPC.GotoLable(this, "@OnDeath", false);
                             }
                         }
                     }

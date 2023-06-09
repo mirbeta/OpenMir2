@@ -1,10 +1,11 @@
-﻿namespace CommandSystem
+﻿namespace CommandModule
 {
     /// <summary>
     /// 命令定义
     /// </summary>
     [AttributeUsage(AttributeTargets.Class)]
-    public class CommandAttribute : Attribute {
+    public class CommandAttribute : Attribute
+    {
         /// <summary>
         /// 命令名
         /// </summary>
@@ -32,14 +33,16 @@
         /// </summary>
         public byte PermissionMax { get; set; }
 
-        public CommandAttribute(string name, string desc, byte minUserLevel = 0, byte maxUserLevel = 10) {
+        public CommandAttribute(string name, string desc, byte minUserLevel = 0, byte maxUserLevel = 10)
+        {
             this.Name = name;
             this.Desc = desc;
             this.PermissionMin = minUserLevel;
             this.PermissionMax = maxUserLevel;
         }
 
-        public CommandAttribute(string name, string desc, string help, byte minUserLevel = 0, byte maxUserLevel = 10) {
+        public CommandAttribute(string name, string desc, string help, byte minUserLevel = 0, byte maxUserLevel = 10)
+        {
             this.Name = name;
             this.Desc = desc;
             this.Help = help;
@@ -54,7 +57,8 @@
     /// 命令执行入口定义
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class CommandExecuteAttribute : Attribute {
+    public class CommandExecuteAttribute : Attribute
+    {
         /// <summary>
         /// 命令名称
         /// </summary>
@@ -75,7 +79,8 @@
         /// </summary>
         public byte MinUserLevel { get; private set; }
 
-        public CommandExecuteAttribute(string command, string desc, string help, byte minUserLevel = 0) {
+        public CommandExecuteAttribute(string command, string desc, string help, byte minUserLevel = 0)
+        {
             this.Name = command;
             this.Desc = desc;
             this.Help = help;
@@ -90,8 +95,10 @@
     /// public void CmdTest(){}
     /// </summary>
     [AttributeUsage(AttributeTargets.Method)]
-    public class ExecuteCommand : CommandExecuteAttribute {
-        public ExecuteCommand(byte minUserLevel = 0) : base("", "", "", minUserLevel) {
+    public class ExecuteCommand : CommandExecuteAttribute
+    {
+        public ExecuteCommand(byte minUserLevel = 0) : base("", "", "", minUserLevel)
+        {
 
         }
     }
@@ -100,10 +107,12 @@
     /// 游戏命令注册实现Attribute
     /// </summary>
     [AttributeUsage(AttributeTargets.Field)]
-    public class RegisterCommandAttribute : Attribute {
+    public class RegisterCommandAttribute : Attribute
+    {
         public readonly Type HandleType;
 
-        public RegisterCommandAttribute(Type commond) {
+        public RegisterCommandAttribute(Type commond)
+        {
             HandleType = commond;
         }
     }

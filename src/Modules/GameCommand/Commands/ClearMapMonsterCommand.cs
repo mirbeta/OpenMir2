@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 清楚指定地图怪物
@@ -24,22 +24,16 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boKillAll = false;
-            var boKillAllMap = false;
-            var boNotItem = true;
             var nMonCount = 0;
             IEnvirnoment envir = null;
             if (sMonName == "*")
             {
-                boKillAll = true;
             }
             if (sMapName == "*")
             {
-                boKillAllMap = true;
             }
             if (sItems == "1")
             {
-                boNotItem = false;
             }
             IList<IActor> monList = new List<IActor>();
             //for (var i = 0; i < M2Share.MapMgr.Maps.Count; i++)

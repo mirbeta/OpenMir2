@@ -1,23 +1,28 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("ShutupRelease", "恢复禁言", CommandHelp.GameCommandShutupReleaseHelpMsg, 10)]
-    public class ShutupReleaseCommand : GameCommand {
+    public class ShutupReleaseCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             var boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
-            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName)) {
+            if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName))
+            {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
             HUtil32.EnterCriticalSection(ModuleShare.DenySayMsgList);
-            try {
+            try
+            {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
                 //    Settings.g_DenySayMsgList.Remove(sHumanName);
@@ -35,7 +40,8 @@ namespace CommandSystem {
                 //        MsgColor.c_Green, MsgType.t_Hint);
                 //}
             }
-            finally {
+            finally
+            {
                 HUtil32.LeaveCriticalSection(ModuleShare.DenySayMsgList);
             }
         }

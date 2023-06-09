@@ -1,16 +1,21 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("Allowguildrecall", "", "")]
-    public class AllowGuildRecallCommand : GameCommand {
+    public class AllowGuildRecallCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
             PlayerActor.AllowGuildReCall = !PlayerActor.AllowGuildReCall;
-            if (PlayerActor.AllowGuildReCall) {
+            if (PlayerActor.AllowGuildReCall)
+            {
                 PlayerActor.SysMsg(CommandHelp.EnableGuildRecall, MsgColor.Green, MsgType.Hint);
             }
-            else {
+            else
+            {
                 PlayerActor.SysMsg(CommandHelp.DisableGuildRecall, MsgColor.Green, MsgType.Hint);
             }
         }

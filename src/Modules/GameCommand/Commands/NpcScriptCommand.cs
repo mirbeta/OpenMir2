@@ -1,10 +1,8 @@
-﻿using M2Server.Npc;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Common;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     [Command("NpcScript", "重新读取面对面NPC脚本", "重新读取面对面NPC脚本", 10)]
     public class NpcScriptCommand : GameCommand
@@ -13,7 +11,6 @@ namespace CommandSystem
         public void Execute(IPlayerActor PlayerActor)
         {
             var sScriptFileName = string.Empty;
-            var nNpcType = -1;
             var baseObject = PlayerActor.GetPoseCreate();
             //if (baseObject != null)
             //{

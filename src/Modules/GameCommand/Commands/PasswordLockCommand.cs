@@ -1,9 +1,7 @@
 ﻿using SystemModule;
-using M2Server;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 密码锁定

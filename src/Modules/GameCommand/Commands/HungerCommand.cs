@@ -1,8 +1,7 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定玩家能量值
@@ -32,7 +31,7 @@ namespace CommandSystem
             if (mIPlayerActor != null)
             {
                 mIPlayerActor.HungerStatus = nHungerPoint;
-                mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_MYSTATUS, 0, 0, 0, 0);
+                mIPlayerActor.SendMsg(PlayerActor, Messages.RM_MYSTATUS, 0, 0, 0, 0);
                 mIPlayerActor.RefMyStatus();
                 PlayerActor.SysMsg(sHumanName + " 的能量值已改变。", MsgColor.Green, MsgType.Hint);
             }

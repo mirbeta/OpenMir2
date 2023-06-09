@@ -1,8 +1,7 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 此命令用于改变客户端连接网关的
@@ -35,7 +34,7 @@ namespace CommandSystem
             }
             if (!string.IsNullOrEmpty(sIPaddr) && !string.IsNullOrEmpty(sPort))
             {
-                PlayerActor.SendMsg(IPlayerActor,Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
+                PlayerActor.SendMsg(PlayerActor, Messages.RM_RECONNECTION, 0, 0, 0, 0, sIPaddr + '/' + sPort);
             }
         }
     }

@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     [Command("Banguildchat", "", "")]
     public class BanGuildChatCommand : GameCommand
@@ -9,8 +9,8 @@ namespace CommandSystem
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            PlayerActor.SysMsgBanGuildChat = !PlayerActor.SysMsgBanGuildChat;
-            if (PlayerActor.SysMsgBanGuildChat)
+            PlayerActor.BanGuildChat = !PlayerActor.BanGuildChat;
+            if (PlayerActor.BanGuildChat)
             {
                 PlayerActor.SysMsg(CommandHelp.EnableGuildChat, MsgColor.Green, MsgType.Hint);
             }

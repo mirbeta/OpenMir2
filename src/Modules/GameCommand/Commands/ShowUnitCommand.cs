@@ -1,9 +1,12 @@
-﻿namespace CommandSystem {
+﻿namespace CommandModule.Commands
+{
 
     [Command("ShowUnit", "", "", 10)]
-    public class ShowUnitCommand : GameCommand {
+    public class ShowUnitCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute() {
+        public void Execute()
+        {
 
         }
     }

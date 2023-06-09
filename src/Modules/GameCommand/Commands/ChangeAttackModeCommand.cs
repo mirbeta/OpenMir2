@@ -1,34 +1,42 @@
 ﻿using SystemModule;
-using M2Server;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 调整当前玩家攻击模式
     /// </summary>
     [Command("AttackMode", "调整当前玩家攻击模式")]
-    public class ChangeAttackModeCommand : GameCommand {
+    public class ChangeAttackModeCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
-            if (PlayerActor.AttatckMode >= AttackMode.HAM_PKATTACK) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            if (PlayerActor.AttatckMode >= AttackMode.HAM_PKATTACK)
+            {
                 PlayerActor.AttatckMode = 0;
             }
-            else {
-                if (PlayerActor.AttatckMode < AttackMode.HAM_PKATTACK) {
+            else
+            {
+                if (PlayerActor.AttatckMode < AttackMode.HAM_PKATTACK)
+                {
                     PlayerActor.AttatckMode++;
                 }
-                else {
+                else
+                {
                     PlayerActor.AttatckMode = AttackMode.HAM_ALL;
                 }
             }
-            if (PlayerActor.AttatckMode < AttackMode.HAM_PKATTACK) {
+            if (PlayerActor.AttatckMode < AttackMode.HAM_PKATTACK)
+            {
                 PlayerActor.AttatckMode++;
             }
-            else {
+            else
+            {
                 PlayerActor.AttatckMode = AttackMode.HAM_ALL;
             }
-            switch (PlayerActor.AttatckMode) {
+            switch (PlayerActor.AttatckMode)
+            {
                 case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
                     PlayerActor.SysMsg(Settings.AttackModeOfAll, MsgColor.Green, MsgType.Hint);
                     break;

@@ -1,20 +1,23 @@
-﻿using M2Server.Maps;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 移动到某地图XY坐标处
     /// </summary>
     [Command("PositionMove", "移动到某地图XY坐标处", CommandHelp.GameCommandPositionMoveHelpMsg, 10)]
-    public class PositionMoveCommand : GameCommand {
+    public class PositionMoveCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
-            try {
+            try
+            {
                 var sMapName = @params.Length > 0 ? @params[0] : "";
                 var sX = @params.Length > 1 ? @params[1] : "";
                 var sY = @params.Length > 2 ? @params[2] : "";
@@ -24,24 +27,30 @@ namespace CommandSystem {
                     PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (PlayerActor.Permission >= this.Command.PermissionMin || ModuleShare.CanMoveMap(sMapName)) {
+                if (PlayerActor.Permission >= this.Command.PermissionMin || ModuleShare.CanMoveMap(sMapName))
+                {
                     envir = ModuleShare.MapMgr.FindMap(sMapName);
-                    if (envir != null) {
+                    if (envir != null)
+                    {
                         var nX = HUtil32.StrToInt16(sX, 0);
                         var nY = HUtil32.StrToInt16(sY, 0);
-                        if (envir.CanWalk(nX, nY, true)) {
+                        if (envir.CanWalk(nX, nY, true))
+                        {
                             PlayerActor.SpaceMove(sMapName, nX, nY, 0);
                         }
-                        else {
+                        else
+                        {
                             PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandPositionMoveCanotMoveToMap, sMapName, sX, sY), MsgColor.Green, MsgType.Hint);
                         }
                     }
                 }
-                else {
+                else
+                {
                     PlayerActor.SysMsg(string.Format(CommandHelp.TheMapDisableMove, sMapName, envir.MapDesc), MsgColor.Red, MsgType.Hint);
                 }
             }
-            catch (Exception e) {
+            catch (Exception e)
+            {
                 ModuleShare.Logger.Error("[Exceptioin] PlayerActor.SysMsgCmdPositionMove");
                 ModuleShare.Logger.Error(e.Message);
             }

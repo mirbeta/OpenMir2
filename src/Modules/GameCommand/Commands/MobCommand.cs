@@ -1,9 +1,7 @@
-﻿using M2Server.Monster;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 刷指定怪物
@@ -40,10 +38,10 @@ namespace CommandSystem
             PlayerActor.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (var i = 0; i < nCount; i++)
             {
-                var monster = (MonsterObject)ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+                var monster = ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (monster != null)
                 {
-                    monster.SlaveMakeLevel = nLevel;
+                   // monster.SlaveMakeLevel = nLevel;
                     monster.SlaveExpLevel = nLevel;
                     monster.RecalcAbilitys();
                     monster.RefNameColor();

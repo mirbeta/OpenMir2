@@ -1,8 +1,7 @@
 ﻿using SystemModule;
-using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 创建行会
@@ -47,12 +46,12 @@ namespace CommandSystem
             }
             if (boAddState)
             {
-                chiefObject.MyGuild = ModuleShare.GuildMgr.MemberOfGuild(chiefObject.ChrName);
-                if (chiefObject.MyGuild != null)
-                {
-                    chiefObject.GuildRankName = chiefObject.MyGuild.GetRankName(IPlayerActor, ref chiefObject.GuildRankNo);
-                    chiefObject.RefShowName();
-                }
+                //chiefObject.MyGuild = ModuleShare.GuildMgr.MemberOfGuild(chiefObject.ChrName);
+                //if (chiefObject.MyGuild != null)
+                //{
+                //    chiefObject.GuildRankName = chiefObject.MyGuild.GetRankName(PlayerActor, ref chiefObject.GuildRankNo);
+                //    chiefObject.RefShowName();
+                //}
             }
         }
     }

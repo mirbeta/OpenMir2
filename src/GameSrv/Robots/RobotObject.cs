@@ -35,22 +35,22 @@ namespace GameSrv.Robots
                     case Robot.nRODAY:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddDays(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                        GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nROHOUR:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddHours(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                        GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nROMIN:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddMinutes(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                        GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nROSEC:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddSeconds(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
-                        GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                        GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
                     case Robot.nRUNONWEEK:
                         GetWeekTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
@@ -344,7 +344,7 @@ namespace GameSrv.Robots
 
         public override void Run()
         {
-            if (M2Share.RobotNPC == null)
+            if (ModuleShare.RobotNPC == null)
             {
                 return;
             }

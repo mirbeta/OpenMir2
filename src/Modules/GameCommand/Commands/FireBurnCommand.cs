@@ -1,9 +1,8 @@
-﻿using M2Server.Event.Events;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
+using SystemModule.Events;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     [Command("FireBurn", "", 10)]
     public class FireBurnCommand : GameCommand
@@ -27,8 +26,8 @@ namespace CommandSystem
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var fireBurnEvent = new FireBurnEvent(IPlayerActor, PlayerActor.CurrX, PlayerActor.CurrY, (byte)nInt, nTime, nN);
-            SystemShare.EventMgr.AddEvent(fireBurnEvent);
+            var fireBurnEvent = new FireBurnEvent(PlayerActor, PlayerActor.CurrX, PlayerActor.CurrY, (byte)nInt, nTime, nN);
+            ModuleShare.EventMgr.AddEvent(fireBurnEvent);
         }
     }
 }

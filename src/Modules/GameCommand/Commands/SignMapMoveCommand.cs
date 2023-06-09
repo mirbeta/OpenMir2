@@ -1,13 +1,16 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 回到上次死亡地点
     /// </summary>
     [Command("SignMapMove", "回到上次死亡地点", 10)]
-    public class SignMapMoveCommand : GameCommand {
+    public class SignMapMoveCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
             //try
             //{
             //    Envirnoment Envir = null;

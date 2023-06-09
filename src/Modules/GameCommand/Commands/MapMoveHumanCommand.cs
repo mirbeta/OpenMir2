@@ -1,8 +1,7 @@
-﻿using M2Server.Actor;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 将指定地图所有玩家随机移动
@@ -39,12 +38,12 @@ namespace CommandSystem
                     MsgType.Hint);
                 return;
             }
-            IList<BaseObject> humanList = new List<BaseObject>();
+            IList<IActor> humanList = new List<IActor>();
             ModuleShare.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
             for (var i = 0; i < humanList.Count; i++)
             {
                 var moveHuman = (IPlayerActor)humanList[i];
-                if (moveHuman != IPlayerActor)
+                if (moveHuman != PlayerActor)
                 {
                     moveHuman.MapRandomMove(sDenMap, 0);
                 }

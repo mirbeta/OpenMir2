@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 删除对面面NPC
@@ -12,7 +12,6 @@ namespace CommandSystem
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            const string sDelOk = "删除NPC成功...";
             var baseObject = PlayerActor.GetPoseCreate();
             if (baseObject != null)
             {

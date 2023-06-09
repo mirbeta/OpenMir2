@@ -1,24 +1,29 @@
 ﻿using SystemModule;
-using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
-    public class ClearItemMapCommand : GameCommand {
+    public class ClearItemMapCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
-            if (@params == null) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
+            if (@params == null)
+            {
                 return;
             }
             var sMap = @params.Length > 0 ? @params[0] : "";
             var sItemName = @params.Length > 1 ? @params[1] : "";
-            var nX = @params.Length > 2 ? HUtil32.StrToInt(@params[2],0) : 0;
-            var nY = @params.Length > 3 ? HUtil32.StrToInt(@params[3],0) : 0;
-            var nRange = @params.Length > 4 ? HUtil32.StrToInt(@params[4],0) : 0;
-            if (string.IsNullOrEmpty(sMap) || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?') {
+            var nX = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            var nY = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 0;
+            var nRange = @params.Length > 4 ? HUtil32.StrToInt(@params[4], 0) : 0;
+            if (string.IsNullOrEmpty(sMap) || string.IsNullOrEmpty(sItemName) || nX < 0 || nY < 0 || nRange < 0 || !string.IsNullOrEmpty(sItemName) && sItemName[0] == '?')
+            {
                 //PlayerActor.SysMsg(string.Format(Settings.GameCommandParamUnKnow, this.Attributes.Name, Settings.GameCommandCLEARITEMMAPHelpMsg), MsgColor.c_Red, MsgType.t_Hint);
                 return;
             }
-            if (sItemName == "ALL") {
+            if (sItemName == "ALL")
+            {
             }
             // TMapItem MapItem = null;
             // var ItemList = new List<TMapItem>();

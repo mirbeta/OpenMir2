@@ -669,7 +669,7 @@ namespace M2Server.Player
         {
             if (!IsCanDeal)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
                 return;
             }
             if (Death || Ghost)
@@ -1066,9 +1066,9 @@ namespace M2Server.Player
         private bool UseStdModeFunItem(StdItem stdItem)
         {
             bool result = false;
-            if (M2Share.FunctionNPC != null)
+            if (ModuleShare.FunctionNPC != null)
             {
-                //M2Share.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
+                //ModuleShare.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
                 result = true;
             }
             return result;
@@ -1244,10 +1244,10 @@ namespace M2Server.Player
                             playObject.MakeWeaponUnlock();
                         }
                     }
-                    if (M2Share.FunctionNPC != null)
+                    if (ModuleShare.FunctionNPC != null)
                     {
-                        //M2Share.FunctionNPC.GotoLable(playObject, "@OnMurder", false);
-                        //M2Share.FunctionNPC.GotoLable(this, "@Murdered", false);
+                        //ModuleShare.FunctionNPC.GotoLable(playObject, "@OnMurder", false);
+                        //ModuleShare.FunctionNPC.GotoLable(this, "@Murdered", false);
                     }
                 }
                 else
@@ -2900,7 +2900,7 @@ namespace M2Server.Player
             DearHuman = M2Share.WorldEngine.GetPlayObject(DearName);
             if (DearHuman != null)
             {
-                DearHuman.DearHuman = this;
+                DearHuman.DearHuman = (IPlayerActor)this;
                 if (Gender == PlayGender.Man)
                 {
                     sSayMsg = string.Format(Settings.ManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
@@ -3048,7 +3048,7 @@ namespace M2Server.Player
                 MasterHuman = M2Share.WorldEngine.GetPlayObject(MasterName);
                 if (MasterHuman != null)
                 {
-                    MasterHuman.MasterHuman = this;
+                    MasterHuman.MasterHuman = (IPlayerActor)this;
                     MasterList.Add(MasterHuman);
                     sSayMsg = string.Format(Settings.MasterOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
@@ -3070,7 +3070,7 @@ namespace M2Server.Player
                     {
                         if (MasterHuman.MasterName == ChrName)
                         {
-                            MasterHuman.MasterHuman = this;
+                            MasterHuman.MasterHuman = (IPlayerActor)this;
                         }
                         MasterHuman.MasterList.Add(this);
                         sSayMsg = string.Format(Settings.MasterListOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
@@ -3438,15 +3438,15 @@ namespace M2Server.Player
                     }
                     break;
                 case 1:
-                    if (M2Share.FunctionNPC != null)
+                    if (ModuleShare.FunctionNPC != null)
                     {
-                        //M2Share.FunctionNPC.GotoLable(this, GotoNpcLabel, false);
+                        //ModuleShare.FunctionNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
                 case 2:
-                    if (M2Share.ManageNPC != null)
+                    if (ModuleShare.ManageNPC != null)
                     {
-                        // M2Share.ManageNPC.GotoLable(this, GotoNpcLabel, false);
+                        // ModuleShare.ManageNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
             }

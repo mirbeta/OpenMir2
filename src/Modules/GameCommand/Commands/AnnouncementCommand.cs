@@ -1,13 +1,16 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     /// <summary>
     /// 查看行会争霸赛结果
     /// </summary>
     [Command("Announcement", "查看行会争霸赛结果", 10)]
-    public class AnnouncementCommand : GameCommand {
+    public class AnnouncementCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(string[] @params, IPlayerActor PlayerActor) {
+        public void Execute(string[] @params, IPlayerActor PlayerActor)
+        {
             //string sGuildName = @Params.Length > 0 ? @Params[0] : "";
             //TGUild Guild;
             //string sHumanName;

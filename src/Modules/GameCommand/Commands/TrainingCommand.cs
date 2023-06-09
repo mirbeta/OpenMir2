@@ -1,11 +1,15 @@
 ﻿using SystemModule;
 
-namespace CommandSystem {
+namespace CommandModule.Commands
+{
     [Command("Training", "", 10)]
-    public class TrainingCommand : GameCommand {
+    public class TrainingCommand : GameCommand
+    {
         [ExecuteCommand]
-        public void Execute(IPlayerActor PlayerActor) {
-            if (PlayerActor.Permission < 6) {
+        public void Execute(IPlayerActor PlayerActor)
+        {
+            if (PlayerActor.Permission < 6)
+            {
                 return;
             }
         }

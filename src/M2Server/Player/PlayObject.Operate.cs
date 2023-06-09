@@ -219,17 +219,17 @@ namespace M2Server.Player
         {
             if (ModuleShare.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return;
             }
             if (ModuleShare.Config.ControlDropItem && nGold < ModuleShare.Config.CanDropGold)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
                 return;
             }
             if (!IsCanDrop || Envir.Flag.NoThrowItem)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return;
             }
             if (nGold >= Gold)
@@ -249,12 +249,12 @@ namespace M2Server.Player
             var result = false;
             if (ModuleShare.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
                 return false;
             }
             if (!IsCanDrop || Envir.Flag.NoThrowItem)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
                 return false;
             }
             if (sItemName.IndexOf(' ') > 0)
@@ -542,9 +542,9 @@ namespace M2Server.Player
                                 SendMsg(Messages.RM_SUBABILITY, 0, 0, 0, 0);
                                 SendDefMessage(Messages.SM_TAKEOFF_OK, GetFeatureToLong(), GetFeatureEx(), 0, 0);
                                 FeatureChanged();
-                                if (M2Share.FunctionNPC != null)
+                                if (ModuleShare.FunctionNPC != null)
                                 {
-                                    //  M2Share.FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
+                                    //  ModuleShare.FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
                                 }
                             }
                             else
@@ -678,7 +678,7 @@ namespace M2Server.Player
             }
             else
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotUseItemMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotUseItemMsg);
             }
             if (eatSuccess)
             {
@@ -797,9 +797,9 @@ namespace M2Server.Player
             {
                 SysMsg("如果你想退出，使用编组功能（删除按钮）", MsgColor.Red, MsgType.Hint);
             }
-            if (M2Share.FunctionNPC != null)
+            if (ModuleShare.FunctionNPC != null)
             {
-                //M2Share.FunctionNPC.GotoLable(this, "@GroupClose", false);
+                //ModuleShare.FunctionNPC.GotoLable(this, "@GroupClose", false);
             }
         }
 
@@ -834,9 +834,9 @@ namespace M2Server.Player
             AllowGroup = true;
             SendDefMessage(Messages.SM_CREATEGROUP_OK, 0, 0, 0, 0);
             SendGroupMembers();
-            if (M2Share.FunctionNPC != null)
+            if (ModuleShare.FunctionNPC != null)
             {
-                // M2Share.FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
+                // ModuleShare.FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
             }
         }
 
@@ -872,9 +872,9 @@ namespace M2Server.Player
             playObject.JoinGroup((IPlayerActor)this);
             SendDefMessage(Messages.SM_GROUPADDMEM_OK, 0, 0, 0, 0);
             SendGroupMembers();
-            if (M2Share.FunctionNPC != null)
+            if (ModuleShare.FunctionNPC != null)
             {
-                //M2Share.FunctionNPC.GotoLable(this, "@GroupAddMember", false);
+                //ModuleShare.FunctionNPC.GotoLable(this, "@GroupAddMember", false);
             }
         }
 
@@ -898,9 +898,9 @@ namespace M2Server.Player
             }
             DelMember(playObject);
             SendDefMessage(Messages.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
-            if (M2Share.FunctionNPC != null)
+            if (ModuleShare.FunctionNPC != null)
             {
-                //  M2Share.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
+                //  ModuleShare.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
             }
         }
 
@@ -908,7 +908,7 @@ namespace M2Server.Player
         {
             if (ModuleShare.Config.DisableDeal)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DisableDealItemsMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DisableDealItemsMsg);
                 return;
             }
             if (Dealing)
@@ -917,12 +917,12 @@ namespace M2Server.Player
             }
             if ((HUtil32.GetTickCount() - DealLastTick) < ModuleShare.Config.TryDealTime)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.PleaseTryDealLaterMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.PleaseTryDealLaterMsg);
                 return;
             }
             if (!IsCanDeal)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
                 return;
             }
             var poseObject = GetPoseCreate();
@@ -998,7 +998,7 @@ namespace M2Server.Player
         {
             if (ModuleShare.Config.CanNotGetBackDeal)
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
                 SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
                 return;
             }
@@ -1046,7 +1046,7 @@ namespace M2Server.Player
         {
             if (DealGolds > 0 && ModuleShare.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
-                SendMsg(M2Share.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
+                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
                 SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
                 return;
             }
@@ -1620,7 +1620,7 @@ namespace M2Server.Player
                 var sUserItemName = CustomItem.GetItemName(userItem);// 取自定义物品名称
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0) // 检查NPC是否允许存物品
                 {
-                    if (merchant != null && merchant.IsStorage && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == M2Share.FunctionNPC))
+                    if (merchant != null && merchant.IsStorage && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == ModuleShare.FunctionNPC))
                     {
                         if (StorageItemList.Count < 39)
                         {
@@ -1675,7 +1675,7 @@ namespace M2Server.Player
                 {
                     if (IsAddWeightAvailable(ItemSystem.GetStdItemWeight(userItem.Index)))// 检查NPC是否允许取物品
                     {
-                        if (merchant.IsGetback && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == M2Share.FunctionNPC))
+                        if (merchant.IsGetback && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == ModuleShare.FunctionNPC))
                         {
                             if (AddItemToBag(userItem))
                             {

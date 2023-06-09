@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 总在线数
@@ -11,7 +11,7 @@ namespace CommandSystem
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            PlayerActor.HearMsg($"总在线数{ModuleShare.TotalHumCount}");
+            //PlayerActor.HearMsg($"总在线数{ModuleShare.TotalHumCount}");
         }
     }
 }

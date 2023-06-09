@@ -1,10 +1,8 @@
-﻿using M2Server.Items;
-using SystemModule;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule.Commands
 {
     [Command("ClearBagItem", "清理包裹物品", "人物名称", 10)]
     public class ClearBagItemCommand : GameCommand
@@ -37,7 +35,7 @@ namespace CommandSystem
                     var userItem = mIPlayerActor.ItemList[i];
                     delList.Add(new DeleteItem()
                     {
-                        ItemName = ItemSystem.GetStdItemName(userItem.Index),
+                        ItemName = ModuleShare.ItemSystem.GetStdItemName(userItem.Index),
                         MakeIndex = userItem.MakeIndex
                     });
                     mIPlayerActor.ItemList.RemoveAt(i);
@@ -48,7 +46,7 @@ namespace CommandSystem
             {
                 var objectId = HUtil32.Sequence();
                 ModuleShare.ActorMgr.AddOhter(objectId, delList);
-                mIPlayerActor.SendMsg(IPlayerActor, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
+                mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
         }
     }

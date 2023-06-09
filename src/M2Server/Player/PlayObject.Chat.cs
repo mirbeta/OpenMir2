@@ -142,7 +142,7 @@ namespace M2Server.Player
                     //OldSayMsg = sData;
                     if (sData.StartsWith("@@加速处理"))
                     {
-                        //M2Share.FunctionNPC.GotoLable(this, "@加速处理", false);
+                        //ModuleShare.FunctionNPC.GotoLable(this, "@加速处理", false);
                         return;
                     }
                     string sText;

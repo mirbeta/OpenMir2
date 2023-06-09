@@ -225,7 +225,7 @@ namespace GameSrv.DataSource
                     saveList = null;
                 }
                 if (File.Exists(sScriptFile)) {
-                    M2Share.ManageNPC = new Merchant {
+                    ModuleShare.ManageNPC = new Merchant {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -239,11 +239,11 @@ namespace GameSrv.DataSource
                    // M2Share.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
                 }
                 else {
-                    M2Share.ManageNPC = null;
+                    ModuleShare.ManageNPC = null;
                 }
             }
             catch {
-                M2Share.ManageNPC = null;
+                ModuleShare.ManageNPC = null;
             }
         }
 
@@ -261,7 +261,7 @@ namespace GameSrv.DataSource
                     tSaveList = null;
                 }
                 if (File.Exists(sScriptFile)) {
-                    M2Share.RobotNPC = new Merchant {
+                    ModuleShare.RobotNPC = new Merchant {
                         MapName = "0",
                         CurrX = 0,
                         CurrY = 0,
@@ -275,11 +275,11 @@ namespace GameSrv.DataSource
                    // M2Share.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
                 }
                 else {
-                    M2Share.RobotNPC = null;
+                    ModuleShare.RobotNPC = null;
                 }
             }
             catch {
-                M2Share.RobotNPC = null;
+                ModuleShare.RobotNPC = null;
             }
         }
 
