@@ -31,8 +31,8 @@ namespace M2Server.World.Threads
         {
             try
             {
-                M2Shares.WorldEngine.ProcessNpcs();
-                M2Shares.WorldEngine.ProcessMerchants();
+                M2Share.WorldEngine.ProcessNpcs();
+                M2Share.WorldEngine.ProcessMerchants();
             }
             catch (Exception ex)
             {

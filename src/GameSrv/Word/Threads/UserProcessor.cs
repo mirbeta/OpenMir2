@@ -31,7 +31,7 @@ namespace M2Server.World.Threads
         {
             try
             {
-                M2Shares.WorldEngine.ProcessHumans();
+                M2Share.WorldEngine.ProcessHumans();
             }
             catch (Exception ex)
             {

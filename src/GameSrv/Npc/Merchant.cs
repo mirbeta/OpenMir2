@@ -13,7 +13,7 @@ namespace M2Server.Npc
     /// 交易NPC类
     /// 普通商人 如：药店和杂货店都在此实现
     /// </summary>
-    public class Merchant : NormNpc
+    public class Merchant : NormNpc,IMerchant
     {
         /// <summary>
         /// 脚本路径
@@ -30,11 +30,11 @@ namespace M2Server.Npc
         /// <summary>
         /// 刷新在售商品时间
         /// </summary>
-        internal int RefillGoodsTick { get; set; }
+        public int RefillGoodsTick { get; set; }
         /// <summary>
         /// 清理武器升级过期时间
         /// </summary>
-        internal int ClearExpreUpgradeTick { get; set; }
+        public int ClearExpreUpgradeTick { get; set; }
         /// <summary>
         /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
         /// </summary>
@@ -43,15 +43,15 @@ namespace M2Server.Npc
         /// <summary>
         /// 商品列表
         /// </summary>
-        private IList<IList<UserItem>> GoodsList { get; set; }
+        public IList<IList<UserItem>> GoodsList { get; set; }
         /// <summary>
         /// 物品价格列表
         /// </summary>
-        private IList<ItemPrice> ItemPriceList { get; set; }
+        public IList<ItemPrice> ItemPriceList { get; set; }
         /// <summary>
         /// 物品升级列表
         /// </summary>
-        private IList<WeaponUpgradeInfo> UpgradeWeaponList { get; set; }
+        public IList<WeaponUpgradeInfo> UpgradeWeaponList { get; set; }
         public bool BoCanMove { get; set; }
         public int MoveTime { get; set; }
         public int MoveTick { get; set; }
@@ -78,6 +78,7 @@ namespace M2Server.Npc
         public bool IsOffLineMsg { get; set; }
         public bool IsYbDeal { get; set; }
         public bool CanItemMarket { get; set; }
+        public int NpcFlag { get; set; }
 
         public Merchant() : base()
         {
@@ -411,7 +412,7 @@ namespace M2Server.Npc
                 }
                 else
                 {
-                    if (M2Shares.IsAccessory(userItem.Index))
+                    if (M2Share.IsAccessory(userItem.Index))
                     {
                         var stdItem = ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null)
@@ -789,6 +790,9 @@ namespace M2Server.Npc
             return result;
         }
 
+        public string m_sPath { get; set; }
+        public int ProcessRefillIndex { get; set; }
+
         public override void UserSelect(IPlayerActor playObject, string sData)
         {
             var sLabel = string.Empty;
@@ -958,6 +962,16 @@ namespace M2Server.Npc
                 M2Share.Logger.Error(Format(sExceptionMsg, sData));
                 M2Share.Logger.Error(ex.StackTrace);
             }
+        }
+
+        public void Click(IActor actor)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp, string sMsg)
+        {
+            throw new NotImplementedException();
         }
 
         private void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode)

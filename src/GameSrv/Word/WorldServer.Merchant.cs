@@ -1,8 +1,5 @@
-﻿using GameSrv.Npc;
-using M2Server.Actor;
-using M2Server.Maps;
+﻿using M2Server.Actor;
 using M2Server.Npc;
-using SystemModule;
 
 namespace M2Server.World
 {
@@ -162,12 +159,7 @@ namespace M2Server.World
             if (ProcessNpcTimeMin > ProcessNpcTimeMax) ProcessNpcTimeMax = ProcessNpcTimeMin;
         }
 
-        public void AddMerchant(Merchant merchantOld)
-        {
-            MerchantList.Add(merchantOld);
-        }
-
-        public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
+        public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<IMerchant> tmpList)
         {
             for (var i = 0; i < MerchantList.Count; i++)
             {

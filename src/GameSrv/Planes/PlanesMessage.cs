@@ -147,8 +147,8 @@ namespace M2Server.Planes
             {
                 try
                 {
-                    M2Shares.WorldEngine.AddSwitchData(new SwitchDataInfo());
-                    M2Shares.WorldEngine.SendServerGroupMsg(Messages.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
+                    // M2Share.WorldEngine.AddSwitchData(new SwitchDataInfo());
+                    M2Share.WorldEngine.SendServerGroupMsg(Messages.ISM_CHANGESERVERRECIEVEOK, M2Share.ServerIndex, ufilename);
                 }
                 catch
                 {
@@ -160,19 +160,19 @@ namespace M2Server.Planes
         private static void MsgGetUserChangeServerRecieveOk(int sNum, string Body)
         {
             string ufilename = Body;
-            M2Shares.WorldEngine.GetIsmChangeServerReceive(ufilename);
+            //M2Share.WorldEngine.GetIsmChangeServerReceive(ufilename);
         }
 
         private static void MsgGetUserLogon(int sNum, string Body)
         {
             string uname = Body;
-            M2Shares.WorldEngine.OtherServerUserLogon(sNum, uname);
+            //M2Share.WorldEngine.OtherServerUserLogon(sNum, uname);
         }
 
         private static void MsgGetUserLogout(int sNum, string Body)
         {
             string uname = Body;
-            M2Shares.WorldEngine.OtherServerUserLogout(sNum, uname);
+            //M2Share.WorldEngine.OtherServerUserLogout(sNum, uname);
         }
 
         private static void MsgGetWhisper(int sNum, string Body)
@@ -182,7 +182,7 @@ namespace M2Server.Planes
             {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                IPlayerActor hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                IPlayerActor hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.HearWhisper)
@@ -200,7 +200,7 @@ namespace M2Server.Planes
             {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                IPlayerActor hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                IPlayerActor hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.HearWhisper)
@@ -218,7 +218,7 @@ namespace M2Server.Planes
             {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                IPlayerActor hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                IPlayerActor hum = M2Share.WorldEngine.GetPlayObject(uname);
                 if (hum != null)
                 {
                     if (hum.HearWhisper)
@@ -231,7 +231,7 @@ namespace M2Server.Planes
 
         private static void MsgGetSysopMsg(int sNum, string Body)
         {
-            M2Shares.WorldEngine.SendBroadCastMsg(Body, MsgType.System);
+            M2Share.WorldEngine.SendBroadCastMsg(Body, MsgType.System);
         }
 
         private static void MsgGetAddGuild(int sNum, string Body)
@@ -255,14 +255,14 @@ namespace M2Server.Planes
             //    guild = M2Share.GuildMgr.FindGuild(gname);
             //    if (guild != null) {
             //        guild.LoadGuild();
-            //        M2Shares.WorldEngine.GuildMemberReGetRankName(guild);
+            //        M2Share.WorldEngine.GuildMemberReGetRankName(guild);
             //    }
             //}
             //else if (M2Share.ServerIndex != sNum) {
             //    guild = M2Share.GuildMgr.FindGuild(gname);
             //    if (guild != null) {
             //        guild.LoadGuildFile(gname + '.' + sNum);
-            //        M2Shares.WorldEngine.GuildMemberReGetRankName(guild);
+            //        M2Share.WorldEngine.GuildMemberReGetRankName(guild);
             //        guild.SaveGuildInfoFile();
             //    }
             //}
@@ -404,7 +404,7 @@ namespace M2Server.Planes
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 short dx = HUtil32.StrToInt16(dxstr, 0);
                 short dy = HUtil32.StrToInt16(dystr, 0);
-                //PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                //PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 //if (hum != null) {
                 //    if (hum.AllowGuildReCall) {
                 //        hum.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -431,10 +431,10 @@ namespace M2Server.Planes
                 Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 Str = HUtil32.GetValidStr3(Str, ref lovername, HUtil32.Backslash);
-                //humlover = M2Shares.WorldEngine.GetPlayObject(lovername);
+                //humlover = M2Share.WorldEngine.GetPlayObject(lovername);
                 //if (humlover != null) {
                 //    int svidx = 0;
-                //    if (M2Shares.WorldEngine.FindOtherServerUser(uname, ref svidx)) {
+                //    if (M2Share.WorldEngine.FindOtherServerUser(uname, ref svidx)) {
                 //        WorldServer.SendServerGroupMsg(Messages.ISM_LM_LOGIN_REPLY, svidx, lovername + '/' + uname + '/' + humlover.Envir.MapDesc);
                 //    }
                 //}
@@ -450,7 +450,7 @@ namespace M2Server.Planes
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
                 string lovername = Str;
-                //PlayObject hum = M2Shares.WorldEngine.GetPlayObject(lovername);
+                //PlayObject hum = M2Share.WorldEngine.GetPlayObject(lovername);
                 //if (hum != null) {
                 //    hum.SysMsg(uname + sLoverFindYouMsg, MsgColor.Red, MsgType.Hint);
                 //}
@@ -468,7 +468,7 @@ namespace M2Server.Planes
             {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                //PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                //PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 //if (hum != null) {
                 //    hum.SysMsg(Str, MsgColor.Red, MsgType.Hint);
                 //}
@@ -488,7 +488,7 @@ namespace M2Server.Planes
                 Str = HUtil32.GetValidStr3(Str, ref dystr, HUtil32.Backslash);
                 short dx = HUtil32.StrToInt16(dxstr, 0);
                 short dy = HUtil32.StrToInt16(dystr, 0);
-                //PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                //PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 //if (hum != null) {
                 //    hum.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 //    hum.SpaceMove(Str, dx, dy, 0);
@@ -503,7 +503,7 @@ namespace M2Server.Planes
             {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                //PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                //PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 //if (hum != null) {
                 //    hum.RecallHuman(Str);
                 //}
@@ -517,7 +517,7 @@ namespace M2Server.Planes
             {
                 string Str = Body;
                 Str = HUtil32.GetValidStr3(Str, ref uname, HUtil32.Backslash);
-                //PlayObject hum = M2Shares.WorldEngine.GetPlayObject(uname);
+                //PlayObject hum = M2Share.WorldEngine.GetPlayObject(uname);
                 //if (hum != null) {
                 //    if (!hum.Envir.Flag.NoReCall) {
                 //        hum.RecallHuman(Str);

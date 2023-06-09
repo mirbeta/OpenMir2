@@ -201,7 +201,13 @@ namespace M2Server
         }
 
         public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
-
+            
+        public static bool IsAccessory(ushort nIndex)
+        {
+            var item = ItemSystem.GetStdItem(nIndex);
+            return IsAccessoryMap.Contains(item.StdMode);
+        }
+        
         public static bool LoadLineNotice(string FileName)
         {
             var result = false;

@@ -20,7 +20,7 @@ namespace M2Server.DataSource
             if (!File.Exists(sfilename)) {
                 return false;
             }
-            M2Shares.WorldEngine.AdminList.Clear();
+            M2Share.WorldEngine.AdminList.Clear();
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sfilename);
             for (int i = 0; i < loadList.Count; i++) {
@@ -69,7 +69,7 @@ namespace M2Server.DataSource
                             ChrName = sChrName,
                             IPaddr = sIPaddr
                         };
-                        M2Shares.WorldEngine.AdminList.Add(adminInfo);
+                        M2Share.WorldEngine.AdminList.Add(adminInfo);
                     }
                 }
             }
@@ -109,7 +109,7 @@ namespace M2Server.DataSource
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
                             {
-                                IActor guard = M2Shares.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
+                                IActor guard = M2Share.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
                                 if (guard != null)
                                 {
                                     guard.Dir = (byte)HUtil32.StrToInt(direction, 0);
@@ -187,7 +187,7 @@ namespace M2Server.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Shares.WorldEngine.AddMerchant(GameShare.FunctionNPC);
+                    M2Share.WorldEngine.AddMerchant(GameShare.FunctionNPC);
                 }
                 else {
                     GameShare.FunctionNPC = null;
@@ -236,7 +236,7 @@ namespace M2Server.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Shares.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
+                   // M2Share.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
                 }
                 else {
                     M2Share.ManageNPC = null;
@@ -272,7 +272,7 @@ namespace M2Server.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Shares.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
+                   // M2Share.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
                 }
                 else {
                     M2Share.RobotNPC = null;
@@ -378,15 +378,17 @@ namespace M2Server.DataSource
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sIsCalste, _textSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, _textSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, _textSpitConst);
-                        if (!string.IsNullOrEmpty(sScript) && !string.IsNullOrEmpty(sMapName) && !string.IsNullOrEmpty(sAppr)) {
-                            Merchant merchantOldNpc = new() {
+                        if (!string.IsNullOrEmpty(sScript) && !string.IsNullOrEmpty(sMapName) && !string.IsNullOrEmpty(sAppr))
+                        {
+                            IMerchant merchantOldNpc = new Merchant()
+                            {
                                 ScriptName = sScript,
                                 MapName = sMapName,
                                 CurrX = HUtil32.StrToInt16(sX, 0),
                                 CurrY = HUtil32.StrToInt16(sY, 0),
                                 ChrName = sName,
                                 NpcFlag = HUtil32.StrToInt16(sFlag, 0),
-                                Appr = (ushort)HUtil32.StrToInt(sAppr, 0),
+                                Appr = (ushort) HUtil32.StrToInt(sAppr, 0),
                                 MoveTime = HUtil32.StrToInt(sMoveTime, 0)
                             };
                             if (HUtil32.StrToInt(sIsCalste, 0) != 0) {
@@ -395,7 +397,7 @@ namespace M2Server.DataSource
                             if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchantOldNpc.MoveTime > 0) {
                                 merchantOldNpc.BoCanMove = true;
                             }
-                            M2Shares.WorldEngine.AddMerchant(merchantOldNpc);
+                            M2Share.WorldEngine.AddMerchant(merchantOldNpc);
                         }
                     }
                 }
@@ -606,7 +608,7 @@ namespace M2Server.DataSource
                                 npc.ChrName = chrName;
                                 npc.NpcFlag = HUtil32.StrToInt16(flag, 0);
                                 npc.Appr = (ushort)HUtil32.StrToInt(appr, 0);
-                                M2Shares.WorldEngine.QuestNpcList.Add(npc);
+                                //M2Share.WorldEngine.QuestNpcList.Add(npc);
                             }
                         }
                     }
@@ -862,15 +864,15 @@ namespace M2Server.DataSource
             string sCastle = string.Empty;
             string sCanMove = string.Empty;
             string sMoveTime = string.Empty;
-            Merchant merchantOld;
+            IMerchant merchant;
             string sFileName = M2Share.GetEnvirFilePath("Merchant.txt");
             if (!File.Exists(sFileName)) {
                 return;
             }
-            for (int i = 0; i < M2Shares.WorldEngine.MerchantList.Count; i++) {
-                merchantOld = M2Shares.WorldEngine.MerchantList[i];
-                if (merchantOld != GameShare.FunctionNPC) {
-                    merchantOld.NpcFlag = -1;
+            for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++) {
+                merchant = M2Share.WorldEngine.MerchantList[i];
+                if (merchant != GameShare.FunctionNPC) {
+                    merchant.NpcFlag = -1;
                 }
             }
             using StringList loadList = new StringList();
@@ -894,61 +896,61 @@ namespace M2Server.DataSource
                     short nX = (short)HUtil32.StrToInt(sX, 0);
                     short nY = (short)HUtil32.StrToInt(sY, 0);
                     bool boNewNpc = true;
-                    for (int j = 0; j < M2Shares.WorldEngine.MerchantList.Count; j++) {
-                        merchantOld = M2Shares.WorldEngine.MerchantList[j];
-                        if (merchantOld.MapName == sMapName && merchantOld.CurrX == nX && merchantOld.CurrY == nY) {
+                    for (int j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++) {
+                        merchant = M2Share.WorldEngine.MerchantList[j];
+                        if (merchant.MapName == sMapName && merchant.CurrX == nX && merchant.CurrY == nY) {
                             boNewNpc = false;
-                            merchantOld.ScriptName = sScript;
-                            merchantOld.ChrName = sChrName;
-                            merchantOld.NpcFlag = HUtil32.StrToInt16(sFlag, 0);
-                            merchantOld.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
-                            merchantOld.MoveTime = HUtil32.StrToInt(sMoveTime, 0);
+                            merchant.ScriptName = sScript;
+                            merchant.ChrName = sChrName;
+                            merchant.NpcFlag = HUtil32.StrToInt16(sFlag, 0);
+                            merchant.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
+                            merchant.MoveTime = HUtil32.StrToInt(sMoveTime, 0);
                             if (HUtil32.StrToInt(sCastle, 0) != 1) {
-                                merchantOld.CastleMerchant = true;
+                                merchant.CastleMerchant = true;
                             }
                             else {
-                                merchantOld.CastleMerchant = false;
+                                merchant.CastleMerchant = false;
                             }
-                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchantOld.MoveTime > 0) {
-                                merchantOld.BoCanMove = true;
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchant.MoveTime > 0) {
+                                merchant.BoCanMove = true;
                             }
                             break;
                         }
                     }
                     if (boNewNpc) {
-                        merchantOld = new Merchant {
+                        merchant = new Merchant {
                             MapName = sMapName
                         };
-                        merchantOld.Envir = GameShare.MapMgr.FindMap(merchantOld.MapName);
-                        if (merchantOld.Envir != null) {
-                            merchantOld.ScriptName = sScript;
-                            merchantOld.CurrX = nX;
-                            merchantOld.CurrY = nY;
-                            merchantOld.ChrName = sChrName;
-                            merchantOld.NpcFlag = HUtil32.StrToInt16(sFlag, 0);
-                            merchantOld.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
-                            merchantOld.MoveTime = HUtil32.StrToInt(sMoveTime, 0);
+                        merchant.Envir = GameShare.MapMgr.FindMap(merchant.MapName);
+                        if (merchant.Envir != null) {
+                            merchant.ScriptName = sScript;
+                            merchant.CurrX = nX;
+                            merchant.CurrY = nY;
+                            merchant.ChrName = sChrName;
+                            merchant.NpcFlag = HUtil32.StrToInt16(sFlag, 0);
+                            merchant.Appr = (ushort)HUtil32.StrToInt(sAppr, 0);
+                            merchant.MoveTime = HUtil32.StrToInt(sMoveTime, 0);
                             if (HUtil32.StrToInt(sCastle, 0) != 1) {
-                                merchantOld.CastleMerchant = true;
+                                merchant.CastleMerchant = true;
                             }
                             else {
-                                merchantOld.CastleMerchant = false;
+                                merchant.CastleMerchant = false;
                             }
-                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchantOld.MoveTime > 0) {
-                                merchantOld.BoCanMove = true;
+                            if (HUtil32.StrToInt(sCanMove, 0) != 0 && merchant.MoveTime > 0) {
+                                merchant.BoCanMove = true;
                             }
-                            M2Shares.WorldEngine.MerchantList.Add(merchantOld);
-                            merchantOld.Initialize();
+                            M2Share.WorldEngine.MerchantList.Add(merchant);
+                            merchant.Initialize();
                         }
                     }
                 }
             }
-            for (int i = M2Shares.WorldEngine.MerchantList.Count - 1; i >= 0; i--) {
-                merchantOld = M2Shares.WorldEngine.MerchantList[i];
-                if (merchantOld.NpcFlag == -1) {
-                    merchantOld.Ghost = true;
-                    merchantOld.GhostTick = HUtil32.GetTickCount();
-                    M2Shares.WorldEngine.MerchantList.RemoveAt(i);
+            for (int i = M2Share.WorldEngine.MerchantList.Count - 1; i >= 0; i--) {
+                merchant = M2Share.WorldEngine.MerchantList[i];
+                if (merchant.NpcFlag == -1) {
+                    merchant.Ghost = true;
+                    merchant.GhostTick = HUtil32.GetTickCount();
+                    M2Share.WorldEngine.MerchantList.RemoveAt(i);
                 }
             }
         }

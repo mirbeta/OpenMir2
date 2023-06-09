@@ -51,7 +51,7 @@ namespace GameSrv
         public static readonly LocalDb LocalDb;
         public static readonly CommonDB CommonDb;
         public static readonly RandomNumber RandomNumber;
-        public static readonly MapQuestManager QuestManager;
+        public static MapQuestManager QuestManager;
         public static DBService DataServer = null;
         public static MarketService MarketService = null;
         public static ChatChannelService ChatChannel = null;
@@ -69,7 +69,7 @@ namespace GameSrv
         public static RobotManage RobotMgr = null;
         public static NormNpc ManageNPC = null;
         public static NormNpc RobotNPC = null;
-        public static Merchant FunctionNPC = null;
+        public static IMerchant FunctionNPC = null;
         public static NetworkMonitor NetworkMonitor;
         public static SystemProcessor SystemProcess;
         public static UserProcessor UserProcessor;

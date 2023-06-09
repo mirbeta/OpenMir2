@@ -14,5 +14,9 @@
         void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp);
 
         void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp, string sMsg);
+
+        void OnEnvirnomentChanged();
+
+        void LoadNpcData();
     }
 }

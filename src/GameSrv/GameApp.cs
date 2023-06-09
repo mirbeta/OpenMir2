@@ -49,8 +49,8 @@ namespace GameSrv
             GameShare.Config.WinLotteryLevel4 = 0;
             GameShare.Config.WinLotteryLevel5 = 0;
             GameShare.Config.WinLotteryLevel6 = 0;
+            GameShare.QuestManager = new MapQuestManager();
             M2Share.LogonCostLogList = new ArrayList();
-            
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<StartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];

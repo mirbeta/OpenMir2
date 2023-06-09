@@ -145,12 +145,12 @@ namespace M2Server.World.Threads
             //    boReTry = true;// 反回TRUE,则重新加入队列
             //    return false;
             //}
-            if (M2Shares.WorldEngine.GetPlayObjectEx(loadUser.ChrName) != null)
+            /*if (M2Share.WorldEngine.GetPlayObjectEx(loadUser.ChrName) != null)
             {
-                M2Shares.WorldEngine.KickPlayObjectEx(loadUser.ChrName);
+                M2Share.WorldEngine.KickPlayObjectEx(loadUser.ChrName);
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return false;
-            }
+            }*/
             if (!PlayerDataService.LoadHumRcdFromDB(loadUser.Account, loadUser.ChrName, loadUser.sIPaddr, ref queryId, loadUser.SessionID))
             {
                 GameShare.SocketMgr.SendOutConnectMsg(loadUser.GateIdx, loadUser.SocketId, loadUser.GSocketIdx);
@@ -164,7 +164,7 @@ namespace M2Server.World.Threads
                     HumanRcd = null,
                     QueryId = queryId
                 };
-                M2Shares.WorldEngine.AddUserOpenInfo(userOpenInfo);
+                //M2Share.WorldEngine.AddUserOpenInfo(userOpenInfo);
                 result = true;
             }
             return result;

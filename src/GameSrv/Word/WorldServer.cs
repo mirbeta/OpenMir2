@@ -43,7 +43,8 @@ namespace M2Server.World
         /// 处理假人间隔
         /// </summary>
         public long RobotLogonTick { get; set; }
-        public readonly IList<AdminInfo> AdminList;
+
+        public IList<AdminInfo> AdminList { get; set; }
         private readonly IList<GoldChangeInfo> ChangeHumanDbGoldList;
         private readonly IList<SwitchDataInfo> ChangeServerList;
         private readonly IList<int> ListOfGateIdx;
@@ -55,7 +56,7 @@ namespace M2Server.World
         protected readonly object LoadPlaySection;
         public readonly IList<MagicEvent> MagicEventList;
         public IList<MagicInfo> MagicList;
-        public readonly IList<Merchant> MerchantList;
+        public IList<IMerchant> MerchantList { get; set; }
         protected readonly IList<IPlayerActor> NewHumanList;
         protected readonly IList<IPlayerActor> PlayObjectFreeList;
         protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
@@ -96,7 +97,7 @@ namespace M2Server.World
             MonsterThreadMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
             MagicList = new List<MagicInfo>();
             AdminList = new List<AdminInfo>();
-            MerchantList = new List<Merchant>();
+            MerchantList = new List<IMerchant>();
             QuestNpcList = new List<NormNpc>();
             ChangeServerList = new List<SwitchDataInfo>();
             MagicEventList = new List<MagicEvent>();
@@ -1526,6 +1527,14 @@ namespace M2Server.World
                 }
             }
             return null;
+        }
+        
+        public void AddMerchant(IMerchant merchant)
+        {
+            if (merchant != null)
+            {
+                MerchantList.Add(merchant);
+            }
         }
 
         public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<IActor> list)

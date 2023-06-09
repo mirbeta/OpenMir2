@@ -1,7 +1,8 @@
 ﻿using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace SystemModule{
+namespace SystemModule
+{
     public interface IWorldEngine
     {
         void Initialize();
@@ -46,6 +47,12 @@ namespace SystemModule{
 
         MagicInfo FindMagic(string sMagicName);
 
+        IList<IMerchant> MerchantList { get; set; }
+
+        void AddMerchant(IMerchant merchant);
+
+        IList<AdminInfo> AdminList { get; set; }
+
         int PlayObjectCount { get; }
 
         int OnlinePlayObject { get; }
@@ -72,6 +79,11 @@ namespace SystemModule{
         void AddMonGenInfoThreadMap(int threadId, MonGenInfo monGenInfo);
 
         void CreateMonGenInfoThreadMap(int threadId, IList<MonGenInfo> monGenInfo);
-    }
 
+        void PrcocessData();
+        void ProcessNpcs();
+        void ProcessMerchants();
+        void ProcessRobotPlayData();
+        void ProcessHumans();
+    }
 }

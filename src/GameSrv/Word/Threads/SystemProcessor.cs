@@ -38,7 +38,7 @@ namespace M2Server.World.Threads
         {
             Run();
             IdSrvClient.Instance.Run();
-            M2Shares.WorldEngine.PrcocessData();
+            M2Share.WorldEngine.PrcocessData();
             ProcessGameRun();
             if (M2Share.ServerIndex == 0)
             {
@@ -58,13 +58,13 @@ namespace M2Server.World.Threads
             {
                 ShowOnlineTick = HUtil32.GetTickCount();
                 M2Share.NoticeMgr.LoadingNotice();
-                _logger.Info("在线数: " + M2Shares.WorldEngine.PlayObjectCount);
+                _logger.Info("在线数: " + M2Share.WorldEngine.PlayObjectCount);
                 M2Share.CastleMgr.Save();
             }
             if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
             {
                 SendOnlineHumTime = HUtil32.GetTickCount();
-                IdSrvClient.Instance.SendOnlineHumCountMsg(M2Shares.WorldEngine.OnlinePlayObject);
+                IdSrvClient.Instance.SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
             }
         }
 

@@ -33,7 +33,7 @@ namespace M2Server.World.Threads
             try
             {
                 ProcessedMonsters = 0;
-                M2Shares.WorldEngine.ProcessRobotPlayData();
+                M2Share.WorldEngine.ProcessRobotPlayData();
                 /*foreach (var map in Kernel.MapMgr.GameMaps.Values)
                     ProcessedMonsters += await map.OnTimerAsync();
                 await Kernel.RoleManager.OnRoleTimerAsync();*/
