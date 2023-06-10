@@ -20,7 +20,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            HUtil32.EnterCriticalSection(ModuleShare.DenySayMsgList);
+            HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
             try
             {
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
@@ -42,7 +42,7 @@ namespace CommandModule.Commands
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(ModuleShare.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(SystemShare.DenySayMsgList);
             }
         }
     }

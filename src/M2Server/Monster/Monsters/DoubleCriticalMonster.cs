@@ -51,7 +51,7 @@ namespace M2Server.Monster.Monsters
             {
                 for (int k = 0; k < 4; k++)
                 {
-                    if (ModuleShare.Config.SpitMap[btDir, i, k] == 1)
+                    if (SystemShare.Config.SpitMap[btDir, i, k] == 1)
                     {
                         short nX = (short)(CurrX - 2 + k);
                         short nY = (short)(CurrY - 2 + i);

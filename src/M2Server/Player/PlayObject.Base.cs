@@ -58,7 +58,7 @@ namespace M2Server.Player
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > ModuleShare.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
+            if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > SystemShare.Config.FloorItemCanPickUpTime)// 2 * 60 * 1000
             {
                 mapItem.OfBaseObject = 0;
             }
@@ -93,8 +93,8 @@ namespace M2Server.Player
                 if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1)
                 {
                     UserItem userItem = mapItem.UserItem;
-                    StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
-                    if (stdItem != null && IsAddWeightAvailable(ModuleShare.ItemSystem.GetStdItemWeight(userItem.Index)))
+                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    if (stdItem != null && IsAddWeightAvailable(SystemShare.ItemSystem.GetStdItemWeight(userItem.Index)))
                     {
                         SendMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY);
                         AddItemToBag(userItem);
@@ -122,14 +122,14 @@ namespace M2Server.Player
 
         public void WinExp(int dwExp)
         {
-            if (Abil.Level > ModuleShare.Config.LimitExpLevel)
+            if (Abil.Level > SystemShare.Config.LimitExpLevel)
             {
-                dwExp = ModuleShare.Config.LimitExpValue;
+                dwExp = SystemShare.Config.LimitExpValue;
                 GetExp(dwExp);
             }
             else if (dwExp > 0)
             {
-                dwExp = ModuleShare.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
+                dwExp = SystemShare.Config.KillMonExpMultiple * dwExp; // 系统指定杀怪经验倍数
                 dwExp = MNKillMonExpMultiple * dwExp; // 人物指定的杀怪经验倍数
                 dwExp = HUtil32.Round(KillMonExpRate / 100.0 * dwExp);// 人物指定的杀怪经验倍数
                 if (Envir.Flag.boEXPRATE)
@@ -162,7 +162,7 @@ namespace M2Server.Player
         public bool IncGold(int tGold)
         {
             bool result = false;
-            if (Gold + tGold <= ModuleShare.Config.HumanMaxGold)
+            if (Gold + tGold <= SystemShare.Config.HumanMaxGold)
             {
                 Gold += tGold;
                 result = true;
@@ -191,13 +191,13 @@ namespace M2Server.Player
 
         public void SendAddItem(UserItem userItem)
         {
-            StdItem item = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem item = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (item == null)
             {
                 return;
             }
             ClientItem clientItem = new ClientItem();
-            ModuleShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
+            SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
             clientItem.Item.Name = CustomItem.GetItemName(userItem);
             clientItem.MakeIndex = userItem.MakeIndex;
             clientItem.Dura = userItem.Dura;
@@ -290,7 +290,7 @@ namespace M2Server.Player
         /// </summary>
         private void ProcessSpiritSuite()
         {
-            if (!ModuleShare.Config.SpiritMutiny || !IsSpirit)
+            if (!SystemShare.Config.SpiritMutiny || !IsSpirit)
             {
                 return;
             }
@@ -306,7 +306,7 @@ namespace M2Server.Player
                 {
                     continue;
                 }
-                StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(useItem.Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(useItem.Index);
                 if (stdItem != null)
                 {
                     if (stdItem.Shape is ItemShapeConst.SpiritItem3 or ItemShapeConst.SpiritItem1 or ItemShapeConst.SpiritItem2 or ItemShapeConst.SpiritItem4)
@@ -317,7 +317,7 @@ namespace M2Server.Player
                 }
             }
             RecalcAbilitys();
-            M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + ModuleShare.Config.SpiritMutinyTime;
+            M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + SystemShare.Config.SpiritMutinyTime;
             M2Share.WorldEngine.SendBroadCastMsg("神之祈祷，天地震怒，尸横遍野...", MsgType.System);
             SysMsg("祈祷发出强烈的宇宙效应", MsgColor.Green, MsgType.Hint);
         }
@@ -329,19 +329,19 @@ namespace M2Server.Player
             {
                 return;
             }
-            if (!ModuleShare.Config.MasterDieMutiny)
+            if (!SystemShare.Config.MasterDieMutiny)
             {
                 return;
             }
             for (int i = SlaveList.Count - 1; i >= 0; i--)
             {
-                if (SlaveList[i].Master.LastHiter != null && (M2Share.RandomNumber.Random(ModuleShare.Config.MasterDieMutinyRate) == 0))
+                if (SlaveList[i].Master.LastHiter != null && (M2Share.RandomNumber.Random(SystemShare.Config.MasterDieMutinyRate) == 0))
                 {
                     SlaveList[i].Master = null;
-                    SlaveList[i].SlaveExpLevel = (byte)ModuleShare.Config.SlaveColor.Length;
+                    SlaveList[i].SlaveExpLevel = (byte)SystemShare.Config.SlaveColor.Length;
                     SlaveList[i].RecalcAbilitys();
-                    SlaveList[i].WAbil.DC = (ushort)HUtil32.MakeLong((short)(HUtil32.LoByte(SlaveList[i].WAbil.DC) * ModuleShare.Config.MasterDieMutinyPower), (short)(HUtil32.HiByte(SlaveList[i].WAbil.DC) * ModuleShare.Config.MasterDieMutinyPower));
-                    SlaveList[i].WalkSpeed = SlaveList[i].WalkSpeed / ModuleShare.Config.MasterDieMutinySpeed;
+                    SlaveList[i].WAbil.DC = (ushort)HUtil32.MakeLong((short)(HUtil32.LoByte(SlaveList[i].WAbil.DC) * SystemShare.Config.MasterDieMutinyPower), (short)(HUtil32.HiByte(SlaveList[i].WAbil.DC) * SystemShare.Config.MasterDieMutinyPower));
+                    SlaveList[i].WalkSpeed = SlaveList[i].WalkSpeed / SystemShare.Config.MasterDieMutinySpeed;
                     SlaveList[i].RefNameColor();
                     SlaveList[i].RefShowName();
                 }
@@ -367,7 +367,7 @@ namespace M2Server.Player
         private void LogonTimcCost()
         {
             int n08;
-            if (PayMent == 2 || ModuleShare.Config.TestServer)
+            if (PayMent == 2 || SystemShare.Config.TestServer)
             {
                 n08 = (HUtil32.GetTickCount() - LogonTick) / 1000;
             }
@@ -392,7 +392,7 @@ namespace M2Server.Player
                 var nOldX = CurrX;
                 var nOldY = CurrY;
                 Dir = btDir;
-                bool canWalk = ModuleShare.Config.DiableHumanRun || Permission > 9 && ModuleShare.Config.boGMRunAll;
+                bool canWalk = SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll;
                 switch (btDir)
                 {
                     case Direction.Up:
@@ -481,7 +481,7 @@ namespace M2Server.Player
                 var nOldX = CurrX;
                 var nOldY = CurrY;
                 Dir = btDir;
-                bool canWalk = ModuleShare.Config.DiableHumanRun || Permission > 9 && ModuleShare.Config.boGMRunAll;
+                bool canWalk = SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll;
                 switch (btDir)
                 {
                     case Direction.Up:
@@ -669,14 +669,14 @@ namespace M2Server.Player
         {
             if (!IsCanDeal)
             {
-                SendMsg(ModuleShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
                 return;
             }
             if (Death || Ghost)
             {
                 return;
             }
-            if (HUtil32.GetTickCount() - ClickNpcTime > ModuleShare.Config.ClickNpcTime)
+            if (HUtil32.GetTickCount() - ClickNpcTime > SystemShare.Config.ClickNpcTime)
             {
                 ClickNpcTime = HUtil32.GetTickCount();
                 INormNpc normNpc = M2Share.WorldEngine.FindMerchant(actorId) ?? M2Share.WorldEngine.FindNpc(actorId);
@@ -699,9 +699,9 @@ namespace M2Server.Player
         {
             if (PvpLevel() >= 2)
             {
-                HomeMap = ModuleShare.Config.RedHomeMap;
-                HomeX = ModuleShare.Config.RedHomeX;
-                HomeY = ModuleShare.Config.RedHomeY;
+                HomeMap = SystemShare.Config.RedHomeMap;
+                HomeX = SystemShare.Config.RedHomeX;
+                HomeY = SystemShare.Config.RedHomeY;
                 return;
             }
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
@@ -788,7 +788,7 @@ namespace M2Server.Player
                             playObject = groupOwnerPlay.GroupMembers[i];
                             if (!playObject.Death && Envir == playObject.Envir && Math.Abs(CurrX - playObject.CurrX) <= 12 && Math.Abs(CurrX - playObject.CurrX) <= 12)
                             {
-                                if (ModuleShare.Config.HighLevelKillMonFixExp)
+                                if (SystemShare.Config.HighLevelKillMonFixExp)
                                 {
                                     playObject.WinExp(HUtil32.Round(dwExp / (double)n)); // 在高等级经验不变时，把组队的经验平均分配
                                 }
@@ -850,8 +850,8 @@ namespace M2Server.Player
                 + " 防御力: " + HUtil32.LoWord(WAbil.AC) + '-' + HUtil32.HiWord(WAbil.AC) + " 魔防力: " + HUtil32.LoWord(WAbil.MAC)
                 + '-' + HUtil32.HiWord(WAbil.MAC) + " 准确:" + HitPoint + " 敏捷:" + SpeedPoint + " 速度:" + HitSpeed
                 + " 仓库密码:" + StoragePwd + " 登录IP:" + LoginIpAddr + '(' + LoginIpLocal + ')' + " 登录帐号:" + UserAccount + " 登录时间:" + DateTimeOffset.FromUnixTimeMilliseconds(LogonTime).ToString("yyyy-MM-dd HH:mm:ss")
-                + " 在线时长(分钟):" + (HUtil32.GetTickCount() - LogonTick) / 60000 + " 登录模式:" + PayMent + ' ' + ModuleShare.Config.GameGoldName + ':' + GameGold
-                + ' ' + ModuleShare.Config.GamePointName + ':' + GamePoint + ' ' + ModuleShare.Config.PayMentPointName + ':' + PayMentPoint + " 会员类型:" + MemberType
+                + " 在线时长(分钟):" + (HUtil32.GetTickCount() - LogonTick) / 60000 + " 登录模式:" + PayMent + ' ' + SystemShare.Config.GameGoldName + ':' + GameGold
+                + ' ' + SystemShare.Config.GamePointName + ':' + GamePoint + ' ' + SystemShare.Config.PayMentPointName + ':' + PayMentPoint + " 会员类型:" + MemberType
                 + " 会员等级:" + MemberLevel + " 经验倍数:" + KillMonExpRate / 100 + " 攻击倍数:" + PowerRate / 100 + " 声望值:" + CreditPoint;
         }
 
@@ -927,7 +927,7 @@ namespace M2Server.Player
             }
             if (boSendName)
             {
-                sMsg = ModuleShare.Config.GameGoldName + '\r' + ModuleShare.Config.GamePointName;
+                sMsg = SystemShare.Config.GameGoldName + '\r' + SystemShare.Config.GamePointName;
             }
             SendDefMessage(Messages.SM_GAMEGOLDNAME, GameGold, HUtil32.LoWord(GamePoint), HUtil32.HiWord(GamePoint), 0, sMsg);
         }
@@ -939,25 +939,25 @@ namespace M2Server.Player
                 return;
             }
 
-            if (ModuleShare.Config.DiableHumanRun || Permission > 9 && ModuleShare.Config.boGMRunAll)
+            if (SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll)
             {
             }
             else
             {
-                if (ModuleShare.Config.boRunHuman || Envir.Flag.RunHuman)
+                if (SystemShare.Config.boRunHuman || Envir.Flag.RunHuman)
                 {
                 }
-                if (ModuleShare.Config.boRunMon || Envir.Flag.RunMon)
+                if (SystemShare.Config.boRunMon || Envir.Flag.RunMon)
                 {
                 }
-                if (ModuleShare.Config.boRunNpc)
+                if (SystemShare.Config.boRunNpc)
                 {
                 }
-                if (ModuleShare.Config.boWarDisHumRun)
+                if (SystemShare.Config.boWarDisHumRun)
                 {
                 }
             }
-            string sMsg = EDCode.EncodeBuffer(ModuleShare.Config.ClientConf);
+            string sMsg = EDCode.EncodeBuffer(SystemShare.Config.ClientConf);
             //var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
             //var nParam = (short)HUtil32.MakeWord(5, 0);
             SendDefMessage(Messages.SM_SERVERCONFIG, 0, 0, 0, 0, sMsg);
@@ -1017,11 +1017,11 @@ namespace M2Server.Player
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem item = ModuleShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem item = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
                     if (item != null)
                     {
                         ClientItem clientItem = new ClientItem();
-                        ModuleShare.ItemSystem.GetUpgradeStdItem(item, UseItems[i], ref clientItem);
+                        SystemShare.ItemSystem.GetUpgradeStdItem(item, UseItems[i], ref clientItem);
                         //Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
                         clientItem.Item.Name = CustomItem.GetItemName(UseItems[i]);
                         clientItem.Dura = UseItems[i].Dura;
@@ -1066,7 +1066,7 @@ namespace M2Server.Player
         private bool UseStdModeFunItem(StdItem stdItem)
         {
             bool result = false;
-            if (ModuleShare.FunctionNPC != null)
+            if (SystemShare.FunctionNPC != null)
             {
                 //ModuleShare.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
                 result = true;
@@ -1112,16 +1112,16 @@ namespace M2Server.Player
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    bonusTick = ModuleShare.Config.BonusAbilofWarr;
-                    nakedAbil = ModuleShare.Config.NakedAbilofWarr;
+                    bonusTick = SystemShare.Config.BonusAbilofWarr;
+                    nakedAbil = SystemShare.Config.NakedAbilofWarr;
                     break;
                 case PlayJob.Wizard:
-                    bonusTick = ModuleShare.Config.BonusAbilofWizard;
-                    nakedAbil = ModuleShare.Config.NakedAbilofWizard;
+                    bonusTick = SystemShare.Config.BonusAbilofWizard;
+                    nakedAbil = SystemShare.Config.NakedAbilofWizard;
                     break;
                 case PlayJob.Taoist:
-                    bonusTick = ModuleShare.Config.BonusAbilofTaos;
-                    nakedAbil = ModuleShare.Config.NakedAbilofTaos;
+                    bonusTick = SystemShare.Config.BonusAbilofTaos;
+                    nakedAbil = SystemShare.Config.NakedAbilofTaos;
                     break;
             }
             short adc = (short)(BonusAbil.DC / bonusTick.DC);
@@ -1186,13 +1186,13 @@ namespace M2Server.Player
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    sSendMsg = EDCode.EncodePacket(ModuleShare.Config.BonusAbilofWarr) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(ModuleShare.Config.NakedAbilofWarr);
+                    sSendMsg = EDCode.EncodePacket(SystemShare.Config.BonusAbilofWarr) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(SystemShare.Config.NakedAbilofWarr);
                     break;
                 case PlayJob.Wizard:
-                    sSendMsg = EDCode.EncodePacket(ModuleShare.Config.BonusAbilofWizard) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(ModuleShare.Config.NakedAbilofWizard);
+                    sSendMsg = EDCode.EncodePacket(SystemShare.Config.BonusAbilofWizard) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(SystemShare.Config.NakedAbilofWizard);
                     break;
                 case PlayJob.Taoist:
-                    sSendMsg = EDCode.EncodePacket(ModuleShare.Config.BonusAbilofTaos) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(ModuleShare.Config.NakedAbilofTaos);
+                    sSendMsg = EDCode.EncodePacket(SystemShare.Config.BonusAbilofTaos) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(SystemShare.Config.NakedAbilofTaos);
                     break;
             }
             ClientMsg = Messages.MakeMessage(Messages.SM_ADJUST_BONUS, BonusPoint, 0, 0, 0);
@@ -1201,14 +1201,14 @@ namespace M2Server.Player
 
         private void PvpDie(PlayObject playObject)
         {
-            int nWinLevel = ModuleShare.Config.KillHumanWinLevel;
-            int nLostLevel = ModuleShare.Config.KilledLostLevel;
-            int nWinExp = ModuleShare.Config.KillHumanWinExp;
-            int nLostExp = ModuleShare.Config.KillHumanLostExp;
-            bool boWinLEvel = ModuleShare.Config.IsKillHumanWinLevel;
-            bool boLostLevel = ModuleShare.Config.IsKilledLostLevel;
-            bool boWinExp = ModuleShare.Config.IsKillHumanWinExp;
-            bool boLostExp = ModuleShare.Config.IsKilledLostExp;
+            int nWinLevel = SystemShare.Config.KillHumanWinLevel;
+            int nLostLevel = SystemShare.Config.KilledLostLevel;
+            int nWinExp = SystemShare.Config.KillHumanWinExp;
+            int nLostExp = SystemShare.Config.KillHumanLostExp;
+            bool boWinLEvel = SystemShare.Config.IsKillHumanWinLevel;
+            bool boLostLevel = SystemShare.Config.IsKilledLostLevel;
+            bool boWinExp = SystemShare.Config.IsKillHumanWinExp;
+            bool boLostExp = SystemShare.Config.IsKilledLostExp;
             if (Envir.Flag.boPKWINLEVEL)
             {
                 boWinLEvel = true;
@@ -1229,14 +1229,14 @@ namespace M2Server.Player
                 boLostExp = true;
                 nLostExp = Envir.Flag.nPKLOSTEXP;
             }
-            if (playObject.Abil.Level - Abil.Level > ModuleShare.Config.HumanLevelDiffer)
+            if (playObject.Abil.Level - Abil.Level > SystemShare.Config.HumanLevelDiffer)
             {
                 if (!IsGoodKilling(this))
                 {
-                    playObject.IncPkPoint(ModuleShare.Config.KillHumanAddPKPoint);
+                    playObject.IncPkPoint(SystemShare.Config.KillHumanAddPKPoint);
                     playObject.SysMsg(Settings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
                     SysMsg(Format(Settings.YouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
-                    playObject.AddBodyLuck(-ModuleShare.Config.KillHumanDecLuckPoint);
+                    playObject.AddBodyLuck(-SystemShare.Config.KillHumanDecLuckPoint);
                     if (PvpLevel() < 1)
                     {
                         if (M2Share.RandomNumber.Random(5) == 0)
@@ -1244,7 +1244,7 @@ namespace M2Server.Player
                             playObject.MakeWeaponUnlock();
                         }
                     }
-                    if (ModuleShare.FunctionNPC != null)
+                    if (SystemShare.FunctionNPC != null)
                     {
                         //ModuleShare.FunctionNPC.GotoLable(playObject, "@OnMurder", false);
                         //ModuleShare.FunctionNPC.GotoLable(this, "@Murdered", false);
@@ -1534,7 +1534,7 @@ namespace M2Server.Player
                 if (mineEvent.MineCount > 0)
                 {
                     mineEvent.MineCount -= 1;
-                    if (M2Share.RandomNumber.Random(ModuleShare.Config.MakeMineHitRate) == 0)
+                    if (M2Share.RandomNumber.Random(SystemShare.Config.MakeMineHitRate) == 0)
                     {
                         PileStones pileEvent = (PileStones)Envir.GetEvent(CurrX, CurrY);
                         if (pileEvent == null)
@@ -1549,7 +1549,7 @@ namespace M2Server.Player
                                 pileEvent.AddEventParam();
                             }
                         }
-                        if (M2Share.RandomNumber.Random(ModuleShare.Config.MakeMineRate) == 0)
+                        if (M2Share.RandomNumber.Random(SystemShare.Config.MakeMineRate) == 0)
                         {
                             if (Envir.Flag.Mine)
                             {
@@ -1594,11 +1594,11 @@ namespace M2Server.Player
                 for (int i = startCount; i < endCount; i++)
                 {
                     UserItem userItem = StorageItemList[i];
-                    StdItem item = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                    StdItem item = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                     if (item != null)
                     {
                         ClientItem clientItem = new ClientItem();
-                        ModuleShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
+                        SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Item.Name = CustomItem.GetItemName(userItem);
                         clientItem.Dura = userItem.Dura;
@@ -1637,11 +1637,11 @@ namespace M2Server.Player
 
         public void SendDelItems(UserItem userItem)
         {
-            StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1657,11 +1657,11 @@ namespace M2Server.Player
 
         public void SendUpdateItem(UserItem userItem)
         {
-            StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1677,11 +1677,11 @@ namespace M2Server.Player
 
         private void SendUpdateItemWithLevel(UserItem userItem, byte level)
         {
-            StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1698,11 +1698,11 @@ namespace M2Server.Player
 
         private void SendUpdateItemByJob(UserItem userItem, byte level)
         {
-            StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -2024,7 +2024,7 @@ namespace M2Server.Player
                     {
                         continue;
                     }
-                    StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         n14 += stdItem.Weight;
@@ -2241,7 +2241,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        BaseObjectMove(ModuleShare.Config.RedHomeMap, ModuleShare.Config.RedHomeX, ModuleShare.Config.RedHomeY);
+                        BaseObjectMove(SystemShare.Config.RedHomeMap, SystemShare.Config.RedHomeX, SystemShare.Config.RedHomeY);
                     }
                     result = true;
                     break;
@@ -2348,11 +2348,11 @@ namespace M2Server.Player
         {
             if (DealCreat != null)
             {
-                StdItem pStdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                StdItem pStdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (pStdItem != null)
                 {
                     ClientItem clientItem = new ClientItem();
-                    ModuleShare.ItemSystem.GetUpgradeStdItem(pStdItem, userItem, ref clientItem);
+                    SystemShare.ItemSystem.GetUpgradeStdItem(pStdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
@@ -2375,11 +2375,11 @@ namespace M2Server.Player
             SendDefMessage(Messages.SM_DEALADDITEM_OK, 0, 0, 0, 0);
             if (DealCreat != null)
             {
-                StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
                     ClientItem clientItem = new ClientItem();
-                    ModuleShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                    SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
@@ -2417,10 +2417,10 @@ namespace M2Server.Player
         /// <returns></returns>
         private static ushort MakeMineRandomDrua()
         {
-            int result = M2Share.RandomNumber.Random(ModuleShare.Config.StoneGeneralDuraRate) + ModuleShare.Config.StoneMinDura;
-            if (M2Share.RandomNumber.Random(ModuleShare.Config.StoneAddDuraRate) == 0)
+            int result = M2Share.RandomNumber.Random(SystemShare.Config.StoneGeneralDuraRate) + SystemShare.Config.StoneMinDura;
+            if (M2Share.RandomNumber.Random(SystemShare.Config.StoneAddDuraRate) == 0)
             {
-                result += M2Share.RandomNumber.Random(ModuleShare.Config.StoneAddDuraMax);
+                result += M2Share.RandomNumber.Random(SystemShare.Config.StoneAddDuraMax);
             }
             return (ushort)result;
         }
@@ -2435,11 +2435,11 @@ namespace M2Server.Player
             {
                 return;
             }
-            int nRandom = M2Share.RandomNumber.Random(ModuleShare.Config.StoneTypeRate);
-            if (nRandom >= ModuleShare.Config.GoldStoneMin && nRandom <= ModuleShare.Config.GoldStoneMax)
+            int nRandom = M2Share.RandomNumber.Random(SystemShare.Config.StoneTypeRate);
+            if (nRandom >= SystemShare.Config.GoldStoneMin && nRandom <= SystemShare.Config.GoldStoneMax)
             {
                 userItem = new UserItem();
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.GoldStone, ref userItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GoldStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2452,10 +2452,10 @@ namespace M2Server.Player
                 }
                 return;
             }
-            if (nRandom >= ModuleShare.Config.SilverStoneMin && nRandom <= ModuleShare.Config.SilverStoneMax)
+            if (nRandom >= SystemShare.Config.SilverStoneMin && nRandom <= SystemShare.Config.SilverStoneMax)
             {
                 userItem = new UserItem();
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.SilverStone, ref userItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.SilverStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2468,10 +2468,10 @@ namespace M2Server.Player
                 }
                 return;
             }
-            if (nRandom >= ModuleShare.Config.SteelStoneMin && nRandom <= ModuleShare.Config.SteelStoneMax)
+            if (nRandom >= SystemShare.Config.SteelStoneMin && nRandom <= SystemShare.Config.SteelStoneMax)
             {
                 userItem = new UserItem();
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.SteelStone, ref userItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.SteelStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2484,10 +2484,10 @@ namespace M2Server.Player
                 }
                 return;
             }
-            if (nRandom >= ModuleShare.Config.BlackStoneMin && nRandom <= ModuleShare.Config.BlackStoneMax)
+            if (nRandom >= SystemShare.Config.BlackStoneMin && nRandom <= SystemShare.Config.BlackStoneMax)
             {
                 userItem = new UserItem();
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.BlackStone, ref userItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.BlackStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2501,7 +2501,7 @@ namespace M2Server.Player
                 return;
             }
             userItem = new UserItem();
-            if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.CopperStone, ref userItem))
+            if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.CopperStone, ref userItem))
             {
                 userItem.Dura = MakeMineRandomDrua();
                 ItemList.Add(userItem);
@@ -2527,7 +2527,7 @@ namespace M2Server.Player
             int mineRate = M2Share.RandomNumber.Random(120);
             if (HUtil32.RangeInDefined(mineRate, 1, 2))
             {
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.GemStone1, ref mineItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone1, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2541,7 +2541,7 @@ namespace M2Server.Player
             }
             else if (HUtil32.RangeInDefined(mineRate, 3, 20))
             {
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.GemStone2, ref mineItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone2, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2555,7 +2555,7 @@ namespace M2Server.Player
             }
             else if (HUtil32.RangeInDefined(mineRate, 21, 45))
             {
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.GemStone3, ref mineItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone3, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2569,7 +2569,7 @@ namespace M2Server.Player
             }
             else
             {
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(ModuleShare.Config.GemStone4, ref mineItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone4, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2596,7 +2596,7 @@ namespace M2Server.Player
             for (int i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
-                if (string.Compare(ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (userItem.Dura > nDura)
                     {
@@ -2653,17 +2653,17 @@ namespace M2Server.Player
         {
             bool result = false;
             dwDelayTime = 0;
-            if (ModuleShare.Config.CloseSpeedHackCheck)
+            if (SystemShare.Config.CloseSpeedHackCheck)
             {
                 return true;
             }
             int dwCheckTime;
-            if (!ModuleShare.Config.DisableStruck) // 检查人物弯腰停留时间
+            if (!SystemShare.Config.DisableStruck) // 检查人物弯腰停留时间
             {
                 dwCheckTime = HUtil32.GetTickCount() - StruckTick;
-                if (ModuleShare.Config.StruckTime > dwCheckTime)
+                if (SystemShare.Config.StruckTime > dwCheckTime)
                 {
-                    dwDelayTime = ModuleShare.Config.StruckTime - dwCheckTime;
+                    dwDelayTime = SystemShare.Config.StruckTime - dwCheckTime;
                     MBtOldDir = Dir;
                     return false;
                 }
@@ -2679,7 +2679,7 @@ namespace M2Server.Player
                 // 当二次操作一样时，则将 boFirst 设置为 真 ，退出由调用函数本身检查二个相同操作之间的间隔时间
                 return true;
             }
-            if (!ModuleShare.Config.boControlActionInterval)
+            if (!SystemShare.Config.boControlActionInterval)
             {
                 return true;
             }
@@ -2687,47 +2687,47 @@ namespace M2Server.Player
             switch (wIdent)
             {
                 case Messages.CM_LONGHIT:
-                    if (ModuleShare.Config.boControlRunLongHit && OldIdent == Messages.CM_RUN && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlRunLongHit && OldIdent == Messages.CM_RUN && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_HIT:
-                    if (ModuleShare.Config.boControlWalkHit && OldIdent == Messages.CM_WALK && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlWalkHit && OldIdent == Messages.CM_WALK && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = WalkHitIntervalTime; // 走位攻击
                     }
-                    if (ModuleShare.Config.boControlRunHit && OldIdent == Messages.CM_RUN && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlRunHit && OldIdent == Messages.CM_RUN && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
                     break;
                 case Messages.CM_RUN:
-                    if (ModuleShare.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
-                    if (ModuleShare.Config.boControlRunHit && OldIdent == Messages.CM_HIT && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlRunHit && OldIdent == Messages.CM_HIT && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = RunHitIntervalTime;// 跑位攻击
                     }
-                    if (ModuleShare.Config.boControlRunMagic && OldIdent == Messages.CM_SPELL && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlRunMagic && OldIdent == Messages.CM_SPELL && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
                     break;
                 case Messages.CM_WALK:
-                    if (ModuleShare.Config.boControlWalkHit && OldIdent == Messages.CM_HIT && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlWalkHit && OldIdent == Messages.CM_HIT && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = WalkHitIntervalTime;// 走位攻击
                     }
-                    if (ModuleShare.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlRunLongHit && OldIdent == Messages.CM_LONGHIT && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = RunLongHitIntervalTime;// 跑位刺杀
                     }
                     break;
                 case Messages.CM_SPELL:
-                    if (ModuleShare.Config.boControlRunMagic && OldIdent == Messages.CM_RUN && MBtOldDir != Dir)
+                    if (SystemShare.Config.boControlRunMagic && OldIdent == Messages.CM_RUN && MBtOldDir != Dir)
                     {
                         dwActionIntervalTime = RunMagicIntervalTime;// 跑位魔法
                     }
@@ -2959,7 +2959,7 @@ namespace M2Server.Player
             }
             if (!string.IsNullOrEmpty(MasterName) && !IsMaster)
             {
-                if (Abil.Level >= ModuleShare.Config.MasterOKLevel)
+                if (Abil.Level >= SystemShare.Config.MasterOKLevel)
                 {
                     IPlayerActor human = M2Share.WorldEngine.GetPlayObject(MasterName);
                     if (human != null && !human.Death && !human.Ghost)
@@ -2982,11 +2982,11 @@ namespace M2Server.Player
                         }
                         MasterName = "";
                         RefShowName();
-                        if (human.CreditPoint + ModuleShare.Config.MasterOKCreditPoint <= byte.MaxValue)
+                        if (human.CreditPoint + SystemShare.Config.MasterOKCreditPoint <= byte.MaxValue)
                         {
-                            human.CreditPoint += (byte)ModuleShare.Config.MasterOKCreditPoint;
+                            human.CreditPoint += (byte)SystemShare.Config.MasterOKCreditPoint;
                         }
-                        human.BonusPoint += ModuleShare.Config.nMasterOKBonusPoint;
+                        human.BonusPoint += SystemShare.Config.nMasterOKBonusPoint;
                         human.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
                     }
                     else
@@ -3032,11 +3032,11 @@ namespace M2Server.Player
                 SysMsg(Settings.UnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
                 MasterName = "";
                 RefShowName();
-                if (CreditPoint + ModuleShare.Config.MasterOKCreditPoint <= byte.MaxValue)
+                if (CreditPoint + SystemShare.Config.MasterOKCreditPoint <= byte.MaxValue)
                 {
-                    CreditPoint += (byte)ModuleShare.Config.MasterOKCreditPoint;
+                    CreditPoint += (byte)SystemShare.Config.MasterOKCreditPoint;
                 }
-                BonusPoint += ModuleShare.Config.nMasterOKBonusPoint;
+                BonusPoint += SystemShare.Config.nMasterOKBonusPoint;
                 SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
             }
             if (string.IsNullOrEmpty(MasterName))
@@ -3216,39 +3216,39 @@ namespace M2Server.Player
                     IsPasswordLocked = false;
                     if (IsUnLockPwd)
                     {
-                        if (ModuleShare.Config.LockDealAction)
+                        if (SystemShare.Config.LockDealAction)
                         {
                             IsCanDeal = true;
                         }
-                        if (ModuleShare.Config.LockDropAction)
+                        if (SystemShare.Config.LockDropAction)
                         {
                             IsCanDrop = true;
                         }
-                        if (ModuleShare.Config.LockWalkAction)
+                        if (SystemShare.Config.LockWalkAction)
                         {
                             IsCanWalk = true;
                         }
-                        if (ModuleShare.Config.LockRunAction)
+                        if (SystemShare.Config.LockRunAction)
                         {
                             IsCanRun = true;
                         }
-                        if (ModuleShare.Config.LockHitAction)
+                        if (SystemShare.Config.LockHitAction)
                         {
                             IsCanHit = true;
                         }
-                        if (ModuleShare.Config.LockSpellAction)
+                        if (SystemShare.Config.LockSpellAction)
                         {
                             IsCanSpell = true;
                         }
-                        if (ModuleShare.Config.LockSendMsgAction)
+                        if (SystemShare.Config.LockSendMsgAction)
                         {
                             IsCanSendMsg = true;
                         }
-                        if (ModuleShare.Config.LockUserItemAction)
+                        if (SystemShare.Config.LockUserItemAction)
                         {
                             BoCanUseItem = true;
                         }
-                        if (ModuleShare.Config.LockInObModeAction)
+                        if (SystemShare.Config.LockInObModeAction)
                         {
                             ObMode = false;
                             AdminMode = false;
@@ -3258,7 +3258,7 @@ namespace M2Server.Player
                     }
                     if (IsUnLockStoragePwd)
                     {
-                        if (ModuleShare.Config.LockGetBackItemAction)
+                        if (SystemShare.Config.LockGetBackItemAction)
                         {
                             IsCanGetBackItem = true;
                         }
@@ -3438,13 +3438,13 @@ namespace M2Server.Player
                     }
                     break;
                 case 1:
-                    if (ModuleShare.FunctionNPC != null)
+                    if (SystemShare.FunctionNPC != null)
                     {
                         //ModuleShare.FunctionNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
                 case 2:
-                    if (ModuleShare.ManageNPC != null)
+                    if (SystemShare.ManageNPC != null)
                     {
                         // ModuleShare.ManageNPC.GotoLable(this, GotoNpcLabel, false);
                     }
@@ -3483,7 +3483,7 @@ namespace M2Server.Player
                             UserItem userItem = ItemList[i];
                             if (userItem.Index == DlgItemIndex)
                             {
-                                StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                                 if (stdItem != null)
                                 {
                                     if (stdItem.NeedIdentify == 1)

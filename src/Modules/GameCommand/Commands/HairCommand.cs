@@ -20,7 +20,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 mIPlayerActor.Hair = (byte)nHair;

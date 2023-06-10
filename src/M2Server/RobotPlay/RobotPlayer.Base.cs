@@ -126,7 +126,7 @@ namespace M2Server.RobotPlay
 
                         if (IsRobot && !Ghost && !Death)
                         {
-                            if (ModuleShare.Config.boHPAutoMoveMap)
+                            if (SystemShare.Config.boHPAutoMoveMap)
                             {
                                 if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - MDwHpToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
@@ -145,7 +145,7 @@ namespace M2Server.RobotPlay
                                     }
                                 }
                             }
-                            if (ModuleShare.Config.boAutoRepairItem)
+                            if (SystemShare.Config.boAutoRepairItem)
                             {
                                 if (HUtil32.GetTickCount() - AutoRepairItemTick > 15000)
                                 {
@@ -161,11 +161,11 @@ namespace M2Server.RobotPlay
                                         }
                                         if (UseItems[nWhere].Index <= 0)
                                         {
-                                            stdItem = ModuleShare.ItemSystem.GetStdItem(UseItemNames[nWhere]);
+                                            stdItem = SystemShare.ItemSystem.GetStdItem(UseItemNames[nWhere]);
                                             if (stdItem != null)
                                             {
                                                 userItem = new UserItem();
-                                                if (ModuleShare.ItemSystem.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
+                                                if (SystemShare.ItemSystem.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
                                                 {
                                                     boRecalcAbilitys = true;
                                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
@@ -190,7 +190,7 @@ namespace M2Server.RobotPlay
                                                 userItem = ItemList[j];
                                                 if (userItem != null)
                                                 {
-                                                    stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                                                    stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                                                     if (stdItem != null)
                                                     {
                                                         boFind = false;
@@ -205,7 +205,7 @@ namespace M2Server.RobotPlay
                                             if (!boFind)
                                             {
                                                 userItem = new UserItem();
-                                                if (ModuleShare.ItemSystem.CopyToUserItemFromName(BagItemNames[i], ref userItem))
+                                                if (SystemShare.ItemSystem.CopyToUserItemFromName(BagItemNames[i], ref userItem))
                                                 {
                                                     if (!AddItemToBag(userItem))
                                                     {
@@ -224,7 +224,7 @@ namespace M2Server.RobotPlay
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
-                                            stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[nWhere].Index);
+                                            stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[nWhere].Index);
                                             if (stdItem != null)
                                             {
                                                 if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && stdItem.StdMode != 43)
@@ -244,14 +244,14 @@ namespace M2Server.RobotPlay
                                     }
                                 }
                             }
-                            if (ModuleShare.Config.boRenewHealth) // 自动增加HP MP
+                            if (SystemShare.Config.boRenewHealth) // 自动增加HP MP
                             {
                                 if (HUtil32.GetTickCount() - AutoAddHealthTick > 5000)
                                 {
                                     AutoAddHealthTick = HUtil32.GetTickCount();
                                     var nPercent = WAbil.HP * 100 / WAbil.MaxHP;
                                     var nValue = WAbil.MaxHP / 10;
-                                    if (nPercent < ModuleShare.Config.nRenewPercent)
+                                    if (nPercent < SystemShare.Config.nRenewPercent)
                                     {
                                         if (WAbil.HP + nValue >= WAbil.MaxHP)
                                         {
@@ -264,7 +264,7 @@ namespace M2Server.RobotPlay
                                     }
                                     nValue = WAbil.MaxMP / 10;
                                     nPercent = WAbil.MP * 100 / WAbil.MaxMP;
-                                    if (nPercent < ModuleShare.Config.nRenewPercent)
+                                    if (nPercent < SystemShare.Config.nRenewPercent)
                                     {
                                         if (WAbil.MP + nValue >= WAbil.MaxMP)
                                         {
@@ -526,7 +526,7 @@ namespace M2Server.RobotPlay
                                         case CellType.Item:
                                             if (Race == ActorRace.Play)
                                             {
-                                                if (HUtil32.GetTickCount() - cellObject.AddTime > ModuleShare.Config.ClearDropOnFloorItemTime)
+                                                if (HUtil32.GetTickCount() - cellObject.AddTime > SystemShare.Config.ClearDropOnFloorItemTime)
                                                 {
                                                     if (cellObject.CellObjId > 0)
                                                     {
@@ -548,7 +548,7 @@ namespace M2Server.RobotPlay
                                                 UpdateVisibleItem(nX, nY, mapItem);
                                                 if (mapItem.OfBaseObject != 0 || mapItem.DropBaseObject != 0)
                                                 {
-                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > ModuleShare.Config.FloorItemCanPickUpTime)
+                                                    if (HUtil32.GetTickCount() - mapItem.CanPickUpTick > SystemShare.Config.FloorItemCanPickUpTime)
                                                     {
                                                         mapItem.OfBaseObject = 0;
                                                         mapItem.DropBaseObject = 0;
@@ -847,7 +847,7 @@ namespace M2Server.RobotPlay
                         //g_DenySayMsgList.UnLock;
                         if (!boDisableSayMsg)
                         {
-                            SendRefMsg(Messages.RM_HEAR, 0, ModuleShare.Config.btHearMsgFColor, ModuleShare.Config.btHearMsgBColor, 0, ChrName + ':' + AiSayMsgList[M2Share.RandomNumber.Random(AiSayMsgList.Count)]);
+                            SendRefMsg(Messages.RM_HEAR, 0, SystemShare.Config.btHearMsgFColor, SystemShare.Config.btHearMsgBColor, 0, ChrName + ':' + AiSayMsgList[M2Share.RandomNumber.Random(AiSayMsgList.Count)]);
                         }
                     }
                 }
@@ -911,10 +911,10 @@ namespace M2Server.RobotPlay
                         nC++;
                         continue;
                     }
-                    int dropWide = HUtil32._MIN(ModuleShare.Config.DropItemRage, 3);
+                    int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[nC], dropWide, true, baseObject, this.ActorId))
                     {
-                        var stdItem = ModuleShare.ItemSystem.GetStdItem(UseItems[nC].Index);
+                        var stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -923,7 +923,7 @@ namespace M2Server.RobotPlay
                                 {
                                     dropItemList.Add(new DeleteItem()
                                     {
-                                        ItemName = ModuleShare.ItemSystem.GetStdItemName(UseItems[nC].Index),
+                                        ItemName = SystemShare.ItemSystem.GetStdItemName(UseItems[nC].Index),
                                         MakeIndex = UseItems[nC].MakeIndex
                                     });
                                 }

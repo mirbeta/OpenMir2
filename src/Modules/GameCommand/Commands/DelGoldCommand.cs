@@ -22,13 +22,13 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0)
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
+            mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.Gold > nCount)
@@ -42,7 +42,7 @@ namespace CommandModule.Commands
                 }
                 mIPlayerActor.GoldChanged();
                 PlayerActor.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
-                if (ModuleShare.GameLogGold)
+                if (SystemShare.GameLogGold)
                 {
                     // M2Share.EventSource.AddEventLog(13, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY + "\09"
                     //                                     + PlayerActor.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
@@ -51,7 +51,7 @@ namespace CommandModule.Commands
             else
             {
                 var nServerIndex = 0;
-                if (ModuleShare.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
+                if (SystemShare.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
                     PlayerActor.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);
                 }

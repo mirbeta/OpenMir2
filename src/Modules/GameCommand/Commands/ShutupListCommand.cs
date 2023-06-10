@@ -12,11 +12,11 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            HUtil32.EnterCriticalSection(ModuleShare.DenySayMsgList);
+            HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
             try
             {
-                var nCount = ModuleShare.DenySayMsgList.Count;
-                if (ModuleShare.DenySayMsgList.Count <= 0)
+                var nCount = SystemShare.DenySayMsgList.Count;
+                if (SystemShare.DenySayMsgList.Count <= 0)
                 {
                     PlayerActor.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);
                 }
@@ -36,7 +36,7 @@ namespace CommandModule.Commands
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(ModuleShare.DenySayMsgList);
+                HUtil32.LeaveCriticalSection(SystemShare.DenySayMsgList);
             }
         }
     }

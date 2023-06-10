@@ -20,7 +20,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -35,7 +35,7 @@ namespace CommandModule.Commands
                     var userItem = mIPlayerActor.ItemList[i];
                     delList.Add(new DeleteItem()
                     {
-                        ItemName = ModuleShare.ItemSystem.GetStdItemName(userItem.Index),
+                        ItemName = SystemShare.ItemSystem.GetStdItemName(userItem.Index),
                         MakeIndex = userItem.MakeIndex
                     });
                     mIPlayerActor.ItemList.RemoveAt(i);
@@ -45,7 +45,7 @@ namespace CommandModule.Commands
             if (delList != null)
             {
                 var objectId = HUtil32.Sequence();
-                ModuleShare.ActorMgr.AddOhter(objectId, delList);
+                SystemShare.ActorMgr.AddOhter(objectId, delList);
                 mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
         }

@@ -92,7 +92,7 @@ namespace M2Server.Player
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
+                            sUserItemName = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && SellOffItemList.Count < 9)
                         {
@@ -158,7 +158,7 @@ namespace M2Server.Player
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
+                            sUserItemName = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -207,7 +207,7 @@ namespace M2Server.Player
                                 {
                                     continue;
                                 }
-                                StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                 if (stdItem != null)
                                 {
                                     UserItem userItem = dealOffInfo.UseItems[j];
@@ -294,9 +294,9 @@ namespace M2Server.Player
                             && string.Compare(dealOffInfo.sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 0)
                         {
                             dealOffInfo.Flag = 4;
-                            if (GameGold >= dealOffInfo.nSellGold + ModuleShare.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
+                            if (GameGold >= dealOffInfo.nSellGold + SystemShare.Config.DecUserGameGold)// 每次扣多少元宝(元宝寄售)
                             {
-                                GameGold -= dealOffInfo.nSellGold + ModuleShare.Config.DecUserGameGold; // 扣出元宝
+                                GameGold -= dealOffInfo.nSellGold + SystemShare.Config.DecUserGameGold; // 扣出元宝
                                 if (GameGold < 0)
                                 {
                                     GameGold = 0;
@@ -331,7 +331,7 @@ namespace M2Server.Player
                                 //M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (int j = 0; j <= 9; j++)
                                 {
-                                    StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                     if (stdItem != null)
                                     {
                                         //UserItem = new TUserItem();
@@ -438,7 +438,7 @@ namespace M2Server.Player
         /// <returns></returns>
         public string SelectSellDate()
         {
-            string result = "您未开通" + ModuleShare.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
+            string result = "您未开通" + SystemShare.Config.GameGoldName + "寄售服务,请先开通!!!\\ \\<返回/@main>";
             if (SaleDeal)
             {
                 // 已开通元宝服务
@@ -451,12 +451,12 @@ namespace M2Server.Player
                         {
                             if (string.Compare(dealOffInfo.sDealChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && dealOffInfo.Flag == 2)
                             {
-                                result = "最后一笔出售记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sBuyChrName + "交易成功,获得了" + dealOffInfo.nSellGold + '个' + ModuleShare.Config.GameGoldName + "。\\ \\<返回/@main>";
+                                result = "最后一笔出售记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sBuyChrName + "交易成功,获得了" + dealOffInfo.nSellGold + '个' + SystemShare.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
                             }
                             else if (string.Compare(dealOffInfo.sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) == 0 && (dealOffInfo.Flag == 1 || dealOffInfo.Flag == 2))
                             {
-                                result = "最后一笔购买记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sDealChrName + "交易成功,支付了" + dealOffInfo.nSellGold + '个' + ModuleShare.Config.GameGoldName + "。\\ \\<返回/@main>";
+                                result = "最后一笔购买记录:\\   " + dealOffInfo.dSellDateTime.ToString("yyyy年mm月dd日 hh时ss分") + ",\\  您与" + dealOffInfo.sDealChrName + "交易成功,支付了" + dealOffInfo.nSellGold + '个' + SystemShare.Config.GameGoldName + "。\\ \\<返回/@main>";
                                 return result;
                             }
                         }
@@ -527,7 +527,7 @@ namespace M2Server.Player
                     for (int i = 0; i < SellOffItemList.Count; i++)
                     {
                         var userItem = SellOffItemList[i];
-                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && userItem != null && userItem.MakeIndex > 0)
                         {
                             dealOffInfo.UseItems[i] = userItem;
@@ -540,7 +540,7 @@ namespace M2Server.Player
                     {
                         continue;
                     }
-                    stdItem = ModuleShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                    stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                     if (stdItem == null && nGameDiamond > 0 && nGameDiamond < 10000 && nCode == short.MaxValue)// 物品是金刚石
                     {
                         if (nGameDiamond > Gold) // 金刚石数量大于玩家的数量时则反回失败
@@ -566,7 +566,7 @@ namespace M2Server.Player
                 dealOffInfo.Flag = 0; // 标识
                 M2Share.SellOffItemList.Add(dealOffInfo); // 增加到元宝寄售列表中
                 this.SendMsg(Messages.RM_SELLOFFEND_OK, 0, 0, 0, 0);
-                GameGold -= ModuleShare.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
+                GameGold -= SystemShare.Config.DecUserGameGold; // 每次扣多少元宝(元宝寄售) 
                 if (GameGold < 0)
                 {
                     GameGold = 0;

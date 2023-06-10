@@ -25,13 +25,13 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var magic = ModuleShare.WorldEngine.FindMagic(sSkillName);
+            var magic = SystemShare.WorldEngine.FindMagic(sSkillName);
             if (magic == null)
             {
 

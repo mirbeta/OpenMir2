@@ -1,5 +1,4 @@
-﻿using M2Server.Player;
-using NLog;
+﻿using NLog;
 using SystemModule;
 using SystemModule.Common;
 
@@ -8,11 +7,11 @@ namespace M2Server.Castle
     public class CastleManager : ICastleSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        public readonly IList<UserCastle> CastleList;
+        public readonly IList<IUserCastle> CastleList;
 
         public CastleManager()
         {
-            CastleList = new List<UserCastle>();
+            CastleList = new List<IUserCastle>();
         }
 
         public IUserCastle Find(string sCastleName)
@@ -58,10 +57,10 @@ namespace M2Server.Castle
 
         public void Initialize()
         {
-            UserCastle castle;
+            IUserCastle castle;
             if (CastleList.Count <= 0)
             {
-                castle = new UserCastle(ModuleShare.Config.CastleDir);
+                castle = new UserCastle(SystemShare.Config.CastleDir);
                 castle.Initialize();
                 castle.ConfigDir = "0";
                 castle.EnvirList.Add("0151");
@@ -132,7 +131,7 @@ namespace M2Server.Castle
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
-                UserCastle castle = CastleList[i];
+                IUserCastle castle = CastleList[i];
                 //List.Add(string.Format(CommandHelp.GameCommandSbkGoldShowMsg, castle.sName, castle.TotalGold, castle.TodayIncome));
             }
         }
@@ -142,14 +141,14 @@ namespace M2Server.Castle
             SaveCastleList();
             for (int i = 0; i < CastleList.Count; i++)
             {
-                UserCastle castle = CastleList[i];
+                IUserCastle castle = CastleList[i];
                 castle.Save();
             }
         }
 
         public void LoadCastleList()
         {
-            string castleFile = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleFile);
+            string castleFile = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleFile);
             if (File.Exists(castleFile))
             {
                 using StringList loadList = new StringList();
@@ -173,7 +172,7 @@ namespace M2Server.Castle
 
         private void SaveCastleList()
         {
-            string castleDirPath = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleDir);
+            string castleDirPath = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleDir);
             if (!Directory.Exists(castleDirPath))
             {
                 Directory.CreateDirectory(castleDirPath);
@@ -183,7 +182,7 @@ namespace M2Server.Castle
             {
                 loadList.Add(i.ToString());
             }
-            string savePath = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleFile);
+            string savePath = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleFile);
             loadList.SaveToFile(savePath);
         }
 

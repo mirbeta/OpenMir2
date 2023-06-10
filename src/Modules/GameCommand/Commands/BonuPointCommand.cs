@@ -23,7 +23,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumName), MsgColor.Red, MsgType.Hint);

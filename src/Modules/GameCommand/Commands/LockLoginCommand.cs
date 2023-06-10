@@ -12,7 +12,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            if (!ModuleShare.Config.LockHumanLogin)
+            if (!SystemShare.Config.LockHumanLogin)
             {
                 PlayerActor.SysMsg("本服务器还没有启用登录锁功能!!!", MsgColor.Red, MsgType.Hint);
                 return;

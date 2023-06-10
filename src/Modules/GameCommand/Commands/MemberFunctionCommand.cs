@@ -8,10 +8,10 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            if (ModuleShare.ManageNPC != null)
+            if (SystemShare.ManageNPC != null)
             {
                 PlayerActor.ScriptGotoCount = 0;
-                ModuleShare.ManageNPC.GotoLable(PlayerActor, "@Member", false);
+                SystemShare.ManageNPC.GotoLable(PlayerActor, "@Member", false);
             }
         }
     }

@@ -35,7 +35,7 @@ namespace CommandModule.Commands
             {
                 boDelAll = false;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

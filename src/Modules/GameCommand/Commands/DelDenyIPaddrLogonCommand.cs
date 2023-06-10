@@ -22,9 +22,9 @@ namespace CommandModule.Commands
             var boDelete = false;
             try
             {
-                for (var i = ModuleShare.DenyIPAddrList.Count - 1; i >= 0; i--)
+                for (var i = SystemShare.DenyIPAddrList.Count - 1; i >= 0; i--)
                 {
-                    if (ModuleShare.DenyIPAddrList.Count <= 0)
+                    if (SystemShare.DenyIPAddrList.Count <= 0)
                     {
                         break;
                     }

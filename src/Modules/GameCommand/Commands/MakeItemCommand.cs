@@ -27,12 +27,12 @@ namespace CommandModule.Commands
             if (nCount > 10) nCount = 10;
             if (PlayerActor.Permission < Command.PermissionMax)
             {
-                if (!ModuleShare.CanMakeItem(sItemName))
+                if (!SystemShare.CanMakeItem(sItemName))
                 {
                     PlayerActor.SysMsg(CommandHelp.GamecommandMakeItemNameOrPerMissionNot, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (ModuleShare.CastleMgr.InCastleWarArea(PlayerActor) != null) // 攻城区域，禁止使用此功能
+                if (SystemShare.CastleMgr.InCastleWarArea(PlayerActor) != null) // 攻城区域，禁止使用此功能
                 {
                     PlayerActor.SysMsg(CommandHelp.GamecommandMakeInCastleWarRange, MsgColor.Red, MsgType.Hint);
                     return;
@@ -48,26 +48,26 @@ namespace CommandModule.Commands
             {
                 if (PlayerActor.ItemList.Count >= Grobal2.MaxBagItem) return;
                 UserItem userItem = null;
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                 {
-                    var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
-                    if (stdItem.Price >= 15000 && !ModuleShare.Config.TestServer && PlayerActor.Permission < 5)
+                    var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    if (stdItem.Price >= 15000 && !SystemShare.Config.TestServer && PlayerActor.Permission < 5)
                     {
                         return;
                     }
-                    if (ModuleShare.RandomNumber.Random(ModuleShare.Config.MakeRandomAddValue) == 0)
+                    if (SystemShare.RandomNumber.Random(SystemShare.Config.MakeRandomAddValue) == 0)
                     {
                        // ModuleShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                     }
                     if (PlayerActor.Permission >= Command.PermissionMax)
                     {
-                        userItem.MakeIndex = ModuleShare.GetItemNumberEx(); // 制造的物品另行取得物品ID
+                        userItem.MakeIndex = SystemShare.GetItemNumberEx(); // 制造的物品另行取得物品ID
                     }
                     PlayerActor.ItemList.Add(userItem);
                     PlayerActor.SendAddItem(userItem);
                     if (PlayerActor.Permission >= 6)
                     {
-                        ModuleShare.Logger.Warn("[制造物品] " + PlayerActor.ChrName + " " + sItemName + "(" + userItem.MakeIndex + ")");
+                        SystemShare.Logger.Warn("[制造物品] " + PlayerActor.ChrName + " " + sItemName + "(" + userItem.MakeIndex + ")");
                     }
                     if (stdItem.NeedIdentify == 1)
                     {

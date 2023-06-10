@@ -555,7 +555,7 @@ namespace M2Server
                             if (baseObject != null)
                             {
                                 IUserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
-                                if (ModuleShare.Config.boWarDisHumRun && castle != null && castle.UnderWar)
+                                if (SystemShare.Config.boWarDisHumRun && castle != null && castle.UnderWar)
                                 {
 
                                 }
@@ -565,7 +565,7 @@ namespace M2Server
                                     {
                                         case ActorRace.Play:
                                             {
-                                                if (ModuleShare.Config.boRunHuman || Flag.RunHuman)
+                                                if (SystemShare.Config.boRunHuman || Flag.RunHuman)
                                                 {
                                                     continue;
                                                 }
@@ -573,7 +573,7 @@ namespace M2Server
                                             }
                                         case ActorRace.NPC:
                                             {
-                                                if (ModuleShare.Config.boRunNpc)
+                                                if (SystemShare.Config.boRunNpc)
                                                 {
                                                     continue;
                                                 }
@@ -582,7 +582,7 @@ namespace M2Server
                                         case ActorRace.Guard:
                                         case ActorRace.ArcherGuard:
                                             {
-                                                if (ModuleShare.Config.boRunGuard)
+                                                if (SystemShare.Config.boRunGuard)
                                                 {
                                                     continue;
                                                 }
@@ -590,7 +590,7 @@ namespace M2Server
                                             }
                                         default:
                                             {
-                                                if (ModuleShare.Config.boRunMon || Flag.RunMon)
+                                                if (SystemShare.Config.boRunMon || Flag.RunMon)
                                                 {
                                                     continue;
                                                 }

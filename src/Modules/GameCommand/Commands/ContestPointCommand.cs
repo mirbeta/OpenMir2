@@ -23,7 +23,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = ModuleShare.GuildMgr.FindGuild(sGuildName);
+            var guild = SystemShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
                // PlayerActor.SysMsg($"{sGuildName} 的得分为: {guild.ContestPoint}", MsgColor.Green, MsgType.Hint);

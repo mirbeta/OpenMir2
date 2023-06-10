@@ -65,34 +65,34 @@ namespace GameSrv
 
         private void InitializeModule()
         {
-            ModuleShare.HumLimit = 30;
-            ModuleShare.MonLimit = 30;
-            ModuleShare.ZenLimit = 5;
-            ModuleShare.NpcLimit = 5;
-            ModuleShare.SocLimit = 10;
-            ModuleShare.DecLimit = 20;
-            ModuleShare.Config.nLoadDBErrorCount = 0;
-            ModuleShare.Config.nLoadDBCount = 0;
-            ModuleShare.Config.nSaveDBCount = 0;
-            ModuleShare.Config.nDBQueryID = 0;
-            ModuleShare.Config.ItemNumber = 0;
-            ModuleShare.Config.ItemNumberEx = int.MaxValue / 2;
-            ModuleShare.StartReady = false;
-            ModuleShare.FilterWord = true;
-            ModuleShare.Config.WinLotteryCount = 0;
-            ModuleShare.Config.NoWinLotteryCount = 0;
-            ModuleShare.Config.WinLotteryLevel1 = 0;
-            ModuleShare.Config.WinLotteryLevel2 = 0;
-            ModuleShare.Config.WinLotteryLevel3 = 0;
-            ModuleShare.Config.WinLotteryLevel4 = 0;
-            ModuleShare.Config.WinLotteryLevel5 = 0;
-            ModuleShare.Config.WinLotteryLevel6 = 0;
-            ModuleShare.ManageNPC = new Merchant();
-            ModuleShare.RobotNPC = new Merchant();
-            ModuleShare.FunctionNPC = new Merchant();
-            ModuleShare.ItemSystem = new ItemSystem();
-            ModuleShare.GuildMgr = new GuildManager();
-            ModuleShare.CastleMgr = new CastleManager();
+            SystemShare.HumLimit = 30;
+            SystemShare.MonLimit = 30;
+            SystemShare.ZenLimit = 5;
+            SystemShare.NpcLimit = 5;
+            SystemShare.SocLimit = 10;
+            SystemShare.DecLimit = 20;
+            SystemShare.Config.nLoadDBErrorCount = 0;
+            SystemShare.Config.nLoadDBCount = 0;
+            SystemShare.Config.nSaveDBCount = 0;
+            SystemShare.Config.nDBQueryID = 0;
+            SystemShare.Config.ItemNumber = 0;
+            SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
+            SystemShare.StartReady = false;
+            SystemShare.FilterWord = true;
+            SystemShare.Config.WinLotteryCount = 0;
+            SystemShare.Config.NoWinLotteryCount = 0;
+            SystemShare.Config.WinLotteryLevel1 = 0;
+            SystemShare.Config.WinLotteryLevel2 = 0;
+            SystemShare.Config.WinLotteryLevel3 = 0;
+            SystemShare.Config.WinLotteryLevel4 = 0;
+            SystemShare.Config.WinLotteryLevel5 = 0;
+            SystemShare.Config.WinLotteryLevel6 = 0;
+            SystemShare.ManageNPC = new Merchant();
+            SystemShare.RobotNPC = new Merchant();
+            SystemShare.FunctionNPC = new Merchant();
+            SystemShare.ItemSystem = new ItemSystem();
+            SystemShare.GuildMgr = new GuildManager();
+            SystemShare.CastleMgr = new CastleManager();
         }
 
         public void Initialize(CancellationToken stoppingToken)
@@ -104,7 +104,7 @@ namespace GameSrv
             GameShare.ChatChannel = new ChatService();
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
-            ModuleShare.MapMgr = new MapManager();
+            SystemShare.MapMgr = new MapManager();
             M2Share.FrontEngine = new FrontEngine();
             GameShare.RobotMgr = new RobotManage();
             GameShare.LoadConfig();
@@ -124,7 +124,7 @@ namespace GameSrv
                 _logger.Info($"物品数据库加载失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"物品数据库加载成功...[{ModuleShare.ItemSystem.ItemCount}]");
+            _logger.Info($"物品数据库加载成功...[{SystemShare.ItemSystem.ItemCount}]");
             nCode = Map.LoadMinMap();
             if (nCode < 0)
             {
@@ -226,7 +226,7 @@ namespace GameSrv
         {
             try
             {
-                ModuleShare.MapMgr.LoadMapDoor();
+                SystemShare.MapMgr.LoadMapDoor();
                 GameShare.LocalDb.LoadMerchant();
                 _logger.Info("交易NPC列表加载成功...");
                 GameShare.LocalDb.LoadNpcs();
@@ -236,10 +236,10 @@ namespace GameSrv
                 GameShare.LocalDb.LoadStartPoint();
                 _logger.Info("回城点配置加载成功...");
                 _logger.Info("正在初始安全区光圈...");
-                ModuleShare.MapMgr.MakeSafePkZone();
+                SystemShare.MapMgr.MakeSafePkZone();
                 _logger.Info("安全区光圈初始化成功...");
                 M2Share.WorldEngine.InitializationMonsterThread();
-                if (!ModuleShare.Config.VentureServer)
+                if (!SystemShare.Config.VentureServer)
                 {
                     LocalDb.LoadGuardList();
                     _logger.Info("守卫列表加载成功...");
@@ -247,9 +247,9 @@ namespace GameSrv
                 _logger.Info("游戏处理引擎初始化成功...");
                 GameShare.PlanesService.Start();
                 IdSrvClient.Instance.Initialize();
-                ModuleShare.GuildMgr.LoadGuildInfo();
-                ModuleShare.CastleMgr.LoadCastleList();
-                ModuleShare.CastleMgr.Initialize();
+                SystemShare.GuildMgr.LoadGuildInfo();
+                SystemShare.CastleMgr.LoadCastleList();
+                SystemShare.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
             }
             catch (Exception ex)

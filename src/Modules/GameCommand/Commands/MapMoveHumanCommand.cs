@@ -24,8 +24,8 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var srcEnvir = ModuleShare.MapMgr.FindMap(sSrcMap);
-            var denEnvir = ModuleShare.MapMgr.FindMap(sDenMap);
+            var srcEnvir = SystemShare.MapMgr.FindMap(sSrcMap);
+            var denEnvir = SystemShare.MapMgr.FindMap(sDenMap);
             if (srcEnvir == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red,
@@ -39,7 +39,7 @@ namespace CommandModule.Commands
                 return;
             }
             IList<IActor> humanList = new List<IActor>();
-            ModuleShare.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
+            SystemShare.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
             for (var i = 0; i < humanList.Count; i++)
             {
                 var moveHuman = (IPlayerActor)humanList[i];

@@ -12,8 +12,8 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            ModuleShare.FilterWord = !ModuleShare.FilterWord;
-            if (ModuleShare.FilterWord)
+            SystemShare.FilterWord = !SystemShare.FilterWord;
+            if (SystemShare.FilterWord)
             {
                 PlayerActor.SysMsg("已启用文字过滤。", MsgColor.Green, MsgType.Hint);
             }

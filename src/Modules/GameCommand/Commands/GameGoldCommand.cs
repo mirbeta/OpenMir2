@@ -30,7 +30,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -48,14 +48,14 @@ namespace CommandModule.Commands
                     mIPlayerActor.GameGold -= nGold;
                     break;
             }
-            if (ModuleShare.GameLogGameGold)
+            if (SystemShare.GameLogGameGold)
             {
                 // M2Share.EventSource.AddEventLog(Grobal2.LogGameGold, string.Format(CommandHelp.GameLogMsg1, mIPlayerActor.MapName, mIPlayerActor.CurrX, mIPlayerActor.CurrY,
                 //     mIPlayerActor.ChrName, M2Share.Config.GameGoldName, nGold, sCtr[1], PlayerActor.ChrName));
             }
             PlayerActor.GameGoldChanged();
-            mIPlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGameGoldHumanMsg, ModuleShare.Config.GameGoldName, nGold, mIPlayerActor.GameGold, ModuleShare.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
-            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGameGoldGMMsg, sHumanName, ModuleShare.Config.GameGoldName, nGold, mIPlayerActor.GameGold, ModuleShare.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
+            mIPlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGameGoldHumanMsg, SystemShare.Config.GameGoldName, nGold, mIPlayerActor.GameGold, SystemShare.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandGameGoldGMMsg, sHumanName, SystemShare.Config.GameGoldName, nGold, mIPlayerActor.GameGold, SystemShare.Config.GameGoldName), MsgColor.Green, MsgType.Hint);
         }
     }
 }

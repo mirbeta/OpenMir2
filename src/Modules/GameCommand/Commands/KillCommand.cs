@@ -20,7 +20,7 @@ namespace CommandModule.Commands
             IActor baseObject;
             if (!string.IsNullOrEmpty(sHumanName))
             {
-                baseObject = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+                baseObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
                 if (baseObject == null)
                 {
                     PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

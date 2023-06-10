@@ -19,13 +19,13 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 mIPlayerActor.FilterSendMsg = true;
             }
-            ModuleShare.DisableSendMsgList.Add(sHumanName);
-            ModuleShare.SaveDisableSendMsgList();
+            SystemShare.DisableSendMsgList.Add(sHumanName);
+            SystemShare.SaveDisableSendMsgList();
             PlayerActor.SysMsg(sHumanName + " 已加入禁言列表。", MsgColor.Green, MsgType.Hint);
         }
     }

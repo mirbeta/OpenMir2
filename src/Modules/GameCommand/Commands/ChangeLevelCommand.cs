@@ -21,9 +21,9 @@ namespace CommandModule.Commands
             PlayerActor.Abil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
             PlayerActor.HasLevelUp(1);// 等级调整记录日志
             //   M2Share.EventSource.AddEventLog(17, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + PlayerActor.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
-            if (ModuleShare.Config.ShowMakeItemMsg)
+            if (SystemShare.Config.ShowMakeItemMsg)
             {
-                ModuleShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.Abil.Level));
+                SystemShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.Abil.Level));
             }
         }
     }

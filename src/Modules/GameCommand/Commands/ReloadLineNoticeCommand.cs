@@ -12,7 +12,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            if (ModuleShare.LoadLineNotice(ModuleShare.GetNoticeFilePath("LineNotice.txt")))
+            if (SystemShare.LoadLineNotice(SystemShare.GetNoticeFilePath("LineNotice.txt")))
             {
                 PlayerActor.SysMsg(CommandHelp.GameCommandReloadLineNoticeSuccessMsg, MsgColor.Green, MsgType.Hint);
             }

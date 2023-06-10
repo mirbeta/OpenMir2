@@ -120,9 +120,9 @@ namespace GameSrv.NPC
             }
             if (PlayObject.MyGuild == null)
             {
-                if (PlayObject.Gold >= ModuleShare.Config.BuildGuildPrice)
+                if (PlayObject.Gold >= SystemShare.Config.BuildGuildPrice)
                 {
-                    UserItem = PlayObject.CheckItems(ModuleShare.Config.WomaHorn);
+                    UserItem = PlayObject.CheckItems(SystemShare.Config.WomaHorn);
                     if (UserItem == null)
                     {
                         result = -3;// '你没有准备好需要的全部物品。'
@@ -143,8 +143,8 @@ namespace GameSrv.NPC
                 {
                     M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
-                    PlayObject.DelBagItem(UserItem.MakeIndex, ModuleShare.Config.WomaHorn);
-                    PlayObject.DecGold(ModuleShare.Config.BuildGuildPrice);
+                    PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.WomaHorn);
+                    PlayObject.DecGold(SystemShare.Config.BuildGuildPrice);
                     PlayObject.GoldChanged();
                     PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
                     if (PlayObject.MyGuild != null)
@@ -181,9 +181,9 @@ namespace GameSrv.NPC
         {
             if (M2Share.GuildMgr.FindGuild(sGuildName) != null)
             {
-                if (PlayObject.Gold >= ModuleShare.Config.GuildWarPrice)
+                if (PlayObject.Gold >= SystemShare.Config.GuildWarPrice)
                 {
-                    PlayObject.DecGold(ModuleShare.Config.GuildWarPrice);
+                    PlayObject.DecGold(SystemShare.Config.GuildWarPrice);
                     PlayObject.GoldChanged();
                     PlayObject.ReQuestGuildWar(sGuildName);
                 }
@@ -213,13 +213,13 @@ namespace GameSrv.NPC
             IUserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
             {
-                UserItem UserItem = PlayObject.CheckItems(ModuleShare.Config.ZumaPiece);
+                UserItem UserItem = PlayObject.CheckItems(SystemShare.Config.ZumaPiece);
                 if (UserItem != null)
                 {
                     if (Castle.AddAttackerInfo(PlayObject.MyGuild))
                     {
                         PlayObject.SendDelItems(UserItem);
-                        PlayObject.DelBagItem(UserItem.MakeIndex, ModuleShare.Config.ZumaPiece);
+                        PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.ZumaPiece);
                         GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok", false);
                     }
                     else
@@ -229,7 +229,7 @@ namespace GameSrv.NPC
                 }
                 else
                 {
-                    PlayObject.SysMsg("你没有" + ModuleShare.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
+                    PlayObject.SysMsg("你没有" + SystemShare.Config.ZumaPiece + "!!!", MsgColor.Red, MsgType.Hint);
                 }
             }
             else

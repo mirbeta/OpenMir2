@@ -45,7 +45,7 @@ namespace CommandModule.Commands
                     break;
                 }
                 PlayerActor.GetFrontPosition(ref nX, ref nY);
-                IActor mon = ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+                IActor mon = SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (mon != null)
                 {
                     mon.Master = PlayerActor;

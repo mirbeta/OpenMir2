@@ -93,7 +93,7 @@ namespace M2Server.Actor
             var result = false;
             short nX = 0;
             short nY = 0;
-            nSecPwr = HUtil32.Round((nSecPwr * ModuleShare.Config.SwordLongPowerRate) / 100.0);
+            nSecPwr = HUtil32.Round((nSecPwr * SystemShare.Config.SwordLongPowerRate) / 100.0);
             if (Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref nX, ref nY))
             {
                 var baseObject = Envir.GetMovingObject(nX, nY, true);
@@ -122,7 +122,7 @@ namespace M2Server.Actor
             short nY = 0;
             while (true)
             {
-                var nDir = (byte)((Dir + ModuleShare.Config.WideAttack[nC]) % 8);
+                var nDir = (byte)((Dir + SystemShare.Config.WideAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
                     var targetObject = Envir.GetMovingObject(nX, nY, true);
@@ -149,7 +149,7 @@ namespace M2Server.Actor
             short nY = 0;
             while (true)
             {
-                var nDir = (byte)((Dir + ModuleShare.Config.CrsAttack[nC]) % 8);
+                var nDir = (byte)((Dir + SystemShare.Config.CrsAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
                     var targetObject = Envir.GetMovingObject(nX, nY, true);

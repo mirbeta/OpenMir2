@@ -33,15 +33,15 @@ namespace CommandModule.Commands
             }
             if (nDura <= 0)
             {
-                nDura = ModuleShare.RandomNumber.Random(18) + 3;
+                nDura = SystemShare.RandomNumber.Random(18) + 3;
             }
             // 如纯度不填,则随机给纯度
             for (var i = 0; i < nMineCount; i++)
             {
                 var userItem = new UserItem();
-                if (ModuleShare.ItemSystem.CopyToUserItemFromName(sMineName, ref userItem))
+                if (SystemShare.ItemSystem.CopyToUserItemFromName(sMineName, ref userItem))
                 {
-                    var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                    var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem != null && stdItem.StdMode == 43)
                     {
                         if (PlayerActor.IsAddWeightAvailable(stdItem.Weight * nMineCount))

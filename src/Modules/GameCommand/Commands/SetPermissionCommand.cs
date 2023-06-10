@@ -25,15 +25,15 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (ModuleShare.Config.ShowMakeItemMsg)
+            if (SystemShare.Config.ShowMakeItemMsg)
             {
-                ModuleShare.Logger.Warn(string.Format(sOutFormatMsg, PlayerActor.ChrName, mIPlayerActor.ChrName, mIPlayerActor.Permission, nPerission));
+                SystemShare.Logger.Warn(string.Format(sOutFormatMsg, PlayerActor.ChrName, mIPlayerActor.ChrName, mIPlayerActor.Permission, nPerission));
             }
             mIPlayerActor.Permission = (byte)nPerission;
             PlayerActor.SysMsg(sHumanName + " 当前权限为: " + mIPlayerActor.Permission, MsgColor.Red, MsgType.Hint);

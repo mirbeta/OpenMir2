@@ -28,7 +28,7 @@ namespace CommandModule.Commands
                 if (!string.IsNullOrEmpty(sFixDeny) && sFixDeny[0] == '1')
                 {
                     //Settings.g_DenyIPAddrList.Add(sIPaddr, ((1) as Object));
-                    ModuleShare.SaveDenyIPAddrList();
+                    SystemShare.SaveDenyIPAddrList();
                     PlayerActor.SysMsg(sIPaddr + "已加入禁止登录IP列表", MsgColor.Green, MsgType.Hint);
                 }
                 else

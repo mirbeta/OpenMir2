@@ -25,7 +25,7 @@ namespace CommandModule.Commands
             {
                 if (PlayerActor.UseItems[nWhere].Index > 0)
                 {
-                    var stdItem = ModuleShare.ItemSystem.GetStdItem(PlayerActor.UseItems[nWhere].Index);
+                    var stdItem = SystemShare.ItemSystem.GetStdItem(PlayerActor.UseItems[nWhere].Index);
                     if (stdItem == null)
                     {
                         return;
@@ -65,9 +65,9 @@ namespace CommandModule.Commands
                         + '/' + PlayerActor.UseItems[nWhere].Desc[9] + '/' + PlayerActor.UseItems[nWhere].Desc[ItemAttr.WeaponUpgrade] + '/' + PlayerActor.UseItems[nWhere].Desc[11]
                         + '/' + PlayerActor.UseItems[nWhere].Desc[12] + '/' + PlayerActor.UseItems[nWhere].Desc[13];
                     PlayerActor.SysMsg(sShowMsg, MsgColor.Blue, MsgType.Hint);
-                    if (ModuleShare.Config.ShowMakeItemMsg)
+                    if (SystemShare.Config.ShowMakeItemMsg)
                     {
-                        ModuleShare.Logger.Warn("[物品调整] " + PlayerActor.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
+                        SystemShare.Logger.Warn("[物品调整] " + PlayerActor.ChrName + '(' + stdItem.Name + " -> " + sShowMsg + ')');
                     }
                 }
                 else

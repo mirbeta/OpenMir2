@@ -9,10 +9,10 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            if (ModuleShare.RobotNPC != null)
+            if (SystemShare.RobotNPC != null)
             {
-                ModuleShare.RobotNPC.ClearScript();
-                ModuleShare.RobotNPC.LoadNPCScript();
+                SystemShare.RobotNPC.ClearScript();
+                SystemShare.RobotNPC.LoadNPCScript();
                 PlayerActor.SysMsg("重新加载机器人专用脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else

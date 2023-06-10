@@ -52,7 +52,7 @@ namespace CommandModule.Commands
                             }
                         }
                         PlayerActor.GroupRcallTick = HUtil32.GetTickCount();
-                        PlayerActor.GroupRcallTime = ModuleShare.Config.GroupRecallTime;
+                        PlayerActor.GroupRcallTime = SystemShare.Config.GroupRecallTime;
                     }
                 }
                 else

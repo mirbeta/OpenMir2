@@ -33,7 +33,7 @@ namespace PlanesSystem
 
         private PlanesClient()
         {
-            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(ModuleShare.Config.MasterSrvAddr), ModuleShare.Config.MasterSrvPort));
+            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort));
             _msgClient.OnConnected += MsgClientConnect;
             _msgClient.OnReceivedData += MsgClientRead;
             _msgClient.OnError += MsgClientError;
@@ -56,7 +56,7 @@ namespace PlanesSystem
 
         public void CheckConnected()
         {
-            if (ModuleShare.Config.nServerNumber > 0)
+            if (SystemShare.Config.nServerNumber > 0)
             {
                 if (_msgClient.IsConnected)
                 {

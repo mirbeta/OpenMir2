@@ -134,38 +134,38 @@ namespace GameSrv
 
         public static void LoadConfig()
         {
-            ModuleShare.ServerConf.LoadConfig();
-            ModuleShare.StringConf.LoadString();
-            ModuleShare.ExpConf.LoadConfig();
-            ModuleShare.GlobalConf.LoadConfig();
-            ModuleShare.GameSetting.LoadConfig();
+            SystemShare.ServerConf.LoadConfig();
+            SystemShare.StringConf.LoadString();
+            SystemShare.ExpConf.LoadConfig();
+            SystemShare.GlobalConf.LoadConfig();
+            SystemShare.GameSetting.LoadConfig();
         }
 
         public static string GetEnvirFilePath(string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath);
+            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath);
         }
 
         public static string GetEnvirFilePath(string dirPath, string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, dirPath, filePath);
+            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, dirPath, filePath);
         }
 
         public static string GetNoticeFilePath(string filePath)
         {
             if (filePath.StartsWith(".."))
             {
-                return Path.Combine(BasePath, ModuleShare.Config.EnvirDir, filePath[3..]);
+                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
             }
-            return Path.Combine(BasePath, ModuleShare.Config.NoticeDir, filePath);
+            return Path.Combine(BasePath, SystemShare.Config.NoticeDir, filePath);
         }
     }
 }

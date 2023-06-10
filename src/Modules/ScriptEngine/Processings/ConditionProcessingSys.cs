@@ -171,28 +171,28 @@ namespace ScriptSystem
             success = false;
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (ModuleShare.GameTime != 0)
+                if (SystemShare.GameTime != 0)
                 {
                     success = false;
                 }
             }
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (ModuleShare.GameTime != 1)
+                if (SystemShare.GameTime != 1)
                 {
                     success = false;
                 }
             }
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (ModuleShare.GameTime != 2)
+                if (SystemShare.GameTime != 2)
                 {
                     success = false;
                 }
             }
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (ModuleShare.GameTime != 3)
+                if (SystemShare.GameTime != 3)
                 {
                     success = false;
                 }
@@ -242,19 +242,19 @@ namespace ScriptSystem
             switch (cMode)
             {
                 case 'L':
-                    success = ModuleShare.HighLevelHuman == playerActor.ActorId;
+                    success = SystemShare.HighLevelHuman == playerActor.ActorId;
                     break;
                 case 'P':
-                    success = ModuleShare.HighPKPointHuman == playerActor.ActorId;
+                    success = SystemShare.HighPKPointHuman == playerActor.ActorId;
                     break;
                 case 'D':
-                    success = ModuleShare.HighDCHuman == playerActor.ActorId;
+                    success = SystemShare.HighDCHuman == playerActor.ActorId;
                     break;
                 case 'M':
-                    success = ModuleShare.HighMCHuman == playerActor.ActorId;
+                    success = SystemShare.HighMCHuman == playerActor.ActorId;
                     break;
                 case 'S':
-                    success = ModuleShare.HighSCHuman == playerActor.ActorId;
+                    success = SystemShare.HighSCHuman == playerActor.ActorId;
                     break;
                 default:
                     ScriptConditionError(playerActor, questConditionInfo, ConditionCode.ISHIGH);
@@ -354,7 +354,7 @@ namespace ScriptSystem
             string Petname = string.Empty;
             string lvl = string.Empty;
             string lvlexp = string.Empty;
-            string sFileName = ModuleShare.GetEnvirFilePath("PetData", playerActor.ChrName + ".txt");
+            string sFileName = SystemShare.GetEnvirFilePath("PetData", playerActor.ChrName + ".txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
@@ -642,7 +642,7 @@ namespace ScriptSystem
                 ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKNAMEDATELIST);
                 return;
             }
-            var sListFileName = ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
             if (File.Exists(sListFileName))
             {
                 loadList = new StringList();
@@ -652,7 +652,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    ModuleShare.Logger.Error("loading fail.... => " + sListFileName);
+                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -737,7 +737,7 @@ namespace ScriptSystem
                                 }
                                 catch
                                 {
-                                    ModuleShare.Logger.Error("Save fail.... => " + sListFileName);
+                                    SystemShare.Logger.Error("Save fail.... => " + sListFileName);
                                 }
                             }
                         }
@@ -748,7 +748,7 @@ namespace ScriptSystem
             }
             else
             {
-                ModuleShare.Logger.Error("file not found => " + sListFileName);
+                SystemShare.Logger.Error("file not found => " + sListFileName);
             }
         }
 
@@ -781,7 +781,7 @@ namespace ScriptSystem
                     ScriptConditionError(playerActor,questConditionInfo, ConditionCode.CHECKGUILDNAMEDATELIST);
                     return;
                 }
-                sListFileName = ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
+                sListFileName = SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
                 if (File.Exists(sListFileName))
                 {
                     loadList = new StringList();
@@ -791,7 +791,7 @@ namespace ScriptSystem
                     }
                     catch
                     {
-                        ModuleShare.Logger.Error("loading fail.... => " + sListFileName);
+                        SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                     }
                     for (int i = 0; i < loadList.Count; i++)
                     {
@@ -887,7 +887,7 @@ namespace ScriptSystem
                                     }
                                     catch
                                     {
-                                        ModuleShare.Logger.Error("Save fail.... => " + sListFileName);
+                                        SystemShare.Logger.Error("Save fail.... => " + sListFileName);
                                     }
                                 }
                             }
@@ -898,7 +898,7 @@ namespace ScriptSystem
                 }
                 else
                 {
-                    ModuleShare.Logger.Error("file not found => " + sListFileName);
+                    SystemShare.Logger.Error("file not found => " + sListFileName);
                 }
             }
         }
@@ -927,18 +927,18 @@ namespace ScriptSystem
                 }
             }
             var sMapName = questConditionInfo.sParam1;
-            var envir = ModuleShare.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
-                envir = ModuleShare.MapMgr.FindMap(sMapName);
+                envir = SystemShare.MapMgr.FindMap(sMapName);
             }
             if (envir == null)
             {
                 ScriptConditionError(baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
                 return;
             }
-            var nHumanCount = ModuleShare.WorldEngine.GetMapHuman(envir.MapName);
+            var nHumanCount = SystemShare.WorldEngine.GetMapHuman(envir.MapName);
             var cMethod = questConditionInfo.sParam2[1];
             switch (cMethod)
             {
@@ -976,7 +976,7 @@ namespace ScriptSystem
             success = false;
             int nCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             string sMapName = questConditionInfo.sParam1;
-            IEnvirnoment envir = ModuleShare.MapMgr.FindMap(sMapName);
+            IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
             if (baseObject.Race == ActorRace.Play)
             {
                 if (nCount < 0)
@@ -986,7 +986,7 @@ namespace ScriptSystem
                 if (envir == null)
                 {
                     GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
-                    envir = ModuleShare.MapMgr.FindMap(sMapName);
+                    envir = SystemShare.MapMgr.FindMap(sMapName);
                 }
             }
             if (nCount < 0 || envir == null)
@@ -994,7 +994,7 @@ namespace ScriptSystem
                 ScriptConditionError(baseObject, questConditionInfo, ConditionCode.CHECKMAPMONCOUNT);
                 return;
             }
-            var nMonCount = ModuleShare.WorldEngine.GetMapMonster(envir, null);
+            var nMonCount = SystemShare.WorldEngine.GetMapMonster(envir, null);
             var cMethod = questConditionInfo.sParam2[1];
             switch (cMethod)
             {
@@ -1046,7 +1046,7 @@ namespace ScriptSystem
             }
             GetVarValue(playerActor, questConditionInfo.sParam1, ref sMapName);
             sMapName = GetLineVariableText(playerActor, questConditionInfo.sParam1); // 地图支持变量
-            var envir = ModuleShare.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 ScriptConditionError(playerActor, questConditionInfo, ConditionCode.ISONMAP);
@@ -1068,11 +1068,11 @@ namespace ScriptSystem
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nCount);
             }
-            var envir = ModuleShare.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
-                envir = ModuleShare.MapMgr.FindMap(sMapName);
+                envir = SystemShare.MapMgr.FindMap(sMapName);
             }
             if (envir == null || nCount < 0)
             {
@@ -1080,7 +1080,7 @@ namespace ScriptSystem
                 return;
             }
             var monList = new List<IActor>();
-            int nMapRangeCount = ModuleShare.WorldEngine.GetMapMonster(envir, monList);
+            int nMapRangeCount = SystemShare.WorldEngine.GetMapMonster(envir, monList);
             for (int i = monList.Count - 1; i >= 0; i--)
             {
                 if (monList.Count <= 0)
@@ -1130,7 +1130,7 @@ namespace ScriptSystem
             {
                 GetVarValue(baseObject, questConditionInfo.sParam6, ref nCount);
             }
-            var envir = ModuleShare.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null || nX < 0 || nY < 0 || nRange < 0 || nCount < 0)
             {
                 ScriptConditionError(baseObject, questConditionInfo, ConditionCode.CHECKRANGEMONCOUNT);
@@ -1192,7 +1192,7 @@ namespace ScriptSystem
             int nCount;
             char cMethod = ' ';
             int nMapRangeCount;
-            var groupOwnerPlay = (IPlayerActor)ModuleShare.ActorMgr.Get(playerActor.GroupOwner);
+            var groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(playerActor.GroupOwner);
             if (playerActor.GroupOwner != 0 && groupOwnerPlay != null)
             {
                 nRange = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
@@ -1282,27 +1282,27 @@ namespace ScriptSystem
             switch (cMethod)
             {
                 case '=':
-                    if (ModuleShare.WorldEngine.PlayObjectCount == nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount == nCount)
                     {
                         success = true;
                     }
                     break;
 
                 case '>':
-                    if (ModuleShare.WorldEngine.PlayObjectCount > nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount > nCount)
                     {
                         success = true;
                     }
                     break;
 
                 case '<':
-                    if (ModuleShare.WorldEngine.PlayObjectCount < nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount < nCount)
                     {
                         success = true;
                     }
                     break;
                 default:
-                    if (ModuleShare.WorldEngine.PlayObjectCount >= nCount)
+                    if (SystemShare.WorldEngine.PlayObjectCount >= nCount)
                     {
                         success = true;
                     }
@@ -1325,7 +1325,7 @@ namespace ScriptSystem
                 return false;
             }
             userItem = playerActor.UseItems[nWhere];
-            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playerActor.SysMsg("你身上没有戴指定物品！！！", MsgColor.Red, MsgType.Hint);
@@ -1336,7 +1336,7 @@ namespace ScriptSystem
 
         public bool ConditionOfCheckMemoryItemIsRememberItem(UserItem userItem)
         {
-            StdItem stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem == null)
             {
                 return false;
@@ -1776,10 +1776,10 @@ namespace ScriptSystem
                 sChrName = playerActor.ChrName;
                 sCharAccount = playerActor.UserAccount;
                 sCharIPaddr = playerActor.LoginIpAddr;
-                if (File.Exists(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
                     loadList = new StringList();
-                    loadList.LoadFromFile(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         sLine = loadList[i];
@@ -3016,7 +3016,7 @@ namespace ScriptSystem
             {
                 success = false;
             }
-            var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null && stdItem.StdMode == nType)
             {
                 success = true;
@@ -3075,7 +3075,7 @@ namespace ScriptSystem
             string sVar = string.Empty;
             string sValue = string.Empty;
             int nValue = 0;
-            var sListFileName = ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1);
             var nItemCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             var loadList = new StringList();
             if (File.Exists(sListFileName))
@@ -3086,12 +3086,12 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    ModuleShare.Logger.Error("loading fail.... => " + sListFileName);
+                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
             }
             else
             {
-                ModuleShare.Logger.Info("file not found => " + sListFileName);
+                SystemShare.Logger.Info("file not found => " + sListFileName);
             }
             if (nItemCount < 0 && baseObject.Race == ActorRace.Play)
             {
@@ -3117,7 +3117,7 @@ namespace ScriptSystem
                 for (int j = 0; j < baseObject.ItemList.Count; j++)
                 {
                     var userItem = baseObject.ItemList[j];
-                    if (string.Compare(ModuleShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.Ordinal) == 0)
+                    if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.Ordinal) == 0)
                     {
                         nItemCount -= 1;
                         if (nItemCount <= 0)
@@ -3313,9 +3313,9 @@ namespace ScriptSystem
             {
                 var sChrName = playerActor.ChrName;
                 var sCharIPaddr = playerActor.LoginIpAddr;
-                if (File.Exists(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
-                    loadList.LoadFromFile(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         var sLine = loadList[i];
@@ -3499,7 +3499,7 @@ namespace ScriptSystem
         private void ConditionOfCheckServerName(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (questConditionInfo.sParam1 == ModuleShare.Config.ServerName)
+            if (questConditionInfo.sParam1 == SystemShare.Config.ServerName)
             {
                 success = true;
             }
@@ -3574,7 +3574,7 @@ namespace ScriptSystem
             success = false;
             var sChrName = baseObject.ChrName;
             var sMapName = questConditionInfo.sParam1;
-            if (ModuleShare.MapMgr.FindMap(sMapName) == null)
+            if (SystemShare.MapMgr.FindMap(sMapName) == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
             }
@@ -3813,9 +3813,9 @@ namespace ScriptSystem
             var loadList = new StringList();
             try
             {
-                if (File.Exists(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
-                    loadList.LoadFromFile(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     nPostion = loadList.IndexOf(sValue);
                     success = nPostion >= 0;
                 }
@@ -4154,7 +4154,7 @@ namespace ScriptSystem
         private void ConditionOfRandom(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (ModuleShare.RandomNumber.Random(questConditionInfo.nParam1) != 0)
+            if (SystemShare.RandomNumber.Random(questConditionInfo.nParam1) != 0)
             {
                 success = false;
             }
@@ -4226,10 +4226,10 @@ namespace ScriptSystem
             try
             {
                 sChrName = playerActor.ChrName;
-                if (File.Exists(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1)))
                 {
                     loadList = new StringList();
-                    loadList.LoadFromFile(ModuleShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         string sLine = loadList[i].Trim();
@@ -4515,7 +4515,7 @@ namespace ScriptSystem
         {
             bool success = false;
             StringList loadList;
-            sListFileName = ModuleShare.GetEnvirFilePath(sListFileName);
+            sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
                 loadList = new StringList();
@@ -4525,7 +4525,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    ModuleShare.Logger.Error("loading fail.... => " + sListFileName);
+                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -4539,7 +4539,7 @@ namespace ScriptSystem
             }
             else
             {
-                ModuleShare.Logger.Error("file not found => " + sListFileName);
+                SystemShare.Logger.Error("file not found => " + sListFileName);
             }
             return success;
         }
@@ -4562,7 +4562,7 @@ namespace ScriptSystem
             {
                 GetValValue(playerActor,questConditionInfo.sParam1, ref s01);
             }
-            if ((string.IsNullOrEmpty(s01)) || (ModuleShare.WorldEngine.GetPlayObject(s01) == null))
+            if ((string.IsNullOrEmpty(s01)) || (SystemShare.WorldEngine.GetPlayObject(s01) == null))
             {
                 success = false;
             }
@@ -4603,7 +4603,7 @@ namespace ScriptSystem
             {
                 n14 = questConditionInfo.nParam2;
             }
-            if (ModuleShare.WorldEngine.GetMapHuman(questConditionInfo.sParam1) < n14)
+            if (SystemShare.WorldEngine.GetMapHuman(questConditionInfo.sParam1) < n14)
             {
                 success = false;
             }
@@ -4676,16 +4676,16 @@ namespace ScriptSystem
             bool success = false;
             n140 = -1;
             n180 = questConditionInfo.nParam2;
-            var n100 = ModuleShare.GetValNameNo(questConditionInfo.sParam1);
+            var n100 = SystemShare.GetValNameNo(questConditionInfo.sParam1);
             if (n100 <= 0) return success;
             if (HUtil32.RangeInDefined(n100, 0, 99))
             {
-                n140 = ModuleShare.Config.GlobalVal[n100];// G
+                n140 = SystemShare.Config.GlobalVal[n100];// G
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 1000, 1099))
             {
-                n140 = ModuleShare.Config.GlobaDyMval[n100 - 1000];// I
+                n140 = SystemShare.Config.GlobaDyMval[n100 - 1000];// I
                 success = true;
             }
             else if (HUtil32.RangeInDefined(n100, 1100, 1109))
@@ -4710,7 +4710,7 @@ namespace ScriptSystem
             }
             else if (HUtil32.RangeInDefined(n100, 2000, 2499))
             {
-                if (String.Compare(ModuleShare.Config.GlobalAVal[n100 - 2000], questConditionInfo.sParam2, StringComparison.OrdinalIgnoreCase) == 0)
+                if (String.Compare(SystemShare.Config.GlobalAVal[n100 - 2000], questConditionInfo.sParam2, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     n140 = 0;
                     n180 = 0;
@@ -4734,7 +4734,7 @@ namespace ScriptSystem
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + _chrName + " 地图:" + _mMapName + " 座标:" + X + ':' + Y + " 参数1:"
                   + questConditionInfo.sParam1 + " 参数2:" + questConditionInfo.sParam2 + " 参数3:" + questConditionInfo.sParam3 + " 参数4:" + questConditionInfo.sParam4 + " 参数5:"
                   + questConditionInfo.sParam5;
-            ModuleShare.Logger.Error("[脚本参数不正确] " + sMsg);
+            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
         }
 
         private void ScriptConditionError(IActor baseObject, QuestConditionInfo questConditionInfo, string sCmd)
@@ -4742,7 +4742,7 @@ namespace ScriptSystem
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + _chrName + " 地图:" + _mMapName + " 座标:" + X + ':' + Y + " 参数1:"
                   + questConditionInfo.sParam1 + " 参数2:" + questConditionInfo.sParam2 + " 参数3:" + questConditionInfo.sParam3 + " 参数4:" + questConditionInfo.sParam4 + " 参数5:"
                   + questConditionInfo.sParam5;
-            ModuleShare.Logger.Error("[脚本参数不正确] " + sMsg);
+            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
         }
 
         private void Dispose(object obj)

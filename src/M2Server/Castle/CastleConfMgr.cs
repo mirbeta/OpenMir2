@@ -89,13 +89,13 @@ namespace M2Server.Castle
 
         public void SaveConfig(UserCastle userCastle)
         {
-            string filePath = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleDir, userCastle.ConfigDir);
+            string filePath = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleDir, userCastle.ConfigDir);
             string sMapList = string.Empty;
             if (!Directory.Exists(filePath))
             {
                 Directory.CreateDirectory(filePath);
             }
-            if (ModuleShare.MapMgr.GetMapOfServerIndex(userCastle.MapName) != M2Share.ServerIndex) return;
+            if (SystemShare.MapMgr.GetMapOfServerIndex(userCastle.MapName) != M2Share.ServerIndex) return;
             if (!string.IsNullOrEmpty(userCastle.sName))
             {
                 WriteString("Setup", "CastleName", userCastle.sName);

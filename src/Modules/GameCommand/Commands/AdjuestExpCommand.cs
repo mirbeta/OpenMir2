@@ -24,16 +24,16 @@ namespace CommandModule.Commands
                 return;
             }
             var dwExp = HUtil32.StrToInt(sExp, 0);
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 var dwOExp = PlayerActor.Abil.Exp;
                 mIPlayerActor.Abil.Exp = dwExp;
                 mIPlayerActor.HasLevelUp((ushort)(mIPlayerActor.Abil.Level - 1));
                 PlayerActor.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
-                if (ModuleShare.Config.ShowMakeItemMsg)
+                if (SystemShare.Config.ShowMakeItemMsg)
                 {
-                    ModuleShare.Logger.Warn("[经验调整] " + PlayerActor.ChrName + '(' + mIPlayerActor.ChrName + ' ' + dwOExp + " -> " + mIPlayerActor.Abil.Exp + ')');
+                    SystemShare.Logger.Warn("[经验调整] " + PlayerActor.ChrName + '(' + mIPlayerActor.ChrName + ' ' + dwOExp + " -> " + mIPlayerActor.Abil.Exp + ')');
                 }
             }
             else

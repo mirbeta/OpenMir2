@@ -28,7 +28,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.Gold + nCount < mIPlayerActor.GoldMax)
@@ -42,14 +42,14 @@ namespace CommandModule.Commands
                 }
                 mIPlayerActor.GoldChanged();
                 PlayerActor.SysMsg(sHumName + "的金币已增加" + nCount + ".", MsgColor.Green, MsgType.Hint);
-                if (ModuleShare.GameLogGold)
+                if (SystemShare.GameLogGold)
                 {
                     //M2Share.EventSource.AddEventLog(14, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
                 }
             }
             else
             {
-                if (ModuleShare.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
+                if (SystemShare.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
                     PlayerActor.SysMsg(sHumName + " 现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);
                 }

@@ -248,7 +248,7 @@ namespace GameSrv.Word
             {
                 playObject = new PlayObject();
                 SwitchDataInfo switchDataInfo;
-                if (!ModuleShare.Config.VentureServer)
+                if (!SystemShare.Config.VentureServer)
                 {
                     userOpenInfo.ChrName = string.Empty;
                     userOpenInfo.LoadUser.SessionID = 0;
@@ -288,7 +288,7 @@ namespace GameSrv.Word
                             playObject.IsNewHuman = true;
                         }
                     }
-                    var envir = ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    var envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
                         playObject.MapFileName = envir.MapFileName;
@@ -327,7 +327,7 @@ namespace GameSrv.Word
                             }
                         }
                     }
-                    if (ModuleShare.MapMgr.FindMap(playObject.MapName) == null) playObject.Abil.HP = 0;
+                    if (SystemShare.MapMgr.FindMap(playObject.MapName) == null) playObject.Abil.HP = 0;
                     if (playObject.Abil.HP <= 0)
                     {
                         playObject.ClearStatusTime();
@@ -349,14 +349,14 @@ namespace GameSrv.Word
                         }
                         else
                         {
-                            playObject.MapName = ModuleShare.Config.RedDieHomeMap;// '3'
-                            playObject.CurrX = (short)(M2Share.RandomNumber.Random(13) + ModuleShare.Config.RedDieHomeX);// 839
-                            playObject.CurrY = (short)(M2Share.RandomNumber.Random(13) + ModuleShare.Config.RedDieHomeY);// 668
+                            playObject.MapName = SystemShare.Config.RedDieHomeMap;// '3'
+                            playObject.CurrX = (short)(M2Share.RandomNumber.Random(13) + SystemShare.Config.RedDieHomeX);// 839
+                            playObject.CurrY = (short)(M2Share.RandomNumber.Random(13) + SystemShare.Config.RedDieHomeY);// 668
                         }
                         playObject.Abil.HP = 14;
                     }
                     playObject.AbilCopyToWAbil();
-                    envir = ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);//切换其他服务器
+                    envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);//切换其他服务器
                     if (envir == null)
                     {
                         playObject.SessionId = userOpenInfo.LoadUser.SessionID;
@@ -364,7 +364,7 @@ namespace GameSrv.Word
                         playObject.GateIdx = userOpenInfo.LoadUser.GateIdx;
                         playObject.SocketIdx = userOpenInfo.LoadUser.GSocketIdx;
                         playObject.WAbil = playObject.Abil;
-                        playObject.ServerIndex = (byte)ModuleShare.MapMgr.GetMapOfServerIndex(playObject.MapName);
+                        playObject.ServerIndex = (byte)SystemShare.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
                             _logger.Warn(string.Format(sChangeServerFail1, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
@@ -388,10 +388,10 @@ namespace GameSrv.Word
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
                         _logger.Warn(string.Format(sChangeServerFail2, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                        playObject.MapName = ModuleShare.Config.HomeMap;
-                        envir = ModuleShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
-                        playObject.CurrX = ModuleShare.Config.HomeX;
-                        playObject.CurrY = ModuleShare.Config.HomeY;
+                        playObject.MapName = SystemShare.Config.HomeMap;
+                        envir = SystemShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
+                        playObject.CurrX = SystemShare.Config.HomeX;
+                        playObject.CurrY = SystemShare.Config.HomeY;
                     }
                     playObject.Envir = envir;
                     playObject.OnEnvirnomentChanged();
@@ -414,24 +414,24 @@ namespace GameSrv.Word
                     playObject.Abil = switchDataInfo.Abil;
                     LoadSwitchData(switchDataInfo, ref playObject);
                     DelSwitchData(switchDataInfo);
-                    var envir = ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    var envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
                         _logger.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                        playObject.MapName = ModuleShare.Config.HomeMap;
-                        envir = ModuleShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
-                        playObject.CurrX = ModuleShare.Config.HomeX;
-                        playObject.CurrY = ModuleShare.Config.HomeY;
+                        playObject.MapName = SystemShare.Config.HomeMap;
+                        envir = SystemShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
+                        playObject.CurrX = SystemShare.Config.HomeX;
+                        playObject.CurrY = SystemShare.Config.HomeY;
                     }
                     else
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
                             _logger.Warn(string.Format(sChangeServerFail4, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
-                            playObject.MapName = ModuleShare.Config.HomeMap;
-                            envir = ModuleShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
-                            playObject.CurrX = ModuleShare.Config.HomeX;
-                            playObject.CurrY = ModuleShare.Config.HomeY;
+                            playObject.MapName = SystemShare.Config.HomeMap;
+                            envir = SystemShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
+                            playObject.CurrX = SystemShare.Config.HomeX;
+                            playObject.CurrY = SystemShare.Config.HomeY;
                         }
                         playObject.AbilCopyToWAbil();
                         playObject.Envir = envir;
@@ -580,7 +580,7 @@ namespace GameSrv.Word
                 for (var i = 0; i < PlayObjectFreeList.Count; i++)
                 {
                     playObject = PlayObjectFreeList[i];
-                    if ((HUtil32.GetTickCount() - playObject.GhostTick) > ModuleShare.Config.HumanFreeDelayTime)// 5 * 60 * 1000
+                    if ((HUtil32.GetTickCount() - playObject.GhostTick) > SystemShare.Config.HumanFreeDelayTime)// 5 * 60 * 1000
                     {
                         PlayObjectFreeList[i] = null;
                         PlayObjectFreeList.RemoveAt(i);
@@ -659,12 +659,12 @@ namespace GameSrv.Word
                                         playObject.SearchViewRange();//搜索对像
                                         playObject.GameTimeChanged();//游戏时间改变
                                     }
-                                    if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > ModuleShare.Config.ShowLineNoticeTime)
+                                    if ((HUtil32.GetTickCount() - playObject.ShowLineNoticeTick) > SystemShare.Config.ShowLineNoticeTime)
                                     {
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
                                         {
-                                            var lineNoticeMsg = ModuleShare.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
+                                            var lineNoticeMsg = SystemShare.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
@@ -677,7 +677,7 @@ namespace GameSrv.Word
                                                     playObject.SysMsg(lineNoticeMsg.AsSpan()[1..].ToString(), MsgColor.Blue, MsgType.Notice);
                                                     break;
                                                 default:
-                                                    playObject.SysMsg(lineNoticeMsg, (MsgColor)ModuleShare.Config.LineNoticeColor, MsgType.Notice);
+                                                    playObject.SysMsg(lineNoticeMsg, (MsgColor)SystemShare.Config.LineNoticeColor, MsgType.Notice);
                                                     break;
                                             }
                                         }
@@ -688,7 +688,7 @@ namespace GameSrv.Word
                                         }
                                     }
                                     playObject.Run();
-                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.SaveRcdTick) > ModuleShare.Config.SaveHumanRcdTime)
+                                    if (!M2Share.FrontEngine.IsFull() && (HUtil32.GetTickCount() - playObject.SaveRcdTick) > SystemShare.Config.SaveHumanRcdTime)
                                     {
                                         playObject.SaveRcdTick = HUtil32.GetTickCount();
                                         playObject.DealCancelA();
@@ -761,7 +761,7 @@ namespace GameSrv.Word
             switch (defMsg.Ident)
             {
                 case Messages.CM_SPELL:
-                    if (ModuleShare.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (SystemShare.Config.SpellSendUpdateMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendUpdateMsg(defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), HUtil32.MakeLong(defMsg.Param, defMsg.Series), "");
                     }
@@ -821,7 +821,7 @@ namespace GameSrv.Word
                 case Messages.CM_TWINHIT:
                 case Messages.CM_WIDEHIT:
                 case Messages.CM_FIREHIT:
-                    if (ModuleShare.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
+                    if (SystemShare.Config.ActionSendActionMsg) // 使用UpdateMsg 可以防止消息队列里有多个操作
                     {
                         playObject.SendActionMsg(defMsg.Ident, defMsg.Tag, HUtil32.LoWord(defMsg.Recog), HUtil32.HiWord(defMsg.Recog), 0, "");
                     }
@@ -997,7 +997,7 @@ namespace GameSrv.Word
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission)
         {
             var result = false;
-            btPermission = ModuleShare.Config.StartPermission;
+            btPermission = SystemShare.Config.StartPermission;
             for (var i = 0; i < AdminList.Count; i++)
             {
                 var adminInfo = AdminList[i];
@@ -1363,17 +1363,17 @@ namespace GameSrv.Word
             int I;
             if (M2Share.StartPointList.Count > 0)
             {
-                if (M2Share.StartPointList.Count > ModuleShare.Config.StartPointSize)
-                    I = M2Share.RandomNumber.Random(ModuleShare.Config.StartPointSize);
+                if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
             {
-                result = ModuleShare.Config.HomeMap;
-                nX = ModuleShare.Config.HomeX;
-                nX = ModuleShare.Config.HomeY;
+                result = SystemShare.Config.HomeMap;
+                nX = SystemShare.Config.HomeX;
+                nX = SystemShare.Config.HomeY;
             }
             return result;
         }
@@ -1390,7 +1390,12 @@ namespace GameSrv.Word
 
         public INormNpc FindNpc(int npcId)
         {
-            throw new NotImplementedException();
+            return SystemShare.ActorMgr.Get<INormNpc>(npcId);
+        }
+
+        public IMerchant FindMerchant(int npcId)
+        {
+            return SystemShare.ActorMgr.Get<IMerchant>(npcId);
         }
 
         public MagicInfo FindMagic(int nMagIdx)
@@ -1459,7 +1464,7 @@ namespace GameSrv.Word
 
         private static void ProcessMapDoor()
         {
-            IList<IEnvirnoment> doorList = ModuleShare.MapMgr.GetDoorMapList();
+            IList<IEnvirnoment> doorList = SystemShare.MapMgr.GetDoorMapList();
             for (var i = 0; i < doorList.Count; i++)
             {
                 var envir = doorList[i];
@@ -1537,7 +1542,7 @@ namespace GameSrv.Word
         {
             var result = 0;
             if (envir == null) return result;
-            for (var i = 0; i < ModuleShare.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
@@ -1593,7 +1598,7 @@ namespace GameSrv.Word
         public int GetMapHuman(string sMapName)
         {
             var result = 0;
-            var envir = ModuleShare.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null) return result;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
@@ -1641,38 +1646,33 @@ namespace GameSrv.Word
             }
         }
 
-        public IMerchant FindMerchant(int npcId)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SendBroadCastMsg(string sMsg, MsgType msgType)
         {
-            if (ModuleShare.Config.ShowPreFixMsg)
+            if (SystemShare.Config.ShowPreFixMsg)
             {
                 switch (msgType)
                 {
                     case MsgType.Mon:
-                        sMsg = ModuleShare.Config.MonSayMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.MonSayMsgPreFix + sMsg;
                         break;
                     case MsgType.Hint:
-                        sMsg = ModuleShare.Config.HintMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.HintMsgPreFix + sMsg;
                         break;
                     case MsgType.GameManger:
-                        sMsg = ModuleShare.Config.GameManagerRedMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.GameManagerRedMsgPreFix + sMsg;
                         break;
                     case MsgType.System:
-                        sMsg = ModuleShare.Config.SysMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.SysMsgPreFix + sMsg;
                         break;
                     case MsgType.Cust:
-                        sMsg = ModuleShare.Config.CustMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.CustMsgPreFix + sMsg;
                         break;
                     case MsgType.Castle:
-                        sMsg = ModuleShare.Config.CastleMsgPreFix + sMsg;
+                        sMsg = SystemShare.Config.CastleMsgPreFix + sMsg;
                         break;
                 }
             }
-            if (ModuleShare.Config.EnableChatServer)
+            if (SystemShare.Config.EnableChatServer)
             {
                 //M2Share.ChatChannel.SendPubChannelMessage(sMsg);
             }
@@ -1698,7 +1698,7 @@ namespace GameSrv.Word
 
         public void ClearMonSayMsg()
         {
-            for (var i = 0; i < ModuleShare.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             {
                 for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
@@ -1718,17 +1718,17 @@ namespace GameSrv.Word
             if (M2Share.StartPointList.Count > 0)
             {
                 int I;
-                if (M2Share.StartPointList.Count > ModuleShare.Config.StartPointSize)
-                    I = M2Share.RandomNumber.Random(ModuleShare.Config.StartPointSize);
+                if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
+                    I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
                 else
                     I = 0;
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
             {
-                result = ModuleShare.Config.HomeMap;
-                nX = ModuleShare.Config.HomeX;
-                nX = ModuleShare.Config.HomeY;
+                result = SystemShare.Config.HomeMap;
+                nX = SystemShare.Config.HomeX;
+                nX = SystemShare.Config.HomeY;
             }
             return result;
         }

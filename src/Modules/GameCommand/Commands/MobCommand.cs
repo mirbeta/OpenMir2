@@ -38,7 +38,7 @@ namespace CommandModule.Commands
             PlayerActor.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
             for (var i = 0; i < nCount; i++)
             {
-                var monster = ModuleShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+                var monster = SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (monster != null)
                 {
                    // monster.SlaveMakeLevel = nLevel;

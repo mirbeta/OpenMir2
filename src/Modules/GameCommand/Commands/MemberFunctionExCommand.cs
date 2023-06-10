@@ -8,9 +8,9 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            if (ModuleShare.FunctionNPC != null)
+            if (SystemShare.FunctionNPC != null)
             {
-                ModuleShare.FunctionNPC.GotoLable(PlayerActor, "@Member", false);
+                SystemShare.FunctionNPC.GotoLable(PlayerActor, "@Member", false);
             }
         }
     }

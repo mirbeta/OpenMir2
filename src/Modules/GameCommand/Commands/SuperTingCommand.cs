@@ -26,11 +26,11 @@ namespace CommandModule.Commands
                 return;
             }
             var nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 humanList = new List<IActor>();
-                ModuleShare.WorldEngine.GetMapRageHuman(mIPlayerActor.Envir, mIPlayerActor.CurrX, mIPlayerActor.CurrY, nRange, ref humanList);
+                SystemShare.WorldEngine.GetMapRageHuman(mIPlayerActor.Envir, mIPlayerActor.CurrX, mIPlayerActor.CurrY, nRange, ref humanList);
                 for (var i = 0; i < humanList.Count; i++)
                 {
                     moveHuman = humanList[i] as IPlayerActor;

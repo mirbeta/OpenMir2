@@ -111,7 +111,7 @@ namespace M2Server.Items
         /// <returns></returns>
         public static string GetItemName(UserItem userItem)
         {
-            var result = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
+            var result = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
             if (userItem.Desc[13] == 1)
             {
                 result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);

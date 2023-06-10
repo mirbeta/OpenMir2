@@ -24,9 +24,9 @@ namespace CommandModule.Commands
                 var nY = HUtil32.StrToInt16(sY, -1);
                 if (!PlayerActor.Envir.Flag.boNOPOSITIONMOVE)
                 {
-                    if (PlayerActor.Envir.CanWalkOfItem(nX, nY, ModuleShare.Config.boUserMoveCanDupObj, ModuleShare.Config.boUserMoveCanOnItem))
+                    if (PlayerActor.Envir.CanWalkOfItem(nX, nY, SystemShare.Config.boUserMoveCanDupObj, SystemShare.Config.boUserMoveCanOnItem))
                     {
-                        if ((HUtil32.GetTickCount() - PlayerActor.TeleportTick) > ModuleShare.Config.dwUserMoveTime * 1000)
+                        if ((HUtil32.GetTickCount() - PlayerActor.TeleportTick) > SystemShare.Config.dwUserMoveTime * 1000)
                         {
                             PlayerActor.TeleportTick = HUtil32.GetTickCount();
                             PlayerActor.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
@@ -34,7 +34,7 @@ namespace CommandModule.Commands
                         }
                         else
                         {
-                            PlayerActor.SysMsg(ModuleShare.Config.dwUserMoveTime - (HUtil32.GetTickCount() - PlayerActor.TeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
+                            PlayerActor.SysMsg(SystemShare.Config.dwUserMoveTime - (HUtil32.GetTickCount() - PlayerActor.TeleportTick) / 1000 + "秒之后才可以再使用此功能!!!", MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else

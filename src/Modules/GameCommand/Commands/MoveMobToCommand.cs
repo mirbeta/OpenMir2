@@ -45,8 +45,8 @@ namespace CommandModule.Commands
             {
                 y = 0;
             }
-            var srcEnvir = ModuleShare.MapMgr.FindMap(oleMap);// 原地图
-            var denEnvir = ModuleShare.MapMgr.FindMap(newMap);// 新地图
+            var srcEnvir = SystemShare.MapMgr.FindMap(oleMap);// 原地图
+            var denEnvir = SystemShare.MapMgr.FindMap(newMap);// 新地图
             if (srcEnvir == null || denEnvir == null)
             {
                 return;

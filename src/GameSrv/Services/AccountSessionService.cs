@@ -21,7 +21,7 @@ namespace GameSrv.Services
         public AccountSessionService()
         {
             _sessionList = new List<PlayerSession>();
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(ModuleShare.Config.sIDSAddr), ModuleShare.Config.nIDSPort));
+            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort));
             _clientScoket.OnConnected += IDSocketConnect;
             _clientScoket.OnDisconnected += IDSocketDisconnect;
             _clientScoket.OnError += IDSocketError;
@@ -120,13 +120,13 @@ namespace GameSrv.Services
         public void SendOnlineHumCountMsg(int nCount)
         {
             const string sFormatMsg = "({0}/{1}/{2}/{3}/{4})";
-            SendSocket(string.Format(sFormatMsg, Messages.SS_SERVERINFO, ModuleShare.Config.ServerName, M2Share.ServerIndex, nCount, ModuleShare.Config.PayMentMode));
+            SendSocket(string.Format(sFormatMsg, Messages.SS_SERVERINFO, SystemShare.Config.ServerName, M2Share.ServerIndex, nCount, SystemShare.Config.PayMentMode));
         }
 
         public void SendUserPlayTime(string account, long playTime)
         {
             const string sFormatMsg = "({0}/{1}/{2}/{3})";
-            SendSocket(string.Format(sFormatMsg, Messages.ISM_GAMETIMEOFTIMECARDUSER, ModuleShare.Config.ServerName, account, playTime));
+            SendSocket(string.Format(sFormatMsg, Messages.ISM_GAMETIMEOFTIMECARDUSER, SystemShare.Config.ServerName, account, playTime));
         }
 
         public void Run()
@@ -215,7 +215,7 @@ namespace GameSrv.Services
             string account = string.Empty;
             string certstr = HUtil32.GetValidStr3(sData, ref account, '/');
             int cert = HUtil32.StrToInt(certstr, 0);
-            if (!ModuleShare.Config.TestServer)
+            if (!SystemShare.Config.TestServer)
             {
                 int playTime = M2Share.WorldEngine.GetPlayExpireTime(account);
                 if (playTime >= 3600 || playTime < 1800) //大于一个小时或者小于半个小时都不处理
@@ -238,7 +238,7 @@ namespace GameSrv.Services
             string account = string.Empty;
             string certstr = HUtil32.GetValidStr3(sData, ref account, '/');
             int cert = HUtil32.StrToInt(certstr, 0);
-            if (!ModuleShare.Config.TestServer)
+            if (!SystemShare.Config.TestServer)
             {
                 M2Share.WorldEngine.AccountExpired(account);
                 DelSession(cert);
@@ -373,7 +373,7 @@ namespace GameSrv.Services
                     break;
                 }
             }
-            if (ModuleShare.Config.ViewAdmissionFailure && !boFound)
+            if (SystemShare.Config.ViewAdmissionFailure && !boFound)
             {
                 _logger.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, nSessionID));
             }
@@ -393,7 +393,7 @@ namespace GameSrv.Services
             {
                 string sessionId = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
                 int sessionID = HUtil32.StrToInt(sessionId, 0);
-                if (!ModuleShare.Config.TestServer)
+                if (!SystemShare.Config.TestServer)
                 {
                     M2Share.WorldEngine.AccountExpired(sAccount);
                     DelSession(sessionID);

@@ -44,13 +44,13 @@ namespace CommandModule.Commands
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = ModuleShare.MapMgr.FindMap(sMap);
+            var envir = SystemShare.MapMgr.FindMap(sMap);
             if (envir != null)
             {
                 var oldEnvir = PlayerActor.Envir;
                 PlayerActor.Envir = envir;
                 var fireBurnEvent = new FireBurnEvent(PlayerActor, nX, nY, nType, nTime * 1000, nPoint);
-                ModuleShare.EventMgr.AddEvent(fireBurnEvent);
+                SystemShare.EventMgr.AddEvent(fireBurnEvent);
                 PlayerActor.Envir = oldEnvir;
                 return;
             }

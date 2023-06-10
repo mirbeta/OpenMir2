@@ -18,7 +18,7 @@ namespace CommandModule.Commands
                 {
                     if (PlayerActor.MyGuild.IsMember(PlayerActor.ChrName) && PlayerActor.MyGuild.DelMember(PlayerActor.ChrName))
                     {
-                        ModuleShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, ModuleShare.ServerIndex, PlayerActor.MyGuild.GuildName);
+                        SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, SystemShare.ServerIndex, PlayerActor.MyGuild.GuildName);
                         PlayerActor.MyGuild = null;
                         PlayerActor.RefRankInfo(0, "");
                         PlayerActor.RefShowName();

@@ -17,7 +17,7 @@ namespace CommandModule.Commands
                 return;
             }
             var sGuildName = @params.Length > 0 ? @params[0] : "";
-            if (ModuleShare.ServerIndex != 0)
+            if (SystemShare.ServerIndex != 0)
             {
                 PlayerActor.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", MsgColor.Red, MsgType.Hint);
                 return;
@@ -27,9 +27,9 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (ModuleShare.GuildMgr.DelGuild(sGuildName))
+            if (SystemShare.GuildMgr.DelGuild(sGuildName))
             {
-                ModuleShare.WorldEngine.SendServerGroupMsg(Messages.SS_206, ModuleShare.ServerIndex, sGuildName);
+                SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_206, SystemShare.ServerIndex, sGuildName);
             }
             else
             {

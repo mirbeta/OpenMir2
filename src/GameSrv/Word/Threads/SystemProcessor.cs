@@ -54,7 +54,7 @@ namespace GameSrv.Word.Threads
 
         private void Run()
         {
-            if ((HUtil32.GetTickCount() - ShowOnlineTick) > ModuleShare.Config.ConsoleShowUserCountTime)
+            if ((HUtil32.GetTickCount() - ShowOnlineTick) > SystemShare.Config.ConsoleShowUserCountTime)
             {
                 ShowOnlineTick = HUtil32.GetTickCount();
                 M2Share.NoticeMgr.LoadingNotice();

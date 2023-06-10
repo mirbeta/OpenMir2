@@ -22,7 +22,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sChrName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sChrName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.WhisperHuman == PlayerActor)

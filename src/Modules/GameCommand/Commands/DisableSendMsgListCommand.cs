@@ -9,13 +9,13 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            if (ModuleShare.DisableSendMsgList.Count <= 0)
+            if (SystemShare.DisableSendMsgList.Count <= 0)
             {
                 PlayerActor.SysMsg("禁言列表为空!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
             PlayerActor.SysMsg("禁言列表:", MsgColor.Blue, MsgType.Hint);
-            for (var i = 0; i < ModuleShare.DisableSendMsgList.Count; i++)
+            for (var i = 0; i < SystemShare.DisableSendMsgList.Count; i++)
             {
                 //PlayerActor.SysMsg(Settings.g_DisableSendMsgList[i], MsgColor.c_Green, MsgType.t_Hint);
             }

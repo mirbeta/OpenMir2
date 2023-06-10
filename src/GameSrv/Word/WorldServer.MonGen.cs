@@ -51,7 +51,7 @@ namespace GameSrv.Word
 
             if (monsterGenMap.Count <= 0)
             {
-                for (var i = 0; i < ModuleShare.Config.ProcessMonsterMultiThreadLimit; i++)
+                for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
                 {
                     if (MonGenInfoThreadMap.ContainsKey(i))
                     {
@@ -65,7 +65,7 @@ namespace GameSrv.Word
                 var monsterNames = monsterGenMap.Keys.ToArray();
                 for (var i = 0; i < monsterNames.Length; i++)
                 {
-                    var threadId = M2Share.RandomNumber.Random(ModuleShare.Config.ProcessMonsterMultiThreadLimit);
+                    var threadId = M2Share.RandomNumber.Random(SystemShare.Config.ProcessMonsterMultiThreadLimit);
                     var monName = monsterNames[i];
                     if (MonGenInfoThreadMap.ContainsKey(threadId))
                     {
@@ -93,7 +93,7 @@ namespace GameSrv.Word
             var monsterName = MonsterList.Values.ToList();
             for (var i = 0; i < monsterName.Count; i++)
             {
-                var threadId = M2Share.RandomNumber.Random(ModuleShare.Config.ProcessMonsterMultiThreadLimit);
+                var threadId = M2Share.RandomNumber.Random(SystemShare.Config.ProcessMonsterMultiThreadLimit);
                 if (!MonsterThreadMap.ContainsKey(MonsterList[monsterName[i].Name].Name))
                 {
                     MonsterThreadMap.Add(MonsterList[monsterName[i].Name].Name, threadId);
@@ -139,9 +139,9 @@ namespace GameSrv.Word
         /// </summary>
         public void InitializationMonsterThread()
         {
-            _logger.Debug($"Run monster threads:[{ModuleShare.Config.ProcessMonsterMultiThreadLimit}]");
+            _logger.Debug($"Run monster threads:[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
 
-            int monsterThreads = ModuleShare.Config.ProcessMonsterMultiThreadLimit;//处理线程+预留线程
+            int monsterThreads = SystemShare.Config.ProcessMonsterMultiThreadLimit;//处理线程+预留线程
 
             MobThreads = new MonsterThread[monsterThreads];
             MobThreading = new Thread[monsterThreads];
@@ -160,7 +160,7 @@ namespace GameSrv.Word
                 };
                 MobThreading[i].Start();
             }
-            _logger.Info($"怪物线程初始化完成...[{ModuleShare.Config.ProcessMonsterMultiThreadLimit}]");
+            _logger.Info($"怪物线程初始化完成...[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
         }
 
         /// <summary>
@@ -171,7 +171,7 @@ namespace GameSrv.Word
         {
             if (dwTime < 30 * 60 * 1000)
             {
-                var d10 = (PlayObjectCount - ModuleShare.Config.UserFull) / HUtil32._MAX(1, ModuleShare.Config.ZenFastStep);
+                var d10 = (PlayObjectCount - SystemShare.Config.UserFull) / HUtil32._MAX(1, SystemShare.Config.ZenFastStep);
                 if (d10 > 0)
                 {
                     if (d10 > 6)
@@ -206,7 +206,7 @@ namespace GameSrv.Word
             while (true)
             {
                 MonGenInfo monGen = null;
-                if ((HUtil32.GetTickCount() - monsterThread.RegenMonstersTick) > ModuleShare.Config.RegenMonstersTime)
+                if ((HUtil32.GetTickCount() - monsterThread.RegenMonstersTick) > SystemShare.Config.RegenMonstersTime)
                 {
                     monsterThread.RegenMonstersTick = HUtil32.GetTickCount();
                     if (monsterThread.CurrMonGenIdx < mongenList.Count)
@@ -225,14 +225,14 @@ namespace GameSrv.Word
                     {
                         monsterThread.CurrMonGenIdx = 0;
                     }
-                    if (monGen != null && !string.IsNullOrEmpty(monGen.MonName) && !ModuleShare.Config.VentureServer)
+                    if (monGen != null && !string.IsNullOrEmpty(monGen.MonName) && !SystemShare.Config.VentureServer)
                     {
                         if (monGen.StartTick == 0 || ((HUtil32.GetTickCount() - monGen.StartTick) > GetMonstersZenTime(monGen.ZenTime)))
                         {
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
-                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (ModuleShare.Config.MonGenRate / 10.0)));//所需刷的怪总数
-                            var map = ModuleShare.MapMgr.FindMap(monGen.MapName);
+                            var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (SystemShare.Config.MonGenRate / 10.0)));//所需刷的怪总数
+                            var map = SystemShare.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 canCreate = false;
@@ -288,7 +288,7 @@ namespace GameSrv.Word
                                                 }
                                             }
                                         }
-                                        if (!monster.IsVisibleActive && (monster.ProcessRunCount < ModuleShare.Config.ProcessMonsterInterval))
+                                        if (!monster.IsVisibleActive && (monster.ProcessRunCount < SystemShare.Config.ProcessMonsterInterval))
                                         {
                                             monster.ProcessRunCount++;
                                         }
@@ -392,7 +392,7 @@ namespace GameSrv.Word
                     MonGenInfo.ZenTime = 0;
                     MonGenInfo.MissionGenRate = 0;// 集中座标刷新机率 1 -100
                     MonGenInfo.CertList = new List<IMonsterActor>();
-                    MonGenInfo.Envir = ModuleShare.MapMgr.FindMap(MonGenInfo.MapName);
+                    MonGenInfo.Envir = SystemShare.MapMgr.FindMap(MonGenInfo.MapName);
                     if (MonGenInfo.TryAdd(baseObject))
                     {
                         MonGenInfo.CertCount++;
@@ -452,20 +452,20 @@ namespace GameSrv.Word
                             {
                                 if (string.IsNullOrEmpty(itemName)) itemName = monItem.ItemName;
                                 UserItem userItem = null;
-                                if (ModuleShare.ItemSystem.CopyToUserItemFromName(itemName, ref userItem))
+                                if (SystemShare.ItemSystem.CopyToUserItemFromName(itemName, ref userItem))
                                 {
                                     userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100.0 * (20 + M2Share.RandomNumber.Random(80)));
-                                    var stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                                    var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                                     if (stdItem == null) continue;
-                                    if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(ModuleShare.Config.MonRandomAddValue) == 0) //极品掉落几率
+                                    if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(SystemShare.Config.MonRandomAddValue) == 0) //极品掉落几率
                                     {
-                                        ModuleShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
+                                        SystemShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                                     }
                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                                     {
                                         if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                         {
-                                            ModuleShare.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
+                                            SystemShare.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
                                         }
                                     }
                                     mon.ItemList.Add(userItem);
@@ -484,7 +484,7 @@ namespace GameSrv.Word
         private IMonsterActor CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName)
         {
             IMonsterActor cert = null;
-            var map = ModuleShare.MapMgr.FindMap(sMapName);
+            var map = SystemShare.MapMgr.FindMap(sMapName);
             if (map == null) return null;
             switch (nMonRace)
             {

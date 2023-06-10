@@ -27,9 +27,9 @@ namespace CommandModule.Commands
                     PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                     return;
                 }
-                if (PlayerActor.Permission >= this.Command.PermissionMin || ModuleShare.CanMoveMap(sMapName))
+                if (PlayerActor.Permission >= this.Command.PermissionMin || SystemShare.CanMoveMap(sMapName))
                 {
-                    envir = ModuleShare.MapMgr.FindMap(sMapName);
+                    envir = SystemShare.MapMgr.FindMap(sMapName);
                     if (envir != null)
                     {
                         var nX = HUtil32.StrToInt16(sX, 0);
@@ -51,8 +51,8 @@ namespace CommandModule.Commands
             }
             catch (Exception e)
             {
-                ModuleShare.Logger.Error("[Exceptioin] PlayerActor.SysMsgCmdPositionMove");
-                ModuleShare.Logger.Error(e.Message);
+                SystemShare.Logger.Error("[Exceptioin] PlayerActor.SysMsgCmdPositionMove");
+                SystemShare.Logger.Error(e.Message);
             }
         }
     }

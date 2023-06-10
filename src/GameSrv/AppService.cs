@@ -167,7 +167,7 @@ namespace GameSrv
             // 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
             await Task.Factory.StartNew(async () =>
             {
-                var shutdownSeconds = ModuleShare.Config.ShutdownSeconds;
+                var shutdownSeconds = SystemShare.Config.ShutdownSeconds;
                 _logger.Debug("网关停止新玩家连接");
                 GameShare.SocketMgr.SendServerStopMsg();//通知网关停止分配新的玩家连接
                 await Task.Delay(5000);//强制5秒延迟，防止玩家在倒计时结束前进入游戏

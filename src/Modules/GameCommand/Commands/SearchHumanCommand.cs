@@ -27,7 +27,7 @@ namespace CommandModule.Commands
                 if (HUtil32.GetTickCount() - PlayerActor.ProbeTick > 10000 || PlayerActor.Permission >= 3)
                 {
                     PlayerActor.ProbeTick = HUtil32.GetTickCount();
-                    var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+                    var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
                     if (mIPlayerActor != null)
                     {
                         PlayerActor.SysMsg(sHumanName + " 现在位于 " + mIPlayerActor.Envir.MapDesc + '(' + mIPlayerActor.Envir.MapName + ") " + mIPlayerActor.CurrX + ':'

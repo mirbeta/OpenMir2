@@ -24,7 +24,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            ModuleShare.Config.ZenFastStep = nFastStep;
+            SystemShare.Config.ZenFastStep = nFastStep;
             PlayerActor.SysMsg($"怪物行动速度: {nFastStep}", MsgColor.Green, MsgType.Hint);
         }
     }

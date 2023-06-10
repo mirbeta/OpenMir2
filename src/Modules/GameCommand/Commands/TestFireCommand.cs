@@ -30,7 +30,7 @@ namespace CommandModule.Commands
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {
                         fireBurnEvent = new FireBurnEvent(PlayerActor, (short)nX, (short)nY, (byte)nType, nTime * 1000, nPoint);
-                        ModuleShare.EventMgr.AddEvent(fireBurnEvent);
+                        SystemShare.EventMgr.AddEvent(fireBurnEvent);
                     }
                 }
             }

@@ -109,7 +109,7 @@ namespace GameSrv.Word
 
         private static RobotPlayer CreateRobotPlayObject(RoBotLogon ai)
         {
-            var envirnoment = ModuleShare.MapMgr.FindMap(ai.sMapName);
+            var envirnoment = SystemShare.MapMgr.FindMap(ai.sMapName);
             if (envirnoment == null)
             {
                 return null;

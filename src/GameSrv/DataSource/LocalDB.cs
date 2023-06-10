@@ -207,7 +207,7 @@ namespace GameSrv.DataSource
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    ModuleShare.FunctionNPC = new Merchant
+                    SystemShare.FunctionNPC = new Merchant
                     {
                         MapName = "0",
                         CurrX = 0,
@@ -220,16 +220,16 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.AddMerchant(ModuleShare.FunctionNPC);
+                    M2Share.WorldEngine.AddMerchant(SystemShare.FunctionNPC);
                 }
                 else
                 {
-                    ModuleShare.FunctionNPC = null;
+                    SystemShare.FunctionNPC = null;
                 }
             }
             catch
             {
-                ModuleShare.FunctionNPC = null;
+                SystemShare.FunctionNPC = null;
             }
         }
 
@@ -265,7 +265,7 @@ namespace GameSrv.DataSource
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    ModuleShare.ManageNPC = new Merchant
+                    SystemShare.ManageNPC = new Merchant
                     {
                         MapName = "0",
                         CurrX = 0,
@@ -281,12 +281,12 @@ namespace GameSrv.DataSource
                 }
                 else
                 {
-                    ModuleShare.ManageNPC = null;
+                    SystemShare.ManageNPC = null;
                 }
             }
             catch
             {
-                ModuleShare.ManageNPC = null;
+                SystemShare.ManageNPC = null;
             }
         }
 
@@ -309,7 +309,7 @@ namespace GameSrv.DataSource
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    ModuleShare.RobotNPC = new Merchant
+                    SystemShare.RobotNPC = new Merchant
                     {
                         MapName = "0",
                         CurrX = 0,
@@ -325,12 +325,12 @@ namespace GameSrv.DataSource
                 }
                 else
                 {
-                    ModuleShare.RobotNPC = null;
+                    SystemShare.RobotNPC = null;
                 }
             }
             catch
             {
-                ModuleShare.RobotNPC = null;
+                SystemShare.RobotNPC = null;
             }
         }
 
@@ -376,7 +376,7 @@ namespace GameSrv.DataSource
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, _textSpitConst);
                         if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest))
                         {
-                            IEnvirnoment map = ModuleShare.MapMgr.FindMap(sMap);
+                            IEnvirnoment map = SystemShare.MapMgr.FindMap(sMap);
                             if (map != null)
                             {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
@@ -551,10 +551,10 @@ namespace GameSrv.DataSource
                         monGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
+                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
                         {
                             monGenInfo.CertList = new List<IMonsterActor>();
-                            monGenInfo.Envir = ModuleShare.MapMgr.FindMap(monGenInfo.MapName);
+                            monGenInfo.Envir = SystemShare.MapMgr.FindMap(monGenInfo.MapName);
                             if (monGenInfo.Envir != null)
                             {
                                 M2Share.WorldEngine.AddMonGenList(monGenInfo);
@@ -1004,7 +1004,7 @@ namespace GameSrv.DataSource
             for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
             {
                 merchant = M2Share.WorldEngine.MerchantList[i];
-                if (merchant != ModuleShare.FunctionNPC)
+                if (merchant != SystemShare.FunctionNPC)
                 {
                     merchant.NpcFlag = -1;
                 }
@@ -1065,7 +1065,7 @@ namespace GameSrv.DataSource
                         {
                             MapName = sMapName
                         };
-                        merchant.Envir = ModuleShare.MapMgr.FindMap(merchant.MapName);
+                        merchant.Envir = SystemShare.MapMgr.FindMap(merchant.MapName);
                         if (merchant.Envir != null)
                         {
                             merchant.ScriptName = sScript;

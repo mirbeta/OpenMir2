@@ -22,7 +22,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
+            var targerIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (targerIPlayerActor != null)
             {
                 targerIPlayerActor.BonusPoint = 0;

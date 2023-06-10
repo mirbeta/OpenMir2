@@ -12,7 +12,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!ModuleShare.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
                 PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -39,7 +39,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!ModuleShare.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
                 PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -65,7 +65,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!ModuleShare.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
                 PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -98,12 +98,12 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!ModuleShare.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
                 PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayerActor.PwdFailCount > ModuleShare.Config.PasswordErrorCountLock)
+            if (PlayerActor.PwdFailCount > SystemShare.Config.PasswordErrorCountLock)
             {
                 PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 PlayerActor.IsPasswordLocked = true;
@@ -138,12 +138,12 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!ModuleShare.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
                 PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayerActor.PwdFailCount > ModuleShare.Config.PasswordErrorCountLock)
+            if (PlayerActor.PwdFailCount > SystemShare.Config.PasswordErrorCountLock)
             {
                 PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 PlayerActor.IsPasswordLocked = true;
@@ -178,7 +178,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (!ModuleShare.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
                 PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
@@ -217,7 +217,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var targetObject = ModuleShare.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
             if (targetObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);
@@ -252,7 +252,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var targetObject = ModuleShare.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
             if (targetObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);
@@ -287,7 +287,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var targetObject = ModuleShare.WorldEngine.GetPlayObject(@params[0]);
+            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
             if (targetObject != null)
             {
                 var nFlag = HUtil32.StrToInt(@params[1], 0);

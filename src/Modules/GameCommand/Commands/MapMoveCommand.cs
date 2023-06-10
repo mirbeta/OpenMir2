@@ -22,13 +22,13 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = ModuleShare.MapMgr.FindMap(sMapName);
+            var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.TheMapNotFound, sMapName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayerActor.Permission >= this.Command.PermissionMin || ModuleShare.CanMoveMap(sMapName))
+            if (PlayerActor.Permission >= this.Command.PermissionMin || SystemShare.CanMoveMap(sMapName))
             {
                 PlayerActor.SendRefMsg(Messages.RM_SPACEMOVE_FIRE, 0, 0, 0, 0, "");
                 PlayerActor.MapRandomMove(sMapName, 0);

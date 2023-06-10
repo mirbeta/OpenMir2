@@ -23,7 +23,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 int nOLevel = mIPlayerActor.Abil.Level;
@@ -31,9 +31,9 @@ namespace CommandModule.Commands
                 //M2Share.EventSource.AddEventLog(17, mIPlayerActor.MapName + "\09" + mIPlayerActor.CurrX + "\09" + mIPlayerActor.CurrY + "\09"
                 //                                    + mIPlayerActor.ChrName + "\09" + mIPlayerActor.Abil.Level + "\09" + PlayerActor.ChrName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
                 PlayerActor.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
-                if (ModuleShare.Config.ShowMakeItemMsg)
+                if (SystemShare.Config.ShowMakeItemMsg)
                 {
-                    ModuleShare.Logger.Warn("[等级调整] " + PlayerActor.ChrName + "(" + mIPlayerActor.ChrName + " " + nOLevel + " -> " + mIPlayerActor.Abil.Level + ")");
+                    SystemShare.Logger.Warn("[等级调整] " + PlayerActor.ChrName + "(" + mIPlayerActor.ChrName + " " + nOLevel + " -> " + mIPlayerActor.Abil.Level + ")");
                 }
             }
             else

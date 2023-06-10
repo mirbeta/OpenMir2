@@ -32,10 +32,10 @@ namespace MarketSystem
 
         public void Start()
         {
-            if (ModuleShare.Config.EnableMarket)
+            if (SystemShare.Config.EnableMarket)
             {
                 var config = new TouchSocketConfig();
-                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(ModuleShare.Config.MarketSrvAddr), ModuleShare.Config.MarketSrvPort))
+                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort))
                     .SetBufferLength(4096);
                 config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
                 _clientScoket.Setup(config);
@@ -52,7 +52,7 @@ namespace MarketSystem
 
         public void Stop()
         {
-            if (ModuleShare.Config.EnableMarket)
+            if (SystemShare.Config.EnableMarket)
             {
                 _clientScoket.Close();
             }
@@ -62,7 +62,7 @@ namespace MarketSystem
 
         public void CheckConnected()
         {
-            if (!ModuleShare.Config.EnableMarket)
+            if (!SystemShare.Config.EnableMarket)
             {
                 return;
             }
@@ -121,13 +121,13 @@ namespace MarketSystem
             switch (e.SocketErrorCode)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Error("数据库(拍卖行)服务器[" + ModuleShare.Config.MarketSrvAddr + ":" + ModuleShare.Config.MarketSrvPort + "]拒绝链接...");
+                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]拒绝链接...");
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Error("数据库(拍卖行)服务器[" + ModuleShare.Config.MarketSrvAddr + ":" + ModuleShare.Config.MarketSrvPort + "]关闭连接...");
+                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]关闭连接...");
                     break;
                 case SocketError.TimedOut:
-                    _logger.Error("数据库(拍卖行)服务器[" + ModuleShare.Config.MarketSrvAddr + ":" + ModuleShare.Config.MarketSrvPort + "]链接超时...");
+                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]链接超时...");
                     break;
             }
         }
@@ -142,14 +142,14 @@ namespace MarketSystem
                 return;
             }
             var request = new ServerRequestMessage(Messages.DB_LOADMARKET, 0, 0, 0, 0);
-            var requestData = new MarketRegisterMessage() { ServerIndex = ModuleShare.ServerIndex, ServerName = ModuleShare.Config.ServerName, GroupId = 1, Token = ModuleShare.Config.MarketToken };
+            var requestData = new MarketRegisterMessage() { ServerIndex = SystemShare.ServerIndex, ServerName = SystemShare.Config.ServerName, GroupId = 1, Token = SystemShare.Config.MarketToken };
             //M2Share.MarketService.SendRequest(1, request, requestData);
             IsFirstData = true;
         }
 
         public bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo)
         {
-            if (!ModuleShare.Config.EnableMarket)
+            if (!SystemShare.Config.EnableMarket)
             {
                 return false;
             }
@@ -212,7 +212,7 @@ namespace MarketSystem
                     var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                     if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
                     {
-                        ModuleShare.Config.nLoadDBErrorCount++;
+                        SystemShare.Config.nLoadDBErrorCount++;
                         return;
                     }
                     var signatureBuff = BitConverter.GetBytes(queryId);
@@ -238,7 +238,7 @@ namespace MarketSystem
                                 //M2Share.MarketManager.OnMsgReadData();
                                 break;
                             case Messages.DB_LOADUSERMARKETSUCCESS:
-                                var user = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                var user = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                 if (user != null)
                                 {
                                     // user.ReadyToSellUserMarket(SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
@@ -251,7 +251,7 @@ namespace MarketSystem
                             case Messages.DB_SEARCHMARKETSUCCESS:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                    var searchUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                     if (searchUser != null)
                                     {
                                         //  searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
@@ -266,7 +266,7 @@ namespace MarketSystem
                             case Messages.DB_SRARCHMARKETFAIL:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                    var searchUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                     if (searchUser != null && commandMessage.Param <= 1)
                                     {
                                         //searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
@@ -280,7 +280,7 @@ namespace MarketSystem
                                 _logger.Info("搜索拍卖行数据失败...");
                                 break;
                             case Messages.DB_SAVEMARKETSUCCESS:// 保存结果需要返回给玩家
-                                var saveUser = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                var saveUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                 if (saveUser != null)
                                 {
                                     if (commandMessage.Tag == 1)
@@ -305,7 +305,7 @@ namespace MarketSystem
                     else
                     {
                         _logger.Warn("非法拍卖行数据封包，解析失败...");
-                        ModuleShare.Config.nLoadDBErrorCount++;
+                        SystemShare.Config.nLoadDBErrorCount++;
                     }
                 }
             }

@@ -28,7 +28,7 @@ namespace CommandModule.Commands
             }
             else
             {
-                PlayerActor.CharPushed(ModuleShare.RandomNumber.RandomByte(nType), nCount);
+                PlayerActor.CharPushed(SystemShare.RandomNumber.RandomByte(nType), nCount);
             }
         }
     }

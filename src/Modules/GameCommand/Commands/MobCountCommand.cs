@@ -22,13 +22,13 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envirnoment = ModuleShare.MapMgr.FindMap(sMapName);
+            var envirnoment = SystemShare.MapMgr.FindMap(sMapName);
             if (envirnoment == null)
             {
                 PlayerActor.SysMsg(CommandHelp.GameCommandMobCountMapNotFound, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobCountMonsterCount, ModuleShare.WorldEngine.GetMapMonster(envirnoment, null)), MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobCountMonsterCount, SystemShare.WorldEngine.GetMapMonster(envirnoment, null)), MsgColor.Green, MsgType.Hint);
         }
     }
 }

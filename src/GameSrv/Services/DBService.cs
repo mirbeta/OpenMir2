@@ -18,7 +18,7 @@ namespace GameSrv.Services
 
         public DBService()
         {
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(ModuleShare.Config.sDBAddr), ModuleShare.Config.nDBPort), 4096);
+            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort), 4096);
             _clientScoket.OnConnected += DbScoketConnected;
             _clientScoket.OnDisconnected += DbScoketDisconnected;
             _clientScoket.OnReceivedData += DBSocketRead;
@@ -49,7 +49,7 @@ namespace GameSrv.Services
             {
                 return;
             }
-            _clientScoket.Connect(ModuleShare.Config.sDBAddr, ModuleShare.Config.nDBPort);
+            _clientScoket.Connect(SystemShare.Config.sDBAddr, SystemShare.Config.nDBPort);
         }
 
         public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
@@ -100,13 +100,13 @@ namespace GameSrv.Services
             switch (e.ErrorCode)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Error("数据库服务器[" + ModuleShare.Config.sDBAddr + ":" + ModuleShare.Config.nDBPort + "]拒绝链接...");
+                    _logger.Error("数据库服务器[" + SystemShare.Config.sDBAddr + ":" + SystemShare.Config.nDBPort + "]拒绝链接...");
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Error("数据库服务器[" + ModuleShare.Config.sDBAddr + ":" + ModuleShare.Config.nDBPort + "]关闭连接...");
+                    _logger.Error("数据库服务器[" + SystemShare.Config.sDBAddr + ":" + SystemShare.Config.nDBPort + "]关闭连接...");
                     break;
                 case SocketError.TimedOut:
-                    _logger.Error("数据库服务器[" + ModuleShare.Config.sDBAddr + ":" + ModuleShare.Config.nDBPort + "]链接超时...");
+                    _logger.Error("数据库服务器[" + SystemShare.Config.sDBAddr + ":" + SystemShare.Config.nDBPort + "]链接超时...");
                     break;
             }
         }
@@ -208,7 +208,7 @@ namespace GameSrv.Services
                         var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                         if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
                         {
-                            ModuleShare.Config.nLoadDBErrorCount++;
+                            SystemShare.Config.nLoadDBErrorCount++;
                             return;
                         }
                         var signatureBuff = BitConverter.GetBytes(queryId);
@@ -219,7 +219,7 @@ namespace GameSrv.Services
                         }
                         else
                         {
-                            ModuleShare.Config.nLoadDBErrorCount++;
+                            SystemShare.Config.nLoadDBErrorCount++;
                         }
                     }
                 }

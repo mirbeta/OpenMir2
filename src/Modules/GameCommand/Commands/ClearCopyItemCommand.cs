@@ -26,7 +26,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerObject = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var targerObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (targerObject == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -40,11 +40,11 @@ namespace CommandModule.Commands
                 }
 
                 userItem = targerObject.ItemList[i];
-                s14 = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
+                s14 = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
                 for (var j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.ItemList[j];
-                    if (ModuleShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
+                    if (SystemShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
                     {
                         PlayerActor.ItemList.RemoveAt(j);
                         break;
@@ -59,11 +59,11 @@ namespace CommandModule.Commands
                     break;
                 }
                 userItem = targerObject.StorageItemList[i];
-                s14 = ModuleShare.ItemSystem.GetStdItemName(userItem.Index);
+                s14 = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
                 for (var j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.StorageItemList[j];
-                    if (ModuleShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 &&
+                    if (SystemShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 &&
                         userItem.MakeIndex == userItem1.MakeIndex)
                     {
                         PlayerActor.StorageItemList.RemoveAt(j);

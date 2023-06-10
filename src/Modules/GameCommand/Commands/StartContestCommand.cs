@@ -24,7 +24,7 @@ namespace CommandModule.Commands
             IList<IActor> list10 = new List<IActor>();
             IList<IPlayerActor> list14 = new List<IPlayerActor>();
             IList<GuildInfo> guildList = new List<GuildInfo>();
-            ModuleShare.WorldEngine.GetMapRageHuman(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, ref list10);
+            SystemShare.WorldEngine.GetMapRageHuman(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, ref list10);
             for (var i = 0; i < list10.Count; i++)
             {
                 mIPlayerActor = list10[i] as IPlayerActor;
@@ -51,7 +51,7 @@ namespace CommandModule.Commands
                 }
             }
             PlayerActor.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
-            ModuleShare.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, ModuleShare.Config.CryMsgFColor, ModuleShare.Config.CryMsgBColor, "- 行会战争已爆发。");
+            SystemShare.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, "- 行会战争已爆发。");
             var s20 = "";
             GuildInfo guild;
             //for (var i = 0; i < guildList.Count; i++)
@@ -68,7 +68,7 @@ namespace CommandModule.Commands
             //    }
             //    s20 = s20 + guild.GuildName + ' ';
             //}
-            ModuleShare.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, ModuleShare.Config.CryMsgFColor, ModuleShare.Config.CryMsgBColor, " -参加的门派:" + s20);
+            SystemShare.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, " -参加的门派:" + s20);
         }
     }
 }

@@ -16,7 +16,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            if (!ModuleShare.Config.PasswordLockSystem)
+            if (!SystemShare.Config.PasswordLockSystem)
             {
                 PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;

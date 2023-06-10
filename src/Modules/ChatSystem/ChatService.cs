@@ -31,7 +31,7 @@ namespace GameSrv.Services
 
         public bool IsEnableChatServer
         {
-            get { return ModuleShare.Config.EnableChatServer; }
+            get { return SystemShare.Config.EnableChatServer; }
         }
 
         public async Task Start()
@@ -41,7 +41,7 @@ namespace GameSrv.Services
                 return;
             }
             logger.Info("开始链接世界聊天频道...");
-            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(ModuleShare.Config.ChatSrvAddr, ModuleShare.Config.ChatSrvPort).Build();
+            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(SystemShare.Config.ChatSrvAddr, SystemShare.Config.ChatSrvPort).Build();
             try
             {
                 using var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));

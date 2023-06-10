@@ -12,7 +12,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            ModuleShare.SpiritMutinyTick = 0;
+            SystemShare.SpiritMutinyTick = 0;
             PlayerActor.SysMsg("祈祷叛变已停止。", MsgColor.Green, MsgType.Hint);
         }
     }

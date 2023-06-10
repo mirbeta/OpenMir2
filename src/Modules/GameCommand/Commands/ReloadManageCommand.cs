@@ -9,20 +9,20 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            if (ModuleShare.ManageNPC != null)
+            if (SystemShare.ManageNPC != null)
             {
-                ModuleShare.ManageNPC.ClearScript();
-                ModuleShare.ManageNPC.LoadNPCScript();
+                SystemShare.ManageNPC.ClearScript();
+                SystemShare.ManageNPC.LoadNPCScript();
                 PlayerActor.SysMsg("重新加载登录脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else
             {
                 PlayerActor.SysMsg("重新加载登录脚本失败...", MsgColor.Green, MsgType.Hint);
             }
-            if (ModuleShare.FunctionNPC != null)
+            if (SystemShare.FunctionNPC != null)
             {
-                ModuleShare.FunctionNPC.ClearScript();
-                ModuleShare.FunctionNPC.LoadNPCScript();
+                SystemShare.FunctionNPC.ClearScript();
+                SystemShare.FunctionNPC.LoadNPCScript();
                 PlayerActor.SysMsg("重新加载功能脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else

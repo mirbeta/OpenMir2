@@ -37,7 +37,7 @@ namespace PlanesSystem
             var touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
-                new IPHost(IPAddress.Parse(ModuleShare.Config.MasterSrvAddr), ModuleShare.Config.MasterSrvPort)
+                new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort)
             });
             _serverSocket.Setup(touchSocketConfig);
             //M2Share.Logger.Info($"节点数据服务[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]已启动.");

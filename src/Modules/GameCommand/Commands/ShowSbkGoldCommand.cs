@@ -27,14 +27,14 @@ namespace CommandModule.Commands
             if (string.IsNullOrEmpty(sCastleName))
             {
                 IList<string> list = new List<string>();
-                ModuleShare.CastleMgr.GetCastleGoldInfo(list);
+                SystemShare.CastleMgr.GetCastleGoldInfo(list);
                 for (var i = 0; i < list.Count; i++)
                 {
                     PlayerActor.SysMsg(list[i], MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
-            var castle = ModuleShare.CastleMgr.Find(sCastleName);
+            var castle = SystemShare.CastleMgr.Find(sCastleName);
             if (castle == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);

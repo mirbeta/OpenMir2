@@ -30,7 +30,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumanName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -50,7 +50,7 @@ namespace CommandModule.Commands
                             break;
                         }
                         userItem = mIPlayerActor.UseItems[i];
-                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!mIPlayerActor.IsEnoughBag)
@@ -85,7 +85,7 @@ namespace CommandModule.Commands
                             break;
                         }
                         userItem = mIPlayerActor.ItemList[i];
-                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!mIPlayerActor.IsEnoughBag)
@@ -118,7 +118,7 @@ namespace CommandModule.Commands
                             break;
                         }
                         userItem = mIPlayerActor.StorageItemList[i];
-                        stdItem = ModuleShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!mIPlayerActor.IsEnoughBag)

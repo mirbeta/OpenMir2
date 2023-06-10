@@ -21,7 +21,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var mIPlayerActor = ModuleShare.WorldEngine.GetPlayObject(sHumName);
+            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null)
             {
                 mIPlayerActor.BoKickFlag = true;

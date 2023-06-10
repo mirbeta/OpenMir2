@@ -22,7 +22,7 @@ namespace CommandModule.Commands
             PlayerActor.FeatureChanged();
             if (PlayerActor.OnHorse)
             {
-                ModuleShare.FunctionNPC.GotoLable(PlayerActor, "@OnHorse", false);
+                SystemShare.FunctionNPC.GotoLable(PlayerActor, "@OnHorse", false);
             }
         }
     }

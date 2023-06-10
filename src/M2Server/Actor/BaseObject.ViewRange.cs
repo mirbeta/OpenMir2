@@ -200,7 +200,7 @@ namespace M2Server.Actor
                             }
                             if ((cellObject.CellType == CellType.Item) && !Death && (Race > ActorRace.Monster))
                             {
-                                if ((HUtil32.GetTickCount() - cellObject.AddTime) > ModuleShare.Config.ClearDropOnFloorItemTime)
+                                if ((HUtil32.GetTickCount() - cellObject.AddTime) > SystemShare.Config.ClearDropOnFloorItemTime)
                                 {
                                     cellInfo.Remove(i);
                                     if (cellInfo.Count > 0)

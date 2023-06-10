@@ -80,7 +80,7 @@ namespace GameSrv
             {
                 _clearIntervalTime = HUtil32.GetTickCount();
                 GameShare.Statistics.ShowServerStatus();
-                ModuleShare.ActorMgr.CleanObject();
+                SystemShare.ActorMgr.CleanObject();
             }
             if ((currentTick - _playerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
             {

@@ -11,13 +11,13 @@ namespace SystemModule
 
         public void LoadConfig()
         {
-            for (int i = 0; i < ModuleShare.Config.GlobalVal.Length; i++)
+            for (int i = 0; i < SystemShare.Config.GlobalVal.Length; i++)
             {
-                ModuleShare.Config.GlobalVal[i] = ReadWriteInteger("Integer", "GlobalVal" + i, ModuleShare.Config.GlobalVal[i]);
+                SystemShare.Config.GlobalVal[i] = ReadWriteInteger("Integer", "GlobalVal" + i, SystemShare.Config.GlobalVal[i]);
             }
-            for (int i = 0; i < ModuleShare.Config.GlobalAVal.Length; i++)
+            for (int i = 0; i < SystemShare.Config.GlobalAVal.Length; i++)
             {
-                ModuleShare.Config.GlobalAVal[i] = ReadWriteString("String", "GlobalStrVal" + i, ModuleShare.Config.GlobalAVal[i]);
+                SystemShare.Config.GlobalAVal[i] = ReadWriteString("String", "GlobalStrVal" + i, SystemShare.Config.GlobalAVal[i]);
             }
         }
     }
