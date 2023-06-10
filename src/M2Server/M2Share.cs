@@ -1345,64 +1345,6 @@ namespace M2Server
             return true;
         }
 
-        public static int GetUseItemIdx(string sName)
-        {
-            var result = -1;
-            if (string.Compare(sName, Settings.DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 0;
-            }
-            else if (string.Compare(sName, Settings.WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 1;
-            }
-            else if (string.Compare(sName, Settings.RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 2;
-            }
-            else if (string.Compare(sName, Settings.NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 3;
-            }
-            else if (string.Compare(sName, Settings.HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 4;
-            }
-            else if (string.Compare(sName, Settings.ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 5;
-            }
-            else if (string.Compare(sName, Settings.ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 6;
-            }
-            else if (string.Compare(sName, Settings.RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 7;
-            }
-            else if (string.Compare(sName, Settings.RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 8;
-            }
-            else if (string.Compare(sName, Settings.BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 9;
-            }
-            else if (string.Compare(sName, Settings.BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 10;
-            }
-            else if (string.Compare(sName, Settings.BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 11;
-            }
-            else if (string.Compare(sName, Settings.CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
-            {
-                result = 12;
-            }
-            return result;
-        }
-
         public static bool LoadDisableSendMsgList()
         {
             var sFileName = GetEnvirFilePath("DisableSendMsgList.txt");
@@ -1966,16 +1908,7 @@ namespace M2Server
             }
             return result;
         }
-
-        public static void LoadConfig()
-        {
-            /*ServerConf.LoadConfig();
-            StringConf.LoadString();
-            ExpConf.LoadConfig();
-            GlobalConf.LoadConfig();
-            GameSetting.LoadConfig();*/
-        }
-
+        
         public static string GetIPLocal(string sIPaddr)
         {
             return "未知!!!";

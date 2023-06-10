@@ -93,6 +93,7 @@ namespace GameSrv
             SystemShare.ItemSystem = new ItemSystem();
             SystemShare.GuildMgr = new GuildManager();
             SystemShare.CastleMgr = new CastleManager();
+            SystemShare.MapMgr = new MapManager();
         }
 
         public void Initialize(CancellationToken stoppingToken)
@@ -104,7 +105,6 @@ namespace GameSrv
             GameShare.ChatChannel = new ChatService();
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
-            SystemShare.MapMgr = new MapManager();
             M2Share.FrontEngine = new FrontEngine();
             GameShare.RobotMgr = new RobotManage();
             GameShare.LoadConfig();
@@ -211,7 +211,7 @@ namespace GameSrv
                 _logger.Info("加载文字过滤信息成功...");
             }
             _logger.Info("正在加载公告提示信息...");
-            if (!M2Share.LoadLineNotice(GameShare.GetNoticeFilePath("LineNotice.txt")))
+            if (!M2Share.LoadLineNotice(SystemShare.GetNoticeFilePath("LineNotice.txt")))
             {
                 _logger.Info("加载公告提示信息失败!!!");
             }
@@ -265,7 +265,7 @@ namespace GameSrv
             string sSelGateIPaddr = string.Empty;
             string sGameGateIPaddr = string.Empty;
             string sGameGatePort = string.Empty;
-            string sFileName = Path.Combine(GameShare.BasePath, "!servertable.txt");
+            string sFileName = Path.Combine(SystemShare.BasePath, "!servertable.txt");
             if (File.Exists(sFileName))
             {
                 StringList loadList = new StringList();

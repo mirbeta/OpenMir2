@@ -17,21 +17,12 @@ namespace GameSrv
     public static class GameShare
     {
         /// <summary>
-        /// 启动路径
-        /// </summary>
-        public static readonly string BasePath;
-        /// <summary>
-        /// 服务器编号
-        /// </summary>
-        public static byte ServerIndex = 0;
-        /// <summary>
         /// 服务器启动时间
         /// </summary>
         public static long StartTime;
         public static readonly WordStatistics Statistics;
         public static readonly LocalDb LocalDb;
         public static readonly CommonDB CommonDb;
-        public static readonly RandomNumber RandomNumber;
         public static MapQuestManager QuestManager;
         public static DBService DataServer = null;
         public static IMarketService MarketService = null;
@@ -52,12 +43,9 @@ namespace GameSrv
         public static TimedRobotProcessor TimedRobotProcessor;
         public static bool StartReady = false;
         public static int SendOnlineTick = 0;
-        public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
-
+        
         static GameShare()
         {
-            BasePath = AppContext.BaseDirectory;
-            RandomNumber = RandomNumber.GetInstance();
             ScriptEngine = new ScriptEngine();
             Statistics = new WordStatistics();
             LocalDb = new LocalDb();
@@ -71,7 +59,7 @@ namespace GameSrv
             EventProcessor = new EventProcessor();
             StorageProcessor = new StorageProcessor();
             TimedRobotProcessor = new TimedRobotProcessor();
-            PlanesService=new PlanesService();
+            PlanesService = new PlanesService();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
@@ -112,7 +100,7 @@ namespace GameSrv
 
         private static string GetRandpmRoute(TRouteInfo routeInfo, ref int gatePort)
         {
-            var random = RandomNumber.Random(routeInfo.GateCount);
+            var random = RandomNumber.GetInstance().Random(routeInfo.GateCount);
             gatePort = routeInfo.GameGatePort[random];
             return routeInfo.GameGateIP[random];
         }
@@ -139,33 +127,6 @@ namespace GameSrv
             SystemShare.ExpConf.LoadConfig();
             SystemShare.GlobalConf.LoadConfig();
             SystemShare.GameSetting.LoadConfig();
-        }
-
-        public static string GetEnvirFilePath(string filePath)
-        {
-            if (filePath.StartsWith(".."))
-            {
-                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
-            }
-            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath);
-        }
-
-        public static string GetEnvirFilePath(string dirPath, string filePath)
-        {
-            if (filePath.StartsWith(".."))
-            {
-                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
-            }
-            return Path.Combine(BasePath, SystemShare.Config.EnvirDir, dirPath, filePath);
-        }
-
-        public static string GetNoticeFilePath(string filePath)
-        {
-            if (filePath.StartsWith(".."))
-            {
-                return Path.Combine(BasePath, SystemShare.Config.EnvirDir, filePath[3..]);
-            }
-            return Path.Combine(BasePath, SystemShare.Config.NoticeDir, filePath);
         }
     }
 }

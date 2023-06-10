@@ -216,17 +216,17 @@ namespace GameSrv
             _logger.Debug("Application is stopping");
             GameShare.StartReady = false;
             SavePlayer();
-            if (GameShare.ServerIndex == 0)
+            if (SystemShare.ServerIndex == 0)
             {
                 await StopService(string.Empty, 0, false);
             }
-            else if (GameShare.ServerIndex > 0)
+            else if (SystemShare.ServerIndex > 0)
             {
                 _logger.Info("检查是否有其他可用服务器.");
                 //如果有多机负载转移在线玩家到新服务器
                 var sIPaddr = string.Empty;
                 var nPort = 0;
-                var isMultiServer = GameShare.GetMultiServerAddrPort(GameShare.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
+                var isMultiServer = GameShare.GetMultiServerAddrPort(SystemShare.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
                 if (isMultiServer)
                 {
                     _logger.Info($"玩家转移目标服务器[{sIPaddr}:{nPort}].");
