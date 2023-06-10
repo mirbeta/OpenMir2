@@ -1,8 +1,7 @@
-﻿using M2Server;
-using M2Server.Player;
-using NLog;
+﻿using NLog;
 using System.Net;
 using System.Net.Sockets;
+using SystemModule;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.Data;
@@ -15,9 +14,9 @@ using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 using TcpClient = SystemModule.Sockets.Components.TCP.TcpClient;
 
-namespace GameSrv.Services
+namespace MarketSystem
 {
-    public class MarketService
+    public class MarketService : IMarketService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpClient _clientScoket;
@@ -143,7 +142,7 @@ namespace GameSrv.Services
                 return;
             }
             var request = new ServerRequestMessage(Messages.DB_LOADMARKET, 0, 0, 0, 0);
-            var requestData = new MarketRegisterMessage() { ServerIndex = M2Share.ServerIndex, ServerName = ModuleShare.Config.ServerName, GroupId = 1, Token = ModuleShare.Config.MarketToken };
+            var requestData = new MarketRegisterMessage() { ServerIndex = ModuleShare.ServerIndex, ServerName = ModuleShare.Config.ServerName, GroupId = 1, Token = ModuleShare.Config.MarketToken };
             //M2Share.MarketService.SendRequest(1, request, requestData);
             IsFirstData = true;
         }
@@ -239,10 +238,10 @@ namespace GameSrv.Services
                                 //M2Share.MarketManager.OnMsgReadData();
                                 break;
                             case Messages.DB_LOADUSERMARKETSUCCESS:
-                                var user = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                var user = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                 if (user != null)
                                 {
-                                    user.ReadyToSellUserMarket(SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
+                                    // user.ReadyToSellUserMarket(SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
                                 }
                                 else
                                 {
@@ -252,10 +251,10 @@ namespace GameSrv.Services
                             case Messages.DB_SEARCHMARKETSUCCESS:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                    var searchUser = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                     if (searchUser != null)
                                     {
-                                        searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                        //  searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                                     }
                                     else
                                     {
@@ -267,7 +266,7 @@ namespace GameSrv.Services
                             case Messages.DB_SRARCHMARKETFAIL:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                    var searchUser = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                     if (searchUser != null && commandMessage.Param <= 1)
                                     {
                                         //searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
@@ -281,7 +280,7 @@ namespace GameSrv.Services
                                 _logger.Info("搜索拍卖行数据失败...");
                                 break;
                             case Messages.DB_SAVEMARKETSUCCESS:// 保存结果需要返回给玩家
-                                var saveUser = M2Share.ActorMgr.Get<PlayObject>(commandMessage.Recog);
+                                var saveUser = ModuleShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                 if (saveUser != null)
                                 {
                                     if (commandMessage.Tag == 1)

@@ -32,47 +32,47 @@ namespace GameSrv.Robots
             {
                 switch (autoRunInfo.Moethod)
                 {
-                    case Robot.nRODAY:
+                    case RobotConst.nRODAY:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddDays(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
-                    case Robot.nROHOUR:
+                    case RobotConst.nROHOUR:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddHours(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
-                    case Robot.nROMIN:
+                    case RobotConst.nROMIN:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddMinutes(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
-                    case Robot.nROSEC:
+                    case RobotConst.nROSEC:
                         autoRunInfo.RunTimeTick = DateTimeOffset.Now.AddSeconds(1).ToUnixTimeMilliseconds();
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         GameShare.ScriptEngine.GotoLable(this, ModuleShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         break;
-                    case Robot.nRUNONWEEK:
+                    case RobotConst.nRUNONWEEK:
                         GetWeekTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         AutoRunOfOnWeek(autoRunInfo);
                         break;
-                    case Robot.nRUNONDAY:
+                    case RobotConst.nRUNONDAY:
                         GetDayTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         AutoRunOfOnDay(autoRunInfo);
                         break;
-                    case Robot.nRUNONHOUR:
+                    case RobotConst.nRUNONHOUR:
                         GetHourTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         AutoRunOfOnHour(autoRunInfo);
                         break;
-                    case Robot.nRUNONMIN:
+                    case RobotConst.nRUNONMIN:
                         GetMinuteTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         AutoRunOfOnMin(autoRunInfo);
                         break;
-                    case Robot.nRUNONSEC:
+                    case RobotConst.nRUNONSEC:
                         GetSecondTime(autoRunInfo.sParam1, ref autoRunInfo.RunTimeTick);
                         autoRunInfo.RunTick = HUtil32.GetTimestamp();
                         AutoRunOfOnSec(autoRunInfo);
@@ -208,65 +208,65 @@ namespace GameSrv.Robots
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sParam2, LoadSriptSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sParam3, LoadSriptSpitConst);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sParam4, LoadSriptSpitConst);
-                        if (string.Compare(sActionType, Robot.sROAUTORUN, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(sActionType, RobotConst.sROAUTORUN, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (string.Compare(sRunCmd, Robot.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)
+                            if (string.Compare(sRunCmd, RobotConst.sRONPCLABLEJMP, StringComparison.OrdinalIgnoreCase) == 0)
                             {
                                 var autoRunInfo = new AutoRunInfo();
                                 autoRunInfo.RunTick = HUtil32.GetTimestamp();
                                 autoRunInfo.RunTimeTick = 0;
                                 autoRunInfo.boStatus = false;
-                                if (string.Compare(sMoethod, Robot.sRODAY, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sRODAY, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nRODAY;
+                                    autoRunInfo.Moethod = RobotConst.nRODAY;
                                 }
-                                if (string.Compare(sMoethod, Robot.sROHOUR, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sROHOUR, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nROHOUR;
+                                    autoRunInfo.Moethod = RobotConst.nROHOUR;
                                 }
-                                if (string.Compare(sMoethod, Robot.sROMIN, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sROMIN, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nROMIN;
+                                    autoRunInfo.Moethod = RobotConst.nROMIN;
                                 }
-                                if (string.Compare(sMoethod, Robot.sROSEC, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sROSEC, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nROSEC;
+                                    autoRunInfo.Moethod = RobotConst.nROSEC;
                                 }
-                                if (string.Compare(sMoethod, Robot.sRUNONWEEK, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sRUNONWEEK, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nRUNONWEEK;
+                                    autoRunInfo.Moethod = RobotConst.nRUNONWEEK;
                                     if (!GetWeekTime(sParam1, ref autoRunInfo.RunTimeTick))
                                     {
                                         OutErrorMessage(sActionType, sRunCmd, sParam1, sParam2, sParam3, sParam4);
                                     }
                                 }
-                                if (string.Compare(sMoethod, Robot.sRUNONDAY, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sRUNONDAY, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nRUNONDAY;
+                                    autoRunInfo.Moethod = RobotConst.nRUNONDAY;
                                     if (!GetDayTime(sParam1, ref autoRunInfo.RunTimeTick))
                                     {
                                         OutErrorMessage(sActionType, sRunCmd, sParam1, sParam2, sParam3, sParam4);
                                     }
                                 }
-                                if (string.Compare(sMoethod, Robot.sRUNONHOUR, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sRUNONHOUR, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nRUNONHOUR;
+                                    autoRunInfo.Moethod = RobotConst.nRUNONHOUR;
                                     if (!GetHourTime(sParam1, ref autoRunInfo.RunTimeTick))
                                     {
                                         OutErrorMessage(sActionType, sRunCmd, sParam1, sParam2, sParam3, sParam4);
                                     }
                                 }
-                                if (string.Compare(sMoethod, Robot.sRUNONMIN, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sRUNONMIN, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nRUNONMIN;
+                                    autoRunInfo.Moethod = RobotConst.nRUNONMIN;
                                     if (!GetMinuteTime(sParam1, ref autoRunInfo.RunTimeTick))
                                     {
                                         OutErrorMessage(sActionType, sRunCmd, sParam1, sParam2, sParam3, sParam4);
                                     }
                                 }
-                                if (string.Compare(sMoethod, Robot.sRUNONSEC, StringComparison.OrdinalIgnoreCase) == 0)
+                                if (string.Compare(sMoethod, RobotConst.sRUNONSEC, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
-                                    autoRunInfo.Moethod = Robot.nRUNONSEC;
+                                    autoRunInfo.Moethod = RobotConst.nRUNONSEC;
                                     if (!GetSecondTime(sParam1, ref autoRunInfo.RunTimeTick))
                                     {
                                         OutErrorMessage(sActionType, sRunCmd, sParam1, sParam2, sParam3, sParam4);

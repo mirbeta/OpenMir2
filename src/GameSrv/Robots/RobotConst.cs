@@ -18,7 +18,7 @@ namespace GameSrv.Robots
     RUNODAYTIME:指定时间段内按指定间隔运行(结束时间不能小于开始时间)
     ;每天15:09启动,15:30结束,每次30秒执行触发@30秒刷新排行榜
     ;#AutoRun NPC RUNODAYTIME 15:09 15:30 30 @30秒刷新排行榜*/
-    public static class Robot
+    public static class RobotConst
     {
         public const string sROAUTORUN = "#AUTORUN";
         public const string sRONPCLABLEJMP = "NPC";

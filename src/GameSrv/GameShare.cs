@@ -9,6 +9,7 @@ using M2Server;
 using M2Server.Castle;
 using M2Server.Guild;
 using M2Server.Items;
+using MarketSystem;
 using NLog;
 using ScriptSystem;
 using System.Text.RegularExpressions;
@@ -39,7 +40,7 @@ namespace GameSrv
         public static readonly RandomNumber RandomNumber;
         public static MapQuestManager QuestManager;
         public static DBService DataServer = null;
-        public static MarketService MarketService = null;
+        public static IMarketService MarketService = null;
         public static IChatService ChatChannel = null;
         public static ThreadSocketMgr SocketMgr = null;
         public static GameEventSource EventSource;
