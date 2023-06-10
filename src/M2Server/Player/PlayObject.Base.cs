@@ -684,7 +684,7 @@ namespace M2Server.Player
                 {
                     if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
                     {
-                        normNpc.Click(this);
+                        normNpc.Click((IPlayerActor)this);
                     }
                 }
             }

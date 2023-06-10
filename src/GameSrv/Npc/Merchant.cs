@@ -17,8 +17,6 @@ namespace GameSrv.NPC
     /// </summary>
     public class Merchant : NormNpc, IMerchant
     {
-        public string m_sPath { get; set; }
-        public int ProcessRefillIndex { get; set; }
         /// <summary>
         /// 脚本路径
         /// </summary>
@@ -960,16 +958,6 @@ namespace GameSrv.NPC
             }
         }
 
-        public void Click(IActor actor)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp, string sMsg)
-        {
-            throw new NotImplementedException();
-        }
-
         private void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode)
         {
             switch (UserMode)
@@ -1194,7 +1182,7 @@ namespace GameSrv.NPC
             ItemTypeList.Clear();
             m_sPath = ScriptFlagCode.sMarket_Def;
             var scriptPath = ScriptName + '-' + MapName;
-            GameShare.ScriptParsers.LoadScriptFile(this, "Market_Def", scriptPath, true);
+            M2Share.ScriptParsers.LoadScriptFile(this, "Market_Def", scriptPath, true);
         }
 
         public override void Click(IPlayerActor playObject)

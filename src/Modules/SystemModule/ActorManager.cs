@@ -62,42 +62,11 @@ namespace SystemModule
             return _actorsMap.TryGetValue(actorId, out var actor) ? (T)actor : default;
         }
 
-        public T FindMerchant<T>(int merchantId)
-        {
-            //var normNpc = M2Share.ActorMgr.Get(merchantId);
-            // var npcType = normNpc.GetType();
-            //if (npcType == typeof(Merchant))
-            //{
-            //    return (T)Convert.ChangeType(normNpc, typeof(T));
-            //}
-            //if (npcType == typeof(GuildOfficial))
-            //{
-            //    return (T)Convert.ChangeType(normNpc, typeof(T));
-            //}
-            //if (npcType == typeof(CastleOfficial))
-            //{
-            //    return (T)Convert.ChangeType(normNpc, typeof(T));
-            //}
-            //if (npcType == typeof(INormNpc))
-            //{
-            //    return (T)Convert.ChangeType(normNpc, typeof(T));
-            //}
-            //return (T)Convert.ChangeType(normNpc, typeof(T));
-            return default(T);
-        }
-
-        public static T FindNpc<T>(int npcId)
-        {
-            //  var normNpc = M2Share.ActorMgr.Get(npcId);
-            // return (T)Convert.ChangeType(normNpc, typeof(T));
-            return default(T);
-        }
-
-        public void SendMessage(int actorId, SendMessage sendMessage)
+        private void SendMessage(int actorId, SendMessage sendMessage)
         {
             if (_actorsMap.TryGetValue(actorId, out var actor))
             {
-                // actor.AddMessage(sendMessage);
+                actor.AddMessage(sendMessage);
             }
         }
 

@@ -16,7 +16,7 @@ namespace SystemModule
 
         public static ActorMgr ActorMgr { get; private set; }
 
-        public static IItemSystem ItemSystem { get; private set; }
+        public static IItemSystem ItemSystem { get; set; }
 
         public static IMapSystem MapMgr { get; private set; }
 

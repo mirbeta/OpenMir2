@@ -16,6 +16,7 @@ using M2Server.Npc;
 using NLog;
 using ScriptSystem;
 using System.Text.RegularExpressions;
+using EventLogSystem;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -59,7 +60,6 @@ namespace GameSrv
         public static MapManager MapMgr = null;
         public static CustomItem CustomItemMgr = null;
         public static ScriptEngine ScriptEngine = null;
-        public static ScriptParsers ScriptParsers;
         public static MarketManager MarketManager = null;
         public static NoticeManager NoticeMgr = null;
         public static GuildManager GuildMgr = null;
@@ -122,7 +122,6 @@ namespace GameSrv
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
             ScriptEngine = new ScriptEngine();
-            ScriptParsers = new ScriptParsers();
             Statistics = new WordStatistics();
             ActorMgr = new ActorMgr();
             LocalDb = new LocalDb();

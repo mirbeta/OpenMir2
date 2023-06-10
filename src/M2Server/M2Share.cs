@@ -8,6 +8,7 @@ using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using ScriptSystem;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -33,6 +34,7 @@ namespace M2Server
         public static int ShareFileNameNum = 0;
         public static int ServerTickDifference = 0;
         public static readonly ActorMgr ActorMgr;
+        public static ScriptParsers ScriptParsers;
         /// <summary>
         /// 寻路
         /// </summary>
@@ -191,10 +193,11 @@ namespace M2Server
             EventMgr = new EventManager();
             CastleMgr = new CastleManager();
             GuildMgr = new GuildManager();
-            ItemSystem = new ItemSystem();
-            StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
+            ModuleShare.ItemSystem = new ItemSystem();
+            ScriptParsers=new ScriptParsers();
             ProcessHumanCriticalSection = new object();
             UserDBCriticalSection = new object();
+            StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
         public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());

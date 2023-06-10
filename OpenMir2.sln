@@ -71,6 +71,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommandSystem", "src\Module
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ChatSystem", "src\Modules\ChatSystem\ChatSystem.csproj", "{AB9C5D81-C28A-4180-9D82-722FAF0FE7F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EventLogSystem", "src\Modules\EventLogSystem\EventLogSystem.csproj", "{387D6035-BF18-4EC5-ABC5-82744B1B4F0D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -169,6 +171,10 @@ Global
 		{AB9C5D81-C28A-4180-9D82-722FAF0FE7F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AB9C5D81-C28A-4180-9D82-722FAF0FE7F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AB9C5D81-C28A-4180-9D82-722FAF0FE7F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{387D6035-BF18-4EC5-ABC5-82744B1B4F0D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{387D6035-BF18-4EC5-ABC5-82744B1B4F0D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{387D6035-BF18-4EC5-ABC5-82744B1B4F0D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{387D6035-BF18-4EC5-ABC5-82744B1B4F0D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -199,6 +205,7 @@ Global
 		{CC63C0CC-5C9D-41D2-9CF0-277591E65F4E} = {C95AD1A2-2753-45DE-A26C-8945A684AF67}
 		{3375F945-E67F-49B5-9358-A6DDAD075C6D} = {8BD52155-0632-44C4-BB76-182CB6E30060}
 		{AB9C5D81-C28A-4180-9D82-722FAF0FE7F0} = {C95AD1A2-2753-45DE-A26C-8945A684AF67}
+		{387D6035-BF18-4EC5-ABC5-82744B1B4F0D} = {C95AD1A2-2753-45DE-A26C-8945A684AF67}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {425FF5BB-3CA9-4756-A222-E1BBF4218F66}

@@ -14,7 +14,7 @@
 
         void UserSelect(IPlayerActor actor, string sText);
 
-        void Click(IActor actor);
+        void Click(IPlayerActor actor);
 
         void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp);
 

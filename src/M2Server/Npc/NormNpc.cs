@@ -11,7 +11,7 @@ namespace M2Server.Npc
     /// 管理类NPC
     /// 如 月老
     /// </summary>
-    public class NormNpc : AnimalObject
+    public class NormNpc : AnimalObject, INormNpc
     {
         /// <summary>
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
@@ -22,6 +22,10 @@ namespace M2Server.Npc
         /// 此NPC是否是隐藏的，不显示在地图中
         /// </summary>
         public bool IsHide { get; set; }
+
+        public string m_sPath { get; set; }
+        public int ProcessRefillIndex { get; set; }
+
         /// <summary>
         /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
@@ -48,6 +52,11 @@ namespace M2Server.Npc
         public virtual void ClearScript()
         {
             //m_ScriptList.Clear();
+        }
+
+        public void ClearData()
+        {
+            throw new NotImplementedException();
         }
 
         public virtual void Click(IPlayerActor PlayObject)
@@ -1572,19 +1581,23 @@ namespace M2Server.Npc
             }
         }
 
+        public void LoadNpcData()
+        {
+            throw new NotImplementedException();
+        }
+
         public void LoadNPCScript()
         {
-            //if (IsQuest)
-            //{
-            //    m_sPath = ScriptFlagConst.sNpc_def;
-            //    string sScriptName = ChrName + '-' + MapName;
-            //    M2Share.ScriptSystem.LoadScript(this, FilePath, sScriptName);
-            //}
-            //else
-            //{
-            //    m_sPath = FilePath;
-            //    M2Share.ScriptSystem.LoadScript(this, FilePath, ChrName);
-            //}
+            if (IsQuest)
+            {
+                FilePath = "sNpc_def";
+                string sScriptName = ChrName + '-' + MapName;
+                M2Share.ScriptParsers.LoadScript(this, FilePath, sScriptName);
+            }
+            else
+            {
+                M2Share.ScriptParsers.LoadScript(this, FilePath, ChrName);
+            }
         }
 
         public override void Run()
@@ -1625,22 +1638,22 @@ namespace M2Server.Npc
                 HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                 if (string.Compare(PlayObject.ScriptCurrLable, sLabel, StringComparison.OrdinalIgnoreCase) != 0)
                 {
-                    //if (string.Compare(sLabel, ScriptFlagConst.sBACK, StringComparison.OrdinalIgnoreCase) != 0)
-                    //{
-                    //    PlayObject.ScriptGoBackLable = PlayObject.ScriptCurrLable;
-                    //    PlayObject.ScriptCurrLable = sLabel;
-                    //}
-                    //else
-                    //{
-                    //    if (!string.IsNullOrEmpty(PlayObject.ScriptCurrLable))
-                    //    {
-                    //        PlayObject.ScriptCurrLable = string.Empty;
-                    //    }
-                    //    else
-                    //    {
-                    //        PlayObject.ScriptGoBackLable = string.Empty;
-                    //    }
-                    //}
+                    if (string.Compare(sLabel, "@back", StringComparison.OrdinalIgnoreCase) != 0)
+                    {
+                        PlayObject.ScriptGoBackLable = PlayObject.ScriptCurrLable;
+                        PlayObject.ScriptCurrLable = sLabel;
+                    }
+                    else
+                    {
+                        if (!string.IsNullOrEmpty(PlayObject.ScriptCurrLable))
+                        {
+                            PlayObject.ScriptCurrLable = string.Empty;
+                        }
+                        else
+                        {
+                            PlayObject.ScriptGoBackLable = string.Empty;
+                        }
+                    }
                 }
             }
         }
@@ -1875,6 +1888,11 @@ namespace M2Server.Npc
         public void GotoLable(IPlayerActor playObject, string lab, bool s)
         {
 
+        }
+
+        public void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp, string sMsg)
+        {
+            throw new NotImplementedException();
         }
     }
 }

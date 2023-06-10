@@ -16,6 +16,7 @@ using M2Server.Notices;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
+using EventLogSystem;
 using SystemModule.Common;
 using SystemModule.Data;
 

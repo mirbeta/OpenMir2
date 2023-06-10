@@ -434,5 +434,7 @@ namespace SystemModule
         IActor GetPoseCreate();
 
         void OnEnvirnomentChanged();
+
+        void AddMessage(SendMessage sendMessage);
     }
 }

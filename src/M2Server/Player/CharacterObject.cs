@@ -1,5 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Items;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;

@@ -95,6 +95,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\M2Server\M2Server.csproj" />
+		<ProjectReference Include="..\Modules\EventLogSystem\EventLogSystem.csproj" />
 		<ProjectReference Include="..\Modules\ScriptEngine\ScriptSystem.csproj" />
 		<ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
 	</ItemGroup>

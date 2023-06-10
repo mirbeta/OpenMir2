@@ -671,7 +671,7 @@
         [ScriptDefName("SAVESLAVES")]
         SaveSlaves,
         /// <summary>
-        // 检查会员时间
+        /// 检查会员时间
         /// </summary>
         [ScriptDefName("CHECKUSERDATE")]
         CheckUserDate,
