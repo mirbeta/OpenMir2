@@ -2,7 +2,6 @@
 using M2Server;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
-using M2Server.Npc;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;

@@ -51,10 +51,6 @@
     </PropertyGroup>
     
     <ItemGroup>
-        <ProjectReference Include="..\SystemModule\OpenMir2.csproj" />
-    </ItemGroup>
-    
-    <ItemGroup>
         <None Include="..\..\nlog.config">
             <Link>nlog.config</Link>
             <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -73,6 +69,10 @@
     
     <ItemGroup>
         <Compile Remove="Services\CloudClient.cs" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
     </ItemGroup>
 
 </Project>

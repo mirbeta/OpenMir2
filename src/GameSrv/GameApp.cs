@@ -1,22 +1,19 @@
-﻿using GameSrv.DataSource;
+﻿using EventLogSystem;
+using GameSrv.DataSource;
 using GameSrv.Maps;
 using GameSrv.Network;
 using GameSrv.NPC;
-using GameSrv.Planes;
 using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word;
-using GameSrv.Word.Managers;
 using M2Server;
 using M2Server.Castle;
-using M2Server.Event;
 using M2Server.Guild;
 using M2Server.Items;
-using M2Server.Notices;
 using NLog;
+using PlanesSystem;
 using System.Collections;
 using System.Collections.Concurrent;
-using EventLogSystem;
 using SystemModule.Common;
 using SystemModule.Data;
 
@@ -28,28 +25,28 @@ namespace GameSrv
 
         public GameApp()
         {
-            GameShare.HumLimit = 30;
-            GameShare.MonLimit = 30;
-            GameShare.ZenLimit = 5;
-            GameShare.NpcLimit = 5;
-            GameShare.SocLimit = 10;
-            GameShare.DecLimit = 20;
-            GameShare.Config.nLoadDBErrorCount = 0;
-            GameShare.Config.nLoadDBCount = 0;
-            GameShare.Config.nSaveDBCount = 0;
-            GameShare.Config.nDBQueryID = 0;
-            GameShare.Config.ItemNumber = 0;
-            GameShare.Config.ItemNumberEx = int.MaxValue / 2;
-            GameShare.StartReady = false;
-            GameShare.FilterWord = true;
-            GameShare.Config.WinLotteryCount = 0;
-            GameShare.Config.NoWinLotteryCount = 0;
-            GameShare.Config.WinLotteryLevel1 = 0;
-            GameShare.Config.WinLotteryLevel2 = 0;
-            GameShare.Config.WinLotteryLevel3 = 0;
-            GameShare.Config.WinLotteryLevel4 = 0;
-            GameShare.Config.WinLotteryLevel5 = 0;
-            GameShare.Config.WinLotteryLevel6 = 0;
+            ModuleShare.HumLimit = 30;
+            ModuleShare.MonLimit = 30;
+            ModuleShare.ZenLimit = 5;
+            ModuleShare.NpcLimit = 5;
+            ModuleShare.SocLimit = 10;
+            ModuleShare.DecLimit = 20;
+            ModuleShare.Config.nLoadDBErrorCount = 0;
+            ModuleShare.Config.nLoadDBCount = 0;
+            ModuleShare.Config.nSaveDBCount = 0;
+            ModuleShare.Config.nDBQueryID = 0;
+            ModuleShare.Config.ItemNumber = 0;
+            ModuleShare.Config.ItemNumberEx = int.MaxValue / 2;
+            ModuleShare.StartReady = false;
+            ModuleShare.FilterWord = true;
+            ModuleShare.Config.WinLotteryCount = 0;
+            ModuleShare.Config.NoWinLotteryCount = 0;
+            ModuleShare.Config.WinLotteryLevel1 = 0;
+            ModuleShare.Config.WinLotteryLevel2 = 0;
+            ModuleShare.Config.WinLotteryLevel3 = 0;
+            ModuleShare.Config.WinLotteryLevel4 = 0;
+            ModuleShare.Config.WinLotteryLevel5 = 0;
+            ModuleShare.Config.WinLotteryLevel6 = 0;
             GameShare.QuestManager = new MapQuestManager();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
@@ -96,19 +93,16 @@ namespace GameSrv
             GameShare.GeneratorProcessor.Initialize(stoppingToken);
             GameShare.DataServer = new DBService();
             GameShare.MarketService = new MarketService();
-            GameShare.ChatChannel = new ChatChannelService();
+            GameShare.ChatChannel = new ChatService();
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
             GameShare.MapMgr = new MapManager();
             GameShare.CustomItemMgr = new CustomItem();
-            GameShare.NoticeMgr = new NoticeManager();
             GameShare.GuildMgr = new GuildManager();
-            GameShare.MarketManager = new MarketManager();
-            GameShare.EventMgr = new EventManager();
             GameShare.CastleMgr = new CastleManager();
             GameShare.FrontEngine = new FrontEngine();
-            M2Share.WorldEngine = new WorldServer();
             GameShare.RobotMgr = new RobotManage();
+            M2Share.WorldEngine = new WorldServer();
             GameShare.LoadConfig();
             LoadServerTable();
             _logger.Info("初始化游戏引擎数据配置文件完成...");
@@ -240,7 +234,7 @@ namespace GameSrv
                 GameShare.MapMgr.MakeSafePkZone();
                 _logger.Info("安全区光圈初始化成功...");
                 M2Share.WorldEngine.InitializationMonsterThread();
-                if (!GameShare.Config.VentureServer)
+                if (!ModuleShare.Config.VentureServer)
                 {
                     LocalDb.LoadGuardList();
                     _logger.Info("守卫列表加载成功...");
@@ -254,7 +248,7 @@ namespace GameSrv
                 else
                 {
                     PlanesClient.Instance.ConnectPlanesServer();
-                    _logger.Info($"节点运行模式...主机端口:[{GameShare.Config.MasterSrvAddr}:{GameShare.Config.MasterSrvPort}]");
+                    _logger.Info($"节点运行模式...主机端口:[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]");
                 }
                 IdSrvClient.Instance.Initialize();
                 GameShare.GuildMgr.LoadGuildInfo();

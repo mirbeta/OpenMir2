@@ -207,7 +207,7 @@ namespace GameSrv.DataSource
                 }
                 if (File.Exists(sScriptFile))
                 {
-                    GameShare.FunctionNPC = new Merchant
+                    ModuleShare.FunctionNPC = new Merchant
                     {
                         MapName = "0",
                         CurrX = 0,
@@ -220,16 +220,16 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.AddMerchant(GameShare.FunctionNPC);
+                    M2Share.WorldEngine.AddMerchant(ModuleShare.FunctionNPC);
                 }
                 else
                 {
-                    GameShare.FunctionNPC = null;
+                    ModuleShare.FunctionNPC = null;
                 }
             }
             catch
             {
-                GameShare.FunctionNPC = null;
+                ModuleShare.FunctionNPC = null;
             }
         }
 
@@ -1004,7 +1004,7 @@ namespace GameSrv.DataSource
             for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
             {
                 merchant = M2Share.WorldEngine.MerchantList[i];
-                if (merchant != GameShare.FunctionNPC)
+                if (merchant != ModuleShare.FunctionNPC)
                 {
                     merchant.NpcFlag = -1;
                 }

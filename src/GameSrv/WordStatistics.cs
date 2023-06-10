@@ -33,12 +33,12 @@ namespace GameSrv
         public void ShowServerStatus()
         {
             _logger.Debug("{0}", "=".PadLeft(64, '='));
-            _logger.Info(string.Format(TITLE_FORMAT_S, GameShare.Config.ServerName, DateTimeOffset.Now.ToString("G"),
+            _logger.Info(string.Format(TITLE_FORMAT_S, ModuleShare.Config.ServerName, DateTimeOffset.Now.ToString("G"),
       GameShare.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
       GameShare.SystemProcess.ElapsedMilliseconds, GameShare.UserProcessor.ElapsedMilliseconds,
       GameShare.RobotProcessor.ElapsedMilliseconds, AppVersion));
 
-            GameShare.ActorMgr.Analytics();
+            ModuleShare.ActorMgr.Analytics();
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))//todo 待实现MACOS下的状态显示
             {

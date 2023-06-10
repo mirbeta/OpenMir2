@@ -77,7 +77,6 @@
 		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
 		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
 		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-		<PackageReference Include="MQTTnet" Version="4.1.4.563" />
 		<PackageReference Include="MySqlConnector" Version="2.2.5" />
 		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
 		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
@@ -95,7 +94,9 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\M2Server\M2Server.csproj" />
+		<ProjectReference Include="..\Modules\ChatSystem\ChatSystem.csproj" />
 		<ProjectReference Include="..\Modules\EventLogSystem\EventLogSystem.csproj" />
+		<ProjectReference Include="..\Modules\PlanesSystem\PlanesSystem.csproj" />
 		<ProjectReference Include="..\Modules\ScriptEngine\ScriptSystem.csproj" />
 		<ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
 	</ItemGroup>

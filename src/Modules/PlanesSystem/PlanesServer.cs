@@ -1,6 +1,6 @@
-using M2Server;
 using System.Net;
 using System.Net.Sockets;
+using SystemModule;
 using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.Sockets.Common;
@@ -9,7 +9,7 @@ using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace GameSrv.Planes
+namespace PlanesSystem
 {
     /// <summary>
     /// 位面服务器
@@ -40,7 +40,7 @@ namespace GameSrv.Planes
                 new IPHost(IPAddress.Parse(ModuleShare.Config.MasterSrvAddr), ModuleShare.Config.MasterSrvPort)
             });
             _serverSocket.Setup(touchSocketConfig);
-            M2Share.Logger.Info($"节点数据服务[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]已启动.");
+            //M2Share.Logger.Info($"节点数据服务[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)
@@ -100,7 +100,7 @@ namespace GameSrv.Planes
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(ex.StackTrace);
+                //M2Share.Logger.Error(ex.StackTrace);
             }
         }
 
@@ -160,7 +160,7 @@ namespace GameSrv.Planes
                     serverMsgInfo.Socket = client.MainSocket;
                     serverMsgInfo.SocData = string.Empty;
                     serverMsgInfo.SocketId = client.ID;
-                    M2Share.Logger.Info($"节点服务器({endPoint})链接成功...");
+                    //M2Share.Logger.Info($"节点服务器({endPoint})链接成功...");
                     srvArray[i] = serverMsgInfo;
                     break;
                 }
@@ -181,7 +181,7 @@ namespace GameSrv.Planes
                 {
                     serverMsgInfo.Socket = null;
                     serverMsgInfo.SocData = "";
-                    M2Share.Logger.Error($"节点服务器({client.MainSocket.RemoteEndPoint})断开连接...");
+                    //M2Share.Logger.Error($"节点服务器({client.MainSocket.RemoteEndPoint})断开连接...");
                     srvArray[i] = null;
                     break;
                 }
@@ -208,7 +208,7 @@ namespace GameSrv.Planes
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                //M2Share.Logger.Error(sExceptionMsg);
             }
         }
     }

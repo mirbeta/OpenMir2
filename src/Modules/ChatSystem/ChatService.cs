@@ -1,6 +1,7 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
 using NLog;
+using SystemModule;
 
 namespace GameSrv.Services
 {
@@ -8,13 +9,13 @@ namespace GameSrv.Services
     /// 公共聊天频道服务类
     /// 简单的设计，后续需要根据聊天频道架构进行修改
     /// </summary>
-    public class ChatChannelService
+    public class ChatService : IChatService
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly MqttFactory mqttFactory;
         private readonly IMqttClient chatClient;
 
-        public ChatChannelService()
+        public ChatService()
         {
             mqttFactory = new MqttFactory();
             chatClient = mqttFactory.CreateMqttClient();

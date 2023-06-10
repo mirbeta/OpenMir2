@@ -1,9 +1,9 @@
-using GameSrv.Planes;
 using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using PlanesSystem;
 
 namespace GameSrv
 {
@@ -80,7 +80,7 @@ namespace GameSrv
             {
                 _clearIntervalTime = HUtil32.GetTickCount();
                 GameShare.Statistics.ShowServerStatus();
-                GameShare.ActorMgr.CleanObject();
+                ModuleShare.ActorMgr.CleanObject();
             }
             if ((currentTick - _playerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
             {

@@ -173,10 +173,10 @@ namespace SystemModule
         public static readonly HashSet<byte> RobotPlayRaceMap = new HashSet<byte>() { 55, 79, 109, 110, 111, 128, 143, 145, 147, 151, 153, 156 };
         public static readonly ServerConf ServerConf;
         public static readonly GameSvrConf Config;
-        private static readonly StringConf StringConf;
-        private static readonly ExpsConf ExpConf;
-        private static readonly GlobalConf GlobalConf;
-        private static readonly GameSettingConf GameSetting;
+        public static readonly StringConf StringConf;
+        public static readonly ExpsConf ExpConf;
+        public static readonly GlobalConf GlobalConf;
+        public static readonly GameSettingConf GameSetting;
 
         static ModuleShare()
         {

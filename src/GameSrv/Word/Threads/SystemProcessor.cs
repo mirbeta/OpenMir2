@@ -1,7 +1,7 @@
-using GameSrv.Planes;
 using GameSrv.Services;
 using M2Server;
 using NLog;
+using PlanesSystem;
 
 namespace GameSrv.Word.Threads
 {

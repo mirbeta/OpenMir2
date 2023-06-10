@@ -52,10 +52,10 @@ namespace GameSrv
 
         private static void ProcessGameNotice()
         {
-            if (GameShare.Config.SendOnlineCount && (HUtil32.GetTickCount() - GameShare.SendOnlineTick) > GameShare.Config.SendOnlineTime)
+            if (ModuleShare.Config.SendOnlineCount && (HUtil32.GetTickCount() - GameShare.SendOnlineTick) > ModuleShare.Config.SendOnlineTime)
             {
                 GameShare.SendOnlineTick = HUtil32.GetTickCount();
-                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (GameShare.Config.SendOnlineCountRate / 10.0)));
+                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (ModuleShare.Config.SendOnlineCountRate / 10.0)));
                 M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
             }
         }
@@ -63,7 +63,7 @@ namespace GameSrv
         public static void SaveItemNumber()
         {
             ProcessGameNotice();
-            GameShare.ServerConf.SaveVariable();
+            ModuleShare.ServerConf.SaveVariable();
         }
     }
 }
