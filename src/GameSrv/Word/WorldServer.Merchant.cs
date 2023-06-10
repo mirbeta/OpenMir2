@@ -159,7 +159,7 @@ namespace GameSrv.Word
             if (ProcessNpcTimeMin > ProcessNpcTimeMax) ProcessNpcTimeMax = ProcessNpcTimeMin;
         }
 
-        public int GetMerchantList(Envirnoment envir, int nX, int nY, int nRange, IList<IMerchant> tmpList)
+        public int GetMerchantList(IEnvirnoment envir, int nX, int nY, int nRange, IList<IMerchant> tmpList)
         {
             for (var i = 0; i < MerchantList.Count; i++)
             {
@@ -170,7 +170,7 @@ namespace GameSrv.Word
             return tmpList.Count;
         }
 
-        public int GetNpcList(Envirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
+        public int GetNpcList(IEnvirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
         {
             for (var i = 0; i < QuestNpcList.Count; i++)
             {

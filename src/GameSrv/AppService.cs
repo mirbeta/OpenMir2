@@ -20,7 +20,6 @@ namespace GameSrv
         private CancellationTokenSource _cancellationTokenSource;
         private readonly CommandLineApplication _application;
         private PeriodicTimer _timer;
-        public static readonly WordStatistics Statistics;
 
         public AppService(IHostApplicationLifetime lifetime, GameApp serverApp, IServiceProvider serviceProvider)
         {

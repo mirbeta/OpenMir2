@@ -40,7 +40,7 @@ namespace M2Server
         /// <summary>
         /// 门
         /// </summary>
-        public readonly IList<MapDoor> DoorList;
+        public IList<MapDoor> DoorList { get; set; }
         /// <summary>
         /// 任务
         /// </summary>

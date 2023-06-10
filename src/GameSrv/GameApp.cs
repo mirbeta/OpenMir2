@@ -7,12 +7,8 @@ using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
-using M2Server.Castle;
-using M2Server.Guild;
-using M2Server.Items;
 using MarketSystem;
 using NLog;
-using PlanesSystem;
 using System.Collections;
 using System.Collections.Concurrent;
 using SystemModule.Common;
@@ -98,9 +94,6 @@ namespace GameSrv
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
             GameShare.MapMgr = new MapManager();
-            GameShare.CustomItemMgr = new CustomItem();
-            GameShare.GuildMgr = new GuildManager();
-            GameShare.CastleMgr = new CastleManager();
             GameShare.FrontEngine = new FrontEngine();
             GameShare.RobotMgr = new RobotManage();
             M2Share.WorldEngine = new WorldServer();
@@ -109,9 +102,9 @@ namespace GameSrv
             _logger.Info("初始化游戏引擎数据配置文件完成...");
             //CommandMgr.RegisterCommand();
             M2Share.LoadGameLogItemNameList();
-            GameShare.LoadDenyIPAddrList();
+            M2Share.LoadDenyIPAddrList();
             M2Share.LoadDenyAccountList();
-            GameShare.LoadDenyChrNameList();
+            M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
             _logger.Info("正在加载物品数据库...");
             var nCode = GameShare.CommonDb.LoadItemsDB();
@@ -165,16 +158,16 @@ namespace GameSrv
             _logger.Info($"加载怪物说话配置信息成功...[{M2Share.MonSayMsgList.Count}]");
             M2Share.LoadDisableTakeOffList();
             M2Share.LoadMonDropLimitList();
-            GameShare.LoadDisableMakeItem();
-            GameShare.LoadEnableMakeItem();
+            M2Share.LoadDisableMakeItem();
+            M2Share.LoadEnableMakeItem();
             M2Share.LoadAllowSellOffItem();
             M2Share.LoadDisableMoveMap();
-            GameShare.CustomItemMgr.LoadCustomItemName();
-            GameShare.LoadDisableSendMsgList();
+            M2Share.CustomItemMgr.LoadCustomItemName();
+            M2Share.LoadDisableSendMsgList();
             M2Share.LoadItemBindIPaddr();
             M2Share.LoadItemBindAccount();
             M2Share.LoadItemBindChrName();
-            GameShare.LoadUnMasterList();
+            M2Share.LoadUnMasterList();
             M2Share.LoadUnForceMasterList();
             _logger.Info("正在加载捆装物品信息...");
             nCode = GameShare.LocalDb.LoadUnbindList();
@@ -241,20 +234,11 @@ namespace GameSrv
                     _logger.Info("守卫列表加载成功...");
                 }
                 _logger.Info("游戏处理引擎初始化成功...");
-                if (GameShare.ServerIndex == 0)
-                {
-                    PlanesServer.Instance.StartPlanesServer();
-                    _logger.Debug("主机运行模式...");
-                }
-                else
-                {
-                    PlanesClient.Instance.ConnectPlanesServer();
-                    _logger.Info($"节点运行模式...主机端口:[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]");
-                }
+                GameShare.PlanesService.Start();
                 IdSrvClient.Instance.Initialize();
-                GameShare.GuildMgr.LoadGuildInfo();
-                GameShare.CastleMgr.LoadCastleList();
-                //GameShare.CastleMgr.Initialize();
+                ModuleShare.GuildMgr.LoadGuildInfo();
+                ModuleShare.CastleMgr.LoadCastleList();
+                ModuleShare.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
             }
             catch (Exception ex)

@@ -81,7 +81,13 @@ namespace SystemModule
 
         void CreateMonGenInfoThreadMap(int threadId, IList<MonGenInfo> monGenInfo);
 
+        void ClearMonsterList();
+
         void AddMonsterList(MonsterInfo monsterInfo);
+
+        void SwitchMagicList();
+
+        void AddMagicList(MagicInfo magicInfo);
 
         void PrcocessData();
         void ProcessNpcs();

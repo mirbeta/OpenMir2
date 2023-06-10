@@ -420,7 +420,7 @@ namespace GameSrv.Maps
         {
             var sw = new Stopwatch();
             sw.Start();
-            IList<Envirnoment> mineMapList = GameShare.MapMgr.GetMineMaps();
+            IList<IEnvirnoment> mineMapList = GameShare.MapMgr.GetMineMaps();
             logger.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
             for (var i = 0; i < mineMapList.Count; i++)
             {

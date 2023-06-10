@@ -376,7 +376,7 @@ namespace GameSrv.DataSource
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, _textSpitConst);
                         if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest))
                         {
-                            Envirnoment map = GameShare.MapMgr.FindMap(sMap);
+                            IEnvirnoment map = GameShare.MapMgr.FindMap(sMap);
                             if (map != null)
                             {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);

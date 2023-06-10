@@ -138,6 +138,11 @@ namespace GameSrv.Word
             MonsterList.Add(monsterInfo.Name, monsterInfo);
         }
 
+        public void AddMagicList(MagicInfo magicInfo)
+        {
+            MagicList.Add(magicInfo);
+        }
+
         public void PrcocessData()
         {
             try
@@ -1403,7 +1408,7 @@ namespace GameSrv.Word
             return result;
         }
 
-        public static void OpenDoor(Envirnoment envir, int nX, int nY)
+        public static void OpenDoor(IEnvirnoment envir, int nX, int nY)
         {
             MapDoor door = default;
             if (envir.GetDoor(nX, nY, ref door) && !door.Status.Opened)
@@ -1414,7 +1419,7 @@ namespace GameSrv.Word
             }
         }
 
-        private static void CloseDoor(Envirnoment envir, MapDoor door)
+        private static void CloseDoor(IEnvirnoment envir, MapDoor door)
         {
             if (!door.Status.Opened)
                 return;
@@ -1422,7 +1427,7 @@ namespace GameSrv.Word
             SendDoorStatus(envir, door.nX, door.nY, Messages.RM_DOORCLOSE, 0, door.nX, door.nY);
         }
 
-        private static void SendDoorStatus(Envirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)
+        private static void SendDoorStatus(IEnvirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)
         {
             var n1C = nX - 12;
             var n24 = nX + 12;
@@ -1454,7 +1459,7 @@ namespace GameSrv.Word
 
         private static void ProcessMapDoor()
         {
-            IList<Envirnoment> doorList = GameShare.MapMgr.GetDoorMapList();
+            IList<IEnvirnoment> doorList = GameShare.MapMgr.GetDoorMapList();
             for (var i = 0; i < doorList.Count; i++)
             {
                 var envir = doorList[i];
@@ -1743,6 +1748,10 @@ namespace GameSrv.Word
         public void ClearItemList()
         {
             ClearMerchantData();
+        }
+
+        public void ClearMonsterList() {
+            MonsterList.Clear();
         }
 
         public void SwitchMagicList()

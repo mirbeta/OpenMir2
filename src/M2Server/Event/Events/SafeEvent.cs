@@ -8,7 +8,7 @@ namespace M2Server.Event.Events
     /// </summary>
     public class SafeEvent : MapEvent
     {
-        public SafeEvent(Envirnoment envir, short nX, short nY, byte nType) : base(envir, nX, nY, nType, HUtil32.GetTickCount(), true)
+        public SafeEvent(IEnvirnoment envir, short nX, short nY, byte nType) : base(envir, nX, nY, nType, HUtil32.GetTickCount(), true)
         {
 
         }

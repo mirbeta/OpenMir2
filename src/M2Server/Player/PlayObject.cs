@@ -801,7 +801,7 @@ namespace M2Server.Player
         public int AutoGetExpTick;
         public int AutoGetExpTime = 0;
         public int AutoGetExpPoint;
-        public Envirnoment AutoGetExpEnvir;
+        public IEnvirnoment AutoGetExpEnvir;
         public bool AutoGetExpInSafeZone = false;
         public readonly Dictionary<string, DynamicVar> DynamicVarMap;
         public short ClientTick;

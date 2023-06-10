@@ -114,7 +114,7 @@ namespace GameSrv.DataSource
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                //M2Share.WorldEngine.SwitchMagicList();
+                M2Share.WorldEngine.SwitchMagicList();
                 if (!Open())
                 {
                     return result;
@@ -149,7 +149,7 @@ namespace GameSrv.DataSource
                     magic.Desc = dr.GetString("Descr");
                     if (magic.MagicId > 0)
                     {
-                        //   M2Share.WorldEngine.MagicList.Add(magic);
+                        M2Share.WorldEngine.AddMagicList(magic);
                     }
                     else
                     {
@@ -177,7 +177,7 @@ namespace GameSrv.DataSource
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                //M2Share.WorldEngine.MonsterList.Clear();
+                M2Share.WorldEngine.ClearMonsterList();
                 if (!Open())
                 {
                     return result;

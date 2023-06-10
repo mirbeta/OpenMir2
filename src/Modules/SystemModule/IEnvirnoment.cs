@@ -25,6 +25,8 @@ namespace SystemModule
 
         IList<PointInfo> PointList { get; set; }
 
+        IList<MapDoor> DoorList { get; }
+
         void AddDoorToMap();
         bool AddItemToMap(int nX, int nY, MapItem mapItem);
         void AddMapDoor(int nX, int nY, MapDoor mapDoor);

@@ -32,7 +32,6 @@ namespace M2Server
         /// </summary>
         public static long StartTime;
         public static int ShareFileNameNum = 0;
-        public static int ServerTickDifference = 0;
         public static readonly ActorMgr ActorMgr;
         public static ScriptParsers ScriptParsers;
         /// <summary>
@@ -52,7 +51,6 @@ namespace M2Server
         public static CastleManager CastleMgr = null;
         public static NetworkMonitor NetworkMonitor;
         public static IWorldEngine WorldEngine;
-        public static IItemSystem ItemSystem = null;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -173,10 +171,7 @@ namespace M2Server
         public static byte GameTime = 0;
         public static char GMRedMsgCmd = '!';
         public static byte GMREDMSGCMD = 6;
-        public static int SendOnlineTick = 0;
         public static int SpiritMutinyTick = 0;
-        public static int[] OldNeedExps = new int[Grobal2.MaxChangeLevel];
-        public static int CurrentMerchantIndex = 0;
         public static readonly HashSet<byte> ItemDamageRevivalMap = new HashSet<byte>() { 114, 160, 161, 162 };
         public static readonly HashSet<byte> IsAccessoryMap = new HashSet<byte> { 19, 20, 21, 22, 23, 24, 26 };
         public static readonly HashSet<byte> StdModeMap = new HashSet<byte>() { 15, 19, 20, 21, 22, 23, 24, 26 };
@@ -193,10 +188,11 @@ namespace M2Server
             EventMgr = new EventManager();
             CastleMgr = new CastleManager();
             GuildMgr = new GuildManager();
+            ScriptParsers = new ScriptParsers();
             ModuleShare.ItemSystem = new ItemSystem();
-            ScriptParsers=new ScriptParsers();
             ProcessHumanCriticalSection = new object();
             UserDBCriticalSection = new object();
+            ProcessMsgCriticalSection = new object();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

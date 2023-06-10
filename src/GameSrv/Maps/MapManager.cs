@@ -1,25 +1,24 @@
-﻿using GameSrv.NPC;
-using M2Server;
+﻿using M2Server;
 using M2Server.Event.Events;
 using NLog;
 using SystemModule.Data;
 
 namespace GameSrv.Maps
 {
-    public class MapManager
+    public class MapManager : IMapManager
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly Dictionary<string, Envirnoment> _mapList = new Dictionary<string, Envirnoment>(StringComparer.OrdinalIgnoreCase);
+        private readonly Dictionary<string, IEnvirnoment> _mapList = new Dictionary<string, IEnvirnoment>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// 地图上门列表
         /// </summary>
-        private readonly IList<Envirnoment> _mapDoorList = new List<Envirnoment>();
+        private readonly IList<IEnvirnoment> _mapDoorList = new List<IEnvirnoment>();
         /// <summary>
         /// 矿物地图列表
         /// </summary>
-        private readonly IList<Envirnoment> _mapMineList = new List<Envirnoment>();
+        private readonly IList<IEnvirnoment> _mapMineList = new List<IEnvirnoment>();
 
-        public IList<Envirnoment> Maps => _mapList.Values.ToList();
+        public IList<IEnvirnoment> Maps => _mapList.Values.ToList();
 
         /// <summary>
         /// 地图安全区
@@ -31,7 +30,7 @@ namespace GameSrv.Maps
                 var startPoint = M2Share.StartPointList[i];
                 if (string.IsNullOrEmpty(startPoint.MapName) && startPoint.Type > 0)
                 {
-                    Envirnoment envir = FindMap(startPoint.MapName);
+                    IEnvirnoment envir = FindMap(startPoint.MapName);
                     if (envir != null)
                     {
                         short nMinX = (short)(startPoint.CurrX - startPoint.Range);
@@ -54,17 +53,17 @@ namespace GameSrv.Maps
             }
         }
 
-        public IList<Envirnoment> GetMineMaps()
+        public IList<IEnvirnoment> GetMineMaps()
         {
             return _mapMineList;
         }
 
-        public IList<Envirnoment> GetDoorMapList()
+        public IList<IEnvirnoment> GetDoorMapList()
         {
             return _mapDoorList;
         }
 
-        public void AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag mapFlag, Merchant questNpc)
+        public void AddMapInfo(string sMapName, string sMapDesc, byte nServerNumber, MapInfoFlag mapFlag, IMerchant questNpc)
         {
             string sMapFileName = string.Empty;
             string sTempName = sMapName;
@@ -84,7 +83,7 @@ namespace GameSrv.Maps
                     sMapName = sTempName;
                 }
             }
-            Envirnoment envirnoment = new Envirnoment
+            IEnvirnoment envirnoment = new Envirnoment
             {
                 MapName = sMapName,
                 MapFileName = sMapFileName,
@@ -128,8 +127,8 @@ namespace GameSrv.Maps
         public bool AddMapRoute(string sSMapNo, int nSMapX, int nSMapY, string sDMapNo, int nDMapX, int nDMapY)
         {
             bool result = false;
-            Envirnoment sEnvir = FindMap(sSMapNo);
-            Envirnoment dEnvir = FindMap(sDMapNo);
+            IEnvirnoment sEnvir = FindMap(sSMapNo);
+            IEnvirnoment dEnvir = FindMap(sDMapNo);
             if (sEnvir != null && dEnvir != null)
             {
                 MapRouteItem mapRoute = new MapRouteItem
@@ -146,15 +145,15 @@ namespace GameSrv.Maps
             return result;
         }
 
-        public Envirnoment FindMap(string sMapName)
+        public IEnvirnoment FindMap(string sMapName)
         {
-            return _mapList.TryGetValue(sMapName, out Envirnoment map) ? map : null;
+            return _mapList.TryGetValue(sMapName, out IEnvirnoment map) ? map : null;
         }
 
-        public Envirnoment GetMapInfo(int nServerIdx, string sMapName)
+        public IEnvirnoment GetMapInfo(int nServerIdx, string sMapName)
         {
-            Envirnoment result = null;
-            if (_mapList.TryGetValue(sMapName, out Envirnoment envirnoment))
+            IEnvirnoment result = null;
+            if (_mapList.TryGetValue(sMapName, out IEnvirnoment envirnoment))
             {
                 if (envirnoment.ServerIndex == nServerIdx)
                 {
@@ -171,7 +170,7 @@ namespace GameSrv.Maps
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
-            if (_mapList.TryGetValue(sMapName, out Envirnoment envirnoment))
+            if (_mapList.TryGetValue(sMapName, out IEnvirnoment envirnoment))
             {
                 return envirnoment.ServerIndex;
             }

@@ -379,7 +379,7 @@ namespace M2Server.Castle
             SaveAttackSabukWall();
         }
 
-        public bool InCastleWarArea(Envirnoment envir, int nX, int nY)
+        public bool InCastleWarArea(IEnvirnoment envir, int nX, int nY)
         {
             if (envir == null)
             {
@@ -620,12 +620,7 @@ namespace M2Server.Castle
             int Day = AttackerInfo.AttackDate.Day;
             return string.Format(WarDateMsg, Year, Month, Day);
         }
-
-        public bool InCastleWarArea(IEnvirnoment envir, int nX, int nY)
-        {
-            throw new NotImplementedException();
-        }
-
+        
         public string GetAttackWarList()
         {
             string result = string.Empty;

@@ -44,7 +44,7 @@ namespace M2Server.Castle
             return null;
         }
 
-        public UserCastle InCastleWarArea(Envirnoment Envir, int nX, int nY)
+        public UserCastle InCastleWarArea(IEnvirnoment Envir, int nX, int nY)
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
