@@ -346,7 +346,7 @@ namespace GameSrv.Maps
                                 MapFlag.RequestLevel = HUtil32.StrToInt(sCommand[1..], 1);
                             }
                         }
-                        GameShare.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC);
+                        ModuleShare.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC);
                         result = 1;
                     }
                 }
@@ -369,11 +369,11 @@ namespace GameSrv.Maps
                         var n1C = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, new[] { ' ', ',', ';', '\t' });
                         var n20 = HUtil32.StrToInt(sCommand, 0);
-                        GameShare.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
+                        ModuleShare.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
                 }
             }
-            logger.Info($"地图数据加载成功...[{GameShare.MapMgr.Maps.Count}]");
+            logger.Info($"地图数据加载成功...[{ModuleShare.MapMgr.Maps.Count}]");
             return result;
         }
 
@@ -420,7 +420,7 @@ namespace GameSrv.Maps
         {
             var sw = new Stopwatch();
             sw.Start();
-            IList<IEnvirnoment> mineMapList = GameShare.MapMgr.GetMineMaps();
+            IList<IEnvirnoment> mineMapList = ModuleShare.MapMgr.GetMineMaps();
             logger.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
             for (var i = 0; i < mineMapList.Count; i++)
             {

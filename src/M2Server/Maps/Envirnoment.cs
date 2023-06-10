@@ -554,7 +554,7 @@ namespace M2Server
                             IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                                IUserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
                                 if (ModuleShare.Config.boWarDisHumRun && castle != null && castle.UnderWar)
                                 {
 

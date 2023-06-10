@@ -12,19 +12,19 @@ namespace SystemModule
     {
         public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public static IWorldEngine WorldEngine { get; private set; }
+        public static IWorldEngine WorldEngine { get; set; }
 
-        public static ActorMgr ActorMgr { get; private set; }
+        public static ActorMgr ActorMgr { get; set; }
 
         public static IItemSystem ItemSystem { get; set; }
 
-        public static IMapSystem MapMgr { get; private set; }
+        public static IMapSystem MapMgr { get; set; }
 
-        public static IGuildSystem GuildMgr { get; private set; }
+        public static IGuildSystem GuildMgr { get; set; }
 
-        public static ICastleSystem CastleMgr { get; private set; }
+        public static ICastleSystem CastleMgr { get; set; }
 
-        public static IEventSystem EventMgr { get; private set; }
+        public static IEventSystem EventMgr { get; set; }
 
         /// <summary>
         /// 启动路径

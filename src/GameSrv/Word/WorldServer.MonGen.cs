@@ -232,7 +232,7 @@ namespace GameSrv.Word
                             var nGenCount = monGen.ActiveCount; //取已刷出来的怪数量
                             var boRegened = true;
                             var genModCount = HUtil32._MAX(1, HUtil32.Round(HUtil32._MAX(1, monGen.Count) / (ModuleShare.Config.MonGenRate / 10.0)));//所需刷的怪总数
-                            var map = GameShare.MapMgr.FindMap(monGen.MapName);
+                            var map = ModuleShare.MapMgr.FindMap(monGen.MapName);
                             bool canCreate;
                             if (map == null || map.Flag.boNOHUMNOMON && map.HumCount <= 0)
                                 canCreate = false;
@@ -392,7 +392,7 @@ namespace GameSrv.Word
                     MonGenInfo.ZenTime = 0;
                     MonGenInfo.MissionGenRate = 0;// 集中座标刷新机率 1 -100
                     MonGenInfo.CertList = new List<IMonsterActor>();
-                    MonGenInfo.Envir = GameShare.MapMgr.FindMap(MonGenInfo.MapName);
+                    MonGenInfo.Envir = ModuleShare.MapMgr.FindMap(MonGenInfo.MapName);
                     if (MonGenInfo.TryAdd(baseObject))
                     {
                         MonGenInfo.CertCount++;
@@ -484,7 +484,7 @@ namespace GameSrv.Word
         private IMonsterActor CreateMonster(string sMapName, short nX, short nY, int nMonRace, string sMonName)
         {
             IMonsterActor cert = null;
-            var map = GameShare.MapMgr.FindMap(sMapName);
+            var map = ModuleShare.MapMgr.FindMap(sMapName);
             if (map == null) return null;
             switch (nMonRace)
             {

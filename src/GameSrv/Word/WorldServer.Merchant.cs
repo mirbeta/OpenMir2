@@ -10,7 +10,7 @@ namespace GameSrv.Word
             for (var i = MerchantList.Count - 1; i >= 0; i--)
             {
                 var merchant = MerchantList[i];
-                merchant.Envir = GameShare.MapMgr.FindMap(merchant.MapName);
+                merchant.Envir = ModuleShare.MapMgr.FindMap(merchant.MapName);
                 if (merchant.Envir != null)
                 {
                     merchant.OnEnvirnomentChanged();
@@ -39,7 +39,7 @@ namespace GameSrv.Word
             for (var i = QuestNpcList.Count - 1; i >= 0; i--)
             {
                 var normNpc = QuestNpcList[i];
-                normNpc.Envir = GameShare.MapMgr.FindMap(normNpc.MapName);
+                normNpc.Envir = ModuleShare.MapMgr.FindMap(normNpc.MapName);
                 if (normNpc.Envir != null)
                 {
                     normNpc.OnEnvirnomentChanged();

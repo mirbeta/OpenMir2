@@ -364,7 +364,7 @@ namespace M2Server.Player
                 return;
             }
             var castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
-            if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, this))
+            if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, (IPlayerActor)this))
             {
                 // M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
             }

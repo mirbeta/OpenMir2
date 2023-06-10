@@ -1198,7 +1198,7 @@ namespace M2Server.RobotPlay
                             SetLastHiter(attackBaseObject);
                             Struck(attackBaseObject);
                         }
-                        if (M2Share.CastleMgr.IsCastleMember(this) != null && attackBaseObject != null)
+                        if (M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null && attackBaseObject != null)
                         {
                             if (attackBaseObject.Race == ActorRace.Guard)
                             {

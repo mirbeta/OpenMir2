@@ -12,7 +12,7 @@
 
         void LoadGuildInfo();
 
-        GuildInfo MemberOfGuild(string sName);
+        IGuild MemberOfGuild(string sName);
 
         void Run();
     }

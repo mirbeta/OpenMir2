@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace GameSrv.Services
 {
-    public class FrontEngine
+    public class FrontEngine : IFrontEngine
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         public readonly object UserCriticalSection;

@@ -5,7 +5,7 @@ using SystemModule.Common;
 
 namespace M2Server.Castle
 {
-    public class CastleManager
+    public class CastleManager : ICastleSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         public readonly IList<UserCastle> CastleList;
@@ -15,7 +15,7 @@ namespace M2Server.Castle
             CastleList = new List<UserCastle>();
         }
 
-        public UserCastle Find(string sCastleName)
+        public IUserCastle Find(string sCastleName)
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
@@ -32,7 +32,7 @@ namespace M2Server.Castle
         /// </summary>
         /// <param name="BaseObject"></param>
         /// <returns></returns>
-        public UserCastle InCastleWarArea(IActor BaseObject)
+        public IUserCastle InCastleWarArea(IActor BaseObject)
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
@@ -44,7 +44,7 @@ namespace M2Server.Castle
             return null;
         }
 
-        public UserCastle InCastleWarArea(IEnvirnoment Envir, int nX, int nY)
+        public IUserCastle InCastleWarArea(IEnvirnoment Envir, int nX, int nY)
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
@@ -83,7 +83,7 @@ namespace M2Server.Castle
         }
 
         // 城堡皇宫所在地图
-        public UserCastle IsCastlePalaceEnvir(IEnvirnoment Envir)
+        public IUserCastle IsCastlePalaceEnvir(IEnvirnoment Envir)
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
@@ -96,7 +96,7 @@ namespace M2Server.Castle
         }
 
         // 城堡所在地图
-        public UserCastle IsCastleEnvir(IEnvirnoment envir)
+        public IUserCastle IsCastleEnvir(IEnvirnoment envir)
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
@@ -108,7 +108,7 @@ namespace M2Server.Castle
             return null;
         }
 
-        public UserCastle IsCastleMember(PlayObject playObject)
+        public IUserCastle IsCastleMember(IPlayerActor playObject)
         {
             for (int i = 0; i < CastleList.Count; i++)
             {
@@ -187,7 +187,7 @@ namespace M2Server.Castle
             loadList.SaveToFile(savePath);
         }
 
-        public UserCastle GetCastle(int nIndex)
+        public IUserCastle GetCastle(int nIndex)
         {
             if (nIndex >= 0 && nIndex < CastleList.Count)
             {

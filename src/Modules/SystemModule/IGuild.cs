@@ -1,4 +1,5 @@
-﻿using SystemModule.Data;
+﻿using System.Collections;
+using SystemModule.Data;
 
 namespace SystemModule
 {
@@ -8,11 +9,17 @@ namespace SystemModule
         int Aurae { get; set; }
         int BuildPoint { get; set; }
         int ChiefItemCount { get; set; }
+        int ContestPoint { get; set; }
         int Count { get; }
         int Flourishing { get; set; }
         bool IsFull { get; }
         int Stability { get; set; }
+        bool EnableAuthAlly { get; set; }
         Dictionary<string, DynamicVar> DynamicVarList { get; set; }
+        ArrayList NoticeList { get; set; }
+        IList<WarGuild> GuildWarList { get; set; }
+        IList<GuildInfo> GuildAllList { get; set; }
+        IList<GuildRank> RankList { get; set; }
         void AddMember(IPlayerActor playObject);
         void AddTeamFightMember(string sHumanName);
         WarGuild AddWarGuild(WarGuild guild);

@@ -5,7 +5,7 @@ using SystemModule.Data;
 
 namespace GameSrv.Maps
 {
-    public class MapManager : IMapManager
+    public class MapManager : IMapSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, IEnvirnoment> _mapList = new Dictionary<string, IEnvirnoment>(StringComparer.OrdinalIgnoreCase);

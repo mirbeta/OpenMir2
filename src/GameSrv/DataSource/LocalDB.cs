@@ -376,7 +376,7 @@ namespace GameSrv.DataSource
                         tStr = HUtil32.GetValidStr3(tStr, ref s30, _textSpitConst);
                         if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest))
                         {
-                            IEnvirnoment map = GameShare.MapMgr.FindMap(sMap);
+                            IEnvirnoment map = ModuleShare.MapMgr.FindMap(sMap);
                             if (map != null)
                             {
                                 HUtil32.ArrestStringEx(s1C, "[", "]", ref s34);
@@ -551,10 +551,10 @@ namespace GameSrv.DataSource
                         monGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
-                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && GameShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
+                        if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
                         {
                             monGenInfo.CertList = new List<IMonsterActor>();
-                            monGenInfo.Envir = GameShare.MapMgr.FindMap(monGenInfo.MapName);
+                            monGenInfo.Envir = ModuleShare.MapMgr.FindMap(monGenInfo.MapName);
                             if (monGenInfo.Envir != null)
                             {
                                 M2Share.WorldEngine.AddMonGenList(monGenInfo);
@@ -1065,7 +1065,7 @@ namespace GameSrv.DataSource
                         {
                             MapName = sMapName
                         };
-                        merchant.Envir = GameShare.MapMgr.FindMap(merchant.MapName);
+                        merchant.Envir = ModuleShare.MapMgr.FindMap(merchant.MapName);
                         if (merchant.Envir != null)
                         {
                             merchant.ScriptName = sScript;

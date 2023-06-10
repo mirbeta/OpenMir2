@@ -95,7 +95,7 @@ namespace M2Server.Castle
             {
                 Directory.CreateDirectory(filePath);
             }
-            if (M2Share.MapMgr.GetMapOfServerIndex(userCastle.MapName) != M2Share.ServerIndex) return;
+            if (ModuleShare.MapMgr.GetMapOfServerIndex(userCastle.MapName) != M2Share.ServerIndex) return;
             if (!string.IsNullOrEmpty(userCastle.sName))
             {
                 WriteString("Setup", "CastleName", userCastle.sName);

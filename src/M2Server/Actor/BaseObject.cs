@@ -1103,7 +1103,7 @@ namespace M2Server.Actor
 
         public void SpaceMove(string sMap, short nX, short nY, int nInt)
         {
-            IEnvirnoment envir = M2Share.MapMgr.FindMap(sMap);
+            IEnvirnoment envir = ModuleShare.MapMgr.FindMap(sMap);
             if (envir != null)
             {
                 if (M2Share.ServerIndex == envir.ServerIndex)
@@ -1215,7 +1215,7 @@ namespace M2Server.Actor
         public void MapRandomMove(string sMapName, int nInt)
         {
             int nEgdey;
-            IEnvirnoment envir = M2Share.MapMgr.FindMap(sMapName);
+            IEnvirnoment envir = ModuleShare.MapMgr.FindMap(sMapName);
             if (envir != null)
             {
                 if (envir.Height < 150)

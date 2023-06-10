@@ -288,7 +288,7 @@ namespace GameSrv.Word
                             playObject.IsNewHuman = true;
                         }
                     }
-                    var envir = GameShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    var envir = ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
                         playObject.MapFileName = envir.MapFileName;
@@ -310,7 +310,7 @@ namespace GameSrv.Word
                     var userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
                     if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar))
                     {
-                        userCastle = M2Share.CastleMgr.IsCastleMember(playObject);
+                        userCastle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)playObject);
                         if (userCastle == null)
                         {
                             playObject.MapName = playObject.HomeMap;
@@ -327,13 +327,13 @@ namespace GameSrv.Word
                             }
                         }
                     }
-                    if (GameShare.MapMgr.FindMap(playObject.MapName) == null) playObject.Abil.HP = 0;
+                    if (ModuleShare.MapMgr.FindMap(playObject.MapName) == null) playObject.Abil.HP = 0;
                     if (playObject.Abil.HP <= 0)
                     {
                         playObject.ClearStatusTime();
                         if (playObject.PvpLevel() < 2)
                         {
-                            userCastle = M2Share.CastleMgr.IsCastleMember(playObject);
+                            userCastle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)playObject);
                             if (userCastle != null && userCastle.UnderWar)
                             {
                                 playObject.MapName = userCastle.HomeMap;
@@ -356,7 +356,7 @@ namespace GameSrv.Word
                         playObject.Abil.HP = 14;
                     }
                     playObject.AbilCopyToWAbil();
-                    envir = GameShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);//切换其他服务器
+                    envir = ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);//切换其他服务器
                     if (envir == null)
                     {
                         playObject.SessionId = userOpenInfo.LoadUser.SessionID;
@@ -364,7 +364,7 @@ namespace GameSrv.Word
                         playObject.GateIdx = userOpenInfo.LoadUser.GateIdx;
                         playObject.SocketIdx = userOpenInfo.LoadUser.GSocketIdx;
                         playObject.WAbil = playObject.Abil;
-                        playObject.ServerIndex = (byte)GameShare.MapMgr.GetMapOfServerIndex(playObject.MapName);
+                        playObject.ServerIndex = (byte)ModuleShare.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
                             _logger.Warn(string.Format(sChangeServerFail1, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
@@ -389,7 +389,7 @@ namespace GameSrv.Word
                     {
                         _logger.Warn(string.Format(sChangeServerFail2, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         playObject.MapName = ModuleShare.Config.HomeMap;
-                        envir = GameShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
+                        envir = ModuleShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
                         playObject.CurrX = ModuleShare.Config.HomeX;
                         playObject.CurrY = ModuleShare.Config.HomeY;
                     }
@@ -414,12 +414,12 @@ namespace GameSrv.Word
                     playObject.Abil = switchDataInfo.Abil;
                     LoadSwitchData(switchDataInfo, ref playObject);
                     DelSwitchData(switchDataInfo);
-                    var envir = GameShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    var envir = ModuleShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
                         _logger.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         playObject.MapName = ModuleShare.Config.HomeMap;
-                        envir = GameShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
+                        envir = ModuleShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
                         playObject.CurrX = ModuleShare.Config.HomeX;
                         playObject.CurrY = ModuleShare.Config.HomeY;
                     }
@@ -429,7 +429,7 @@ namespace GameSrv.Word
                         {
                             _logger.Warn(string.Format(sChangeServerFail4, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                             playObject.MapName = ModuleShare.Config.HomeMap;
-                            envir = GameShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
+                            envir = ModuleShare.MapMgr.FindMap(ModuleShare.Config.HomeMap);
                             playObject.CurrX = ModuleShare.Config.HomeX;
                             playObject.CurrY = ModuleShare.Config.HomeY;
                         }
@@ -1459,7 +1459,7 @@ namespace GameSrv.Word
 
         private static void ProcessMapDoor()
         {
-            IList<IEnvirnoment> doorList = GameShare.MapMgr.GetDoorMapList();
+            IList<IEnvirnoment> doorList = ModuleShare.MapMgr.GetDoorMapList();
             for (var i = 0; i < doorList.Count; i++)
             {
                 var envir = doorList[i];
@@ -1593,7 +1593,7 @@ namespace GameSrv.Word
         public int GetMapHuman(string sMapName)
         {
             var result = 0;
-            var envir = GameShare.MapMgr.FindMap(sMapName);
+            var envir = ModuleShare.MapMgr.FindMap(sMapName);
             if (envir == null) return result;
             for (var i = 0; i < PlayObjectList.Count; i++)
             {

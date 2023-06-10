@@ -11,8 +11,11 @@ using MarketSystem;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
+using M2Server.Items;
 using SystemModule.Common;
 using SystemModule.Data;
+using M2Server.Guild;
+using M2Server.Castle;
 
 namespace GameSrv
 {
@@ -22,30 +25,9 @@ namespace GameSrv
 
         public GameApp()
         {
-            ModuleShare.HumLimit = 30;
-            ModuleShare.MonLimit = 30;
-            ModuleShare.ZenLimit = 5;
-            ModuleShare.NpcLimit = 5;
-            ModuleShare.SocLimit = 10;
-            ModuleShare.DecLimit = 20;
-            ModuleShare.Config.nLoadDBErrorCount = 0;
-            ModuleShare.Config.nLoadDBCount = 0;
-            ModuleShare.Config.nSaveDBCount = 0;
-            ModuleShare.Config.nDBQueryID = 0;
-            ModuleShare.Config.ItemNumber = 0;
-            ModuleShare.Config.ItemNumberEx = int.MaxValue / 2;
-            ModuleShare.StartReady = false;
-            ModuleShare.FilterWord = true;
-            ModuleShare.Config.WinLotteryCount = 0;
-            ModuleShare.Config.NoWinLotteryCount = 0;
-            ModuleShare.Config.WinLotteryLevel1 = 0;
-            ModuleShare.Config.WinLotteryLevel2 = 0;
-            ModuleShare.Config.WinLotteryLevel3 = 0;
-            ModuleShare.Config.WinLotteryLevel4 = 0;
-            ModuleShare.Config.WinLotteryLevel5 = 0;
-            ModuleShare.Config.WinLotteryLevel6 = 0;
             GameShare.QuestManager = new MapQuestManager();
             M2Share.LogonCostLogList = new ArrayList();
+            M2Share.CustomItemMgr = new CustomItem();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<StartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
@@ -75,13 +57,42 @@ namespace GameSrv
             M2Share.ItemBindIPaddr = new List<ItemBind>();
             M2Share.ItemBindAccount = new List<ItemBind>();
             M2Share.ItemBindChrName = new List<ItemBind>();
-            M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
+            InitializeModule();
+        }
+
+        private void InitializeModule()
+        {
+            ModuleShare.HumLimit = 30;
+            ModuleShare.MonLimit = 30;
+            ModuleShare.ZenLimit = 5;
+            ModuleShare.NpcLimit = 5;
+            ModuleShare.SocLimit = 10;
+            ModuleShare.DecLimit = 20;
+            ModuleShare.Config.nLoadDBErrorCount = 0;
+            ModuleShare.Config.nLoadDBCount = 0;
+            ModuleShare.Config.nSaveDBCount = 0;
+            ModuleShare.Config.nDBQueryID = 0;
+            ModuleShare.Config.ItemNumber = 0;
+            ModuleShare.Config.ItemNumberEx = int.MaxValue / 2;
+            ModuleShare.StartReady = false;
+            ModuleShare.FilterWord = true;
+            ModuleShare.Config.WinLotteryCount = 0;
+            ModuleShare.Config.NoWinLotteryCount = 0;
+            ModuleShare.Config.WinLotteryLevel1 = 0;
+            ModuleShare.Config.WinLotteryLevel2 = 0;
+            ModuleShare.Config.WinLotteryLevel3 = 0;
+            ModuleShare.Config.WinLotteryLevel4 = 0;
+            ModuleShare.Config.WinLotteryLevel5 = 0;
+            ModuleShare.Config.WinLotteryLevel6 = 0;
             ModuleShare.ManageNPC = new Merchant();
             ModuleShare.RobotNPC = new Merchant();
             ModuleShare.FunctionNPC = new Merchant();
+            ModuleShare.ItemSystem = new ItemSystem();
+            ModuleShare.GuildMgr = new GuildManager();
+            ModuleShare.CastleMgr = new CastleManager();
         }
 
         public void Initialize(CancellationToken stoppingToken)
@@ -93,10 +104,9 @@ namespace GameSrv
             GameShare.ChatChannel = new ChatService();
             GameShare.SocketMgr = new ThreadSocketMgr();
             GameShare.EventSource = new GameEventSource();
-            GameShare.MapMgr = new MapManager();
-            GameShare.FrontEngine = new FrontEngine();
+            ModuleShare.MapMgr = new MapManager();
+            M2Share.FrontEngine = new FrontEngine();
             GameShare.RobotMgr = new RobotManage();
-            M2Share.WorldEngine = new WorldServer();
             GameShare.LoadConfig();
             LoadServerTable();
             _logger.Info("初始化游戏引擎数据配置文件完成...");
@@ -106,6 +116,7 @@ namespace GameSrv
             M2Share.LoadDenyAccountList();
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
+            M2Share.WorldEngine = new WorldServer();
             _logger.Info("正在加载物品数据库...");
             var nCode = GameShare.CommonDb.LoadItemsDB();
             if (nCode < 0)
@@ -215,7 +226,7 @@ namespace GameSrv
         {
             try
             {
-                GameShare.MapMgr.LoadMapDoor();
+                ModuleShare.MapMgr.LoadMapDoor();
                 GameShare.LocalDb.LoadMerchant();
                 _logger.Info("交易NPC列表加载成功...");
                 GameShare.LocalDb.LoadNpcs();
@@ -225,7 +236,7 @@ namespace GameSrv
                 GameShare.LocalDb.LoadStartPoint();
                 _logger.Info("回城点配置加载成功...");
                 _logger.Info("正在初始安全区光圈...");
-                GameShare.MapMgr.MakeSafePkZone();
+                ModuleShare.MapMgr.MakeSafePkZone();
                 _logger.Info("安全区光圈初始化成功...");
                 M2Share.WorldEngine.InitializationMonsterThread();
                 if (!ModuleShare.Config.VentureServer)

@@ -244,7 +244,7 @@ namespace M2Server.Player
         /// 是否在开行会战
         /// </summary>
         public bool InGuildWarArea;
-        public GuildInfo MyGuild;
+        public IGuild MyGuild;
         public short GuildRankNo;
         public string GuildRankName = string.Empty;
         public string ScriptLable = string.Empty;
@@ -1699,7 +1699,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        UserCastle Castle = M2Share.CastleMgr.InCastleWarArea(this);
+                        IUserCastle Castle = M2Share.CastleMgr.InCastleWarArea(this);
                         if ((Castle != null && Castle.UnderWar) || (InGuildWarArea))
                         {
                             guildwarkill = true;
@@ -3303,7 +3303,7 @@ namespace M2Server.Player
             {
                 if (MyGuild != null)
                 {
-                    UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+                    IUserCastle castle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)this);
                     if (castle != null)
                     {
                         sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
@@ -3604,7 +3604,7 @@ namespace M2Server.Player
                         result = MyGuild == targetObject.MyGuild ? ModuleShare.Config.AllyAndGuildNameColor : ModuleShare.Config.WarGuildNameColor;
                     }
                 }
-                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
+                IUserCastle castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
                 if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea)
                 {
                     result = ModuleShare.Config.InFreePKAreaNameColor;
@@ -3637,7 +3637,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (castle.IsMember(targetObject))
+                                if (castle.IsMember((IPlayerActor)targetObject))
                                 {
                                     result = ModuleShare.Config.WarGuildNameColor;
                                 }
@@ -3735,7 +3735,7 @@ namespace M2Server.Player
                 {
                     return false;
                 }
-                UserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
+                IUserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
                 if ((castle != null))
                 {
                     if (!castle.CheckInPalace(CurrX, CurrY))

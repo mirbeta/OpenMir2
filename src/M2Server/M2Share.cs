@@ -33,6 +33,9 @@ namespace M2Server
         public static long StartTime;
         public static int ShareFileNameNum = 0;
         public static readonly ActorMgr ActorMgr;
+        /// <summary>
+        /// 脚本解释器
+        /// </summary>
         public static ScriptParsers ScriptParsers;
         /// <summary>
         /// 寻路
@@ -43,14 +46,14 @@ namespace M2Server
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
         public static readonly RandomNumber RandomNumber;
-        public static IMapManager MapMgr;
         public static CustomItem CustomItemMgr = null;
         public static NoticeManager NoticeMgr = null;
         public static GuildManager GuildMgr = null;
         public static EventManager EventMgr = null;
         public static CastleManager CastleMgr = null;
-        public static NetworkMonitor NetworkMonitor;
-        public static IWorldEngine WorldEngine;
+        public static NetworkMonitor NetworkMonitor = null;
+        public static IWorldEngine WorldEngine = null;
+        public static IFrontEngine FrontEngine = null;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -130,7 +133,6 @@ namespace M2Server
         public static bool GameLogGameGold = true;
         public static bool GameLogGamePoint = true;
         public static bool GameLogHumanDie = true;
-        public static IFrontEngine FrontEngine = null;
         /// <summary>
         /// IP过滤列表
         /// </summary>
@@ -151,7 +153,6 @@ namespace M2Server
         /// 不清除怪物列表
         /// </summary>
         public static IList<string> NoHptoexpMonLIst = null;
-        public static object ProcessMsgCriticalSection = null;
         public static object UserDBCriticalSection = null;
         public static object ProcessHumanCriticalSection = null;
         public static int TotalHumCount = 0;
@@ -189,10 +190,6 @@ namespace M2Server
             CastleMgr = new CastleManager();
             GuildMgr = new GuildManager();
             ScriptParsers = new ScriptParsers();
-            ModuleShare.ItemSystem = new ItemSystem();
-            ProcessHumanCriticalSection = new object();
-            UserDBCriticalSection = new object();
-            ProcessMsgCriticalSection = new object();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

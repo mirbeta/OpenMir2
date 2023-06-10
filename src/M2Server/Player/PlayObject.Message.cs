@@ -280,7 +280,7 @@ namespace M2Server.Player
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
-                UserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
+                IUserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
                 if (castle != null && castle.UnderWar)
                 {
                     ChangePkStatus(true);
@@ -317,7 +317,7 @@ namespace M2Server.Player
                     {
                         if (Envir == castle.PalaceEnvir && MyGuild != null)
                         {
-                            if (!castle.IsMember(this))
+                            if (!castle.IsMember((IPlayerActor)this))
                             {
                                 if (castle.IsAttackGuild(MyGuild))
                                 {
@@ -1572,7 +1572,7 @@ namespace M2Server.Player
                             }
                             if (this.MyGuild != null && this.Castle != null)
                             {
-                                if (M2Share.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                                if (M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                                 {
                                     if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
                                     {

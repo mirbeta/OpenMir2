@@ -210,7 +210,7 @@ namespace GameSrv.NPC
             {
                 nIndex = 0;
             }
-            UserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
+            IUserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
             {
                 UserItem UserItem = PlayObject.CheckItems(ModuleShare.Config.ZumaPiece);

@@ -51,26 +51,29 @@ namespace M2Server.Guild
         /// <summary>
         /// 行会公告
         /// </summary>
-        public ArrayList NoticeList;
-        public IList<WarGuild> GuildWarList;
-        public IList<GuildInfo> GuildAllList;
+        public ArrayList NoticeList { get; set; }
+        public IList<WarGuild> GuildWarList { get; set; }
+        public IList<GuildInfo> GuildAllList { get; set; }
         /// <summary>
         /// 职位列表
         /// </summary>
-        public IList<GuildRank> RankList;
-        public int ContestPoint;
+        public IList<GuildRank> RankList { get; set; }
+        public int ContestPoint { get; set; }
         public bool BoTeamFight;
         public ArrayList TeamFightDeadList;
         /// <summary>
         /// 是否允许行会联盟
         /// </summary>
-        public bool EnableAuthAlly;
+        public bool EnableAuthAlly { get; set; }
         public int DwSaveTick;
         public bool BoChanged;
         /// <summary>
         /// 行会变量
         /// </summary>
         public Dictionary<string, DynamicVar> DynamicVarList { get; set; }
+        IList<SystemModule.WarGuild> IGuild.GuildWarList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        IList<SystemModule.GuildInfo> IGuild.GuildAllList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
         /// <summary>
         /// 建筑度
         /// </summary>
@@ -961,8 +964,10 @@ namespace M2Server.Guild
             }
             if (result == 0)
             {
-                ClearRankList(ref RankList);
-                RankList = guildRankList;// 更新在线人物职位表
+                IList<GuildRank> rankListTmp = new List<GuildRank>();
+                ClearRankList(ref rankListTmp);
+                //RankList = guildRankList;// 更新在线人物职位表
+                RankList = rankListTmp;
                 for (var i = 0; i < RankList.Count; i++)
                 {
                     guildRank = RankList[i];

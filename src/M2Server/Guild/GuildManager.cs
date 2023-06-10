@@ -4,7 +4,7 @@ using SystemModule.Common;
 
 namespace M2Server.Guild
 {
-    public class GuildManager
+    public class GuildManager : IGuildSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<IGuild> _guildList;
@@ -107,7 +107,7 @@ namespace M2Server.Guild
             }
         }
 
-        public GuildInfo MemberOfGuild(string sName)
+        public IGuild MemberOfGuild(string sName)
         {
             for (var i = 0; i < _guildList.Count; i++)
             {

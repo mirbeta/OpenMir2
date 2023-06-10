@@ -41,6 +41,8 @@ namespace M2Server.Castle
             WarRangeX = ModuleShare.Config.CastleWarRangeX;
             WarRangeY = ModuleShare.Config.CastleWarRangeY;
             EnvirList = new List<string>();
+            Archers = new ArcherUnit[12];
+            Guards = new ArcherUnit[12];
             string filePath = Path.Combine(M2Share.BasePath, ModuleShare.Config.CastleDir, ConfigDir);
             if (!Directory.Exists(filePath))
             {
@@ -104,13 +106,13 @@ namespace M2Server.Castle
             ArcherUnit ObjUnit;
             LoadConfig();
             LoadAttackSabukWall();
-            if (M2Share.MapMgr.GetMapOfServerIndex(MapName) == M2Share.ServerIndex)
+            if (ModuleShare.MapMgr.GetMapOfServerIndex(MapName) == M2Share.ServerIndex)
             {
-                PalaceEnvir = M2Share.MapMgr.FindMap(PalaceMap);
+                PalaceEnvir = ModuleShare.MapMgr.FindMap(PalaceMap);
                 if (PalaceEnvir == null) _logger.Warn($"皇宫地图{PalaceMap}没找到!!!");
-                SecretEnvir = M2Share.MapMgr.FindMap(SecretMap);
+                SecretEnvir = ModuleShare.MapMgr.FindMap(SecretMap);
                 if (SecretEnvir == null) _logger.Warn($"密道地图{SecretMap}没找到!!!");
-                CastleEnvir = M2Share.MapMgr.FindMap(MapName);
+                CastleEnvir = ModuleShare.MapMgr.FindMap(MapName);
                 if (CastleEnvir != null)
                 {
                     MainDoor.BaseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, MainDoor.nX, MainDoor.nY, MainDoor.sName);
@@ -275,7 +277,7 @@ namespace M2Server.Castle
             const string sExceptionMsg = "[Exception] TUserCastle::Run";
             try
             {
-                if (M2Share.ServerIndex != M2Share.MapMgr.GetMapOfServerIndex(MapName)) return;
+                if (M2Share.ServerIndex != ModuleShare.MapMgr.GetMapOfServerIndex(MapName)) return;
                 int Year = DateTime.Now.Year;
                 int Month = DateTime.Now.Month;
                 int Day = DateTime.Now.Day;

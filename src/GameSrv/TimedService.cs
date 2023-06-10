@@ -231,7 +231,7 @@ namespace GameSrv
                 _scheduledSaveData = true;
                 foreach (var play in M2Share.WorldEngine.PlayObjects)
                 {
-                    if (GameShare.FrontEngine.InSaveRcdList(play.ChrName))
+                    if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
                     {
                         continue;
                     }

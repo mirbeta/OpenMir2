@@ -1953,7 +1953,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 7:
-                    if (MyGuild != null && M2Share.CastleMgr.IsCastleMember(this) != null)
+                    if (MyGuild != null && M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null)
                     {
                         result = true;
                     }
@@ -1963,7 +1963,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 70:
-                    if (MyGuild != null && M2Share.CastleMgr.IsCastleMember(this) != null && GuildRankNo == 1)
+                    if (MyGuild != null && M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null && GuildRankNo == 1)
                     {
                         if (Abil.Level >= clientItem.Item.NeedLevel)
                         {
@@ -2256,7 +2256,7 @@ namespace M2Server.Player
                     {
                         if (!InGuildWarArea)
                         {
-                            UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+                            IUserCastle castle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)this);
                             if (castle != null && castle.IsMasterGuild(MyGuild))
                             {
                                 BaseObjectMove(castle.HomeMap, castle.GetHomeX(), castle.GetHomeY());
@@ -2814,7 +2814,7 @@ namespace M2Server.Player
         private bool CheckItemsNeed(StdItem stdItem)
         {
             bool result = true;
-            UserCastle castle = M2Share.CastleMgr.IsCastleMember(this);
+            IUserCastle castle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)this);
             switch (stdItem.Need)
             {
                 case 6:

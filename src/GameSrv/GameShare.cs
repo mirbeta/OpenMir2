@@ -6,7 +6,6 @@ using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word.Threads;
 using M2Server;
-using M2Server.Items;
 using MarketSystem;
 using PlanesSystem;
 using ScriptSystem;
@@ -39,9 +38,7 @@ namespace GameSrv
         public static IChatService ChatChannel = null;
         public static ThreadSocketMgr SocketMgr = null;
         public static GameEventSource EventSource;
-        public static IMapManager MapMgr = null;
         public static ScriptEngine ScriptEngine = null;
-        public static FrontEngine FrontEngine = null;
         public static RobotManage RobotMgr = null;
         public static IPlanesService PlanesService;
         public static NetworkMonitor NetworkMonitor;
