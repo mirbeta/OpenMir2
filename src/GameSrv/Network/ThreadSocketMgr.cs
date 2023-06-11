@@ -96,7 +96,7 @@ namespace GameSrv.Network
             _logger.Info($"游戏网关[{SystemShare.Config.sGateAddr}:{SystemShare.Config.nGatePort}]已启动...");
         }
 
-        public async Task StopAsync()
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (_receiveQueue.Reader.Count > 0)
                 await _receiveQueue.Reader.Completion;
@@ -428,18 +428,18 @@ namespace GameSrv.Network
         /// <summary>
         /// 处理GameGate消息
         /// </summary>
-        public Task StartMessageThread()
+        public Task StartMessageThread(CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(async () =>
-             {
-                 while (await _receiveQueue.Reader.WaitToReadAsync(_stoppingCancelReads))
-                 {
-                     while (_receiveQueue.Reader.TryRead(out var message))
-                     {
-                         // ExecGateBuffers(message.Packet, message.Data);
-                     }
-                 }
-             }, _stoppingCancelReads);
+            {
+                while (await _receiveQueue.Reader.WaitToReadAsync(_stoppingCancelReads))
+                {
+                    while (_receiveQueue.Reader.TryRead(out var message))
+                    {
+                        // ExecGateBuffers(message.Packet, message.Data);
+                    }
+                }
+            }, cancellationToken);
         }
     }
 

@@ -12,6 +12,7 @@ using SystemModule.Common;
 using SystemModule.Data;
 using M2Server.Guild;
 using M2Server.Castle;
+using M2Server.Event;
 
 namespace GameSrv
 {
@@ -88,8 +89,13 @@ namespace GameSrv
             SystemShare.GuildMgr = new GuildManager();
             SystemShare.CastleMgr = new CastleManager();
             SystemShare.MapMgr = new MapManager();
+            SystemShare.EventMgr = new EventManager();
         }
 
+        /// <summary>
+        /// 初始化游戏数据配置文件
+        /// </summary>
+        /// <param name="stoppingToken"></param>
         public void Initialize(CancellationToken stoppingToken)
         {
             _logger.Info("读取游戏引擎数据配置文件...");
@@ -210,7 +216,11 @@ namespace GameSrv
             _logger.Info("正在初始化网络引擎...");
         }
 
-        public void StartServer(CancellationToken stoppingToken)
+        /// <summary>
+        /// 初始化游戏世界服务
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        public void InitializeWorld(CancellationToken stoppingToken)
         {
             try
             {
@@ -237,6 +247,10 @@ namespace GameSrv
                 SystemShare.GuildMgr.LoadGuildInfo();
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();
+                GameShare.DataServer.Start();
+                GameShare.MarketService.Start();
+                GameShare.SocketMgr.Start();
+                GameShare.StartReady = true;
                 M2Share.WorldEngine.Initialize();
                 _logger.Info("游戏处理引擎初始化成功...");
             }
@@ -246,7 +260,7 @@ namespace GameSrv
             }
         }
 
-        private static void LoadServerTable()
+        private void LoadServerTable()
         {
             int nRouteIdx = 0;
             string sIdx = string.Empty;
@@ -301,7 +315,7 @@ namespace GameSrv
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private static bool LoadAbuseInformation(string fileName)
+        private bool LoadAbuseInformation(string fileName)
         {
             int lineCount = 0;
             bool result = false;

@@ -1,4 +1,3 @@
-using M2Server;
 using NLog;
 
 namespace GameSrv.Word.Threads

@@ -1,3 +1,4 @@
+using ChatSystem;
 using EventLogSystem;
 using GameSrv.DataSource;
 using GameSrv.Maps;
@@ -37,7 +38,7 @@ namespace GameSrv
         public static readonly IMarketService MarketService;
         public static readonly MapQuestManager QuestManager;
         public static readonly DBService DataServer;
-        public static readonly IChatService ChatChannel;
+        public static readonly IChatService ChatService;
         public static readonly ThreadSocketMgr SocketMgr;
         public static readonly RobotManage RobotMgr;
         public static bool StartReady = false;
@@ -62,7 +63,7 @@ namespace GameSrv
             EventSource = new GameEventSource();
             MarketService = new MarketService();
             DataServer = new DBService();
-            ChatChannel = new ChatService();
+            ChatService = new ChatService();
             SocketMgr = new ThreadSocketMgr();
             RobotMgr = new RobotManage();
             QuestManager = new MapQuestManager();

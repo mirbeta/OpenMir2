@@ -99,7 +99,7 @@ namespace GameSrv
                         _logger.Info("正在读取配置信息...");
                         _mirApp.Initialize(stoppingToken);
                         _logger.Info("读取配置信息完成...");
-                        _mirApp.StartServer(stoppingToken);
+                        _mirApp.InitializeWorld(stoppingToken);
                         await _mirApp.StartUp(stoppingToken);
                         _exitCode = 0;
                     }

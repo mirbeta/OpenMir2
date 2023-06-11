@@ -1,4 +1,4 @@
-﻿namespace GameSrv.Services
+﻿namespace ChatSystem
 {
     public interface IChatService
     {
@@ -6,7 +6,7 @@
 
         Task Ping();
         void SendPubChannelMessage(string sendMsg);
-        Task Start();
-        Task Stop();
+        Task StartAsync(CancellationToken cancellationToken = default);
+        Task StopAsync(CancellationToken cancellationToken = default);
     }
 }

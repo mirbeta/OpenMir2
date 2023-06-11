@@ -3,7 +3,7 @@ using MQTTnet.Client;
 using NLog;
 using SystemModule;
 
-namespace GameSrv.Services
+namespace ChatSystem
 {
     /// <summary>
     /// 公共聊天频道服务类
@@ -34,7 +34,7 @@ namespace GameSrv.Services
             get { return SystemShare.Config.EnableChatServer; }
         }
 
-        public async Task Start()
+        public async Task StartAsync(CancellationToken cancellationToken = default)
         {
             if (!IsEnableChatServer)
             {
@@ -45,7 +45,7 @@ namespace GameSrv.Services
             try
             {
                 using var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await chatClient.ConnectAsync(chatClientOptions, CancellationToken.None);
+                var response = await chatClient.ConnectAsync(chatClientOptions, cancellationToken);
                 if (response.ResultCode == MqttClientConnectResultCode.Success)
                 {
                     logger.Info("链接世界聊天频道成功...");
@@ -72,10 +72,10 @@ namespace GameSrv.Services
             logger.Info("与世界聊天频道失去链接...");
         }
 
-        public async Task Stop()
+        public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             logger.Info("断开世界聊天频道...");
-            await chatClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectReason.NormalDisconnection).Build());
+            await chatClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectReason.NormalDisconnection).Build(), cancellationToken);
         }
 
         public async Task Ping()

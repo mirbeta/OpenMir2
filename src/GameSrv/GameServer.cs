@@ -24,14 +24,10 @@ namespace GameSrv
             await GameShare.EventProcessor.StartAsync(stoppingToken);
             await GameShare.StorageProcessor.StartAsync(stoppingToken);
             await GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
-            await GameShare.SocketMgr.StartMessageThread();
-            await GameShare.ChatChannel.Start();
-            GameShare.DataServer.Start();
-            GameShare.MarketService.Start();
-            GameShare.SocketMgr.Start();
-            _logger.Info("初始化游戏世界服务线程完成...");
-            GameShare.StartReady = true;
+            await GameShare.SocketMgr.StartMessageThread(stoppingToken);
+            await GameShare.ChatService.StartAsync(stoppingToken);
             Map.StartMakeStoneThread();
+            _logger.Info("初始化游戏世界服务线程完成...");
         }
 
         public static async Task Stopping(CancellationToken cancellationToken)
@@ -44,10 +40,10 @@ namespace GameSrv
             await GameShare.EventProcessor.StopAsync(cancellationToken);
             await GameShare.StorageProcessor.StopAsync(cancellationToken);
             await GameShare.TimedRobotProcessor.StopAsync(cancellationToken);
-            await GameShare.SocketMgr.StopAsync();
+            await GameShare.SocketMgr.StopAsync(cancellationToken);
+            await GameShare.ChatService.StopAsync(cancellationToken);
             GameShare.DataServer.Stop();
             GameShare.MarketService.Stop();
-            await GameShare.ChatChannel.Stop();
         }
 
         private static void ProcessGameNotice()
