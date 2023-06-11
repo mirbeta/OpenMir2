@@ -1,4 +1,4 @@
-using SystemModule.Packets.ServerPackets;
+﻿using SystemModule.Packets.ServerPackets;
 
 namespace SystemModule.Data
 {
@@ -7,7 +7,7 @@ namespace SystemModule.Data
         public string Account;
         public string ChrName;
         public int SessionID;
-        public object PlayObject;
+        public IPlayerActor PlayObject;
         public PlayerDataInfo HumanRcd;
         public int ReTryCount;
         public bool IsSaveing;

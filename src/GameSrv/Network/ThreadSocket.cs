@@ -1,7 +1,6 @@
 ﻿using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
-using M2Server.Player;
 using NLog;
 using System.Buffers;
 using System.Net.Sockets;

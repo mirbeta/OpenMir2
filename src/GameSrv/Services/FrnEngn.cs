@@ -246,5 +246,47 @@ namespace GameSrv.Services
             }*/
             return result;
         }
+
+        public IList<SavePlayerRcd> GetSaveRcdList()
+        {
+            return m_SaveRcdList;
+        }
+
+        public void ClearSaveList()
+        {
+            for (int i = 0; i < m_SaveRcdList.Count; i++)
+            {
+                if (m_SaveRcdList[i] != null)
+                {
+                    m_SaveRcdList[i] = null;
+                }
+            }
+            m_SaveRcdList.Clear();
+        }
+
+        public IList<SavePlayerRcd> GetTempSaveRcdList()
+        {
+            return m_SaveRcdTempList;
+        }
+
+        public void ClearLoadList()
+        {
+            m_LoadRcdTempList.Clear();
+        }
+
+        public IList<LoadDBInfo> GetLoadTempList()
+        {
+            return m_LoadRcdTempList;
+        }
+
+        public void ClearSaveRcdTempList()
+        {
+            m_SaveRcdTempList.Clear();
+        }
+
+        public void ClearLoadRcdTempList()
+        {
+            m_LoadRcdTempList.Clear();
+        }
     }
 }

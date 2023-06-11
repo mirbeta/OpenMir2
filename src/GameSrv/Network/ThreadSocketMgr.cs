@@ -1,6 +1,5 @@
 ﻿using GameSrv.Services;
 using M2Server;
-using M2Server.Player;
 using NLog;
 using System.Net;
 using System.Net.Sockets;

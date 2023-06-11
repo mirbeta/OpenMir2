@@ -1,5 +1,4 @@
 ﻿using M2Server;
-using M2Server.Player;
 using SystemModule.Data;
 
 namespace GameSrv.Word

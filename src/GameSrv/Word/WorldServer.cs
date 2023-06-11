@@ -267,7 +267,7 @@ namespace GameSrv.Word
                         short homeX = 0;
                         short homeY = 0;
                         playObject.HomeMap = GetHomeInfo(playObject.Job, ref homeX, ref homeY);
-                        playObject.HomeX= homeX;
+                        playObject.HomeX = homeX;
                         playObject.HomeY = homeY;
                         playObject.MapName = playObject.HomeMap;
                         playObject.CurrX = GetRandHomeX(playObject);
@@ -1754,7 +1754,8 @@ namespace GameSrv.Word
             ClearMerchantData();
         }
 
-        public void ClearMonsterList() {
+        public void ClearMonsterList()
+        {
             MonsterList.Clear();
         }
 

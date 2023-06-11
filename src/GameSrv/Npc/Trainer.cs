@@ -9,7 +9,7 @@ namespace GameSrv.NPC
     public class Trainer : NormNpc
     {
         private int AttackPower { get; set; }
-        private int AttackCount{ get; set; }
+        private int AttackCount { get; set; }
 
         public Trainer() : base()
         {

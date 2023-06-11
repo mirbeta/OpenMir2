@@ -4,6 +4,20 @@ namespace SystemModule
 {
     public interface IFrontEngine
     {
+        IList<SavePlayerRcd> GetSaveRcdList();
+
+        IList<SavePlayerRcd> GetTempSaveRcdList();
+
+        IList<LoadDBInfo> GetLoadTempList();
+
+        void ClearSaveList();
+
+        void ClearSaveRcdTempList();
+
+        void ClearLoadRcdTempList();
+
+        void ClearLoadList();
+
         void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold);
         void AddToLoadRcdList(LoadDBInfo loadRcdInfo);
         void AddToSaveRcdList(SavePlayerRcd SaveRcd);

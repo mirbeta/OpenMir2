@@ -94,5 +94,7 @@ namespace SystemModule
         void ProcessMerchants();
         void ProcessRobotPlayData();
         void ProcessHumans();
+
+        void AddUserOpenInfo(UserOpenInfo UserOpenInfo);
     }
 }

@@ -43,7 +43,7 @@ namespace GameSrv
         public static readonly RobotManage RobotMgr;
         public static bool StartReady = false;
         public static int SendOnlineTick = 0;
-        
+
         static GameShare()
         {
             ScriptEngine = new ScriptEngine();
@@ -97,14 +97,14 @@ namespace GameSrv
             }
             return result;
         }
-        
+
         private static string GetRandpmRoute(TRouteInfo routeInfo, ref int gatePort)
         {
             var random = RandomNumber.GetInstance().Random(routeInfo.GateCount);
             gatePort = routeInfo.GameGatePort[random];
             return routeInfo.GameGateIP[random];
         }
-        
+
         public static void LoadConfig()
         {
             SystemShare.ServerConf.LoadConfig();
