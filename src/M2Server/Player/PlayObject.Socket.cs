@@ -98,7 +98,7 @@ namespace M2Server.Player
             // M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
         }
 
-        internal virtual void SendSocket(CommandMessage defMsg, string sMsg)
+        public virtual void SendSocket(CommandMessage defMsg, string sMsg)
         {
             if (IsRobot)
             {

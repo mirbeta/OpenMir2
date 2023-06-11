@@ -618,7 +618,7 @@ namespace M2Server.Magic
                             MagicBase.UseAmulet(playObject, 1, 1, nAmuletIdx);
                             nPower = (ushort)(userMagic.Level + 1 + M2Share.RandomNumber.Random(userMagic.Level));
                             var nTime = playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
-                            ((PlayObject)targetObject).AttPowerUp(nPower, nTime);
+                            ((IPlayerActor)targetObject).AttPowerUp(nPower, nTime);
                             boTrain = true;
                             boSpellFail = false;
                         }
@@ -1248,7 +1248,7 @@ namespace M2Server.Magic
                                     targetObject.SetLastHiter(playObject);
                                     nPower = targetObject.GetMagStruckDamage(playObject, nPower);
                                     playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
-                                    if (targetObject.Race == ActorRace.Play && !((PlayObject)targetObject).UnParalysis)
+                                    if (targetObject.Race == ActorRace.Play && !((IPlayerActor)targetObject).UnParalysis)
                                     {
                                         targetObject.SendSelfDelayMsg(Messages.RM_POISON, PoisonState.STONE, nPower / SystemShare.Config.MabMabeHitMabeTimeRate + M2Share.RandomNumber.Random(nLevel), playObject.ActorId, nLevel, "", 650); // 中毒类型 - 麻痹
                                     }

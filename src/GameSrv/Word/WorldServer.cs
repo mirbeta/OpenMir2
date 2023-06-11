@@ -215,28 +215,28 @@ namespace GameSrv.Word
         private bool ProcessHumansIsLogined(string sChrName)
         {
             var result = false;
-            //if (M2Share.FrontEngine.InSaveRcdList(sChrName))
-            //{
-            //    result = true;
-            //}
-            //else
-            //{
-            //    for (var i = 0; i < PlayObjectList.Count; i++)
-            //    {
-            //        if (string.Compare(PlayObjectList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
-            //        {
-            //            result = true;
-            //            break;
-            //        }
-            //    }
-            //}
+            if (M2Share.FrontEngine.InSaveRcdList(sChrName))
+            {
+                result = true;
+            }
+            else
+            {
+                for (var i = 0; i < PlayObjectList.Count; i++)
+                {
+                    if (string.Compare(PlayObjectList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        result = true;
+                        break;
+                    }
+                }
+            }
             return result;
         }
 
         private IPlayerActor ProcessHumansMakeNewHuman(UserOpenInfo userOpenInfo)
         {
             IPlayerActor result = null;
-            PlayObject playObject = null;
+            IPlayerActor playObject = null;
             const string sExceptionMsg = "[Exception] WorldServer::MakeNewHuman";
             const string sChangeServerFail1 = "chg-server-fail-1 [{0}] -> [{1}] [{2}]";
             const string sChangeServerFail2 = "chg-server-fail-2 [{0}] -> [{1}] [{2}]";
@@ -264,7 +264,11 @@ namespace GameSrv.Word
                     playObject.Race = ActorRace.Play;
                     if (string.IsNullOrEmpty(playObject.HomeMap))
                     {
-                        playObject.HomeMap = GetHomeInfo(playObject.Job, ref playObject.HomeX, ref playObject.HomeY);
+                        short homeX = 0;
+                        short homeY = 0;
+                        playObject.HomeMap = GetHomeInfo(playObject.Job, ref homeX, ref homeY);
+                        playObject.HomeX= homeX;
+                        playObject.HomeY = homeY;
                         playObject.MapName = playObject.HomeMap;
                         playObject.CurrX = GetRandHomeX(playObject);
                         playObject.CurrY = GetRandHomeY(playObject);
@@ -310,7 +314,7 @@ namespace GameSrv.Word
                     var userCastle = SystemShare.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
                     if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar))
                     {
-                        userCastle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)playObject);
+                        userCastle = SystemShare.CastleMgr.IsCastleMember(playObject);
                         if (userCastle == null)
                         {
                             playObject.MapName = playObject.HomeMap;
@@ -333,7 +337,7 @@ namespace GameSrv.Word
                         playObject.ClearStatusTime();
                         if (playObject.PvpLevel() < 2)
                         {
-                            userCastle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)playObject);
+                            userCastle = SystemShare.CastleMgr.IsCastleMember(playObject);
                             if (userCastle != null && userCastle.UnderWar)
                             {
                                 playObject.MapName = userCastle.HomeMap;
@@ -369,9 +373,9 @@ namespace GameSrv.Word
                         {
                             _logger.Warn(string.Format(sChangeServerFail1, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         }
-                        //SendSwitchData(playObject, playObject.ServerIndex);
-                        //SendChangeServer(playObject, playObject.ServerIndex);
-                        playObject.SetSocket();
+                        SendSwitchData(playObject, playObject.ServerIndex);
+                        SendChangeServer(playObject, playObject.ServerIndex);
+                        //playObject.SetSocket();
                         playObject = null;
                         return result;
                     }
@@ -464,8 +468,8 @@ namespace GameSrv.Word
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.SoftVersionDate = userOpenInfo.LoadUser.SoftVersionDate;
                 playObject.SoftVersionDateEx = userOpenInfo.LoadUser.SoftVersionDate;//M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
-                playObject.SetSocket();
-                // result = playObject;
+                //playObject.SetSocket();
+                result = playObject;
             }
             catch (Exception ex)
             {
@@ -559,7 +563,7 @@ namespace GameSrv.Word
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
-                        //GameShare.SocketMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
+                        GameShare.SocketMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
                     for (var i = 0; i < ListOfGateIdx.Count; i++)
@@ -753,7 +757,7 @@ namespace GameSrv.Word
             }
         }
 
-        public static void ProcessUserMessage(PlayObject playObject, CommandMessage defMsg, string buff)
+        public static void ProcessUserMessage(IPlayerActor playObject, CommandMessage defMsg, string buff)
         {
             if (playObject.OffLineFlag) return;
             var sMsg = string.Empty;
@@ -1073,7 +1077,7 @@ namespace GameSrv.Word
             PlayObjectFreeList.Add(playObject);
         }
 
-        private void GetHumData(PlayObject playObject, ref PlayerDataInfo humanRcd)
+        private void GetHumData(IPlayerActor playObject, ref PlayerDataInfo humanRcd)
         {
             var humData = humanRcd.Data;
             playObject.UserAccount = humData.Account;
@@ -1378,12 +1382,12 @@ namespace GameSrv.Word
             return result;
         }
 
-        private static short GetRandHomeX(PlayObject playObject)
+        private static short GetRandHomeX(IPlayerActor playObject)
         {
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeX - 2));
         }
 
-        private static short GetRandHomeY(PlayObject playObject)
+        private static short GetRandHomeY(IPlayerActor playObject)
         {
             return (short)(M2Share.RandomNumber.Random(3) + (playObject.HomeY - 2));
         }

@@ -118,7 +118,7 @@ namespace M2Server.Actor
                             BreakHolySeizeMode();
                             if (Master != null && struckObject != Master && struckObject.Race == ActorRace.Play)
                             {
-                                ((PlayObject)Master).SetPkFlag(struckObject);
+                                ((IPlayerActor)Master).SetPkFlag(struckObject);
                             }
                             MonsterSayMessage(struckObject, MonStatus.UnderFire);
                         }

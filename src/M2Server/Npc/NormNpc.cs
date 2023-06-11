@@ -351,7 +351,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighLevelHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighLevelHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighLevelHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -364,7 +364,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighPKPointHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighPKPointHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighPKPointHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -377,7 +377,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighDCHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighDCHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighDCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -390,7 +390,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighMCHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighMCHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighMCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -403,7 +403,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighSCHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighSCHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighSCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -416,7 +416,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighOnlineHuman != 0)
                         {
-                            sText = ((PlayObject)M2Share.ActorMgr.Get(M2Share.HighOnlineHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighOnlineHuman)).GetMyInfo();
                         }
                         else
                         {

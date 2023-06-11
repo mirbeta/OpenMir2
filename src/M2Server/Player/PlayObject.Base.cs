@@ -12,7 +12,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Player
 {
-    public partial class PlayObject : CharacterObject
+    public partial class PlayObject
     {
         private bool ClientPickUpItemIsSelf(int actorId)
         {
@@ -34,7 +34,7 @@ namespace M2Server.Player
             {
                 return false;
             }
-            PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+            IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
             for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
                 if (groupOwnerPlay.GroupMembers[i].ActorId == actorId)
@@ -220,7 +220,7 @@ namespace M2Server.Player
             SendSocket(ClientMsg, EDCode.EncodeBuffer(clientItem));
         }
 
-        internal bool IsBlockWhisper(string sName)
+        public bool IsBlockWhisper(string sName)
         {
             bool result = false;
             for (int i = 0; i < LockWhisperList.Count; i++)
@@ -683,7 +683,7 @@ namespace M2Server.Player
                 {
                     if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
                     {
-                        normNpc.Click((IPlayerActor)this);
+                        normNpc.Click(this);
                     }
                 }
             }
@@ -720,7 +720,7 @@ namespace M2Server.Player
 
         }
 
-        private void DealCancel()
+        public void DealCancel()
         {
             if (!Dealing)
             {
@@ -765,7 +765,7 @@ namespace M2Server.Player
                 {
                     int sumlv = 0;
                     int n = 0;
-                    PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                    IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
                     for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
                         playObject = groupOwnerPlay.GroupMembers[i];
@@ -1185,20 +1185,20 @@ namespace M2Server.Player
             switch (Job)
             {
                 case PlayJob.Warrior:
-                    sSendMsg = EDCode.EncodePacket(SystemShare.Config.BonusAbilofWarr) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(SystemShare.Config.NakedAbilofWarr);
+                    sSendMsg = EDCode.EncodeMessage(SystemShare.Config.BonusAbilofWarr) + '/' + EDCode.EncodeMessage(BonusAbil) + '/' + EDCode.EncodeMessage(SystemShare.Config.NakedAbilofWarr);
                     break;
                 case PlayJob.Wizard:
-                    sSendMsg = EDCode.EncodePacket(SystemShare.Config.BonusAbilofWizard) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(SystemShare.Config.NakedAbilofWizard);
+                    sSendMsg = EDCode.EncodeMessage(SystemShare.Config.BonusAbilofWizard) + '/' + EDCode.EncodeMessage(BonusAbil) + '/' + EDCode.EncodeMessage(SystemShare.Config.NakedAbilofWizard);
                     break;
                 case PlayJob.Taoist:
-                    sSendMsg = EDCode.EncodePacket(SystemShare.Config.BonusAbilofTaos) + '/' + EDCode.EncodePacket(BonusAbil) + '/' + EDCode.EncodePacket(SystemShare.Config.NakedAbilofTaos);
+                    sSendMsg = EDCode.EncodeMessage(SystemShare.Config.BonusAbilofTaos) + '/' + EDCode.EncodeMessage(BonusAbil) + '/' + EDCode.EncodeMessage(SystemShare.Config.NakedAbilofTaos);
                     break;
             }
             ClientMsg = Messages.MakeMessage(Messages.SM_ADJUST_BONUS, BonusPoint, 0, 0, 0);
             SendSocket(ClientMsg, sSendMsg);
         }
 
-        private void PvpDie(PlayObject playObject)
+        private void PvpDie(IPlayerActor playObject)
         {
             int nWinLevel = SystemShare.Config.KillHumanWinLevel;
             int nLostLevel = SystemShare.Config.KilledLostLevel;
@@ -1952,7 +1952,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 7:
-                    if (MyGuild != null && SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null)
+                    if (MyGuild != null && SystemShare.CastleMgr.IsCastleMember(this) != null)
                     {
                         result = true;
                     }
@@ -1962,7 +1962,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 70:
-                    if (MyGuild != null && SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null && GuildRankNo == 1)
+                    if (MyGuild != null && SystemShare.CastleMgr.IsCastleMember(this) != null && GuildRankNo == 1)
                     {
                         if (Abil.Level >= clientItem.Item.NeedLevel)
                         {
@@ -2255,7 +2255,7 @@ namespace M2Server.Player
                     {
                         if (!InGuildWarArea)
                         {
-                            IUserCastle castle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this);
+                            IUserCastle castle = SystemShare.CastleMgr.IsCastleMember(this);
                             if (castle != null && castle.IsMasterGuild(MyGuild))
                             {
                                 BaseObjectMove(castle.HomeMap, castle.GetHomeX(), castle.GetHomeY());
@@ -2391,9 +2391,9 @@ namespace M2Server.Player
             }
         }
 
-        private void OpenDealDlg(BaseObject baseObject)
+        public void OpenDealDlg(IPlayerActor baseObject)
         {
-            DealCreat = (PlayObject)baseObject;
+            DealCreat = (IPlayerActor)baseObject;
             if (DealCreat == null)
             {
                 return;
@@ -2404,7 +2404,7 @@ namespace M2Server.Player
             DealLastTick = HUtil32.GetTickCount();
         }
 
-        private void JoinGroup(PlayObject playObject)
+        public void JoinGroup(IPlayerActor playObject)
         {
             GroupOwner = playObject.ActorId;
             SendGroupText(Format(Settings.JoinGroup, ChrName));
@@ -2813,7 +2813,7 @@ namespace M2Server.Player
         private bool CheckItemsNeed(StdItem stdItem)
         {
             bool result = true;
-            IUserCastle castle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this);
+            IUserCastle castle = SystemShare.CastleMgr.IsCastleMember(this);
             switch (stdItem.Need)
             {
                 case 6:
@@ -2899,7 +2899,7 @@ namespace M2Server.Player
             DearHuman = M2Share.WorldEngine.GetPlayObject(DearName);
             if (DearHuman != null)
             {
-                DearHuman.DearHuman = (IPlayerActor)this;
+                DearHuman.DearHuman = this;
                 if (Gender == PlayGender.Man)
                 {
                     sSayMsg = string.Format(Settings.ManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
@@ -3047,7 +3047,7 @@ namespace M2Server.Player
                 MasterHuman = M2Share.WorldEngine.GetPlayObject(MasterName);
                 if (MasterHuman != null)
                 {
-                    MasterHuman.MasterHuman = (IPlayerActor)this;
+                    MasterHuman.MasterHuman = this;
                     MasterList.Add(MasterHuman);
                     sSayMsg = string.Format(Settings.MasterOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
@@ -3069,7 +3069,7 @@ namespace M2Server.Player
                     {
                         if (MasterHuman.MasterName == ChrName)
                         {
-                            MasterHuman.MasterHuman = (IPlayerActor)this;
+                            MasterHuman.MasterHuman = this;
                         }
                         MasterHuman.MasterList.Add(this);
                         sSayMsg = string.Format(Settings.MasterListOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
@@ -3507,7 +3507,7 @@ namespace M2Server.Player
             }
         }
 
-        private int GetGuildRelation(PlayObject play, PlayObject target)
+        private int GetGuildRelation(IPlayerActor play, IPlayerActor target)
         {
             GuildWarArea = false;
             if ((play.MyGuild == null) || (target.MyGuild == null))

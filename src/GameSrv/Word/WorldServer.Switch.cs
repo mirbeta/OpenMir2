@@ -21,7 +21,7 @@ namespace GameSrv.Word
             return result;
         }
 
-        private static void LoadSwitchData(SwitchDataInfo switchData, ref PlayObject playObject)
+        private static void LoadSwitchData(SwitchDataInfo switchData, ref IPlayerActor playObject)
         {
             playObject.BanShout = switchData.boBanShout;
             playObject.HearWhisper = switchData.boHearWhisper;

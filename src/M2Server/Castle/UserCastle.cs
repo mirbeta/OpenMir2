@@ -447,7 +447,7 @@ namespace M2Server.Castle
             bool result = true;
             for (int i = 0; i < playObjectList.Count; i++)
             {
-                PlayObject playObject = (PlayObject)playObjectList[i];
+                IPlayerActor playObject = (IPlayerActor)playObjectList[i];
                 if (!playObject.Death && playObject.MyGuild != guild)
                 {
                     result = false;
@@ -489,7 +489,7 @@ namespace M2Server.Castle
             M2Share.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ref playObjectList);
             for (int i = 0; i < playObjectList.Count; i++)
             {
-                ((PlayObject)playObjectList[i]).RefShowName();
+                ((IPlayerActor)playObjectList[i]).RefShowName();
             }
         }
 

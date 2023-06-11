@@ -676,7 +676,7 @@ namespace ScriptSystem
                 }
                 for (int i = 0; i < nItemCount; i++)
                 {
-                    if (playerActor.IsEnoughBag)
+                    if (playerActor.IsEnoughBag())
                     {
                         userItem = new UserItem();
                         if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))

@@ -319,11 +319,11 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (((PlayObject)Master).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
+                                if (((IPlayerActor)Master).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
                                 {
                                     if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
                                     {
-                                        ((PlayObject)Master).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
+                                        ((IPlayerActor)Master).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
                                     }
                                 }
                             }
@@ -663,11 +663,11 @@ namespace M2Server.Player
                                 }
                             }
                         }
-                        if (((PlayObject)targetObject).IsMaster)
+                        if (((IPlayerActor)targetObject).IsMaster)
                         {
-                            for (int i = 0; i < ((PlayObject)targetObject).MasterList.Count; i++)
+                            for (int i = 0; i < ((IPlayerActor)targetObject).MasterList.Count; i++)
                             {
-                                if (((PlayObject)targetObject).MasterList[i] == this)
+                                if (((IPlayerActor)targetObject).MasterList[i] == this)
                                 {
                                     result = false;
                                     break;
@@ -710,9 +710,9 @@ namespace M2Server.Player
                             {
                                 result = false;
                             }
-                            if (GuildWarArea && (((PlayObject)targetObject).MyGuild != null))
+                            if (GuildWarArea && (((IPlayerActor)targetObject).MyGuild != null))
                             {
-                                if (MyGuild.IsAllyGuild(((PlayObject)targetObject).MyGuild))
+                                if (MyGuild.IsAllyGuild(((IPlayerActor)targetObject).MyGuild))
                                 {
                                     result = false;
                                 }
@@ -733,11 +733,11 @@ namespace M2Server.Player
                     {
                         if (PvpLevel() >= 2)
                         {
-                            result = ((PlayObject)targetObject).PvpLevel() < 2;
+                            result = ((IPlayerActor)targetObject).PvpLevel() < 2;
                         }
                         else
                         {
-                            result = ((PlayObject)targetObject).PvpLevel() >= 2;
+                            result = ((IPlayerActor)targetObject).PvpLevel() >= 2;
                         }
                     }
                     if (SystemShare.Config.PveServer)
@@ -767,7 +767,7 @@ namespace M2Server.Player
                     return IsProperIsFriend(targetObject.Master);
                 }
                 if (targetObject.Race > ActorRace.Play) return result;
-                PlayObject playObject = (PlayObject)targetObject;
+                IPlayerActor playObject = (IPlayerActor)targetObject;
                 if (!playObject.InGuildWarArea)
                 {
                     if (SystemShare.Config.boPKLevelProtect)// 新人保护

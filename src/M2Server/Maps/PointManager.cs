@@ -130,9 +130,9 @@ namespace M2Server.Maps
             {
                 nMX = 0;
                 nMY = 0;
-                if (((PlayObject)FBaseObject).Envir != m_PEnvir)
+                if (((IPlayerActor)FBaseObject).Envir != m_PEnvir)
                 {
-                    m_PEnvir = ((PlayObject)FBaseObject).Envir;
+                    m_PEnvir = ((IPlayerActor)FBaseObject).Envir;
                     m_nPostion = 0;
                     CurrX = nX;
                     CurrY = nY;
@@ -392,15 +392,15 @@ namespace M2Server.Maps
                 CurrX = nX;
                 CurrY = nY;
                 nC = 0;
-                btDir = ((PlayObject)FBaseObject).Dir;
+                btDir = ((IPlayerActor)FBaseObject).Dir;
                 while (true)
                 {
                     btDir = GetPoint1_GetNextDir(btDir);
                     for (int i = 2; i >= 1; i--)
                     {
-                        if (((PlayObject)FBaseObject).Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY))
+                        if (((IPlayerActor)FBaseObject).Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY))
                         {
-                            if (((PlayObject)FBaseObject).CanMove(nMX, nMY, false))
+                            if (((IPlayerActor)FBaseObject).CanMove(nMX, nMY, false))
                             {
                                 nX = nMX;
                                 nY = nMY;
@@ -420,9 +420,9 @@ namespace M2Server.Maps
             {
                 nMX = 0;
                 nMY = 0;
-                if (((PlayObject)FBaseObject).Envir != m_PEnvir)
+                if (((IPlayerActor)FBaseObject).Envir != m_PEnvir)
                 {
-                    m_PEnvir = ((PlayObject)FBaseObject).Envir;
+                    m_PEnvir = ((IPlayerActor)FBaseObject).Envir;
                     m_nPostion = 0;
                     CurrX = nX;
                     CurrY = nY;
@@ -495,7 +495,7 @@ namespace M2Server.Maps
                             }
                         }
                     }
-                    if (!((PlayObject)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
+                    if (!((IPlayerActor)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
                     {
                         for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
                         {

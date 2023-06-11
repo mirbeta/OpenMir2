@@ -17,7 +17,11 @@ namespace GameSrv.Word
             var playObject = CreateRobotPlayObject(ai);
             if (playObject != null)
             {
-                playObject.HomeMap = GetHomeInfo(ref playObject.HomeX, ref playObject.HomeY);
+                short homeX = 0;
+                short homeY = 0;
+                playObject.HomeMap = GetHomeInfo(playObject.Job, ref homeX, ref homeY);
+                playObject.HomeX= homeX;
+                playObject.HomeY = homeY;
                 playObject.MapFileName = playObject.HomeMap;
                 playObject.UserAccount = "假人" + ai.sChrName;
                 playObject.Start(FindPathType.Dynamic);

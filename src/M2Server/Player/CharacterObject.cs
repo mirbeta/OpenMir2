@@ -12,69 +12,69 @@ namespace M2Server.Player
         /// <summary>
         /// 攻击速度
         /// </summary>
-        internal ushort HitSpeed;
+        internal ushort HitSpeed { get; set; }
         /// <summary>
         /// HP恢复点数
         /// </summary>
-        protected ushort HealthRecover;
+        protected ushort HealthRecover { get; set; }
         /// <summary>
         /// MP恢复点数
         /// </summary>
-        protected ushort SpellRecover;
+        protected ushort SpellRecover { get; set; }
         /// <summary>
         /// 中毒恢复点数
         /// </summary>
-        protected ushort PoisonRecover;
-        protected byte PerHealth;
-        protected byte PerHealing;
-        protected byte PerSpell;
+        protected ushort PoisonRecover { get; set; }
+        protected byte PerHealth { get; set; }
+        protected byte PerHealing { get; set; }
+        protected byte PerSpell { get; set; }
         /// <summary>
         /// 增加血量的间隔
         /// </summary>
-        protected int IncHealthSpellTick;
+        protected int IncHealthSpellTick { get; set; }
         /// <summary>
         /// 身上物品
         /// </summary>
-        public UserItem[] UseItems;
+        public UserItem[] UseItems { get; set; }
         /// <summary>
         /// 攻击状态
         /// </summary>
-        public AttackMode AttatckMode;
+        public AttackMode AttatckMode { get; set; }
         /// <summary>
         /// 衣服特效(如天外飞仙衣服效果)
         /// </summary>
-        private readonly byte DressEffType;
+        public byte DressEffType { get; set; }
         /// <summary>
         /// 马类型
         /// </summary>
-        public byte HorseType;
+        public byte HorseType { get; set; }
         /// <summary>
         /// 骑马
         /// </summary>
-        public bool OnHorse;
+        public bool OnHorse { get; set; }
         /// <summary>
         /// 魔法盾
         /// </summary>
-        internal bool AbilMagBubbleDefence;
+        public bool AbilMagBubbleDefence { get; set; }
         /// <summary>
         /// 魔法盾等级
         /// </summary>
-        protected byte MagBubbleDefenceLevel;
+        public byte MagBubbleDefenceLevel { get; set; }
         /// <summary>
         /// 气血石时间
         /// </summary>
-        private int IncHpStoneTime;
+        public int IncHpStoneTime { get; set; }
         /// <summary>
         /// 魔血石时间
         /// </summary>
-        private int IncMpStoneTime;
-        public ushort IncHealth;
-        public ushort IncSpell;
-        public ushort IncHealing;
+        public int IncMpStoneTime { get; set; }
+        public ushort IncHealth { get; set; }
+        public ushort IncSpell { get; set; }
+        public ushort IncHealing { get; set; }
         /// <summary>
         /// 死亡是不是掉装备
         /// </summary>
-        public bool NoDropUseItem = false;
+        public bool NoDropUseItem { get; set; }
 
         public CharacterObject()
         {
@@ -194,7 +194,7 @@ namespace M2Server.Player
                                 UseItems[ItemLocation.Charm].Dura = 0;
                                 if (Race == ActorRace.Play)
                                 {
-                                    ((PlayObject)this).SendDelItems(UseItems[ItemLocation.Charm]);
+                                    ((IPlayerActor)this).SendDelItems(UseItems[ItemLocation.Charm]);
                                 }
                                 UseItems[ItemLocation.Charm].Index = 0;
                             }
@@ -233,7 +233,7 @@ namespace M2Server.Player
                                 UseItems[ItemLocation.Charm].Dura = 0;
                                 if (Race == ActorRace.Play)
                                 {
-                                    ((PlayObject)this).SendDelItems(UseItems[ItemLocation.Charm]);
+                                    ((IPlayerActor)this).SendDelItems(UseItems[ItemLocation.Charm]);
                                 }
                                 UseItems[ItemLocation.Charm].Index = 0;
                             }

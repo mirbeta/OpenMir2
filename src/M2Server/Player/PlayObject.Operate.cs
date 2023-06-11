@@ -66,7 +66,7 @@ namespace M2Server.Player
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)
         {
-            var playObject = (PlayObject)M2Share.ActorMgr.Get(charId);
+            var playObject = (IPlayerActor)M2Share.ActorMgr.Get(charId);
             if (!CretInNearXy(playObject, nX, nY))
             {
                 return;
@@ -120,7 +120,7 @@ namespace M2Server.Player
             }
             if (npc.Envir == Envir && IsWithinSight(npc) || npc.IsHide)
             {
-                npc.UserSelect((IPlayerActor)this, sMsg.Trim());
+                npc.UserSelect(this, sMsg.Trim());
             }
         }
 
@@ -364,7 +364,7 @@ namespace M2Server.Player
                 return;
             }
             var castle = SystemShare.CastleMgr.IsCastleEnvir(Envir);
-            if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, (IPlayerActor)this))
+            if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, this))
             {
                 // M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
             }
@@ -789,8 +789,8 @@ namespace M2Server.Player
             }
             if (GroupOwner != this.ActorId)
             {
-                var groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                groupOwnerPlay.DelMember((IPlayerActor)this);
+                var groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                groupOwnerPlay.DelMember(this);
                 AllowGroup = false;
             }
             else
@@ -827,10 +827,10 @@ namespace M2Server.Player
                 return;
             }
             GroupMembers.Clear();
-            this.GroupMembers.Add((IPlayerActor)this);
+            this.GroupMembers.Add(this);
             this.GroupMembers.Add(playObject);
             JoinGroup(this);
-            playObject.JoinGroup((IPlayerActor)this);
+            playObject.JoinGroup(this);
             AllowGroup = true;
             SendDefMessage(Messages.SM_CREATEGROUP_OK, 0, 0, 0, 0);
             SendGroupMembers();
@@ -869,7 +869,7 @@ namespace M2Server.Player
                 return;
             }
             this.GroupMembers.Add(playObject);
-            playObject.JoinGroup((IPlayerActor)this);
+            playObject.JoinGroup(this);
             SendDefMessage(Messages.SM_GROUPADDMEM_OK, 0, 0, 0, 0);
             SendGroupMembers();
             if (SystemShare.FunctionNPC != null)
@@ -928,7 +928,7 @@ namespace M2Server.Player
             var poseObject = GetPoseCreate();
             if (poseObject.Race == ActorRace.Play)
             {
-                var targetPlayObject = (PlayObject)poseObject;
+                var targetPlayObject = (IPlayerActor)poseObject;
                 if (targetPlayObject != this)
                 {
                     if (targetPlayObject.GetPoseCreate() == this && !targetPlayObject.Dealing)
@@ -1467,7 +1467,7 @@ namespace M2Server.Player
                 var poseObject = GetPoseCreate();
                 if (poseObject != null && poseObject.Race == ActorRace.Play)
                 {
-                    var posePlayer = (PlayObject)poseObject;
+                    var posePlayer = (IPlayerActor)poseObject;
                     if (posePlayer.MyGuild != null && posePlayer.GetPoseCreate() == this)
                     {
                         if (posePlayer.MyGuild.EnableAuthAlly)

@@ -4877,7 +4877,7 @@ namespace ScriptSystem
                     StdItem stdItem;
                     // nItemCount 为0时出死循环
                     UserItem userItem;
-                    if (playerActor.IsEnoughBag)
+                    if (playerActor.IsEnoughBag())
                     {
                         userItem = new UserItem();
                         if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))

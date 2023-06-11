@@ -595,7 +595,7 @@ namespace GameSrv.NPC
         {
             WeaponUpgradeInfo upgradeInfo = default;
             var nFlag = 0;
-            if (!user.IsEnoughBag)
+            if (!user.IsEnoughBag())
             {
                 // GameShare.ScriptEngine.GotoLable(user, ScriptFlagConst.sGETBACKUPGFULL, false);
                 return;

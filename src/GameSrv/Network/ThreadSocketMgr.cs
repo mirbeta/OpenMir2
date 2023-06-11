@@ -341,7 +341,7 @@ namespace GameSrv.Network
         /// <summary>
         /// 设置用户对应网关编号
         /// </summary>
-        public void SetGateUserList(int gateIdx, int nSocket, PlayObject playObject)
+        public void SetGateUserList(int gateIdx, int nSocket, IPlayerActor playObject)
         {
             _gameGates[gateIdx].SetGateUserList(nSocket, playObject);
         }

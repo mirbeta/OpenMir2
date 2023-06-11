@@ -457,7 +457,7 @@ namespace ScriptSystem
 
         private void ConditionOfCheckBagGage(IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
-            if (playerActor.IsEnoughBag)
+            if (playerActor.IsEnoughBag())
             {
                 if ((!string.IsNullOrEmpty(questConditionInfo.sParam1)))
                 {

@@ -315,7 +315,7 @@ namespace M2Server.Player
                     {
                         if (Envir == castle.PalaceEnvir && MyGuild != null)
                         {
-                            if (!castle.IsMember((IPlayerActor)this))
+                            if (!castle.IsMember(this))
                             {
                                 if (castle.IsAttackGuild(MyGuild))
                                 {
@@ -699,7 +699,7 @@ namespace M2Server.Player
                     // 清组队已死亡成员
                     if (GroupOwner != 0)
                     {
-                        PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                        IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
                         if (groupOwnerPlay.Death || groupOwnerPlay.Ghost)
                         {
                             GroupOwner = 0;
@@ -743,7 +743,7 @@ namespace M2Server.Player
             {
                 if (WAbil.HP == 0)
                 {
-                    if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((PlayObject)LastHiter).UnRevival))
+                    if (((LastHiter == null) || LastHiter.Race == ActorRace.Play && !((IPlayerActor)LastHiter).UnRevival))
                     {
                         if (Race == ActorRace.Play && Revival && ((HUtil32.GetTickCount() - RevivalTick) > SystemShare.Config.RevivalTime))
                         {
@@ -1570,7 +1570,7 @@ namespace M2Server.Player
                             }
                             if (this.MyGuild != null && this.Castle != null)
                             {
-                                if (SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                                if (SystemShare.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                                 {
                                     if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
                                     {
@@ -2133,12 +2133,12 @@ namespace M2Server.Player
             }
             if (GroupOwner != 0)
             {
-                PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                groupOwnerPlay.DelMember((IPlayerActor)this);
+                IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                groupOwnerPlay.DelMember(this);
             }
             if (MyGuild != null)
             {
-                MyGuild.DelHumanObj((IPlayerActor)this);
+                MyGuild.DelHumanObj(this);
             }
             LogonTimcCost();
             base.Disappear();

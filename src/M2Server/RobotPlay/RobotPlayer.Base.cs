@@ -356,7 +356,7 @@ namespace M2Server.RobotPlay
                     {
                         if (baseObject.Race == ActorRace.Play)
                         {
-                            var targetPvpLevel = ((PlayObject)baseObject).PvpLevel();
+                            var targetPvpLevel = ((IPlayerActor)baseObject).PvpLevel();
                             if (PvpLevel() >= 2)
                             {
                                 result = targetPvpLevel < 2;
@@ -404,7 +404,7 @@ namespace M2Server.RobotPlay
                         {
                             result = false;
                         }
-                        if (baseObject.IsRobot && (!InGuildWarArea || ((PlayObject)baseObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
+                        if (baseObject.IsRobot && (!InGuildWarArea || ((IPlayerActor)baseObject).PvpLevel() < 2)) // 假人不攻击假人,行会战除外
                         {
                             result = false;
                         }

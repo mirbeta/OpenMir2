@@ -775,9 +775,9 @@ namespace M2Server.Actor
         /// <param name="nDamage"></param>
         internal void DamageHealth(int nDamage)
         {
-            if ((LastHiter == null) || ((LastHiter.Race == ActorRace.Play) && !((PlayObject)LastHiter).UnMagicShield))
+            if ((LastHiter == null) || ((LastHiter.Race == ActorRace.Play) && !((IPlayerActor)LastHiter).UnMagicShield))
             {
-                if (Race == ActorRace.Play && ((PlayObject)this).MagicShield && (nDamage > 0) && (WAbil.MP > 0))
+                if (Race == ActorRace.Play && ((IPlayerActor)this).MagicShield && (nDamage > 0) && (WAbil.MP > 0))
                 {
                     int nSpdam = HUtil32.Round(nDamage * 1.5);
                     if (WAbil.MP >= nSpdam)
@@ -818,7 +818,7 @@ namespace M2Server.Actor
             }
         }
 
-        public static byte GetBackDir(byte nDir)
+        public byte GetBackDir(byte nDir)
         {
             byte result = 0;
             switch (nDir)
@@ -1161,7 +1161,7 @@ namespace M2Server.Actor
                         {
                             DisappearA();
                             SpaceMoved = true;
-                            ((PlayObject)this).ChangeSpaceMove(envir, nX, nY);
+                            ((IPlayerActor)this).ChangeSpaceMove(envir, nX, nY);
                         }
                         else
                         {
@@ -1177,7 +1177,7 @@ namespace M2Server.Actor
             SendRefMsg(Messages.RM_USERNAME, 0, 0, 0, 0, GetShowName());
         }
 
-        public BaseObject MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec)
+        public IActor MakeSlave(string sMonName, int nMakeLevel, int nExpLevel, int nMaxMob, int dwRoyaltySec)
         {
             if (SlaveList == null)
             {
@@ -1426,7 +1426,7 @@ namespace M2Server.Actor
             }
         }
 
-        protected bool InSafeArea()
+        public bool InSafeArea()
         {
             if (Envir == null)
             {
@@ -2198,7 +2198,7 @@ namespace M2Server.Actor
             return null;
         }
 
-        protected void DelBagItem(int nIndex)
+        public void DelBagItem(int nIndex)
         {
             if ((nIndex < 0) || (nIndex >= ItemList.Count))
             {
@@ -2206,6 +2206,11 @@ namespace M2Server.Actor
             }
             Dispose(ItemList[nIndex]);
             ItemList.RemoveAt(nIndex);
+        }
+        
+        public void DelBagItem(UserItem userItem)
+        {
+            DelBagItem(userItem.Index);
         }
 
         public bool DelBagItem(int nItemIndex, string sItemName)
@@ -2252,7 +2257,7 @@ namespace M2Server.Actor
         {
             if (Race == ActorRace.Play)
             {
-                return ((((PlayObject)this).Permission > 9) && SystemShare.Config.boGMRunAll);
+                return ((((IPlayerActor)this).Permission > 9) && SystemShare.Config.boGMRunAll);
             }
             return false;
         }
@@ -2768,9 +2773,9 @@ namespace M2Server.Actor
             //                    MessageBodyW.Tag2 = 0;
             //                    sSENDMSG = EDcode.EncodeBuffer(@MessageBodyW);
             //                }
-            //                ((PlayObject)(this)).m_DefMsg = EDCode.MakeDefaultMsg(Messages.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
-            //                ((PlayObject)(this)).SendSocket(((PlayObject)(this)).m_DefMsg, sSENDMSG);
-            //                ((PlayObject)(this)).protectedPowerPointChanged();
+            //                ((IPlayerActor)(this)).m_DefMsg = EDCode.MakeDefaultMsg(Messages.SM_FEATURECHANGED, this.ObjectId, HUtil32.LoWord(i), HUtil32.HiWord(i), GetFeatureEx());
+            //                ((IPlayerActor)(this)).SendSocket(((IPlayerActor)(this)).m_DefMsg, sSENDMSG);
+            //                ((IPlayerActor)(this)).protectedPowerPointChanged();
             //                SendUpdateMsg(this, Messages.RM_USERNAME, 0, 0, 0, 0, GetShowName());
             //            }
             //            HealthSpellChanged();
@@ -2789,9 +2794,9 @@ namespace M2Server.Actor
             //        m_CurSafeZoneList.Add(StartPointInfo);
             //    }
             //}
-            //if ((m_btRaceServer == ActorRace.Play) && !((PlayObject)(this)).m_boOffLineFlag)
+            //if ((m_btRaceServer == ActorRace.Play) && !((IPlayerActor)(this)).m_boOffLineFlag)
             //{
-            //   ((PlayObject)(this)).CheckMapEvent(5, "");
+            //   ((IPlayerActor)(this)).CheckMapEvent(5, "");
             //}
         }
 

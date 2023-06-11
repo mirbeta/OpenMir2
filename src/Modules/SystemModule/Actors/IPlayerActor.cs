@@ -12,7 +12,9 @@ namespace SystemModule
         byte HorseType { get; set; }
         AttackMode AttatckMode { get; set; }
         UserItem[] UseItems { get; set; }
-        bool IsEnoughBag { get; }
+        ushort IncHealth { get; set; }
+        ushort IncSpell { get; set; }
+        ushort IncHealing { get; set; }
         /// <summary>
         /// 性别
         /// </summary>
@@ -104,7 +106,7 @@ namespace SystemModule
         /// <summary>
         /// 交易对象
         /// </summary>
-        IActor DealCreat { get; set; }
+        IPlayerActor DealCreat { get; set; }
         /// <summary>
         /// 正在交易
         /// </summary>
@@ -577,7 +579,7 @@ namespace SystemModule
         /// <summary>
         /// 组成员
         /// </summary>
-        IList<IActor> GroupMembers { get; set; }
+        IList<IPlayerActor> GroupMembers { get; set; }
         string PlayDiceLabel { get; set; }
         bool IsTimeRecall { get; set; }
         int TimeRecallTick { get; set; }
@@ -854,7 +856,6 @@ namespace SystemModule
 
         short Contribution { get; set; }
 
-
         string RankLevelName { get; set; }
 
         bool IsFilterAction { get; set; }
@@ -973,7 +974,7 @@ namespace SystemModule
 
         int GetMyStatus();
 
-        void HasLevelUp(ushort level);
+        void HasLevelUp(int level);
 
         bool IsAddWeightAvailable(int nWeight);
 
@@ -995,7 +996,7 @@ namespace SystemModule
 
         string GetMyInfo();
 
-        int PvpLevel();
+        byte PvpLevel();
 
         UserMagic GetMagicInfo(string magicName);
 
@@ -1013,7 +1014,7 @@ namespace SystemModule
 
         void DelBagItem(UserItem userItem);
 
-        void DelBagItem(int makeIndex, string itemName);
+        bool DelBagItem(int makeIndex, string itemName);
 
         void SendUpdateItem(UserItem userItem);
 
@@ -1021,9 +1022,9 @@ namespace SystemModule
 
         void SendAddMagic(UserMagic userMagic);
 
-        void QuestTakeCheckItem(UserItem userItem);
+        bool QuestTakeCheckItem(UserItem userItem);
 
-        void IncGold(int gold);
+        bool IncGold(int gold);
 
         bool DecGold(int gold);
 
@@ -1044,8 +1045,6 @@ namespace SystemModule
         void ClientQueryBagItems();
 
         void SendGroupText(string sText);
-
-        void GotoLable(IPlayerActor playObject, string lab, bool s);
 
         void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries);
 
@@ -1088,5 +1087,41 @@ namespace SystemModule
         void ClientGuildAlly();
 
         void ClientGuildBreakAlly(string guildName);
+
+        bool IsEnoughBag();
+
+        void DealCancel();
+
+        void AbilCopyToWAbil();
+
+        void ClearStatusTime();
+
+        void DelMember(IPlayerActor playerActor);
+
+        bool InSafeArea();
+
+        void OpenDealDlg(IPlayerActor playerActor);
+
+        bool CanMove(short nX, short nY, bool boFlag);
+
+        bool CanRun(short nCurrX, short nCurrY, short nX, short nY, bool boFlag);
+
+        void GainExp(int dwExp);
+
+        void AddBodyLuck(double dLuck);
+
+        void SetPkFlag(IActor baseObject);
+
+        void IncPkPoint(int nPoint);
+
+        void MakeWeaponUnlock();
+
+        void AttPowerUp(int nPower, int nTime);
+
+        void ChangeSpaceMove(IEnvirnoment envir, short nX, short nY);
+
+        void ChangeItemByJob(ref ClientItem citem, int level);
+
+        void SendSocket(CommandMessage defMsg, string sMsg);
     }
 }

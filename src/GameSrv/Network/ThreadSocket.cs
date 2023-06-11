@@ -353,7 +353,7 @@ namespace GameSrv.Network
                                     NewUserTick = HUtil32.GetTickCount(),
                                     PlayTime = nPlayTime
                                 };
-                                //M2Share.FrontEngine.AddToLoadRcdList(loadRcdInfo);
+                                M2Share.FrontEngine.AddToLoadRcdList(loadRcdInfo);
                             }
                             else
                             {
@@ -481,7 +481,7 @@ namespace GameSrv.Network
         /// <summary>
         /// 设置用户对应网关编号
         /// </summary>
-        public void SetGateUserList(int nSocket, PlayObject playObject)
+        public void SetGateUserList(int nSocket, IPlayerActor playObject)
         {
             HUtil32.EnterCriticalSection(runSocketSection);
             try

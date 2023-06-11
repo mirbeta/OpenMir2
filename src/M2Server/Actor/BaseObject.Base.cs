@@ -643,7 +643,7 @@ namespace M2Server.Actor
                                                 }
                                                 else
                                                 {
-                                                    ((PlayObject)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                    ((IPlayerActor)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
                                                 }
                                             }
                                         }
@@ -661,7 +661,7 @@ namespace M2Server.Actor
                                                     }
                                                     else
                                                     {
-                                                        ((PlayObject)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                        ((IPlayerActor)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
                                                     }
                                                 }
                                             }
@@ -746,7 +746,7 @@ namespace M2Server.Actor
                                 SetTargetCreat(targetBaseObject);
                                 if ((Race == ActorRace.Play) && (targetBaseObject.Race == ActorRace.Play))
                                 {
-                                    ((PlayObject)this).SetPkFlag(targetBaseObject);
+                                    ((IPlayerActor)this).SetPkFlag(targetBaseObject);
                                 }
                                 SetLastHiter(targetBaseObject);
                             }
@@ -832,7 +832,7 @@ namespace M2Server.Actor
             }
             if ((Race >= ActorRace.Animal) && (LastHiter != null) && (LastHiter.Race == ActorRace.Play)) // 人攻击怪物
             {
-                switch (((PlayObject)LastHiter).Job)
+                switch (((IPlayerActor)LastHiter).Job)
                 {
                     case PlayJob.Warrior:
                         nDamage = (ushort)(nDamage * SystemShare.Config.WarrMon / 10);

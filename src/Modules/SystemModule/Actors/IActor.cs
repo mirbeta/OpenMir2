@@ -379,6 +379,10 @@ namespace SystemModule
 
         void SendMsg(IActor baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "");
 
+        void SendActionMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg);
+        
+        void SendUpdateMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg);
+
         bool IsProperTarget(IActor actor);
 
         bool InSafeZone();

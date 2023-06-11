@@ -6,7 +6,7 @@ namespace M2Server.Maps
     /// <summary>
     /// 地图物品
     /// </summary>
-    public class VisibleMapItem
+    public class VisibleMapItemOld
     {
         public short nX;
         public short nY;

@@ -249,7 +249,7 @@ namespace M2Server.RobotPlay
             base.MakeGhost();
         }
 
-        protected override void Whisper(string whostr, string saystr)
+        public override void Whisper(string whostr, string saystr)
         {
             var playObject = M2Share.WorldEngine.GetPlayObject(whostr);
             if (playObject != null)
@@ -1197,7 +1197,7 @@ namespace M2Server.RobotPlay
                             SetLastHiter(attackBaseObject);
                             Struck(attackBaseObject);
                         }
-                        if (SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null && attackBaseObject != null)
+                        if (SystemShare.CastleMgr.IsCastleMember(this) != null && attackBaseObject != null)
                         {
                             if (attackBaseObject.Race == ActorRace.Guard)
                             {
@@ -3559,7 +3559,7 @@ namespace M2Server.RobotPlay
                                 }
                                 if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && ((IPlayerActor)TargetCret).ExtraAbil[(byte)((IPlayerActor)TargetCret).Job + 6] == 0)
                                     {
                                         return 52;// 英雄诅咒术
                                     }
@@ -3568,7 +3568,7 @@ namespace M2Server.RobotPlay
                             case 1:
                                 if (AllowUseMagic(52)) // 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && ((IPlayerActor)TargetCret).ExtraAbil[(byte)((IPlayerActor)TargetCret).Job + 6] == 0)
                                     {
                                         return 52;// 英雄诅咒术
                                     }
@@ -3601,7 +3601,7 @@ namespace M2Server.RobotPlay
                                 }
                                 if (AllowUseMagic(52))// 诅咒术
                                 {
-                                    if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
+                                    if (TargetCret.Race == ActorRace.Play && ((IPlayerActor)TargetCret).ExtraAbil[(byte)((IPlayerActor)TargetCret).Job + 6] == 0)
                                     {
                                         return 52;
                                     }
@@ -3635,7 +3635,7 @@ namespace M2Server.RobotPlay
                         }
                         if (AllowUseMagic(52))// 诅咒术
                         {
-                            if (TargetCret.Race == ActorRace.Play && ((PlayObject)TargetCret).ExtraAbil[(byte)((PlayObject)TargetCret).Job + 6] == 0)
+                            if (TargetCret.Race == ActorRace.Play && ((IPlayerActor)TargetCret).ExtraAbil[(byte)((IPlayerActor)TargetCret).Job + 6] == 0)
                             {
                                 return 52;
                             }

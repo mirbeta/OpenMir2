@@ -67,7 +67,7 @@ namespace M2Server.Monster.Monsters
                     {
                         if (baseObject.Race == ActorRace.Play)
                         {
-                            if (Castle.MasterGuild == ((PlayObject)baseObject).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject).MyGuild))
+                            if (Castle.MasterGuild == ((IPlayerActor)baseObject).MyGuild || Castle.MasterGuild.IsAllyGuild(((IPlayerActor)baseObject).MyGuild))
                             {
                                 if (LastHiter != baseObject)
                                 {
@@ -80,7 +80,7 @@ namespace M2Server.Monster.Monsters
                     {
                         if (baseObject.Master.Race == ActorRace.Play)
                         {
-                            if (Castle.MasterGuild == ((PlayObject)baseObject.Master).MyGuild || Castle.MasterGuild.IsAllyGuild(((PlayObject)baseObject.Master).MyGuild))
+                            if (Castle.MasterGuild == ((IPlayerActor)baseObject.Master).MyGuild || Castle.MasterGuild.IsAllyGuild(((IPlayerActor)baseObject.Master).MyGuild))
                             {
                                 if (LastHiter != baseObject.Master && LastHiter != baseObject)
                                 {
@@ -109,7 +109,7 @@ namespace M2Server.Monster.Monsters
                 {
                     return false;
                 }
-                if (((PlayObject)baseObject).PvpLevel() >= 2)
+                if (((IPlayerActor)baseObject).PvpLevel() >= 2)
                 {
                     return true;
                 }

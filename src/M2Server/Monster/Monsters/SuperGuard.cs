@@ -87,7 +87,7 @@ namespace M2Server.Monster.Monsters
                     }
                     if (attackObject.Race == ActorRace.Play && !attackObject.Mission)
                     {
-                        if (((PlayObject)attackObject).PvpLevel() >= 2)
+                        if (((IPlayerActor)attackObject).PvpLevel() >= 2)
                         {
                             SetAttackTarget(attackObject);
                             break;

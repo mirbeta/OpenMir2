@@ -67,7 +67,7 @@ namespace GameSrv.Network
         /// <summary>
         /// 人物对象
         /// </summary>
-        public PlayObject PlayObject;
+        public IPlayerActor PlayObject;
         public int SessionID;
         /// <summary>
         /// 账号

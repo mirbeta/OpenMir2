@@ -78,7 +78,7 @@ namespace GameSrv.Services
             _logger.Debug("登录服务器连接初始化完成...");
         }
 
-        private void SendSocket(string sSendMsg)
+        public void SendSocket(string sSendMsg)
         {
             if (_clientScoket == null || !_clientScoket.IsConnected) return;
             byte[] data = HUtil32.GetBytes(sSendMsg);

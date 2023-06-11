@@ -13,816 +13,816 @@ using SystemModule.Packets.ServerPackets;
 
 namespace M2Server.Player
 {
-    public partial class PlayObject
+    public partial class PlayObject : CharacterObject, IPlayerActor
     {
         /// <summary>
         /// 性别
         /// </summary>
-        public PlayGender Gender;
+        public PlayGender Gender { get; set; }
         /// <summary>
         /// 人物的头发
         /// </summary>
-        public byte Hair;
+        public byte Hair { get; set; }
         /// <summary>
         /// 人物的职业 (0:战士 1：法师 2:道士)
         /// </summary>
-        public PlayJob Job;
+        public PlayJob Job { get; set; }
         /// <summary>
         /// 登录帐号名
         /// </summary>
-        public string UserAccount;
+        public string UserAccount { get; set; }
         /// <summary>
         /// 人物IP地址
         /// </summary>
-        public string LoginIpAddr = string.Empty;
-        public string LoginIpLocal = string.Empty;
+        public string LoginIpAddr { get; set; }
+        public string LoginIpLocal { get; set; }
         /// <summary>
         /// 账号过期
         /// </summary>
-        public bool AccountExpired;
+        public bool AccountExpired { get; set; }
         /// <summary>
         /// 账号游戏点数检查时间
         /// </summary>
-        public int AccountExpiredTick;
-        public long ExpireTime;
-        public int ExpireCount;
-        public int QueryExpireTick;
+        public int AccountExpiredTick { get; set; }
+        public long ExpireTime { get; set; }
+        public int ExpireCount { get; set; }
+        public int QueryExpireTick { get; set; }
         /// <summary>
         /// 权限等级
         /// </summary>
-        public byte Permission;
+        public byte Permission { get; set; }
         /// <summary>
         /// 人物的幸运值
         /// </summary>
-        public byte Luck;
+        public byte Luck { get; set; }
         /// <summary>
         /// 人物身上最多可带金币数
         /// </summary>
-        public int GoldMax;
+        public int GoldMax { get; set; }
         /// <summary>
         /// 行会占争范围
         /// </summary>
-        public bool GuildWarArea;
+        public bool GuildWarArea { get; set; }
         /// <summary>
         /// 允许行会传送
         /// </summary>
-        public bool AllowGuildReCall = false;
+        public bool AllowGuildReCall { get; set; }
         /// <summary>
         /// 允许私聊
         /// </summary>
-        public bool HearWhisper;
+        public bool HearWhisper { get; set; }
         /// <summary>
         /// 允许群聊
         /// </summary>
-        public bool BanShout;
+        public bool BanShout { get; set; }
         /// <summary>
         /// 拒绝行会聊天
         /// </summary>
-        public bool BanGuildChat;
+        public bool BanGuildChat { get; set; }
         /// <summary>
         /// 是否允许交易
         /// </summary>
-        public bool AllowDeal;
+        public bool AllowDeal { get; set; }
         /// <summary>
         /// 检查重叠人物使用
         /// </summary>
-        public bool BoDuplication;
+        public bool BoDuplication { get; set; }
         /// <summary>
         /// 检查重叠人物间隔
         /// </summary>
-        public int DupStartTick = 0;
+        public int DupStartTick { get; set; }
         /// <summary>
         /// 是否用了神水
         /// </summary>
-        protected bool UserUnLockDurg;
+        public bool UserUnLockDurg { get; set; }
         /// <summary>
         /// 允许组队
         /// </summary>
-        public bool AllowGroup;
+        public bool AllowGroup { get; set; }
         /// <summary>
         /// 允许加入行会
         /// </summary>        
-        public bool AllowGuild;
+        public bool AllowGuild { get; set; }
         /// <summary>
         /// 交易对象
         /// </summary>
-        protected PlayObject DealCreat;
+        public IPlayerActor DealCreat { get; set; }
         /// <summary>
         /// 正在交易
         /// </summary>
-        protected bool Dealing;
+        public bool Dealing { get; set; }
         /// <summary>
         /// 交易最后操作时间
         /// </summary>
-        internal int DealLastTick = 0;
+        public int DealLastTick { get; set; }
         /// <summary>
         /// 交易的金币数量
         /// </summary>
-        public int DealGolds;
+        public int DealGolds { get; set; }
         /// <summary>
         /// 确认交易标志
         /// </summary>
-        public bool DealSuccess = false;
+        public bool DealSuccess  { get; set; }
         /// <summary>
         /// 回城地图
         /// </summary>
-        public string HomeMap;
+        public string HomeMap { get; set; }
         /// <summary>
         /// 回城座标X
         /// </summary>
-        public short HomeX = 0;
+        public short HomeX { get; set; }
         /// <summary>
         /// 回城座标Y
         /// </summary>
-        public short HomeY = 0;
+        public short HomeY { get; set; }
         /// <summary>
         /// 记忆使用间隔
         /// </summary>
-        public int GroupRcallTick;
-        public short GroupRcallTime;
+        public int GroupRcallTick { get; set; }
+        public short GroupRcallTime { get; set; }
         /// <summary>
         /// 行会传送
         /// </summary>
-        public bool GuildMove = false;
-        public CommandMessage ClientMsg;
+        public bool GuildMove { get; set; }
+        public CommandMessage ClientMsg{ get; set; }
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
-        public ushort FightZoneDieCount;
+        public ushort FightZoneDieCount { get; set; }
         /// <summary>
         /// 祈祷
         /// </summary>
-        protected bool IsSpirit = false;
+        public bool IsSpirit { get; set; }
         /// <summary>
         /// 野蛮冲撞间隔
         /// </summary>
-        public int DoMotaeboTick = 0;
-        protected bool CrsHitkill = false;
-        public bool MBo43Kill = false;
-        protected bool RedUseHalfMoon;
-        protected bool UseThrusting;
-        protected bool UseHalfMoon;
+        public int DoMotaeboTick { get; set; }
+        public bool CrsHitkill { get; set; }
+        public bool MBo43Kill { get; set; }
+        public bool RedUseHalfMoon { get; set; }
+        public bool UseThrusting { get; set; }
+        public bool UseHalfMoon { get; set; }
         /// <summary>
         /// 魔法技能
         /// </summary>
-        protected UserMagic[] MagicArr;
+        public UserMagic[] MagicArr { get; set; }
         /// <summary>
         /// 攻杀剑法
         /// </summary>
-        protected bool PowerHit;
+        public bool PowerHit { get; set; }
         /// <summary>
         /// 烈火剑法
         /// </summary>
-        protected bool FireHitSkill;
+        public bool FireHitSkill { get; set; }
         /// <summary>
         /// 烈火剑法
         /// </summary>
-        protected bool TwinHitSkill;
+        public bool TwinHitSkill { get; set; }
         /// <summary>
         /// 额外攻击伤害(攻杀)
         /// </summary>
-        internal ushort HitPlus;
+        public ushort HitPlus { get; set; }
         /// <summary>
         /// 双倍攻击伤害(烈火专用)
         /// </summary>
-        internal ushort HitDouble;
-        protected int LatestFireHitTick = 0;
-        protected int LatestTwinHitTick = 0;
+        public ushort HitDouble { get; set; }
+        public int LatestFireHitTick { get; set; }
+        public int LatestTwinHitTick { get; set; }
         /// <summary>
         /// 力量物品值
         /// </summary>
-        protected byte PowerItem = 0;
+        public byte PowerItem { get; set; }
         /// <summary>
         /// 交易列表
         /// </summary>
-        public IList<UserItem> DealItemList;
+        public IList<UserItem> DealItemList { get; set; }
         /// <summary>
         /// 仓库物品列表
         /// </summary>
-        public readonly IList<UserItem> StorageItemList;
+        public IList<UserItem> StorageItemList { get; set; }
         /// <summary>
         /// 可见事件列表
         /// </summary>
-        internal readonly IList<MapEvent> VisibleEvents;
+        public IList<MapEvent> VisibleEvents { get; set; }
         /// <summary>
         /// 可见物品列表
         /// </summary>
-        protected readonly IList<VisibleMapItem> VisibleItems;
+        public IList<VisibleMapItem> VisibleItems { get; set; }
         /// <summary>
         /// 禁止私聊人员列表
         /// </summary>
-        public IList<string> LockWhisperList;
+        public IList<string> LockWhisperList { get; set; }
         /// <summary>
         /// 力量物品(影响力量的物品)
         /// </summary>
-        public bool BoPowerItem = false;
-        public bool AllowGroupReCall;
-        public int HungerStatus = 0;
-        public int BonusPoint = 0;
-        public byte BtB2;
+        public bool BoPowerItem { get; set; }
+        public bool AllowGroupReCall { get; set; }
+        public int HungerStatus { get; set; }
+        public int BonusPoint { get; set; }
+        public byte BtB2 { get; set; }
         /// <summary>
         /// 人物攻击变色标志
         /// </summary>
-        public bool PvpFlag;
+        public bool PvpFlag { get; set; }
         /// <summary>
         /// 减PK值时间`
         /// </summary>
-        private int DecPkPointTick;
+        public int DecPkPointTick { get; set; }
         /// <summary>
         /// 人物的PK值
         /// </summary>
-        public int PkPoint;
+        public int PkPoint { get; set; }
         /// <summary>
         /// 人物攻击变色时间长度
         /// </summary>
-        public int PvpNameColorTick;
-        protected bool NameColorChanged;
+        public int PvpNameColorTick { get; set; }
+        public bool NameColorChanged { get; set; }
         /// <summary>
         /// 是否在开行会战
         /// </summary>
-        public bool InGuildWarArea;
-        public IGuild MyGuild;
-        public short GuildRankNo;
-        public string GuildRankName = string.Empty;
-        public string ScriptLable = string.Empty;
-        public int SayMsgCount = 0;
-        public int SayMsgTick;
-        public bool DisableSayMsg;
-        public int DisableSayMsgTick;
-        public int CheckDupObjTick;
-        public int DiscountForNightTick;
+        public bool InGuildWarArea { get; set; }
+        public IGuild MyGuild { get; set; }
+        public short GuildRankNo { get; set; }
+        public string GuildRankName { get; set; }
+        public string ScriptLable { get; set; }
+        public int SayMsgCount { get; set; }
+        public int SayMsgTick { get; set; }
+        public bool DisableSayMsg { get; set; }
+        public int DisableSayMsgTick { get; set; }
+        public int CheckDupObjTick { get; set; }
+        public int DiscountForNightTick { get; set; }
         /// <summary>
         /// 是否在安全区域
         /// </summary>
-        private bool IsSafeArea;
+        public bool IsSafeArea { get; set; }
         /// <summary>
         /// 喊话消息间隔
         /// </summary>
-        protected int ShoutMsgTick;
-        protected byte AttackSkillCount;
-        protected byte AttackSkillPointCount;
-        protected bool SmashSet = false;
-        protected bool HwanDevilSet = false;
-        protected bool PuritySet = false;
-        protected bool MundaneSet = false;
-        protected bool NokChiSet = false;
-        protected bool TaoBuSet = false;
-        protected bool FiveStringSet = false;
-        public byte ValNpcType;
-        public byte ValType;
-        public byte ValLabel;
+        public int ShoutMsgTick { get; set; }
+        public byte AttackSkillCount { get; set; }
+        public byte AttackSkillPointCount { get; set; }
+        public bool SmashSet { get; set; }
+        public bool HwanDevilSet { get; set; }
+        public bool PuritySet { get; set; }
+        public bool MundaneSet  { get; set; }
+        public bool NokChiSet { get; set; }
+        public bool TaoBuSet { get; set; }
+        public bool FiveStringSet { get; set; }
+        public byte ValNpcType { get; set; }
+        public byte ValType { get; set; }
+        public byte ValLabel { get; set; }
         /// <summary>
         /// 复活戒指使用间隔时间
         /// </summary>
-        public int RevivalTick = 0;
+        public int RevivalTick { get; set; }
         /// <summary>
         /// 掉物品
         /// </summary>
-        public bool NoDropItem = false;
+        public bool NoDropItem { get; set; }
         /// <summary>
         /// 探测项链使用间隔
         /// </summary>
-        public int ProbeTick;
+        public int ProbeTick { get; set; }
         /// <summary>
         /// 传送戒指使用间隔
         /// </summary>
-        public int TeleportTick;
-        protected int DecHungerPointTick;
+        public int TeleportTick { get; set; }
+        public int DecHungerPointTick { get; set; }
         /// <summary>
         /// 气血石
         /// </summary>
-        protected int AutoAddHpmpMode = 0;
-        public int CheckHpmpTick = 0;
-        public int KickOffLineTick = 0;
+        public int AutoAddHpmpMode { get; set; }
+        public int CheckHpmpTick { get; set; }
+        public int KickOffLineTick { get; set; }
         /// <summary>
         /// 挂机
         /// </summary>
-        public bool OffLineFlag = false;
+        public bool OffLineFlag { get; set; }
         /// <summary>
         /// 挂机字符
         /// </summary>
-        public string OffLineLeaveWord = string.Empty;
+        public string OffLineLeaveWord { get; set; }
         /// <summary>
         /// Socket Handle
         /// </summary>
-        public int SocketId = 0;
+        public int SocketId { get; set; }
         /// <summary>
         /// 人物连接到游戏网关SOCKETID
         /// </summary>
-        public ushort SocketIdx = 0;
+        public ushort SocketIdx { get; set; }
         /// <summary>
         /// 人物所在网关号
         /// </summary>
-        public int GateIdx = 0;
-        public int SoftVersionDate = 0;
+        public int GateIdx { get; set; }
+        public int SoftVersionDate { get; set; }
         /// <summary>
         /// 登录时间戳
         /// </summary>
-        public long LogonTime;
+        public long LogonTime { get; set; }
         /// <summary>
         /// 战领沙城时间
         /// </summary>
-        public int LogonTick;
+        public int LogonTick { get; set; }
         /// <summary>
         /// 是否进入游戏完成
         /// </summary>
-        public bool BoReadyRun;
+        public bool BoReadyRun { get; set; }
         /// <summary>
         /// 移动间隔
         /// </summary>
-        protected int MapMoveTick;
+        public int MapMoveTick { get; set; }
         /// <summary>
         /// 人物当前付费模式
         /// 1:试玩
         /// 2:付费
         /// 3:测试
         /// </summary>
-        public byte PayMent;
-        public byte PayMode = 0;
+        public byte PayMent { get; set; }
+        public byte PayMode { get; set; }
         /// <summary>
         /// 当前会话ID
         /// </summary>
-        public int SessionId = 0;
+        public int SessionId { get; set; }
         /// <summary>
         /// 全局会话信息
         /// </summary>
-        public PlayerSession SessInfo;
-        public int LoadTick = 0;
+        public PlayerSession SessInfo { get; set; }
+        public int LoadTick { get; set; }
         /// <summary>
         /// 人物当前所在服务器序号
         /// </summary>
-        public byte ServerIndex = 0;
+        public byte ServerIndex { get; set; }
         /// <summary>
         /// 超时关闭链接
         /// </summary>
-        public bool BoEmergencyClose;
+        public bool BoEmergencyClose { get; set; }
         /// <summary>
         /// 掉线标志
         /// </summary>
-        public bool BoSoftClose;
+        public bool BoSoftClose { get; set; }
         /// <summary>
         /// 断线标志(@kick 命令)
         /// </summary>
-        public bool BoKickFlag;
+        public bool BoKickFlag { get; set; }
         /// <summary>
         /// 是否重连
         /// </summary>
-        public bool BoReconnection;
-        public bool RcdSaved;
-        public bool SwitchData;
-        public bool SwitchDataOk = false;
-        public string SwitchDataTempFile = string.Empty;
-        public int WriteChgDataErrCount;
-        public string SwitchMapName = string.Empty;
-        public short SwitchMapX = 0;
-        public short SwitchMapY = 0;
-        public bool SwitchDataSended;
-        public int ChgDataWritedTick = 0;
+        public bool BoReconnection { get; set; }
+        public bool RcdSaved { get; set; }
+        public bool SwitchData { get; set; }
+        public bool SwitchDataOk { get; set; }
+        public string SwitchDataTempFile { get; set; }
+        public int WriteChgDataErrCount { get; set; }
+        public string SwitchMapName { get; set; }
+        public short SwitchMapX  { get; set; }
+        public short SwitchMapY { get; set; }
+        public bool SwitchDataSended { get; set; }
+        public int ChgDataWritedTick { get; set; }
         /// <summary>
         /// 心灵启示
         /// </summary>
-        public bool AbilSeeHealGauge;
+        public bool AbilSeeHealGauge { get; set; }
         /// <summary>
         /// 攻击间隔
         /// </summary>
-        public int HitIntervalTime;
+        public int HitIntervalTime { get; set; }
         /// <summary>
         /// 魔法间隔
         /// </summary>
-        public int MagicHitIntervalTime;
+        public int MagicHitIntervalTime { get; set; }
         /// <summary>
         /// 走路间隔
         /// </summary>
-        public int RunIntervalTime;
+        public int RunIntervalTime { get; set; }
         /// <summary>
         /// 走路间隔
         /// </summary>
-        public int WalkIntervalTime;
+        public int WalkIntervalTime { get; set; }
         /// <summary>
         /// 换方向间隔
         /// </summary>
-        public int TurnIntervalTime;
+        public int TurnIntervalTime { get; set; }
         /// <summary>
         /// 组合操作间隔
         /// </summary>
-        public int ActionIntervalTime;
+        public int ActionIntervalTime { get; set; }
         /// <summary>
         /// 移动刺杀间隔
         /// </summary>
-        public int RunLongHitIntervalTime;
+        public int RunLongHitIntervalTime { get; set; }
         /// <summary>
         /// 跑位攻击间隔
         /// </summary>        
-        public int RunHitIntervalTime;
+        public int RunHitIntervalTime { get; set; }
         /// <summary>
         /// 走位攻击间隔
         /// </summary>        
-        public int WalkHitIntervalTime;
+        public int WalkHitIntervalTime { get; set; }
         /// <summary>
         /// 跑位魔法间隔
         /// </summary>        
-        public int RunMagicIntervalTime;
+        public int RunMagicIntervalTime { get; set; }
         /// <summary>
         /// 魔法攻击时间
         /// </summary>        
-        public int MagicAttackTick;
+        public int MagicAttackTick { get; set; }
         /// <summary>
         /// 魔法攻击间隔时间
         /// </summary>
-        public int MagicAttackInterval;
+        public int MagicAttackInterval { get; set; }
         /// <summary>
         /// 人物跑动时间
         /// </summary>
-        public int MoveTick;
+        public int MoveTick { get; set; }
         /// <summary>
         /// 人物攻击计数
         /// </summary>
-        public int AttackCount;
+        public int AttackCount { get; set; }
         /// <summary>
         /// 人物攻击计数
         /// </summary>
-        public int AttackCountA;
+        public int AttackCountA { get; set; }
         /// <summary>
         /// 魔法攻击计数
         /// </summary>
-        public int MagicAttackCount;
+        public int MagicAttackCount { get; set; }
         /// <summary>
         /// 人物跑计数
         /// </summary>
-        public int MoveCount;
+        public int MoveCount { get; set; }
         /// <summary>
         /// 超速计数
         /// </summary>
-        public int OverSpeedCount;
+        public int OverSpeedCount { get; set; }
         /// <summary>
         /// 复活戒指
         /// </summary>
-        internal bool Revival = false;
+        public bool Revival { get; set; }
         /// <summary>
         /// 传送戒指
         /// </summary>
-        public bool Teleport = false;
+        public bool Teleport { get; set; }
         /// <summary>
         /// 麻痹戒指
         /// </summary>
-        internal bool Paralysis = false;
+        public bool Paralysis { get; set; }
         /// <summary>
         /// 火焰戒指
         /// </summary>
-        private bool FlameRing = false;
+        public bool FlameRing { get; set; }
         /// <summary>
         /// 治愈戒指
         /// </summary>
-        private bool RecoveryRing;
+        public bool RecoveryRing { get; set; }
         /// <summary>
         /// 未知戒指
         /// </summary>
-        protected bool AngryRing = false;
+        public bool AngryRing { get; set; }
         /// <summary>
         /// 护身戒指
         /// </summary>
-        internal bool MagicShield = false;
+        public bool MagicShield { get; set; }
         /// <summary>
         /// 防护身
         /// </summary>
-        internal readonly bool UnMagicShield = false;
+        public bool UnMagicShield { get; set; }
         /// <summary>
         /// 活力戒指
         /// </summary>
-        private bool MuscleRing = false;
+        public bool MuscleRing { get; set; }
         /// <summary>
         /// 探测项链
         /// </summary>
-        public bool ProbeNecklace = false;
+        public bool ProbeNecklace { get; set; }
         /// <summary>
         /// 防复活
         /// </summary>
-        internal readonly bool UnRevival = false;
+        public bool UnRevival { get; set; }
         /// <summary>
         /// 记忆全套
         /// </summary>
-        public bool RecallSuite;
+        public bool RecallSuite { get; set; }
         /// <summary>
         /// 魔血一套
         /// </summary>
-        protected int MoXieSuite;
+        public int MoXieSuite { get; set; }
         /// <summary>
         /// 虹魔一套
         /// </summary>
-        internal int SuckupEnemyHealthRate;
-        internal double SuckupEnemyHealth;
-        public double BodyLuck;
-        public int BodyLuckLevel;
-        public bool DieInFight3Zone;
-        public string GotoNpcLabel = string.Empty;
-        public bool TakeDlgItem = false;
-        public int DlgItemIndex = 0;
-        public int DelayCall;
-        public int DelayCallTick = 0;
-        public bool IsDelayCall;
-        public int DelayCallNpc;
-        public string DelayCallLabel = string.Empty;
-        public int LastNpc = 0;
+        public int SuckupEnemyHealthRate { get; set; }
+        public double SuckupEnemyHealth { get; set; }
+        public double BodyLuck { get; set; }
+        public int BodyLuckLevel { get; set; }
+        public bool DieInFight3Zone { get; set; }
+        public string GotoNpcLabel { get; set; }
+        public bool TakeDlgItem  { get; set; }
+        public int DlgItemIndex { get; set; }
+        public int DelayCall { get; set; }
+        public int DelayCallTick { get; set; }
+        public bool IsDelayCall { get; set; }
+        public int DelayCallNpc { get; set; }
+        public string DelayCallLabel { get; set; }
+        public int LastNpc { get; set; }
         /// <summary>
         /// 职业属性点
         /// </summary>
-        public NakedAbility BonusAbil;
+        public NakedAbility BonusAbil { get; set; }
         /// <summary>
         /// 玩家的变量P
         /// </summary>
-        public int[] MNVal;
+        public int[] MNVal { get; set; }
         /// <summary>
         /// 玩家的变量M
         /// </summary>
-        public int[] MNMval;
+        public int[] MNMval { get; set; }
         /// <summary>
         /// 玩家的变量D
         /// </summary>
-        public int[] MDyVal;
+        public int[] MDyVal { get; set; }
         /// <summary>
         /// 玩家的变量
         /// </summary>
-        public string[] MNSval;
+        public string[] MNSval { get; set; }
         /// <summary>
         /// 人物变量  N
         /// </summary>
-        public int[] MNInteger;
+        public int[] MNInteger { get; set; }
         /// <summary>
         /// 人物变量  S
         /// </summary>
-        public string[] MSString;
+        public string[] MSString { get; set; }
         /// <summary>
         /// 服务器变量 W 0-20 个人服务器数值变量，不可保存，不可操作
         /// </summary>
-        public string[] MServerStrVal;
+        public string[] MServerStrVal { get; set; }
         /// <summary>
         /// E 0-20 个人服务器字符串变量，不可保存，不可操作
         /// </summary>
-        public int[] MServerIntVal;
-        public Dictionary<string, int> m_IntegerList = null;
-        public Dictionary<string, string> m_StringList = null;
-        public string ScatterItemName = String.Empty;
-        public string ScatterItemOwnerName = String.Empty;
-        public int ScatterItemX = 0;
-        public int ScatterItemY = 0;
-        public string ScatterItemMapName = String.Empty;
-        public string ScatterItemMapDesc = String.Empty;
+        public int[] MServerIntVal { get; set; }
+        public Dictionary<string, int> m_IntegerList { get; set; }
+        public Dictionary<string, string> m_StringList { get; set; }
+        public string ScatterItemName { get; set; }
+        public string ScatterItemOwnerName { get; set; }
+        public int ScatterItemX { get; set; }
+        public int ScatterItemY { get; set; }
+        public string ScatterItemMapName { get; set; }
+        public string ScatterItemMapDesc { get; set; }
         /// <summary>
         /// 技能表
         /// </summary>
-        public readonly IList<UserMagic> MagicList;
+        public IList<UserMagic> MagicList { get; set; }
         /// <summary>
         /// 组队长
         /// </summary>
-        public int GroupOwner;
+        public int GroupOwner { get; set; }
         /// <summary>
         /// 组成员
         /// </summary>
-        public IList<IPlayerActor> GroupMembers;
-        public string PlayDiceLabel = string.Empty;
-        public bool IsTimeRecall;
-        public int TimeRecallTick = 0;
-        public string TimeRecallMoveMap = string.Empty;
-        public short TimeRecallMoveX;
-        public short TimeRecallMoveY;
+        public IList<IPlayerActor> GroupMembers { get; set; }
+        public string PlayDiceLabel { get; set; }
+        public bool IsTimeRecall { get; set; }
+        public int TimeRecallTick { get; set; }
+        public string TimeRecallMoveMap { get; set; }
+        public short TimeRecallMoveX { get; set; }
+        public short TimeRecallMoveY { get; set; }
         /// <summary>
         /// 减少勋章持久间隔
         /// </summary>
-        protected int DecLightItemDrugTick;
+        public int DecLightItemDrugTick { get; set; }
         /// <summary>
         /// 保存人物数据时间间隔
         /// </summary>
-        public int SaveRcdTick;
-        public byte Bright;
-        public bool IsNewHuman;
-        private bool IsSendNotice;
-        private int WaitLoginNoticeOkTick;
-        public bool LoginNoticeOk;
+        public int SaveRcdTick { get; set; }
+        public byte Bright { get; set; }
+        public bool IsNewHuman { get; set; }
+        public bool IsSendNotice { get; set; }
+        public int WaitLoginNoticeOkTick { get; set; }
+        public bool LoginNoticeOk { get; set; }
         /// <summary>
         /// 试玩模式
         /// </summary>
-        public bool TryPlayMode;
-        public int ShowLineNoticeTick;
-        public int ShowLineNoticeIdx;
-        public int SoftVersionDateEx;
+        public bool TryPlayMode { get; set; }
+        public int ShowLineNoticeTick { get; set; }
+        public int ShowLineNoticeIdx { get; set; }
+        public int SoftVersionDateEx { get; set; }
         /// <summary>
         /// 可点击脚本标签字典
         /// </summary>
-        private readonly Hashtable CanJmpScriptLableMap;
-        public int ScriptGotoCount = 0;
+        public Hashtable CanJmpScriptLableMap { get; set; }
+        public int ScriptGotoCount { get; set; }
         /// <summary>
         /// 用于处理 @back 脚本命令
         /// </summary>
-        public string ScriptCurrLable = string.Empty;
+        public string ScriptCurrLable { get; set; }
         /// <summary>
         /// 用于处理 @back 脚本命令
         /// </summary>        
-        public string ScriptGoBackLable = string.Empty;
+        public string ScriptGoBackLable { get; set; }
         /// <summary>
         /// 转身间隔
         /// </summary>
-        public int TurnTick;
-        public int OldIdent = 0;
-        public byte MBtOldDir = 0;
+        public int TurnTick { get; set; }
+        public int OldIdent { get; set; }
+        public byte MBtOldDir { get; set; }
         /// <summary>
         /// 第一个操作
         /// </summary>
-        public bool IsFirstAction = false;
+        public bool IsFirstAction { get; set; }
         /// <summary>
         /// 二次操作之间间隔时间
         /// </summary>        
-        public int ActionTick;
+        public int ActionTick { get; set; }
         /// <summary>
         /// 配偶名称
         /// </summary>
-        public string DearName;
-        public IPlayerActor DearHuman;
+        public string DearName { get; set; }
+        public IPlayerActor DearHuman { get; set; }
         /// <summary>
         /// 是否允许夫妻传送
         /// </summary>
-        public bool CanDearRecall;
-        public bool CanMasterRecall;
+        public bool CanDearRecall { get; set; }
+        public bool CanMasterRecall { get; set; }
         /// <summary>
         /// 夫妻传送时间
         /// </summary>
-        public int DearRecallTick;
-        public int MasterRecallTick;
+        public int DearRecallTick { get; set; }
+        public int MasterRecallTick { get; set; }
         /// <summary>
         /// 师徒名称
         /// </summary>
-        public string MasterName;
-        public IPlayerActor MasterHuman;
-        public IList<IPlayerActor> MasterList;
-        public bool IsMaster = false;
+        public string MasterName { get; set; }
+        public IPlayerActor MasterHuman { get; set; }
+        public IList<IActor> MasterList { get; set; }
+        public bool IsMaster { get; set; }
         /// <summary>
         /// 对面玩家
         /// </summary>
-        public int PoseBaseObject = 0;
+        public int PoseBaseObject { get; set; }
         /// <summary>
         /// 声望点
         /// </summary>
-        public byte CreditPoint = 0;
+        public byte CreditPoint { get; set; }
         /// <summary>
         /// 离婚次数
         /// </summary>        
-        public byte MarryCount = 0;
+        public byte MarryCount { get; set; }
         /// <summary>
         /// 转生等级
         /// </summary>
-        public byte ReLevel = 0;
-        public byte ReColorIdx;
-        public int ReColorTick = 0;
+        public byte ReLevel { get; set; }
+        public byte ReColorIdx { get; set; }
+        public int ReColorTick { get; set; }
         /// <summary>
         /// 杀怪经验倍数
         /// </summary>
-        public int MNKillMonExpMultiple;
+        public int MNKillMonExpMultiple { get; set; }
         /// <summary>
         /// 处理消息循环时间控制
         /// </summary>        
-        public int GetMessageTick = 0;
-        public bool IsSetStoragePwd;
-        public bool IsReConfigPwd;
-        public bool IsCheckOldPwd;
-        public bool IsUnLockPwd;
-        public bool IsUnLockStoragePwd;
+        public int GetMessageTick { get; set; }
+        public bool IsSetStoragePwd { get; set; }
+        public bool IsReConfigPwd { get; set; }
+        public bool IsCheckOldPwd { get; set; }
+        public bool IsUnLockPwd { get; set; }
+        public bool IsUnLockStoragePwd { get; set; }
         /// <summary>
         /// 锁密码
         /// </summary>
-        public bool IsPasswordLocked;
-        public byte PwdFailCount;
+        public bool IsPasswordLocked { get; set; }
+        public byte PwdFailCount { get; set; }
         /// <summary>
         /// 是否启用锁登录功能
         /// </summary>
-        public bool IsLockLogon;
+        public bool IsLockLogon { get; set; }
         /// <summary>
         /// 是否打开登录锁
         /// </summary>        
-        public bool IsLockLogoned;
-        public string MSTempPwd;
-        public string StoragePwd;
-        public bool IsStartMarry = false;
-        public bool IsStartMaster = false;
-        public bool IsStartUnMarry = false;
-        public bool IsStartUnMaster = false;
+        public bool IsLockLogoned { get; set; }
+        public string MSTempPwd { get; set; }
+        public string StoragePwd { get; set; }
+        public bool IsStartMarry { get; set; }
+        public bool IsStartMaster { get; set; }
+        public bool IsStartUnMarry { get; set; }
+        public bool IsStartUnMaster { get; set; }
         /// <summary>
         /// 禁止发方字(发的文字只能自己看到)
         /// </summary>
-        public bool FilterSendMsg;
+        public bool FilterSendMsg { get; set; }
         /// <summary>
         /// 杀怪经验倍数(此数除以 100 为真正倍数)
         /// </summary>        
-        public int KillMonExpRate;
+        public int KillMonExpRate { get; set; }
         /// <summary>
         /// 人物攻击力倍数(此数除以 100 为真正倍数)
         /// </summary>        
-        public int PowerRate;
-        public int KillMonExpRateTime = 0;
-        public int PowerRateTime = 0;
-        public int ExpRateTick;
+        public int PowerRate { get; set; }
+        public int KillMonExpRateTime { get; set; }
+        public int PowerRateTime { get; set; }
+        public int ExpRateTick { get; set; }
         /// <summary>
         /// 技巧项链
         /// </summary>
-        private bool FastTrain = false;
+        public bool FastTrain { get; set; }
         /// <summary>
         /// 是否允许使用物品
         /// </summary>
-        public bool BoCanUseItem;
+        public bool BoCanUseItem { get; set; }
         /// <summary>
         /// 是否允许交易物品
         /// </summary>
-        public bool IsCanDeal;
-        public bool IsCanDrop;
-        public bool IsCanGetBackItem;
-        public bool IsCanWalk;
-        public bool IsCanRun;
-        public bool IsCanHit;
-        public bool IsCanSpell;
-        public bool IsCanSendMsg;
+        public bool IsCanDeal { get; set; }
+        public bool IsCanDrop { get; set; }
+        public bool IsCanGetBackItem { get; set; }
+        public bool IsCanWalk { get; set; }
+        public bool IsCanRun { get; set; }
+        public bool IsCanHit { get; set; }
+        public bool IsCanSpell { get; set; }
+        public bool IsCanSendMsg { get; set; }
         /// <summary>
         /// 会员类型
         /// </summary>
-        public int MemberType;
+        public int MemberType { get; set; }
         /// <summary>
         /// 会员等级
         /// </summary> 
-        public byte MemberLevel;
+        public byte MemberLevel { get; set; }
         /// <summary>
         /// 发祝福语标志
         /// </summary> 
-        public bool BoSendMsgFlag;
-        public bool BoChangeItemNameFlag;
+        public bool BoSendMsgFlag { get; set; }
+        public bool BoChangeItemNameFlag { get; set; }
         /// <summary>
         /// 游戏币
         /// </summary>
-        public int GameGold;
+        public int GameGold { get; set; }
         /// <summary>
         /// 是否自动减游戏币
         /// </summary>        
-        public bool BoDecGameGold;
-        public int DecGameGoldTime;
-        public int DecGameGoldTick;
-        public int DecGameGold;
+        public bool BoDecGameGold { get; set; }
+        public int DecGameGoldTime { get; set; }
+        public int DecGameGoldTick { get; set; }
+        public int DecGameGold { get; set; }
         // 一次减点数
-        public bool BoIncGameGold;
+        public bool BoIncGameGold { get; set; }
         // 是否自动加游戏币
-        public int IncGameGoldTime;
-        public int IncGameGoldTick;
-        public int IncGameGold;
+        public int IncGameGoldTime { get; set; }
+        public int IncGameGoldTick { get; set; }
+        public int IncGameGold { get; set; }
         // 一次减点数
-        public int GamePoint;
+        public int GamePoint { get; set; }
         // 游戏点数
-        public int IncGamePointTick;
-        public int PayMentPoint;
-        public int PayMentPointTick = 0;
-        public int DecHpTick = 0;
-        public int IncHpTick = 0;
+        public int IncGamePointTick { get; set; }
+        public int PayMentPoint { get; set; }
+        public int PayMentPointTick { get; set; }
+        public int DecHpTick  { get; set; }
+        public int IncHpTick { get; set; }
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
         /// </summary>
-        private readonly int PkDieLostExp;
+        public int PkDieLostExp { get; set; }
         /// <summary>
         /// PK 死亡掉等级
         /// </summary>
-        private readonly byte PkDieLostLevel;
+        public byte PkDieLostLevel { get; set; }
         /// <summary>
         /// 私聊对象
         /// </summary>
-        public PlayObject WhisperHuman;
+        public IActor WhisperHuman { get; set; }
         /// <summary>
         /// 清理无效对象间隔
         /// </summary>
-        public int ClearInvalidObjTick = 0;
-        public short Contribution;
-        public string RankLevelName = string.Empty;
-        public bool IsFilterAction = false;
-        public int AutoGetExpTick;
-        public int AutoGetExpTime = 0;
-        public int AutoGetExpPoint;
-        public IEnvirnoment AutoGetExpEnvir;
-        public bool AutoGetExpInSafeZone = false;
-        public readonly Dictionary<string, DynamicVar> DynamicVarMap;
-        public short ClientTick;
+        public int ClearInvalidObjTick { get; set; }
+        public short Contribution { get; set; }
+        public string RankLevelName { get; set; }
+        public bool IsFilterAction { get; set; }
+        public int AutoGetExpTick { get; set; }
+        public int AutoGetExpTime { get; set; }
+        public int AutoGetExpPoint { get; set; }
+        public IEnvirnoment AutoGetExpEnvir { get; set; }
+        public bool AutoGetExpInSafeZone { get; set; }
+        public Dictionary<string, DynamicVar> DynamicVarMap { get; set; }
+        public short ClientTick { get; set; }
         /// <summary>
         /// 进入速度测试模式
         /// </summary>
-        public bool TestSpeedMode;
-        public string RandomNo = string.Empty;
+        public bool TestSpeedMode { get; set; }
+        public string RandomNo { get; set; }
         /// <summary>
         /// 刷新包裹间隔
         /// </summary>
-        public int QueryBagItemsTick = 0;
-        public bool IsTimeGoto;
-        public int TimeGotoTick;
-        public string TimeGotoLable;
-        public BaseObject TimeGotoNpc;
+        public int QueryBagItemsTick { get; set; }
+        public bool IsTimeGoto { get; set; }
+        public int TimeGotoTick { get; set; }
+        public string TimeGotoLable { get; set; }
+        public IActor TimeGotoNpc { get; set; }
         /// <summary>
         /// 个人定时器
         /// </summary>
-        public int[] AutoTimerTick;
+        public int[] AutoTimerTick { get; set; }
         /// <summary>
         /// 个人定时器 时间间隔
         /// </summary>
-        public int[] AutoTimerStatus;
+        public int[] AutoTimerStatus { get; set; }
         /// <summary>
         /// 0-攻击力增加 1-魔法增加  2-道术增加(无极真气) 3-攻击速度 4-HP增加(酒气护体)
         /// 5-增加MP上限 6-减攻击力 7-减魔法 8-减道术 9-减HP 10-减MP 11-敏捷 12-增加防
@@ -830,8 +830,8 @@ namespace M2Server.Player
         /// 17-内力瞬间恢复增加(何首凝神酒) 18-增加斗转上限(培元酒) 19-不死状态 21-弟子心法激活
         /// 22-移动减速 23-定身(十步一杀)
         /// </summary>
-        public ushort[] ExtraAbil;
-        internal byte[] ExtraAbilFlag;
+        public ushort[] ExtraAbil { get; set; }
+        public byte[] ExtraAbilFlag { get; set; }
         /// <summary>
         /// 0-攻击力增加 1-魔法增加  2-道术增加(无极真气) 3-攻击速度 4-HP增加(酒气护体)
         /// 5-增加MP上限 6-减攻击力 7-减魔法 8-减道术 9-减HP 10-减MP 11-敏捷 12-增加防
@@ -839,28 +839,28 @@ namespace M2Server.Player
         /// 17-内力瞬间恢复增加(何首凝神酒) 18-增加斗转上限(培元酒) 19-不死状态 20-道术+上下限(除魔药剂类) 21-弟子心法激活
         /// 22-移动减速 23-定身(十步一杀)
         /// </summary>
-        public int[] ExtraAbilTimes;
+        public int[] ExtraAbilTimes { get; set; }
         /// <summary>
         /// 点击NPC时间
         /// </summary>
-        public int ClickNpcTime = 0;
+        public int ClickNpcTime { get; set; }
         /// <summary>
         /// 是否开通元宝交易服务
         /// </summary>
-        public bool SaleDeal;
+        public bool SaleDeal { get; set; }
         /// <summary>
         /// 确认元宝寄售标志
         /// </summary>
-        public bool SellOffConfirm = false;
+        public bool SellOffConfirm { get; set; }
         /// <summary>
         /// 元宝寄售物品列表
         /// </summary>
-        private IList<UserItem> SellOffItemList;
-        public byte[] QuestUnitOpen;
-        public byte[] QuestUnit;
-        public byte[] QuestFlag;
-        public MarketUser MarketUser;
-        public bool FlagReadyToSellCheck = false;
+        public IList<UserItem> SellOffItemList { get; set; }
+        public byte[] QuestUnitOpen { get; set; }
+        public byte[] QuestUnit { get; set; }
+        public byte[] QuestFlag { get; set; }
+        public MarketUser MarketUser { get; set; }
+        public bool FlagReadyToSellCheck { get; set; }
 
         public PlayObject()
         {
@@ -971,7 +971,7 @@ namespace M2Server.Player
             PayMentPoint = 0;
             DearHuman = null;
             MasterHuman = null;
-            MasterList = new List<IPlayerActor>();
+            MasterList = new List<IActor>();
             BoSendMsgFlag = false;
             BoChangeItemNameFlag = false;
             CanMasterRecall = false;
@@ -1378,7 +1378,9 @@ namespace M2Server.Player
                 MyGuild = SystemShare.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {
-                    GuildRankName = MyGuild.GetRankName((IPlayerActor)this, ref GuildRankNo);
+                    short rankNo = 0;
+                    GuildRankName = MyGuild.GetRankName(this, ref rankNo);
+                    GuildRankNo = rankNo;
                     for (int i = MyGuild.GuildWarList.Count - 1; i >= 0; i--)
                     {
                         SysMsg(MyGuild.GuildWarList[i] + " 正在与本行会进行行会战.", MsgColor.Green, MsgType.Hint);
@@ -1579,7 +1581,7 @@ namespace M2Server.Player
             return true;
         }
 
-        private void MakeWeaponUnlock()
+        public void MakeWeaponUnlock()
         {
             if (UseItems[ItemLocation.Weapon] == null)
             {
@@ -1639,7 +1641,7 @@ namespace M2Server.Player
                 //Merchant QuestNPC;
                 //if (GroupOwner != 0)
                 //{
-                //    PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                //    PlayObject groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
                 //    for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 //    {
                 //        PlayObject groupHuman = groupOwnerPlay.GroupMembers[i];
@@ -1686,7 +1688,7 @@ namespace M2Server.Player
                 if (boPK && Race == ActorRace.Play && killObject.Race == ActorRace.Play)
                 {
                     bool guildwarkill = false;
-                    PlayObject targetObject = ((PlayObject)killObject);
+                    IPlayerActor targetObject = ((IPlayerActor)killObject);
                     if (MyGuild != null && targetObject.MyGuild != null)
                     {
                         if (GetGuildRelation(this, targetObject) == 2)
@@ -1958,8 +1960,8 @@ namespace M2Server.Player
             string tStr;
             if (GroupOwner != 0)
             {
-                PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
-                groupOwnerPlay.DelMember((IPlayerActor)this);// 人物死亡立即退组，以防止组队刷经验
+                IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                groupOwnerPlay.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
             }
             if (LastHiter != null)
             {
@@ -3300,7 +3302,7 @@ namespace M2Server.Player
             {
                 if (MyGuild != null)
                 {
-                    IUserCastle castle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this);
+                    IUserCastle castle = SystemShare.CastleMgr.IsCastleMember(this);
                     if (castle != null)
                     {
                         sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
@@ -3470,7 +3472,7 @@ namespace M2Server.Player
                     {
                         for (int i = MasterList.Count - 1; i >= 0; i--)
                         {
-                            IPlayerActor human = MasterList[i];
+                            IPlayerActor human = (IPlayerActor)MasterList[i];
                             sSayMsg = Settings.MasterLongOutMasterListOnlineMsg.Replace("%s", ChrName);
                             sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                             sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
@@ -3578,7 +3580,7 @@ namespace M2Server.Player
             if (baseObject.Race == ActorRace.Play)
             {
                 byte result = baseObject.NameColor;
-                PlayObject targetObject = (PlayObject)baseObject;
+                IPlayerActor targetObject = (IPlayerActor)baseObject;
                 if (targetObject.PvpLevel() < 2)
                 {
                     if (targetObject.PvpFlag)
@@ -3634,7 +3636,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                if (castle.IsMember((IPlayerActor)targetObject))
+                                if (castle.IsMember(targetObject))
                                 {
                                     result = SystemShare.Config.WarGuildNameColor;
                                 }
@@ -4225,11 +4227,11 @@ namespace M2Server.Player
                                 }
                             }
                         }
-                        else if (((PlayObject)cret).IsMaster)
+                        else if (((IPlayerActor)cret).IsMaster)
                         {
-                            for (int i = 0; i < ((PlayObject)cret).MasterList.Count; i++)
+                            for (int i = 0; i < ((IPlayerActor)cret).MasterList.Count; i++)
                             {
-                                if (((PlayObject)cret).MasterList[i] == this)
+                                if (((IPlayerActor)cret).MasterList[i] == this)
                                 {
                                     result = true;
                                     break;
@@ -4258,9 +4260,9 @@ namespace M2Server.Player
                             {
                                 result = true;
                             }
-                            if (GuildWarArea && (((PlayObject)cret).MyGuild != null))
+                            if (GuildWarArea && (((IPlayerActor)cret).MyGuild != null))
                             {
-                                if (MyGuild.IsAllyGuild(((PlayObject)cret).MyGuild))
+                                if (MyGuild.IsAllyGuild(((IPlayerActor)cret).MyGuild))
                                 {
                                     result = true;
                                 }
@@ -4274,14 +4276,14 @@ namespace M2Server.Player
                         }
                         if (PvpLevel() >= 2)
                         {
-                            if (((PlayObject)cret).PvpLevel() < 2)
+                            if (((IPlayerActor)cret).PvpLevel() < 2)
                             {
                                 result = true;
                             }
                         }
                         else
                         {
-                            if (((PlayObject)cret).PvpLevel() >= 2)
+                            if (((IPlayerActor)cret).PvpLevel() >= 2)
                             {
                                 result = true;
                             }
@@ -4292,7 +4294,7 @@ namespace M2Server.Player
             return result;
         }
 
-        internal void AddBodyLuck(double dLuck)
+        public void AddBodyLuck(double dLuck)
         {
             if ((dLuck > 0) && (BodyLuck < 5 * Settings.BODYLUCKUNIT))
             {
@@ -4318,7 +4320,7 @@ namespace M2Server.Player
         {
             if (baseObject.Race == ActorRace.Play)
             {
-                PlayObject targetObject = (PlayObject)baseObject;
+                IPlayerActor targetObject = (IPlayerActor)baseObject;
                 if ((PvpLevel() < 2) && (targetObject.PvpLevel() < 2) && (!Envir.Flag.FightZone) && (!Envir.Flag.Fight3Zone) && !PvpFlag)
                 {
                     targetObject.PvpNameColorTick = HUtil32.GetTickCount();
@@ -4699,7 +4701,7 @@ namespace M2Server.Player
             }
         }
 
-        protected void ChangeItemByJob(ref ClientItem citem, int level)
+        public void ChangeItemByJob(ref ClientItem citem, int level)
         {
             if ((citem.Item.StdMode == 22) && (citem.Item.Shape == DragonConst.DRAGON_RING_SHAPE))
             {
@@ -5105,7 +5107,7 @@ namespace M2Server.Player
             }
         }
 
-        private void DelMember(IPlayerActor baseObject)
+        public void DelMember(IPlayerActor baseObject)
         {
             if (GroupOwner != baseObject.ActorId)
             {
@@ -5144,7 +5146,7 @@ namespace M2Server.Player
             {
                 return false;
             }
-            PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+            IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
             for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
                 if (groupOwnerPlay.GroupMembers[i] == target)
@@ -5156,7 +5158,7 @@ namespace M2Server.Player
             return result;
         }
 
-        private void LeaveGroup()
+        public void LeaveGroup()
         {
             const string sExitGroupMsg = "{0} 已经退出了本组.";
             SendGroupText(Format(sExitGroupMsg, ChrName));
@@ -5169,7 +5171,7 @@ namespace M2Server.Player
             sMsg = SystemShare.Config.GroupMsgPreFix + sMsg;
             if (GroupOwner != 0)
             {
-                PlayObject groupOwnerPlay = (PlayObject)M2Share.ActorMgr.Get(GroupOwner);
+                IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
                 for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 {
                     groupOwnerPlay.GroupMembers[i].SendMsg(this, Messages.RM_GROUPMESSAGE, 0, SystemShare.Config.GroupMsgFColor, SystemShare.Config.GroupMsgBColor, 0, sMsg);

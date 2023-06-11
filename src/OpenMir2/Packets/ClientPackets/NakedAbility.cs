@@ -3,7 +3,7 @@
 namespace SystemModule.Packets.ClientPackets
 {
     [MemoryPackable]
-    public partial struct NakedAbility
+    public partial class NakedAbility
     {
         public ushort DC { get; set; }
         public ushort MC { get; set; }
