@@ -19,14 +19,10 @@
         void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp);
 
         void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp, string sMsg);
-
-        void LoadNpcData();
-
+        
         void LoadNPCScript();
 
         void ClearScript();
-
-        void ClearData();
 
         string GetLineVariableText(IPlayerActor PlayObject, string sMsg);
     }

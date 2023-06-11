@@ -71,12 +71,15 @@ namespace SystemModule
         bool IsOffLineMsg { get; set; }
         bool IsYbDeal { get; set; }
         bool CanItemMarket { get; set; }
-
-        int NpcFlag { get; set; }
+        short NpcFlag { get; set; }
 
         void Initialize();
 
         void LoadMerchantScript();
+
+        void LoadNpcData();
+
+        void ClearData();
 
         void Run();
     }

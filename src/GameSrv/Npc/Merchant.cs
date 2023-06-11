@@ -80,7 +80,6 @@ namespace GameSrv.NPC
         public bool IsOffLineMsg { get; set; }
         public bool IsYbDeal { get; set; }
         public bool CanItemMarket { get; set; }
-        public int NpcFlag { get; set; }
 
         public Merchant() : base()
         {

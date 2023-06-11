@@ -232,17 +232,17 @@ namespace GameSrv
                     LocalDb.LoadGuardList();
                     _logger.Info("守卫列表加载成功...");
                 }
-                _logger.Info("游戏处理引擎初始化成功...");
                 GameShare.PlanesService.Start();
                 IdSrvClient.Instance.Initialize();
                 SystemShare.GuildMgr.LoadGuildInfo();
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();
                 M2Share.WorldEngine.Initialize();
+                _logger.Info("游戏处理引擎初始化成功...");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.StackTrace);
+                _logger.Error(ex);
             }
         }
 

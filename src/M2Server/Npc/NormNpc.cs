@@ -16,7 +16,8 @@ namespace M2Server.Npc
         /// <summary>
         /// 用于标识此NPC是否有效，用于重新加载NPC列表(-1 为无效)
         /// </summary>
-        public short NpcFlag = 0;
+        public short NpcFlag { get; set; }
+
         public string FilePath;
         /// <summary>
         /// 此NPC是否是隐藏的，不显示在地图中
@@ -51,12 +52,7 @@ namespace M2Server.Npc
 
         public virtual void ClearScript()
         {
-            //m_ScriptList.Clear();
-        }
-
-        public void ClearData()
-        {
-            throw new NotImplementedException();
+            //ScriptList.Clear();
         }
 
         public virtual void Click(IPlayerActor PlayObject)
@@ -1579,11 +1575,6 @@ namespace M2Server.Npc
                     }
                 }
             }
-        }
-
-        public void LoadNpcData()
-        {
-            throw new NotImplementedException();
         }
 
         public void LoadNPCScript()
