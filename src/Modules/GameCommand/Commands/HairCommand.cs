@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("Hair", "修改玩家发型", "人物名称 类型值", 10)]
     public class HairCommand : GameCommand

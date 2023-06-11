@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 此命令用于停止祈祷生效导致宝宝叛变

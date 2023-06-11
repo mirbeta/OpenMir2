@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 此命令用于允许或禁止师徒传送

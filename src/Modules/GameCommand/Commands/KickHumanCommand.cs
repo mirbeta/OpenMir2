@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 剔除指定玩家下线

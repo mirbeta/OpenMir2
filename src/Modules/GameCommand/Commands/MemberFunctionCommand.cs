@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("MemberFunction", "", help: "打开会员功能窗口")]
     public class MemberFunctionCommand : GameCommand

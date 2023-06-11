@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using SystemModule;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("ServerInfo", "查看服务器信息", 10)]
     public class ServerInfoCommand : GameCommand

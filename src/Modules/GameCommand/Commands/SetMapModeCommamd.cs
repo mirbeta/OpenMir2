@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 设置地图模式

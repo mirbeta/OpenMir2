@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)

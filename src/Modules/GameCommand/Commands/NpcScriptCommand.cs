@@ -2,7 +2,7 @@
 using SystemModule.Common;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("NpcScript", "重新读取面对面NPC脚本", "重新读取面对面NPC脚本", 10)]
     public class NpcScriptCommand : GameCommand

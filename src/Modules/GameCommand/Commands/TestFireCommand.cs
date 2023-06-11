@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Events;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("TestFire", "", 10)]
     public class TestFireCommand : GameCommand

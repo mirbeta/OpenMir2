@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 推开范围内对象

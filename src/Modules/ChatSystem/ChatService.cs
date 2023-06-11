@@ -75,7 +75,7 @@ namespace ChatSystem
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             logger.Info("断开世界聊天频道...");
-            await chatClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectReason.NormalDisconnection).Build(), cancellationToken);
+            await chatClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection).Build(), cancellationToken);
         }
 
         public async Task Ping()

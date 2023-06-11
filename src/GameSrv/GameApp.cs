@@ -1,18 +1,19 @@
-﻿using GameSrv.DataSource;
+﻿using CommandSystem;
+using GameSrv.DataSource;
 using GameSrv.Maps;
 using GameSrv.NPC;
 using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
+using M2Server.Castle;
+using M2Server.Event;
+using M2Server.Guild;
+using M2Server.Items;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
-using M2Server.Items;
 using SystemModule.Common;
 using SystemModule.Data;
-using M2Server.Guild;
-using M2Server.Castle;
-using M2Server.Event;
 
 namespace GameSrv
 {
@@ -56,6 +57,7 @@ namespace GameSrv
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
+            M2Share.CommandSystem = new GameCommandSystem();
             InitializeModule();
         }
 
@@ -104,7 +106,7 @@ namespace GameSrv
             GameShare.LoadConfig();
             LoadServerTable();
             _logger.Info("初始化游戏引擎数据配置文件完成...");
-            //CommandMgr.RegisterCommand();
+            M2Share.CommandSystem.RegisterCommand();
             M2Share.LoadGameLogItemNameList();
             M2Share.LoadDenyIPAddrList();
             M2Share.LoadDenyAccountList();

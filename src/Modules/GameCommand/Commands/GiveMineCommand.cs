@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 给指定纯度的矿石

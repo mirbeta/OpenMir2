@@ -3,7 +3,7 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 删除指定玩家包裹物品

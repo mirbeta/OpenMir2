@@ -1,23 +1,23 @@
-﻿using System.Reflection;
-using NLog;
+﻿using NLog;
+using System.Reflection;
 using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule
+namespace CommandSystem
 {
-    public static class CommandMgr
+    public class GameCommandSystem : ICommandSystem
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly GameCmdConf CommandConf;
-        public static readonly GameCommands GameCommands = new GameCommands();
+        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        private readonly GameCmdConf CommandConf;
+        private readonly GameCommands GameCommands = new GameCommands();
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
 
-        static CommandMgr()
+        public GameCommandSystem()
         {
             CommandConf = new GameCmdConf(Path.Combine(SystemShare.BasePath, ConfConst.CommandFileName));
         }
 
-        public static void RegisterCommand()
+        public void RegisterCommand()
         {
             Logger.Info("读取游戏命令配置...");
             CommandConf.LoadConfig();
@@ -34,7 +34,7 @@ namespace CommandModule
         /// <summary>
         /// 注册自定义命令
         /// </summary>
-        private static Dictionary<string, GameCmd> RegisterCustomCommand()
+        private Dictionary<string, GameCmd> RegisterCustomCommand()
         {
             var commands = GameCommands.GetType().GetFields();
             if (commands.Length <= 0)
@@ -69,7 +69,7 @@ namespace CommandModule
         /// <summary>
         /// 注册游戏命令
         /// </summary>
-        private static void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
+        private void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
         {
             var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToArray();//只有继承GameCommand，才添加到命令Map中
             if (commands.Length <= 0)
@@ -114,7 +114,7 @@ namespace CommandModule
         /// <param name="IPlayerActor">命令对象</param>
         /// <param name="line">命令字符串</param>
         /// <returns><see cref="bool"/></returns>
-        public static bool Execute(IPlayerActor PlayerActor, string line)
+        public bool Execute(IPlayerActor PlayerActor, string line)
         {
             if (PlayerActor == null)
                 throw new ArgumentException("IPlayerActor");
@@ -144,7 +144,7 @@ namespace CommandModule
             return found;
         }
 
-        public static void ExecCmd(string line)
+        public void ExecCmd(string line)
         {
             var found = false;
 
@@ -171,7 +171,7 @@ namespace CommandModule
         /// <param name="command">返回 命令名称</param>
         /// <param name="parameters">返回 命令参数</param>
         /// <returns>解析是否成功</returns>
-        private static bool ExtractCommandAndParameters(string line, out string command, out string parameters)
+        private bool ExtractCommandAndParameters(string line, out string command, out string parameters)
         {
             line = line.Trim();
             command = string.Empty;

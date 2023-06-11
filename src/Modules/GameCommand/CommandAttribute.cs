@@ -1,4 +1,4 @@
-﻿namespace CommandModule
+﻿namespace CommandSystem
 {
     /// <summary>
     /// 命令定义

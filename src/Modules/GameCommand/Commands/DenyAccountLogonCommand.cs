@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("DenyAccountLogon", "", "登录帐号 是否永久封(0,1)", 10)]
     public class DenyAccountLogonCommand : GameCommand

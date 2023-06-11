@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 using SystemModule.Events;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 调整安全去光环

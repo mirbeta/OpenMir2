@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("ShowMapInfo", "显示当前地图信息")]
     public class ShowMapInfoCommand : GameCommand

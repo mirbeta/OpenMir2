@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("ClearItemMap", "清除指定地图范围物品", "地图编号", 10)]
     public class ClearItemMapCommand : GameCommand

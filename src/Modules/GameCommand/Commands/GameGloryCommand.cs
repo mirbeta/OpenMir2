@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("GameGlory", "调整玩家灵符", 10)]
     public class GameGloryCommand : GameCommand

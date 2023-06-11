@@ -1,4 +1,4 @@
-﻿namespace CommandModule.Commands
+﻿namespace CommandSystem.Commands
 {
 
     [Command("ShowUnit", "", "", 10)]

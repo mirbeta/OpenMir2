@@ -1,4 +1,4 @@
-﻿namespace CommandModule
+﻿namespace CommandSystem
 {
     public static class CommandHelp
     {

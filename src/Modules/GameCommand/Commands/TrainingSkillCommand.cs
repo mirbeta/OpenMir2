@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 调整指定玩家技能等级

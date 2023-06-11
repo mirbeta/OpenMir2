@@ -1,6 +1,6 @@
-using CommandModule.Commands;
+using CommandSystem.Commands;
 
-namespace CommandModule
+namespace CommandSystem
 {
     public class GameCommands
     {

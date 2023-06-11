@@ -2,7 +2,7 @@
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("ClearBagItem", "清理包裹物品", "人物名称", 10)]
     public class ClearBagItemCommand : GameCommand

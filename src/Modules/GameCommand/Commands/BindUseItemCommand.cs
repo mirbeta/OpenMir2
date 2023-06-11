@@ -2,7 +2,7 @@
 using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("BindUseItem", "", CommandHelp.GameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : GameCommand

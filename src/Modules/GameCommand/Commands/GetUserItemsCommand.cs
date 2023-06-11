@@ -3,7 +3,7 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     /// <summary>
     /// 取指定玩家物品
@@ -53,7 +53,7 @@ namespace CommandModule.Commands
                         stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (!mIPlayerActor.IsEnoughBag)
+                            if (!mIPlayerActor.IsEnoughBag())
                             {
                                 break;
                             }
@@ -88,7 +88,7 @@ namespace CommandModule.Commands
                         stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (!mIPlayerActor.IsEnoughBag)
+                            if (!mIPlayerActor.IsEnoughBag())
                             {
                                 break;
                             }
@@ -121,7 +121,7 @@ namespace CommandModule.Commands
                         stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
-                            if (!mIPlayerActor.IsEnoughBag)
+                            if (!mIPlayerActor.IsEnoughBag())
                             {
                                 break;
                             }

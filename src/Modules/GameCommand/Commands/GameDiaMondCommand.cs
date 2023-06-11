@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("GameDiaMond", "调整玩家金刚石", 10)]
     public class GameDiaMondCommand : GameCommand

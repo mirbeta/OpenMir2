@@ -2,7 +2,7 @@
 using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule
+namespace CommandSystem
 {
     public class GameCommand
     {

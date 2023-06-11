@@ -1,6 +1,3 @@
-using M2Server.Castle;
-using M2Server.Event;
-using M2Server.Guild;
 using M2Server.Items;
 using M2Server.Maps.AutoPath;
 using M2Server.Notices;
@@ -51,6 +48,7 @@ namespace M2Server
         public static NetworkMonitor NetworkMonitor = null;
         public static IWorldEngine WorldEngine = null;
         public static IFrontEngine FrontEngine = null;
+        public static ICommandSystem CommandSystem;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;

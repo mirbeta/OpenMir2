@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("ReloadManage", "重新加载脚本", 10)]
     public class ReloadManageCommand : GameCommand

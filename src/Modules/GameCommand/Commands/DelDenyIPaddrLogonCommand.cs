@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("DelDenyIPaddrLogon", "", "IP地址", 10)]
     public class DelDenyIPaddrLogonCommand : GameCommand

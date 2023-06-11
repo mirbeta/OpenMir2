@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("TestGetBagItems", "", 10)]
     public class TestGetBagItemsCommand : GameCommand

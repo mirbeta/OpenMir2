@@ -2,7 +2,7 @@
 using SystemModule.Enums;
 using SystemModule.Events;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("FireBurn", "", 10)]
     public class FireBurnCommand : GameCommand

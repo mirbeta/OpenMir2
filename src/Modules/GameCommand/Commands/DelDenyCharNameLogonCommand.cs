@@ -1,7 +1,7 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
 
-namespace CommandModule.Commands
+namespace CommandSystem.Commands
 {
     [Command("DelDenyChrNameLogon", "", "人物名称", 10)]
     public class DelDenyChrNameLogonCommand : GameCommand
