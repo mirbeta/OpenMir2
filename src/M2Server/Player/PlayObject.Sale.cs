@@ -1,5 +1,4 @@
-﻿using M2Server.Items;
-using SystemModule;
+﻿using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;

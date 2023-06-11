@@ -363,7 +363,7 @@ namespace M2Server.Player
             {
                 return;
             }
-            var castle = M2Share.CastleMgr.IsCastleEnvir(Envir);
+            var castle = SystemShare.CastleMgr.IsCastleEnvir(Envir);
             if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, (IPlayerActor)this))
             {
                 // M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
@@ -1394,7 +1394,7 @@ namespace M2Server.Player
                         var s14 = MyGuild.GuildName;
                         if (MyGuild.CancelGuld(sHumName))
                         {
-                            M2Share.GuildMgr.DelGuild(s14);
+                            SystemShare.GuildMgr.DelGuild(s14);
                             M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, s14);
                             MyGuild = null;
                             RefRankInfo(0, "");
@@ -1525,7 +1525,7 @@ namespace M2Server.Player
                 return;
             }
             var guildsuccess = false;
-            var guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            var guild = SystemShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
                 if (MyGuild.IsAllyGuild(guild))

@@ -204,7 +204,7 @@ namespace M2Server.Castle
         private void LoadConfig()
         {
             castleConf.LoadConfig(this);
-            MasterGuild = M2Share.GuildMgr.FindGuild(OwnGuild);
+            MasterGuild = SystemShare.GuildMgr.FindGuild(OwnGuild);
         }
 
         private void SaveConfigFile()
@@ -234,7 +234,7 @@ namespace M2Server.Castle
             {
                 string sData = loadList[i];
                 string s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { ' ', '\t' });
-                IGuild guild = M2Share.GuildMgr.FindGuild(guildName);
+                IGuild guild = SystemShare.GuildMgr.FindGuild(guildName);
                 if (guild == null) continue;
                 AttackerInfo attackerInfo = new AttackerInfo();
                 HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
@@ -622,7 +622,7 @@ namespace M2Server.Castle
             int Day = AttackerInfo.AttackDate.Day;
             return string.Format(WarDateMsg, Year, Month, Day);
         }
-        
+
         public string GetAttackWarList()
         {
             string result = string.Empty;

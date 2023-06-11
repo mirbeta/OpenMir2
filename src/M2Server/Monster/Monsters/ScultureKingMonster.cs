@@ -27,7 +27,7 @@ namespace M2Server.Monster.Monsters
             SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, 0, "");
             StoneMode = false;
             MapEvent stoneEvent = new MapEvent(Envir, CurrX, CurrY, 6, 5 * 60 * 1000, true);
-            M2Share.EventMgr.AddEvent(stoneEvent);
+            SystemShare.EventMgr.AddEvent(stoneEvent);
         }
 
         private void CallSlave()

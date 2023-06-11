@@ -1,9 +1,9 @@
 ﻿using GameSrv.DataSource;
-using GameSrv.Word.Managers;
 using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
 using M2Server.Player;
+using Markets;
 using ScriptSystem;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -552,7 +552,7 @@ namespace GameSrv.NPC
                     }
                     else if (SystemShare.Config.GetAllNpcTax)
                     {
-                        M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                        SystemShare.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
                     }
                 }
                 user.GoldChanged();
@@ -1348,7 +1348,7 @@ namespace GameSrv.NPC
                                                 }
                                                 else if (SystemShare.Config.GetAllNpcTax)
                                                 {
-                                                    M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                                                    SystemShare.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
                                                 }
                                             }
                                             playObject.SendAddItem(userItem);
@@ -1483,7 +1483,7 @@ namespace GameSrv.NPC
                         }
                         else if (SystemShare.Config.GetAllNpcTax)
                         {
-                            M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                            SystemShare.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
                         }
                     }
                     playObject.SendMsg(Messages.RM_USERSELLITEM_OK, 0, playObject.Gold, 0, 0);
@@ -1735,7 +1735,7 @@ namespace GameSrv.NPC
                             }
                             else if (SystemShare.Config.GetAllNpcTax)
                             {
-                                M2Share.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
+                                SystemShare.CastleMgr.IncRateGold(SystemShare.Config.UpgradeWeaponPrice);
                             }
                         }
                         if (supRepair)

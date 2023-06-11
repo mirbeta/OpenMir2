@@ -11,7 +11,7 @@ namespace M2Server.Items
         /// </summary>
         public readonly IList<StdItem> StdItemList;
 
-       public ItemSystem()
+        public ItemSystem()
         {
             StdItemList = new List<StdItem>();
         }

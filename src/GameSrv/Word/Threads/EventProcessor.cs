@@ -29,8 +29,8 @@ namespace GameSrv.Word.Threads
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
-            var eventList = M2Share.EventMgr.Events;
-            var closedEventList = M2Share.EventMgr.ClosedEvents;
+            var eventList = SystemShare.EventMgr.Events;
+            var closedEventList = SystemShare.EventMgr.ClosedEvents;
             for (var i = eventList.Count - 1; i >= 0; i--)
             {
                 var executeEvent = eventList[i];

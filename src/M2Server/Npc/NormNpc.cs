@@ -800,7 +800,7 @@ namespace M2Server.Npc
                     {
                         if (Castle == null)
                         {
-                            Castle = M2Share.CastleMgr.GetCastle(0);
+                            Castle = SystemShare.CastleMgr.GetCastle(0);
                         }
                         if (Castle != null)
                         {
@@ -1675,7 +1675,7 @@ namespace M2Server.Npc
         public override void Initialize()
         {
             base.Initialize();
-            Castle = M2Share.CastleMgr.InCastleWarArea(this);
+            Castle = SystemShare.CastleMgr.InCastleWarArea(this);
         }
 
         private static bool GetValValue(PlayObject PlayObject, string sMsg, ref int nValue)

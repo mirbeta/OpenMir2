@@ -306,11 +306,11 @@ namespace GameSrv.Word
                             }
                         }
                     }
-                    playObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(playObject.ChrName);
-                    var userCastle = M2Share.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
+                    playObject.MyGuild = SystemShare.GuildMgr.MemberOfGuild(playObject.ChrName);
+                    var userCastle = SystemShare.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
                     if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar))
                     {
-                        userCastle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)playObject);
+                        userCastle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)playObject);
                         if (userCastle == null)
                         {
                             playObject.MapName = playObject.HomeMap;
@@ -333,7 +333,7 @@ namespace GameSrv.Word
                         playObject.ClearStatusTime();
                         if (playObject.PvpLevel() < 2)
                         {
-                            userCastle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)playObject);
+                            userCastle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)playObject);
                             if (userCastle != null && userCastle.UnderWar)
                             {
                                 playObject.MapName = userCastle.HomeMap;

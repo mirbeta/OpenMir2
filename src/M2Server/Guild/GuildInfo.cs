@@ -279,12 +279,12 @@ namespace M2Server.Guild
                             }
                             var guildWar = new WarGuild
                             {
-                                Guild = M2Share.GuildMgr.FindGuild(s1C)
+                                Guild = SystemShare.GuildMgr.FindGuild(s1C)
                             };
                             if (guildWar.Guild != null)
                             {
-                                guildWar.dwWarTick = HUtil32.GetTickCount();
-                                guildWar.dwWarTime = HUtil32.StrToInt(s20.Trim(), 0);
+                                guildWar.WarTick = HUtil32.GetTickCount();
+                                guildWar.WarTime = HUtil32.StrToInt(s20.Trim(), 0);
                                 GuildWarList.Add(guildWar);
                             }
                         }
@@ -298,7 +298,7 @@ namespace M2Server.Guild
                             {
                                 break;
                             }
-                            var guild = M2Share.GuildMgr.FindGuild(s1C);
+                            var guild = SystemShare.GuildMgr.FindGuild(s1C);
                             if (guild != null)
                             {
                                 //GuildAllList.Add(guild);
@@ -393,7 +393,7 @@ namespace M2Server.Guild
             for (var i = 0; i < GuildWarList.Count; i++)
             {
                 var warGuild = GuildWarList[i];
-                long n14 = warGuild.dwWarTime - (HUtil32.GetTickCount() - warGuild.dwWarTick);
+                long n14 = warGuild.WarTime - (HUtil32.GetTickCount() - warGuild.WarTick);
                 if (n14 <= 0)
                 {
                     continue;
@@ -1016,37 +1016,38 @@ namespace M2Server.Guild
             SaveGuildInfoFile();
         }
 
-        public WarGuild AddWarGuild(WarGuild guild)
+        public WarGuild AddWarGuild(IGuild guild)
         {
             WarGuild result = default;
+            WarGuild warGuild = default;
             if (guild != null)
             {
-                //if (!IsAllyGuild(guild))
-                //{
-                //    for (var i = 0; i < GuildWarList.Count; i++)
-                //    {
-                //        if (GuildWarList[i].Guild == guild)
-                //        {
-                //            warGuild = GuildWarList[i];
-                //            warGuild.dwWarTick = HUtil32.GetTickCount();
-                //            warGuild.dwWarTime = SystemShare.Config.GuildWarTime;// 10800000
-                //            SendGuildMsg("***" + guild.GuildName + "行会战争将持续三个小时。");
-                //            break;
-                //        }
-                //    }
-                //    if (warGuild.dwWarTime > 0)
-                //    {
-                //        warGuild = new WarGuild
-                //        {
-                //            Guild = guild,
-                //            dwWarTick = HUtil32.GetTickCount(),
-                //            dwWarTime = SystemShare.Config.GuildWarTime// 10800000
-                //        };
-                //        GuildWarList.Add(warGuild);
-                //        SendGuildMsg("***" + guild.GuildName + "行会战争开始(三个小时)");
-                //    }
-                //    result = warGuild;
-                //}
+                if (!IsAllyGuild(guild))
+                {
+                    for (var i = 0; i < GuildWarList.Count; i++)
+                    {
+                        if (GuildWarList[i].Guild == guild)
+                        {
+                            warGuild = GuildWarList[i];
+                            warGuild.WarTick = HUtil32.GetTickCount();
+                            warGuild.WarTime = SystemShare.Config.GuildWarTime;// 10800000
+                            SendGuildMsg("***" + guild.GuildName + "行会战争将持续三个小时。");
+                            break;
+                        }
+                    }
+                    if (warGuild.WarTime > 0)
+                    {
+                        warGuild = new WarGuild
+                        {
+                            Guild = guild,
+                            WarTick = HUtil32.GetTickCount(),
+                            WarTime = SystemShare.Config.GuildWarTime// 10800000
+                        };
+                        GuildWarList.Add(warGuild);
+                        SendGuildMsg("***" + guild.GuildName + "行会战争开始(三个小时)");
+                    }
+                    result = warGuild;
+                }
             }
             RefMemberName();
             UpdateGuildFile();
@@ -1113,11 +1114,6 @@ namespace M2Server.Guild
         {
             chiefItemCount = nPoint;
             BoChanged = true;
-        }
-
-        public SystemModule.WarGuild AddWarGuild(SystemModule.WarGuild guild)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -39,9 +39,7 @@ namespace SystemModule
         /// </summary>
         public static long StartTime;
         public static int ShareFileNameNum = 0;
-        public static int ServerTickDifference = 0;
         public static readonly RandomNumber RandomNumber;
-        public static NetworkMonitor NetworkMonitor;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;
@@ -143,15 +141,11 @@ namespace SystemModule
         /// 不清除怪物列表
         /// </summary>
         public static IList<string> NoHptoexpMonLIst = null;
-        public static object ProcessMsgCriticalSection = null;
-        public static object UserDBCriticalSection = null;
-        public static object ProcessHumanCriticalSection = null;
         public static int TotalHumCount = 0;
         public static bool BoMission = false;
         public static string MissionMap = string.Empty;
         public static short MissionX = 0;
         public static short MissionY = 0;
-        public static bool StartReady = false;
         public static bool FilterWord = false;
         public static int HumLimit = 30;
         public static int MonLimit = 30;
@@ -188,7 +182,6 @@ namespace SystemModule
             GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.GameSettingFileName));
             Config = new GameSvrConf();
             RandomNumber = RandomNumber.GetInstance();
-            NetworkMonitor = new NetworkMonitor();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

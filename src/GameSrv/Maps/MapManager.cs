@@ -44,7 +44,7 @@ namespace GameSrv.Maps
                                 if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                                 {
                                     SafeEvent safeEvent = new SafeEvent(envir, nX, nY, (byte)startPoint.Type);
-                                    M2Share.EventMgr.AddEvent(safeEvent);
+                                    SystemShare.EventMgr.AddEvent(safeEvent);
                                 }
                             }
                         }

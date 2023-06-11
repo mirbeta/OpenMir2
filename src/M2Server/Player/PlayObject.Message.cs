@@ -1,5 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Items;
 using M2Server.Monster.Monsters;
 using SystemModule;
 using SystemModule.Consts;
@@ -7,7 +6,6 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using UserCastle = M2Server.Castle.UserCastle;
 
 namespace M2Server.Player
 {
@@ -280,7 +278,7 @@ namespace M2Server.Player
                         CharPushed(M2Share.RandomNumber.RandomByte(8), 1);
                     }
                 }
-                IUserCastle castle = M2Share.CastleMgr.InCastleWarArea(this);
+                IUserCastle castle = SystemShare.CastleMgr.InCastleWarArea(this);
                 if (castle != null && castle.UnderWar)
                 {
                     ChangePkStatus(true);
@@ -376,7 +374,7 @@ namespace M2Server.Player
                     }
                     if (!BoReconnection && BoSoftClose)
                     {
-                        MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
+                        MyGuild = SystemShare.GuildMgr.MemberOfGuild(ChrName);
                         if (MyGuild != null)
                         {
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
@@ -1572,7 +1570,7 @@ namespace M2Server.Player
                             }
                             if (this.MyGuild != null && this.Castle != null)
                             {
-                                if (M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                                if (SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
                                 {
                                     if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
                                     {

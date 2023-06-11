@@ -59,7 +59,7 @@ namespace GameSrv.Word.Threads
                 ShowOnlineTick = HUtil32.GetTickCount();
                 M2Share.NoticeMgr.LoadingNotice();
                 _logger.Info("在线数: " + M2Share.WorldEngine.PlayObjectCount);
-                M2Share.CastleMgr.Save();
+                SystemShare.CastleMgr.Save();
             }
             if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
             {
@@ -76,8 +76,8 @@ namespace GameSrv.Word.Threads
                 if ((HUtil32.GetTickCount() - RunTimeTick) > 10000)
                 {
                     RunTimeTick = HUtil32.GetTickCount();
-                    M2Share.GuildMgr.Run();
-                    M2Share.CastleMgr.Run();
+                    SystemShare.GuildMgr.Run();
+                    SystemShare.CastleMgr.Run();
                     GameShare.SocketMgr.Run();
                     if (!M2Share.DenySayMsgList.IsEmpty)
                     {

@@ -1,13 +1,9 @@
-﻿using EventLogSystem;
-using GameSrv.DataSource;
+﻿using GameSrv.DataSource;
 using GameSrv.Maps;
-using GameSrv.Network;
 using GameSrv.NPC;
-using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
-using MarketSystem;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -25,7 +21,6 @@ namespace GameSrv
 
         public GameApp()
         {
-            GameShare.QuestManager = new MapQuestManager();
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.CustomItemMgr = new CustomItem();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
@@ -77,7 +72,6 @@ namespace GameSrv
             SystemShare.Config.nDBQueryID = 0;
             SystemShare.Config.ItemNumber = 0;
             SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
-            SystemShare.StartReady = false;
             SystemShare.FilterWord = true;
             SystemShare.Config.WinLotteryCount = 0;
             SystemShare.Config.NoWinLotteryCount = 0;
@@ -100,13 +94,7 @@ namespace GameSrv
         {
             _logger.Info("读取游戏引擎数据配置文件...");
             GameShare.GeneratorProcessor.Initialize(stoppingToken);
-            GameShare.DataServer = new DBService();
-            GameShare.MarketService = new MarketService();
-            GameShare.ChatChannel = new ChatService();
-            GameShare.SocketMgr = new ThreadSocketMgr();
-            GameShare.EventSource = new GameEventSource();
             M2Share.FrontEngine = new FrontEngine();
-            GameShare.RobotMgr = new RobotManage();
             GameShare.LoadConfig();
             LoadServerTable();
             _logger.Info("初始化游戏引擎数据配置文件完成...");

@@ -26,7 +26,7 @@ namespace GameSrv.NPC
             {
                 string sText = "";
                 IList<string> List = new List<string>();
-                M2Share.CastleMgr.GetCastleNameList(List);
+                SystemShare.CastleMgr.GetCastleNameList(List);
                 for (int i = 0; i < List.Count; i++)
                 {
                     sText = sText + Format("<{0}/@requestcastlewarnow{1}> {2}", List[i], i, sText);
@@ -139,14 +139,14 @@ namespace GameSrv.NPC
             }
             if (result == 0)
             {
-                if (M2Share.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
+                if (SystemShare.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
                 {
                     M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.WomaHorn);
                     PlayObject.DecGold(SystemShare.Config.BuildGuildPrice);
                     PlayObject.GoldChanged();
-                    PlayObject.MyGuild = M2Share.GuildMgr.MemberOfGuild(PlayObject.ChrName);
+                    PlayObject.MyGuild = SystemShare.GuildMgr.MemberOfGuild(PlayObject.ChrName);
                     if (PlayObject.MyGuild != null)
                     {
                         short rankNo = 0;
@@ -179,7 +179,7 @@ namespace GameSrv.NPC
         /// <returns></returns>
         private static void ReQuestGuildWar(IPlayerActor PlayObject, string sGuildName)
         {
-            if (M2Share.GuildMgr.FindGuild(sGuildName) != null)
+            if (SystemShare.GuildMgr.FindGuild(sGuildName) != null)
             {
                 if (PlayObject.Gold >= SystemShare.Config.GuildWarPrice)
                 {
@@ -210,7 +210,7 @@ namespace GameSrv.NPC
             {
                 nIndex = 0;
             }
-            IUserCastle Castle = M2Share.CastleMgr.GetCastle(nIndex);
+            IUserCastle Castle = SystemShare.CastleMgr.GetCastle(nIndex);
             if (PlayObject.IsGuildMaster() && !Castle.IsMember(PlayObject))
             {
                 UserItem UserItem = PlayObject.CheckItems(SystemShare.Config.ZumaPiece);

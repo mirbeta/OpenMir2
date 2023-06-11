@@ -55,7 +55,7 @@ namespace M2Server.Monster.Monsters
         private void Turned()
         {
             MapEvent digEvent = new MapEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI, 5 * 60 * 1000, true);
-            M2Share.EventMgr.AddEvent(digEvent);
+            SystemShare.EventMgr.AddEvent(digEvent);
             FixedHideMode = false;
             SendRefMsg(Messages.RM_DIGUP, Dir, CurrX, CurrY, digEvent.Id, "");
         }

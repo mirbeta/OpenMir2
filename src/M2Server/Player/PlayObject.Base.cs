@@ -9,7 +9,6 @@ using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
-using UserCastle = M2Server.Castle.UserCastle;
 
 namespace M2Server.Player
 {
@@ -1540,7 +1539,7 @@ namespace M2Server.Player
                         if (pileEvent == null)
                         {
                             pileEvent = new PileStones(Envir, CurrX, CurrY, Grobal2.ET_PILESTONES, 5 * 60 * 1000);
-                            M2Share.EventMgr.AddEvent(pileEvent);
+                            SystemShare.EventMgr.AddEvent(pileEvent);
                         }
                         else
                         {
@@ -1953,7 +1952,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 7:
-                    if (MyGuild != null && M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null)
+                    if (MyGuild != null && SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null)
                     {
                         result = true;
                     }
@@ -1963,7 +1962,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 70:
-                    if (MyGuild != null && M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null && GuildRankNo == 1)
+                    if (MyGuild != null && SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null && GuildRankNo == 1)
                     {
                         if (Abil.Level >= clientItem.Item.NeedLevel)
                         {
@@ -2256,7 +2255,7 @@ namespace M2Server.Player
                     {
                         if (!InGuildWarArea)
                         {
-                            IUserCastle castle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)this);
+                            IUserCastle castle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this);
                             if (castle != null && castle.IsMasterGuild(MyGuild))
                             {
                                 BaseObjectMove(castle.HomeMap, castle.GetHomeX(), castle.GetHomeY());
@@ -2814,7 +2813,7 @@ namespace M2Server.Player
         private bool CheckItemsNeed(StdItem stdItem)
         {
             bool result = true;
-            IUserCastle castle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)this);
+            IUserCastle castle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this);
             switch (stdItem.Need)
             {
                 case 6:
@@ -3340,7 +3339,7 @@ namespace M2Server.Player
                 SysMsg("这个命令不能在本服务器上使用!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            IGuild guild = M2Share.GuildMgr.FindGuild(sGuildName);
+            IGuild guild = SystemShare.GuildMgr.FindGuild(sGuildName);
             if (guild == null)
             {
                 SysMsg("行会不存在!!!", MsgColor.Red, MsgType.Hint);

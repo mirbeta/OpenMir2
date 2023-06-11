@@ -1,5 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Items;
 using M2Server.Magic;
 using M2Server.RobotPlay;
 using System.Collections;
@@ -11,8 +10,6 @@ using SystemModule.Enums;
 using SystemModule.Events;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using GuildInfo = M2Server.Guild.GuildInfo;
-using UserCastle = M2Server.Castle.UserCastle;
 
 namespace M2Server.Player
 {
@@ -1378,7 +1375,7 @@ namespace M2Server.Player
                 SendPriorityMsg(Messages.RM_DAYCHANGING, 0, 0, 0, 0);
                 SendPriorityMsg(Messages.RM_SENDUSEITEMS, 0, 0, 0, 0, "", MessagePriority.High);
                 SendPriorityMsg(Messages.RM_SENDMYMAGIC, 0, 0, 0, 0, "", MessagePriority.High);
-                MyGuild = M2Share.GuildMgr.MemberOfGuild(ChrName);
+                MyGuild = SystemShare.GuildMgr.MemberOfGuild(ChrName);
                 if (MyGuild != null)
                 {
                     GuildRankName = MyGuild.GetRankName((IPlayerActor)this, ref GuildRankNo);
@@ -1699,7 +1696,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        IUserCastle Castle = M2Share.CastleMgr.InCastleWarArea(this);
+                        IUserCastle Castle = SystemShare.CastleMgr.InCastleWarArea(this);
                         if ((Castle != null && Castle.UnderWar) || (InGuildWarArea))
                         {
                             guildwarkill = true;
@@ -1859,7 +1856,7 @@ namespace M2Server.Player
                                 {
                                     if (Envir.ArroundDoorOpened(CurrX, CurrY))
                                     {
-                                        if ((!mapRoute.Envir.Flag.boNEEDHOLE) || (M2Share.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
+                                        if ((!mapRoute.Envir.Flag.boNEEDHOLE) || (SystemShare.EventMgr.GetEvent(Envir, CurrX, CurrY, Grobal2.ET_DIGOUTZOMBI) != null))
                                         {
                                             if (M2Share.ServerIndex == mapRoute.Envir.ServerIndex)
                                             {
@@ -3303,7 +3300,7 @@ namespace M2Server.Player
             {
                 if (MyGuild != null)
                 {
-                    IUserCastle castle = M2Share.CastleMgr.IsCastleMember((IPlayerActor)this);
+                    IUserCastle castle = SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this);
                     if (castle != null)
                     {
                         sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
@@ -3312,7 +3309,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        castle = M2Share.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
+                        castle = SystemShare.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
                         if (SystemShare.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea)
                         {
                             sGuildName = Settings.NoCastleGuildName.Replace("%guildname", MyGuild.GuildName);
@@ -3604,7 +3601,7 @@ namespace M2Server.Player
                         result = MyGuild == targetObject.MyGuild ? SystemShare.Config.AllyAndGuildNameColor : SystemShare.Config.WarGuildNameColor;
                     }
                 }
-                IUserCastle castle = M2Share.CastleMgr.InCastleWarArea(targetObject);
+                IUserCastle castle = SystemShare.CastleMgr.InCastleWarArea(targetObject);
                 if ((castle != null) && castle.UnderWar && InGuildWarArea && targetObject.InGuildWarArea)
                 {
                     result = SystemShare.Config.InFreePKAreaNameColor;
@@ -3735,7 +3732,7 @@ namespace M2Server.Player
                 {
                     return false;
                 }
-                IUserCastle castle = M2Share.CastleMgr.IsCastlePalaceEnvir(envir);
+                IUserCastle castle = SystemShare.CastleMgr.IsCastlePalaceEnvir(envir);
                 if ((castle != null))
                 {
                     if (!castle.CheckInPalace(CurrX, CurrY))

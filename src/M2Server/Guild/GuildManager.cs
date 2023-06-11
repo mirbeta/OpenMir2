@@ -7,11 +7,11 @@ namespace M2Server.Guild
     public class GuildManager : IGuildSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<IGuild> _guildList;
+        private readonly IList<IGuild> GuildList;
 
         public GuildManager()
         {
-            _guildList = new List<IGuild>();
+            GuildList = new List<IGuild>();
         }
 
         public bool AddGuild(string sGuildName, string sChief)
@@ -21,7 +21,7 @@ namespace M2Server.Guild
             {
                 var guild = new GuildInfo(sGuildName);
                 guild.SetGuildInfo(sChief);
-                _guildList.Add(guild);
+                GuildList.Add(guild);
                 SaveGuildList();
                 result = true;
             }
@@ -32,17 +32,17 @@ namespace M2Server.Guild
         public bool DelGuild(string sGuildName)
         {
             var result = false;
-            for (var i = 0; i < _guildList.Count; i++)
+            for (var i = 0; i < GuildList.Count; i++)
             {
-                var guild = _guildList[i];
+                var guild = GuildList[i];
                 if (string.Compare(guild.GuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    //if (guild.RankList.Count > 1)
-                    //{
-                    //    break;
-                    //}
+                    if (guild.RankList.Count > 1)
+                    {
+                        break;
+                    }
                     guild.BackupGuildFile();
-                    _guildList.RemoveAt(i);
+                    GuildList.RemoveAt(i);
                     SaveGuildList();
                     result = true;
                     break;
@@ -54,20 +54,20 @@ namespace M2Server.Guild
 
         public void ClearGuildInf()
         {
-            for (var i = 0; i < _guildList.Count; i++)
+            for (var i = 0; i < GuildList.Count; i++)
             {
-                _guildList[i] = null;
+                GuildList[i] = null;
             }
-            _guildList.Clear();
+            GuildList.Clear();
         }
 
         public IGuild FindGuild(string sGuildName)
         {
-            for (var i = 0; i < _guildList.Count; i++)
+            for (var i = 0; i < GuildList.Count; i++)
             {
-                if (_guildList[i].GuildName == sGuildName)
+                if (GuildList[i].GuildName == sGuildName)
                 {
-                    return _guildList[i];
+                    return GuildList[i];
                 }
             }
             return null;
@@ -75,7 +75,7 @@ namespace M2Server.Guild
 
         public void LoadGuildInfo()
         {
-            _guildList.Clear();
+            GuildList.Clear();
             if (File.Exists(SystemShare.Config.GuildFile))
             {
                 using var loadList = new StringList();
@@ -86,20 +86,20 @@ namespace M2Server.Guild
                     if (!string.IsNullOrEmpty(sGuildName))
                     {
                         var guild = new GuildInfo(sGuildName);
-                        _guildList.Add(guild);
+                        GuildList.Add(guild);
                     }
                 }
-                for (var i = _guildList.Count - 1; i >= 0; i--)
+                for (var i = GuildList.Count - 1; i >= 0; i--)
                 {
-                    var guild = _guildList[i];
+                    var guild = GuildList[i];
                     if (!guild.LoadGuild())
                     {
                         _logger.Warn(guild.GuildName + " 读取出错!!!");
-                        _guildList.RemoveAt(i);
+                        GuildList.RemoveAt(i);
                         SaveGuildList();
                     }
                 }
-                _logger.Info($"已读取 [{_guildList.Count}] 个行会信息...");
+                _logger.Info($"已读取 [{GuildList.Count}] 个行会信息...");
             }
             else
             {
@@ -109,12 +109,12 @@ namespace M2Server.Guild
 
         public IGuild MemberOfGuild(string sName)
         {
-            for (var i = 0; i < _guildList.Count; i++)
+            for (var i = 0; i < GuildList.Count; i++)
             {
-                //if (_guildList[i].IsMember(sName))
-                //{
-                //    return _guildList[i];
-                //}
+                if (GuildList[i].IsMember(sName))
+                {
+                    return GuildList[i];
+                }
             }
             return null;
         }
@@ -126,9 +126,9 @@ namespace M2Server.Guild
                 return;
             }
             var saveList = new StringList();
-            for (var i = 0; i < _guildList.Count; i++)
+            for (var i = 0; i < GuildList.Count; i++)
             {
-                saveList.Add(_guildList[i].GuildName);
+                saveList.Add(GuildList[i].GuildName);
             }
             try
             {
@@ -142,20 +142,20 @@ namespace M2Server.Guild
 
         public void Run()
         {
-            for (var i = 0; i < _guildList.Count; i++)
+            for (var i = 0; i < GuildList.Count; i++)
             {
-                var guild = _guildList[i];
+                var guild = GuildList[i];
                 var boChanged = false;
-                //for (var j = guild.GuildWarList.Count - 1; j >= 0; j--)
-                //{
-                //    var warGuild = guild.GuildWarList[j];
-                //    if ((HUtil32.GetTickCount() - warGuild.dwWarTick) > warGuild.dwWarTime) //行会战时间到
-                //    {
-                //        guild.EndGuildWar(warGuild.Guild);
-                //        guild.GuildWarList.RemoveAt(j);
-                //        boChanged = true;
-                //    }
-                //}
+                for (var j = guild.GuildWarList.Count - 1; j >= 0; j--)
+                {
+                    var warGuild = guild.GuildWarList[j];
+                    if ((HUtil32.GetTickCount() - warGuild.WarTick) > warGuild.WarTime) //行会战时间到
+                    {
+                        guild.EndGuildWar(warGuild.Guild);
+                        guild.GuildWarList.RemoveAt(j);
+                        boChanged = true;
+                    }
+                }
                 if (boChanged)
                 {
                     guild.UpdateGuildFile();

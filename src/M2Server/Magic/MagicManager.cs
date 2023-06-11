@@ -1,6 +1,5 @@
 ﻿using M2Server.Actor;
 using M2Server.Event.Events;
-using M2Server.Items;
 using M2Server.Monster;
 using M2Server.Player;
 using SystemModule;
@@ -1069,27 +1068,27 @@ namespace M2Server.Magic
             if (playObject.Envir.GetEvent(nX, nY - 1) == null)
             {
                 var fireBurnEvent = new FireBurnEvent(playObject, nX, (short)(nY - 1), Grobal2.ET_FIRE, time * 1000, nDamage);
-                M2Share.EventMgr.AddEvent(fireBurnEvent);
+                SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX - 1, nY) == null)
             {
                 var fireBurnEvent = new FireBurnEvent(playObject, (short)(nX - 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
-                M2Share.EventMgr.AddEvent(fireBurnEvent);
+                SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX, nY) == null)
             {
                 var fireBurnEvent = new FireBurnEvent(playObject, nX, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
-                M2Share.EventMgr.AddEvent(fireBurnEvent);
+                SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX + 1, nY) == null)
             {
                 var fireBurnEvent = new FireBurnEvent(playObject, (short)(nX + 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
-                M2Share.EventMgr.AddEvent(fireBurnEvent);
+                SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX, nY + 1) == null)
             {
                 var fireBurnEvent = new FireBurnEvent(playObject, nX, (short)(nY + 1), Grobal2.ET_FIRE, time * 1000, nDamage);
-                M2Share.EventMgr.AddEvent(fireBurnEvent);
+                SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             return true;
         }
@@ -1174,28 +1173,28 @@ namespace M2Server.Magic
                 if (result > 0)
                 {
                     var holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX - 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[0] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX + 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[1] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX - 2), (short)(nY - 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[2] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX + 2), (short)(nY - 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[3] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX - 2), (short)(nY + 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[4] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX + 2), (short)(nY + 1), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[5] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX - 1), (short)(nY + 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[6] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX + 1), (short)(nY + 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
-                    M2Share.EventMgr.AddEvent(holyCurtainEvent);
+                    SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[7] = holyCurtainEvent;
                     // M2Share.WorldEngine.MagicEventList.Add(magicEvent);
                 }

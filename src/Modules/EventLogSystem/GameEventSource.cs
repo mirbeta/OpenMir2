@@ -5,7 +5,7 @@ namespace EventLogSystem
 {
     [SupportedOSPlatform("Windows")]
     [EventSource(Name = "UserLogProvider")]
-    public class GameEventSource : EventSource
+    public class GameEventSource : EventSource, IGameEventSource
     {
         public void AddEventLog(int eventType, string meesage)
         {
@@ -15,7 +15,7 @@ namespace EventLogSystem
 
         public void AddEventLog(GameEventLogType eventType, string meesage)
         {
-            WriteEvent((int)eventType, meesage);
+            WriteEvent((int) eventType, meesage);
         }
     }
 }

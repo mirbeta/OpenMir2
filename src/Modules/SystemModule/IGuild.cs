@@ -22,7 +22,7 @@ namespace SystemModule
         IList<GuildRank> RankList { get; set; }
         void AddMember(IPlayerActor playObject);
         void AddTeamFightMember(string sHumanName);
-        WarGuild AddWarGuild(WarGuild guild);
+        WarGuild AddWarGuild(IGuild guild);
         void AllyGuild(IGuild guild);
         void BackupGuildFile();
         bool CancelGuld(string sHumName);

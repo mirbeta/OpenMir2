@@ -1,8 +1,9 @@
 using NLog;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 
-namespace GameSrv.Word.Managers
+namespace Markets
 {
     public static class MarketConst
     {
@@ -122,18 +123,18 @@ namespace GameSrv.Word.Managers
 
         protected void Add(MarketItem marketItem)
         {
-            if ((Items != null) && (marketItem != null))
+            if (Items != null && marketItem != null)
             {
                 //Items.Add(marketItem);
                 OnMsgWriteData(marketItem);
             }
             if (Items.Count % MarketConst.MAKET_ITEMCOUNT_PER_PAGE == 0)
             {
-                FLoadedPage = (Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE);
+                FLoadedPage = Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE;
             }
             else
             {
-                FLoadedPage = (Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE) + 1;
+                FLoadedPage = Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE + 1;
             }
         }
 
@@ -239,7 +240,7 @@ namespace GameSrv.Word.Managers
             }
             else
             {
-                return (Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE) + 1;
+                return Items.Count / MarketConst.MAKET_ITEMCOUNT_PER_PAGE + 1;
             }
         }
 

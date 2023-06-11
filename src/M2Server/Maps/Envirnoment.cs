@@ -1,5 +1,4 @@
 using M2Server.Actor;
-using M2Server.Castle;
 using M2Server.Monster.Monsters;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -554,7 +553,7 @@ namespace M2Server
                             IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
-                                IUserCastle castle = M2Share.CastleMgr.InCastleWarArea(baseObject);
+                                IUserCastle castle = SystemShare.CastleMgr.InCastleWarArea(baseObject);
                                 if (SystemShare.Config.boWarDisHumRun && castle != null && castle.UnderWar)
                                 {
 

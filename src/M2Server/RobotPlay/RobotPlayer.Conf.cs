@@ -1,4 +1,3 @@
-using M2Server.Items;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;

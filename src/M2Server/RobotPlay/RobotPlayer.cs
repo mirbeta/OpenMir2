@@ -1,5 +1,4 @@
 using M2Server.Actor;
-using M2Server.Items;
 using M2Server.Magic;
 using M2Server.Maps;
 using M2Server.Monster.Monsters;
@@ -1198,7 +1197,7 @@ namespace M2Server.RobotPlay
                             SetLastHiter(attackBaseObject);
                             Struck(attackBaseObject);
                         }
-                        if (M2Share.CastleMgr.IsCastleMember((IPlayerActor)this) != null && attackBaseObject != null)
+                        if (SystemShare.CastleMgr.IsCastleMember((IPlayerActor)this) != null && attackBaseObject != null)
                         {
                             if (attackBaseObject.Race == ActorRace.Guard)
                             {

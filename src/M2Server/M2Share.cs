@@ -5,10 +5,10 @@ using M2Server.Items;
 using M2Server.Maps.AutoPath;
 using M2Server.Notices;
 using NLog;
+using ScriptSystem;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
-using ScriptSystem;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
@@ -48,9 +48,6 @@ namespace M2Server
         public static readonly RandomNumber RandomNumber;
         public static CustomItem CustomItemMgr = null;
         public static NoticeManager NoticeMgr = null;
-        public static GuildManager GuildMgr = null;
-        public static EventManager EventMgr = null;
-        public static CastleManager CastleMgr = null;
         public static NetworkMonitor NetworkMonitor = null;
         public static IWorldEngine WorldEngine = null;
         public static IFrontEngine FrontEngine = null;
@@ -186,9 +183,7 @@ namespace M2Server
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
             NetworkMonitor = new NetworkMonitor();
-            EventMgr = new EventManager();
-            CastleMgr = new CastleManager();
-            GuildMgr = new GuildManager();
+            NoticeMgr = new NoticeManager();
             ScriptParsers = new ScriptParsers();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
@@ -1908,7 +1903,7 @@ namespace M2Server
             }
             return result;
         }
-        
+
         public static string GetIPLocal(string sIPaddr)
         {
             return "未知!!!";
