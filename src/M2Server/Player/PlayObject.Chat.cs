@@ -227,14 +227,6 @@ namespace M2Server.Player
         public void ProcessUserLineMsg(string sData)
         {
             string sC;
-            string sCMD = string.Empty;
-            string sParam1 = string.Empty;
-            string sParam2 = string.Empty;
-            string sParam3 = string.Empty;
-            string sParam4 = string.Empty;
-            string sParam5 = string.Empty;
-            string sParam6 = string.Empty;
-            string sParam7 = string.Empty;
             int nLen;
             const string sExceptionMsg = "[Exception] PlayObject::ProcessUserLineMsg Msg = {0}";
             try
@@ -371,42 +363,14 @@ namespace M2Server.Player
                     ProcessSayMsg(sData);
                     return;
                 }
-                sC = sData.AsSpan()[1..].ToString();
-                sC = HUtil32.GetValidStr3(sC, ref sCMD, new[] { ' ', ':', ',', '\t' });
-                if (!string.IsNullOrEmpty(sC))
+                if (M2Share.CommandSystem.Execute(this, sData))
                 {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam1, new[] { ' ', ':', ',', '\t' });
+                    return;
                 }
-                if (!string.IsNullOrEmpty(sC))
-                {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam2, new[] { ' ', ':', ',', '\t' });
-                }
-                if (!string.IsNullOrEmpty(sC))
-                {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam3, new[] { ' ', ':', ',', '\t' });
-                }
-                if (!string.IsNullOrEmpty(sC))
-                {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam4, new[] { ' ', ':', ',', '\t' });
-                }
-                if (!string.IsNullOrEmpty(sC))
-                {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam5, new[] { ' ', ':', ',', '\t' });
-                }
-                if (!string.IsNullOrEmpty(sC))
-                {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam6, new[] { ' ', ':', ',', '\t' });
-                }
-                if (!string.IsNullOrEmpty(sC))
-                {
-                    sC = HUtil32.GetValidStr3(sC, ref sParam7, new[] { ' ', ':', ',', '\t' });
-                }
-                //if (CommandMgr.Execute(this, sData))
-                //{
-                //    return;
-                //}
+                string sCMD = string.Empty;
                 if (Permission >= 2 && sData.Length > 2)
                 {
+                    HUtil32.GetValidStr3(sData, ref sCMD, new[] { ' ', ':', ',', '\t' });
                     if (Permission >= 6 && sData[2] == M2Share.GMRedMsgCmd)
                     {
                         if (HUtil32.GetTickCount() - SayMsgTick > 2000)
@@ -417,6 +381,7 @@ namespace M2Server.Player
                             {
                                 sData = sData[..SystemShare.Config.SayRedMsgMaxLen];
                             }
+                            sC = sData.AsSpan()[1..].ToString();
                             if (SystemShare.Config.ShutRedMsgShowGMName)
                             {
                                 sC = ChrName + ": " + sData;

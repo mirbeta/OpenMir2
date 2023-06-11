@@ -11,6 +11,7 @@ namespace CommandSystem
         private readonly GameCmdConf CommandConf;
         private readonly GameCommands GameCommands = new GameCommands();
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
+        private char[] CommandSplitLine = new[] { ' ', ':', ',', '\t' };
 
         public GameCommandSystem()
         {
@@ -20,7 +21,7 @@ namespace CommandSystem
         public void RegisterCommand()
         {
             Logger.Info("读取游戏命令配置...");
-            CommandConf.LoadConfig();
+            CommandConf.LoadConfig(GameCommands);
             var customCommandMap = RegisterCustomCommand();
             if (customCommandMap == null)
             {
@@ -118,6 +119,45 @@ namespace CommandSystem
         {
             if (PlayerActor == null)
                 throw new ArgumentException("IPlayerActor");
+
+            //string sCMD = string.Empty;
+            //string sParam1 = string.Empty;
+            //string sParam2 = string.Empty;
+            //string sParam3 = string.Empty;
+            //string sParam4 = string.Empty;
+            //string sParam5 = string.Empty;
+            //string sParam6 = string.Empty;
+            //string sParam7 = string.Empty;
+            //string sC= sC = line.AsSpan()[1..].ToString();
+            //sC = HUtil32.GetValidStr3(sC, ref sCMD, CommandSplitLine);
+            //if (!string.IsNullOrEmpty(sC))
+            //{
+            //    sC = HUtil32.GetValidStr3(sC, ref sParam1, CommandSplitLine);
+            //}
+            //if (!string.IsNullOrEmpty(sC))
+            //{
+            //    sC = HUtil32.GetValidStr3(sC, ref sParam2, CommandSplitLine);
+            //}
+            //if (!string.IsNullOrEmpty(sC))
+            //{
+            //    sC = HUtil32.GetValidStr3(sC, ref sParam3, CommandSplitLine);
+            //}
+            //if (!string.IsNullOrEmpty(sC))
+            //{
+            //    sC = HUtil32.GetValidStr3(sC, ref sParam4, CommandSplitLine);
+            //}
+            //if (!string.IsNullOrEmpty(sC))
+            //{
+            //    sC = HUtil32.GetValidStr3(sC, ref sParam5, CommandSplitLine);
+            //}
+            //if (!string.IsNullOrEmpty(sC))
+            //{
+            //    sC = HUtil32.GetValidStr3(sC, ref sParam6, CommandSplitLine);
+            //}
+            //if (!string.IsNullOrEmpty(sC))
+            //{
+            //    sC = HUtil32.GetValidStr3(sC, ref sParam7, CommandSplitLine);
+            //}
 
             if (!ExtractCommandAndParameters(line, out var commandName, out var parameters))
                 return false;
