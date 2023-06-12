@@ -4,7 +4,6 @@ using M2Server.Actor;
 using M2Server.Event.Events;
 using M2Server.Npc;
 using M2Server.Player;
-using M2Server.RobotPlay;
 using NLog;
 using PlanesSystem;
 using System.Collections;
@@ -62,7 +61,7 @@ namespace GameSrv.Word
         protected readonly IList<IPlayerActor> PlayObjectFreeList;
         protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
         protected readonly IList<IPlayerActor> PlayObjectList;
-        protected readonly IList<RobotPlayer> BotPlayObjectList;
+        protected readonly IList<IRobotPlayer> BotPlayObjectList;
         protected readonly List<int> LoadPlayerQueue = new List<int>();
         private readonly ArrayList OldMagicList;
         public readonly IList<NormNpc> QuestNpcList;
@@ -112,7 +111,7 @@ namespace GameSrv.Word
             OldMagicList = new ArrayList();
             OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
             RobotLogonQueue = new Queue<RoBotLogon>();
-            BotPlayObjectList = new List<RobotPlayer>();
+            BotPlayObjectList = new List<IRobotPlayer>();
         }
 
         public int OnlinePlayObject => GetOnlineHumCount();
@@ -521,7 +520,7 @@ namespace GameSrv.Word
                                 {
                                     if (playObject.IsRobot)
                                     {
-                                        BotPlayObjectList.Add((RobotPlayer)playObject);
+                                        BotPlayObjectList.Add((IRobotPlayer)playObject);
                                     }
                                     else
                                     {

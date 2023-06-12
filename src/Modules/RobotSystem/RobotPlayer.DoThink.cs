@@ -1,8 +1,7 @@
-using M2Server.Magic;
 using System.Collections;
 using SystemModule.Enums;
 
-namespace M2Server.RobotPlay
+namespace RobotSystem
 {
     public partial class RobotPlayer
     {
@@ -55,7 +54,7 @@ namespace M2Server.RobotPlay
             short nTargetY = 0;
             if (magicId == MagicConst.SKILL_MOOTEBO && Master != null && TargetCret != null && AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && CheckMagicInterval(27, 1000 * 10))
             {
-                var btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
+                var btNewDir = SystemShare.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                 {
                     result = Envir.CanWalk(nTargetX, nTargetY, true);
@@ -72,7 +71,7 @@ namespace M2Server.RobotPlay
             short nTargetY = 0;
             if (TargetCret != null && Abil.Level > TargetCret.Abil.Level && Math.Abs(CurrX - TargetCret.CurrX) <= 1 && Math.Abs(CurrY - TargetCret.CurrY) <= 1)
             {
-                btNewDir = M2Share.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, CurrX, CurrY);
+                btNewDir = SystemShare.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, CurrX, CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                 {
                     result = Envir.CanWalk(nTargetX, nTargetY, true);
@@ -93,7 +92,7 @@ namespace M2Server.RobotPlay
                         {
                             if (Abil.Level > targetObject.Abil.Level && !targetObject.StickMode)
                             {
-                                btNewDir = M2Share.GetNextDirection(targetObject.CurrX, targetObject.CurrY, CurrX, CurrY);
+                                btNewDir = SystemShare.GetNextDirection(targetObject.CurrX, targetObject.CurrY, CurrX, CurrY);
                                 if (Envir.GetNextPosition(targetObject.CurrX, targetObject.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                                 {
                                     if (Envir.CanWalk(nTargetX, nTargetY, true))

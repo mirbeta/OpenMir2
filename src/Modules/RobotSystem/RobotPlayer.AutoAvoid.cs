@@ -1,7 +1,7 @@
 using SystemModule;
 using SystemModule.Enums;
 
-namespace M2Server.RobotPlay
+namespace RobotSystem
 {
     public partial class RobotPlayer
     {
@@ -75,7 +75,7 @@ namespace M2Server.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RoboPlayObject.IsNeedAvoid");
+                SystemShare.Logger.Error("RoboPlayObject.IsNeedAvoid");
             }
             return result;
         }
@@ -422,7 +422,7 @@ namespace M2Server.RobotPlay
                 }
                 nTargetX = nX;
                 nTargetY = nY;
-                nDir = M2Share.RandomNumber.RandomByte(7);
+                nDir = SystemShare.RandomNumber.RandomByte(7);
                 result = AutoAvoid_GetGotoXY(nDir, ref nTargetX, ref nTargetY);
                 n10++;
             }
@@ -439,7 +439,7 @@ namespace M2Server.RobotPlay
             bool result = true;
             if (TargetCret != null && !TargetCret.Death)
             {
-                byte nDir = M2Share.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                byte nDir = SystemShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 nDir = GetBackDir(nDir);
                 Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, nDir, 5, ref TargetX, ref TargetY);
                 result = GotoTargetXy(TargetX, TargetY, 1);

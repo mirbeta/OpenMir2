@@ -4,7 +4,7 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.RobotPlay
+namespace RobotSystem
 {
     public partial class RobotPlayer
     {
@@ -48,7 +48,7 @@ namespace M2Server.RobotPlay
                     var sMagicName = tempList[i].Trim();
                     if (FindMagic(sMagicName) == null)
                     {
-                        var magic = M2Share.WorldEngine.FindMagic(sMagicName);
+                        var magic = SystemShare.WorldEngine.FindMagic(sMagicName);
                         if (magic != null)
                         {
                             if (magic.Job == 99 || magic.Job == (byte)Job)
@@ -80,11 +80,11 @@ namespace M2Server.RobotPlay
                         userItem = new UserItem();
                         if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            if (M2Share.StdModeMap.Contains(stdItem.StdMode))
+                            if (SystemShare.StdModeMap.Contains(stdItem.StdMode))
                             {
                                 if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                 {
-                                    //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
+                                    //SystemShare.WorldEngine.GetUnknowItemValue(UserItem);
                                 }
                             }
                             if (!AddItemToBag(userItem))
@@ -132,11 +132,11 @@ namespace M2Server.RobotPlay
                         userItem = new UserItem();
                         if (SystemShare.ItemSystem.CopyToUserItemFromName(UseItemNames[i], ref userItem))
                         {
-                            if (M2Share.StdModeMap.Contains(stdItem.StdMode))
+                            if (SystemShare.StdModeMap.Contains(stdItem.StdMode))
                             {
                                 if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                 {
-                                    //M2Share.WorldEngine.GetUnknowItemValue(UserItem);
+                                    //SystemShare.WorldEngine.GetUnknowItemValue(UserItem);
                                 }
                             }
                         }
@@ -176,7 +176,7 @@ namespace M2Server.RobotPlay
                     {
                         loadList = new StringList();
                         loadList.LoadFromFile(ConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(loadList.Count);
+                        nIndex = SystemShare.RandomNumber.Random(loadList.Count);
                         if (nIndex >= 0 && nIndex < loadList.Count)
                         {
                             str = loadList[nIndex];
@@ -204,7 +204,7 @@ namespace M2Server.RobotPlay
                     {
                         loadList = new StringList();
                         loadList.LoadFromFile(HeroConfigListFileName);
-                        nIndex = M2Share.RandomNumber.Random(loadList.Count);
+                        nIndex = SystemShare.RandomNumber.Random(loadList.Count);
                         if (nIndex >= 0 && nIndex < loadList.Count)
                         {
                             str = loadList[nIndex];

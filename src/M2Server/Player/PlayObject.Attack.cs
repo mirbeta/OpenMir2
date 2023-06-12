@@ -1,5 +1,4 @@
 using M2Server.Magic;
-using M2Server.RobotPlay;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -285,13 +284,13 @@ namespace M2Server.Player
                     case ActorRace.Play:
                         if (IsRobot)
                         {
-                            if (((RobotPlayer)this).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
-                            {
-                                if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
-                                {
-                                    ((RobotPlayer)this).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
-                                }
-                            }
+                            //if (((IRobotPlayer)this).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
+                            //{
+                            //    if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
+                            //    {
+                            //        ((IRobotPlayer)this).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
+                            //    }
+                            //}
                         }
                         else
                         {
@@ -309,13 +308,13 @@ namespace M2Server.Player
                         {
                             if (Master.IsRobot)
                             {
-                                if (((RobotPlayer)Master).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
-                                {
-                                    if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
-                                    {
-                                        ((RobotPlayer)Master).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
-                                    }
-                                }
+                                //if (((IRobotPlayer)Master).Abil.Level <= SystemShare.Config.MonHptoExpLevel)
+                                //{
+                                //    if (!M2Share.GetNoHptoexpMonList(targetObject.ChrName))
+                                //    {
+                                //        ((IRobotPlayer)Master).GainExp(nPower * SystemShare.Config.MonHptoExpmax);
+                                //    }
+                                //}
                             }
                             else
                             {

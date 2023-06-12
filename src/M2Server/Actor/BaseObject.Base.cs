@@ -1,7 +1,5 @@
 ﻿using M2Server.Magic;
 using M2Server.Monster;
-using M2Server.Player;
-using M2Server.RobotPlay;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -639,7 +637,7 @@ namespace M2Server.Actor
                                             {
                                                 if (targetBaseObject.IsRobot)
                                                 {
-                                                    ((RobotPlayer)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                    ((IRobotPlayer)targetBaseObject).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
                                                 }
                                                 else
                                                 {
@@ -657,7 +655,7 @@ namespace M2Server.Actor
                                                 {
                                                     if (targetBaseObject.Master.IsRobot)
                                                     {
-                                                        ((RobotPlayer)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
+                                                        ((IRobotPlayer)targetBaseObject.Master).GainExp(GetMagStruckDamage(targetBaseObject, nDamage) * SystemShare.Config.MonHptoExpmax);
                                                     }
                                                     else
                                                     {

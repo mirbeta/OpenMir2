@@ -1,6 +1,4 @@
 ﻿using M2Server.Actor;
-using M2Server.Magic;
-using M2Server.RobotPlay;
 using System.Collections;
 using System.Runtime.CompilerServices;
 using SystemModule;
@@ -122,7 +120,7 @@ namespace M2Server.Player
         /// <summary>
         /// 确认交易标志
         /// </summary>
-        public bool DealSuccess  { get; set; }
+        public bool DealSuccess { get; set; }
         /// <summary>
         /// 回城地图
         /// </summary>
@@ -144,7 +142,7 @@ namespace M2Server.Player
         /// 行会传送
         /// </summary>
         public bool GuildMove { get; set; }
-        public CommandMessage ClientMsg{ get; set; }
+        public CommandMessage ClientMsg { get; set; }
         /// <summary>
         /// 在行会占争地图中死亡次数
         /// </summary>
@@ -264,7 +262,7 @@ namespace M2Server.Player
         public bool SmashSet { get; set; }
         public bool HwanDevilSet { get; set; }
         public bool PuritySet { get; set; }
-        public bool MundaneSet  { get; set; }
+        public bool MundaneSet { get; set; }
         public bool NokChiSet { get; set; }
         public bool TaoBuSet { get; set; }
         public bool FiveStringSet { get; set; }
@@ -374,7 +372,7 @@ namespace M2Server.Player
         public string SwitchDataTempFile { get; set; }
         public int WriteChgDataErrCount { get; set; }
         public string SwitchMapName { get; set; }
-        public short SwitchMapX  { get; set; }
+        public short SwitchMapX { get; set; }
         public short SwitchMapY { get; set; }
         public bool SwitchDataSended { get; set; }
         public int ChgDataWritedTick { get; set; }
@@ -515,7 +513,7 @@ namespace M2Server.Player
         public int BodyLuckLevel { get; set; }
         public bool DieInFight3Zone { get; set; }
         public string GotoNpcLabel { get; set; }
-        public bool TakeDlgItem  { get; set; }
+        public bool TakeDlgItem { get; set; }
         public int DlgItemIndex { get; set; }
         public int DelayCall { get; set; }
         public int DelayCallTick { get; set; }
@@ -774,7 +772,7 @@ namespace M2Server.Player
         public int IncGamePointTick { get; set; }
         public int PayMentPoint { get; set; }
         public int PayMentPointTick { get; set; }
-        public int DecHpTick  { get; set; }
+        public int DecHpTick { get; set; }
         public int IncHpTick { get; set; }
         /// <summary>
         /// PK 死亡掉经验，不够经验就掉等级
@@ -1628,7 +1626,7 @@ namespace M2Server.Player
             {
                 if (IsRobot && ExpHitter != null && ExpHitter.Race == ActorRace.Play)
                 {
-                    ((RobotPlayer)ExpHitter).GainExp(monsterExp);
+                    // ((IRobotPlayer)ExpHitter).GainExp(monsterExp);
                 }
                 else
                 {

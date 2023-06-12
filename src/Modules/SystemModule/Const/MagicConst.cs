@@ -1,4 +1,4 @@
-﻿namespace M2Server.Magic
+﻿namespace SystemModule
 {
     public static class MagicConst
     {

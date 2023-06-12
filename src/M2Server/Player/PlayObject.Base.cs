@@ -2393,7 +2393,7 @@ namespace M2Server.Player
 
         public void OpenDealDlg(IPlayerActor baseObject)
         {
-            DealCreat = (IPlayerActor)baseObject;
+            DealCreat = baseObject;
             if (DealCreat == null)
             {
                 return;

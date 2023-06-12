@@ -1,5 +1,4 @@
 ﻿using M2Server.Npc;
-using M2Server.Player;
 using SystemModule;
 using SystemModule.Enums;
 

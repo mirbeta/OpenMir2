@@ -1,7 +1,6 @@
 ﻿using M2Server.Items;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
-using M2Server.Player;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -2207,7 +2206,7 @@ namespace M2Server.Actor
             Dispose(ItemList[nIndex]);
             ItemList.RemoveAt(nIndex);
         }
-        
+
         public void DelBagItem(UserItem userItem)
         {
             DelBagItem(userItem.Index);

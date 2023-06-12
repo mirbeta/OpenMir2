@@ -1,11 +1,9 @@
-using M2Server.Magic;
-using M2Server.Monster;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
-namespace M2Server.RobotPlay
+namespace RobotSystem
 {
     public partial class RobotPlayer
     {
@@ -147,7 +145,7 @@ namespace M2Server.RobotPlay
             }
             catch
             {
-                // M2Share.Logger.Error(format("{%s} RoboPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
+                // SystemShare.Logger.Error(format("{%s} RoboPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
             }
             return result;
         }
@@ -200,7 +198,7 @@ namespace M2Server.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RoboPlayObject.WizardAttackTarget");
+                SystemShare.Logger.Error("RoboPlayObject.WizardAttackTarget");
             }
             return result;
         }
@@ -428,7 +426,7 @@ namespace M2Server.RobotPlay
             }
             catch
             {
-                // M2Share.Logger.Error('{异常} RoboPlayObject.TaoistAttackTarget');
+                // SystemShare.Logger.Error('{异常} RoboPlayObject.TaoistAttackTarget');
             }
             return result;
         }
@@ -512,7 +510,7 @@ namespace M2Server.RobotPlay
             }
             catch
             {
-                M2Share.Logger.Error("RoboPlayObject.AttackTarget");
+                SystemShare.Logger.Error("RoboPlayObject.AttackTarget");
             }
             return result;
         }

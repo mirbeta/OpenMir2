@@ -1,10 +1,7 @@
-﻿using M2Server.Actor;
-using M2Server.Player;
-using SystemModule;
-using SystemModule.Data;
+﻿using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace M2Server.Maps
+namespace SystemModule
 {
     public class PointManager
     {
@@ -15,9 +12,9 @@ namespace M2Server.Maps
         public int m_nTurnCount;
         public IEnvirnoment m_PEnvir;
         public FindPathType PathType;
-        private readonly BaseObject FBaseObject;
+        private readonly IPlayerActor FBaseObject;
 
-        public PointManager(BaseObject baseObject)
+        public PointManager(IPlayerActor baseObject)
         {
             CurrX = -1;
             CurrY = -1;
@@ -180,14 +177,14 @@ namespace M2Server.Maps
                             nCurrY = Pt.nY;
                             if (nStep == 0)
                             {
-                                btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
+                                btDir = SystemShare.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 m_nPostion = i;
                             }
                             else
                             {
-                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir)
+                                if (SystemShare.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir)
                                 {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
@@ -236,7 +233,7 @@ namespace M2Server.Maps
             switch (btDir)
             {
                 case Direction.Up:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.UpRight;
@@ -253,7 +250,7 @@ namespace M2Server.Maps
                     }
                     break;
                 case Direction.UpRight:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.Right;
@@ -270,7 +267,7 @@ namespace M2Server.Maps
                     }
                     break;
                 case Direction.Right:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.DownRight;
@@ -287,7 +284,7 @@ namespace M2Server.Maps
                     }
                     break;
                 case Direction.DownRight:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.Down;
@@ -304,7 +301,7 @@ namespace M2Server.Maps
                     }
                     break;
                 case Direction.Down:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.DownLeft;
@@ -321,7 +318,7 @@ namespace M2Server.Maps
                     }
                     break;
                 case Direction.DownLeft:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.Left;
@@ -338,7 +335,7 @@ namespace M2Server.Maps
                     }
                     break;
                 case Direction.Left:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.UpLeft;
@@ -355,7 +352,7 @@ namespace M2Server.Maps
                     }
                     break;
                 case Direction.UpLeft:
-                    switch (M2Share.RandomNumber.Random(4))
+                    switch (SystemShare.RandomNumber.Random(4))
                     {
                         case 0:
                             result = Direction.Up;
@@ -470,14 +467,14 @@ namespace M2Server.Maps
                             nCurrY = Pt.nY;
                             if (nStep == 0)
                             {
-                                btDir = M2Share.GetNextDirection(nX, nY, nCurrX, nCurrY);
+                                btDir = SystemShare.GetNextDirection(nX, nY, nCurrX, nCurrY);
                                 nMX = nCurrX;
                                 nMY = nCurrY;
                                 m_nPostion = i;
                             }
                             else
                             {
-                                if (M2Share.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir)
+                                if (SystemShare.GetNextDirection(nMX, nMY, nCurrX, nCurrY) == btDir)
                                 {
                                     nMX = nCurrX;
                                     nMY = nCurrY;
