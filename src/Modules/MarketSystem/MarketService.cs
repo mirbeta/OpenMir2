@@ -20,6 +20,7 @@ namespace MarketSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpClient _clientScoket;
+        private readonly MarketManager marketManager;
         private Thread _thread;
         private bool IsFirstData = false;
 
@@ -29,13 +30,15 @@ namespace MarketSystem
             _clientScoket.Connected += MarketScoketConnected;
             _clientScoket.Disconnected += MarketScoketDisconnected;
             _clientScoket.Received += MarketSocketRead;
+            marketManager = new MarketManager();
         }
 
         public void Start()
         {
             if (SystemShare.Config.EnableMarket)
             {
-                if (_thread == null) {
+                if (_thread == null)
+                {
                     _thread = new Thread(CheckConnected);
                     _thread.IsBackground = true;
                 }
@@ -142,6 +145,88 @@ namespace MarketSystem
             }
         }
 
+
+        private void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode)
+        {
+            //switch (UserMode)
+            //{
+            //    case MarketConst.USERMARKET_MODE_BUY:
+            //    case MarketConst.USERMARKET_MODE_INQUIRY:
+            //        RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
+            //        break;
+            //    case MarketConst.USERMARKET_MODE_SELL:
+            //        SendUserMarketSellReady(user);
+            //        break;
+            //}
+        }
+
+        private void RequireLoadUserMarket(IPlayerActor user, string MarketName, short ItemType, byte UserMode, string OtherName, string ItemName)
+        {
+            var IsOk = false;
+            var marKetReqInfo = new MarKetReqInfo();
+            //marKetReqInfo.UserName = ChrName;
+            marKetReqInfo.MarketName = MarketName;
+            marKetReqInfo.SearchWho = OtherName;
+            marKetReqInfo.SearchItem = ItemName;
+            marKetReqInfo.ItemType = ItemType;
+            marKetReqInfo.ItemSet = 0;
+            marKetReqInfo.UserMode = UserMode;
+
+            switch (ItemType)
+            {
+                case MarketConst.USERMARKET_TYPE_ALL:
+                case MarketConst.USERMARKET_TYPE_WEAPON:
+                case MarketConst.USERMARKET_TYPE_NECKLACE:
+                case MarketConst.USERMARKET_TYPE_RING:
+                case MarketConst.USERMARKET_TYPE_BRACELET:
+                case MarketConst.USERMARKET_TYPE_CHARM:
+                case MarketConst.USERMARKET_TYPE_HELMET:
+                case MarketConst.USERMARKET_TYPE_BELT:
+                case MarketConst.USERMARKET_TYPE_SHOES:
+                case MarketConst.USERMARKET_TYPE_ARMOR:
+                case MarketConst.USERMARKET_TYPE_DRINK:
+                case MarketConst.USERMARKET_TYPE_JEWEL:
+                case MarketConst.USERMARKET_TYPE_BOOK:
+                case MarketConst.USERMARKET_TYPE_MINERAL:
+                case MarketConst.USERMARKET_TYPE_QUEST:
+                case MarketConst.USERMARKET_TYPE_ETC:
+                case MarketConst.USERMARKET_TYPE_OTHER:
+                case MarketConst.USERMARKET_TYPE_ITEMNAME:
+                    IsOk = true;
+                    break;
+                case MarketConst.USERMARKET_TYPE_SET:
+                    marKetReqInfo.ItemSet = 1;
+                    IsOk = true;
+                    break;
+                case MarketConst.USERMARKET_TYPE_MINE:
+                    //marKetReqInfo.SearchWho = ChrName;
+                    IsOk = true;
+                    break;
+            }
+            if (IsOk)
+            {
+                if (RequestLoadPageUserMarket(user.ActorId, marKetReqInfo))
+                {
+                    SendUserMarketCloseMsg(user);
+                }
+            }
+        }
+
+        private void SendUserMarketCloseMsg(IPlayerActor user)
+        {
+            // user.SendMsg(this, Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_MarketNotReady, 0);
+            //  user.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "你不能使用寄售商人功能。");
+        }
+
+        private void SendUserMarketSellReady(IPlayerActor user)
+        {
+            if (!SystemShare.Config.EnableMarket)
+            {
+                user.SysMsg("寄售商人功能无法使用。", MsgColor.Red, MsgType.Hint);
+            }
+            //SendUserMarketSellReady(user.ActorId, user.ChrName, ActorId);
+        }
+
         /// <summary>
         /// 发送拍卖行注册信息
         /// </summary>
@@ -233,7 +318,7 @@ namespace MarketSystem
                         switch (commandMessage.Ident)
                         {
                             case Messages.DB_LOADMARKETSUCCESS:
-                                // M2Share.MarketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                marketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                                 _logger.Info("加载拍卖行数据成功...");
                                 break;
                             case Messages.DB_LOADMARKETFAIL:
@@ -245,7 +330,7 @@ namespace MarketSystem
                                 {
                                     _logger.Info("获取拍卖行数据失败...");
                                 }
-                                //M2Share.MarketManager.OnMsgReadData();
+                                marketManager.OnMsgReadData();
                                 break;
                             case Messages.DB_LOADUSERMARKETSUCCESS:
                                 var user = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
