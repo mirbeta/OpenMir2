@@ -12,7 +12,7 @@ namespace M2Server.Player
         /// <summary>
         /// 攻击速度
         /// </summary>
-        internal ushort HitSpeed { get; set; }
+        public ushort HitSpeed { get; set; }
         /// <summary>
         /// HP恢复点数
         /// </summary>
@@ -148,7 +148,7 @@ namespace M2Server.Player
         /// <summary>
         /// 气血石和魔血石
         /// </summary>
-        internal void PlaySuperRock()
+        public void PlaySuperRock()
         {
             if (!Death && Race == ActorRace.Play || Race == ActorRace.PlayClone)
             {

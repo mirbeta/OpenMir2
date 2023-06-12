@@ -1,3 +1,4 @@
+using M2Server.Monster;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Enums;

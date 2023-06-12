@@ -1,3 +1,4 @@
+using M2Server;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -527,7 +528,7 @@ namespace RobotSystem
                                                 {
                                                     if (cellObject.CellObjId > 0)
                                                     {
-                                                        SystemShare.CellObjectMgr.Remove(cellObject.CellObjId);
+                                                        M2Share.CellObjectMgr.Remove(cellObject.CellObjId);
                                                     }
                                                     cellInfo.Remove(cellObject);
                                                     if (cellInfo.Count <= 0)
@@ -537,7 +538,7 @@ namespace RobotSystem
                                                     }
                                                     continue;
                                                 }
-                                                var mapItem = SystemShare.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                                var mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                                 if (mapItem.ItemId == 0)
                                                 {
                                                     continue;
@@ -575,7 +576,7 @@ namespace RobotSystem
                                             {
                                                 if (cellObject.CellObjId < 0)
                                                 {
-                                                    mapEvent = SystemShare.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
+                                                    mapEvent = M2Share.CellObjectMgr.Get<MapEvent>(cellObject.CellObjId);
                                                     UpdateVisibleEvent(nX, nY, mapEvent);
                                                 }
                                             }

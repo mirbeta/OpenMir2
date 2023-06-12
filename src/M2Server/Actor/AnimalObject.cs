@@ -11,8 +11,8 @@ namespace M2Server.Actor
         /// 经验值
         /// </summary>
         public int FightExp { get; set; }
-        internal short TargetX;
-        internal short TargetY;
+        public short TargetX;
+        public short TargetY;
         public bool RunAwayMode;
         public int RunAwayStart;
         public int RunAwayTime;

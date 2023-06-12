@@ -1,4 +1,9 @@
 using System.Collections;
+using M2Server;
+using M2Server.Actor;
+using M2Server.Magic;
+using M2Server.Monster.Monsters;
+using M2Server.Player;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
@@ -11,7 +16,7 @@ namespace RobotSystem
     /// <summary>
     /// 假人
     /// </summary>
-    public partial class RobotPlayer : IRobotPlayer
+    public partial class RobotPlayer : PlayObject, IRobotPlayer
     {
         public long WalkIntervalTick = 0;
         public long SearchTargetTick = 0;
@@ -2010,7 +2015,7 @@ namespace RobotSystem
                 {
                     if (Math.Abs(nX - CurrX) > 2 || Math.Abs(nY - CurrY) > 2)
                     {
-                        MPath = SystemShare.FindPath.Find(Envir, CurrX, CurrY, nX, nY, true);
+                        MPath = M2Share.FindPath.Find(Envir, CurrX, CurrY, nX, nY, true);
                         MNPostion = 0;
                         if (MPath.Length > 0 && MNPostion < MPath.Length)
                         {
@@ -2140,7 +2145,7 @@ namespace RobotSystem
             //0代替-1
             if (!CanWalk(x1, y1, x2, y2, 0, ref nStep, Race != 108))
             {
-                PointInfo[] path = SystemShare.FindPath.Find(Envir, x1, y1, x2, y2, false);
+                PointInfo[] path = M2Share.FindPath.Find(Envir, x1, y1, x2, y2, false);
                 if (path.Length <= 0)
                 {
                     return false;
@@ -2167,7 +2172,7 @@ namespace RobotSystem
             }
             if (!result)
             {
-                PointInfo[] path = SystemShare.FindPath.Find(Envir, CurrX, CurrY, nX, nY, boRun);
+                PointInfo[] path = M2Share.FindPath.Find(Envir, CurrX, CurrY, nX, nY, boRun);
                 if (path.Length > 0)
                 {
                     for (var i = 0; i < path.Length; i++)
