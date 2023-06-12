@@ -4,12 +4,12 @@ namespace WebApi
 {
     public class Startup
     {
-        public Startup(ISystemShare.Configuration)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
 
-        public ISystemShare.Configuration { get; }
+        public IConfiguration Configuration { get; }
         
         public void ConfigureServices(IServiceCollection services)
         {

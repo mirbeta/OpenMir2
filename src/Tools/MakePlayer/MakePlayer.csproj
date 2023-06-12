@@ -52,16 +52,16 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\SystemModule\OpenMir2.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
       <None Update="AppSetting.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
       <None Update="SayMessage.txt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\OpenMir2\OpenMir2.csproj" />
     </ItemGroup>
 
 </Project>

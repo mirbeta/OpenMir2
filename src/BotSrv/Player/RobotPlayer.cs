@@ -2620,7 +2620,7 @@ namespace BotSrv.Player
         public void SendAdjustBonus(int remain, NakedAbility babil)
         {
             var msg = Messages.MakeMessage(Messages.CM_ADJUST_BONUS, remain, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodePacket(babil));
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeMessage(babil));
         }
 
         public bool ServerAcceptNextAction()
