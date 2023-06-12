@@ -946,6 +946,11 @@ namespace GameSrv.NPC
                             //    SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_SELL);
                             //}
                         }
+                        else
+                        {
+                            //todo 检查是否由插件实现
+
+                        }
                     }
                 }
             }

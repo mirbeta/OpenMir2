@@ -64,6 +64,7 @@ namespace GameSrv
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             await Builder.StartAsync(cancellationToken);
+            SystemShare.ServiceProvider = Services;
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)

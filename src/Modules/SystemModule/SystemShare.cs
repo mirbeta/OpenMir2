@@ -26,6 +26,8 @@ namespace SystemModule
 
         public static IEventSystem EventMgr { get; set; }
 
+        public static IServiceProvider ServiceProvider { get; set; }
+
         /// <summary>
         /// 启动路径
         /// </summary>

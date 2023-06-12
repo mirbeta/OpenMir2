@@ -7,12 +7,18 @@ namespace MarketSystem
     {
         bool IsConnected { get; }
 
-        void CheckConnected();
-        bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo);
-        void SendFirstMessage();
-        bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet);
-        bool SendUserMarketSellReady(int actorId, string chrName, int marketNpc);
         void Start();
+
         void Stop();
+
+        void CheckConnected();
+
+        bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo);
+
+        void SendFirstMessage();
+
+        bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet);
+
+        bool SendUserMarketSellReady(int actorId, string chrName, int marketNpc);
     }
 }

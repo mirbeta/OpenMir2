@@ -58,7 +58,6 @@ namespace GameSrv
             TimedRobotProcessor = new TimedRobotProcessor();
             PlanesService = new PlanesService();
             EventSource = new GameEventSource();
-            //MarketService = new MarketService();
             DataServer = new DBService();
             ChatService = new ChatService();
             SocketMgr = new ThreadSocketMgr();

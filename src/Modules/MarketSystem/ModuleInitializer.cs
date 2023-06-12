@@ -11,7 +11,7 @@ namespace MarketSystem
 
         public void Configure(IHostEnvironment env)
         {
-            throw new NotImplementedException();
+
         }
 
         public void ConfigureServices(IServiceCollection serviceCollection)
@@ -22,11 +22,13 @@ namespace MarketSystem
         public void Startup(CancellationToken cancellationToken = default)
         {
             logger.Info("Marker寄售行插件启动...");
+            SystemShare.ServiceProvider.GetService<IMarketService>().Start();
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
             logger.Info("Marker寄售行插件停止...");
+            SystemShare.ServiceProvider.GetService<IMarketService>().Stop();
         }
     }
 }

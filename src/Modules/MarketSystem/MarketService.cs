@@ -20,6 +20,7 @@ namespace MarketSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpClient _clientScoket;
+        private Thread _thread;
         private bool IsFirstData = false;
 
         public MarketService()
@@ -34,6 +35,10 @@ namespace MarketSystem
         {
             if (SystemShare.Config.EnableMarket)
             {
+                if (_thread == null) {
+                    _thread = new Thread(CheckConnected);
+                    _thread.IsBackground = true;
+                }
                 var config = new TouchSocketConfig();
                 config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort))
                     .SetBufferLength(4096);
@@ -114,6 +119,11 @@ namespace MarketSystem
             var client = (TcpClient)sender;
             _logger.Info("数据库(拍卖行)服务器[" + client.MainSocket.RemoteEndPoint + "]连接成功...");
             SendFirstMessage();// 链接成功后进行第一次主动拉取拍卖行数据
+            if (_thread != null)
+            {
+                _thread.Interrupt();
+            }
+            _thread.Start();
         }
 
         private void MarketSocketError(SocketException e)
