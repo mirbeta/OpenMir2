@@ -21,10 +21,6 @@ namespace SystemModule
 
         int OfflinePlayCount { get; }
 
-        int RobotPlayerCount { get; }
-
-        int RobotLogonQueueCount { get; }
-
         int MonGenCount { get; }
 
         void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg);
@@ -92,7 +88,6 @@ namespace SystemModule
         void PrcocessData();
         void ProcessNpcs();
         void ProcessMerchants();
-        void ProcessRobotPlayData();
         void ProcessHumans();
 
         void AddUserOpenInfo(UserOpenInfo UserOpenInfo);

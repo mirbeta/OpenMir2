@@ -26,7 +26,6 @@ namespace GameSrv.Word
         private int ProcessNpcTimeMin { get; set; }
         private int ProcessLoadPlayTick { get; set; }
         private int ProcHumIdx { get; set; }
-        private int ProcBotHubIdx { get; set; }
         /// <summary>
         /// 交易NPC处理位置
         /// </summary>
@@ -39,11 +38,6 @@ namespace GameSrv.Word
         /// 处理人物开始索引（每次处理人物数限制）
         /// </summary>
         private int ProcessHumanLoopTime { get; set; }
-        /// <summary>
-        /// 处理假人间隔
-        /// </summary>
-        public long RobotLogonTick { get; set; }
-
         public IList<AdminInfo> AdminList { get; set; }
         private readonly IList<GoldChangeInfo> ChangeHumanDbGoldList;
         private readonly IList<SwitchDataInfo> ChangeServerList;
@@ -61,7 +55,6 @@ namespace GameSrv.Word
         protected readonly IList<IPlayerActor> PlayObjectFreeList;
         protected readonly Dictionary<string, ServerGruopInfo> OtherUserNameList;
         protected readonly IList<IPlayerActor> PlayObjectList;
-        protected readonly IList<IRobotPlayer> BotPlayObjectList;
         protected readonly List<int> LoadPlayerQueue = new List<int>();
         private readonly ArrayList OldMagicList;
         public readonly IList<NormNpc> QuestNpcList;
@@ -69,12 +62,6 @@ namespace GameSrv.Word
         /// 怪物列表
         /// </summary>
         internal readonly Dictionary<string, MonsterInfo> MonsterList;
-        /// <summary>
-        /// 假人列表
-        /// </summary>
-        public readonly Queue<RoBotLogon> RobotLogonQueue;
-        public int RobotLogonQueueCount => RobotLogonQueue.Count;
-
 
         public WorldServer()
         {
@@ -87,7 +74,6 @@ namespace GameSrv.Word
             ProcessMissionsTime = HUtil32.GetTickCount();
             ProcessLoadPlayTick = HUtil32.GetTickCount();
             ProcHumIdx = 0;
-            ProcBotHubIdx = 0;
             ProcessHumanLoopTime = 0;
             MerchantPosition = 0;
             NpcPosition = 0;
@@ -110,15 +96,12 @@ namespace GameSrv.Word
             ListOfSocket = new List<int>();
             OldMagicList = new ArrayList();
             OtherUserNameList = new Dictionary<string, ServerGruopInfo>(StringComparer.OrdinalIgnoreCase);
-            RobotLogonQueue = new Queue<RoBotLogon>();
-            BotPlayObjectList = new List<IRobotPlayer>();
         }
 
         public int OnlinePlayObject => GetOnlineHumCount();
         public int PlayObjectCount => GetUserCount();
         public int OfflinePlayCount => 0;
         public int LoadPlayCount => GetLoadPlayCount();
-        public int RobotPlayerCount => BotPlayObjectList.Count;
         public IEnumerable<IPlayerActor> PlayObjects { get { return PlayObjectList; } }
         public int MonsterCount { get { return MonsterList.Count; } }
         public int MagicCount { get { return MagicList.Count; } }
@@ -203,12 +186,12 @@ namespace GameSrv.Word
 
         internal int GetOnlineHumCount()
         {
-            return PlayObjectList.Count + BotPlayObjectList.Count;
+            return PlayObjectList.Count;
         }
 
         internal int GetUserCount()
         {
-            return PlayObjectList.Count + BotPlayObjectList.Count;
+            return PlayObjectList.Count;
         }
 
         private bool ProcessHumansIsLogined(string sChrName)
@@ -520,7 +503,7 @@ namespace GameSrv.Word
                                 {
                                     if (playObject.IsRobot)
                                     {
-                                        BotPlayObjectList.Add((IRobotPlayer)playObject);
+                                        //BotPlayObjectList.Add((IRobotPlayer)playObject);
                                     }
                                     else
                                     {
@@ -1624,15 +1607,15 @@ namespace GameSrv.Word
             }
             if (botPlay)
             {
-                for (var i = 0; i < BotPlayObjectList.Count; i++)
-                {
-                    var botPlayer = BotPlayObjectList[i];
-                    if (!botPlayer.Death && !botPlayer.Ghost && botPlayer.Envir == envir &&
-                        Math.Abs(botPlayer.CurrX - nRageX) <= nRage && Math.Abs(botPlayer.CurrY - nRageY) <= nRage)
-                    {
-                        list.Add(botPlayer);
-                    }
-                }
+                //for (var i = 0; i < BotPlayObjectList.Count; i++)
+                //{
+                //    var botPlayer = BotPlayObjectList[i];
+                //    if (!botPlayer.Death && !botPlayer.Ghost && botPlayer.Envir == envir &&
+                //        Math.Abs(botPlayer.CurrX - nRageX) <= nRage && Math.Abs(botPlayer.CurrY - nRageY) <= nRage)
+                //    {
+                //        list.Add(botPlayer);
+                //    }
+                //}
             }
         }
 
