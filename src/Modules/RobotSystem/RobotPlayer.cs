@@ -3,6 +3,7 @@ using M2Server.Actor;
 using M2Server.Magic;
 using M2Server.Monster.Monsters;
 using M2Server.Player;
+using RobotSystem.Data;
 using System.Collections;
 using SystemModule;
 using SystemModule.Consts;
@@ -17,8 +18,14 @@ namespace RobotSystem
     /// </summary>
     public partial class RobotPlayer : PlayObject, IRobotPlayer
     {
-        public long WalkIntervalTick = 0;
-        public long SearchTargetTick = 0;
+        /// <summary>
+        /// 走路间隔时间
+        /// </summary>
+        public int WalkIntervalTick = 0;
+        /// <summary>
+        /// 搜索目标间隔时间
+        /// </summary>
+        public int SearchTargetTick = 0;
         /// <summary>
         /// 假人启动
         /// </summary>
@@ -27,9 +34,9 @@ namespace RobotSystem
         /// 挂机地图
         /// </summary>
         public IEnvirnoment ManagedEnvir;
-        public PointManager PointManager;
+        public IPointManager PointManager;
         public PointInfo[] MPath;
-        public int MNPostion;
+        public int Postion;
         public int MoveFailCount;
         public string ConfigListFileName = string.Empty;
         public string FilePath = string.Empty;
@@ -53,12 +60,12 @@ namespace RobotSystem
         /// 思考时间
         /// </summary>
         public long ThinkTick;
-        public bool MBoDupMode;
+        public bool IsDupMode;
         public long SearchUseMagic = 0;
         /// <summary>
         /// 低血回城间隔
         /// </summary>
-        public long MDwHpToMapHomeTick = 0;
+        public long HpToMapHomeTick = 0;
         /// <summary>
         /// 守护模式
         /// </summary>
@@ -77,7 +84,7 @@ namespace RobotSystem
         /// 拾取物品间隔
         /// </summary>
         public long PickUpItemTick;
-        public MapItem MSelMapItem;
+        public MapItem SelMapItem;
         /// <summary>
         /// 跑步计时
         /// </summary>
@@ -134,7 +141,7 @@ namespace RobotSystem
             RobotStart = false; // 开始挂机
             ManagedEnvir = null; // 挂机地图
             MPath = null;
-            MNPostion = -1;
+            Postion = -1;
             UseItemNames = new string[13];
             BagItemNames = new List<string>();
             PointManager = new PointManager(this);
@@ -143,7 +150,7 @@ namespace RobotSystem
             AutoAddHealthTick = HUtil32.GetTickCount();
             AutoRepairItemTick = HUtil32.GetTickCount();
             ThinkTick = HUtil32.GetTickCount();
-            MBoDupMode = false;
+            IsDupMode = false;
             ProtectStatus = false;// 守护模式
             ProtectDest = true;// 到达守护坐标
             GotoProtectXyCount = 0;// 是向守护坐标的累计数
@@ -192,7 +199,7 @@ namespace RobotSystem
                 RobotStart = false;
                 MoveFailCount = 0;
                 MPath = null;
-                MNPostion = -1;
+                Postion = -1;
                 if (SystemShare.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
@@ -562,7 +569,7 @@ namespace RobotSystem
                 if (IsEnoughBag() && TargetCret == null)
                 {
                     var boFound = false;
-                    if (MSelMapItem.ItemId > 0)
+                    if (SelMapItem.ItemId > 0)
                     {
                         CanPickIng = true;
                         for (var i = 0; i < VisibleItems.Count; i++)
@@ -570,7 +577,7 @@ namespace RobotSystem
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
                             {
-                                if (visibleMapItem.MapItem == MSelMapItem)
+                                if (visibleMapItem.MapItem == SelMapItem)
                                 {
                                     boFound = true;
                                     break;
@@ -580,9 +587,9 @@ namespace RobotSystem
                     }
                     if (!boFound)
                     {
-                        MSelMapItem = default;
+                        SelMapItem = default;
                     }
-                    if (MSelMapItem.ItemId > 0)
+                    if (SelMapItem.ItemId > 0)
                     {
                         if (SearchPickUpItemPickUpItem(CurrX, CurrY))
                         {
@@ -593,14 +600,14 @@ namespace RobotSystem
                     var n01 = 999;
                     VisibleMapItem selVisibleMapItem = null;
                     boFound = false;
-                    if (MSelMapItem.ItemId > 0)
+                    if (SelMapItem.ItemId > 0)
                     {
                         for (var i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
                             {
-                                if (visibleMapItem.MapItem == MSelMapItem)
+                                if (visibleMapItem.MapItem == SelMapItem)
                                 {
                                     selVisibleMapItem = visibleMapItem;
                                     boFound = true;
@@ -643,8 +650,8 @@ namespace RobotSystem
                     }
                     if (selVisibleMapItem != null)
                     {
-                        MSelMapItem = selVisibleMapItem.MapItem;
-                        if (MSelMapItem.ItemId > 0)
+                        SelMapItem = selVisibleMapItem.MapItem;
+                        if (SelMapItem.ItemId > 0)
                         {
                             CanPickIng = true;
                         }
@@ -900,14 +907,14 @@ namespace RobotSystem
             {
                 var nX = CurrX;
                 var nY = CurrY;
-                if (MPath != null && MPath.Length > 0 && MNPostion < MPath.Length)
+                if (MPath != null && MPath.Length > 0 && Postion < MPath.Length)
                 {
-                    if (!GotoNextOne(MPath[MNPostion].nX, MPath[MNPostion].nY, true))
+                    if (!GotoNextOne(MPath[Postion].nX, MPath[Postion].nY, true))
                     {
                         MPath = null;
-                        MNPostion = -1;
+                        Postion = -1;
                         MoveFailCount++;
-                        MNPostion++;
+                        Postion++;
                     }
                     else
                     {
@@ -918,33 +925,33 @@ namespace RobotSystem
                 else
                 {
                     MPath = null;
-                    MNPostion = -1;
+                    Postion = -1;
                 }
                 if (PointManager.GetPoint(ref nX, ref nY))
                 {
                     if (Math.Abs(nX - CurrX) > 2 || Math.Abs(nY - CurrY) > 2)
                     {
                         MPath = M2Share.FindPath.Find(Envir, CurrX, CurrY, nX, nY, true);
-                        MNPostion = 0;
-                        if (MPath.Length > 0 && MNPostion < MPath.Length)
+                        Postion = 0;
+                        if (MPath.Length > 0 && Postion < MPath.Length)
                         {
-                            if (!GotoNextOne(MPath[MNPostion].nX, MPath[MNPostion].nY, true))
+                            if (!GotoNextOne(MPath[Postion].nX, MPath[Postion].nY, true))
                             {
                                 MPath = null;
-                                MNPostion = -1;
+                                Postion = -1;
                                 MoveFailCount++;
                             }
                             else
                             {
                                 MoveFailCount = 0;
-                                MNPostion++;
+                                Postion++;
                                 return;
                             }
                         }
                         else
                         {
                             MPath = null;
-                            MNPostion = -1;
+                            Postion = -1;
                             MoveFailCount++;
                         }
                     }
@@ -971,7 +978,7 @@ namespace RobotSystem
                         WalkTo(Dir, false);
                     }
                     MPath = null;
-                    MNPostion = -1;
+                    Postion = -1;
                     MoveFailCount++;
                 }
             }
@@ -986,7 +993,7 @@ namespace RobotSystem
                     WalkTo(Dir, false);
                 }
                 MPath = null;
-                MNPostion = -1;
+                Postion = -1;
                 MoveFailCount = 0;
             }
         }
@@ -1891,7 +1898,7 @@ namespace RobotSystem
                     ThinkTick = HUtil32.GetTickCount();
                     if (Envir.GetXYObjCount(CurrX, CurrY) >= 2)
                     {
-                        MBoDupMode = true;
+                        IsDupMode = true;
                     }
                     if (TargetCret != null)
                     {
@@ -1901,7 +1908,7 @@ namespace RobotSystem
                         }
                     }
                 }
-                if (MBoDupMode)
+                if (IsDupMode)
                 {
                     int nOldX = CurrX;
                     int nOldY = CurrY;
@@ -1909,7 +1916,7 @@ namespace RobotSystem
                     //m_dwStationTick = HUtil32.GetTickCount(); // 增加检测人物站立时间
                     if (nOldX != CurrX || nOldY != CurrY)
                     {
-                        MBoDupMode = false;
+                        IsDupMode = false;
                         result = true;
                     }
                 }

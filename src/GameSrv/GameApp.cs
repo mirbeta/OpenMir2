@@ -95,7 +95,7 @@ namespace GameSrv
         }
 
         /// <summary>
-        /// 初始化游戏数据配置文件
+        /// 初始化游戏基础配置
         /// </summary>
         /// <param name="stoppingToken"></param>
         public void Initialize(CancellationToken stoppingToken)

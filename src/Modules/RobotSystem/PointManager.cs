@@ -1,9 +1,11 @@
-﻿using SystemModule.Data;
+﻿using RobotSystem.Data;
+using SystemModule;
+using SystemModule.Data;
 using SystemModule.Enums;
 
-namespace SystemModule
+namespace RobotSystem
 {
-    public class PointManager
+    public class PointManager : IPointManager
     {
         public short CurrX;
         public short CurrY;
@@ -11,7 +13,7 @@ namespace SystemModule
         public byte m_btDirection;
         public int m_nTurnCount;
         public IEnvirnoment m_PEnvir;
-        public FindPathType PathType;
+        public FindPathType PathType { get; set; }
         private readonly IPlayerActor FBaseObject;
 
         public PointManager(IPlayerActor baseObject)

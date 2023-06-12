@@ -126,9 +126,9 @@ namespace RobotSystem
                         {
                             if (SystemShare.Config.boHPAutoMoveMap)
                             {
-                                if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - MDwHpToMapHomeTick > 15000) // 低血时回城或回守护点 
+                                if (WAbil.HP <= Math.Round(WAbil.MaxHP * 0.3) && HUtil32.GetTickCount() - HpToMapHomeTick > 15000) // 低血时回城或回守护点 
                                 {
-                                    MDwHpToMapHomeTick = HUtil32.GetTickCount();
+                                    HpToMapHomeTick = HUtil32.GetTickCount();
                                     DelTargetCreat();
                                     if (ProtectStatus) // 守护状态
                                     {

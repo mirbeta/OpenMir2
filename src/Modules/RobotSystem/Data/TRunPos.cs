@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Data
+﻿namespace RobotSystem.Data
 {
     public record struct TRunPos
     {
