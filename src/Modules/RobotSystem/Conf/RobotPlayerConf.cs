@@ -1,6 +1,6 @@
 ﻿using SystemModule.Common;
 
-namespace SystemModule
+namespace RobotSystem
 {
     public class RobotPlayerConf : ConfigFile
     {
