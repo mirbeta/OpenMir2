@@ -952,8 +952,6 @@ namespace SystemModule
 
         MarketUser MarketUser { get; set; }
 
-        bool FlagReadyToSellCheck { get; set; }
-
         int FightExp { get; set; }
 
         void FeatureChanged();

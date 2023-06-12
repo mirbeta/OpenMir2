@@ -858,7 +858,6 @@ namespace M2Server.Player
         public byte[] QuestUnit { get; set; }
         public byte[] QuestFlag { get; set; }
         public MarketUser MarketUser { get; set; }
-        public bool FlagReadyToSellCheck { get; set; }
 
         public PlayObject()
         {

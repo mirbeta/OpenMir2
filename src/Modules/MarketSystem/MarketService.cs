@@ -35,45 +35,35 @@ namespace MarketSystem
 
         public void Start()
         {
-            if (SystemShare.Config.EnableMarket)
+            if (_thread == null)
             {
-                if (_thread == null)
-                {
-                    _thread = new Thread(CheckConnected);
-                    _thread.IsBackground = true;
-                }
-                var config = new TouchSocketConfig();
-                config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort))
-                    .SetBufferLength(4096);
-                config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
-                _clientScoket.Setup(config);
-                try
-                {
-                    _clientScoket.Connect();
-                }
-                catch (SocketException ex)
-                {
-                    MarketSocketError(ex);
-                }
+                _thread = new Thread(CheckConnected);
+                _thread.IsBackground = true;
+            }
+            var config = new TouchSocketConfig();
+            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort))
+                .SetBufferLength(4096);
+            config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            _clientScoket.Setup(config);
+            try
+            {
+                _clientScoket.Connect();
+            }
+            catch (SocketException ex)
+            {
+                MarketSocketError(ex);
             }
         }
 
         public void Stop()
         {
-            if (SystemShare.Config.EnableMarket)
-            {
-                _clientScoket.Close();
-            }
+            _clientScoket.Close();
         }
 
         public bool IsConnected => _clientScoket.Online;
 
         public void CheckConnected()
         {
-            if (!SystemShare.Config.EnableMarket)
-            {
-                return;
-            }
             if (IsConnected)
             {
                 return;
@@ -148,16 +138,16 @@ namespace MarketSystem
 
         private void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode)
         {
-            //switch (UserMode)
-            //{
-            //    case MarketConst.USERMARKET_MODE_BUY:
-            //    case MarketConst.USERMARKET_MODE_INQUIRY:
-            //        RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
-            //        break;
-            //    case MarketConst.USERMARKET_MODE_SELL:
-            //        SendUserMarketSellReady(user);
-            //        break;
-            //}
+            switch (UserMode)
+            {
+                case MarketConst.USERMARKET_MODE_BUY:
+                case MarketConst.USERMARKET_MODE_INQUIRY:
+                    RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
+                    break;
+                case MarketConst.USERMARKET_MODE_SELL:
+                    SendUserMarketSellReady(user);
+                    break;
+            }
         }
 
         private void RequireLoadUserMarket(IPlayerActor user, string MarketName, short ItemType, byte UserMode, string OtherName, string ItemName)
@@ -214,8 +204,8 @@ namespace MarketSystem
 
         private void SendUserMarketCloseMsg(IPlayerActor user)
         {
-            // user.SendMsg(this, Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_MarketNotReady, 0);
-            //  user.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "你不能使用寄售商人功能。");
+            user.SendMsg(user, Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_MarketNotReady, 0);
+            user.SendMsg(user, Messages.RM_MENU_OK, 0, user.ActorId, 0, 0, "你不能使用寄售商人功能。");
         }
 
         private void SendUserMarketSellReady(IPlayerActor user)
@@ -238,16 +228,12 @@ namespace MarketSystem
             }
             var request = new ServerRequestMessage(Messages.DB_LOADMARKET, 0, 0, 0, 0);
             var requestData = new MarketRegisterMessage() { ServerIndex = SystemShare.ServerIndex, ServerName = SystemShare.Config.ServerName, GroupId = 1, Token = SystemShare.Config.MarketToken };
-            //M2Share.MarketService.SendRequest(1, request, requestData);
+            SendRequest(1, request, requestData);
             IsFirstData = true;
         }
 
         public bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo)
         {
-            if (!SystemShare.Config.EnableMarket)
-            {
-                return false;
-            }
             var request = new ServerRequestMessage(Messages.DB_SEARCHMARKET, actorId, 0, 0, 0);
             var requestData = new MarketSearchMessage
             {
@@ -259,7 +245,7 @@ namespace MarketSystem
                 ItemSet = marKetReqInfo.ItemSet,
                 UserMode = marKetReqInfo.UserMode
             };
-            //M2Share.MarketService.SendRequest(1, request, requestData);
+            SendRequest(1, request, requestData);
             return true;
         }
 
@@ -271,7 +257,7 @@ namespace MarketSystem
                 UserName = chrName,
                 MarketNPC = marketNpc
             };
-            //M2Share.MarketService.SendRequest(1, request, requestData);
+            SendRequest(1, request, requestData);
             _logger.Info($"发送用户[{chrName}]个人拍卖行数据请求");
             return true;
         }
@@ -336,7 +322,7 @@ namespace MarketSystem
                                 var user = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                 if (user != null)
                                 {
-                                    // user.ReadyToSellUserMarket(SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
+                                    ReadyToSellUserMarket(user, SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
                                 }
                                 else
                                 {
@@ -349,7 +335,7 @@ namespace MarketSystem
                                     var searchUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                     if (searchUser != null)
                                     {
-                                        //  searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
+                                        SendUserMarketList(searchUser, 0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
                                     }
                                     else
                                     {
@@ -408,6 +394,56 @@ namespace MarketSystem
             {
                 _logger.Error("错误的封包数据");
             }
+        }
+
+
+        public void SendUserMarketList(IPlayerActor user, int nextPage, MarketDataMessage marketData)
+        {
+            if (marketData.TotalCount <= 0)
+            {
+                return;
+            }
+            var page = 0;
+            if (nextPage == 0)
+            {
+                page = 1;
+            }
+            else
+            {
+            }
+            if (nextPage == 1)
+            {
+                //page = MarketUser.CurrPage + 1;
+            }
+            // MarketUser.CurrPage = page;
+            var maxpage = (int)Math.Ceiling(marketData.TotalCount / (double)MarketConst.MAKET_ITEMCOUNT_PER_PAGE);
+            var marketItems = marketData.List.Skip((page - 1) * MarketConst.MAKET_ITEMCOUNT_PER_PAGE).Take(MarketConst.MAKET_ITEMCOUNT_PER_PAGE).ToList();
+            var buffer = string.Empty;
+            var cnt = 0;
+            if (marketItems.Count > 0)
+            {
+                for (int i = 0; i < marketItems.Count; i++)
+                {
+                    cnt++;
+                    buffer = buffer + EDCode.EncodeBuffer(marketData.List[i]) + '/';
+                }
+            }
+            buffer = cnt + '/' + page + '/' + maxpage + '/' + buffer;
+            //user.SendMsg(Messages.RM_MARKET_LIST, 0, MarketUser.UserMode, MarketUser.ItemType, bFirstSend, buffer);
+        }
+
+        public void ReadyToSellUserMarket(IPlayerActor user, MarkerUserLoadMessage readyItem)
+        {
+            if (readyItem.IsBusy != MarketConst.UMRESULT_SUCCESS) return;
+            if (readyItem.SellCount < MarketConst.MARKET_MAX_SELL_COUNT)
+            {
+                user.SendMsg(Messages.RM_MARKET_RESULT, 0, readyItem.MarketNPC, MarketConst.UMResult_ReadyToSell, 0);
+            }
+            else
+            {
+                user.SendMsg(Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_OverSellCount, 0);
+            }
+            // FlagReadyToSellCheck = true;
         }
     }
 }
