@@ -160,7 +160,7 @@ namespace GameSrv
             if (playerCount == 0)
             {
                 _logger.Info("没有玩家在线，游戏引擎服务已停止...Bye!");
-                await ServerBase.Stopping(_cancellationTokenSource.Token);
+                await _mirApp.Stopping(_cancellationTokenSource.Token);
                 await Host.StopAsync(_cancellationTokenSource.Token);
                 return;
             }
@@ -203,7 +203,7 @@ namespace GameSrv
                 _logger.Info("网关服务已停止...");
                 _logger.Info("即将停止游戏引擎世界服务...");
                 await Task.Delay(500);//延时1秒，等待网关服务停止
-                await ServerBase.Stopping(_cancellationTokenSource.Token);
+                await _mirApp.Stopping(_cancellationTokenSource.Token);
                 _logger.Info("游戏引擎世界服务已停止...");
                 _logger.Info("游戏服务已停止...");
                 _logger.Info("goodbye!");

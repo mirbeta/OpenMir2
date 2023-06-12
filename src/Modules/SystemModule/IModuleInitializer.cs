@@ -11,5 +11,9 @@ namespace SystemModule
         void ConfigureServices(IServiceCollection serviceCollection);
 
         void Configure(IHostEnvironment env);
+
+        void Startup(CancellationToken cancellationToken = default);
+
+        void Stopping(CancellationToken cancellationToken = default);
     }
 }

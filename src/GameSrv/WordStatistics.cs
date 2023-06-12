@@ -32,11 +32,11 @@ namespace GameSrv
 
         public void ShowServerStatus()
         {
-            _logger.Debug("{0}", "=".PadLeft(64, '='));
-            _logger.Info(string.Format(TITLE_FORMAT_S, SystemShare.Config.ServerName, DateTimeOffset.Now.ToString("G"),
-      GameShare.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
-      GameShare.SystemProcess.ElapsedMilliseconds, GameShare.UserProcessor.ElapsedMilliseconds,
-      GameShare.RobotProcessor.ElapsedMilliseconds, AppVersion));
+      //      _logger.Debug("{0}", "=".PadLeft(64, '='));
+      //      _logger.Info(string.Format(TITLE_FORMAT_S, SystemShare.Config.ServerName, DateTimeOffset.Now.ToString("G"),
+      //GameShare.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
+      //GameShare.SystemProcess.ElapsedMilliseconds, GameShare.UserProcessor.ElapsedMilliseconds,
+      //GameShare.RobotProcessor.ElapsedMilliseconds, AppVersion));
 
             SystemShare.ActorMgr.Analytics();
 
@@ -57,7 +57,7 @@ namespace GameSrv
             _logger.Debug("{0}", $"Total Bytes Sent: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalBytesSent)}, Total Packets Sent: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalPacketsSent)}");
             _logger.Debug("{0}", $"Total Bytes Recv: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalBytesRecv)}, Total Packets Recv: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalPacketsRecv)}");
             _logger.Debug("{0}", $"System Thread: {GameShare.SystemProcess.ElapsedMilliseconds:N0}ms");
-            _logger.Debug("{0} - {1}", $"User Thread: [{GameShare.UserProcessor.ElapsedMilliseconds:N0}ms]", $"RobotUser Thread: [{GameShare.RobotProcessor.ElapsedMilliseconds:N0}ms] Online/Queue:({M2Share.WorldEngine.RobotPlayerCount}/{M2Share.WorldEngine.RobotLogonQueueCount})");
+            //_logger.Debug("{0} - {1}", $"User Thread: [{GameShare.UserProcessor.ElapsedMilliseconds:N0}ms]", $"RobotUser Thread: [{GameShare.RobotProcessor.ElapsedMilliseconds:N0}ms] Online/Queue:({M2Share.WorldEngine.RobotPlayerCount}/{M2Share.WorldEngine.RobotLogonQueueCount})");
             _logger.Debug("{0} - {1}", $"Event Thread: [{GameShare.EventProcessor.ElapsedMilliseconds:N0}ms]", $"Storage Thread: [{GameShare.StorageProcessor.ElapsedMilliseconds:N0}ms]");
             _logger.Debug("{0} - {1}", $"Merchant Thread: [{GameShare.MerchantProcessor.ElapsedMilliseconds:N0}ms]", $"TimedBot Thread: [{GameShare.TimedRobotProcessor.ElapsedMilliseconds:N0}ms]");
             _logger.Debug("{0} {1}", $"Generator Thread: [{GameShare.GeneratorProcessor.ElapsedMilliseconds}ms]", $"Identities Remaining: ");

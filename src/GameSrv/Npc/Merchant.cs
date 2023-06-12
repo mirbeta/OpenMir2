@@ -3,7 +3,6 @@ using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
 using M2Server.Player;
-using Markets;
 using ScriptSystem;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -938,14 +937,14 @@ namespace GameSrv.NPC
                         }
                         else if (CanItemMarket) //拍卖行
                         {
-                            if (string.Compare(sLabel, "market_0", StringComparison.OrdinalIgnoreCase) == 0)
-                            {
-                                SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
-                            }
-                            else if (string.Compare(sLabel, "@market_sell", StringComparison.OrdinalIgnoreCase) == 0)
-                            {
-                                SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_SELL);
-                            }
+                            //if (string.Compare(sLabel, "market_0", StringComparison.OrdinalIgnoreCase) == 0)
+                            //{
+                            //    SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
+                            //}
+                            //else if (string.Compare(sLabel, "@market_sell", StringComparison.OrdinalIgnoreCase) == 0)
+                            //{
+                            //    SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_SELL);
+                            //}
                         }
                     }
                 }
@@ -959,16 +958,16 @@ namespace GameSrv.NPC
 
         private void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode)
         {
-            switch (UserMode)
-            {
-                case MarketConst.USERMARKET_MODE_BUY:
-                case MarketConst.USERMARKET_MODE_INQUIRY:
-                    RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
-                    break;
-                case MarketConst.USERMARKET_MODE_SELL:
-                    SendUserMarketSellReady(user);
-                    break;
-            }
+            //switch (UserMode)
+            //{
+            //    case MarketConst.USERMARKET_MODE_BUY:
+            //    case MarketConst.USERMARKET_MODE_INQUIRY:
+            //        RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
+            //        break;
+            //    case MarketConst.USERMARKET_MODE_SELL:
+            //        SendUserMarketSellReady(user);
+            //        break;
+            //}
         }
 
         private void RequireLoadUserMarket(IPlayerActor user, string MarketName, short ItemType, byte UserMode, string OtherName, string ItemName)
@@ -983,37 +982,37 @@ namespace GameSrv.NPC
             marKetReqInfo.ItemSet = 0;
             marKetReqInfo.UserMode = UserMode;
 
-            switch (ItemType)
-            {
-                case MarketConst.USERMARKET_TYPE_ALL:
-                case MarketConst.USERMARKET_TYPE_WEAPON:
-                case MarketConst.USERMARKET_TYPE_NECKLACE:
-                case MarketConst.USERMARKET_TYPE_RING:
-                case MarketConst.USERMARKET_TYPE_BRACELET:
-                case MarketConst.USERMARKET_TYPE_CHARM:
-                case MarketConst.USERMARKET_TYPE_HELMET:
-                case MarketConst.USERMARKET_TYPE_BELT:
-                case MarketConst.USERMARKET_TYPE_SHOES:
-                case MarketConst.USERMARKET_TYPE_ARMOR:
-                case MarketConst.USERMARKET_TYPE_DRINK:
-                case MarketConst.USERMARKET_TYPE_JEWEL:
-                case MarketConst.USERMARKET_TYPE_BOOK:
-                case MarketConst.USERMARKET_TYPE_MINERAL:
-                case MarketConst.USERMARKET_TYPE_QUEST:
-                case MarketConst.USERMARKET_TYPE_ETC:
-                case MarketConst.USERMARKET_TYPE_OTHER:
-                case MarketConst.USERMARKET_TYPE_ITEMNAME:
-                    IsOk = true;
-                    break;
-                case MarketConst.USERMARKET_TYPE_SET:
-                    marKetReqInfo.ItemSet = 1;
-                    IsOk = true;
-                    break;
-                case MarketConst.USERMARKET_TYPE_MINE:
-                    marKetReqInfo.SearchWho = ChrName;
-                    IsOk = true;
-                    break;
-            }
+            //switch (ItemType)
+            //{
+            //    case MarketConst.USERMARKET_TYPE_ALL:
+            //    case MarketConst.USERMARKET_TYPE_WEAPON:
+            //    case MarketConst.USERMARKET_TYPE_NECKLACE:
+            //    case MarketConst.USERMARKET_TYPE_RING:
+            //    case MarketConst.USERMARKET_TYPE_BRACELET:
+            //    case MarketConst.USERMARKET_TYPE_CHARM:
+            //    case MarketConst.USERMARKET_TYPE_HELMET:
+            //    case MarketConst.USERMARKET_TYPE_BELT:
+            //    case MarketConst.USERMARKET_TYPE_SHOES:
+            //    case MarketConst.USERMARKET_TYPE_ARMOR:
+            //    case MarketConst.USERMARKET_TYPE_DRINK:
+            //    case MarketConst.USERMARKET_TYPE_JEWEL:
+            //    case MarketConst.USERMARKET_TYPE_BOOK:
+            //    case MarketConst.USERMARKET_TYPE_MINERAL:
+            //    case MarketConst.USERMARKET_TYPE_QUEST:
+            //    case MarketConst.USERMARKET_TYPE_ETC:
+            //    case MarketConst.USERMARKET_TYPE_OTHER:
+            //    case MarketConst.USERMARKET_TYPE_ITEMNAME:
+            //        IsOk = true;
+            //        break;
+            //    case MarketConst.USERMARKET_TYPE_SET:
+            //        marKetReqInfo.ItemSet = 1;
+            //        IsOk = true;
+            //        break;
+            //    case MarketConst.USERMARKET_TYPE_MINE:
+            //        marKetReqInfo.SearchWho = ChrName;
+            //        IsOk = true;
+            //        break;
+            //}
             if (IsOk)
             {
                 //if (M2Share.MarketService.RequestLoadPageUserMarket(user.ActorId, marKetReqInfo))
@@ -1025,8 +1024,8 @@ namespace GameSrv.NPC
 
         private void SendUserMarketCloseMsg(PlayObject user)
         {
-            user.SendMsg(this, Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_MarketNotReady, 0);
-            user.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "你不能使用寄售商人功能。");
+           // user.SendMsg(this, Messages.RM_MARKET_RESULT, 0, 0, MarketConst.UMResult_MarketNotReady, 0);
+          //  user.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, "你不能使用寄售商人功能。");
         }
 
         private void SendUserMarketSellReady(IPlayerActor user)

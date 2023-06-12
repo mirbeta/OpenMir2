@@ -1,7 +1,8 @@
 using M2Server;
 using NLog;
+using SystemModule;
 
-namespace GameSrv.Word.Threads
+namespace RobotSystem
 {
     public class RobotProcessor : TimerScheduledService
     {
@@ -15,7 +16,7 @@ namespace GameSrv.Word.Threads
 
         public override void Initialize(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            logger.Debug("初始化Robot(机器人)处理插件...");
         }
 
         protected override void Startup(CancellationToken stoppingToken)

@@ -21,7 +21,7 @@ namespace GameSrv
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
 
-        public GameApp()
+        public GameApp(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             M2Share.LogonCostLogList = new ArrayList();
             M2Share.CustomItemMgr = new CustomItem();
@@ -250,7 +250,7 @@ namespace GameSrv
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();
                 GameShare.DataServer.Start();
-                GameShare.MarketService.Start();
+               // GameShare.MarketService.Start();
                 GameShare.SocketMgr.Start();
                 GameShare.StartReady = true;
                 M2Share.WorldEngine.Initialize();

@@ -36,9 +36,22 @@ namespace GameSrv
 
         public static void ConfigureServices(IServiceCollection services)
         {
+            services.AddModules();
             services.AddSingleton<GameApp>();
             services.AddHostedService<AppService>();
             services.AddHostedService<TimedService>();
+
+            foreach (var module in GameShare.Modules)
+            {
+                var moduleInitializerType = module.Assembly.GetTypes()
+                   .FirstOrDefault(t => typeof(IModuleInitializer).IsAssignableFrom(t));
+                if ((moduleInitializerType != null) && (moduleInitializerType != typeof(IModuleInitializer)))
+                {
+                    var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
+                    services.AddSingleton(typeof(IModuleInitializer), moduleInitializer);
+                    moduleInitializer.ConfigureServices(services);
+                }
+            }
         }
 
         private void ConfigureLogging(ILoggingBuilder logging)

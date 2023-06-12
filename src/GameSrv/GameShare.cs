@@ -7,7 +7,6 @@ using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word.Threads;
 using M2Server;
-using MarketSystem;
 using PlanesSystem;
 using ScriptSystem;
 using SystemModule.Data;
@@ -28,14 +27,12 @@ namespace GameSrv
         public static readonly NetworkMonitor NetworkMonitor;
         public static readonly SystemProcessor SystemProcess;
         public static readonly UserProcessor UserProcessor;
-        public static readonly RobotProcessor RobotProcessor;
         public static readonly MerchantProcessor MerchantProcessor;
         public static readonly GeneratorProcessor GeneratorProcessor;
         public static readonly EventProcessor EventProcessor;
         public static readonly StorageProcessor StorageProcessor;
         public static readonly TimedRobotProcessor TimedRobotProcessor;
         public static readonly IGameEventSource EventSource;
-        public static readonly IMarketService MarketService;
         public static readonly MapQuestManager QuestManager;
         public static readonly DBService DataServer;
         public static readonly IChatService ChatService;
@@ -43,6 +40,7 @@ namespace GameSrv
         public static readonly RobotManage RobotMgr;
         public static bool StartReady = false;
         public static int SendOnlineTick = 0;
+        public static IList<ModuleInfo> Modules { get; set; } = new List<ModuleInfo>();
 
         static GameShare()
         {
@@ -53,7 +51,6 @@ namespace GameSrv
             NetworkMonitor = new NetworkMonitor();
             SystemProcess = new SystemProcessor();
             UserProcessor = new UserProcessor();
-            RobotProcessor = new RobotProcessor();
             MerchantProcessor = new MerchantProcessor();
             GeneratorProcessor = new GeneratorProcessor();
             EventProcessor = new EventProcessor();
@@ -61,7 +58,7 @@ namespace GameSrv
             TimedRobotProcessor = new TimedRobotProcessor();
             PlanesService = new PlanesService();
             EventSource = new GameEventSource();
-            MarketService = new MarketService();
+            //MarketService = new MarketService();
             DataServer = new DBService();
             ChatService = new ChatService();
             SocketMgr = new ThreadSocketMgr();
