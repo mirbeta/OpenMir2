@@ -99,6 +99,7 @@
 		<ProjectReference Include="..\Modules\GameCommand\CommandSystem.csproj" />
 		<ProjectReference Include="..\Modules\MarketSystem\MarketSystem.csproj" />
 		<ProjectReference Include="..\Modules\PlanesSystem\PlanesSystem.csproj" />
+		<ProjectReference Include="..\Modules\RobotSystem\RobotSystem.csproj" />
 		<ProjectReference Include="..\Modules\ScriptEngine\ScriptSystem.csproj" />
 		<ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
 	</ItemGroup>
