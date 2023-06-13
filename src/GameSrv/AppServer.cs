@@ -1,8 +1,10 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Spectre.Console;
+using System.Reflection;
 using SystemModule.Hosts;
 
 namespace GameSrv
@@ -40,6 +42,7 @@ namespace GameSrv
             services.AddSingleton<GameApp>();
             services.AddHostedService<AppService>();
             services.AddHostedService<TimedService>();
+            services.AddScoped<IMediator, Mediator>();
 
             foreach (var module in GameShare.Modules)
             {
@@ -64,7 +67,6 @@ namespace GameSrv
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
             await Builder.StartAsync(cancellationToken);
-            SystemShare.ServiceProvider = Services;
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)

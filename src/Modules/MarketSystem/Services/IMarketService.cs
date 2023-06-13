@@ -1,4 +1,5 @@
-﻿using SystemModule.Data;
+﻿using SystemModule;
+using SystemModule.Data;
 using SystemModule.Packets.ServerPackets;
 
 namespace MarketSystem
@@ -20,5 +21,7 @@ namespace MarketSystem
         bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet);
 
         bool SendUserMarketSellReady(int actorId, string chrName, int marketNpc);
+
+        void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode);
     }
 }

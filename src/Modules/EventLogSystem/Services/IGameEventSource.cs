@@ -1,4 +1,4 @@
-﻿namespace EventLogSystem
+﻿namespace EventLogSystem.Services
 {
     public interface IGameEventSource
     {

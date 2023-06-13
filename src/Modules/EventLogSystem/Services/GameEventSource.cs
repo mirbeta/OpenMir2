@@ -1,7 +1,7 @@
 using System.Diagnostics.Tracing;
 using System.Runtime.Versioning;
 
-namespace EventLogSystem
+namespace EventLogSystem.Services
 {
     [SupportedOSPlatform("Windows")]
     [EventSource(Name = "UserLogProvider")]
@@ -15,7 +15,7 @@ namespace EventLogSystem
 
         public void AddEventLog(GameEventLogType eventType, string meesage)
         {
-            WriteEvent((int) eventType, meesage);
+            WriteEvent((int)eventType, meesage);
         }
     }
 }

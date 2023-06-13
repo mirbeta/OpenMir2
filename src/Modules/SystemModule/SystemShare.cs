@@ -1,3 +1,4 @@
+using MediatR;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -27,6 +28,8 @@ namespace SystemModule
         public static IEventSystem EventMgr { get; set; }
 
         public static IServiceProvider ServiceProvider { get; set; }
+
+        public static IMediator Mediator { get; set; }
 
         /// <summary>
         /// 启动路径

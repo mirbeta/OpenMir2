@@ -1,7 +1,9 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using SystemModule;
+using SystemModule.ModuleEvent;
 
 namespace RobotSystem
 {
@@ -17,6 +19,7 @@ namespace RobotSystem
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
             serviceCollection.AddHostedService<RobotProcessor>();
+            serviceCollection.AddTransient<INotificationHandler<UserSelectMessageEvent>, MessageEventHandler>();
         }
 
         public void Startup(CancellationToken cancellationToken = default)

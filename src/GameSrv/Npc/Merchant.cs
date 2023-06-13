@@ -3,6 +3,8 @@ using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
 using M2Server.Player;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using ScriptSystem;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -578,7 +580,7 @@ namespace GameSrv.NPC
             }
             if (upgradeSuccess)
             {
-                //  GameShare.ScriptEngine.GotoLable(user, ScriptFlagConst.sUPGRADEOK, false);
+                //GameShare.ScriptEngine.GotoLable(user, ScriptFlagConst.sUPGRADEOK, false);
             }
             else
             {
@@ -935,21 +937,9 @@ namespace GameSrv.NPC
                                 UserSelectOpenDealOffForm(playObject); // 打开出售物品窗口
                             }
                         }
-                        else if (CanItemMarket) //拍卖行
+                        else //插件消息
                         {
-                            //if (string.Compare(sLabel, "market_0", StringComparison.OrdinalIgnoreCase) == 0)
-                            //{
-                            //    SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
-                            //}
-                            //else if (string.Compare(sLabel, "@market_sell", StringComparison.OrdinalIgnoreCase) == 0)
-                            //{
-                            //    SendUserMarket(playObject, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_SELL);
-                            //}
-                        }
-                        else
-                        {
-                            //todo 检查是否由插件实现
-
+                            SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel });
                         }
                     }
                 }

@@ -35,11 +35,6 @@ namespace MarketSystem
 
         public void Start()
         {
-            if (_thread == null)
-            {
-                _thread = new Thread(CheckConnected);
-                _thread.IsBackground = true;
-            }
             var config = new TouchSocketConfig();
             config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort))
                 .SetBufferLength(4096);
@@ -48,6 +43,11 @@ namespace MarketSystem
             try
             {
                 _clientScoket.Connect();
+                if (_thread == null)
+                {
+                    _thread = new Thread(CheckConnected);
+                    _thread.IsBackground = true;
+                }
             }
             catch (SocketException ex)
             {
@@ -136,13 +136,13 @@ namespace MarketSystem
         }
 
 
-        private void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode)
+        public void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode)
         {
             switch (UserMode)
             {
                 case MarketConst.USERMARKET_MODE_BUY:
                 case MarketConst.USERMARKET_MODE_INQUIRY:
-                    RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
+                    //RequireLoadUserMarket(user, SystemShare.Config.ServerName + '_' + this.ChrName, ItemType, UserMode, "", "");
                     break;
                 case MarketConst.USERMARKET_MODE_SELL:
                     SendUserMarketSellReady(user);
@@ -410,6 +410,7 @@ namespace MarketSystem
             }
             else
             {
+                page++;
             }
             if (nextPage == 1)
             {

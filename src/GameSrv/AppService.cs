@@ -1,6 +1,7 @@
 using GameSrv.Word;
 using M2Server;
 using McMaster.Extensions.CommandLineUtils;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;

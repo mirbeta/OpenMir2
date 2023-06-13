@@ -6,4 +6,8 @@
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+    </ItemGroup>
+
 </Project>

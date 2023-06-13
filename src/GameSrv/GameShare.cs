@@ -1,5 +1,5 @@
 using ChatSystem;
-using EventLogSystem;
+using EventLogSystem.Services;
 using GameSrv.DataSource;
 using GameSrv.Maps;
 using GameSrv.Network;

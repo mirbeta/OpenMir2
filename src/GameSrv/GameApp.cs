@@ -9,6 +9,8 @@ using M2Server.Castle;
 using M2Server.Event;
 using M2Server.Guild;
 using M2Server.Items;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
@@ -58,10 +60,10 @@ namespace GameSrv
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.CommandSystem = new GameCommandSystem();
-            InitializeModule();
+            InitializeModule(serviceProvider);
         }
 
-        private void InitializeModule()
+        private void InitializeModule(IServiceProvider serviceProvider)
         {
             SystemShare.HumLimit = 30;
             SystemShare.MonLimit = 30;
@@ -92,6 +94,8 @@ namespace GameSrv
             SystemShare.CastleMgr = new CastleManager();
             SystemShare.MapMgr = new MapManager();
             SystemShare.EventMgr = new EventManager();
+            SystemShare.Mediator = serviceProvider.GetService<IMediator>();
+            SystemShare.ServiceProvider = serviceProvider;
         }
 
         /// <summary>
