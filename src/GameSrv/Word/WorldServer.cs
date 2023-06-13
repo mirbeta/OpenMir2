@@ -465,7 +465,7 @@ namespace GameSrv.Word
         {
             const string sExceptionMsg1 = "[Exception] WorldServer::ProcessHumans -> Ready, Save, Load...";
             const string sExceptionMsg3 = "[Exception] WorldServer::ProcessHumans ClosePlayer.Delete";
-            var dwCheckTime = HUtil32.GetTickCount();
+            //var dwCheckTime = HUtil32.GetTickCount();
             IPlayerActor playObject;
             if ((HUtil32.GetTickCount() - ProcessLoadPlayTick) > 200)
             {
@@ -687,7 +687,7 @@ namespace GameSrv.Word
                         {
                             PlayObjectList.Remove(playObject);
                             playObject.Disappear();
-                            //AddToHumanFreeList(playObject);
+                            AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
                             GameShare.SocketMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
@@ -732,7 +732,7 @@ namespace GameSrv.Word
         {
             for (var i = 0; i < PlayObjectList.Count; i++)
             {
-                IPlayerActor playObject = PlayObjectList[i];
+                var playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
                     playObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
@@ -1050,7 +1050,7 @@ namespace GameSrv.Word
                 PlayObject = playObject
             };
             saveRcd.HumanRcd = MakeSaveRcd(playObject);
-            // M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
+            M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
         }
 
         private void AddToHumanFreeList(IPlayerActor playObject)
@@ -1238,9 +1238,9 @@ namespace GameSrv.Word
             playerInfo.AllowGroup = playObject.AllowGroup ? (byte)1 : (byte)0;
             playerInfo.btF9 = playObject.BtB2;
             playerInfo.AttatckMode = (byte)playObject.AttatckMode;
-            //playerInfo.IncHealth = (byte)playObject.IncHealth;
-            //playerInfo.IncSpell = (byte)playObject.IncSpell;
-            //playerInfo.IncHealing = (byte)playObject.IncHealing;
+            playerInfo.IncHealth = (byte)playObject.IncHealth;
+            playerInfo.IncSpell = (byte)playObject.IncSpell;
+            playerInfo.IncHealing = (byte)playObject.IncHealing;
             playerInfo.FightZoneDieCount = (byte)playObject.FightZoneDieCount;
             playerInfo.Account = playObject.UserAccount;
             playerInfo.LockLogon = playObject.IsLockLogon;
@@ -1726,7 +1726,7 @@ namespace GameSrv.Word
                 IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
                 {
-                    //GameShare.ScriptEngine.GotoLable(playObject, sQuestName, false);
+                   // GameShare.ScriptEngine.GotoLable(playObject, sQuestName, false);
                 }
             }
         }
