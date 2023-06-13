@@ -7,6 +7,7 @@ namespace SystemModule.ModuleEvent
     /// </summary>
     public class GameMessageEvent : INotification
     {
-
+        public byte EventType { get; set; }
+        public string Event { get; set; }
     }
 }

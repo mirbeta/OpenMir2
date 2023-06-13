@@ -1,5 +1,6 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
+using SystemModule.ModuleEvent;
 
 namespace CommandSystem.Commands
 {
@@ -44,6 +45,7 @@ namespace CommandSystem.Commands
                 PlayerActor.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
                 if (SystemShare.GameLogGold)
                 {
+                    //SystemShare.Mediator.Publish(new GameMessageEvent() { EventType = 13, Event = "123" });
                     // M2Share.EventSource.AddEventLog(13, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY + "\09"
                     //                                     + PlayerActor.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
                 }
