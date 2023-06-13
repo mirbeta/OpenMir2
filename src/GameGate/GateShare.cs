@@ -1,11 +1,11 @@
+using GameGate.Filters;
+using GameGate.Services;
 using System;
 using System.Buffers;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using GameGate.Filters;
-using GameGate.Services;
 using SystemModule.Common;
 using SystemModule.Packets.ServerPackets;
 
@@ -80,14 +80,14 @@ namespace GameGate
         SendFinsh,
         CheckTick
     }
-    
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct SessionMessage
     {
-        public byte ServiceId{ get; set; }
-        public ushort SessionId { get;set; }
-        public byte[] Buffer { get;set; }
-        public short BuffLen { get;set; }
+        public byte ServiceId { get; set; }
+        public ushort SessionId { get; set; }
+        public byte[] Buffer { get; set; }
+        public short BuffLen { get; set; }
         public ushort ConnectionId { get; set; }
 
         public SessionMessage(ushort sessionId, byte[] buffer, short buffLen)
@@ -101,9 +101,9 @@ namespace GameGate
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ServerSessionMessage
     {
-        public ushort SessionId { get;set; }
-        public byte[] Buffer { get;set; }
-        public short BuffLen { get;set; }
+        public ushort SessionId { get; set; }
+        public byte[] Buffer { get; set; }
+        public short BuffLen { get; set; }
 
         public ServerSessionMessage(ushort sessionId, byte[] buffer, short buffLen)
         {
@@ -135,7 +135,7 @@ namespace GameGate
         Runing,
         Stop
     }
-    
+
     public enum RunningState : byte
     {
         /// <summary>

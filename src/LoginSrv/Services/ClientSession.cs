@@ -10,7 +10,6 @@ using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 using SystemModule.SocketComponents;
-using SystemModule.Sockets;
 
 namespace LoginSrv.Services
 {
@@ -195,7 +194,7 @@ namespace LoginSrv.Services
             try
             {
                 userInfo.Seconds = 0;
-                var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId,'/');
+                var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId, '/');
                 var nCode = 0;
                 var boNeedUpdate = false;
                 var accountIndex = _accountStorage.Index(sLoginId);

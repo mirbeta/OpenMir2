@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 namespace SystemModule.Packets.ClientPackets
 {
     [MemoryPackable]
-    [StructLayout(LayoutKind.Sequential,CharSet = CharSet.Ansi, Size =40)]
+    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Size = 40)]
     public partial class Ability : ICloneable
     {
         [MemoryPackOrder(0)]

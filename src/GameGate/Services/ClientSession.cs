@@ -1,14 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Net.Sockets;
 using GameGate.Conf;
 using GameGate.Packet;
 using NLog;
-using System.Runtime.InteropServices;
+using System;
+using System.Collections.Generic;
+using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using System.Buffers.Binary;
 
 namespace GameGate.Services
 {
@@ -70,7 +68,7 @@ namespace GameGate.Services
         public ClientThread ServerThread => ClientThread;
 
         public SessionInfo Session => _session;
-        
+
         private static GateConfig Config => ConfigManager.Instance.GateConfig;
 
         private void Kick(byte code)
@@ -1211,7 +1209,7 @@ namespace GameGate.Services
                     MemoryCopy.BlockCopy(packetBuff, 0, loginDataPacket, 0, packetBuff.Length);
 
                     SendLoginMessage(loginDataPacket[..(ServerMessage.PacketSize + packetHeader.PackLength)]);
-                    
+
                     //Logger.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
                     success = true;
                     HandleLogin = true;

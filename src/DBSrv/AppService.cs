@@ -1,10 +1,10 @@
+using DBSrv.Services.Impl;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using NLog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using DBSrv.Services.Impl;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using NLog;
 
 namespace DBSrv
 {
@@ -26,7 +26,7 @@ namespace DBSrv
             _appLifetime = lifetime;
             _userService = serviceProvider.GetService<UserService>();
             _dataService = serviceProvider.GetService<DataService>();
-            _marketService =serviceProvider.GetService<MarketService>();
+            _marketService = serviceProvider.GetService<MarketService>();
             _sessionService = serviceProvider.GetService<ClientSession>();
             _host = serviceProvider.GetService<IHost>();
         }
@@ -66,7 +66,7 @@ namespace DBSrv
                 ProcessLoopAsync();
             });
             _appLifetime.ApplicationStopping.Register(OnShutdown);
-            
+
             return Task.CompletedTask;
         }
 
@@ -96,7 +96,7 @@ namespace DBSrv
             _cancellationTokenSource.CancelAfter(3000);
             await _host.StopAsync(_cancellationTokenSource.Token);
         }
-        
+
         private static void ProcessLoopAsync()
         {
             while (true)

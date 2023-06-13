@@ -60,12 +60,12 @@ namespace SelGate.Services
         /// <summary>
         /// 数据缓冲区
         /// </summary>
-        private byte[] DataBuff;
+        private readonly byte[] DataBuff;
         /// <summary>
         /// 缓存缓冲长度
         /// </summary>
         private int DataLen;
-        
+
         public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
         {
             ClientId = clientId;
@@ -212,7 +212,7 @@ namespace SelGate.Services
                 if (nCheckMsgLen > nLen)
                 {
                     break;
-                } 
+                }
                 var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 switch (messageData.Type)
                 {
@@ -266,7 +266,7 @@ namespace SelGate.Services
                 DataLen = 0;
             }
         }
-                
+
         public void RestSessionArray()
         {
             for (var i = 0; i < MaxSession; i++)
@@ -298,11 +298,11 @@ namespace SelGate.Services
         {
             if (!_clientSocket.IsConnected)
             {
-               return;
+                return;
             }
             SendMessage(buffer);
         }
-        
+
         private void SendMessage(byte[] sendBuffer)
         {
             var serverMessage = new ServerDataPacket

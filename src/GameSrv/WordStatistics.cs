@@ -32,11 +32,11 @@ namespace GameSrv
 
         public void ShowServerStatus()
         {
-      //      _logger.Debug("{0}", "=".PadLeft(64, '='));
-      //      _logger.Info(string.Format(TITLE_FORMAT_S, SystemShare.Config.ServerName, DateTimeOffset.Now.ToString("G"),
-      //GameShare.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
-      //GameShare.SystemProcess.ElapsedMilliseconds, GameShare.UserProcessor.ElapsedMilliseconds,
-      //GameShare.RobotProcessor.ElapsedMilliseconds, AppVersion));
+            //      _logger.Debug("{0}", "=".PadLeft(64, '='));
+            //      _logger.Info(string.Format(TITLE_FORMAT_S, SystemShare.Config.ServerName, DateTimeOffset.Now.ToString("G"),
+            //GameShare.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
+            //GameShare.SystemProcess.ElapsedMilliseconds, GameShare.UserProcessor.ElapsedMilliseconds,
+            //GameShare.RobotProcessor.ElapsedMilliseconds, AppVersion));
 
             SystemShare.ActorMgr.Analytics();
 

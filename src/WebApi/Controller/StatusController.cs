@@ -18,7 +18,7 @@ namespace WebApi.Controller
         {
             return Ok();
         }
-        
+
         /// <summary>
         /// 获取游戏服务器状态
         /// </summary>

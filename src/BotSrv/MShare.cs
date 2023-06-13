@@ -1,9 +1,9 @@
+using BotSrv.Objects;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using BotSrv.Objects;
 using SystemModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;

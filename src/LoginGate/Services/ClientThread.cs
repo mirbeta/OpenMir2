@@ -38,7 +38,7 @@ namespace LoginGate.Services
         /// <summary>
         /// 数据缓冲区
         /// </summary>
-        private byte[] DataBuff;
+        private readonly byte[] DataBuff;
         /// <summary>
         /// 缓存缓冲长度
         /// </summary>
@@ -166,7 +166,7 @@ namespace LoginGate.Services
             }
             ReceiveBytes += nMsgLen;
         }
-        
+
         private void ProcessServerData(byte[] data, int nLen, int socketId)
         {
             var srcOffset = 0;
@@ -187,7 +187,7 @@ namespace LoginGate.Services
                 if (nCheckMsgLen > nLen)
                 {
                     break;
-                } 
+                }
                 var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 switch (messageData.Type)
                 {

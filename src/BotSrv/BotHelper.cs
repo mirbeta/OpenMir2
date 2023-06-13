@@ -18,7 +18,7 @@ namespace BotSrv
             }
             return (int)Math.Truncate(len);
         }
-        
+
         public static void GetNextHitPosition(short sX, short sY, ref short newX, ref short newY)
         {
             var dir = GetNextDirection(sX, sY, newX, newY);

@@ -61,7 +61,7 @@ namespace DBSrv.Services.Impl
         {
             _socketServer.Stop();
         }
-        
+
         public void PushMarketData()
         {
             //todo 根据服务器分组推送到各个GameSrv或者推送到所有GameSrv
@@ -82,7 +82,7 @@ namespace DBSrv.Services.Impl
             }
             _logger.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Length}]");
         }
-        
+
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
             if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
@@ -207,7 +207,7 @@ namespace DBSrv.Services.Impl
                 _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
-            var searchItems = _marketStorage.SearchMarketItems(marketSearch.GroupId,marketSearch.MarketName, marketSearch.SearchItem, marketSearch.SearchWho, marketSearch.ItemType, marketSearch.ItemSet);
+            var searchItems = _marketStorage.SearchMarketItems(marketSearch.GroupId, marketSearch.MarketName, marketSearch.SearchItem, marketSearch.SearchWho, marketSearch.ItemType, marketSearch.ItemSet);
             if (!searchItems.Any())
             {
                 var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 1, 0, 0);
@@ -221,7 +221,7 @@ namespace DBSrv.Services.Impl
             SendSuccessMessage(connectionId, actorId, Messages.DB_SEARCHMARKETSUCCESS, marketItemMessgae);
             _logger.Info($"服务器组[{marketSearch.GroupId}]搜索拍卖行数据...");
         }
-        
+
         private void LoadMarketList(int nQueryId, byte[] sData, string connectionId)
         {
             var marketMessage = SerializerUtil.Deserialize<MarketRegisterMessage>(sData);

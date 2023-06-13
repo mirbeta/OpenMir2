@@ -29,7 +29,7 @@ namespace MakePlayer.Scenes.Scene
         {
             _clientSocket.Connect(_play.SelChrAddr, _play.SelChrPort);
         }
-        
+
         public override void CloseScene()
         {
             SetNotifyEvent(CloseSocket, RandomNumber.GetInstance().Random(1000, 3000));
@@ -308,7 +308,7 @@ namespace MakePlayer.Scenes.Scene
             _clientSocket.Disconnect(false);//断开登录网关链接
             MainOutMessage("主动断开");
         }
-        
+
         #region Socket Events
 
         private void CSocketConnect(object sender, DSCClientConnectedEventArgs e)
@@ -325,7 +325,7 @@ namespace MakePlayer.Scenes.Scene
         {
             MainOutMessage($"角色服务[{e.RemoteEndPoint}断开连接...");
         }
-        
+
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             if (e.BuffLen > 0)

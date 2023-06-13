@@ -168,7 +168,7 @@ namespace ScriptSystem
         {
             if (ProcessExecutionMessage.ContainsKey(questConditionInfo.nCmdCode))
             {
-                ProcessExecutionMessage[questConditionInfo.nCmdCode](normNpc, playerActor,questConditionInfo, ref success);
+                ProcessExecutionMessage[questConditionInfo.nCmdCode](normNpc, playerActor, questConditionInfo, ref success);
             }
         }
 
@@ -272,12 +272,12 @@ namespace ScriptSystem
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Movr);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Movr);
                 }
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Movr);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Movr);
             }
         }
 
@@ -316,117 +316,117 @@ namespace ScriptSystem
             }
             if (string.IsNullOrEmpty(sParam1))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                 return;
             }
             switch (GetMovDataType(questActionInfo))
             {
                 case 0:
-                    if (GetMovDataHumanInfoValue(normNpc, playerActor,sParam3, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataHumanInfoValue(normNpc, playerActor, sParam3, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataDynamicVarValue(playerActor,sParam1, sParam2, sValue, nValue, nDataType))
+                        if (!SetMovDataDynamicVarValue(playerActor, sParam1, sParam2, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(playerActor,string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playerActor, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 1:
-                    if (GetMovDataValNameValue(playerActor,sParam3, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataValNameValue(playerActor, sParam3, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataDynamicVarValue(playerActor,sParam1, sParam2, sValue, nValue, nDataType))
+                        if (!SetMovDataDynamicVarValue(playerActor, sParam1, sParam2, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(playerActor,string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playerActor, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 2:
-                    if (!SetMovDataDynamicVarValue(playerActor,sParam1, sParam2, questActionInfo.sParam3, questActionInfo.nParam3, 1))
+                    if (!SetMovDataDynamicVarValue(playerActor, sParam1, sParam2, questActionInfo.sParam3, questActionInfo.nParam3, 1))
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 3:
-                    if (!SetMovDataDynamicVarValue(playerActor,sParam1, sParam2, questActionInfo.sParam3, questActionInfo.nParam3, 0))
+                    if (!SetMovDataDynamicVarValue(playerActor, sParam1, sParam2, questActionInfo.sParam3, questActionInfo.nParam3, 0))
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sParam1, sParam2), questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 4:
-                    if (GetMovDataHumanInfoValue(normNpc, playerActor,sParam2, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataHumanInfoValue(normNpc, playerActor, sParam2, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataValNameValue(playerActor,sParam1, sValue, nValue, nDataType))
+                        if (!SetMovDataValNameValue(playerActor, sParam1, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 5:
-                    if (GetMovDataValNameValue(playerActor,sParam2, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataValNameValue(playerActor, sParam2, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataValNameValue(playerActor,sParam1, sValue, nValue, nDataType))
+                        if (!SetMovDataValNameValue(playerActor, sParam1, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 6:
-                    if (GetMovDataDynamicVarValue(playerActor,sParam2, sParam3, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataDynamicVarValue(playerActor, sParam2, sParam3, ref sValue, ref nValue, ref nDataType))
                     {
-                        if (!SetMovDataValNameValue(playerActor,sParam1, sValue, nValue, nDataType))
+                        if (!SetMovDataValNameValue(playerActor, sParam1, sValue, nValue, nDataType))
                         {
-                            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sParam2, sParam3), questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sParam2, sParam3), questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 case 7:
-                    if (GetMovDataValNameValue(playerActor,sParam1, ref sValue, ref nValue, ref nDataType))
+                    if (GetMovDataValNameValue(playerActor, sParam1, ref sValue, ref nValue, ref nDataType))
                     {
                         if ((!string.IsNullOrEmpty(sParam2)) && (sParam2[0] == '<') && (sParam2[1] == '$'))//  支持:MOV A14 <$USERALLNAME>\天下第一战士 的传值
                         {
-                            GetMovDataHumanInfoValue(normNpc, playerActor,sParam2, ref sValue, ref nValue, ref nDataType);// 取人物信息
+                            GetMovDataHumanInfoValue(normNpc, playerActor, sParam2, ref sValue, ref nValue, ref nDataType);// 取人物信息
                             sValue = sValue + sParam2.Substring(sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) - 1, sParam2.Length - sParam2.IndexOf("\\", StringComparison.CurrentCultureIgnoreCase) + 1);
-                            if (!SetMovDataValNameValue(playerActor,sParam1, sValue, nValue, nDataType))
+                            if (!SetMovDataValNameValue(playerActor, sParam1, sValue, nValue, nDataType))
                             {
-                                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                                 return;
                             }
                         }
                         else
                         {
-                            if (!SetMovDataValNameValue(playerActor,sParam1, questActionInfo.sParam2, questActionInfo.nParam2, nDataType))
+                            if (!SetMovDataValNameValue(playerActor, sParam1, questActionInfo.sParam2, questActionInfo.nParam2, nDataType))
                             {
-                                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                                 return;
                             }
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                     }
                     break;
                 default:
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mov);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mov);
                     break;
             }
         }
@@ -472,7 +472,7 @@ namespace ScriptSystem
             }
             if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2)))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                 return;
             }
             if (!string.IsNullOrEmpty(sParam3))
@@ -480,10 +480,10 @@ namespace ScriptSystem
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(playerActor,sParam2, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playerActor, sParam2, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarTypeError, sParam2), questActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playerActor, string.Format(sVarTypeError, sParam2), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
@@ -501,7 +501,7 @@ namespace ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     n14 = SystemShare.GetValNameNo(sParam1);
@@ -598,12 +598,12 @@ namespace ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     return;
@@ -657,7 +657,7 @@ namespace ScriptSystem
                             }
                             else
                             {
-                                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                             }
                         }
                         else
@@ -670,10 +670,10 @@ namespace ScriptSystem
                         n3C = questActionInfo.nParam3;
                     }
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(playerActor,sParam1, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playerActor, sParam1, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarTypeError, sParam1), questActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playerActor, string.Format(sVarTypeError, sParam1), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
@@ -698,14 +698,14 @@ namespace ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sParam2, sParam1), questActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sParam2, sParam1), questActionInfo, ExecutionCode.Inc);
                         return;
                     }
                     return;
                 }
                 if (n10 == 0)
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                 }
             }
             else
@@ -758,12 +758,12 @@ namespace ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                         }
                     }
                     else
                     {
-                        n3C = HUtil32.StrToInt(GetLineVariableText(playerActor,sParam2), 0);// 个人变量
+                        n3C = HUtil32.StrToInt(GetLineVariableText(playerActor, sParam2), 0);// 个人变量
                         s01 = sParam2;
                     }
                 }
@@ -865,12 +865,12 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                     }
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Inc);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Inc);
                     return;
                 }
             }
@@ -885,7 +885,7 @@ namespace ScriptSystem
         {
             string s34 = string.Empty;
             int n18 = 0;
-            int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam2), -1);
+            int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = SystemShare.GetValNameNo(questActionInfo.sParam2);
@@ -921,12 +921,12 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Div);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Div);
                     }
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Div);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Div);
                 }
             }
             else
@@ -934,7 +934,7 @@ namespace ScriptSystem
                 n18 = n14;
             }
             int n1C = 0;
-            n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
                 n14 = SystemShare.GetValNameNo(questActionInfo.sParam3);
@@ -970,7 +970,7 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Div);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Div);
                     }
                 }
                 else
@@ -1033,7 +1033,7 @@ namespace ScriptSystem
         {
             string s34 = string.Empty;
             int n18 = 0;
-            int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam2), -1);
+            int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = SystemShare.GetValNameNo(questActionInfo.sParam2);
@@ -1081,12 +1081,12 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mul);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mul);
                     }
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mul);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mul);
                 }
             }
             else
@@ -1094,7 +1094,7 @@ namespace ScriptSystem
                 n18 = n14;
             }
             int n1C = 0;
-            n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
                 n14 = SystemShare.GetValNameNo(questActionInfo.sParam3);
@@ -1142,7 +1142,7 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mul);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mul);
                     }
                 }
                 else
@@ -1217,7 +1217,7 @@ namespace ScriptSystem
         {
             string s34 = string.Empty;
             int n18 = 0;
-            int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam2), -1);
+            int n14 = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam2), -1);
             if (n14 < 0)
             {
                 n14 = SystemShare.GetValNameNo(questActionInfo.sParam2); // 取第一个变量,并传值给n18
@@ -1253,12 +1253,12 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Percent);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Percent);
                     }
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Percent);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Percent);
                 }
             }
             else
@@ -1266,7 +1266,7 @@ namespace ScriptSystem
                 n18 = n14;
             }
             int n1C = 0;
-            n14 = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam3), -1);
+            n14 = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam3), -1);
             if (n14 < 0)
             {
                 n14 = SystemShare.GetValNameNo(questActionInfo.sParam3); // 取第一个变量,并传值给n1C
@@ -1302,7 +1302,7 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Percent);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Percent);
                     }
                 }
                 else
@@ -1428,12 +1428,12 @@ namespace ScriptSystem
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Sum);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Sum);
                 }
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Sum);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Sum);
             }
             int n1C = 0;
             if (HUtil32.CompareLStr(questActionInfo.sParam2, "<$STR(", 6)) //SUM 支持字符串变量
@@ -1489,7 +1489,7 @@ namespace ScriptSystem
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Sum);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Sum);
                 }
             }
             if (HUtil32.CompareLStr(questActionInfo.sParam1, "<$STR(", 6)) // SUM 支持字符串变量
@@ -1586,7 +1586,7 @@ namespace ScriptSystem
             }
             if ((string.IsNullOrEmpty(sParam1)) || (string.IsNullOrEmpty(sParam2)))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                 return;
             }
             string s02;
@@ -1597,10 +1597,10 @@ namespace ScriptSystem
                 if ((!HUtil32.IsVarNumber(sParam1)) && HUtil32.IsVarNumber(sParam2))
                 {
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(playerActor,sParam2, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playerActor, sParam2, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarTypeError, sParam2), questActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playerActor, string.Format(sVarTypeError, sParam2), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam3, out DynamicVar))
@@ -1618,7 +1618,7 @@ namespace ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sParam3, sParam2), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     n14 = SystemShare.GetValNameNo(sParam1);
@@ -1724,12 +1724,12 @@ namespace ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                         }
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     return;
@@ -1783,7 +1783,7 @@ namespace ScriptSystem
                             }
                             else
                             {
-                                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                             }
                         }
                         else
@@ -1796,10 +1796,10 @@ namespace ScriptSystem
                         n3C = questActionInfo.nParam3;
                     }
                     boVarFound = false;
-                    DynamicVarList = GetDynamicVarMap(playerActor,sParam1, ref sName);
+                    DynamicVarList = GetDynamicVarMap(playerActor, sParam1, ref sName);
                     if (DynamicVarList == null)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarTypeError, sParam1), questActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playerActor, string.Format(sVarTypeError, sParam1), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     if (DynamicVarList.TryGetValue(sParam2, out DynamicVar))
@@ -1827,14 +1827,14 @@ namespace ScriptSystem
                     }
                     if (!boVarFound)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sParam2, sParam1), questActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sParam2, sParam1), questActionInfo, ExecutionCode.Dec);
                         return;
                     }
                     return;
                 }
                 if (n10 == 0)
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                 }
             }
             else
@@ -1887,12 +1887,12 @@ namespace ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                         }
                     }
                     else
                     {
-                        n3C = HUtil32.StrToInt(GetLineVariableText(playerActor,sParam2), 0);// 个人变量
+                        n3C = HUtil32.StrToInt(GetLineVariableText(playerActor, sParam2), 0);// 个人变量
                         s01 = sParam2;
                     }
                 }
@@ -2003,12 +2003,12 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                        ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                     }
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Dec);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Dec);
                     return;
                 }
             }
@@ -2017,7 +2017,7 @@ namespace ScriptSystem
         private void ActionOfExeaction(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var n40 = questActionInfo.nParam1;
-           // normNpc.ExeAction(playerActor,questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.nParam1, questActionInfo.nParam2, questActionInfo.nParam3);
+            // normNpc.ExeAction(playerActor,questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.nParam1, questActionInfo.nParam2, questActionInfo.nParam3);
         }
 
         private void ActionOfPlayDice(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
@@ -2193,7 +2193,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ReCallMap);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ReCallMap);
             }
         }
 
@@ -2213,7 +2213,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ExchangeMap);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ExchangeMap);
             }
         }
 
@@ -2236,7 +2236,7 @@ namespace ScriptSystem
             string sSlaveName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sSlaveName))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.KillSlaveName);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.KillSlaveName);
                 return;
             }
             if (sSlaveName.Equals("*") || string.Compare(sSlaveName, "ALL", StringComparison.OrdinalIgnoreCase) == 0)
@@ -2323,9 +2323,9 @@ namespace ScriptSystem
                     playerActor.SendMsg(normNpc, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, playerActor.ChrName + "/您已开通寄售服务,不需要再开通!!!\\ \\<返回/@main>");
                     return;// 如已开通元宝服务则退出
                 }
-                if (!GetValValue(playerActor,questActionInfo.sParam1, ref nGameGold))
+                if (!GetValValue(playerActor, questActionInfo.sParam1, ref nGameGold))
                 {
-                    nGameGold = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam1), 0);
+                    nGameGold = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam1), 0);
                 }
                 if (playerActor.GameGold >= nGameGold)// 玩家的元宝数大于或等于开通所需的元宝数
                 {
@@ -2394,7 +2394,7 @@ namespace ScriptSystem
                                         //M2Share.ItemUnit.GetItemAddValue(DealOffInfo.UseItems[K], ref StdItem80);
                                         //Move(StdItem80, sClientDealOffInfo.UseItems[K].S, sizeof(TStdItem));
                                         sClientDealOffInfo.UseItems[j] = new ClientItem();
-                                       // M2Share.ItemSystem.GetUpgradeStdItem(stdItem, dealOffInfo.UseItems[j], ref sClientDealOffInfo.UseItems[j]);
+                                        // M2Share.ItemSystem.GetUpgradeStdItem(stdItem, dealOffInfo.UseItems[j], ref sClientDealOffInfo.UseItems[j]);
                                         //sClientDealOffInfo.UseItems[j].S = StdItem80;
                                         // 取自定义物品名称
                                         //var sUserItemName = string.Empty;
@@ -2435,12 +2435,12 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        normNpc.GotoLable(playerActor,"@AskYBSellFail", false);
+                        normNpc.GotoLable(playerActor, "@AskYBSellFail", false);
                     }
                 }
                 else
                 {
-                    playerActor.SendMsg(playerActor,Messages.RM_MENU_OK, 0, playerActor.ActorId, 0, 0, "您未开通寄售服务,请先开通!!!");
+                    playerActor.SendMsg(playerActor, Messages.RM_MENU_OK, 0, playerActor.ActorId, 0, 0, "您未开通寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -2506,7 +2506,7 @@ namespace ScriptSystem
                                         var sUserItemName = string.Empty;
                                         if (dealOffInfo.UseItems[k].Desc[13] == 1)
                                         {
-                                           // sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(dealOffInfo.UseItems[k].MakeIndex, dealOffInfo.UseItems[k].Index);
+                                            // sUserItemName = M2Share.CustomItemMgr.GetCustomItemName(dealOffInfo.UseItems[k].MakeIndex, dealOffInfo.UseItems[k].Index);
                                         }
                                         if (!string.IsNullOrEmpty(sUserItemName))
                                         {
@@ -2542,12 +2542,12 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        normNpc.GotoLable(playerActor,"@AskYBDealFail", false);
+                        normNpc.GotoLable(playerActor, "@AskYBDealFail", false);
                     }
                 }
                 else
                 {
-                    playerActor.SendMsg(playerActor,Messages.RM_MENU_OK, 0, playerActor.ActorId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
+                    playerActor.SendMsg(playerActor, Messages.RM_MENU_OK, 0, playerActor.ActorId, 0, 0, "您未开通元宝寄售服务,请先开通!!!");
                 }
             }
             catch
@@ -2647,7 +2647,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.AddSkill);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.AddSkill);
             }
         }
 
@@ -2671,7 +2671,7 @@ namespace ScriptSystem
                 playerActor.BoIncGameGold = false;
                 return;
             }
-            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.AutoAddGameGold);
+            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.AutoAddGameGold);
         }
 
         // SETAUTOGETEXP 时间 点数 是否安全区 地图号
@@ -2688,7 +2688,7 @@ namespace ScriptSystem
             }
             if (nTime <= 0 || nPoint <= 0 || string.IsNullOrEmpty(sMap) && envir == null)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SetautogetExp);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SetautogetExp);
                 return;
             }
             playerActor.AutoGetExpInSafeZone = boIsSafeZone;
@@ -2702,9 +2702,8 @@ namespace ScriptSystem
         /// </summary>
         private void ActionOfOffLine(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            const string sOffLineStartMsg = "系统已经为你开启了脱机泡点功能，你现在可以下线了……";
             playerActor.ClientMsg = Messages.MakeMessage(Messages.SM_SYSMESSAGE, playerActor.ActorId, HUtil32.MakeWord(SystemShare.Config.CustMsgFColor, SystemShare.Config.CustMsgBColor), 0, 1);
-           // playerActor.SendSocket(playerActor.ClientMsg, EDCode.EncodeString(sOffLineStartMsg));
+            // playerActor.SendSocket(playerActor.ClientMsg, EDCode.EncodeString(sOffLineStartMsg));
             var nTime = HUtil32.StrToInt(questActionInfo.sParam1, 5);
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam2, 500);
             var nKickOffLine = HUtil32.StrToInt(questActionInfo.sParam3, 1440 * 15);
@@ -2714,7 +2713,7 @@ namespace ScriptSystem
             playerActor.AutoGetExpPoint = nPoint;
             playerActor.OffLineFlag = true;
             playerActor.KickOffLineTick = HUtil32.GetTickCount() + nKickOffLine * 60 * 1000;
-         //   IdSrvClient.Instance.SendHumanLogOutMsgA(playerActor.UserAccount, playerActor.SessionId);
+            //   IdSrvClient.Instance.SendHumanLogOutMsgA(playerActor.UserAccount, playerActor.SessionId);
             playerActor.SendDefMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
         }
 
@@ -2738,7 +2737,7 @@ namespace ScriptSystem
                 playerActor.BoDecGameGold = false;
                 return;
             }
-            ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.AutoSubGameGold);
+            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.AutoSubGameGold);
         }
 
         private void ActionOfChangeCreditPoint(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
@@ -2746,7 +2745,7 @@ namespace ScriptSystem
             var nCreditPoint = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nCreditPoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.CreditPoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.CreditPoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -2786,7 +2785,7 @@ namespace ScriptSystem
                     }
                     break;
                 default:
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.CreditPoint);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.CreditPoint);
                     return;
             }
         }
@@ -2797,7 +2796,7 @@ namespace ScriptSystem
             var nExp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nExp < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangeExp);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangeExp);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -2844,7 +2843,7 @@ namespace ScriptSystem
                     }
                     playerActor.Abil.Exp += dwInt;
                     // playerActor.GetExp(dwInt);
-                    playerActor.SendMsg(playerActor,Messages.RM_WINEXP, 0, dwInt, 0, 0);
+                    playerActor.SendMsg(playerActor, Messages.RM_WINEXP, 0, dwInt, 0, 0);
                     break;
             }
         }
@@ -2859,7 +2858,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Hairstyle);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Hairstyle);
             }
         }
 
@@ -2880,7 +2879,7 @@ namespace ScriptSystem
             }
             if (nJob == PlayJob.None)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangeJob);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangeJob);
                 return;
             }
             if (playerActor.Job != nJob)
@@ -2898,7 +2897,7 @@ namespace ScriptSystem
             var nLevel = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangeLevel);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangeLevel);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -2937,7 +2936,7 @@ namespace ScriptSystem
             var nPkPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nPkPoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangePkPoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangePkPoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -3022,7 +3021,7 @@ namespace ScriptSystem
             var magic = SystemShare.WorldEngine.FindMagic(questActionInfo.sParam1);
             if (magic == null)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.DelSkill);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.DelSkill);
                 return;
             }
             for (var i = 0; i < playerActor.MagicList.Count; i++)
@@ -3045,7 +3044,7 @@ namespace ScriptSystem
             var nGameGold = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.GameGold);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.GameGold);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -3082,7 +3081,7 @@ namespace ScriptSystem
             var nGamePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.GamePoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.GamePoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -3105,7 +3104,7 @@ namespace ScriptSystem
             }
             if (SystemShare.GameLogGamePoint)
             {
-              //  M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, string.Format(CommandHelp.GameLogMsg1, playerActor.MapName, playerActor.CurrX, playerActor.CurrY, playerActor.ChrName, SystemShare.Config.GamePointName, nGamePoint, cMethod, normNpc.ChrName));
+                //  M2Share.EventSource.AddEventLog(Grobal2.LogGamePoint, string.Format(CommandHelp.GameLogMsg1, playerActor.MapName, playerActor.CurrX, playerActor.CurrY, playerActor.ChrName, SystemShare.Config.GamePointName, nGamePoint, cMethod, normNpc.ChrName));
             }
             if (nOldGamePoint != playerActor.GamePoint)
             {
@@ -3124,7 +3123,7 @@ namespace ScriptSystem
             }
             else
             {
-                normNpc.GotoLable(playerActor,"@MarryError", false);
+                normNpc.GotoLable(playerActor, "@MarryError", false);
             }
         }
 
@@ -3139,13 +3138,13 @@ namespace ScriptSystem
             }
             else
             {
-                normNpc.GotoLable(playerActor,"@MasterError", false);
+                normNpc.GotoLable(playerActor, "@MasterError", false);
             }
         }
 
         private void ActionOfLineMsg(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var sMsg = GetLineVariableText(playerActor,questActionInfo.sParam2);
+            var sMsg = GetLineVariableText(playerActor, questActionInfo.sParam2);
             sMsg = sMsg.Replace("%s", playerActor.ChrName);
             sMsg = sMsg.Replace("%d", normNpc.ChrName);
             switch (questActionInfo.nParam1)
@@ -3185,7 +3184,7 @@ namespace ScriptSystem
                     }
                     break;
                 default:
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SendMsg);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SendMsg);
                     break;
             }
         }
@@ -3205,21 +3204,21 @@ namespace ScriptSystem
             var poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman == null)
             {
-                normNpc.GotoLable(playerActor,"@MarryCheckDir", false);
+                normNpc.GotoLable(playerActor, "@MarryCheckDir", false);
                 return;
             }
             if (string.IsNullOrEmpty(questActionInfo.sParam1))
             {
                 if (poseHuman.Race != ActorRace.Play)
                 {
-                    normNpc.GotoLable(playerActor,"@HumanTypeErr", false);
+                    normNpc.GotoLable(playerActor, "@HumanTypeErr", false);
                     return;
                 }
                 if (poseHuman.GetPoseCreate() == playerActor)
                 {
                     if (playerActor.Gender != poseHuman.Gender)
                     {
-                        normNpc.GotoLable(playerActor,"@StartMarry", false);
+                        normNpc.GotoLable(playerActor, "@StartMarry", false);
                         normNpc.GotoLable(poseHuman, "@StartMarry", false);
                         if (playerActor.Gender == PlayGender.Man && poseHuman.Gender == PlayGender.WoMan)
                         {
@@ -3241,12 +3240,12 @@ namespace ScriptSystem
                     else
                     {
                         normNpc.GotoLable(poseHuman, "@MarrySexErr", false);
-                        normNpc.GotoLable(playerActor,"@MarrySexErr", false);
+                        normNpc.GotoLable(playerActor, "@MarrySexErr", false);
                     }
                 }
                 else
                 {
-                    normNpc.GotoLable(playerActor,"@MarryDirErr", false);
+                    normNpc.GotoLable(playerActor, "@MarryDirErr", false);
                     normNpc.GotoLable(poseHuman, "@MarryCheckDir", false);
                 }
                 return;
@@ -3266,7 +3265,7 @@ namespace ScriptSystem
                         sSayMsg = sSayMsg.Replace("%s", playerActor.ChrName);
                         sSayMsg = sSayMsg.Replace("%d", poseHuman.ChrName);
                         SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                        normNpc.GotoLable(playerActor,"@WateMarry", false);
+                        normNpc.GotoLable(playerActor, "@WateMarry", false);
                         normNpc.GotoLable(poseHuman, "@RevMarry", false);
                     }
                 }
@@ -3285,7 +3284,7 @@ namespace ScriptSystem
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             sSayMsg = string.Format(Settings.MarryWoManGetMarryMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            normNpc.GotoLable(playerActor,"@EndMarry", false);
+                            normNpc.GotoLable(playerActor, "@EndMarry", false);
                             normNpc.GotoLable(poseHuman, "@EndMarry", false);
                             playerActor.IsStartMarry = false;
                             poseHuman.IsStartMarry = false;
@@ -3301,7 +3300,7 @@ namespace ScriptSystem
                     {
                         if (playerActor.IsStartMarry && poseHuman.IsStartMarry)
                         {
-                            normNpc.GotoLable(playerActor,"@EndMarryFail", false);
+                            normNpc.GotoLable(playerActor, "@EndMarryFail", false);
                             normNpc.GotoLable(poseHuman, "@EndMarryFail", false);
                             playerActor.IsStartMarry = false;
                             poseHuman.IsStartMarry = false;
@@ -3324,26 +3323,26 @@ namespace ScriptSystem
             var poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman == null)
             {
-                normNpc.GotoLable(playerActor,"@MasterCheckDir", false);
+                normNpc.GotoLable(playerActor, "@MasterCheckDir", false);
                 return;
             }
             if ((string.IsNullOrEmpty(questActionInfo.sParam1)))
             {
                 if (poseHuman.Race != ActorRace.Play)
                 {
-                    normNpc.GotoLable(playerActor,"@HumanTypeErr", false);
+                    normNpc.GotoLable(playerActor, "@HumanTypeErr", false);
                     return;
                 }
                 if (poseHuman.GetPoseCreate() == playerActor)
                 {
-                    normNpc.GotoLable(playerActor,"@StartGetMaster", false);
+                    normNpc.GotoLable(playerActor, "@StartGetMaster", false);
                     normNpc.GotoLable(poseHuman, "@StartMaster", false);
                     playerActor.IsStartMaster = true;
                     poseHuman.IsStartMaster = true;
                 }
                 else
                 {
-                    normNpc.GotoLable(playerActor,"@MasterDirErr", false);
+                    normNpc.GotoLable(playerActor, "@MasterDirErr", false);
                     normNpc.GotoLable(poseHuman, "@MasterCheckDir", false);
                 }
                 return;
@@ -3354,7 +3353,7 @@ namespace ScriptSystem
                 {
                     playerActor.PoseBaseObject = poseHuman.ActorId;
                     poseHuman.PoseBaseObject = playerActor.ActorId;
-                    normNpc.GotoLable(playerActor,"@WateMaster", false);
+                    normNpc.GotoLable(playerActor, "@WateMaster", false);
                     normNpc.GotoLable(poseHuman, "@RevMaster", false);
                 }
                 return;
@@ -3367,7 +3366,7 @@ namespace ScriptSystem
                     {
                         if (playerActor.IsStartMaster && poseHuman.IsStartMaster)
                         {
-                            normNpc.GotoLable(playerActor,"@EndMaster", false);
+                            normNpc.GotoLable(playerActor, "@EndMaster", false);
                             normNpc.GotoLable(poseHuman, "@EndMaster", false);
                             playerActor.IsStartMaster = false;
                             poseHuman.IsStartMaster = false;
@@ -3388,7 +3387,7 @@ namespace ScriptSystem
                 {
                     if (playerActor.IsStartMaster && poseHuman.IsStartMaster)
                     {
-                        normNpc.GotoLable(playerActor,"@EndMasterFail", false);
+                        normNpc.GotoLable(playerActor, "@EndMasterFail", false);
                         normNpc.GotoLable(poseHuman, "@EndMasterFail", false);
                         playerActor.IsStartMaster = false;
                         poseHuman.IsStartMaster = false;
@@ -3399,7 +3398,7 @@ namespace ScriptSystem
 
         private void ActionOfMessageBox(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            playerActor.SendMsg(normNpc, Messages.RM_MENU_OK, 0, playerActor.ActorId, 0, 0, GetLineVariableText(playerActor,questActionInfo.sParam1));
+            playerActor.SendMsg(normNpc, Messages.RM_MENU_OK, 0, playerActor.ActorId, 0, 0, GetLineVariableText(playerActor, questActionInfo.sParam1));
         }
 
         private void ActionOfMission(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
@@ -3412,7 +3411,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Mission);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Mission);
             }
         }
 
@@ -3427,7 +3426,7 @@ namespace ScriptSystem
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam6, -1);
             if (string.IsNullOrEmpty(sMap) || nX < 0 || nY < 0 || nType < 0 || nTime < 0 || nPoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.MobFireburn);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.MobFireburn);
                 return;
             }
             //var envir = M2Share.MapMgr.FindMap(sMap);
@@ -3462,7 +3461,7 @@ namespace ScriptSystem
                 }
                 else
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.MobPlace);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.MobPlace);
                     break;
                 }
             }
@@ -3477,7 +3476,7 @@ namespace ScriptSystem
             var sRankLevelName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sRankLevelName))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SkillLevel);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SkillLevel);
                 return;
             }
             playerActor.RankLevelName = sRankLevelName;
@@ -3497,7 +3496,7 @@ namespace ScriptSystem
                     playerActor.BoChangeItemNameFlag = boFlag;
                     break;
                 default:
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SetscriptFlag);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SetscriptFlag);
                     break;
             }
         }
@@ -3507,7 +3506,7 @@ namespace ScriptSystem
             var nLevel = HUtil32.StrToInt(questActionInfo.sParam3, 0);
             if (nLevel < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SkillLevel);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SkillLevel);
                 return;
             }
             var cMethod = questActionInfo.sParam2[0];
@@ -3561,7 +3560,7 @@ namespace ScriptSystem
             var nGold = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGold < 0 || normNpc.Castle == null)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.TakeCastleGold);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.TakeCastleGold);
                 return;
             }
             if (nGold <= normNpc.Castle.TotalGold)
@@ -3578,13 +3577,13 @@ namespace ScriptSystem
         {
             if (string.IsNullOrEmpty(playerActor.DearName))
             {
-                normNpc.GotoLable(playerActor,"@ExeMarryFail", false);
+                normNpc.GotoLable(playerActor, "@ExeMarryFail", false);
                 return;
             }
             var poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman == null)
             {
-                normNpc.GotoLable(playerActor,"@UnMarryCheckDir", false);
+                normNpc.GotoLable(playerActor, "@UnMarryCheckDir", false);
             }
             if (poseHuman != null)
             {
@@ -3592,14 +3591,14 @@ namespace ScriptSystem
                 {
                     if (poseHuman.Race != ActorRace.Play)
                     {
-                        normNpc.GotoLable(playerActor,"@UnMarryTypeErr", false);
+                        normNpc.GotoLable(playerActor, "@UnMarryTypeErr", false);
                         return;
                     }
                     if (poseHuman.GetPoseCreate() == playerActor)
                     {
                         if (playerActor.DearName == poseHuman.ChrName)
                         {
-                            normNpc.GotoLable(playerActor,"@StartUnMarry", false);
+                            normNpc.GotoLable(playerActor, "@StartUnMarry", false);
                             normNpc.GotoLable(poseHuman, "@StartUnMarry", false);
                             return;
                         }
@@ -3628,12 +3627,12 @@ namespace ScriptSystem
                             poseHuman.IsStartUnMarry = false;
                             playerActor.RefShowName();
                             poseHuman.RefShowName();
-                            normNpc.GotoLable(playerActor,"@UnMarryEnd", false);
+                            normNpc.GotoLable(playerActor, "@UnMarryEnd", false);
                             normNpc.GotoLable(poseHuman, "@UnMarryEnd", false);
                         }
                         else
                         {
-                            normNpc.GotoLable(playerActor,"@WateUnMarry", false);
+                            normNpc.GotoLable(playerActor, "@WateUnMarry", false);
                             // GotoLable(PoseHuman,'@RevUnMarry',False);
                         }
                     }
@@ -3665,7 +3664,7 @@ namespace ScriptSystem
                         }
                         playerActor.DearName = string.Empty;
                         playerActor.MarryCount++;
-                        normNpc.GotoLable(playerActor,"@UnMarryEnd", false);
+                        normNpc.GotoLable(playerActor, "@UnMarryEnd", false);
                         playerActor.RefShowName();
                     }
                 }
@@ -3686,7 +3685,7 @@ namespace ScriptSystem
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = questActionInfo.sParam1;
             var sVarName = questActionInfo.sParam2;
-            var sFileName = GetLineVariableText(playerActor,questActionInfo.sParam3);
+            var sFileName = GetLineVariableText(playerActor, questActionInfo.sParam3);
             if (sFileName[0] == '\\')
             {
                 sFileName = sFileName[1..];
@@ -3702,15 +3701,15 @@ namespace ScriptSystem
             sFileName = SystemShare.GetEnvirFilePath(sFileName);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SaveVar);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SaveVar);
                 return;
             }
             var boFoundVar = false;
-            var dynamicVarList = GetDynamicVarMap(playerActor,sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playerActor, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
-                ScriptActionError(playerActor,string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
+                ScriptActionError(playerActor, string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (dynamicVarList.TryGetValue(sVarName, out dynamicVar))
@@ -3731,7 +3730,7 @@ namespace ScriptSystem
             }
             if (!boFoundVar)
             {
-                ScriptActionError(playerActor,string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.SaveVar);
+                ScriptActionError(playerActor, string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.SaveVar);
             }
         }
 
@@ -3744,11 +3743,11 @@ namespace ScriptSystem
             playerActor.DelayCallNpc = normNpc.ActorId;
 
             playerActor.IsTimeGoto = true;
-            int mDelayGoto = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam1), 0);//变量操作
+            int mDelayGoto = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam1), 0);//变量操作
             if (mDelayGoto == 0)
             {
                 int delayCount = 0;
-                GetValValue(playerActor,questActionInfo.sParam1, ref delayCount);
+                GetValValue(playerActor, questActionInfo.sParam1, ref delayCount);
                 mDelayGoto = delayCount;
             }
             if (mDelayGoto > 0)
@@ -3782,7 +3781,7 @@ namespace ScriptSystem
             var nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || string.IsNullOrEmpty(sMethod))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.CalcVar);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.CalcVar);
                 return;
             }
             var boFoundVar = false;
@@ -3810,14 +3809,14 @@ namespace ScriptSystem
                     }
                     if (!boFoundVar)
                     {
-                        ScriptActionError(playerActor,string.Format(sVarFound, sVarValue, sType), questActionInfo, ExecutionCode.CalcVar);
+                        ScriptActionError(playerActor, string.Format(sVarFound, sVarValue, sType), questActionInfo, ExecutionCode.CalcVar);
                         return;
                     }
                 }
                 else
                 {
-                    nVarValue = HUtil32.StrToInt(GetLineVariableText(playerActor,sVarValue), 0);
-                    sVarValue = GetLineVariableText(playerActor,sVarValue);
+                    nVarValue = HUtil32.StrToInt(GetLineVariableText(playerActor, sVarValue), 0);
+                    sVarValue = GetLineVariableText(playerActor, sVarValue);
                 }
             }
             else
@@ -3825,11 +3824,11 @@ namespace ScriptSystem
                 nVarValue = HUtil32.StrToInt(questActionInfo.sParam4, 0);
             }
             var cMethod = sMethod[0];
-            var dynamicVarList = GetDynamicVarMap(playerActor,sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playerActor, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
-                ScriptActionError(playerActor,string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.CalcVar);
+                ScriptActionError(playerActor, string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.CalcVar);
                 return;
             }
 
@@ -3875,7 +3874,7 @@ namespace ScriptSystem
             }
             if (!boFoundVar)
             {
-                ScriptActionError(playerActor,string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.CalcVar);
+                ScriptActionError(playerActor, string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.CalcVar);
             }
         }
 
@@ -3959,7 +3958,7 @@ namespace ScriptSystem
             }
             if (!boFlag)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.GroupMoveMap);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.GroupMoveMap);
             }
         }
 
@@ -3971,7 +3970,7 @@ namespace ScriptSystem
             var nPoint = HUtil32.StrToInt(questActionInfo.sParam3, -1);
             if (nWhere < 0 || nWhere > playerActor.UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.UpgradeItems);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.UpgradeItems);
                 return;
             }
             var userItem = playerActor.UseItems[nWhere];
@@ -4022,7 +4021,7 @@ namespace ScriptSystem
             var nUpgradeItemStatus = HUtil32.StrToInt(questActionInfo.sParam5, -1);
             if (nValType < 0 || nValType > 14 || nWhere < 0 || nWhere > playerActor.UseItems.Length || nRate < 0 || nPoint < 0 || nPoint > 255)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.UpgradeItemSex);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.UpgradeItemSex);
                 return;
             }
             var userItem = playerActor.UseItems[nWhere];
@@ -4105,7 +4104,7 @@ namespace ScriptSystem
             }
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || varType == VarType.None)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Var);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (string.Compare(questActionInfo.sParam1, "Integer", StringComparison.OrdinalIgnoreCase) == 0)
@@ -4118,7 +4117,7 @@ namespace ScriptSystem
             }
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || varType == VarType.None)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Var);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Var);
                 return;
             }
             var dynamicVar = new DynamicVar();
@@ -4127,11 +4126,11 @@ namespace ScriptSystem
             dynamicVar.nInternet = nVarValue;
             dynamicVar.sString = sVarValue;
             var boFoundVar = false;
-            var dynamicVarList = GetDynamicVarMap(playerActor,sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playerActor, sType, ref sName);
             if (dynamicVarList == null)
             {
                 Dispose(dynamicVar);
-                ScriptActionError(playerActor,string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
+                ScriptActionError(playerActor, string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (dynamicVarList.ContainsKey(sVarName))
@@ -4144,7 +4143,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.Var);
+                ScriptActionError(playerActor, string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.Var);
             }
         }
 
@@ -4161,7 +4160,7 @@ namespace ScriptSystem
             const string sVarTypeError = "变量类型错误，错误类型:{0} 当前支持类型(HUMAN、GUILD、GLOBAL)";
             var sType = questActionInfo.sParam1;
             var sVarName = questActionInfo.sParam2;
-            var sFileName = GetLineVariableText(playerActor,questActionInfo.sParam3);
+            var sFileName = GetLineVariableText(playerActor, questActionInfo.sParam3);
             if (sFileName[0] == '\\')
             {
                 sFileName = sFileName[1..];
@@ -4177,14 +4176,14 @@ namespace ScriptSystem
             sFileName = SystemShare.GetEnvirFilePath(sFileName);
             if (string.IsNullOrEmpty(sType) || string.IsNullOrEmpty(sVarName) || !File.Exists(sFileName))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.LoadVar);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.LoadVar);
                 return;
             }
             var boFoundVar = false;
-            var dynamicVarList = GetDynamicVarMap(playerActor,sType, ref sName);
+            var dynamicVarList = GetDynamicVarMap(playerActor, sType, ref sName);
             if (dynamicVarList == null)
             {
-                ScriptActionError(playerActor,string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
+                ScriptActionError(playerActor, string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.Var);
                 return;
             }
             if (dynamicVarList.TryGetValue(sVarName, out _))
@@ -4223,7 +4222,7 @@ namespace ScriptSystem
             }
             if (!boFoundVar)
             {
-                ScriptActionError(playerActor,string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.LoadVar);
+                ScriptActionError(playerActor, string.Format(sVarFound, sVarName, sType), questActionInfo, ExecutionCode.LoadVar);
             }
         }
 
@@ -4232,7 +4231,7 @@ namespace ScriptSystem
             var nNeed = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nNeed < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ClearNeedItems);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ClearNeedItems);
                 return;
             }
             StdItem stdItem;
@@ -4268,7 +4267,7 @@ namespace ScriptSystem
             var boMatchName = questActionInfo.sParam3 == "1";
             if (string.IsNullOrEmpty(sItemName) || nMakeIndex <= 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ClearMakeItems);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ClearMakeItems);
                 return;
             }
             StdItem stdItem;
@@ -4320,13 +4319,13 @@ namespace ScriptSystem
         {
             if (string.IsNullOrEmpty(playerActor.MasterName))
             {
-                normNpc.GotoLable(playerActor,"@ExeMasterFail", false);
+                normNpc.GotoLable(playerActor, "@ExeMasterFail", false);
                 return;
             }
             var poseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if (poseHuman == null)
             {
-                normNpc.GotoLable(playerActor,"@UnMasterCheckDir", false);
+                normNpc.GotoLable(playerActor, "@UnMasterCheckDir", false);
             }
             if (poseHuman != null)
             {
@@ -4334,7 +4333,7 @@ namespace ScriptSystem
                 {
                     if (poseHuman.Race != ActorRace.Play)
                     {
-                        normNpc.GotoLable(playerActor,"@UnMasterTypeErr", false);
+                        normNpc.GotoLable(playerActor, "@UnMasterTypeErr", false);
                         return;
                     }
                     if (poseHuman.GetPoseCreate() == playerActor)
@@ -4343,15 +4342,15 @@ namespace ScriptSystem
                         {
                             if (playerActor.IsMaster)
                             {
-                                normNpc.GotoLable(playerActor,"@UnIsMaster", false);
+                                normNpc.GotoLable(playerActor, "@UnIsMaster", false);
                                 return;
                             }
                             if (playerActor.MasterName != poseHuman.ChrName)
                             {
-                                normNpc.GotoLable(playerActor,"@UnMasterError", false);
+                                normNpc.GotoLable(playerActor, "@UnMasterError", false);
                                 return;
                             }
-                            normNpc.GotoLable(playerActor,"@StartUnMaster", false);
+                            normNpc.GotoLable(playerActor, "@StartUnMaster", false);
                             normNpc.GotoLable(poseHuman, "@WateUnMaster", false);
                             return;
                         }
@@ -4377,12 +4376,12 @@ namespace ScriptSystem
                             poseHuman.IsStartUnMaster = false;
                             playerActor.RefShowName();
                             poseHuman.RefShowName();
-                            normNpc.GotoLable(playerActor,"@UnMasterEnd", false);
+                            normNpc.GotoLable(playerActor, "@UnMasterEnd", false);
                             normNpc.GotoLable(poseHuman, "@UnMasterEnd", false);
                         }
                         else
                         {
-                            normNpc.GotoLable(playerActor,"@WateUnMaster", false);
+                            normNpc.GotoLable(playerActor, "@WateUnMaster", false);
                             normNpc.GotoLable(poseHuman, "@RevUnMaster", false);
                         }
                     }
@@ -4405,7 +4404,7 @@ namespace ScriptSystem
                     //    M2Share.SaveUnForceMasterList();
                     //}
                     playerActor.MasterName = "";
-                    normNpc.GotoLable(playerActor,"@UnMasterEnd", false);
+                    normNpc.GotoLable(playerActor, "@UnMasterEnd", false);
                     playerActor.RefShowName();
                 }
             }
@@ -4420,7 +4419,7 @@ namespace ScriptSystem
             var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null || string.IsNullOrEmpty(sMapMode))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SetMapMode);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SetMapMode);
                 return;
             }
             if (string.Compare(sMapMode, "SAFE", StringComparison.OrdinalIgnoreCase) == 0)
@@ -4782,7 +4781,7 @@ namespace ScriptSystem
             var nLevel = (byte)HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nLevel < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SetMemberLevel);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SetMemberLevel);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -4817,7 +4816,7 @@ namespace ScriptSystem
             var nType = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nType < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.SetMemberType);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.SetMemberType);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -4853,7 +4852,7 @@ namespace ScriptSystem
             var nItemCount = questActionInfo.nParam2;
             if (string.IsNullOrEmpty(sItemName) || nItemCount <= 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Give);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Give);
                 return;
             }
             if (string.Compare(sItemName, Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -4862,7 +4861,7 @@ namespace ScriptSystem
                 playerActor.GoldChanged();
                 if (SystemShare.GameLogGold)
                 {
-                   // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + normNpc.ChrName);
+                    // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nItemCount + "\t" + '1' + "\t" + normNpc.ChrName);
                 }
                 return;
             }
@@ -4887,7 +4886,7 @@ namespace ScriptSystem
                             stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                               // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
+                                // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
                             }
                         }
                         else
@@ -4903,7 +4902,7 @@ namespace ScriptSystem
                             stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
-                               // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
+                                // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
                             }
                             playerActor.DropItemDown(userItem, 3, false, playerActor.ActorId, 0);
                         }
@@ -4943,7 +4942,7 @@ namespace ScriptSystem
             var nAuraePoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nAuraePoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.AuraePoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.AuraePoint);
                 return;
             }
             if (playerActor.MyGuild == null)
@@ -4990,7 +4989,7 @@ namespace ScriptSystem
             var nBuildPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBuildPoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.BuildPoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.BuildPoint);
                 return;
             }
             if (playerActor.MyGuild == null)
@@ -5037,7 +5036,7 @@ namespace ScriptSystem
             var nItemCount = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nItemCount < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.GuildChiefItemCount);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.GuildChiefItemCount);
                 return;
             }
             if (playerActor.MyGuild == null)
@@ -5084,7 +5083,7 @@ namespace ScriptSystem
             var nFlourishPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nFlourishPoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.FlourishPoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.FlourishPoint);
                 return;
             }
             if (playerActor.MyGuild == null)
@@ -5131,7 +5130,7 @@ namespace ScriptSystem
             var nStabilityPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nStabilityPoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.StabilityPoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.StabilityPoint);
                 return;
             }
             if (playerActor.MyGuild == null)
@@ -5178,7 +5177,7 @@ namespace ScriptSystem
             var nHp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nHp < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.HumanHp);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.HumanHp);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -5216,7 +5215,7 @@ namespace ScriptSystem
             var nMp = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nMp < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.HumanMp);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.HumanMp);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -5283,7 +5282,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Kill);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Kill);
             }
         }
 
@@ -5292,7 +5291,7 @@ namespace ScriptSystem
             var nBonusPoint = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nBonusPoint < 0 || nBonusPoint > 10000)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.BonusPoint);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.BonusPoint);
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
@@ -5344,7 +5343,7 @@ namespace ScriptSystem
             var nColor = questActionInfo.nParam1;
             if (nColor < 0 || nColor > 255)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangeNameColor);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangeNameColor);
                 return;
             }
             playerActor.NameColor = (byte)nColor;
@@ -5391,7 +5390,7 @@ namespace ScriptSystem
             var nBounsuPoint = HUtil32.StrToInt(questActionInfo.sParam3, -1);
             if (nReLevel < 0 || nLevel < 0 || nBounsuPoint < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.Renewlevel);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.Renewlevel);
                 return;
             }
             if (playerActor.ReLevel + nReLevel <= 255)
@@ -5417,7 +5416,7 @@ namespace ScriptSystem
             var nGender = HUtil32.StrToInt(questActionInfo.sParam1, -1);
             if (nGender > 1)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangeGender);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangeGender);
                 return;
             }
             playerActor.Gender = Enum.Parse<PlayGender>(nGender.ToString());
@@ -5439,7 +5438,7 @@ namespace ScriptSystem
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nRate < 0 || nTime < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.KillMonExpRate);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.KillMonExpRate);
                 return;
             }
             playerActor.KillMonExpRate = nRate;
@@ -5460,7 +5459,7 @@ namespace ScriptSystem
             var nCount = questActionInfo.nParam6;
             if (string.IsNullOrEmpty(sMapName) || nMapX <= 0 || nMapY <= 0 || string.IsNullOrEmpty(sMapName) || nRange <= 0 || nCount <= 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.MonGenex);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.MonGenex);
                 return;
             }
             for (var i = 0; i < nCount; i++)
@@ -5481,7 +5480,7 @@ namespace ScriptSystem
             var sMonName = questActionInfo.sParam1;
             if (string.IsNullOrEmpty(sMonName))
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.OpenMagicbox);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.OpenMagicbox);
                 return;
             }
             playerActor.GetFrontPosition(ref nX, ref nY);
@@ -5529,7 +5528,7 @@ namespace ScriptSystem
             var nTime = HUtil32.StrToInt(questActionInfo.sParam2, -1);
             if (nRate < 0 || nTime < 0)
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.PowerRate);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.PowerRate);
                 return;
             }
             playerActor.PowerRate = nRate;
@@ -5600,7 +5599,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangeMode);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangeMode);
             }
         }
 
@@ -5613,7 +5612,7 @@ namespace ScriptSystem
             }
             else
             {
-                ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ChangePerMission);
+                ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ChangePerMission);
                 return;
             }
             if (SystemShare.Config.ShowScriptActionMsg)
@@ -5635,33 +5634,33 @@ namespace ScriptSystem
             UserItem userItem = null;
             try
             {
-                if (!GetValValue(playerActor,questActionInfo.sParam1, ref sMap))
+                if (!GetValValue(playerActor, questActionInfo.sParam1, ref sMap))
                 {
-                    sMap = GetLineVariableText(playerActor,questActionInfo.sParam1);
+                    sMap = GetLineVariableText(playerActor, questActionInfo.sParam1);
                 }
-                if (!GetValValue(playerActor,questActionInfo.sParam2, ref nX))
+                if (!GetValValue(playerActor, questActionInfo.sParam2, ref nX))
                 {
-                    nX = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam2), -1);
+                    nX = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam2), -1);
                 }
-                if (!GetValValue(playerActor,questActionInfo.sParam3, ref nY))
+                if (!GetValValue(playerActor, questActionInfo.sParam3, ref nY))
                 {
-                    nY = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam3), -1);
+                    nY = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam3), -1);
                 }
-                if (!GetValValue(playerActor,questActionInfo.sParam4, ref nRange))
+                if (!GetValValue(playerActor, questActionInfo.sParam4, ref nRange))
                 {
-                    nRange = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam4), -1);
+                    nRange = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam4), -1);
                 }
-                if (!GetValValue(playerActor,questActionInfo.sParam5, ref sItemName))
+                if (!GetValValue(playerActor, questActionInfo.sParam5, ref sItemName))
                 {
-                    sItemName = GetLineVariableText(playerActor,questActionInfo.sParam5);
+                    sItemName = GetLineVariableText(playerActor, questActionInfo.sParam5);
                 }
-                if (!GetValValue(playerActor,questActionInfo.sParam6, ref nCount))
+                if (!GetValValue(playerActor, questActionInfo.sParam6, ref nCount))
                 {
-                    nCount = HUtil32.StrToInt(GetLineVariableText(playerActor,questActionInfo.sParam6), -1);
+                    nCount = HUtil32.StrToInt(GetLineVariableText(playerActor, questActionInfo.sParam6), -1);
                 }
                 if (string.IsNullOrEmpty(sMap) || nX < 0 || nY < 0 || nRange < 0 || string.IsNullOrEmpty(sItemName) || nCount <= 0)
                 {
-                    ScriptActionError(playerActor,"", questActionInfo, ExecutionCode.ThrowItem);
+                    ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.ThrowItem);
                     return;
                 }
                 var envir = SystemShare.MapMgr.FindMap(sMap);
@@ -5740,7 +5739,7 @@ namespace ScriptSystem
                                 // GetDropPosition(nX, nY, nRange, dx, dy);//取掉物的位置
                                 if (envir.AddItemToMap(dX, dY, mapItem))
                                 {
-                                   // normNpc.SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dX, dY, mapItem.Name + nameCorlr);
+                                    // normNpc.SendRefMsg(Messages.RM_ITEMSHOW, mapItem.Looks, mapItem.ItemId, dX, dY, mapItem.Name + nameCorlr);
                                 }
                                 else
                                 {

@@ -1,9 +1,4 @@
-using System;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using GameGate.Conf;
-using NLog;
 
 namespace GameGate.Services
 {
@@ -31,7 +26,7 @@ namespace GameGate.Services
                 _sessionMap[i] = new ClientSession[GateShare.MaxSession];
             }
         }
-        
+
         public void AddSession(byte serviceId, int sessionId, ClientSession clientSession)
         {
             _sessionMap[serviceId][sessionId] = clientSession;

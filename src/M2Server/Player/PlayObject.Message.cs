@@ -238,7 +238,7 @@ namespace M2Server.Player
                     INormNpc normNpc = M2Share.WorldEngine.FindMerchant(DelayCallNpc) ?? M2Share.WorldEngine.FindNpc(DelayCallNpc);
                     if (normNpc != null)
                     {
-                         normNpc.GotoLable(this, DelayCallLabel, false);
+                        normNpc.GotoLable(this, DelayCallLabel, false);
                     }
                 }
                 if ((HUtil32.GetTickCount() - DecPkPointTick) > SystemShare.Config.DecPkPointTime)// 减少PK值

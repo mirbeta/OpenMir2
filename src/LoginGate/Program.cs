@@ -1,5 +1,5 @@
-﻿using System.Runtime;
-using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.Hosting;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,7 +12,7 @@ namespace LoginGate
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
-            
+
             var serviceRunner = new AppServer();
             await serviceRunner.RunAsync();
         }

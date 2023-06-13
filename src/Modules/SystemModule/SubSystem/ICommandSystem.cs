@@ -1,6 +1,6 @@
 ﻿namespace SystemModule
 {
-    public interface ICommandSystem 
+    public interface ICommandSystem
     {
         /// <summary>
         /// 注册游戏命令

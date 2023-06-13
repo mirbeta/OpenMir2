@@ -11,7 +11,6 @@ using SystemModule.ByteManager;
 using SystemModule.Core.Config;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.SocketComponents.Event;
 using SystemModule.Sockets.Common;
 using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Extensions;
@@ -96,7 +95,7 @@ namespace GameGate.Services
         public byte ThreadId => GateInfo.ServiceId;
 
         public RunningState Running => RunningState;
-        
+
         /// <summary>
         /// 返回等待处理的消息数量
         /// </summary>
@@ -266,7 +265,7 @@ namespace GameGate.Services
                     break;
             }
         }
-        
+
         /// <summary>
         /// 添加到消息处理队列
         /// </summary>

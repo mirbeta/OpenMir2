@@ -1,5 +1,5 @@
-﻿using System;
-using BotSrv.Player;
+﻿using BotSrv.Player;
+using System;
 using SystemModule;
 
 namespace BotSrv.Scenes

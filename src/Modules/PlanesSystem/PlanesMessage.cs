@@ -134,7 +134,6 @@ namespace PlanesSystem
 
         private static void MsgGetUserServerChange(int sNum, string Body)
         {
-            const string sExceptionMsg = "[Exception] TFrmSrvMsg::MsgGetUserServerChange";
             int shifttime = HUtil32.GetTickCount();
             string ufilename = Body;
             /*if (M2Share.ServerIndex == sNum)
@@ -225,20 +224,20 @@ namespace PlanesSystem
 
         private static void MsgGetSysopMsg(int sNum, string Body)
         {
-          //  M2Share.WorldEngine.SendBroadCastMsg(Body, MsgType.System);
+            //  M2Share.WorldEngine.SendBroadCastMsg(Body, MsgType.System);
         }
 
         private static void MsgGetAddGuild(int sNum, string Body)
         {
             string gname = string.Empty;
             string mname = HUtil32.GetValidStr3(Body, ref gname, HUtil32.Backslash);
-           // M2Share.GuildMgr.AddGuild(gname, mname);
+            // M2Share.GuildMgr.AddGuild(gname, mname);
         }
 
         private static void MsgGetDelGuild(int sNum, string Body)
         {
             string gname = Body;
-          //  M2Share.GuildMgr.DelGuild(gname);
+            //  M2Share.GuildMgr.DelGuild(gname);
         }
 
         private static void MsgGetReloadGuild(int sNum, string Body)
@@ -382,7 +381,7 @@ namespace PlanesSystem
         private static void MsgGetReloadMakeItemList()
         {
             //M2Share.LocalDB.LoadMakeItemList();
-           // GameShare.LocalDb.LoadMakeItem();
+            // GameShare.LocalDb.LoadMakeItem();
         }
 
         private static void MsgGetGuildMemberRecall(int sNum, string Body)
@@ -416,7 +415,6 @@ namespace PlanesSystem
 
         private static void MsgGetLoverLogin(int sNum, string Body)
         {
-            string Str;
             string uname = string.Empty;
             string lovername = string.Empty;
             /*if (sNum == M2Share.ServerIndex)

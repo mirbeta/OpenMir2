@@ -10,7 +10,6 @@ using SystemModule.Core.Config;
 using SystemModule.Dependency;
 using SystemModule.Extensions;
 using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Common.Options;
 using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Enum;
 using SystemModule.Sockets.Exceptions;
@@ -371,7 +370,7 @@ namespace SystemModule.Sockets.Components.TCP
                 m_serverState = ServerState.Running;
                 return this;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 m_serverState = ServerState.Exception;
                 throw;

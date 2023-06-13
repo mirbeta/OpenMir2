@@ -18,13 +18,13 @@
         /// </summary>
         String
     }
-    
+
     public class VarInfo
     {
         public VarType VarType;
         public VarAttr VarAttr;
     }
-    
+
     public enum VarAttr
     {
         aNone,

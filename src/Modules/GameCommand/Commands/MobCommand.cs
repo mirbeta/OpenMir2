@@ -41,7 +41,7 @@ namespace CommandSystem.Commands
                 var monster = SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (monster != null)
                 {
-                   // monster.SlaveMakeLevel = nLevel;
+                    // monster.SlaveMakeLevel = nLevel;
                     monster.SlaveExpLevel = nLevel;
                     monster.RecalcAbilitys();
                     monster.RefNameColor();

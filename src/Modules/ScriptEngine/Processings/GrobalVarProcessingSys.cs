@@ -127,7 +127,7 @@ namespace ScriptSystem
         {
             if (ProcessGrobalMessage.ContainsKey(nIdx))
             {
-                ProcessGrobalMessage[nIdx](playerActor,sVariable, ref sMsg);
+                ProcessGrobalMessage[nIdx](playerActor, sVariable, ref sMsg);
                 //if (nIdx < FProcessGrobalMessage.Count())
                 //{
                 //    FProcessGrobalMessage[nIdx](playerActor,sVariable, ref sMsg);
@@ -189,7 +189,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetUserCount(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(M2Share.WorldEngine.IPlayerActorCount));
+            // sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(M2Share.WorldEngine.IPlayerActorCount));
         }
 
         /// <summary>
@@ -1182,7 +1182,7 @@ namespace ScriptSystem
         {
             sMsg = CombineStr(sMsg, "<$GUILDWARFEE>", (SystemShare.Config.GuildWarPrice).ToString());
         }
-        
+
         /// <summary>
         /// 建立行会所需的金币数
         /// </summary>
@@ -1204,7 +1204,7 @@ namespace ScriptSystem
         {
             sMsg = CombineStr(sMsg, "<$REQUESTBUILDGUILDITEM>", SystemShare.Config.WomaHorn);
         }
-        
+
         /// <summary>
         /// 多少天后攻城
         /// </summary>
@@ -1224,7 +1224,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdDate(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_DATE>", CommandMgr.GameCommands.Data.CmdName);
         }
 
         /// <summary>
@@ -1235,7 +1235,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdAllowmsg(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_ALLOWMSG>", CommandMgr.GameCommands.AllowMsg.CmdName);
         }
 
         /// <summary>
@@ -1246,7 +1246,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdletshout(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_LETSHOUT>", CommandMgr.GameCommands.Letshout.CmdName);
         }
 
         /// <summary>
@@ -1257,7 +1257,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdLettrade(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-          //  sMsg = CombineStr(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
+            //  sMsg = CombineStr(sMsg, "<$CMD_LETTRADE>", CommandMgr.GameCommands.LetTrade.CmdName);
         }
 
         /// <summary>
@@ -1268,7 +1268,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdLeTGuild(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-          //  sMsg = CombineStr(sMsg, "<$CMD_LETGuild>", CommandMgr.GameCommands.LetGuild.CmdName);
+            //  sMsg = CombineStr(sMsg, "<$CMD_LETGuild>", CommandMgr.GameCommands.LetGuild.CmdName);
         }
 
         /// <summary>
@@ -1279,7 +1279,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdEndGuild(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_ENDGUILD>", CommandMgr.GameCommands.EndGuild.CmdName);
         }
 
         /// <summary>
@@ -1290,7 +1290,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdBanGuildChat(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_BANGUILDCHAT>", CommandMgr.GameCommands.BanGuildChat.CmdName);
         }
 
         /// <summary>
@@ -1301,7 +1301,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdAuthally(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-          //  sMsg = CombineStr(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
+            //  sMsg = CombineStr(sMsg, "<$CMD_AUTHALLY>", CommandMgr.GameCommands.Authally.CmdName);
         }
 
         /// <summary>
@@ -1312,7 +1312,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdAuth(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_AUTH>", CommandMgr.GameCommands.Auth.CmdName);
         }
 
         /// <summary>
@@ -1323,7 +1323,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdAythCcancel(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_AUTHCANCEL>", CommandMgr.GameCommands.AuthCancel.CmdName);
         }
 
         /// <summary>
@@ -1334,7 +1334,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdUserMove(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-          //  sMsg = CombineStr(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
+            //  sMsg = CombineStr(sMsg, "<$CMD_USERMOVE>", CommandMgr.GameCommands.UserMove.CmdName);
         }
 
         /// <summary>
@@ -1367,7 +1367,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdAllowGroupCall(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_ALLOWGROUPCALL>", CommandMgr.GameCommands.AllowGroupCall.CmdName);
         }
 
         /// <summary>
@@ -1378,7 +1378,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdStorageChgPassword(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           // sMsg = CombineStr(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
+            // sMsg = CombineStr(sMsg, "<$CMD_STORAGECHGPASSWORD>", CommandMgr.GameCommands.ChgPassword.CmdName);
         }
 
         /// <summary>
@@ -1389,7 +1389,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdStorageSetPassword(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-          //  sMsg = CombineStr(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
+            //  sMsg = CombineStr(sMsg, "<$CMD_STORAGESETPASSWORD>", CommandMgr.GameCommands.SetPassword.CmdName);
         }
 
         /// <summary>
@@ -1397,7 +1397,7 @@ namespace ScriptSystem
         /// </summary>
         internal void GetCmdStorageLock(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-          //  sMsg = CombineStr(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
+            //  sMsg = CombineStr(sMsg, "<$CMD_STORAGELOCK>", CommandMgr.GameCommands.Lock.CmdName);
         }
 
         /// <summary>
@@ -1408,7 +1408,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetCmdStorageUnlock(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-          //  sMsg = CombineStr(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
+            //  sMsg = CombineStr(sMsg, "<$CMD_STORAGEUNLOCK>", CommandMgr.GameCommands.UnlockStorage.CmdName);
         }
 
         /// <summary>
@@ -1488,7 +1488,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetRing_L(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-           string  sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
+            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
             sMsg = CombineStr(sMsg, "<$RING_L>", sText);
         }
 

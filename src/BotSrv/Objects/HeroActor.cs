@@ -1,6 +1,6 @@
-using System;
 using BotSrv.Player;
 using BotSrv.Scenes;
+using System;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Enums;
@@ -82,7 +82,7 @@ namespace BotSrv.Objects
                 Dispose(p);
             }
         }
-        
+
         // 估价函数,估价 x,y 到目的地的距离,估计值必须保证比实际值小
         private int Judge(int x, int y, int endX, int endY)
         {
@@ -638,7 +638,7 @@ namespace BotSrv.Objects
             return result;
         }
 
-        private bool AttackTaggetAAA(bool result,byte magicKey)
+        private bool AttackTaggetAAA(bool result, byte magicKey)
         {
             if (AutoUseMagic(magicKey, MShare.AutoTagget))
             {
@@ -720,7 +720,7 @@ namespace BotSrv.Objects
         {
             if (magicKey > 0)
             {
-                if (AutoUseMagic((byte)magicKey, MShare.AutoTagget)) return result;
+                if (AutoUseMagic(magicKey, MShare.AutoTagget)) return result;
             }
             else
             {
@@ -730,7 +730,7 @@ namespace BotSrv.Objects
             return result;
         }
 
-        private bool AttackTaggetEEE(ref bool result,byte magicKey)
+        private bool AttackTaggetEEE(ref bool result, byte magicKey)
         {
             if (CanNextSpell())
             {
@@ -875,7 +875,7 @@ namespace BotSrv.Objects
                                         }
                                     }
                                     nOldDc = 3;
-                                FFFF:
+                                    FFFF:
                                     if (MShare.MagicArr[10] != null)
                                     {
                                         tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoTagget.CurrX, MShare.AutoTagget.CurrY);

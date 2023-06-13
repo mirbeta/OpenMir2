@@ -19,7 +19,7 @@ namespace WebApi.Controller
         {
             return Ok();
         }
-        
+
         /// <summary>
         /// 获取寄售行物品类型
         /// </summary>
@@ -63,7 +63,7 @@ namespace WebApi.Controller
         {
             return Ok();
         }
-        
+
         /// <summary>
         /// 取消物品寄售
         /// </summary>

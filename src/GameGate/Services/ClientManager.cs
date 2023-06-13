@@ -1,4 +1,3 @@
-using GameGate.Conf;
 using NLog;
 using System.Collections.Concurrent;
 using System.Linq;
@@ -21,7 +20,7 @@ namespace GameGate.Services
         {
             _clientThreadMap = new ConcurrentDictionary<string, ClientThread>();
         }
- 
+
         /// <summary>
         /// 添加用户对应网关
         /// </summary>

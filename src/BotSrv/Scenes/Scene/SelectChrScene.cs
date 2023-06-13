@@ -1,6 +1,6 @@
-﻿using System;
-using BotSrv.Player;
+﻿using BotSrv.Player;
 using NLog;
+using System;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.SocketComponents.AsyncSocketClient;
@@ -10,7 +10,7 @@ namespace BotSrv.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
-        private readonly static Logger logger = LogManager.GetCurrentClassLogger();
+        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient ClientSocket;
         private int NewIndex = 0;
         private readonly SelChar[] ChrArr;

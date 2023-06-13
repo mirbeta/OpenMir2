@@ -46,14 +46,13 @@ namespace CommandSystem.Commands
                     }
                     if (!bo19)
                     {
-                       // guildList.Add(mIPlayerActor.MyGuild);
+                        // guildList.Add(mIPlayerActor.MyGuild);
                     }
                 }
             }
             PlayerActor.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
             SystemShare.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, "- 行会战争已爆发。");
             var s20 = "";
-            GuildInfo guild;
             //for (var i = 0; i < guildList.Count; i++)
             //{
             //    guild = guildList[i];

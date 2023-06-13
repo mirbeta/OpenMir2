@@ -254,7 +254,7 @@ namespace GameSrv
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();
                 GameShare.DataServer.Start();
-               // GameShare.MarketService.Start();
+                // GameShare.MarketService.Start();
                 GameShare.SocketMgr.Start();
                 GameShare.StartReady = true;
                 M2Share.WorldEngine.Initialize();

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using BotSrv.Player;
+﻿using BotSrv.Player;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using NLog;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using SystemModule;
 
 namespace BotSrv

@@ -3,6 +3,7 @@ using LoginGate.Services;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
@@ -11,7 +12,6 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using NLog;
 using SystemModule.Hosts;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 

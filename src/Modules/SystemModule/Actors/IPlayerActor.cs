@@ -1121,7 +1121,7 @@ namespace SystemModule
         void ChangeItemByJob(ref ClientItem citem, int level);
 
         void NpcGotoLable(INormNpc actor, string sLable, bool boMaster);
-        
+
         void SendSocket(CommandMessage defMsg, string sMsg);
     }
 }

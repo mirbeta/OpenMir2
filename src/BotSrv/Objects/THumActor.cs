@@ -1,6 +1,6 @@
-﻿using System.Collections;
+﻿using BotSrv.Player;
+using System.Collections;
 using System.Collections.Generic;
-using BotSrv.Player;
 using SystemModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;

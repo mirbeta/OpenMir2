@@ -151,7 +151,7 @@ namespace MakePlayer.Scenes.Scene
             var msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(message));
         }
-        
+
         private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             ConnectionStatus = ConnectionStatus.Success;

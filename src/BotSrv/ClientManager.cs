@@ -1,11 +1,11 @@
-﻿using System;
+﻿using BotSrv.Player;
+using NLog;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using BotSrv.Player;
-using NLog;
 using SystemModule;
 
 namespace BotSrv
@@ -39,7 +39,7 @@ namespace BotSrv
 
         public void Stop(CancellationToken stoppingToken)
         {
-            
+
         }
 
         private async Task ProcessReviceMessage(CancellationToken stoppingToken)

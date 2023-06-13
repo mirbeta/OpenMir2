@@ -17,7 +17,7 @@ namespace GameGate
     internal class Program
     {
         private static Logger _logger;
-        private static PeriodicTimer _timer;
+        private static readonly PeriodicTimer _timer;
         private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
         private static async Task Main(string[] args)
@@ -31,7 +31,7 @@ namespace GameGate
             _logger = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
-            
+
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
             _logger.Info(new StringBuilder()
@@ -125,7 +125,7 @@ namespace GameGate
             LogManager.ReconfigExistingLoggers();
             LogManager.Configuration.Reload();
         }
-        
+
         private static Task ShowServerStatus()
         {
             return Task.CompletedTask;

@@ -208,7 +208,7 @@ namespace SystemModule
             }
             return string.Empty;
         }
-        
+
         public static string EncodePacket<T>(T packet) where T : struct
         {
             byte[] data = SerializerUtil.Serialize(packet);

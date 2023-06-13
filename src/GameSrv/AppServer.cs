@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using Spectre.Console;
-using System.Reflection;
 using SystemModule.Hosts;
 
 namespace GameSrv

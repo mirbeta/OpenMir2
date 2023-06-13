@@ -1,5 +1,4 @@
 using System.IO;
-using System.Net.Security;
 using System.Net.Sockets;
 using SystemModule.Core.Config;
 using SystemModule.Sockets.Components.TCP;
@@ -50,7 +49,7 @@ namespace SystemModule.Sockets.Interface
         /// </para>
         /// </summary>
         DisconnectEventHandler<ITcpClientBase> Disconnecting { get; set; }
-        
+
         /// <summary>
         /// IP地址
         /// </summary>
@@ -60,7 +59,7 @@ namespace SystemModule.Sockets.Interface
         /// 表示是否为客户端。
         /// </summary>
         bool IsClient { get; }
-        
+
         /// <summary>
         /// 主通信器
         /// </summary>

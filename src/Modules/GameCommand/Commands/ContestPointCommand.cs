@@ -26,7 +26,7 @@ namespace CommandSystem.Commands
             var guild = SystemShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
-               // PlayerActor.SysMsg($"{sGuildName} 的得分为: {guild.ContestPoint}", MsgColor.Green, MsgType.Hint);
+                // PlayerActor.SysMsg($"{sGuildName} 的得分为: {guild.ContestPoint}", MsgColor.Green, MsgType.Hint);
             }
             else
             {

@@ -9,9 +9,9 @@ namespace DBSrv.Storage.MySQL.EqualityComparer
         {
             if (ReferenceEquals(x, y))
                 return true;
-            if (ReferenceEquals(x, null))
+            if (x is null)
                 return false;
-            if (ReferenceEquals(y, null))
+            if (y is null)
                 return false;
             if (x.GetType() != y.GetType())
                 return false;

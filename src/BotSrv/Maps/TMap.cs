@@ -1,6 +1,6 @@
-﻿using System.Drawing;
+﻿using BotSrv.Player;
+using System.Drawing;
 using System.IO;
-using BotSrv.Player;
 using SystemModule;
 
 namespace BotSrv.Maps

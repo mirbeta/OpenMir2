@@ -40,7 +40,7 @@ namespace WebApi.Controller
         {
             return Ok();
         }
-        
+
         /// <summary>
         /// 获取道士名人榜
         /// </summary>

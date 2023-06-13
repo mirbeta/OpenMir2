@@ -59,7 +59,7 @@ namespace LoginSrv.Services
             _serverSocket.Start();
             _logger.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
-        
+
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
             if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
@@ -98,8 +98,8 @@ namespace LoginSrv.Services
             _clientManager.Delete(clientId);
             _logger.Warn($"登录网关[{client.MainSocket.RemoteEndPoint}]断开链接.");
         }
-        
-        private void ProcessGateData(ServerDataPacket packetHead,byte[] data, int socketId)
+
+        private void ProcessGateData(ServerDataPacket packetHead, byte[] data, int socketId)
         {
             if (packetHead.PacketCode != Grobal2.PacketCode)
             {
@@ -179,7 +179,7 @@ namespace LoginSrv.Services
             messagePacket.Type = ServerDataType.KeepAlive;
             SendMessage(connectionId, SerializerUtil.Serialize(messagePacket));
         }
-        
+
         private void ReceiveCloseUser(int sSockIndex, LoginGateInfo gateInfo)
         {
             const string sCloseMsg = "Close: {0}";
@@ -261,7 +261,7 @@ namespace LoginSrv.Services
         {
             _sessionManager.Delete(account, nSessionId);
         }
-        
+
         private void SendMessage(string connectionId, byte[] sendBuffer)
         {
             var serverMessage = new ServerDataPacket

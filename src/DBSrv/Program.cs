@@ -14,7 +14,7 @@ namespace DBSrv
             var serviceRunner = new AppServer();
             await serviceRunner.RunAsync();
         }
-        
+
         private static void PrintUsage()
         {
             var table = new Table()

@@ -28,7 +28,7 @@ namespace DBSrv.Services.Impl
     /// 角色数据服务
     /// DBSrv-SelGate-Client
     /// </summary>
-    public class UserService: IService
+    public class UserService : IService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SettingConf _setting;
@@ -155,7 +155,7 @@ namespace DBSrv.Services.Impl
                 }
             }
         }
-        
+
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
             if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
@@ -208,10 +208,10 @@ namespace DBSrv.Services.Impl
             _logger.Info(string.Format(sGateClose, clientId, client.MainSocket.RemoteEndPoint));
             _gateClients[int.Parse(client.ID) - 1] = null;
         }
-        
+
         private const string sGateOpen = "角色网关[{0}]({1})已打开...";
         private const string sGateClose = "角色网关[{0}]({1})已关闭...";
-        
+
         private void ProcessGateData(ServerDataPacket packetHead, byte[] data, int connectionId, ref SelGateInfo gateInfo)
         {
             try
@@ -251,7 +251,7 @@ namespace DBSrv.Services.Impl
                 _logger.Error(ex);
             }
         }
-        
+
         public int GetUserCount()
         {
             var nUserCount = 0;
@@ -791,7 +791,7 @@ namespace DBSrv.Services.Impl
                 return;
             SendMessage(connectionId, SerializerUtil.Serialize(packet));
         }
-        
+
         private void SendMessage(string connectionId, byte[] sendBuffer)
         {
             var serverMessage = new ServerDataPacket

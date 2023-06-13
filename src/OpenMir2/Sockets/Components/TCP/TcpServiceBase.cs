@@ -38,7 +38,7 @@ namespace SystemModule.Sockets.Components.TCP
         /// <inheritdoc/>
         /// </summary>
         public abstract Common.NetworkMonitor[] Monitors { get; }
-        
+
         /// <summary>
         /// <inheritdoc/>
         /// </summary>

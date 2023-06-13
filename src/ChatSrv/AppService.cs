@@ -1,10 +1,10 @@
 using Microsoft.Extensions.Hosting;
 using MQTTnet;
+using MQTTnet.Server;
+using NLog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MQTTnet.Server;
-using NLog;
 
 namespace GameGate
 {
@@ -12,7 +12,7 @@ namespace GameGate
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly MqttServer _mqttServer;
-        
+
         public AppService()
         {
             var mqttFactory = new MqttFactory(new QueueConsoleLogger());

@@ -1,6 +1,5 @@
 using NLog;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text;
 using SystemModule.Data;
@@ -115,13 +114,11 @@ namespace DBSrv.Storage.MySQL
 
         private IEnumerable<MarketItem> SearchMarketItemNameItems(byte groupId, string marketName, string sellWho)
         {
-            const string sSql = "select * from marketItems where SellState!=20 and SellWho = @SellWho and MarketName = @MarketName";
             return new List<MarketItem>();
         }
 
         private IEnumerable<MarketItem> SearchMarketItemSetItems(byte groupId, string marketName, byte itemSet)
         {
-            const string sSql = "select * from marketItems where SellState=1 and ItemSet = @ItemSet and MarketName = @MarketName";
             return new List<MarketItem>();
         }
 
@@ -141,7 +138,6 @@ namespace DBSrv.Storage.MySQL
 
         private IEnumerable<MarketItem> SearchMarketNameItems(byte groupId, string marketName, string itemName)
         {
-            const string sSql = "select * from marketItems where MarketName = @MarketName and ItemName = @ItemName";
             return new List<MarketItem>();
         }
     }

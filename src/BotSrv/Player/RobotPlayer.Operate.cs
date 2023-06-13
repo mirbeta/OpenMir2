@@ -1,10 +1,9 @@
-using System;
-using System.Drawing;
 using BotSrv.Objects;
 using BotSrv.Scenes;
+using System;
+using System.Drawing;
 using SystemModule;
 using SystemModule.Enums;
-using SystemModule.Packets;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
@@ -39,7 +38,7 @@ namespace BotSrv.Player
                 }
             }
         }
-        
+
         private void DecodeMessagePacket(string datablock)
         {
             var body = string.Empty;
@@ -591,7 +590,7 @@ namespace BotSrv.Player
                     MShare.g_nMyDecDamage = HUtil32.HiByte(HUtil32.HiWord(msg.Recog));
                     break;
                 case Messages.SM_DAYCHANGING:
-                    
+
                     break;
                 case Messages.SM_WINEXP:
                     MShare.MySelf.Abil.Exp = msg.Recog;

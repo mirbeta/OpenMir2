@@ -17,7 +17,7 @@ namespace GameGate.Filters
 
         public ChatCommandFilter()
         {
-           
+
         }
 
         public void LoadChatCommandFilterList()

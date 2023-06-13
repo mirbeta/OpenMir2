@@ -58,7 +58,7 @@ namespace LoginSrv.Services
             _serverSocket.Start();
             _logger.Info($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
-        
+
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
             var client = (SocketClient)sender;
@@ -118,8 +118,8 @@ namespace LoginSrv.Services
                 }
             }
         }
-        
-        private void SocketClientRead(string socketId, byte[] data,int dataLen)
+
+        private void SocketClientRead(string socketId, byte[] data, int dataLen)
         {
             var sReviceMsg = string.Empty;
             var sMsg = string.Empty;

@@ -34,7 +34,7 @@ namespace CommandSystem.Commands
                     {
                         for (var i = 0; i < PlayerActor.GroupMembers.Count; i++)
                         {
-                            var mIPlayerActor = (IPlayerActor)PlayerActor.GroupMembers[i];
+                            var mIPlayerActor = PlayerActor.GroupMembers[i];
                             if (mIPlayerActor.AllowGroupReCall)
                             {
                                 if (mIPlayerActor.Envir.Flag.NoReCall)

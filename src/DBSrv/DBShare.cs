@@ -22,7 +22,7 @@ namespace DBSrv
         private static readonly string GateIdConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SelectID.txt");
 
         public static int ServerIpCount => ServerIpList.Count;
-        
+
         public static int GetMapIndex(string sMap)
         {
             if (string.IsNullOrEmpty(sMap))
@@ -260,7 +260,7 @@ namespace DBSrv
 
         public SelGateInfo()
         {
-  
+
         }
 
         public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string queueCount) GetStatus()

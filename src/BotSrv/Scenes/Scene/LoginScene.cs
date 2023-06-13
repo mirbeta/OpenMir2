@@ -1,7 +1,6 @@
-﻿using System;
-using System.Net;
-using BotSrv.Player;
+﻿using BotSrv.Player;
 using NLog;
+using System.Net;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.SocketComponents.AsyncSocketClient;

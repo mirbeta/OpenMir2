@@ -98,7 +98,7 @@ namespace PlanesSystem
                 }
                 ps.SocData = BufStr + ps.SocData;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 //M2Share.Logger.Error(ex.StackTrace);
             }
@@ -190,7 +190,6 @@ namespace PlanesSystem
 
         public void Run()
         {
-            const string sExceptionMsg = "[Exception] TFrmSrvMsg::Run";
             try
             {
                 for (int i = 0; i < srvArray.Length; i++)

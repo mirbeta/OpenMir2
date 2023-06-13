@@ -57,7 +57,6 @@ namespace LoginGate.Services
                     //return;
                 }
             }
-            bool success = false;
             byte[] tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
             int nDeCodeLen = 0;
             var packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);

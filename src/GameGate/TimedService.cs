@@ -65,7 +65,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                   _logger.Debug( $"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(500)}");
+                    _logger.Debug($"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(500)}");
                 }
             }
         }

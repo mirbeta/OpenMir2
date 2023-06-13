@@ -275,7 +275,7 @@ namespace SystemModule.Sockets.Components.UDP
                 m_serverState = ServerState.Running;
                 return this;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 m_serverState = ServerState.Exception;
                 throw;

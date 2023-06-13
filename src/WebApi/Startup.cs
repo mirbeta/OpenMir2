@@ -10,7 +10,7 @@ namespace WebApi
         }
 
         public IConfiguration Configuration { get; }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSwaggerGen(options =>
@@ -28,7 +28,7 @@ namespace WebApi
                     }
                 });
                 options.IncludeXmlComments("WebApi.xml", true);
-                
+
                 //定义JwtBearer认证方式一
                 options.AddSecurityDefinition("JwtBearer", new OpenApiSecurityScheme()
                 {
@@ -57,7 +57,7 @@ namespace WebApi
                     [scheme] = new string[0]
                 });
             });
-            
+
             services.AddControllers();
         }
 

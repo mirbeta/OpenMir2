@@ -22,7 +22,7 @@ namespace DBSrv.Services.Impl
     /// 玩家数据服务
     /// DBSrv->GameSvr
     /// </summary>
-    public class DataService: IService
+    public class DataService : IService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IPlayDataStorage _playDataStorage;
@@ -98,7 +98,7 @@ namespace DBSrv.Services.Impl
             var client = (SocketClient)sender;
             ClearSocket(client.ID);
         }
-        
+
         private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)
         {
             var nQueryId = requestData.QueryId;
@@ -139,7 +139,7 @@ namespace DBSrv.Services.Impl
             responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
             SendRequest(connectionId, nQueryId, responsePack);
         }
-        
+
         /// <summary>
         /// 清理超时会话
         /// </summary>
@@ -366,7 +366,7 @@ namespace DBSrv.Services.Impl
                 nIndex++;
             }
         }
-           
+
         private void SendRequest(string connectionId, int queryId, ServerRequestData requestPacket)
         {
             requestPacket.QueryId = queryId;

@@ -1800,7 +1800,7 @@ namespace M2Server.Player
                     {
                         if (ExpHitter.Race == ActorRace.Play)
                         {
-                             SystemShare.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            SystemShare.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                         if (ExpHitter.Master != null)
                         {

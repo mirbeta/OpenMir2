@@ -40,7 +40,7 @@ namespace LoginSrv
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
         }
-        
+
         public override void Initialize()
         {
 

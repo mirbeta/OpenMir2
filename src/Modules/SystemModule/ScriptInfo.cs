@@ -7,14 +7,14 @@
         public Dictionary<string, SayingRecord> RecordList;
         public int QuestCount;
     }
-    
+
     public struct ScriptQuestInfo
     {
         public short wFlag;
         public byte btValue;
         public int nRandRage;
     }
-    
+
     public class SayingProcedure
     {
         public IList<QuestConditionInfo> ConditionList;
@@ -42,7 +42,7 @@
             ProcedureList = new List<SayingProcedure>();
         }
     }
-    
+
     public struct QuestActionInfo
     {
         public int nCmdCode;

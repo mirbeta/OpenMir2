@@ -11,7 +11,7 @@ namespace CommandSystem
         private readonly GameCmdConf CommandConf;
         private readonly GameCommands GameCommands = new GameCommands();
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
-        private char[] CommandSplitLine = new[] { ' ', ':', ',', '\t' };
+        private readonly char[] CommandSplitLine = new[] { ' ', ':', ',', '\t' };
 
         public GameCommandSystem()
         {

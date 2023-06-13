@@ -33,7 +33,7 @@ namespace GameGate.Conf
         public void LoadConfig()
         {
             Load();
-            
+
             GateConfig.ServerWorkThread = ReadWriteByte("GameGate", "ServerWorkThread", 1);
             if (GateConfig.ServerWorkThread <= 0)
             {
@@ -51,12 +51,12 @@ namespace GameGate.Conf
                 GateList[i].GatePort = ReadWriteInteger("GameGate", "GatePort" + (i + 1), GateList[i].GatePort);
                 if (string.IsNullOrEmpty(GateList[i].ServerAdress) || GateList[i].ServerPort <= 0)
                 {
-                    logger.Info("配置文件节点[ServerAddr{I}]配置错误或端口错误.",  i);
+                    logger.Info("配置文件节点[ServerAddr{I}]配置错误或端口错误.", i);
                     continue;
                 }
                 if (string.IsNullOrEmpty(GateList[i].GateAddress) || GateList[i].GatePort <= 0)
                 {
-                    logger.Info("配置文件节点[GateAddress{I}]配置错误或端口错误.",  i);
+                    logger.Info("配置文件节点[GateAddress{I}]配置错误或端口错误.", i);
                     continue;
                 }
             }
@@ -71,7 +71,7 @@ namespace GameGate.Conf
             }
             GateConfig.LogLevel = ReadWriteByte("GameGate", "LogLevel", GateConfig.LogLevel);
             GateConfig.Debug = ReadWriteBool("GameGate", "Debug", GateConfig.Debug);
-            
+
             GateConfig.UseCloudGate = ReadWriteBool("Cloud", "UseCloudGate", GateConfig.UseCloudGate);
             if (GateConfig.UseCloudGate)
             {
@@ -79,7 +79,7 @@ namespace GameGate.Conf
                 GateConfig.CloudPort = ReadWriteInteger("Cloud", "CloudPort", GateConfig.CloudPort);
                 GateConfig.LicenseCode = ReadWriteString("Cloud", "LicenseCode", GateConfig.LicenseCode);
             }
-            
+
             GateConfig.SpaceMoveCommand = ReadWriteString("Strings", "CMDSpaceMove", GateConfig.SpaceMoveCommand);
             GateConfig.ClientOverCntMsg = ReadWriteString("Strings", "OverClientCntMsg", GateConfig.ClientOverCntMsg);
             GateConfig.HWIDBlockedMsg = ReadWriteString("Strings", "HWIDBlockedMsg", GateConfig.HWIDBlockedMsg);
@@ -157,7 +157,7 @@ namespace GameGate.Conf
             GateConfig.OpenClientSpeedRate = ReadWriteBool("Switch", "OpenClientSpeedRate", GateConfig.OpenClientSpeedRate);
             GateConfig.SyncClientSpeed = ReadWriteBool("Switch", "SyncClientSpeed", GateConfig.SyncClientSpeed);
             GateConfig.PunishIntervalRate = ReadWriteFloat("Float", "PunishIntervalRate", GateConfig.PunishIntervalRate);
-      
+
             //魔法间隔控制
             for (var i = 0; i < TableDef.MaigicDelayTimeList.Length; i++)
             {
@@ -167,7 +167,7 @@ namespace GameGate.Conf
                 }
             }
         }
-        
+
         public void ReLoadConfig()
         {
             Clear();

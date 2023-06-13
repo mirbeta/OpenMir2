@@ -3,8 +3,6 @@ using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
 using M2Server.Player;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
 using ScriptSystem;
 using SystemModule.Data;
 using SystemModule.Enums;

@@ -1,6 +1,7 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace ScriptSystem{
+namespace ScriptSystem
+{
     public partial class ScriptHelper
     {
         [GeneratedRegex("#CALL", RegexOptions.IgnoreCase | RegexOptions.ExplicitCapture | RegexOptions.RightToLeft, "zh-CN")]

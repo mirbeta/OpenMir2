@@ -1,10 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using GameGate.Conf;
+﻿using GameGate.Conf;
 using GameGate.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +7,12 @@ using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Extensions.Logging;
 using Spectre.Console;
+using System;
+using System.Linq;
+using System.Runtime;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 using LogLevel = NLog.LogLevel;
 
 namespace GameGate
@@ -141,12 +141,12 @@ namespace GameGate
             LogManager.ReconfigExistingLoggers();
             LogManager.Configuration.Reload();
         }
-        
+
         private static async Task ShowServerStatus()
         {
             //GateShare.ShowLog = false;
             ChanggeLogLevel(LogLevel.Off);
-            
+
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);

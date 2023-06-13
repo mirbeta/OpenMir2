@@ -11,8 +11,8 @@ namespace ScriptSystem
     /// </summary>
     public class ScriptEngine
     {
-        private ConditionProcessingSys ConditionScript;
-        private ExecutionProcessingSys ExecutionProcessing;
+        private readonly ConditionProcessingSys ConditionScript;
+        private readonly ExecutionProcessingSys ExecutionProcessing;
 
         public ScriptEngine()
         {
@@ -975,21 +975,18 @@ namespace ScriptSystem
 
         private void ScriptActionError(IPlayerActor playerActor, string sErrMsg, QuestActionInfo QuestActionInfo, ExecutionCode sCmd)
         {
-            const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             //string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             //M2Share.MainOutMessage(sMsg);
         }
 
         private void ScriptActionError(IPlayerActor playerActor, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd)
         {
-            const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             //string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             //M2Share.MainOutMessage(sMsg);
         }
 
         private void ScriptConditionError(IPlayerActor playerActor, QuestConditionInfo QuestConditionInfo, ConditionCode sCmd)
         {
-            const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             //string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
             //M2Share.MainOutMessage(sMsg);
         }

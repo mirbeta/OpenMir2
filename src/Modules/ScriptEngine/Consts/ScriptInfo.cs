@@ -12,7 +12,7 @@ namespace ScriptSystem
             CommandName = codeName;
         }
     }
-    
+
     public class DefineInfo
     {
         public string Name;

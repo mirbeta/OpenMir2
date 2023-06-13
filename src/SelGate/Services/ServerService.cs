@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.SocketComponents;
 using SystemModule.SocketComponents.AsyncSocketServer;
-using SystemModule.Sockets;
 
 namespace SelGate.Services
 {

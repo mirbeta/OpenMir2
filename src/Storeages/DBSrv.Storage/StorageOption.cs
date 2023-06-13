@@ -6,7 +6,7 @@
         {
             ConnectionString = connectionString;
         }
-        
+
         public string ConnectionString { get; set; }
     }
 }

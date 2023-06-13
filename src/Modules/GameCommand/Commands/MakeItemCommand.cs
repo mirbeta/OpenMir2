@@ -57,7 +57,7 @@ namespace CommandSystem.Commands
                     }
                     if (SystemShare.RandomNumber.Random(SystemShare.Config.MakeRandomAddValue) == 0)
                     {
-                       // ModuleShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
+                        // ModuleShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
                     }
                     if (PlayerActor.Permission >= Command.PermissionMax)
                     {

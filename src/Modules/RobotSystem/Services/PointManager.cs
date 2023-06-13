@@ -128,9 +128,9 @@ namespace RobotSystem
             {
                 nMX = 0;
                 nMY = 0;
-                if (((IPlayerActor)FBaseObject).Envir != m_PEnvir)
+                if (FBaseObject.Envir != m_PEnvir)
                 {
-                    m_PEnvir = ((IPlayerActor)FBaseObject).Envir;
+                    m_PEnvir = FBaseObject.Envir;
                     m_nPostion = 0;
                     CurrX = nX;
                     CurrY = nY;
@@ -390,15 +390,15 @@ namespace RobotSystem
                 CurrX = nX;
                 CurrY = nY;
                 nC = 0;
-                btDir = ((IPlayerActor)FBaseObject).Dir;
+                btDir = FBaseObject.Dir;
                 while (true)
                 {
                     btDir = GetPoint1_GetNextDir(btDir);
                     for (int i = 2; i >= 1; i--)
                     {
-                        if (((IPlayerActor)FBaseObject).Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY))
+                        if (FBaseObject.Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nMX, ref nMY))
                         {
-                            if (((IPlayerActor)FBaseObject).CanMove(nMX, nMY, false))
+                            if (FBaseObject.CanMove(nMX, nMY, false))
                             {
                                 nX = nMX;
                                 nY = nMY;
@@ -418,9 +418,9 @@ namespace RobotSystem
             {
                 nMX = 0;
                 nMY = 0;
-                if (((IPlayerActor)FBaseObject).Envir != m_PEnvir)
+                if (FBaseObject.Envir != m_PEnvir)
                 {
-                    m_PEnvir = ((IPlayerActor)FBaseObject).Envir;
+                    m_PEnvir = FBaseObject.Envir;
                     m_nPostion = 0;
                     CurrX = nX;
                     CurrY = nY;
@@ -493,7 +493,7 @@ namespace RobotSystem
                             }
                         }
                     }
-                    if (!((IPlayerActor)FBaseObject).CanRun(nX, nY, nMX, nMY, false))
+                    if (!FBaseObject.CanRun(nX, nY, nMX, nMY, false))
                     {
                         for (int i = m_nPostion + 1; i < m_PEnvir.PointList.Count; i++)
                         {

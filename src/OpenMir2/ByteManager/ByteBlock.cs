@@ -1215,7 +1215,7 @@ namespace SystemModule.ByteManager
         }
 
         #endregion Null
-      
+
         #region DateTime
 
         /// <summary>

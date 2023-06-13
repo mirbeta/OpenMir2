@@ -41,7 +41,7 @@ namespace SelGate
         {
 
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));

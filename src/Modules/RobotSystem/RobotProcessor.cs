@@ -143,8 +143,8 @@ namespace RobotSystem
                             //AddToHumanFreeList(robotPlayer);
                             //robotPlayer.DealCancelA();
                             //SaveHumanRcd(robotPlayer);
-                           // GameShare.SocketMgr.CloseUser(robotPlayer.GateIdx, robotPlayer.SocketId);
-                           // SendServerGroupMsg(Messages.SS_202, M2Share.ServerIndex, robotPlayer.ChrName);
+                            // GameShare.SocketMgr.CloseUser(robotPlayer.GateIdx, robotPlayer.SocketId);
+                            // SendServerGroupMsg(Messages.SS_202, M2Share.ServerIndex, robotPlayer.ChrName);
                             continue;
                         }
                     }
