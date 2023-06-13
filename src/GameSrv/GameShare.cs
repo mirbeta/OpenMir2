@@ -1,5 +1,3 @@
-using ChatSystem;
-using EventLogSystem.Services;
 using GameSrv.DataSource;
 using GameSrv.Maps;
 using GameSrv.Network;
@@ -32,10 +30,8 @@ namespace GameSrv
         public static readonly EventProcessor EventProcessor;
         public static readonly StorageProcessor StorageProcessor;
         public static readonly TimedRobotProcessor TimedRobotProcessor;
-        public static readonly IGameEventSource EventSource;
         public static readonly MapQuestManager QuestManager;
         public static readonly DBService DataServer;
-        public static readonly IChatService ChatService;
         public static readonly ThreadSocketMgr SocketMgr;
         public static readonly RobotManage RobotMgr;
         public static bool StartReady = false;
@@ -57,9 +53,7 @@ namespace GameSrv
             StorageProcessor = new StorageProcessor();
             TimedRobotProcessor = new TimedRobotProcessor();
             PlanesService = new PlanesService();
-            EventSource = new GameEventSource();
             DataServer = new DBService();
-            ChatService = new ChatService();
             SocketMgr = new ThreadSocketMgr();
             RobotMgr = new RobotManage();
             QuestManager = new MapQuestManager();

@@ -69,7 +69,7 @@ namespace GameSrv
                 GameShare.DataServer.CheckConnected();
                 IdSrvClient.Instance.CheckConnected();
                 PlanesClient.Instance.CheckConnected();
-                await GameShare.ChatService.Ping();
+                //await GameShare.ChatService.Ping();
             }
             if ((currentTick - _saveIntervalTime) > 60 * 1000) //保存游戏变量等
             {
