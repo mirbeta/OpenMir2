@@ -1122,6 +1122,10 @@ namespace SystemModule
 
         void NpcGotoLable(INormNpc actor, string sLable, bool boMaster);
 
+        void GetScriptLabel(string sMsg);
+
+        void SendPriorityMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "", MessagePriority Priority = MessagePriority.Normal);
+
         void SendSocket(CommandMessage defMsg, string sMsg);
     }
 }

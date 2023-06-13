@@ -16,7 +16,7 @@ namespace ScriptSystem
 
         public ScriptEngine()
         {
-            ConditionScript = new ConditionProcessingSys("", "", "", 0, 0);
+            ConditionScript = new ConditionProcessingSys();
             ConditionScript.Initialize();
             ExecutionProcessing = new ExecutionProcessingSys();
             ExecutionProcessing.Initialize();
@@ -24,8 +24,8 @@ namespace ScriptSystem
 
         private void GotoLable(IPlayerActor playerActor, int npcId, string sLabel, bool boExtJmp, string sMsg)
         {
-            var currentNpc = SystemShare.ActorMgr.Get<INormNpc>(npcId);
-            if (currentNpc == null)
+            var normNpc = SystemShare.ActorMgr.Get<INormNpc>(npcId);
+            if (normNpc == null)
             {
                 return;
             }
@@ -37,7 +37,7 @@ namespace ScriptSystem
             SayingRecord sayingRecord;
             UserItem userItem = null;
             string sC = string.Empty;
-            var scriptList = currentNpc.ScriptList;
+            var scriptList = normNpc.ScriptList;
             if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 for (int i = 0; i < scriptList.Count; i++)
@@ -90,34 +90,34 @@ namespace ScriptSystem
                     {
                         SayingProcedure sayingProcedure = sayingRecord.ProcedureList[i];
                         bool bo11 = false;
-                        if (GotoLableQuestCheckCondition(playerActor, sayingProcedure.ConditionList, ref sC, ref userItem))
+                        if (GotoLableQuestCheckCondition(normNpc, playerActor, sayingProcedure.ConditionList, ref sC, ref userItem))
                         {
                             sSendMsg = sSendMsg + sayingProcedure.sSayMsg;
-                            if (!GotoLableQuestActionProcess(playerActor, npcId, sayingProcedure.ActionList, ref sC, ref userItem, ref bo11))
+                            if (!GotoLableQuestActionProcess(normNpc, playerActor, sayingProcedure.ActionList, ref sC, ref userItem, ref bo11))
                             {
                                 break;
                             }
                             if (bo11)
                             {
-                                GotoLableSendMerChantSayMsg(playerActor, sSendMsg, true);
+                                GotoLableSendMerChantSayMsg(normNpc, playerActor, sSendMsg, true);
                             }
                         }
                         else
                         {
                             sSendMsg = sSendMsg + sayingProcedure.sElseSayMsg;
-                            if (!GotoLableQuestActionProcess(playerActor, npcId, sayingProcedure.ElseActionList, ref sC, ref userItem, ref bo11))
+                            if (!GotoLableQuestActionProcess(normNpc, playerActor, sayingProcedure.ElseActionList, ref sC, ref userItem, ref bo11))
                             {
                                 break;
                             }
                             if (bo11)
                             {
-                                GotoLableSendMerChantSayMsg(playerActor, sSendMsg, true);
+                                GotoLableSendMerChantSayMsg(normNpc, playerActor, sSendMsg, true);
                             }
                         }
                     }
                     if (!string.IsNullOrEmpty(sSendMsg))
                     {
-                        GotoLableSendMerChantSayMsg(playerActor, sSendMsg, false);
+                        GotoLableSendMerChantSayMsg(normNpc, playerActor, sSendMsg, false);
                     }
                 }
             }
@@ -379,7 +379,7 @@ namespace ScriptSystem
             return false;
         }
 
-        private bool GotoLableQuestCheckCondition(IPlayerActor playerActor, IList<QuestConditionInfo> conditionList, ref string sC, ref UserItem userItem)
+        private bool GotoLableQuestCheckCondition(INormNpc normNpc, IPlayerActor playerActor, IList<QuestConditionInfo> conditionList, ref string sC, ref UserItem userItem)
         {
             bool result = true;
             int n1C = 0;
@@ -390,7 +390,7 @@ namespace ScriptSystem
                 var questConditionInfo = conditionList[i];
                 if (ConditionScript.IsRegister(questConditionInfo.CmdCode))
                 {
-                    ConditionScript.Execute(playerActor, questConditionInfo, ref result);
+                    ConditionScript.Execute(normNpc, playerActor, questConditionInfo, ref result);
                     return result;
                 }
                 if (!string.IsNullOrEmpty(questConditionInfo.sParam1))
@@ -591,29 +591,28 @@ namespace ScriptSystem
             return true;
         }
 
-        private bool JmpToLable(IPlayerActor playerActor, int npcId, string sLabel)
+        private bool JmpToLable(IPlayerActor playerActor, INormNpc npc, string sLabel)
         {
             playerActor.ScriptGotoCount++;
             if (playerActor.ScriptGotoCount > SystemShare.Config.ScriptGotoCountLimit)
             {
                 return false;
             }
-            GotoLable(playerActor, npcId, sLabel, false);
+            GotoLable(playerActor, npc.ActorId, sLabel, false);
             return true;
         }
 
-        private void GoToQuest(IPlayerActor playerActor, int npcId, int nQuest)
+        private void GoToQuest(IPlayerActor playerActor, INormNpc npc, int nQuest)
         {
-            var currentNpc = SystemShare.ActorMgr.Get<INormNpc>(npcId);
-            var ScriptList = currentNpc.ScriptList;
+            var ScriptList = npc.ScriptList;
             for (int i = 0; i < ScriptList.Count; i++)
             {
                 ScriptInfo script = ScriptList[i];
                 if (script.QuestCount == nQuest)
                 {
                     playerActor.Script = script;
-                    playerActor.LastNpc = npcId;
-                    GotoLable(playerActor, npcId, ScriptFlagCode.sMAIN, false);
+                    playerActor.LastNpc = npc.ActorId;
+                    GotoLable(playerActor, npc.ActorId, ScriptFlagCode.sMAIN, false);
                     break;
                 }
             }
@@ -850,21 +849,15 @@ namespace ScriptSystem
             }
         }
 
-        private bool GotoLableQuestActionProcess(IPlayerActor playerActor, int npcId, IList<QuestActionInfo> actionList, ref string sC, ref UserItem userItem, ref bool bo11)
+        private bool GotoLableQuestActionProcess(INormNpc normNpc, IPlayerActor playerActor, IList<QuestActionInfo> actionList, ref string sC, ref UserItem userItem, ref bool bo11)
         {
             bool result = true;
-            string s44 = string.Empty;
-            int n18 = 0;
-            int n34 = 0;
-            int n38 = 0;
-            int n3C = 0;
-            int n40 = 0;
             for (int i = 0; i < actionList.Count; i++)
             {
                 QuestActionInfo questActionInfo = actionList[i];
                 if (ExecutionProcessing.IsRegister(questActionInfo.nCmdCode))
                 {
-                    //  ExecutionProcessing.Execute(this, playerActor,questActionInfo, ref result);
+                    ExecutionProcessing.Execute(normNpc, playerActor, questActionInfo, ref result);
                     return result;
                 }
                 ExecutionCode executionCode = (ExecutionCode)questActionInfo.nCmdCode;
@@ -883,26 +876,26 @@ namespace ScriptSystem
                         }
                         else
                         {
-                            ScriptActionError(playerActor, "", questActionInfo, ExecutionCode.TakecheckItem);
+                            ScriptActionError(normNpc, playerActor, "", questActionInfo, ExecutionCode.TakecheckItem);
                         }
                         break;
                     case ExecutionCode.Break:
                         result = false;
                         break;
                     case ExecutionCode.Param1:
-                        n34 = questActionInfo.nParam1;
-                        s44 = questActionInfo.sParam1;
+                        int n34 = questActionInfo.nParam1;
+                        string s44 = questActionInfo.sParam1;
                         break;
                     case ExecutionCode.Param2:
-                        n38 = questActionInfo.nParam1;
+                        int n38 = questActionInfo.nParam1;
                         string s48 = questActionInfo.sParam1;
                         break;
                     case ExecutionCode.Param3:
-                        n3C = questActionInfo.nParam1;
+                        int n3C = questActionInfo.nParam1;
                         string s4C = questActionInfo.sParam1;
                         break;
                     case ExecutionCode.Param4:
-                        n40 = questActionInfo.nParam1;
+                        int n40 = questActionInfo.nParam1;
                         break;
                     case ExecutionCode.Map:
                     case ExecutionCode.MapMove:
@@ -920,7 +913,7 @@ namespace ScriptSystem
                         //});
                         break;
                     case ExecutionCode.BatchDelay:
-                        n18 = questActionInfo.nParam1 * 1000;
+                        int n18 = questActionInfo.nParam1 * 1000;
                         break;
                     case ExecutionCode.BatchMove:
                         //int n20 = 0;
@@ -935,15 +928,15 @@ namespace ScriptSystem
                         bo11 = true;
                         break;
                     case ExecutionCode.GoQuest:
-                        GoToQuest(playerActor, npcId, questActionInfo.nParam1);
+                        GoToQuest(playerActor, normNpc, questActionInfo.nParam1);
                         break;
                     case ExecutionCode.EndQuest:
                         playerActor.Script = null;
                         break;
                     case ExecutionCode.Goto:
-                        if (!JmpToLable(playerActor, npcId, questActionInfo.sParam1))
+                        if (!JmpToLable(playerActor, normNpc, questActionInfo.sParam1))
                         {
-                            //M2Share.MainOutMessage("[脚本死循环] NPC:" + this.m_sCharName + " 位置:" + this.m_sMapName + '(' + this.m_nCurrX + ':' + this.m_nCurrY + ')' + " 命令:" + M2Share.sGOTO + ' ' + QuestActionInfo.sParam1);
+                            SystemShare.Logger.Error("[脚本死循环] NPC:" + normNpc.ChrName + " 位置:" + normNpc.MapName + '(' + normNpc.CurrX + ':' + normNpc.CurrY + ')' + " 命令:" + ExecutionCode.Goto + ' ' + questActionInfo.sParam1);
                             result = false;
                             return result;
                         }
@@ -959,42 +952,45 @@ namespace ScriptSystem
             return result;
         }
 
-        private void GotoLableSendMerChantSayMsg(IPlayerActor playerActor, string sMsg, bool boFlag)
+        private void GotoLableSendMerChantSayMsg(INormNpc normNpc, IPlayerActor playerActor, string sMsg, bool boFlag)
         {
-            //sMsg = GetLineVariableText(playerActor,sMsg);
-            //playerActor.GetScriptLabel(sMsg);
-            //if (boFlag)
-            //{
-            //    playerActor.SendPriorityMsg(Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg, MessagePriority.High);
-            //}
-            //else
-            //{
-            //    playerActor.SendMsg(this, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, ChrName + '/' + sMsg);
-            //}
+            sMsg = ConditionScript.GetLineVariableText(playerActor, sMsg);
+            playerActor.GetScriptLabel(sMsg);
+            if (boFlag)
+            {
+                playerActor.SendPriorityMsg(Messages.RM_MERCHANTSAY, 0, 0, 0, 0, normNpc.ChrName + '/' + sMsg, MessagePriority.High);
+            }
+            else
+            {
+                playerActor.SendMsg(normNpc, Messages.RM_MERCHANTSAY, 0, 0, 0, 0, normNpc.ChrName + '/' + sMsg);
+            }
         }
 
-        private void ScriptActionError(IPlayerActor playerActor, string sErrMsg, QuestActionInfo QuestActionInfo, ExecutionCode sCmd)
+        private void ScriptActionError(INormNpc normNpc, IPlayerActor playerActor, string sErrMsg, QuestActionInfo QuestActionInfo, ExecutionCode sCmd)
         {
-            //string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
-            //M2Share.MainOutMessage(sMsg);
+            const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
+            string sMsg = string.Format(sOutMessage, sErrMsg, sCmd, normNpc.ChrName, normNpc.MapName, normNpc.CurrX, normNpc.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            SystemShare.Logger.Error(sMsg);
         }
 
-        private void ScriptActionError(IPlayerActor playerActor, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd)
+        private void ScriptActionError(INormNpc normNpc, IPlayerActor playerActor, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd)
         {
-            //string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
-            //M2Share.MainOutMessage(sMsg);
+            const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
+            string sMsg = string.Format(sOutMessage, sErrMsg, sCmd, normNpc.ChrName, normNpc.MapName, normNpc.CurrX, normNpc.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
+            SystemShare.Logger.Error(sMsg);
         }
 
-        private void ScriptConditionError(IPlayerActor playerActor, QuestConditionInfo QuestConditionInfo, ConditionCode sCmd)
+        private void ScriptConditionError(INormNpc normNpc, IPlayerActor playerActor, string sErrMsg, QuestConditionInfo QuestConditionInfo, ConditionCode sCmd)
         {
-            //string sMsg = format(sOutMessage, sErrMsg, sCmd, this.m_sCharName, this.m_sMapName, this.m_nCurrX, this.m_nCurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
-            //M2Share.MainOutMessage(sMsg);
+            const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
+            string sMsg = string.Format(sOutMessage, sErrMsg, sCmd, normNpc.ChrName, normNpc.MapName, normNpc.CurrX, normNpc.CurrY, QuestConditionInfo.sParam1, QuestConditionInfo.sParam2, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5, QuestConditionInfo.sParam6);
+            SystemShare.Logger.Error(sMsg);
         }
 
-        private void ScriptConditionError(IPlayerActor playerActor, QuestConditionInfo QuestConditionInfo, string sCmd)
+        private void ScriptConditionError(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo QuestConditionInfo, string sCmd)
         {
-            //string sMsg = "Cmd:" + sCmd + " NPC名称:" + this.m_sCharName + " 地图:" + this.m_sMapName + " 座标:" + this.m_nCurrX + ':' + this.m_nCurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
-            //M2Share.MainOutMessage("[脚本参数不正确] " + sMsg);
+            string sMsg = "Cmd:" + sCmd + " NPC名称:" + normNpc.ChrName + " 地图:" + normNpc.MapName + " 座标:" + normNpc.CurrX + ':' + normNpc.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
+            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
         }
 
         public void Dispose(object obj)
