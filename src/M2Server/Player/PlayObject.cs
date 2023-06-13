@@ -243,6 +243,7 @@ namespace M2Server.Player
         public short GuildRankNo { get; set; }
         public string GuildRankName { get; set; }
         public string ScriptLable { get; set; }
+        public ScriptInfo Script { get; set; }
         public int SayMsgCount { get; set; }
         public int SayMsgTick { get; set; }
         public bool DisableSayMsg { get; set; }
@@ -1421,7 +1422,7 @@ namespace M2Server.Player
                 }
                 if (SystemShare.ManageNPC != null)
                 {
-                    //ModuleShare.ManageNPC.GotoLable(this, "@Login", false);
+                    SystemShare.ManageNPC.GotoLable(this, "@Login", false);
                 }
                 FixedHideMode = false;
                 if (!string.IsNullOrEmpty(DearName))
@@ -1618,7 +1619,7 @@ namespace M2Server.Player
             }
             if (SystemShare.FunctionNPC != null)
             {
-                // ModuleShare.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
+                SystemShare.FunctionNPC.GotoLable(this, "@PlayKillMob", false);
             }
             int monsterExp = CalcGetExp(WAbil.Level, fightExp);
             if (!SystemShare.Config.VentureServer)
@@ -1799,11 +1800,11 @@ namespace M2Server.Player
                     {
                         if (ExpHitter.Race == ActorRace.Play)
                         {
-                            // ModuleShare.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                             SystemShare.FunctionNPC.GotoLable(ExpHitter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                         if (ExpHitter.Master != null)
                         {
-                            //ModuleShare.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                            SystemShare.FunctionNPC.GotoLable(ExpHitter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                         }
                     }
                     else
@@ -1812,11 +1813,11 @@ namespace M2Server.Player
                         {
                             if (LastHiter.Race == ActorRace.Play)
                             {
-                                //  ModuleShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                SystemShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                             if (LastHiter.Master != null)
                             {
-                                //  ModuleShare.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
+                                SystemShare.FunctionNPC.GotoLable(LastHiter.Master as PlayObject, "@KillPlayMon" + Envir.Flag.nKILLFUNCNO, false);
                             }
                         }
                     }
@@ -1825,7 +1826,7 @@ namespace M2Server.Player
                 {
                     if ((LastHiter != null) && (LastHiter.Race == ActorRace.Play))
                     {
-                        //  ModuleShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
+                        SystemShare.FunctionNPC.GotoLable(LastHiter as PlayObject, "@KillPlay" + Envir.Flag.nKILLFUNCNO, false);
                     }
                 }
             }
@@ -4864,6 +4865,15 @@ namespace M2Server.Player
                             break;
                     }
                 }
+            }
+        }
+
+        public void NpcGotoLable(INormNpc actor, string sLable, bool boMaster)
+        {
+            if (actor != null && !string.IsNullOrEmpty(sLable))
+            {
+                ScriptGotoCount = 0;
+                actor.GotoLable(this, sLable, false);
             }
         }
 

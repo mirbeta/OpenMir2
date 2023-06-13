@@ -1,4 +1,5 @@
-﻿namespace ScriptSystem{
+﻿namespace SystemModule
+{
     public static class ScriptFlagCode
     {
         public const string sMarket_Def = "Market_Def";

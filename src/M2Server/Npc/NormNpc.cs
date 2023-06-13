@@ -26,7 +26,7 @@ namespace M2Server.Npc
 
         public string m_sPath { get; set; }
         public int ProcessRefillIndex { get; set; }
-
+        public IList<ScriptInfo> ScriptList { get; private set; }
         /// <summary>
         /// NPC类型为地图任务型的，加载脚本时的脚本文件名为 角色名-地图号.txt
         /// </summary>
@@ -42,6 +42,7 @@ namespace M2Server.Npc
             FilePath = "";
             IsHide = false;
             IsQuest = true;
+            ScriptList = new List<ScriptInfo>();
             CellType = CellType.Merchant;
         }
 
@@ -52,7 +53,12 @@ namespace M2Server.Npc
 
         public virtual void ClearScript()
         {
-            //ScriptList.Clear();
+            ScriptList.Clear();
+        }
+
+        public void AddScript(ScriptInfo scriptInfo)
+        {
+            ScriptList.Add(scriptInfo);
         }
 
         public virtual void Click(IPlayerActor PlayObject)

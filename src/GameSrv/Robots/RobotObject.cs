@@ -99,7 +99,7 @@ namespace GameSrv.Robots
                     if (wMin == nMin)
                     {
                         if (autoRunInfo.boStatus) return;
-                        // GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                        GameShare.ScriptEngine.GotoLable(this, SystemShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         autoRunInfo.boStatus = true;
                     }
                     else
@@ -126,7 +126,7 @@ namespace GameSrv.Robots
                 if (wMin == nMin)
                 {
                     if (autoRunInfo.boStatus) return;
-                    //  GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                    GameShare.ScriptEngine.GotoLable(this, SystemShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                     autoRunInfo.boStatus = true;
                 }
                 else
@@ -162,7 +162,7 @@ namespace GameSrv.Robots
                     if (wMin == nMin)
                     {
                         if (autoRunInfo.boStatus) return;
-                        // GameShare.ScriptEngine.GotoLable(this, M2Share.RobotNPC.ActorId, autoRunInfo.sParam2, false);
+                        GameShare.ScriptEngine.GotoLable(this, SystemShare.RobotNPC.ActorId, autoRunInfo.sParam2, false);
                         autoRunInfo.boStatus = true;
                     }
                     else

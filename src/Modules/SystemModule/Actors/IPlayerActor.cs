@@ -245,6 +245,7 @@ namespace SystemModule
         short GuildRankNo { get; set; }
         string GuildRankName { get; set; }
         string ScriptLable { get; set; }
+        ScriptInfo Script { get; set; }
         int SayMsgCount { get; set; }
         int SayMsgTick { get; set; }
         bool DisableSayMsg { get; set; }
@@ -522,7 +523,6 @@ namespace SystemModule
         bool IsDelayCall { get; set; }
         int DelayCallNpc { get; set; }
         string DelayCallLabel { get; set; }
-        //ScriptInfo MScript { get; set; }
         int LastNpc { get; set; }
         /// <summary>
         /// 职业属性点
@@ -1120,6 +1120,8 @@ namespace SystemModule
 
         void ChangeItemByJob(ref ClientItem citem, int level);
 
+        void NpcGotoLable(INormNpc actor, string sLable, bool boMaster);
+        
         void SendSocket(CommandMessage defMsg, string sMsg);
     }
 }

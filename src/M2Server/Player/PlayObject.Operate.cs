@@ -544,7 +544,7 @@ namespace M2Server.Player
                                 FeatureChanged();
                                 if (SystemShare.FunctionNPC != null)
                                 {
-                                    //  ModuleShare.FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
+                                    SystemShare.FunctionNPC.GotoLable(this, "@TakeOff" + sItemName, false);
                                 }
                             }
                             else
@@ -799,7 +799,7 @@ namespace M2Server.Player
             }
             if (SystemShare.FunctionNPC != null)
             {
-                //ModuleShare.FunctionNPC.GotoLable(this, "@GroupClose", false);
+                SystemShare.FunctionNPC.GotoLable(this, "@GroupClose", false);
             }
         }
 
@@ -836,7 +836,7 @@ namespace M2Server.Player
             SendGroupMembers();
             if (SystemShare.FunctionNPC != null)
             {
-                // ModuleShare.FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
+                SystemShare.FunctionNPC.GotoLable(this, "@GroupCreate", false);// 创建小组时触发
             }
         }
 
@@ -874,7 +874,7 @@ namespace M2Server.Player
             SendGroupMembers();
             if (SystemShare.FunctionNPC != null)
             {
-                //ModuleShare.FunctionNPC.GotoLable(this, "@GroupAddMember", false);
+                SystemShare.FunctionNPC.GotoLable(this, "@GroupAddMember", false);
             }
         }
 
@@ -900,7 +900,7 @@ namespace M2Server.Player
             SendDefMessage(Messages.SM_GROUPDELMEM_OK, 0, 0, 0, 0, sHumName);
             if (SystemShare.FunctionNPC != null)
             {
-                //  ModuleShare.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
+                SystemShare.FunctionNPC.GotoLable(this, "@GroupDelMember", false);
             }
         }
 

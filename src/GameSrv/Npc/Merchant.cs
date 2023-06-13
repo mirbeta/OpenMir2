@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ScriptSystem;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.ModuleEvent;
 using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.NPC
@@ -580,11 +581,11 @@ namespace GameSrv.NPC
             }
             if (upgradeSuccess)
             {
-                //GameShare.ScriptEngine.GotoLable(user, ScriptFlagConst.sUPGRADEOK, false);
+                GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEOK, false);
             }
             else
             {
-                // GameShare.ScriptEngine.GotoLable(user, ScriptFlagConst.sUPGRADEFAIL, false);
+                GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEFAIL, false);
             }
         }
 
@@ -598,7 +599,7 @@ namespace GameSrv.NPC
             var nFlag = 0;
             if (!user.IsEnoughBag())
             {
-                // GameShare.ScriptEngine.GotoLable(user, ScriptFlagConst.sGETBACKUPGFULL, false);
+                GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGFULL, false);
                 return;
             }
             for (var i = 0; i < UpgradeWeaponList.Count; i++)

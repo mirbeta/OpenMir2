@@ -8,7 +8,9 @@
 
         int ProcessRefillIndex { get; set; }
 
-        //IList<ScriptInfo> GetScriptList();
+        void AddScript(ScriptInfo scriptInfo);
+
+        IList<ScriptInfo> ScriptList { get; }
 
         void SendSayMsg(string sText);
 

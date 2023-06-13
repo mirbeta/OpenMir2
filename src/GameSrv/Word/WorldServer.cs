@@ -1726,7 +1726,7 @@ namespace GameSrv.Word
                 IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
                 {
-                   // GameShare.ScriptEngine.GotoLable(playObject, sQuestName, false);
+                    playObject.NpcGotoLable(SystemShare.ManageNPC, sQuestName, false);
                 }
             }
         }

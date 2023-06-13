@@ -240,7 +240,7 @@ namespace ScriptSystem
                 IsQuest = false,
                 RecordList = new Dictionary<string, SayingRecord>(StringComparer.OrdinalIgnoreCase)
             };
-            //NPC.m_ScriptList.Add(scriptInfo);
+            NPC.AddScript(scriptInfo);
             return scriptInfo;
         }
 

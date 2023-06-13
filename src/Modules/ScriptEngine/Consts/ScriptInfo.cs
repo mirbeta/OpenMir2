@@ -1,6 +1,7 @@
 using System.Collections;
 
-namespace ScriptSystem{
+namespace ScriptSystem
+{
     [AttributeUsage(AttributeTargets.Field)]
     public class ScriptDefName : Attribute
     {
@@ -10,21 +11,6 @@ namespace ScriptSystem{
         {
             CommandName = codeName;
         }
-    }
-
-    public class ScriptInfo
-    {
-        public bool IsQuest;
-        public ScriptQuestInfo[] QuestInfo;
-        public Dictionary<string, SayingRecord> RecordList;
-        public int QuestCount;
-    }
-
-    public struct ScriptQuestInfo
-    {
-        public short wFlag;
-        public byte btValue;
-        public int nRandRage;
     }
     
     public class DefineInfo

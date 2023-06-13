@@ -1067,7 +1067,7 @@ namespace M2Server.Player
             bool result = false;
             if (SystemShare.FunctionNPC != null)
             {
-                //ModuleShare.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
+                SystemShare.FunctionNPC.GotoLable(this, "@StdModeFunc" + stdItem.AniCount, false);
                 result = true;
             }
             return result;
@@ -1245,8 +1245,8 @@ namespace M2Server.Player
                     }
                     if (SystemShare.FunctionNPC != null)
                     {
-                        //ModuleShare.FunctionNPC.GotoLable(playObject, "@OnMurder", false);
-                        //ModuleShare.FunctionNPC.GotoLable(this, "@Murdered", false);
+                        SystemShare.FunctionNPC.GotoLable(playObject, "@OnMurder", false);
+                        SystemShare.FunctionNPC.GotoLable(this, "@Murdered", false);
                     }
                 }
                 else
@@ -3432,20 +3432,20 @@ namespace M2Server.Player
                     {
                         if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
                         {
-                            //normNpc.GotoLable(this, GotoNpcLabel, false);
+                            normNpc.GotoLable(this, GotoNpcLabel, false);
                         }
                     }
                     break;
                 case 1:
                     if (SystemShare.FunctionNPC != null)
                     {
-                        //ModuleShare.FunctionNPC.GotoLable(this, GotoNpcLabel, false);
+                        SystemShare.FunctionNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
                 case 2:
                     if (SystemShare.ManageNPC != null)
                     {
-                        // ModuleShare.ManageNPC.GotoLable(this, GotoNpcLabel, false);
+                        SystemShare.ManageNPC.GotoLable(this, GotoNpcLabel, false);
                     }
                     break;
             }

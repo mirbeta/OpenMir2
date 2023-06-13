@@ -187,7 +187,7 @@ namespace RobotSystem
                 if (SystemShare.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                    // ModuleShare.FunctionNPC.GotoLable(this, "@AIStart", false);
+                    SystemShare.FunctionNPC.GotoLable(this, "@AIStart", false);
                 }
             }
         }
@@ -203,7 +203,7 @@ namespace RobotSystem
                 if (SystemShare.FunctionNPC != null)
                 {
                     ScriptGotoCount = 0;
-                    // ModuleShare.FunctionNPC.GotoLable(this, "@AIStop", false);
+                    SystemShare.FunctionNPC.GotoLable(this, "@AIStop", false);
                 }
             }
         }

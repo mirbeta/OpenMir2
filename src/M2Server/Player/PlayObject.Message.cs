@@ -145,7 +145,7 @@ namespace M2Server.Player
                             {
                                 AutoTimerTick[i] = HUtil32.GetTickCount();
                                 ScriptGotoCount = 0;
-                                //ModuleShare.ManageNPC.GotoLable(this, "@OnTimer" + i, false);
+                                SystemShare.ManageNPC.GotoLable(this, "@OnTimer" + i, false);
                             }
                         }
                     }
@@ -224,7 +224,7 @@ namespace M2Server.Player
                 if (IsTimeGoto && (HUtil32.GetTickCount() > TimeGotoTick)) //Delaygoto延时跳转
                 {
                     IsTimeGoto = false;
-                    // ((Merchant)TimeGotoNpc)?.GotoLable(this, TimeGotoLable, false);
+                    ((IMerchant)TimeGotoNpc)?.GotoLable(this, TimeGotoLable, false);
                 }
                 // 增加挂机
                 if (OffLineFlag && HUtil32.GetTickCount() > KickOffLineTick)
@@ -238,7 +238,7 @@ namespace M2Server.Player
                     INormNpc normNpc = M2Share.WorldEngine.FindMerchant(DelayCallNpc) ?? M2Share.WorldEngine.FindNpc(DelayCallNpc);
                     if (normNpc != null)
                     {
-                        // normNpc.GotoLable(this, DelayCallLabel, false);
+                         normNpc.GotoLable(this, DelayCallLabel, false);
                     }
                 }
                 if ((HUtil32.GetTickCount() - DecPkPointTick) > SystemShare.Config.DecPkPointTime)// 减少PK值
@@ -1630,7 +1630,7 @@ namespace M2Server.Player
                         {
                             if (SystemShare.FunctionNPC != null)
                             {
-                                // ModuleShare.FunctionNPC.GotoLable(this, "@OnDeath", false);
+                                SystemShare.FunctionNPC.GotoLable(this, "@OnDeath", false);
                             }
                         }
                     }
