@@ -906,13 +906,13 @@ namespace ScriptSystem
                     GetVarValue(baseObject, questConditionInfo.sParam3, ref nCount);
                     if (nCount < 0)
                     {
-                        ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
+                        ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
                         return;
                     }
                 }
                 else
                 {
-                    ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
+                    ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
                     return;
                 }
             }
@@ -925,7 +925,7 @@ namespace ScriptSystem
             }
             if (envir == null)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
                 return;
             }
             var nHumanCount = SystemShare.WorldEngine.GetMapHuman(envir.MapName);
@@ -981,7 +981,7 @@ namespace ScriptSystem
             }
             if (nCount < 0 || envir == null)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKMAPMONCOUNT);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMAPMONCOUNT);
                 return;
             }
             var nMonCount = SystemShare.WorldEngine.GetMapMonster(envir, null);
@@ -1066,7 +1066,7 @@ namespace ScriptSystem
             }
             if (envir == null || nCount < 0)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKMONMAP);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMONMAP);
                 return;
             }
             var monList = new List<IActor>();
@@ -1123,7 +1123,7 @@ namespace ScriptSystem
             var envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null || nX < 0 || nY < 0 || nRange < 0 || nCount < 0)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKRANGEMONCOUNT);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKRANGEMONCOUNT);
                 return;
             }
             var monList = new List<IActor>();
@@ -1393,7 +1393,7 @@ namespace ScriptSystem
                     GetVarValue(baseObject, questConditionInfo.sParam2, ref nLevel);
                     if (!(nLevel >= 0 && nLevel <= 7))
                     {
-                        ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKSLAVELEVEL);
+                        ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKSLAVELEVEL);
                         return;
                     }
                 }
@@ -1450,7 +1450,7 @@ namespace ScriptSystem
                 GetVarValue(baseObject, questConditionInfo.sParam3, ref nRange);
                 if (nRange < 0)
                 {
-                    ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKSLAVERANGE);
+                    ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKSLAVERANGE);
                     return;
                 }
             }
@@ -1807,7 +1807,7 @@ namespace ScriptSystem
             }
             if (nSize <= 0 || nSize > Grobal2.MaxBagItem)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKBAGSIZE);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKBAGSIZE);
                 return;
             }
             if (baseObject.ItemList.Count + nSize <= Grobal2.MaxBagItem)
@@ -1910,7 +1910,7 @@ namespace ScriptSystem
             }
             if (nMin < 0 || nMax < 0)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKHP);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKHP);
                 return;
             }
             switch (cMethodMin)
@@ -1996,7 +1996,7 @@ namespace ScriptSystem
             }
             if (nMin < 0 || nMax < 0)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKMP);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMP);
                 return;
             }
             switch (cMethodMin)
@@ -2080,7 +2080,7 @@ namespace ScriptSystem
             }
             if (nMin < 0 || nMax < 0)
             {
-                ScriptConditionError(normNpc,baseObject, questConditionInfo, ConditionCode.CHECKDC);
+                ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKDC);
                 return;
             }
             switch (cMethodMin)
