@@ -20,7 +20,7 @@ namespace GameSrv
         public static readonly WordStatistics Statistics;
         public static readonly LocalDb LocalDb;
         public static readonly CommonDB CommonDb;
-        public static readonly ScriptEngine ScriptEngine;
+        public static readonly IScriptEngine ScriptEngine;
         public static readonly IPlanesService PlanesService;
         public static readonly NetworkMonitor NetworkMonitor;
         public static readonly SystemProcessor SystemProcess;

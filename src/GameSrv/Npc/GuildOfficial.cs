@@ -91,7 +91,7 @@ namespace GameSrv.NPC
                         {
                             PlayObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
                         }
-                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable, false);
+                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable);
                     }
                 }
             }
@@ -218,7 +218,7 @@ namespace GameSrv.NPC
                     {
                         PlayObject.SendDelItems(UserItem);
                         PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.ZumaPiece);
-                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok", false);
+                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok");
                     }
                     else
                     {

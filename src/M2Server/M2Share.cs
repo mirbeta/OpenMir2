@@ -33,7 +33,7 @@ namespace M2Server
         /// <summary>
         /// 脚本解释器
         /// </summary>
-        public static ScriptParsers ScriptParsers;
+        public static IScriptParsers ScriptParsers;
         /// <summary>
         /// 寻路
         /// </summary>

@@ -10,7 +10,7 @@ namespace ScriptSystem
     /// <summary>
     /// 脚本解析器
     /// </summary>
-    public class ScriptParsers
+    public class ScriptParsers : IScriptParsers
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> ConditionCodeDefMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);

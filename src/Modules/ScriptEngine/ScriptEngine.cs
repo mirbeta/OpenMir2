@@ -9,7 +9,7 @@ namespace ScriptSystem
     /// <summary>
     /// 脚本执行引擎
     /// </summary>
-    public class ScriptEngine
+    public class ScriptEngine : IScriptEngine
     {
         private readonly ConditionProcessingSys ConditionScript;
         private readonly ExecutionProcessingSys ExecutionProcessing;
@@ -34,7 +34,6 @@ namespace ScriptSystem
                 playerActor.LastNpc = 0;
             }
             ScriptInfo script = null;
-            SayingRecord sayingRecord;
             UserItem userItem = null;
             string sC = string.Empty;
             var scriptList = normNpc.ScriptList;
@@ -79,6 +78,7 @@ namespace ScriptSystem
             }
             if (script != null)
             {
+                SayingRecord sayingRecord;
                 if (script.RecordList.TryGetValue(sLabel, out sayingRecord))
                 {
                     if (boExtJmp && sayingRecord.boExtJmp == false)
@@ -123,9 +123,9 @@ namespace ScriptSystem
             }
         }
 
-        public void GotoLable(IActor playerActor, int npcId, string sLabel, bool boExtJmp)
+        public void GotoLable(IPlayerActor playerActor, int npcId, string sLabel, bool boExtJmp = false)
         {
-            GotoLable((IPlayerActor)playerActor, npcId, sLabel, boExtJmp, string.Empty);
+            GotoLable(playerActor, npcId, sLabel, boExtJmp, string.Empty);
         }
 
         private static bool CheckGotoLableQuestStatus(IPlayerActor playerActor, ScriptInfo scriptInfo)
@@ -598,7 +598,7 @@ namespace ScriptSystem
             {
                 return false;
             }
-            GotoLable(playerActor, npc.ActorId, sLabel, false);
+            GotoLable(playerActor, npc.ActorId, sLabel);
             return true;
         }
 
@@ -612,7 +612,7 @@ namespace ScriptSystem
                 {
                     playerActor.Script = script;
                     playerActor.LastNpc = npc.ActorId;
-                    GotoLable(playerActor, npc.ActorId, ScriptFlagCode.sMAIN, false);
+                    GotoLable(playerActor, npc.ActorId, ScriptFlagCode.sMAIN);
                     break;
                 }
             }
