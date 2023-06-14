@@ -30,6 +30,10 @@ namespace M2Server
         public static long StartTime;
         public static int ShareFileNameNum = 0;
         public static IAccountSessionService accountSessionService;
+        /// <summary>
+        /// 脚本执行引擎
+        /// </summary>
+        public static IScriptEngine ScriptEngine;
         public static readonly ThreadSocketMgr SocketMgr;
         /// <summary>
         /// 脚本解释器

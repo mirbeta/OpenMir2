@@ -19,7 +19,6 @@ namespace GameSrv
         public static readonly WordStatistics Statistics;
         public static readonly LocalDb LocalDb;
         public static readonly CommonDB CommonDb;
-        public static readonly IScriptEngine ScriptEngine;
         public static readonly IPlanesService PlanesService;
         public static readonly NetworkMonitor NetworkMonitor;
         public static readonly SystemProcessor SystemProcess;
@@ -38,7 +37,6 @@ namespace GameSrv
 
         static GameShare()
         {
-            ScriptEngine = new ScriptEngine();
             Statistics = new WordStatistics();
             LocalDb = new LocalDb();
             CommonDb = new CommonDB();

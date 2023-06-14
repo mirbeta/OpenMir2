@@ -60,7 +60,7 @@ namespace GameSrv.NPC
                 {
                     string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                     bool boCanJmp = PlayObject.LableIsCanJmp(sLabel);
-                    GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, sLabel, !boCanJmp);
+                    M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, sLabel, !boCanJmp);
                     if (!boCanJmp)
                     {
                         return;
@@ -91,7 +91,7 @@ namespace GameSrv.NPC
                         {
                             PlayObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
                         }
-                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable);
+                        M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable);
                     }
                 }
             }
@@ -218,7 +218,7 @@ namespace GameSrv.NPC
                     {
                         PlayObject.SendDelItems(UserItem);
                         PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.ZumaPiece);
-                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok");
+                        M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, "~@request_ok");
                     }
                     else
                     {

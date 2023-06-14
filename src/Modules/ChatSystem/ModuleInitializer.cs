@@ -22,12 +22,12 @@ namespace ChatSystem
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("日志事件插件启动...");
+            logger.Info("聊天系统插件启动...");
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("日志事件插件停止...");
+            logger.Info("聊天系统插件停止...");
         }
     }
 }

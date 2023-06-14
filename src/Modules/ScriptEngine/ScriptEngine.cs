@@ -24,11 +24,6 @@ namespace ScriptSystem
 
         private void GotoLable(IPlayerActor playerActor, int npcId, string sLabel, bool boExtJmp, string sMsg)
         {
-            var normNpc = SystemShare.ActorMgr.Get<INormNpc>(npcId);
-            if (normNpc == null)
-            {
-                return;
-            }
             if (playerActor.LastNpc != npcId)
             {
                 playerActor.LastNpc = 0;
@@ -124,6 +119,16 @@ namespace ScriptSystem
         }
 
         public void GotoLable(IPlayerActor playerActor, int npcId, string sLabel, bool boExtJmp = false)
+        {
+            var normNpc = SystemShare.ActorMgr.Get<INormNpc>(npcId);
+            if (normNpc == null)
+            {
+                return;
+            }
+            GotoLable(playerActor, npcId, sLabel, boExtJmp, string.Empty);
+        }
+
+        public void GotoLable(INormNpc normNpc, IPlayerActor playerActor, string sLabel, bool boExtJmp = false)
         {
             GotoLable(playerActor, npcId, sLabel, boExtJmp, string.Empty);
         }

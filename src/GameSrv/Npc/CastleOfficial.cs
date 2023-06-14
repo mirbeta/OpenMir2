@@ -116,7 +116,7 @@ namespace GameSrv.NPC
                                 return;
                             }
                         }
-                        GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, sLabel, !boCanJmp);
+                        M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, sLabel, !boCanJmp);
                         if (!boCanJmp)
                         {
                             return;
@@ -168,7 +168,7 @@ namespace GameSrv.NPC
                                     s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
+                                    M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
                                     break;
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
@@ -190,7 +190,7 @@ namespace GameSrv.NPC
                                     s18 = "只有行会 " + Castle.OwnGuild + " 的掌门人才能使用!!!";
                                     break;
                                 case 1:
-                                    GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
+                                    M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
                                     break;
                             }
                             PlayObject.SendMsg(this, Messages.RM_MENU_OK, 0, ActorId, 0, 0, s18);
@@ -206,22 +206,22 @@ namespace GameSrv.NPC
                         else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRDOORNOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairDoor(PlayObject);
-                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
+                            M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
                         }
                         else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRWALLNOW1, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(1, PlayObject);
-                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
+                            M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
                         }
                         else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRWALLNOW2, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(2, PlayObject);
-                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
+                            M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
                         }
                         else if (string.Compare(sLabel, ScriptFlagCode.sREPAIRWALLNOW3, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             RepairWallNow(3, PlayObject);
-                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
+                            M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, ScriptFlagCode.sMAIN);
                         }
                         else if (HUtil32.CompareLStr(sLabel, ScriptFlagCode.sHIREGUARDNOW))
                         {
@@ -245,7 +245,7 @@ namespace GameSrv.NPC
                             {
                                 PlayObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
                             }
-                            GameShare.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable);
+                            M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable);
                         }
                     }
                 }

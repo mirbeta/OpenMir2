@@ -48,7 +48,7 @@ namespace SystemModule
         int DeleteFromMap(int nX, int nY, CellType cellType, int cellId, IActor mapObject);
         void DelObjectCount(IActor baseObject);
         void Dispose();
-        void GetBaseObjects(int nX, int nY, bool boFlag, ref IList<IActor> baseObjectList);
+        void GetBaseObjects(int nX, int nY, bool boFlag, ref IList<IActor> actorList);
         ref MapCellInfo GetCellInfo(int nX, int nY, out bool success);
         bool GetDoor(int nX, int nY, ref MapDoor door);
         string GetEnvirInfo();
@@ -57,7 +57,7 @@ namespace SystemModule
         int GetItemEx(int nX, int nY, ref int nCount);
         IActor GetMovingObject(short nX, short nY, bool boFlag);
         bool GetNextPosition(short sx, short sy, byte ndir, int nFlag, ref short snx, ref short sny);
-        int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<IActor> baseObjectList);
+        int GetRangeBaseObject(int nX, int nY, int nRage, bool boFlag, IList<IActor> actorList);
         bool GetXyHuman(int nMapX, int nMapY);
         int GetXYObjCount(int nX, int nY);
         bool IsCheapStuff();

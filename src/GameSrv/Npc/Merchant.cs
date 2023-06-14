@@ -535,7 +535,7 @@ namespace GameSrv.NPC
                 upgradeInfo = UpgradeWeaponList[i];
                 if (upgradeInfo.UserName == user.ChrName)
                 {
-                    GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEING);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEING);
                     return;
                 }
             }
@@ -579,11 +579,11 @@ namespace GameSrv.NPC
             }
             if (upgradeSuccess)
             {
-                GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEOK);
+                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEOK);
             }
             else
             {
-                GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEFAIL);
+                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEFAIL);
             }
         }
 
@@ -597,7 +597,7 @@ namespace GameSrv.NPC
             var nFlag = 0;
             if (!user.IsEnoughBag())
             {
-                GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGFULL);
+                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGFULL);
                 return;
             }
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
@@ -749,13 +749,13 @@ namespace GameSrv.NPC
             switch (nFlag)
             {
                 case 0:
-                    GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGFAIL);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGFAIL);
                     break;
                 case 1:
-                    GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGING);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGING);
                     break;
                 case 2:
-                    GameShare.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGOK);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGOK);
                     break;
             }
         }
@@ -807,7 +807,7 @@ namespace GameSrv.NPC
                                 return;
                             }
                         }
-                        GameShare.ScriptEngine.GotoLable(playObject, this.ActorId, sLabel, !boCanJmp);
+                        M2Share.ScriptEngine.GotoLable(playObject, this.ActorId, sLabel, !boCanJmp);
                         if (!boCanJmp)
                         {
                             return;
@@ -927,7 +927,7 @@ namespace GameSrv.NPC
                             {
                                 playObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
                             }
-                            GameShare.ScriptEngine.GotoLable(playObject, this.ActorId, playObject.ScriptGoBackLable);
+                            M2Share.ScriptEngine.GotoLable(playObject, this.ActorId, playObject.ScriptGoBackLable);
                         }
                         else if (string.Compare(sLabel, ScriptFlagCode.sDealYBme, StringComparison.OrdinalIgnoreCase) == 0) // 元宝寄售:出售物品 
                         {
@@ -1653,14 +1653,14 @@ namespace GameSrv.NPC
                         {
                             userItem.Dura = userItem.DuraMax;
                             playObject.SendMsg(Messages.RM_USERREPAIRITEM_OK, 0, playObject.Gold, userItem.Dura, userItem.DuraMax);
-                            GameShare.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagCode.sSUPERREPAIROK);
+                            M2Share.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagCode.sSUPERREPAIROK);
                         }
                         else
                         {
                             userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / SystemShare.Config.RepairItemDecDura);
                             userItem.Dura = userItem.DuraMax;
                             playObject.SendMsg(Messages.RM_USERREPAIRITEM_OK, 0, playObject.Gold, userItem.Dura, userItem.DuraMax);
-                            GameShare.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagCode.sREPAIROK);
+                            M2Share.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagCode.sREPAIROK);
                         }
                     }
                     else

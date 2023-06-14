@@ -1882,9 +1882,9 @@ namespace M2Server.Npc
             return result;
         }
 
-        public void GotoLable(IPlayerActor playObject, string lab, bool s)
+        public void GotoLable(IPlayerActor playObject, string sLabel, bool boExtJmp)
         {
-
+            M2Share.ScriptEngine.GotoLable(this, playObject, sLabel, boExtJmp);
         }
     }
 }

@@ -12,6 +12,7 @@ using M2Server.Items;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
+using ScriptSystem;
 using System.Collections;
 using System.Collections.Concurrent;
 using SystemModule.Common;
@@ -61,6 +62,7 @@ namespace GameSrv
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.CommandSystem = new GameCommandSystem();
             M2Share.accountSessionService = new AccountSessionService();
+            M2Share.ScriptEngine = new ScriptEngine();
             InitializeModule(serviceProvider);
         }
 
