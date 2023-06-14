@@ -1573,11 +1573,11 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1600, 1699)) //个人服务器字符串变量E
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MServerStrVal[nVarValue - 1600]);
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.ServerStrVal[nVarValue - 1600]);
                     }
                     else if (HUtil32.RangeInDefined(nVarValue, 1700, 1799)) //个人服务器字符串变量W
                     {
-                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.MServerIntVal[nVarValue - 1700].ToString());
+                        sMsg = ReplaceVariableText(sMsg, "<" + sVariable + ">", PlayObject.ServerIntVal[nVarValue - 1700].ToString());
                     }
                 }
             }
@@ -1737,12 +1737,12 @@ namespace M2Server.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                 {
-                    nValue = HUtil32.StrToInt(PlayObject.MServerStrVal[n01 - 1600], 0);
+                    nValue = HUtil32.StrToInt(PlayObject.ServerStrVal[n01 - 1600], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1700, 1799))
                 {
-                    nValue = PlayObject.MServerIntVal[n01 - 1700];
+                    nValue = PlayObject.ServerIntVal[n01 - 1700];
                     result = true;
                 }
             }
@@ -1776,7 +1776,7 @@ namespace M2Server.Npc
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                 {
-                    sValue = PlayObject.MServerStrVal[n01 - 1600];
+                    sValue = PlayObject.ServerStrVal[n01 - 1600];
                     result = true;
                 }
             }
@@ -1833,7 +1833,7 @@ namespace M2Server.Npc
                     }
                     else if (HUtil32.RangeInDefined(n01, 1700, 1799))
                     {
-                        PlayObject.MServerIntVal[n01 - 1700] = nValue;
+                        PlayObject.ServerIntVal[n01 - 1700] = nValue;
                         result = true;
                     }
                 }

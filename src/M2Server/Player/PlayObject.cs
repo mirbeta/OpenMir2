@@ -553,12 +553,12 @@ namespace M2Server.Player
         /// <summary>
         /// 服务器变量 W 0-20 个人服务器数值变量，不可保存，不可操作
         /// </summary>
-        public string[] MServerStrVal { get; set; }
+        public string[] ServerStrVal { get; set; }
         /// <summary>
         /// E 0-20 个人服务器字符串变量，不可保存，不可操作
         /// </summary>
-        public int[] MServerIntVal { get; set; }
-        public Dictionary<string, int> m_IntegerList { get; set; }
+        public int[] ServerIntVal { get; set; }
+        public Dictionary<string, int> IntegerList { get; set; }
         public Dictionary<string, string> m_StringList { get; set; }
         public string ScatterItemName { get; set; }
         public string ScatterItemOwnerName { get; set; }
@@ -990,8 +990,8 @@ namespace M2Server.Player
             MNSval = new string[100];
             MNInteger = new int[100];
             MSString = new string[100];
-            MServerStrVal = new string[100];
-            MServerIntVal = new int[100];
+            ServerStrVal = new string[100];
+            ServerIntVal = new int[100];
             ExtraAbil = new ushort[7];
             ExtraAbilTimes = new int[7];
             ExtraAbilFlag = new byte[7];

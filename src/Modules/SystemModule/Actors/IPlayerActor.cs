@@ -555,12 +555,12 @@ namespace SystemModule
         /// <summary>
         /// 服务器变量 W 0-20 个人服务器数值变量，不可保存，不可操作
         /// </summary>
-        string[] MServerStrVal { get; set; }
+        string[] ServerStrVal { get; set; }
         /// <summary>
         /// E 0-20 个人服务器字符串变量，不可保存，不可操作
         /// </summary>
-        int[] MServerIntVal { get; set; }
-        Dictionary<string, int> m_IntegerList { get; set; }
+        int[] ServerIntVal { get; set; }
+        Dictionary<string, int> IntegerList { get; set; }
         Dictionary<string, string> m_StringList { get; set; }
         string ScatterItemName { get; set; }
         string ScatterItemOwnerName { get; set; }

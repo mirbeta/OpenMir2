@@ -1014,7 +1014,7 @@ namespace ScriptSystem
             return result;
         }
 
-        public static Dictionary<string, DynamicVar> GetDynamicVarMap(IPlayerActor playerActor, string sType, ref string sName)
+        protected static Dictionary<string, DynamicVar> GetDynamicVarMap(IPlayerActor playerActor, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN", 5))
@@ -1048,7 +1048,7 @@ namespace ScriptSystem
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(IPlayerActor playerActor, string sData, ref int nValue)
+        protected VarInfo GetVarValue(IPlayerActor playerActor, string sData, ref int nValue)
         {
             string sVar = string.Empty;
             string sValue = string.Empty;
@@ -1059,14 +1059,14 @@ namespace ScriptSystem
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(IPlayerActor playerActor, string sData, ref string sValue)
+        protected VarInfo GetVarValue(IPlayerActor playerActor, string sData, ref string sValue)
         {
             string sVar = string.Empty;
             int nValue = 0;
             return GetVarValue(playerActor, sData, ref sVar, ref sValue, ref nValue);
         }
 
-        public bool GetValValue(IPlayerActor playerActor, string sMsg, ref string sValue)
+        protected bool GetValValue(IPlayerActor playerActor, string sMsg, ref string sValue)
         {
             if (string.IsNullOrEmpty(sMsg))
             {
@@ -1093,14 +1093,14 @@ namespace ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                 {
-                    sValue = playerActor.MServerStrVal[n01 - 1600];
+                    sValue = playerActor.ServerStrVal[n01 - 1600];
                     result = true;
                 }
             }
             return result;
         }
 
-        public bool GetValValue(IPlayerActor playerActor, string sMsg, ref int nValue)
+        protected bool GetValValue(IPlayerActor playerActor, string sMsg, ref int nValue)
         {
             bool result = false;
             if (string.IsNullOrEmpty(sMsg))
@@ -1162,12 +1162,12 @@ namespace ScriptSystem
                 }
                 else if (HUtil32.RangeInDefined(n01, 1600, 1699))
                 {
-                    nValue = HUtil32.StrToInt(playerActor.MServerStrVal[n01 - 1600], 0);
+                    nValue = HUtil32.StrToInt(playerActor.ServerStrVal[n01 - 1600], 0);
                     result = true;
                 }
                 else if (HUtil32.RangeInDefined(n01, 1700, 1799))
                 {
-                    nValue = playerActor.MServerIntVal[n01 - 1700];
+                    nValue = playerActor.ServerIntVal[n01 - 1700];
                     result = true;
                 }
             }
@@ -1178,7 +1178,7 @@ namespace ScriptSystem
         /// 取文本变量
         /// </summary>
         /// <returns></returns>
-        public VarInfo GetVarValue(IPlayerActor playerActor, string sData, ref string sVar, ref string sValue, ref int nValue)
+        protected VarInfo GetVarValue(IPlayerActor playerActor, string sData, ref string sVar, ref string sValue, ref int nValue)
         {
             long n10;
             sVar = sData;
@@ -1272,7 +1272,7 @@ namespace ScriptSystem
             return result;
         }
 
-        public VarType GetDynamicValue(IPlayerActor playerActor, string sVar, ref string sValue, ref int nValue)
+        private VarType GetDynamicValue(IPlayerActor playerActor, string sVar, ref string sValue, ref int nValue)
         {
             string sVarName = "";
             string sVarType = "";
@@ -1330,7 +1330,7 @@ namespace ScriptSystem
             return result;
         }
 
-        public VarType GetValNameValue(IPlayerActor playerActor, string sVar, ref string sValue, ref int nValue)
+        private VarType GetValNameValue(IPlayerActor playerActor, string sVar, ref string sValue, ref int nValue)
         {
             var result = VarType.None;
             var sName = string.Empty;
@@ -1418,14 +1418,14 @@ namespace ScriptSystem
             }
             else if (sName != "" && char.ToUpper(sName[0]) == 'N')
             {
-                if (playerActor.m_IntegerList.ContainsKey(sName))
+                if (playerActor.IntegerList.ContainsKey(sName))
                 {
-                    nValue = playerActor.m_IntegerList[sName];
+                    nValue = playerActor.IntegerList[sName];
                 }
                 else
                 {
                     nValue = 0;
-                    playerActor.m_IntegerList.Add(sName, nValue);
+                    playerActor.IntegerList.Add(sName, nValue);
                 }
                 result = VarType.Integer;
             }
@@ -1457,7 +1457,7 @@ namespace ScriptSystem
             return sMsg;
         }
 
-        public virtual void GetVariableText(IPlayerActor PlayerActor, ref string sMsg, string sVariable)
+        public virtual void GetVariableText(IPlayerActor playerActor, ref string sMsg, string sVariable)
         {
             string dynamicName = string.Empty;
             DynamicVar DynamicVar;
@@ -1470,7 +1470,7 @@ namespace ScriptSystem
                 {
                     return;
                 }
-                GrobalVarProcessingSys.Handler(PlayerActor, nIdx, sVariable, ref sMsg);
+                GrobalVarProcessingSys.Handler(playerActor, nIdx, sVariable, ref sMsg);
                 return;
             }
 
@@ -1495,7 +1495,7 @@ namespace ScriptSystem
             {
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref dynamicName);
                 boFoundVar = false;
-                if (PlayerActor.DynamicVarMap.TryGetValue(dynamicName, out DynamicVar))
+                if (playerActor.DynamicVarMap.TryGetValue(dynamicName, out DynamicVar))
                 {
                     if (string.Compare(DynamicVar.Name, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -1521,20 +1521,20 @@ namespace ScriptSystem
             }
             if (HUtil32.CompareLStr(sVariable, "$GUILD("))
             {
-                if (PlayerActor.MyGuild == null)
+                if (playerActor.MyGuild == null)
                 {
                     return;
                 }
                 HUtil32.ArrestStringEx(sVariable, "(", ")", ref dynamicName);
                 boFoundVar = false;
-                if (PlayerActor.MyGuild.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
+                if (playerActor.MyGuild.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
                 {
                     if (string.Compare(DynamicVar.Name, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         switch (DynamicVar.VarType)
                         {
                             case VarType.Integer:
-                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.Internet);
+                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.Internet.ToString());
                                 boFoundVar = true;
                                 break;
 
@@ -1590,15 +1590,15 @@ namespace ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n18, 1100, 1109))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayerActor.MNVal[n18 - 1100].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playerActor.MNVal[n18 - 1100].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1110, 1119))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayerActor.MDyVal[n18 - 1110].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playerActor.MDyVal[n18 - 1110].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1200, 1299))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayerActor.MNMval[n18 - 1200].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playerActor.MNMval[n18 - 1200].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1000, 1099))
                     {
@@ -1606,11 +1606,11 @@ namespace ScriptSystem
                     }
                     else if (HUtil32.RangeInDefined(n18, 1300, 1399))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayerActor.MNInteger[n18 - 1300].ToString());
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playerActor.MNInteger[n18 - 1300].ToString());
                     }
                     else if (HUtil32.RangeInDefined(n18, 1400, 1499))
                     {
-                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayerActor.MSString[n18 - 1400]);
+                        sMsg = CombineStr(sMsg, '<' + sVariable + '>', playerActor.MSString[n18 - 1400]);
                     }
                     else if (HUtil32.RangeInDefined(n18, 2000, 2499))
                     {
@@ -1619,16 +1619,16 @@ namespace ScriptSystem
                 }
                 else if (dynamicName != "" && char.ToUpper(dynamicName[1]) == 'S')
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayerActor.m_StringList.ContainsKey(dynamicName) ? PlayerActor.m_StringList[dynamicName] : "");
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playerActor.m_StringList.ContainsKey(dynamicName) ? playerActor.m_StringList[dynamicName] : "");
                 }
                 else if (dynamicName != "" && char.ToUpper(dynamicName[1]) == 'N')
                 {
-                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', PlayerActor.m_IntegerList.ContainsKey(dynamicName) ? Convert.ToString(PlayerActor.m_IntegerList[dynamicName]) : "-1");
+                    sMsg = CombineStr(sMsg, '<' + sVariable + '>', playerActor.IntegerList.ContainsKey(dynamicName) ? Convert.ToString(playerActor.IntegerList[dynamicName]) : "-1");
                 }
             }
         }
 
-        public bool SetDynamicValue(IPlayerActor playerActor, string sVar, string sValue, int nValue)
+        protected bool SetDynamicValue(IPlayerActor playerActor, string sVar, string sValue, int nValue)
         {
             var result = false;
             var sVarName = "";
@@ -1680,7 +1680,7 @@ namespace ScriptSystem
             return result;
         }
 
-        public bool SetValNameValue(IPlayerActor playerActor, string sVar, string sValue, int nValue)
+        protected bool SetValNameValue(IPlayerActor playerActor, string sVar, string sValue, int nValue)
         {
             var sName = string.Empty;
             var result = false;
@@ -1760,21 +1760,21 @@ namespace ScriptSystem
             }
             else if (sName != "" && char.ToUpper(sName[0]) == 'N')
             {
-                if (playerActor.m_IntegerList.ContainsKey(sName))
+                if (playerActor.IntegerList.ContainsKey(sName))
                 {
-                    playerActor.m_IntegerList[sName] = nValue;
+                    playerActor.IntegerList[sName] = nValue;
                     result = true;
                 }
                 else
                 {
-                    playerActor.m_IntegerList.Add(sName, nValue);
+                    playerActor.IntegerList.Add(sName, nValue);
                     result = true;
                 }
             }
             return result;
         }
 
-        public Dictionary<string, DynamicVar> GeDynamicVarList(IPlayerActor playerActor, string sType, ref string sName)
+        protected Dictionary<string, DynamicVar> GeDynamicVarList(IPlayerActor playerActor, string sType, ref string sName)
         {
             Dictionary<string, DynamicVar> result = null;
             if (HUtil32.CompareLStr(sType, "HUMAN"))
@@ -1803,15 +1803,15 @@ namespace ScriptSystem
         /// 合并字符串
         /// </summary>
         /// <returns></returns>
-        public string CombineStr(string sMsg, string variable, object variableVal)
+        private string CombineStr(string sMsg, string variable, string variableVal)
         {
             string result;
-            var n10 = sMsg.IndexOf(variable, StringComparison.Ordinal);
-            if (n10 > -1)
+            var varIndex = sMsg.IndexOf(variable, StringComparison.Ordinal);
+            if (varIndex > -1)
             {
-                var s14 = sMsg.Substring(1 - 1, n10);
-                var s18 = sMsg.Substring(variable.Length + n10, sMsg.Length - (variable.Length + n10));
-                result = s14 + Convert.ToString(variableVal) + s18;
+                var s14 = sMsg.Substring(1 - 1, varIndex);
+                var s18 = sMsg.Substring(variable.Length + varIndex, sMsg.Length - (variable.Length + varIndex));
+                result = s14 + variableVal + s18;
             }
             else
             {
@@ -1820,14 +1820,13 @@ namespace ScriptSystem
             return result;
         }
 
-        public bool GotoLableCheckStringList(string sHumName, string sListFileName)
+        protected bool GotoLableCheckStringList(string sHumName, string sListFileName)
         {
             bool result = false;
-            StringList LoadList;
             sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
-                LoadList = new StringList();
+                var LoadList = new StringList();
                 try
                 {
                     LoadList.LoadFromFile(sListFileName);
@@ -1853,13 +1852,13 @@ namespace ScriptSystem
             return result;
         }
 
-        protected static string ReplaceVariableText(string sMsg, string sStr, string sText)
+        private static string ReplaceVariableText(string sMsg, string sStr, string sText)
         {
             int n10 = sMsg.IndexOf(sStr, StringComparison.OrdinalIgnoreCase);
             if (n10 > -1)
             {
                 ReadOnlySpan<char> s18 = sMsg.AsSpan()[(sStr.Length + n10)..sMsg.Length];
-                StringBuilder builder = new StringBuilder();
+                var builder = new StringBuilder();
                 builder.Append(sMsg[..n10]);
                 builder.Append(sText);
                 builder.Append(s18);
