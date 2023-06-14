@@ -4,14 +4,14 @@ using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Items
 {
-    public class ItemSystem : IItemSystem
+    public class GameItemSystem : IItemSystem
     {
         /// <summary>
         /// 物品列表
         /// </summary>
         public readonly IList<StdItem> StdItemList;
 
-        public ItemSystem()
+        public GameItemSystem()
         {
             StdItemList = new List<StdItem>();
         }

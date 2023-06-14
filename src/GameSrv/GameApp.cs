@@ -28,7 +28,7 @@ namespace GameSrv
         public GameApp(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             M2Share.LogonCostLogList = new ArrayList();
-            M2Share.CustomItemMgr = new CustomItem();
+            M2Share.CustomItemMgr = new CustomItemSystem();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<StartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
@@ -62,7 +62,7 @@ namespace GameSrv
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.CommandSystem = new GameCommandSystem();
-            M2Share.accountSessionService = new AccountSessionService();
+            M2Share.LoginSession = new LoginSessionService();
             M2Share.ScriptEngine = new ScriptEngine();
             InitializeModule(serviceProvider);
         }
@@ -93,7 +93,7 @@ namespace GameSrv
             SystemShare.ManageNPC = new Merchant();
             SystemShare.RobotNPC = new Merchant();
             SystemShare.FunctionNPC = new Merchant();
-            SystemShare.ItemSystem = new ItemSystem();
+            SystemShare.ItemSystem = new GameItemSystem();
             SystemShare.GuildMgr = new GuildManager();
             SystemShare.CastleMgr = new CastleManager();
             SystemShare.MapMgr = new MapManager();
@@ -222,7 +222,7 @@ namespace GameSrv
             _logger.Info("加载公告提示信息成功...");
             LocalDb.LoadAdminList();
             _logger.Info("管理员列表加载成功...");
-            M2Share.SocketMgr.Initialize();
+            M2Share.ThreadSocket.Initialize();
             _logger.Info("正在初始化网络引擎...");
         }
 
@@ -253,13 +253,13 @@ namespace GameSrv
                     _logger.Info("守卫列表加载成功...");
                 }
                 GameShare.PlanesService.Start();
-                M2Share.accountSessionService.Initialize();
+                M2Share.LoginSession.Initialize();
                 SystemShare.GuildMgr.LoadGuildInfo();
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();
                 GameShare.DataServer.Start();
                 // GameShare.MarketService.Start();
-                M2Share.SocketMgr.Start();
+                M2Share.ThreadSocket.Start();
                 GameShare.StartReady = true;
                 M2Share.WorldEngine.Initialize();
                 GameShare.RobotMgr.Initialize();

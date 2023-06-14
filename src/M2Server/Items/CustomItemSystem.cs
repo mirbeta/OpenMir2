@@ -5,16 +5,16 @@ using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Items
 {
-    public class CustomItem
+    public class CustomItemSystem : ICustomItem
     {
         private IList<ItemName> ItemNameList;
 
-        public CustomItem()
+        public CustomItemSystem()
         {
             ItemNameList = new List<ItemName>();
         }
 
-        ~CustomItem()
+        ~CustomItemSystem()
         {
             for (var i = 0; i < ItemNameList.Count; i++)
             {

@@ -1,7 +1,5 @@
 namespace M2Server.Actor
 {
-
-
     public class DragonConst
     {
         public const byte DRAGON_RING_SHAPE = 198;

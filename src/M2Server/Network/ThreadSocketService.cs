@@ -18,7 +18,7 @@ using SystemModule.Sockets.SocketEventArgs;
 
 namespace M2Server
 {
-    public class ThreadSocketMgr
+    public class ThreadSocketService : IThreadSocket
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpService tcpService;
@@ -28,7 +28,7 @@ namespace M2Server
         private readonly HashSet<long> _gatePermitMap = new HashSet<long>();
         private CancellationToken _stoppingCancelReads;
 
-        public ThreadSocketMgr()
+        public ThreadSocketService()
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
@@ -61,7 +61,7 @@ namespace M2Server
             var client = (SocketClient)sender;
             if (_gatePermitMap.Contains(HUtil32.IpToInt(client.ServiceIP)))
             {
-                M2Share.SocketMgr.AddGate(client);
+                M2Share.ThreadSocket.AddGate(client);
             }
             else
             {
@@ -73,7 +73,7 @@ namespace M2Server
         private void Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            M2Share.SocketMgr.CloseGate(client.ID, client.ServiceIP);
+            M2Share.ThreadSocket.CloseGate(client.ID, client.ServiceIP);
             tcpService.NextId();
         }
 
@@ -128,7 +128,7 @@ namespace M2Server
             }
         }
 
-        private void AddGate(SocketClient e)
+        public void AddGate(SocketClient e)
         {
             const string sGateOpen = "游戏网关[{0}]已打开...";
             const string sKickGate = "服务器未就绪: {0}";
@@ -250,7 +250,7 @@ namespace M2Server
             }
         }
 
-        private void CloseGate(string connectionId, string endPoint)
+        public void CloseGate(string connectionId, string endPoint)
         {
             const string sGateClose = "游戏网关[{0}]已关闭...";
             HUtil32.EnterCriticalSection(_runSocketSection);
@@ -280,7 +280,7 @@ namespace M2Server
                                     gateUser.PlayObject.BoEmergencyClose = true;
                                     if (!gateUser.PlayObject.BoReconnection)
                                     {
-                                        M2Share.accountSessionService.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.LoginSession.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                 }
                                 gateInfo.UserList[j] = null;
@@ -392,7 +392,7 @@ namespace M2Server
             var clientOutMessage = new ClientOutMessage();
             clientOutMessage.CommandPacket = defMsg;
             clientOutMessage.MessagePacket = msgHdr;
-            //M2Share.GateMgr.AddGateBuffer(nIndex, ServerPackSerializer.Serialize(clientOutMessage));
+            M2Share.ThreadSocket.AddGateBuffer(nIndex, SerializerUtil.Serialize(clientOutMessage));
         }
 
         /// <summary>
@@ -405,7 +405,7 @@ namespace M2Server
             _gameGates[gateIdx].ProcessBufferSend(senData);
         }
 
-        internal void Send(string connectId, byte[] buff)
+        public void Send(string connectId, byte[] buff)
         {
             tcpService.Send(connectId, buff);
         }

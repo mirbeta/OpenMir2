@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace GameSrv
+namespace GameSrv.Module
 {
     public class ModuleInfo
     {

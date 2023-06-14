@@ -551,7 +551,7 @@ namespace M2Server.Actor
                 MapItem mapItem = new MapItem
                 {
                     UserItem = new UserItem(userItem),
-                    Name = CustomItem.GetItemName(userItem),// 取自定义物品名称
+                    Name = CustomItemSystem.GetItemName(userItem),// 取自定义物品名称
                     Looks = stdItem.Looks
                 };
                 if (stdItem.StdMode == 45)

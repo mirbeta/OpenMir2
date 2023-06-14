@@ -40,7 +40,7 @@ namespace M2Server.Player
                 {
                     var clientItem = new ClientItem();
                     SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
-                    clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                    clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
                     clientItem.MakeIndex = userItem.MakeIndex;
@@ -90,7 +90,7 @@ namespace M2Server.Player
                     }
                     var clientItem = new ClientItem();
                     SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, playObject.UseItems[i], ref clientItem);
-                    clientItem.Item.Name = CustomItem.GetItemName(playObject.UseItems[i]);
+                    clientItem.Item.Name = CustomItemSystem.GetItemName(playObject.UseItems[i]);
                     clientItem.MakeIndex = playObject.UseItems[i].MakeIndex;
                     clientItem.Dura = playObject.UseItems[i].Dura;
                     clientItem.DuraMax = playObject.UseItems[i].DuraMax;
@@ -131,7 +131,7 @@ namespace M2Server.Player
                 var userItem = ItemList[i];
                 if (userItem.MakeIndex == nMakeIndex)
                 {
-                    var sUserItemName = CustomItem.GetItemName(userItem);
+                    var sUserItemName = CustomItemSystem.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         userItem18 = userItem;
@@ -161,7 +161,7 @@ namespace M2Server.Player
                 var userItem = ItemList[i];
                 if (userItem != null && userItem.MakeIndex == nMakeIndex)
                 {
-                    var sUserItemName = CustomItem.GetItemName(userItem);
+                    var sUserItemName = CustomItemSystem.GetItemName(userItem);
                     //if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     //{
                     //    var merchant = SystemShare.ActorMgr.FindMerchant(nParam1);
@@ -273,7 +273,7 @@ namespace M2Server.Player
                         {
                             continue;
                         }
-                        var sUserItemName = CustomItem.GetItemName(userItem);
+                        var sUserItemName = CustomItemSystem.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (SystemShare.Config.ControlDropItem && stdItem.Price < SystemShare.Config.CanDropPrice)
@@ -382,7 +382,7 @@ namespace M2Server.Player
                 if (userItem != null && userItem.MakeIndex == nItemIdx)
                 {
                     stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
-                    var sUserItemName = CustomItem.GetItemName(userItem);
+                    var sUserItemName = CustomItemSystem.GetItemName(userItem);
                     if (stdItem != null)
                     {
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -399,7 +399,7 @@ namespace M2Server.Player
                 if (M2Share.CheckUserItems(btWhere, stdItem))
                 {
                     SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
-                    clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                    clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                     if (CheckTakeOnItems(btWhere, ref clientItem) && CheckItemBindUse(userItem))
                     {
                         UserItem takeOffItem = null;
@@ -527,7 +527,7 @@ namespace M2Server.Player
                             SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             goto FailExit;
                         }
-                        var sUserItemName = CustomItem.GetItemName(UseItems[btWhere]);// 取自定义物品名称
+                        var sUserItemName = CustomItemSystem.GetItemName(UseItems[btWhere]);// 取自定义物品名称
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             var userItem = UseItems[btWhere];
@@ -975,7 +975,7 @@ namespace M2Server.Player
                     var userItem = ItemList[i];
                     if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = CustomItem.GetItemName(userItem);
+                        var sUserItemName = CustomItemSystem.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && DealItemList.Count < 12)
                         {
                             DealItemList.Add(userItem);
@@ -1018,7 +1018,7 @@ namespace M2Server.Player
                     var userItem = DealItemList[i];
                     if (userItem.MakeIndex == nItemIdx)
                     {
-                        var sUserItemName = CustomItem.GetItemName(userItem);
+                        var sUserItemName = CustomItemSystem.GetItemName(userItem);
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             ItemList.Add(userItem);
@@ -1558,7 +1558,7 @@ namespace M2Server.Player
                 var userItem = ItemList[i];
                 if (userItem.MakeIndex == nInt)
                 {
-                    var sUserItemName = CustomItem.GetItemName(userItem);
+                    var sUserItemName = CustomItemSystem.GetItemName(userItem);
                     if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         userItemA = userItem;
@@ -1583,7 +1583,7 @@ namespace M2Server.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 userItem = ItemList[i];
-                var sUserItemName = CustomItem.GetItemName(userItem);
+                var sUserItemName = CustomItemSystem.GetItemName(userItem);
                 if (userItem.MakeIndex == nInt && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     break;
@@ -1616,7 +1616,7 @@ namespace M2Server.Player
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
-                var sUserItemName = CustomItem.GetItemName(userItem);// 取自定义物品名称
+                var sUserItemName = CustomItemSystem.GetItemName(userItem);// 取自定义物品名称
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0) // 检查NPC是否允许存物品
                 {
                     if (merchant != null && merchant.IsStorage && (merchant.Envir == Envir && IsWithinSight(merchant) || merchant == SystemShare.FunctionNPC))
@@ -1669,7 +1669,7 @@ namespace M2Server.Player
             for (var i = 0; i < StorageItemList.Count; i++)
             {
                 var userItem = StorageItemList[i];
-                var sUserItemName = CustomItem.GetItemName(userItem);
+                var sUserItemName = CustomItemSystem.GetItemName(userItem);
                 if (userItem.MakeIndex == nItemIdx && string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (IsAddWeightAvailable(SystemShare.ItemSystem.GetStdItemWeight(userItem.Index)))// 检查NPC是否允许取物品

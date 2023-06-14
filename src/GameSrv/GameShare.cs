@@ -1,5 +1,6 @@
 using GameSrv.DataSource;
 using GameSrv.Maps;
+using GameSrv.Module;
 using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word.Threads;

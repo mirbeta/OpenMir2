@@ -10,7 +10,7 @@ using SystemModule.SocketComponents.Event;
 
 namespace GameSrv.Services
 {
-    public class AccountSessionService : IAccountSessionService
+    public class LoginSessionService : ILoginSession
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<PlayerSession> _sessionList;
@@ -19,7 +19,7 @@ namespace GameSrv.Services
         private string SocketRecvText = string.Empty;
         private bool SocketConnected = false;
 
-        public AccountSessionService()
+        public LoginSessionService()
         {
             _sessionList = new List<PlayerSession>();
             _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort));
@@ -324,7 +324,7 @@ namespace GameSrv.Services
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    M2Share.SocketMgr.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
+                    M2Share.ThreadSocket.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
                 }
             }
             catch (Exception e)

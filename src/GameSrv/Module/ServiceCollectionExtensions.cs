@@ -1,10 +1,9 @@
-﻿using GameSrv.Extensions;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Loader;
 
-namespace GameSrv
+namespace GameSrv.Module
 {
     public static class ServiceCollectionExtensions
     {

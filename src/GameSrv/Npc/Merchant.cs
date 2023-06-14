@@ -973,7 +973,7 @@ namespace GameSrv.NPC
                 var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
-                    var sName = CustomItem.GetItemName(userItem);
+                    var sName = CustomItemSystem.GetItemName(userItem);
                     var nPrice = GetUserPrice(user, GetItemPrice(userItem.Index));
                     var nStock = goods.Count;
                     short nSubMenu;
@@ -1236,7 +1236,7 @@ namespace GameSrv.NPC
                 var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
-                    var sUserItemName = CustomItem.GetItemName(userItem);
+                    var sUserItemName = CustomItemSystem.GetItemName(userItem);
                     if (playObject.IsAddWeightAvailable(stdItem.Weight))
                     {
                         if (sUserItemName == sItemName)

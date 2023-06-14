@@ -1,4 +1,4 @@
-﻿namespace GameSrv.Extensions
+﻿namespace GameSrv.Module
 {
     public interface IModuleConfigurationManager
     {

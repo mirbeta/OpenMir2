@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace M2Server
 {
-    public interface IAccountSessionService
+    public interface ILoginSession
     {
         void CheckConnected();
         void Close();

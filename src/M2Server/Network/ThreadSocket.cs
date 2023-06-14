@@ -326,7 +326,7 @@ namespace M2Server
                         var packetMsg = sMsg.AsSpan()[1..].ToString();
                         if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
                         {
-                            sessInfo = M2Share.accountSessionService.GetAdmission(sAccount, gateUser.sIPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
+                            sessInfo = M2Share.LoginSession.GetAdmission(sAccount, gateUser.sIPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (sessInfo != null && nPayMent > 0)
                             {
                                 gateUser.Certification = true;
@@ -409,11 +409,11 @@ namespace M2Server
                                     }
                                     if (gateUser.PlayObject.Ghost && !gateUser.PlayObject.BoReconnection)
                                     {
-                                        M2Share.accountSessionService.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.LoginSession.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                     if (gateUser.PlayObject.BoSoftClose && gateUser.PlayObject.BoReconnection && gateUser.PlayObject.BoEmergencyClose)
                                     {
-                                        M2Share.accountSessionService.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.LoginSession.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                 }
                                 GateInfo.UserList[i] = null;
@@ -547,7 +547,7 @@ namespace M2Server
                         {
                             try
                             {
-                                M2Share.SocketMgr.Send(ConnectionId, buffer);
+                                M2Share.ThreadSocket.Send(ConnectionId, buffer);
                             }
                             catch (Exception ex)
                             {

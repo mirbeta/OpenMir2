@@ -1,8 +1,7 @@
-﻿using GameSrv.Extensions;
-using System.Text.Json;
+﻿using System.Text.Json;
 using SystemModule;
 
-namespace GameSrv
+namespace GameSrv.Module
 {
     public class ModuleConfigurationManager : IModuleConfigurationManager
     {

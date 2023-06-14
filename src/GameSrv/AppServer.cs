@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using GameSrv.Module;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;

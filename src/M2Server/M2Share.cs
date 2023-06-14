@@ -29,12 +29,18 @@ namespace M2Server
         /// </summary>
         public static long StartTime;
         public static int ShareFileNameNum = 0;
-        public static IAccountSessionService accountSessionService;
+        /// <summary>
+        /// 账号会话信息
+        /// </summary>
+        public static ILoginSession LoginSession;
         /// <summary>
         /// 脚本执行引擎
         /// </summary>
         public static IScriptEngine ScriptEngine;
-        public static readonly ThreadSocketMgr SocketMgr;
+        /// <summary>
+        /// ThreadSocket
+        /// </summary>
+        public static IThreadSocket ThreadSocket;
         /// <summary>
         /// 脚本解释器
         /// </summary>
@@ -48,7 +54,7 @@ namespace M2Server
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
         public static readonly RandomNumber RandomNumber;
-        public static CustomItem CustomItemMgr = null;
+        public static CustomItemSystem CustomItemMgr = null;
         public static NoticeManager NoticeMgr = null;
         public static NetworkMonitor NetworkMonitor = null;
         public static IWorldEngine WorldEngine = null;
@@ -187,7 +193,7 @@ namespace M2Server
             NetworkMonitor = new NetworkMonitor();
             NoticeMgr = new NoticeManager();
             ScriptParsers = new ScriptParsers();
-            SocketMgr = new ThreadSocketMgr();
+            ThreadSocket = new ThreadSocketService();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

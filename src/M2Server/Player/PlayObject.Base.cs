@@ -197,7 +197,7 @@ namespace M2Server.Player
             }
             ClientItem clientItem = new ClientItem();
             SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
-            clientItem.Item.Name = CustomItem.GetItemName(userItem);
+            clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
             clientItem.MakeIndex = userItem.MakeIndex;
             clientItem.Dura = userItem.Dura;
             clientItem.DuraMax = userItem.DuraMax;
@@ -1022,7 +1022,7 @@ namespace M2Server.Player
                         ClientItem clientItem = new ClientItem();
                         SystemShare.ItemSystem.GetUpgradeStdItem(item, UseItems[i], ref clientItem);
                         //Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
-                        clientItem.Item.Name = CustomItem.GetItemName(UseItems[i]);
+                        clientItem.Item.Name = CustomItemSystem.GetItemName(UseItems[i]);
                         clientItem.Dura = UseItems[i].Dura;
                         clientItem.DuraMax = UseItems[i].DuraMax;
                         clientItem.MakeIndex = UseItems[i].MakeIndex;
@@ -1599,7 +1599,7 @@ namespace M2Server.Player
                         ClientItem clientItem = new ClientItem();
                         SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
-                        clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                        clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                         clientItem.Dura = userItem.Dura;
                         clientItem.DuraMax = userItem.DuraMax;
                         clientItem.MakeIndex = userItem.MakeIndex;
@@ -1641,7 +1641,7 @@ namespace M2Server.Player
             {
                 ClientItem clientItem = new ClientItem();
                 SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
-                clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
                 clientItem.DuraMax = userItem.DuraMax;
@@ -1661,7 +1661,7 @@ namespace M2Server.Player
             {
                 ClientItem clientItem = new ClientItem();
                 SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
-                clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
                 clientItem.DuraMax = userItem.DuraMax;
@@ -1681,7 +1681,7 @@ namespace M2Server.Player
             {
                 ClientItem clientItem = new ClientItem();
                 SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
-                clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
                 clientItem.DuraMax = userItem.DuraMax;
@@ -1702,7 +1702,7 @@ namespace M2Server.Player
             {
                 ClientItem clientItem = new ClientItem();
                 SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
-                clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
                 clientItem.DuraMax = userItem.DuraMax;
@@ -2352,7 +2352,7 @@ namespace M2Server.Player
                 {
                     ClientItem clientItem = new ClientItem();
                     SystemShare.ItemSystem.GetUpgradeStdItem(pStdItem, userItem, ref clientItem);
-                    clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                    clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
@@ -2379,7 +2379,7 @@ namespace M2Server.Player
                 {
                     ClientItem clientItem = new ClientItem();
                     SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
-                    clientItem.Item.Name = CustomItem.GetItemName(userItem);
+                    clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
                     clientItem.DuraMax = userItem.DuraMax;
