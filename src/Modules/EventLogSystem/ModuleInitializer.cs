@@ -25,12 +25,12 @@ namespace EventLogSystem
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("日志事件插件启动...");
+            logger.Info("GameEvent日志事件插件启动...");
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("日志事件插件停止...");
+            logger.Info("GameEvent日志事件插件停止...");
         }
     }
 }

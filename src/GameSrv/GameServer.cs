@@ -18,13 +18,6 @@ namespace GameSrv
 
         public async Task StartUp(CancellationToken stoppingToken)
         {
-            var modules = serviceProvider.GetServices<IModuleInitializer>();
-
-            foreach (var module in modules)
-            {
-                module.Startup(stoppingToken);
-            }
-
             await GameShare.GeneratorProcessor.StartAsync(stoppingToken);
             await GameShare.SystemProcess.StartAsync(stoppingToken);
             await GameShare.UserProcessor.StartAsync(stoppingToken);
@@ -34,18 +27,19 @@ namespace GameSrv
             await GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
             await M2Share.SocketMgr.StartMessageThread(stoppingToken);
             Map.StartMakeStoneThread();
+
+            var modules = serviceProvider.GetServices<IModuleInitializer>();
+
+            foreach (var module in modules)
+            {
+                module.Startup(stoppingToken);
+            }
+
             _logger.Info("初始化游戏世界服务线程完成...");
         }
 
         public async Task Stopping(CancellationToken cancellationToken)
         {
-            var modules = serviceProvider.GetServices<IModuleInitializer>();
-
-            foreach (var module in modules)
-            {
-                module.Stopping(cancellationToken);
-            }
-
             await GameShare.GeneratorProcessor.StopAsync(cancellationToken);
             await GameShare.SystemProcess.StopAsync(cancellationToken);
             await GameShare.UserProcessor.StopAsync(cancellationToken);
@@ -55,6 +49,13 @@ namespace GameSrv
             await GameShare.TimedRobotProcessor.StopAsync(cancellationToken);
             await M2Share.SocketMgr.StopAsync(cancellationToken);
             GameShare.DataServer.Stop();
+
+            var modules = serviceProvider.GetServices<IModuleInitializer>();
+
+            foreach (var module in modules)
+            {
+                module.Stopping(cancellationToken);
+            }
         }
 
         private static void ProcessGameNotice()
