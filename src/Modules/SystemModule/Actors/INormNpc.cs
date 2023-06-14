@@ -22,7 +22,7 @@
 
         void Click(IPlayerActor actor);
 
-        void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp);
+        void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp = false);
 
         void LoadNPCScript();
 

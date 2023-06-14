@@ -491,10 +491,10 @@ namespace ScriptSystem
                         switch (DynamicVar.VarType)
                         {
                             case VarType.Integer:
-                                n3C = DynamicVar.nInternet;
+                                n3C = DynamicVar.Internet;
                                 break;
                             case VarType.String:
-                                s01 = DynamicVar.sString;
+                                s01 = DynamicVar.String;
                                 break;
                         }
                         boVarFound = true;
@@ -683,15 +683,15 @@ namespace ScriptSystem
                             case VarType.Integer:
                                 if (n3C > 1)
                                 {
-                                    DynamicVar.nInternet += n3C;
+                                    DynamicVar.Internet += n3C;
                                 }
                                 else
                                 {
-                                    DynamicVar.nInternet++;
+                                    DynamicVar.Internet++;
                                 }
                                 break;
                             case VarType.String:
-                                DynamicVar.sString = DynamicVar.sString + s01;
+                                DynamicVar.String = DynamicVar.String + s01;
                                 break;
                         }
                         boVarFound = true;
@@ -1608,10 +1608,10 @@ namespace ScriptSystem
                         switch (DynamicVar.VarType)
                         {
                             case VarType.Integer:
-                                n3C = DynamicVar.nInternet;
+                                n3C = DynamicVar.Internet;
                                 break;
                             case VarType.String:
-                                s01 = DynamicVar.sString;
+                                s01 = DynamicVar.String;
                                 break;
                         }
                         boVarFound = true;
@@ -1809,18 +1809,18 @@ namespace ScriptSystem
                             case VarType.Integer:
                                 if (n3C > 1)
                                 {
-                                    DynamicVar.nInternet -= n3C;
+                                    DynamicVar.Internet -= n3C;
                                 }
                                 else
                                 {
-                                    DynamicVar.nInternet -= 1;
+                                    DynamicVar.Internet -= 1;
                                 }
                                 break;
                             case VarType.String:
-                                n10 = DynamicVar.sString.AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
-                                s02 = DynamicVar.sString[..(n10 - 1)];
-                                s03 = DynamicVar.sString.Substring(s01.Length + n10 - 1, DynamicVar.sString.Length);
-                                DynamicVar.sString = s02 + s03;
+                                n10 = DynamicVar.String.AsSpan().IndexOf(s01, StringComparison.CurrentCultureIgnoreCase);
+                                s02 = DynamicVar.String[..(n10 - 1)];
+                                s03 = DynamicVar.String.Substring(s01.Length + n10 - 1, DynamicVar.String.Length);
+                                DynamicVar.String = s02 + s03;
                                 break;
                         }
                         boVarFound = true;
@@ -3718,13 +3718,13 @@ namespace ScriptSystem
                 iniFile.Load();
                 if (dynamicVar.VarType == VarType.Integer)
                 {
-                    dynamicVarList[sVarName].nInternet = dynamicVar.nInternet;
-                    iniFile.WriteInteger(sName, dynamicVar.sName, dynamicVar.nInternet);
+                    dynamicVarList[sVarName].Internet = dynamicVar.Internet;
+                    iniFile.WriteInteger(sName, dynamicVar.Name, dynamicVar.Internet);
                 }
                 else
                 {
-                    dynamicVarList[sVarName].sString = dynamicVar.sString;
-                    iniFile.WriteString(sName, dynamicVar.sName, dynamicVar.sString);
+                    dynamicVarList[sVarName].String = dynamicVar.String;
+                    iniFile.WriteString(sName, dynamicVar.Name, dynamicVar.String);
                 }
                 boFoundVar = true;
             }
@@ -3798,10 +3798,10 @@ namespace ScriptSystem
                             switch (dynamicVar.VarType)
                             {
                                 case VarType.Integer:
-                                    nVarValue = dynamicVar.nInternet;
+                                    nVarValue = dynamicVar.Internet;
                                     break;
                                 case VarType.String:
-                                    sVarValue = dynamicVar.sString;
+                                    sVarValue = dynamicVar.String;
                                     break;
                             }
                             boFoundVar = true;
@@ -3831,7 +3831,6 @@ namespace ScriptSystem
                 ScriptActionError(normNpc, playerActor, string.Format(sVarTypeError, sType), questActionInfo, ExecutionCode.CalcVar);
                 return;
             }
-
             if (playerActor.DynamicVarMap.TryGetValue(sVarName, out dynamicVar))
             {
                 switch (dynamicVar.VarType)
@@ -3840,19 +3839,19 @@ namespace ScriptSystem
                         switch (cMethod)
                         {
                             case '=':
-                                dynamicVar.nInternet = nVarValue;
+                                dynamicVar.Internet = nVarValue;
                                 break;
                             case '+':
-                                dynamicVar.nInternet = dynamicVar.nInternet + nVarValue;
+                                dynamicVar.Internet = dynamicVar.Internet + nVarValue;
                                 break;
                             case '-':
-                                dynamicVar.nInternet = dynamicVar.nInternet - nVarValue;
+                                dynamicVar.Internet = dynamicVar.Internet - nVarValue;
                                 break;
                             case '*':
-                                dynamicVar.nInternet = dynamicVar.nInternet * nVarValue;
+                                dynamicVar.Internet = dynamicVar.Internet * nVarValue;
                                 break;
                             case '/':
-                                dynamicVar.nInternet = dynamicVar.nInternet / nVarValue;
+                                dynamicVar.Internet = dynamicVar.Internet / nVarValue;
                                 break;
                         }
                         break;
@@ -3860,10 +3859,10 @@ namespace ScriptSystem
                         switch (cMethod)
                         {
                             case '=':
-                                dynamicVar.sString = sVarValue;
+                                dynamicVar.String = sVarValue;
                                 break;
                             case '+':
-                                dynamicVar.sString = dynamicVar.sString + sVarValue;
+                                dynamicVar.String = dynamicVar.String + sVarValue;
                                 break;
                             case '-':
                                 break;
@@ -3910,8 +3909,6 @@ namespace ScriptSystem
         /// <summary>
         /// 特修身上所有装备
         /// </summary>
-        /// <param name="IPlayerActor"></param>
-        /// <param name="questActionInfo"></param>
         private void ActionOfRepairAllItem(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var boIsHasItem = false;
@@ -3949,8 +3946,8 @@ namespace ScriptSystem
                     {
                         for (var i = 0; i < playerActor.GroupMembers.Count; i++)
                         {
-                            var IPlayerActorEx = playerActor.GroupMembers[i];
-                            IPlayerActorEx.SpaceMove(questActionInfo.sParam1, (short)questActionInfo.nParam2, (short)questActionInfo.nParam3, 0);
+                            var groupActorEx = playerActor.GroupMembers[i];
+                            groupActorEx.SpaceMove(questActionInfo.sParam1, (short)questActionInfo.nParam2, (short)questActionInfo.nParam3, 0);
                         }
                         boFlag = true;
                     }
@@ -4082,8 +4079,6 @@ namespace ScriptSystem
         /// 声明变量
         /// VAR 数据类型(Integer String) 类型(HUMAN GUILD GLOBAL) 变量值
         /// </summary>
-        /// <param name="IPlayerActor"></param>
-        /// <param name="questActionInfo"></param>
         private void ActionOfVar(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
@@ -4121,10 +4116,10 @@ namespace ScriptSystem
                 return;
             }
             var dynamicVar = new DynamicVar();
-            dynamicVar.sName = sVarName;
+            dynamicVar.Name = sVarName;
             dynamicVar.VarType = varType;
-            dynamicVar.nInternet = nVarValue;
-            dynamicVar.sString = sVarValue;
+            dynamicVar.Internet = nVarValue;
+            dynamicVar.String = sVarValue;
             var boFoundVar = false;
             var dynamicVarList = GetDynamicVarMap(playerActor, sType, ref sName);
             if (dynamicVarList == null)
@@ -4151,8 +4146,6 @@ namespace ScriptSystem
         /// 读取变量值
         /// LOADVAR 变量类型 变量名 文件名
         /// </summary>
-        /// <param name="IPlayerActor"></param>
-        /// <param name="questActionInfo"></param>
         private void ActionOfLoadVar(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var sName = string.Empty;
@@ -4212,8 +4205,8 @@ namespace ScriptSystem
                     {
                         dynamicVarList.Add(sVarName, new DynamicVar()
                         {
-                            sName = sVarName,
-                            sString = str,
+                            Name = sVarName,
+                            String = str,
                             VarType = VarType.String
                         });
                     }
@@ -4392,17 +4385,17 @@ namespace ScriptSystem
                 {
                     sMsg = string.Format(Settings.NPCSayForceUnMasterMsg, normNpc.ChrName, playerActor.ChrName, playerActor.MasterName);
                     SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
-                    //poseHuman = M2Share.WorldEngine.GetIPlayerActor(playerActor.MasterName);
-                    //if (poseHuman != null)
-                    //{
-                    //    poseHuman.MasterName = "";
-                    //    poseHuman.RefShowName();
-                    //}
-                    //else
-                    //{
-                    //    M2Share.UnForceMasterList.Add(playerActor.MasterName);
-                    //    M2Share.SaveUnForceMasterList();
-                    //}
+                    poseHuman = SystemShare.WorldEngine.GetPlayObject(playerActor.MasterName);
+                    if (poseHuman != null)
+                    {
+                        poseHuman.MasterName = "";
+                        poseHuman.RefShowName();
+                    }
+                    else
+                    {
+                        //M2Share.UnForceMasterList.Add(playerActor.MasterName);
+                        //M2Share.SaveUnForceMasterList();
+                    }
                     playerActor.MasterName = "";
                     normNpc.GotoLable(playerActor, "@UnMasterEnd", false);
                     playerActor.RefShowName();

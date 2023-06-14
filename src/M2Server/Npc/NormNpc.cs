@@ -1455,11 +1455,11 @@ namespace M2Server.Npc
                     switch (DynamicVar.VarType)
                     {
                         case VarType.Integer:
-                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.Internet.ToString());
                             boFoundVar = true;
                             break;
                         case VarType.String:
-                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.String);
                             boFoundVar = true;
                             break;
                     }
@@ -1480,16 +1480,16 @@ namespace M2Server.Npc
                 boFoundVar = false;
                 if (PlayObject.MyGuild.DynamicVarList.TryGetValue(s14, out DynamicVar))
                 {
-                    if (string.Compare(DynamicVar.sName, s14, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(DynamicVar.Name, s14, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         switch (DynamicVar.VarType)
                         {
                             case VarType.Integer:
-                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
+                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.Internet.ToString());
                                 boFoundVar = true;
                                 break;
                             case VarType.String:
-                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                                sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.String);
                                 boFoundVar = true;
                                 break;
                         }
@@ -1510,11 +1510,11 @@ namespace M2Server.Npc
                     switch (DynamicVar.VarType)
                     {
                         case VarType.Integer:
-                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.Internet.ToString());
                             boFoundVar = true;
                             break;
                         case VarType.String:
-                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                            sMsg = ReplaceVariableText(sMsg, '<' + sVariable + '>', DynamicVar.String);
                             boFoundVar = true;
                             break;
                     }

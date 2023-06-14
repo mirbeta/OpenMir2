@@ -4,9 +4,9 @@ namespace SystemModule.Data
 {
     public class DynamicVar
     {
-        public string sName;
+        public string Name;
         public VarType VarType;
-        public int nInternet;
-        public string sString;
+        public int Internet;
+        public string String;
     }
 }

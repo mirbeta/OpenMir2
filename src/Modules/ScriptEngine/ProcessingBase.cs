@@ -569,12 +569,12 @@ namespace ScriptSystem
                     switch (DynamicVar.VarType)
                     {
                         case VarType.Integer:
-                            nValue = DynamicVar.nInternet;
+                            nValue = DynamicVar.Internet;
                             nDataType = 1;
                             result = true;
                             return result;
                         case VarType.String:
-                            sValue = DynamicVar.sString;
+                            sValue = DynamicVar.String;
                             nDataType = 0;
                             result = true;
                             return result;
@@ -589,12 +589,12 @@ namespace ScriptSystem
                     switch (DynamicVar.VarType)
                     {
                         case VarType.Integer:
-                            nValue = DynamicVar.nInternet;
+                            nValue = DynamicVar.Internet;
                             nDataType = 1;
                             result = true;
                             return result;
                         case VarType.String:
-                            sValue = DynamicVar.sString;
+                            sValue = DynamicVar.String;
                             nDataType = 0;
                             result = true;
                             return result;
@@ -609,12 +609,12 @@ namespace ScriptSystem
                     switch (DynamicVar.VarType)
                     {
                         case VarType.Integer:
-                            nValue = DynamicVar.nInternet;
+                            nValue = DynamicVar.Internet;
                             nDataType = 1;
                             result = true;
                             return result;
                         case VarType.String:
-                            sValue = DynamicVar.sString;
+                            sValue = DynamicVar.String;
                             nDataType = 0;
                             result = true;
                             return result;
@@ -902,11 +902,11 @@ namespace ScriptSystem
                 switch (DynamicVar.VarType)
                 {
                     case VarType.Integer:
-                        nValue = DynamicVar.nInternet;
+                        nValue = DynamicVar.Internet;
                         nDataType = 1;
                         break;
                     case VarType.String:
-                        sValue = DynamicVar.sString;
+                        sValue = DynamicVar.String;
                         nDataType = 0;
                         break;
                 }
@@ -928,12 +928,12 @@ namespace ScriptSystem
             {
                 if (nDataType == 1 && DynamicVar.VarType == VarType.Integer)
                 {
-                    DynamicVar.nInternet = nValue;
+                    DynamicVar.Internet = nValue;
                     boVarFound = true;
                 }
                 else if (DynamicVar.VarType == VarType.String)
                 {
-                    DynamicVar.sString = sValue;
+                    DynamicVar.String = sValue;
                     boVarFound = true;
                 }
             }
@@ -1309,18 +1309,18 @@ namespace ScriptSystem
             }
             if (DynamicVarList.TryGetValue(sVarName, out DynamicVar DynamicVar))
             {
-                if (string.Compare(DynamicVar.sName, sVarName, StringComparison.Ordinal) == 0)
+                if (string.Compare(DynamicVar.Name, sVarName, StringComparison.Ordinal) == 0)
                 {
                     switch (DynamicVar.VarType)
                     {
                         case VarType.Integer:
-                            nValue = DynamicVar.nInternet;
+                            nValue = DynamicVar.Internet;
                             sValue = nValue.ToString();
                             result = VarType.Integer;
                             break;
 
                         case VarType.String:
-                            sValue = DynamicVar.sString;
+                            sValue = DynamicVar.String;
                             nValue = HUtil32.StrToInt(sValue, 0);
                             result = VarType.String;
                             break;
@@ -1497,17 +1497,17 @@ namespace ScriptSystem
                 boFoundVar = false;
                 if (PlayerActor.DynamicVarMap.TryGetValue(dynamicName, out DynamicVar))
                 {
-                    if (string.Compare(DynamicVar.sName, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(DynamicVar.Name, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         switch (DynamicVar.VarType)
                         {
                             case VarType.Integer:
-                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
+                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.Internet.ToString());
                                 boFoundVar = true;
                                 break;
 
                             case VarType.String:
-                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.String);
                                 boFoundVar = true;
                                 break;
                         }
@@ -1529,17 +1529,17 @@ namespace ScriptSystem
                 boFoundVar = false;
                 if (PlayerActor.MyGuild.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
                 {
-                    if (string.Compare(DynamicVar.sName, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(DynamicVar.Name, dynamicName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         switch (DynamicVar.VarType)
                         {
                             case VarType.Integer:
-                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.nInternet);
+                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.Internet);
                                 boFoundVar = true;
                                 break;
 
                             case VarType.String:
-                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.String);
                                 boFoundVar = true;
                                 break;
                         }
@@ -1557,16 +1557,16 @@ namespace ScriptSystem
                 boFoundVar = false;
                 if (SystemShare.DynamicVarList.TryGetValue(dynamicName, out DynamicVar))
                 {
-                    if (string.Compare(DynamicVar.sName, dynamicName, StringComparison.Ordinal) == 0)
+                    if (string.Compare(DynamicVar.Name, dynamicName, StringComparison.Ordinal) == 0)
                     {
                         switch (DynamicVar.VarType)
                         {
                             case VarType.Integer:
-                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.nInternet.ToString());
+                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.Internet.ToString());
                                 boFoundVar = true;
                                 break;
                             case VarType.String:
-                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.sString);
+                                sMsg = CombineStr(sMsg, '<' + sVariable + '>', DynamicVar.String);
                                 boFoundVar = true;
                                 break;
                         }
@@ -1668,11 +1668,11 @@ namespace ScriptSystem
                 switch (dynamicVar.VarType)
                 {
                     case VarType.Integer:
-                        dynamicVar.nInternet = nValue;
+                        dynamicVar.Internet = nValue;
                         break;
 
                     case VarType.String:
-                        dynamicVar.sString = sValue;
+                        dynamicVar.String = sValue;
                         break;
                 }
                 result = true;

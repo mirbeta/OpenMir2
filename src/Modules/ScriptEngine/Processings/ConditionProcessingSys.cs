@@ -1542,25 +1542,25 @@ namespace ScriptSystem
                             switch (cMethod)
                             {
                                 case '=':
-                                    if (dynamic.nInternet == nVarValue)
+                                    if (dynamic.Internet == nVarValue)
                                     {
                                         success = true;
                                     }
                                     break;
                                 case '>':
-                                    if (dynamic.nInternet > nVarValue)
+                                    if (dynamic.Internet > nVarValue)
                                     {
                                         success = true;
                                     }
                                     break;
                                 case '<':
-                                    if (dynamic.nInternet < nVarValue)
+                                    if (dynamic.Internet < nVarValue)
                                     {
                                         success = true;
                                     }
                                     break;
                                 default:
-                                    if (dynamic.nInternet >= nVarValue)
+                                    if (dynamic.Internet >= nVarValue)
                                     {
                                         success = true;
                                     }
@@ -1571,7 +1571,7 @@ namespace ScriptSystem
                             switch (cMethod)
                             {
                                 case '=':
-                                    if (dynamic.sString == sVarValue)
+                                    if (dynamic.String == sVarValue)
                                     {
                                         success = true;
                                     }

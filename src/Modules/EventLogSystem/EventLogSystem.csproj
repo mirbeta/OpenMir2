@@ -9,6 +9,10 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
       <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
     </ItemGroup>
 
