@@ -32,7 +32,7 @@ namespace GameSrv
             await GameShare.EventProcessor.StartAsync(stoppingToken);
             await GameShare.StorageProcessor.StartAsync(stoppingToken);
             await GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
-            await GameShare.SocketMgr.StartMessageThread(stoppingToken);
+            await M2Share.SocketMgr.StartMessageThread(stoppingToken);
             Map.StartMakeStoneThread();
             _logger.Info("初始化游戏世界服务线程完成...");
         }
@@ -53,7 +53,7 @@ namespace GameSrv
             await GameShare.EventProcessor.StopAsync(cancellationToken);
             await GameShare.StorageProcessor.StopAsync(cancellationToken);
             await GameShare.TimedRobotProcessor.StopAsync(cancellationToken);
-            await GameShare.SocketMgr.StopAsync(cancellationToken);
+            await M2Share.SocketMgr.StopAsync(cancellationToken);
             GameShare.DataServer.Stop();
         }
 

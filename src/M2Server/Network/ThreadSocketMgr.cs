@@ -1,9 +1,8 @@
-﻿using GameSrv.Services;
-using M2Server;
-using NLog;
+﻿using NLog;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
+using SystemModule;
 using SystemModule.ByteManager;
 using SystemModule.Common;
 using SystemModule.Core.Config;
@@ -17,7 +16,7 @@ using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace GameSrv.Network
+namespace M2Server
 {
     public class ThreadSocketMgr
     {
@@ -62,7 +61,7 @@ namespace GameSrv.Network
             var client = (SocketClient)sender;
             if (_gatePermitMap.Contains(HUtil32.IpToInt(client.ServiceIP)))
             {
-                GameShare.SocketMgr.AddGate(client);
+                M2Share.SocketMgr.AddGate(client);
             }
             else
             {
@@ -74,7 +73,7 @@ namespace GameSrv.Network
         private void Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            GameShare.SocketMgr.CloseGate(client.ID, client.ServiceIP);
+            M2Share.SocketMgr.CloseGate(client.ID, client.ServiceIP);
             tcpService.NextId();
         }
 
@@ -281,7 +280,7 @@ namespace GameSrv.Network
                                     gateUser.PlayObject.BoEmergencyClose = true;
                                     if (!gateUser.PlayObject.BoReconnection)
                                     {
-                                        IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.accountSessionService.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                 }
                                 gateInfo.UserList[j] = null;

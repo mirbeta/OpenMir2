@@ -60,6 +60,7 @@ namespace GameSrv
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.CommandSystem = new GameCommandSystem();
+            M2Share.accountSessionService = new AccountSessionService();
             InitializeModule(serviceProvider);
         }
 
@@ -218,7 +219,7 @@ namespace GameSrv
             _logger.Info("加载公告提示信息成功...");
             LocalDb.LoadAdminList();
             _logger.Info("管理员列表加载成功...");
-            GameShare.SocketMgr.Initialize();
+            M2Share.SocketMgr.Initialize();
             _logger.Info("正在初始化网络引擎...");
         }
 
@@ -249,13 +250,13 @@ namespace GameSrv
                     _logger.Info("守卫列表加载成功...");
                 }
                 GameShare.PlanesService.Start();
-                IdSrvClient.Instance.Initialize();
+                M2Share.accountSessionService.Initialize();
                 SystemShare.GuildMgr.LoadGuildInfo();
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();
                 GameShare.DataServer.Start();
                 // GameShare.MarketService.Start();
-                GameShare.SocketMgr.Start();
+                M2Share.SocketMgr.Start();
                 GameShare.StartReady = true;
                 M2Share.WorldEngine.Initialize();
                 _logger.Info("游戏处理引擎初始化成功...");

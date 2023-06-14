@@ -30,6 +30,8 @@ namespace M2Server
         public static long StartTime;
         public static int ShareFileNameNum = 0;
         public static readonly ActorMgr ActorMgr;
+        public static IAccountSessionService accountSessionService;
+        public static readonly ThreadSocketMgr SocketMgr;
         /// <summary>
         /// 脚本解释器
         /// </summary>
@@ -183,6 +185,7 @@ namespace M2Server
             NetworkMonitor = new NetworkMonitor();
             NoticeMgr = new NoticeManager();
             ScriptParsers = new ScriptParsers();
+            SocketMgr = new ThreadSocketMgr();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

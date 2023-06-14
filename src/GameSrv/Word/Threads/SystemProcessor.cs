@@ -37,7 +37,7 @@ namespace GameSrv.Word.Threads
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             Run();
-            IdSrvClient.Instance.Run();
+            M2Share.accountSessionService.Run();
             M2Share.WorldEngine.PrcocessData();
             ProcessGameRun();
             if (M2Share.ServerIndex == 0)
@@ -64,7 +64,7 @@ namespace GameSrv.Word.Threads
             if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
             {
                 SendOnlineHumTime = HUtil32.GetTickCount();
-                IdSrvClient.Instance.SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
+                M2Share.accountSessionService.SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
             }
         }
 
@@ -78,7 +78,7 @@ namespace GameSrv.Word.Threads
                     RunTimeTick = HUtil32.GetTickCount();
                     SystemShare.GuildMgr.Run();
                     SystemShare.CastleMgr.Run();
-                    GameShare.SocketMgr.Run();
+                    M2Share.SocketMgr.Run();
                     if (!M2Share.DenySayMsgList.IsEmpty)
                     {
                         List<string> denyList = new List<string>(M2Share.DenySayMsgList.Count);

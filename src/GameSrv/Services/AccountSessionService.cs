@@ -9,7 +9,7 @@ using SystemModule.SocketComponents.Event;
 
 namespace GameSrv.Services
 {
-    public class AccountSessionService
+    public class AccountSessionService : IAccountSessionService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<PlayerSession> _sessionList;
@@ -323,7 +323,7 @@ namespace GameSrv.Services
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    GameShare.SocketMgr.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
+                    M2Share.SocketMgr.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
                 }
             }
             catch (Exception e)
@@ -458,23 +458,6 @@ namespace GameSrv.Services
             for (int i = 0; i < _sessionList.Count; i++)
             {
                 List.Add(_sessionList[i]);
-            }
-        }
-    }
-
-    public class IdSrvClient
-    {
-        private static AccountSessionService instance;
-
-        public static AccountSessionService Instance
-        {
-            get
-            {
-                if (instance == null)
-                {
-                    instance = new AccountSessionService();
-                }
-                return instance;
             }
         }
     }

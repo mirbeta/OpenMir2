@@ -1,4 +1,3 @@
-using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
 using Microsoft.Extensions.Hosting;
@@ -43,7 +42,7 @@ namespace GameSrv
             {
                 while (await _timer.WaitForNextTickAsync(stoppingToken))
                 {
-                    await ExecuteInternal();
+                    ExecuteInternal();
                 }
             }
             catch (OperationCanceledException)
@@ -59,7 +58,7 @@ namespace GameSrv
             return base.StopAsync(cancellationToken);
         }
 
-        private async Task ExecuteInternal()
+        private void ExecuteInternal()
         {
             if (!GameShare.StartReady) return;
             var currentTick = HUtil32.GetTickCount();
@@ -67,7 +66,7 @@ namespace GameSrv
             {
                 _checkIntervalTime = HUtil32.GetTickCount();
                 GameShare.DataServer.CheckConnected();
-                IdSrvClient.Instance.CheckConnected();
+                M2Share.accountSessionService.CheckConnected();
                 PlanesClient.Instance.CheckConnected();
                 //await GameShare.ChatService.Ping();
             }

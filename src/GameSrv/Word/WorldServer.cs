@@ -489,7 +489,7 @@ namespace GameSrv.Word
                                 {
                                     _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
                                     LoadPlayerQueue.Add(i);
-                                    GameShare.SocketMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
+                                    M2Share.SocketMgr.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
                                 if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
@@ -545,12 +545,12 @@ namespace GameSrv.Word
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
-                        GameShare.SocketMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
+                        M2Share.SocketMgr.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
                     for (var i = 0; i < ListOfGateIdx.Count; i++)
                     {
-                        GameShare.SocketMgr.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
+                        M2Share.SocketMgr.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
                     }
                     ListOfGateIdx.Clear();
                     ListOfSocket.Clear();
@@ -690,7 +690,7 @@ namespace GameSrv.Word
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
-                            GameShare.SocketMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
+                            M2Share.SocketMgr.CloseUser(playObject.GateIdx, playObject.SocketId);
                             SendServerGroupMsg(Messages.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }
@@ -739,7 +739,7 @@ namespace GameSrv.Word
             }
         }
 
-        public static void ProcessUserMessage(IPlayerActor playObject, CommandMessage defMsg, string buff)
+        public void ProcessUserMessage(IPlayerActor playObject, CommandMessage defMsg, string buff)
         {
             if (playObject.OffLineFlag) return;
             var sMsg = string.Empty;

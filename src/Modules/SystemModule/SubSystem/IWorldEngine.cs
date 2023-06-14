@@ -1,5 +1,6 @@
 ﻿using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule
 {
@@ -22,6 +23,8 @@ namespace SystemModule
         int OfflinePlayCount { get; }
 
         int MonGenCount { get; }
+
+        void ProcessUserMessage(IPlayerActor playObject, CommandMessage defMsg, string buff);
 
         void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg);
 

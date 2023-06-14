@@ -67,7 +67,7 @@ namespace M2Server.Player
             byte[] actionData = new byte[ServerMessage.PacketSize + msgBuff.Length];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, actionData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(msgBuff, 0, actionData, ServerMessage.PacketSize, msgBuff.Length);
-            // M2Share.SocketMgr.AddGateBuffer(GateIdx, actionData);
+            M2Share.SocketMgr.AddGateBuffer(GateIdx, actionData);
         }
 
         /// <summary>
@@ -95,7 +95,7 @@ namespace M2Server.Player
             byte[] sendData = new byte[HeaderLen];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
-            // M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
+            M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
         }
 
         public virtual void SendSocket(CommandMessage defMsg, string sMsg)
@@ -125,7 +125,7 @@ namespace M2Server.Player
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
             MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
-            // M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
+            M2Share.SocketMgr.AddGateBuffer(GateIdx, sendData);
         }
     }
 }

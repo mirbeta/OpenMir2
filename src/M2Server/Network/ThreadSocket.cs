@@ -1,16 +1,14 @@
-﻿using GameSrv.Services;
-using GameSrv.Word;
-using M2Server;
-using NLog;
+﻿using NLog;
 using System.Buffers;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading.Channels;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace GameSrv.Network
+namespace M2Server
 {
     public class ThreadSocket
     {
@@ -225,12 +223,12 @@ namespace GameSrv.Network
                                     mesaagePacket.Series = BitConverter.ToUInt16(msgBuff.Slice(10, 2));
                                     if (nMsgLen == 12)
                                     {
-                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, null);
+                                       SystemShare.WorldEngine.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, null);
                                     }
                                     else
                                     {
                                         var sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
-                                        WorldServer.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, sMsg);
+                                        SystemShare.WorldEngine.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, sMsg);
                                     }
                                 }
                             }
@@ -328,7 +326,7 @@ namespace GameSrv.Network
                         var packetMsg = sMsg.AsSpan()[1..].ToString();
                         if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
                         {
-                            sessInfo = IdSrvClient.Instance.GetAdmission(sAccount, gateUser.sIPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
+                            sessInfo = M2Share.accountSessionService.GetAdmission(sAccount, gateUser.sIPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (sessInfo != null && nPayMent > 0)
                             {
                                 gateUser.Certification = true;
@@ -411,11 +409,11 @@ namespace GameSrv.Network
                                     }
                                     if (gateUser.PlayObject.Ghost && !gateUser.PlayObject.BoReconnection)
                                     {
-                                        IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.accountSessionService.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                     if (gateUser.PlayObject.BoSoftClose && gateUser.PlayObject.BoReconnection && gateUser.PlayObject.BoEmergencyClose)
                                     {
-                                        IdSrvClient.Instance.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.accountSessionService.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                 }
                                 GateInfo.UserList[i] = null;
@@ -491,7 +489,7 @@ namespace GameSrv.Network
                     if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
-                        gateUserInfo.WorldEngine = (WorldServer)M2Share.WorldEngine;
+                        gateUserInfo.WorldEngine = M2Share.WorldEngine;
                         gateUserInfo.PlayObject = playObject;
                         break;
                     }
@@ -549,7 +547,7 @@ namespace GameSrv.Network
                         {
                             try
                             {
-                                GameShare.SocketMgr.Send(ConnectionId, buffer);
+                                M2Share.SocketMgr.Send(ConnectionId, buffer);
                             }
                             catch (Exception ex)
                             {

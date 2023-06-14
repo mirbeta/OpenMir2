@@ -1,9 +1,8 @@
-using GameSrv.Services;
-using GameSrv.Word;
 using System.Net.Sockets;
+using SystemModule;
 using SystemModule.Data;
 
-namespace GameSrv.Network
+namespace M2Server
 {
     public class ThreadGateInfo
     {
@@ -94,8 +93,8 @@ namespace GameSrv.Network
         /// </summary>
         public PlayerSession SessInfo;
         public int nSocket;
-        public FrontEngine FrontEngine;
-        public WorldServer WorldEngine;
+        public IFrontEngine FrontEngine;
+        public IWorldEngine WorldEngine;
         public int dwNewUserTick;
     }
 }

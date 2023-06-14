@@ -1,6 +1,5 @@
 using GameSrv.DataSource;
 using GameSrv.Maps;
-using GameSrv.Network;
 using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word.Threads;
@@ -32,7 +31,6 @@ namespace GameSrv
         public static readonly TimedRobotProcessor TimedRobotProcessor;
         public static readonly MapQuestManager QuestManager;
         public static readonly DBService DataServer;
-        public static readonly ThreadSocketMgr SocketMgr;
         public static readonly RobotManage RobotMgr;
         public static bool StartReady = false;
         public static int SendOnlineTick = 0;
@@ -54,7 +52,6 @@ namespace GameSrv
             TimedRobotProcessor = new TimedRobotProcessor();
             PlanesService = new PlanesService();
             DataServer = new DBService();
-            SocketMgr = new ThreadSocketMgr();
             RobotMgr = new RobotManage();
             QuestManager = new MapQuestManager();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();

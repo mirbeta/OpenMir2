@@ -108,7 +108,7 @@ namespace GameSrv.Word.Threads
                 }
                 if (!LoadPlayerFromDB(loadDbInfo, ref boReTryLoadDb))
                 {
-                    GameShare.SocketMgr.CloseUser(loadDbInfo.GateIdx, loadDbInfo.SocketId);
+                    M2Share.SocketMgr.CloseUser(loadDbInfo.GateIdx, loadDbInfo.SocketId);
                     _logger.Debug("读取用户数据失败，踢出用户.");
                 }
                 else
@@ -149,7 +149,7 @@ namespace GameSrv.Word.Threads
             }*/
             if (!PlayerDataService.LoadHumRcdFromDB(loadUser.Account, loadUser.ChrName, loadUser.sIPaddr, ref queryId, loadUser.SessionID))
             {
-                GameShare.SocketMgr.SendOutConnectMsg(loadUser.GateIdx, loadUser.SocketId, loadUser.GSocketIdx);
+                M2Share.SocketMgr.SendOutConnectMsg(loadUser.GateIdx, loadUser.SocketId, loadUser.GSocketIdx);
             }
             else
             {
