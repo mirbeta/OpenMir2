@@ -50,6 +50,8 @@ namespace SystemModule
 
         void AddMerchant(IMerchant merchant);
 
+        void AddQuestNpc(INormNpc normNpc);
+
         IList<AdminInfo> AdminList { get; set; }
 
         int PlayObjectCount { get; }

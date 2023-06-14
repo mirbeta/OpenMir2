@@ -357,7 +357,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighLevelHuman != 0)
                         {
-                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighLevelHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)SystemShare.ActorMgr.Get(M2Share.HighLevelHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -370,7 +370,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighPKPointHuman != 0)
                         {
-                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighPKPointHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)SystemShare.ActorMgr.Get(M2Share.HighPKPointHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -383,7 +383,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighDCHuman != 0)
                         {
-                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighDCHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)SystemShare.ActorMgr.Get(M2Share.HighDCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -396,7 +396,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighMCHuman != 0)
                         {
-                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighMCHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)SystemShare.ActorMgr.Get(M2Share.HighMCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -409,7 +409,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighSCHuman != 0)
                         {
-                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighSCHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)SystemShare.ActorMgr.Get(M2Share.HighSCHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -422,7 +422,7 @@ namespace M2Server.Npc
                     {
                         if (M2Share.HighOnlineHuman != 0)
                         {
-                            sText = ((IPlayerActor)M2Share.ActorMgr.Get(M2Share.HighOnlineHuman)).GetMyInfo();
+                            sText = ((IPlayerActor)SystemShare.ActorMgr.Get(M2Share.HighOnlineHuman)).GetMyInfo();
                         }
                         else
                         {
@@ -1587,7 +1587,7 @@ namespace M2Server.Npc
         {
             if (IsQuest)
             {
-                FilePath = "sNpc_def";
+                FilePath = "Npc_def";
                 string sScriptName = ChrName + '-' + MapName;
                 M2Share.ScriptParsers.LoadScript(this, FilePath, sScriptName);
             }
@@ -1885,11 +1885,6 @@ namespace M2Server.Npc
         public void GotoLable(IPlayerActor playObject, string lab, bool s)
         {
 
-        }
-
-        public void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp, string sMsg)
-        {
-            throw new NotImplementedException();
         }
     }
 }

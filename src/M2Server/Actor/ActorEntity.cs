@@ -1,3 +1,4 @@
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -16,7 +17,7 @@ namespace M2Server.Actor
 
         public ActorEntity()
         {
-            ActorId = M2Share.ActorMgr.GetNextIdentity();
+            ActorId = SystemShare.ActorMgr.GetNextIdentity();
             MsgQueue = new PriorityQueue<SendMessage, byte>();
         }
 

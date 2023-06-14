@@ -140,7 +140,7 @@ namespace M2Server.Monster
             SearchTick = HUtil32.GetTickCount();
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
-            var baseObject = M2Share.ActorMgr.Get(acrotId);
+            var baseObject = SystemShare.ActorMgr.Get(acrotId);
             if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;

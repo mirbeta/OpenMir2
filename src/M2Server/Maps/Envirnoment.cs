@@ -349,7 +349,7 @@ namespace M2Server
                             CellObject cellObject = cellInfo.ObjList[i];
                             if (cellObject.ActorObject)
                             {
-                                IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
                                     if (!baseObject.Ghost && !baseObject.Death && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -451,7 +451,7 @@ namespace M2Server
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject)
                         {
-                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -504,7 +504,7 @@ namespace M2Server
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (!boFlag && cellObject.CellObjId > 0 && cellObject.ActorObject)
                         {
-                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 if (baseObject.CellType == CellType.CastleDoor)
@@ -550,7 +550,7 @@ namespace M2Server
                         CellObject cellObject = cellInfo.ObjList[i];
                         if (cellObject.ActorObject)
                         {
-                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null)
                             {
                                 IUserCastle castle = SystemShare.CastleMgr.InCastleWarArea(baseObject);
@@ -717,7 +717,7 @@ namespace M2Server
                         case CellType.Play:
                         case CellType.Monster:
                         case CellType.Merchant:
-                            IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                            IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                             if (baseObject != null && !baseObject.Death)
                             {
                                 ChFlag = false;
@@ -757,7 +757,7 @@ namespace M2Server
                             case CellType.Merchant:
                             case CellType.Play:
                                 {
-                                    IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death)
                                     {
                                         ChFlag = false;
@@ -1063,7 +1063,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.ActorObject)
                     {
-                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1204,7 +1204,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null && !baseObject.Ghost)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1311,7 +1311,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                        IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                         if (baseObject != null)
                         {
                             if (baseObject.CellType == CellType.CastleDoor)
@@ -1400,7 +1400,7 @@ namespace M2Server
                     CellObject cellObject = cellInfo.ObjList[i];
                     if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                     {
-                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId); ;
+                        IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId); ;
                         if (baseObject.Race == ActorRace.Play)
                         {
                             result = true;

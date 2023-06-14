@@ -277,7 +277,7 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    // M2Share.WorldEngine.QuestNpcList.Add(M2Share.ManageNPC);
+                    M2Share.WorldEngine.AddQuestNpc(SystemShare.ManageNPC);
                 }
                 else
                 {
@@ -321,7 +321,7 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    // M2Share.WorldEngine.QuestNpcList.Add(M2Share.RobotNPC);
+                    M2Share.WorldEngine.AddQuestNpc(SystemShare.RobotNPC);
                 }
                 else
                 {
@@ -701,7 +701,7 @@ namespace GameSrv.DataSource
                                 npc.ChrName = chrName;
                                 npc.NpcFlag = HUtil32.StrToInt16(flag, 0);
                                 npc.Appr = (ushort)HUtil32.StrToInt(appr, 0);
-                                //M2Share.WorldEngine.QuestNpcList.Add(npc);
+                                M2Share.WorldEngine.AddQuestNpc(npc);
                             }
                         }
                     }

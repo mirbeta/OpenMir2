@@ -170,7 +170,7 @@ namespace GameSrv.Word
             return tmpList.Count;
         }
 
-        public int GetNpcList(IEnvirnoment envir, int nX, int nY, int nRange, IList<BaseObject> tmpList)
+        public int GetNpcList(IEnvirnoment envir, int nX, int nY, int nRange, IList<INormNpc> tmpList)
         {
             for (var i = 0; i < QuestNpcList.Count; i++)
             {

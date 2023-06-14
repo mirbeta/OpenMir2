@@ -1612,7 +1612,7 @@ namespace M2Server.Player
         /// </summary>
         private void KillTargetTrigger(int actorId, int fightExp)
         {
-            var killObject = M2Share.ActorMgr.Get(actorId);
+            var killObject = SystemShare.ActorMgr.Get(actorId);
             if (killObject == null)
             {
                 return;
@@ -1639,7 +1639,7 @@ namespace M2Server.Player
                 //Merchant QuestNPC;
                 //if (GroupOwner != 0)
                 //{
-                //    PlayObject groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                //    PlayObject groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                 //    for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 //    {
                 //        PlayObject groupHuman = groupOwnerPlay.GroupMembers[i];
@@ -1958,7 +1958,7 @@ namespace M2Server.Player
             string tStr;
             if (GroupOwner != 0)
             {
-                IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                 groupOwnerPlay.DelMember(this);// 人物死亡立即退组，以防止组队刷经验
             }
             if (LastHiter != null)
@@ -3112,7 +3112,7 @@ namespace M2Server.Player
                                         //    cellInfo.Clear();
                                         //    break;
                                         //}
-                                        IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                        IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                         if (baseObject != null && !baseObject.Invisible)
                                         {
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
@@ -3124,7 +3124,7 @@ namespace M2Server.Player
                                                     {
                                                         if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange))
                                                         {
-                                                            M2Share.ActorMgr.SendMessage(baseObject.ActorId, Messages.RM_UPDATEVIEWRANGE, this.ActorId, 0, 0, 0, "");// 发送消息更新对方的视野
+                                                            SystemShare.ActorMgr.SendMessage(baseObject.ActorId, Messages.RM_UPDATEVIEWRANGE, this.ActorId, 0, 0, 0, "");// 发送消息更新对方的视野
                                                         }
                                                     }
                                                 }
@@ -3157,16 +3157,16 @@ namespace M2Server.Player
                                             }
                                             else
                                             {
-                                                if (M2Share.ActorMgr.Get(mapItem.OfBaseObject) != null)
+                                                if (SystemShare.ActorMgr.Get(mapItem.OfBaseObject) != null)
                                                 {
-                                                    if (M2Share.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
+                                                    if (SystemShare.ActorMgr.Get(mapItem.OfBaseObject).Ghost)
                                                     {
                                                         mapItem.OfBaseObject = 0;
                                                     }
                                                 }
-                                                if (M2Share.ActorMgr.Get(mapItem.DropBaseObject) != null)
+                                                if (SystemShare.ActorMgr.Get(mapItem.DropBaseObject) != null)
                                                 {
-                                                    if (M2Share.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
+                                                    if (SystemShare.ActorMgr.Get(mapItem.DropBaseObject).Ghost)
                                                     {
                                                         mapItem.DropBaseObject = 0;
                                                     }
@@ -3552,7 +3552,7 @@ namespace M2Server.Player
                     if (delList.Count > 0)
                     {
                         int objectId = HUtil32.Sequence();
-                        M2Share.ActorMgr.AddOhter(objectId, delList);
+                        SystemShare.ActorMgr.AddOhter(objectId, delList);
                         SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
                     }
                 }
@@ -5153,7 +5153,7 @@ namespace M2Server.Player
             {
                 return false;
             }
-            IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+            IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
             for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
                 if (groupOwnerPlay.GroupMembers[i] == target)
@@ -5178,7 +5178,7 @@ namespace M2Server.Player
             sMsg = SystemShare.Config.GroupMsgPreFix + sMsg;
             if (GroupOwner != 0)
             {
-                IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                 for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 {
                     groupOwnerPlay.GroupMembers[i].SendMsg(this, Messages.RM_GROUPMESSAGE, 0, SystemShare.Config.GroupMsgFColor, SystemShare.Config.GroupMsgBColor, 0, sMsg);

@@ -66,7 +66,7 @@ namespace ScriptSystem
             {
                 sPatch = ScriptFlagCode.sNpc_def;
             }
-            LoadScriptFile(NPC, sPatch, scriptName, false); ;
+            LoadScriptFile(NPC, sPatch, scriptName, false);
         }
 
         private static bool LoadScriptCallScript(string sFileName, string sLabel, StringList List)

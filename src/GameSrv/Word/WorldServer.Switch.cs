@@ -41,7 +41,7 @@ namespace GameSrv.Word
             {
                 if (string.IsNullOrEmpty(switchData.SlaveArr[nCount].SlaveName)) break;
                 int slaveId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
+                SystemShare.ActorMgr.AddOhter(slaveId, switchData.SlaveArr[nCount]);
                 playObject.SendSelfDelayMsg(Messages.RM_10401, 0, slaveId, 0, 0, "", 500);
                 nCount++;
                 if (nCount >= 5) break;

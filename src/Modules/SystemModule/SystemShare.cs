@@ -186,6 +186,7 @@ namespace SystemModule
             GlobalConf = new GlobalConf(Path.Combine(BasePath, ConfConst.GlobalConfigFileName));
             GameSetting = new GameSettingConf(Path.Combine(BasePath, ConfConst.GameSettingFileName));
             Config = new GameSvrConf();
+            ActorMgr = new ActorMgr();
             RandomNumber = RandomNumber.GetInstance();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }

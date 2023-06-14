@@ -57,7 +57,7 @@ namespace GameSrv.Word
         protected readonly IList<IPlayerActor> PlayObjectList;
         protected readonly List<int> LoadPlayerQueue = new List<int>();
         private readonly ArrayList OldMagicList;
-        public readonly IList<NormNpc> QuestNpcList;
+        private readonly IList<INormNpc> QuestNpcList;
         /// <summary>
         /// 怪物列表
         /// </summary>
@@ -84,7 +84,7 @@ namespace GameSrv.Word
             MagicList = new List<MagicInfo>();
             AdminList = new List<AdminInfo>();
             MerchantList = new List<IMerchant>();
-            QuestNpcList = new List<NormNpc>();
+            QuestNpcList = new List<INormNpc>();
             ChangeServerList = new List<SwitchDataInfo>();
             MagicEventList = new List<MagicEvent>();
             ProcessMerchantTimeMin = 0;
@@ -1436,7 +1436,7 @@ namespace GameSrv.Word
                             var cellObject = cellInfo.ObjList[i];
                             if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                             {
-                                var baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                var baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0);
@@ -1832,6 +1832,11 @@ namespace GameSrv.Word
         public void CreateMonGenInfoThreadMap(int threadId, IList<MonGenInfo> monGenInfo)
         {
             MonGenInfoThreadMap.Add(threadId, monGenInfo);
+        }
+
+        public void AddQuestNpc(INormNpc normNpc)
+        {
+            QuestNpcList.Add(normNpc);
         }
     }
 }

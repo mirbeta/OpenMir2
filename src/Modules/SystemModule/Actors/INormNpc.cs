@@ -12,6 +12,10 @@
 
         IList<ScriptInfo> ScriptList { get; }
 
+        void Initialize();
+
+        void Run();
+
         void SendSayMsg(string sText);
 
         void UserSelect(IPlayerActor actor, string sText);
@@ -19,8 +23,6 @@
         void Click(IPlayerActor actor);
 
         void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp);
-
-        void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp, string sMsg);
 
         void LoadNPCScript();
 

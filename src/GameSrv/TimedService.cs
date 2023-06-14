@@ -125,7 +125,7 @@ namespace GameSrv
                 //if (Permission < 6)
                 //{
                 //    // 最高等级
-                //    BaseObject targetObject = M2Share.ActorMgr.Get(M2Share.HighLevelHuman);
+                //    BaseObject targetObject = SystemShare.ActorMgr.Get(M2Share.HighLevelHuman);
                 //    if (M2Share.HighLevelHuman == 0 || targetObject.Ghost)
                 //    {
                 //        M2Share.HighLevelHuman = ActorId;
@@ -139,7 +139,7 @@ namespace GameSrv
                 //    }
 
                 //    // 最高PK
-                //    targetObject = M2Share.ActorMgr.Get(M2Share.HighPKPointHuman);
+                //    targetObject = SystemShare.ActorMgr.Get(M2Share.HighPKPointHuman);
                 //    if (M2Share.HighPKPointHuman == 0 || targetObject.Ghost)
                 //    {
                 //        if (PkPoint > 0)
@@ -156,7 +156,7 @@ namespace GameSrv
                 //    }
 
                 //    // 最高攻击力
-                //    targetObject = M2Share.ActorMgr.Get(M2Share.HighDCHuman);
+                //    targetObject = SystemShare.ActorMgr.Get(M2Share.HighDCHuman);
                 //    if (M2Share.HighDCHuman == 0 || targetObject.Ghost)
                 //    {
                 //        M2Share.HighDCHuman = ActorId;
@@ -170,7 +170,7 @@ namespace GameSrv
                 //    }
 
                 //    // 最高魔法
-                //    targetObject = M2Share.ActorMgr.Get(M2Share.HighMCHuman);
+                //    targetObject = SystemShare.ActorMgr.Get(M2Share.HighMCHuman);
                 //    if (M2Share.HighMCHuman == 0 || targetObject.Ghost)
                 //    {
                 //        M2Share.HighMCHuman = ActorId;
@@ -184,7 +184,7 @@ namespace GameSrv
                 //    }
 
                 //    // 最高道术
-                //    targetObject = M2Share.ActorMgr.Get(M2Share.HighSCHuman);
+                //    targetObject = SystemShare.ActorMgr.Get(M2Share.HighSCHuman);
                 //    if (M2Share.HighSCHuman == 0 || targetObject.Ghost)
                 //    {
                 //        M2Share.HighSCHuman = ActorId;
@@ -198,7 +198,7 @@ namespace GameSrv
                 //    }
 
                 //    // 最长在线时间
-                //    targetObject = M2Share.ActorMgr.Get(M2Share.HighOnlineHuman);
+                //    targetObject = SystemShare.ActorMgr.Get(M2Share.HighOnlineHuman);
                 //    if (M2Share.HighOnlineHuman == 0 || targetObject.Ghost)
                 //    {
                 //        M2Share.HighOnlineHuman = ActorId;

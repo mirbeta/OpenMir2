@@ -98,7 +98,7 @@ namespace M2Server.Actor
                                         cellInfo.Clear();
                                         break;
                                     }
-                                    IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null)
                                     {
                                         if (!baseObject.Death && !baseObject.Invisible)

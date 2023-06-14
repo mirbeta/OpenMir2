@@ -460,7 +460,7 @@ namespace M2Server.Actor
             FixStatus = -1;
             FastParalysis = false;
             NastyMode = false;
-            M2Share.ActorMgr.Add(this);
+            SystemShare.ActorMgr.Add(this);
         }
 
         /// <summary>
@@ -2110,7 +2110,7 @@ namespace M2Server.Actor
                             CellObject cellObject = cellInfo.ObjList[i];
                             if ((cellObject.CellObjId > 0) && (cellObject.CellType == CellType.Play || cellObject.CellType == CellType.Monster))
                             {
-                                IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                 if ((baseObject != null) && (!baseObject.Ghost))
                                 {
                                     if (IsProperFriend(baseObject))
@@ -2820,7 +2820,7 @@ namespace M2Server.Actor
                                 CellObject cellObject = cellInfo.ObjList[i];
                                 if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                                 {
-                                    IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost)
                                     {
                                         objectList.Add(baseObject);

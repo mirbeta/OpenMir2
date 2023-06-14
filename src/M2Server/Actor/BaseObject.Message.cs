@@ -422,7 +422,7 @@ namespace M2Server.Actor
                                     //        break;
                                     //    }
                                     //}
-                                    IActor targetObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                    IActor targetObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                     if ((targetObject != null) && !targetObject.Ghost)
                                     {
                                         if (targetObject.Race == ActorRace.Play)
@@ -449,7 +449,7 @@ namespace M2Server.Actor
 
             for (int i = 0; i < VisibleHumanList.Count; i++)
             {
-                IActor targetObject = M2Share.ActorMgr.Get(VisibleHumanList[i]);
+                IActor targetObject = SystemShare.ActorMgr.Get(VisibleHumanList[i]);
                 if (targetObject.Ghost)
                 {
                     continue;

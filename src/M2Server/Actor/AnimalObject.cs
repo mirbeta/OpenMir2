@@ -109,7 +109,7 @@ namespace M2Server.Actor
             {
                 case Messages.RM_STRUCK:
                     {
-                        var struckObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        var struckObject = SystemShare.ActorMgr.Get(processMsg.nParam3);
                         if (processMsg.ActorId == ActorId && struckObject != null)
                         {
                             SetLastHiter(struckObject);

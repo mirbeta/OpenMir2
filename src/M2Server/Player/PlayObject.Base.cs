@@ -34,7 +34,7 @@ namespace M2Server.Player
             {
                 return false;
             }
-            IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+            IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
             for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
             {
                 if (groupOwnerPlay.GroupMembers[i].ActorId == actorId)
@@ -765,7 +765,7 @@ namespace M2Server.Player
                 {
                     int sumlv = 0;
                     int n = 0;
-                    IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                    IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                     for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
                         playObject = groupOwnerPlay.GroupMembers[i];
@@ -993,7 +993,7 @@ namespace M2Server.Player
                             CellObject cellObject = cellInfo.ObjList[i];
                             if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                             {
-                                IActor baseObject = M2Share.ActorMgr.Get(cellObject.CellObjId);
+                                IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null)
                                 {
                                     if (!baseObject.Ghost && baseObject == targeBaseObject)

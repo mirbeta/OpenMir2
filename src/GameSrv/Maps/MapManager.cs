@@ -133,7 +133,7 @@ namespace GameSrv.Maps
             {
                 MapRouteItem mapRoute = new MapRouteItem
                 {
-                    RouteId = M2Share.ActorMgr.GetNextIdentity(),
+                    RouteId = SystemShare.ActorMgr.GetNextIdentity(),
                     Flag = false,
                     Envir = dEnvir,
                     X = (short)nDMapX,

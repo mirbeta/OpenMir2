@@ -59,5 +59,21 @@ namespace GameSrv.Robots
             }
             RobotHumanList.Clear();
         }
+
+        public void Run()
+        {
+            for (var i = 0; i < RobotHumanList.Count; i++)
+            {
+                RobotHumanList[i].Run();
+            }
+        }
+
+        public void Initialize()
+        {
+            for (var i = 0; i < RobotHumanList.Count; i++)
+            {
+                RobotHumanList[i].Initialize();
+            }
+        }
     }
 }

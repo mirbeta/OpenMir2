@@ -80,7 +80,5 @@ namespace SystemModule
         void LoadNpcData();
 
         void ClearData();
-
-        void Run();
     }
 }

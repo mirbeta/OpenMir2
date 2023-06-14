@@ -29,7 +29,6 @@ namespace M2Server
         /// </summary>
         public static long StartTime;
         public static int ShareFileNameNum = 0;
-        public static readonly ActorMgr ActorMgr;
         public static IAccountSessionService accountSessionService;
         public static readonly ThreadSocketMgr SocketMgr;
         /// <summary>
@@ -179,7 +178,6 @@ namespace M2Server
         {
             BasePath = AppContext.BaseDirectory;
             RandomNumber = RandomNumber.GetInstance();
-            ActorMgr = new ActorMgr();
             FindPath = new FindPath();
             CellObjectMgr = new CellObjectMgr();
             NetworkMonitor = new NetworkMonitor();

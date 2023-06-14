@@ -699,7 +699,7 @@ namespace M2Server.Player
                     // 清组队已死亡成员
                     if (GroupOwner != 0)
                     {
-                        IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                        IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                         if (groupOwnerPlay.Death || groupOwnerPlay.Ghost)
                         {
                             GroupOwner = 0;
@@ -769,7 +769,7 @@ namespace M2Server.Player
             IActor baseObject = null;
             if (processMsg.ActorId > 0)
             {
-                baseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
+                baseObject = SystemShare.ActorMgr.Get(processMsg.ActorId);
             }
             switch (processMsg.wIdent)
             {
@@ -1332,7 +1332,7 @@ namespace M2Server.Player
                     }
                     break;
                 case Messages.CM_SPELL:
-                    if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, M2Share.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref delayTime))
+                    if (ClientSpellXY(processMsg.wIdent, processMsg.wParam, (short)processMsg.nParam1, (short)processMsg.nParam2, SystemShare.ActorMgr.Get(processMsg.nParam3), processMsg.LateDelivery, ref delayTime))
                     {
                         ActionTick = HUtil32.GetTickCount();
                         SendSocket(M2Share.GetGoodTick);
@@ -1560,22 +1560,22 @@ namespace M2Server.Player
                     {
                         if (processMsg.ActorId == ActorId)
                         {
-                            if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                            if (SystemShare.ActorMgr.Get(processMsg.nParam3) != null)
                             {
-                                if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Play)
+                                if (SystemShare.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Play)
                                 {
-                                    SetPkFlag(M2Share.ActorMgr.Get(processMsg.nParam3));
+                                    SetPkFlag(SystemShare.ActorMgr.Get(processMsg.nParam3));
                                 }
-                                SetLastHiter(M2Share.ActorMgr.Get(processMsg.nParam3));
+                                SetLastHiter(SystemShare.ActorMgr.Get(processMsg.nParam3));
                             }
                             if (this.MyGuild != null && this.Castle != null)
                             {
-                                if (SystemShare.CastleMgr.IsCastleMember(this) != null && M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                                if (SystemShare.CastleMgr.IsCastleMember(this) != null && SystemShare.ActorMgr.Get(processMsg.nParam3) != null)
                                 {
-                                    if (M2Share.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
+                                    if (SystemShare.ActorMgr.Get(processMsg.nParam3).Race == ActorRace.Guard)
                                     {
-                                        ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastle = true;
-                                        ((GuardUnit)M2Share.ActorMgr.Get(processMsg.nParam3)).CrimeforCastleTime = HUtil32.GetTickCount();
+                                        ((GuardUnit)SystemShare.ActorMgr.Get(processMsg.nParam3)).CrimeforCastle = true;
+                                        ((GuardUnit)SystemShare.ActorMgr.Get(processMsg.nParam3)).CrimeforCastleTime = HUtil32.GetTickCount();
                                     }
                                 }
                             }
@@ -1863,9 +1863,9 @@ namespace M2Server.Player
                     SendSaveItemList(processMsg.nParam1);
                     break;
                 case Messages.RM_SENDDELITEMLIST:
-                    IList<DeleteItem> delItemList = (IList<DeleteItem>)M2Share.ActorMgr.GetOhter(processMsg.nParam1);
+                    IList<DeleteItem> delItemList = (IList<DeleteItem>)SystemShare.ActorMgr.GetOhter(processMsg.nParam1);
                     SendDelItemList(delItemList);
-                    M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
+                    SystemShare.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
                 case Messages.RM_USERMAKEDRUGITEMLIST:
                     SendDefMessage(Messages.SM_SENDUSERMAKEDRUGITEMLIST, processMsg.nParam1, processMsg.nParam2, 0, 0, processMsg.Msg);
@@ -1897,11 +1897,11 @@ namespace M2Server.Player
                     SendSocket(ClientMsg);
                     break;
                 case Messages.RM_FLYAXE:
-                    if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                    if (SystemShare.ActorMgr.Get(processMsg.nParam3) != null)
                     {
                         MessageBodyW flyaxeMessage = default;
-                        flyaxeMessage.Param1 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
-                        flyaxeMessage.Param2 = (ushort)M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
+                        flyaxeMessage.Param1 = (ushort)SystemShare.ActorMgr.Get(processMsg.nParam3).CurrX;
+                        flyaxeMessage.Param2 = (ushort)SystemShare.ActorMgr.Get(processMsg.nParam3).CurrY;
                         flyaxeMessage.Tag1 = HUtil32.LoWord(processMsg.nParam3);
                         flyaxeMessage.Tag2 = HUtil32.HiWord(processMsg.nParam3);
                         ClientMsg = Messages.MakeMessage(Messages.SM_FLYAXE, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.wParam);
@@ -1909,11 +1909,11 @@ namespace M2Server.Player
                     }
                     break;
                 case Messages.RM_LIGHTING:
-                    if (M2Share.ActorMgr.Get(processMsg.nParam3) != null)
+                    if (SystemShare.ActorMgr.Get(processMsg.nParam3) != null)
                     {
                         MessageBodyWL lightingMessage = default;
-                        lightingMessage.Param1 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrX;
-                        lightingMessage.Param2 = M2Share.ActorMgr.Get(processMsg.nParam3).CurrY;
+                        lightingMessage.Param1 = SystemShare.ActorMgr.Get(processMsg.nParam3).CurrX;
+                        lightingMessage.Param2 = SystemShare.ActorMgr.Get(processMsg.nParam3).CurrY;
                         lightingMessage.Tag1 = processMsg.nParam3;
                         lightingMessage.Tag2 = processMsg.wParam;
                         ClientMsg = Messages.MakeMessage(Messages.SM_LIGHTING, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, baseObject.Dir);
@@ -1998,8 +1998,8 @@ namespace M2Server.Player
                     SendAdjustBonus();
                     break;
                 case Messages.RM_10401:
-                    ChangeServerMakeSlave((SlaveInfo)M2Share.ActorMgr.GetOhter(processMsg.nParam1));
-                    M2Share.ActorMgr.RevomeOhter(processMsg.nParam1);
+                    ChangeServerMakeSlave((SlaveInfo)SystemShare.ActorMgr.GetOhter(processMsg.nParam1));
+                    SystemShare.ActorMgr.RevomeOhter(processMsg.nParam1);
                     break;
                 case Messages.RM_OPENHEALTH:
                     SendDefMessage(Messages.SM_OPENHEALTH, processMsg.ActorId, baseObject.WAbil.HP, baseObject.WAbil.MaxHP, 0);
@@ -2018,8 +2018,8 @@ namespace M2Server.Player
                     {
                         ClientMsg = Messages.MakeMessage(Messages.SM_CHANGEFACE, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0);
                         CharDesc changefacemessae = default;
-                        changefacemessae.Feature = M2Share.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
-                        changefacemessae.Status = M2Share.ActorMgr.Get(processMsg.nParam2).CharStatus;
+                        changefacemessae.Feature = SystemShare.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
+                        changefacemessae.Status = SystemShare.ActorMgr.Get(processMsg.nParam2).CharStatus;
                         SendSocket(ClientMsg, EDCode.EncodePacket(changefacemessae));
                     }
                     break;
@@ -2133,7 +2133,7 @@ namespace M2Server.Player
             }
             if (GroupOwner != 0)
             {
-                IPlayerActor groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                 groupOwnerPlay.DelMember(this);
             }
             if (MyGuild != null)
@@ -2211,7 +2211,7 @@ namespace M2Server.Player
                 if (dropItemList.Count > 0)
                 {
                     int objectId = HUtil32.Sequence();
-                    M2Share.ActorMgr.AddOhter(objectId, dropItemList);
+                    SystemShare.ActorMgr.AddOhter(objectId, dropItemList);
                     SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
                 }
             }

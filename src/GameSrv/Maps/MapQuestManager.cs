@@ -1,4 +1,5 @@
 ﻿using GameSrv.NPC;
+using M2Server;
 using M2Server.Player;
 using SystemModule.Data;
 
@@ -39,7 +40,7 @@ namespace GameSrv.Maps
                 sQuest = "";
             }
             mapQuest.Grouped = boGrouped;
-            Merchant mapMerchantOld = new Merchant
+            Merchant questMerchant = new Merchant
             {
                 MapName = "0",
                 CurrX = 0,
@@ -51,8 +52,8 @@ namespace GameSrv.Maps
                 IsHide = true,
                 IsQuest = false
             };
-            //M2Share.WorldEngine.QuestNpcList.Add(mapMerchantOld);
-            mapQuest.NPC = mapMerchantOld;
+            M2Share.WorldEngine.AddQuestNpc(questMerchant);
+            mapQuest.NPC = questMerchant;
             QuestList.Add(mapQuest);
             return true;
         }

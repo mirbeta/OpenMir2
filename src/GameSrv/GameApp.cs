@@ -259,6 +259,7 @@ namespace GameSrv
                 M2Share.SocketMgr.Start();
                 GameShare.StartReady = true;
                 M2Share.WorldEngine.Initialize();
+                GameShare.RobotMgr.Initialize();
                 _logger.Info("游戏处理引擎初始化成功...");
             }
             catch (Exception ex)

@@ -1,3 +1,4 @@
+using GameSrv.Robots;
 using GameSrv.Services;
 using M2Server;
 using NLog;
@@ -78,6 +79,7 @@ namespace GameSrv.Word.Threads
                     RunTimeTick = HUtil32.GetTickCount();
                     SystemShare.GuildMgr.Run();
                     SystemShare.CastleMgr.Run();
+                    GameShare.RobotMgr.Run();
                     M2Share.SocketMgr.Run();
                     if (!M2Share.DenySayMsgList.IsEmpty)
                     {

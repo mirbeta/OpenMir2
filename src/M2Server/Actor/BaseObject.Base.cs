@@ -627,7 +627,7 @@ namespace M2Server.Actor
                             SendRefMsg(Messages.RM_STRUCK_MAG, nDamage, WAbil.HP, WAbil.MaxHP, processMsg.ActorId, "");
                             if (SystemShare.Config.MonDelHptoExp)
                             {
-                                targetBaseObject = M2Share.ActorMgr.Get(processMsg.ActorId);
+                                targetBaseObject = SystemShare.ActorMgr.Get(processMsg.ActorId);
                                 switch (targetBaseObject.Race)
                                 {
                                     case ActorRace.Play:
@@ -711,7 +711,7 @@ namespace M2Server.Actor
                         ushort nTargetX = HUtil32.LoWord(processMsg.nParam1);
                         ushort nTargetY = HUtil32.HiWord(processMsg.nParam1);
                         int nRage = processMsg.nParam2;
-                        targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        targetBaseObject = SystemShare.ActorMgr.Get(processMsg.nParam3);
                         if ((targetBaseObject != null) && (targetBaseObject.GetMagStruckDamage(this, nPower) > 0))
                         {
                             SetTargetCreat(targetBaseObject);
@@ -729,14 +729,14 @@ namespace M2Server.Actor
                         MapRandomMove(processMsg.Msg, processMsg.wParam);
                         break;
                     case Messages.RM_DELAYPUSHED:
-                        targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam3);
+                        targetBaseObject = SystemShare.ActorMgr.Get(processMsg.nParam3);
                         if (targetBaseObject != null)
                         {
                             targetBaseObject.CharPushed((byte)processMsg.wParam, (byte)processMsg.nParam2);
                         }
                         break;
                     case Messages.RM_POISON:
-                        targetBaseObject = M2Share.ActorMgr.Get(processMsg.nParam2);
+                        targetBaseObject = SystemShare.ActorMgr.Get(processMsg.nParam2);
                         if (targetBaseObject != null)
                         {
                             if (IsProperTarget(targetBaseObject))

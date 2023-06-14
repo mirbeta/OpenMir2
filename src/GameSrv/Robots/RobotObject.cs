@@ -25,6 +25,14 @@ namespace GameSrv.Robots
             ClearScript();
         }
 
+        public override void Initialize()
+        {
+            if (SystemShare.ManageNPC != null)
+            {
+                SystemShare.ManageNPC.GotoLable(this, "@Startup", false);
+            }
+        }
+
         private void AutoRun(AutoRunInfo autoRunInfo)
         {
             var currentTime = HUtil32.GetTimestamp();

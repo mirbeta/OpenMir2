@@ -521,7 +521,7 @@ namespace GameSrv.NPC
             if (delItemList != null)
             {
                 var objectId = HUtil32.Sequence();
-                M2Share.ActorMgr.AddOhter(objectId, delItemList);
+                SystemShare.ActorMgr.AddOhter(objectId, delItemList);
                 user.SendMsg(user, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
         }
@@ -1494,7 +1494,7 @@ namespace GameSrv.NPC
                 if (list28 != null)
                 {
                     var objectId = HUtil32.Sequence();
-                    M2Share.ActorMgr.AddOhter(objectId, list28);
+                    SystemShare.ActorMgr.AddOhter(objectId, list28);
                     playObject.SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
                 }
             }

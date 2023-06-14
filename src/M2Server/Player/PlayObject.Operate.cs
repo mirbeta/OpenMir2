@@ -12,7 +12,7 @@ namespace M2Server.Player
     {
         private void ClientQueryUserName(int targetId, int x, int y)
         {
-            var baseObject = M2Share.ActorMgr.Get(targetId);
+            var baseObject = SystemShare.ActorMgr.Get(targetId);
             if (baseObject == null)
             {
                 return;
@@ -65,7 +65,7 @@ namespace M2Server.Player
 
         private void ClientQueryUserInformation(int charId, int nX, int nY)
         {
-            var playObject = (IPlayerActor)M2Share.ActorMgr.Get(charId);
+            var playObject = (IPlayerActor)SystemShare.ActorMgr.Get(charId);
             if (!CretInNearXy(playObject, nX, nY))
             {
                 return;
@@ -164,7 +164,7 @@ namespace M2Server.Player
                     var sUserItemName = CustomItem.GetItemName(userItem);
                     //if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
                     //{
-                    //    var merchant = M2Share.ActorMgr.FindMerchant(nParam1);
+                    //    var merchant = SystemShare.ActorMgr.FindMerchant(nParam1);
                     //    if (merchant != null && merchant.IsSell && merchant.Envir == Envir && IsWithinSight(merchant))
                     //    {
                     //        if (merchant.ClientSellItem(this, userItem))
@@ -697,7 +697,7 @@ namespace M2Server.Player
         private bool ClientGetButchItem(int charId, int nX, int nY, byte btDir, ref int dwDelayTime)
         {
             dwDelayTime = 0;
-            var baseObject = M2Share.ActorMgr.Get(charId);
+            var baseObject = SystemShare.ActorMgr.Get(charId);
             if (!SystemShare.Config.CloseSpeedHackCheck)
             {
                 var dwCheckTime = HUtil32.GetTickCount() - TurnTick;
@@ -788,7 +788,7 @@ namespace M2Server.Player
             }
             if (GroupOwner != this.ActorId)
             {
-                var groupOwnerPlay = (IPlayerActor)M2Share.ActorMgr.Get(GroupOwner);
+                var groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                 groupOwnerPlay.DelMember(this);
                 AllowGroup = false;
             }
