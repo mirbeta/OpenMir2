@@ -1,6 +1,7 @@
 ﻿using M2Server;
 using M2Server.Event.Events;
 using NLog;
+using SystemModule;
 using SystemModule.Data;
 
 namespace GameSrv.Maps

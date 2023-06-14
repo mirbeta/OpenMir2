@@ -1,5 +1,6 @@
 ﻿using M2Server;
 using M2Server.Npc;
+using SystemModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 

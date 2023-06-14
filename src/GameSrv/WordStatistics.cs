@@ -3,6 +3,7 @@ using NLog;
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using SystemModule;
 using SystemModule.Base;
 
 namespace GameSrv

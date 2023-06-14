@@ -3,6 +3,7 @@ using NLog;
 using System.Collections;
 using System.Net;
 using System.Net.Sockets;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.SocketComponents.AsyncSocketClient;
 using SystemModule.SocketComponents.Event;

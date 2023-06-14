@@ -1,5 +1,6 @@
 ﻿using M2Server;
 using M2Server.Actor;
+using SystemModule;
 
 namespace GameSrv.Word
 {

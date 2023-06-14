@@ -11,8 +11,8 @@ namespace ScriptSystem
     /// </summary>
     public class ScriptEngine : IScriptEngine
     {
-        private readonly ConditionProcessingSys ConditionScript;
-        private readonly ExecutionProcessingSys ExecutionProcessing;
+        private ConditionProcessingSys ConditionScript { get; set; }
+        private ExecutionProcessingSys ExecutionProcessing { get; set; }
 
         public ScriptEngine()
         {
@@ -22,9 +22,9 @@ namespace ScriptSystem
             ExecutionProcessing.Initialize();
         }
 
-        private void GotoLable(IPlayerActor playerActor, int npcId, string sLabel, bool boExtJmp, string sMsg)
+        private void GotoLable(INormNpc normNpc, IPlayerActor playerActor, string sLabel, bool boExtJmp, string sMsg)
         {
-            if (playerActor.LastNpc != npcId)
+            if (playerActor.LastNpc != normNpc.ActorId)
             {
                 playerActor.LastNpc = 0;
             }
@@ -41,7 +41,7 @@ namespace ScriptSystem
                     {
                         script = script3C;
                         playerActor.Script = script;
-                        playerActor.LastNpc = npcId;
+                        playerActor.LastNpc = normNpc.ActorId;
                         break;
                     }
                 }
@@ -66,7 +66,7 @@ namespace ScriptSystem
                         {
                             script = scriptList[i];
                             playerActor.Script = script;
-                            playerActor.LastNpc = npcId;
+                            playerActor.LastNpc = normNpc.ActorId;
                         }
                     }
                 }
@@ -125,12 +125,12 @@ namespace ScriptSystem
             {
                 return;
             }
-            GotoLable(playerActor, npcId, sLabel, boExtJmp, string.Empty);
+            GotoLable(normNpc, playerActor, sLabel, boExtJmp, string.Empty);
         }
 
         public void GotoLable(INormNpc normNpc, IPlayerActor playerActor, string sLabel, bool boExtJmp = false)
         {
-            GotoLable(playerActor, npcId, sLabel, boExtJmp, string.Empty);
+            GotoLable(normNpc, playerActor, sLabel, boExtJmp, string.Empty);
         }
 
         private static bool CheckGotoLableQuestStatus(IPlayerActor playerActor, ScriptInfo scriptInfo)

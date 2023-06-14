@@ -3,6 +3,7 @@ using M2Server;
 using M2Server.Npc;
 using ScriptSystem;
 using System.Collections;
+using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 

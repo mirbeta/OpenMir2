@@ -1,4 +1,5 @@
 using NLog;
+using SystemModule;
 using SystemModule.Data;
 
 namespace GameSrv.Services

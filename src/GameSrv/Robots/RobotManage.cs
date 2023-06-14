@@ -1,5 +1,6 @@
 ﻿using M2Server;
 using NLog;
+using SystemModule;
 using SystemModule.Common;
 
 namespace GameSrv.Robots

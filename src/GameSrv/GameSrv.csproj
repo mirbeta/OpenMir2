@@ -12,11 +12,6 @@
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<Description>网络游戏数据处理引擎</Description>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<Using Include="GameSrv" />
-		<Using Include="SystemModule" />
-	</ItemGroup>
 	
 	<PropertyGroup>
 		<ServerGarbageCollection>false</ServerGarbageCollection>

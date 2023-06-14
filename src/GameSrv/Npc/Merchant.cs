@@ -4,6 +4,7 @@ using M2Server.Items;
 using M2Server.Npc;
 using M2Server.Player;
 using ScriptSystem;
+using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.ModuleEvent;

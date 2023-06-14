@@ -1,4 +1,5 @@
 ﻿using M2Server.Npc;
+using SystemModule;
 using SystemModule.Data;
 
 namespace GameSrv.NPC

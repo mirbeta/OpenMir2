@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using Spectre.Console;
+using SystemModule;
 using SystemModule.Enums;
 
 namespace GameSrv

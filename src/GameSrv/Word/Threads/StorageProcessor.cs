@@ -1,6 +1,7 @@
 using GameSrv.Services;
 using M2Server;
 using NLog;
+using SystemModule;
 using SystemModule.Data;
 
 namespace GameSrv.Word.Threads

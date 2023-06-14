@@ -1,4 +1,6 @@
-﻿namespace GameSrv.Word
+﻿using SystemModule;
+
+namespace GameSrv.Word
 {
     public class MonsterThread
     {

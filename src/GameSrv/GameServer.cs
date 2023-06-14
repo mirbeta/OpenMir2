@@ -2,6 +2,7 @@
 using M2Server;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
+using SystemModule;
 using SystemModule.Enums;
 
 namespace GameSrv
