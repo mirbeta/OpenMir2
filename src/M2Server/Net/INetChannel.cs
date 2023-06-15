@@ -15,10 +15,9 @@ namespace M2Server.Net
         void SendOutConnectMsg(int gateIdx, int nSocket, ushort nGsIdx);
         void SendServerStopMsg();
         void SetGateUserList(int gateIdx, int nSocket, IPlayerActor playObject);
-        void Start();
+        Task Start(CancellationToken cancellationToken = default);
         void Send(string connectId, byte[] buff);
         void CloseGate(string connectionId, string endPoint);
-        Task StartMessageThread(CancellationToken cancellationToken);
         Task StopAsync(CancellationToken cancellationToken = default);
     }
 }

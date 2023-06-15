@@ -26,7 +26,6 @@ namespace GameSrv
             await GameShare.EventProcessor.StartAsync(stoppingToken);
             await GameShare.StorageProcessor.StartAsync(stoppingToken);
             await GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
-            await M2Share.NetChannel.StartMessageThread(stoppingToken);
             Map.StartMakeStoneThread();
 
             var modules = serviceProvider.GetServices<IModuleInitializer>();
@@ -35,6 +34,7 @@ namespace GameSrv
             {
                 module.Startup(stoppingToken);
             }
+            await  M2Share.NetChannel.Start(stoppingToken);
 
             _logger.Info("初始化游戏世界服务线程完成...");
         }

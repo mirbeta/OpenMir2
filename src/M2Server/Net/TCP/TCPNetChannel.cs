@@ -119,10 +119,11 @@ namespace M2Server.Net.TCP
             _logger.Info("游戏网关初始化完成...");
         }
 
-        public void Start()
+        public Task Start(CancellationToken cancellationToken = default)
         {
             tcpService.Start();
             _logger.Info($"游戏网关[{SystemShare.Config.sGateAddr}:{SystemShare.Config.nGatePort}]已启动...");
+            return StartMessageThread(cancellationToken);
         }
 
         public async Task StopAsync(CancellationToken cancellationToken = default)
@@ -457,7 +458,7 @@ namespace M2Server.Net.TCP
         /// <summary>
         /// 处理GameGate消息
         /// </summary>
-        public Task StartMessageThread(CancellationToken cancellationToken)
+        private Task StartMessageThread(CancellationToken cancellationToken)
         {
             return Task.Factory.StartNew(async () =>
             {
