@@ -964,7 +964,7 @@ namespace ScriptSystem
 
         private void GotoLableSendMerChantSayMsg(INormNpc normNpc, IPlayerActor playerActor, string sMsg, bool boFlag)
         {
-            sMsg = ConditionScript.GetLineVariableText(playerActor, sMsg);
+            sMsg = normNpc.GetLineVariableText(playerActor, sMsg);
             playerActor.GetScriptLabel(sMsg);
             if (boFlag)
             {
