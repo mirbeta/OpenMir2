@@ -82,7 +82,7 @@ namespace M2Server.Actor
             {
                 if (CanReAlive && MonGen != null)
                 {
-                    int makeGhostTime = HUtil32._MAX(10 * 1000, M2Share.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
+                    int makeGhostTime = HUtil32._MAX(10 * 1000, SystemShare.WorldEngine.GetMonstersZenTime(MonGen.ZenTime) - 20 * 1000);
                     if (makeGhostTime > SystemShare.Config.MakeGhostTime)
                     {
                         makeGhostTime = SystemShare.Config.MakeGhostTime;

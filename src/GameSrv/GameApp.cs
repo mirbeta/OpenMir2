@@ -102,6 +102,7 @@ namespace GameSrv
             SystemShare.EventMgr = new EventManager();
             SystemShare.Mediator = serviceProvider.GetService<IMediator>();
             SystemShare.ServiceProvider = serviceProvider;
+            SystemShare.WorldEngine = new WorldServer();
         }
 
         /// <summary>
@@ -122,7 +123,6 @@ namespace GameSrv
             M2Share.LoadDenyAccountList();
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
-            M2Share.WorldEngine = new WorldServer();
             _logger.Info("正在加载物品数据库...");
             var nCode = GameShare.CommonDb.LoadItemsDB();
             if (nCode < 0)
@@ -150,7 +150,7 @@ namespace GameSrv
                 _logger.Info($"加载怪物数据库失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"加载怪物数据库成功...[{M2Share.WorldEngine.MonsterCount}]");
+            _logger.Info($"加载怪物数据库成功...[{SystemShare.WorldEngine.MonsterCount}]");
             _logger.Info("正在加载技能数据库...");
             nCode = GameShare.CommonDb.LoadMagicDB();
             if (nCode < 0)
@@ -158,7 +158,7 @@ namespace GameSrv
                 _logger.Info($"加载技能数据库失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicCount}]");
+            _logger.Info($"加载技能数据库成功...[{SystemShare.WorldEngine.MagicCount}]");
             _logger.Info("正在加载怪物刷新配置信息...");
             nCode = GameShare.LocalDb.LoadMonGen(out var mongenCount);
             if (nCode < 0)
@@ -168,7 +168,7 @@ namespace GameSrv
             }
             _logger.Info($"加载怪物刷新配置信息成功...[{mongenCount}]");
             _logger.Info("初始化怪物处理线程...");
-            M2Share.WorldEngine.InitializeMonster();
+            SystemShare.WorldEngine.InitializeMonster();
             _logger.Info("初始化怪物处理完成...");
             _logger.Info("正加载怪物说话配置信息...");
             M2Share.LoadMonSayMsg();
@@ -248,7 +248,7 @@ namespace GameSrv
                 _logger.Info("正在初始安全区光圈...");
                 SystemShare.MapMgr.MakeSafePkZone();
                 _logger.Info("安全区光圈初始化成功...");
-                M2Share.WorldEngine.InitializationMonsterThread();
+                SystemShare.WorldEngine.InitializationMonsterThread();
                 if (!SystemShare.Config.VentureServer)
                 {
                     LocalDb.LoadGuardList();
@@ -262,7 +262,7 @@ namespace GameSrv
                 GameShare.DataServer.Start();
                 // GameShare.MarketService.Start();
                 M2Share.StartReady = true;
-                M2Share.WorldEngine.Initialize();
+                SystemShare.WorldEngine.Initialize();
                 M2Share.AutoBot.Initialize();
                 _logger.Info("游戏处理引擎初始化成功...");
             }

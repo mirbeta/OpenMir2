@@ -32,7 +32,7 @@ namespace M2Server.Monster.Monsters
         {
             if (processMsg.wIdent == Messages.RM_ZEN_BEE)
             {
-                IActor bb = M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, SystemShare.Config.Bee);
+                IActor bb = SystemShare.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, SystemShare.Config.Bee);
                 if (bb != null)
                 {
                     bb.SetTargetCreat(TargetCret);

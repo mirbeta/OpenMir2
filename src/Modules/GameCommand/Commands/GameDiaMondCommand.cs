@@ -32,7 +32,7 @@ namespace CommandSystem.Commands
             //    }
             //    return;
             //}
-            //IPlayerActor TargetObject = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
+            //IPlayerActor TargetObject = SystemShare.WorldEngine.GeIPlayerActor(sHumanName);
             //if (TargetObject == null)
             //{
             //    PlayerActor.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.c_Red,

@@ -296,7 +296,7 @@ namespace ScriptSystem
                         nCMDCode = 0;
                     }
                 }
-                if (code == (int)ConditionCode.CHECKOPEN)
+                else if (code == (int)ConditionCode.CHECKOPEN)
                 {
                     nCMDCode = code;
                     HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
@@ -309,7 +309,7 @@ namespace ScriptSystem
                         nCMDCode = 0;
                     }
                 }
-                if (code == (int)ConditionCode.CHECKUNIT)
+                else if (code == (int)ConditionCode.CHECKUNIT)
                 {
                     nCMDCode = code;
                     HUtil32.ArrestStringEx(sParam1, "[", "]", ref sParam1);
@@ -322,7 +322,10 @@ namespace ScriptSystem
                         nCMDCode = 0;
                     }
                 }
-                nCMDCode = code;
+                else
+                {
+                    nCMDCode = code - 1;
+                }
             }
 
             L001:
@@ -427,7 +430,6 @@ namespace ScriptSystem
 
             if (ExecutionCodeDefMap.TryGetValue(sCmd, out var code))
             {
-                nCMDCode = code;
                 if (code == (int)ExecutionCode.Set)
                 {
                     nCMDCode = code;
@@ -492,6 +494,10 @@ namespace ScriptSystem
                     {
                         nCMDCode = 0;
                     }
+                }
+                else
+                {
+                    nCMDCode = code - 1;
                 }
             }
 

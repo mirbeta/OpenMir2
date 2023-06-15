@@ -24,7 +24,7 @@ namespace GameSrv.DataSource
             {
                 return false;
             }
-            M2Share.WorldEngine.AdminList.Clear();
+            SystemShare.WorldEngine.AdminList.Clear();
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sfilename);
             for (int i = 0; i < loadList.Count; i++)
@@ -88,7 +88,7 @@ namespace GameSrv.DataSource
                             ChrName = sChrName,
                             IPaddr = sIPaddr
                         };
-                        M2Share.WorldEngine.AdminList.Add(adminInfo);
+                        SystemShare.WorldEngine.AdminList.Add(adminInfo);
                     }
                 }
             }
@@ -128,7 +128,7 @@ namespace GameSrv.DataSource
                             sLine = HUtil32.GetValidStr3(sLine, ref direction, new[] { ' ', ':' });
                             if (!string.IsNullOrEmpty(monName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(direction))
                             {
-                                IActor guard = M2Share.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
+                                IActor guard = SystemShare.WorldEngine.RegenMonsterByName(mapName, HUtil32.StrToInt16(cX, 0), HUtil32.StrToInt16(cY, 0), monName);
                                 if (guard != null)
                                 {
                                     guard.Dir = (byte)HUtil32.StrToInt(direction, 0);
@@ -221,7 +221,7 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.AddMerchant(SystemShare.FunctionNPC);
+                    SystemShare.WorldEngine.AddMerchant(SystemShare.FunctionNPC);
                 }
                 else
                 {
@@ -278,7 +278,7 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.AddQuestNpc(SystemShare.ManageNPC);
+                    SystemShare.WorldEngine.AddQuestNpc(SystemShare.ManageNPC);
                 }
                 else
                 {
@@ -322,7 +322,7 @@ namespace GameSrv.DataSource
                         IsHide = true,
                         IsQuest = false
                     };
-                    M2Share.WorldEngine.AddQuestNpc(SystemShare.RobotNPC);
+                    SystemShare.WorldEngine.AddQuestNpc(SystemShare.RobotNPC);
                 }
                 else
                 {
@@ -467,7 +467,7 @@ namespace GameSrv.DataSource
                             {
                                 merchantOldNpc.BoCanMove = true;
                             }
-                            M2Share.WorldEngine.AddMerchant(merchantOldNpc);
+                            SystemShare.WorldEngine.AddMerchant(merchantOldNpc);
                         }
                     }
                 }
@@ -558,7 +558,7 @@ namespace GameSrv.DataSource
                             monGenInfo.Envir = SystemShare.MapMgr.FindMap(monGenInfo.MapName);
                             if (monGenInfo.Envir != null)
                             {
-                                M2Share.WorldEngine.AddMonGenList(monGenInfo);
+                                SystemShare.WorldEngine.AddMonGenList(monGenInfo);
                             }
                             else
                             {
@@ -572,16 +572,16 @@ namespace GameSrv.DataSource
                     CertList = new List<IMonsterActor>(),
                     Envir = null
                 };
-                if (M2Share.WorldEngine.CheckMonGenInfoThreadMap(0))
+                if (SystemShare.WorldEngine.CheckMonGenInfoThreadMap(0))
                 {
-                    M2Share.WorldEngine.AddMonGenInfoThreadMap(0, monGenInfo);
+                    SystemShare.WorldEngine.AddMonGenInfoThreadMap(0, monGenInfo);
                 }
                 else
                 {
-                    M2Share.WorldEngine.CreateMonGenInfoThreadMap(0, new List<MonGenInfo>() { monGenInfo });
+                    SystemShare.WorldEngine.CreateMonGenInfoThreadMap(0, new List<MonGenInfo>() { monGenInfo });
                 }
                 result = 1;
-                mongenCount = M2Share.WorldEngine.MonGenCount;
+                mongenCount = SystemShare.WorldEngine.MonGenCount;
             }
             return result;
         }
@@ -702,7 +702,7 @@ namespace GameSrv.DataSource
                                 npc.ChrName = chrName;
                                 npc.NpcFlag = HUtil32.StrToInt16(flag, 0);
                                 npc.Appr = (ushort)HUtil32.StrToInt(appr, 0);
-                                M2Share.WorldEngine.AddQuestNpc(npc);
+                                SystemShare.WorldEngine.AddQuestNpc(npc);
                             }
                         }
                     }
@@ -1002,9 +1002,9 @@ namespace GameSrv.DataSource
             {
                 return;
             }
-            for (int i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
+            for (int i = 0; i < SystemShare.WorldEngine.MerchantList.Count; i++)
             {
-                merchant = M2Share.WorldEngine.MerchantList[i];
+                merchant = SystemShare.WorldEngine.MerchantList[i];
                 if (merchant != SystemShare.FunctionNPC)
                 {
                     merchant.NpcFlag = -1;
@@ -1034,9 +1034,9 @@ namespace GameSrv.DataSource
                     short nX = (short)HUtil32.StrToInt(sX, 0);
                     short nY = (short)HUtil32.StrToInt(sY, 0);
                     bool boNewNpc = true;
-                    for (int j = 0; j < M2Share.WorldEngine.MerchantList.Count; j++)
+                    for (int j = 0; j < SystemShare.WorldEngine.MerchantList.Count; j++)
                     {
-                        merchant = M2Share.WorldEngine.MerchantList[j];
+                        merchant = SystemShare.WorldEngine.MerchantList[j];
                         if (merchant.MapName == sMapName && merchant.CurrX == nX && merchant.CurrY == nY)
                         {
                             boNewNpc = false;
@@ -1088,20 +1088,20 @@ namespace GameSrv.DataSource
                             {
                                 merchant.BoCanMove = true;
                             }
-                            M2Share.WorldEngine.MerchantList.Add(merchant);
+                            SystemShare.WorldEngine.MerchantList.Add(merchant);
                             merchant.Initialize();
                         }
                     }
                 }
             }
-            for (int i = M2Share.WorldEngine.MerchantList.Count - 1; i >= 0; i--)
+            for (int i = SystemShare.WorldEngine.MerchantList.Count - 1; i >= 0; i--)
             {
-                merchant = M2Share.WorldEngine.MerchantList[i];
+                merchant = SystemShare.WorldEngine.MerchantList[i];
                 if (merchant.NpcFlag == -1)
                 {
                     merchant.Ghost = true;
                     merchant.GhostTick = HUtil32.GetTickCount();
-                    M2Share.WorldEngine.MerchantList.RemoveAt(i);
+                    SystemShare.WorldEngine.MerchantList.RemoveAt(i);
                 }
             }
         }

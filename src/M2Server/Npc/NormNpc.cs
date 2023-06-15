@@ -334,7 +334,7 @@ namespace M2Server.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$GAMEPOINTNAME>", SystemShare.Config.GamePointName);
                     return;
                 case "$USERCOUNT":
-                    sText = M2Share.WorldEngine.PlayObjectCount.ToString();
+                    sText = SystemShare.WorldEngine.PlayObjectCount.ToString();
                     sMsg = ReplaceVariableText(sMsg, "<$USERCOUNT>", sText);
                     return;
                 case "$MACRUNTIME":
@@ -1091,9 +1091,9 @@ namespace M2Server.Npc
             //        {
             //            for (int i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             //            {
-            //                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+            //                for (int j = 0; j < SystemShare.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
             //                {
-            //                    MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
+            //                    MonGen = SystemShare.WorldEngine.MonGenInfoThreadMap[i][j];
             //                    if (MonGen == null)
             //                    {
             //                        continue;
@@ -1113,9 +1113,9 @@ namespace M2Server.Npc
             //        {
             //            for (int i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             //            {
-            //                for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+            //                for (int j = 0; j < SystemShare.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
             //                {
-            //                    MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
+            //                    MonGen = SystemShare.WorldEngine.MonGenInfoThreadMap[i][j];
             //                    if (MonGen == null)
             //                    {
             //                        continue;
@@ -1142,9 +1142,9 @@ namespace M2Server.Npc
             //            {
             //                for (int i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             //                {
-            //                    for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+            //                    for (int j = 0; j < SystemShare.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
             //                    {
-            //                        MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
+            //                        MonGen = SystemShare.WorldEngine.MonGenInfoThreadMap[i][j];
             //                        if (MonGen == null)
             //                        {
             //                            continue;
@@ -1164,9 +1164,9 @@ namespace M2Server.Npc
             //            {
             //                for (int i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             //                {
-            //                    for (int j = 0; j < M2Share.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
+            //                    for (int j = 0; j < SystemShare.WorldEngine.MonGenInfoThreadMap[i].Count; j++)
             //                    {
-            //                        MonGen = M2Share.WorldEngine.MonGenInfoThreadMap[i][j];
+            //                        MonGen = SystemShare.WorldEngine.MonGenInfoThreadMap[i][j];
             //                        if (MonGen == null)
             //                        {
             //                            continue;
@@ -1665,7 +1665,7 @@ namespace M2Server.Npc
             if (PlayObject.BoSendMsgFlag)
             {
                 PlayObject.BoSendMsgFlag = false;
-                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Cust);
+                SystemShare.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Cust);
             }
         }
 

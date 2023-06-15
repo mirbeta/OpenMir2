@@ -1399,7 +1399,7 @@ namespace GameSrv.Word
             return result;
         }
 
-        public static void OpenDoor(IEnvirnoment envir, int nX, int nY)
+        public void OpenDoor(IEnvirnoment envir, int nX, int nY)
         {
             MapDoor door = default;
             if (envir.GetDoor(nX, nY, ref door) && !door.Status.Opened)
@@ -1410,7 +1410,7 @@ namespace GameSrv.Word
             }
         }
 
-        private static void CloseDoor(IEnvirnoment envir, MapDoor door)
+        public void CloseDoor(IEnvirnoment envir, MapDoor door)
         {
             if (!door.Status.Opened)
                 return;
@@ -1448,7 +1448,7 @@ namespace GameSrv.Word
             }
         }
 
-        private static void ProcessMapDoor()
+        private void ProcessMapDoor()
         {
             IList<IEnvirnoment> doorList = SystemShare.MapMgr.GetDoorMapList();
             for (var i = 0; i < doorList.Count; i++)

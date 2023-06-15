@@ -1102,7 +1102,7 @@ namespace M2Server.Actor
         public void SpaceMove(string sMap, short nX, short nY, int nInt)
         {
             IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMap);
-            if (envir != null)
+            if (envir != null) //todo 这里有问题
             {
                 if (M2Share.ServerIndex == envir.ServerIndex)
                 {
@@ -1122,8 +1122,8 @@ namespace M2Server.Actor
                     MapFileName = envir.MapFileName;
                     CurrX = nX;
                     CurrY = nY;
-                    short tempX = 0;
-                    short tempY = 0;
+                    short tempX = CurrX;
+                    short tempY = CurrY;
                     if (SpaceMoveGetRandXY(Envir, ref tempX, ref tempY))
                     {
                         CurrX = tempX;
@@ -1186,7 +1186,7 @@ namespace M2Server.Actor
                 short nX = 0;
                 short nY = 0;
                 GetFrontPosition(ref nX, ref nY);
-                MonsterObject monObj = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
+                MonsterObject monObj = (MonsterObject)SystemShare.WorldEngine.RegenMonsterByName(Envir.MapName, nX, nY, sMonName);
                 if (monObj != null)
                 {
                     monObj.Master = this;

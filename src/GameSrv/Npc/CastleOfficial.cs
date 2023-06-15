@@ -278,7 +278,7 @@ namespace GameSrv.NPC
                         if (!Castle.UnderWar)
                         {
                             ArcherUnit ObjUnit = Castle.Guards[n10];
-                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            ObjUnit.BaseObject = SystemShare.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
                                 Castle.TotalGold -= SystemShare.Config.HireGuardPrice;
@@ -325,7 +325,7 @@ namespace GameSrv.NPC
                         if (!Castle.UnderWar)
                         {
                             ArcherUnit ObjUnit = Castle.Archers[n10];
-                            ObjUnit.BaseObject = M2Share.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
+                            ObjUnit.BaseObject = SystemShare.WorldEngine.RegenMonsterByName(Castle.MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                             if (ObjUnit.BaseObject != null)
                             {
                                 Castle.TotalGold -= SystemShare.Config.HireArcherPrice;
@@ -415,7 +415,7 @@ namespace GameSrv.NPC
             if (PlayObject.BoSendMsgFlag)
             {
                 PlayObject.BoSendMsgFlag = false;
-                M2Share.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
+                SystemShare.WorldEngine.SendBroadCastMsg(PlayObject.ChrName + ": " + sMsg, MsgType.Castle);
             }
         }
     }

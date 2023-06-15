@@ -19,7 +19,7 @@ namespace CommandSystem.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            //M2Share.WorldEngine.SendQuestMsg(sQuestName);
+            //SystemShare.WorldEngine.SendQuestMsg(sQuestName);
         }
     }
 }

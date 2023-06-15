@@ -142,9 +142,9 @@ namespace GameSrv.Word.Threads
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return false;
             }
-            /*if (M2Share.WorldEngine.GetPlayObjectEx(loadUser.ChrName) != null)
+            /*if (SystemShare.WorldEngine.GetPlayObjectEx(loadUser.ChrName) != null)
             {
-                M2Share.WorldEngine.KickPlayObjectEx(loadUser.ChrName);
+                SystemShare.WorldEngine.KickPlayObjectEx(loadUser.ChrName);
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return false;
             }*/
@@ -161,7 +161,7 @@ namespace GameSrv.Word.Threads
                     HumanRcd = null,
                     QueryId = queryId
                 };
-                M2Share.WorldEngine.AddUserOpenInfo(userOpenInfo);
+                SystemShare.WorldEngine.AddUserOpenInfo(userOpenInfo);
                 result = true;
             }
             return result;

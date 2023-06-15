@@ -43,7 +43,7 @@ namespace CommandSystem.Commands
             //    {
             //        if (boKillAllMap || string.Compare(envir.MapName, sMapName, StringComparison.OrdinalIgnoreCase) == 0)
             //        {
-            //            var monsterCount = M2Share.WorldEngine.GetMapMonster(envir, monList);
+            //            var monsterCount = SystemShare.WorldEngine.GetMapMonster(envir, monList);
             //            if (monsterCount > 0)
             //            {
             //                for (var j = 0; j < monsterCount; j++)

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Hosting;
 using NLog;
 using PlanesSystem;
 using SystemModule;
+using SystemModule.Enums;
 
 namespace GameSrv
 {
@@ -20,6 +21,7 @@ namespace GameSrv
         /// 是否正在保存数据
         /// </summary>
         private bool _scheduledSaveData;
+        private int SendOnlineTick = 0;
 
         public TimedService()
         {
@@ -74,7 +76,8 @@ namespace GameSrv
             if ((currentTick - _saveIntervalTime) > 60 * 1000) //保存游戏变量等
             {
                 _saveIntervalTime = HUtil32.GetTickCount();
-                ServerBase.SaveItemNumber();
+                SaveItemNumber();
+                ProcessGameNotice();
             }
             if ((currentTick - _clearIntervalTime) > 60 * 10000) //定时清理游戏对象
             {
@@ -226,10 +229,10 @@ namespace GameSrv
                 return;
             }
             _logger.Debug("定时保存角色数据");
-            if (M2Share.WorldEngine.PlayObjectCount > 0)
+            if (SystemShare.WorldEngine.PlayObjectCount > 0)
             {
                 _scheduledSaveData = true;
-                foreach (var play in M2Share.WorldEngine.PlayObjects)
+                foreach (var play in SystemShare.WorldEngine.PlayObjects)
                 {
                     if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
                     {
@@ -240,6 +243,21 @@ namespace GameSrv
                 _scheduledSaveData = false;
             }
             _logger.Debug("定时保存角色数据完毕.");
+        }
+
+        private void ProcessGameNotice()
+        {
+            if (SystemShare.Config.SendOnlineCount && (HUtil32.GetTickCount() - SendOnlineTick) > SystemShare.Config.SendOnlineTime)
+            {
+                SendOnlineTick = HUtil32.GetTickCount();
+                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(SystemShare.WorldEngine.OnlinePlayObject * (SystemShare.Config.SendOnlineCountRate / 10.0)));
+                SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
+            }
+        }
+
+        public void SaveItemNumber()
+        {
+            SystemShare.ServerConf.SaveVariable();
         }
     }
 }

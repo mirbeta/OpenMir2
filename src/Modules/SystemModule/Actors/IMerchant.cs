@@ -78,5 +78,19 @@ namespace SystemModule
         void LoadNpcData();
 
         void ClearData();
+
+        void ClientBuyItem(IPlayerActor playObject, string sItemName, int nInt);
+
+        void ClientGetDetailGoodsList(IPlayerActor playObject, string sItemName, int nInt);
+
+        void ClientQuerySellPrice(IPlayerActor playObject, UserItem userItem);
+
+        bool ClientSellItem(IPlayerActor playObject, UserItem userItem);
+
+        void ClientMakeDrugItem(IPlayerActor playObject, string sItemName);
+
+        void ClientQueryRepairCost(IPlayerActor playObject, UserItem userItem);
+
+        void ClientRepairItem(IPlayerActor playObject, UserItem userItem);
     }
 }

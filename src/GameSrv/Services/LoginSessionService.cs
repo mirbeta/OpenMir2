@@ -21,12 +21,8 @@ namespace GameSrv.Services
 
         public LoginSessionService()
         {
+            _clientScoket = new ScoketClient();
             _sessionList = new List<PlayerSession>();
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort));
-            _clientScoket.OnConnected += IDSocketConnect;
-            _clientScoket.OnDisconnected += IDSocketDisconnect;
-            _clientScoket.OnError += IDSocketError;
-            _clientScoket.OnReceivedData += IdSocketRead;
             UserIDSection = new object();
         }
 
@@ -40,7 +36,7 @@ namespace GameSrv.Services
             {
                 return;
             }
-            _clientScoket.Connect();
+            _clientScoket.Connect(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort));
         }
 
         private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
@@ -75,6 +71,10 @@ namespace GameSrv.Services
 
         public void Initialize()
         {
+            _clientScoket.OnConnected += IDSocketConnect;
+            _clientScoket.OnDisconnected += IDSocketDisconnect;
+            _clientScoket.OnError += IDSocketError;
+            _clientScoket.OnReceivedData += IdSocketRead;
             CheckConnected();
             _logger.Debug("登录服务器连接初始化完成...");
         }
@@ -218,18 +218,18 @@ namespace GameSrv.Services
             int cert = HUtil32.StrToInt(certstr, 0);
             if (!SystemShare.Config.TestServer)
             {
-                int playTime = M2Share.WorldEngine.GetPlayExpireTime(account);
+                int playTime = SystemShare.WorldEngine.GetPlayExpireTime(account);
                 if (playTime >= 3600 || playTime < 1800) //大于一个小时或者小于半个小时都不处理
                 {
                     return;
                 }
                 if (cert <= 1800)//小于30分钟一分钟查询一次，否则10分钟或者半个小时同步一次都行
                 {
-                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
+                    SystemShare.WorldEngine.SetPlayExpireTime(account, cert);
                 }
                 else
                 {
-                    M2Share.WorldEngine.SetPlayExpireTime(account, cert);
+                    SystemShare.WorldEngine.SetPlayExpireTime(account, cert);
                 }
             }
         }
@@ -241,7 +241,7 @@ namespace GameSrv.Services
             int cert = HUtil32.StrToInt(certstr, 0);
             if (!SystemShare.Config.TestServer)
             {
-                M2Share.WorldEngine.AccountExpired(account);
+                SystemShare.WorldEngine.AccountExpired(account);
                 DelSession(cert);
             }
         }
@@ -396,7 +396,7 @@ namespace GameSrv.Services
                 int sessionID = HUtil32.StrToInt(sessionId, 0);
                 if (!SystemShare.Config.TestServer)
                 {
-                    M2Share.WorldEngine.AccountExpired(sAccount);
+                    SystemShare.WorldEngine.AccountExpired(sAccount);
                     DelSession(sessionID);
                 }
             }
@@ -429,7 +429,7 @@ namespace GameSrv.Services
         {
             SocketConnected = true;
             _logger.Info("登录服务器[" + _clientScoket.RemoteEndPoint + "]连接成功...");
-            SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
+            SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
         }
 
         private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e)

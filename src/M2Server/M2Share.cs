@@ -59,7 +59,6 @@ namespace M2Server
         public static CustomItemSystem CustomItemMgr;
         public static NoticeManager NoticeMgr;
         public static NetworkMonitor NetworkMonitor;
-        public static IWorldEngine WorldEngine;
         public static IFrontEngine FrontEngine;
         public static ICommandSystem CommandSystem;
         public static IAutoBotSystem AutoBot;

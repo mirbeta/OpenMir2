@@ -101,11 +101,11 @@ namespace GameSrv.Services
             queryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
             SavePlayerDataMessage saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
-            //if (M2Share.DataServer.SendRequest(queryId, packet, saveHumData))
-            //{
-            //    SaveProcessList.Enqueue(queryId);
-            //    return true;
-            //}
+            if (GameShare.DataServer.SendRequest(queryId, packet, saveHumData))
+            {
+                SaveProcessList.Enqueue(queryId);
+                return true;
+            }
             Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             return false;
         }
@@ -162,16 +162,16 @@ namespace GameSrv.Services
         {
             int nQueryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            //if (M2Share.DataServer.SendRequest(nQueryId, packet, loadHuman))
-            //{
-            //    QueryProcessList.Enqueue(new QueryPlayData()
-            //    {
-            //        QueryId = nQueryId
-            //    });
-            //    queryId = nQueryId;
-            //    Logger.Debug($"查询玩家数据任务ID:[{queryId}]");
-            //    return true;
-            //}
+            if (GameShare.DataServer.SendRequest(nQueryId, packet, loadHuman))
+            {
+                QueryProcessList.Enqueue(new QueryPlayData()
+                {
+                    QueryId = nQueryId
+                });
+                queryId = nQueryId;
+                Logger.Debug($"查询玩家数据任务ID:[{queryId}]");
+                return true;
+            }
             Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             return false;
         }

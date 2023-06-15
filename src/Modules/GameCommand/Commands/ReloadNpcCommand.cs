@@ -22,9 +22,9 @@ namespace CommandSystem.Commands
             //if (string.Compare("all", sParam, StringComparison.CurrentCultureIgnoreCase) == 0)
             //{
             //    M2Share.LocalDb.ReLoadMerchants();
-            //    M2Share.WorldEngine.ReloadMerchantList();
+            //    SystemShare.WorldEngine.ReloadMerchantList();
             //    PlayerActor.SysMsg("交易NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
-            //    M2Share.WorldEngine.ReloadNpcList();
+            //    SystemShare.WorldEngine.ReloadNpcList();
             //    PlayerActor.SysMsg("管理NPC重新加载完成!!!", MsgColor.Red, MsgType.Hint);
             //    return;
             //}
@@ -33,7 +33,7 @@ namespace CommandSystem.Commands
             //    IList<BaseObject> tmpMerList = new List<BaseObject>();
             //    try
             //    {
-            //        if (M2Share.WorldEngine.GetMerchantList(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 9, tmpMerList) > 0)
+            //        if (SystemShare.WorldEngine.GetMerchantList(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 9, tmpMerList) > 0)
             //        {
             //            for (var i = 0; i < tmpMerList.Count; i++)
             //            {
@@ -49,7 +49,7 @@ namespace CommandSystem.Commands
             //        }
 
             //        IList<BaseObject> tmpNorList = new List<BaseObject>();
-            //        if (M2Share.WorldEngine.GetNpcList(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 9, tmpNorList) > 0)
+            //        if (SystemShare.WorldEngine.GetNpcList(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 9, tmpNorList) > 0)
             //        {
             //            for (var i = 0; i < tmpNorList.Count; i++)
             //            {

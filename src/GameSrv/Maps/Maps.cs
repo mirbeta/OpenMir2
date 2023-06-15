@@ -457,7 +457,7 @@ namespace GameSrv.Maps
                 IsHide = true,
                 IsQuest = false
             };
-            //M2Share.WorldEngine.QuestNpcList.Add(questNPC);
+            //SystemShare.WorldEngine.QuestNpcList.Add(questNPC);
             return questNPC;
         }
 

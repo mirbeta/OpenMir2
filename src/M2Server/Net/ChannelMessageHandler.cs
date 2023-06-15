@@ -487,7 +487,7 @@ namespace M2Server.Net
                     if (gateUserInfo != null && gateUserInfo.Socket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
-                        gateUserInfo.WorldEngine = M2Share.WorldEngine;
+                        gateUserInfo.WorldEngine = SystemShare.WorldEngine;
                         gateUserInfo.PlayObject = playObject;
                         break;
                     }

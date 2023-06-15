@@ -35,11 +35,11 @@ namespace CommandSystem.Commands
             //}
             //else
             //{
-            //    sMapName = M2Share.WorldEngine.GetHomeInfo(ref nX, ref nY);
+            //    sMapName = SystemShare.WorldEngine.GetHomeInfo(ref nX, ref nY);
             //}
             //for (var i = 0; i < userCount; i++)
             //{
-            //    M2Share.WorldEngine.AddRobotLogon(new RoBotLogon()
+            //    SystemShare.WorldEngine.AddRobotLogon(new RoBotLogon()
             //    {
             //        sChrName = RandomNumber.GetInstance().GenerateRandomNumber(RandomNumber.GetInstance().Random(4, 8)),
             //        sFilePath = M2Share.Config.EnvirDir,
@@ -50,7 +50,7 @@ namespace CommandSystem.Commands
             //        nY = nY
             //    });
             //}
-            //PlayerActor.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{M2Share.WorldEngine.RobotLogonQueue.Count}],当前共[{M2Share.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
+            //PlayerActor.SysMsg($"已添加[{userCount}]个假人玩家,队列玩家:[{SystemShare.WorldEngine.RobotLogonQueue.Count}],当前共[{SystemShare.WorldEngine.RobotPlayerCount}]个假人玩家", MsgColor.Green, MsgType.Hint);
 
         }
     }

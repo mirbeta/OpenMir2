@@ -235,7 +235,7 @@ namespace M2Server.Player
                 if (IsDelayCall && (HUtil32.GetTickCount() - DelayCallTick) > DelayCall)
                 {
                     IsDelayCall = false;
-                    INormNpc normNpc = M2Share.WorldEngine.FindMerchant(DelayCallNpc) ?? M2Share.WorldEngine.FindNpc(DelayCallNpc);
+                    INormNpc normNpc = SystemShare.WorldEngine.FindMerchant(DelayCallNpc) ?? SystemShare.WorldEngine.FindNpc(DelayCallNpc);
                     if (normNpc != null)
                     {
                         normNpc.GotoLable(this, DelayCallLabel, false);
@@ -322,7 +322,7 @@ namespace M2Server.Player
                                     if (castle.CanGetCastle(MyGuild))
                                     {
                                         castle.GetCastle(MyGuild);
-                                        M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, MyGuild.GuildName);
+                                        SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_211, M2Share.ServerIndex, MyGuild.GuildName);
                                         if (castle.InPalaceGuildCount() <= 1)
                                         {
                                             castle.StopWallconquestWar();
@@ -378,7 +378,7 @@ namespace M2Server.Player
                         if (MyGuild != null)
                         {
                             MyGuild.SendGuildMsg(ChrName + " 已经退出游戏.");
-                            M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + "" + '/' + ChrName + " has exited the game.");
+                            SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + "" + '/' + ChrName + " has exited the game.");
                         }
                         //IdSrvClient.Instance.SendHumanLogOutMsg(UserAccount, SessionId);
                     }
@@ -536,7 +536,7 @@ namespace M2Server.Player
                     {
                         lastHiterPlay.MyGuild.TeamFightWhoWinPoint(LastHiter.ChrName, 100);
                         string tStr = lastHiterPlay.MyGuild.GuildName + ':' + lastHiterPlay.MyGuild.ContestPoint + "  " + MyGuild.GuildName + ':' + MyGuild.ContestPoint;
-                        M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, "- " + tStr);
+                        SystemShare.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 1000, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, "- " + tStr);
                     }
                 }
             }

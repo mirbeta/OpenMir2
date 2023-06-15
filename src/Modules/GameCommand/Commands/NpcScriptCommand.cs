@@ -14,17 +14,17 @@ namespace CommandSystem.Commands
             var baseObject = PlayerActor.GetPoseCreate();
             //if (baseObject != null)
             //{
-            //    for (var i = 0; i < M2Share.WorldEngine.MerchantList.Count; i++)
+            //    for (var i = 0; i < SystemShare.WorldEngine.MerchantList.Count; i++)
             //    {
-            //        if (M2Share.WorldEngine.MerchantList[i] == baseObject)
+            //        if (SystemShare.WorldEngine.MerchantList[i] == baseObject)
             //        {
             //            nNpcType = 0;
             //            break;
             //        }
             //    }
-            //    for (var i = 0; i < M2Share.WorldEngine.QuestNpcList.Count; i++)
+            //    for (var i = 0; i < SystemShare.WorldEngine.QuestNpcList.Count; i++)
             //    {
-            //        if (M2Share.WorldEngine.QuestNpcList[i] == baseObject)
+            //        if (SystemShare.WorldEngine.QuestNpcList[i] == baseObject)
             //        {
             //            nNpcType = 1;
             //            break;

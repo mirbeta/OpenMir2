@@ -26,15 +26,15 @@ namespace CommandSystem.Commands
                 //if (Settings.g_DenySayMsgList.ContainsKey(sHumanName))
                 //{
                 //    Settings.g_DenySayMsgList.Remove(sHumanName);
-                //    IPlayerActor m_IPlayerActor = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
-                //    //IPlayerActor = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
+                //    IPlayerActor m_IPlayerActor = SystemShare.WorldEngine.GeIPlayerActor(sHumanName);
+                //    //IPlayerActor = SystemShare.WorldEngine.GeIPlayerActor(sHumanName);
                 //    if (m_IPlayerActor != null)
                 //    {
                 //        m_IPlayerActor.SysMsg(Settings.GameCommandShutupReleaseCanSendMsg, MsgColor.c_Red, MsgType.t_Hint);
                 //    }
                 //    if (boAll)
                 //    {
-                //        //M2Share.WorldEngine.SendServerGroupMsg(SS_210, nServerIndex, sHumanName);
+                //        //SystemShare.WorldEngine.SendServerGroupMsg(SS_210, nServerIndex, sHumanName);
                 //    }
                 //    PlayerActor.SysMsg(string.Format(Settings.GameCommandShutupReleaseHumanCanSendMsg, sHumanName),
                 //        MsgColor.c_Green, MsgType.t_Hint);

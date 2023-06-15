@@ -240,7 +240,7 @@ namespace GameSrv.Services
                     HumanRcd.Data.Gold += GoldChangeInfo.nGold;
                     if (PlayerDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
                     {
-                        M2Share.WorldEngine.sub_4AE514(GoldChangeInfo);
+                        SystemShare.WorldEngine.sub_4AE514(GoldChangeInfo);
                         result = true;
                     }
                 }

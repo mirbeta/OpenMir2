@@ -1028,7 +1028,7 @@ namespace ScriptSystem
             string sMapName = string.Empty;
             if (questConditionInfo.sParam6 == "88")
             {
-                //playerActor = M2Share.WorldEngine.GetPlayObject(GetLineVariableText(playerActor, questConditionInfo.sParam7));
+                //playerActor = SystemShare.WorldEngine.GetPlayObject(GetLineVariableText(playerActor, questConditionInfo.sParam7));
                 //if (playerActor == null)
                 //{
 
@@ -4608,7 +4608,7 @@ namespace ScriptSystem
         private void ConditionOfCheckNameList(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!GotoLableCheckStringList(playerActor.ChrName, normNpc.m_sPath + questConditionInfo.sParam1))
+            if (!GotoLableCheckStringList(playerActor.ChrName, questConditionInfo.sParam1))
             {
                 success = false;
             }

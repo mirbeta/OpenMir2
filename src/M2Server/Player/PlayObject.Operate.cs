@@ -112,7 +112,7 @@ namespace M2Server.Player
             {
                 return;
             }
-            var npc = M2Share.WorldEngine.FindMerchant(nParam1) ?? M2Share.WorldEngine.FindNpc(nParam1);
+            var npc = SystemShare.WorldEngine.FindMerchant(nParam1) ?? SystemShare.WorldEngine.FindNpc(nParam1);
             if (npc == null)
             {
                 return;
@@ -143,14 +143,14 @@ namespace M2Server.Player
             {
                 return;
             }
-            var merchant = M2Share.WorldEngine.FindMerchant(nParam1);
+            var merchant = SystemShare.WorldEngine.FindMerchant(nParam1);
             if (merchant == null)
             {
                 return;
             }
             if (merchant.Envir == Envir && merchant.IsSell && IsWithinSight(merchant))
             {
-                // merchant.ClientQuerySellPrice(this, userItem18);
+                merchant.ClientQuerySellPrice(this, userItem18);
             }
         }
 
@@ -162,24 +162,24 @@ namespace M2Server.Player
                 if (userItem != null && userItem.MakeIndex == nMakeIndex)
                 {
                     var sUserItemName = CustomItemSystem.GetItemName(userItem);
-                    //if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
-                    //{
-                    //    var merchant = SystemShare.ActorMgr.FindMerchant(nParam1);
-                    //    if (merchant != null && merchant.IsSell && merchant.Envir == Envir && IsWithinSight(merchant))
-                    //    {
-                    //        if (merchant.ClientSellItem(this, userItem))
-                    //        {
-                    //            if (userItem.Desc[13] == 1)
-                    //            {
-                    //                M2Share.CustomItemMgr.DelCustomItemName(userItem.MakeIndex, userItem.Index);
-                    //                userItem.Desc[13] = 0;
-                    //            }
-                    //            ItemList.RemoveAt(i);
-                    //            WeightChanged();
-                    //        }
-                    //    }
-                    //    break;
-                    //}
+                    if (string.Compare(sUserItemName, sMsg, StringComparison.OrdinalIgnoreCase) == 0)
+                    {
+                        var merchant = SystemShare.WorldEngine.FindMerchant(nParam1);
+                        if (merchant != null && merchant.IsSell && merchant.Envir == Envir && IsWithinSight(merchant))
+                        {
+                            if (merchant.ClientSellItem(this, userItem))
+                            {
+                                if (userItem.Desc[13] == 1)
+                                {
+                                    M2Share.CustomItemMgr.DelCustomItemName(userItem.MakeIndex, userItem.Index);
+                                    userItem.Desc[13] = 0;
+                                }
+                                ItemList.RemoveAt(i);
+                                WeightChanged();
+                            }
+                        }
+                        break;
+                    }
                 }
             }
         }
@@ -192,20 +192,20 @@ namespace M2Server.Player
                 {
                     return;
                 }
-                var merchant = M2Share.WorldEngine.FindMerchant(nParam1);
+                var merchant = SystemShare.WorldEngine.FindMerchant(nParam1);
                 if (merchant == null || !merchant.IsBuy || merchant.Envir != Envir || Math.Abs(merchant.CurrX - CurrX) > 15 || Math.Abs(merchant.CurrY - CurrY) > 15)
                 {
                     return;
                 }
-                //switch (nIdent)
-                //{
-                //    case Messages.CM_USERBUYITEM:
-                //        merchant.ClientBuyItem(this, sMsg, nInt);
-                //        break;
-                //    case Messages.CM_USERGETDETAILITEM:
-                //        merchant.ClientGetDetailGoodsList(this, sMsg, nZz);
-                //        break;
-                //}
+                switch (nIdent)
+                {
+                    case Messages.CM_USERBUYITEM:
+                        merchant.ClientBuyItem(this, sMsg, nInt);
+                        break;
+                    case Messages.CM_USERGETDETAILITEM:
+                        merchant.ClientGetDetailGoodsList(this, sMsg, nZz);
+                        break;
+                }
             }
             catch (Exception e)
             {
@@ -365,7 +365,7 @@ namespace M2Server.Player
             var castle = SystemShare.CastleMgr.IsCastleEnvir(Envir);
             if (castle == null || castle.DoorStatus != door.Status || Race != ActorRace.Play || castle.CheckInPalace(CurrX, CurrY, this))
             {
-                // M2Share.WorldEngine.OpenDoor(Envir, nX, nY);
+                SystemShare.WorldEngine.OpenDoor(Envir, nX, nY);
             }
         }
 
@@ -804,7 +804,7 @@ namespace M2Server.Player
 
         private void ClientCreateGroup(string sHumName)
         {
-            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var playObject = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != 0)
             {
                 SendDefMessage(Messages.SM_CREATEGROUP_FAIL, -1, 0, 0, 0);
@@ -841,7 +841,7 @@ namespace M2Server.Player
 
         private void ClientAddGroupMember(string sHumName)
         {
-            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var playObject = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this.ActorId)
             {
                 SendDefMessage(Messages.SM_GROUPADDMEM_FAIL, -1, 0, 0, 0);
@@ -879,7 +879,7 @@ namespace M2Server.Player
 
         private void ClientDelGroupMember(string sHumName)
         {
-            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            var playObject = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (GroupOwner != this.ActorId)
             {
                 SendDefMessage(Messages.SM_GROUPDELMEM_FAIL, -1, 0, 0, 0);
@@ -1210,14 +1210,14 @@ namespace M2Server.Player
 
         private void ClientMakeDrugItem(int actorId, string nItemName)
         {
-            var merchant = M2Share.WorldEngine.FindMerchant(actorId);
+            var merchant = SystemShare.WorldEngine.FindMerchant(actorId);
             if (merchant == null || !merchant.IsMakeDrug)
             {
                 return;
             }
             if (merchant.Envir == Envir && IsWithinSight(merchant))
             {
-                //  merchant.ClientMakeDrugItem(this, nItemName);
+                merchant.ClientMakeDrugItem(this, nItemName);
             }
         }
 
@@ -1304,7 +1304,7 @@ namespace M2Server.Player
             byte nC = 1; // '你没有权利使用这个命令。'
             if (IsGuildMaster())
             {
-                var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+                var playObject = SystemShare.WorldEngine.GetPlayObject(sHumName);
                 if (playObject != null)
                 {
                     if (playObject.GetPoseCreate() == this)
@@ -1316,7 +1316,7 @@ namespace M2Server.Player
                                 if (playObject.MyGuild == null && MyGuild.RankList.Count < 400)
                                 {
                                     MyGuild.AddMember(playObject);
-                                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
                                     playObject.MyGuild = MyGuild;
                                     short rankNo = 0;
                                     playObject.GuildRankName = MyGuild.GetRankName(playObject, ref rankNo);
@@ -1372,14 +1372,14 @@ namespace M2Server.Player
                     {
                         if (MyGuild.DelMember(sHumName))
                         {
-                            var playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+                            var playObject = SystemShare.WorldEngine.GetPlayObject(sHumName);
                             if (playObject != null)
                             {
                                 playObject.MyGuild = null;
                                 playObject.RefRankInfo(0, "");
                                 playObject.RefShowName();
                             }
-                            M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                            SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
                             nC = 0;
                         }
                         else
@@ -1394,7 +1394,7 @@ namespace M2Server.Player
                         if (MyGuild.CancelGuld(sHumName))
                         {
                             SystemShare.GuildMgr.DelGuild(s14);
-                            M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, s14);
+                            SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_206, M2Share.ServerIndex, s14);
                             MyGuild = null;
                             RefRankInfo(0, "");
                             RefShowName();
@@ -1432,7 +1432,7 @@ namespace M2Server.Player
                 MyGuild.NoticeList.Add(sNoticeStr);
             }
             MyGuild.SaveGuildInfoFile();
-            M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+            SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
             ClientOpenGuildDlg();
         }
 
@@ -1445,7 +1445,7 @@ namespace M2Server.Player
             var nC = MyGuild.UpdateRank(sRankInfo);
             if (nC == 0)
             {
-                M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
                 ClientGuildMemberList();
             }
             else
@@ -1481,8 +1481,8 @@ namespace M2Server.Player
                                     posePlayer.MyGuild.SendGuildMsg(MyGuild.GuildName + "行会已经和您的行会联盟成功。");
                                     MyGuild.RefMemberName();
                                     posePlayer.MyGuild.RefMemberName();
-                                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
-                                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, posePlayer.MyGuild.GuildName);
+                                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, posePlayer.MyGuild.GuildName);
                                     n8 = 0;
                                 }
                                 else
@@ -1535,8 +1535,8 @@ namespace M2Server.Player
                     guild.SendGuildMsg(MyGuild.GuildName + " 行会解除了与您行会的联盟!!!");
                     MyGuild.RefMemberName();
                     guild.RefMemberName();
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.GuildName);
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.GuildName);
                     guildsuccess = true;
                 }
             }
@@ -1570,10 +1570,10 @@ namespace M2Server.Player
             {
                 return;
             }
-            var merchant = M2Share.WorldEngine.FindMerchant(actorId);
+            var merchant = SystemShare.WorldEngine.FindMerchant(actorId);
             if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
-                // merchant.ClientQueryRepairCost(this, userItemA);
+                merchant.ClientQueryRepairCost(this, userItemA);
             }
         }
 
@@ -1593,10 +1593,10 @@ namespace M2Server.Player
             {
                 return;
             }
-            var merchant = M2Share.WorldEngine.FindMerchant(actorId);
+            var merchant = SystemShare.WorldEngine.FindMerchant(actorId);
             if (merchant != null && merchant.Envir == Envir && IsWithinSight(merchant))
             {
-                // merchant.ClientRepairItem(this, userItem);
+                merchant.ClientRepairItem(this, userItem);
             }
         }
 
@@ -1612,7 +1612,7 @@ namespace M2Server.Player
                 SysMsg(Settings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var merchant = M2Share.WorldEngine.FindMerchant(actorId);
+            var merchant = SystemShare.WorldEngine.FindMerchant(actorId);
             for (var i = 0; i < ItemList.Count; i++)
             {
                 var userItem = ItemList[i];
@@ -1651,7 +1651,7 @@ namespace M2Server.Player
         private void ClientTakeBackStorageItem(int actorId, int nItemIdx, string sMsg)
         {
             var bo19 = false;
-            var merchant = M2Share.WorldEngine.FindMerchant(actorId);
+            var merchant = SystemShare.WorldEngine.FindMerchant(actorId);
             if (merchant == null)
             {
                 return;

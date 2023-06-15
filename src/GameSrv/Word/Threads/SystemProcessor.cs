@@ -38,7 +38,7 @@ namespace GameSrv.Word.Threads
         {
             M2Share.NetChannel.Run();
             M2Share.LoginSession.Run();
-            M2Share.WorldEngine.Run();
+            SystemShare.WorldEngine.Run();
             M2Share.AutoBot.Run();
             if (M2Share.ServerIndex == 0)
             {
@@ -60,13 +60,13 @@ namespace GameSrv.Word.Threads
             {
                 ShowOnlineTick = HUtil32.GetTickCount();
                 M2Share.NoticeMgr.LoadingNotice();
-                _logger.Info("在线数: " + M2Share.WorldEngine.PlayObjectCount);
+                _logger.Info("在线数: " + SystemShare.WorldEngine.PlayObjectCount);
                 SystemShare.CastleMgr.Save();
             }
             if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
             {
                 SendOnlineHumTime = HUtil32.GetTickCount();
-                M2Share.LoginSession.SendOnlineHumCountMsg(M2Share.WorldEngine.OnlinePlayObject);
+                M2Share.LoginSession.SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
             }
         }
 

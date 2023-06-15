@@ -1196,7 +1196,7 @@ namespace M2Server.Magic
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX + 1), (short)(nY + 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[7] = holyCurtainEvent;
-                    // M2Share.WorldEngine.MagicEventList.Add(magicEvent);
+                    // SystemShare.WorldEngine.MagicEventList.Add(magicEvent);
                 }
             }
             return result;

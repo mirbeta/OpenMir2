@@ -32,8 +32,8 @@ namespace GameSrv.Word.Threads
         {
             try
             {
-                M2Share.WorldEngine.ProcessNpcs();
-                M2Share.WorldEngine.ProcessMerchants();
+                SystemShare.WorldEngine.ProcessNpcs();
+                SystemShare.WorldEngine.ProcessMerchants();
             }
             catch (Exception ex)
             {

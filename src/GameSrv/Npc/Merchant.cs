@@ -2,7 +2,6 @@
 using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
-using M2Server.Player;
 using ScriptSystem;
 using SystemModule;
 using SystemModule.Data;
@@ -939,7 +938,10 @@ namespace GameSrv.NPC
                         }
                         else //插件消息
                         {
-                            SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel });
+                            if (!boCanJmp)
+                            {
+                                SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel });
+                            }
                         }
                     }
                 }
@@ -1347,7 +1349,7 @@ namespace GameSrv.NPC
             playObject.SendMsg(Messages.RM_SENDDETAILGOODSLIST, 0, ActorId, nItemCount, nInt, sSendMsg);
         }
 
-        public void ClientQuerySellPrice(PlayObject playObject, UserItem userItem)
+        public void ClientQuerySellPrice(IPlayerActor playObject, UserItem userItem)
         {
             var nC = GetSellItemPrice(GetUserItemPrice(userItem));
             if (nC >= 0)
@@ -1379,7 +1381,7 @@ namespace GameSrv.NPC
             return result;
         }
 
-        public bool ClientSellItem(PlayObject playObject, UserItem userItem)
+        public bool ClientSellItem(IPlayerActor playObject, UserItem userItem)
         {
             var result = false;
             var nPrice = GetSellItemPrice(GetUserItemPrice(userItem));
@@ -1434,7 +1436,7 @@ namespace GameSrv.NPC
             itemList.Insert(0, userItem);
         }
 
-        private bool ClientMakeDrugCheckNeedItem(PlayObject playObject, string sItemName)
+        private bool ClientMakeDrugCheckNeedItem(IPlayerActor playObject, string sItemName)
         {
             IList<MakeItem> list10 = M2Share.GetMakeItemInfo(sItemName);
             if (list10 == null)
@@ -1502,7 +1504,7 @@ namespace GameSrv.NPC
             return result;
         }
 
-        public void ClientMakeDrugItem(PlayObject playObject, string sItemName)
+        public void ClientMakeDrugItem(IPlayerActor playObject, string sItemName)
         {
             byte n14 = 1;
             for (var i = 0; i < GoodsList.Count; i++)

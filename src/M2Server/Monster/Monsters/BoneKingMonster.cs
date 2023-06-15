@@ -29,7 +29,7 @@ namespace M2Server.Monster.Monsters
                 {
                     break;
                 }
-                IActor baseObject = M2Share.WorldEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
+                IActor baseObject = SystemShare.WorldEngine.RegenMonsterByName(MapName, n10, n14, sMonName[M2Share.RandomNumber.Random(3)]);
                 if (baseObject != null)
                 {
                     SlaveObjectList.Add(baseObject);

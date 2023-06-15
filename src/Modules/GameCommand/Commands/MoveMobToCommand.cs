@@ -54,7 +54,7 @@ namespace CommandSystem.Commands
             IList<IActor> monList = new List<IActor>();
             //if (!boMoveAll)// 指定名称的怪移动
             //{
-            //    M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 10, monList);// 查指定XY范围内的怪
+            //    SystemShare.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 10, monList);// 查指定XY范围内的怪
             //    if (monList.Count > 0)
             //    {
             //        for (var i = 0; i < monList.Count; i++)
@@ -73,7 +73,7 @@ namespace CommandSystem.Commands
             //else
             //{
             //    // 所有怪移动
-            //    M2Share.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 1000, monList);// 查指定XY范围内的怪
+            //    SystemShare.WorldEngine.GetMapRangeMonster(srcEnvir, x, y, 1000, monList);// 查指定XY范围内的怪
             //    for (var i = 0; i < monList.Count; i++)
             //    {
             //        var moveMon = monList[i];

@@ -30,7 +30,7 @@ namespace CommandSystem.Commands
                 }
                 //if ((sHumanName).CompareTo((Settings.g_DisableSendMsgList[i])) == 0)
                 //{
-                //    m_IPlayerActor = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
+                //    m_IPlayerActor = SystemShare.WorldEngine.GeIPlayerActor(sHumanName);
                 //    if (m_IPlayerActor != null)
                 //    {
                 //        m_IPlayerActor.m_boFilterSendMsg = false;

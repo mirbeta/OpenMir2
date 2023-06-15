@@ -496,7 +496,7 @@ namespace ScriptSystem
                             questConditionInfo.sOpName = ConditionScript.GetLineVariableText(playerActor, questConditionInfo.sOpName);
                         }
                     }
-                    /*IPlayerActor human = M2Share.WorldEngine.GetIPlayerActor(questConditionInfo.sOpName);
+                    /*IPlayerActor human = SystemShare.WorldEngine.GetIPlayerActor(questConditionInfo.sOpName);
                     if (human != null)
                     {
                         IPlayerActor = human;

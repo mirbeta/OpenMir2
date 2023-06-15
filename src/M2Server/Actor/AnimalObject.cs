@@ -296,7 +296,7 @@ namespace M2Server.Actor
                 {
                     if (monStatus == MonStatus.MonGen)
                     {
-                        M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
+                        SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Mon);
                         break;
                     }
                     if (monSayMsg.Color == MsgColor.White)

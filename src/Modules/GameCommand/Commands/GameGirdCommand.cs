@@ -28,7 +28,7 @@ namespace CommandSystem.Commands
             //    }
             //    return;
             //}
-            //m_IPlayerActor = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
+            //m_IPlayerActor = SystemShare.WorldEngine.GeIPlayerActor(sHumanName);
             //if (m_IPlayerActor == null)
             //{
             //    PlayerActor.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, new string[] { sHumanName }), MsgColor.c_Red, MsgType.t_Hint);

@@ -2203,7 +2203,7 @@ namespace ScriptSystem
             if (envir != null)
             {
                 //IList<BaseObject> exchangeList = new List<BaseObject>();
-                //M2Share.WorldEngine.GetMapRageHuman(envir, 0, 0, 1000, ref exchangeList);
+                //SystemShare.WorldEngine.GetMapRageHuman(envir, 0, 0, 1000, ref exchangeList);
                 //if (exchangeList.Count > 0)
                 //{
                 //    var user = exchangeList[0];

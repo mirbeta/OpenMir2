@@ -99,7 +99,7 @@ namespace M2Server.Monster
 
         protected BaseObject MakeClone(string sMonName, MonsterObject OldMon)
         {
-            MonsterObject ElfMon = (MonsterObject)M2Share.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
+            MonsterObject ElfMon = (MonsterObject)SystemShare.WorldEngine.RegenMonsterByName(Envir.MapName, CurrX, CurrY, sMonName);
             if (ElfMon != null)
             {
                 if (OldMon.TargetCret == null)

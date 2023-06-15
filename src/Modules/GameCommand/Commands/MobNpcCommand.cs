@@ -45,7 +45,7 @@ namespace CommandSystem.Commands
             //merchant.CurrY = nY;
             //merchant.Initialize();
             //merchant.OnEnvirnomentChanged();
-            //M2Share.WorldEngine.AddMerchant(merchant);
+            //SystemShare.WorldEngine.AddMerchant(merchant);
         }
     }
 }

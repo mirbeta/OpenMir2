@@ -3,7 +3,6 @@ using M2Server;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using SystemModule;
-using SystemModule.Enums;
 
 namespace GameSrv
 {
@@ -57,22 +56,8 @@ namespace GameSrv
             {
                 module.Stopping(cancellationToken);
             }
-        }
 
-        private static void ProcessGameNotice()
-        {
-            if (SystemShare.Config.SendOnlineCount && (HUtil32.GetTickCount() - GameShare.SendOnlineTick) > SystemShare.Config.SendOnlineTime)
-            {
-                GameShare.SendOnlineTick = HUtil32.GetTickCount();
-                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (SystemShare.Config.SendOnlineCountRate / 10.0)));
-                M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
-            }
-        }
-
-        public static void SaveItemNumber()
-        {
-            ProcessGameNotice();
-            SystemShare.ServerConf.SaveVariable();
+            _logger.Info("游戏世界服务线程停止...");
         }
     }
 }

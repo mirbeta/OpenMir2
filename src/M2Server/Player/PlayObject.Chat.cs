@@ -13,7 +13,7 @@ namespace M2Server.Player
         public virtual void Whisper(string whostr, string saystr)
         {
             int svidx = 0;
-            IPlayerActor PlayObject = M2Share.WorldEngine.GetPlayObject(whostr);
+            IPlayerActor PlayObject = SystemShare.WorldEngine.GetPlayObject(whostr);
             if (PlayObject != null)
             {
                 if (!PlayObject.BoReadyRun)
@@ -65,9 +65,9 @@ namespace M2Server.Player
             }
             else
             {
-                if (M2Share.WorldEngine.FindOtherServerUser(whostr, ref svidx))
+                if (SystemShare.WorldEngine.FindOtherServerUser(whostr, ref svidx))
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.ISM_WHISPER, svidx, whostr + '/' + ChrName + "=> " + saystr);
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.ISM_WHISPER, svidx, whostr + '/' + ChrName + "=> " + saystr);
                 }
                 else
                 {
@@ -167,12 +167,12 @@ namespace M2Server.Player
                                         case '!'://发送组队消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             SendGroupText(ChrName + ": " + sText);
-                                            M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
+                                            SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, ChrName + "/:" + sText);
                                             return;
                                         case '~' when MyGuild != null://发送行会消息
                                             sText = sData.AsSpan()[2..].ToString();
                                             MyGuild.SendGuildMsg(ChrName + ": " + sText);
-                                            M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + ChrName + '/' + sText);
+                                            SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_208, M2Share.ServerIndex, MyGuild.GuildName + '/' + ChrName + '/' + sText);
                                             return;
                                     }
                                 }
@@ -194,7 +194,7 @@ namespace M2Server.Player
                                         }
                                         else
                                         {
-                                            M2Share.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, sCryCryMsg);
+                                            SystemShare.WorldEngine.CryCry(Messages.RM_CRY, Envir, CurrX, CurrY, 50, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, sCryCryMsg);
                                         }
                                         return;
                                     }
@@ -390,7 +390,7 @@ namespace M2Server.Player
                             {
                                 sC = sData;
                             }
-                            M2Share.WorldEngine.SendBroadCastMsg(sC, MsgType.GameManger);
+                            SystemShare.WorldEngine.SendBroadCastMsg(sC, MsgType.GameManger);
                         }
                         return;
                     }

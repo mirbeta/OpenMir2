@@ -106,11 +106,11 @@ namespace LoginSrv.Services
                 {
                     if (msgServer.ServerIndex == 99)
                     {
-                        _logger.Warn($"[{msgServer.ServerName}]数据库服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
+                        _logger.Warn($"[{msgServer.ServerName}]数据库服务器[{msgServer.EndPoint}]断开链接.");
                     }
                     else
                     {
-                        _logger.Warn($"[{msgServer.ServerName}]游戏服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
+                        _logger.Warn($"[{msgServer.ServerName}]游戏服务器[{msgServer.EndPoint}]断开链接.");
                     }
                     msgServer = null;
                     _serverList.RemoveAt(i);

@@ -317,7 +317,7 @@ namespace M2Server.Player
             }
             RecalcAbilitys();
             M2Share.SpiritMutinyTick = HUtil32.GetTickCount() + SystemShare.Config.SpiritMutinyTime;
-            M2Share.WorldEngine.SendBroadCastMsg("神之祈祷，天地震怒，尸横遍野...", MsgType.System);
+            SystemShare.WorldEngine.SendBroadCastMsg("神之祈祷，天地震怒，尸横遍野...", MsgType.System);
             SysMsg("祈祷发出强烈的宇宙效应", MsgColor.Green, MsgType.Hint);
         }
 
@@ -678,7 +678,7 @@ namespace M2Server.Player
             if (HUtil32.GetTickCount() - ClickNpcTime > SystemShare.Config.ClickNpcTime)
             {
                 ClickNpcTime = HUtil32.GetTickCount();
-                INormNpc normNpc = M2Share.WorldEngine.FindMerchant(actorId) ?? M2Share.WorldEngine.FindNpc(actorId);
+                INormNpc normNpc = SystemShare.WorldEngine.FindMerchant(actorId) ?? SystemShare.WorldEngine.FindNpc(actorId);
                 if (normNpc != null)
                 {
                     if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
@@ -691,7 +691,7 @@ namespace M2Server.Player
 
         private int GetRangeHumanCount()
         {
-            return M2Share.WorldEngine.GetMapOfRangeHumanCount(Envir, CurrX, CurrY, 10);
+            return SystemShare.WorldEngine.GetMapOfRangeHumanCount(Envir, CurrX, CurrY, 10);
         }
 
         private void GetStartPoint()
@@ -900,9 +900,9 @@ namespace M2Server.Player
 
         private void ReadAllBook()
         {
-            //for (int i = 0; i < M2Share.WorldEngine.MagicList.Count; i++)
+            //for (int i = 0; i < SystemShare.WorldEngine.MagicList.Count; i++)
             //{
-            //    MagicInfo magic = M2Share.WorldEngine.MagicList[i];
+            //    MagicInfo magic = SystemShare.WorldEngine.MagicList[i];
             //    UserMagic userMagic = new UserMagic
             //    {
             //        Magic = magic,
@@ -2160,7 +2160,7 @@ namespace M2Server.Player
         private bool ReadBook(StdItem stdItem)
         {
             bool result = false;
-            MagicInfo magic = M2Share.WorldEngine.FindMagic(stdItem.Name);
+            MagicInfo magic = SystemShare.WorldEngine.FindMagic(stdItem.Name);
             if (magic != null)
             {
                 if (!IsTrainingSkill(magic.MagicId))
@@ -2896,7 +2896,7 @@ namespace M2Server.Player
                 DearName = "";
                 RefShowName();
             }
-            DearHuman = M2Share.WorldEngine.GetPlayObject(DearName);
+            DearHuman = SystemShare.WorldEngine.GetPlayObject(DearName);
             if (DearHuman != null)
             {
                 DearHuman.DearHuman = this;
@@ -2960,7 +2960,7 @@ namespace M2Server.Player
             {
                 if (Abil.Level >= SystemShare.Config.MasterOKLevel)
                 {
-                    IPlayerActor human = M2Share.WorldEngine.GetPlayObject(MasterName);
+                    IPlayerActor human = SystemShare.WorldEngine.GetPlayObject(MasterName);
                     if (human != null && !human.Death && !human.Ghost)
                     {
                         sSayMsg = string.Format(Settings.YourMasterListUnMasterOKMsg, ChrName);
@@ -3044,7 +3044,7 @@ namespace M2Server.Player
             }
             if (IsMaster) // 师父上线通知
             {
-                MasterHuman = M2Share.WorldEngine.GetPlayObject(MasterName);
+                MasterHuman = SystemShare.WorldEngine.GetPlayObject(MasterName);
                 if (MasterHuman != null)
                 {
                     MasterHuman.MasterHuman = this;
@@ -3064,7 +3064,7 @@ namespace M2Server.Player
                 // 徒弟上线通知
                 if (!string.IsNullOrEmpty(MasterName))
                 {
-                    MasterHuman = M2Share.WorldEngine.GetPlayObject(MasterName);
+                    MasterHuman = SystemShare.WorldEngine.GetPlayObject(MasterName);
                     if (MasterHuman != null)
                     {
                         if (MasterHuman.MasterName == ChrName)
@@ -3305,7 +3305,7 @@ namespace M2Server.Player
             short nY = 0;
             short n18 = 0;
             short n1C = 0;
-            IPlayerActor playObject = M2Share.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor playObject = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (playObject != null)
             {
                 if (GetFrontPosition(ref nX, ref nY))
@@ -3346,22 +3346,22 @@ namespace M2Server.Player
                 return;
             }
             bool boReQuestOk = false;
-            //WarGuild warGuild = MyGuild.AddWarGuild(guild);
-            //if (warGuild.dwWarTick > 0)
-            //{
-            //    if (guild.AddWarGuild(MyGuild).Guild != null)
-            //    {
-            //        warGuild.dwWarTick = 0;
-            //    }
-            //    else
-            //    {
-            //        boReQuestOk = true;
-            //    }
-            //}
+            WarGuild warGuild = MyGuild.AddWarGuild(guild);
+            if (warGuild.WarTick > 0)
+            {
+                if (guild.AddWarGuild(MyGuild).Guild != null)
+                {
+                    warGuild.WarTick = 0;
+                }
+                else
+                {
+                    boReQuestOk = true;
+                }
+            }
             if (boReQuestOk)
             {
-                M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
-                M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.GuildName);
+                SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, MyGuild.GuildName);
+                SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_207, M2Share.ServerIndex, guild.GuildName);
             }
         }
 
@@ -3423,10 +3423,10 @@ namespace M2Server.Player
             switch (ValNpcType)
             {
                 case 0:
-                    normNpc = M2Share.WorldEngine.FindMerchant(npc);
+                    normNpc = SystemShare.WorldEngine.FindMerchant(npc);
                     if (normNpc == null)
                     {
-                        normNpc = M2Share.WorldEngine.FindNpc(npc);
+                        normNpc = SystemShare.WorldEngine.FindNpc(npc);
                     }
                     if (normNpc != null)
                     {
@@ -3461,7 +3461,7 @@ namespace M2Server.Player
                 {
                     return;
                 }
-                INormNpc npc = M2Share.WorldEngine.FindMerchant(nParam1) ?? M2Share.WorldEngine.FindNpc(nParam1);
+                INormNpc npc = SystemShare.WorldEngine.FindMerchant(nParam1) ?? SystemShare.WorldEngine.FindNpc(nParam1);
                 if (npc != null)
                 {
                     LastNpc = npc.ActorId;
@@ -3501,7 +3501,7 @@ namespace M2Server.Player
                         nTemp = 0;
                     }
                     SendDefMessage(Messages.SM_ITEMDLGSELECT, 1, nTemp, 0, 0);
-                    //npc.GotoLable(this, GotoNpcLabel, false);
+                    npc.GotoLable(this, GotoNpcLabel);
                     GotoNpcLabel = string.Empty;
                 }
             }

@@ -33,7 +33,7 @@ namespace CommandSystem.Commands
             //        return;
             //    }
 
-            //    var TargerObject = M2Share.WorldEngine.GeIPlayerActor(sHumanName);
+            //    var TargerObject = SystemShare.WorldEngine.GeIPlayerActor(sHumanName);
             //    if (TargerObject == null)
             //    {
             //        PlayerActor.SysMsg(string.Format(Settings.NowNotOnLineOrOnOtherServer, new string[] { sHumanName }),

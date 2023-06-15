@@ -10,14 +10,14 @@ namespace CommandSystem.Commands
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
             var sb = new StringBuilder();
-            //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", M2Share.WorldEngine.MonsterCount,
-            //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, M2Share.WorldEngine.OnlineIPlayerActor,
-            //       M2Share.WorldEngine.IPlayerActorCount, M2Share.WorldEngine.LoadPlayCount, M2Share.WorldEngine.m_IPlayerActorFreeList.Count));
+            //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", SystemShare.WorldEngine.MonsterCount,
+            //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, SystemShare.WorldEngine.OnlineIPlayerActor,
+            //       SystemShare.WorldEngine.IPlayerActorCount, SystemShare.WorldEngine.LoadPlayCount, SystemShare.WorldEngine.m_IPlayerActorFreeList.Count));
             //sb.AppendLine(string.Format("Run({0}/{1}) Soc({2}/{3}) Usr({4}/{5})", M2Share.nRunTimeMin, M2Share.nRunTimeMax, Settings.g_nSockCountMin,
             //        Settings.g_nSockCountMax, Settings.g_nUsrTimeMin, Settings.g_nUsrTimeMax));
             //sb.AppendLine(string.Format("Hum{0}/{1} Usr{2}/{3} Mer{4}/{5} Npc{6}/{7}", Settings.g_nHumCountMin, Settings.g_nHumCountMax,
-            //        M2Share.dwUsrRotCountMin, M2Share.dwUsrRotCountMax, M2Share.WorldEngine.dwProcessMerchantTimeMin,
-            //        M2Share.WorldEngine.dwProcessMerchantTimeMax, M2Share.WorldEngine.dwProcessNpcTimeMin, M2Share.WorldEngine.dwProcessNpcTimeMax,
+            //        M2Share.dwUsrRotCountMin, M2Share.dwUsrRotCountMax, SystemShare.WorldEngine.dwProcessMerchantTimeMin,
+            //        SystemShare.WorldEngine.dwProcessMerchantTimeMax, SystemShare.WorldEngine.dwProcessNpcTimeMin, SystemShare.WorldEngine.dwProcessNpcTimeMax,
             //        Settings.g_nProcessHumanLoopTime));
             //sb.AppendLine(string.Format("MonG({0}/{1}/{2}) MonP({3}/{4}/{5}) ObjRun({6}/{7})", Settings.g_nMonGenTime, Settings.g_nMonGenTimeMin,
             //      Settings.g_nMonGenTimeMax, Settings.g_nMonProcTime, Settings.g_nMonProcTimeMin, Settings.g_nMonProcTimeMax, Settings.g_nBaseObjTimeMin,

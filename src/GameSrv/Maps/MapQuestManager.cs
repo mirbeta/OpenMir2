@@ -1,6 +1,6 @@
 ﻿using GameSrv.NPC;
-using M2Server;
 using M2Server.Player;
+using SystemModule;
 using SystemModule.Data;
 
 namespace GameSrv.Maps
@@ -52,7 +52,7 @@ namespace GameSrv.Maps
                 IsHide = true,
                 IsQuest = false
             };
-            M2Share.WorldEngine.AddQuestNpc(questMerchant);
+            SystemShare.WorldEngine.AddQuestNpc(questMerchant);
             mapQuest.NPC = questMerchant;
             QuestList.Add(mapQuest);
             return true;

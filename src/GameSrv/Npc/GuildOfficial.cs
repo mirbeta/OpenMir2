@@ -140,7 +140,7 @@ namespace GameSrv.NPC
             {
                 if (SystemShare.GuildMgr.AddGuild(sGuildName, PlayObject.ChrName))
                 {
-                    M2Share.WorldEngine.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
+                    SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_205, M2Share.ServerIndex, sGuildName + '/' + PlayObject.ChrName);
                     PlayObject.SendDelItems(UserItem);
                     PlayObject.DelBagItem(UserItem.MakeIndex, SystemShare.Config.WomaHorn);
                     PlayObject.DecGold(SystemShare.Config.BuildGuildPrice);

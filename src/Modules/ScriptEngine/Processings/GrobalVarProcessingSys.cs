@@ -189,7 +189,7 @@ namespace ScriptSystem
         /// <param name="sMsg"></param>
         internal void GetUserCount(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            // sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(M2Share.WorldEngine.IPlayerActorCount));
+            // sMsg = CombineStr(sMsg, $"<{sVariable}>", Convert.ToString(SystemShare.WorldEngine.IPlayerActorCount));
         }
 
         /// <summary>

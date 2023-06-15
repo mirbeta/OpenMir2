@@ -99,5 +99,9 @@ namespace SystemModule
         void ProcessHumans();
 
         void AddUserOpenInfo(UserOpenInfo UserOpenInfo);
+
+        void OpenDoor(IEnvirnoment envir, int nX, int nY);
+
+        void CloseDoor(IEnvirnoment envir, MapDoor door);
     }
 }

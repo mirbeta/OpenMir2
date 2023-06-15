@@ -1178,7 +1178,7 @@ namespace M2Server.Player
                 {
                     MapRandomMove(Envir.MapName, 0);
                 }
-                //if (M2Share.WorldEngine.GetHumPermission(ChrName, ref sIPaddr, ref Permission))
+                //if (SystemShare.WorldEngine.GetHumPermission(ChrName, ref sIPaddr, ref Permission))
                 //{
                 //    if (SystemShare.Config.PermissionSystem)
                 //    {
@@ -1356,7 +1356,7 @@ namespace M2Server.Player
                     {
                         SysMsg(Settings.StartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
-                    if (M2Share.WorldEngine.PlayObjectCount > SystemShare.Config.TestUserLimit)
+                    if (SystemShare.WorldEngine.PlayObjectCount > SystemShare.Config.TestUserLimit)
                     {
                         if (Permission < 2)
                         {
@@ -1636,29 +1636,29 @@ namespace M2Server.Player
             // 是否执行任务脚本
             if (Envir.IsCheapStuff())// 地图是否有任务脚本
             {
-                //Merchant QuestNPC;
-                //if (GroupOwner != 0)
-                //{
-                //    PlayObject groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
-                //    for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
-                //    {
-                //        PlayObject groupHuman = groupOwnerPlay.GroupMembers[i];
-                //        bool tCheck;
-                //        if (!groupHuman.Death && Envir == groupHuman.Envir && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && this == groupHuman)
-                //        {
-                //            tCheck = false;
-                //        }
-                //        else
-                //        {
-                //            tCheck = true;
-                //        }
-                //        QuestNPC = Envir.GetQuestNpc(groupHuman, ChrName, "", tCheck);
-                //        if (QuestNPC != null)
-                //        {
-                //            QuestNPC.Click(groupHuman);
-                //        }
-                //    }
-                //}
+                IMerchant QuestNPC;
+                if (GroupOwner != 0)
+                {
+                    IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
+                    for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
+                    {
+                        IPlayerActor groupHuman = groupOwnerPlay.GroupMembers[i];
+                        bool tCheck;
+                        if (!groupHuman.Death && Envir == groupHuman.Envir && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && this == groupHuman)
+                        {
+                            tCheck = false;
+                        }
+                        else
+                        {
+                            tCheck = true;
+                        }
+                        //QuestNPC = Envir.GetQuestNpc(groupHuman, ChrName, "", tCheck);
+                        //if (QuestNPC != null)
+                        //{
+                        //    QuestNPC.Click(groupHuman);
+                        //}
+                    }
+                }
                 //QuestNPC = Envir.GetQuestNpc(this, ChrName, "", false);
                 //if (QuestNPC != null)
                 //{
@@ -3901,10 +3901,10 @@ namespace M2Server.Player
             switch (nIndex)
             {
                 case 1:
-                    magic = M2Share.WorldEngine.FindMagic(SystemShare.Config.FireBallSkill);
+                    magic = SystemShare.WorldEngine.FindMagic(SystemShare.Config.FireBallSkill);
                     break;
                 case 2:
-                    magic = M2Share.WorldEngine.FindMagic(SystemShare.Config.HealSkill);
+                    magic = SystemShare.WorldEngine.FindMagic(SystemShare.Config.HealSkill);
                     break;
             }
             if (magic != null)

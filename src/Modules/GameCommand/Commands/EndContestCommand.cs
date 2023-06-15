@@ -32,7 +32,7 @@ namespace CommandSystem.Commands
             //}
             //List10 = new List<IPlayerActor>();
             //List14 = new ArrayList();
-            //M2Share.WorldEngine.GetMapRageHuman(PlayerActor.SysMsgm_PEnvir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, List10);
+            //SystemShare.WorldEngine.GetMapRageHuman(PlayerActor.SysMsgm_PEnvir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, List10);
             //for (int i = 0; i < List10.Count; i++)
             //{
             //    m_IPlayerActor = List10[i];
@@ -61,7 +61,7 @@ namespace CommandSystem.Commands
             //{
             //    Guild = ((TGUild)(List14[i]));
             //    Guild.EndTeamFight();
-            //    M2Share.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.SysMsgm_PEnvir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, Settings.Config.btCryMsgFColor,
+            //    SystemShare.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.SysMsgm_PEnvir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, Settings.Config.btCryMsgFColor,
             //        Settings.Config.btCryMsgBColor, string.Format(" - {0} 行会争霸赛已结束。", Guild.sGuildName));
             //}
             //HUtil32.Dispose(List10);

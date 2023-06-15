@@ -115,7 +115,7 @@ namespace GameSrv.DataSource
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.WorldEngine.SwitchMagicList();
+                SystemShare.WorldEngine.SwitchMagicList();
                 if (!Open())
                 {
                     return result;
@@ -150,7 +150,7 @@ namespace GameSrv.DataSource
                     magic.Desc = dr.GetString("Descr");
                     if (magic.MagicId > 0)
                     {
-                        M2Share.WorldEngine.AddMagicList(magic);
+                        SystemShare.WorldEngine.AddMagicList(magic);
                     }
                     else
                     {
@@ -178,7 +178,7 @@ namespace GameSrv.DataSource
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                M2Share.WorldEngine.ClearMonsterList();
+                SystemShare.WorldEngine.ClearMonsterList();
                 if (!Open())
                 {
                     return result;
@@ -230,7 +230,7 @@ namespace GameSrv.DataSource
                     }
                     monster.ItemList = null;
                     GameShare.LocalDb.LoadMonitems(monster.Name, ref monster.ItemList);
-                    //if (M2Share.WorldEngine.MonsterList.ContainsKey(monster.Name))
+                    //if (SystemShare.WorldEngine.MonsterList.ContainsKey(monster.Name))
                     //{
                     //    logger.Warn($"怪物名称[{monster.Name}]重复,请确认数据是否正常.");
                     //    continue;
@@ -239,7 +239,7 @@ namespace GameSrv.DataSource
                     //{
                     //    logger.Debug($"怪物[{monster.Name}]爆率文件为空.");
                     //}
-                    M2Share.WorldEngine.AddMonsterList(monster);
+                    SystemShare.WorldEngine.AddMonsterList(monster);
                     result = 1;
                 }
             }

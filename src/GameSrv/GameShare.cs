@@ -30,7 +30,6 @@ namespace GameSrv
         public static readonly TimedRobotProcessor TimedRobotProcessor;
         public static readonly MapQuestManager QuestManager;
         public static readonly DBService DataServer;
-        public static int SendOnlineTick = 0;
         public static IList<ModuleInfo> Modules { get; set; } = new List<ModuleInfo>();
 
         static GameShare()

@@ -32,7 +32,7 @@ namespace GameSrv.Word.Threads
         {
             try
             {
-                M2Share.WorldEngine.ProcessHumans();
+                SystemShare.WorldEngine.ProcessHumans();
             }
             catch (Exception ex)
             {
