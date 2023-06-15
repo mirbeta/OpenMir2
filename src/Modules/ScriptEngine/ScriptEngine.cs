@@ -6,6 +6,13 @@ using SystemModule.Packets.ClientPackets;
 
 namespace ScriptSystem
 {
+    public struct GotoLabParams
+    {
+        public string ItemName { get; set; }
+        public UserItem UserItem { get; set; }
+        public bool SendSayMsg { get; set; }
+    }
+
     /// <summary>
     /// 脚本执行引擎
     /// </summary>
@@ -13,6 +20,7 @@ namespace ScriptSystem
     {
         private ConditionProcessingSys ConditionScript { get; set; }
         private ExecutionProcessingSys ExecutionProcessing { get; set; }
+        private GotoLabParams GotoLabParams;
 
         public ScriptEngine()
         {
@@ -29,8 +37,6 @@ namespace ScriptSystem
                 playerActor.LastNpc = 0;
             }
             ScriptInfo script = null;
-            UserItem userItem = null;
-            string sC = string.Empty;
             var scriptList = normNpc.ScriptList;
             if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
             {
@@ -40,7 +46,7 @@ namespace ScriptSystem
                     if (script3C.RecordList.TryGetValue(sLabel, out _))
                     {
                         script = script3C;
-                        playerActor.Script = script;
+                        playerActor.Script = script3C;
                         playerActor.LastNpc = normNpc.ActorId;
                         break;
                     }
@@ -73,26 +79,25 @@ namespace ScriptSystem
             }
             if (script != null)
             {
-                SayingRecord sayingRecord;
-                if (script.RecordList.TryGetValue(sLabel, out sayingRecord))
+                if (script.RecordList.TryGetValue(sLabel, out var sayingRecord))
                 {
                     if (boExtJmp && sayingRecord.boExtJmp == false)
                     {
                         return;
                     }
                     string sSendMsg = string.Empty;
+                    GotoLabParams = default;
                     for (int i = 0; i < sayingRecord.ProcedureList.Count; i++)
                     {
                         SayingProcedure sayingProcedure = sayingRecord.ProcedureList[i];
-                        bool bo11 = false;
-                        if (GotoLableQuestCheckCondition(normNpc, playerActor, sayingProcedure.ConditionList, ref sC, ref userItem))
+                        if (GotoLableQuestCheckCondition(normNpc, playerActor, sayingProcedure.ConditionList, ref GotoLabParams))
                         {
                             sSendMsg = sSendMsg + sayingProcedure.sSayMsg;
-                            if (!GotoLableQuestActionProcess(normNpc, playerActor, sayingProcedure.ActionList, ref sC, ref userItem, ref bo11))
+                            if (!GotoLableQuestActionProcess(normNpc, playerActor, sayingProcedure.ActionList, ref GotoLabParams))
                             {
                                 break;
                             }
-                            if (bo11)
+                            if (GotoLabParams.SendSayMsg)
                             {
                                 GotoLableSendMerChantSayMsg(normNpc, playerActor, sSendMsg, true);
                             }
@@ -100,11 +105,11 @@ namespace ScriptSystem
                         else
                         {
                             sSendMsg = sSendMsg + sayingProcedure.sElseSayMsg;
-                            if (!GotoLableQuestActionProcess(normNpc, playerActor, sayingProcedure.ElseActionList, ref sC, ref userItem, ref bo11))
+                            if (!GotoLableQuestActionProcess(normNpc, playerActor, sayingProcedure.ElseActionList, ref GotoLabParams))
                             {
                                 break;
                             }
-                            if (bo11)
+                            if (GotoLabParams.SendSayMsg)
                             {
                                 GotoLableSendMerChantSayMsg(normNpc, playerActor, sSendMsg, true);
                             }
@@ -384,7 +389,7 @@ namespace ScriptSystem
             return false;
         }
 
-        private bool GotoLableQuestCheckCondition(INormNpc normNpc, IPlayerActor playerActor, IList<QuestConditionInfo> conditionList, ref string sC, ref UserItem userItem)
+        private bool GotoLableQuestCheckCondition(INormNpc normNpc, IPlayerActor playerActor, IList<QuestConditionInfo> conditionList, ref GotoLabParams gotoLabParams)
         {
             bool result = true;
             int n1C = 0;
@@ -530,20 +535,20 @@ namespace ScriptSystem
                         result = GotoLable_QuestCheckCondition_CheckKillMon(playerActor, questConditionInfo.sParam1);
                         break;
                     case (int)ConditionCode.CHECKITEMW:
-                        userItem = CheckGotoLableItemW(playerActor, questConditionInfo.sParam1, questConditionInfo.nParam2);
-                        if (userItem == null)
+                        gotoLabParams.UserItem = CheckGotoLableItemW(playerActor, questConditionInfo.sParam1, questConditionInfo.nParam2);
+                        if (gotoLabParams.UserItem == null)
                         {
                             result = false;
                         }
                         break;
                     case (int)ConditionCode.ISTAKEITEM:
-                        if (sC != questConditionInfo.sParam1)
+                        if (gotoLabParams.ItemName != questConditionInfo.sParam1)
                         {
                             result = false;
                         }
                         break;
                     case (int)ConditionCode.CHECKDURAEVA:
-                        userItem = playerActor.QuestCheckItem(questConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
+                        gotoLabParams.UserItem = playerActor.QuestCheckItem(questConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
                         if (n1C > 0)
                         {
                             if (HUtil32.Round(nMaxDura / n1C / 1000.0) < questConditionInfo.nParam2)
@@ -623,7 +628,7 @@ namespace ScriptSystem
             }
         }
 
-        private void GotoLableTakeItem(IPlayerActor playerActor, string sItemName, int nItemCount, ref string sC)
+        private void GotoLableTakeItem(IPlayerActor playerActor, string sItemName, int nItemCount, string sC)
         {
             UserItem userItem;
             StdItem stdItem;
@@ -854,7 +859,7 @@ namespace ScriptSystem
             }
         }
 
-        private bool GotoLableQuestActionProcess(INormNpc normNpc, IPlayerActor playerActor, IList<QuestActionInfo> actionList, ref string sC, ref UserItem userItem, ref bool bo11)
+        private bool GotoLableQuestActionProcess(INormNpc normNpc, IPlayerActor playerActor, IList<QuestActionInfo> actionList, ref GotoLabParams gotoLabParams)
         {
             bool result = true;
             for (int i = 0; i < actionList.Count; i++)
@@ -869,15 +874,15 @@ namespace ScriptSystem
                 switch (executionCode)
                 {
                     case ExecutionCode.Take:
-                        GotoLableTakeItem(playerActor, questActionInfo.sParam1, questActionInfo.nParam2, ref sC);
+                        GotoLableTakeItem(playerActor, questActionInfo.sParam1, questActionInfo.nParam2, gotoLabParams.ItemName);
                         break;
                     case ExecutionCode.Takew:
                         GotoLableTakeWItem(playerActor, questActionInfo.sParam1, questActionInfo.nParam2);
                         break;
                     case ExecutionCode.TakecheckItem:
-                        if (userItem != null)
+                        if (gotoLabParams.UserItem != null)
                         {
-                            playerActor.QuestTakeCheckItem(userItem);
+                            playerActor.QuestTakeCheckItem(gotoLabParams.UserItem);
                         }
                         else
                         {
@@ -904,7 +909,7 @@ namespace ScriptSystem
                         break;
                     case ExecutionCode.Map:
                     case ExecutionCode.MapMove:
-                        bo11 = true;
+                        gotoLabParams.SendSayMsg = true;
                         break;
                     case ExecutionCode.AddBatch:
                         //if (BatchParamsList == null)
@@ -930,7 +935,7 @@ namespace ScriptSystem
                         //}
                         break;
                     case ExecutionCode.PlayDice:
-                        bo11 = true;
+                        gotoLabParams.SendSayMsg = true;
                         break;
                     case ExecutionCode.GoQuest:
                         GoToQuest(playerActor, normNpc, questActionInfo.nParam1);

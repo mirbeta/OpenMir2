@@ -56,12 +56,13 @@ namespace M2Server
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
         public static readonly RandomNumber RandomNumber;
-        public static CustomItemSystem CustomItemMgr = null;
-        public static NoticeManager NoticeMgr = null;
-        public static NetworkMonitor NetworkMonitor = null;
-        public static IWorldEngine WorldEngine = null;
-        public static IFrontEngine FrontEngine = null;
+        public static CustomItemSystem CustomItemMgr;
+        public static NoticeManager NoticeMgr;
+        public static NetworkMonitor NetworkMonitor;
+        public static IWorldEngine WorldEngine;
+        public static IFrontEngine FrontEngine;
         public static ICommandSystem CommandSystem;
+        public static IAutoBotSystem AutoBot;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;
         public static int HighDCHuman;

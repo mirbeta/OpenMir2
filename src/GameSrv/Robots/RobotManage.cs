@@ -5,7 +5,7 @@ using SystemModule.Common;
 
 namespace GameSrv.Robots
 {
-    public class RobotManage
+    public class RobotManage : IAutoBotSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<RobotObject> RobotHumanList;

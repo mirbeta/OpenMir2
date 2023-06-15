@@ -73,8 +73,6 @@ namespace SystemModule
         bool CanItemMarket { get; set; }
         short NpcFlag { get; set; }
 
-        void Initialize();
-
         void LoadMerchantScript();
 
         void LoadNpcData();

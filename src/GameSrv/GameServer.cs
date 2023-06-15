@@ -34,7 +34,7 @@ namespace GameSrv
             {
                 module.Startup(stoppingToken);
             }
-            await  M2Share.NetChannel.Start(stoppingToken);
+            await M2Share.NetChannel.Start(stoppingToken);
 
             _logger.Info("初始化游戏世界服务线程完成...");
         }

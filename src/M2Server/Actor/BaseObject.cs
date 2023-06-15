@@ -136,7 +136,7 @@ namespace M2Server.Actor
         /// <summary>
         /// 下属列表
         /// </summary>        
-        public IList<IActor> SlaveList { get; set; }
+        public IList<IMonsterActor> SlaveList { get; set; }
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -365,7 +365,6 @@ namespace M2Server.Actor
         /// 是否机器人
         /// </summary>
         public bool IsRobot { get; set; }
-        public byte SlaveExpLevel { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
 
         protected BaseObject()
         {
@@ -1180,7 +1179,7 @@ namespace M2Server.Actor
         {
             if (SlaveList == null)
             {
-                SlaveList = new List<IActor>();
+                SlaveList = new List<IMonsterActor>();
             }
             if (SlaveList.Count < nMaxMob)
             {

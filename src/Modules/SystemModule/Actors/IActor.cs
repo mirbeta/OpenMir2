@@ -131,7 +131,7 @@ namespace SystemModule
         /// <summary>
         /// 下属列表
         /// </summary>        
-        IList<IActor> SlaveList { get; set; }
+        IList<IMonsterActor> SlaveList { get; set; }
         /// <summary>
         /// 宝宝攻击状态(休息/攻击)
         /// </summary>
@@ -404,8 +404,6 @@ namespace SystemModule
         void RefNameColor();
 
         void RefShowName();
-
-        byte SlaveExpLevel { get; set; }
 
         byte GetNameColor();
 

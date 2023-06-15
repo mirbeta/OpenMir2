@@ -2,7 +2,6 @@ using GameSrv.Services;
 using M2Server;
 using M2Server.Actor;
 using M2Server.Event.Events;
-using M2Server.Npc;
 using M2Server.Player;
 using NLog;
 using PlanesSystem;
@@ -126,7 +125,7 @@ namespace GameSrv.Word
             MagicList.Add(magicInfo);
         }
 
-        public void PrcocessData()
+        public void Run()
         {
             try
             {

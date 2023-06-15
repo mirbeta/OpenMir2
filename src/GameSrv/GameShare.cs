@@ -1,12 +1,10 @@
 using GameSrv.DataSource;
 using GameSrv.Maps;
 using GameSrv.Module;
-using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word.Threads;
 using M2Server;
 using PlanesSystem;
-using ScriptSystem;
 using SystemModule;
 using SystemModule.Data;
 
@@ -32,8 +30,6 @@ namespace GameSrv
         public static readonly TimedRobotProcessor TimedRobotProcessor;
         public static readonly MapQuestManager QuestManager;
         public static readonly DBService DataServer;
-        public static readonly RobotManage RobotMgr;
-        public static bool StartReady = false;
         public static int SendOnlineTick = 0;
         public static IList<ModuleInfo> Modules { get; set; } = new List<ModuleInfo>();
 
@@ -52,7 +48,6 @@ namespace GameSrv
             TimedRobotProcessor = new TimedRobotProcessor();
             PlanesService = new PlanesService();
             DataServer = new DBService();
-            RobotMgr = new RobotManage();
             QuestManager = new MapQuestManager();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }

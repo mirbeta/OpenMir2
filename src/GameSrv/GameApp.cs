@@ -2,6 +2,7 @@
 using GameSrv.DataSource;
 using GameSrv.Maps;
 using GameSrv.NPC;
+using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word;
 using M2Server;
@@ -64,6 +65,7 @@ namespace GameSrv
             M2Share.CommandSystem = new GameCommandSystem();
             M2Share.LoginSession = new LoginSessionService();
             M2Share.ScriptEngine = new ScriptEngine();
+            M2Share.AutoBot = new RobotManage();
             InitializeModule(serviceProvider);
         }
 
@@ -259,9 +261,9 @@ namespace GameSrv
                 SystemShare.CastleMgr.Initialize();
                 GameShare.DataServer.Start();
                 // GameShare.MarketService.Start();
-                GameShare.StartReady = true;
+                M2Share.StartReady = true;
                 M2Share.WorldEngine.Initialize();
-                GameShare.RobotMgr.Initialize();
+                M2Share.AutoBot.Initialize();
                 _logger.Info("游戏处理引擎初始化成功...");
             }
             catch (Exception ex)

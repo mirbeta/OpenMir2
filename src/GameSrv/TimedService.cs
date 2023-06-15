@@ -61,7 +61,7 @@ namespace GameSrv
 
         private void ExecuteInternal()
         {
-            if (!GameShare.StartReady) return;
+            if (!M2Share.StartReady) return;
             var currentTick = HUtil32.GetTickCount();
             if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
             {

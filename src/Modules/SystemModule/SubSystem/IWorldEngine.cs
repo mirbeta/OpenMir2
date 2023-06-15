@@ -90,7 +90,7 @@ namespace SystemModule
 
         void AddMagicList(MagicInfo magicInfo);
 
-        void PrcocessData();
+        void Run();
 
         void ProcessNpcs();
 

@@ -41,7 +41,7 @@ namespace CommandSystem.Commands
             {
                 nNameColor = 255;
             }
-            var mon = SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
+            IMonsterActor mon = (IMonsterActor)SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
             if (mon != null)
             {
                 mon.Master = PlayerActor;

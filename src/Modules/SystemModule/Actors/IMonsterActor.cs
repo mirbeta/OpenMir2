@@ -4,6 +4,8 @@
     {
         bool IsSlave { get; set; }
 
+        byte SlaveExpLevel { get; set; }
+
         int ProcessRunCount { get; set; }
 
         int FightExp { get; set; }

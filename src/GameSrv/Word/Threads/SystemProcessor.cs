@@ -1,5 +1,3 @@
-using GameSrv.Robots;
-using GameSrv.Services;
 using M2Server;
 using NLog;
 using PlanesSystem;
@@ -38,10 +36,10 @@ namespace GameSrv.Word.Threads
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
-            Run();
+            M2Share.NetChannel.Run();
             M2Share.LoginSession.Run();
-            M2Share.WorldEngine.PrcocessData();
-            ProcessGameRun();
+            M2Share.WorldEngine.Run();
+            M2Share.AutoBot.Run();
             if (M2Share.ServerIndex == 0)
             {
                 PlanesServer.Instance.Run();
@@ -51,10 +49,12 @@ namespace GameSrv.Word.Threads
                 PlanesClient.Instance.Run();
             }
             GetGameTime();
+            ShowOnline();
+            ProcessGameRun();
             return Task.CompletedTask;
         }
 
-        private void Run()
+        private void ShowOnline()
         {
             if ((HUtil32.GetTickCount() - ShowOnlineTick) > SystemShare.Config.ConsoleShowUserCountTime)
             {
@@ -72,39 +72,29 @@ namespace GameSrv.Word.Threads
 
         private void ProcessGameRun()
         {
-            HUtil32.EnterCriticalSections(M2Share.ProcessHumanCriticalSection);
-            try
+            if ((HUtil32.GetTickCount() - RunTimeTick) > 10000)
             {
-                if ((HUtil32.GetTickCount() - RunTimeTick) > 10000)
+                RunTimeTick = HUtil32.GetTickCount();
+                SystemShare.GuildMgr.Run();
+                SystemShare.CastleMgr.Run();
+                if (!M2Share.DenySayMsgList.IsEmpty)
                 {
-                    RunTimeTick = HUtil32.GetTickCount();
-                    SystemShare.GuildMgr.Run();
-                    SystemShare.CastleMgr.Run();
-                    GameShare.RobotMgr.Run();
-                    M2Share.NetChannel.Run();
-                    if (!M2Share.DenySayMsgList.IsEmpty)
+                    List<string> denyList = new List<string>(M2Share.DenySayMsgList.Count);
+                    foreach (KeyValuePair<string, long> item in M2Share.DenySayMsgList)
                     {
-                        List<string> denyList = new List<string>(M2Share.DenySayMsgList.Count);
-                        foreach (KeyValuePair<string, long> item in M2Share.DenySayMsgList)
+                        if (HUtil32.GetTickCount() > item.Value)
                         {
-                            if (HUtil32.GetTickCount() > item.Value)
-                            {
-                                denyList.Add(item.Key);
-                            }
+                            denyList.Add(item.Key);
                         }
-                        for (int i = 0; i < denyList.Count; i++)
+                    }
+                    for (int i = 0; i < denyList.Count; i++)
+                    {
+                        if (M2Share.DenySayMsgList.TryRemove(denyList[i], out long _))
                         {
-                            if (M2Share.DenySayMsgList.TryRemove(denyList[i], out long _))
-                            {
-                                M2Share.Logger.Debug($"解除玩家禁言[{denyList[i]}]");
-                            }
+                            M2Share.Logger.Debug($"解除玩家禁言[{denyList[i]}]");
                         }
                     }
                 }
-            }
-            finally
-            {
-                HUtil32.LeaveCriticalSections(M2Share.ProcessHumanCriticalSection);
             }
         }
 

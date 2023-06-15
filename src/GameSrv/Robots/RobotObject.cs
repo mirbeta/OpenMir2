@@ -7,7 +7,7 @@ using SystemModule.Enums;
 
 namespace GameSrv.Robots
 {
-    public class RobotObject : PlayObject
+    public class RobotObject : PlayObject, IRobotObject
     {
         private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly char[] LoadSriptSpitConst = new[] { ' ', '/', '\t' };

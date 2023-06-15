@@ -215,7 +215,7 @@ namespace GameSrv
         private async void OnShutdown()
         {
             _logger.Debug("Application is stopping");
-            GameShare.StartReady = false;
+            M2Share.StartReady = false;
             SavePlayer();
             if (SystemShare.ServerIndex == 0)
             {
