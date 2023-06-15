@@ -2,11 +2,13 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Runtime.Loader;
+using NLog;
 
 namespace GameSrv.Module
 {
     public static class ServiceCollectionExtensions
     {
+        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly IModuleConfigurationManager _modulesConfig = new ModuleConfigurationManager();
 
         public static IServiceCollection AddModules(this IServiceCollection services)
@@ -43,18 +45,25 @@ namespace GameSrv.Module
 
         private static void TryLoadModuleAssembly(string moduleFolderPath, ModuleInfo module)
         {
-            const string binariesFolderName = "bin";
-            var binariesFolderPath = Path.Combine(moduleFolderPath, binariesFolderName);
-            var binariesFolder = new DirectoryInfo(binariesFolderPath);
+            const string binariesFolderName = "plugins";
+            var modulePath = Path.Combine(AppContext.BaseDirectory, binariesFolderName, module.Id);
 
-            if (Directory.Exists(binariesFolderPath))
+            var binariesFolder = new DirectoryInfo(modulePath);
+
+            if (Directory.Exists(modulePath))
             {
+                var context = new AssemblyLoadContext(modulePath);
+                context.Resolving += ContextResolving;
                 foreach (var file in binariesFolder.GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
                 {
                     Assembly assembly;
                     try
                     {
-                        assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(file.FullName);
+                        assembly = context.LoadFromAssemblyPath(file.FullName);
+                        if (assembly == null)
+                        {
+                            throw new Exception($"初始化{file.FullName}功能模块失败.");
+                        }
                     }
                     catch (FileLoadException)
                     {
@@ -82,6 +91,32 @@ namespace GameSrv.Module
                     }
                 }
             }
+        }
+        
+        /// <summary>
+        /// 加载依赖项
+        /// </summary>
+        /// <returns></returns>
+        private static Assembly ContextResolving(AssemblyLoadContext context, AssemblyName assemblyName)
+        {
+            var expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
+            if (File.Exists(expectedPath))
+            {
+                try
+                {
+                    using var stream = File.OpenRead(expectedPath);
+                    return context.LoadFromStream(stream);
+                }
+                catch (Exception ex)
+                {
+                    _logger.Error($"加载依赖项{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
+                }
+            }
+            else
+            {
+                _logger.Error($"依赖项不存在：{expectedPath}");
+            }
+            return null;
         }
     }
 }
