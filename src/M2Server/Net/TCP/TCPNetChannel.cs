@@ -22,7 +22,7 @@ namespace M2Server.Net.TCP
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpService tcpService;
-        private readonly object _runSocketSection;
+        private readonly object RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
         private readonly ChannelMessageHandler[] _gameGates;
         private readonly HashSet<long> Whitelist = new HashSet<long>();
@@ -37,7 +37,7 @@ namespace M2Server.Net.TCP
             tcpService.Connected += Connecting;
             tcpService.Disconnected += Disconnected;
             tcpService.Received += Received;
-            _runSocketSection = new object();
+            RunSocketSection = new object();
             _stoppingCancelReads = new CancellationToken();
         }
 
@@ -59,10 +59,10 @@ namespace M2Server.Net.TCP
         private void Connecting(object sender, TouchSocketEventArgs e)
         {
             const string sKickGate = "服务器未就绪: {0}";
+            const string sGateOpen = "游戏网关[{0}]已打开...";
             var client = (SocketClient)sender;
             if (M2Share.StartReady)
             {
-                const string sGateOpen = "游戏网关[{0}]已打开...";
                 if (_gameGates.Length > 20)
                 {
                     client.Close();
@@ -136,7 +136,7 @@ namespace M2Server.Net.TCP
 
         private void LoadRunAddr()
         {
-            var sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "!Runaddr.txt");
+            var sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "!runaddr.txt");
             if (File.Exists(sFileName))
             {
                 var runAddrList = new StringList();
@@ -157,42 +157,6 @@ namespace M2Server.Net.TCP
                         Whitelist.Add(HUtil32.IpToInt(localEntity.AddressList[i].ToString()));
                     }
                 }
-            }
-        }
-
-        public void AddGate(SocketClient e)
-        {
-            const string sGateOpen = "游戏网关[{0}]已打开...";
-            const string sKickGate = "服务器未就绪: {0}";
-            if (M2Share.StartReady)
-            {
-                if (_gameGates.Length > 20)
-                {
-                    e.Close();
-                    _logger.Error("超过网关最大链接数量.关闭链接");
-                    return;
-                }
-                var gateInfo = new ChannelGate();
-                gateInfo.SendMsgCount = 0;
-                gateInfo.SendRemainCount = 0;
-                gateInfo.SendTick = HUtil32.GetTickCount();
-                gateInfo.SendMsgBytes = 0;
-                gateInfo.SendedMsgCount = 0;
-                gateInfo.BoUsed = true;
-                gateInfo.SocketId = e.ID;
-                gateInfo.Socket = e.MainSocket;
-                gateInfo.UserList = new List<SessionUser>();
-                gateInfo.UserCount = 0;
-                gateInfo.SendKeepAlive = false;
-                gateInfo.SendChecked = 0;
-                gateInfo.SendBlockCount = 0;
-                _gameGates[int.Parse(e.ID) - 1] = new ChannelMessageHandler(gateInfo);
-                _logger.Info(string.Format(sGateOpen, e.MainSocket.RemoteEndPoint));
-            }
-            else
-            {
-                _logger.Error(string.Format(sKickGate, e.MainSocket.RemoteEndPoint));
-                e.Close();
             }
         }
 
@@ -217,7 +181,7 @@ namespace M2Server.Net.TCP
                     var gateInfo = _gameGates[i].GateInfo;
                     if (gateInfo.BoUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
-                        HUtil32.EnterCriticalSection(_runSocketSection);
+                        HUtil32.EnterCriticalSection(RunSocketSection);
                         try
                         {
                             for (var j = 0; j < gateInfo.UserList.Count; j++)
@@ -254,7 +218,7 @@ namespace M2Server.Net.TCP
                         }
                         finally
                         {
-                            HUtil32.LeaveCriticalSection(_runSocketSection);
+                            HUtil32.LeaveCriticalSection(RunSocketSection);
                         }
                     }
                 }
@@ -285,7 +249,7 @@ namespace M2Server.Net.TCP
         public void CloseGate(string connectionId, string endPoint)
         {
             const string sGateClose = "游戏网关[{0}]已关闭...";
-            HUtil32.EnterCriticalSection(_runSocketSection);
+            HUtil32.EnterCriticalSection(RunSocketSection);
             try
             {
                 for (int i = 0; i < _gameGates.Length; i++)
@@ -299,7 +263,7 @@ namespace M2Server.Net.TCP
                         var gateInfo = _gameGates[i].GateInfo;
                         if (gateInfo.Socket == null)
                         {
-                            _logger.Error("Scoket异常，无需关闭");
+                            _logger.Error("Socket异常，无需关闭");
                             return;
                         }
                         for (var j = 0; j < gateInfo.UserList.Count; j++)
@@ -329,7 +293,7 @@ namespace M2Server.Net.TCP
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(_runSocketSection);
+                HUtil32.LeaveCriticalSection(RunSocketSection);
             }
         }
 
