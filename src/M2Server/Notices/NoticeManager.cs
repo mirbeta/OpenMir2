@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace M2Server.Notices
 {
-    public class NoticeManager
+    public class NoticeManager : INoticeSystem
     {
         private readonly NoticeMsg[] NoticeList = new NoticeMsg[100];
 

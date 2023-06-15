@@ -5,7 +5,7 @@ using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Items
 {
-    public class CustomItemSystem : ICustomItem
+    public class CustomItemSystem : ICustomItemSystem
     {
         private IList<ItemName> ItemNameList;
 

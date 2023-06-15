@@ -1,4 +1,3 @@
-using M2Server.Items;
 using M2Server.Maps.AutoPath;
 using M2Server.Net;
 using M2Server.Net.TCP;
@@ -56,8 +55,8 @@ namespace M2Server
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
         public static readonly RandomNumber RandomNumber;
-        public static CustomItemSystem CustomItemMgr;
-        public static NoticeManager NoticeMgr;
+        public static ICustomItemSystem CustomItemMgr;
+        public static INoticeSystem NoticeMgr;
         public static NetworkMonitor NetworkMonitor;
         public static IFrontEngine FrontEngine;
         public static ICommandSystem CommandSystem;
