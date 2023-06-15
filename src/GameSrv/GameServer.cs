@@ -26,7 +26,7 @@ namespace GameSrv
             await GameShare.EventProcessor.StartAsync(stoppingToken);
             await GameShare.StorageProcessor.StartAsync(stoppingToken);
             await GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
-            await M2Share.ThreadSocket.StartMessageThread(stoppingToken);
+            await M2Share.NetChannel.StartMessageThread(stoppingToken);
             Map.StartMakeStoneThread();
 
             var modules = serviceProvider.GetServices<IModuleInitializer>();
@@ -48,7 +48,7 @@ namespace GameSrv
             await GameShare.EventProcessor.StopAsync(cancellationToken);
             await GameShare.StorageProcessor.StopAsync(cancellationToken);
             await GameShare.TimedRobotProcessor.StopAsync(cancellationToken);
-            await M2Share.ThreadSocket.StopAsync(cancellationToken);
+            await M2Share.NetChannel.StopAsync(cancellationToken);
             GameShare.DataServer.Stop();
 
             var modules = serviceProvider.GetServices<IModuleInitializer>();

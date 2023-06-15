@@ -81,7 +81,7 @@ namespace GameSrv.Word.Threads
                     SystemShare.GuildMgr.Run();
                     SystemShare.CastleMgr.Run();
                     GameShare.RobotMgr.Run();
-                    M2Share.ThreadSocket.Run();
+                    M2Share.NetChannel.Run();
                     if (!M2Share.DenySayMsgList.IsEmpty)
                     {
                         List<string> denyList = new List<string>(M2Share.DenySayMsgList.Count);

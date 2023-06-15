@@ -18,7 +18,7 @@ namespace M2Server.Castle
         /// </summary>
         private int _techLevel;
 
-        private readonly CastleConfMgr castleConf;
+        private readonly CastleConf castleConf;
 
         public UserCastle(string sCastleDir)
         {
@@ -48,7 +48,7 @@ namespace M2Server.Castle
             {
                 Directory.CreateDirectory(filePath);
             }
-            castleConf = new CastleConfMgr(Path.Combine(filePath, CastleConst.SabukWFileName));
+            castleConf = new CastleConf(Path.Combine(filePath, CastleConst.SabukWFileName));
         }
 
         public int TechLevel

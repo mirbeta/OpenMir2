@@ -8,30 +8,28 @@ using SystemModule.Data;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
-namespace M2Server
+namespace M2Server.Net
 {
-    public class ThreadSocket
+    public class ChannelMessageHandler
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ThreadGateInfo _gateInfo;
+        private readonly ChannelGate _gateInfo;
         private readonly SocketSendQueue _sendQueue;
-        private readonly object runSocketSection;
+        private object RunSocketSection{ get; }
         private readonly CancellationTokenSource _cancellation;
-        private CommandMessage mesaagePacket;
-        public string ConnectionId { get; }
+        public readonly string ConnectionId;
 
-        public ThreadSocket(ThreadGateInfo gateInfo)
+        public ChannelMessageHandler(ChannelGate gateInfo)
         {
             _gateInfo = gateInfo;
             ConnectionId = _gateInfo.SocketId;
-            runSocketSection = new object();
+            RunSocketSection = new object();
             _sendQueue = new SocketSendQueue(gateInfo);
             _cancellation = new CancellationTokenSource();
-            mesaagePacket = new CommandMessage();
             Start();
         }
 
-        public ThreadGateInfo GateInfo => _gateInfo;
+        public ChannelGate GateInfo => _gateInfo;
 
         private void Start()
         {
@@ -46,7 +44,7 @@ namespace M2Server
 
         /// <summary>
         /// 添加到网关发送队列
-        /// M2Server.-> GameGate
+        /// M2Server -> GameGate
         /// </summary>
         /// <returns></returns>
         public void ProcessBufferSend(byte[] sendData)
@@ -57,12 +55,12 @@ namespace M2Server
             }
             const string sExceptionMsg = "[Exception] TRunSocket::SendGateBuffers -> SendBuff";
             var dwRunTick = HUtil32.GetTickCount();
-            if (GateInfo.nSendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
+            if (GateInfo.SendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
             {
-                if ((HUtil32.GetTickCount() - GateInfo.dwSendCheckTick) > M2Share.SocCheckTimeOut) // 2 * 1000
+                if ((HUtil32.GetTickCount() - GateInfo.SendCheckTick) > M2Share.SocCheckTimeOut) // 2 * 1000
                 {
-                    GateInfo.nSendChecked = 0;
-                    GateInfo.nSendBlockCount = 0;
+                    GateInfo.SendChecked = 0;
+                    GateInfo.SendBlockCount = 0;
                 }
                 return;
             }
@@ -73,22 +71,22 @@ namespace M2Server
                 {
                     return;
                 }
-                if (GateInfo.nSendChecked == 0 && GateInfo.nSendBlockCount + sendBuffLen >= SystemShare.Config.CheckBlock * 10)
+                if (GateInfo.SendChecked == 0 && GateInfo.SendBlockCount + sendBuffLen >= SystemShare.Config.CheckBlock * 10)
                 {
-                    if (GateInfo.nSendBlockCount == 0 && SystemShare.Config.CheckBlock * 10 <= sendBuffLen)
+                    if (GateInfo.SendBlockCount == 0 && SystemShare.Config.CheckBlock * 10 <= sendBuffLen)
                     {
                         return;
                     }
                     SendCheck(Grobal2.GM_RECEIVE_OK);
-                    GateInfo.nSendChecked = 1;
-                    GateInfo.dwSendCheckTick = HUtil32.GetTickCount();
+                    GateInfo.SendChecked = 1;
+                    GateInfo.SendCheckTick = HUtil32.GetTickCount();
                 }
                 if (GateInfo.Socket != null && GateInfo.Socket.Connected)
                 {
                     _sendQueue.SendMessage(sendData);
-                    GateInfo.nSendCount++;
-                    GateInfo.nSendBytesCount += sendBuffLen;
-                    GateInfo.nSendBlockCount += sendBuffLen;
+                    GateInfo.SendCount++;
+                    GateInfo.SendBytesCount += sendBuffLen;
+                    GateInfo.SendBlockCount += sendBuffLen;
                     M2Share.NetworkMonitor.Send(sendBuffLen);
                 }
                 if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit)
@@ -130,7 +128,7 @@ namespace M2Server
             return new ArraySegment<byte>(array);
         }
 
-        public void ProcessBuffer(ServerMessage packetHeader, ReadOnlySpan<byte> message)
+        public void ProcessDataBuffer(ServerMessage packetHeader, ReadOnlySpan<byte> message)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             try
@@ -169,17 +167,17 @@ namespace M2Server
                         var sIPaddr = HUtil32.GetString(msgBuff, nMsgLen);
                         nUserIdx = OpenNewUser(msgPacket.Socket, msgPacket.SessionId, sIPaddr, GateInfo.UserList);
                         SendNewUserMsg(GateInfo.Socket, msgPacket.Socket, msgPacket.SessionId, nUserIdx + 1);
-                        GateInfo.nUserCount++;
+                        GateInfo.UserCount++;
                         break;
                     case Grobal2.GM_CLOSE:
                         CloseUser(msgPacket.Socket);
                         break;
                     case Grobal2.GM_CHECKCLIENT:
-                        GateInfo.boSendKeepAlive = true;
+                        GateInfo.SendKeepAlive = true;
                         break;
                     case Grobal2.GM_RECEIVE_OK:
-                        GateInfo.nSendChecked = 0;
-                        GateInfo.nSendBlockCount = 0;
+                        GateInfo.SendChecked = 0;
+                        GateInfo.SendBlockCount = 0;
                         break;
                     case Grobal2.GM_DATA:
                         SessionUser gateUser = null;
@@ -189,7 +187,7 @@ namespace M2Server
                             if (GateInfo.UserList.Count > nUserIdx)
                             {
                                 gateUser = GateInfo.UserList[nUserIdx];
-                                if (gateUser != null && gateUser.nSocket != msgPacket.Socket)
+                                if (gateUser != null && gateUser.Socket != msgPacket.Socket)
                                 {
                                     gateUser = null;
                                 }
@@ -203,7 +201,7 @@ namespace M2Server
                                 {
                                     continue;
                                 }
-                                if (GateInfo.UserList[i].nSocket == msgPacket.Socket)
+                                if (GateInfo.UserList[i].Socket == msgPacket.Socket)
                                 {
                                     gateUser = GateInfo.UserList[i];
                                     break;
@@ -216,6 +214,7 @@ namespace M2Server
                             {
                                 if (gateUser.Certification && nMsgLen >= 12)
                                 {
+                                    var mesaagePacket = new CommandMessage();
                                     mesaagePacket.Recog = BitConverter.ToInt32(msgBuff[..4]);
                                     mesaagePacket.Ident = BitConverter.ToUInt16(msgBuff.Slice(4, 2));
                                     mesaagePacket.Param = BitConverter.ToUInt16(msgBuff.Slice(6, 2));
@@ -223,7 +222,7 @@ namespace M2Server
                                     mesaagePacket.Series = BitConverter.ToUInt16(msgBuff.Slice(10, 2));
                                     if (nMsgLen == 12)
                                     {
-                                       SystemShare.WorldEngine.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, null);
+                                        SystemShare.WorldEngine.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, null);
                                     }
                                     else
                                     {
@@ -313,7 +312,6 @@ namespace M2Server
             var nPlayTime = 0L;
             var hwid = MD5.EmptyDigest;
             var gateIdx = 0;
-            PlayerSession sessInfo;
             const string sExceptionMsg = "[Exception] ThreadSocket::DoClientCertification";
             const string sDisable = "*disable*";
             try
@@ -326,12 +324,12 @@ namespace M2Server
                         var packetMsg = sMsg.AsSpan()[1..].ToString();
                         if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
                         {
-                            sessInfo = M2Share.LoginSession.GetAdmission(sAccount, gateUser.sIPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
+                            var sessInfo = M2Share.LoginSession.GetAdmission(sAccount, gateUser.IPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (sessInfo != null && nPayMent > 0)
                             {
                                 gateUser.Certification = true;
                                 gateUser.Account = sAccount.Trim();
-                                gateUser.sChrName = sChrName.Trim();
+                                gateUser.ChrName = sChrName.Trim();
                                 gateUser.SessionID = nSessionId;
                                 gateUser.ClientVersion = nClientVersion;
                                 gateUser.SessInfo = sessInfo;
@@ -339,7 +337,7 @@ namespace M2Server
                                 {
                                     Account = sAccount,
                                     ChrName = sChrName,
-                                    sIPaddr = gateUser.sIPaddr,
+                                    sIPaddr = gateUser.IPaddr,
                                     SessionID = nSessionId,
                                     SoftVersionDate = nClientVersion,
                                     PayMent = nPayMent,
@@ -357,7 +355,7 @@ namespace M2Server
                                 gateUser.Account = sDisable;
                                 gateUser.Certification = false;
                                 CloseUser(nSocket);
-                                _logger.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionId} Address:{gateUser.sIPaddr}");
+                                _logger.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionId} Address:{gateUser.IPaddr}");
                             }
                         }
                         else
@@ -383,7 +381,7 @@ namespace M2Server
             }
             if (GateInfo.UserList.Count > 0)
             {
-                HUtil32.EnterCriticalSections(runSocketSection);
+                HUtil32.EnterCriticalSections(RunSocketSection);
                 try
                 {
                     for (var i = 0; i < GateInfo.UserList.Count; i++)
@@ -395,11 +393,11 @@ namespace M2Server
                             {
                                 continue;
                             }
-                            if (gateUser.nSocket == nSocket)
+                            if (gateUser.Socket == nSocket)
                             {
                                 if (gateUser.FrontEngine != null)
                                 {
-                                    gateUser.FrontEngine.DeleteHuman(i, gateUser.nSocket);
+                                    gateUser.FrontEngine.DeleteHuman(i, gateUser.Socket);
                                 }
                                 if (gateUser.PlayObject != null)
                                 {
@@ -417,7 +415,7 @@ namespace M2Server
                                     }
                                 }
                                 GateInfo.UserList[i] = null;
-                                GateInfo.nUserCount -= 1;
+                                GateInfo.UserCount -= 1;
                                 break;
                             }
                         }
@@ -425,7 +423,7 @@ namespace M2Server
                 }
                 finally
                 {
-                    HUtil32.LeaveCriticalSections(runSocketSection);
+                    HUtil32.LeaveCriticalSections(RunSocketSection);
                 }
             }
         }
@@ -435,15 +433,15 @@ namespace M2Server
             var gateUser = new SessionUser
             {
                 Account = string.Empty,
-                sChrName = string.Empty,
-                sIPaddr = sIPaddr,
-                nSocket = socket,
+                ChrName = string.Empty,
+                IPaddr = sIPaddr,
+                Socket = socket,
                 SocketId = socketId,
                 SessionID = 0,
                 WorldEngine = null,
                 FrontEngine = null,
                 PlayObject = null,
-                dwNewUserTick = HUtil32.GetTickCount(),
+                NewUserTick = HUtil32.GetTickCount(),
                 Certification = false
             };
             for (var i = 0; i < userList.Count; i++)
@@ -480,13 +478,13 @@ namespace M2Server
         /// </summary>
         public void SetGateUserList(int nSocket, IPlayerActor playObject)
         {
-            HUtil32.EnterCriticalSection(runSocketSection);
+            HUtil32.EnterCriticalSection(RunSocketSection);
             try
             {
                 for (var i = 0; i < GateInfo.UserList.Count; i++)
                 {
                     var gateUserInfo = GateInfo.UserList[i];
-                    if (gateUserInfo != null && gateUserInfo.nSocket == nSocket)
+                    if (gateUserInfo != null && gateUserInfo.Socket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
                         gateUserInfo.WorldEngine = M2Share.WorldEngine;
@@ -497,7 +495,7 @@ namespace M2Server
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(runSocketSection);
+                HUtil32.LeaveCriticalSection(RunSocketSection);
             }
         }
 
@@ -506,7 +504,7 @@ namespace M2Server
             private Channel<byte[]> SendQueue { get; }
             private string ConnectionId { get; }
 
-            public SocketSendQueue(ThreadGateInfo gateInfo)
+            public SocketSendQueue(ChannelGate gateInfo)
             {
                 SendQueue = Channel.CreateUnbounded<byte[]>();
                 ConnectionId = gateInfo.SocketId;
@@ -547,7 +545,7 @@ namespace M2Server
                         {
                             try
                             {
-                                M2Share.ThreadSocket.Send(ConnectionId, buffer);
+                                M2Share.NetChannel.Send(ConnectionId, buffer);
                             }
                             catch (Exception ex)
                             {

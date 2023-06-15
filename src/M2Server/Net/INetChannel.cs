@@ -1,17 +1,16 @@
 ﻿using SystemModule;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.Components.TCP;
 
-namespace M2Server
+namespace M2Server.Net
 {
-    public interface IThreadSocket
+    public interface INetChannel
     {
         void AddGameGateQueue(int gateIdx, ServerMessage packet, byte[] data);
         void AddGateBuffer(int gateIdx, byte[] senData);
         void CloseAllGate();
         void CloseUser(int gateIdx, int nSocket);
         void Initialize();
-        void KickUser(string sAccount, int sessionId, int payMode);
+        void KickUser(string account, int sessionId, int payMode);
         void Run();
         void SendOutConnectMsg(int gateIdx, int nSocket, ushort nGsIdx);
         void SendServerStopMsg();
@@ -19,7 +18,6 @@ namespace M2Server
         void Start();
         void Send(string connectId, byte[] buff);
         void CloseGate(string connectionId, string endPoint);
-        void AddGate(SocketClient e);
         Task StartMessageThread(CancellationToken cancellationToken);
         Task StopAsync(CancellationToken cancellationToken = default);
     }

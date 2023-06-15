@@ -222,7 +222,7 @@ namespace GameSrv
             _logger.Info("加载公告提示信息成功...");
             LocalDb.LoadAdminList();
             _logger.Info("管理员列表加载成功...");
-            M2Share.ThreadSocket.Initialize();
+            M2Share.NetChannel.Initialize();
             _logger.Info("正在初始化网络引擎...");
         }
 
@@ -259,7 +259,7 @@ namespace GameSrv
                 SystemShare.CastleMgr.Initialize();
                 GameShare.DataServer.Start();
                 // GameShare.MarketService.Start();
-                M2Share.ThreadSocket.Start();
+                M2Share.NetChannel.Start();
                 GameShare.StartReady = true;
                 M2Share.WorldEngine.Initialize();
                 GameShare.RobotMgr.Initialize();

@@ -1,5 +1,7 @@
 using M2Server.Items;
 using M2Server.Maps.AutoPath;
+using M2Server.Net;
+using M2Server.Net.TCP;
 using M2Server.Notices;
 using NLog;
 using ScriptSystem;
@@ -40,7 +42,7 @@ namespace M2Server
         /// <summary>
         /// ThreadSocket
         /// </summary>
-        public static IThreadSocket ThreadSocket;
+        public static INetChannel NetChannel;
         /// <summary>
         /// 脚本解释器
         /// </summary>
@@ -193,7 +195,7 @@ namespace M2Server
             NetworkMonitor = new NetworkMonitor();
             NoticeMgr = new NoticeManager();
             ScriptParsers = new ScriptParsers();
-            ThreadSocket = new ThreadSocketService();
+            NetChannel = new TCPNetChannel();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

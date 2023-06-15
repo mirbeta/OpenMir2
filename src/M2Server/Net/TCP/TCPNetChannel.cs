@@ -16,23 +16,23 @@ using SystemModule.Sockets.Config;
 using SystemModule.Sockets.Interface;
 using SystemModule.Sockets.SocketEventArgs;
 
-namespace M2Server
+namespace M2Server.Net.TCP
 {
-    public class ThreadSocketService : IThreadSocket
+    public class TCPNetChannel : INetChannel
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpService tcpService;
         private readonly object _runSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
-        private readonly ThreadSocket[] _gameGates;
-        private readonly HashSet<long> _gatePermitMap = new HashSet<long>();
+        private readonly ChannelMessageHandler[] _gameGates;
+        private readonly HashSet<long> Whitelist = new HashSet<long>();
         private CancellationToken _stoppingCancelReads;
 
-        public ThreadSocketService()
+        public TCPNetChannel()
         {
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
-            _gameGates = new ThreadSocket[20];
+            _gameGates = new ChannelMessageHandler[20];
             tcpService = new TcpService();
             tcpService.Connected += Connecting;
             tcpService.Disconnected += Disconnected;
@@ -48,7 +48,7 @@ namespace M2Server
             var client = (SocketClient)sender;
             if (int.TryParse(client.ID, out var clientId))
             {
-                _gameGates[clientId - 1].ProcessBuffer(fixedHeader.Header, fixedHeader.Message);
+                _gameGates[clientId - 1].ProcessDataBuffer(fixedHeader.Header, fixedHeader.Message);
             }
             else
             {
@@ -58,22 +58,53 @@ namespace M2Server
 
         private void Connecting(object sender, TouchSocketEventArgs e)
         {
+            const string sKickGate = "服务器未就绪: {0}";
             var client = (SocketClient)sender;
-            if (_gatePermitMap.Contains(HUtil32.IpToInt(client.ServiceIP)))
+            if (M2Share.StartReady)
             {
-                M2Share.ThreadSocket.AddGate(client);
+                const string sGateOpen = "游戏网关[{0}]已打开...";
+                if (_gameGates.Length > 20)
+                {
+                    client.Close();
+                    _logger.Error("超过网关最大链接数量.关闭链接");
+                    return;
+                }
+                if (Whitelist.Contains(HUtil32.IpToInt(client.ServiceIP)))
+                {
+                    var gateInfo = new ChannelGate();
+                    gateInfo.SendMsgCount = 0;
+                    gateInfo.SendRemainCount = 0;
+                    gateInfo.SendTick = HUtil32.GetTickCount();
+                    gateInfo.SendMsgBytes = 0;
+                    gateInfo.SendedMsgCount = 0;
+                    gateInfo.BoUsed = true;
+                    gateInfo.SocketId = client.ID;
+                    gateInfo.Socket = client.MainSocket;
+                    gateInfo.UserList = new List<SessionUser>();
+                    gateInfo.UserCount = 0;
+                    gateInfo.SendKeepAlive = false;
+                    gateInfo.SendChecked = 0;
+                    gateInfo.SendBlockCount = 0;
+                    _gameGates[int.Parse(client.ID) - 1] = new ChannelMessageHandler(gateInfo);
+                    _logger.Info(string.Format(sGateOpen, client.MainSocket.RemoteEndPoint));
+                }
+                else
+                {
+                    client.Close();
+                    _logger.Warn($"关闭非白名单网关地址链接. IP:{client.MainSocket.RemoteEndPoint}");
+                }
             }
             else
             {
+                _logger.Error(string.Format(sKickGate, client.MainSocket.RemoteEndPoint));
                 client.Close();
-                _logger.Warn($"关闭非白名单网关地址链接. IP:{client.MainSocket.RemoteEndPoint}");
             }
         }
 
         private void Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            M2Share.ThreadSocket.CloseGate(client.ID, client.ServiceIP);
+            M2Share.NetChannel.CloseGate(client.ID, client.ServiceIP);
             tcpService.NextId();
         }
 
@@ -114,7 +145,7 @@ namespace M2Server
                 {
                     if (!string.IsNullOrEmpty(runAddrList[i]))
                     {
-                        _gatePermitMap.Add(HUtil32.IpToInt(runAddrList[i]));
+                        Whitelist.Add(HUtil32.IpToInt(runAddrList[i]));
                     }
                 }
                 var localEntity = Dns.GetHostEntry(Dns.GetHostName());
@@ -122,7 +153,7 @@ namespace M2Server
                 {
                     if (localEntity.AddressList[i].AddressFamily == AddressFamily.InterNetwork)
                     {
-                        _gatePermitMap.Add(HUtil32.IpToInt(localEntity.AddressList[i].ToString()));
+                        Whitelist.Add(HUtil32.IpToInt(localEntity.AddressList[i].ToString()));
                     }
                 }
             }
@@ -140,21 +171,21 @@ namespace M2Server
                     _logger.Error("超过网关最大链接数量.关闭链接");
                     return;
                 }
-                var gateInfo = new ThreadGateInfo();
-                gateInfo.nSendMsgCount = 0;
-                gateInfo.nSendRemainCount = 0;
-                gateInfo.dwSendTick = HUtil32.GetTickCount();
-                gateInfo.nSendMsgBytes = 0;
-                gateInfo.nSendedMsgCount = 0;
+                var gateInfo = new ChannelGate();
+                gateInfo.SendMsgCount = 0;
+                gateInfo.SendRemainCount = 0;
+                gateInfo.SendTick = HUtil32.GetTickCount();
+                gateInfo.SendMsgBytes = 0;
+                gateInfo.SendedMsgCount = 0;
                 gateInfo.BoUsed = true;
                 gateInfo.SocketId = e.ID;
                 gateInfo.Socket = e.MainSocket;
                 gateInfo.UserList = new List<SessionUser>();
-                gateInfo.nUserCount = 0;
-                gateInfo.boSendKeepAlive = false;
-                gateInfo.nSendChecked = 0;
-                gateInfo.nSendBlockCount = 0;
-                _gameGates[int.Parse(e.ID) - 1] = new ThreadSocket(gateInfo);
+                gateInfo.UserCount = 0;
+                gateInfo.SendKeepAlive = false;
+                gateInfo.SendChecked = 0;
+                gateInfo.SendBlockCount = 0;
+                _gameGates[int.Parse(e.ID) - 1] = new ChannelMessageHandler(gateInfo);
                 _logger.Info(string.Format(sGateOpen, e.MainSocket.RemoteEndPoint));
             }
             else
@@ -199,7 +230,7 @@ namespace M2Server
                                 {
                                     if (gateUserInfo.FrontEngine != null)
                                     {
-                                        gateUserInfo.FrontEngine.DeleteHuman(i, gateUserInfo.nSocket);
+                                        gateUserInfo.FrontEngine.DeleteHuman(i, gateUserInfo.Socket);
                                     }
                                     if (gateUserInfo.PlayObject != null)
                                     {
@@ -215,7 +246,7 @@ namespace M2Server
                                         gateUserInfo.PlayObject.BoSoftClose = true;
                                     }
                                     gateInfo.UserList[j] = null;
-                                    gateInfo.nUserCount -= 1;
+                                    gateInfo.UserCount -= 1;
                                     break;
                                 }
                             }
@@ -359,17 +390,17 @@ namespace M2Server
                         var gateInfo = _gameGates[i].GateInfo;
                         if (gateInfo.Socket != null && gateInfo.Socket.Connected)
                         {
-                            if (HUtil32.GetTickCount() - gateInfo.dwSendTick >= 1000)
+                            if (HUtil32.GetTickCount() - gateInfo.SendTick >= 1000)
                             {
-                                gateInfo.dwSendTick = HUtil32.GetTickCount();
-                                gateInfo.nSendMsgBytes = gateInfo.nSendBytesCount;
-                                gateInfo.nSendedMsgCount = gateInfo.nSendCount;
-                                gateInfo.nSendBytesCount = 0;
-                                gateInfo.nSendCount = 0;
+                                gateInfo.SendTick = HUtil32.GetTickCount();
+                                gateInfo.SendMsgBytes = gateInfo.SendBytesCount;
+                                gateInfo.SendedMsgCount = gateInfo.SendCount;
+                                gateInfo.SendBytesCount = 0;
+                                gateInfo.SendCount = 0;
                             }
-                            if (gateInfo.boSendKeepAlive)
+                            if (gateInfo.SendKeepAlive)
                             {
-                                gateInfo.boSendKeepAlive = false;
+                                gateInfo.SendKeepAlive = false;
                                 _gameGates[i].SendCheck(Grobal2.GM_CHECKSERVER);
                             }
                         }
@@ -392,7 +423,7 @@ namespace M2Server
             var clientOutMessage = new ClientOutMessage();
             clientOutMessage.CommandPacket = defMsg;
             clientOutMessage.MessagePacket = msgHdr;
-            M2Share.ThreadSocket.AddGateBuffer(nIndex, SerializerUtil.Serialize(clientOutMessage));
+            M2Share.NetChannel.AddGateBuffer(nIndex, SerializerUtil.Serialize(clientOutMessage));
         }
 
         /// <summary>

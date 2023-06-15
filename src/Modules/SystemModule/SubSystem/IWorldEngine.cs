@@ -91,8 +91,11 @@ namespace SystemModule
         void AddMagicList(MagicInfo magicInfo);
 
         void PrcocessData();
+
         void ProcessNpcs();
+
         void ProcessMerchants();
+        
         void ProcessHumans();
 
         void AddUserOpenInfo(UserOpenInfo UserOpenInfo);

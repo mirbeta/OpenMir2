@@ -324,7 +324,7 @@ namespace GameSrv.Services
                 }
                 if (!string.IsNullOrEmpty(sAccount))
                 {
-                    M2Share.ThreadSocket.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
+                    M2Share.NetChannel.KickUser(sAccount, sessionId, sessInfo?.PayMode ?? 0);
                 }
             }
             catch (Exception e)

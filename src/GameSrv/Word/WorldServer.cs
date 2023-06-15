@@ -490,7 +490,7 @@ namespace GameSrv.Word
                                 {
                                     _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
                                     LoadPlayerQueue.Add(i);
-                                    M2Share.ThreadSocket.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
+                                    M2Share.NetChannel.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
                                 if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
@@ -546,12 +546,12 @@ namespace GameSrv.Word
                     for (var i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
-                        M2Share.ThreadSocket.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
+                        M2Share.NetChannel.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
                     for (var i = 0; i < ListOfGateIdx.Count; i++)
                     {
-                        M2Share.ThreadSocket.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
+                        M2Share.NetChannel.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
                     }
                     ListOfGateIdx.Clear();
                     ListOfSocket.Clear();
@@ -691,7 +691,7 @@ namespace GameSrv.Word
                             AddToHumanFreeList(playObject);
                             playObject.DealCancelA();
                             SaveHumanRcd(playObject);
-                            M2Share.ThreadSocket.CloseUser(playObject.GateIdx, playObject.SocketId);
+                            M2Share.NetChannel.CloseUser(playObject.GateIdx, playObject.SocketId);
                             SendServerGroupMsg(Messages.ISM_USERLOGOUT, M2Share.ServerIndex, playObject.ChrName);
                             continue;
                         }

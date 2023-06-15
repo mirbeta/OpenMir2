@@ -3,9 +3,9 @@ using SystemModule.Common;
 
 namespace M2Server.Castle
 {
-    public class CastleConfMgr : ConfigFile
+    public class CastleConf : ConfigFile
     {
-        public CastleConfMgr(string fileName) : base(fileName)
+        public CastleConf(string fileName) : base(fileName)
         {
             Load();
         }

@@ -7,16 +7,16 @@ namespace M2Server
     {
         void CheckConnected();
         void Close();
-        PlayerSession GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime);
+        PlayerSession GetAdmission(string account, string paddr, int sessionId, ref int payMode, ref int payMent, ref long playTime);
         int GetSessionCount();
-        void GetSessionList(ArrayList List);
+        void GetSessionList(ArrayList list);
         void Initialize();
         void Run();
-        void SendHumanLogOutMsg(string sUserId, int nId);
-        void SendHumanLogOutMsgA(string sUserID, int nID);
-        void SendLogonCostMsg(string sAccount, int nTime);
+        void SendHumanLogOutMsg(string userId, int nId);
+        void SendHumanLogOutMsgA(string userId, int nId);
+        void SendLogonCostMsg(string account, int nTime);
         void SendOnlineHumCountMsg(int nCount);
-        void SendSocket(string sSendMsg);
+        void SendSocket(string sendMsg);
         void SendUserPlayTime(string account, long playTime);
     }
 }
