@@ -12,15 +12,15 @@ namespace MarketSystem
             _marketService = marketService;
         }
 
-        public Task Handle(UserSelectMessageEvent notification, CancellationToken cancellationToken)
+        public Task Handle(UserSelectMessageEvent messageEvent, CancellationToken cancellationToken)
         {
-            if (string.Compare(notification.Lable, "market_0", StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(messageEvent.Lable, "market_0", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                _marketService.SendUserMarket(notification.Actor, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
+                _marketService.SendUserMarket(messageEvent.NormNpc, messageEvent.Actor, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_BUY);
             }
-            else if (string.Compare(notification.Lable, "@market_sell", StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(messageEvent.Lable, "@market_sell", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                _marketService.SendUserMarket(notification.Actor, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_SELL);
+                _marketService.SendUserMarket(messageEvent.NormNpc, messageEvent.Actor, MarketConst.USERMARKET_TYPE_ALL, MarketConst.USERMARKET_MODE_SELL);
             }
             return Task.CompletedTask;
         }

@@ -5,7 +5,7 @@ using NLog;
 using SystemModule;
 using SystemModule.ModuleEvent;
 
-namespace RobotSystem
+namespace UserStallSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
@@ -13,23 +13,25 @@ namespace RobotSystem
 
         public void Configure(IHostEnvironment env)
         {
-            throw new NotImplementedException();
+
         }
 
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddHostedService<RobotProcessor>();
-            serviceCollection.AddTransient<INotificationHandler<UserSelectMessageEvent>, MessageEventHandler>();
+            //serviceCollection.AddSingleton<IMarketService, MarketService>();
+            //serviceCollection.AddTransient<INotificationHandler<UserSelectMessageEvent>, MessageEventHandler>();
         }
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("Robot(机器人)插件启动...");
+            logger.Info("UserStall(摆摊)插件启动...");
+            //SystemShare.ServiceProvider.GetService<IMarketService>().Start();
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("Robot(机器人)插件停止...");
+            logger.Info("UserStall(摆摊)插件停止...");
+            //SystemShare.ServiceProvider.GetService<IMarketService>().Stop();
         }
     }
 }

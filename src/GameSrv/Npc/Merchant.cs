@@ -940,7 +940,7 @@ namespace GameSrv.NPC
                         {
                             if (!boCanJmp)
                             {
-                                SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel });
+                                SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel,NormNpc = this});
                             }
                         }
                     }

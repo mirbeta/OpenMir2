@@ -1,11 +1,12 @@
-﻿using MediatR;
+﻿using GoldDealSystem.Service;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
 using SystemModule;
 using SystemModule.ModuleEvent;
 
-namespace RobotSystem
+namespace GoldDealSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
@@ -13,23 +14,25 @@ namespace RobotSystem
 
         public void Configure(IHostEnvironment env)
         {
-            throw new NotImplementedException();
+
         }
 
         public void ConfigureServices(IServiceCollection serviceCollection)
         {
-            serviceCollection.AddHostedService<RobotProcessor>();
-            serviceCollection.AddTransient<INotificationHandler<UserSelectMessageEvent>, MessageEventHandler>();
+            serviceCollection.AddSingleton<IGoldDealService, GoldDealService>();
+            //serviceCollection.AddTransient<INotificationHandler<UserSelectMessageEvent>, MessageEventHandler>();
         }
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("Robot(机器人)插件启动...");
+            logger.Info("GoldDeal(元宝交易)插件启动...");
+            //SystemShare.ServiceProvider.GetService<IMarketService>().Start();
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("Robot(机器人)插件停止...");
+            logger.Info("GoldDeal(元宝交易)插件停止...");
+            //SystemShare.ServiceProvider.GetService<IMarketService>().Stop();
         }
     }
 }

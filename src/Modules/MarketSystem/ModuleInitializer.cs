@@ -24,13 +24,13 @@ namespace MarketSystem
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("Marker寄售行插件启动...");
+            logger.Info("Marker(寄售行)插件启动...");
             SystemShare.ServiceProvider.GetService<IMarketService>().Start();
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("Marker寄售行插件停止...");
+            logger.Info("Marker(寄售行)插件停止...");
             SystemShare.ServiceProvider.GetService<IMarketService>().Stop();
         }
     }

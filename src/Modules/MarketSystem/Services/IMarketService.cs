@@ -22,6 +22,6 @@ namespace MarketSystem
 
         bool SendUserMarketSellReady(int actorId, string chrName, int marketNpc);
 
-        void SendUserMarket(IPlayerActor user, short ItemType, byte UserMode);
+        void SendUserMarket(INormNpc normNpc, IPlayerActor user, short ItemType, byte UserMode);
     }
 }
