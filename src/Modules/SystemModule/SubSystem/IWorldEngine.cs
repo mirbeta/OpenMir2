@@ -28,8 +28,14 @@ namespace SystemModule
 
         void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg);
 
-        void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false);
+        /// <summary>
+        /// 获取地图范围内玩家列表
+        /// </summary>
+        void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IPlayerActor> list, bool botPlay = false);
 
+        /// <summary>
+        /// 获取地图范围内玩家数量
+        /// </summary>
         int GetMapOfRangeHumanCount(IEnvirnoment envir, int nX, int nY, int nRange);
 
         IActor RegenMonsterByName(string sMap, short nX, short nY, string sMonName);

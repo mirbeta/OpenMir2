@@ -1594,7 +1594,7 @@ namespace GameSrv.Word
             return result;
         }
 
-        public void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IActor> list, bool botPlay = false)
+        public void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IPlayerActor> list, bool botPlay = false)
         {
             for (var i = 0; i < PlayObjectList.Count; i++)
             {

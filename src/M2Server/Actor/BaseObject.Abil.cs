@@ -13,7 +13,7 @@ namespace M2Server.Actor
         /// </summary>
         public virtual void RecalcAbilitys()
         {
-            //AddAbil = default;
+            AddAbil = default;
             Ability temp = WAbil;
             WAbil = (Ability)Abil.Clone();
             WAbil.HP = temp.HP;

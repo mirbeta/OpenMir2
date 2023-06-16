@@ -2147,14 +2147,16 @@ namespace ScriptSystem
         private void ActionOfMonClear(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var list58 = new List<IActor>();
-            SystemShare.WorldEngine.GetMapMonster(SystemShare.MapMgr.FindMap(questActionInfo.sParam1), list58);
-            for (int k = 0; k < list58.Count; k++)
+            if (SystemShare.WorldEngine.GetMapMonster(SystemShare.MapMgr.FindMap(questActionInfo.sParam1), list58) > 0)
             {
-                list58[k].NoItem = true;
-                list58[k].WAbil.HP = 0;
-                list58[k].MakeGhost();
+                for (int k = 0; k < list58.Count; k++)
+                {
+                    list58[k].NoItem = true;
+                    list58[k].WAbil.HP = 0;
+                    list58[k].MakeGhost();
+                }
+                list58.Clear();
             }
-            list58.Clear();
         }
 
         private void ActionOfMap(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
@@ -2179,7 +2181,7 @@ namespace ScriptSystem
             var recallEnvir = SystemShare.MapMgr.FindMap(questActionInfo.sParam1);
             if (recallEnvir != null)
             {
-                IList<IActor> recallList = new List<IActor>();
+                IList<IPlayerActor> recallList = new List<IPlayerActor>();
                 SystemShare.WorldEngine.GetMapRageHuman(recallEnvir, 0, 0, 1000, ref recallList);
                 for (int k = 0; k < recallList.Count; k++)
                 {
@@ -2202,13 +2204,13 @@ namespace ScriptSystem
             var envir = SystemShare.MapMgr.FindMap(questActionInfo.sParam1);
             if (envir != null)
             {
-                //IList<BaseObject> exchangeList = new List<BaseObject>();
-                //SystemShare.WorldEngine.GetMapRageHuman(envir, 0, 0, 1000, ref exchangeList);
-                //if (exchangeList.Count > 0)
-                //{
-                //    var user = exchangeList[0];
-                //    user.MapRandomMove(normNpc.MapName, 0);
-                //}
+                IList<IPlayerActor> exchangeList = new List<IPlayerActor>();
+                SystemShare.WorldEngine.GetMapRageHuman(envir, 0, 0, 1000, ref exchangeList);
+                if (exchangeList.Count > 0)
+                {
+                    var user = exchangeList[0];
+                    user.MapRandomMove(normNpc.MapName, 0);
+                }
                 playerActor.MapRandomMove(questActionInfo.sParam1, 0);
             }
             else
@@ -2842,7 +2844,7 @@ namespace ScriptSystem
                         }
                     }
                     playerActor.Abil.Exp += dwInt;
-                    // playerActor.GetExp(dwInt);
+                    //playerActor.GetExp(dwInt);
                     playerActor.SendMsg(playerActor, Messages.RM_WINEXP, 0, dwInt, 0, 0);
                     break;
             }
