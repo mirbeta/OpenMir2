@@ -2084,8 +2084,6 @@ namespace M2Server.Player
                 bool dragonsetBoots = false;
                 bool dragonsetBelt = false;
                 bool dsetWingdress = false;
-                AddAbility addAbilTemp = AddAbil;
-                Ability abilityTemp = WAbil;
                 for (int i = 0; i < UseItems.Length; i++)
                 {
                     if (UseItems[i] != null && (UseItems[i].Index > 0))
@@ -2098,28 +2096,28 @@ namespace M2Server.Player
                             {
                                 if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
                                 {
-                                    abilityTemp.HandWeight = (byte)(abilityTemp.HandWeight + stdItem.Weight);
+                                    WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
                                 }
                                 else
                                 {
-                                    abilityTemp.WearWeight = (byte)(abilityTemp.WearWeight + stdItem.Weight);
+                                    WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
                                 }
                             }
                             continue;
                         }
                         stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
-                        ApplyItemParameters(UseItems[i], stdItem, ref addAbilTemp);
-                        ApplyItemParametersEx(UseItems[i], ref abilityTemp);
+                        ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
+                        ApplyItemParametersEx(UseItems[i], ref WAbil);
    
                         if (stdItem != null)
                         {
                             if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
                             {
-                                abilityTemp.HandWeight = (byte)(abilityTemp.HandWeight + stdItem.Weight);
+                                WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
                             }
                             else
                             {
-                                abilityTemp.WearWeight = (byte)(abilityTemp.WearWeight + stdItem.Weight);
+                                WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
                             }
                             switch (i)
                             {
@@ -2129,11 +2127,11 @@ namespace M2Server.Player
                                     {
                                         if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
                                         {
-                                            addAbilTemp.UndeadPower = (byte)(addAbilTemp.UndeadPower + (-stdItem.SpecialPwr));
+                                            AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (-stdItem.SpecialPwr));
                                         }
                                         if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
                                         {
-                                            addAbilTemp.UndeadPower = (byte)(addAbilTemp.UndeadPower + (stdItem.SpecialPwr + 50));
+                                            AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
                                         }
                                         switch (stdItem.Shape)
                                         {
@@ -2490,7 +2488,7 @@ namespace M2Server.Player
                                     {
                                         if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE))
                                         {
-                                            addAbilTemp.Luck = (byte)(HUtil32._MIN(255, addAbilTemp.Luck + 1));
+                                            AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 1));
                                         }
                                         break;
                                     }
@@ -2524,200 +2522,200 @@ namespace M2Server.Player
                 }
                 if (shNecklace && shBracelet && shRing)
                 {
-                    addAbilTemp.HIT = (ushort)(addAbilTemp.HIT + 2);
+                    AddAbil.HIT = (ushort)(AddAbil.HIT + 2);
                 }
                 if (hpBracelet && hpRing)
                 {
-                    addAbilTemp.HP = (ushort)(addAbilTemp.HP + 50);
+                    AddAbil.HP = (ushort)(AddAbil.HP + 50);
                 }
                 if (mpBracelet && mpRing)
                 {
-                    addAbilTemp.MP = (ushort)(addAbilTemp.MP + 50);
+                    AddAbil.MP = (ushort)(AddAbil.MP + 50);
                 }
                 if (hpmpBracelet && hpmpRing)
                 {
-                    addAbilTemp.HP = (ushort)(addAbilTemp.HP + 30);
-                    addAbilTemp.MP = (ushort)(addAbilTemp.MP + 30);
+                    AddAbil.HP = (ushort)(AddAbil.HP + 30);
+                    AddAbil.MP = (ushort)(AddAbil.MP + 30);
                 }
                 if (hppNecklace && hppBracelet && hppRing)
                 {
-                    addAbilTemp.HP = (ushort)(addAbilTemp.HP + ((abilityTemp.MaxHP * 30) / 100));
-                    addAbilTemp.AC = (ushort)(addAbilTemp.AC + HUtil32.MakeWord(2, 2));
+                    AddAbil.HP = (ushort)(AddAbil.HP + ((WAbil.MaxHP * 30) / 100));
+                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(2, 2));
                 }
                 if (choWeapon && choNecklace && choRing && choHelmet && choBracelet)
                 {
-                    addAbilTemp.HitSpeed = (ushort)(addAbilTemp.HitSpeed + 4);
-                    addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(2, 5));
+                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 4);
+                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(2, 5));
                 }
                 if (psetBracelet && psetRing)
                 {
-                    addAbilTemp.HitSpeed = (ushort)(addAbilTemp.HitSpeed + 2);
+                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
                     if (psetNecklace)
                     {
-                        addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(1, 3));
+                        AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(1, 3));
                     }
                 }
                 if (hsetBracelet && hsetRing)
                 {
-                    abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 20);
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 5));
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 20);
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 5));
                     if (hsetNecklace)
                     {
-                        addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(1, 2));
+                        AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(1, 2));
                     }
                 }
                 if (ysetBracelet && ysetRing)
                 {
-                    addAbilTemp.UndeadPower = (byte)(addAbilTemp.UndeadPower + 3);
+                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + 3);
                     if (ysetNecklace)
                     {
-                        addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(1, 2));
+                        AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(1, 2));
                     }
                 }
                 if (bonesetWeapon && bonesetHelmet && bonesetDress)
                 {
-                    addAbilTemp.AC = (ushort)(addAbilTemp.AC + HUtil32.MakeWord(0, 2));
-                    addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(0, 1));
-                    addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(0, 1));
+                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
+                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
+                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
                 }
                 if (bugsetNecklace && bugsetRing && bugsetBracelet)
                 {
-                    addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(0, 1));
-                    addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(0, 1));
-                    addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(0, 1));
-                    addAbilTemp.AntiMagic = (ushort)(addAbilTemp.AntiMagic + 1);
-                    addAbilTemp.AntiPoison = (ushort)(addAbilTemp.AntiPoison + 1);
+                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
+                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
+                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
+                    AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 1);
+                    AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + 1);
                 }
                 if (ptsetBelt && ptsetBoots && ptsetNecklace && ptsetBracelet && ptsetRing)
                 {
-                    addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(0, 2));
-                    addAbilTemp.AC = (ushort)(addAbilTemp.AC + HUtil32.MakeWord(0, 2));
-                    abilityTemp.MaxHandWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxHandWeight + 1));
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 2));
+                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 2));
+                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
+                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
                 if (kssetBelt && kssetBoots && kssetNecklace && kssetBracelet && kssetRing)
                 {
-                    addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(0, 2));
-                    addAbilTemp.AC = (ushort)(addAbilTemp.AC + HUtil32.MakeWord(0, 1));
-                    addAbilTemp.MAC = (ushort)(addAbilTemp.MAC + HUtil32.MakeWord(0, 1));
-                    addAbilTemp.SPEED = (ushort)(addAbilTemp.SPEED + 1);
-                    abilityTemp.MaxHandWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxHandWeight + 1));
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 2));
+                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
+                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 1));
+                    AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 1));
+                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
                 if (rubysetBelt && rubysetBoots && rubysetNecklace && rubysetBracelet && rubysetRing)
                 {
-                    addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(0, 2));
-                    addAbilTemp.MAC = (ushort)(addAbilTemp.MAC + HUtil32.MakeWord(0, 2));
-                    abilityTemp.MaxHandWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxHandWeight + 1));
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 2));
+                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
+                    AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 2));
+                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
                 if (strongPtsetBelt && strongPtsetBoots && strongPtsetNecklace && strongPtsetBracelet && strongPtsetRing)
                 {
-                    addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(0, 3));
-                    addAbilTemp.HP = (ushort)(addAbilTemp.HP + 30);
-                    addAbilTemp.HitSpeed = (ushort)(addAbilTemp.HitSpeed + 2);
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 2));
+                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 3));
+                    AddAbil.HP = (ushort)(AddAbil.HP + 30);
+                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
                 if (strongKssetBelt && strongKssetBoots && strongKssetNecklace && strongKssetBracelet && strongKssetRing)
                 {
-                    addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(0, 2));
-                    addAbilTemp.HP = (ushort)(addAbilTemp.HP + 15);
-                    addAbilTemp.MP = (ushort)(addAbilTemp.MP + 20);
-                    addAbilTemp.UndeadPower = (byte)(addAbilTemp.UndeadPower + 1);
-                    addAbilTemp.HIT = (ushort)(addAbilTemp.HIT + 1);
-                    addAbilTemp.SPEED = (ushort)(addAbilTemp.SPEED + 1);
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 2));
+                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
+                    AddAbil.HP = (ushort)(AddAbil.HP + 15);
+                    AddAbil.MP = (ushort)(AddAbil.MP + 20);
+                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + 1);
+                    AddAbil.HIT = (ushort)(AddAbil.HIT + 1);
+                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
                 if (strongRubysetBelt && strongRubysetBoots && strongRubysetNecklace && strongRubysetBracelet && strongRubysetRing)
                 {
-                    addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(0, 2));
-                    addAbilTemp.MP = (ushort)(addAbilTemp.MP + 40);
-                    addAbilTemp.SPEED = (ushort)(addAbilTemp.SPEED + 2);
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 2));
+                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
+                    AddAbil.MP = (ushort)(AddAbil.MP + 40);
+                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 2);
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
                 }
                 if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace && dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
                 {
-                    addAbilTemp.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.AC) + 4));
-                    addAbilTemp.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MAC) + 4));
-                    addAbilTemp.Luck = (byte)(HUtil32._MIN(255, addAbilTemp.Luck + 2));
-                    addAbilTemp.HitSpeed = (ushort)(addAbilTemp.HitSpeed + 2);
-                    addAbilTemp.AntiMagic = (ushort)(addAbilTemp.AntiMagic + 6);
-                    addAbilTemp.AntiPoison = (ushort)(addAbilTemp.AntiPoison + 6);
-                    abilityTemp.MaxHandWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxHandWeight + 34));
-                    abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 27));
-                    abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 120);
-                    abilityTemp.MaxHP = (ushort)(abilityTemp.MaxHP + 70);
-                    abilityTemp.MaxMP = (ushort)(abilityTemp.MaxMP + 80);
-                    addAbilTemp.SPEED = (ushort)(addAbilTemp.SPEED + 1);
-                    addAbilTemp.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.DC) + 4));
-                    addAbilTemp.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MC) + 3));
-                    addAbilTemp.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.SC) + 3));
+                    AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 4));
+                    AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 4));
+                    AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 2));
+                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
+                    AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 6);
+                    AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + 6);
+                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 34));
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 120);
+                    WAbil.MaxHP = (ushort)(WAbil.MaxHP + 70);
+                    WAbil.MaxMP = (ushort)(WAbil.MaxMP + 80);
+                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                    AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
+                    AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
+                    AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
                 }
                 else
                 {
                     if (dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
                     {
-                        abilityTemp.MaxHandWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxHandWeight + 34));
-                        abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 50);
-                        addAbilTemp.SPEED = (ushort)(addAbilTemp.SPEED + 1);
-                        addAbilTemp.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.DC) + 4));
-                        addAbilTemp.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MC) + 3));
-                        addAbilTemp.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.SC) + 3));
+                        WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 34));
+                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
+                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                        AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
+                        AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
+                        AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
                     }
                     else if (dragonsetDress && dragonsetBoots && dragonsetBelt)
                     {
-                        abilityTemp.MaxHandWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxHandWeight + 17));
-                        abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 30);
-                        addAbilTemp.DC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.DC) + 1));
-                        addAbilTemp.MC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MC) + 1));
-                        addAbilTemp.SC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.SC) + 1));
+                        WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 17));
+                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 1));
+                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
+                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
                     }
                     else if (dragonsetDress && dragonsetHelmet && dragonsetWeapon)
                     {
-                        addAbilTemp.DC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.DC) + 2));
-                        addAbilTemp.MC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MC) + 1));
-                        addAbilTemp.SC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.SC) + 1));
-                        addAbilTemp.SPEED = (ushort)(addAbilTemp.SPEED + 1);
+                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 2));
+                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
+                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
+                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
                     }
                     if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
                     {
-                        abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 27));
-                        abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 50);
-                        addAbilTemp.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.AC) + 3));
-                        addAbilTemp.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MAC) + 3));
+                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
+                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 3));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 3));
                     }
                     else if ((dragonsetRingLeft || dragonsetRingRight) && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
                     {
-                        abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 17));
-                        abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 30);
-                        addAbilTemp.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.AC) + 1));
-                        addAbilTemp.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MAC) + 1));
+                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
+                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                     }
                     else if (dragonsetRingLeft && dragonsetRingRight && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
                     {
-                        abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 17));
-                        abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 30);
-                        addAbilTemp.AC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.AC) + 2));
-                        addAbilTemp.MAC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MAC) + 2));
+                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
+                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 2));
+                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 2));
                     }
                     else if ((dragonsetRingLeft || dragonsetRingRight) && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
                     {
-                        abilityTemp.MaxWearWeight = (byte)(HUtil32._MIN(255, abilityTemp.MaxWearWeight + 17));
-                        abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight + 30);
-                        addAbilTemp.AC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.AC) + 1));
-                        addAbilTemp.MAC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MAC) + 1));
+                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
+                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                     }
                     else
                     {
                         if (dragonsetBraceletLeft && dragonsetBraceletRight)
                         {
-                            addAbilTemp.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.AC)));
-                            addAbilTemp.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(addAbilTemp.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MAC)));
+                            AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC)));
+                            AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC)));
                         }
                         if (dragonsetRingLeft && dragonsetRingRight)
                         {
-                            addAbilTemp.AC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.AC) + 1));
-                            addAbilTemp.MAC = HUtil32.MakeWord(HUtil32.LoByte(addAbilTemp.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(addAbilTemp.MAC) + 1));
+                            AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                            AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                         }
                     }
                 }
@@ -2726,29 +2724,29 @@ namespace M2Server.Player
                     switch (Abil.Level)
                     {
                         case < 40:
-                            addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(0, 1));
-                            addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(0, 2));
-                            addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(0, 2));
-                            addAbilTemp.AC = (ushort)(addAbilTemp.AC + HUtil32.MakeWord(2, 3));
-                            addAbilTemp.MAC = (ushort)(addAbilTemp.MAC + HUtil32.MakeWord(0, 2));
+                            AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
+                            AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
+                            AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
+                            AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(2, 3));
+                            AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 2));
                             break;
                         case < 50:
-                            addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(0, 3));
-                            addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(0, 4));
-                            addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(0, 4));
-                            addAbilTemp.AC = (ushort)(addAbilTemp.AC + HUtil32.MakeWord(5, 5));
-                            addAbilTemp.MAC = (ushort)(addAbilTemp.MAC + HUtil32.MakeWord(1, 2));
+                            AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 3));
+                            AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 4));
+                            AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 4));
+                            AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(5, 5));
+                            AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(1, 2));
                             break;
                         default:
-                            addAbilTemp.DC = (ushort)(addAbilTemp.DC + HUtil32.MakeWord(0, 5));
-                            addAbilTemp.MC = (ushort)(addAbilTemp.MC + HUtil32.MakeWord(0, 6));
-                            addAbilTemp.SC = (ushort)(addAbilTemp.SC + HUtil32.MakeWord(0, 6));
-                            addAbilTemp.AC = (ushort)(addAbilTemp.AC + HUtil32.MakeWord(9, 7));
-                            addAbilTemp.MAC = (ushort)(addAbilTemp.MAC + HUtil32.MakeWord(2, 4));
+                            AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 5));
+                            AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 6));
+                            AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 6));
+                            AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(9, 7));
+                            AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(2, 4));
                             break;
                     }
                 }
-                abilityTemp.Weight = RecalcBagWeight();
+                WAbil.Weight = RecalcBagWeight();
 
                 if (FlameRing)
                 {
@@ -2768,53 +2766,53 @@ namespace M2Server.Player
                 }
                 if (MuscleRing)
                 {
-                    abilityTemp.MaxWeight = (ushort)(abilityTemp.MaxWeight * 2);
-                    abilityTemp.MaxWearWeight = (byte)HUtil32._MIN(255, abilityTemp.MaxWearWeight * 2);
-                    if ((abilityTemp.MaxHandWeight * 2 > 255))
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight * 2);
+                    WAbil.MaxWearWeight = (byte)HUtil32._MIN(255, WAbil.MaxWearWeight * 2);
+                    if ((WAbil.MaxHandWeight * 2 > 255))
                     {
-                        abilityTemp.MaxHandWeight = 255;
+                        WAbil.MaxHandWeight = 255;
                     }
                     else
                     {
-                        abilityTemp.MaxHandWeight = (byte)(abilityTemp.MaxHandWeight * 2);
+                        WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight * 2);
                     }
                 }
                 if (MoXieSuite > 0) //魔血套装
                 {
-                    if (MoXieSuite >= abilityTemp.MaxMP)
+                    if (MoXieSuite >= WAbil.MaxMP)
                     {
-                        MoXieSuite = abilityTemp.MaxMP - 1;
+                        MoXieSuite = WAbil.MaxMP - 1;
                     }
-                    abilityTemp.MaxMP = (ushort)(abilityTemp.MaxMP - MoXieSuite);
-                    abilityTemp.MaxHP = (ushort)(abilityTemp.MaxHP + MoXieSuite);
-                    if ((Race == ActorRace.Play) && (abilityTemp.HP > abilityTemp.MaxHP))
+                    WAbil.MaxMP = (ushort)(WAbil.MaxMP - MoXieSuite);
+                    WAbil.MaxHP = (ushort)(WAbil.MaxHP + MoXieSuite);
+                    if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP))
                     {
-                        abilityTemp.HP = abilityTemp.MaxHP;
+                        WAbil.HP = WAbil.MaxHP;
                     }
                 }
                 if (spiritArr[0] && spiritArr[2] && spiritArr[3] && spiritArr[4]) //祈祷套装
                 {
                     IsSpirit = true;
                 }
-                if ((Race == ActorRace.Play) && (abilityTemp.HP > abilityTemp.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
+                if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
                 {
-                    abilityTemp.HP = abilityTemp.MaxHP;
+                    WAbil.HP = WAbil.MaxHP;
                 }
-                if ((Race == ActorRace.Play) && (abilityTemp.MP > abilityTemp.MaxMP))
+                if ((Race == ActorRace.Play) && (WAbil.MP > WAbil.MaxMP))
                 {
-                    abilityTemp.MP = abilityTemp.MaxMP;
+                    WAbil.MP = WAbil.MaxMP;
                 }
                 if (ExtraAbil[AbilConst.EABIL_DCUP] > 0)
                 {
-                    abilityTemp.DC = HUtil32.MakeWord(HUtil32.LoByte(abilityTemp.DC), (ushort)(HUtil32.HiByte(abilityTemp.DC) + ExtraAbil[AbilConst.EABIL_DCUP]));
+                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]));
                 }
                 if (ExtraAbil[AbilConst.EABIL_MCUP] > 0)
                 {
-                    abilityTemp.MC = HUtil32.MakeWord(HUtil32.LoByte(abilityTemp.MC), (ushort)(HUtil32.HiByte(abilityTemp.MC) + ExtraAbil[AbilConst.EABIL_MCUP]));
+                    WAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MC), (ushort)(HUtil32.HiByte(WAbil.MC) + ExtraAbil[AbilConst.EABIL_MCUP]));
                 }
                 if (ExtraAbil[AbilConst.EABIL_SCUP] > 0)
                 {
-                    abilityTemp.SC = HUtil32.MakeWord(HUtil32.LoByte(abilityTemp.SC), (ushort)(HUtil32.HiByte(abilityTemp.SC) + ExtraAbil[AbilConst.EABIL_SCUP]));
+                    WAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.SC), (ushort)(HUtil32.HiByte(WAbil.SC) + ExtraAbil[AbilConst.EABIL_SCUP]));
                 }
                 if (ExtraAbil[AbilConst.EABIL_HITSPEEDUP] > 0)
                 {
@@ -2822,17 +2820,17 @@ namespace M2Server.Player
                 }
                 if (ExtraAbil[AbilConst.EABIL_HPUP] > 0)
                 {
-                    abilityTemp.MaxHP = (ushort)(abilityTemp.MaxHP + ExtraAbil[AbilConst.EABIL_HPUP]);
+                    WAbil.MaxHP = (ushort)(WAbil.MaxHP + ExtraAbil[AbilConst.EABIL_HPUP]);
                 }
                 if (ExtraAbil[AbilConst.EABIL_MPUP] > 0)
                 {
-                    abilityTemp.MaxMP = (ushort)(abilityTemp.MaxMP + ExtraAbil[AbilConst.EABIL_MPUP]);
+                    WAbil.MaxMP = (ushort)(WAbil.MaxMP + ExtraAbil[AbilConst.EABIL_MPUP]);
                 }
                 if (ExtraAbil[AbilConst.EABIL_PWRRATE] > 0)
                 {
-                    abilityTemp.DC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(abilityTemp.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(abilityTemp.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
-                    abilityTemp.MC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(abilityTemp.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(abilityTemp.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
-                    abilityTemp.SC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(abilityTemp.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(abilityTemp.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+                    WAbil.DC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+                    WAbil.MC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+                    WAbil.SC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
                 }
                 if (Race == ActorRace.Play)
                 {
@@ -2888,16 +2886,13 @@ namespace M2Server.Player
                 Luck = (byte)(Luck + AddAbil.Luck);
                 Luck = (byte)(Luck - AddAbil.UnLuck);
                 HitSpeed = AddAbil.HitSpeed;
-                abilityTemp.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
-                abilityTemp.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
-                abilityTemp.AC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
-                abilityTemp.MAC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
-                abilityTemp.DC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
-                abilityTemp.MC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
-                abilityTemp.SC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
-
-                AddAbil = addAbilTemp;
-                WAbil = abilityTemp;
+                WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
+                WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
+                WAbil.AC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
+                WAbil.MAC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
+                WAbil.DC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
+                WAbil.MC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
+                WAbil.SC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
             }
         }
 
@@ -4399,7 +4394,7 @@ namespace M2Server.Player
             return (MyGuild != null) && (GuildRankNo == 1);
         }
 
-        internal void ApplyItemParameters(UserItem uitem, StdItem item, ref AddAbility aabil)
+        private void ApplyItemParameters(UserItem uitem, StdItem item, ref AddAbility aabil)
         {
             if (item != null)
             {
@@ -4602,7 +4597,7 @@ namespace M2Server.Player
             }
         }
 
-        internal static void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
+        private static void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
         {
             StdItem item = SystemShare.ItemSystem.GetStdItem(uitem.Index);
             if (item != null)
