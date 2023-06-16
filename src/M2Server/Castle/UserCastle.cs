@@ -442,7 +442,7 @@ namespace M2Server.Castle
             {
                 return false;
             }
-            IList<IActor> playObjectList = new List<IActor>();
+            IList<IPlayerActor> playObjectList = new List<IPlayerActor>();
             SystemShare.WorldEngine.GetMapRageHuman(PalaceEnvir, 0, 0, 1000, ref playObjectList);
             bool result = true;
             for (int i = 0; i < playObjectList.Count; i++)
@@ -485,11 +485,11 @@ namespace M2Server.Castle
         /// </summary>
         public void StartWallconquestWar()
         {
-            IList<IActor> playObjectList = new List<IActor>();
+            IList<IPlayerActor> playObjectList = new List<IPlayerActor>();
             SystemShare.WorldEngine.GetMapRageHuman(PalaceEnvir, HomeX, HomeY, 100, ref playObjectList);
             for (int i = 0; i < playObjectList.Count; i++)
             {
-                ((IPlayerActor)playObjectList[i]).RefShowName();
+                playObjectList[i].RefShowName();
             }
         }
 

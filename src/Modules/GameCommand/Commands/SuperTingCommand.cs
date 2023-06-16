@@ -19,7 +19,7 @@ namespace CommandSystem.Commands
             var sHumanName = @params.Length > 0 ? @params[0] : "";
             var sRange = @params.Length > 1 ? @params[1] : "";
             IPlayerActor moveHuman;
-            IList<IActor> humanList;
+            IList<IPlayerActor> humanList;
             if (string.IsNullOrEmpty(sRange) || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -29,7 +29,7 @@ namespace CommandSystem.Commands
             var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
-                humanList = new List<IActor>();
+                humanList = new List<IPlayerActor>();
                 SystemShare.WorldEngine.GetMapRageHuman(mIPlayerActor.Envir, mIPlayerActor.CurrX, mIPlayerActor.CurrY, nRange, ref humanList);
                 for (var i = 0; i < humanList.Count; i++)
                 {

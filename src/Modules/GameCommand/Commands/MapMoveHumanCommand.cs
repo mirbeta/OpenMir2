@@ -38,7 +38,7 @@ namespace CommandSystem.Commands
                     MsgType.Hint);
                 return;
             }
-            IList<IActor> humanList = new List<IActor>();
+            IList<IPlayerActor> humanList = new List<IPlayerActor>();
             SystemShare.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
             for (var i = 0; i < humanList.Count; i++)
             {
