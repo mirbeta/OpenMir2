@@ -2106,8 +2106,8 @@ namespace M2Server.Player
                             continue;
                         }
                         stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
-                        ApplyItemParameters(UseItems[i], stdItem, ref AddAbil);
-                        ApplyItemParametersEx(UseItems[i], ref WAbil);
+                        ApplyItemParameters(UseItems[i], stdItem);
+                        ApplyItemParametersEx(UseItems[i]);
    
                         if (stdItem != null)
                         {
@@ -4394,7 +4394,7 @@ namespace M2Server.Player
             return (MyGuild != null) && (GuildRankNo == 1);
         }
 
-        private void ApplyItemParameters(UserItem uitem, StdItem item, ref AddAbility aabil)
+        private void ApplyItemParameters(UserItem uitem, StdItem item)
         {
             if (item != null)
             {
@@ -4405,46 +4405,46 @@ namespace M2Server.Player
                 {
                     case 5:
                     case 6:
-                        aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + SystemShare.ItemSystem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
-                        aabil.Luck = (byte)(aabil.Luck + HUtil32.LoByte(clientItem.Item.AC));
-                        aabil.UnLuck = (byte)(aabil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
-                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
-                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        AddAbil.HIT = (ushort)(AddAbil.HIT + HUtil32.HiByte(clientItem.Item.AC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + SystemShare.ItemSystem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.Luck = (byte)(AddAbil.Luck + HUtil32.LoByte(clientItem.Item.AC));
+                        AddAbil.UnLuck = (byte)(AddAbil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
+                        AddAbil.Slowdown = (byte)(AddAbil.Slowdown + clientItem.Item.Slowdown);
+                        AddAbil.Poison = (byte)(AddAbil.Poison + clientItem.Item.Tox);
                         if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10)
                         {
-                            aabil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
+                            AddAbil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
                         }
                         break;
                     case 10:
                     case 11:
-                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
-                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
-                        aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
-                        aabil.AntiMagic = (ushort)(aabil.AntiMagic + clientItem.Item.MgAvoid);
-                        aabil.AntiPoison = (ushort)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
-                        aabil.HP = (ushort)(aabil.HP + clientItem.Item.HpAdd);
-                        aabil.MP = (ushort)(aabil.MP + clientItem.Item.MpAdd);
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + clientItem.Item.Agility);
+                        AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + clientItem.Item.MgAvoid);
+                        AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + clientItem.Item.ToxAvoid);
+                        AddAbil.HP = (ushort)(AddAbil.HP + clientItem.Item.HpAdd);
+                        AddAbil.MP = (ushort)(AddAbil.MP + clientItem.Item.MpAdd);
                         if (clientItem.Item.EffType1 > 0)
                         {
                             switch (clientItem.Item.EffType1)
                             {
                                 case EfftypeConst.EFFTYPE_HP_MP_ADD:
-                                    if ((aabil.HealthRecover + clientItem.Item.EffRate1 > 65000))
+                                    if ((AddAbil.HealthRecover + clientItem.Item.EffRate1 > 65000))
                                     {
-                                        aabil.HealthRecover = 65000;
+                                        AddAbil.HealthRecover = 65000;
                                     }
                                     else
                                     {
-                                        aabil.HealthRecover = (ushort)(aabil.HealthRecover + clientItem.Item.EffRate1);
+                                        AddAbil.HealthRecover = (ushort)(AddAbil.HealthRecover + clientItem.Item.EffRate1);
                                     }
-                                    if ((aabil.SpellRecover + clientItem.Item.EffValue1 > 65000))
+                                    if ((AddAbil.SpellRecover + clientItem.Item.EffValue1 > 65000))
                                     {
-                                        aabil.SpellRecover = 65000;
+                                        AddAbil.SpellRecover = 65000;
                                     }
                                     else
                                     {
-                                        aabil.SpellRecover = (ushort)(aabil.SpellRecover + clientItem.Item.EffValue1);
+                                        AddAbil.SpellRecover = (ushort)(AddAbil.SpellRecover + clientItem.Item.EffValue1);
                                     }
                                     break;
                             }
@@ -4454,150 +4454,150 @@ namespace M2Server.Player
                             switch (clientItem.Item.EffType2)
                             {
                                 case EfftypeConst.EFFTYPE_HP_MP_ADD:
-                                    if ((aabil.HealthRecover + clientItem.Item.EffRate2 > 65000))
+                                    if ((AddAbil.HealthRecover + clientItem.Item.EffRate2 > 65000))
                                     {
-                                        aabil.HealthRecover = 65000;
+                                        AddAbil.HealthRecover = 65000;
                                     }
                                     else
                                     {
-                                        aabil.HealthRecover = (ushort)(aabil.HealthRecover + clientItem.Item.EffRate2);
+                                        AddAbil.HealthRecover = (ushort)(AddAbil.HealthRecover + clientItem.Item.EffRate2);
                                     }
-                                    if ((aabil.SpellRecover + clientItem.Item.EffValue2 > 65000))
+                                    if ((AddAbil.SpellRecover + clientItem.Item.EffValue2 > 65000))
                                     {
-                                        aabil.SpellRecover = 65000;
+                                        AddAbil.SpellRecover = 65000;
                                     }
                                     else
                                     {
-                                        aabil.SpellRecover = (ushort)(aabil.SpellRecover + clientItem.Item.EffValue2);
+                                        AddAbil.SpellRecover = (ushort)(AddAbil.SpellRecover + clientItem.Item.EffValue2);
                                     }
                                     break;
                             }
                         }
                         if (clientItem.Item.EffType1 == EfftypeConst.EFFTYPE_LUCK_ADD)
                         {
-                            if (aabil.Luck + clientItem.Item.EffValue1 > 255)
+                            if (AddAbil.Luck + clientItem.Item.EffValue1 > 255)
                             {
-                                aabil.Luck = byte.MaxValue;
+                                AddAbil.Luck = byte.MaxValue;
                             }
                             else
                             {
-                                aabil.Luck = (byte)(aabil.Luck + clientItem.Item.EffValue1);
+                                AddAbil.Luck = (byte)(AddAbil.Luck + clientItem.Item.EffValue1);
                             }
                         }
                         else if (clientItem.Item.EffType2 == EfftypeConst.EFFTYPE_LUCK_ADD)
                         {
-                            if (aabil.Luck + clientItem.Item.EffValue2 > 255)
+                            if (AddAbil.Luck + clientItem.Item.EffValue2 > 255)
                             {
-                                aabil.Luck = byte.MaxValue;
+                                AddAbil.Luck = byte.MaxValue;
                             }
                             else
                             {
-                                aabil.Luck = (byte)(aabil.Luck + clientItem.Item.EffValue2);
+                                AddAbil.Luck = (byte)(AddAbil.Luck + clientItem.Item.EffValue2);
                             }
                         }
                         break;
                     case 15:
-                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
-                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
-                        aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
-                        aabil.AntiMagic = (ushort)(aabil.AntiMagic + clientItem.Item.MgAvoid);
-                        aabil.AntiPoison = (ushort)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.HIT = (ushort)(AddAbil.HIT + clientItem.Item.Accurate);
+                        AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + clientItem.Item.MgAvoid);
+                        AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + clientItem.Item.ToxAvoid);
                         break;
                     case 19:
-                        aabil.AntiMagic = (ushort)(aabil.AntiMagic + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.UnLuck = (byte)(aabil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
-                        aabil.Luck = (byte)(aabil.Luck + HUtil32.HiByte(clientItem.Item.MAC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + clientItem.Item.AtkSpd);
-                        aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
-                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
-                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + HUtil32.HiByte(clientItem.Item.AC));
+                        AddAbil.UnLuck = (byte)(AddAbil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
+                        AddAbil.Luck = (byte)(AddAbil.Luck + HUtil32.HiByte(clientItem.Item.MAC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + clientItem.Item.AtkSpd);
+                        AddAbil.HIT = (ushort)(AddAbil.HIT + clientItem.Item.Accurate);
+                        AddAbil.Slowdown = (byte)(AddAbil.Slowdown + clientItem.Item.Slowdown);
+                        AddAbil.Poison = (byte)(AddAbil.Poison + clientItem.Item.Tox);
                         break;
                     case 20:
-                        aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.SPEED = (ushort)(aabil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + clientItem.Item.AtkSpd);
-                        aabil.AntiMagic = (ushort)(aabil.AntiMagic + clientItem.Item.MgAvoid);
-                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
-                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        AddAbil.HIT = (ushort)(AddAbil.HIT + HUtil32.HiByte(clientItem.Item.AC));
+                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + clientItem.Item.AtkSpd);
+                        AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + clientItem.Item.MgAvoid);
+                        AddAbil.Slowdown = (byte)(AddAbil.Slowdown + clientItem.Item.Slowdown);
+                        AddAbil.Poison = (byte)(AddAbil.Poison + clientItem.Item.Tox);
                         break;
                     case 21:
-                        aabil.HealthRecover = (ushort)(aabil.HealthRecover + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.SpellRecover = (ushort)(aabil.SpellRecover + HUtil32.HiByte(clientItem.Item.MAC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + HUtil32.LoByte(clientItem.Item.AC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed - HUtil32.LoByte(clientItem.Item.MAC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + clientItem.Item.AtkSpd);
-                        aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
-                        aabil.AntiMagic = (ushort)(aabil.AntiMagic + clientItem.Item.MgAvoid);
-                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
-                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        AddAbil.HealthRecover = (ushort)(AddAbil.HealthRecover + HUtil32.HiByte(clientItem.Item.AC));
+                        AddAbil.SpellRecover = (ushort)(AddAbil.SpellRecover + HUtil32.HiByte(clientItem.Item.MAC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + HUtil32.LoByte(clientItem.Item.AC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed - HUtil32.LoByte(clientItem.Item.MAC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + clientItem.Item.AtkSpd);
+                        AddAbil.HIT = (ushort)(AddAbil.HIT + clientItem.Item.Accurate);
+                        AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + clientItem.Item.MgAvoid);
+                        AddAbil.Slowdown = (byte)(AddAbil.Slowdown + clientItem.Item.Slowdown);
+                        AddAbil.Poison = (byte)(AddAbil.Poison + clientItem.Item.Tox);
                         break;
                     case 22:
-                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
-                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + clientItem.Item.AtkSpd);
-                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
-                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
-                        aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
-                        aabil.HP = (ushort)(aabil.HP + clientItem.Item.HpAdd);
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + clientItem.Item.AtkSpd);
+                        AddAbil.Slowdown = (byte)(AddAbil.Slowdown + clientItem.Item.Slowdown);
+                        AddAbil.Poison = (byte)(AddAbil.Poison + clientItem.Item.Tox);
+                        AddAbil.HIT = (ushort)(AddAbil.HIT + clientItem.Item.Accurate);
+                        AddAbil.HP = (ushort)(AddAbil.HP + clientItem.Item.HpAdd);
                         break;
                     case 23:
-                        aabil.AntiPoison = (ushort)(aabil.AntiPoison + HUtil32.HiByte(clientItem.Item.AC));
-                        aabil.PoisonRecover = (ushort)(aabil.PoisonRecover + HUtil32.HiByte(clientItem.Item.MAC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + HUtil32.LoByte(clientItem.Item.AC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed - HUtil32.LoByte(clientItem.Item.MAC));
-                        aabil.HitSpeed = (ushort)(aabil.HitSpeed + clientItem.Item.AtkSpd);
-                        aabil.Slowdown = (byte)(aabil.Slowdown + clientItem.Item.Slowdown);
-                        aabil.Poison = (byte)(aabil.Poison + clientItem.Item.Tox);
+                        AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + HUtil32.HiByte(clientItem.Item.AC));
+                        AddAbil.PoisonRecover = (ushort)(AddAbil.PoisonRecover + HUtil32.HiByte(clientItem.Item.MAC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + HUtil32.LoByte(clientItem.Item.AC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed - HUtil32.LoByte(clientItem.Item.MAC));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + clientItem.Item.AtkSpd);
+                        AddAbil.Slowdown = (byte)(AddAbil.Slowdown + clientItem.Item.Slowdown);
+                        AddAbil.Poison = (byte)(AddAbil.Poison + clientItem.Item.Tox);
                         break;
                     case 24:
                     case 26:
                         if (clientItem.Item.SpecialPwr >= 1 && clientItem.Item.SpecialPwr <= 10)
                         {
-                            aabil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
+                            AddAbil.WeaponStrong = (byte)clientItem.Item.SpecialPwr;
                         }
                         switch (item.StdMode)
                         {
                             case 24:
-                                aabil.HIT = (ushort)(aabil.HIT + HUtil32.HiByte(clientItem.Item.AC));
-                                aabil.SPEED = (ushort)(aabil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
+                                AddAbil.HIT = (ushort)(AddAbil.HIT + HUtil32.HiByte(clientItem.Item.AC));
+                                AddAbil.SPEED = (ushort)(AddAbil.SPEED + HUtil32.HiByte(clientItem.Item.MAC));
                                 break;
                             case 26:
-                                aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
-                                aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
-                                aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
-                                aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
-                                aabil.MP = (ushort)(aabil.MP + clientItem.Item.MpAdd);
+                                AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                                AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
+                                AddAbil.HIT = (ushort)(AddAbil.HIT + clientItem.Item.Accurate);
+                                AddAbil.SPEED = (ushort)(AddAbil.SPEED + clientItem.Item.Agility);
+                                AddAbil.MP = (ushort)(AddAbil.MP + clientItem.Item.MpAdd);
                                 break;
                         }
                         break;
                     case 52:
-                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
-                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
-                        aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + clientItem.Item.Agility);
                         break;
                     case 54:
-                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
-                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
-                        aabil.HIT = (ushort)(aabil.HIT + clientItem.Item.Accurate);
-                        aabil.SPEED = (ushort)(aabil.SPEED + clientItem.Item.Agility);
-                        aabil.AntiPoison = (ushort)(aabil.AntiPoison + clientItem.Item.ToxAvoid);
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.HIT = (ushort)(AddAbil.HIT + clientItem.Item.Accurate);
+                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + clientItem.Item.Agility);
+                        AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + clientItem.Item.ToxAvoid);
                         break;
                     case 53:
-                        aabil.HP = (ushort)(aabil.HP + clientItem.Item.HpAdd);
-                        aabil.MP = (ushort)(aabil.MP + clientItem.Item.MpAdd);
+                        AddAbil.HP = (ushort)(AddAbil.HP + clientItem.Item.HpAdd);
+                        AddAbil.MP = (ushort)(AddAbil.MP + clientItem.Item.MpAdd);
                         break;
                     default:
-                        aabil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(aabil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
-                        aabil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(aabil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(clientItem.Item.AC)), (ushort)(HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(clientItem.Item.AC)));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(clientItem.Item.MAC)), (ushort)(HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(clientItem.Item.MAC)));
                         break;
                 }
-                aabil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.DC) + HUtil32.LoByte(clientItem.Item.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(aabil.DC) + HUtil32.HiByte(clientItem.Item.DC)));
-                aabil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.MC) + HUtil32.LoByte(clientItem.Item.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(aabil.MC) + HUtil32.HiByte(clientItem.Item.MC)));
-                aabil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(aabil.SC) + HUtil32.LoByte(clientItem.Item.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(aabil.SC) + HUtil32.HiByte(clientItem.Item.SC)));
+                AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(clientItem.Item.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(clientItem.Item.DC)));
+                AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(clientItem.Item.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(clientItem.Item.MC)));
+                AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(clientItem.Item.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(clientItem.Item.SC)));
             }
         }
 
-        private static void ApplyItemParametersEx(UserItem uitem, ref Ability aWabil)
+        private void ApplyItemParametersEx(UserItem uitem)
         {
             StdItem item = SystemShare.ItemSystem.GetStdItem(uitem.Index);
             if (item != null)
@@ -4612,23 +4612,23 @@ namespace M2Server.Player
                             switch (clientItem.Item.EffType1)
                             {
                                 case EfftypeConst.EFFTYPE_TWOHAND_WEHIGHT_ADD:
-                                    if ((aWabil.MaxHandWeight + clientItem.Item.EffValue1 > 255))
+                                    if ((WAbil.MaxHandWeight + clientItem.Item.EffValue1 > 255))
                                     {
-                                        aWabil.MaxHandWeight = byte.MaxValue;
+                                        WAbil.MaxHandWeight = byte.MaxValue;
                                     }
                                     else
                                     {
-                                        aWabil.MaxHandWeight = (byte)(aWabil.MaxHandWeight + clientItem.Item.EffValue1);
+                                        WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight + clientItem.Item.EffValue1);
                                     }
                                     break;
                                 case EfftypeConst.EFFTYPE_EQUIP_WHEIGHT_ADD:
-                                    if ((aWabil.MaxWearWeight + clientItem.Item.EffValue1 > 255))
+                                    if ((WAbil.MaxWearWeight + clientItem.Item.EffValue1 > 255))
                                     {
-                                        aWabil.MaxWearWeight = byte.MaxValue;
+                                        WAbil.MaxWearWeight = byte.MaxValue;
                                     }
                                     else
                                     {
-                                        aWabil.MaxWearWeight = (byte)(aWabil.MaxWearWeight + clientItem.Item.EffValue1);
+                                        WAbil.MaxWearWeight = (byte)(WAbil.MaxWearWeight + clientItem.Item.EffValue1);
                                     }
                                     break;
                             }
@@ -4638,23 +4638,23 @@ namespace M2Server.Player
                             switch (clientItem.Item.EffType2)
                             {
                                 case EfftypeConst.EFFTYPE_TWOHAND_WEHIGHT_ADD:
-                                    if ((aWabil.MaxHandWeight + clientItem.Item.EffValue2 > 255))
+                                    if ((WAbil.MaxHandWeight + clientItem.Item.EffValue2 > 255))
                                     {
-                                        aWabil.MaxHandWeight = byte.MaxValue;
+                                        WAbil.MaxHandWeight = byte.MaxValue;
                                     }
                                     else
                                     {
-                                        aWabil.MaxHandWeight = (byte)(aWabil.MaxHandWeight + clientItem.Item.EffValue2);
+                                        WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight + clientItem.Item.EffValue2);
                                     }
                                     break;
                                 case EfftypeConst.EFFTYPE_EQUIP_WHEIGHT_ADD:
-                                    if ((aWabil.MaxWearWeight + clientItem.Item.EffValue2 > 255))
+                                    if ((WAbil.MaxWearWeight + clientItem.Item.EffValue2 > 255))
                                     {
-                                        aWabil.MaxWearWeight = byte.MaxValue;
+                                        WAbil.MaxWearWeight = byte.MaxValue;
                                     }
                                     else
                                     {
-                                        aWabil.MaxWearWeight = (byte)(aWabil.MaxWearWeight + clientItem.Item.EffValue2);
+                                        WAbil.MaxWearWeight = (byte)(WAbil.MaxWearWeight + clientItem.Item.EffValue2);
                                     }
                                     break;
                             }
@@ -4666,13 +4666,13 @@ namespace M2Server.Player
                             switch (clientItem.Item.EffType1)
                             {
                                 case EfftypeConst.EFFTYPE_BAG_WHIGHT_ADD:
-                                    if ((aWabil.MaxWeight + clientItem.Item.EffValue1 > 65000))
+                                    if ((WAbil.MaxWeight + clientItem.Item.EffValue1 > 65000))
                                     {
-                                        aWabil.MaxWeight = 65000;
+                                        WAbil.MaxWeight = 65000;
                                     }
                                     else
                                     {
-                                        aWabil.MaxWeight = (ushort)(aWabil.MaxWeight + clientItem.Item.EffValue1);
+                                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + clientItem.Item.EffValue1);
                                     }
                                     break;
                             }
@@ -4682,13 +4682,13 @@ namespace M2Server.Player
                             switch (clientItem.Item.EffType2)
                             {
                                 case EfftypeConst.EFFTYPE_BAG_WHIGHT_ADD:
-                                    if ((aWabil.MaxWeight + clientItem.Item.EffValue2 > 65000))
+                                    if ((WAbil.MaxWeight + clientItem.Item.EffValue2 > 65000))
                                     {
-                                        aWabil.MaxWeight = 65000;
+                                        WAbil.MaxWeight = 65000;
                                     }
                                     else
                                     {
-                                        aWabil.MaxWeight = (ushort)(aWabil.MaxWeight + clientItem.Item.EffValue2);
+                                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + clientItem.Item.EffValue2);
                                     }
                                     break;
                             }
