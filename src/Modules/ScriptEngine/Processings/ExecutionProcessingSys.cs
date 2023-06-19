@@ -2152,7 +2152,7 @@ namespace ScriptSystem
                 for (int k = 0; k < list58.Count; k++)
                 {
                     list58[k].NoItem = true;
-                    list58[k].WAbil.HP = 0;
+                    //list58[k].WAbil.HP = 0;
                     list58[k].MakeGhost();
                 }
                 list58.Clear();
@@ -2245,7 +2245,7 @@ namespace ScriptSystem
             {
                 for (int i = 0; i < playerActor.SlaveList.Count; i++)
                 {
-                    playerActor.SlaveList[i].WAbil.HP = 0;
+                    //playerActor.SlaveList[i].WAbil.HP = 0;
                 }
                 return;
             }
@@ -2254,7 +2254,7 @@ namespace ScriptSystem
                 IActor baseObject = playerActor.SlaveList[i];
                 if (!baseObject.Death && (string.Compare(sSlaveName, baseObject.ChrName, StringComparison.OrdinalIgnoreCase) == 0))
                 {
-                    baseObject.WAbil.HP = 0;
+                    //baseObject.WAbil.HP = 0;
                 }
             }
         }
@@ -2802,22 +2802,23 @@ namespace ScriptSystem
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
+            var abil = playerActor.Abil;
             switch (cMethod)
             {
                 case '=':
                     if (nExp > 0)
                     {
-                        playerActor.Abil.Exp = nExp;
+                        abil.Exp = nExp;
                     }
                     break;
                 case '-':
                     if (playerActor.Abil.Exp > nExp)
                     {
-                        playerActor.Abil.Exp -= nExp;
+                        abil.Exp -= nExp;
                     }
                     else
                     {
-                        playerActor.Abil.Exp = 0;
+                        abil.Exp = 0;
                     }
                     break;
                 case '+':
@@ -2843,7 +2844,8 @@ namespace ScriptSystem
                             dwInt = nExp;
                         }
                     }
-                    playerActor.Abil.Exp += dwInt;
+                    abil.Exp += dwInt;
+                    playerActor.Abil = abil;
                     //playerActor.GetExp(dwInt);
                     playerActor.SendMsg(playerActor, Messages.RM_WINEXP, 0, dwInt, 0, 0);
                     break;
@@ -2903,28 +2905,30 @@ namespace ScriptSystem
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
+            var abil = playerActor.Abil;
             switch (cMethod)
             {
                 case '=':
                     if (nLevel > 0 && nLevel <= Grobal2.MaxLevel)
                     {
-                        playerActor.Abil.Level = (byte)nLevel;
+                        abil.Level = (byte)nLevel;
                         boChgOk = true;
                     }
                     break;
                 case '-':
                     nLv = HUtil32._MAX(0, playerActor.Abil.Level - nLevel);
                     nLv = HUtil32._MIN(Grobal2.MaxLevel, nLv);
-                    playerActor.Abil.Level = (byte)nLv;
+                    abil.Level = (byte)nLv;
                     boChgOk = true;
                     break;
                 case '+':
                     nLv = HUtil32._MAX(0, playerActor.Abil.Level + nLevel);
                     nLv = HUtil32._MIN(Grobal2.MaxLevel, nLv);
-                    playerActor.Abil.Level = (byte)nLv;
+                    abil.Level = (byte)nLv;
                     boChgOk = true;
                     break;
             }
+            playerActor.Abil = abil;
             if (boChgOk)
             {
                 playerActor.HasLevelUp(nOldLevel);
@@ -2981,7 +2985,7 @@ namespace ScriptSystem
                     continue;
                 }
                 mon.NoItem = true;
-                mon.WAbil.HP = 0;
+                //mon.WAbil.HP = 0;
                 mon.MakeGhost();
             }
         }
@@ -5176,29 +5180,31 @@ namespace ScriptSystem
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
+            var abil = playerActor.Abil;
             switch (cMethod)
             {
                 case '=':
-                    playerActor.WAbil.HP = (ushort)nHp;
+                    abil.HP = (ushort)nHp;
                     break;
                 case '-':
                     if (playerActor.WAbil.HP >= nHp)
                     {
-                        playerActor.WAbil.HP -= (ushort)nHp;
+                        abil.HP -= (ushort)nHp;
                     }
                     else
                     {
-                        playerActor.WAbil.HP = 0;
+                        abil.HP = 0;
                     }
                     break;
                 case '+':
-                    playerActor.WAbil.HP += (ushort)nHp;
+                    abil.HP += (ushort)nHp;
                     if (playerActor.WAbil.HP > playerActor.WAbil.MaxHP)
                     {
-                        playerActor.WAbil.HP = playerActor.WAbil.MaxHP;
+                        abil.HP = playerActor.WAbil.MaxHP;
                     }
                     break;
             }
+            playerActor.Abil = abil;
             if (SystemShare.Config.ShowScriptActionMsg)
             {
                 playerActor.SysMsg(string.Format(Settings.ScriptChangeHumanHPMsg, playerActor.WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
@@ -5214,29 +5220,31 @@ namespace ScriptSystem
                 return;
             }
             var cMethod = questActionInfo.sParam1[0];
+            var abil = playerActor.Abil;
             switch (cMethod)
             {
                 case '=':
-                    playerActor.WAbil.MP = (ushort)nMp;
+                    abil.MP = (ushort)nMp;
                     break;
                 case '-':
                     if (playerActor.WAbil.MP >= nMp)
                     {
-                        playerActor.WAbil.MP -= (ushort)nMp;
+                        abil.MP -= (ushort)nMp;
                     }
                     else
                     {
-                        playerActor.WAbil.MP = 0;
+                        abil.MP = 0;
                     }
                     break;
                 case '+':
-                    playerActor.WAbil.MP += (ushort)nMp;
+                    abil.MP += (ushort)nMp;
                     if (playerActor.WAbil.MP > playerActor.WAbil.MaxMP)
                     {
-                        playerActor.WAbil.MP = playerActor.WAbil.MaxMP;
+                        abil.MP = playerActor.WAbil.MaxMP;
                     }
                     break;
             }
+            playerActor.Abil = abil;
             if (SystemShare.Config.ShowScriptActionMsg)
             {
                 playerActor.SysMsg(string.Format(Settings.ScriptChangeHumanMPMsg, new[] { playerActor.WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
@@ -5393,11 +5401,11 @@ namespace ScriptSystem
                 playerActor.ReLevel += nReLevel;
                 if (nLevel > 0)
                 {
-                    playerActor.Abil.Level = nLevel;
+                   // playerActor.Abil.Level = nLevel;
                 }
                 if (SystemShare.Config.ReNewLevelClearExp)
                 {
-                    playerActor.Abil.Exp = 0;
+                  //  playerActor.Abil.Exp = 0;
                 }
                 playerActor.BonusPoint += nBounsuPoint;
                 playerActor.SendMsg(Messages.RM_ADJUST_BONUS, 0, 0, 0, 0);
@@ -5423,7 +5431,7 @@ namespace ScriptSystem
             for (var i = 0; i < playerActor.SlaveList.Count; i++)
             {
                 var slave = playerActor.SlaveList[i];
-                slave.WAbil.HP = 0;
+                //slave.WAbil.HP = 0;
             }
         }
 

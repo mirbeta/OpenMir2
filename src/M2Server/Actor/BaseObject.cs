@@ -53,11 +53,25 @@ namespace M2Server.Actor
         /// <summary>
         /// 基本属性
         /// </summary>
-        public Ability Abil { get; set; }
+        private Ability _Abil;
+        
+        public Ability Abil 
+        {
+            get { return _Abil; }
+            set { _Abil = value; }
+        }
+
         /// <summary>
         /// 属性
         /// </summary>
-        public Ability WAbil { get; set; }
+        private Ability _WAbil;
+        
+        public Ability WAbil 
+        {
+            get { return _WAbil; }
+            set { _WAbil = value; }
+        }
+        
         /// <summary>
         /// 附加属性
         /// </summary>

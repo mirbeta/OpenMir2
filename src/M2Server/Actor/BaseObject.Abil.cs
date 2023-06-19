@@ -1,6 +1,7 @@
 ﻿using M2Server.Monster;
 using SystemModule;
 using SystemModule.Consts;
+using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
@@ -13,7 +14,7 @@ namespace M2Server.Actor
         /// </summary>
         public virtual void RecalcAbilitys()
         {
-            AddAbil = default;
+            AddAbil = new AddAbility();
             Ability temp = WAbil;
             WAbil = (Ability)Abil.Clone();
             WAbil.HP = temp.HP;
