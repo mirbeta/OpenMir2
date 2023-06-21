@@ -696,7 +696,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        protected void HealthSpellChanged()
+        public void HealthSpellChanged()
         {
             if (Race == ActorRace.Play)
             {
@@ -771,7 +771,7 @@ namespace M2Server.Actor
         /// 减少生命值
         /// </summary>
         /// <param name="nDamage"></param>
-        internal void DamageHealth(int nDamage)
+        public void DamageHealth(int nDamage)
         {
             if ((LastHiter == null) || ((LastHiter.Race == ActorRace.Play) && !((IPlayerActor)LastHiter).UnMagicShield))
             {

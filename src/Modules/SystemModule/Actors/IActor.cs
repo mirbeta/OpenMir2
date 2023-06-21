@@ -383,6 +383,14 @@ namespace SystemModule
 
         void SendUpdateMsg(int wIdent, int wParam, int lParam1, int lParam2, int lParam3, string sMsg);
 
+        int GetCharStatus();
+
+        void StatusChanged();
+
+        void DamageHealth(int nDamage);
+
+        void HealthSpellChanged();
+
         bool IsProperTarget(IActor actor);
 
         bool InSafeZone();
