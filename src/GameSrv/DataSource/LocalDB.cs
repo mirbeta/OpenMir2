@@ -535,9 +535,9 @@ namespace GameSrv.DataSource
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MapName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.X = HUtil32.StrToInt(sData, 0);
+                        monGenInfo.X = (short) HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.Y = HUtil32.StrToInt(sData, 0);
+                        monGenInfo.Y = (short) HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, _textSpitConst);
                         if (!string.IsNullOrEmpty(sData) && sData[0] == '\"')
                         {
@@ -545,13 +545,13 @@ namespace GameSrv.DataSource
                         }
                         monGenInfo.MonName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.Range = HUtil32.StrToInt(sData, 0);
+                        monGenInfo.Range = (byte) HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.Count = HUtil32.StrToInt(sData, 0);
+                        monGenInfo.Count = (ushort) HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.MissionGenRate = HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
+                        monGenInfo.MissionGenRate = (byte) HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
                         if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
                         {
                             monGenInfo.CertList = new List<IMonsterActor>();

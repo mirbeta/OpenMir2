@@ -101,8 +101,8 @@ namespace GameSrv
             SystemShare.MapMgr = new MapManager();
             SystemShare.EventMgr = new EventManager();
             SystemShare.Mediator = serviceProvider.GetService<IMediator>();
-            SystemShare.ServiceProvider = serviceProvider;
             SystemShare.WorldEngine = new WorldServer();
+            SystemShare.ServiceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -260,10 +260,9 @@ namespace GameSrv
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();
                 GameShare.DataServer.Start();
-                // GameShare.MarketService.Start();
-                M2Share.StartReady = true;
                 SystemShare.WorldEngine.Initialize();
                 M2Share.AutoBot.Initialize();
+                M2Share.StartReady = true;
                 _logger.Info("游戏处理引擎初始化成功...");
             }
             catch (Exception ex)

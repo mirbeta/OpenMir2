@@ -6,8 +6,8 @@
     public class MonGenInfo
     {
         public string MapName;
-        public int X;
-        public int Y;
+        public short X;
+        public short Y;
         /// <summary>
         /// 怪物名称
         /// </summary>
@@ -15,33 +15,28 @@
         /// <summary>
         /// 范围
         /// </summary>
-        public int Range;
+        public byte Range;
         /// <summary>
         /// 刷新数量
         /// </summary>
-        public int Count;
-        public int ActiveCount;
+        public ushort Count;
+        public ushort ActiveCount;
         /// <summary>
         /// 刷新时间
         /// </summary>
         public int ZenTime;
-        public int MissionGenRate;
+        public byte MissionGenRate;
         /// <summary>
         /// 对象列表
         /// </summary>
         public IList<IMonsterActor> CertList;
-        public int CertCount;
         public IEnvirnoment Envir;
-        public int Race;
+        public short Race;
         /// <summary>
         /// 创建时间
         /// </summary>
         public int StartTick;
-        /// <summary>
-        /// 死亡释放
-        /// </summary>
-        public bool DeathRelease;
-
+        
         /// <summary>
         /// 添加对象到列表
         /// 返回true则当前线程怪物列表未满

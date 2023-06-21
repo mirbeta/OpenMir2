@@ -111,7 +111,7 @@ namespace GameSrv.Word
                         {
                             continue;
                         }
-                        MonGenInfoThreadMap[i][j].Race = GetMonRace(MonGenInfoThreadMap[i][j].MonName);
+                        MonGenInfoThreadMap[i][j].Race = (short) GetMonRace(MonGenInfoThreadMap[i][j].MonName);
                     }
                 }
             }
@@ -320,7 +320,7 @@ namespace GameSrv.Word
                                     if ((HUtil32.GetTickCount() - monster.GhostTick) > 5 * 60 * 1000)
                                     {
                                         monGen.CertList.RemoveAt(processPosition);
-                                        monGen.CertCount--;
+                                        //monGen.CertCount--;
                                         monster = null;
                                         continue;
                                     }
@@ -396,7 +396,7 @@ namespace GameSrv.Word
                     MonGenInfo.Envir = SystemShare.MapMgr.FindMap(MonGenInfo.MapName);
                     if (MonGenInfo.TryAdd(baseObject))
                     {
-                        MonGenInfo.CertCount++;
+                        //MonGenInfo.CertCount++;
                     }
                     MonGenInfoThreadMap[threadId].Add(MonGenInfo);
 
@@ -433,13 +433,14 @@ namespace GameSrv.Word
         /// <returns></returns>
         private void MonGetRandomItems(IMonsterActor mon)
         {
+            return;
             var itemName = string.Empty;
             if (MonsterList.TryGetValue(mon.ChrName, out var monster))
             {
                 IList<MonsterDropItem> itemList = monster.ItemList;
                 if (itemList != null && itemList.Count > 0)
                 {
-                    mon.ItemList = new List<UserItem>();
+                    mon.ItemList = new List<UserItem>(itemList.Count);
                     for (var i = 0; i < itemList.Count; i++)
                     {
                         var monItem = itemList[i];
