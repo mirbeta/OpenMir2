@@ -74,10 +74,6 @@ namespace M2Server.Actor
         /// </summary>
         public ushort[] StatusTimeArr { get; set; }
         /// <summary>
-        /// 状态持续的开始时间
-        /// </summary>
-        public int[] StatusArrTick { get; set; }
-        /// <summary>
         /// 防麻痹
         /// </summary>
         public bool UnParalysis { get; set; }
@@ -390,7 +386,6 @@ namespace M2Server.Actor
             CharStatus = 0;
             CharStatusEx = 0;
             StatusTimeArr = new ushort[15];
-            StatusArrTick = new int[15];
             SuperMan = false;
             Skeleton = false;
             RushMode = false;
@@ -1946,18 +1941,19 @@ namespace M2Server.Actor
             if (nType >= Grobal2.MAX_STATUS_ATTRIBUTE)
                 return false;
             int nOldCharStatus = CharStatus;
-            if (StatusTimeArr[nType] > 0)
-            {
-                if (StatusTimeArr[nType] < nTime)
-                {
-                    StatusTimeArr[nType] = nTime;
-                }
-            }
-            else
-            {
-                StatusTimeArr[nType] = nTime;
-            }
-            StatusArrTick[nType] = HUtil32.GetTickCount();
+            M2Share.ActorBuffSystem.AddBuff(this, (BuffStateType)nType, nTime, nPoint);
+            //if (StatusTimeArr[nType] > 0)
+            //{
+            //    if (StatusTimeArr[nType] < nTime)
+            //    {
+            //        StatusTimeArr[nType] = nTime;
+            //    }
+            //}
+            //else
+            //{
+            //    StatusTimeArr[nType] = nTime;
+            //}
+            //StatusArrTick[nType] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
             GreenPoisoningPoint = (byte)HUtil32._MAX(255, nPoint);
             if (nOldCharStatus != CharStatus)
@@ -2135,48 +2131,49 @@ namespace M2Server.Actor
 
         public bool DefenceUp(int nSec)
         {
-            bool result = false;
-            if (StatusTimeArr[PoisonState.DefenceUP] > 0)
-            {
-                if (StatusTimeArr[PoisonState.DefenceUP] < nSec)
-                {
-                    StatusTimeArr[PoisonState.DefenceUP] = (ushort)nSec;
-                    result = true;
-                }
-            }
-            else
-            {
-                StatusTimeArr[PoisonState.DefenceUP] = (ushort)nSec;
-                result = true;
-            }
-            StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
+            M2Share.ActorBuffSystem.AddBuff(this, BuffStateType.DefensePower, nSec, nSec);
+            //if (StatusTimeArr[PoisonState.DefenceUP] > 0)
+            //{
+            //    if (StatusTimeArr[PoisonState.DefenceUP] < nSec)
+            //    {
+            //        StatusTimeArr[PoisonState.DefenceUP] = (ushort)nSec;
+            //        result = true;
+            //    }
+            //}
+            //else
+            //{
+            //    StatusTimeArr[PoisonState.DefenceUP] = (ushort)nSec;
+            //    result = true;
+            //}
+            //StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
-            return result;
+            return true;
         }
 
         public bool MagDefenceUp(int nSec)
         {
-            bool result = false;
-            if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
-            {
-                if (StatusTimeArr[PoisonState.MagDefenceUP] < nSec)
-                {
-                    StatusTimeArr[PoisonState.MagDefenceUP] = (ushort)nSec;
-                    result = true;
-                }
-            }
-            else
-            {
-                StatusTimeArr[PoisonState.MagDefenceUP] = (ushort)nSec;
-                result = true;
-            }
-            StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();
+            //bool result = false;
+            M2Share.ActorBuffSystem.AddBuff(this, BuffStateType.MagicDefensePower, nSec, nSec);
+            //if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
+            //{
+            //    if (StatusTimeArr[PoisonState.MagDefenceUP] < nSec)
+            //    {
+            //        StatusTimeArr[PoisonState.MagDefenceUP] = (ushort)nSec;
+            //        result = true;
+            //    }
+            //}
+            //else
+            //{
+            //    StatusTimeArr[PoisonState.MagDefenceUP] = (ushort)nSec;
+            //    result = true;
+            //}
+            //StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();
             SysMsg(Format(Settings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
-            return result;
+            return true;
         }
 
         public UserItem CheckItems(string sItemName)

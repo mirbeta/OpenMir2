@@ -242,75 +242,76 @@ namespace M2Server.Actor
                     HealthSpellChanged();
                 }
             }
-            bool boChg = false;
-            var boNeedRecalc = false;
-            for (int i = 0; i < StatusArrTick.Length; i++)
-            {
-                if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
-                {
-                    if ((HUtil32.GetTickCount() - StatusArrTick[i]) > 1000)
-                    {
-                        StatusTimeArr[i] -= 1;
-                        StatusArrTick[i] += 1000;
-                        if (StatusTimeArr[i] == 0)
-                        {
-                            boChg = true;
-                            switch (i)
-                            {
-                                case PoisonState.DefenceUP:
-                                    boNeedRecalc = true;
-                                    SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case PoisonState.MagDefenceUP:
-                                    boNeedRecalc = true;
-                                    SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
-                                    break;
-                                case PoisonState.STATETRANSPARENT:
-                                    HideMode = false;
-                                    break;
-                            }
-                        }
-                        else if (StatusTimeArr[i] == 10)
-                        {
-                            if (i == PoisonState.DefenceUP)
-                            {
-                                SysMsg($"防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                break;
-                            }
-                            if (i == PoisonState.MagDefenceUP)
-                            {
-                                SysMsg($"魔法防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-            if (boChg)
-            {
-                CharStatus = GetCharStatus();
-                StatusChanged();
-            }
-            if (boNeedRecalc)
-            {
-                RecalcAbilitys();
-                SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
-            }
-            if ((HUtil32.GetTickCount() - PoisoningTick) > SystemShare.Config.PosionDecHealthTime)
-            {
-                PoisoningTick = HUtil32.GetTickCount();
-                if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
-                {
-                    if (Animal)
-                    {
-                        ((AnimalObject)this).MeatQuality -= 1000;
-                    }
-                    DamageHealth(GreenPoisoningPoint + 1);
-                    HealthTick = 0;
-                    SpellTick = 0;
-                    HealthSpellChanged();
-                }
-            }
+            M2Share.ActorBuffSystem.Operate(this);
+            //bool boChg = false;
+            //var boNeedRecalc = false;
+            //for (int i = 0; i < StatusArrTick.Length; i++)
+            //{
+            //    if ((StatusTimeArr[i] > 0) && (StatusTimeArr[i] < 60000))
+            //    {
+            //        if ((HUtil32.GetTickCount() - StatusArrTick[i]) > 1000)
+            //        {
+            //            StatusTimeArr[i] -= 1;
+            //            StatusArrTick[i] += 1000;
+            //            if (StatusTimeArr[i] == 0)
+            //            {
+            //                boChg = true;
+            //                switch (i)
+            //                {
+            //                    case PoisonState.DefenceUP:
+            //                        boNeedRecalc = true;
+            //                        SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
+            //                        break;
+            //                    case PoisonState.MagDefenceUP:
+            //                        boNeedRecalc = true;
+            //                        SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
+            //                        break;
+            //                    case PoisonState.STATETRANSPARENT:
+            //                        HideMode = false;
+            //                        break;
+            //                }
+            //            }
+            //            else if (StatusTimeArr[i] == 10)
+            //            {
+            //                if (i == PoisonState.DefenceUP)
+            //                {
+            //                    SysMsg($"防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+            //                    break;
+            //                }
+            //                if (i == PoisonState.MagDefenceUP)
+            //                {
+            //                    SysMsg($"魔法防御力{StatusTimeArr[i]}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+            //                    break;
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
+            //if (boChg)
+            //{
+            //    CharStatus = GetCharStatus();
+            //    StatusChanged();
+            //}
+            //if (boNeedRecalc)
+            //{
+            //    RecalcAbilitys();
+            //    SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
+            //}
+            //if ((HUtil32.GetTickCount() - PoisoningTick) > SystemShare.Config.PosionDecHealthTime)
+            //{
+            //    PoisoningTick = HUtil32.GetTickCount();
+            //    if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
+            //    {
+            //        if (Animal)
+            //        {
+            //            ((AnimalObject)this).MeatQuality -= 1000;
+            //        }
+            //        DamageHealth(GreenPoisoningPoint + 1);
+            //        HealthTick = 0;
+            //        SpellTick = 0;
+            //        HealthSpellChanged();
+            //    }
+            //}
         }
 
         public virtual void Die()

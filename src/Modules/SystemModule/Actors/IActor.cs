@@ -68,10 +68,6 @@ namespace SystemModule
         /// </summary>
         ushort[] StatusTimeArr { get; set; }
         /// <summary>
-        /// 状态持续的开始时间
-        /// </summary>
-        int[] StatusArrTick { get; set; }
-        /// <summary>
         /// 防麻痹
         /// </summary>
         bool UnParalysis { get; set; }

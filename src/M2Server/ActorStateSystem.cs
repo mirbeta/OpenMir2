@@ -31,6 +31,18 @@ namespace M2Server
 
         public void AddBuff(IActor actor, BuffStateType buffType, int duraTime, int stateval)
         {
+            //if (StatusTimeArr[nType] > 0)
+            //{
+            //    if (StatusTimeArr[nType] < nTime)
+            //    {
+            //        StatusTimeArr[nType] = nTime;
+            //    }
+            //}
+            //else
+            //{
+            //    StatusTimeArr[nType] = nTime;
+            //}
+
             if (ActorBuffMap.TryGetValue(actor.ActorId, out var buffs))
             {
                 buffs.Add(new ActorBuffState()
@@ -62,51 +74,49 @@ namespace M2Server
         {
             bool boChg = false;
             var boNeedRecalc = false;
-            for (int i = 0; i < ActorBuffs.Count; i++)
+            //for (int i = 0; i < ActorBuffs.Count; i++)
+            //{
+            if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs))
             {
-                if (ActorBuffMap.TryGetValue(ActorBuffs[i], out var actorBuffs))
+                for (int i = 0; i < actorBuffs.Count; i++)
                 {
-                    for (int j = 0; j < actorBuffs.Count; j++)
+                    if ((actorBuffs[i].StateTick > 0) && (actorBuffs[i].StateTick < 60000))
                     {
-                        if ((actorBuffs[i].StateTick > 0) && (actorBuffs[i].StateTick < 60000))
+                        if ((HUtil32.GetTickCount() - actorBuffs[i].StatusArrTick) > 1000)
                         {
-                            if ((HUtil32.GetTickCount() - actorBuffs[i].StatusArrTick) > 1000)
+                            actorBuffs[i].StateTick -= 1;
+                            actorBuffs[i].StatusArrTick += 1000;
+                            if (actor.Race == ActorRace.Play)
                             {
-                                actorBuffs[i].StateTick -= 1;
-                                actorBuffs[i].StatusArrTick += 1000;
-                                if (actor.Race == ActorRace.Play)
+                                if (actorBuffs[i].StateTick == 0)
                                 {
-                                    if (actorBuffs[i].StateTick == 0)
+                                    boChg = true;
+                                    switch (i)
                                     {
-                                        boChg = true;
-                                        switch (i)
-                                        {
-                                            case PoisonState.DefenceUP:
-                                                boNeedRecalc = true;
-                                                ((IPlayerActor)actor).SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
-                                                break;
-                                            case PoisonState.MagDefenceUP:
-                                                boNeedRecalc = true;
-                                                ((IPlayerActor)actor).SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
-                                                break;
-                                            case PoisonState.STATETRANSPARENT:
-                                                actor.HideMode = false;
-                                                break;
-                                        }
+                                        case PoisonState.DefenceUP:
+                                            boNeedRecalc = true;
+                                            ((IPlayerActor)actor).SysMsg("防御力回复正常.", MsgColor.Green, MsgType.Hint);
+                                            break;
+                                        case PoisonState.MagDefenceUP:
+                                            boNeedRecalc = true;
+                                            ((IPlayerActor)actor).SysMsg("魔法防御力回复正常.", MsgColor.Green, MsgType.Hint);
+                                            break;
+                                        case PoisonState.STATETRANSPARENT:
+                                            actor.HideMode = false;
+                                            break;
                                     }
-                                    else if (actorBuffs[i].StateTick == 10)
+                                }
+                                else if (actorBuffs[i].StateTick == 10)
+                                {
+                                    if (actorBuffs[i].StateType == BuffStateType.DefensePower)
                                     {
-                                        if (i == PoisonState.DefenceUP)
-                                        {
-                                            ((IPlayerActor)actor).SysMsg($"防御力{actorBuffs[i].StateTick}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                            break;
-                                        }
-
-                                        if (i == PoisonState.MagDefenceUP)
-                                        {
-                                            ((IPlayerActor)actor).SysMsg($"魔法防御力{actorBuffs[i].StateTick}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
-                                            break;
-                                        }
+                                        ((IPlayerActor)actor).SysMsg($"防御力{actorBuffs[i].StateTick}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                        break;
+                                    }
+                                    if (actorBuffs[i].StateType == BuffStateType.MagicDefensePower)
+                                    {
+                                        ((IPlayerActor)actor).SysMsg($"魔法防御力{actorBuffs[i].StateTick}秒后恢复正常。", MsgColor.Green, MsgType.Hint);
+                                        break;
                                     }
                                 }
                             }
@@ -114,6 +124,7 @@ namespace M2Server
                     }
                 }
             }
+            //}
 
             if (boChg)
             {
@@ -131,14 +142,14 @@ namespace M2Server
             {
                 actor.PoisoningTick = HUtil32.GetTickCount();
 
-                if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs))
+                if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuff))
                 {
-                    for (int i = 0; i < ActorBuffs.Count; i++)
+                    for (int i = 0; i < actorBuff.Count; i++)
                     {
-                        if (actorBuffs[i].StateType == BuffStateType.GreenPoison)
+                        if (actorBuff[i].StateType == BuffStateType.GreenPoison)
                         {
                             //if (StatusTimeArr[PoisonState.DECHEALTH] > 0)
-                            if (actorBuffs[i].StateVal > 0)
+                            if (actorBuff[i].StateVal > 0)
                             {
                                 if (actor.Animal)
                                 {
@@ -172,8 +183,8 @@ namespace M2Server
         }
 
         public void Remove()
-        { 
-            
+        {
+
         }
 
         public bool HasBuff()

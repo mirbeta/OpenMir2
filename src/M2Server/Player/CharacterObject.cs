@@ -98,8 +98,9 @@ namespace M2Server.Player
                 return false;
             }
             int nOldStatus = CharStatus;
-            StatusTimeArr[PoisonState.BubbleDefenceUP] = nSec;
-            StatusArrTick[PoisonState.BubbleDefenceUP] = HUtil32.GetTickCount();
+            M2Share.ActorBuffSystem.AddBuff(this, BuffStateType.MagicShield, nSec, nSec);
+            //StatusTimeArr[PoisonState.BubbleDefenceUP] = nSec;
+            //StatusArrTick[PoisonState.BubbleDefenceUP] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
             if (nOldStatus != CharStatus)
             {

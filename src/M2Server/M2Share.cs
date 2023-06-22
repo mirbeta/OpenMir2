@@ -55,6 +55,7 @@ namespace M2Server
         /// </summary>
         public static readonly CellObjectMgr CellObjectMgr;
         public static readonly RandomNumber RandomNumber;
+        public static ActorStateSystem ActorBuffSystem;
         public static ICustomItemSystem CustomItemMgr;
         public static INoticeSystem NoticeMgr;
         public static NetworkMonitor NetworkMonitor;
@@ -195,6 +196,7 @@ namespace M2Server
             NoticeMgr = new NoticeManager();
             ScriptParsers = new ScriptParsers();
             NetChannel = new TCPNetChannel();
+            ActorBuffSystem = new ActorStateSystem();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 

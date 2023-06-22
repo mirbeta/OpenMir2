@@ -1282,13 +1282,13 @@ namespace M2Server.Player
                         }
                     }
                 }
-                for (int i = 0; i < StatusArrTick.Length; i++)
-                {
-                    if (StatusTimeArr[i] > 0)
-                    {
-                        StatusArrTick[i] = HUtil32.GetTickCount();
-                    }
-                }
+                //for (int i = 0; i < StatusArrTick.Length; i++)
+                //{
+                //    if (StatusTimeArr[i] > 0)
+                //    {
+                //        StatusArrTick[i] = HUtil32.GetTickCount();
+                //    }
+                //}
                 CharStatus = GetCharStatus();
                 RecalcLevelAbilitys();
                 RecalcAbilitys();

@@ -26,7 +26,7 @@ namespace CommandSystem.Commands
             //    return;
             //}
             PlayerActor.StatusTimeArr[nType] = (ushort)(nTime * 1000);
-            PlayerActor.StatusArrTick[nType] = HUtil32.GetTickCount();
+            //PlayerActor.StatusArrTick[nType] = HUtil32.GetTickCount();
             PlayerActor.CharStatus = PlayerActor.GetCharStatus();
             PlayerActor.StatusChanged();
             PlayerActor.SysMsg(string.Format("状态编号:{0} 时间长度: {1} 秒", nType, nTime), MsgColor.Green, MsgType.Hint);
