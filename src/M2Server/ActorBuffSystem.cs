@@ -24,10 +24,35 @@ namespace M2Server
     /// <summary>
     /// 精灵状态系统
     /// </summary>
-    public class ActorStateSystem
+    public class ActorBuffSystem
     {
         private readonly Dictionary<int, IList<ActorBuffState>> ActorBuffMap = new Dictionary<int, IList<ActorBuffState>>();
+        private readonly Timer _buffTimer;
         private readonly IList<int> ActorBuffs = new List<int>();
+
+        public ActorBuffSystem()
+        {
+            _buffTimer = new Timer(DoWork, null, 500, 10000);
+        }
+
+        public void DoWork(object obj)
+        {
+            //todo 检查Buff是否到期
+            var currentTickCount = HUtil32.GetTickCount();
+            for (int i = 0; i < ActorBuffs.Count; i++)
+            {
+                if (ActorBuffMap.TryGetValue(ActorBuffs[i], out var actorBuffs))
+                {
+                    for (int j = 0; j < actorBuffs.Count; j++)
+                    {
+                        if (currentTickCount >= actorBuffs[j].DestroyTick)
+                        {
+                            actorBuffs.RemoveAt(j);
+                        }
+                    }
+                }
+            }
+        }
 
         public void AddBuff(IActor actor, BuffStateType buffType, int duraTime, int stateval)
         {
@@ -64,7 +89,7 @@ namespace M2Server
                 };
                 ActorBuffMap.Add(actor.ActorId, new List<ActorBuffState>() { buffState });
             }
-            ActorBuffs.Add(actor.ActorId);
+            //ActorBuffs.Add(actor.ActorId);
         }
 
         /// <summary>

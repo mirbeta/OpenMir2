@@ -17,23 +17,23 @@ namespace M2Server.Actor
         /// </summary>
         public string ChrName { get; set; }
         /// <summary>
-        /// 人物名字的颜色
+        /// 名字颜色
         /// </summary>        
         public byte NameColor { get; set; }
         /// <summary>
-        /// 所在座标X
+        /// 座标X
         /// </summary>
         public short CurrX { get; set; }
         /// <summary>
-        /// 所在座标Y
+        /// 座标Y
         /// </summary>
         public short CurrY { get; set; }
         /// <summary>
-        /// 所在方向
+        /// 方向
         /// </summary>
         public byte Dir { get; set; }
         /// <summary>
-        /// 所在地图名称
+        /// 地图名称
         /// </summary>
         public string MapName { get; set; }
         /// <summary>
@@ -276,7 +276,7 @@ namespace M2Server.Actor
         /// </summary>
         public int RunTime { get; set; }
         /// <summary>
-        /// 特别指定为 此类型  加血间隔
+        /// 血量恢复间隔
         /// </summary>
         public int HealthTick { get; set; }
         public int SpellTick { get; set; }
@@ -311,7 +311,7 @@ namespace M2Server.Actor
         /// </summary>
         public IList<VisibleBaseObject> VisibleActors { get; set; }
         /// <summary>
-        /// 玩家包裹物品列表或怪物物品掉落列表
+        /// 包裹物品或怪物掉落列表
         /// </summary>
         public IList<UserItem> ItemList { get; set; }
         public int SendRefMsgTick { get; set; }

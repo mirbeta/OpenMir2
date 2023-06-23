@@ -254,9 +254,9 @@ namespace GameSrv.Word
                 var dwRunTick = HUtil32.GetTickCount();
                 try
                 {
-                    var boProcessLimit = false;
-                    var dwCurrentTick = HUtil32.GetTickCount();
-                    var dwMonProcTick = HUtil32.GetTickCount();
+                    var processLimit = false;
+                    var currentTick = HUtil32.GetTickCount();
+                    var monProcTick = HUtil32.GetTickCount();
                     monsterThread.MonsterProcessCount = 0;
                     var i = 0;
                     for (i = monsterThread.MonGenListPosition; i < mongenList.Count; i++)
@@ -275,7 +275,7 @@ namespace GameSrv.Word
                             {
                                 if (!monster.Ghost)
                                 {
-                                    if ((dwCurrentTick - monster.RunTick) > monster.RunTime)
+                                    if ((currentTick - monster.RunTick) > monster.RunTime)
                                     {
                                         monster.RunTick = dwRunTick;
                                         if (monster.Death && monster.CanReAlive && monster.Invisible && (monster.MonGen != null))
@@ -297,7 +297,7 @@ namespace GameSrv.Word
                                         {
                                             if (monster.IsSlave || (monster.Race is ActorRace.Guard or ActorRace.ArcherGuard or ActorRace.SlaveMonster))// 守卫和下属主动搜索附近的精灵
                                             {
-                                                if ((dwCurrentTick - monster.SearchTick) > monster.SearchTime)
+                                                if ((currentTick - monster.SearchTick) > monster.SearchTime)
                                                 {
                                                     monster.SearchTick = HUtil32.GetTickCount();
                                                     //怪物主动搜索视觉范围，修改为人物视野被动激活，从而大幅度降低CPU使用率
@@ -327,14 +327,14 @@ namespace GameSrv.Word
                                 }
                             }
                             processPosition++;
-                            if ((HUtil32.GetTickCount() - dwMonProcTick) > M2Share.MonLimit)
+                            if ((HUtil32.GetTickCount() - monProcTick) > M2Share.MonLimit)
                             {
-                                boProcessLimit = true;
+                                processLimit = true;
                                 monsterThread.MonGenCertListPosition = processPosition;
                                 break;
                             }
                         }
-                        if (boProcessLimit) break;
+                        if (processLimit) break;
                     }
                     if (MonGenInfoThreadMap.Count <= i)
                     {
@@ -342,7 +342,7 @@ namespace GameSrv.Word
                         monsterThread.MonsterCount = monsterThread.MonsterProcessPostion;
                         monsterThread.MonsterProcessPostion = 0;
                     }
-                    monsterThread.MonGenListPosition = !boProcessLimit ? 0 : i;
+                    monsterThread.MonGenListPosition = !processLimit ? 0 : i;
                 }
                 catch (Exception e)
                 {
