@@ -242,7 +242,6 @@ namespace M2Server.Actor
                     HealthSpellChanged();
                 }
             }
-            M2Share.ActorBuffSystem.Operate(this);
             //bool boChg = false;
             //var boNeedRecalc = false;
             //for (int i = 0; i < StatusArrTick.Length; i++)

@@ -1488,14 +1488,7 @@ namespace M2Server.Actor
             //or 代表运算, 需要两个运算数，即两个数的位运算，只有其中一个是1就返回1; 都是0才返回0
             //and 表示 当对应位均为1时返回1，其余为0
             //从上面算法得到，最终 nStatus得到是1,
-            int nStatus = 0;
-            for (int i = 0; i < StatusTimeArr.Length; i++)
-            {
-                if (StatusTimeArr[i] > 0)
-                {
-                    nStatus = (int)(nStatus | (0x80000000 >> i));
-                }
-            }
+            var nStatus = M2Share.ActorBuffSystem.GetBuffStatus(this);
             return nStatus | (CharStatusEx & 0x0000FFFF);
         }
 

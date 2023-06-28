@@ -65,6 +65,7 @@ namespace GameSrv
         {
             if (!M2Share.StartReady) return;
             var currentTick = HUtil32.GetTickCount();
+            M2Share.ActorBuffSystem.DoWork(null);
             if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
             {
                 _checkIntervalTime = HUtil32.GetTickCount();
