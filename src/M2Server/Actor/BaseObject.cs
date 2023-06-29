@@ -1934,7 +1934,7 @@ namespace M2Server.Actor
             if (nType >= Grobal2.MAX_STATUS_ATTRIBUTE)
                 return false;
             int nOldCharStatus = CharStatus;
-            M2Share.ActorBuffSystem.AddBuff(this, (BuffStateType)nType, nTime, nPoint);
+            M2Share.ActorBuffSystem.AddBuff(this, (BuffType)nType, nTime, nPoint);
             //if (StatusTimeArr[nType] > 0)
             //{
             //    if (StatusTimeArr[nType] < nTime)
@@ -1948,7 +1948,7 @@ namespace M2Server.Actor
             //}
             //StatusArrTick[nType] = HUtil32.GetTickCount();
             CharStatus = GetCharStatus();
-            GreenPoisoningPoint = (byte)HUtil32._MAX(255, nPoint);
+            GreenPoisoningPoint = (byte)nPoint;
             if (nOldCharStatus != CharStatus)
             {
                 StatusChanged();
@@ -2124,7 +2124,7 @@ namespace M2Server.Actor
 
         public bool DefenceUp(int nSec)
         {
-            M2Share.ActorBuffSystem.AddBuff(this, BuffStateType.DefensePower, nSec, nSec);
+            M2Share.ActorBuffSystem.AddBuff(this, BuffType.DefensePower, nSec, nSec);
             //if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             //{
             //    if (StatusTimeArr[PoisonState.DefenceUP] < nSec)
@@ -2148,7 +2148,7 @@ namespace M2Server.Actor
         public bool MagDefenceUp(int nSec)
         {
             //bool result = false;
-            M2Share.ActorBuffSystem.AddBuff(this, BuffStateType.MagicDefensePower, nSec, nSec);
+            M2Share.ActorBuffSystem.AddBuff(this, BuffType.MagicDefensePower, nSec, nSec);
             //if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
             //{
             //    if (StatusTimeArr[PoisonState.MagDefenceUP] < nSec)

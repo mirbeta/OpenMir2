@@ -70,11 +70,11 @@ namespace M2Server.Actor
             WAbil.SC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
             if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             {
-                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + M2Share.ActorBuffSystem.GetBuff(this, BuffStateType.DefensePower)));
+                WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + M2Share.ActorBuffSystem.GetBuff(this, BuffType.DefensePower)));
             }
             if (StatusTimeArr[PoisonState.MagDefenceUP] > 0)
             {
-                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + M2Share.ActorBuffSystem.GetBuff(this, BuffStateType.MagicDefensePower)));
+                WAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.MAC) + (Abil.Level / 7) + M2Share.ActorBuffSystem.GetBuff(this, BuffType.MagicDefensePower)));
             }
             if (Race >= ActorRace.Animal)
             {
