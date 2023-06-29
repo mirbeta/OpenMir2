@@ -14,7 +14,7 @@ namespace SystemModule
 
         IPlayerActor GetPlayObject(string chrName);
 
-        IEnumerable<IPlayerActor> PlayObjects { get; }
+        IEnumerable<IPlayerActor> GetPlayObjects();
 
         int MonsterCount { get; }
 

@@ -144,7 +144,8 @@ namespace GameSrv
             if (SystemShare.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 _logger.Debug("保存玩家数据");
-                foreach (var play in SystemShare.WorldEngine.PlayObjects)
+                var playObjectList = SystemShare.WorldEngine.GetPlayObjects();
+                foreach (var play in playObjectList)
                 {
                     WorldServer.SaveHumanRcd(play);
                 }
@@ -174,11 +175,12 @@ namespace GameSrv
                 await Task.Delay(5000);//强制5秒延迟，防止玩家在倒计时结束前进入游戏
                 while (true)
                 {
+                    var playObjectList = SystemShare.WorldEngine.GetPlayObjects();
                     if (shutdownSeconds <= 0)
                     {
                         if (isTransfer)
                         {
-                            foreach (var playObject in SystemShare.WorldEngine.PlayObjects)
+                            foreach (var playObject in playObjectList)
                             {
                                 if (playObject.Ghost || playObject.Death)//死亡或者下线的玩家不进行转移
                                 {
@@ -189,7 +191,7 @@ namespace GameSrv
                         }
                         break;//转移结束后跳出循环
                     }
-                    foreach (var playObject in SystemShare.WorldEngine.PlayObjects)
+                    foreach (var playObject in playObjectList)
                     {
                         var closeMsg = isTransfer ? string.Format(CloseTransferMessgae, shutdownSeconds) : string.Format(CloseServerMessage, shutdownSeconds);
                         playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);

@@ -12,16 +12,16 @@ namespace GameSrv
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly PeriodicTimer _timer;
-        private int _checkIntervalTime;
-        private int _saveIntervalTime;
-        private int _clearIntervalTime;
-        private int _scheduledSaveIntervalTime;
-        private int _playerHighestRankTime;
+        private int CheckIntervalTime { get; set; }
+        private int SaveIntervalTime { get; set; }
+        private int ClearIntervalTime { get; set; }
+        private int ScheduledSaveIntervalTime { get; set; }
+        private int PlayerHighestRankTime { get; set; }
         /// <summary>
         /// 是否正在保存数据
         /// </summary>
-        private bool _scheduledSaveData;
-        private int SendOnlineTick = 0;
+        private bool ScheduledSaveData{ get; set; }
+        private int SendOnlineTick { get; set; }
 
         public TimedService()
         {
@@ -31,11 +31,11 @@ namespace GameSrv
         public override Task StartAsync(CancellationToken cancellationToken)
         {
             var currentTick = HUtil32.GetTickCount();
-            _checkIntervalTime = currentTick;
-            _saveIntervalTime = currentTick;
-            _clearIntervalTime = currentTick;
-            _scheduledSaveIntervalTime = currentTick;
-            _playerHighestRankTime = currentTick;
+            CheckIntervalTime = currentTick;
+            SaveIntervalTime = currentTick;
+            ClearIntervalTime = currentTick;
+            ScheduledSaveIntervalTime = currentTick;
+            PlayerHighestRankTime = currentTick;
             return base.StartAsync(cancellationToken);
         }
 
@@ -65,35 +65,34 @@ namespace GameSrv
         {
             if (!M2Share.StartReady) return;
             var currentTick = HUtil32.GetTickCount();
-            M2Share.ActorBuffSystem.DoWork(null);
-            if ((currentTick - _checkIntervalTime) > 10 * 1000) //10s一次检查链接
+            if ((currentTick - CheckIntervalTime) > 10 * 1000) //10s一次检查链接
             {
-                _checkIntervalTime = HUtil32.GetTickCount();
+                CheckIntervalTime = HUtil32.GetTickCount();
                 GameShare.DataServer.CheckConnected();
                 M2Share.LoginSession.CheckConnected();
                 PlanesClient.Instance.CheckConnected();
                 //await GameShare.ChatService.Ping();
             }
-            if ((currentTick - _saveIntervalTime) > 60 * 1000) //保存游戏变量等
+            if ((currentTick - SaveIntervalTime) > 60 * 1000) //保存游戏变量等
             {
-                _saveIntervalTime = HUtil32.GetTickCount();
+                SaveIntervalTime = HUtil32.GetTickCount();
                 SaveItemNumber();
                 ProcessGameNotice();
             }
-            if ((currentTick - _clearIntervalTime) > 60 * 10000) //定时清理游戏对象
+            if ((currentTick - ClearIntervalTime) > 60 * 10000) //定时清理游戏对象
             {
-                _clearIntervalTime = HUtil32.GetTickCount();
+                ClearIntervalTime = HUtil32.GetTickCount();
                 GameShare.Statistics.ShowServerStatus();
                 SystemShare.ActorMgr.CleanObject();
             }
-            if ((currentTick - _playerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
+            if ((currentTick - PlayerHighestRankTime) > 60 * 1000) //定时更新玩家最高属性排行榜
             {
-                _playerHighestRankTime = HUtil32.GetTickCount();
+                PlayerHighestRankTime = HUtil32.GetTickCount();
                 PlayerHighestRank();
             }
-            if (currentTick - _scheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
+            if (currentTick - ScheduledSaveIntervalTime > 60 * 10000) //定时保存玩家数据
             {
-                _scheduledSaveIntervalTime = HUtil32.GetTickCount();
+                ScheduledSaveIntervalTime = HUtil32.GetTickCount();
                 TimingSaveData();
             }
         }
@@ -225,15 +224,15 @@ namespace GameSrv
 
         private void TimingSaveData()
         {
-            if (_scheduledSaveData)
+            if (ScheduledSaveData)
             {
                 return;
             }
             _logger.Debug("定时保存角色数据");
             if (SystemShare.WorldEngine.PlayObjectCount > 0)
             {
-                _scheduledSaveData = true;
-                foreach (var play in SystemShare.WorldEngine.PlayObjects)
+                ScheduledSaveData = true;
+                foreach (var play in SystemShare.WorldEngine.GetPlayObjects())
                 {
                     if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
                     {
@@ -241,7 +240,7 @@ namespace GameSrv
                     }
                     WorldServer.SaveHumanRcd(play);
                 }
-                _scheduledSaveData = false;
+                ScheduledSaveData = false;
             }
             _logger.Debug("定时保存角色数据完毕.");
         }

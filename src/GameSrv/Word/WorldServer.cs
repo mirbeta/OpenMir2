@@ -103,6 +103,12 @@ namespace GameSrv.Word
         public int OfflinePlayCount => 0;
         public int LoadPlayCount => GetLoadPlayCount();
         public IEnumerable<IPlayerActor> PlayObjects { get { return PlayObjectList; } }
+
+        public IEnumerable<IPlayerActor> GetPlayObjects()
+        {
+            return PlayObjects;
+        }
+
         public int MonsterCount { get { return MonsterList.Count; } }
         public int MagicCount { get { return MagicList.Count; } }
         public int MonGenCount => MonGenList.Sum(x => x.Count);
