@@ -433,7 +433,6 @@ namespace GameSrv.Word
         /// <returns></returns>
         private void MonGetRandomItems(IMonsterActor mon)
         {
-            return;
             var itemName = string.Empty;
             if (MonsterList.TryGetValue(mon.ChrName, out var monster))
             {
@@ -835,34 +834,34 @@ namespace GameSrv.Word
             return result;
         }
 
-        private void ApplyMonsterAbility(IMonsterActor baseObject, string sMonName)
+        private void ApplyMonsterAbility(IMonsterActor monsterActor, string sMonName)
         {
             if (!MonsterList.TryGetValue(sMonName, out var monster)) return;
-            baseObject.Race = monster.Race;
-            baseObject.RaceImg = monster.RaceImg;
-            baseObject.Appr = monster.Appr;
-            baseObject.Abil.Level = monster.Level;
-            baseObject.LifeAttrib = monster.btLifeAttrib;
-            baseObject.CoolEyeCode = monster.CoolEye;
-            baseObject.FightExp = monster.Exp;
-            baseObject.Abil.HP = monster.HP;
-            baseObject.Abil.MaxHP = monster.HP;
-            baseObject.Abil.MP = 0;
-            baseObject.Abil.MaxMP = monster.MP;
-            baseObject.Abil.AC = HUtil32.MakeWord(monster.AC, monster.AC);
-            baseObject.Abil.MAC = HUtil32.MakeWord(monster.MAC, monster.MAC);
-            baseObject.Abil.DC = HUtil32.MakeWord(monster.DC, monster.MaxDC);
-            baseObject.Abil.MC = HUtil32.MakeWord(monster.MC, monster.MC);
-            baseObject.Abil.SC = HUtil32.MakeWord(monster.SC, monster.SC);
-            baseObject.MonsterWeapon = HUtil32.LoByte(monster.MP);
-            baseObject.SpeedPoint = monster.Speed;
-            baseObject.HitPoint = monster.HitPoint;
-            baseObject.WalkSpeed = monster.WalkSpeed;
-            baseObject.WalkStep = monster.WalkStep;
-            baseObject.WalkWait = monster.WalkWait;
-            baseObject.NextHitTime = monster.AttackSpeed;
-            baseObject.NastyMode = monster.boAggro;
-            baseObject.NoTame = monster.boTame;
+            monsterActor.Race = monster.Race;
+            monsterActor.RaceImg = monster.RaceImg;
+            monsterActor.Appr = monster.Appr;
+            monsterActor.Abil.Level = monster.Level;
+            monsterActor.LifeAttrib = monster.btLifeAttrib;
+            monsterActor.CoolEyeCode = monster.CoolEye;
+            monsterActor.FightExp = monster.Exp;
+            monsterActor.Abil.HP = monster.HP;
+            monsterActor.Abil.MaxHP = monster.HP;
+            monsterActor.Abil.MP = 0;
+            monsterActor.Abil.MaxMP = monster.MP;
+            monsterActor.Abil.AC = HUtil32.MakeWord(monster.AC, monster.AC);
+            monsterActor.Abil.MAC = HUtil32.MakeWord(monster.MAC, monster.MAC);
+            monsterActor.Abil.DC = HUtil32.MakeWord(monster.DC, monster.MaxDC);
+            monsterActor.Abil.MC = HUtil32.MakeWord(monster.MC, monster.MC);
+            monsterActor.Abil.SC = HUtil32.MakeWord(monster.SC, monster.SC);
+            monsterActor.MonsterWeapon = HUtil32.LoByte(monster.MP);
+            monsterActor.SpeedPoint = monster.Speed;
+            monsterActor.HitPoint = monster.HitPoint;
+            monsterActor.WalkSpeed = monster.WalkSpeed;
+            monsterActor.WalkStep = monster.WalkStep;
+            monsterActor.WalkWait = monster.WalkWait;
+            monsterActor.NextHitTime = monster.AttackSpeed;
+            monsterActor.NastyMode = monster.boAggro;
+            monsterActor.NoTame = monster.boTame;
         }
     }
 }

@@ -147,7 +147,7 @@ namespace M2Server
         /// <summary>
         /// 消息处理
         /// </summary>
-        public void Operate()
+        private void Operate()
         {
             bool boChg = false;
             var boNeedRecalc = false;
@@ -250,14 +250,12 @@ namespace M2Server
 
         public int GetBuff(IActor actor, BuffType buffState)
         {
-            if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs))
+            if (!ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs)) return 0;
+            for (var i = 0; i < actorBuffs.Count; i++)
             {
-                for (int i = 0; i < actorBuffs.Count; i++)
+                if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffState)
                 {
-                    if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffState)
-                    {
-                        return i + 1;
-                    }
+                    return i + 1;
                 }
             }
             return 0;

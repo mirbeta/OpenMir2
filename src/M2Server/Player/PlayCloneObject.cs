@@ -5,7 +5,6 @@ namespace M2Server.Player
 {
     public class PlayCloneObject : PlayObject
     {
-
         public PlayCloneObject(PlayObject PlayObject) : base()
         {
             this.ChrName = "Clone";
