@@ -21,7 +21,6 @@ namespace SystemModule.NativeList.Utils
             public NativeListEnumerator(NativeList<TItem> owner)
             {
                 _buffer = owner;
-
                 Reset();
             }
 
@@ -201,7 +200,7 @@ namespace SystemModule.NativeList.Utils
 
             for (int i = 0; i < Count; i++)
             {
-                SetAt(i, default(TItem));
+                SetAt(i, default);
             }
 
             Interlocked.Exchange(ref _count, 0);

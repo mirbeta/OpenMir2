@@ -1,4 +1,5 @@
-﻿using SystemModule.NativeList.Utils;
+﻿using System.Buffers;
+using SystemModule.NativeList.Utils;
 
 namespace SystemModule
 {
@@ -7,7 +8,7 @@ namespace SystemModule
         /// <summary>
         /// 对象数量
         /// </summary>
-        public readonly int Count => ObjList == null ? 0 : ObjList.Count;
+        public int Count => ObjList == null ? 0 : ObjList.Count;
         /// <summary>
         /// 地图对象列表
         /// </summary>
@@ -26,7 +27,7 @@ namespace SystemModule
             ObjList = null;
         }
 
-        public readonly bool IsAvailable => ObjList?.Count > 0;
+        public bool IsAvailable => ObjList?.Count > 0;
 
         public void Add(CellObject cell)
         {

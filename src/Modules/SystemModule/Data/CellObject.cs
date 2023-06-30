@@ -5,7 +5,6 @@ namespace SystemModule
     /// <summary>
     /// 地图上的对象
     /// </summary>
-    [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct CellObject
     {
         /// <summary>

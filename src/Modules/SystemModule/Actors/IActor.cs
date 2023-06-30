@@ -421,8 +421,18 @@ namespace SystemModule
 
         int GetMagStruckDamage(IActor baseObject, int nDamage);
 
+        /// <summary>
+        /// 增加防御力
+        /// </summary>
+        /// <param name="nSec"></param>
+        /// <returns></returns>
         bool DefenceUp(int nSec);
 
+        /// <summary>
+        /// 增加魔法防御力
+        /// </summary>
+        /// <param name="nSec"></param>
+        /// <returns></returns>
         bool MagDefenceUp(int nSec);
 
         ushort GetFeatureEx();

@@ -1,5 +1,6 @@
 using M2Server.Actor;
 using M2Server.Monster.Monsters;
+using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -12,7 +13,7 @@ using SystemModule.NativeList.Utils;
 
 namespace M2Server
 {
-    public class Envirnoment : IEnvirnoment, IDisposable
+    public class Envirnoment:IEnvirnoment,IDisposable
     {
         /// <summary>
         /// 怪物数量
@@ -27,7 +28,7 @@ namespace M2Server
         public string MapFileName { get; set; }
         public string MapName { get; set; }
         public string MapDesc { get; set; }
-        private MapCellInfo[] _cellArray;
+        private MapCellInfo[] CellArray { get; set; }
         public short MinMap { get; set; }
         public byte ServerIndex { get; set; }
         /// <summary>
@@ -302,7 +303,7 @@ namespace M2Server
         {
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                return _cellArray[nX * Height + nY].Valid;
+                return CellArray[nX * Height + nY].Valid;
             }
             return true;
         }
@@ -317,7 +318,7 @@ namespace M2Server
         {
             if (nX >= 0 && nX < Width && nY >= 0 && nY < Height)
             {
-                ref MapCellInfo cellInfo = ref _cellArray[nX * Height + nY];
+                ref MapCellInfo cellInfo = ref CellArray[nX * Height + nY];
                 if (cellInfo.Valid)
                 {
                     success = true;
@@ -325,7 +326,7 @@ namespace M2Server
                 }
             }
             success = false;
-            return ref _cellArray[0];
+            return ref CellArray[0];
         }
 
         public bool MoveToMovingObject(int nCx, int nCy, IActor cert, int nX, int nY, bool boFlag)
@@ -933,19 +934,20 @@ namespace M2Server
                             mapUnitInfo.btAniTick = binReader.ReadByte();
                             mapUnitInfo.btArea = binReader.ReadByte();
                             mapUnitInfo.btLight = binReader.ReadByte();
+                            CellArray[n24 + nH] = new MapCellInfo();
                             if ((mapUnitInfo.wBkImg & 0x8000) != 0)// wBkImg High
                             {
-                                _cellArray[n24 + nH].Attribute = CellAttribute.HighWall;
+                                CellArray[n24 + nH].Attribute = CellAttribute.HighWall;
                                 isInitialize = false;
                             }
                             if ((mapUnitInfo.wFrImg & 0x8000) != 0)// wFrImg High
                             {
-                                _cellArray[n24 + nH].Attribute = CellAttribute.LowWall;
+                                CellArray[n24 + nH].Attribute = CellAttribute.LowWall;
                                 isInitialize = false;
                             }
                             if (isInitialize)
                             {
-                                _cellArray[n24 + nH].ObjList = new NativeList<CellObject>();
+                                CellArray[n24 + nH].ObjList = new NativeList<CellObject>();
                             }
                             if ((mapUnitInfo.btDoorIndex & 0x80) != 0)
                             {
@@ -1030,25 +1032,25 @@ namespace M2Server
         {
             if (nWidth > 1 && nHeight > 1)
             {
-                if (_cellArray != null)
+                if (CellArray != null)
                 {
                     for (int nW = 0; nW < Width; nW++)
                     {
                         for (int nH = 0; nH < Height; nH++)
                         {
-                            if (_cellArray[nW * Height + nH].ObjList != null)
+                            if (CellArray[nW * Height + nH].ObjList != null)
                             {
-                                _cellArray[nW * Height + nH] = default;
+                                CellArray[nW * Height + nH] = default;
                             }
                         }
                     }
-                    _cellArray = null;
+                    CellArray = null;
                 }
                 Width = nWidth;
                 Height = nHeight;
                 //_cellArray = new MapCellInfo[nWidth * nHeight];
                 //_cellArray = GC.AllocateUninitializedArray<MapCellInfo>(nWidth * nHeight);
-                _cellArray = GC.AllocateArray<MapCellInfo>(nWidth * nHeight);
+                CellArray = GC.AllocateArray<MapCellInfo>(nWidth * nHeight);
             }
         }
 
@@ -1470,7 +1472,7 @@ namespace M2Server
         {
             if (disposing)
             {
-                _cellArray = null;
+                CellArray = null;
             }
         }
 

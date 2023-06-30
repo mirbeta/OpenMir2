@@ -10,7 +10,7 @@ using SystemModule.SocketComponents.Event;
 
 namespace GameSrv.Services
 {
-    public class LoginSessionService : ILoginSession
+    public class UserSessionService : ILoginSession
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<PlayerSession> _sessionList;
@@ -19,7 +19,7 @@ namespace GameSrv.Services
         private string SocketRecvText = string.Empty;
         private bool SocketConnected = false;
 
-        public LoginSessionService()
+        public UserSessionService()
         {
             _clientScoket = new ScoketClient();
             _sessionList = new List<PlayerSession>();

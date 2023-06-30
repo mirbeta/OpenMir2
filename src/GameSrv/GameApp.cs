@@ -63,7 +63,7 @@ namespace GameSrv
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.CommandSystem = new GameCommandSystem();
-            M2Share.LoginSession = new LoginSessionService();
+            M2Share.LoginSession = new UserSessionService();
             M2Share.ScriptEngine = new ScriptEngine();
             M2Share.AutoBot = new RobotManage();
             InitializeModule(serviceProvider);

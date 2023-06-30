@@ -2079,7 +2079,7 @@ namespace M2Server.Actor
             return result;
         }
 
-        public int MagMakeDefenceArea(int nX, int nY, int nRange, int nSec, byte btState)
+        public int MagMakeDefenceArea(int nX, int nY, byte nRange, int nSec, byte btState)
         {
             int result = 0;
             int nStartX = nX - nRange;
@@ -2124,6 +2124,11 @@ namespace M2Server.Actor
 
         public bool DefenceUp(int nSec)
         {
+            if (M2Share.ActorBuffSystem.HasBuff(this, BuffType.DefensePower))
+            {
+                M2Share.ActorBuffSystem.TryUpdate(this, BuffType.DefensePower, nSec);
+                return true;
+            }
             M2Share.ActorBuffSystem.AddBuff(this, BuffType.DefensePower, nSec, nSec);
             //if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             //{

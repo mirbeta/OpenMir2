@@ -248,12 +248,12 @@ namespace M2Server
             }
         }
 
-        public int GetBuff(IActor actor, BuffType buffState)
+        public int GetBuff(IActor actor, BuffType buffType)
         {
             if (!ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs)) return 0;
             for (var i = 0; i < actorBuffs.Count; i++)
             {
-                if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffState)
+                if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffType)
                 {
                     return i + 1;
                 }
@@ -282,9 +282,31 @@ namespace M2Server
 
         }
 
-        public bool HasBuff()
+        public bool HasBuff(IActor actor, BuffType buffType)
         {
-            return true;
+            if (!ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs)) return false;
+            for (var i = 0; i < actorBuffs.Count; i++)
+            {
+                if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffType)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public bool TryUpdate(IActor actor, BuffType buffType, int duraTime)
+        {
+            if (!ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs)) return false;
+            for (var i = 0; i < actorBuffs.Count; i++)
+            {
+                if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffType)
+                {
+                    actorBuffs[i].StateTick = duraTime;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 

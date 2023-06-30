@@ -14,7 +14,7 @@ namespace GameSrv.Services
         public Action CallBack;
     }
 
-    public static class PlayerDataService
+    public static class DataCacheService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly ConcurrentDictionary<int, ServerRequestData> ReceivedMap = new ConcurrentDictionary<int, ServerRequestData>();

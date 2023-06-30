@@ -498,7 +498,7 @@ namespace GameSrv.Word
                                     M2Share.NetChannel.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
-                                if (!PlayerDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
+                                if (!DataCacheService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
                                 {
                                     userOpenInfo.FailCount++;
                                     continue;

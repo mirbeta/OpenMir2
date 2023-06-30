@@ -9,7 +9,7 @@ using SystemModule.SocketComponents.Event;
 
 namespace GameSrv.Services
 {
-    public class DBService
+    public class DataCacheThread
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ScoketClient _clientScoket;
@@ -17,7 +17,7 @@ namespace GameSrv.Services
         private int BuffLen { get; set; }
         private bool SocketWorking { get; set; }
 
-        public DBService()
+        public DataCacheThread()
         {
             _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort), 4096);
             _clientScoket.OnConnected += DbScoketConnected;
@@ -216,7 +216,7 @@ namespace GameSrv.Services
                         var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
                         if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(sginBuff))
                         {
-                            PlayerDataService.Enqueue(respCheckCode, responsePacket);
+                            DataCacheService.Enqueue(respCheckCode, responsePacket);
                         }
                         else
                         {
