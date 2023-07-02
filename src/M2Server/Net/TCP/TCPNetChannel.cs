@@ -23,8 +23,11 @@ namespace M2Server.Net.TCP
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpService tcpService;
         private readonly object RunSocketSection;
-        private readonly Channel<ReceiveData> _receiveQueue;//todo 一个网关一个队列
+        private readonly Channel<ReceiveData> _receiveQueue;
         private readonly ChannelMessageHandler[] _gameGates;
+        /// <summary>
+        /// 网关地址白名单
+        /// </summary>
         private readonly HashSet<long> Whitelist = new HashSet<long>();
         private CancellationToken _stoppingCancelReads;
 
@@ -43,17 +46,16 @@ namespace M2Server.Net.TCP
 
         private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
         {
-            if (requestInfo is not DataMessageFixedHeaderRequestInfo fixedHeader)
+            if (requestInfo is not DataMessageFixedHeaderRequestInfo gateMessage)
                 return;
             var client = (SocketClient)sender;
-            if (int.TryParse(client.ID, out var clientId))
+            var gateId = int.Parse(client.ID) - 1;
+            _receiveQueue.Writer.TryWrite(new ReceiveData()
             {
-                _gameGates[clientId - 1].ProcessDataBuffer(fixedHeader.Header, fixedHeader.Message);
-            }
-            else
-            {
-                _logger.Info("未知客户端...");
-            }
+                Data = gateMessage.Message,
+                Packet = gateMessage.Header,
+                GateId = gateId
+            });
         }
 
         private void Connecting(object sender, TouchSocketEventArgs e)
@@ -430,7 +432,7 @@ namespace M2Server.Net.TCP
                 {
                     while (_receiveQueue.Reader.TryRead(out var message))
                     {
-                        // ExecGateBuffers(message.Packet, message.Data);
+                        _gameGates[message.GateId].ProcessDataBuffer(message.Packet, message.Data);
                     }
                 }
             }, cancellationToken);

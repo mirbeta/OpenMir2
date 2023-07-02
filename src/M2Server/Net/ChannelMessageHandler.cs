@@ -111,23 +111,9 @@ namespace M2Server.Net
                 PackLength = 0
             };
             var data = SerializerUtil.Serialize(msgHeader);
-            //var sendData = M2Share.BytePool.Rent(data.Length);
-            //data.CopyTo(sendData.Memory);
             _sendQueue.SendMessage(data);
         }
-
-        static ArraySegment<byte> GetArraySegment(ref ReadOnlySequence<byte> input)
-        {
-            if (input.IsSingleSegment && MemoryMarshal.TryGetArray(input.First, out var segment))
-            {
-                return segment;
-            }
-
-            // Should be rare
-            var array = input.ToArray();
-            return new ArraySegment<byte>(array);
-        }
-
+ 
         public void ProcessDataBuffer(ServerMessage packetHeader, ReadOnlySpan<byte> message)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
