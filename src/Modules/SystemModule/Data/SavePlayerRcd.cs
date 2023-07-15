@@ -8,14 +8,14 @@ namespace SystemModule.Data
         public string ChrName;
         public int SessionID;
         public IPlayerActor PlayObject;
-        public PlayerDataInfo HumanRcd;
+        public CharacterDataInfo CharacterData;
         public int ReTryCount;
         public bool IsSaveing;
         public int QueryId;
 
         public SavePlayerRcd()
         {
-            HumanRcd = new PlayerDataInfo();
+            CharacterData = new CharacterDataInfo();
         }
     }
 }

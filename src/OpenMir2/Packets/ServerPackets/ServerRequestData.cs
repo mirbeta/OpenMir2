@@ -26,6 +26,6 @@ namespace SystemModule.Packets.ServerPackets
     public partial class LoadPlayerDataPacket
     {
         public string ChrName { get; set; }
-        public PlayerDataInfo HumDataInfo { get; set; }
+        public CharacterDataInfo HumDataInfo { get; set; }
     }
 }

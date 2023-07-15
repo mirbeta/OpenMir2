@@ -10,7 +10,7 @@ namespace DBSrv.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
-        public bool Update(string chrName, PlayerDataInfo humanRcd)
+        public bool Update(string chrName, CharacterDataInfo humanRcd)
         {
             if (_NameQuickMap.TryGetValue(chrName, out var playerId))
             {
@@ -41,7 +41,7 @@ namespace DBSrv.Storage.MySQL
         /// todo 保存前要先获取一次数据，部分数据要进行对比
         /// </summary>
         /// <returns></returns>
-        private bool SaveRecord(int playerId, ref PlayerDataInfo humanRcd)
+        private bool SaveRecord(int playerId, ref CharacterDataInfo humanRcd)
         {
             using var context = new StorageContext(_storageOption);
             var success = false;
@@ -78,7 +78,7 @@ namespace DBSrv.Storage.MySQL
             return result;
         }
 
-        private void SaveRecord(StorageContext context, int playerId, PlayerInfoData hd)
+        private void SaveRecord(StorageContext context, int playerId, CharacterData hd)
         {
             var strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters SET ServerIndex = @ServerIndex, LoginID = @LoginID,MapName = @MapName, CX = @CX, CY = @CY, Level = @Level, Dir = @Dir, Hair = @Hair, Sex = @Sex, Job = Job, Gold = @Gold, ");
@@ -205,7 +205,7 @@ namespace DBSrv.Storage.MySQL
         private void SaveItem(StorageContext context, int playerId, ServerUserItem[] userItems)
         {
             var useSize = userItems.Length;
-            var playData = new PlayerDataInfo();
+            var playData = new CharacterDataInfo();
             GetItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.HumItems;
             var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
@@ -284,7 +284,7 @@ namespace DBSrv.Storage.MySQL
         {
             try
             {
-                var playData = new PlayerDataInfo();
+                var playData = new CharacterDataInfo();
                 GetBagItemRecord(playerId, context, ref playData);
                 var oldItems = playData.Data.BagItems;
                 var bagSize = bagItems.Length;
@@ -361,7 +361,7 @@ namespace DBSrv.Storage.MySQL
             try
             {
                 var storageSize = storageItems.Length;
-                var playData = new PlayerDataInfo();
+                var playData = new CharacterDataInfo();
                 GetStorageRecord(playerId, context, ref playData);
                 var oldItems = playData.Data.StorageItems;
                 var newItems = storageItems;
@@ -489,7 +489,7 @@ namespace DBSrv.Storage.MySQL
             }
         }
 
-        private void SaveQuest(StorageContext context, int id, PlayerDataInfo humanRcd)
+        private void SaveQuest(StorageContext context, int id, CharacterDataInfo humanRcd)
         {
             const string sSqlStr4 = "DELETE FROM characters_quest WHERE PlayerId=@PlayerId";
             try

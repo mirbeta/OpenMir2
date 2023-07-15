@@ -270,13 +270,13 @@ namespace DBSrv.Services.Impl
         private bool NewChrData(string sAccount, string sChrName, int nSex, int nJob, int nHair)
         {
             if (_playDataStorage.Index(sChrName) != -1) return false;
-            var chrRecord = new PlayerDataInfo();
+            var chrRecord = new CharacterDataInfo();
             chrRecord.Header = new RecordHeader
             {
                 Name = sChrName,
                 sAccount = sAccount
             };
-            chrRecord.Data = new PlayerInfoData();
+            chrRecord.Data = new CharacterData();
             chrRecord.Data.ChrName = sChrName;
             chrRecord.Data.Account = sAccount;
             chrRecord.Data.Sex = (byte)nSex;

@@ -14,7 +14,10 @@ namespace GameSrv.Services
         public Action CallBack;
     }
 
-    public static class DataCacheService
+    /// <summary>
+    /// 玩家数据处理服务
+    /// </summary>
+    public static class CharacterDataService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly ConcurrentDictionary<int, ServerRequestData> ReceivedMap = new ConcurrentDictionary<int, ServerRequestData>();
@@ -28,7 +31,7 @@ namespace GameSrv.Services
             Logger.Debug($"执行任务Id:{queryId}成功");
         }
 
-        private static bool GetDbSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
+        private static bool GetDataSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
         {
             bool result = false;
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
@@ -59,7 +62,7 @@ namespace GameSrv.Services
             return result;
         }
 
-        public static bool GetPlayData(int queryId, ref PlayerDataInfo playerData)
+        public static bool GetPlayData(int queryId, ref CharacterDataInfo playerData)
         {
             if (!LoadPlayDataMap.TryGetValue(queryId, out var loadPlayDataPacket))
                 return false;
@@ -68,15 +71,18 @@ namespace GameSrv.Services
             return true;
         }
 
-        public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref int queryId, int nCertCode)
+        /// <summary>
+        /// 查询角色数据
+        /// </summary>
+        public static bool QueryCharacterData(string account, string chrName, string addr, ref int queryId, int certCode)
         {
             bool result = false;
             var loadHum = new LoadPlayerDataMessage()
             {
-                Account = sAccount,
-                ChrName = sChrName,
-                UserAddr = sStr,
-                SessionID = nCertCode
+                Account = account,
+                ChrName = chrName,
+                UserAddr = addr,
+                SessionID = certCode
             };
             if (LoadRcd(loadHum, ref queryId))
             {
@@ -100,7 +106,7 @@ namespace GameSrv.Services
         {
             queryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
-            SavePlayerDataMessage saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
+            SaveCharacterData saveHumData = new SaveCharacterData(saveRcd.Account, saveRcd.ChrName, saveRcd.CharacterData);
             if (GameShare.DataServer.SendRequest(queryId, packet, saveHumData))
             {
                 SaveProcessList.Enqueue(queryId);
@@ -117,7 +123,7 @@ namespace GameSrv.Services
                 int nIdent = 0;
                 int nRecog = 0;
                 byte[] data = null;
-                if (GetDbSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
+                if (GetDataSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
                 {
                     if (nIdent == Messages.DBR_SAVEHUMANRCD && nRecog == 1)
                     {
@@ -140,7 +146,7 @@ namespace GameSrv.Services
                 int nIdent = 0;
                 int nRecog = 0;
                 byte[] data = null;
-                if (GetDbSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
+                if (GetDataSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
                 {
                     if (nIdent == Messages.DBR_LOADHUMANRCD && nRecog == 1 && data.Length > 0)
                     {

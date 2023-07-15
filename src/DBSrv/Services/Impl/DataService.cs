@@ -213,7 +213,7 @@ namespace DBSrv.Services.Impl
             {
                 return;
             }
-            PlayerDataInfo humanRcd = null;
+            CharacterDataInfo humanRcd = null;
             var boFoundSession = false;
             var nCheckCode = -1;
             if ((!string.IsNullOrEmpty(loadHumanPacket.Account)) && (!string.IsNullOrEmpty(loadHumanPacket.ChrName)))
@@ -266,7 +266,7 @@ namespace DBSrv.Services.Impl
         {
             try
             {
-                var saveHumDataPacket = SerializerUtil.Deserialize<SavePlayerDataMessage>(sMsg);
+                var saveHumDataPacket = SerializerUtil.Deserialize<SaveCharacterData>(sMsg);
                 if (saveHumDataPacket == null)
                 {
                     _logger.Error("保存玩家数据出错.");
@@ -274,7 +274,7 @@ namespace DBSrv.Services.Impl
                 }
                 var sUserId = saveHumDataPacket.Account;
                 var sChrName = saveHumDataPacket.ChrName;
-                var humanRcd = saveHumDataPacket.HumDataInfo;
+                var humanRcd = saveHumDataPacket.CharacterData;
                 var bo21 = humanRcd == null;
                 if (!bo21)
                 {
@@ -325,7 +325,7 @@ namespace DBSrv.Services.Impl
 
         private void SaveHumanRcdEx(int nQueryId, byte[] sMsg, int nRecog, string connectionId)
         {
-            var saveHumDataPacket = SerializerUtil.Deserialize<SavePlayerDataMessage>(sMsg);
+            var saveHumDataPacket = SerializerUtil.Deserialize<SaveCharacterData>(sMsg);
             if (saveHumDataPacket == null)
             {
                 _logger.Error("保存玩家数据出错.");

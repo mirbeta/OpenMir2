@@ -86,7 +86,7 @@ namespace DBSrv
         {
             //从内存获取保存数据，刷新到数据库，减少数据库压力，和防止大量数据保存超时
             _logger.Info("同步玩家缓存数据.");
-            using IEnumerator<PlayerDataInfo> playList = _cacheStorage.QueryCacheData();
+            using IEnumerator<CharacterDataInfo> playList = _cacheStorage.QueryCacheData();
             while (playList.MoveNext())
             {
                 var play = playList.Current;

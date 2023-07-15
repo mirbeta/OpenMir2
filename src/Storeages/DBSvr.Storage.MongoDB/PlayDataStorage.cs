@@ -16,7 +16,7 @@ namespace DBSrv.Storage.MongoDB
         private readonly Dictionary<int, int> _quickIndexIdMap;
         private readonly PlayQuickList _mirQuickIdList;
         private readonly StorageOption _storageOption;
-        private IMongoCollection<PlayerDataInfo> humDataInfo;
+        private IMongoCollection<CharacterDataInfo> humDataInfo;
         private int _recordCount;
 
         public PlayDataStorage(StorageOption storageOption)
@@ -40,7 +40,7 @@ namespace DBSrv.Storage.MongoDB
             }
             MongoClient client = new MongoClient(_storageOption.ConnectionString);
             IMongoDatabase db = client.GetDatabase("mir2");
-            humDataInfo = db.GetCollection<PlayerDataInfo>("PlayObject");
+            humDataInfo = db.GetCollection<CharacterDataInfo>("PlayObject");
         }
 
         public void LoadQuickList()
@@ -107,7 +107,7 @@ namespace DBSrv.Storage.MongoDB
             return -1;
         }
 
-        public int Get(int nIndex, ref PlayerDataInfo HumanRCD)
+        public int Get(int nIndex, ref CharacterDataInfo HumanRCD)
         {
             int result = -1;
             if (nIndex < 0)
@@ -125,17 +125,17 @@ namespace DBSrv.Storage.MongoDB
             return result;
         }
 
-        public bool Get(string sName, ref PlayerDataInfo HumanRCD)
+        public bool Get(string sName, ref CharacterDataInfo HumanRCD)
         {
             throw new NotImplementedException();
         }
 
-        public PlayerInfoData Query(int playerId)
+        public CharacterData Query(int playerId)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(string nIndex, PlayerDataInfo HumanRCD)
+        public bool Update(string nIndex, CharacterDataInfo HumanRCD)
         {
             bool result = false;
             //if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))
@@ -167,7 +167,7 @@ namespace DBSrv.Storage.MongoDB
             return result;
         }
 
-        public bool Add(PlayerDataInfo HumanRCD)
+        public bool Add(CharacterDataInfo HumanRCD)
         {
             bool result = false;
             int nIndex;
@@ -193,7 +193,7 @@ namespace DBSrv.Storage.MongoDB
             return result;
         }
 
-        private bool GetRecord(int nIndex, ref PlayerDataInfo HumanRCD)
+        private bool GetRecord(int nIndex, ref CharacterDataInfo HumanRCD)
         {
             int playerId = 0;
             if (HumanRCD == null)
@@ -214,80 +214,80 @@ namespace DBSrv.Storage.MongoDB
             return true;
         }
 
-        private void GetChrRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetChrRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetAbilGetRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetAbilGetRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetBonusAbilRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetBonusAbilRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetMagicRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetMagicRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetItemRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetItemRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetStorageRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetStorageRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetPlayerStatus(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetPlayerStatus(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private bool AddRecord(ref int nIndex, ref PlayerDataInfo HumanRCD)
+        private bool AddRecord(ref int nIndex, ref CharacterDataInfo HumanRCD)
         {
             return InsertRecord(HumanRCD.Data, ref nIndex);
         }
 
-        private bool InsertRecord(PlayerInfoData hd, ref int nIndex)
+        private bool InsertRecord(CharacterData hd, ref int nIndex)
         {
             return true;
         }
 
-        private bool UpdateRecord(int nIndex, ref PlayerDataInfo HumanRCD)
+        private bool UpdateRecord(int nIndex, ref CharacterDataInfo HumanRCD)
         {
             bool result = true;
             return result;
         }
 
-        private void UpdateRecord(int Id, PlayerDataInfo HumanRCD)
+        private void UpdateRecord(int Id, CharacterDataInfo HumanRCD)
         {
 
         }
 
-        private void UpdateAblity(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateAblity(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateItem(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateItem(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void SaveItemStorge(int playerId, PlayerDataInfo HumanRCD)
+        private void SaveItemStorge(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void SavePlayerMagic(int playerId, PlayerDataInfo HumanRCD)
+        private void SavePlayerMagic(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateBonusability(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateBonusability(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateQuest(int Id, PlayerDataInfo HumanRCD)
+        private void UpdateQuest(int Id, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateStatus(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateStatus(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 

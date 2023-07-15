@@ -91,7 +91,7 @@ namespace DBSrv.Storage.MySQL
             return -1;
         }
 
-        public int Get(int nIndex, ref PlayerDataInfo humanRcd)
+        public int Get(int nIndex, ref CharacterDataInfo humanRcd)
         {
             var result = -1;
             if (nIndex < 0)
@@ -109,7 +109,7 @@ namespace DBSrv.Storage.MySQL
             return result;
         }
 
-        public bool Get(string chrName, ref PlayerDataInfo humanRcd)
+        public bool Get(string chrName, ref CharacterDataInfo humanRcd)
         {
             if (string.IsNullOrEmpty(chrName))
             {
@@ -126,9 +126,9 @@ namespace DBSrv.Storage.MySQL
             return false;
         }
 
-        public PlayerInfoData Query(int playerId)
+        public CharacterData Query(int playerId)
         {
-            PlayerInfoData playData;
+            CharacterData playData;
             using var context = new StorageContext(_storageOption);
             try
             {
@@ -151,7 +151,7 @@ namespace DBSrv.Storage.MySQL
             return playData;
         }
 
-        private bool GetRecord(int nIndex, ref PlayerDataInfo humanRcd)
+        private bool GetRecord(int nIndex, ref CharacterDataInfo humanRcd)
         {
             var playerId = _IndexQuickIdMap[nIndex];
             if (playerId == 0)
@@ -167,7 +167,7 @@ namespace DBSrv.Storage.MySQL
                 {
                     return false;
                 }
-                humanRcd = new PlayerDataInfo();
+                humanRcd = new CharacterDataInfo();
                 humanRcd.Data = GetChrRecord(playerId, context);
                 humanRcd.Header.SetName(humanRcd.Data.ChrName);
                 humanRcd.Data.Abil = GetAbilGetRecord(playerId, context);
@@ -190,19 +190,19 @@ namespace DBSrv.Storage.MySQL
             return true;
         }
 
-        private PlayerInfoData GetChrRecord(int playerId, StorageContext context)
+        private CharacterData GetChrRecord(int playerId, StorageContext context)
         {
             const string sSqlString = "SELECT * FROM characters WHERE ID=@ID";
             try
             {
-                PlayerInfoData humInfoData = null;
+                CharacterData humInfoData = null;
                 var command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@Id", playerId);
                 using var dr = command.ExecuteReader();
                 if (dr.Read())
                 {
-                    humInfoData = new PlayerInfoData();
+                    humInfoData = new CharacterData();
                     humInfoData.Account = dr.GetString("LoginID");
                     humInfoData.ChrName = dr.GetString("ChrName");
                     if (!dr.IsDBNull(dr.GetOrdinal("MapName")))
@@ -307,7 +307,7 @@ namespace DBSrv.Storage.MySQL
             return humanRcd;
         }
 
-        private void GetBonusAbilRecord(int playerId, StorageContext context, ref PlayerDataInfo humanRcd)
+        private void GetBonusAbilRecord(int playerId, StorageContext context, ref CharacterDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bonusability WHERE PlayerId=@PlayerId";
             try
@@ -341,7 +341,7 @@ namespace DBSrv.Storage.MySQL
             }
         }
 
-        private void GetMagicRecord(int playerId, StorageContext context, ref PlayerDataInfo humanRcd)
+        private void GetMagicRecord(int playerId, StorageContext context, ref CharacterDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_magic WHERE PlayerId=@PlayerId";
             try
@@ -373,7 +373,7 @@ namespace DBSrv.Storage.MySQL
             }
         }
 
-        private void GetItemRecord(int playerId, StorageContext context, ref PlayerDataInfo humanRcd)
+        private void GetItemRecord(int playerId, StorageContext context, ref CharacterDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_item WHERE PlayerId=@PlayerId";
             try
@@ -401,7 +401,7 @@ namespace DBSrv.Storage.MySQL
             }
         }
 
-        private void GetBagItemRecord(int playerId, StorageContext context, ref PlayerDataInfo humanRcd)
+        private void GetBagItemRecord(int playerId, StorageContext context, ref CharacterDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_bagitem WHERE PlayerId=@PlayerId";
             try
@@ -429,7 +429,7 @@ namespace DBSrv.Storage.MySQL
             }
         }
 
-        private void GetStorageRecord(int playerId, StorageContext context, ref PlayerDataInfo humanRcd)
+        private void GetStorageRecord(int playerId, StorageContext context, ref CharacterDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_storageitem WHERE PlayerId=@PlayerId";
             try
@@ -458,7 +458,7 @@ namespace DBSrv.Storage.MySQL
             }
         }
 
-        private void GetPlayerStatus(int playerId, StorageContext context, ref PlayerDataInfo humanRcd)
+        private void GetPlayerStatus(int playerId, StorageContext context, ref CharacterDataInfo humanRcd)
         {
             const string sSqlString = "SELECT * FROM characters_status WHERE PlayerId=@PlayerId";
             try

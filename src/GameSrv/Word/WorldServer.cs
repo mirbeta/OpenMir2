@@ -498,7 +498,7 @@ namespace GameSrv.Word
                                     M2Share.NetChannel.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
                                 }
-                                if (!DataCacheService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
+                                if (!CharacterDataService.GetPlayData(userOpenInfo.QueryId, ref userOpenInfo.HumanRcd))
                                 {
                                     userOpenInfo.FailCount++;
                                     continue;
@@ -1055,7 +1055,7 @@ namespace GameSrv.Word
                 SessionID = playObject.SessionId,
                 PlayObject = playObject
             };
-            saveRcd.HumanRcd = MakeSaveRcd(playObject);
+            saveRcd.CharacterData = MakeSaveRcd(playObject);
             M2Share.FrontEngine.AddToSaveRcdList(saveRcd);
         }
 
@@ -1065,7 +1065,7 @@ namespace GameSrv.Word
             PlayObjectFreeList.Add(playObject);
         }
 
-        private void GetHumData(IPlayerActor playObject, ref PlayerDataInfo humanRcd)
+        private void GetHumData(IPlayerActor playObject, ref CharacterDataInfo humanRcd)
         {
             var humData = humanRcd.Data;
             playObject.UserAccount = humData.Account;
@@ -1196,9 +1196,9 @@ namespace GameSrv.Word
             }
         }
 
-        private static PlayerDataInfo MakeSaveRcd(IPlayerActor playObject)
+        private static CharacterDataInfo MakeSaveRcd(IPlayerActor playObject)
         {
-            var humanRcd = new PlayerDataInfo();
+            var humanRcd = new CharacterDataInfo();
             var playerInfo = humanRcd.Data;
             var playAbil = humanRcd.Data.Abil;
             playerInfo.ServerIndex = M2Share.ServerIndex;

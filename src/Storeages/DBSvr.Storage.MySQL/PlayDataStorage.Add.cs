@@ -30,7 +30,7 @@ namespace DBSrv.Storage.MySQL
             return false;
         }
 
-        public bool Add(PlayerDataInfo humanRcd)
+        public bool Add(CharacterDataInfo humanRcd)
         {
             var sChrName = humanRcd.Header.Name;
             if (CheckChrExists(sChrName))
@@ -47,7 +47,7 @@ namespace DBSrv.Storage.MySQL
             return false;
         }
 
-        private bool AddRecord(ref int nIndex, ref PlayerDataInfo humanRcd)
+        private bool AddRecord(ref int nIndex, ref CharacterDataInfo humanRcd)
         {
             using var context = new StorageContext(_storageOption);
             var success = false;
@@ -86,7 +86,7 @@ namespace DBSrv.Storage.MySQL
             return result;
         }
 
-        private int CreateCharacters(StorageContext context, PlayerDataInfo humanRcd)
+        private int CreateCharacters(StorageContext context, CharacterDataInfo humanRcd)
         {
             var hd = humanRcd.Data;
             var strSql = new StringBuilder();
@@ -153,7 +153,7 @@ namespace DBSrv.Storage.MySQL
             }
         }
 
-        private void CreateAblity(StorageContext context, int playerId, PlayerInfoData hd)
+        private void CreateAblity(StorageContext context, int playerId, CharacterData hd)
         {
             try
             {
@@ -213,7 +213,7 @@ namespace DBSrv.Storage.MySQL
         private void CreateUseItem(StorageContext context, int playerId)
         {
             const string InsertUseItemSql = "INSERT INTO characters_item (PlayerId,Position,MakeIndex,StdIndex,Dura,DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-            var playData = new PlayerDataInfo();
+            var playData = new CharacterDataInfo();
             GetItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.HumItems;
             var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
@@ -265,7 +265,7 @@ namespace DBSrv.Storage.MySQL
         private void CreateBagItem(StorageContext context, int playerId)
         {
             const string InsertBagItemSql = "INSERT INTO characters_bagitem (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-            var playData = new PlayerDataInfo();
+            var playData = new CharacterDataInfo();
             GetBagItemRecord(playerId, context, ref playData);
             var oldItems = playData.Data.BagItems;
             var bagItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
@@ -313,7 +313,7 @@ namespace DBSrv.Storage.MySQL
         private void CreateStorageItem(StorageContext context, int playerId)
         {
             const string InsertStorageItemSql = "INSERT INTO characters_storageitem (PlayerId, Position, MakeIndex, StdIndex, Dura, DuraMax) VALUES (@PlayerId, @Position, @MakeIndex, @StdIndex, @Dura, @DuraMax);";
-            var playData = new PlayerDataInfo();
+            var playData = new CharacterDataInfo();
             GetStorageRecord(playerId, context, ref playData);
             var oldItems = playData.Data.StorageItems;
             var storageItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);

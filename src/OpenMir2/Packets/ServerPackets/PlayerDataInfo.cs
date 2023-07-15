@@ -6,30 +6,39 @@ using SystemModule.Packets.ClientPackets;
 namespace SystemModule.Packets.ServerPackets
 {
     [MemoryPackable]
-    public partial class PlayerDataInfo
+    public partial class CharacterDataInfo
     {
         public RecordHeader Header { get; set; }
-        public PlayerInfoData Data { get; set; }
+        public CharacterData Data { get; set; }
 
-        public PlayerDataInfo()
+        public CharacterDataInfo()
         {
             Header = new RecordHeader();
-            Data = new PlayerInfoData();
+            Data = new CharacterData();
         }
     }
 
     [MemoryPackable]
-    public partial class SavePlayerDataMessage
+    public partial class SaveCharacterData
     {
+        /// <summary>
+        /// 玩家账号
+        /// </summary>
         public string Account { get; set; }
+        /// <summary>
+        /// 角色名称
+        /// </summary>
         public string ChrName { get; set; }
-        public PlayerDataInfo HumDataInfo { get; set; }
+        /// <summary>
+        /// 角色数据
+        /// </summary>
+        public CharacterDataInfo CharacterData { get; set; }
 
-        public SavePlayerDataMessage(string account, string chrName, PlayerDataInfo humDataInfo)
+        public SaveCharacterData(string account, string chrName, CharacterDataInfo characterData)
         {
             Account = account;
-            ChrName = chrName;
-            HumDataInfo = humDataInfo;
+            ChrName = chrName;  
+            CharacterData = characterData;
         }
     }
 
@@ -43,7 +52,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial class PlayerInfoData
+    public partial class CharacterData
     {
         public byte ServerIndex { get; set; }
         public string ChrName { get; set; }
@@ -98,7 +107,7 @@ namespace SystemModule.Packets.ServerPackets
         public ServerUserItem[] StorageItems;
         public MagicRcd[] Magic { get; set; }
 
-        public PlayerInfoData()
+        public CharacterData()
         {
             QuestUnitOpen = new byte[128];
             QuestUnit = new byte[128];

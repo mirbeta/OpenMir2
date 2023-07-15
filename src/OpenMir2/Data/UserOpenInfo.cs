@@ -14,6 +14,6 @@ namespace SystemModule.Data
         public int FailCount;
         public string ChrName;
         public LoadDBInfo LoadUser;
-        public PlayerDataInfo HumanRcd;
+        public CharacterDataInfo HumanRcd;
     }
 }
