@@ -12,13 +12,13 @@
         /// </summary>
         public long PlayTime;
         public int SessionStatus;
-        public int dwStartTick;
+        public int StartTick;
         public int ActiveTick;
-        public int nRefCount;
-        public int nSocket;
-        public int nGateIdx;
-        public int nGSocketIdx;
-        public int dwNewUserTick;
-        public int nSoftVersionDate;
+        public int RefCount;
+        public int Socket;
+        public int GateIdx;
+        public int SocketIdx;
+        public int NewUserTick;
+        public int SoftVersionDate;
     }
 }

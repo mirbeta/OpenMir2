@@ -19,14 +19,14 @@ namespace GameSrv.Services
     public static class CharacterDataService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly ConcurrentDictionary<int, ServerRequestData> ReceivedMap = new ConcurrentDictionary<int, ServerRequestData>();
+        private static readonly ConcurrentDictionary<int, ServerRequestData> QueryMap = new ConcurrentDictionary<int, ServerRequestData>();
         private static readonly ConcurrentQueue<QueryPlayData> QueryProcessList = new ConcurrentQueue<QueryPlayData>();
         private static readonly ConcurrentQueue<int> SaveProcessList = new ConcurrentQueue<int>();
         private static readonly ConcurrentDictionary<int, LoadPlayerDataPacket> LoadPlayDataMap = new ConcurrentDictionary<int, LoadPlayerDataPacket>();
 
         public static void Enqueue(int queryId, ServerRequestData data)
         {
-            ReceivedMap.TryAdd(queryId, data);
+            QueryMap.TryAdd(queryId, data);
             Logger.Debug($"执行任务Id:{queryId}成功");
         }
 
@@ -36,7 +36,7 @@ namespace GameSrv.Services
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
-                if (ReceivedMap.TryGetValue(queryId, out var respPack))
+                if (QueryMap.TryGetValue(queryId, out var respPack))
                 {
                     if (respPack == null)
                     {
@@ -52,7 +52,7 @@ namespace GameSrv.Services
                     data = respPack.Packet;
                     result = true;
                 }
-                ReceivedMap.TryRemove(queryId, out _);
+                QueryMap.TryRemove(queryId, out _);
             }
             finally
             {

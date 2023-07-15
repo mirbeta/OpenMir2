@@ -23,7 +23,7 @@ namespace GameSrv
             await GameShare.UserProcessor.StartAsync(stoppingToken);
             await GameShare.MerchantProcessor.StartAsync(stoppingToken);
             await GameShare.EventProcessor.StartAsync(stoppingToken);
-            await GameShare.StorageProcessor.StartAsync(stoppingToken);
+            await GameShare.CharacterDataProcessor.StartAsync(stoppingToken);
             await GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
             await GameShare.ActorBuffProcessor.StopAsync(stoppingToken);
             Map.StartMakeStoneThread();
@@ -52,7 +52,7 @@ namespace GameSrv
             await GameShare.UserProcessor.StopAsync(cancellationToken);
             await GameShare.MerchantProcessor.StopAsync(cancellationToken);
             await GameShare.EventProcessor.StopAsync(cancellationToken);
-            await GameShare.StorageProcessor.StopAsync(cancellationToken);
+            await GameShare.CharacterDataProcessor.StopAsync(cancellationToken);
             await GameShare.TimedRobotProcessor.StopAsync(cancellationToken);
             await GameShare.ActorBuffProcessor.StopAsync(cancellationToken);
             await M2Share.NetChannel.StopAsync(cancellationToken);

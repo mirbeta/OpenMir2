@@ -280,8 +280,8 @@ namespace GameSrv.Services
             const string sExceptionMsg = "[Exception] AccountService:GetCancelAdmission";
             try
             {
-                string sSessionID = HUtil32.GetValidStr3(sData, ref sC, HUtil32.Backslash);
-                DelSession(HUtil32.StrToInt(sSessionID, 0));
+                var sessionId = HUtil32.GetValidStr3(sData, ref sC, HUtil32.Backslash);
+                DelSession(HUtil32.StrToInt(sessionId, 0));
             }
             catch (Exception e)
             {
@@ -299,9 +299,9 @@ namespace GameSrv.Services
             sessInfo.PayMent = nPayMent;
             sessInfo.PayMode = nPayMode;
             sessInfo.SessionStatus = 0;
-            sessInfo.dwStartTick = HUtil32.GetTickCount();
+            sessInfo.StartTick = HUtil32.GetTickCount();
             sessInfo.ActiveTick = HUtil32.GetTickCount();
-            sessInfo.nRefCount = 1;
+            sessInfo.RefCount = 1;
             sessInfo.PlayTime = playTime;
             _sessionList.Add(sessInfo);
         }

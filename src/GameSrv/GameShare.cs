@@ -27,7 +27,7 @@ namespace GameSrv
         public static readonly GeneratorProcessor GeneratorProcessor;
         public static readonly ActorBuffProcessor ActorBuffProcessor;
         public static readonly EventProcessor EventProcessor;
-        public static readonly StorageProcessor StorageProcessor;
+        public static readonly CharacterDataProcessor CharacterDataProcessor;
         public static readonly TimedRobotProcessor TimedRobotProcessor;
         public static readonly MapQuestManager QuestManager;
         public static readonly DataQueryServer DataServer;
@@ -44,7 +44,7 @@ namespace GameSrv
             MerchantProcessor = new MerchantProcessor();
             GeneratorProcessor = new GeneratorProcessor();
             EventProcessor = new EventProcessor();
-            StorageProcessor = new StorageProcessor();
+            CharacterDataProcessor = new CharacterDataProcessor();
             TimedRobotProcessor = new TimedRobotProcessor();
             ActorBuffProcessor = new ActorBuffProcessor();
             PlanesService = new PlanesService();

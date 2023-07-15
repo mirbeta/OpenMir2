@@ -59,7 +59,7 @@ namespace GameSrv
             _logger.Debug("{0}", $"Total Bytes Recv: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalBytesRecv)}, Total Packets Recv: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalPacketsRecv)}");
             _logger.Debug("{0}", $"System Thread: {GameShare.SystemProcess.ElapsedMilliseconds:N0}ms");
             //_logger.Debug("{0} - {1}", $"User Thread: [{GameShare.UserProcessor.ElapsedMilliseconds:N0}ms]", $"RobotUser Thread: [{GameShare.RobotProcessor.ElapsedMilliseconds:N0}ms] Online/Queue:({SystemShare.WorldEngine.RobotPlayerCount}/{SystemShare.WorldEngine.RobotLogonQueueCount})");
-            _logger.Debug("{0} - {1}", $"Event Thread: [{GameShare.EventProcessor.ElapsedMilliseconds:N0}ms]", $"Storage Thread: [{GameShare.StorageProcessor.ElapsedMilliseconds:N0}ms]");
+            _logger.Debug("{0} - {1}", $"Event Thread: [{GameShare.EventProcessor.ElapsedMilliseconds:N0}ms]", $"Storage Thread: [{GameShare.CharacterDataProcessor.ElapsedMilliseconds:N0}ms]");
             _logger.Debug("{0} - {1}", $"Merchant Thread: [{GameShare.MerchantProcessor.ElapsedMilliseconds:N0}ms]", $"TimedBot Thread: [{GameShare.TimedRobotProcessor.ElapsedMilliseconds:N0}ms]");
             _logger.Debug("{0} {1}", $"Generator Thread: [{GameShare.GeneratorProcessor.ElapsedMilliseconds}ms]", $"Identities Remaining: ");
             //_logger.Debug("{0}", $"\tMonster: {IdentityGenerator.Monster.IdentitiesCount()}");
