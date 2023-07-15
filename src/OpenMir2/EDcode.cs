@@ -77,7 +77,25 @@ namespace SystemModule
         /// <param name="str"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static string DeCodeString(Span<byte> str)
+        public static string DeCodeString(ReadOnlySpan<char> str)
+        {
+            if (str.IsEmpty)
+            {
+                throw new ArgumentNullException(nameof(str));
+            }
+
+            int nLen = 0;
+            byte[] encBuf = EncryptUtil.Decode(str, str.Length, ref nLen);
+            return HUtil32.GetString(encBuf);
+        }
+        
+        /// <summary>
+        /// 解密字符串
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static string DeCodeString(ReadOnlySpan<byte> str)
         {
             if (str.IsEmpty)
             {

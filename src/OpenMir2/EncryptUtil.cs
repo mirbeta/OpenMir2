@@ -239,10 +239,61 @@ namespace SystemModule
             return dstBuffer;
         }
 
+                /// <summary>
+        /// 解密
+        /// </summary>
+        public static byte[] Decode(ReadOnlySpan<char> srcBuf, int len, ref int decodeLen)
+        {
+            byte temp;
+            byte remainder;
+            byte c;
+            int nCycles = len / 4;
+            int nBytesLeft = len % 4;
+            int dstPos = 0;
+            decodeLen = GetDecodeLen(nCycles, nBytesLeft);
+            byte[] dstBuffer = new byte[decodeLen];
+            for (int i = 0; i < nCycles; i++)
+            {
+                int curCycleBegin = i * 4;
+                remainder = (byte)((srcBuf[curCycleBegin + 3]) - ByBase);
+                temp = (byte)(srcBuf[curCycleBegin] - ByBase);
+                c = (byte)(((temp << 2) & 0xF0) | (remainder & 0x0C) | (temp & 0x3));
+                dstBuffer[dstPos] = (byte)(c ^ BySeed);
+                dstPos++;
+                temp = (byte)((srcBuf[curCycleBegin + 1]) - ByBase);
+                c = (byte)(((temp << 2) & 0xF0) | ((remainder << 2) & 0x0C) | (temp & 0x3));
+                dstBuffer[dstPos] = (byte)(c ^ BySeed);
+                dstPos++;
+                temp = (byte)(srcBuf[curCycleBegin + 2] - ByBase);
+                c = (byte)(temp | ((remainder << 2) & 0xC0));
+                dstBuffer[dstPos] = (byte)(c ^ BySeed);
+                dstPos++;
+            }
+            if (nBytesLeft == 2)
+            {
+                remainder = (byte)(srcBuf[len - 1] - ByBase);
+                temp = (byte)(srcBuf[len - 2] - ByBase);
+                c = (byte)(((temp << 2) & 0xF0) | ((remainder << 2) & 0x0C) | (temp & 0x3));
+                dstBuffer[dstPos] = (byte)(c ^ BySeed);
+            }
+            else if (nBytesLeft == 3)
+            {
+                remainder = (byte)(srcBuf[len - 1] - ByBase);
+                temp = (byte)(srcBuf[len - 3] - ByBase);
+                c = (byte)(((temp << 2) & 0xF0) | (remainder & 0x0C) | (temp & 0x3));
+                dstBuffer[dstPos] = (byte)(c ^ BySeed);
+                dstPos++;
+                temp = (byte)(srcBuf[len - 2] - ByBase);
+                c = (byte)(((temp << 2) & 0xF0) | ((remainder << 2) & 0x0C) | (temp & 0x3));
+                dstBuffer[dstPos] = (byte)(c ^ BySeed);
+            }
+            return dstBuffer;
+        }
+                
         /// <summary>
         /// 解密
         /// </summary>
-        public static byte[] Decode(Span<byte> srcBuf, int len, ref int decodeLen)
+        public static byte[] Decode(ReadOnlySpan<byte> srcBuf, int len, ref int decodeLen)
         {
             byte temp;
             byte remainder;

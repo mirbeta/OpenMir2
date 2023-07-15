@@ -2,9 +2,11 @@
 using System.Buffers;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Extensions;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
@@ -13,23 +15,23 @@ namespace M2Server.Net
     public class ChannelMessageHandler
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ChannelGate _gateInfo;
+        private readonly ChannelGate _channelGate;
         private readonly SocketSendQueue _sendQueue;
         private object RunSocketSection{ get; }
         private readonly CancellationTokenSource _cancellation;
         public readonly string ConnectionId;
 
-        public ChannelMessageHandler(ChannelGate gateInfo)
+        public ChannelMessageHandler(ChannelGate channelGate)
         {
-            _gateInfo = gateInfo;
-            ConnectionId = _gateInfo.SocketId;
+            _channelGate = channelGate;
+            ConnectionId = _channelGate.SocketId;
             RunSocketSection = new object();
-            _sendQueue = new SocketSendQueue(gateInfo);
+            _sendQueue = new SocketSendQueue(channelGate);
             _cancellation = new CancellationTokenSource();
             Start();
         }
 
-        public ChannelGate GateInfo => _gateInfo;
+        public ChannelGate GateInfo => _channelGate;
 
         private void Start()
         {
@@ -119,16 +121,14 @@ namespace M2Server.Net
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             try
             {
-                if (packetHeader.PacketCode == Grobal2.PacketCode)
+                if (packetHeader.PacketCode != Grobal2.PacketCode) return;
+                if (packetHeader.PackLength > 0)
                 {
-                    if (packetHeader.PackLength > 0)
-                    {
-                        ExecGateBuffers(packetHeader, message, packetHeader.PackLength);
-                    }
-                    else
-                    {
-                        ExecGateBuffers(packetHeader, null, 0);
-                    }
+                    ExecGateBuffers(packetHeader, message, packetHeader.PackLength);
+                }
+                else
+                {
+                    ExecGateBuffers(packetHeader, null, 0);
                 }
             }
             catch (Exception ex)
@@ -212,15 +212,14 @@ namespace M2Server.Net
                                     }
                                     else
                                     {
-                                        var sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
-                                        SystemShare.WorldEngine.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, sMsg);
+                                        var codeBuff = EDCode.DeCodeString(msgBuff[12..^1]); //var sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
+                                        SystemShare.WorldEngine.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, codeBuff);
                                     }
                                 }
                             }
                             else
                             {
-                                var sMsg = HUtil32.SpanToStr(msgBuff);
-                                DoClientCertification(gateUser, msgPacket.Socket, sMsg);
+                                DoClientCertification(gateUser, msgPacket.Socket, msgBuff.ToString(Encoding.ASCII));
                             }
                         }
                         break;
@@ -233,7 +232,7 @@ namespace M2Server.Net
             }
         }
 
-        private bool GetCertification(string sMsg, ref string sAccount, ref string sChrName, ref int nSessionId, ref int nVersion, ref bool boFlag, ref byte[] tHwid, ref int gateId)
+        private bool GetCertification(ReadOnlySpan<char> sMsg, ref string sAccount, ref string sChrName, ref int nSessionId, ref int nVersion, ref bool boFlag, ref byte[] tHwid, ref int gateId)
         {
             var result = false;
             var sCodeStr = string.Empty;
@@ -244,7 +243,8 @@ namespace M2Server.Net
             const string sExceptionMsg = "[Exception] ThreadSocket::DoClientCertification -> GetCertification";
             try
             {
-                var sData = EDCode.DeCodeString(sMsg);
+                var packetMsg = sMsg[1..];
+                var sData = EDCode.DeCodeString(packetMsg);
                 if (sData.Length > 2 && sData[0] == '*' && sData[1] == '*')
                 {
                     sData = sData.AsSpan()[2..sData.Length].ToString();
@@ -307,8 +307,7 @@ namespace M2Server.Net
                     if (HUtil32.TagCount(sMsg, '!') > 0)
                     {
                         HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
-                        var packetMsg = sMsg.AsSpan()[1..].ToString();
-                        if (GetCertification(packetMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
+                        if (GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
                         {
                             var sessInfo = M2Share.LoginSession.GetAdmission(sAccount, gateUser.IPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (sessInfo != null && nPayMent > 0)

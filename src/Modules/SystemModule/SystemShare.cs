@@ -1746,16 +1746,17 @@ namespace SystemModule
                 MonSayMsgList.Clear();
                 var LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
+                var divider = new[] { ' ', '/', ',', '\t' };
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var sLineText = LoadList[i].Trim();
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new[] { ' ', '/', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, divider);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, divider);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, divider);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, divider);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, divider);
                         if (!string.IsNullOrEmpty(sStatus) && !string.IsNullOrEmpty(sRate) && !string.IsNullOrEmpty(sColor) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sSayMsg))
                         {
                             var nStatus = HUtil32.StrToInt(sStatus, -1);
@@ -1825,15 +1826,6 @@ namespace SystemModule
                 result = true;
             }
             return result;
-        }
-
-        public static void LoadConfig()
-        {
-            ServerConf.LoadConfig();
-            StringConf.LoadString();
-            ExpConf.LoadConfig();
-            GlobalConf.LoadConfig();
-            GameSetting.LoadConfig();
         }
 
         public static int GetUseItemIdx(string sName)
@@ -1993,29 +1985,17 @@ namespace SystemModule
 
         public static string GetEnvirFilePath(string filePath)
         {
-            if (filePath.StartsWith(".."))
-            {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
-            }
-            return Path.Combine(BasePath, Config.EnvirDir, filePath);
+            return Path.Combine(BasePath, Config.EnvirDir, filePath.StartsWith("..") ? filePath[3..] : filePath);
         }
 
         public static string GetEnvirFilePath(string dirPath, string filePath)
         {
-            if (filePath.StartsWith(".."))
-            {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
-            }
-            return Path.Combine(BasePath, Config.EnvirDir, dirPath, filePath);
+            return filePath.StartsWith("..") ? Path.Combine(BasePath, Config.EnvirDir, filePath[3..]) : Path.Combine(BasePath, Config.EnvirDir, dirPath, filePath);
         }
 
         public static string GetNoticeFilePath(string filePath)
         {
-            if (filePath.StartsWith(".."))
-            {
-                return Path.Combine(BasePath, Config.EnvirDir, filePath[3..]);
-            }
-            return Path.Combine(BasePath, Config.NoticeDir, filePath);
+            return filePath.StartsWith("..") ? Path.Combine(BasePath, Config.EnvirDir, filePath[3..]) : Path.Combine(BasePath, Config.NoticeDir, filePath);
         }
     }
 }
