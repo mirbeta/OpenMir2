@@ -128,7 +128,7 @@ namespace DBSrv.Services.Impl
             int nQueryId = requestData.QueryId;
             var requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
             var packetLen = requestData.Message.Length + requestData.Packet.Length + ServerDataPacket.FixedHeaderLen;
-            if (packetLen >= Messages.DefBlockSize && nQueryId > 0 && requestData.Packet != null && requestData.Sgin != null)
+            if (packetLen >= Messages.DefBlockSize && nQueryId > 0 && requestData.Packet != null && requestData.Sign != null)
             {
                 var sData = EDCode.DecodeBuff(requestData.Packet);
                 var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
@@ -137,16 +137,16 @@ namespace DBSrv.Services.Impl
                     SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
-                if (requestData.Sgin.Length <= 0)
+                if (requestData.Sign.Length <= 0)
                 {
                     SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
                 var signatureBuff = BitConverter.GetBytes(queryId);
                 var signatureId = BitConverter.ToInt16(signatureBuff);
-                var sginBuff = EDCode.DecodeBuff(requestData.Sgin);
-                var sgin = BitConverter.ToInt16(sginBuff);
-                if (sgin == signatureId)
+                var signBuff = EDCode.DecodeBuff(requestData.Sign);
+                var signId = BitConverter.ToInt16(signBuff);
+                if (signId == signatureId)
                 {
                     ProcessMarketPacket(nQueryId, requestMessage, sData, connectionId);
                     return;
@@ -294,7 +294,7 @@ namespace DBSrv.Services.Impl
                 queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + ServerDataPacket.FixedHeaderLen));
             }
             var nCheckCode = BitConverter.GetBytes(queryPart);
-            requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
+            requestPacket.Sign = EDCode.EncodeBuffer(nCheckCode);
             SendMessage(connectionId, SerializerUtil.Serialize(requestPacket));
         }
 

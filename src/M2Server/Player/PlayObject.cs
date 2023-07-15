@@ -345,7 +345,7 @@ namespace M2Server.Player
         /// <summary>
         /// 全局会话信息
         /// </summary>
-        public PlayerSession SessInfo { get; set; }
+        public AccountSession SessInfo { get; set; }
         public int LoadTick { get; set; }
         /// <summary>
         /// 人物当前所在服务器序号

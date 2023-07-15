@@ -69,7 +69,7 @@ namespace GameSrv
             {
                 CheckIntervalTime = HUtil32.GetTickCount();
                 GameShare.DataServer.CheckConnected();
-                M2Share.LoginSession.CheckConnected();
+                M2Share.AccountSession.CheckConnected();
                 PlanesClient.Instance.CheckConnected();
                 //await GameShare.ChatService.Ping();
             }

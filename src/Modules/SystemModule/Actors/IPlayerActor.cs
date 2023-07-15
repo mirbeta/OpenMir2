@@ -347,7 +347,7 @@ namespace SystemModule
         /// <summary>
         /// 全局会话信息
         /// </summary>
-        PlayerSession SessInfo { get; set; }
+        AccountSession SessInfo { get; set; }
         int LoadTick { get; set; }
         /// <summary>
         /// 人物当前所在服务器序号

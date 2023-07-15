@@ -63,7 +63,7 @@ namespace GameSrv
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.CommandSystem = new GameCommandSystem();
-            M2Share.LoginSession = new UserSessionService();
+            M2Share.AccountSession = new AccountSessionService();
             M2Share.ScriptEngine = new ScriptEngine();
             M2Share.AutoBot = new RobotManage();
             InitializeModule(serviceProvider);
@@ -255,7 +255,7 @@ namespace GameSrv
                     _logger.Info("守卫列表加载成功...");
                 }
                 GameShare.PlanesService.Start();
-                M2Share.LoginSession.Initialize();
+                M2Share.AccountSession.Initialize();
                 SystemShare.GuildMgr.LoadGuildInfo();
                 SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.CastleMgr.Initialize();

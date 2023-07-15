@@ -15,50 +15,50 @@ namespace GameSrv.Services
     public class DataQueryServer
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ScoketClient _clientScoket;
+        private readonly ScoketClient _clientSocket;
         private byte[] ReceiveBuffer { get; set; }
         private int BuffLen { get; set; }
         private bool SocketWorking { get; set; }
 
         public DataQueryServer()
         {
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort), 4096);
-            _clientScoket.OnConnected += DataScoketConnected;
-            _clientScoket.OnDisconnected += DataScoketDisconnected;
-            _clientScoket.OnReceivedData += DataSocketRead;
-            _clientScoket.OnError += DataSocketError;
+            _clientSocket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort), 4096);
+            _clientSocket.OnConnected += DataScoketConnected;
+            _clientSocket.OnDisconnected += DataScoketDisconnected;
+            _clientSocket.OnReceivedData += DataSocketRead;
+            _clientSocket.OnError += DataSocketError;
             SocketWorking = false;
             ReceiveBuffer = new byte[10 * 2048];
         }
 
         public void Start()
         {
-            _clientScoket.Connect();
+            _clientSocket.Connect();
         }
 
         public void Stop()
         {
-            _clientScoket.Disconnect();
+            _clientSocket.Disconnect();
         }
 
-        public bool IsConnected => _clientScoket.IsConnected;
+        public bool IsConnected => _clientSocket.IsConnected;
 
         public void CheckConnected()
         {
-            if (_clientScoket.IsConnected)
+            if (_clientSocket.IsConnected)
             {
                 return;
             }
-            if (_clientScoket.IsBusy)
+            if (_clientSocket.IsBusy)
             {
                 return;
             }
-            _clientScoket.Connect(SystemShare.Config.sDBAddr, SystemShare.Config.nDBPort);
+            _clientSocket.Connect(SystemShare.Config.sDBAddr, SystemShare.Config.nDBPort);
         }
 
         public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
         {
-            if (!_clientScoket.IsConnected)
+            if (!_clientSocket.IsConnected)
             {
                 return false;
             }
@@ -66,8 +66,8 @@ namespace GameSrv.Services
             requestPacket.QueryId = queryId;
             requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
             requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
-            var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
-            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
+            var signId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
+            requestPacket.Sign = EDCode.EncodeBuffer(BitConverter.GetBytes(signId));
             SendMessage(SerializerUtil.Serialize(requestPacket));
             return true;
         }
@@ -83,24 +83,24 @@ namespace GameSrv.Services
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
-            _clientScoket.Send(data);
+            _clientSocket.Send(data);
         }
 
         private void DataScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
         {
-            _clientScoket.IsConnected = false;
+            _clientSocket.IsConnected = false;
             _logger.Error("数据库服务器[" + e.RemoteEndPoint + "]断开连接...");
         }
 
         private void DataScoketConnected(object sender, DSCClientConnectedEventArgs e)
         {
-            _clientScoket.IsConnected = true;
+            _clientSocket.IsConnected = true;
             _logger.Info("数据库服务器[" + e.RemoteEndPoint + "]连接成功...");
         }
 
         private void DataSocketError(object sender, DSCClientErrorEventArgs e)
         {
-            _clientScoket.IsConnected = false;
+            _clientSocket.IsConnected = false;
             switch (e.ErrorCode)
             {
                 case SocketError.ConnectionRefused:
@@ -210,14 +210,14 @@ namespace GameSrv.Services
                     if (nLen >= 12)
                     {
                         var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
-                        if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
+                        if (queryId <= 0 || responsePacket.Sign.Length <= 0)
                         {
                             SystemShare.Config.nLoadDBErrorCount++;
                             return;
                         }
                         var signatureBuff = BitConverter.GetBytes(queryId);
-                        var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
-                        if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(sginBuff))
+                        var signBuff = EDCode.DecodeBuff(responsePacket.Sign);
+                        if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(signBuff))
                         {
                             CharacterDataService.Enqueue(respCheckCode, responsePacket);
                         }

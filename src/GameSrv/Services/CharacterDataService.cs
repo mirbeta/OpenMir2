@@ -11,7 +11,6 @@ namespace GameSrv.Services
     {
         public int QueryId;
         public int QuetyCount;
-        public Action CallBack;
     }
 
     /// <summary>
@@ -33,7 +32,7 @@ namespace GameSrv.Services
 
         private static bool GetDataSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
         {
-            bool result = false;
+            var result = false;
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
@@ -76,7 +75,7 @@ namespace GameSrv.Services
         /// </summary>
         public static bool QueryCharacterData(string account, string chrName, string addr, ref int queryId, int certCode)
         {
-            bool result = false;
+            var result = false;
             var loadHum = new LoadCharacterData()
             {
                 Account = account,
@@ -96,7 +95,7 @@ namespace GameSrv.Services
         /// 保存玩家数据到DB
         /// </summary>
         /// <returns></returns>
-        public static bool SaveHumRcdToDB(SavePlayerRcd saveRcd, ref int queryId)
+        public static bool SaveCharacterData(SavePlayerRcd saveRcd, ref int queryId)
         {
             SystemShare.Config.nSaveDBCount++;
             return SaveRcd(saveRcd, ref queryId);
@@ -105,8 +104,8 @@ namespace GameSrv.Services
         private static bool SaveRcd(SavePlayerRcd saveRcd, ref int queryId)
         {
             queryId = GetQueryId();
-            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
-            SaveCharacterData saveHumData = new SaveCharacterData(saveRcd.Account, saveRcd.ChrName, saveRcd.CharacterData);
+            var packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
+            var saveHumData = new SaveCharacterData(saveRcd.Account, saveRcd.ChrName, saveRcd.CharacterData);
             if (GameShare.DataServer.SendRequest(queryId, packet, saveHumData))
             {
                 SaveProcessList.Enqueue(queryId);
@@ -120,8 +119,8 @@ namespace GameSrv.Services
         {
             if (SaveProcessList.TryPeek(out var queryId))//todo 保存数据优化一下流程，M2Server.需等待DBSrv结果，异步通知即可
             {
-                int nIdent = 0;
-                int nRecog = 0;
+                var nIdent = 0;
+                var nRecog = 0;
                 byte[] data = null;
                 if (GetDataSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
                 {
@@ -143,8 +142,8 @@ namespace GameSrv.Services
                     Logger.Warn("超过最大查询次数,放弃此次保存.");
                     return;
                 }
-                int nIdent = 0;
-                int nRecog = 0;
+                var nIdent = 0;
+                var nRecog = 0;
                 byte[] data = null;
                 if (GetDataSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
                 {
@@ -166,8 +165,8 @@ namespace GameSrv.Services
 
         private static bool LoadRcd(LoadCharacterData loadHuman, ref int queryId)
         {
-            int nQueryId = GetQueryId();
-            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            var nQueryId = GetQueryId();
+            var packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
             if (GameShare.DataServer.SendRequest(nQueryId, packet, loadHuman))
             {
                 QueryProcessList.Enqueue(new QueryPlayData()

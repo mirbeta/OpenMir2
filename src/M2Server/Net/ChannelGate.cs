@@ -91,7 +91,7 @@ namespace M2Server.Net
         /// <summary>
         /// 当前会话信息
         /// </summary>
-        public PlayerSession SessInfo;
+        public AccountSession SessInfo;
         public int Socket;
         public IFrontEngine FrontEngine;
         public IWorldEngine WorldEngine;

@@ -19,7 +19,7 @@ namespace SystemModule.Packets.ServerPackets
         /// <summary>
         /// 验签
         /// </summary>
-        public byte[] Sgin { get; set; }
+        public byte[] Sign { get; set; }
     }
 
     [MemoryPackable]

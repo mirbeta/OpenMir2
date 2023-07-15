@@ -278,7 +278,7 @@ namespace M2Server.Net.TCP
                                     gateUser.PlayObject.BoEmergencyClose = true;
                                     if (!gateUser.PlayObject.BoReconnection)
                                     {
-                                        M2Share.LoginSession.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.AccountSession.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                 }
                                 gateInfo.UserList[j] = null;

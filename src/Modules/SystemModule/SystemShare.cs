@@ -43,7 +43,6 @@ namespace SystemModule
         /// 服务器启动时间
         /// </summary>
         public static long StartTime;
-        public static int ShareFileNameNum = 0;
         public static readonly RandomNumber RandomNumber;
         public static int HighLevelHuman;
         public static int HighPKPointHuman;

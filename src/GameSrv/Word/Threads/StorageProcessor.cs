@@ -80,7 +80,7 @@ namespace GameSrv.Word.Threads
                     continue;
                 }
                 saveRcd.IsSaveing = true;
-                if (!CharacterDataService.SaveHumRcdToDB(saveRcd, ref saveRcd.QueryId) || saveRcd.ReTryCount > 50)
+                if (!CharacterDataService.SaveCharacterData(saveRcd, ref saveRcd.QueryId) || saveRcd.ReTryCount > 50)
                 {
                     saveRcd.ReTryCount++;
                 }

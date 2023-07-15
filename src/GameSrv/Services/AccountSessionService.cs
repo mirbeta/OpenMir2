@@ -10,19 +10,22 @@ using SystemModule.SocketComponents.Event;
 
 namespace GameSrv.Services
 {
-    public class UserSessionService : ILoginSession
+    /// <summary>
+    /// 账号会话管理服务
+    /// </summary>
+    public class AccountSessionService : IAccountSession
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<PlayerSession> _sessionList;
+        private readonly IList<AccountSession> _sessionList;
         private readonly ScoketClient _clientScoket;
         private readonly object UserIDSection;
         private string SocketRecvText = string.Empty;
         private bool SocketConnected = false;
 
-        public UserSessionService()
+        public AccountSessionService()
         {
             _clientScoket = new ScoketClient();
-            _sessionList = new List<PlayerSession>();
+            _sessionList = new List<AccountSession>();
             UserIDSection = new object();
         }
 
@@ -39,13 +42,12 @@ namespace GameSrv.Services
             _clientScoket.Connect(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort));
         }
 
-        private void IdSocketRead(object sender, DSCClientDataInEventArgs e)
+        private void DataSocketRead(object sender, DSCClientDataInEventArgs e)
         {
             HUtil32.EnterCriticalSection(UserIDSection);
             try
             {
-                string recvText = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-                SocketRecvText += recvText;
+                SocketRecvText += HUtil32.GetString(e.Buff, 0, e.BuffLen);
             }
             finally
             {
@@ -53,7 +55,7 @@ namespace GameSrv.Services
             }
         }
 
-        private void IDSocketError(object sender, DSCClientErrorEventArgs e)
+        private void DataSocketError(object sender, DSCClientErrorEventArgs e)
         {
             switch (e.ErrorCode)
             {
@@ -71,10 +73,10 @@ namespace GameSrv.Services
 
         public void Initialize()
         {
-            _clientScoket.OnConnected += IDSocketConnect;
-            _clientScoket.OnDisconnected += IDSocketDisconnect;
-            _clientScoket.OnError += IDSocketError;
-            _clientScoket.OnReceivedData += IdSocketRead;
+            _clientScoket.OnConnected += DataSocketConnect;
+            _clientScoket.OnDisconnected += DataSocketDisconnect;
+            _clientScoket.OnError += DataSocketError;
+            _clientScoket.OnReceivedData += DataSocketRead;
             CheckConnected();
             _logger.Debug("登录服务器连接初始化完成...");
         }
@@ -91,7 +93,7 @@ namespace GameSrv.Services
             const string sFormatMsg = "({0}/{1}/{2})";
             for (int i = 0; i < _sessionList.Count; i++)
             {
-                PlayerSession sessInfo = _sessionList[i];
+                AccountSession sessInfo = _sessionList[i];
                 if (sessInfo.SessionId == nId && sessInfo.Account == sUserId)
                 {
                     break;
@@ -104,7 +106,7 @@ namespace GameSrv.Services
         {
             for (int i = _sessionList.Count - 1; i >= 0; i--)
             {
-                PlayerSession sessInfo = _sessionList[i];
+                AccountSession sessInfo = _sessionList[i];
                 if (sessInfo.SessionId == nID && sessInfo.Account == sUserID)
                 {
                     break;
@@ -290,7 +292,7 @@ namespace GameSrv.Services
 
         private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode, long playTime)
         {
-            PlayerSession sessInfo = new PlayerSession();
+            AccountSession sessInfo = new AccountSession();
             sessInfo.Account = sAccount;
             sessInfo.IPaddr = sIPaddr;
             sessInfo.SessionId = nSessionID;
@@ -307,7 +309,7 @@ namespace GameSrv.Services
         private void DelSession(int sessionId)
         {
             var sAccount = string.Empty;
-            PlayerSession sessInfo = null;
+            AccountSession sessInfo = null;
             const string sExceptionMsg = "[Exception] AccountService:DelSession";
             try
             {
@@ -343,9 +345,9 @@ namespace GameSrv.Services
             _sessionList.Clear();
         }
 
-        public PlayerSession GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime)
+        public AccountSession GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime)
         {
-            PlayerSession result = null;
+            AccountSession result = null;
             bool boFound = false;
             const string sGetFailMsg = "[非法登录] 全局会话验证失败({0}/{1}/{2})";
             nPayMent = 0;
@@ -425,14 +427,14 @@ namespace GameSrv.Services
             M2Share.nGrossResetCnt = HUtil32.StrToInt(s1C, 0);*/
         }
 
-        private void IDSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private void DataSocketConnect(object sender, DSCClientConnectedEventArgs e)
         {
             SocketConnected = true;
             _logger.Info("登录服务器[" + _clientScoket.RemoteEndPoint + "]连接成功...");
             SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
         }
 
-        private void IDSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private void DataSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
         {
             // if (!Settings.Config.boIDSocketConnected)
             // {

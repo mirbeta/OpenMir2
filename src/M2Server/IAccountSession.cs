@@ -3,7 +3,7 @@ using SystemModule.Data;
 
 namespace M2Server
 {
-    public interface ILoginSession
+    public interface IAccountSession
     {
         void Initialize();
 
@@ -13,7 +13,7 @@ namespace M2Server
 
         void Close();
 
-        PlayerSession GetAdmission(string account, string paddr, int sessionId, ref int payMode, ref int payMent, ref long playTime);
+        AccountSession GetAdmission(string account, string paddr, int sessionId, ref int payMode, ref int payMent, ref long playTime);
 
         int GetSessionCount();
 

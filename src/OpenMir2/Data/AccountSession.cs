@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Data
 {
-    public class PlayerSession
+    public class AccountSession
     {
         public int SessionId;
         public string Account;

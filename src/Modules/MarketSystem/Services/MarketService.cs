@@ -83,8 +83,8 @@ namespace MarketSystem
             requestPacket.QueryId = queryId;
             requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
             requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
-            var sginId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
-            requestPacket.Sgin = EDCode.EncodeBuffer(BitConverter.GetBytes(sginId));
+            var signId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
+            requestPacket.Sign = EDCode.EncodeBuffer(BitConverter.GetBytes(signId));
             SendMessage(SerializerUtil.Serialize(requestPacket));
             return true;
         }
@@ -292,14 +292,14 @@ namespace MarketSystem
                 if (nLen >= 12)
                 {
                     var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
-                    if (queryId <= 0 || responsePacket.Sgin.Length <= 0)
+                    if (queryId <= 0 || responsePacket.Sign.Length <= 0)
                     {
                         SystemShare.Config.nLoadDBErrorCount++;
                         return;
                     }
                     var signatureBuff = BitConverter.GetBytes(queryId);
-                    var sginBuff = EDCode.DecodeBuff(responsePacket.Sgin);
-                    if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(sginBuff))
+                    var signBuff = EDCode.DecodeBuff(responsePacket.Sign);
+                    if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(signBuff))
                     {
                         var commandMessage = SerializerUtil.Deserialize<ServerRequestMessage>(responsePacket.Message, true);
                         switch (commandMessage.Ident)
