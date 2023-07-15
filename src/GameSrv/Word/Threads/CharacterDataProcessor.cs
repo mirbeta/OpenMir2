@@ -6,12 +6,12 @@ using SystemModule.Data;
 
 namespace GameSrv.Word.Threads
 {
-    public class StorageProcessor : TimerScheduledService
+    public class CharacterDataProcessor : TimerScheduledService
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly object UserCriticalSection = new object();
 
-        public StorageProcessor() : base(TimeSpan.FromMilliseconds(500), "StorageProcessor")
+        public CharacterDataProcessor() : base(TimeSpan.FromMilliseconds(1000), "StorageProcessor")
         {
 
         }
