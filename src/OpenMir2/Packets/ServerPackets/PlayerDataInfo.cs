@@ -43,7 +43,7 @@ namespace SystemModule.Packets.ServerPackets
     }
 
     [MemoryPackable]
-    public partial record struct LoadPlayerDataMessage
+    public partial struct LoadCharacterData
     {
         public string Account { get; set; }
         public string ChrName { get; set; }

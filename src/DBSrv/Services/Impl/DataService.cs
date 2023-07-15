@@ -208,7 +208,7 @@ namespace DBSrv.Services.Impl
 
         private void LoadHumanRcd(int queryId, byte[] data, string connectionId)
         {
-            var loadHumanPacket = SerializerUtil.Deserialize<LoadPlayerDataMessage>(data);
+            var loadHumanPacket = SerializerUtil.Deserialize<LoadCharacterData>(data);
             if (loadHumanPacket.SessionID <= 0)
             {
                 return;

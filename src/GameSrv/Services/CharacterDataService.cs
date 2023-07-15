@@ -77,7 +77,7 @@ namespace GameSrv.Services
         public static bool QueryCharacterData(string account, string chrName, string addr, ref int queryId, int certCode)
         {
             bool result = false;
-            var loadHum = new LoadPlayerDataMessage()
+            var loadHum = new LoadCharacterData()
             {
                 Account = account,
                 ChrName = chrName,
@@ -164,7 +164,7 @@ namespace GameSrv.Services
             }
         }
 
-        private static bool LoadRcd(LoadPlayerDataMessage loadHuman, ref int queryId)
+        private static bool LoadRcd(LoadCharacterData loadHuman, ref int queryId)
         {
             int nQueryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
