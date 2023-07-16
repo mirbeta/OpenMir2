@@ -215,9 +215,8 @@ namespace GameSrv.Services
                             SystemShare.Config.nLoadDBErrorCount++;
                             return;
                         }
-                        var signatureBuff = BitConverter.GetBytes(queryId);
                         var signBuff = EDCode.DecodeBuff(responsePacket.Sign);
-                        if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(signBuff))
+                        if (queryId == BitConverter.ToInt16(signBuff))
                         {
                             CharacterDataService.Enqueue(respCheckCode, responsePacket);
                         }

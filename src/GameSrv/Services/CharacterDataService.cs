@@ -10,7 +10,7 @@ namespace GameSrv.Services
     public class QueryPlayData
     {
         public int QueryId;
-        public int QuetyCount;
+        public int QueryCount;
     }
 
     /// <summary>
@@ -137,7 +137,7 @@ namespace GameSrv.Services
         {
             if (QueryProcessList.TryDequeue(out var queryData))
             {
-                if (queryData.QuetyCount >= 10000)
+                if (queryData.QueryCount >= 60) //60秒后放弃
                 {
                     Logger.Warn("超过最大查询次数,放弃此次保存.");
                     return;
@@ -157,7 +157,7 @@ namespace GameSrv.Services
                 }
                 else
                 {
-                    queryData.QuetyCount++;
+                    queryData.QueryCount++;
                     QueryProcessList.Enqueue(queryData);
                 }
             }
@@ -165,15 +165,14 @@ namespace GameSrv.Services
 
         private static bool LoadRcd(LoadCharacterData loadHuman, ref int queryId)
         {
-            var nQueryId = GetQueryId();
+            queryId = GetQueryId();
             var packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            if (GameShare.DataServer.SendRequest(nQueryId, packet, loadHuman))
+            if (GameShare.DataServer.SendRequest(queryId, packet, loadHuman))
             {
                 QueryProcessList.Enqueue(new QueryPlayData()
                 {
-                    QueryId = nQueryId
+                    QueryId = queryId
                 });
-                queryId = nQueryId;
                 Logger.Debug($"查询玩家数据任务ID:[{queryId}]");
                 return true;
             }

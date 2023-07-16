@@ -35,9 +35,9 @@
 
     
     <ItemGroup>
-      <PackageReference Include="MongoDB.Bson" Version="2.19.2" />
-      <PackageReference Include="MongoDB.Driver" Version="2.19.2" />
-      <PackageReference Include="NLog" Version="5.2.0" />
+      <PackageReference Include="MongoDB.Bson" Version="2.20.0" />
+      <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
+      <PackageReference Include="NLog" Version="5.2.2" />
     </ItemGroup>
 
     <ItemGroup>

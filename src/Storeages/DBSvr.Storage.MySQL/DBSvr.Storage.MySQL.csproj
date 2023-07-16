@@ -43,7 +43,7 @@
 		<PackageReference Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
 		<PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
 		<PackageReference Include="MySqlConnector" Version="2.2.6" />
-		<PackageReference Include="NLog" Version="5.2.0" />
+		<PackageReference Include="NLog" Version="5.2.2" />
 	</ItemGroup>
 
 	<ItemGroup>
