@@ -956,7 +956,7 @@ namespace M2Server.Player
                 {
                 }
             }
-            string sMsg = EDCode.EncodeBuffer(SystemShare.Config.ClientConf);
+            string sMsg = EDCode.EncodeMessage(SystemShare.Config.ClientConf);
             //var nRecog = HUtil32.MakeLong(HUtil32.MakeWord(nRunHuman, nRunMon), HUtil32.MakeWord(nRunNpc, nWarRunAll));
             //var nParam = (short)HUtil32.MakeWord(5, 0);
             SendDefMessage(Messages.SM_SERVERCONFIG, 0, 0, 0, 0, sMsg);

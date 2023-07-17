@@ -15,10 +15,11 @@ namespace M2Server.Actor
         public virtual void RecalcAbilitys()
         {
             AddAbil = new AddAbility();
-            Ability temp = WAbil;
-            WAbil = (Ability)Abil.Clone();
-            WAbil.HP = temp.HP;
-            WAbil.MP = temp.MP;
+            Abil = WAbil;
+            //Ability temp = WAbil;
+            //WAbil = (Ability)Abil.Clone();
+            WAbil.HP = Abil.HP;
+            WAbil.MP = Abil.MP;
             WAbil.Weight = 0;
             WAbil.WearWeight = 0;
             WAbil.HandWeight = 0;

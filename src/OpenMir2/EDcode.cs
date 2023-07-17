@@ -178,9 +178,8 @@ namespace SystemModule
             {
                 throw new ArgumentNullException(nameof(str));
             }
-
             byte[] bSrc = HUtil32.GetBytes(str);
-            byte[] encBuf = new byte[bSrc.Length * 2];
+            Span<byte> encBuf = stackalloc byte[bSrc.Length * 2];
             int destLen = EncryptUtil.Encode(bSrc, bSrc.Length, encBuf);
             return HUtil32.GetString(encBuf, 0, destLen);
         }
@@ -202,7 +201,7 @@ namespace SystemModule
 
             if (buffSize < BufferSize)
             {
-                byte[] encBuf = new byte[buffSize * 2];
+                Span<byte> encBuf = stackalloc byte[buffSize * 2];
                 int destLen = EncryptUtil.Encode(data, buffSize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
@@ -220,8 +219,8 @@ namespace SystemModule
 
             if (buffSize < BufferSize)
             {
-                byte[] encBuf = new byte[buffSize * 2];
-                int destLen = EncryptUtil.Encode(data, buffSize, encBuf);
+                Span<byte> encBuf = stackalloc byte[buffSize * 2];
+                int destLen = EncryptUtil.Encode(data, buffSize, encBuf, pos: 1);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
             return string.Empty;
@@ -238,7 +237,7 @@ namespace SystemModule
 
             if (buffSize < BufferSize)
             {
-                byte[] encBuf = new byte[buffSize * 2];
+                Span<byte> encBuf = stackalloc byte[buffSize * 2];
                 int destLen = EncryptUtil.Encode(data, buffSize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
@@ -260,7 +259,7 @@ namespace SystemModule
 
             if (buffSize < BufferSize)
             {
-                byte[] encBuf = new byte[buffSize * 2];
+                Span<byte> encBuf = stackalloc byte[buffSize * 2];
                 int destLen = EncryptUtil.Encode(data, buffSize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
@@ -277,32 +276,30 @@ namespace SystemModule
             {
                 throw new ArgumentNullException(nameof(data));
             }
-
             int buffSize = data.Length;
             if (buffSize >= BufferSize)
             {
                 return Array.Empty<byte>();
             }
-
-            byte[] encBuf = new byte[buffSize * 2];
+            Span<byte> encBuf = stackalloc byte[buffSize * 2];
             int destLen = EncryptUtil.Encode(data, buffSize, encBuf);
-            return encBuf[..destLen];
+            return encBuf[..destLen].ToArray();
         }
 
         /// <summary>
         /// 加密Byte数组
         /// </summary>
-        public static string EncodeBuffer(byte[] data, int bufsize)
+        public static string EncodeBuffer(byte[] data, int buffSize)
         {
             if (data == null)
             {
                 throw new ArgumentNullException(nameof(data));
             }
 
-            if (bufsize < BufferSize)
+            if (buffSize < BufferSize)
             {
-                byte[] encBuf = new byte[bufsize * 2];
-                int destLen = EncryptUtil.Encode(data, bufsize, encBuf);
+                Span<byte> encBuf = stackalloc byte[buffSize * 2];
+                int destLen = EncryptUtil.Encode(data, buffSize, encBuf);
                 return HUtil32.GetString(encBuf, 0, destLen);
             }
             return string.Empty;
@@ -333,7 +330,7 @@ namespace SystemModule
             {
                 return string.Empty;
             }
-            byte[] encBuf = new byte[packetData.Length * 2];
+            Span<byte> encBuf = stackalloc byte[packetData.Length * 2];
             int destLen = EncryptUtil.Encode(packetData, 12, encBuf);
             return HUtil32.GetString(encBuf, 0, destLen);
         }

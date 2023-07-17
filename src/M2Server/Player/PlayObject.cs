@@ -1996,119 +1996,100 @@ namespace M2Server.Player
             Luck = 0;
             Luck = (byte)(Luck + AddAbil.Luck);
             Luck = (byte)(Luck - AddAbil.UnLuck);
-            if (Race == ActorRace.Play)
+            bool mhRing = false;
+            bool mhBracelet = false;
+            bool mhNecklace = false;
+            RecoveryRing = false;
+            AngryRing = false;
+            MagicShield = false;
+            MoXieSuite = 0;
+            SuckupEnemyHealthRate = 0;
+            SuckupEnemyHealth = 0;
+            FastTrain = false;
+            HitSpeed = 0;
+            bool[] spiritArr = new bool[4] { false, false, false, false };
+            bool[] cghi = new bool[4] { false, false, false, false };
+            bool shRing = false;
+            bool shBracelet = false;
+            bool shNecklace = false;
+            bool hpRing = false;
+            bool hpBracelet = false;
+            bool mpRing = false;
+            bool mpBracelet = false;
+            bool hpmpRing = false;
+            bool hpmpBracelet = false;
+            bool hppNecklace = false;
+            bool hppBracelet = false;
+            bool hppRing = false;
+            bool choWeapon = false;
+            bool choNecklace = false;
+            bool choRing = false;
+            bool choHelmet = false;
+            bool choBracelet = false;
+            bool psetNecklace = false;
+            bool psetBracelet = false;
+            bool psetRing = false;
+            bool hsetNecklace = false;
+            bool hsetBracelet = false;
+            bool hsetRing = false;
+            bool ysetNecklace = false;
+            bool ysetBracelet = false;
+            bool ysetRing = false;
+            bool bonesetWeapon = false;
+            bool bonesetHelmet = false;
+            bool bonesetDress = false;
+            bool bugsetNecklace = false;
+            bool bugsetRing = false;
+            bool bugsetBracelet = false;
+            bool ptsetBelt = false;
+            bool ptsetBoots = false;
+            bool ptsetNecklace = false;
+            bool ptsetBracelet = false;
+            bool ptsetRing = false;
+            bool kssetBelt = false;
+            bool kssetBoots = false;
+            bool kssetNecklace = false;
+            bool kssetBracelet = false;
+            bool kssetRing = false;
+            bool rubysetBelt = false;
+            bool rubysetBoots = false;
+            bool rubysetNecklace = false;
+            bool rubysetBracelet = false;
+            bool rubysetRing = false;
+            bool strongPtsetBelt = false;
+            bool strongPtsetBoots = false;
+            bool strongPtsetNecklace = false;
+            bool strongPtsetBracelet = false;
+            bool strongPtsetRing = false;
+            bool strongKssetBelt = false;
+            bool strongKssetBoots = false;
+            bool strongKssetNecklace = false;
+            bool strongKssetBracelet = false;
+            bool strongKssetRing = false;
+            bool strongRubysetBelt = false;
+            bool strongRubysetBoots = false;
+            bool strongRubysetNecklace = false;
+            bool strongRubysetBracelet = false;
+            bool strongRubysetRing = false;
+            bool dragonsetRingLeft = false;
+            bool dragonsetRingRight = false;
+            bool dragonsetBraceletLeft = false;
+            bool dragonsetBraceletRight = false;
+            bool dragonsetNecklace = false;
+            bool dragonsetDress = false;
+            bool dragonsetHelmet = false;
+            bool dragonsetWeapon = false;
+            bool dragonsetBoots = false;
+            bool dragonsetBelt = false;
+            bool dsetWingdress = false;
+            for (int i = 0; i < UseItems.Length; i++)
             {
-                bool mhRing = false;
-                bool mhBracelet = false;
-                bool mhNecklace = false;
-                RecoveryRing = false;
-                AngryRing = false;
-                MagicShield = false;
-                MoXieSuite = 0;
-                SuckupEnemyHealthRate = 0;
-                SuckupEnemyHealth = 0;
-                FastTrain = false;
-                HitSpeed = 0;
-                bool[] spiritArr = new bool[4] { false, false, false, false };
-                bool[] cghi = new bool[4] { false, false, false, false };
-                bool shRing = false;
-                bool shBracelet = false;
-                bool shNecklace = false;
-                bool hpRing = false;
-                bool hpBracelet = false;
-                bool mpRing = false;
-                bool mpBracelet = false;
-                bool hpmpRing = false;
-                bool hpmpBracelet = false;
-                bool hppNecklace = false;
-                bool hppBracelet = false;
-                bool hppRing = false;
-                bool choWeapon = false;
-                bool choNecklace = false;
-                bool choRing = false;
-                bool choHelmet = false;
-                bool choBracelet = false;
-                bool psetNecklace = false;
-                bool psetBracelet = false;
-                bool psetRing = false;
-                bool hsetNecklace = false;
-                bool hsetBracelet = false;
-                bool hsetRing = false;
-                bool ysetNecklace = false;
-                bool ysetBracelet = false;
-                bool ysetRing = false;
-                bool bonesetWeapon = false;
-                bool bonesetHelmet = false;
-                bool bonesetDress = false;
-                bool bugsetNecklace = false;
-                bool bugsetRing = false;
-                bool bugsetBracelet = false;
-                bool ptsetBelt = false;
-                bool ptsetBoots = false;
-                bool ptsetNecklace = false;
-                bool ptsetBracelet = false;
-                bool ptsetRing = false;
-                bool kssetBelt = false;
-                bool kssetBoots = false;
-                bool kssetNecklace = false;
-                bool kssetBracelet = false;
-                bool kssetRing = false;
-                bool rubysetBelt = false;
-                bool rubysetBoots = false;
-                bool rubysetNecklace = false;
-                bool rubysetBracelet = false;
-                bool rubysetRing = false;
-                bool strongPtsetBelt = false;
-                bool strongPtsetBoots = false;
-                bool strongPtsetNecklace = false;
-                bool strongPtsetBracelet = false;
-                bool strongPtsetRing = false;
-                bool strongKssetBelt = false;
-                bool strongKssetBoots = false;
-                bool strongKssetNecklace = false;
-                bool strongKssetBracelet = false;
-                bool strongKssetRing = false;
-                bool strongRubysetBelt = false;
-                bool strongRubysetBoots = false;
-                bool strongRubysetNecklace = false;
-                bool strongRubysetBracelet = false;
-                bool strongRubysetRing = false;
-                bool dragonsetRingLeft = false;
-                bool dragonsetRingRight = false;
-                bool dragonsetBraceletLeft = false;
-                bool dragonsetBraceletRight = false;
-                bool dragonsetNecklace = false;
-                bool dragonsetDress = false;
-                bool dragonsetHelmet = false;
-                bool dragonsetWeapon = false;
-                bool dragonsetBoots = false;
-                bool dragonsetBelt = false;
-                bool dsetWingdress = false;
-                for (int i = 0; i < UseItems.Length; i++)
+                if (UseItems[i] != null && (UseItems[i].Index > 0))
                 {
-                    if (UseItems[i] != null && (UseItems[i].Index > 0))
+                    StdItem stdItem;
+                    if (UseItems[i].Dura == 0)
                     {
-                        StdItem stdItem;
-                        if (UseItems[i].Dura == 0)
-                        {
-                            stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
-                            if (stdItem != null)
-                            {
-                                if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
-                                {
-                                    WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
-                                }
-                                else
-                                {
-                                    WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
-                                }
-                            }
-                            continue;
-                        }
                         stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
-                        ApplyItemParameters(UseItems[i], stdItem);
-                        ApplyItemParametersEx(UseItems[i]);
-   
                         if (stdItem != null)
                         {
                             if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
@@ -2119,781 +2100,795 @@ namespace M2Server.Player
                             {
                                 WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
                             }
-                            switch (i)
+                        }
+                        continue;
+                    }
+                    stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    ApplyItemParameters(UseItems[i], stdItem);
+                    ApplyItemParametersEx(UseItems[i]);
+   
+                    if (stdItem != null)
+                    {
+                        if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
+                        {
+                            WAbil.HandWeight = (byte)(WAbil.HandWeight + stdItem.Weight);
+                        }
+                        else
+                        {
+                            WAbil.WearWeight = (byte)(WAbil.WearWeight + stdItem.Weight);
+                        }
+                        switch (i)
+                        {
+                            case ItemLocation.Weapon:
+                            case ItemLocation.ArmRingl:
+                            case ItemLocation.ArmRingr:
                             {
-                                case ItemLocation.Weapon:
-                                case ItemLocation.ArmRingl:
-                                case ItemLocation.ArmRingr:
-                                    {
-                                        if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
-                                        {
-                                            AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (-stdItem.SpecialPwr));
-                                        }
-                                        if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
-                                        {
-                                            AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
-                                        }
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.CCHO_WEAPON:
-                                                choWeapon = true;
-                                                break;
-                                            case ItemShapeConst.BONESET_WEAPON_SHAPE when (stdItem.StdMode == 6):
-                                                bonesetWeapon = true;
-                                                break;
-                                            case DragonConst.DRAGON_WEAPON_SHAPE:
-                                                dragonsetWeapon = true;
-                                                break;
-                                        }
+                                if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
+                                {
+                                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (-stdItem.SpecialPwr));
+                                }
+                                if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
+                                {
+                                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
+                                }
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.CCHO_WEAPON:
+                                        choWeapon = true;
                                         break;
-                                    }
-                                case ItemLocation.Necklace:
-                                    {
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.NECTLACE_FASTTRAINING_ITEM:
-                                                FastTrain = true;
-                                                break;
-                                            case ItemShapeConst.NECTLACE_SEARCH_ITEM:
-                                                ProbeNecklace = true;
-                                                break;
-                                            case ItemShapeConst.NECKLACE_GI_ITEM:
-                                                cghi[1] = true;
-                                                break;
-                                            case ItemShapeConst.NECKLACE_OF_MANATOHEALTH:
-                                                mhNecklace = true;
-                                                MoXieSuite = MoXieSuite + stdItem.AniCount;
-                                                break;
-                                            case ItemShapeConst.NECKLACE_OF_SUCKHEALTH:
-                                                shNecklace = true;
-                                                SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
-                                                break;
-                                            case ItemShapeConst.NECKLACE_OF_HPPUP:
-                                                hppNecklace = true;
-                                                break;
-                                            case ItemShapeConst.CCHO_NECKLACE:
-                                                choNecklace = true;
-                                                break;
-                                            case ItemShapeConst.PSET_NECKLACE_SHAPE:
-                                                psetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.HSET_NECKLACE_SHAPE:
-                                                hsetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.YSET_NECKLACE_SHAPE:
-                                                ysetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.BUGSET_NECKLACE_SHAPE:
-                                                bugsetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.PTSET_NECKLACE_SHAPE:
-                                                ptsetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.KSSET_NECKLACE_SHAPE:
-                                                kssetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.RUBYSET_NECKLACE_SHAPE:
-                                                rubysetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_PTSET_NECKLACE_SHAPE:
-                                                strongPtsetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_KSSET_NECKLACE_SHAPE:
-                                                strongKssetNecklace = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_RUBYSET_NECKLACE_SHAPE:
-                                                strongRubysetNecklace = true;
-                                                break;
-                                            case DragonConst.DRAGON_NECKLACE_SHAPE:
-                                                dragonsetNecklace = true;
-                                                break;
-                                        }
+                                    case ItemShapeConst.BONESET_WEAPON_SHAPE when (stdItem.StdMode == 6):
+                                        bonesetWeapon = true;
                                         break;
-                                    }
-                                case ItemLocation.Ringr:
-                                case ItemLocation.Ringl:
-                                    {
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.RING_TRANSPARENT_ITEM:
-                                                StatusTimeArr[PoisonState.STATETRANSPARENT] = 60000;
-                                                HideMode = true;
-                                                break;
-                                            case ItemShapeConst.RING_SPACEMOVE_ITEM:
-                                                Teleport = true;
-                                                break;
-                                            case ItemShapeConst.RING_MAKESTONE_ITEM:
-                                                Paralysis = true;
-                                                break;
-                                            case ItemShapeConst.RING_REVIVAL_ITEM:
-                                                Revival = true;
-                                                break;
-                                            case ItemShapeConst.RING_FIREBALL_ITEM:
-                                                FlameRing = true;
-                                                break;
-                                            case ItemShapeConst.RING_HEALING_ITEM:
-                                                RecoveryRing = true;
-                                                break;
-                                            case ItemShapeConst.RING_ANGERENERGY_ITEM:
-                                                AngryRing = true;
-                                                break;
-                                            case ItemShapeConst.RING_MAGICSHIELD_ITEM:
-                                                MagicShield = true;
-                                                break;
-                                            case ItemShapeConst.RING_SUPERSTRENGTH_ITEM:
-                                                MuscleRing = true;
-                                                break;
-                                            case ItemShapeConst.RING_CHUN_ITEM:
-                                                cghi[0] = true;
-                                                break;
-                                            case ItemShapeConst.RING_OF_MANATOHEALTH:
-                                                mhRing = true;
-                                                MoXieSuite = MoXieSuite + stdItem.AniCount;
-                                                break;
-                                            case ItemShapeConst.RING_OF_SUCKHEALTH:
-                                                shRing = true;
-                                                SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
-                                                break;
-                                            case ItemShapeConst.RING_OF_HPUP:
-                                                hpRing = true;
-                                                break;
-                                            case ItemShapeConst.RING_OF_MPUP:
-                                                mpRing = true;
-                                                break;
-                                            case ItemShapeConst.RING_OF_HPMPUP:
-                                                hpmpRing = true;
-                                                break;
-                                            case ItemShapeConst.RING_OH_HPPUP:
-                                                hppRing = true;
-                                                break;
-                                            case ItemShapeConst.CCHO_RING:
-                                                choRing = true;
-                                                break;
-                                            case ItemShapeConst.PSET_RING_SHAPE:
-                                                psetRing = true;
-                                                break;
-                                            case ItemShapeConst.HSET_RING_SHAPE:
-                                                hsetRing = true;
-                                                break;
-                                            case ItemShapeConst.YSET_RING_SHAPE:
-                                                ysetRing = true;
-                                                break;
-                                            case ItemShapeConst.BUGSET_RING_SHAPE:
-                                                bugsetRing = true;
-                                                break;
-                                            case ItemShapeConst.PTSET_RING_SHAPE:
-                                                ptsetRing = true;
-                                                break;
-                                            case ItemShapeConst.KSSET_RING_SHAPE:
-                                                kssetRing = true;
-                                                break;
-                                            case ItemShapeConst.RUBYSET_RING_SHAPE:
-                                                rubysetRing = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_PTSET_RING_SHAPE:
-                                                strongPtsetRing = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_KSSET_RING_SHAPE:
-                                                strongKssetRing = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_RUBYSET_RING_SHAPE:
-                                                strongRubysetRing = true;
-                                                break;
-                                            case DragonConst.DRAGON_RING_SHAPE:
-                                                {
-                                                    if ((i == ItemLocation.Ringl))
-                                                    {
-                                                        dragonsetRingLeft = true;
-                                                    }
-                                                    if ((i == ItemLocation.Ringr))
-                                                    {
-                                                        dragonsetRingRight = true;
-                                                    }
-                                                    break;
-                                                }
-                                        }
+                                    case DragonConst.DRAGON_WEAPON_SHAPE:
+                                        dragonsetWeapon = true;
                                         break;
-                                    }
+                                }
+                                break;
                             }
-                            switch (i)
+                            case ItemLocation.Necklace:
                             {
-                                case ItemLocation.ArmRingl:
-                                case ItemLocation.ArmRingr:
-                                    {
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.ARMRING_HAP_ITEM:
-                                                cghi[2] = true;
-                                                break;
-                                            case ItemShapeConst.BRACELET_OF_MANATOHEALTH:
-                                                mhBracelet = true;
-                                                MoXieSuite = MoXieSuite + stdItem.AniCount;
-                                                break;
-                                            case ItemShapeConst.BRACELET_OF_SUCKHEALTH:
-                                                shBracelet = true;
-                                                SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
-                                                break;
-                                            case ItemShapeConst.BRACELET_OF_HPUP:
-                                                hpBracelet = true;
-                                                break;
-                                            case ItemShapeConst.BRACELET_OF_MPUP:
-                                                mpBracelet = true;
-                                                break;
-                                            case ItemShapeConst.BRACELET_OF_HPMPUP:
-                                                hpmpBracelet = true;
-                                                break;
-                                            case ItemShapeConst.BRACELET_OF_HPPUP:
-                                                hppBracelet = true;
-                                                break;
-                                            case ItemShapeConst.CCHO_BRACELET:
-                                                choBracelet = true;
-                                                break;
-                                            case ItemShapeConst.PSET_BRACELET_SHAPE:
-                                                psetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.HSET_BRACELET_SHAPE:
-                                                hsetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.YSET_BRACELET_SHAPE:
-                                                ysetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.BUGSET_BRACELET_SHAPE:
-                                                bugsetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.PTSET_BRACELET_SHAPE:
-                                                ptsetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.KSSET_BRACELET_SHAPE:
-                                                kssetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.RUBYSET_BRACELET_SHAPE:
-                                                rubysetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_PTSET_BRACELET_SHAPE:
-                                                strongPtsetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_KSSET_BRACELET_SHAPE:
-                                                strongKssetBracelet = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_RUBYSET_BRACELET_SHAPE:
-                                                strongRubysetBracelet = true;
-                                                break;
-                                            case DragonConst.DRAGON_BRACELET_SHAPE:
-                                                {
-                                                    if ((i == ItemLocation.ArmRingl))
-                                                    {
-                                                        dragonsetBraceletLeft = true;
-                                                    }
-                                                    if ((i == ItemLocation.ArmRingr))
-                                                    {
-                                                        dragonsetBraceletRight = true;
-                                                    }
-                                                    break;
-                                                }
-                                        }
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.NECTLACE_FASTTRAINING_ITEM:
+                                        FastTrain = true;
                                         break;
-                                    }
-                                case ItemLocation.Helmet:
-                                    {
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.HELMET_IL_ITEM:
-                                                cghi[3] = true;
-                                                break;
-                                            case ItemShapeConst.CCHO_HELMET:
-                                                choHelmet = true;
-                                                break;
-                                            case ItemShapeConst.BONESET_HELMET_SHAPE:
-                                                bonesetHelmet = true;
-                                                break;
-                                            case DragonConst.DRAGON_HELMET_SHAPE:
-                                                dragonsetHelmet = true;
-                                                break;
-                                        }
+                                    case ItemShapeConst.NECTLACE_SEARCH_ITEM:
+                                        ProbeNecklace = true;
                                         break;
-                                    }
-                                case ItemLocation.Dress:
-                                    {
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.DRESS_SHAPE_WING:
-                                                dsetWingdress = true;
-                                                break;
-                                            case ItemShapeConst.BONESET_DRESS_SHAPE:
-                                                bonesetDress = true;
-                                                break;
-                                            case DragonConst.DRAGON_DRESS_SHAPE:
-                                                dragonsetDress = true;
-                                                break;
-                                        }
+                                    case ItemShapeConst.NECKLACE_GI_ITEM:
+                                        cghi[1] = true;
                                         break;
-                                    }
-                                case ItemLocation.Belt:
-                                    {
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.PTSET_BELT_SHAPE:
-                                                ptsetBelt = true;
-                                                break;
-                                            case ItemShapeConst.KSSET_BELT_SHAPE:
-                                                kssetBelt = true;
-                                                break;
-                                            case ItemShapeConst.RUBYSET_BELT_SHAPE:
-                                                rubysetBelt = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_PTSET_BELT_SHAPE:
-                                                strongPtsetBelt = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_KSSET_BELT_SHAPE:
-                                                strongKssetBelt = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_RUBYSET_BELT_SHAPE:
-                                                strongRubysetBelt = true;
-                                                break;
-                                            case DragonConst.DRAGON_BELT_SHAPE:
-                                                dragonsetBelt = true;
-                                                break;
-                                        }
+                                    case ItemShapeConst.NECKLACE_OF_MANATOHEALTH:
+                                        mhNecklace = true;
+                                        MoXieSuite = MoXieSuite + stdItem.AniCount;
                                         break;
-                                    }
-                                case ItemLocation.Boots:
-                                    {
-                                        switch (stdItem.Shape)
-                                        {
-                                            case ItemShapeConst.PTSET_BOOTS_SHAPE:
-                                                ptsetBoots = true;
-                                                break;
-                                            case ItemShapeConst.KSSET_BOOTS_SHAPE:
-                                                kssetBoots = true;
-                                                break;
-                                            case ItemShapeConst.RUBYSET_BOOTS_SHAPE:
-                                                rubysetBoots = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_PTSET_BOOTS_SHAPE:
-                                                strongPtsetBoots = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_KSSET_BOOTS_SHAPE:
-                                                strongKssetBoots = true;
-                                                break;
-                                            case ItemShapeConst.STRONG_RUBYSET_BOOTS_SHAPE:
-                                                strongRubysetBoots = true;
-                                                break;
-                                            case DragonConst.DRAGON_BOOTS_SHAPE:
-                                                dragonsetBoots = true;
-                                                break;
-                                        }
+                                    case ItemShapeConst.NECKLACE_OF_SUCKHEALTH:
+                                        shNecklace = true;
+                                        SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
                                         break;
-                                    }
-                                case ItemLocation.Charm:
-                                    {
-                                        if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE))
-                                        {
-                                            AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 1));
-                                        }
+                                    case ItemShapeConst.NECKLACE_OF_HPPUP:
+                                        hppNecklace = true;
                                         break;
-                                    }
+                                    case ItemShapeConst.CCHO_NECKLACE:
+                                        choNecklace = true;
+                                        break;
+                                    case ItemShapeConst.PSET_NECKLACE_SHAPE:
+                                        psetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.HSET_NECKLACE_SHAPE:
+                                        hsetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.YSET_NECKLACE_SHAPE:
+                                        ysetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.BUGSET_NECKLACE_SHAPE:
+                                        bugsetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.PTSET_NECKLACE_SHAPE:
+                                        ptsetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.KSSET_NECKLACE_SHAPE:
+                                        kssetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.RUBYSET_NECKLACE_SHAPE:
+                                        rubysetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_PTSET_NECKLACE_SHAPE:
+                                        strongPtsetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_KSSET_NECKLACE_SHAPE:
+                                        strongKssetNecklace = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_RUBYSET_NECKLACE_SHAPE:
+                                        strongRubysetNecklace = true;
+                                        break;
+                                    case DragonConst.DRAGON_NECKLACE_SHAPE:
+                                        dragonsetNecklace = true;
+                                        break;
+                                }
+                                break;
                             }
+                            case ItemLocation.Ringr:
+                            case ItemLocation.Ringl:
+                            {
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.RING_TRANSPARENT_ITEM:
+                                        StatusTimeArr[PoisonState.STATETRANSPARENT] = 60000;
+                                        HideMode = true;
+                                        break;
+                                    case ItemShapeConst.RING_SPACEMOVE_ITEM:
+                                        Teleport = true;
+                                        break;
+                                    case ItemShapeConst.RING_MAKESTONE_ITEM:
+                                        Paralysis = true;
+                                        break;
+                                    case ItemShapeConst.RING_REVIVAL_ITEM:
+                                        Revival = true;
+                                        break;
+                                    case ItemShapeConst.RING_FIREBALL_ITEM:
+                                        FlameRing = true;
+                                        break;
+                                    case ItemShapeConst.RING_HEALING_ITEM:
+                                        RecoveryRing = true;
+                                        break;
+                                    case ItemShapeConst.RING_ANGERENERGY_ITEM:
+                                        AngryRing = true;
+                                        break;
+                                    case ItemShapeConst.RING_MAGICSHIELD_ITEM:
+                                        MagicShield = true;
+                                        break;
+                                    case ItemShapeConst.RING_SUPERSTRENGTH_ITEM:
+                                        MuscleRing = true;
+                                        break;
+                                    case ItemShapeConst.RING_CHUN_ITEM:
+                                        cghi[0] = true;
+                                        break;
+                                    case ItemShapeConst.RING_OF_MANATOHEALTH:
+                                        mhRing = true;
+                                        MoXieSuite = MoXieSuite + stdItem.AniCount;
+                                        break;
+                                    case ItemShapeConst.RING_OF_SUCKHEALTH:
+                                        shRing = true;
+                                        SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
+                                        break;
+                                    case ItemShapeConst.RING_OF_HPUP:
+                                        hpRing = true;
+                                        break;
+                                    case ItemShapeConst.RING_OF_MPUP:
+                                        mpRing = true;
+                                        break;
+                                    case ItemShapeConst.RING_OF_HPMPUP:
+                                        hpmpRing = true;
+                                        break;
+                                    case ItemShapeConst.RING_OH_HPPUP:
+                                        hppRing = true;
+                                        break;
+                                    case ItemShapeConst.CCHO_RING:
+                                        choRing = true;
+                                        break;
+                                    case ItemShapeConst.PSET_RING_SHAPE:
+                                        psetRing = true;
+                                        break;
+                                    case ItemShapeConst.HSET_RING_SHAPE:
+                                        hsetRing = true;
+                                        break;
+                                    case ItemShapeConst.YSET_RING_SHAPE:
+                                        ysetRing = true;
+                                        break;
+                                    case ItemShapeConst.BUGSET_RING_SHAPE:
+                                        bugsetRing = true;
+                                        break;
+                                    case ItemShapeConst.PTSET_RING_SHAPE:
+                                        ptsetRing = true;
+                                        break;
+                                    case ItemShapeConst.KSSET_RING_SHAPE:
+                                        kssetRing = true;
+                                        break;
+                                    case ItemShapeConst.RUBYSET_RING_SHAPE:
+                                        rubysetRing = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_PTSET_RING_SHAPE:
+                                        strongPtsetRing = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_KSSET_RING_SHAPE:
+                                        strongKssetRing = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_RUBYSET_RING_SHAPE:
+                                        strongRubysetRing = true;
+                                        break;
+                                    case DragonConst.DRAGON_RING_SHAPE:
+                                    {
+                                        if ((i == ItemLocation.Ringl))
+                                        {
+                                            dragonsetRingLeft = true;
+                                        }
+                                        if ((i == ItemLocation.Ringr))
+                                        {
+                                            dragonsetRingRight = true;
+                                        }
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        switch (i)
+                        {
+                            case ItemLocation.ArmRingl:
+                            case ItemLocation.ArmRingr:
+                            {
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.ARMRING_HAP_ITEM:
+                                        cghi[2] = true;
+                                        break;
+                                    case ItemShapeConst.BRACELET_OF_MANATOHEALTH:
+                                        mhBracelet = true;
+                                        MoXieSuite = MoXieSuite + stdItem.AniCount;
+                                        break;
+                                    case ItemShapeConst.BRACELET_OF_SUCKHEALTH:
+                                        shBracelet = true;
+                                        SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
+                                        break;
+                                    case ItemShapeConst.BRACELET_OF_HPUP:
+                                        hpBracelet = true;
+                                        break;
+                                    case ItemShapeConst.BRACELET_OF_MPUP:
+                                        mpBracelet = true;
+                                        break;
+                                    case ItemShapeConst.BRACELET_OF_HPMPUP:
+                                        hpmpBracelet = true;
+                                        break;
+                                    case ItemShapeConst.BRACELET_OF_HPPUP:
+                                        hppBracelet = true;
+                                        break;
+                                    case ItemShapeConst.CCHO_BRACELET:
+                                        choBracelet = true;
+                                        break;
+                                    case ItemShapeConst.PSET_BRACELET_SHAPE:
+                                        psetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.HSET_BRACELET_SHAPE:
+                                        hsetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.YSET_BRACELET_SHAPE:
+                                        ysetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.BUGSET_BRACELET_SHAPE:
+                                        bugsetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.PTSET_BRACELET_SHAPE:
+                                        ptsetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.KSSET_BRACELET_SHAPE:
+                                        kssetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.RUBYSET_BRACELET_SHAPE:
+                                        rubysetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_PTSET_BRACELET_SHAPE:
+                                        strongPtsetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_KSSET_BRACELET_SHAPE:
+                                        strongKssetBracelet = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_RUBYSET_BRACELET_SHAPE:
+                                        strongRubysetBracelet = true;
+                                        break;
+                                    case DragonConst.DRAGON_BRACELET_SHAPE:
+                                    {
+                                        if ((i == ItemLocation.ArmRingl))
+                                        {
+                                            dragonsetBraceletLeft = true;
+                                        }
+                                        if ((i == ItemLocation.ArmRingr))
+                                        {
+                                            dragonsetBraceletRight = true;
+                                        }
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                            case ItemLocation.Helmet:
+                            {
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.HELMET_IL_ITEM:
+                                        cghi[3] = true;
+                                        break;
+                                    case ItemShapeConst.CCHO_HELMET:
+                                        choHelmet = true;
+                                        break;
+                                    case ItemShapeConst.BONESET_HELMET_SHAPE:
+                                        bonesetHelmet = true;
+                                        break;
+                                    case DragonConst.DRAGON_HELMET_SHAPE:
+                                        dragonsetHelmet = true;
+                                        break;
+                                }
+                                break;
+                            }
+                            case ItemLocation.Dress:
+                            {
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.DRESS_SHAPE_WING:
+                                        dsetWingdress = true;
+                                        break;
+                                    case ItemShapeConst.BONESET_DRESS_SHAPE:
+                                        bonesetDress = true;
+                                        break;
+                                    case DragonConst.DRAGON_DRESS_SHAPE:
+                                        dragonsetDress = true;
+                                        break;
+                                }
+                                break;
+                            }
+                            case ItemLocation.Belt:
+                            {
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.PTSET_BELT_SHAPE:
+                                        ptsetBelt = true;
+                                        break;
+                                    case ItemShapeConst.KSSET_BELT_SHAPE:
+                                        kssetBelt = true;
+                                        break;
+                                    case ItemShapeConst.RUBYSET_BELT_SHAPE:
+                                        rubysetBelt = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_PTSET_BELT_SHAPE:
+                                        strongPtsetBelt = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_KSSET_BELT_SHAPE:
+                                        strongKssetBelt = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_RUBYSET_BELT_SHAPE:
+                                        strongRubysetBelt = true;
+                                        break;
+                                    case DragonConst.DRAGON_BELT_SHAPE:
+                                        dragonsetBelt = true;
+                                        break;
+                                }
+                                break;
+                            }
+                            case ItemLocation.Boots:
+                            {
+                                switch (stdItem.Shape)
+                                {
+                                    case ItemShapeConst.PTSET_BOOTS_SHAPE:
+                                        ptsetBoots = true;
+                                        break;
+                                    case ItemShapeConst.KSSET_BOOTS_SHAPE:
+                                        kssetBoots = true;
+                                        break;
+                                    case ItemShapeConst.RUBYSET_BOOTS_SHAPE:
+                                        rubysetBoots = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_PTSET_BOOTS_SHAPE:
+                                        strongPtsetBoots = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_KSSET_BOOTS_SHAPE:
+                                        strongKssetBoots = true;
+                                        break;
+                                    case ItemShapeConst.STRONG_RUBYSET_BOOTS_SHAPE:
+                                        strongRubysetBoots = true;
+                                        break;
+                                    case DragonConst.DRAGON_BOOTS_SHAPE:
+                                        dragonsetBoots = true;
+                                        break;
+                                }
+                                break;
+                            }
+                            case ItemLocation.Charm:
+                            {
+                                if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE))
+                                {
+                                    AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 1));
+                                }
+                                break;
+                            }
+                        }
 
-                            switch (stdItem.StdMode)
-                            {
-                                case ItemShapeConst.SpiritItem1:
-                                    spiritArr[0] = true;
-                                    break;
-                                case ItemShapeConst.SpiritItem2:
-                                    spiritArr[1] = true;
-                                    break;
-                                case ItemShapeConst.SpiritItem3:
-                                    spiritArr[2] = true;
-                                    break;
-                                case ItemShapeConst.SpiritItem4:
-                                    spiritArr[3] = true;
-                                    break;
-                            }
+                        switch (stdItem.StdMode)
+                        {
+                            case ItemShapeConst.SpiritItem1:
+                                spiritArr[0] = true;
+                                break;
+                            case ItemShapeConst.SpiritItem2:
+                                spiritArr[1] = true;
+                                break;
+                            case ItemShapeConst.SpiritItem3:
+                                spiritArr[2] = true;
+                                break;
+                            case ItemShapeConst.SpiritItem4:
+                                spiritArr[3] = true;
+                                break;
                         }
                     }
                 }
-                if (cghi[0] && cghi[1] && cghi[2] && cghi[3]) //记忆套装
+            }
+            if (cghi[0] && cghi[1] && cghi[2] && cghi[3]) //记忆套装
+            {
+                RecallSuite = true;
+            }
+            if (mhNecklace && mhBracelet && mhRing)
+            {
+                MoXieSuite = MoXieSuite + 50;
+            }
+            if (shNecklace && shBracelet && shRing)
+            {
+                AddAbil.HIT = (ushort)(AddAbil.HIT + 2);
+            }
+            if (hpBracelet && hpRing)
+            {
+                AddAbil.HP = (ushort)(AddAbil.HP + 50);
+            }
+            if (mpBracelet && mpRing)
+            {
+                AddAbil.MP = (ushort)(AddAbil.MP + 50);
+            }
+            if (hpmpBracelet && hpmpRing)
+            {
+                AddAbil.HP = (ushort)(AddAbil.HP + 30);
+                AddAbil.MP = (ushort)(AddAbil.MP + 30);
+            }
+            if (hppNecklace && hppBracelet && hppRing)
+            {
+                AddAbil.HP = (ushort)(AddAbil.HP + ((WAbil.MaxHP * 30) / 100));
+                AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(2, 2));
+            }
+            if (choWeapon && choNecklace && choRing && choHelmet && choBracelet)
+            {
+                AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 4);
+                AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(2, 5));
+            }
+            if (psetBracelet && psetRing)
+            {
+                AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
+                if (psetNecklace)
                 {
-                    RecallSuite = true;
+                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(1, 3));
                 }
-                if (mhNecklace && mhBracelet && mhRing)
+            }
+            if (hsetBracelet && hsetRing)
+            {
+                WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 20);
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 5));
+                if (hsetNecklace)
                 {
-                    MoXieSuite = MoXieSuite + 50;
+                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(1, 2));
                 }
-                if (shNecklace && shBracelet && shRing)
+            }
+            if (ysetBracelet && ysetRing)
+            {
+                AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + 3);
+                if (ysetNecklace)
                 {
-                    AddAbil.HIT = (ushort)(AddAbil.HIT + 2);
+                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(1, 2));
                 }
-                if (hpBracelet && hpRing)
+            }
+            if (bonesetWeapon && bonesetHelmet && bonesetDress)
+            {
+                AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
+                AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
+                AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
+            }
+            if (bugsetNecklace && bugsetRing && bugsetBracelet)
+            {
+                AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
+                AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
+                AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
+                AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 1);
+                AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + 1);
+            }
+            if (ptsetBelt && ptsetBoots && ptsetNecklace && ptsetBracelet && ptsetRing)
+            {
+                AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 2));
+                AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
+                WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
+            }
+            if (kssetBelt && kssetBoots && kssetNecklace && kssetBracelet && kssetRing)
+            {
+                AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
+                AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 1));
+                AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 1));
+                AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
+            }
+            if (rubysetBelt && rubysetBoots && rubysetNecklace && rubysetBracelet && rubysetRing)
+            {
+                AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
+                AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 2));
+                WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
+            }
+            if (strongPtsetBelt && strongPtsetBoots && strongPtsetNecklace && strongPtsetBracelet && strongPtsetRing)
+            {
+                AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 3));
+                AddAbil.HP = (ushort)(AddAbil.HP + 30);
+                AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
+            }
+            if (strongKssetBelt && strongKssetBoots && strongKssetNecklace && strongKssetBracelet && strongKssetRing)
+            {
+                AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
+                AddAbil.HP = (ushort)(AddAbil.HP + 15);
+                AddAbil.MP = (ushort)(AddAbil.MP + 20);
+                AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + 1);
+                AddAbil.HIT = (ushort)(AddAbil.HIT + 1);
+                AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
+            }
+            if (strongRubysetBelt && strongRubysetBoots && strongRubysetNecklace && strongRubysetBracelet && strongRubysetRing)
+            {
+                AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
+                AddAbil.MP = (ushort)(AddAbil.MP + 40);
+                AddAbil.SPEED = (ushort)(AddAbil.SPEED + 2);
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
+            }
+            if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace && dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
+            {
+                AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 4));
+                AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 4));
+                AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 2));
+                AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
+                AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 6);
+                AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + 6);
+                WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 34));
+                WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
+                WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 120);
+                WAbil.MaxHP = (ushort)(WAbil.MaxHP + 70);
+                WAbil.MaxMP = (ushort)(WAbil.MaxMP + 80);
+                AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
+                AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
+                AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
+            }
+            else
+            {
+                if (dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
                 {
-                    AddAbil.HP = (ushort)(AddAbil.HP + 50);
-                }
-                if (mpBracelet && mpRing)
-                {
-                    AddAbil.MP = (ushort)(AddAbil.MP + 50);
-                }
-                if (hpmpBracelet && hpmpRing)
-                {
-                    AddAbil.HP = (ushort)(AddAbil.HP + 30);
-                    AddAbil.MP = (ushort)(AddAbil.MP + 30);
-                }
-                if (hppNecklace && hppBracelet && hppRing)
-                {
-                    AddAbil.HP = (ushort)(AddAbil.HP + ((WAbil.MaxHP * 30) / 100));
-                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(2, 2));
-                }
-                if (choWeapon && choNecklace && choRing && choHelmet && choBracelet)
-                {
-                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 4);
-                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(2, 5));
-                }
-                if (psetBracelet && psetRing)
-                {
-                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
-                    if (psetNecklace)
-                    {
-                        AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(1, 3));
-                    }
-                }
-                if (hsetBracelet && hsetRing)
-                {
-                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 20);
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 5));
-                    if (hsetNecklace)
-                    {
-                        AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(1, 2));
-                    }
-                }
-                if (ysetBracelet && ysetRing)
-                {
-                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + 3);
-                    if (ysetNecklace)
-                    {
-                        AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(1, 2));
-                    }
-                }
-                if (bonesetWeapon && bonesetHelmet && bonesetDress)
-                {
-                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
-                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
-                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
-                }
-                if (bugsetNecklace && bugsetRing && bugsetBracelet)
-                {
-                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
-                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 1));
-                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 1));
-                    AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 1);
-                    AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + 1);
-                }
-                if (ptsetBelt && ptsetBoots && ptsetNecklace && ptsetBracelet && ptsetRing)
-                {
-                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 2));
-                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 2));
-                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
-                }
-                if (kssetBelt && kssetBoots && kssetNecklace && kssetBracelet && kssetRing)
-                {
-                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
-                    AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(0, 1));
-                    AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 1));
-                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
-                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
-                }
-                if (rubysetBelt && rubysetBoots && rubysetNecklace && rubysetBracelet && rubysetRing)
-                {
-                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
-                    AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 2));
-                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 1));
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
-                }
-                if (strongPtsetBelt && strongPtsetBoots && strongPtsetNecklace && strongPtsetBracelet && strongPtsetRing)
-                {
-                    AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 3));
-                    AddAbil.HP = (ushort)(AddAbil.HP + 30);
-                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
-                }
-                if (strongKssetBelt && strongKssetBoots && strongKssetNecklace && strongKssetBracelet && strongKssetRing)
-                {
-                    AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
-                    AddAbil.HP = (ushort)(AddAbil.HP + 15);
-                    AddAbil.MP = (ushort)(AddAbil.MP + 20);
-                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + 1);
-                    AddAbil.HIT = (ushort)(AddAbil.HIT + 1);
-                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
-                }
-                if (strongRubysetBelt && strongRubysetBoots && strongRubysetNecklace && strongRubysetBracelet && strongRubysetRing)
-                {
-                    AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
-                    AddAbil.MP = (ushort)(AddAbil.MP + 40);
-                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 2);
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 2));
-                }
-                if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace && dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
-                {
-                    AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 4));
-                    AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 4));
-                    AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 2));
-                    AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + 2);
-                    AddAbil.AntiMagic = (ushort)(AddAbil.AntiMagic + 6);
-                    AddAbil.AntiPoison = (ushort)(AddAbil.AntiPoison + 6);
                     WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 34));
-                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
-                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 120);
-                    WAbil.MaxHP = (ushort)(WAbil.MaxHP + 70);
-                    WAbil.MaxMP = (ushort)(WAbil.MaxMP + 80);
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
                     AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
                     AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
                     AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
                     AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
                 }
+                else if (dragonsetDress && dragonsetBoots && dragonsetBelt)
+                {
+                    WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 17));
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                    AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 1));
+                    AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
+                    AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
+                }
+                else if (dragonsetDress && dragonsetHelmet && dragonsetWeapon)
+                {
+                    AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 2));
+                    AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
+                    AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
+                    AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
+                }
+                if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
+                {
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
+                    AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 3));
+                    AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 3));
+                }
+                else if ((dragonsetRingLeft || dragonsetRingRight) && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
+                {
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                    AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                    AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
+                }
+                else if (dragonsetRingLeft && dragonsetRingRight && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
+                {
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                    AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 2));
+                    AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 2));
+                }
+                else if ((dragonsetRingLeft || dragonsetRingRight) && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
+                {
+                    WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
+                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
+                    AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
+                    AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
+                }
                 else
                 {
-                    if (dragonsetDress && dragonsetHelmet && dragonsetWeapon && dragonsetBoots && dragonsetBelt)
+                    if (dragonsetBraceletLeft && dragonsetBraceletRight)
                     {
-                        WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 34));
-                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
-                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
-                        AddAbil.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 4));
-                        AddAbil.MC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 3));
-                        AddAbil.SC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.SC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 3));
+                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC)));
+                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC)));
                     }
-                    else if (dragonsetDress && dragonsetBoots && dragonsetBelt)
+                    if (dragonsetRingLeft && dragonsetRingRight)
                     {
-                        WAbil.MaxHandWeight = (byte)(HUtil32._MIN(255, WAbil.MaxHandWeight + 17));
-                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
-                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 1));
-                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
-                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
-                    }
-                    else if (dragonsetDress && dragonsetHelmet && dragonsetWeapon)
-                    {
-                        AddAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + 2));
-                        AddAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + 1));
-                        AddAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + 1));
-                        AddAbil.SPEED = (ushort)(AddAbil.SPEED + 1);
-                    }
-                    if (dragonsetRingLeft && dragonsetRingRight && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
-                    {
-                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 27));
-                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 50);
-                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 3));
-                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 3));
-                    }
-                    else if ((dragonsetRingLeft || dragonsetRingRight) && dragonsetBraceletLeft && dragonsetBraceletRight && dragonsetNecklace)
-                    {
-                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
-                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
-                        AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
-                        AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
-                    }
-                    else if (dragonsetRingLeft && dragonsetRingRight && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
-                    {
-                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
-                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
-                        AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 2));
-                        AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 2));
-                    }
-                    else if ((dragonsetRingLeft || dragonsetRingRight) && (dragonsetBraceletLeft || dragonsetBraceletRight) && dragonsetNecklace)
-                    {
-                        WAbil.MaxWearWeight = (byte)(HUtil32._MIN(255, WAbil.MaxWearWeight + 17));
-                        WAbil.MaxWeight = (ushort)(WAbil.MaxWeight + 30);
                         AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
                         AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
                     }
-                    else
-                    {
-                        if (dragonsetBraceletLeft && dragonsetBraceletRight)
-                        {
-                            AddAbil.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC)));
-                            AddAbil.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(AddAbil.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC)));
-                        }
-                        if (dragonsetRingLeft && dragonsetRingRight)
-                        {
-                            AddAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + 1));
-                            AddAbil.MAC = HUtil32.MakeWord(HUtil32.LoByte(AddAbil.MAC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + 1));
-                        }
-                    }
                 }
-                if (dsetWingdress && (Abil.Level >= 20))
+            }
+            if (dsetWingdress && (Abil.Level >= 20))
+            {
+                switch (Abil.Level)
                 {
-                    switch (Abil.Level)
-                    {
-                        case < 40:
-                            AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
-                            AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
-                            AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
-                            AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(2, 3));
-                            AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 2));
-                            break;
-                        case < 50:
-                            AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 3));
-                            AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 4));
-                            AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 4));
-                            AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(5, 5));
-                            AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(1, 2));
-                            break;
-                        default:
-                            AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 5));
-                            AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 6));
-                            AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 6));
-                            AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(9, 7));
-                            AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(2, 4));
-                            break;
-                    }
+                    case < 40:
+                        AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 1));
+                        AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 2));
+                        AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 2));
+                        AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(2, 3));
+                        AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(0, 2));
+                        break;
+                    case < 50:
+                        AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 3));
+                        AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 4));
+                        AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 4));
+                        AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(5, 5));
+                        AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(1, 2));
+                        break;
+                    default:
+                        AddAbil.DC = (ushort)(AddAbil.DC + HUtil32.MakeWord(0, 5));
+                        AddAbil.MC = (ushort)(AddAbil.MC + HUtil32.MakeWord(0, 6));
+                        AddAbil.SC = (ushort)(AddAbil.SC + HUtil32.MakeWord(0, 6));
+                        AddAbil.AC = (ushort)(AddAbil.AC + HUtil32.MakeWord(9, 7));
+                        AddAbil.MAC = (ushort)(AddAbil.MAC + HUtil32.MakeWord(2, 4));
+                        break;
                 }
-                WAbil.Weight = RecalcBagWeight();
+            }
+            WAbil.Weight = RecalcBagWeight();
 
-                if (FlameRing)
+            if (FlameRing)
+            {
+                AddItemSkill(Settings.AM_FIREBALL);
+            }
+            else
+            {
+                DelItemSkill(Settings.AM_FIREBALL);
+            }
+            if (RecoveryRing)
+            {
+                AddItemSkill(Settings.AM_HEALING);
+            }
+            else
+            {
+                DelItemSkill(Settings.AM_HEALING);
+            }
+            if (MuscleRing)
+            {
+                WAbil.MaxWeight = (ushort)(WAbil.MaxWeight * 2);
+                WAbil.MaxWearWeight = (byte)HUtil32._MIN(255, WAbil.MaxWearWeight * 2);
+                if ((WAbil.MaxHandWeight * 2 > 255))
                 {
-                    AddItemSkill(Settings.AM_FIREBALL);
+                    WAbil.MaxHandWeight = 255;
                 }
                 else
                 {
-                    DelItemSkill(Settings.AM_FIREBALL);
+                    WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight * 2);
                 }
-                if (RecoveryRing)
+            }
+            if (MoXieSuite > 0) //魔血套装
+            {
+                if (MoXieSuite >= WAbil.MaxMP)
                 {
-                    AddItemSkill(Settings.AM_HEALING);
+                    MoXieSuite = WAbil.MaxMP - 1;
                 }
-                else
-                {
-                    DelItemSkill(Settings.AM_HEALING);
-                }
-                if (MuscleRing)
-                {
-                    WAbil.MaxWeight = (ushort)(WAbil.MaxWeight * 2);
-                    WAbil.MaxWearWeight = (byte)HUtil32._MIN(255, WAbil.MaxWearWeight * 2);
-                    if ((WAbil.MaxHandWeight * 2 > 255))
-                    {
-                        WAbil.MaxHandWeight = 255;
-                    }
-                    else
-                    {
-                        WAbil.MaxHandWeight = (byte)(WAbil.MaxHandWeight * 2);
-                    }
-                }
-                if (MoXieSuite > 0) //魔血套装
-                {
-                    if (MoXieSuite >= WAbil.MaxMP)
-                    {
-                        MoXieSuite = WAbil.MaxMP - 1;
-                    }
-                    WAbil.MaxMP = (ushort)(WAbil.MaxMP - MoXieSuite);
-                    WAbil.MaxHP = (ushort)(WAbil.MaxHP + MoXieSuite);
-                    if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP))
-                    {
-                        WAbil.HP = WAbil.MaxHP;
-                    }
-                }
-                if (spiritArr[0] && spiritArr[2] && spiritArr[3] && spiritArr[4]) //祈祷套装
-                {
-                    IsSpirit = true;
-                }
-                if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
+                WAbil.MaxMP = (ushort)(WAbil.MaxMP - MoXieSuite);
+                WAbil.MaxHP = (ushort)(WAbil.MaxHP + MoXieSuite);
+                if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP))
                 {
                     WAbil.HP = WAbil.MaxHP;
                 }
-                if ((Race == ActorRace.Play) && (WAbil.MP > WAbil.MaxMP))
-                {
-                    WAbil.MP = WAbil.MaxMP;
-                }
-                if (ExtraAbil[AbilConst.EABIL_DCUP] > 0)
-                {
-                    WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]));
-                }
-                if (ExtraAbil[AbilConst.EABIL_MCUP] > 0)
-                {
-                    WAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MC), (ushort)(HUtil32.HiByte(WAbil.MC) + ExtraAbil[AbilConst.EABIL_MCUP]));
-                }
-                if (ExtraAbil[AbilConst.EABIL_SCUP] > 0)
-                {
-                    WAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.SC), (ushort)(HUtil32.HiByte(WAbil.SC) + ExtraAbil[AbilConst.EABIL_SCUP]));
-                }
-                if (ExtraAbil[AbilConst.EABIL_HITSPEEDUP] > 0)
-                {
-                    HitSpeed = (ushort)(HitSpeed + ExtraAbil[AbilConst.EABIL_HITSPEEDUP]);
-                }
-                if (ExtraAbil[AbilConst.EABIL_HPUP] > 0)
-                {
-                    WAbil.MaxHP = (ushort)(WAbil.MaxHP + ExtraAbil[AbilConst.EABIL_HPUP]);
-                }
-                if (ExtraAbil[AbilConst.EABIL_MPUP] > 0)
-                {
-                    WAbil.MaxMP = (ushort)(WAbil.MaxMP + ExtraAbil[AbilConst.EABIL_MPUP]);
-                }
-                if (ExtraAbil[AbilConst.EABIL_PWRRATE] > 0)
-                {
-                    WAbil.DC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
-                    WAbil.MC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
-                    WAbil.SC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
-                }
-                if (Race == ActorRace.Play)
-                {
-                    bool fastmoveflag = UseItems[ItemLocation.Boots] != null && UseItems[ItemLocation.Boots].Dura > 0 && UseItems[ItemLocation.Boots].Index == Settings.INDEX_MIRBOOTS;
-                    if (fastmoveflag)
-                    {
-                        StatusTimeArr[PoisonState.FASTMOVE] = 60000;
-                    }
-                    else
-                    {
-                        StatusTimeArr[PoisonState.FASTMOVE] = 0;
-                    }
-                    //if ((Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL))
-                    //{
-                    //    if (BoHighLevelEffect)
-                    //    {
-                    //        StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 60000;
-                    //    }
-                    //    else
-                    //    {
-                    //        StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 0;
-                    //    }
-                    //}
-                    //else
-                    //{
-                    //    StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 0;
-                    //}
-                    CharStatus = GetCharStatus();
-                    StatusChanged();
-                    SendUpdateMsg(Messages.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
-                }
-                RecalcAdjusBonus();
-
-
-
-                byte oldlight = Light;
-                Light = GetMyLight();
-                if (oldlight != Light)
-                {
-                    SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
-                }
-                if (IsSpirit)
-                {
-                    SendSelfDelayMsg(Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
-                }
-                SpeedPoint = (byte)(SpeedPoint + AddAbil.SPEED);
-                HitPoint = (byte)(HitPoint + AddAbil.HIT);
-                AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
-                PoisonRecover = (ushort)(PoisonRecover + AddAbil.PoisonRecover);
-                HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
-                SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
-                AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
-                Luck = (byte)(Luck + AddAbil.Luck);
-                Luck = (byte)(Luck - AddAbil.UnLuck);
-                HitSpeed = AddAbil.HitSpeed;
-                WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
-                WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
-                WAbil.AC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
-                WAbil.MAC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
-                WAbil.DC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
-                WAbil.MC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
-                WAbil.SC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
             }
+            if (spiritArr[0] && spiritArr[2] && spiritArr[3] && spiritArr[4]) //祈祷套装
+            {
+                IsSpirit = true;
+            }
+            if ((Race == ActorRace.Play) && (WAbil.HP > WAbil.MaxHP) && (!mhNecklace && !mhBracelet && !mhRing))
+            {
+                WAbil.HP = WAbil.MaxHP;
+            }
+            if ((Race == ActorRace.Play) && (WAbil.MP > WAbil.MaxMP))
+            {
+                WAbil.MP = WAbil.MaxMP;
+            }
+            if (ExtraAbil[AbilConst.EABIL_DCUP] > 0)
+            {
+                WAbil.DC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.DC), (ushort)(HUtil32.HiByte(WAbil.DC) + ExtraAbil[AbilConst.EABIL_DCUP]));
+            }
+            if (ExtraAbil[AbilConst.EABIL_MCUP] > 0)
+            {
+                WAbil.MC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.MC), (ushort)(HUtil32.HiByte(WAbil.MC) + ExtraAbil[AbilConst.EABIL_MCUP]));
+            }
+            if (ExtraAbil[AbilConst.EABIL_SCUP] > 0)
+            {
+                WAbil.SC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.SC), (ushort)(HUtil32.HiByte(WAbil.SC) + ExtraAbil[AbilConst.EABIL_SCUP]));
+            }
+            if (ExtraAbil[AbilConst.EABIL_HITSPEEDUP] > 0)
+            {
+                HitSpeed = (ushort)(HitSpeed + ExtraAbil[AbilConst.EABIL_HITSPEEDUP]);
+            }
+            if (ExtraAbil[AbilConst.EABIL_HPUP] > 0)
+            {
+                WAbil.MaxHP = (ushort)(WAbil.MaxHP + ExtraAbil[AbilConst.EABIL_HPUP]);
+            }
+            if (ExtraAbil[AbilConst.EABIL_MPUP] > 0)
+            {
+                WAbil.MaxMP = (ushort)(WAbil.MaxMP + ExtraAbil[AbilConst.EABIL_MPUP]);
+            }
+            if (ExtraAbil[AbilConst.EABIL_PWRRATE] > 0)
+            {
+                WAbil.DC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.DC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+                WAbil.MC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.MC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+                WAbil.SC = HUtil32.MakeWord((ushort)((HUtil32.LoByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100), (ushort)((HUtil32.HiByte(WAbil.SC) * ExtraAbil[AbilConst.EABIL_PWRRATE]) / 100));
+            }
+            if (Race == ActorRace.Play)
+            {
+                bool fastmoveflag = UseItems[ItemLocation.Boots] != null && UseItems[ItemLocation.Boots].Dura > 0 && UseItems[ItemLocation.Boots].Index == Settings.INDEX_MIRBOOTS;
+                if (fastmoveflag)
+                {
+                    StatusTimeArr[PoisonState.FASTMOVE] = 60000;
+                }
+                else
+                {
+                    StatusTimeArr[PoisonState.FASTMOVE] = 0;
+                }
+                //if ((Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL))
+                //{
+                //    if (BoHighLevelEffect)
+                //    {
+                //        StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 60000;
+                //    }
+                //    else
+                //    {
+                //        StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 0;
+                //    }
+                //}
+                //else
+                //{
+                //    StatusTimeArr[Grobal2.STATE_50LEVELEFFECT] = 0;
+                //}
+                CharStatus = GetCharStatus();
+                StatusChanged();
+                SendUpdateMsg(Messages.RM_CHARSTATUSCHANGED, HitSpeed, CharStatus, 0, 0, "");
+            }
+            RecalcAdjusBonus();
+
+            byte oldlight = Light;
+            Light = GetMyLight();
+            if (oldlight != Light)
+            {
+                SendRefMsg(Messages.RM_CHANGELIGHT, 0, 0, 0, 0, "");
+            }
+            if (IsSpirit)
+            {
+                SendSelfDelayMsg(Messages.RM_SPIRITSUITE, 0, 0, 0, 0, "", 500);
+            }
+            SpeedPoint = (byte)(SpeedPoint + AddAbil.SPEED);
+            HitPoint = (byte)(HitPoint + AddAbil.HIT);
+            AntiPoison = (byte)(AntiPoison + AddAbil.AntiPoison);
+            PoisonRecover = (ushort)(PoisonRecover + AddAbil.PoisonRecover);
+            HealthRecover = (ushort)(HealthRecover + AddAbil.HealthRecover);
+            SpellRecover = (ushort)(SpellRecover + AddAbil.SpellRecover);
+            AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
+            Luck = (byte)(Luck + AddAbil.Luck);
+            Luck = (byte)(Luck - AddAbil.UnLuck);
+            HitSpeed = AddAbil.HitSpeed;
+            WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
+            WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
+            WAbil.AC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
+            WAbil.MAC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
+            WAbil.DC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
+            WAbil.MC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
+            WAbil.SC = HUtil32.MakeWord((byte)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (byte)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
         }
 
         public override int GetAttackPower(int nBasePower, int nPower)

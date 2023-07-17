@@ -11,7 +11,7 @@ namespace GameSrv.Word.Threads
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly object UserCriticalSection = new object();
 
-        public CharacterDataProcessor() : base(TimeSpan.FromMilliseconds(1000), "StorageProcessor")
+        public CharacterDataProcessor() : base(TimeSpan.FromMilliseconds(500), "StorageProcessor")
         {
 
         }

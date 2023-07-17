@@ -3878,7 +3878,7 @@ namespace BotSrv.Player
             MShare.g_boCanRunNpc = HUtil32.LoByte(HUtil32.HiWord(msg.Recog)) == 1;
             MShare.g_boCanRunAllInWarZone = HUtil32.HiByte(HUtil32.HiWord(msg.Recog)) == 1;
             sBody = EDCode.DeCodeString(sBody);
-            var clientConf = EDCode.DecodeClientBuffer<ClientConf>(sBody);
+            //var clientConf = EDCode.DecodeClientBuffer<ClientConf>(sBody);
             //MShare.g_boCanRunHuman = ClientConf.boRunHuman;
             //MShare.g_boCanRunMon = ClientConf.boRunMon;
             //MShare.g_boCanRunNpc = ClientConf.boRunNpc;

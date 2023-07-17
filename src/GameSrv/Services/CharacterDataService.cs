@@ -117,7 +117,8 @@ namespace GameSrv.Services
 
         public static void ProcessSaveQueue()
         {
-            if (SaveProcessList.TryPeek(out var queryId))//todo 保存数据优化一下流程，M2Server.需等待DBSrv结果，异步通知即可
+            //todo 保存数据优化一下流程，M2Server.需等待DBSrv结果，异步通知即可
+            if (SaveProcessList.TryPeek(out var queryId))
             {
                 var nIdent = 0;
                 var nRecog = 0;
