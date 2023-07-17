@@ -77,7 +77,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoldDealSystem", "src\Modul
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UserStallSystem", "src\Modules\UserStallSystem\UserStallSystem.csproj", "{FDEF5ECD-7841-410D-B419-681F2BAEB9AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestProject1", "TestProject1\TestProject1.csproj", "{0A8CB943-7FC1-4EC7-83EE-D96FBE89E254}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GameSrvTest", "TestProject1\GameSrvTest.csproj", "{0A8CB943-7FC1-4EC7-83EE-D96FBE89E254}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
