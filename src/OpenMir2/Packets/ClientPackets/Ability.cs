@@ -45,6 +45,7 @@ namespace SystemModule.Packets.ClientPackets
         /// 最大魔法值
         /// </summary>
         public ushort MaxMP { get; set; }
+        public short Reserved2 { get; set; }
         public byte ExpCount { get; set; }
         public byte ExpMaxCount { get; set; }
         /// <summary>
@@ -79,8 +80,6 @@ namespace SystemModule.Packets.ClientPackets
         /// 最大腕力
         /// </summary>
         public byte MaxHandWeight { get; set; }
-
-        public short Reserved2 { get; set; }
     }
 
     public class AbilityFormatter : MemoryPackFormatter<Ability>

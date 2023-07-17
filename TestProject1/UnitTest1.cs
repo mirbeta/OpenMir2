@@ -23,12 +23,34 @@ namespace TestProject1
         [Test]
         public void EncodeAbility()
         {
+            var s = new byte[2] {154, 1};
+            BitConverter.ToUInt16(s);
+            
             Ability ability = new Ability();
-            ability.Level = 10;
-            ability.DC = 1;
-            ability.SC = 2;
-            ability.MC = 3;
+            ability.Level=38;
+            ability.DC=4167;
+            ability.SC=6411;
+            ability.MC=0;
+            ability.AC=0;
+            ability.Exp=16230;
+            ability.MaxExp=2000000;
+            ability.ExpCount=0;
+            ability.ExpMaxCount=0;
+            ability.HP=78;
+            ability.MP=128;
+            ability.MaxHP=350;
+            ability.MaxMP=410;
+            ability.HandWeight=46;
+            ability.MaxHandWeight=46;
+            ability.MaxWearWeight=44;
+            ability.MaxWeight=411;
+            ability.Weight=89;
+            ability.WearWeight=7;
+            ability.MAC = 2051;
             var strs = EDCode.EncodeMessage(ability);
+            
+            //^dhgdg`kwhhgdgqivdh?dzihJehcddhknchddDdKjdqodKiig\>d^<
+            //^dhgdg`kwhhgdgqivdh?dzihJehcddhknchddDdKjdqodKiig\>d^<
             Console.WriteLine(strs);
         }
     }

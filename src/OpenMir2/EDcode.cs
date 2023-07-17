@@ -211,6 +211,7 @@ namespace SystemModule
         public static string EncodeMessage<T>(T packet) where T : class
         {
             byte[] data = SerializerUtil.Serialize(packet);
+            var newData = data[1..];
             int buffSize = data.Length;
             if (buffSize <= 0)
             {
