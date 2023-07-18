@@ -12,10 +12,6 @@ namespace M2Server.Monster
         /// </summary>
         public int KillMonCount;
         /// <summary>
-        /// 宝宝等级(1-7)
-        /// </summary>
-        public byte SlaveExpLevel { get; set; }
-        /// <summary>
         /// 召唤等级
         /// </summary>
         public byte SlaveMakeLevel;
@@ -213,7 +209,7 @@ namespace M2Server.Monster
             }
             return result;
         }
-
+         
         protected virtual bool AttackTarget()
         {
             byte btDir = 0;

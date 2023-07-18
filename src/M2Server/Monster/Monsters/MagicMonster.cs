@@ -4,9 +4,6 @@ namespace M2Server.Monster.Monsters
 {
     public class MagicMonster : MonsterObject
     {
-
-        //public int SpellTick = 0;
-
         public MagicMonster() : base()
         {
             DupMode = false;
@@ -47,7 +44,7 @@ namespace M2Server.Monster.Monsters
             return result;
         }
 
-        protected virtual bool AttackTarget()
+        protected override bool AttackTarget()
         {
             bool result = false;
             byte dir = 0;

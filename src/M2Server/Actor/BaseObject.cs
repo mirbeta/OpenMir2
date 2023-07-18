@@ -2840,10 +2840,5 @@ namespace M2Server.Actor
         {
             return string.Format(str, par);
         }
-
-        public void WinExp(int exp)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

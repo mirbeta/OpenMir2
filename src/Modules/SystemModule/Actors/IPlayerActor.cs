@@ -1074,9 +1074,7 @@ namespace SystemModule
 
         void SendUseItems();
 
-        void StatusChanged();
-
-        int GetCharStatus();
+        void WinExp(int exp);
 
         void RefMyStatus();
 

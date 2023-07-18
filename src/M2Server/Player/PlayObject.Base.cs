@@ -756,7 +756,7 @@ namespace M2Server.Player
 
         public void GainExp(int dwExp)
         {
-            IActor playObject;
+            IPlayerActor playObject;
             const string sExceptionMsg = "[Exception] PlayObject::GainExp";
             double[] bonus = { 1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2, 2.1, 2.2 };
             try

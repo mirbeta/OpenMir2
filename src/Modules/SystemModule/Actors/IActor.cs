@@ -436,9 +436,7 @@ namespace SystemModule
         bool MagDefenceUp(int nSec);
 
         ushort GetFeatureEx();
-
-        void WinExp(int exp);
-
+        
         void ApplyMeatQuality();
 
         bool MakePosion(int nType, ushort nTime, int nPoint);

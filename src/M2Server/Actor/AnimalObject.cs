@@ -17,6 +17,9 @@ namespace M2Server.Actor
         public int RunAwayStart;
         public int RunAwayTime;
         protected int SearchEnemyTick = 0;
+        /// <summary>
+        /// 宝宝等级(1-7)
+        /// </summary>
         public byte SlaveExpLevel { get; set; }
         /// <summary>
         /// 行走步伐
