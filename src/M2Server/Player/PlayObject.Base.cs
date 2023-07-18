@@ -1122,6 +1122,10 @@ namespace M2Server.Player
                     bonusTick = SystemShare.Config.BonusAbilofTaos;
                     nakedAbil = SystemShare.Config.NakedAbilofTaos;
                     break;
+                default:
+                    bonusTick = SystemShare.Config.BonusAbilofWarr;
+                    nakedAbil = SystemShare.Config.NakedAbilofWarr;
+                    break;
             }
             short adc = (short)(BonusAbil.DC / bonusTick.DC);
             short amc = (short)(BonusAbil.MC / bonusTick.MC);
@@ -1133,13 +1137,13 @@ namespace M2Server.Player
             RecalcAdjusBonusAdjustAb((byte)nakedAbil.SC, asc, ref lsc, ref hsc);
             RecalcAdjusBonusAdjustAb((byte)nakedAbil.AC, aac, ref lac, ref hac);
             RecalcAdjusBonusAdjustAb((byte)nakedAbil.MAC, amac, ref lmac, ref hmac);
-            Abil.DC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.DC) + ldc), (ushort)(HUtil32.HiWord(Abil.DC) + hdc));
-            Abil.MC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.MC) + lmc), (ushort)(HUtil32.HiWord(Abil.MC) + hmc));
-            Abil.SC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.SC) + lsc), (ushort)(HUtil32.HiWord(Abil.SC) + hsc));
-            Abil.AC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.AC) + lac), (ushort)(HUtil32.HiWord(Abil.AC) + hac));
-            Abil.MAC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(Abil.MAC) + lmac), (ushort)(HUtil32.HiWord(Abil.MAC) + hmac));
-            Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxHP + BonusAbil.HP / bonusTick.HP);
-            Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, Abil.MaxMP + BonusAbil.MP / bonusTick.MP);
+            WAbil.DC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(WAbil.DC) + ldc), (ushort)(HUtil32.HiWord(WAbil.DC) + hdc));
+            WAbil.MC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(WAbil.MC) + lmc), (ushort)(HUtil32.HiWord(WAbil.MC) + hmc));
+            WAbil.SC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(WAbil.SC) + lsc), (ushort)(HUtil32.HiWord(WAbil.SC) + hsc));
+            WAbil.AC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(WAbil.AC) + lac), (ushort)(HUtil32.HiWord(WAbil.AC) + hac));
+            WAbil.MAC = (ushort)HUtil32.MakeLong((ushort)(HUtil32.LoWord(WAbil.MAC) + lmac), (ushort)(HUtil32.HiWord(WAbil.MAC) + hmac));
+            WAbil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, WAbil.MaxHP + BonusAbil.HP / bonusTick.HP);
+            WAbil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, WAbil.MaxMP + BonusAbil.MP / bonusTick.MP);
         }
 
         private void ClientAdjustBonus(int nPoint, string sMsg)

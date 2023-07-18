@@ -15,11 +15,14 @@ namespace M2Server.Actor
         public virtual void RecalcAbilitys()
         {
             AddAbil = new AddAbility();
-            Abil = WAbil;
+            //Abil = WAbil;
             //Ability temp = WAbil;
             //WAbil = (Ability)Abil.Clone();
-            WAbil.HP = Abil.HP;
-            WAbil.MP = Abil.MP;
+            var wOldHP = WAbil.HP;
+            var wOldMP = WAbil.MP;
+            WAbil = Abil.Clone();
+            WAbil.HP = wOldHP;
+            WAbil.MP = wOldMP;
             WAbil.Weight = 0;
             WAbil.WearWeight = 0;
             WAbil.HandWeight = 0;
@@ -64,11 +67,13 @@ namespace M2Server.Actor
             AntiMagic = (ushort)(AntiMagic + AddAbil.AntiMagic);
             WAbil.MaxHP = (ushort)(Abil.MaxHP + AddAbil.HP);
             WAbil.MaxMP = (ushort)(Abil.MaxMP + AddAbil.MP);
+            
             WAbil.AC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.AC) + HUtil32.LoByte(Abil.AC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.AC) + HUtil32.HiByte(Abil.AC)));
             WAbil.MAC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MAC) + HUtil32.LoByte(Abil.MAC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MAC) + HUtil32.HiByte(Abil.MAC)));
             WAbil.DC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.DC) + HUtil32.LoByte(Abil.DC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.DC) + HUtil32.HiByte(Abil.DC)));
             WAbil.MC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.MC) + HUtil32.LoByte(Abil.MC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.MC) + HUtil32.HiByte(Abil.MC)));
             WAbil.SC = HUtil32.MakeWord((ushort)HUtil32._MIN(255, HUtil32.LoByte(AddAbil.SC) + HUtil32.LoByte(Abil.SC)), (ushort)HUtil32._MIN(255, HUtil32.HiByte(AddAbil.SC) + HUtil32.HiByte(Abil.SC)));
+            
             if (StatusTimeArr[PoisonState.DefenceUP] > 0)
             {
                 WAbil.AC = HUtil32.MakeWord(HUtil32.LoByte(WAbil.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(WAbil.AC) + (Abil.Level / 7) + M2Share.ActorBuffSystem.GetBuff(this, BuffType.DefensePower)));

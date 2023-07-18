@@ -1,4 +1,6 @@
-﻿using MemoryPack;
+﻿using System;
+using System.Runtime.CompilerServices;
+using MemoryPack;
 using System.Runtime.InteropServices;
 
 namespace SystemModule.Packets.ClientPackets
@@ -80,6 +82,27 @@ namespace SystemModule.Packets.ClientPackets
         /// 最大腕力
         /// </summary>
         public byte MaxHandWeight { get; set; }
+
+        public Ability Clone()
+        {
+            return (Ability)MemberwiseClone();
+        }
+        
+        public static unsafe T DeepClone<T>(T obj) where T : class
+        {
+            if (obj == null)
+            {
+                return null;
+            }
+            int size = Unsafe.SizeOf<T>();
+            T copy = (T)Activator.CreateInstance(typeof(T));
+            fixed (byte* srcPtr = &Unsafe.As<T, byte>(ref obj))
+            fixed (byte* dstPtr = &Unsafe.As<T, byte>(ref copy))
+            {
+                Buffer.MemoryCopy(srcPtr, dstPtr, size, size);
+            }
+            return copy;
+        }
     }
 
     public class AbilityFormatter : MemoryPackFormatter<Ability>

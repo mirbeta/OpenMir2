@@ -1494,7 +1494,7 @@ namespace M2Server.Actor
 
         public void AbilCopyToWAbil()
         {
-            WAbil = Abil;//.Clone();
+            WAbil = Abil.Clone();
         }
 
         public void FeatureChanged()
