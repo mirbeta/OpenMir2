@@ -16,8 +16,8 @@ namespace GameSrv.GameCommand.Commands {
             int nOLevel = playObject.Abil.Level;
             playObject.Abil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
             playObject.HasLevelUp(1);// 等级调整记录日志
-            M2Share.EventSource.AddEventLog(17, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY
-                                                + "\09" + playObject.ChrName + "\09" + playObject.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
+            M2Share.EventSource.AddEventLog(17, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY
+                                                + "\t" + playObject.ChrName + "\t" + playObject.Abil.Level + "\t" + "0" + "\t" + "=(" + nLevel + ")" + "\t" + "0");
             if (M2Share.Config.ShowMakeItemMsg) {
                 M2Share.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, playObject.ChrName, nOLevel, playObject.Abil.Level));
             }

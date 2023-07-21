@@ -1,6 +1,6 @@
 ﻿namespace GameSrv.GameCommand {
     public static class CommandHelp {
-        public const string GameLogMsg1 = "{0}\09{1}\09{2}\09{3}\09{4}\09{5}\09{6}\09{7}";
+        public const string GameLogMsg1 = "{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}";
         public const string HumanDieEvent = "人物死亡事件";
         public const string HitOverSpeed = "[攻击超速] {0} 间隔:{1} 数量:{2}";
         public const string RunOverSpeed = "[跑步超速] {0} 间隔:{1} 数量:{2}";

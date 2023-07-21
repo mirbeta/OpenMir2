@@ -643,7 +643,7 @@ namespace BotSrv
             //        {
             //            continue;
             //        }
-            //        so = HGEGUI.Units.HGEGUI.GetValidStr3(Strings[i], ref sn, new string[] { ",", " ", "\09" });
+            //        so = HGEGUI.Units.HGEGUI.GetValidStr3(Strings[i], ref sn, new string[] { ",", " ", "\t" });
             //        no = ((int)so != "");
             //        g_APPickUpList.Add(sn, ((no) as Object));
             //    }

@@ -309,7 +309,7 @@ namespace DBSrv
                 var sLineText = loadList[i].Trim();
                 if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                 {
-                    sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
+                    sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\t" });
                     if ((string.IsNullOrEmpty(sGameGate)) || (string.IsNullOrEmpty(sSelGateIPaddr)))
                     {
                         continue;
@@ -320,11 +320,11 @@ namespace DBSrv
                     nGateIdx = 0;
                     while (!string.IsNullOrEmpty(sGameGate))
                     {
-                        sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
+                        sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\t" });
                         var gamrGates = sGameGate.Split(",");
                         if (gamrGates.Length == 0)
                         {
-                            sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
+                            sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\t" });
                             DBShare.RouteInfo[nRouteIdx].GameGateIP[nGateIdx] = sGameGateIPaddr.Trim();
                             DBShare.RouteInfo[nRouteIdx].GameGatePort[nGateIdx] = HUtil32.StrToInt(sGameGatePort, 0);
                             nGateIdx++;
@@ -356,8 +356,8 @@ namespace DBSrv
                     if ((!string.IsNullOrEmpty(sLineText)) && (sLineText[0] == '['))
                     {
                         sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
-                        sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new[] { " ", "\09" });
-                        sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\09" });
+                        sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new[] { " ", "\t" });
+                        sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\t" });
                         var nServerIndex = HUtil32.StrToInt(sServerIndex, 0);
                         DBShare.MapList.Add(sMapName, nServerIndex);
                     }

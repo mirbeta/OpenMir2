@@ -72,13 +72,13 @@ namespace GameSrv.GameCommand.Commands
                     }
                     if (stdItem.NeedIdentify == 1)
                     {
-                        M2Share.EventSource.AddEventLog(5, playObject.MapName + "\09" + playObject.CurrX +
-                           "\09" + playObject.CurrY + "\09" + playObject.ChrName + "\09" + stdItem.Name + "\09" + userItem.MakeIndex + "\09" + "(" +
+                        M2Share.EventSource.AddEventLog(5, playObject.MapName + "\t" + playObject.CurrX +
+                           "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + "(" +
                            HUtil32.LoByte(stdItem.DC) + "/" + HUtil32.HiByte(stdItem.DC) + ")" + "(" + HUtil32.LoByte(stdItem.MC) + "/" + HUtil32.HiByte(stdItem.MC) + ")" + "(" +
                            HUtil32.LoByte(stdItem.SC) + "/" + HUtil32.HiByte(stdItem.SC) + ")" + "(" + HUtil32.LoByte(stdItem.AC) + "/" +
                            HUtil32.HiByte(stdItem.AC) + ")" + "(" + HUtil32.LoByte(stdItem.MAC) + "/" + HUtil32.HiByte(stdItem.MAC) + ")" + userItem.Desc[0]
                            + "/" + userItem.Desc[1] + "/" + userItem.Desc[2] + "/" + userItem.Desc[3] + "/" + userItem.Desc[4] + "/" + userItem.Desc[5] + "/" + userItem.Desc[6]
-                           + "/" + userItem.Desc[7] + "/" + userItem.Desc[8] + "/" + userItem.Desc[14] + "\09" + playObject.ChrName);
+                           + "/" + userItem.Desc[7] + "/" + userItem.Desc[8] + "/" + userItem.Desc[14] + "\t" + playObject.ChrName);
                     }
                 }
                 else
