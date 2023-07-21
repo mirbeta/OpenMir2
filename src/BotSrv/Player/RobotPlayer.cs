@@ -2233,7 +2233,7 @@ namespace BotSrv.Player
                     var param = str[sam.Length..];
                     if (!string.IsNullOrEmpty(param))
                     {
-                        var sy = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
+                        var sy = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\t" });
                         if ((sx != "") && (sy != ""))
                         {
                             var x = Convert.ToInt16(sx);
@@ -2368,8 +2368,8 @@ namespace BotSrv.Player
                     var param = rstr.Substring(sam.Length + 1 - 1, rstr.Length - sam.Length);
                     if (param != "")
                     {
-                        param = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
-                        var sM = HUtil32.GetValidStr3(param, ref sy, new string[] { " ", ":", ",", "\09" });
+                        param = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\t" });
+                        var sM = HUtil32.GetValidStr3(param, ref sy, new string[] { " ", ":", ",", "\t" });
                         if ((sx != "") && (sy != ""))
                         {
                             if ((sM != "") && (string.Compare(MShare.MapTitle, sM, StringComparison.OrdinalIgnoreCase) != 0))// 自动移动

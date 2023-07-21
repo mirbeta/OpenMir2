@@ -66,8 +66,8 @@ namespace DBSrv
                     {
                         continue;
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sID, new[] { " ", "\09" });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sIPaddr, new[] { " ", "\09" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sID, new[] { " ", "\t" });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sIPaddr, new[] { " ", "\t" });
                     int nID = HUtil32.StrToInt(sID, -1);
                     if (nID < 0)
                     {

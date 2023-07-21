@@ -604,9 +604,9 @@ namespace LoginSrv.Services
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var lineText = LoadList[i];
-                    lineText = HUtil32.GetValidStr3(lineText, ref sServerName, new[] { " ", "\09" });
-                    lineText = HUtil32.GetValidStr3(lineText, ref s10, new[] { " ", "\09" });
-                    lineText = HUtil32.GetValidStr3(lineText, ref s14, new[] { " ", "\09" });
+                    lineText = HUtil32.GetValidStr3(lineText, ref sServerName, new[] { " ", "\t" });
+                    lineText = HUtil32.GetValidStr3(lineText, ref s10, new[] { " ", "\t" });
+                    lineText = HUtil32.GetValidStr3(lineText, ref s14, new[] { " ", "\t" });
                     if (!string.IsNullOrEmpty(sServerName))
                     {
                         UserLimit[nC] = new LimitServerUserInfo();

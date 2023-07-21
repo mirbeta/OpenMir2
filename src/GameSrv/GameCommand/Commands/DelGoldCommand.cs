@@ -34,8 +34,8 @@ namespace GameSrv.GameCommand.Commands {
                 mPlayObject.GoldChanged();
                 playObject.SysMsg(sHumName + "的金币已减少" + nCount + ".", MsgColor.Green, MsgType.Hint);
                 if (M2Share.GameLogGold) {
-                    M2Share.EventSource.AddEventLog(13, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09"
-                                                        + playObject.ChrName + "\09" + Grobal2.StringGoldName + "\09" + nCount + "\09" + "1" + "\09" + sHumName);
+                    M2Share.EventSource.AddEventLog(13, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t"
+                                                        + playObject.ChrName + "\t" + Grobal2.StringGoldName + "\t" + nCount + "\t" + "1" + "\t" + sHumName);
                 }
             }
             else {

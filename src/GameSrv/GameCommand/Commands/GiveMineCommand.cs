@@ -42,9 +42,9 @@ namespace GameSrv.GameCommand.Commands {
                             playObject.ItemList.Add(userItem);
                             playObject.SendAddItem(userItem);
                             if (stdItem.NeedIdentify == 1) {
-                                M2Share.EventSource.AddEventLog(5, playObject.MapName + "\09" + playObject.CurrX + "\09" + playObject.CurrY + "\09" +
-                                                                   playObject.ChrName + "\09" + stdItem.Name + "\09" + userItem.MakeIndex + "\09" + userItem.Dura + "/"
-                                                                   + userItem.DuraMax + "\09" + playObject.ChrName);
+                                M2Share.EventSource.AddEventLog(5, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" +
+                                                                   playObject.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + userItem.Dura + "/"
+                                                                   + userItem.DuraMax + "\t" + playObject.ChrName);
                             }
                         }
                     }

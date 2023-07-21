@@ -22,8 +22,8 @@ namespace GameSrv.GameCommand.Commands {
             if (mPlayObject != null) {
                 int nOLevel = mPlayObject.Abil.Level;
                 mPlayObject.HasLevelUp(1);
-                M2Share.EventSource.AddEventLog(17, mPlayObject.MapName + "\09" + mPlayObject.CurrX + "\09" + mPlayObject.CurrY + "\09"
-                                                    + mPlayObject.ChrName + "\09" + mPlayObject.Abil.Level + "\09" + playObject.ChrName + "\09" + "+(" + nLevel + ")" + "\09" + "0");
+                M2Share.EventSource.AddEventLog(17, mPlayObject.MapName + "\t" + mPlayObject.CurrX + "\t" + mPlayObject.CurrY + "\t"
+                                                    + mPlayObject.ChrName + "\t" + mPlayObject.Abil.Level + "\t" + playObject.ChrName + "\t" + "+(" + nLevel + ")" + "\t" + "0");
                 playObject.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (M2Share.Config.ShowMakeItemMsg) {
                     M2Share.Logger.Warn("[等级调整] " + playObject.ChrName + "(" + mPlayObject.ChrName + " " + nOLevel + " -> " + mPlayObject.Abil.Level + ")");

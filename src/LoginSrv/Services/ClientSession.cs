@@ -434,8 +434,8 @@ namespace LoginSrv.Services
             try
             {
                 var sMsg = EDCode.DeCodeString(sData);
-                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginId, new[] { "\09", "\t" });
-                var sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\09", "\t" });
+                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginId, new[] { "\t", "\t" });
+                var sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\t", "\t" });
                 var nCode = 0;
                 if (sNewPassword.Length >= 3)
                 {
@@ -608,12 +608,12 @@ namespace LoginSrv.Services
             CommandMessage defMsg;
             AccountRecord accountRecord = null;
             var sMsg = EDCode.DeCodeString(sData);
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\09");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, "\09");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer1, "\09");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest2, "\09");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, "\09");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\t");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, "\t");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer1, "\t");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest2, "\t");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, "\t");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, "\t");
             var nCode = 0;
             if (!string.IsNullOrEmpty(sAccount))
             {
