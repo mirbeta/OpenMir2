@@ -106,13 +106,13 @@ namespace MarketSystem
         private void MarketScoketDisconnected(object sender, DisconnectEventArgs e)
         {
             var client = (TcpClient)sender;
-            _logger.Error("数据库(拍卖行)服务器[" + client.MainSocket.RemoteEndPoint + "]断开连接...");
+            _logger.Error("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]断开连接...");
         }
 
         private void MarketScoketConnected(object sender, MsgEventArgs e)
         {
             var client = (TcpClient)sender;
-            _logger.Info("数据库(拍卖行)服务器[" + client.MainSocket.RemoteEndPoint + "]连接成功...");
+            _logger.Info("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]连接成功...");
             SendFirstMessage();// 链接成功后进行第一次主动拉取拍卖行数据
             if (_thread != null)
             {
@@ -126,13 +126,13 @@ namespace MarketSystem
             switch (e.SocketErrorCode)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]拒绝链接...");
+                    _logger.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]拒绝链接...");
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]关闭连接...");
+                    _logger.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]关闭连接...");
                     break;
                 case SocketError.TimedOut:
-                    _logger.Error("数据库(拍卖行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]链接超时...");
+                    _logger.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]链接超时...");
                     break;
             }
         }

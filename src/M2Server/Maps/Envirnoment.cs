@@ -1050,7 +1050,7 @@ namespace M2Server
                 Height = nHeight;
                 //_cellArray = new MapCellInfo[nWidth * nHeight];
                 //_cellArray = GC.AllocateUninitializedArray<MapCellInfo>(nWidth * nHeight);
-                CellArray = GC.AllocateArray<MapCellInfo>(nWidth * nHeight);
+                CellArray = GC.AllocateUninitializedArray<MapCellInfo>(nWidth * nHeight);
             }
         }
 

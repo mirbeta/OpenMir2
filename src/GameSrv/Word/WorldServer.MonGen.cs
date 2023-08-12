@@ -202,7 +202,7 @@ namespace GameSrv.Word
             {
                 return;
             }
-            _logger.Debug($"Monster Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
+            _logger.Debug($"MonsterProcess Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
 
             while (true)
             {

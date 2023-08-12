@@ -1,5 +1,4 @@
-﻿using System.Buffers;
-using SystemModule.NativeList.Utils;
+﻿using SystemModule.NativeList.Utils;
 
 namespace SystemModule
 {
@@ -8,7 +7,7 @@ namespace SystemModule
         /// <summary>
         /// 对象数量
         /// </summary>
-        public int Count => ObjList == null ? 0 : ObjList.Count;
+        public readonly int Count => ObjList == null ? 0 : ObjList.Count;
         /// <summary>
         /// 地图对象列表
         /// </summary>
@@ -16,7 +15,7 @@ namespace SystemModule
         /// <summary>
         /// 是否可以移动
         /// </summary>
-        public bool Valid => Attribute == CellAttribute.Walk;
+        public readonly bool Valid => Attribute == CellAttribute.Walk;
         /// <summary>
         /// 移动标识
         /// </summary>
@@ -27,26 +26,26 @@ namespace SystemModule
             ObjList = null;
         }
 
-        public bool IsAvailable => ObjList?.Count > 0;
+        public readonly bool IsAvailable => ObjList?.Count > 0;
 
-        public void Add(CellObject cell)
+        public readonly void Add(CellObject cell)
         {
             ObjList.Add(cell);
         }
 
-        public void Update(int index, ref CellObject cell)
+        public readonly void Update(int index, ref CellObject cell)
         {
             cell.AddTime = HUtil32.GetTickCount();
             ObjList[index] = cell;
         }
 
-        public void Remove(CellObject index)
+        public readonly void Remove(CellObject index)
         {
             //todo 异步通知处理并移除
             ObjList.Remove(index);
         }
 
-        public void Remove(int index)
+        public readonly void Remove(int index)
         {
             ObjList.RemoveAt(index);
         }
@@ -56,7 +55,7 @@ namespace SystemModule
             Attribute = cellAttribute;
         }
 
-        public void Clear()
+        public readonly void Clear()
         {
             ObjList.Clear();
             //ObjList = null;
