@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
         <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
@@ -35,9 +35,9 @@
 
     
     <ItemGroup>
-      <PackageReference Include="MongoDB.Bson" Version="2.20.0" />
-      <PackageReference Include="MongoDB.Driver" Version="2.20.0" />
-      <PackageReference Include="NLog" Version="5.2.2" />
+      <PackageReference Include="MongoDB.Bson" Version="2.21.0" />
+      <PackageReference Include="MongoDB.Driver" Version="2.21.0" />
+      <PackageReference Include="NLog" Version="5.2.4" />
     </ItemGroup>
 
     <ItemGroup>

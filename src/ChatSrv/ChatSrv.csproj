@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <LangVersion>11</LangVersion>
         <RootNamespace>GameGate</RootNamespace>
         <DebugType>embedded</DebugType>
@@ -62,9 +62,9 @@
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
         <PackageReference Include="Spectre.Console" Version="0.47.0" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-        <PackageReference Include="NLog" Version="5.2.2" />
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.2" />
-        <PackageReference Include="MQTTnet" Version="4.2.1.781" />
+        <PackageReference Include="NLog" Version="5.2.4" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
+        <PackageReference Include="MQTTnet" Version="4.3.1.873" />
     </ItemGroup>
     
     <ItemGroup>

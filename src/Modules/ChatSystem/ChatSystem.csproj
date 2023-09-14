@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
@@ -39,8 +39,8 @@
     </Choose>
     
   <ItemGroup>
-    <PackageReference Include="MQTTnet" Version="4.2.1.781" />
-    <PackageReference Include="NLog" Version="5.2.2" />
+    <PackageReference Include="MQTTnet" Version="4.3.1.873" />
+    <PackageReference Include="NLog" Version="5.2.4" />
   </ItemGroup>
 
   <ItemGroup>

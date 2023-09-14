@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <IsPackable>false</IsPackable>
         <LangVersion>11</LangVersion>
         <ImplicitUsings>disable</ImplicitUsings>
@@ -22,8 +22,8 @@
       <PackageReference Include="MemoryPack" Version="1.9.16" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-      <PackageReference Include="NLog" Version="5.2.2" />
-      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.2" />
+      <PackageReference Include="NLog" Version="5.2.4" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
     </ItemGroup>
 

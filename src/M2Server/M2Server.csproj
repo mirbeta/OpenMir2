@@ -1,22 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
         <PackageReference Include="Collections.Pooled" Version="1.0.82" />
-        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.0" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-        <PackageReference Include="MySqlConnector" Version="2.2.6" />
+        <PackageReference Include="MySqlConnector" Version="2.2.7" />
         <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
         <PackageReference Include="Spectre.Console" Version="0.47.0" />
-        <PackageReference Include="NLog" Version="5.2.2" />
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.2" />
+        <PackageReference Include="NLog" Version="5.2.4" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
     </ItemGroup>
     
     <ItemGroup>

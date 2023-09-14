@@ -12,13 +12,13 @@ namespace SystemModule.Extensions
         /// <returns></returns>
         public static T Clone<T>(this object obj)
         {
-            IFormatter formatter = new BinaryFormatter();
-            using (MemoryStream stream = new MemoryStream())
-            {
+           //IFormatter formatter = new BinaryFormatter();
+            //using (MemoryStream stream = new MemoryStream())
+            //{
                 /*formatter.Serialize(stream, obj);
                 stream.Seek(0, SeekOrigin.Begin);
                 return (T)formatter.Deserialize(stream);*/
-            }
+            //}
             return default(T);
         }
     }
