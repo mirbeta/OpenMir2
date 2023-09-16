@@ -32,7 +32,7 @@ namespace SystemModule
         public static IMediator Mediator { get; set; }
 
         /// <summary>
-        /// 启动路径
+        /// 工作目录
         /// </summary>
         public static readonly string BasePath;
         /// <summary>

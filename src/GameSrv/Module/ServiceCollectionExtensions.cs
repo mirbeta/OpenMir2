@@ -109,12 +109,12 @@ namespace GameSrv.Module
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error($"加载依赖项{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
+                    _logger.Error($"加载依赖项{expectedPath} 发生异常:{ex.Message},{ex.StackTrace}");
                 }
             }
             else
             {
-                _logger.Error($"依赖项不存在：{expectedPath}");
+                _logger.Error($"依赖项不存在:{expectedPath}");
             }
             return null;
         }
