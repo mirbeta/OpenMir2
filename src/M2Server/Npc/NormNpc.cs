@@ -24,7 +24,7 @@ namespace M2Server.Npc
         /// </summary>
         public bool IsHide { get; set; }
 
-        public string m_sPath { get; set; }
+        public string Path { get; set; }
         public int ProcessRefillIndex { get; set; }
         public IList<ScriptInfo> ScriptList { get; private set; }
         /// <summary>
@@ -1659,7 +1659,7 @@ namespace M2Server.Npc
         {
             if (!SystemShare.Config.SendCustemMsg)
             {
-                PlayObject.SysMsg(Settings.SendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
+                PlayObject.SysMsg(MessageSettings.SendCustMsgCanNotUseNowMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayObject.BoSendMsgFlag)

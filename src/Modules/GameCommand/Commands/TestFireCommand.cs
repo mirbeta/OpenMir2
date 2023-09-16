@@ -1,5 +1,5 @@
 ﻿using SystemModule;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 
 namespace CommandSystem.Commands
 {

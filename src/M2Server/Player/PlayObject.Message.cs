@@ -49,7 +49,7 @@ namespace M2Server.Player
                 if (FireHitSkill && (HUtil32.GetTickCount() - LatestFireHitTick) > 20 * 1000)
                 {
                     FireHitSkill = false;
-                    SysMsg(Settings.SpiritsGone, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.SpiritsGone, MsgColor.Red, MsgType.Hint);
                     SendSocket("+UFIR");
                 }
                 if (TwinHitSkill && (HUtil32.GetTickCount() - LatestTwinHitTick) > 60 * 1000)
@@ -751,7 +751,7 @@ namespace M2Server.Player
                             ItemDamageRevivalRing();
                             WAbil.HP = WAbil.MaxHP;
                             HealthSpellChanged();
-                            SysMsg(Settings.RevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.RevivalRecoverMsg, MsgColor.Green, MsgType.Hint);
                         }
                     }
                 }
@@ -784,7 +784,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case Messages.CM_QUERYUSERSTATE:
@@ -834,7 +834,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
@@ -1022,7 +1022,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
@@ -1073,7 +1073,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
@@ -1132,7 +1132,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
@@ -1180,7 +1180,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
@@ -1243,7 +1243,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
@@ -1298,7 +1298,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
@@ -1353,7 +1353,7 @@ namespace M2Server.Player
                                 {
                                     if (SystemShare.Config.KickOverSpeed)
                                     {
-                                        SysMsg(Settings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.KickClientUserMsg, MsgColor.Red, MsgType.Hint);
                                         BoEmergencyClose = true;
                                     }
                                     if (SystemShare.Config.ViewHackMessage)

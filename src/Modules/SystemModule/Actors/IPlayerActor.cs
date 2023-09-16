@@ -1,7 +1,7 @@
 using System.Collections;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule

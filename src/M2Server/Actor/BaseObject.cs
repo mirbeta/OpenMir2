@@ -5,7 +5,7 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Actor
@@ -1955,7 +1955,7 @@ namespace M2Server.Actor
             }
             if (Race == ActorRace.Play)
             {
-                SysMsg(Format(Settings.YouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
+                SysMsg(Format(MessageSettings.YouPoisoned, nTime, nPoint), MsgColor.Red, MsgType.Hint);
             }
             return true;
         }
@@ -2144,7 +2144,7 @@ namespace M2Server.Actor
             //    result = true;
             //}
             //StatusArrTick[PoisonState.DefenceUP] = HUtil32.GetTickCount();
-            SysMsg(Format(Settings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
+            SysMsg(Format(MessageSettings.DefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
             return true;
@@ -2168,7 +2168,7 @@ namespace M2Server.Actor
             //    result = true;
             //}
             //StatusArrTick[PoisonState.MagDefenceUP] = HUtil32.GetTickCount();
-            SysMsg(Format(Settings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
+            SysMsg(Format(MessageSettings.MagDefenceUpTime, nSec), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
             return true;

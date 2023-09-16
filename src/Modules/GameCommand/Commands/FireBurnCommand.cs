@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 using SystemModule.Enums;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 
 namespace CommandSystem.Commands
 {

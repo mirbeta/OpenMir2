@@ -1,6 +1,6 @@
 ﻿using SystemModule;
 using SystemModule.Consts;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 
 namespace M2Server.Monster.Monsters
 {

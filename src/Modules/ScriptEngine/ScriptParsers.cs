@@ -64,7 +64,7 @@ namespace ScriptSystem
         {
             if (string.IsNullOrEmpty(sPatch))
             {
-                sPatch = ScriptFlagCode.sNpc_def;
+                sPatch = ScriptFlagConst.sNpc_def;
             }
             LoadScriptFile(NPC, sPatch, scriptName, false);
         }
@@ -698,72 +698,72 @@ namespace ScriptSystem
                                 while (!string.IsNullOrEmpty(line))
                                 {
                                     line = HUtil32.GetValidStr3(line, ref command, HUtil32.Separator);
-                                    if (command.Equals(ScriptFlagCode.sBUY, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sBUY, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsBuy = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sSELL, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sSELL, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsSell = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsMakeDrug = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sPRICES, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sPRICES, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsPrices = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sSTORAGE, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sSTORAGE, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsStorage = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sGETBACK, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sGETBACK, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsGetback = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsUpgradenow = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsGetBackupgnow = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sREPAIR, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sREPAIR, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsRepair = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.SuperRepair, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.SuperRepair, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsSupRepair = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsSendMsg = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.UseItemName, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.UseItemName, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsUseItemName = true;
                                         continue;
                                     }
-                                    if (command.Equals(ScriptFlagCode.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
+                                    if (command.Equals(ScriptFlagConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase))
                                     {
                                         ((IMerchant)NPC).IsOffLineMsg = true;
                                         continue;
                                     }
-                                    if (string.Compare(command, ScriptFlagCode.sybdeal, StringComparison.OrdinalIgnoreCase) == 0)
+                                    if (string.Compare(command, ScriptFlagConst.sybdeal, StringComparison.OrdinalIgnoreCase) == 0)
                                     {
                                         ((IMerchant)NPC).IsYbDeal = true;
                                         continue;
@@ -1087,7 +1087,7 @@ namespace ScriptSystem
                             if (!boAddResetLabel)
                             {
                                 boAddResetLabel = true;
-                                sMsg = ScriptFlagCode.RESETLABEL + sMsg;
+                                sMsg = ScriptFlagConst.RESETLABEL + sMsg;
                             }
                             continue;
                         }

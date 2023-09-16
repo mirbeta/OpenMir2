@@ -5,6 +5,7 @@ using System.Diagnostics;
 using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
+using SystemModule.MagicEvent;
 
 namespace GameSrv.Maps
 {

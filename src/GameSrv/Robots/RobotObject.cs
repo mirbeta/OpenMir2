@@ -107,13 +107,13 @@ namespace GameSrv.Robots
                 {
                     if (wMin == nMin)
                     {
-                        if (autoRunInfo.boStatus) return;
+                        if (autoRunInfo.Status) return;
                         SystemShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2);
-                        autoRunInfo.boStatus = true;
+                        autoRunInfo.Status = true;
                     }
                     else
                     {
-                        autoRunInfo.boStatus = false;
+                        autoRunInfo.Status = false;
                     }
                 }
             }
@@ -134,13 +134,13 @@ namespace GameSrv.Robots
                 var wMin = DateTime.Now.Minute;
                 if (wMin == nMin)
                 {
-                    if (autoRunInfo.boStatus) return;
+                    if (autoRunInfo.Status) return;
                     SystemShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2);
-                    autoRunInfo.boStatus = true;
+                    autoRunInfo.Status = true;
                 }
                 else
                 {
-                    autoRunInfo.boStatus = false;
+                    autoRunInfo.Status = false;
                 }
             }
         }
@@ -170,13 +170,13 @@ namespace GameSrv.Robots
                 {
                     if (wMin == nMin)
                     {
-                        if (autoRunInfo.boStatus) return;
+                        if (autoRunInfo.Status) return;
                         SystemShare.RobotNPC.GotoLable(this, autoRunInfo.sParam2);
-                        autoRunInfo.boStatus = true;
+                        autoRunInfo.Status = true;
                     }
                     else
                     {
-                        autoRunInfo.boStatus = false;
+                        autoRunInfo.Status = false;
                     }
                 }
             }
@@ -224,7 +224,7 @@ namespace GameSrv.Robots
                                 var autoRunInfo = new AutoRunInfo();
                                 autoRunInfo.RunTick = HUtil32.GetTimestamp();
                                 autoRunInfo.RunTimeTick = 0;
-                                autoRunInfo.boStatus = false;
+                                autoRunInfo.Status = false;
                                 if (string.Compare(sMoethod, RobotConst.sRODAY, StringComparison.OrdinalIgnoreCase) == 0)
                                 {
                                     autoRunInfo.Moethod = RobotConst.nRODAY;

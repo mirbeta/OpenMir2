@@ -1,4 +1,4 @@
-﻿using SystemModule.Events;
+﻿using SystemModule.MagicEvent;
 
 namespace SystemModule
 {

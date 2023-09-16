@@ -20,11 +20,11 @@ namespace CommandSystem.Commands
             PlayerActor.ObMode = boFlag;
             if (PlayerActor.ObMode)
             {
-                PlayerActor.SysMsg(Settings.ObserverMode, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.ObserverMode, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayerActor.SysMsg(Settings.ReleaseObserverMode, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.ReleaseObserverMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }

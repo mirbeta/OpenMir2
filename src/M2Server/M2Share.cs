@@ -200,7 +200,7 @@ namespace M2Server
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
 
-        public static string GetGoodTick => string.Format(Settings.sSTATUS_GOOD, HUtil32.GetTickCount());
+        public static string GetGoodTick => string.Format(MessageSettings.sSTATUS_GOOD, HUtil32.GetTickCount());
 
         public static bool IsAccessory(ushort nIndex)
         {

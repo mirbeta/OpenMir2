@@ -535,7 +535,7 @@ namespace GameSrv.NPC
                 upgradeInfo = UpgradeWeaponList[i];
                 if (upgradeInfo.UserName == user.ChrName)
                 {
-                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEING);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sUPGRADEING);
                     return;
                 }
             }
@@ -579,11 +579,11 @@ namespace GameSrv.NPC
             }
             if (upgradeSuccess)
             {
-                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEOK);
+                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sUPGRADEOK);
             }
             else
             {
-                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sUPGRADEFAIL);
+                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sUPGRADEFAIL);
             }
         }
 
@@ -597,7 +597,7 @@ namespace GameSrv.NPC
             var nFlag = 0;
             if (!user.IsEnoughBag())
             {
-                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGFULL);
+                M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sGETBACKUPGFULL);
                 return;
             }
             for (var i = 0; i < UpgradeWeaponList.Count; i++)
@@ -749,13 +749,13 @@ namespace GameSrv.NPC
             switch (nFlag)
             {
                 case 0:
-                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGFAIL);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sGETBACKUPGFAIL);
                     break;
                 case 1:
-                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGING);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sGETBACKUPGING);
                     break;
                 case 2:
-                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagCode.sGETBACKUPGOK);
+                    M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sGETBACKUPGOK);
                     break;
             }
         }
@@ -800,7 +800,7 @@ namespace GameSrv.NPC
                         var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                         playObject.ScriptLable = sData;
                         var boCanJmp = playObject.LableIsCanJmp(sLabel);
-                        if (string.Compare(sLabel, ScriptFlagCode.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
+                        if (string.Compare(sLabel, ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (string.IsNullOrEmpty(sMsg))
                             {
@@ -812,124 +812,124 @@ namespace GameSrv.NPC
                         {
                             return;
                         }
-                        if (string.Compare(sLabel, ScriptFlagCode.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
+                        if (string.Compare(sLabel, ScriptFlagConst.sOFFLINEMSG, StringComparison.OrdinalIgnoreCase) == 0)// 增加挂机
                         {
                             if (IsOffLineMsg)
                             {
                                 SetOffLineMsg(playObject, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsSendMsg)
                             {
                                 SendCustemMsg(playObject, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsSupRepair)
                             {
                                 UserSelectSuperRepairItem(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sBUY, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sBUY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsBuy)
                             {
                                 UserSelectBuyItem(playObject, 0);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sSELL, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sSELL, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsSell)
                             {
                                 UserSelectSellItem(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sREPAIR, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sREPAIR, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsRepair)
                             {
                                 UserSelectRepairItem(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sMAKEDURG, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sMAKEDURG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsMakeDrug)
                             {
                                 UserSelectMakeDurg(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sPRICES, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sPRICES, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsPrices)
                             {
                                 UserSelectItemPrices(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sSTORAGE, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sSTORAGE, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsStorage)
                             {
                                 UserSelectStorage(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sGETBACK, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sGETBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsGetback)
                             {
                                 UserSelectGetBack(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sUPGRADENOW, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sUPGRADENOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsUpgradenow)
                             {
                                 UpgradeWapon(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sGETBACKUPGNOW, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsGetBackupgnow)
                             {
                                 GetBackupgWeapon(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sGETMARRY, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sGETMARRY, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsGetMarry)
                             {
                                 GetBackupgWeapon(playObject);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sGETMASTER, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sGETMASTER, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (IsGetMaster)
                             {
                                 GetBackupgWeapon(playObject);
                             }
                         }
-                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagCode.UseItemName))
+                        else if (HUtil32.CompareLStr(sLabel, ScriptFlagConst.UseItemName))
                         {
                             if (IsUseItemName)
                             {
                                 ChangeUseItemName(playObject, sLabel, sMsg);
                             }
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             playObject.SendMsg(playObject, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
+                        else if (string.Compare(sLabel, ScriptFlagConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (string.IsNullOrEmpty(playObject.ScriptGoBackLable))
                             {
-                                playObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
+                                playObject.ScriptGoBackLable = ScriptFlagConst.sMAIN;
                             }
                             M2Share.ScriptEngine.GotoLable(playObject, this.ActorId, playObject.ScriptGoBackLable);
                         }
-                        else if (string.Compare(sLabel, ScriptFlagCode.sDealYBme, StringComparison.OrdinalIgnoreCase) == 0) // 元宝寄售:出售物品 
+                        else if (string.Compare(sLabel, ScriptFlagConst.sDealYBme, StringComparison.OrdinalIgnoreCase) == 0) // 元宝寄售:出售物品 
                         {
                             if (IsYbDeal)
                             {
@@ -1094,7 +1094,7 @@ namespace GameSrv.NPC
         public void LoadMerchantScript()
         {
             ItemTypeList.Clear();
-            m_sPath = ScriptFlagCode.sMarket_Def;
+            Path = ScriptFlagConst.sMarket_Def;
             var scriptPath = ScriptName + '-' + MapName;
             M2Share.ScriptParsers.LoadScriptFile(this, "Market_Def", scriptPath, true);
         }
@@ -1573,7 +1573,7 @@ namespace GameSrv.NPC
                 {
                     nRepairPrice = nPrice;
                 }
-                if (string.Compare(playObject.ScriptLable, ScriptFlagCode.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(playObject.ScriptLable, ScriptFlagConst.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (IsSupRepair)
                     {
@@ -1605,7 +1605,7 @@ namespace GameSrv.NPC
         /// <returns></returns>
         public void ClientRepairItem(IPlayerActor playObject, UserItem userItem)
         {
-            var supRepair = string.Compare(playObject.ScriptLable, ScriptFlagCode.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0;
+            var supRepair = string.Compare(playObject.ScriptLable, ScriptFlagConst.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0;
             if (supRepair && !IsSupRepair)
             {
                 return;//不支持特殊修理
@@ -1614,7 +1614,7 @@ namespace GameSrv.NPC
             {
                 return; //不支持修理和特殊修理
             }
-            if (string.Compare(playObject.ScriptLable, ScriptFlagCode.Superrepairfail, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(playObject.ScriptLable, ScriptFlagConst.Superrepairfail, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 SendMsgToUser(playObject, "对不起!我不能帮你修理这个物品。\\ \\ \\<返回/@main>");
                 playObject.SendMsg(Messages.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0);
@@ -1656,14 +1656,14 @@ namespace GameSrv.NPC
                         {
                             userItem.Dura = userItem.DuraMax;
                             playObject.SendMsg(Messages.RM_USERREPAIRITEM_OK, 0, playObject.Gold, userItem.Dura, userItem.DuraMax);
-                            M2Share.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagCode.sSUPERREPAIROK);
+                            M2Share.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagConst.sSUPERREPAIROK);
                         }
                         else
                         {
                             userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / SystemShare.Config.RepairItemDecDura);
                             userItem.Dura = userItem.DuraMax;
                             playObject.SendMsg(Messages.RM_USERREPAIRITEM_OK, 0, playObject.Gold, userItem.Dura, userItem.DuraMax);
-                            M2Share.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagCode.sREPAIROK);
+                            M2Share.ScriptEngine.GotoLable(playObject, ActorId, ScriptFlagConst.sREPAIROK);
                         }
                     }
                     else
@@ -1776,14 +1776,14 @@ namespace GameSrv.NPC
                 return;
             }
             playObject.BoChangeItemNameFlag = false;
-            var sWhere = sLabel[ScriptFlagCode.UseItemName.Length..];
+            var sWhere = sLabel[ScriptFlagConst.UseItemName.Length..];
             var btWhere = (byte)HUtil32.StrToInt(sWhere, -1);
             if (btWhere >= 0 && btWhere <= playObject.UseItems.Length)
             {
                 var userItem = playObject.UseItems[btWhere];
                 if (userItem.Index == 0)
                 {
-                    var sMsg = Format(Settings.YourUseItemIsNul, SystemShare.GetUseItemName(btWhere));
+                    var sMsg = Format(MessageSettings.YourUseItemIsNul, SystemShare.GetUseItemName(btWhere));
                     playObject.SendMsg(this, Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, sMsg);
                     return;
                 }

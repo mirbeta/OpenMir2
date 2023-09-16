@@ -1,6 +1,5 @@
 using M2Server.Actor;
 using M2Server.Monster.Monsters;
-using System.Buffers;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -8,7 +7,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 using SystemModule.NativeList.Utils;
 
 namespace M2Server

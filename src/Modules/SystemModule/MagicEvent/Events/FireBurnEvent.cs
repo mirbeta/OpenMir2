@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Events
+﻿namespace SystemModule.MagicEvent
 {
     /// <summary>
     /// 火墙

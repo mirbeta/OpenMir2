@@ -28,7 +28,10 @@
         public int nParam2;
         public int nParam3;
         public int nParam4;
-        public bool boStatus;
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public bool Status;
     }
 }
 

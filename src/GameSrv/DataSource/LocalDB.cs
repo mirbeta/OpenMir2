@@ -194,8 +194,8 @@ namespace GameSrv.DataSource
         {
             try
             {
-                string sScriptFile = M2Share.GetEnvirFilePath(ScriptFlagCode.sMarket_Def, "QFunction-0.txt");
-                string sScritpDir = M2Share.GetEnvirFilePath(ScriptFlagCode.sMarket_Def);
+                string sScriptFile = M2Share.GetEnvirFilePath(ScriptFlagConst.sMarket_Def, "QFunction-0.txt");
+                string sScritpDir = M2Share.GetEnvirFilePath(ScriptFlagConst.sMarket_Def);
                 if (!Directory.Exists(sScritpDir))
                 {
                     Directory.CreateDirectory(sScritpDir);
@@ -216,7 +216,7 @@ namespace GameSrv.DataSource
                         ChrName = "QFunction",
                         NpcFlag = 0,
                         Appr = 0,
-                        FilePath = ScriptFlagCode.sMarket_Def,
+                        FilePath = ScriptFlagConst.sMarket_Def,
                         ScriptName = "QFunction",
                         IsHide = true,
                         IsQuest = false

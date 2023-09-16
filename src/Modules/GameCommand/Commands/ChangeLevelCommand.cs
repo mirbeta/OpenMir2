@@ -18,7 +18,7 @@ namespace CommandSystem.Commands
             var sParam1 = @params.Length > 0 ? @params[0] : "";
             var nLevel = HUtil32.StrToInt(sParam1, 1);
             int nOLevel = PlayerActor.Abil.Level;
-            PlayerActor.Abil.Level = (byte)HUtil32._MIN(Settings.MAXUPLEVEL, nLevel);
+            PlayerActor.Abil.Level = (byte)HUtil32._MIN(MessageSettings.MAXUPLEVEL, nLevel);
             PlayerActor.HasLevelUp(1);// 等级调整记录日志
             //   M2Share.EventSource.AddEventLog(17, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + PlayerActor.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
             if (SystemShare.Config.ShowMakeItemMsg)

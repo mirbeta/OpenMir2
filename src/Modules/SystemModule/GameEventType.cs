@@ -1,6 +1,6 @@
 ﻿namespace SystemModule
 {
-    public enum GameEventType : int
+    public enum GameEventType : ushort
     {
         /// <summary>
         /// 取回物品

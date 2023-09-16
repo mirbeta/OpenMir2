@@ -4,7 +4,7 @@
     {
         bool IsHide { get; set; }
 
-        string m_sPath { get; set; }
+        string Path { get; }
 
         int ProcessRefillIndex { get; set; }
 

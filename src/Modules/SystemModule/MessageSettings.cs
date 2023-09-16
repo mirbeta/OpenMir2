@@ -1,6 +1,6 @@
 ﻿namespace SystemModule
 {
-    public class Settings
+    public class MessageSettings
     {
         public const string sSTATUS_FAIL = "+FL/{0}";
         public const string sSTATUS_GOOD = "+GD/{0}";

@@ -159,28 +159,28 @@ namespace ScriptSystem
         private void ConditionOfDayTime(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sSUNRAISE, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (SystemShare.GameTime != 0)
                 {
                     success = false;
                 }
             }
-            if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sDAY, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (SystemShare.GameTime != 1)
                 {
                     success = false;
                 }
             }
-            if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sSUNSET, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (SystemShare.GameTime != 2)
                 {
                     success = false;
                 }
             }
-            if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sNIGHT, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (SystemShare.GameTime != 3)
                 {
@@ -258,15 +258,15 @@ namespace ScriptSystem
             int nCount = 0;
             PlayJob nJob = PlayJob.None;
             IPlayerActor IPlayerActorEx;
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sWarrior))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
                 nJob = PlayJob.Warrior;
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sWizard))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWizard))
             {
                 nJob = PlayJob.Wizard;
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sTaos))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sTaos))
             {
                 nJob = PlayJob.Taoist;
             }
@@ -632,7 +632,7 @@ namespace ScriptSystem
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CHECKNAMEDATELIST);
                 return;
             }
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1);
             if (File.Exists(sListFileName))
             {
                 loadList = new StringList();
@@ -771,7 +771,7 @@ namespace ScriptSystem
                     ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CHECKGUILDNAMEDATELIST);
                     return;
                 }
-                sListFileName = SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1);
+                sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1);
                 if (File.Exists(sListFileName))
                 {
                     loadList = new StringList();
@@ -1766,10 +1766,10 @@ namespace ScriptSystem
                 sChrName = playerActor.ChrName;
                 sCharAccount = playerActor.UserAccount;
                 sCharIPaddr = playerActor.LoginIpAddr;
-                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1)))
                 {
                     loadList = new StringList();
-                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         sLine = loadList[i];
@@ -3065,7 +3065,7 @@ namespace ScriptSystem
             string sVar = string.Empty;
             string sValue = string.Empty;
             int nValue = 0;
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1);
             var nItemCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             var loadList = new StringList();
             if (File.Exists(sListFileName))
@@ -3303,9 +3303,9 @@ namespace ScriptSystem
             {
                 var sChrName = playerActor.ChrName;
                 var sCharIPaddr = playerActor.LoginIpAddr;
-                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1)))
                 {
-                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         var sLine = loadList[i];
@@ -3803,9 +3803,9 @@ namespace ScriptSystem
             var loadList = new StringList();
             try
             {
-                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1)))
                 {
-                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1));
                     nPostion = loadList.IndexOf(sValue);
                     success = nPostion >= 0;
                 }
@@ -4057,21 +4057,21 @@ namespace ScriptSystem
         private void ConditionOfCheckJob(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sWarrior))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
                 if (playerActor.Job != PlayJob.Warrior)
                 {
                     success = false;
                 }
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sWizard))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWizard))
             {
                 if (playerActor.Job != PlayJob.Wizard)
                 {
                     success = false;
                 }
             }
-            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagCode.sTaos))
+            if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sTaos))
             {
                 if (playerActor.Job != PlayJob.Taoist)
                 {
@@ -4125,7 +4125,7 @@ namespace ScriptSystem
         private void ConditionOfGender(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (string.Compare(questConditionInfo.sParam1, ScriptFlagCode.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 if (playerActor.Gender != PlayGender.Man)
                 {
@@ -4216,10 +4216,10 @@ namespace ScriptSystem
             try
             {
                 sChrName = playerActor.ChrName;
-                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1)))
+                if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1)))
                 {
                     loadList = new StringList();
-                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.m_sPath, questConditionInfo.sParam1));
+                    loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
                         string sLine = loadList[i].Trim();
@@ -4310,7 +4310,7 @@ namespace ScriptSystem
             success = true;
             if (playerActor.MyGuild != null)
             {
-                if (!GotoLableCheckStringList(playerActor.MyGuild.GuildName, normNpc.m_sPath + questConditionInfo.sParam1))
+                if (!GotoLableCheckStringList(playerActor.MyGuild.GuildName, normNpc.Path + questConditionInfo.sParam1))
                 {
                     success = false;
                 }
@@ -4623,7 +4623,7 @@ namespace ScriptSystem
         private void ConditionOfCheckAccountList(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!GotoLableCheckStringList(playerActor.UserAccount, normNpc.m_sPath + questConditionInfo.sParam1))
+            if (!GotoLableCheckStringList(playerActor.UserAccount, normNpc.Path + questConditionInfo.sParam1))
             {
                 success = false;
             }
@@ -4638,7 +4638,7 @@ namespace ScriptSystem
         private void ConditionOfCheckIpList(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            if (!GotoLableCheckStringList(playerActor.LoginIpAddr, normNpc.m_sPath + questConditionInfo.sParam1))
+            if (!GotoLableCheckStringList(playerActor.LoginIpAddr, normNpc.Path + questConditionInfo.sParam1))
             {
                 success = false;
             }

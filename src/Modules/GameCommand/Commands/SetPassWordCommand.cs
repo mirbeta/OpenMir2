@@ -14,18 +14,18 @@ namespace CommandSystem.Commands
         {
             if (!SystemShare.Config.PasswordLockSystem)
             {
-                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
                 PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 PlayerActor.IsSetStoragePwd = true;
-                PlayerActor.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayerActor.SysMsg(Settings.AlreadySetPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.AlreadySetPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -41,17 +41,17 @@ namespace CommandSystem.Commands
         {
             if (!SystemShare.Config.PasswordLockSystem)
             {
-                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (!PlayerActor.IsPasswordLocked)
             {
                 PlayerActor.StoragePwd = "";
-                PlayerActor.SysMsg(Settings.OldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.OldPasswordIsClearMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayerActor.SysMsg(Settings.PleaseUnLockPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.PleaseUnLockPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -67,12 +67,12 @@ namespace CommandSystem.Commands
         {
             if (!SystemShare.Config.PasswordLockSystem)
             {
-                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayerActor.PwdFailCount > 3)
             {
-                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 PlayerActor.IsPasswordLocked = true;
                 return;
             }
@@ -80,11 +80,11 @@ namespace CommandSystem.Commands
             {
                 PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 PlayerActor.IsCheckOldPwd = true;
-                PlayerActor.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayerActor.SysMsg(Settings.NoPasswordSetMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordSetMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -100,12 +100,12 @@ namespace CommandSystem.Commands
         {
             if (!SystemShare.Config.PasswordLockSystem)
             {
-                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayerActor.PwdFailCount > SystemShare.Config.PasswordErrorCountLock)
             {
-                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 PlayerActor.IsPasswordLocked = true;
                 return;
             }
@@ -114,17 +114,17 @@ namespace CommandSystem.Commands
                 if (!PlayerActor.IsUnLockStoragePwd)
                 {
                     PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                    PlayerActor.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                     PlayerActor.IsUnLockStoragePwd = true;
                 }
                 else
                 {
-                    PlayerActor.SysMsg(Settings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                PlayerActor.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -140,12 +140,12 @@ namespace CommandSystem.Commands
         {
             if (!SystemShare.Config.PasswordLockSystem)
             {
-                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (PlayerActor.PwdFailCount > SystemShare.Config.PasswordErrorCountLock)
             {
-                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 PlayerActor.IsPasswordLocked = true;
                 return;
             }
@@ -154,17 +154,17 @@ namespace CommandSystem.Commands
                 if (!PlayerActor.IsUnLockPwd)
                 {
                     PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                    PlayerActor.SysMsg(Settings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.PleaseInputUnLockPasswordMsg, MsgColor.Green, MsgType.Hint);
                     PlayerActor.IsUnLockPwd = true;
                 }
                 else
                 {
-                    PlayerActor.SysMsg(Settings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.StorageAlreadyUnLockMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
             else
             {
-                PlayerActor.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.StorageNoPasswordMsg, MsgColor.Red, MsgType.Hint);
             }
         }
     }
@@ -180,7 +180,7 @@ namespace CommandSystem.Commands
         {
             if (!SystemShare.Config.PasswordLockSystem)
             {
-                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (!PlayerActor.IsPasswordLocked)
@@ -189,16 +189,16 @@ namespace CommandSystem.Commands
                 {
                     PlayerActor.IsPasswordLocked = true;
                     PlayerActor.IsCanGetBackItem = false;
-                    PlayerActor.SysMsg(Settings.LockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.LockStorageSuccessMsg, MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayerActor.SysMsg(Settings.StorageNoPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.StorageNoPasswordMsg, MsgColor.Green, MsgType.Hint);
                 }
             }
             else
             {
-                PlayerActor.SysMsg(Settings.StorageAlreadyLockMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.StorageAlreadyLockMsg, MsgColor.Red, MsgType.Hint);
             }
             return;
         }

@@ -622,7 +622,7 @@ namespace ScriptSystem
                 {
                     playerActor.Script = script;
                     playerActor.LastNpc = npc.ActorId;
-                    GotoLable(playerActor, npc.ActorId, ScriptFlagCode.sMAIN);
+                    GotoLable(playerActor, npc.ActorId, ScriptFlagConst.sMAIN);
                     break;
                 }
             }

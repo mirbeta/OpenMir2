@@ -18,12 +18,12 @@ namespace M2Server.Player
             {
                 if (!PlayObject.BoReadyRun)
                 {
-                    SysMsg(whostr + Settings.CanotSendmsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(whostr + MessageSettings.CanotSendmsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!PlayObject.HearWhisper || PlayObject.IsBlockWhisper(ChrName))
                 {
-                    SysMsg(whostr + Settings.UserDenyWhisperMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(whostr + MessageSettings.UserDenyWhisperMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
                 if (!OffLineFlag && PlayObject.OffLineFlag)
@@ -71,7 +71,7 @@ namespace M2Server.Player
                 }
                 else
                 {
-                    SysMsg(whostr + Settings.UserNotOnLine, MsgColor.Red, MsgType.Hint);
+                    SysMsg(whostr + MessageSettings.UserNotOnLine, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
@@ -119,7 +119,7 @@ namespace M2Server.Player
                     {
                         DisableSayMsg = true;
                         DisableSayMsgTick = HUtil32.GetTickCount() + SystemShare.Config.DisableSayMsgTime;// 60 * 1000
-                        SysMsg(Format(Settings.DisableSayMsg, SystemShare.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
+                        SysMsg(Format(MessageSettings.DisableSayMsg, SystemShare.Config.DisableSayMsgTime / (60 * 1000)), MsgColor.Red, MsgType.Hint);
                     }
                 }
                 else
@@ -182,7 +182,7 @@ namespace M2Server.Player
                                     {
                                         if (Abil.Level <= SystemShare.Config.CanShoutMsgLevel)
                                         {
-                                            SysMsg(Format(Settings.YouNeedLevelMsg, SystemShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                            SysMsg(Format(MessageSettings.YouNeedLevelMsg, SystemShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                             return;
                                         }
                                         ShoutMsgTick = HUtil32.GetTickCount();
@@ -198,10 +198,10 @@ namespace M2Server.Player
                                         }
                                         return;
                                     }
-                                    SysMsg(Format(Settings.YouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(MessageSettings.YouCanSendCyCyLaterMsg, new[] { 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000 }), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
-                                SysMsg(Settings.ThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
+                                SysMsg(MessageSettings.ThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                                 return;
                             }
                     }
@@ -215,7 +215,7 @@ namespace M2Server.Player
                     }
                     return;
                 }
-                SysMsg(Settings.YouIsDisableSendMsg, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.YouIsDisableSendMsg, MsgColor.Red, MsgType.Hint);
             }
             catch (Exception e)
             {
@@ -243,12 +243,12 @@ namespace M2Server.Player
                     {
                         MSTempPwd = sData;
                         IsReConfigPwd = true;
-                        SysMsg(Settings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                     }
                     else
                     {
-                        SysMsg(Settings.PasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                        SysMsg(MessageSettings.PasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                     }
                     return;
                 }
@@ -260,11 +260,11 @@ namespace M2Server.Player
                         StoragePwd = sData;
                         IsPasswordLocked = true;
                         IsCanGetBackItem = false;
-                        SysMsg(Settings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(MessageSettings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(Settings.ReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                     }
                     return;
                 }
@@ -313,7 +313,7 @@ namespace M2Server.Player
                                 AdminMode = false;
                             }
                             IsLockLogoned = true;
-                            SysMsg(Settings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                            SysMsg(MessageSettings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                         if (IsUnLockStoragePwd)
                         {
@@ -321,16 +321,16 @@ namespace M2Server.Player
                             {
                                 IsCanGetBackItem = true;
                             }
-                            SysMsg(Settings.StorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                            SysMsg(MessageSettings.StorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                         }
                     }
                     else
                     {
                         PwdFailCount++;
-                        SysMsg(Settings.UnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.UnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
                         if (PwdFailCount > 3)
                         {
-                            SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     IsUnLockPwd = false;
@@ -343,16 +343,16 @@ namespace M2Server.Player
                     if (StoragePwd == sData)
                     {
                         SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                        SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                         IsSetStoragePwd = true;
                     }
                     else
                     {
                         PwdFailCount++;
-                        SysMsg(Settings.OldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.OldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
                         if (PwdFailCount > 3)
                         {
-                            SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                             IsPasswordLocked = true;
                         }
                     }

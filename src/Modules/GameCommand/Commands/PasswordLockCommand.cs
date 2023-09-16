@@ -18,19 +18,19 @@ namespace CommandSystem.Commands
             }
             if (!SystemShare.Config.PasswordLockSystem)
             {
-                PlayerActor.SysMsg(Settings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.NoPasswordLockSystemMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (string.IsNullOrEmpty(PlayerActor.StoragePwd))
             {
                 PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 PlayerActor.IsSetStoragePwd = true;
-                PlayerActor.SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                 return;
             }
             if (PlayerActor.PwdFailCount > 3)
             {
-                PlayerActor.SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                 PlayerActor.IsPasswordLocked = true;
                 return;
             }
@@ -38,7 +38,7 @@ namespace CommandSystem.Commands
             {
                 PlayerActor.SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 PlayerActor.IsCheckOldPwd = true;
-                PlayerActor.SysMsg(Settings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.PleaseInputOldPasswordMsg, MsgColor.Green, MsgType.Hint);
             }
         }
     }

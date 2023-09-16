@@ -16,11 +16,11 @@ namespace CommandSystem.Commands
             PlayerActor.SuperMan = boFlag;
             if (PlayerActor.SuperMan)
             {
-                PlayerActor.SysMsg(Settings.SupermanMode, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.SupermanMode, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                PlayerActor.SysMsg(Settings.ReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(MessageSettings.ReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
             }
         }
     }

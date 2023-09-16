@@ -8,6 +8,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.MagicEvent;
 using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Player
@@ -63,7 +64,7 @@ namespace M2Server.Player
             }
             if (!ClientPickUpItemIsSelf(mapItem.OfBaseObject) && !ClientPickUpItemIsOfGroup(mapItem.OfBaseObject))
             {
-                SysMsg(Settings.CanotPickUpItem, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.CanotPickUpItem, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (mapItem.Name.Equals(Grobal2.StringGoldName, StringComparison.OrdinalIgnoreCase))
@@ -147,7 +148,7 @@ namespace M2Server.Player
             if (Abil.Exp >= Abil.MaxExp)
             {
                 Abil.Exp -= Abil.MaxExp;
-                if (Abil.Level < Settings.MAXUPLEVEL)
+                if (Abil.Level < MessageSettings.MAXUPLEVEL)
                 {
                     Abil.Level++;
                 }
@@ -570,11 +571,11 @@ namespace M2Server.Player
             UseThrusting = boSwitch;
             if (UseThrusting)
             {
-                SysMsg(Settings.ThrustingOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.ThrustingOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(Settings.ThrustingOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.ThrustingOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -583,11 +584,11 @@ namespace M2Server.Player
             UseHalfMoon = boSwitch;
             if (UseHalfMoon)
             {
-                SysMsg(Settings.HalfMoonOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.HalfMoonOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(Settings.HalfMoonOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.HalfMoonOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -596,11 +597,11 @@ namespace M2Server.Player
             RedUseHalfMoon = boSwitch;
             if (RedUseHalfMoon)
             {
-                SysMsg(Settings.RedHalfMoonOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.RedHalfMoonOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(Settings.RedHalfMoonOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.RedHalfMoonOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -609,11 +610,11 @@ namespace M2Server.Player
             CrsHitkill = boSwitch;
             if (CrsHitkill)
             {
-                SysMsg(Settings.CrsHitOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.CrsHitOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(Settings.CrsHitOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.CrsHitOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -622,11 +623,11 @@ namespace M2Server.Player
             TwinHitSkill = boSwitch;
             if (TwinHitSkill)
             {
-                SysMsg(Settings.TwinHitOn, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.TwinHitOn, MsgColor.Green, MsgType.Hint);
             }
             else
             {
-                SysMsg(Settings.TwinHitOff, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.TwinHitOff, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -649,10 +650,10 @@ namespace M2Server.Player
             {
                 LatestFireHitTick = HUtil32.GetTickCount();
                 FireHitSkill = true;
-                SysMsg(Settings.FireSpiritsSummoned, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.FireSpiritsSummoned, MsgColor.Green, MsgType.Hint);
                 return true;
             }
-            SysMsg(Settings.FireSpiritsFail, MsgColor.Red, MsgType.Hint);
+            SysMsg(MessageSettings.FireSpiritsFail, MsgColor.Red, MsgType.Hint);
             return false;
         }
 
@@ -668,7 +669,7 @@ namespace M2Server.Player
         {
             if (!IsCanDeal)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotTryDealMsg);
                 return;
             }
             if (Death || Ghost)
@@ -734,7 +735,7 @@ namespace M2Server.Player
             }
             DealCreat = null;
             GetBackDealItems();
-            SysMsg(Settings.DealActionCancelMsg, MsgColor.Green, MsgType.Hint);
+            SysMsg(MessageSettings.DealActionCancelMsg, MsgColor.Green, MsgType.Hint);
             DealLastTick = HUtil32.GetTickCount();
         }
 
@@ -1237,8 +1238,8 @@ namespace M2Server.Player
                 if (!IsGoodKilling(this))
                 {
                     playObject.IncPkPoint(SystemShare.Config.KillHumanAddPKPoint);
-                    playObject.SysMsg(Settings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                    SysMsg(Format(Settings.YouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
+                    playObject.SysMsg(MessageSettings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(Format(MessageSettings.YouKilledByMsg, LastHiter.ChrName), MsgColor.Red, MsgType.Hint);
                     playObject.AddBodyLuck(-SystemShare.Config.KillHumanDecLuckPoint);
                     if (PvpLevel() < 1)
                     {
@@ -1255,19 +1256,19 @@ namespace M2Server.Player
                 }
                 else
                 {
-                    playObject.SysMsg(Settings.YouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
+                    playObject.SysMsg(MessageSettings.YouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
             if (boWinLEvel)
             {
-                if (playObject.Abil.Level + nWinLevel <= Settings.MAXUPLEVEL)
+                if (playObject.Abil.Level + nWinLevel <= MessageSettings.MAXUPLEVEL)
                 {
                     playObject.Abil.Level += (byte)nWinLevel;
                 }
                 else
                 {
-                    playObject.Abil.Level = Settings.MAXUPLEVEL;
+                    playObject.Abil.Level = MessageSettings.MAXUPLEVEL;
                 }
                 playObject.HasLevelUp(playObject.Abil.Level - nWinLevel);
                 if (boLostLevel)
@@ -1479,7 +1480,7 @@ namespace M2Server.Player
             {
                 GetFrontPosition(ref nX, ref nY);
                 SendRefMsg(Messages.RM_RUSHKUNG, Dir, nX, nY, 0, "");
-                SysMsg(Settings.MateDoTooweak, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.MateDoTooweak, MsgColor.Red, MsgType.Hint);
             }
             if (n28 > 0)
             {
@@ -1726,17 +1727,17 @@ namespace M2Server.Player
             switch (clientItem.Item.StdMode)
             {
                 case 10 when Gender != PlayGender.Man:
-                    SysMsg(Settings.WearNotOfWoMan, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.WearNotOfWoMan, MsgColor.Red, MsgType.Hint);
                     return false;
                 case 11 when Gender != PlayGender.WoMan:
-                    SysMsg(Settings.WearNotOfMan, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.WearNotOfMan, MsgColor.Red, MsgType.Hint);
                     return false;
             }
             if (nWhere == 1 || nWhere == 2)
             {
                 if (clientItem.Item.Weight > WAbil.MaxHandWeight)
                 {
-                    SysMsg(Settings.HandWeightNot, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.HandWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
                 }
             }
@@ -1744,7 +1745,7 @@ namespace M2Server.Player
             {
                 if (clientItem.Item.Weight + GetUserItemWeitht(nWhere) > WAbil.MaxWearWeight)
                 {
-                    SysMsg(Settings.WearWeightNot, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.WearWeightNot, MsgColor.Red, MsgType.Hint);
                     return false;
                 }
             }
@@ -1757,7 +1758,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.LevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.LevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 1:
@@ -1767,7 +1768,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.DCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.DCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 10:
@@ -1777,7 +1778,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.JobOrLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.JobOrLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 11:
@@ -1787,7 +1788,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.JobOrDCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.JobOrDCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 12:
@@ -1797,7 +1798,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.JobOrMCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.JobOrMCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 13:
@@ -1807,7 +1808,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.JobOrSCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.JobOrSCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 2:
@@ -1817,7 +1818,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.MCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.MCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 3:
@@ -1827,7 +1828,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.SCNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.SCNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 4:
@@ -1837,7 +1838,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 40:
@@ -1849,12 +1850,12 @@ namespace M2Server.Player
                         }
                         else
                         {
-                            SysMsg(Settings.LevelNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.LevelNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(Settings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 41:
@@ -1866,12 +1867,12 @@ namespace M2Server.Player
                         }
                         else
                         {
-                            SysMsg(Settings.DCNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.DCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(Settings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 42:
@@ -1883,12 +1884,12 @@ namespace M2Server.Player
                         }
                         else
                         {
-                            SysMsg(Settings.MCNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.MCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(Settings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 43:
@@ -1900,12 +1901,12 @@ namespace M2Server.Player
                         }
                         else
                         {
-                            SysMsg(Settings.SCNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.SCNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(Settings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 44:
@@ -1917,12 +1918,12 @@ namespace M2Server.Player
                         }
                         else
                         {
-                            SysMsg(Settings.CreditPointNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.CreditPointNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(Settings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ReNewLevelNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 5:
@@ -1932,7 +1933,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.CreditPointNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.CreditPointNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 6:
@@ -1942,7 +1943,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.GuildNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.GuildNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 60:
@@ -1952,7 +1953,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.GuildMasterNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.GuildMasterNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 7:
@@ -1962,7 +1963,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.SabukHumanNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.SabukHumanNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 70:
@@ -1974,12 +1975,12 @@ namespace M2Server.Player
                         }
                         else
                         {
-                            SysMsg(Settings.LevelNot, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.LevelNot, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
                     {
-                        SysMsg(Settings.SabukMasterManNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.SabukMasterManNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 8:
@@ -1989,7 +1990,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.MemberNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.MemberNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 81:
@@ -1999,7 +2000,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.MemberTypeNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.MemberTypeNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
                 case 82:
@@ -2009,7 +2010,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.MemberTypeNot, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.MemberTypeNot, MsgColor.Red, MsgType.Hint);
                     }
                     break;
             }
@@ -2042,7 +2043,7 @@ namespace M2Server.Player
             bool result = false;
             if (Envir.Flag.boNODRUG)
             {
-                SysMsg(Settings.CanotUseDrugOnThisMap, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.CanotUseDrugOnThisMap, MsgColor.Red, MsgType.Hint);
                 return false;
             }
             switch (stdItem.StdMode)
@@ -2411,7 +2412,7 @@ namespace M2Server.Player
         public void JoinGroup(IPlayerActor playObject)
         {
             GroupOwner = playObject.ActorId;
-            SendGroupText(Format(Settings.JoinGroup, ChrName));
+            SendGroupText(Format(MessageSettings.JoinGroup, ChrName));
         }
 
         /// <summary>
@@ -2890,11 +2891,11 @@ namespace M2Server.Player
             {
                 if (Gender == PlayGender.Man)
                 {
-                    sSayMsg = string.Format(Settings.fUnMarryManLoginMsg, DearName, DearName);
+                    sSayMsg = string.Format(MessageSettings.fUnMarryManLoginMsg, DearName, DearName);
                 }
                 else
                 {
-                    sSayMsg = string.Format(Settings.fUnMarryWoManLoginMsg, ChrName, ChrName);
+                    sSayMsg = string.Format(MessageSettings.fUnMarryWoManLoginMsg, ChrName, ChrName);
                 }
                 SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 DearName = "";
@@ -2906,16 +2907,16 @@ namespace M2Server.Player
                 DearHuman.DearHuman = this;
                 if (Gender == PlayGender.Man)
                 {
-                    sSayMsg = string.Format(Settings.ManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
+                    sSayMsg = string.Format(MessageSettings.ManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(Settings.ManLoginDearOnlineDearMsg, DearName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(MessageSettings.ManLoginDearOnlineDearMsg, DearName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    sSayMsg = string.Format(Settings.WoManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
+                    sSayMsg = string.Format(MessageSettings.WoManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(Settings.WoManLoginDearOnlineDearMsg, DearName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(MessageSettings.WoManLoginDearOnlineDearMsg, DearName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
             }
@@ -2923,11 +2924,11 @@ namespace M2Server.Player
             {
                 if (Gender == PlayGender.Man)
                 {
-                    SysMsg(Settings.ManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.ManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
                 else
                 {
-                    SysMsg(Settings.WoManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.WoManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
         }
@@ -2950,11 +2951,11 @@ namespace M2Server.Player
             {
                 if (IsMaster)
                 {
-                    sSayMsg = string.Format(Settings.fUnMasterLoginMsg, MasterName);
+                    sSayMsg = string.Format(MessageSettings.fUnMasterLoginMsg, MasterName);
                 }
                 else
                 {
-                    sSayMsg = string.Format(Settings.fUnMasterListLoginMsg, MasterName);
+                    sSayMsg = string.Format(MessageSettings.fUnMasterListLoginMsg, MasterName);
                 }
                 SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                 MasterName = "";
@@ -2967,9 +2968,9 @@ namespace M2Server.Player
                     IPlayerActor human = SystemShare.WorldEngine.GetPlayObject(MasterName);
                     if (human != null && !human.Death && !human.Ghost)
                     {
-                        sSayMsg = string.Format(Settings.YourMasterListUnMasterOKMsg, ChrName);
+                        sSayMsg = string.Format(MessageSettings.YourMasterListUnMasterOKMsg, ChrName);
                         human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
-                        SysMsg(Settings.YouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.YouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
                         if (ChrName == human.MasterName)// 如果大徒弟则将师父上的名字去掉
                         {
                             human.MasterName = "";
@@ -3012,7 +3013,7 @@ namespace M2Server.Player
                         {
                             M2Share.SaveUnMasterList();
                         }
-                        SysMsg(Settings.YouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.YouAreUnMasterOKMsg, MsgColor.Red, MsgType.Hint);
                         MasterName = "";
                         RefShowName();
                     }
@@ -3032,7 +3033,7 @@ namespace M2Server.Player
             }
             if (boIsfound && IsMaster)
             {
-                SysMsg(Settings.UnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.UnMasterLoginMsg, MsgColor.Red, MsgType.Hint);
                 MasterName = "";
                 RefShowName();
                 if (CreditPoint + SystemShare.Config.MasterOKCreditPoint <= byte.MaxValue)
@@ -3053,14 +3054,14 @@ namespace M2Server.Player
                 {
                     MasterHuman.MasterHuman = this;
                     MasterList.Add(MasterHuman);
-                    sSayMsg = string.Format(Settings.MasterOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
+                    sSayMsg = string.Format(MessageSettings.MasterOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                    sSayMsg = string.Format(Settings.MasterOnlineMasterListMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                    sSayMsg = string.Format(MessageSettings.MasterOnlineMasterListMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
                     MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    SysMsg(Settings.MasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.MasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }
             }
             else
@@ -3076,14 +3077,14 @@ namespace M2Server.Player
                             MasterHuman.MasterHuman = this;
                         }
                         MasterHuman.MasterList.Add(this);
-                        sSayMsg = string.Format(Settings.MasterListOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
+                        sSayMsg = string.Format(MessageSettings.MasterListOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
                         SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
-                        sSayMsg = string.Format(Settings.MasterListOnlineMasterMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
+                        sSayMsg = string.Format(MessageSettings.MasterListOnlineMasterMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
                         MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {
-                        SysMsg(Settings.MasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.MasterListNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     }
                 }
             }
@@ -3091,7 +3092,7 @@ namespace M2Server.Player
 
         public string GetMyInfo()
         {
-            string sMyInfo = Settings.MyInfo;
+            string sMyInfo = MessageSettings.MyInfo;
             sMyInfo = sMyInfo.Replace("%name", ChrName);
             sMyInfo = sMyInfo.Replace("%map", Envir.MapDesc);
             sMyInfo = sMyInfo.Replace("%x", CurrX.ToString());
@@ -3130,7 +3131,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.ItemIsNotThisAccount, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ItemIsNotThisAccount, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3147,7 +3148,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.ItemIsNotThisIPaddr, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ItemIsNotThisIPaddr, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3164,7 +3165,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.ItemIsNotThisChrName, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ItemIsNotThisChrName, MsgColor.Red, MsgType.Hint);
                     }
                     return result;
                 }
@@ -3188,12 +3189,12 @@ namespace M2Server.Player
                 {
                     MSTempPwd = sData;
                     IsReConfigPwd = true;
-                    SysMsg(Settings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);// '请重复输入一次仓库密码：'
+                    SysMsg(MessageSettings.ReSetPasswordMsg, MsgColor.Green, MsgType.Hint);// '请重复输入一次仓库密码：'
                     SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
                 }
                 else
                 {
-                    SysMsg(Settings.PasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
+                    SysMsg(MessageSettings.PasswordOverLongMsg, MsgColor.Red, MsgType.Hint);// '输入的密码长度不正确!!!，密码长度必须在 4 - 7 的范围内，请重新设置密码。'
                 }
                 return;
             }
@@ -3204,11 +3205,11 @@ namespace M2Server.Player
                 {
                     StoragePwd = sData;
                     IsPasswordLocked = true;
-                    SysMsg(Settings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
+                    SysMsg(MessageSettings.ReSetPasswordOKMsg, MsgColor.Blue, MsgType.Hint);// '密码设置成功!!，仓库已经自动上锁，请记好您的仓库密码，在取仓库时需要使用此密码开锁。'
                 }
                 else
                 {
-                    SysMsg(Settings.ReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.ReSetPasswordNotMatchMsg, MsgColor.Red, MsgType.Hint);
                 }
                 return;
             }
@@ -3257,7 +3258,7 @@ namespace M2Server.Player
                             AdminMode = false;
                         }
                         IsLockLogoned = true;
-                        SysMsg(Settings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(MessageSettings.PasswordUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     if (IsUnLockStoragePwd)
                     {
@@ -3265,16 +3266,16 @@ namespace M2Server.Player
                         {
                             IsCanGetBackItem = true;
                         }
-                        SysMsg(Settings.StorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(MessageSettings.StorageUnLockOKMsg, MsgColor.Blue, MsgType.Hint);
                     }
                 }
                 else
                 {
                     PwdFailCount++;
-                    SysMsg(Settings.UnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.UnLockPasswordFailMsg, MsgColor.Red, MsgType.Hint);
                     if (PwdFailCount > 3)
                     {
-                        SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                     }
                 }
                 IsUnLockPwd = false;
@@ -3287,16 +3288,16 @@ namespace M2Server.Player
                 if (StoragePwd == sData)
                 {
                     SendMsg(Messages.RM_PASSWORD, 0, 0, 0, 0);
-                    SysMsg(Settings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.SetPasswordMsg, MsgColor.Green, MsgType.Hint);
                     IsSetStoragePwd = true;
                 }
                 else
                 {
                     PwdFailCount++;
-                    SysMsg(Settings.OldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.OldPasswordIncorrectMsg, MsgColor.Red, MsgType.Hint);
                     if (PwdFailCount > 3)
                     {
-                        SysMsg(Settings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.StoragePasswordLockedMsg, MsgColor.Red, MsgType.Hint);
                         IsPasswordLocked = true;
                     }
                 }
@@ -3374,17 +3375,17 @@ namespace M2Server.Player
             bool result = false;
             if (M2Share.GetDenyIPAddrList(LoginIpAddr))
             {
-                SysMsg(Settings.YourIPaddrDenyLogon, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.YourIPaddrDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             else if (M2Share.GetDenyAccountList(UserAccount))
             {
-                SysMsg(Settings.YourAccountDenyLogon, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.YourAccountDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             else if (M2Share.GetDenyChrNameList(ChrName))
             {
-                SysMsg(Settings.YourChrNameDenyLogon, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.YourChrNameDenyLogon, MsgColor.Red, MsgType.Hint);
                 result = true;
             }
             if (result)

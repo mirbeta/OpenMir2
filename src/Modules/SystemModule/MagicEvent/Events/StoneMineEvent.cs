@@ -1,6 +1,4 @@
-﻿using SystemModule.Events;
-
-namespace SystemModule
+﻿namespace SystemModule.MagicEvent
 {
     /// <summary>
     /// 矿石事件

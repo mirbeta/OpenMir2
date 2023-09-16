@@ -1,6 +1,6 @@
 ﻿namespace SystemModule
 {
-    public static class ScriptFlagCode
+    public static class ScriptFlagConst
     {
         public const string sMarket_Def = "Market_Def";
         public const string sNpc_def = "Npc_def";

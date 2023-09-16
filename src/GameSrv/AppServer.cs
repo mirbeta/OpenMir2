@@ -118,7 +118,7 @@ namespace GameSrv
             AnsiConsole.Write(table);
 
             AnsiConsole.Write(new Rule($"[green3] Free open source, OpenMir2 creates unlimited possibilities.[/]").RuleStyle("grey").LeftJustified());
-            AnsiConsole.Write(new Rule($"[green3] Version:{Settings.Version} UpdateTime:{Settings.UpDateTime}[/]").RuleStyle("grey").LeftJustified());
+            AnsiConsole.Write(new Rule($"[green3] Version:{MessageSettings.Version} UpdateTime:{MessageSettings.UpDateTime}[/]").RuleStyle("grey").LeftJustified());
         }
     }
 }

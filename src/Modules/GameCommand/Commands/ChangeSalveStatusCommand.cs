@@ -21,11 +21,11 @@ namespace CommandSystem.Commands
             {
                 if (PlayerActor.SlaveRelax)
                 {
-                    PlayerActor.SysMsg(Settings.PetRest, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.PetRest, MsgColor.Green, MsgType.Hint);
                 }
                 else
                 {
-                    PlayerActor.SysMsg(Settings.PetAttack, MsgColor.Green, MsgType.Hint);
+                    PlayerActor.SysMsg(MessageSettings.PetAttack, MsgColor.Green, MsgType.Hint);
                 }
             }
         }

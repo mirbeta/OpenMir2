@@ -218,17 +218,17 @@ namespace M2Server.Player
         {
             if (SystemShare.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotDropInSafeZoneMsg);
                 return;
             }
             if (SystemShare.Config.ControlDropItem && nGold < SystemShare.Config.CanDropGold)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropGoldMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotDropGoldMsg);
                 return;
             }
             if (!IsCanDrop || Envir.Flag.NoThrowItem)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotDropItemMsg);
                 return;
             }
             if (nGold >= Gold)
@@ -248,12 +248,12 @@ namespace M2Server.Player
             var result = false;
             if (SystemShare.Config.InSafeDisableDrop && InSafeZone())
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropInSafeZoneMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotDropInSafeZoneMsg);
                 return false;
             }
             if (!IsCanDrop || Envir.Flag.NoThrowItem)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotDropItemMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotDropItemMsg);
                 return false;
             }
             if (sItemName.IndexOf(' ') > 0)
@@ -412,26 +412,26 @@ namespace M2Server.Player
                                 {
                                     if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                                     {
-                                        SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                        SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                         n18 = -4;
                                         goto FailExit;
                                     }
                                 }
                                 if (!UserUnLockDurg && (stdItem20.ItemDesc & 2) != 0)
                                 {
-                                    SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                    SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if ((stdItem20.ItemDesc & 4) != 0)
                                 {
-                                    SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                    SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     n18 = -4;
                                     goto FailExit;
                                 }
                                 if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                                 {
-                                    SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                    SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                     goto FailExit;
                                 }
                                 takeOffItem = UseItems[btWhere];
@@ -505,26 +505,26 @@ namespace M2Server.Player
                         {
                             if (!UserUnLockDurg && UseItems[btWhere].Desc[7] != 0)
                             {
-                                SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                                SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                                 n10 = -4;
                                 goto FailExit;
                             }
                         }
                         if (!UserUnLockDurg && (stdItem.ItemDesc & 2) != 0)
                         {
-                            SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if ((stdItem.ItemDesc & 4) != 0)
                         {
-                            SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             n10 = -4;
                             goto FailExit;
                         }
                         if (M2Share.InDisableTakeOffList(UseItems[btWhere].Index))
                         {
-                            SysMsg(Settings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.CanotTakeOffItem, MsgColor.Red, MsgType.Hint);
                             goto FailExit;
                         }
                         var sUserItemName = CustomItemSystem.GetItemName(UseItems[btWhere]);// 取自定义物品名称
@@ -677,7 +677,7 @@ namespace M2Server.Player
             }
             else
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotUseItemMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotUseItemMsg);
             }
             if (eatSuccess)
             {
@@ -732,7 +732,7 @@ namespace M2Server.Player
                             }
                             if (!TakeBagItems(baseObject))
                             {
-                                SysMsg(Settings.YouFoundNothing, MsgColor.Red, MsgType.Hint);
+                                SysMsg(MessageSettings.YouFoundNothing, MsgColor.Red, MsgType.Hint);
                             }
                             baseObject.BodyLeathery = 50;
                         }
@@ -907,7 +907,7 @@ namespace M2Server.Player
         {
             if (SystemShare.Config.DisableDeal)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DisableDealItemsMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.DisableDealItemsMsg);
                 return;
             }
             if (Dealing)
@@ -916,12 +916,12 @@ namespace M2Server.Player
             }
             if ((HUtil32.GetTickCount() - DealLastTick) < SystemShare.Config.TryDealTime)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.PleaseTryDealLaterMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.PleaseTryDealLaterMsg);
                 return;
             }
             if (!IsCanDeal)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.CanotTryDealMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotTryDealMsg);
                 return;
             }
             var poseObject = GetPoseCreate();
@@ -934,14 +934,14 @@ namespace M2Server.Player
                     {
                         if (targetPlayObject.AllowDeal && targetPlayObject.IsCanDeal)
                         {
-                            targetPlayObject.SysMsg(ChrName + Settings.OpenedDealMsg, MsgColor.Green, MsgType.Hint);
-                            SysMsg(targetPlayObject.ChrName + Settings.OpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            targetPlayObject.SysMsg(ChrName + MessageSettings.OpenedDealMsg, MsgColor.Green, MsgType.Hint);
+                            SysMsg(targetPlayObject.ChrName + MessageSettings.OpenedDealMsg, MsgColor.Green, MsgType.Hint);
                             this.OpenDealDlg(targetPlayObject);
                             targetPlayObject.OpenDealDlg(this);
                         }
                         else
                         {
-                            SysMsg(Settings.PoseDisableDealMsg, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.PoseDisableDealMsg, MsgColor.Red, MsgType.Hint);
                         }
                     }
                     else
@@ -997,7 +997,7 @@ namespace M2Server.Player
         {
             if (SystemShare.Config.CanNotGetBackDeal)
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.DealItemsDenyGetBackMsg);
                 SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
                 return;
             }
@@ -1045,7 +1045,7 @@ namespace M2Server.Player
         {
             if (DealGolds > 0 && SystemShare.Config.CanNotGetBackDeal)// 禁止取回放入交易栏内的金币
             {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, Settings.DealItemsDenyGetBackMsg);
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.DealItemsDenyGetBackMsg);
                 SendDefMessage(Messages.SM_DEALDELITEM_FAIL, 0, 0, 0, 0);
                 return;
             }
@@ -1086,7 +1086,7 @@ namespace M2Server.Player
             }
             if (((HUtil32.GetTickCount() - DealLastTick) < SystemShare.Config.DealOKTime) || ((HUtil32.GetTickCount() - DealCreat.DealLastTick) < SystemShare.Config.DealOKTime))
             {
-                SysMsg(Settings.DealOKTooFast, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.DealOKTooFast, MsgColor.Red, MsgType.Hint);
                 DealCancel();
                 return;
             }
@@ -1096,21 +1096,21 @@ namespace M2Server.Player
                 if (Grobal2.MaxBagItem - ItemList.Count < DealCreat.DealItemList.Count)
                 {
                     bo11 = false;
-                    SysMsg(Settings.YourBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.YourBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
                 }
                 if (GoldMax - Gold < DealCreat.DealGolds)
                 {
-                    SysMsg(Settings.YourGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.YourGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
                 }
                 if (Grobal2.MaxBagItem - DealCreat.ItemList.Count < DealItemList.Count)
                 {
-                    SysMsg(Settings.DealHumanBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.DealHumanBagSizeTooSmall, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
                 }
                 if (DealCreat.GoldMax - DealCreat.Gold < DealGolds)
                 {
-                    SysMsg(Settings.DealHumanGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.DealHumanGoldLargeThenLimit, MsgColor.Red, MsgType.Hint);
                     bo11 = false;
                 }
                 if (bo11)
@@ -1170,14 +1170,14 @@ namespace M2Server.Player
                         }
                     }
                     DealCreat.SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
-                    DealCreat.SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    DealCreat.SysMsg(MessageSettings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     DealCreat.DealCreat = null;
                     DealCreat.Dealing = false;
                     DealCreat.DealItemList.Clear();
                     DealCreat.DealGolds = 0;
                     DealCreat.DealSuccess = false;
                     SendDefMessage(Messages.SM_DEALSUCCESS, 0, 0, 0, 0);
-                    SysMsg(Settings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.DealSuccessMsg, MsgColor.Green, MsgType.Hint);
                     DealCreat = null;
                     Dealing = false;
                     DealItemList.Clear();
@@ -1191,8 +1191,8 @@ namespace M2Server.Player
             }
             else
             {
-                SysMsg(Settings.YouDealOKMsg, MsgColor.Green, MsgType.Hint);
-                DealCreat.SysMsg(Settings.PoseDealOKMsg, MsgColor.Green, MsgType.Hint);
+                SysMsg(MessageSettings.YouDealOKMsg, MsgColor.Green, MsgType.Hint);
+                DealCreat.SysMsg(MessageSettings.PoseDealOKMsg, MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -1609,7 +1609,7 @@ namespace M2Server.Player
             }
             if (PayMent == 1 && !SystemShare.Config.TryModeUseStorage)
             {
-                SysMsg(Settings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var merchant = SystemShare.WorldEngine.FindMerchant(actorId);
@@ -1658,7 +1658,7 @@ namespace M2Server.Player
             }
             if (PayMent == 1 && !SystemShare.Config.TryModeUseStorage)// '试玩模式不可以使用仓库功能!!!'
             {
-                SysMsg(Settings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.TryModeCanotUseStorage, MsgColor.Red, MsgType.Hint);
                 return;
             }
             if (!IsCanGetBackItem)
@@ -1696,7 +1696,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        SysMsg(Settings.CanotGetItems, MsgColor.Red, MsgType.Hint);// '无法携带更多的东西!!!'
+                        SysMsg(MessageSettings.CanotGetItems, MsgColor.Red, MsgType.Hint);// '无法携带更多的东西!!!'
                     }
                     break;
                 }

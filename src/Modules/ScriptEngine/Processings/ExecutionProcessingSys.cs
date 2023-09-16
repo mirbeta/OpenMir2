@@ -2302,7 +2302,7 @@ namespace ScriptSystem
             }
             else
             {
-                playerActor.SysMsg(Settings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
+                playerActor.SysMsg(MessageSettings.QUERYBAGITEMS, MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -2562,7 +2562,7 @@ namespace ScriptSystem
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.m_sPath, questActionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questActionInfo.sParam1);
             using var loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -2599,7 +2599,7 @@ namespace ScriptSystem
         {
             var sHumName = string.Empty;
             var sDate = string.Empty;
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.m_sPath, questActionInfo.sParam1);
+            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questActionInfo.sParam1);
             using var loadList = new StringList();
             if (File.Exists(sListFileName))
             {
@@ -2869,15 +2869,15 @@ namespace ScriptSystem
         private void ActionOfChangeJob(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             var nJob = PlayJob.None;
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagCode.sWarrior))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
                 nJob = PlayJob.Warrior;
             }
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagCode.sWizard))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWizard))
             {
                 nJob = PlayJob.Wizard;
             }
-            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagCode.sTaos))
+            if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sTaos))
             {
                 nJob = PlayJob.Taoist;
             }
@@ -3228,16 +3228,16 @@ namespace ScriptSystem
                         normNpc.GotoLable(poseHuman, "@StartMarry", false);
                         if (playerActor.Gender == PlayGender.Man && poseHuman.Gender == PlayGender.WoMan)
                         {
-                            sSayMsg = string.Format(Settings.StartMarryManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.StartMarryManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(Settings.StartMarryManAskQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.StartMarryManAskQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         else if (playerActor.Gender == PlayGender.WoMan && poseHuman.Gender == PlayGender.Man)
                         {
-                            sSayMsg = string.Format(Settings.StartMarryWoManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.StartMarryWoManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(Settings.StartMarryWoManAskQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.StartMarryWoManAskQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                         playerActor.IsStartMarry = true;
@@ -3263,11 +3263,11 @@ namespace ScriptSystem
                 {
                     if (playerActor.Gender == PlayGender.Man && poseHuman.Gender == PlayGender.WoMan)
                     {
-                        sSayMsg = Settings.MarryManAnswerQuestionMsg.Replace("%n", normNpc.ChrName);
+                        sSayMsg = MessageSettings.MarryManAnswerQuestionMsg.Replace("%n", normNpc.ChrName);
                         sSayMsg = sSayMsg.Replace("%s", playerActor.ChrName);
                         sSayMsg = sSayMsg.Replace("%d", poseHuman.ChrName);
                         SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                        sSayMsg = Settings.MarryManAskQuestionMsg.Replace("%n", normNpc.ChrName);
+                        sSayMsg = MessageSettings.MarryManAskQuestionMsg.Replace("%n", normNpc.ChrName);
                         sSayMsg = sSayMsg.Replace("%s", playerActor.ChrName);
                         sSayMsg = sSayMsg.Replace("%d", poseHuman.ChrName);
                         SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
@@ -3286,9 +3286,9 @@ namespace ScriptSystem
                     {
                         if (playerActor.IsStartMarry && poseHuman.IsStartMarry)
                         {
-                            sSayMsg = string.Format(Settings.MarryWoManAnswerQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.MarryWoManAnswerQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(Settings.MarryWoManGetMarryMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.MarryWoManGetMarryMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             normNpc.GotoLable(playerActor, "@EndMarry", false);
                             normNpc.GotoLable(poseHuman, "@EndMarry", false);
@@ -3310,9 +3310,9 @@ namespace ScriptSystem
                             normNpc.GotoLable(poseHuman, "@EndMarryFail", false);
                             playerActor.IsStartMarry = false;
                             poseHuman.IsStartMarry = false;
-                            sSayMsg = string.Format(Settings.MarryWoManDenyMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.MarryWoManDenyMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
-                            sSayMsg = string.Format(Settings.MarryWoManCancelMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sSayMsg = string.Format(MessageSettings.MarryWoManCancelMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
                     }
@@ -4367,7 +4367,7 @@ namespace ScriptSystem
                         playerActor.IsStartUnMaster = true;
                         if (playerActor.IsStartUnMaster && poseHuman.IsStartUnMaster)
                         {
-                            sMsg = string.Format(Settings.NPCSayUnMasterOKMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
+                            sMsg = string.Format(MessageSettings.NPCSayUnMasterOKMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                             playerActor.MasterName = "";
                             poseHuman.MasterName = "";
@@ -4389,7 +4389,7 @@ namespace ScriptSystem
                 // 强行出师
                 if (string.Compare(questActionInfo.sParam2, "FORCE", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    sMsg = string.Format(Settings.NPCSayForceUnMasterMsg, normNpc.ChrName, playerActor.ChrName, playerActor.MasterName);
+                    sMsg = string.Format(MessageSettings.NPCSayForceUnMasterMsg, normNpc.ChrName, playerActor.ChrName, playerActor.MasterName);
                     SystemShare.WorldEngine.SendBroadCastMsg(sMsg, MsgType.Say);
                     poseHuman = SystemShare.WorldEngine.GetPlayObject(playerActor.MasterName);
                     if (poseHuman != null)
@@ -4806,7 +4806,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ChangeMemberLevelMsg, playerActor.MemberLevel), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ChangeMemberLevelMsg, playerActor.MemberLevel), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -4841,7 +4841,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ChangeMemberTypeMsg, playerActor.MemberType), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ChangeMemberTypeMsg, playerActor.MemberType), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -4946,7 +4946,7 @@ namespace ScriptSystem
             }
             if (playerActor.MyGuild == null)
             {
-                playerActor.SysMsg(Settings.ScriptGuildAuraePointNoGuild, MsgColor.Red, MsgType.Hint);
+                playerActor.SysMsg(MessageSettings.ScriptGuildAuraePointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var guild = playerActor.MyGuild;
@@ -4979,7 +4979,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ScriptGuildAuraePointMsg, new[] { guild.Aurae }), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ScriptGuildAuraePointMsg, new[] { guild.Aurae }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -4993,7 +4993,7 @@ namespace ScriptSystem
             }
             if (playerActor.MyGuild == null)
             {
-                playerActor.SysMsg(Settings.ScriptGuildBuildPointNoGuild, MsgColor.Red, MsgType.Hint);
+                playerActor.SysMsg(MessageSettings.ScriptGuildBuildPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var guild = playerActor.MyGuild;
@@ -5026,7 +5026,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ScriptGuildBuildPointMsg, guild.BuildPoint), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ScriptGuildBuildPointMsg, guild.BuildPoint), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5040,7 +5040,7 @@ namespace ScriptSystem
             }
             if (playerActor.MyGuild == null)
             {
-                playerActor.SysMsg(Settings.ScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
+                playerActor.SysMsg(MessageSettings.ScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var guild = playerActor.MyGuild;
@@ -5073,7 +5073,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ScriptChiefItemCountMsg, guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ScriptChiefItemCountMsg, guild.ChiefItemCount), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5087,7 +5087,7 @@ namespace ScriptSystem
             }
             if (playerActor.MyGuild == null)
             {
-                playerActor.SysMsg(Settings.ScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
+                playerActor.SysMsg(MessageSettings.ScriptGuildFlourishPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var guild = playerActor.MyGuild;
@@ -5120,7 +5120,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ScriptGuildFlourishPointMsg, guild.Flourishing), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ScriptGuildFlourishPointMsg, guild.Flourishing), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5134,7 +5134,7 @@ namespace ScriptSystem
             }
             if (playerActor.MyGuild == null)
             {
-                playerActor.SysMsg(Settings.ScriptGuildStabilityPointNoGuild, MsgColor.Red, MsgType.Hint);
+                playerActor.SysMsg(MessageSettings.ScriptGuildStabilityPointNoGuild, MsgColor.Red, MsgType.Hint);
                 return;
             }
             var guild = playerActor.MyGuild;
@@ -5167,7 +5167,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ScriptGuildStabilityPointMsg, guild.Stability), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ScriptGuildStabilityPointMsg, guild.Stability), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5207,7 +5207,7 @@ namespace ScriptSystem
             playerActor.Abil = abil;
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ScriptChangeHumanHPMsg, playerActor.WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ScriptChangeHumanHPMsg, playerActor.WAbil.MaxHP), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5247,7 +5247,7 @@ namespace ScriptSystem
             playerActor.Abil = abil;
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ScriptChangeHumanMPMsg, new[] { playerActor.WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ScriptChangeHumanMPMsg, new[] { playerActor.WAbil.MaxMP }), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5448,7 +5448,7 @@ namespace ScriptSystem
             playerActor.KillMonExpRateTime = nTime;
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ChangeKillMonExpRateMsg, playerActor.KillMonExpRate / 100, playerActor.KillMonExpRateTime), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ChangeKillMonExpRateMsg, playerActor.KillMonExpRate / 100, playerActor.KillMonExpRateTime), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5538,7 +5538,7 @@ namespace ScriptSystem
             playerActor.PowerRateTime = nTime;
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ChangePowerRateMsg, playerActor.PowerRate / 100, playerActor.PowerRateTime), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ChangePowerRateMsg, playerActor.PowerRate / 100, playerActor.PowerRateTime), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5569,33 +5569,33 @@ namespace ScriptSystem
                         playerActor.AdminMode = boOpen;
                         if (playerActor.AdminMode)
                         {
-                            playerActor.SysMsg(Settings.GameMasterMode, MsgColor.Green, MsgType.Hint);
+                            playerActor.SysMsg(MessageSettings.GameMasterMode, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            playerActor.SysMsg(Settings.ReleaseGameMasterMode, MsgColor.Green, MsgType.Hint);
+                            playerActor.SysMsg(MessageSettings.ReleaseGameMasterMode, MsgColor.Green, MsgType.Hint);
                         }
                         break;
                     case 2:
                         playerActor.SuperMan = boOpen;
                         if (playerActor.SuperMan)
                         {
-                            playerActor.SysMsg(Settings.SupermanMode, MsgColor.Green, MsgType.Hint);
+                            playerActor.SysMsg(MessageSettings.SupermanMode, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            playerActor.SysMsg(Settings.ReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
+                            playerActor.SysMsg(MessageSettings.ReleaseSupermanMode, MsgColor.Green, MsgType.Hint);
                         }
                         break;
                     case 3:
                         playerActor.ObMode = boOpen;
                         if (playerActor.ObMode)
                         {
-                            playerActor.SysMsg(Settings.ObserverMode, MsgColor.Green, MsgType.Hint);
+                            playerActor.SysMsg(MessageSettings.ObserverMode, MsgColor.Green, MsgType.Hint);
                         }
                         else
                         {
-                            playerActor.SysMsg(Settings.ReleaseObserverMode, MsgColor.Green, MsgType.Hint);
+                            playerActor.SysMsg(MessageSettings.ReleaseObserverMode, MsgColor.Green, MsgType.Hint);
                         }
                         break;
                 }
@@ -5620,7 +5620,7 @@ namespace ScriptSystem
             }
             if (SystemShare.Config.ShowScriptActionMsg)
             {
-                playerActor.SysMsg(string.Format(Settings.ChangePermissionMsg, playerActor.Permission), MsgColor.Green, MsgType.Hint);
+                playerActor.SysMsg(string.Format(MessageSettings.ChangePermissionMsg, playerActor.Permission), MsgColor.Green, MsgType.Hint);
             }
         }
 
@@ -5831,7 +5831,7 @@ namespace ScriptSystem
         private static void ActionOfAddUseDateList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questConditionInfo, ref bool success)
         {
             string sHumName = playerActor.ChrName;
-            string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
+            string sListFileName = normNpc.Path + questConditionInfo.sParam1;
             string s10 = string.Empty;
             string sText;
             bool bo15;
@@ -5869,49 +5869,49 @@ namespace ScriptSystem
 
         private void ActionOfAddNameList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questConditionInfo, ref bool success)
         {
-            string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
+            string sListFileName = normNpc.Path + questConditionInfo.sParam1;
             ActionOfAddList(playerActor.ChrName, sListFileName);
         }
 
         private void ActionOfDelUseDateList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questConditionInfo, ref bool success)
         {
-            string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
+            string sListFileName = normNpc.Path + questConditionInfo.sParam1;
             ActionOfDelList(playerActor.ChrName, sListFileName);
         }
 
         private void ActionOfDelNameList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questConditionInfo, ref bool success)
         {
-            string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
+            string sListFileName = normNpc.Path + questConditionInfo.sParam1;
             ActionOfDelList(playerActor.ChrName, sListFileName);
         }
 
         private void ActionOfDelAccountList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questConditionInfo, ref bool success)
         {
             string playName = playerActor.UserAccount;
-            string sListFileName = normNpc.m_sPath + questConditionInfo.sParam1;
+            string sListFileName = normNpc.Path + questConditionInfo.sParam1;
             ActionOfDelList(playerActor.UserAccount, sListFileName);
         }
 
         private void ActionOfAddAccountList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            ActionOfAddList(playerActor.UserAccount, normNpc.m_sPath + questActionInfo.sParam1);
+            ActionOfAddList(playerActor.UserAccount, normNpc.Path + questActionInfo.sParam1);
         }
 
         private void ActionOfAddIpList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            ActionOfAddList(playerActor.LoginIpAddr, normNpc.m_sPath + questActionInfo.sParam1);
+            ActionOfAddList(playerActor.LoginIpAddr, normNpc.Path + questActionInfo.sParam1);
         }
 
         private void ActionOfDelIpList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            ActionOfAddList(playerActor.LoginIpAddr, normNpc.m_sPath + questActionInfo.sParam1);
+            ActionOfAddList(playerActor.LoginIpAddr, normNpc.Path + questActionInfo.sParam1);
         }
 
         private void ActionOfAddGuildList(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
             if (playerActor.MyGuild != null)
             {
-                ActionOfAddList(playerActor.MyGuild.GuildName, normNpc.m_sPath + questActionInfo.sParam1);
+                ActionOfAddList(playerActor.MyGuild.GuildName, normNpc.Path + questActionInfo.sParam1);
             }
         }
 
@@ -5919,7 +5919,7 @@ namespace ScriptSystem
         {
             if (playerActor.MyGuild != null)
             {
-                ActionOfDelList(playerActor.MyGuild.GuildName, normNpc.m_sPath + questActionInfo.sParam1);
+                ActionOfDelList(playerActor.MyGuild.GuildName, normNpc.Path + questActionInfo.sParam1);
             }
         }
 

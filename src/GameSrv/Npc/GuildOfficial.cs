@@ -66,31 +66,31 @@ namespace GameSrv.NPC
                     {
                         return;
                     }
-                    if (string.Compare(sLabel, ScriptFlagCode.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
+                    if (string.Compare(sLabel, ScriptFlagConst.sBUILDGUILDNOW, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestBuildGuild(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptFlagConst.sSCL_GUILDWAR, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         ReQuestGuildWar(PlayObject, sMsg);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptFlagConst.sDONATE, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         DoNate(PlayObject);
                     }
-                    else if (HUtil32.CompareLStr(sLabel, ScriptFlagCode.sREQUESTCASTLEWAR))
+                    else if (HUtil32.CompareLStr(sLabel, ScriptFlagConst.sREQUESTCASTLEWAR))
                     {
-                        ReQuestCastleWar(PlayObject, sLabel[ScriptFlagCode.sREQUESTCASTLEWAR.Length..]);
+                        ReQuestCastleWar(PlayObject, sLabel[ScriptFlagConst.sREQUESTCASTLEWAR.Length..]);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptFlagConst.sEXIT, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         PlayObject.SendMsg(this, Messages.RM_MERCHANTDLGCLOSE, 0, ActorId, 0, 0);
                     }
-                    else if (string.Compare(sLabel, ScriptFlagCode.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
+                    else if (string.Compare(sLabel, ScriptFlagConst.sBACK, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (string.IsNullOrEmpty(PlayObject.ScriptGoBackLable))
                         {
-                            PlayObject.ScriptGoBackLable = ScriptFlagCode.sMAIN;
+                            PlayObject.ScriptGoBackLable = ScriptFlagConst.sMAIN;
                         }
                         M2Share.ScriptEngine.GotoLable(PlayObject, this.ActorId, PlayObject.ScriptGoBackLable);
                     }

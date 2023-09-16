@@ -5,7 +5,7 @@ using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
@@ -982,7 +982,7 @@ namespace M2Server.Player
             Contribution = 0;
             HitPlus = 0;
             HitDouble = 0;
-            RankLevelName = Settings.RankLevelName;
+            RankLevelName = MessageSettings.RankLevelName;
             FixedHideMode = true;
             MNVal = new int[100];
             MNMval = new int[100];
@@ -1308,21 +1308,21 @@ namespace M2Server.Player
                 {
                     if (SoftVersionDate < SystemShare.Config.SoftVersionDate)//登录版本号验证
                     {
-                        SysMsg(Settings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
-                        SysMsg(Settings.DownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
-                        SysMsg(Settings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.DownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
                         BoEmergencyClose = true;
                         return;
                     }
                     if (SoftVersionDateEx == 0 && SystemShare.Config.boOldClientShowHiLevel)
                     {
-                        SysMsg(Settings.ClientSoftVersionTooOld, MsgColor.Blue, MsgType.Hint);
-                        SysMsg(Settings.DownLoadAndUseNewClient, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ClientSoftVersionTooOld, MsgColor.Blue, MsgType.Hint);
+                        SysMsg(MessageSettings.DownLoadAndUseNewClient, MsgColor.Red, MsgType.Hint);
                         if (!SystemShare.Config.CanOldClientLogon)
                         {
-                            SysMsg(Settings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
-                            SysMsg(Settings.DownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
-                            SysMsg(Settings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.ClientSoftVersionError, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.DownLoadNewClientSoft, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
                             BoEmergencyClose = true;
                             return;
                         }
@@ -1330,38 +1330,38 @@ namespace M2Server.Player
                     switch (AttatckMode)
                     {
                         case AttackMode.HAM_ALL:// [攻击模式: 全体攻击]
-                            SysMsg(Settings.AttackModeOfAll, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.AttackModeOfAll, MsgColor.Green, MsgType.Hint);
                             break;
                         case AttackMode.HAM_PEACE:// [攻击模式: 和平攻击]
-                            SysMsg(Settings.AttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.AttackModeOfPeaceful, MsgColor.Green, MsgType.Hint);
                             break;
                         case AttackMode.HAM_DEAR:// [攻击模式: 和平攻击]
-                            SysMsg(Settings.AttackModeOfDear, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.AttackModeOfDear, MsgColor.Green, MsgType.Hint);
                             break;
                         case AttackMode.HAM_MASTER:// [攻击模式: 和平攻击]
-                            SysMsg(Settings.AttackModeOfMaster, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.AttackModeOfMaster, MsgColor.Green, MsgType.Hint);
                             break;
                         case AttackMode.HAM_GROUP:// [攻击模式: 编组攻击]
-                            SysMsg(Settings.AttackModeOfGroup, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.AttackModeOfGroup, MsgColor.Green, MsgType.Hint);
                             break;
                         case AttackMode.HAM_GUILD:// [攻击模式: 行会攻击]
-                            SysMsg(Settings.AttackModeOfGuild, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.AttackModeOfGuild, MsgColor.Green, MsgType.Hint);
                             break;
                         case AttackMode.HAM_PKATTACK:// [攻击模式: 红名攻击]
-                            SysMsg(Settings.AttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
+                            SysMsg(MessageSettings.AttackModeOfRedWhite, MsgColor.Green, MsgType.Hint);
                             break;
                     }
-                    SysMsg(Settings.StartChangeAttackModeHelp, MsgColor.Green, MsgType.Hint);// 使用组合快捷键 CTRL-H 更改攻击...
+                    SysMsg(MessageSettings.StartChangeAttackModeHelp, MsgColor.Green, MsgType.Hint);// 使用组合快捷键 CTRL-H 更改攻击...
                     if (SystemShare.Config.TestServer)
                     {
-                        SysMsg(Settings.StartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
+                        SysMsg(MessageSettings.StartNoticeMsg, MsgColor.Green, MsgType.Hint);// 欢迎进入本服务器进行游戏...
                     }
                     if (SystemShare.WorldEngine.PlayObjectCount > SystemShare.Config.TestUserLimit)
                     {
                         if (Permission < 2)
                         {
-                            SysMsg(Settings.OnlineUserFull, MsgColor.Red, MsgType.Hint);
-                            SysMsg(Settings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.OnlineUserFull, MsgColor.Red, MsgType.Hint);
+                            SysMsg(MessageSettings.ForceDisConnect, MsgColor.Red, MsgType.Hint);
                             BoEmergencyClose = true;
                         }
                     }
@@ -1389,7 +1389,7 @@ namespace M2Server.Player
                 {
                     if (!TryPlayMode)
                     {
-                        SysMsg(Settings.YouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.YouNowIsTryPlayMode, MsgColor.Red, MsgType.Hint);
                     }
                     GoldMax = SystemShare.Config.HumanTryModeMaxGold;
                     if (Abil.Level > SystemShare.Config.TryModeLevel)
@@ -1401,7 +1401,7 @@ namespace M2Server.Player
                 }
                 if (PayMent == 3 && !TryPlayMode)
                 {
-                    SysMsg(Settings.NowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.NowIsFreePlayMode, MsgColor.Green, MsgType.Hint);
                 }
                 if (SystemShare.Config.VentureServer)
                 {
@@ -1504,25 +1504,25 @@ namespace M2Server.Player
                 if (UseItems[ItemLocation.Weapon].Desc[4] > 0)
                 {
                     UseItems[ItemLocation.Weapon].Desc[4] -= 1;
-                    SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 else if (UseItems[ItemLocation.Weapon].Desc[3] < SystemShare.Config.WeaponMakeLuckPoint1)
                 {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
-                    SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 else if (UseItems[ItemLocation.Weapon].Desc[3] < SystemShare.Config.WeaponMakeLuckPoint2 && M2Share.RandomNumber.Random(nRand + SystemShare.Config.WeaponMakeLuckPoint2Rate) == 1)
                 {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
-                    SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 else if (UseItems[ItemLocation.Weapon].Desc[3] < SystemShare.Config.WeaponMakeLuckPoint3 && M2Share.RandomNumber.Random(nRand * SystemShare.Config.WeaponMakeLuckPoint3Rate) == 1)
                 {
                     UseItems[ItemLocation.Weapon].Desc[3]++;
-                    SysMsg(Settings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.WeaptonMakeLuck, MsgColor.Green, MsgType.Hint);
                     boMakeLuck = true;
                 }
                 if (Race == ActorRace.Play)
@@ -1533,7 +1533,7 @@ namespace M2Server.Player
                 }
                 if (!boMakeLuck)
                 {
-                    SysMsg(Settings.WeaptonNotMakeLuck, MsgColor.Green, MsgType.Hint);
+                    SysMsg(MessageSettings.WeaptonNotMakeLuck, MsgColor.Green, MsgType.Hint);
                 }
             }
             return true;
@@ -1559,7 +1559,7 @@ namespace M2Server.Player
             if (nDura <= 0) return false;
             userItem.Dura += nDura;
             SendMsg(Messages.RM_DURACHANGE, 1, userItem.Dura, userItem.DuraMax, 0);
-            SysMsg(Settings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
+            SysMsg(MessageSettings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
 
@@ -1575,7 +1575,7 @@ namespace M2Server.Player
             }
             UseItems[ItemLocation.Weapon].Dura = UseItems[ItemLocation.Weapon].DuraMax;
             SendMsg(Messages.RM_DURACHANGE, 1, UseItems[ItemLocation.Weapon].Dura, UseItems[ItemLocation.Weapon].DuraMax, 0);
-            SysMsg(Settings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
+            SysMsg(MessageSettings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
             return true;
         }
 
@@ -1592,14 +1592,14 @@ namespace M2Server.Player
             if (UseItems[ItemLocation.Weapon].Desc[3] > 0)
             {
                 UseItems[ItemLocation.Weapon].Desc[3] -= 1;
-                SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
             }
             else
             {
                 if (UseItems[ItemLocation.Weapon].Desc[4] < 10)
                 {
                     UseItems[ItemLocation.Weapon].Desc[4]++;
-                    SysMsg(Settings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.TheWeaponIsCursed, MsgColor.Red, MsgType.Hint);
                 }
             }
             RecalcAbilitys();
@@ -1713,8 +1713,8 @@ namespace M2Server.Player
                             if (!IsGoodKilling(this))
                             {
                                 targetObject.IncPkPoint(SystemShare.Config.KillHumanAddPKPoint);
-                                targetObject.SysMsg(Settings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
-                                SysMsg(Format(Settings.YouKilledByMsg, targetObject.ChrName), MsgColor.Red, MsgType.Hint);
+                                targetObject.SysMsg(MessageSettings.YouMurderedMsg, MsgColor.Red, MsgType.Hint);
+                                SysMsg(Format(MessageSettings.YouKilledByMsg, targetObject.ChrName), MsgColor.Red, MsgType.Hint);
                                 targetObject.AddBodyLuck(-SystemShare.Config.KillHumanDecLuckPoint);
                                 if (PvpLevel() < 1)
                                 {
@@ -1726,7 +1726,7 @@ namespace M2Server.Player
                             }
                             else
                             {
-                                targetObject.SysMsg(Settings.YouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
+                                targetObject.SysMsg(MessageSettings.YouprotectedByLawOfDefense, MsgColor.Green, MsgType.Hint);
                             }
                         }
                         if (killObject.Race == ActorRace.Play)// 检查攻击人是否用了着经验或等级装备
@@ -2748,19 +2748,19 @@ namespace M2Server.Player
 
             if (FlameRing)
             {
-                AddItemSkill(Settings.AM_FIREBALL);
+                AddItemSkill(MessageSettings.AM_FIREBALL);
             }
             else
             {
-                DelItemSkill(Settings.AM_FIREBALL);
+                DelItemSkill(MessageSettings.AM_FIREBALL);
             }
             if (RecoveryRing)
             {
-                AddItemSkill(Settings.AM_HEALING);
+                AddItemSkill(MessageSettings.AM_HEALING);
             }
             else
             {
-                DelItemSkill(Settings.AM_HEALING);
+                DelItemSkill(MessageSettings.AM_HEALING);
             }
             if (MuscleRing)
             {
@@ -2832,7 +2832,7 @@ namespace M2Server.Player
             }
             if (Race == ActorRace.Play)
             {
-                bool fastmoveflag = UseItems[ItemLocation.Boots] != null && UseItems[ItemLocation.Boots].Dura > 0 && UseItems[ItemLocation.Boots].Index == Settings.INDEX_MIRBOOTS;
+                bool fastmoveflag = UseItems[ItemLocation.Boots] != null && UseItems[ItemLocation.Boots].Dura > 0 && UseItems[ItemLocation.Boots].Index == MessageSettings.INDEX_MIRBOOTS;
                 if (fastmoveflag)
                 {
                     StatusTimeArr[PoisonState.FASTMOVE] = 60000;
@@ -3297,7 +3297,7 @@ namespace M2Server.Player
                     IUserCastle castle = SystemShare.CastleMgr.IsCastleMember(this);
                     if (castle != null)
                     {
-                        sGuildName = Settings.CastleGuildName.Replace("%castlename", castle.sName);
+                        sGuildName = MessageSettings.CastleGuildName.Replace("%castlename", castle.sName);
                         sGuildName = sGuildName.Replace("%guildname", MyGuild.GuildName);
                         sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                     }
@@ -3306,7 +3306,7 @@ namespace M2Server.Player
                         castle = SystemShare.CastleMgr.InCastleWarArea(this);// 01/25 多城堡
                         if (SystemShare.Config.ShowGuildName || castle != null && castle.UnderWar || InGuildWarArea)
                         {
-                            sGuildName = Settings.NoCastleGuildName.Replace("%guildname", MyGuild.GuildName);
+                            sGuildName = MessageSettings.NoCastleGuildName.Replace("%guildname", MyGuild.GuildName);
                             sGuildName = sGuildName.Replace("%rankname", GuildRankName);
                         }
                     }
@@ -3318,13 +3318,13 @@ namespace M2Server.Player
                         switch (Job)
                         {
                             case PlayJob.Warrior:
-                                sChrName = Settings.WarrReNewName.Replace("%chrname", ChrName);
+                                sChrName = MessageSettings.WarrReNewName.Replace("%chrname", ChrName);
                                 break;
                             case PlayJob.Wizard:
-                                sChrName = Settings.WizardReNewName.Replace("%chrname", ChrName);
+                                sChrName = MessageSettings.WizardReNewName.Replace("%chrname", ChrName);
                                 break;
                             case PlayJob.Taoist:
-                                sChrName = Settings.TaosReNewName.Replace("%chrname", ChrName);
+                                sChrName = MessageSettings.TaosReNewName.Replace("%chrname", ChrName);
                                 break;
                         }
                     }
@@ -3341,25 +3341,25 @@ namespace M2Server.Player
                 {
                     if (IsMaster)
                     {
-                        sMasterName = Format(Settings.MasterName, MasterName);
+                        sMasterName = Format(MessageSettings.MasterName, MasterName);
                     }
                     else
                     {
-                        sMasterName = Format(Settings.NoMasterName, MasterName);
+                        sMasterName = Format(MessageSettings.NoMasterName, MasterName);
                     }
                 }
                 if (!string.IsNullOrEmpty(DearName))
                 {
                     if (Gender == PlayGender.Man)
                     {
-                        sDearName = Format(Settings.ManDearName, DearName);
+                        sDearName = Format(MessageSettings.ManDearName, DearName);
                     }
                     else
                     {
-                        sDearName = Format(Settings.WoManDearName, DearName);
+                        sDearName = Format(MessageSettings.WoManDearName, DearName);
                     }
                 }
-                string sShowName = Settings.HumanShowName.Replace("%chrname", sChrName);
+                string sShowName = MessageSettings.HumanShowName.Replace("%chrname", sChrName);
                 sShowName = sShowName.Replace("%guildname", sGuildName);
                 sShowName = sShowName.Replace("%dearname", sDearName);
                 sShowName = sShowName.Replace("%mastername", sMasterName);
@@ -3439,7 +3439,7 @@ namespace M2Server.Player
                 {
                     if (Gender == PlayGender.Man)
                     {
-                        sSayMsg = Settings.ManLongOutDearOnlineMsg.Replace("%d", DearName);
+                        sSayMsg = MessageSettings.ManLongOutDearOnlineMsg.Replace("%d", DearName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
@@ -3448,7 +3448,7 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        sSayMsg = Settings.WoManLongOutDearOnlineMsg.Replace("%d", DearName);
+                        sSayMsg = MessageSettings.WoManLongOutDearOnlineMsg.Replace("%d", DearName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
@@ -3465,7 +3465,7 @@ namespace M2Server.Player
                         for (int i = MasterList.Count - 1; i >= 0; i--)
                         {
                             IPlayerActor human = (IPlayerActor)MasterList[i];
-                            sSayMsg = Settings.MasterLongOutMasterListOnlineMsg.Replace("%s", ChrName);
+                            sSayMsg = MessageSettings.MasterLongOutMasterListOnlineMsg.Replace("%s", ChrName);
                             sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                             sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                             sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
@@ -3479,7 +3479,7 @@ namespace M2Server.Player
                         {
                             return;
                         }
-                        sSayMsg = Settings.MasterListLongOutMasterOnlineMsg.Replace("%d", MasterName);
+                        sSayMsg = MessageSettings.MasterListLongOutMasterOnlineMsg.Replace("%d", MasterName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
@@ -3650,17 +3650,17 @@ namespace M2Server.Player
             {
                 case PlayJob.Warrior:
                     bonusTick = SystemShare.Config.BonusAbilofWarr;
-                    HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-                    SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                    HitPoint = (byte)(MessageSettings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                    SpeedPoint = (byte)(MessageSettings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
                     break;
                 case PlayJob.Wizard:
                     bonusTick = SystemShare.Config.BonusAbilofWizard;
-                    HitPoint = (byte)(Settings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
-                    SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
+                    HitPoint = (byte)(MessageSettings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
+                    SpeedPoint = (byte)(MessageSettings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
                     break;
                 case PlayJob.Taoist:
                     bonusTick = SystemShare.Config.BonusAbilofTaos;
-                    SpeedPoint = (byte)(Settings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
+                    SpeedPoint = (byte)(MessageSettings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
                     break;
             }
             for (int i = 0; i < MagicList.Count; i++)
@@ -3686,7 +3686,7 @@ namespace M2Server.Player
                         {
                             HitPoint = (byte)(HitPoint + HUtil32.Round(3 / 3.0 * userMagic.Level));
                         }
-                        HitPlus = (byte)(Settings.DEFHIT + userMagic.Level);
+                        HitPlus = (byte)(MessageSettings.DEFHIT + userMagic.Level);
                         AttackSkillCount = (byte)(7 - userMagic.Level);
                         AttackSkillPointCount = M2Share.RandomNumber.RandomByte(AttackSkillCount);
                         break;
@@ -3855,22 +3855,22 @@ namespace M2Server.Player
                 switch (nWinLevel)
                 {
                     case 1:
-                        SysMsg(Settings.WinLottery1Msg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.WinLottery1Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 2:
-                        SysMsg(Settings.WinLottery2Msg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.WinLottery2Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 3:
-                        SysMsg(Settings.WinLottery3Msg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.WinLottery3Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 4:
-                        SysMsg(Settings.WinLottery4Msg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.WinLottery4Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 5:
-                        SysMsg(Settings.WinLottery5Msg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.WinLottery5Msg, MsgColor.Green, MsgType.Hint);
                         break;
                     case 6:
-                        SysMsg(Settings.WinLottery6Msg, MsgColor.Green, MsgType.Hint);
+                        SysMsg(MessageSettings.WinLottery6Msg, MsgColor.Green, MsgType.Hint);
                         break;
                 }
                 if (IncGold(nGold))
@@ -3885,7 +3885,7 @@ namespace M2Server.Player
             else
             {
                 SystemShare.Config.NoWinLotteryCount += 500;
-                SysMsg(Settings.NotWinLotteryMsg, MsgColor.Red, MsgType.Hint);
+                SysMsg(MessageSettings.NotWinLotteryMsg, MsgColor.Red, MsgType.Hint);
             }
         }
 
@@ -3921,7 +3921,7 @@ namespace M2Server.Player
 
         public void SetExpiredTime(int expiredTime)
         {
-            if (Abil.Level > Settings.ExpErienceLevel)
+            if (Abil.Level > MessageSettings.ExpErienceLevel)
             {
                 ExpireTime = HUtil32.GetTickCount() + (60 * 1000);
                 ExpireCount = expiredTime;
@@ -4101,7 +4101,7 @@ namespace M2Server.Player
                 StdItem StdItem = SystemShare.ItemSystem.GetStdItem(useItems.Index);
                 if (UseItems[ItemLocation.Weapon].Index == 0)
                 {
-                    SysMsg(Settings.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
                     SendDelItems(useItems);
                     SendRefMsg(Messages.RM_BREAKWEAPON, 0, 0, 0, 0, "");
                     if (StdItem?.NeedIdentify == 1)
@@ -4112,7 +4112,7 @@ namespace M2Server.Player
                 }
                 else
                 {
-                    SysMsg(Settings.TheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
+                    SysMsg(MessageSettings.TheWeaponRefineSuccessfull, MsgColor.Red, MsgType.Hint);
                     SendUpdateItem(UseItems[ItemLocation.Weapon]);
                     if (StdItem.NeedIdentify == 1)
                     {
@@ -4288,15 +4288,15 @@ namespace M2Server.Player
 
         public void AddBodyLuck(double dLuck)
         {
-            if ((dLuck > 0) && (BodyLuck < 5 * Settings.BODYLUCKUNIT))
+            if ((dLuck > 0) && (BodyLuck < 5 * MessageSettings.BODYLUCKUNIT))
             {
                 BodyLuck = BodyLuck + dLuck;
             }
-            if ((dLuck < 0) && (BodyLuck > -(5 * Settings.BODYLUCKUNIT)))
+            if ((dLuck < 0) && (BodyLuck > -(5 * MessageSettings.BODYLUCKUNIT)))
             {
                 BodyLuck = BodyLuck + dLuck;
             }
-            int n = Convert.ToInt32(BodyLuck / Settings.BODYLUCKUNIT);
+            int n = Convert.ToInt32(BodyLuck / MessageSettings.BODYLUCKUNIT);
             if (n > 5)
             {
                 n = 5;
@@ -5309,7 +5309,7 @@ namespace M2Server.Player
         {
             this.ExtraAbil[0] = (ushort)nPower;
             this.ExtraAbilTimes[0] = HUtil32.GetTickCount() + nTime * 1000;
-            SysMsg(Format(Settings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
+            SysMsg(Format(MessageSettings.AttPowerUpTime, nTime / 60, nTime % 60), MsgColor.Green, MsgType.Hint);
             RecalcAbilitys();
             SendMsg(Messages.RM_ABILITY, 0, 0, 0, 0);
         }

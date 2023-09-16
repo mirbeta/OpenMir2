@@ -5,7 +5,7 @@ using M2Server.Player;
 using SystemModule;
 using SystemModule.Consts;
 using SystemModule.Enums;
-using SystemModule.Events;
+using SystemModule.MagicEvent;
 using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Magic

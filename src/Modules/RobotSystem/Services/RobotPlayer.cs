@@ -216,7 +216,7 @@ namespace RobotSystem
             if (Abil.Exp >= Abil.MaxExp)
             {
                 Abil.Exp -= Abil.MaxExp;
-                if (Abil.Level < Settings.MAXUPLEVEL)
+                if (Abil.Level < MessageSettings.MAXUPLEVEL)
                 {
                     Abil.Level++;
                 }
@@ -300,7 +300,7 @@ namespace RobotSystem
                             {
                                 if (Abil.Level <= SystemShare.Config.CanShoutMsgLevel)
                                 {
-                                    SysMsg(Format(Settings.YouNeedLevelMsg, SystemShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
+                                    SysMsg(Format(MessageSettings.YouNeedLevelMsg, SystemShare.Config.CanShoutMsgLevel + 1), MsgColor.Red, MsgType.Hint);
                                     return;
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
@@ -316,10 +316,10 @@ namespace RobotSystem
                                 }
                                 return;
                             }
-                            SysMsg(Format(Settings.YouCanSendCyCyLaterMsg, 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000), MsgColor.Red, MsgType.Hint);
+                            SysMsg(Format(MessageSettings.YouCanSendCyCyLaterMsg, 10 - (HUtil32.GetTickCount() - ShoutMsgTick) / 1000), MsgColor.Red, MsgType.Hint);
                             return;
                         }
-                        SysMsg(Settings.ThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
+                        SysMsg(MessageSettings.ThisMapDisableSendCyCyMsg, MsgColor.Red, MsgType.Hint);
                         return;
                     }
                     if (!FilterSendMsg)

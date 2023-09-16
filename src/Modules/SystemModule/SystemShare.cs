@@ -1830,55 +1830,55 @@ namespace SystemModule
         public static int GetUseItemIdx(string sName)
         {
             var result = -1;
-            if (string.Compare(sName, Settings.DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            if (string.Compare(sName, MessageSettings.DRESSNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 0;
             }
-            else if (string.Compare(sName, Settings.WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.WEAPONNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 1;
             }
-            else if (string.Compare(sName, Settings.RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.RIGHTHANDNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 2;
             }
-            else if (string.Compare(sName, Settings.NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.NECKLACENAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 3;
             }
-            else if (string.Compare(sName, Settings.HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.HELMETNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 4;
             }
-            else if (string.Compare(sName, Settings.ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.ARMRINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 5;
             }
-            else if (string.Compare(sName, Settings.ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.ARMRINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 6;
             }
-            else if (string.Compare(sName, Settings.RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.RINGLNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 7;
             }
-            else if (string.Compare(sName, Settings.RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.RINGRNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 8;
             }
-            else if (string.Compare(sName, Settings.BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.BUJUKNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 9;
             }
-            else if (string.Compare(sName, Settings.BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.BELTNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 10;
             }
-            else if (string.Compare(sName, Settings.BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.BOOTSNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 11;
             }
-            else if (string.Compare(sName, Settings.CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
+            else if (string.Compare(sName, MessageSettings.CHARMNAME, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 result = 12;
             }
@@ -1891,43 +1891,43 @@ namespace SystemModule
             switch (nIndex)
             {
                 case 0:
-                    result = Settings.DRESSNAME;
+                    result = MessageSettings.DRESSNAME;
                     break;
                 case 1:
-                    result = Settings.WEAPONNAME;
+                    result = MessageSettings.WEAPONNAME;
                     break;
                 case 2:
-                    result = Settings.RIGHTHANDNAME;
+                    result = MessageSettings.RIGHTHANDNAME;
                     break;
                 case 3:
-                    result = Settings.NECKLACENAME;
+                    result = MessageSettings.NECKLACENAME;
                     break;
                 case 4:
-                    result = Settings.HELMETNAME;
+                    result = MessageSettings.HELMETNAME;
                     break;
                 case 5:
-                    result = Settings.ARMRINGLNAME;
+                    result = MessageSettings.ARMRINGLNAME;
                     break;
                 case 6:
-                    result = Settings.ARMRINGRNAME;
+                    result = MessageSettings.ARMRINGRNAME;
                     break;
                 case 7:
-                    result = Settings.RINGLNAME;
+                    result = MessageSettings.RINGLNAME;
                     break;
                 case 8:
-                    result = Settings.RINGRNAME;
+                    result = MessageSettings.RINGRNAME;
                     break;
                 case 9:
-                    result = Settings.BUJUKNAME;
+                    result = MessageSettings.BUJUKNAME;
                     break;
                 case 10:
-                    result = Settings.BELTNAME;
+                    result = MessageSettings.BELTNAME;
                     break;
                 case 11:
-                    result = Settings.BOOTSNAME;
+                    result = MessageSettings.BOOTSNAME;
                     break;
                 case 12:
-                    result = Settings.CHARMNAME;
+                    result = MessageSettings.CHARMNAME;
                     break;
             }
             return result;

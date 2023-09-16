@@ -24,7 +24,7 @@ namespace SystemModule
             if (nInteger <= -1) WriteBool("Config", "StallSystem", SystemShare.Config.ClientConf.boStallSystem);
 
             nInteger = ReadWriteInteger("Config", "SafeZoneStall", -1);
-            if (nInteger <= -1) WriteBool("Config", "SafeZoneStall", Settings.boSafeZoneStall);
+            if (nInteger <= -1) WriteBool("Config", "SafeZoneStall", MessageSettings.boSafeZoneStall);
 
             nInteger = ReadWriteInteger("Config", "ShowHpBar", -1);
             if (nInteger <= -1) WriteBool("Config", "ShowHpBar", SystemShare.Config.ClientConf.boShowHpBar);
@@ -54,10 +54,10 @@ namespace SystemModule
             if (nInteger <= -1) WriteBool("Config", "ShowHelp", SystemShare.Config.ClientConf.boShowHelp);
 
             nInteger = ReadWriteInteger("Config", "SecondCardSystem", -1);
-            if (nInteger <= -1) WriteBool("Config", "SecondCardSystem", Settings.boSecondCardSystem);
+            if (nInteger <= -1) WriteBool("Config", "SecondCardSystem", MessageSettings.boSecondCardSystem);
 
             nInteger = ReadWriteInteger("Config", "ExpErienceLevel", -1);
-            if (nInteger <= -1) WriteInteger("Config", "ExpErienceLevel", Settings.ExpErienceLevel);
+            if (nInteger <= -1) WriteInteger("Config", "ExpErienceLevel", MessageSettings.ExpErienceLevel);
 
 
             string sString = ReadWriteString("Config", "BadManHomeMap", "");
@@ -66,9 +66,9 @@ namespace SystemModule
                 WriteString("Config", "BadManHomeMap", "3");
             }
             nInteger = ReadWriteInteger("Config", "BadManStartX", -1);
-            if (nInteger <= -1) WriteInteger("Config", "BadManStartX", Settings.BADMANSTARTX);
+            if (nInteger <= -1) WriteInteger("Config", "BadManStartX", MessageSettings.BADMANSTARTX);
             nInteger = ReadWriteInteger("Config", "BadManStartY", -1);
-            if (nInteger <= -1) WriteInteger("Config", "BadManStartY", Settings.BADMANSTARTY);
+            if (nInteger <= -1) WriteInteger("Config", "BadManStartY", MessageSettings.BADMANSTARTY);
 
             sString = ReadWriteString("Config", "RECHARGINGMAP", ""); //充值地图
             if (string.IsNullOrEmpty(sString))
@@ -79,7 +79,7 @@ namespace SystemModule
             SystemShare.Config.ClientConf.boWhisperRecord = ReadWriteBool("Config", "WhisperRecord", SystemShare.Config.ClientConf.boWhisperRecord);  //游戏私聊
             SystemShare.Config.ClientConf.boNoFog = ReadWriteBool("Config", "NoFog", SystemShare.Config.ClientConf.boNoFog);
             SystemShare.Config.ClientConf.boStallSystem = ReadWriteBool("Config", "StallSystem", SystemShare.Config.ClientConf.boStallSystem);
-            Settings.boSafeZoneStall = ReadWriteBool("Config", "SafeZoneStall", Settings.boSafeZoneStall);
+            MessageSettings.boSafeZoneStall = ReadWriteBool("Config", "SafeZoneStall", MessageSettings.boSafeZoneStall);
             SystemShare.Config.ClientConf.boShowHpBar = ReadWriteBool("Config", "ShowHpBar", SystemShare.Config.ClientConf.boShowHpBar);
             SystemShare.Config.ClientConf.boShowHpNumber = ReadWriteBool("Config", "ShowHpNumber", SystemShare.Config.ClientConf.boShowHpNumber);
             SystemShare.Config.ClientConf.boNoStruck = ReadWriteBool("Config", "NoStruck", SystemShare.Config.ClientConf.boNoStruck);
@@ -91,14 +91,14 @@ namespace SystemModule
             SystemShare.Config.ClientConf.boShowRecharging = ReadWriteBool("Config", "ShowRecharging", SystemShare.Config.ClientConf.boShowRecharging);
             SystemShare.Config.ClientConf.boShowHelp = ReadWriteBool("Config", "ShowHelp", SystemShare.Config.ClientConf.boShowHelp);
 
-            Settings.boSecondCardSystem = ReadWriteBool("Config", "SecondCardSystem", Settings.boSecondCardSystem);
-            Settings.ExpErienceLevel = ReadWriteByte("Config", "ExpErienceLevel", Settings.ExpErienceLevel);
+            MessageSettings.boSecondCardSystem = ReadWriteBool("Config", "SecondCardSystem", MessageSettings.boSecondCardSystem);
+            MessageSettings.ExpErienceLevel = ReadWriteByte("Config", "ExpErienceLevel", MessageSettings.ExpErienceLevel);
 
-            Settings.BADMANHOMEMAP = ReadWriteString("Config", "BadManHomeMap", Settings.BADMANHOMEMAP);
-            Settings.BADMANSTARTX = ReadWriteInt16("Config", "BadManStartX", Settings.BADMANSTARTX);
-            Settings.BADMANSTARTY = ReadWriteInt16("Config", "BadManStartY", Settings.BADMANSTARTY);
+            MessageSettings.BADMANHOMEMAP = ReadWriteString("Config", "BadManHomeMap", MessageSettings.BADMANHOMEMAP);
+            MessageSettings.BADMANSTARTX = ReadWriteInt16("Config", "BadManStartX", MessageSettings.BADMANSTARTX);
+            MessageSettings.BADMANSTARTY = ReadWriteInt16("Config", "BadManStartY", MessageSettings.BADMANSTARTY);
             SystemShare.Config.ClientConf.boGamepath = ReadWriteBool("Config", "Gamepath", SystemShare.Config.ClientConf.boGamepath);
-            Settings.RECHARGINGMAP = ReadWriteString("Config", "RECHARGINGMAP", Settings.RECHARGINGMAP); //充值
+            MessageSettings.RECHARGINGMAP = ReadWriteString("Config", "RECHARGINGMAP", MessageSettings.RECHARGINGMAP); //充值
         }
     }
 }

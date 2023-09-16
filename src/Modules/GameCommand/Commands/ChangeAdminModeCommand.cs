@@ -13,7 +13,7 @@ namespace CommandSystem.Commands
         public void Execute(IPlayerActor PlayerActor)
         {
             PlayerActor.AdminMode = !PlayerActor.AdminMode;
-            PlayerActor.SysMsg(PlayerActor.AdminMode ? Settings.GameMasterMode : Settings.ReleaseGameMasterMode, MsgColor.Green, MsgType.Hint);
+            PlayerActor.SysMsg(PlayerActor.AdminMode ? MessageSettings.GameMasterMode : MessageSettings.ReleaseGameMasterMode, MsgColor.Green, MsgType.Hint);
         }
     }
 }
