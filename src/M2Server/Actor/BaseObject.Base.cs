@@ -832,13 +832,13 @@ namespace M2Server.Actor
             {
                 switch (((IPlayerActor)LastHiter).Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         nDamage = (ushort)(nDamage * SystemShare.Config.WarrMon / 10);
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         nDamage = (ushort)(nDamage * SystemShare.Config.WizardMon / 10);
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         nDamage = (ushort)(nDamage * SystemShare.Config.TaosMon / 10);
                         break;
                 }

@@ -99,7 +99,7 @@ namespace RobotSystem
                                     }
                                     if (Job > 0)
                                     {
-                                        if (AttackLevelTarget() || TaoLevelHitAttack() && TargetCret.WAbil.MaxHP < 700 && Job == PlayJob.Taoist)// 道法22前是否物理攻击
+                                        if (AttackLevelTarget() || TaoLevelHitAttack() && TargetCret.WAbil.MaxHP < 700 && Job == PlayerJob.Taoist)// 道法22前是否物理攻击
                                         {
                                             if (Master != null)
                                             {

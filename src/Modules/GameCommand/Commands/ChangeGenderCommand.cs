@@ -32,7 +32,7 @@ namespace CommandSystem.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (!Enum.TryParse(nSex.ToString(), out PlayGender playSex))
+            if (!Enum.TryParse(nSex.ToString(), out PlayerGender playSex))
             {
                 return;
             }

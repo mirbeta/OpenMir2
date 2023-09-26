@@ -1111,15 +1111,15 @@ namespace M2Server.Player
             NakedAbility nakedAbil = default;
             switch (Job)
             {
-                case PlayJob.Warrior:
+                case PlayerJob.Warrior:
                     bonusTick = SystemShare.Config.BonusAbilofWarr;
                     nakedAbil = SystemShare.Config.NakedAbilofWarr;
                     break;
-                case PlayJob.Wizard:
+                case PlayerJob.Wizard:
                     bonusTick = SystemShare.Config.BonusAbilofWizard;
                     nakedAbil = SystemShare.Config.NakedAbilofWizard;
                     break;
-                case PlayJob.Taoist:
+                case PlayerJob.Taoist:
                     bonusTick = SystemShare.Config.BonusAbilofTaos;
                     nakedAbil = SystemShare.Config.NakedAbilofTaos;
                     break;
@@ -1189,13 +1189,13 @@ namespace M2Server.Player
             string sSendMsg = string.Empty;
             switch (Job)
             {
-                case PlayJob.Warrior:
+                case PlayerJob.Warrior:
                     sSendMsg = EDCode.EncodeMessage(SystemShare.Config.BonusAbilofWarr) + '/' + EDCode.EncodeMessage(BonusAbil) + '/' + EDCode.EncodeMessage(SystemShare.Config.NakedAbilofWarr);
                     break;
-                case PlayJob.Wizard:
+                case PlayerJob.Wizard:
                     sSendMsg = EDCode.EncodeMessage(SystemShare.Config.BonusAbilofWizard) + '/' + EDCode.EncodeMessage(BonusAbil) + '/' + EDCode.EncodeMessage(SystemShare.Config.NakedAbilofWizard);
                     break;
-                case PlayJob.Taoist:
+                case PlayerJob.Taoist:
                     sSendMsg = EDCode.EncodeMessage(SystemShare.Config.BonusAbilofTaos) + '/' + EDCode.EncodeMessage(BonusAbil) + '/' + EDCode.EncodeMessage(SystemShare.Config.NakedAbilofTaos);
                     break;
             }
@@ -1726,10 +1726,10 @@ namespace M2Server.Player
             bool result = false;
             switch (clientItem.Item.StdMode)
             {
-                case 10 when Gender != PlayGender.Man:
+                case 10 when Gender != PlayerGender.Man:
                     SysMsg(MessageSettings.WearNotOfWoMan, MsgColor.Red, MsgType.Hint);
                     return false;
-                case 11 when Gender != PlayGender.WoMan:
+                case 11 when Gender != PlayerGender.WoMan:
                     SysMsg(MessageSettings.WearNotOfMan, MsgColor.Red, MsgType.Hint);
                     return false;
             }
@@ -1772,7 +1772,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 10:
-                    if (Job == (PlayJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && Abil.Level >= HUtil32.HiByte(clientItem.Item.NeedLevel))
+                    if (Job == (PlayerJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && Abil.Level >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -1782,7 +1782,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 11:
-                    if (Job == (PlayJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.DC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
+                    if (Job == (PlayerJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.DC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -1792,7 +1792,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 12:
-                    if (Job == (PlayJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.MC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
+                    if (Job == (PlayerJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.MC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -1802,7 +1802,7 @@ namespace M2Server.Player
                     }
                     break;
                 case 13:
-                    if (Job == (PlayJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.SC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
+                    if (Job == (PlayerJob)HUtil32.LoByte(clientItem.Item.NeedLevel) && HUtil32.HiByte(WAbil.SC) >= HUtil32.HiByte(clientItem.Item.NeedLevel))
                     {
                         result = true;
                     }
@@ -2328,7 +2328,7 @@ namespace M2Server.Player
 
         private void ChangeServerMakeSlave(SlaveInfo slaveInfo)
         {
-            int nSlavecount = Job == PlayJob.Taoist ? 1 : 5;
+            int nSlavecount = Job == PlayerJob.Taoist ? 1 : 5;
             MonsterObject baseObject = (MonsterObject)MakeSlave(slaveInfo.SlaveName, 3, slaveInfo.SlaveLevel, nSlavecount, slaveInfo.RoyaltySec);
             if (baseObject != null)
             {
@@ -2889,7 +2889,7 @@ namespace M2Server.Player
             }
             if (boIsfound)
             {
-                if (Gender == PlayGender.Man)
+                if (Gender == PlayerGender.Man)
                 {
                     sSayMsg = string.Format(MessageSettings.fUnMarryManLoginMsg, DearName, DearName);
                 }
@@ -2905,7 +2905,7 @@ namespace M2Server.Player
             if (DearHuman != null)
             {
                 DearHuman.DearHuman = this;
-                if (Gender == PlayGender.Man)
+                if (Gender == PlayerGender.Man)
                 {
                     sSayMsg = string.Format(MessageSettings.ManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
@@ -2922,7 +2922,7 @@ namespace M2Server.Player
             }
             else
             {
-                if (Gender == PlayGender.Man)
+                if (Gender == PlayerGender.Man)
                 {
                     SysMsg(MessageSettings.ManLoginDearNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                 }

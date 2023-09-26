@@ -256,19 +256,19 @@ namespace ScriptSystem
         {
             success = false;
             int nCount = 0;
-            PlayJob nJob = PlayJob.None;
+            PlayerJob nJob = PlayerJob.None;
             IPlayerActor IPlayerActorEx;
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
-                nJob = PlayJob.Warrior;
+                nJob = PlayerJob.Warrior;
             }
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWizard))
             {
-                nJob = PlayJob.Wizard;
+                nJob = PlayerJob.Wizard;
             }
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sTaos))
             {
-                nJob = PlayJob.Taoist;
+                nJob = PlayerJob.Taoist;
             }
             if (nJob < 0)
             {
@@ -3383,7 +3383,7 @@ namespace ScriptSystem
             var poseHuman = (IPlayerActor)baseObject.GetPoseCreate();
             if (poseHuman != null)
             {
-                if (poseHuman.Gender == (PlayGender)btSex)
+                if (poseHuman.Gender == (PlayerGender)btSex)
                 {
                     success = true;
                 }
@@ -4059,21 +4059,21 @@ namespace ScriptSystem
             success = true;
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
-                if (playerActor.Job != PlayJob.Warrior)
+                if (playerActor.Job != PlayerJob.Warrior)
                 {
                     success = false;
                 }
             }
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sWizard))
             {
-                if (playerActor.Job != PlayJob.Wizard)
+                if (playerActor.Job != PlayerJob.Wizard)
                 {
                     success = false;
                 }
             }
             if (HUtil32.CompareLStr(questConditionInfo.sParam1, ScriptFlagConst.sTaos))
             {
-                if (playerActor.Job != PlayJob.Taoist)
+                if (playerActor.Job != PlayerJob.Taoist)
                 {
                     success = false;
                 }
@@ -4127,14 +4127,14 @@ namespace ScriptSystem
             success = true;
             if (string.Compare(questConditionInfo.sParam1, ScriptFlagConst.sMAN, StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (playerActor.Gender != PlayGender.Man)
+                if (playerActor.Gender != PlayerGender.Man)
                 {
                     success = false;
                 }
             }
             else
             {
-                if (playerActor.Gender != PlayGender.WoMan)
+                if (playerActor.Gender != PlayerGender.WoMan)
                 {
                     success = false;
                 }

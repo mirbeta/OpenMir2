@@ -28,15 +28,15 @@ namespace CommandSystem.Commands
             {
                 if (string.Compare(sJobName, "Warr", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    mIPlayerActor.Job = PlayJob.Warrior;
+                    mIPlayerActor.Job = PlayerJob.Warrior;
                 }
                 if (string.Compare(sJobName, "Wizard", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    mIPlayerActor.Job = PlayJob.Wizard;
+                    mIPlayerActor.Job = PlayerJob.Wizard;
                 }
                 if (string.Compare(sJobName, "Taos", StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    mIPlayerActor.Job = PlayJob.Taoist;
+                    mIPlayerActor.Job = PlayerJob.Taoist;
                 }
                 mIPlayerActor.HasLevelUp(1);
                 mIPlayerActor.SysMsg(CommandHelp.GameCommandChangeJobHumanMsg, MsgColor.Green, MsgType.Hint);

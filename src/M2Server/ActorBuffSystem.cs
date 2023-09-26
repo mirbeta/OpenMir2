@@ -87,6 +87,13 @@ namespace M2Server
             }
         }
 
+        /// <summary>
+        /// 给对象附加效果
+        /// </summary>
+        /// <param name="actor">对象</param>
+        /// <param name="buffType">效果类型</param>
+        /// <param name="duraTime">持续时长</param>
+        /// <param name="stateval">伤害效果</param>
         public void AddBuff(IActor actor, BuffType buffType, int duraTime, int stateval)
         {
             //if (StatusTimeArr[nType] > 0)

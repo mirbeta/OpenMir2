@@ -16,7 +16,7 @@ namespace M2Server.Player
         /// <summary>
         /// 性别
         /// </summary>
-        public PlayGender Gender { get; set; }
+        public PlayerGender Gender { get; set; }
         /// <summary>
         /// 人物的头发
         /// </summary>
@@ -24,7 +24,7 @@ namespace M2Server.Player
         /// <summary>
         /// 人物的职业 (0:战士 1：法师 2:道士)
         /// </summary>
-        public PlayJob Job { get; set; }
+        public PlayerJob Job { get; set; }
         /// <summary>
         /// 登录帐号名
         /// </summary>
@@ -43,7 +43,7 @@ namespace M2Server.Player
         /// </summary>
         public int AccountExpiredTick { get; set; }
         public long ExpireTime { get; set; }
-        public int ExpireCount { get; set; }
+        public byte ExpireCount { get; set; }
         public int QueryExpireTick { get; set; }
         /// <summary>
         /// 权限等级
@@ -864,7 +864,7 @@ namespace M2Server.Player
         {
             Race = ActorRace.Play;
             Hair = 0;
-            Job = PlayJob.Warrior;
+            Job = PlayerJob.Warrior;
             HomeMap = "0";
             DealGolds = 0;
             DealItemList = new List<UserItem>();
@@ -1225,7 +1225,7 @@ namespace M2Server.Player
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
-                    string sItem = Gender == PlayGender.Man
+                    string sItem = Gender == PlayerGender.Man
                         ? SystemShare.Config.ClothsMan
                         : SystemShare.Config.ClothsWoman;
                     if (SystemShare.ItemSystem.CopyToUserItemFromName(sItem, ref userItem))
@@ -3317,13 +3317,13 @@ namespace M2Server.Player
                     {
                         switch (Job)
                         {
-                            case PlayJob.Warrior:
+                            case PlayerJob.Warrior:
                                 sChrName = MessageSettings.WarrReNewName.Replace("%chrname", ChrName);
                                 break;
-                            case PlayJob.Wizard:
+                            case PlayerJob.Wizard:
                                 sChrName = MessageSettings.WizardReNewName.Replace("%chrname", ChrName);
                                 break;
-                            case PlayJob.Taoist:
+                            case PlayerJob.Taoist:
                                 sChrName = MessageSettings.TaosReNewName.Replace("%chrname", ChrName);
                                 break;
                         }
@@ -3350,7 +3350,7 @@ namespace M2Server.Player
                 }
                 if (!string.IsNullOrEmpty(DearName))
                 {
-                    if (Gender == PlayGender.Man)
+                    if (Gender == PlayerGender.Man)
                     {
                         sDearName = Format(MessageSettings.ManDearName, DearName);
                     }
@@ -3389,7 +3389,7 @@ namespace M2Server.Player
                     nDress = (byte)(stdItem.Shape * 2);
                 }
             }
-            PlayGender playGender = Gender;
+            PlayerGender playGender = Gender;
             nDress += (byte)playGender;
             byte nWeapon = (byte)playGender;
             if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Index > 0) // 武器
@@ -3437,7 +3437,7 @@ namespace M2Server.Player
                 string sSayMsg;
                 if (DearHuman != null)
                 {
-                    if (Gender == PlayGender.Man)
+                    if (Gender == PlayerGender.Man)
                     {
                         sSayMsg = MessageSettings.ManLongOutDearOnlineMsg.Replace("%d", DearName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
@@ -3648,17 +3648,17 @@ namespace M2Server.Player
             NakedAbility bonusTick;
             switch (Job)
             {
-                case PlayJob.Warrior:
+                case PlayerJob.Warrior:
                     bonusTick = SystemShare.Config.BonusAbilofWarr;
                     HitPoint = (byte)(MessageSettings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
                     SpeedPoint = (byte)(MessageSettings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
                     break;
-                case PlayJob.Wizard:
+                case PlayerJob.Wizard:
                     bonusTick = SystemShare.Config.BonusAbilofWizard;
                     HitPoint = (byte)(MessageSettings.DEFHIT + BonusAbil.Hit / bonusTick.Hit);
                     SpeedPoint = (byte)(MessageSettings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed);
                     break;
-                case PlayJob.Taoist:
+                case PlayerJob.Taoist:
                     bonusTick = SystemShare.Config.BonusAbilofTaos;
                     SpeedPoint = (byte)(MessageSettings.DEFSPEED + BonusAbil.Speed / bonusTick.Speed + 3);
                     break;
@@ -3924,7 +3924,7 @@ namespace M2Server.Player
             if (Abil.Level > MessageSettings.ExpErienceLevel)
             {
                 ExpireTime = HUtil32.GetTickCount() + (60 * 1000);
-                ExpireCount = expiredTime;
+                ExpireCount = (byte)expiredTime;
             }
         }
 
@@ -4699,16 +4699,16 @@ namespace M2Server.Player
             {
                 switch (Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 4));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         citem.Item.DC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         citem.Item.MC = 0;
                         break;
                 }
@@ -4717,18 +4717,18 @@ namespace M2Server.Player
             {
                 switch (Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         citem.Item.DC = 0;
                         citem.Item.SC = 0;
                         citem.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.AC) + 1));
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         citem.Item.MC = 0;
                         break;
                 }
@@ -4737,15 +4737,15 @@ namespace M2Server.Player
             {
                 switch (Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         citem.Item.DC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         citem.Item.DC = 0;
                         citem.Item.MC = 0;
                         break;
@@ -4755,15 +4755,15 @@ namespace M2Server.Player
             {
                 switch (Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         citem.Item.DC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         citem.Item.DC = 0;
                         citem.Item.MC = 0;
                         break;
@@ -4773,15 +4773,15 @@ namespace M2Server.Player
             {
                 switch (Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         citem.Item.DC = 0;
                         citem.Item.SC = 0;
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         citem.Item.DC = 0;
                         citem.Item.MC = 0;
                         break;
@@ -4791,13 +4791,13 @@ namespace M2Server.Player
             {
                 switch (Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 28));
                         citem.Item.MC = 0;
                         citem.Item.SC = 0;
                         citem.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.AC) - 2), HUtil32.HiByte(citem.Item.AC));
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         citem.Item.SC = 0;
                         if (HUtil32.HiByte(citem.Item.MAC) > 12)
                         {
@@ -4808,7 +4808,7 @@ namespace M2Server.Player
                             citem.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MAC), 0);
                         }
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         citem.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.DC) + 2), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 10));
                         citem.Item.MC = 0;
                         citem.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(citem.Item.AC) - 2), HUtil32.HiByte(citem.Item.AC));
@@ -4821,17 +4821,17 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC) + 2));
                             citem.Item.MC = 0;
                             citem.Item.SC = 0;
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             citem.Item.DC = 0;
                             citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC) + 2));
                             citem.Item.SC = 0;
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             citem.Item.DC = 0;
                             citem.Item.MC = 0;
                             citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC) + 2));
@@ -4842,17 +4842,17 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             citem.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.DC)));
                             citem.Item.MC = 0;
                             citem.Item.SC = 0;
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             citem.Item.DC = 0;
                             citem.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.MC)));
                             citem.Item.SC = 0;
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             citem.Item.DC = 0;
                             citem.Item.MC = 0;
                             citem.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(citem.Item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(citem.Item.SC)));
@@ -4880,16 +4880,16 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 4));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             std.Item.MC = 0;
                             break;
                     }
@@ -4898,18 +4898,18 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
                             std.Item.AC = HUtil32.MakeWord(HUtil32.LoByte(item.AC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 1));
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             std.Item.MC = 0;
                             break;
                     }
@@ -4918,15 +4918,15 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             std.Item.DC = 0;
                             std.Item.MC = 0;
                             break;
@@ -4936,15 +4936,15 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             std.Item.DC = 0;
                             std.Item.MC = 0;
                             break;
@@ -4954,15 +4954,15 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             std.Item.DC = 0;
                             std.Item.MC = 0;
                             break;
@@ -4972,13 +4972,13 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 28));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) - 2), HUtil32.HiByte(item.AC));
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             std.Item.SC = 0;
                             if (HUtil32.HiByte(item.MAC) > 12)
                             {
@@ -4989,7 +4989,7 @@ namespace M2Server.Player
                                 std.Item.MAC = HUtil32.MakeWord(HUtil32.LoByte(item.MAC), 0);
                             }
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 2), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 10));
                             std.Item.MC = 0;
                             std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) - 2), HUtil32.HiByte(item.AC));
@@ -5002,17 +5002,17 @@ namespace M2Server.Player
                     {
                         switch (Job)
                         {
-                            case PlayJob.Warrior:
+                            case PlayerJob.Warrior:
                                 std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                                 std.Item.MC = 0;
                                 std.Item.SC = 0;
                                 break;
-                            case PlayJob.Wizard:
+                            case PlayerJob.Wizard:
                                 std.Item.DC = 0;
                                 std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.MC) + 2));
                                 std.Item.SC = 0;
                                 break;
-                            case PlayJob.Taoist:
+                            case PlayerJob.Taoist:
                                 std.Item.DC = 0;
                                 std.Item.MC = 0;
                                 std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.SC) + 2));
@@ -5023,17 +5023,17 @@ namespace M2Server.Player
                     {
                         switch (Job)
                         {
-                            case PlayJob.Warrior:
+                            case PlayerJob.Warrior:
                                 std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
                                 std.Item.MC = 0;
                                 std.Item.SC = 0;
                                 break;
-                            case PlayJob.Wizard:
+                            case PlayerJob.Wizard:
                                 std.Item.DC = 0;
                                 std.Item.MC = HUtil32.MakeWord(HUtil32.LoByte(item.MC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.MC)));
                                 std.Item.SC = 0;
                                 break;
-                            case PlayJob.Taoist:
+                            case PlayerJob.Taoist:
                                 std.Item.DC = 0;
                                 std.Item.MC = 0;
                                 std.Item.SC = HUtil32.MakeWord(HUtil32.LoByte(item.SC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.SC)));
@@ -5045,20 +5045,20 @@ namespace M2Server.Player
                 {
                     switch (Job)
                     {
-                        case PlayJob.Warrior:
+                        case PlayerJob.Warrior:
                             std.Item.DC = HUtil32.MakeWord(HUtil32.LoByte(item.DC), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC) + 2));
                             std.Item.MC = 0;
                             std.Item.SC = 0;
                             std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) + 2), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC) + 4));
                             std.Item.MpAdd = item.MpAdd + 30;
                             break;
-                        case PlayJob.Wizard:
+                        case PlayerJob.Wizard:
                             std.Item.DC = 0;
                             std.Item.SC = 0;
                             std.Item.MAC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.MAC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.MAC) + 2));
                             std.Item.HpAdd = item.HpAdd + 30;
                             break;
-                        case PlayJob.Taoist:
+                        case PlayerJob.Taoist:
                             std.Item.DC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.DC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.DC)));
                             std.Item.MC = 0;
                             std.Item.AC = HUtil32.MakeWord((ushort)(HUtil32.LoByte(item.AC) + 1), (ushort)HUtil32._MIN(255, HUtil32.HiByte(item.AC)));
@@ -5094,13 +5094,13 @@ namespace M2Server.Player
             switch (nIndex)
             {
                 case 1:
-                    if (Job != PlayJob.Wizard)
+                    if (Job != PlayerJob.Wizard)
                     {
                         DeleteNameSkill(SystemShare.Config.FireBallSkill);
                     }
                     break;
                 case 2:
-                    if (Job != PlayJob.Taoist)
+                    if (Job != PlayerJob.Taoist)
                     {
                         DeleteNameSkill(SystemShare.Config.HealSkill);
                     }
@@ -5242,7 +5242,7 @@ namespace M2Server.Player
             byte nLevel = Abil.Level;
             switch (this.Job)
             {
-                case PlayJob.Taoist:
+                case PlayerJob.Taoist:
                     Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round((nLevel / (double)SystemShare.Config.nLevelValueOfTaosHP + SystemShare.Config.nLevelValueOfTaosHPRate) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 13 + HUtil32.Round(nLevel / (double)SystemShare.Config.nLevelValueOfTaosMP * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 4.0 * nLevel));
@@ -5263,7 +5263,7 @@ namespace M2Server.Player
                     n = HUtil32.Round(nLevel / 6.0);
                     Abil.MAC = HUtil32.MakeWord((ushort)(n / 2), (ushort)(n + 1));
                     break;
-                case PlayJob.Wizard:
+                case PlayerJob.Wizard:
                     Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)SystemShare.Config.nLevelValueOfWizardHP) + SystemShare.Config.nLevelValueOfWizardHPRate) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 13 + HUtil32.Round(((nLevel / (double)5) + 2) * 2.2 * nLevel));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 5.0 * nLevel));
@@ -5276,7 +5276,7 @@ namespace M2Server.Player
                     Abil.AC = 0;
                     Abil.MAC = 0;
                     break;
-                case PlayJob.Warrior:
+                case PlayerJob.Warrior:
                     Abil.MaxHP = (ushort)HUtil32._MIN(ushort.MaxValue, 14 + HUtil32.Round(((nLevel / (double)SystemShare.Config.nLevelValueOfWarrHP) + SystemShare.Config.nLevelValueOfWarrHPRate + (nLevel / (double)20)) * nLevel));
                     Abil.MaxMP = (ushort)HUtil32._MIN(ushort.MaxValue, 11 + HUtil32.Round(nLevel * 3.5));
                     Abil.MaxWeight = (ushort)(50 + HUtil32.Round(nLevel / 3.0 * nLevel));
@@ -5288,7 +5288,7 @@ namespace M2Server.Player
                     Abil.AC = HUtil32.MakeWord(0, (ushort)(nLevel / 7));
                     Abil.MAC = 0;
                     break;
-                case PlayJob.None:
+                case PlayerJob.None:
                     break;
             }
             if (Abil.HP > Abil.MaxHP)

@@ -1623,10 +1623,10 @@ namespace RobotSystem
             var result = false;
             switch (Job)
             {
-                case PlayJob.Warrior:
+                case PlayerJob.Warrior:
                     result = true;
                     break;
-                case PlayJob.Wizard:
+                case PlayerJob.Wizard:
                     for (var i = 0; i < MagicList.Count; i++)
                     {
                         userMagic = MagicList[i];
@@ -1653,7 +1653,7 @@ namespace RobotSystem
                         }
                     }
                     break;
-                case PlayJob.Taoist:
+                case PlayerJob.Taoist:
                     for (var i = 0; i < MagicList.Count; i++)
                     {
                         userMagic = MagicList[i];
@@ -1942,7 +1942,7 @@ namespace RobotSystem
                     {
                         return true;
                     }
-                    if ((AttackLevelTarget() || TaoLevelHitAttack() && TargetCret.Abil.MaxHP < 700 && Job == PlayJob.Taoist) && (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
+                    if ((AttackLevelTarget() || TaoLevelHitAttack() && TargetCret.Abil.MaxHP < 700 && Job == PlayerJob.Taoist) && (Math.Abs(TargetCret.CurrX - CurrX) > 1 || Math.Abs(TargetCret.CurrY - CurrY) > 1))// 道法22前是否物理攻击大于1格时才走向目标
                     {
                         return true;
                     }
@@ -2520,7 +2520,7 @@ namespace RobotSystem
             short result = 0;
             switch (Job)
             {
-                case PlayJob.Warrior:
+                case PlayerJob.Warrior:
                     if (AllowUseMagic(MagicConst.SKILL_FIRESWORD) && HUtil32.GetTickCount() - LatestFireHitTick > 9000)// 烈火
                     {
                         FireHitSkill = true;
@@ -2787,7 +2787,7 @@ namespace RobotSystem
                         return 41;
                     }
                     break;
-                case PlayJob.Wizard: // 法师
+                case PlayerJob.Wizard: // 法师
                     if (StatusTimeArr[PoisonState.BubbleDefenceUP] == 0 && !AbilMagBubbleDefence) // 使用 魔法盾
                     {
                         if (AllowUseMagic(66)) // 4级魔法盾
@@ -3334,7 +3334,7 @@ namespace RobotSystem
                         }
                     }
                     break;
-                case PlayJob.Taoist:// 道士
+                case PlayerJob.Taoist:// 道士
                     if (SlaveList.Count == 0 && CheckHeroAmulet(1, 5) && CheckMagicInterval(17, 3000) && (AllowUseMagic(72) || AllowUseMagic(30) || AllowUseMagic(17)) && Abil.MP > 20)
                     {
                         if (AllowUseMagic(104)) // 召唤火灵

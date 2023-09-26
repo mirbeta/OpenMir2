@@ -123,9 +123,9 @@ namespace ScriptSystem
             }
         }
 
-        public void GotoLable(IPlayerActor playerActor, int npcId, string sLabel, bool boExtJmp = false)
+        public void GotoLable(IPlayerActor playerActor, int actorId, string sLabel, bool boExtJmp = false)
         {
-            var normNpc = SystemShare.ActorMgr.Get<INormNpc>(npcId);
+            var normNpc = SystemShare.ActorMgr.Get<INormNpc>(actorId);
             if (normNpc == null)
             {
                 return;

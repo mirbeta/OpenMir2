@@ -478,14 +478,14 @@ namespace RobotSystem
                 }
                 switch (Job)
                 {
-                    case PlayJob.Warrior:
+                    case PlayerJob.Warrior:
                         if (HUtil32.GetTickCount() - AttackTick > SystemShare.Config.nAIWarrorAttackTime)
                         {
                             AutoUseMagic = false;// 是否能躲避
                             result = WarrorAttackTarget();
                         }
                         break;
-                    case PlayJob.Wizard:
+                    case PlayerJob.Wizard:
                         if (HUtil32.GetTickCount() - AttackTick > SystemShare.Config.nAIWizardAttackTime)// 连击也不受间隔控制
                         {
                             AttackTick = HUtil32.GetTickCount();
@@ -496,7 +496,7 @@ namespace RobotSystem
                         }
                         AutoMagicId = 0;
                         break;
-                    case PlayJob.Taoist:
+                    case PlayerJob.Taoist:
                         if (HUtil32.GetTickCount() - AttackTick > SystemShare.Config.nAITaoistAttackTime)
                         {
                             AttackTick = HUtil32.GetTickCount();

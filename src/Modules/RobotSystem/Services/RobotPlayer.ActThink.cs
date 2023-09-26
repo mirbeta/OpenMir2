@@ -823,8 +823,8 @@ namespace RobotSystem
                                     break;
                             }
                             break;
-                        case PlayJob.Wizard:
-                        case PlayJob.Taoist:
+                        case PlayerJob.Wizard:
+                        case PlayerJob.Taoist:
                             switch (nCode)
                             {
                                 case 1:

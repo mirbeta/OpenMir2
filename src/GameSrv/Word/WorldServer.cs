@@ -451,7 +451,7 @@ namespace GameSrv.Word
                 playObject.PayMent = (byte)userOpenInfo.LoadUser.PayMent;
                 playObject.PayMode = (byte)userOpenInfo.LoadUser.PayMode;
                 playObject.ExpireTime = userOpenInfo.LoadUser.PlayTime;
-                playObject.ExpireCount = (int)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
+                playObject.ExpireCount = (byte)Math.Round(TimeSpan.FromSeconds(playObject.ExpireTime).TotalMinutes, 1);
                 playObject.LoadTick = userOpenInfo.LoadUser.NewUserTick;
                 //PlayObject.m_nSoftVersionDateEx = M2Share.GetExVersionNO(UserOpenInfo.LoadUser.nSoftVersionDate, ref PlayObject.m_nSoftVersionDate);
                 playObject.SoftVersionDate = userOpenInfo.LoadUser.SoftVersionDate;
@@ -1075,8 +1075,8 @@ namespace GameSrv.Word
             playObject.CurrY = humData.CurY;
             playObject.Dir = humData.Dir;
             playObject.Hair = humData.Hair;
-            playObject.Gender = Enum.Parse<PlayGender>(humData.Sex.ToString());
-            playObject.Job = (PlayJob)humData.Job;
+            playObject.Gender = Enum.Parse<PlayerGender>(humData.Sex.ToString());
+            playObject.Job = (PlayerJob)humData.Job;
             playObject.Gold = humData.Gold;
             playObject.Abil.Level = humData.Abil.Level;
             playObject.Abil.HP = humData.Abil.HP;
@@ -1349,7 +1349,7 @@ namespace GameSrv.Word
             return humanRcd;
         }
 
-        private static string GetHomeInfo(PlayJob nJob, ref short nX, ref short nY)
+        private static string GetHomeInfo(PlayerJob nJob, ref short nX, ref short nY)
         {
             string result;
             int I;

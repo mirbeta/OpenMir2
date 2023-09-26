@@ -33,13 +33,13 @@ namespace RobotSystem
                         {
                             switch (Job)
                             {
-                                case PlayJob.Wizard:
+                                case PlayerJob.Wizard:
                                     if (CheckTargetXYCount(CurrX, CurrY, 4) > 0)
                                     {
                                         return true;
                                     }
                                     break;
-                                case PlayJob.Taoist:
+                                case PlayerJob.Taoist:
                                     if (TargetCret != null)
                                     {
                                         if (TaoLevelHitAttack()) // 22级砍血量的怪

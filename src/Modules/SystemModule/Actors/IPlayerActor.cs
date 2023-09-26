@@ -6,6 +6,9 @@ using SystemModule.Packets.ClientPackets;
 
 namespace SystemModule
 {
+    /// <summary>
+    /// 玩家对象
+    /// </summary>
     public interface IPlayerActor : IActor
     {
         bool OnHorse { get; set; }
@@ -18,7 +21,7 @@ namespace SystemModule
         /// <summary>
         /// 性别
         /// </summary>
-        PlayGender Gender { get; set; }
+        PlayerGender Gender { get; set; }
         /// <summary>
         /// 人物的头发
         /// </summary>
@@ -26,7 +29,7 @@ namespace SystemModule
         /// <summary>
         /// 人物的职业 (0:战士 1：法师 2:道士)
         /// </summary>
-        PlayJob Job { get; set; }
+        PlayerJob Job { get; set; }
         /// <summary>
         /// 登录帐号名
         /// </summary>
@@ -35,6 +38,9 @@ namespace SystemModule
         /// 人物IP地址
         /// </summary>
         string LoginIpAddr { get; set; }
+        /// <summary>
+        /// 登录IP
+        /// </summary>
         string LoginIpLocal { get; set; }
         /// <summary>
         /// 账号过期
@@ -44,8 +50,17 @@ namespace SystemModule
         /// 账号游戏点数检查时间
         /// </summary>
         int AccountExpiredTick { get; set; }
+        /// <summary>
+        /// 过期时间
+        /// </summary>
         long ExpireTime { get; set; }
-        int ExpireCount { get; set; }
+        /// <summary>
+        /// 过期提醒次数
+        /// </summary>
+        byte ExpireCount { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         int QueryExpireTick { get; set; }
         /// <summary>
         /// 权限等级

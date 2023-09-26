@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Enums
 {
-    public enum PlayJob : byte
+    public enum PlayerJob : byte
     {
         /// <summary>
         /// 战士

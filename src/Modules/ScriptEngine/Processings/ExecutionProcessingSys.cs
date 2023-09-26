@@ -2868,20 +2868,20 @@ namespace ScriptSystem
 
         private void ActionOfChangeJob(INormNpc normNpc, IPlayerActor playerActor, QuestActionInfo questActionInfo, ref bool Success)
         {
-            var nJob = PlayJob.None;
+            var nJob = PlayerJob.None;
             if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWarrior))
             {
-                nJob = PlayJob.Warrior;
+                nJob = PlayerJob.Warrior;
             }
             if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sWizard))
             {
-                nJob = PlayJob.Wizard;
+                nJob = PlayerJob.Wizard;
             }
             if (HUtil32.CompareLStr(questActionInfo.sParam1, ScriptFlagConst.sTaos))
             {
-                nJob = PlayJob.Taoist;
+                nJob = PlayerJob.Taoist;
             }
-            if (nJob == PlayJob.None)
+            if (nJob == PlayerJob.None)
             {
                 ScriptActionError(normNpc, playerActor, "", questActionInfo, ExecutionCode.ChangeJob);
                 return;
@@ -3226,14 +3226,14 @@ namespace ScriptSystem
                     {
                         normNpc.GotoLable(playerActor, "@StartMarry", false);
                         normNpc.GotoLable(poseHuman, "@StartMarry", false);
-                        if (playerActor.Gender == PlayGender.Man && poseHuman.Gender == PlayGender.WoMan)
+                        if (playerActor.Gender == PlayerGender.Man && poseHuman.Gender == PlayerGender.WoMan)
                         {
                             sSayMsg = string.Format(MessageSettings.StartMarryManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                             sSayMsg = string.Format(MessageSettings.StartMarryManAskQuestionMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
                         }
-                        else if (playerActor.Gender == PlayGender.WoMan && poseHuman.Gender == PlayGender.Man)
+                        else if (playerActor.Gender == PlayerGender.WoMan && poseHuman.Gender == PlayerGender.Man)
                         {
                             sSayMsg = string.Format(MessageSettings.StartMarryWoManMsg, normNpc.ChrName, playerActor.ChrName, poseHuman.ChrName);
                             SystemShare.WorldEngine.SendBroadCastMsg(sSayMsg, MsgType.Say);
@@ -3261,7 +3261,7 @@ namespace ScriptSystem
             {
                 if (playerActor.IsStartMarry && poseHuman.IsStartMarry)
                 {
-                    if (playerActor.Gender == PlayGender.Man && poseHuman.Gender == PlayGender.WoMan)
+                    if (playerActor.Gender == PlayerGender.Man && poseHuman.Gender == PlayerGender.WoMan)
                     {
                         sSayMsg = MessageSettings.MarryManAnswerQuestionMsg.Replace("%n", normNpc.ChrName);
                         sSayMsg = sSayMsg.Replace("%s", playerActor.ChrName);
@@ -3280,7 +3280,7 @@ namespace ScriptSystem
             // sRESPONSEMARRY
             if (string.Compare(questActionInfo.sParam1, "RESPONSEMARRY", StringComparison.OrdinalIgnoreCase) == 0)
             {
-                if (playerActor.Gender == PlayGender.WoMan && poseHuman.Gender == PlayGender.Man)
+                if (playerActor.Gender == PlayerGender.WoMan && poseHuman.Gender == PlayerGender.Man)
                 {
                     if (string.Compare(questActionInfo.sParam2, "OK", StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -5422,7 +5422,7 @@ namespace ScriptSystem
                 ScriptActionError(normNpc, playerActor, "", questActionInfo, ExecutionCode.ChangeGender);
                 return;
             }
-            playerActor.Gender = Enum.Parse<PlayGender>(nGender.ToString());
+            playerActor.Gender = Enum.Parse<PlayerGender>(nGender.ToString());
             playerActor.FeatureChanged();
         }
 

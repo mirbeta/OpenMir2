@@ -116,7 +116,7 @@ namespace RobotSystem
             int result = -1;
             switch (Job)
             {
-                case PlayJob.Warrior: // 1=野蛮冲撞 2=无法攻击到目标需要移动 3=走位
+                case PlayerJob.Warrior: // 1=野蛮冲撞 2=无法攻击到目标需要移动 3=走位
                     if (DoThinkMotaeboPos(magicId))
                     {
                         result = 1;
@@ -167,7 +167,7 @@ namespace RobotSystem
                         }
                     }
                     break;
-                case PlayJob.Wizard:
+                case PlayerJob.Wizard:
                     if (magicId == 8 && MagPushArround(magicId, magicId))
                     {
                         return result;
@@ -199,7 +199,7 @@ namespace RobotSystem
                         }
                     }
                     break;
-                case PlayJob.Taoist:
+                case PlayerJob.Taoist:
                     if (magicId == 48 && MagPushArround(magicId, magicId))
                     {
                         return result;

@@ -26,8 +26,8 @@ namespace RobotSystem
             NoDropItem = conf.ReadWriteBool("Info", "NoDropItem", true);// 是否掉包裹物品
             NoDropUseItem = conf.ReadWriteBool("Info", "DropUseItem", true);// 是否掉装备
             DropUseItemRate = conf.ReadWriteInteger("Info", "DropUseItemRate", 100);// 掉装备机率
-            Job = (PlayJob)conf.ReadWriteInteger("Info", "Job", 0);
-            Gender = Enum.Parse<PlayGender>(conf.ReadWriteString("Info", "Gender", "0"));
+            Job = (PlayerJob)conf.ReadWriteInteger("Info", "Job", 0);
+            Gender = Enum.Parse<PlayerGender>(conf.ReadWriteString("Info", "Gender", "0"));
             Hair = (byte)conf.ReadWriteInteger("Info", "Hair", 0);
             Abil.Level = (byte)conf.ReadWriteInteger("Info", "Level", 1);
             Abil.MaxExp = GetLevelExp(Abil.Level);

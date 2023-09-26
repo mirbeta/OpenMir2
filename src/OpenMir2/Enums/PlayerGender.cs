@@ -1,6 +1,6 @@
 ﻿namespace SystemModule.Enums
 {
-    public enum PlayGender : byte
+    public enum PlayerGender : byte
     {
         Man = 0,
         WoMan = 1
