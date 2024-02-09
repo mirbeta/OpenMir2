@@ -1,5 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
-using System.Text;
+﻿using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LoginSrv
@@ -10,7 +10,7 @@ namespace LoginSrv
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var serviceRunner = new AppServer();
-            await serviceRunner.RunAsync();
+            await serviceRunner.StartAsync(CancellationToken.None);
         }
     }
 }

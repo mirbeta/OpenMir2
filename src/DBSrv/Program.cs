@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using Spectre.Console;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace DBSrv
@@ -12,7 +13,7 @@ namespace DBSrv
             PrintUsage();
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
             var serviceRunner = new AppServer();
-            await serviceRunner.RunAsync();
+            await serviceRunner.StartAsync(CancellationToken.None);
         }
 
         private static void PrintUsage()

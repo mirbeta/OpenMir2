@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
 using System.Runtime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace SelGate
@@ -13,7 +14,7 @@ namespace SelGate
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
             var serviceRunner = new AppServer();
-            await serviceRunner.RunAsync();
+            await serviceRunner.StartAsync(CancellationToken.None);
         }
     }
 }
