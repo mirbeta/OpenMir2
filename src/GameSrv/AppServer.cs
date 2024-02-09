@@ -66,7 +66,8 @@ namespace GameSrv
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            await Builder.StartAsync(cancellationToken);
+            Host = await Builder.StartAsync(cancellationToken);
+            await Host.RunAsync(cancellationToken);
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)

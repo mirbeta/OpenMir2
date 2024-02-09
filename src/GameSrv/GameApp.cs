@@ -14,6 +14,7 @@ using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using ScriptSystem;
+using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using SystemModule;
@@ -66,10 +67,10 @@ namespace GameSrv
             M2Share.AccountSession = new AccountSessionService();
             M2Share.ScriptEngine = new ScriptEngine();
             M2Share.AutoBot = new RobotManage();
-            InitializeModule(serviceProvider);
+            InitializeSystem(serviceProvider);
         }
 
-        private void InitializeModule(IServiceProvider serviceProvider)
+        private static void InitializeSystem(IServiceProvider serviceProvider)
         {
             SystemShare.HumLimit = 30;
             SystemShare.MonLimit = 30;
@@ -77,10 +78,10 @@ namespace GameSrv
             SystemShare.NpcLimit = 5;
             SystemShare.SocLimit = 10;
             SystemShare.DecLimit = 20;
-            SystemShare.Config.nLoadDBErrorCount = 0;
-            SystemShare.Config.nLoadDBCount = 0;
-            SystemShare.Config.nSaveDBCount = 0;
-            SystemShare.Config.nDBQueryID = 0;
+            SystemShare.Config.LoadDBErrorCount = 0;
+            SystemShare.Config.LoadDBCount = 0;
+            SystemShare.Config.SaveDBCount = 0;
+            SystemShare.Config.DBQueryID = 0;
             SystemShare.Config.ItemNumber = 0;
             SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
             SystemShare.FilterWord = true;

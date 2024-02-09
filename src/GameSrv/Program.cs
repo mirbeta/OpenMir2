@@ -12,7 +12,7 @@ namespace GameSrv
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;//强制压缩大对象堆 LOH
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
             AppServer serviceRunner = new AppServer();
-            await serviceRunner.RunAsync();
+            await serviceRunner.StartAsync(CancellationToken.None);
         }
     }
 }

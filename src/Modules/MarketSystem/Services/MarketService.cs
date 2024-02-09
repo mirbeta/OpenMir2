@@ -294,7 +294,7 @@ namespace MarketSystem
                     var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                     if (queryId <= 0 || responsePacket.Sign.Length <= 0)
                     {
-                        SystemShare.Config.nLoadDBErrorCount++;
+                        SystemShare.Config.LoadDBErrorCount++;
                         return;
                     }
                     var signatureBuff = BitConverter.GetBytes(queryId);
@@ -387,7 +387,7 @@ namespace MarketSystem
                     else
                     {
                         _logger.Warn("非法拍卖行数据封包，解析失败...");
-                        SystemShare.Config.nLoadDBErrorCount++;
+                        SystemShare.Config.LoadDBErrorCount++;
                     }
                 }
             }

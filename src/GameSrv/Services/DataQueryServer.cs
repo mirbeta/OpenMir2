@@ -212,7 +212,7 @@ namespace GameSrv.Services
                         var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                         if (queryId <= 0 || responsePacket.Sign.Length <= 0)
                         {
-                            SystemShare.Config.nLoadDBErrorCount++;
+                            SystemShare.Config.LoadDBErrorCount++;
                             return;
                         }
                         var signatureBuff = BitConverter.GetBytes(queryId);
@@ -223,7 +223,7 @@ namespace GameSrv.Services
                         }
                         else
                         {
-                            SystemShare.Config.nLoadDBErrorCount++;
+                            SystemShare.Config.LoadDBErrorCount++;
                         }
                     }
                 }

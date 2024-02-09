@@ -87,7 +87,7 @@ namespace GameSrv.Services
             {
                 result = true;
             }
-            SystemShare.Config.nLoadDBCount++;
+            SystemShare.Config.LoadDBCount++;
             return result;
         }
 
@@ -97,7 +97,7 @@ namespace GameSrv.Services
         /// <returns></returns>
         public static bool SaveCharacterData(SavePlayerRcd saveRcd, ref int queryId)
         {
-            SystemShare.Config.nSaveDBCount++;
+            SystemShare.Config.SaveDBCount++;
             return SaveRcd(saveRcd, ref queryId);
         }
 
@@ -183,12 +183,12 @@ namespace GameSrv.Services
 
         private static int GetQueryId()
         {
-            SystemShare.Config.nDBQueryID++;
-            if (SystemShare.Config.nDBQueryID > int.MaxValue - 1)
+            SystemShare.Config.DBQueryID++;
+            if (SystemShare.Config.DBQueryID > int.MaxValue - 1)
             {
-                SystemShare.Config.nDBQueryID = 1;
+                SystemShare.Config.DBQueryID = 1;
             }
-            return SystemShare.Config.nDBQueryID;
+            return SystemShare.Config.DBQueryID;
         }
     }
 }

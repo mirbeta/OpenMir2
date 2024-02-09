@@ -32,10 +32,7 @@ namespace SystemModule
             return _generateQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
         }
 
-        public int GetGenerateQueueCount()
-        {
-            return _generateQueue.Count;
-        }
+        public int GenerateQueueCount => _generateQueue.Count;
 
         public void AddToQueue(int sequence)
         {

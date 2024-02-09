@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace SystemModule.Hosts
 {
-    public abstract class ServiceHost : IHost
+    public abstract class ServiceHost 
     {
         private readonly ILogger Logger;
         protected readonly IConfigurationRoot Configuration;
@@ -39,7 +39,7 @@ namespace SystemModule.Hosts
             Initialize();
         }
 
-        public IServiceProvider Services => Host?.Services;
+        public IServiceProvider Services => Host.Services;
 
         public abstract void Initialize();
 

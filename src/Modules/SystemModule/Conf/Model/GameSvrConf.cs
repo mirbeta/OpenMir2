@@ -1140,13 +1140,13 @@ namespace SystemModule
         /// </summary>
         public int ProcessMonsterInterval;
         public bool boCheckFail;
-        public int nLoadDBCount;
-        public int nLoadDBErrorCount;
-        public int nSaveDBCount;
-        public int nDBQueryID;
-        public int nClientFile1_CRC;
-        public int nClientFile2_CRC;
-        public int nClientFile3_CRC;
+        public int LoadDBCount;
+        public int LoadDBErrorCount;
+        public int SaveDBCount;
+        public int DBQueryID;
+        public int ClientFile1_CRC;
+        public int ClientFile2_CRC;
+        public int ClientFile3_CRC;
         /// <summary>
         /// 不可保存的变量 I
         /// </summary>

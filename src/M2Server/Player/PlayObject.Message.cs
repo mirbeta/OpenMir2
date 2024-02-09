@@ -1682,7 +1682,7 @@ namespace M2Server.Player
                     RefUserState();
                     SendMapDescription();
                     SendGoldInfo(true);
-                    ClientMsg = Messages.MakeMessage(Messages.SM_VERSION_FAIL, SystemShare.Config.nClientFile1_CRC, HUtil32.LoWord(SystemShare.Config.nClientFile2_CRC), HUtil32.HiWord(SystemShare.Config.nClientFile2_CRC), 0);
+                    ClientMsg = Messages.MakeMessage(Messages.SM_VERSION_FAIL, SystemShare.Config.ClientFile1_CRC, HUtil32.LoWord(SystemShare.Config.ClientFile2_CRC), HUtil32.HiWord(SystemShare.Config.ClientFile2_CRC), 0);
                     SendSocket(ClientMsg, "<<<<<<");
                     break;
                 case Messages.RM_HEAR:

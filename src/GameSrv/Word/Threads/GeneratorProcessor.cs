@@ -39,7 +39,7 @@ namespace GameSrv.Word.Threads
 
         private void GenerateIdThread()
         {
-            if (SystemShare.ActorMgr.GetGenerateQueueCount() < 20000)
+            if (SystemShare.ActorMgr.GenerateQueueCount < 20000)
             {
                 sw.Reset();
                 sw.Start();
@@ -65,7 +65,7 @@ namespace GameSrv.Word.Threads
                     SystemShare.ActorMgr.AddToQueue(sequence);
                 }
                 sw.Stop();
-                _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{SystemShare.ActorMgr.GetGenerateQueueCount()}]");
+                _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{SystemShare.ActorMgr.GenerateQueueCount}]");
             }
         }
     }
