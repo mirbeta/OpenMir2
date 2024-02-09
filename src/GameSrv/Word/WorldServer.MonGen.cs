@@ -136,7 +136,7 @@ namespace GameSrv.Word
         }
 
         /// <summary>
-        /// 初始化怪物运行线程
+        /// 初始化怪物线程
         /// </summary>
         public void InitializationMonsterThread()
         {

@@ -1,4 +1,4 @@
-using GameSrv.DataSource;
+using GameSrv.DB;
 using GameSrv.Maps;
 using GameSrv.Module;
 using GameSrv.Services;
@@ -18,7 +18,7 @@ namespace GameSrv
         public static readonly long StartTime;
         public static readonly WordStatistics Statistics;
         public static readonly LocalDb LocalDb;
-        public static readonly CommonDB CommonDb;
+        public static readonly MySqlDB CommonDb;
         public static readonly IPlanesService PlanesService;
         public static readonly NetworkMonitor NetworkMonitor;
         public static readonly SystemProcessor SystemProcess;
@@ -37,7 +37,7 @@ namespace GameSrv
         {
             Statistics = new WordStatistics();
             LocalDb = new LocalDb();
-            CommonDb = new CommonDB();
+            CommonDb = new MySqlDB();
             NetworkMonitor = new NetworkMonitor();
             SystemProcess = new SystemProcessor();
             UserProcessor = new UserProcessor();

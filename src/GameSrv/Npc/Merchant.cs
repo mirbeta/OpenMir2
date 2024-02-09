@@ -1,4 +1,4 @@
-﻿using GameSrv.DataSource;
+﻿using GameSrv.DB;
 using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
@@ -1701,7 +1701,7 @@ namespace GameSrv.NPC
             UpgradeWeaponList.Clear();
             try
             {
-                CommonDB.LoadUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
+                MySqlDB.LoadUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {
@@ -1713,7 +1713,7 @@ namespace GameSrv.NPC
         {
             try
             {
-                CommonDB.SaveUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
+                MySqlDB.SaveUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {

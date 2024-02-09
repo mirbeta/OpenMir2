@@ -8,6 +8,9 @@ namespace SystemModule
     {
         void Initialize();
 
+        /// <summary>
+        /// 初始化怪物线程（怪物刷新 行动等都在此进行初始化）
+        /// </summary>
         void InitializationMonsterThread();
 
         void InitializeMonster();
