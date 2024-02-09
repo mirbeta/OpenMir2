@@ -7,16 +7,16 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Collections.Pooled" Version="1.0.82" />
+        <PackageReference Include="Collections.Pooled" Version="2.0.0-preview.27" />
         <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-        <PackageReference Include="MySqlConnector" Version="2.2.7" />
-        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
-        <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-        <PackageReference Include="Spectre.Console" Version="0.47.0" />
-        <PackageReference Include="NLog" Version="5.2.4" />
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+        <PackageReference Include="MySqlConnector" Version="2.3.5" />
+        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+        <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20" />
+        <PackageReference Include="NLog" Version="5.2.8" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
     </ItemGroup>
     
     <ItemGroup>

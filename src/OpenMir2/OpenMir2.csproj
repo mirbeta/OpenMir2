@@ -19,12 +19,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="MemoryPack" Version="1.9.16" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-      <PackageReference Include="NLog" Version="5.2.4" />
-      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.4" />
-      <PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
+      <PackageReference Include="MemoryPack" Version="1.10.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+      <PackageReference Include="NLog" Version="5.2.8" />
+      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
+      <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
     </ItemGroup>
 
     <ItemGroup>
