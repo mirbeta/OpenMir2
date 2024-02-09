@@ -53,7 +53,7 @@ namespace M2Server.Guild
         /// </summary>
         public ArrayList NoticeList { get; set; }
         public IList<WarGuild> GuildWarList { get; set; }
-        public IList<GuildInfo> GuildAllList { get; set; }
+        public IList<IGuild> GuildAllList { get; set; }
         /// <summary>
         /// 职位列表
         /// </summary>
@@ -71,9 +71,6 @@ namespace M2Server.Guild
         /// 行会变量
         /// </summary>
         public Dictionary<string, DynamicVar> DynamicVarList { get; set; }
-        IList<SystemModule.WarGuild> IGuild.GuildWarList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-        IList<SystemModule.GuildInfo> IGuild.GuildAllList { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-
         /// <summary>
         /// 建筑度
         /// </summary>
@@ -107,7 +104,7 @@ namespace M2Server.Guild
             GuildName = sName;
             NoticeList = new ArrayList();
             GuildWarList = new List<WarGuild>();
-            GuildAllList = new List<GuildInfo>();
+            GuildAllList = new List<IGuild>();
             RankList = new List<GuildRank>();
             TeamFightDeadList = new ArrayList();
             DwSaveTick = 0;

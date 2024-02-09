@@ -927,31 +927,6 @@ namespace M2Server.Castle
             _techLevel = nLevel;
         }
 
-        public bool IsAttackAllyGuild(SystemModule.GuildInfo Guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsAttackGuild(SystemModule.GuildInfo Guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsDefenseAllyGuild(SystemModule.GuildInfo guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsDefenseGuild(SystemModule.GuildInfo guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsMasterGuild(SystemModule.GuildInfo guild)
-        {
-            throw new NotImplementedException();
-        }
-
         public bool IsAttackAllyGuild(IGuild Guild)
         {
             throw new NotImplementedException();

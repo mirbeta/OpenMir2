@@ -23,7 +23,7 @@ namespace CommandSystem.Commands
             PlayerActor.SysMsg("开始行会争霸赛。", MsgColor.Red, MsgType.Hint);
             IList<IPlayerActor> list10 = new List<IPlayerActor>();
             IList<IPlayerActor> list14 = new List<IPlayerActor>();
-            IList<GuildInfo> guildList = new List<GuildInfo>();
+            IList<IGuild> guildList = new List<IGuild>();
             SystemShare.WorldEngine.GetMapRageHuman(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, ref list10);
             for (var i = 0; i < list10.Count; i++)
             {

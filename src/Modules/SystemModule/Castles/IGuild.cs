@@ -17,9 +17,13 @@ namespace SystemModule
         bool EnableAuthAlly { get; set; }
         Dictionary<string, DynamicVar> DynamicVarList { get; set; }
         ArrayList NoticeList { get; set; }
+
         IList<WarGuild> GuildWarList { get; set; }
-        IList<GuildInfo> GuildAllList { get; set; }
+
+        IList<IGuild> GuildAllList { get; set; }
+
         IList<GuildRank> RankList { get; set; }
+
         void AddMember(IPlayerActor playObject);
         void AddTeamFightMember(string sHumanName);
         WarGuild AddWarGuild(IGuild guild);

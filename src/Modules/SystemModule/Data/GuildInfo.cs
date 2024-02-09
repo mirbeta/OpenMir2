@@ -1,10 +1,5 @@
 ﻿namespace SystemModule
 {
-    public class GuildInfo
-    {
-
-    }
-
     public class GuildRank
     {
         public short RankNo;

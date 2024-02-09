@@ -2,6 +2,7 @@ using GameSrv.Services;
 using M2Server;
 using M2Server.Actor;
 using M2Server.Event.Events;
+using M2Server.Guild;
 using M2Server.Player;
 using NLog;
 using PlanesSystem;
@@ -11,7 +12,6 @@ using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using GuildInfo = M2Server.Guild.GuildInfo;
 
 namespace GameSrv.Word
 {
@@ -1757,7 +1757,7 @@ namespace GameSrv.Word
             }
         }
 
-        public void GuildMemberReGetRankName(GuildInfo guild)
+        public void GuildMemberReGetRankName(IGuild guild)
         {
             short nRankNo = 0;
             for (var i = 0; i < PlayObjectList.Count; i++)
