@@ -9,8 +9,6 @@ namespace M2Server
 
         void Run();
 
-        void CheckConnected();
-
         void Close();
 
         AccountSession GetAdmission(string account, string paddr, int sessionId, ref int payMode, ref int payMent, ref long playTime);

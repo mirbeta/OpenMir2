@@ -21,7 +21,7 @@ namespace GameGate.Services
         private readonly object _syncObj;
         private ClientThread ClientThread { get; set; }
         private SendQueue SendQueue { get; set; }
-        private IList<DelayMessage> MsgList { get; set; }
+        private List<DelayMessage> MsgList { get; set; }
         private int LastDirection { get; set; }
         private bool HandleLogin { get; set; }
         private bool KickFlag { get; set; }
@@ -36,6 +36,10 @@ namespace GameGate.Services
         /// </summary>
         private string SessionKey { get; set; }
         private long FinishTick { get; set; }
+
+        /// <summary>
+        /// ServerMessage
+        /// </summary>
         private ServerMessage SendMsg;
 
         public ClientSession(byte serviceId, SessionInfo session, ClientThread clientThread, SendQueue sendQueue)
@@ -76,9 +80,10 @@ namespace GameGate.Services
             Session.Socket.Close();
         }
 
-        private readonly byte[] httpSpan = HUtil32.GetBytes("http://");
-        private readonly byte[] commandFlagSpan = HUtil32.GetBytes("@");
-        private readonly byte[] whisperFlagSpan = HUtil32.GetBytes("/");
+        private readonly byte[] _httpSpan = HUtil32.GetBytes("http://");
+        private readonly byte[] _httpsSpan = HUtil32.GetBytes("https://");
+        private readonly byte[] _commandFlagSpan = HUtil32.GetBytes("@");
+        private readonly byte[] _whisperFlagSpan = HUtil32.GetBytes("/");
 
         /// <summary>
         /// 处理客户端封包
@@ -92,11 +97,11 @@ namespace GameGate.Services
                 KickFlag = false;
                 return;
             }
-            var destinationSpan = new Span<byte>(messagePacket.Data.ToPointer(), messagePacket.BuffLen);
+            var destinationSpan = messagePacket.Data.AsSpan();
             var packetLen = messagePacket.BuffLen;
             if (Config.IsDefenceCCPacket && (packetLen >= 5))
             {
-                if (destinationSpan[..7].SequenceEqual(httpSpan))
+                if (destinationSpan[..7].SequenceEqual(_httpSpan))
                 {
                     //HTTP封包，直接丢弃
                     //if (LogManager.g_pLogMgr.CheckLevel(6))
@@ -106,6 +111,10 @@ namespace GameGate.Services
                     //Misc.KickUser(m_pUserOBJ.nIPAddr);
                     KickFlag = false;
                     return;
+                }
+                if (destinationSpan[..7].SequenceEqual(_httpsSpan))
+                {
+                    KickFlag = false;
                 }
             }
             if ((Stat == CheckStep.CheckLogin) || (Stat == CheckStep.SendCheck))
@@ -473,7 +482,7 @@ namespace GameGate.Services
                         var msgContent = decodeBuff[12..];
                         if (Config.IsChatInterval)
                         {
-                            if (!msgContent.StartsWith(commandFlagSpan))
+                            if (!msgContent.StartsWith(_commandFlagSpan))
                             {
                                 currentTick = HUtil32.GetTickCount();
                                 if (currentTick - gameSpeed.SayMsgTick < Config.ChatInterval)
@@ -485,7 +494,7 @@ namespace GameGate.Services
                         }
                         if (deCodeLen > GateShare.CommandFixedLength)
                         {
-                            if (msgContent.StartsWith(commandFlagSpan))
+                            if (msgContent.StartsWith(_commandFlagSpan))
                             {
                                 var pszChatBuffer = new byte[255];
                                 var pszChatCmd = string.Empty;
@@ -536,7 +545,7 @@ namespace GameGate.Services
                             }
                             else if (Config.IsChatFilter)
                             {
-                                if (msgContent.StartsWith(whisperFlagSpan))
+                                if (msgContent.StartsWith(_whisperFlagSpan))
                                 {
                                     var pszChatBuffer = new byte[255];
                                     var pszChatCmd = string.Empty;
@@ -565,7 +574,7 @@ namespace GameGate.Services
                                     //    //}
                                     //}
                                 }
-                                else if (!msgContent.StartsWith(commandFlagSpan))
+                                else if (!msgContent.StartsWith(_commandFlagSpan))
                                 {
                                     var pszChatBuffer = new byte[255];
                                     MemoryCopy.BlockCopy(destinationSpan, GateShare.CommandFixedLength, pszChatBuffer, 0, deCodeLen - GateShare.CommandFixedLength);
@@ -822,7 +831,7 @@ namespace GameGate.Services
             var count = 0;
             while (MsgList.Count > count)
             {
-                DelayMessage msg = MsgList[count];
+                var msg = MsgList[count];
                 if (msg.DelayTime != 0 && HUtil32.GetTickCount() < msg.DelayTime)
                 {
                     count++;
@@ -846,10 +855,10 @@ namespace GameGate.Services
         /// </summary>
         private void SendDelayMsg(int magicId, byte nDir, int nIdx, int nLen, byte[] pMsg, int delayTime)
         {
-            const int delayBufferLen = 1024;
+            const ushort delayBufferLen = 1024;
             if (nLen > 0 && nLen <= delayBufferLen)
             {
-                var pDelayMsg = new DelayMessage
+                var delayMsg = new DelayMessage
                 {
                     Mag = magicId,
                     Dir = nDir,
@@ -858,9 +867,8 @@ namespace GameGate.Services
                     BufLen = nLen,
                     Buffer = pMsg
                 };
-                MsgList.Add(pDelayMsg);
+                MsgList.Add(delayMsg);
             }
-
             if (magicId > 0)
             {
                 Logger.Debug($"发送延时处理消息:User:[{_session.ChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
@@ -885,20 +893,28 @@ namespace GameGate.Services
             var bufferLen = message.BuffLen;
             if (bufferLen < 0)//小包 走路 攻击等
             {
-                var buffLen = -bufferLen;
-                Span<byte> sendBuffer = stackalloc byte[buffLen + 2];//小包用完即释放
-                var destinationSpan = new byte[buffLen + 2];
+                /*var buffLen = -bufferLen;
+                Span<byte> sendBuffer = new byte[buffLen + 2];//小包用完即释放
                 sendBuffer[0] = (byte)'#';//消息头
-                MemoryCopy.BlockCopy(message.Buffer, 0, sendBuffer, 1, buffLen);
+                message.Buffer.AsSpan().CopyTo(sendBuffer[1..]);
                 sendBuffer[buffLen + 1] = (byte)'!';//消息结尾
+                _session.Socket.Send(sendBuffer, SocketFlags.None);*/
+                var buffLen = -bufferLen;
+                // 使用 Span<byte> 替代 byte[]
+                Span<byte> sendBuffer = stackalloc byte[buffLen + 2];
+                // 消息头
+                sendBuffer[0] = (byte)'#';
+                // 消息内容
+                message.Buffer.CopyTo(sendBuffer[1..]);
+                // 消息结尾
+                sendBuffer[buffLen + 1] = (byte)'!';
                 _session.Socket.Send(sendBuffer, SocketFlags.None);
-                return;
             }
             else
             {
                 var sendMsg = GateShare.PacketMessagePool.Pop(); //大包走对象池,从队列发出去
                 sendMsg.ServiceId = serviceId;
-                sendMsg.ConnectionId = (ushort)_session.ConnectionId;
+                sendMsg.ConnectionId = _session.ConnectionId;
                 sendMsg.SessionId = message.SessionId;
                 var sendLen = bufferLen + CommandMessage.Size;
 
@@ -1205,6 +1221,7 @@ namespace GameGate.Services
                         SessionIndex = _session.SessionIndex,
                         PackLength = encodeLen + 3
                     };
+                    
                     var packetBuff = SerializerUtil.Serialize(packetHeader);
                     MemoryCopy.BlockCopy(packetBuff, 0, loginDataPacket, 0, packetBuff.Length);
 

@@ -5,7 +5,7 @@ namespace SystemModule.MemoryPool
 {
     public sealed class FixedLengthMemoryPool<T> : MemoryPool<T>
     {
-        public static new FixedLengthMemoryPool<T> Shared { get; } = new FixedLengthMemoryPool<T>();
+        public new static FixedLengthMemoryPool<T> Shared { get; } = new FixedLengthMemoryPool<T>();
 
         protected override void Dispose(bool disposing) { }
 

@@ -15,7 +15,7 @@ namespace LoginGate.Conf
             GameGates = new GameGateInfo[32];
             for (var i = 0; i < GameGates.Length; i++)
             {
-                GameGates[i].LoginAdress = "127.0.0.1";
+                GameGates[i].LoginServer = "127.0.0.1";
                 GameGates[i].LoginPort = 5500;
                 GameGates[i].GateAddress = "127.0.0.1";
                 GameGates[i].GatePort = 7000 + i;
@@ -47,7 +47,7 @@ namespace LoginGate.Conf
             GetConfig.ShowDebug = ReadWriteBool("LoginGate", "ShowDebug", GetConfig.ShowDebug);
             for (var i = 0; i < GetConfig.GateCount; i++)
             {
-                GameGates[i].LoginAdress = ReadWriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginAdress);
+                GameGates[i].LoginServer = ReadWriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginServer);
                 GameGates[i].LoginPort = ReadWriteInteger("LoginGate", "ServerPort" + i, GameGates[i].LoginPort);
                 GameGates[i].GateAddress = ReadWriteString("LoginGate", "GateAddr" + i, GameGates[i].GateAddress);
                 GameGates[i].GatePort = ReadWriteInteger("LoginGate", "GatePort" + i, GameGates[i].GatePort);
@@ -75,7 +75,7 @@ namespace LoginGate.Conf
             WriteBool("LoginGate", "ShowDebug", GetConfig.ShowDebug);
             for (var i = 0; i < GetConfig.GateCount; i++)
             {
-                WriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginAdress);
+                WriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginServer);
                 WriteInteger("LoginGate", "ServerPort" + i, GameGates[i].LoginPort);
                 WriteString("LoginGate", "GateAddr" + i, GameGates[i].GateAddress);
                 WriteInteger("LoginGate", "GatePort" + i, GameGates[i].GatePort);
@@ -89,7 +89,7 @@ namespace LoginGate.Conf
         /// <summary>
         /// 服务器地址
         /// </summary>
-        public string LoginAdress;
+        public string LoginServer;
         /// <summary>
         /// 服务器端口 默认值：5500
         /// </summary>

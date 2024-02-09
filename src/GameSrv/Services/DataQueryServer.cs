@@ -1,11 +1,11 @@
-﻿using M2Server;
+﻿using System.Net;
+using M2Server;
 using NLog;
-using System.Net;
-using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace GameSrv.Services
 {
@@ -15,50 +15,47 @@ namespace GameSrv.Services
     public class DataQueryServer
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ScoketClient _clientSocket;
+        private readonly TcpClient _tcpClient;
         private byte[] ReceiveBuffer { get; set; }
         private int BuffLen { get; set; }
         private bool SocketWorking { get; set; }
 
         public DataQueryServer()
         {
-            _clientSocket = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort), 4096);
-            _clientSocket.OnConnected += DataScoketConnected;
-            _clientSocket.OnDisconnected += DataScoketDisconnected;
-            _clientSocket.OnReceivedData += DataSocketRead;
-            _clientSocket.OnError += DataSocketError;
+            _tcpClient.Setup(new TouchSocketConfig()
+                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort))
+                .ConfigureContainer(a =>
+                {
+                    a.AddConsoleLogger(); //添加一个日志注入
+                }));
+            
+            _tcpClient.Connected = DataScoketConnected; 
+            _tcpClient.Disconnected = DataScoketDisconnected;
+            _tcpClient.Received = DataSocketRead;
             SocketWorking = false;
             ReceiveBuffer = new byte[10 * 2048];
         }
 
         public void Start()
         {
-            _clientSocket.Connect();
+            _tcpClient.Connect();
         }
 
         public void Stop()
         {
-            _clientSocket.Disconnect();
+            _tcpClient.Close();
         }
 
-        public bool IsConnected => _clientSocket.IsConnected;
+        public bool IsConnected => _tcpClient.Online;
 
         public void CheckConnected()
         {
-            if (_clientSocket.IsConnected)
-            {
-                return;
-            }
-            if (_clientSocket.IsBusy)
-            {
-                return;
-            }
-            _clientSocket.Connect(SystemShare.Config.sDBAddr, SystemShare.Config.nDBPort);
+            _tcpClient.Connect(SystemShare.Config.sDBAddr, SystemShare.Config.nDBPort);
         }
 
         public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
         {
-            if (!_clientSocket.IsConnected)
+            if (!_tcpClient.Online)
             {
                 return false;
             }
@@ -83,45 +80,28 @@ namespace GameSrv.Services
             var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
-            _clientSocket.Send(data);
+            _tcpClient.Send(data);
         }
 
-        private void DataScoketDisconnected(object sender, DSCClientConnectedEventArgs e)
+        private Task DataScoketDisconnected(ITcpClientBase sender, DisconnectEventArgs e)
         {
-            _clientSocket.IsConnected = false;
-            _logger.Error("数据库服务器[" + e.RemoteEndPoint + "]断开连接...");
+            _logger.Error("数据库服务器[" + sender.GetIPPort() + "]断开连接...");
+            return Task.CompletedTask;
         }
 
-        private void DataScoketConnected(object sender, DSCClientConnectedEventArgs e)
+        private Task DataScoketConnected(ITcpClient client, ConnectedEventArgs e)
         {
-            _clientSocket.IsConnected = true;
-            _logger.Info("数据库服务器[" + e.RemoteEndPoint + "]连接成功...");
+            _logger.Info("数据库服务器[" + client.RemoteIPHost + "]连接成功...");
+            return Task.CompletedTask;
         }
 
-        private void DataSocketError(object sender, DSCClientErrorEventArgs e)
-        {
-            _clientSocket.IsConnected = false;
-            switch (e.ErrorCode)
-            {
-                case SocketError.ConnectionRefused:
-                    _logger.Error("数据库服务器[" + SystemShare.Config.sDBAddr + ":" + SystemShare.Config.nDBPort + "]拒绝链接...");
-                    break;
-                case SocketError.ConnectionReset:
-                    _logger.Error("数据库服务器[" + SystemShare.Config.sDBAddr + ":" + SystemShare.Config.nDBPort + "]关闭连接...");
-                    break;
-                case SocketError.TimedOut:
-                    _logger.Error("数据库服务器[" + SystemShare.Config.sDBAddr + ":" + SystemShare.Config.nDBPort + "]链接超时...");
-                    break;
-            }
-        }
-
-        private void DataSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task DataSocketRead(TcpClient sender, ReceivedDataEventArgs e)
         {
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
-                var nMsgLen = e.BuffLen;
-                var packetData = e.Buff;
+                var nMsgLen = e.ByteBlock.Len;
+                var packetData = e.ByteBlock.Buffer;
                 if (BuffLen > 0)
                 {
                     MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
@@ -140,6 +120,7 @@ namespace GameSrv.Services
             {
                 HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
             }
+            return Task.CompletedTask;
         }
 
         private void ProcessServerPacket(Span<byte> buff, int buffLen)

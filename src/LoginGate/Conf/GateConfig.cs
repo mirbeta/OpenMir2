@@ -39,7 +39,7 @@ namespace LoginGate.Conf
             GameGateList = new GameGateInfo[32];
             for (var i = 0; i < GameGateList.Length; i++)
             {
-                GameGateList[i].LoginAdress = "127.0.0.1";
+                GameGateList[i].LoginServer = "127.0.0.1";
                 GameGateList[i].LoginPort = 5500;
                 GameGateList[i].GatePort = 7000 + i;
             }

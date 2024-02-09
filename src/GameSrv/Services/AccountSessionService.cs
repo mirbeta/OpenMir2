@@ -2,11 +2,11 @@ using M2Server;
 using NLog;
 using System.Collections;
 using System.Net;
-using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace GameSrv.Services
 {
@@ -17,75 +17,52 @@ namespace GameSrv.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IList<AccountSession> _sessionList;
-        private readonly ScoketClient _clientScoket;
+        private readonly TcpClient _tcpClient;
         private readonly object UserIDSection;
         private string SocketRecvText = string.Empty;
         private bool SocketConnected = false;
 
         public AccountSessionService()
         {
-            _clientScoket = new ScoketClient();
+            _tcpClient = new TcpClient();
             _sessionList = new List<AccountSession>();
             UserIDSection = new object();
         }
 
-        public void CheckConnected()
+        public void Initialize()
         {
-            if (_clientScoket.IsConnected)
-            {
-                return;
-            }
-            if (_clientScoket.IsBusy)
-            {
-                return;
-            }
-            _clientScoket.Connect(new IPEndPoint(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort));
+            _tcpClient.Setup(new TouchSocketConfig()
+                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort))
+                .ConfigureContainer(a =>
+                {
+                    a.AddConsoleLogger(); //添加一个日志注入
+                }));
+            _tcpClient.Connected = DataSocketConnect; //成功连接到服务器
+            _tcpClient.Disconnected = DataSocketDisconnect; //从服务器断开连接，当连接不成功时不会触发。
+            _tcpClient.Received = DataSocketRead;
+            _logger.Debug("登录服务器连接初始化完成...");
+            _tcpClient.Connect();
         }
 
-        private void DataSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task DataSocketRead(TcpClient sender, ReceivedDataEventArgs e)
         {
             HUtil32.EnterCriticalSection(UserIDSection);
             try
             {
-                SocketRecvText += HUtil32.GetString(e.Buff, 0, e.BuffLen);
+                SocketRecvText += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
             }
             finally
             {
                 HUtil32.LeaveCriticalSection(UserIDSection);
             }
-        }
-
-        private void DataSocketError(object sender, DSCClientErrorEventArgs e)
-        {
-            switch (e.ErrorCode)
-            {
-                case SocketError.ConnectionRefused:
-                    _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]拒绝链接...");
-                    break;
-                case SocketError.ConnectionReset:
-                    _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]关闭连接...");
-                    break;
-                case SocketError.TimedOut:
-                    _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]链接超时...");
-                    break;
-            }
-        }
-
-        public void Initialize()
-        {
-            _clientScoket.OnConnected += DataSocketConnect;
-            _clientScoket.OnDisconnected += DataSocketDisconnect;
-            _clientScoket.OnError += DataSocketError;
-            _clientScoket.OnReceivedData += DataSocketRead;
-            CheckConnected();
-            _logger.Debug("登录服务器连接初始化完成...");
+            return Task.CompletedTask;
         }
 
         public void SendSocket(string sSendMsg)
         {
-            if (_clientScoket == null || !_clientScoket.IsConnected) return;
+            if (_tcpClient == null || !_tcpClient.Online) return;
             byte[] data = HUtil32.GetBytes(sSendMsg);
-            _clientScoket.Send(data);
+            _tcpClient.Send(data);
         }
 
         public void SendHumanLogOutMsg(string sUserId, int nId)
@@ -427,14 +404,15 @@ namespace GameSrv.Services
             M2Share.nGrossResetCnt = HUtil32.StrToInt(s1C, 0);*/
         }
 
-        private void DataSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task DataSocketConnect(ITcpClient client, ConnectedEventArgs e)
         {
             SocketConnected = true;
-            _logger.Info("登录服务器[" + _clientScoket.RemoteEndPoint + "]连接成功...");
+            _logger.Info("登录服务器[" + client.RemoteIPHost + "]连接成功...");
             SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
+            return Task.CompletedTask;
         }
 
-        private void DataSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private Task DataSocketDisconnect(ITcpClientBase sender, DisconnectEventArgs e)
         {
             // if (!Settings.Config.boIDSocketConnected)
             // {
@@ -442,13 +420,13 @@ namespace GameSrv.Services
             // }
             ClearSession();
             SocketConnected = false;
-            _clientScoket.IsConnected = false;
-            _logger.Error("登录服务器[" + _clientScoket.RemoteEndPoint + "]断开连接...");
+            _logger.Error("登录服务器[" + sender.IP + "]断开连接...");
+            return Task.CompletedTask;
         }
 
         public void Close()
         {
-            _clientScoket.Disconnect();
+            _tcpClient.Close();
         }
 
         public int GetSessionCount()

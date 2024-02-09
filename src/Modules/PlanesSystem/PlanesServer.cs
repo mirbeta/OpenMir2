@@ -1,13 +1,8 @@
 using System.Net;
 using System.Net.Sockets;
 using SystemModule;
-using SystemModule.ByteManager;
-using SystemModule.Core.Config;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace PlanesSystem
 {
@@ -133,21 +128,17 @@ namespace PlanesSystem
             }
         }
 
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
-            var client = (SocketClient)sender;
-            if (int.TryParse(client.ID, out var clientId))
+            if (int.TryParse(socketClient.Id, out var clientId))
             {
                 var serverInfo = srvArray[clientId - 1];
-                serverInfo.SocData = serverInfo.SocData + HUtil32.GetString(byteBlock.Buffer, 0, (int)byteBlock.Length);
+                serverInfo.SocData += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
             }
-            else
-            {
-                //_logger.Info("未知客户端...");
-            }
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(object sender, TouchSocketEventArgs e)
         {
             var client = (SocketClient)sender;
             var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
@@ -159,15 +150,16 @@ namespace PlanesSystem
                     serverMsgInfo = new TServerMsgInfo();
                     serverMsgInfo.Socket = client.MainSocket;
                     serverMsgInfo.SocData = string.Empty;
-                    serverMsgInfo.SocketId = client.ID;
+                    serverMsgInfo.SocketId = client.Id;
                     //M2Share.Logger.Info($"节点服务器({endPoint})链接成功...");
                     srvArray[i] = serverMsgInfo;
                     break;
                 }
             }
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
             for (var i = 0; i < srvArray.Length; i++)
@@ -177,7 +169,7 @@ namespace PlanesSystem
                 {
                     continue;
                 }
-                if (serverMsgInfo.SocketId == client.ID)
+                if (serverMsgInfo.SocketId == client.Id)
                 {
                     serverMsgInfo.Socket = null;
                     serverMsgInfo.SocData = "";
@@ -186,6 +178,7 @@ namespace PlanesSystem
                     break;
                 }
             }
+            return Task.CompletedTask;
         }
 
         public void Run()

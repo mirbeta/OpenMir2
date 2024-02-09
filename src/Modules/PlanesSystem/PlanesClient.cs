@@ -1,9 +1,10 @@
-using NLog;
 using System.Net;
 using System.Net.Sockets;
+using NLog;
 using SystemModule;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace PlanesSystem
 {
@@ -14,7 +15,7 @@ namespace PlanesSystem
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private string sRecvMsg = string.Empty;
-        private readonly ScoketClient _msgClient;
+        private readonly TcpClient _tcpClient;
         private readonly PlanesMessage _groupMessageHandle;
 
         private static PlanesClient instance;
@@ -33,22 +34,26 @@ namespace PlanesSystem
 
         private PlanesClient()
         {
-            _msgClient = new ScoketClient(new IPEndPoint(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort));
-            _msgClient.OnConnected += MsgClientConnect;
-            _msgClient.OnReceivedData += MsgClientRead;
-            _msgClient.OnError += MsgClientError;
-            _msgClient.OnDisconnected += MsgClientDisconnected;
+            _tcpClient.Setup(new TouchSocketConfig()
+                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort))
+                .ConfigureContainer(a =>
+                {
+                    a.AddConsoleLogger(); //添加一个日志注入
+                }));
+            _tcpClient.Connected += MsgClientConnect; //成功连接到服务器
+            _tcpClient.Disconnected += MsgClientDisconnected; //从服务器断开连接，当连接不成功时不会触发。
+            _tcpClient.Received += MsgClientRead;
             _groupMessageHandle = new PlanesMessage();
         }
 
         public void ConnectPlanesServer()
         {
-            _msgClient.Connect();
+            _tcpClient.Connect();
         }
 
         public void Run()
         {
-            if (_msgClient.IsConnected)
+            if (_tcpClient.Online)
             {
                 DecodeSocStr();
             }
@@ -58,17 +63,17 @@ namespace PlanesSystem
         {
             if (SystemShare.Config.nServerNumber > 0)
             {
-                if (_msgClient.IsConnected)
+                if (_tcpClient.Online)
                 {
                     return;
                 }
-                _msgClient.Connect();
+                _tcpClient.Connect();
             }
         }
 
         private bool IsConnect()
         {
-            return _msgClient.IsConnected;
+            return _tcpClient.Online;
         }
 
         private void DecodeSocStr()
@@ -117,45 +122,30 @@ namespace PlanesSystem
             if (IsConnect())
             {
                 byte[] buff = HUtil32.GetBytes("(" + sMsg + ")");
-                _msgClient.Send(buff);
+                _tcpClient.Send(buff);
             }
         }
 
-        private void MsgClientConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task MsgClientConnect(ITcpClient client, ConnectedEventArgs e)
         {
-            _logger.Info("连接主服务器(" + e.RemoteEndPoint + ")成功...");
+            _logger.Info("连接主服务器(" + client.RemoteIPHost + ")成功...");
             //todo 链接主服务器成功后需要发消息链接主服务器告知主服务器当前服务器IP和端口，保持登录数据同步
+            return Task.CompletedTask;
         }
 
-        private void MsgClientError(object sender, DSCClientErrorEventArgs e)
+        private Task MsgClientDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            switch (e.ErrorCode)
-            {
-                case SocketError.ConnectionRefused:
-                    _logger.Error("主游戏引擎[" + _msgClient.RemoteEndPoint + "]拒绝链接...");
-                    break;
-                case SocketError.ConnectionReset:
-                    _logger.Error("主游戏引擎[" + _msgClient.RemoteEndPoint + "]关闭连接...");
-                    break;
-                case SocketError.TimedOut:
-                    _logger.Error("主游戏引擎[" + _msgClient.RemoteEndPoint + "]链接超时...");
-                    break;
-            }
-        }
-
-        private void MsgClientDisconnected(object sender, DSCClientConnectedEventArgs e)
-        {
-            _logger.Error("节点服务器(" + e.RemoteEndPoint + ")断开连接...");
+            _logger.Error("节点服务器(" + client.GetIPPort() + ")断开连接...");
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// 接收主机发送过来的消息
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MsgClientRead(object sender, DSCClientDataInEventArgs e)
+        private Task MsgClientRead(ITcpClientBase client, ReceivedDataEventArgs e)
         {
-            sRecvMsg += HUtil32.GetString(e.Buff.ToArray(), 0, e.BuffLen);
+            sRecvMsg += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
+            return Task.CompletedTask;
         }
     }
 }

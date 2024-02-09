@@ -1,6 +1,6 @@
 using System.Runtime.InteropServices;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.DataAdapter.Custom;
+using TouchSocket.Core;
 
 namespace SystemModule.DataHandlingAdapters
 {

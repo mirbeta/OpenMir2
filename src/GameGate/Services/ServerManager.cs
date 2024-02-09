@@ -244,13 +244,6 @@ namespace GameGate.Services
                             {
                                 _logger.Error(e);
                             }
-                            finally
-                            {
-                                unsafe
-                                {
-                                    NativeMemory.Free(message.Data.ToPointer());
-                                }
-                            }
                         }
                     }
                 }, _cts.Token);

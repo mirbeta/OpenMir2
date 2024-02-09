@@ -5,8 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace LoginGate.Services
 {
@@ -26,7 +25,7 @@ namespace LoginGate.Services
         /// <summary>
         /// Socket
         /// </summary>
-        private readonly ScoketClient _clientSocket;
+        private readonly TcpClient _clientSocket;
         /// <summary>
         /// Client管理
         /// </summary>
@@ -48,7 +47,7 @@ namespace LoginGate.Services
         {
             _clientManager = clientManager;
             _sessionManager = sessionManager;
-            _clientSocket = new ScoketClient();
+            _clientSocket = new TcpClient();
             _clientSocket.OnConnected += ClientSocketConnect;
             _clientSocket.OnDisconnected += ClientSocketDisconnect;
             _clientSocket.OnReceivedData += ClientSocketRead;
@@ -63,7 +62,7 @@ namespace LoginGate.Services
 
         public void Start(GameGateInfo gateInfo)
         {
-            _clientSocket.Connect(gateInfo.LoginAdress, gateInfo.LoginPort);
+            _clientSocket.Connect(gateInfo.LoginServer, gateInfo.LoginPort);
         }
 
         public void ReConnected()

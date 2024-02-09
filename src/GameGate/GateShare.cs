@@ -119,9 +119,9 @@ namespace GameGate
         public int SessionId { get; }
         public byte ServiceId { get; }
         public ushort BuffLen { get; }
-        public IntPtr Data { get; }
+        public byte[] Data { get; }
 
-        public ClientPacketMessage(byte serviceId, int sessionId, IntPtr buffer, ushort buffLen)
+        public ClientPacketMessage(byte serviceId, int sessionId, byte[] buffer, ushort buffLen)
         {
             this.SessionId = sessionId;
             this.ServiceId = serviceId;
@@ -164,9 +164,9 @@ namespace GameGate
         /// </summary>
         public ushort SessionId;
         /// <summary>
-        /// Soccket链接ID
+        /// Socket链接ID
         /// </summary>
-        public int ConnectionId;
+        public ushort ConnectionId;
         /// <summary>
         /// 数据处理ThreadId
         /// </summary>

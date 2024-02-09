@@ -1,8 +1,6 @@
 using MakePlayer.Cliens;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
 
 namespace MakePlayer.Scenes.Scene
 {

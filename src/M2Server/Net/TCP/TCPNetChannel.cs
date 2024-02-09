@@ -3,18 +3,13 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
 using SystemModule;
-using SystemModule.ByteManager;
 using SystemModule.Common;
-using SystemModule.Core.Config;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace M2Server.Net.TCP
 {
@@ -44,34 +39,34 @@ namespace M2Server.Net.TCP
             _stoppingCancelReads = new CancellationToken();
         }
 
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
-            if (requestInfo is not DataMessageFixedHeaderRequestInfo gateMessage)
-                return;
-            var client = (SocketClient)sender;
-            var gateId = int.Parse(client.ID) - 1;
+            if (e.RequestInfo is not DataMessageFixedHeaderRequestInfo gateMessage)
+                return Task.CompletedTask;
+            var gateId = int.Parse(socketClient.Id) - 1;
             _receiveQueue.Writer.TryWrite(new ReceiveData()
             {
                 Data = gateMessage.Message,
                 Packet = gateMessage.Header,
                 GateId = gateId
             });
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(IClient client, ConnectedEventArgs e)
         {
             const string sKickGate = "服务器未就绪: {0}";
             const string sGateOpen = "游戏网关[{0}]已打开...";
-            var client = (SocketClient)sender;
+            var clientSoc = (SocketClient)client;
             if (M2Share.StartReady)
             {
                 if (_gameGates.Length > 20)
                 {
-                    client.Close();
+                    clientSoc.Close();
                     _logger.Error("超过网关最大链接数量.关闭链接");
-                    return;
+                    return Task.CompletedTask;
                 }
-                if (Whitelist.Contains(HUtil32.IpToInt(client.ServiceIP)))
+                if (Whitelist.Contains(HUtil32.IpToInt(clientSoc.ServiceIP)))
                 {
                     var gateInfo = new ChannelGate();
                     gateInfo.SendMsgCount = 0;
@@ -80,43 +75,42 @@ namespace M2Server.Net.TCP
                     gateInfo.SendMsgBytes = 0;
                     gateInfo.SendedMsgCount = 0;
                     gateInfo.BoUsed = true;
-                    gateInfo.SocketId = client.ID;
-                    gateInfo.Socket = client.MainSocket;
+                    gateInfo.SocketId = clientSoc.Id;
+                    gateInfo.Socket = clientSoc.MainSocket;
                     gateInfo.UserList = new List<SessionUser>();
                     gateInfo.UserCount = 0;
                     gateInfo.SendKeepAlive = false;
                     gateInfo.SendChecked = 0;
                     gateInfo.SendBlockCount = 0;
-                    _gameGates[int.Parse(client.ID) - 1] = new ChannelMessageHandler(gateInfo);
-                    _logger.Info(string.Format(sGateOpen, client.MainSocket.RemoteEndPoint));
+                    _gameGates[int.Parse(clientSoc.Id) - 1] = new ChannelMessageHandler(gateInfo);
+                    _logger.Info(string.Format(sGateOpen, clientSoc.MainSocket.RemoteEndPoint));
                 }
                 else
                 {
-                    client.Close();
-                    _logger.Warn($"关闭非白名单网关地址链接. IP:{client.MainSocket.RemoteEndPoint}");
+                    clientSoc.Close();
+                    _logger.Warn($"关闭非白名单网关地址链接. IP:{clientSoc.MainSocket.RemoteEndPoint}");
                 }
             }
             else
             {
-                _logger.Error(string.Format(sKickGate, client.MainSocket.RemoteEndPoint));
-                client.Close();
+                _logger.Error(string.Format(sKickGate, clientSoc.MainSocket.RemoteEndPoint));
+                clientSoc.Close();
             }
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            M2Share.NetChannel.CloseGate(client.ID, client.ServiceIP);
-            tcpService.NextId();
+            M2Share.NetChannel.CloseGate(client.Id, client.ServiceIP);
+            return Task.CompletedTask;
         }
 
         public void Initialize()
         {
             var touchSocketConfig = new TouchSocketConfig();
-            touchSocketConfig.SetListenIPHosts(new IPHost[1]
-            {
-                new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort)
-            }).SetDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
+            touchSocketConfig.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort))
+                .SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             tcpService.Setup(touchSocketConfig);
             _logger.Info("游戏网关初始化完成...");
         }
