@@ -18,14 +18,14 @@ namespace GameSrv
 
         public async Task StartUp(CancellationToken stoppingToken)
         {
-            await GameShare.GeneratorProcessor.StartAsync(stoppingToken);
-            await GameShare.SystemProcess.StartAsync(stoppingToken);
-            await GameShare.UserProcessor.StartAsync(stoppingToken);
-            await GameShare.MerchantProcessor.StartAsync(stoppingToken);
-            await GameShare.EventProcessor.StartAsync(stoppingToken);
-            await GameShare.CharacterDataProcessor.StartAsync(stoppingToken);
-            await GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
-            await GameShare.ActorBuffProcessor.StopAsync(stoppingToken);
+            _ = GameShare.GeneratorProcessor.StartAsync(stoppingToken);
+            _ = GameShare.SystemProcess.StartAsync(stoppingToken);
+            _ = GameShare.UserProcessor.StartAsync(stoppingToken);
+            _ = GameShare.MerchantProcessor.StartAsync(stoppingToken);
+            _ = GameShare.EventProcessor.StartAsync(stoppingToken);
+            _ = GameShare.CharacterDataProcessor.StartAsync(stoppingToken);
+            _ = GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
+            _ = GameShare.ActorBuffProcessor.StartAsync(stoppingToken);
             Map.StartMakeStoneThread();
 
             var modules = serviceProvider.GetServices<IModuleInitializer>();
@@ -34,6 +34,7 @@ namespace GameSrv
             {
                 module.Startup(stoppingToken);
             }
+
             await M2Share.NetChannel.Start(stoppingToken);
 
             _logger.Info("初始化游戏世界服务线程完成...");

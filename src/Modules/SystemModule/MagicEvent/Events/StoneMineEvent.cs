@@ -5,10 +5,10 @@
     /// </summary>
     public class StoneMineEvent : MapEvent
     {
-        private readonly int AddStoneCount;
+        private readonly int _addStoneCount;
+        public readonly bool AddToMap;
         public int MineCount;
         public int AddStoneMineTick;
-        public bool AddToMap;
 
         public StoneMineEvent(IEnvirnoment envir, short nX, short nY, byte nType) : base(envir, nX, nY, nType, 0, false)
         {
@@ -21,7 +21,7 @@
                     MineCount = SystemShare.RandomNumber.Random(2000) + 300;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    AddStoneCount = SystemShare.RandomNumber.Random(800) + 100;
+                    _addStoneCount = SystemShare.RandomNumber.Random(800) + 100;
                 }
                 else
                 {
@@ -36,7 +36,7 @@
                     MineCount = SystemShare.RandomNumber.Random(200) + 1;
                     AddStoneMineTick = HUtil32.GetTickCount();
                     Active = false;
-                    AddStoneCount = SystemShare.RandomNumber.Random(80) + 1;
+                    _addStoneCount = SystemShare.RandomNumber.Random(80) + 1;
                 }
                 else
                 {
@@ -47,7 +47,7 @@
 
         public void AddStoneMine()
         {
-            MineCount = AddStoneCount;
+            MineCount = _addStoneCount;
             AddStoneMineTick = HUtil32.GetTickCount();
         }
     }

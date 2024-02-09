@@ -1,3 +1,4 @@
+#nullable enable
 using M2Server.Maps.AutoPath;
 using M2Server.Net;
 using M2Server.Net.TCP;

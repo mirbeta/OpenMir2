@@ -422,16 +422,16 @@ namespace GameSrv.Maps
         {
             var sw = new Stopwatch();
             sw.Start();
-            IList<IEnvirnoment> mineMapList = SystemShare.MapMgr.GetMineMaps();
+            var mineMapList = SystemShare.MapMgr.GetMineMaps();
             logger.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
             for (var i = 0; i < mineMapList.Count; i++)
             {
-                var envir = mineMapList[i];
-                for (short nW = 0; nW < envir.Width; nW++)
+                var mineEnvir = mineMapList[i];
+                for (short nW = 0; nW < mineEnvir.Width; nW++)
                 {
-                    for (short nH = 0; nH < envir.Height; nH++)
+                    for (short nH = 0; nH < mineEnvir.Height; nH++)
                     {
-                        var mine = new StoneMineEvent(envir, nW, nH, Grobal2.ET_MINE);
+                        var mine = new StoneMineEvent(mineEnvir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)
                         {
                             M2Share.CellObjectMgr.Remove(mine.Id);
@@ -458,18 +458,18 @@ namespace GameSrv.Maps
                 IsHide = true,
                 IsQuest = false
             };
-            //SystemShare.WorldEngine.QuestNpcList.Add(questNPC);
+            SystemShare.WorldEngine.AddQuestNpc(questNPC);
             return questNPC;
         }
 
         private static void LoadSubMapInfo(StringList loadList, string sFileName)
         {
-            var sFileDir = M2Share.GetEnvirFilePath("MapInfo");
-            if (!Directory.Exists(sFileDir))
+            var fileDir = M2Share.GetEnvirFilePath("MapInfo");
+            if (!Directory.Exists(fileDir))
             {
-                Directory.CreateDirectory(sFileDir);
+                Directory.CreateDirectory(fileDir);
             }
-            var sFilePatchName = sFileDir + sFileName;
+            var sFilePatchName = fileDir + sFileName;
             if (File.Exists(sFilePatchName))
             {
                 var loadMapList = new StringList();
@@ -480,6 +480,5 @@ namespace GameSrv.Maps
                 }
             }
         }
-
     }
 }
