@@ -9,9 +9,9 @@ using SystemModule.Enums;
 using SystemModule.Extensions;
 using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.DataSource
+namespace GameSrv.DB
 {
-    public class CommonDB
+    public class MySqlDB : IDataSource
     {
         private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private IDbConnection _dbConnection;

@@ -7,7 +7,7 @@ using SystemModule;
 using SystemModule.Common;
 using SystemModule.Data;
 
-namespace GameSrv.DataSource
+namespace GameSrv.DB
 {
     public class LocalDb
     {
