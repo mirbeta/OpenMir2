@@ -5,16 +5,9 @@ using System;
 using System.Collections.Generic;
 using System.Net;
 using SystemModule;
-using SystemModule.ByteManager;
-using SystemModule.Core.Config;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Extensions;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
 
 namespace DBSrv.Services.Impl
 {

@@ -102,6 +102,10 @@ namespace GameGate.Services
             var config = new TouchSocketConfig();
             config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort));
             config.SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
+            config.ConfigurePlugins(x =>
+            {
+                x.UseReconnection();
+            });
             ClientSocket.Setup(config);
         }
 
@@ -114,14 +118,6 @@ namespace GameGate.Services
             catch (SocketException ex)
             {
                 ClientSocketError(null, ex.SocketErrorCode);
-            }
-        }
-
-        private void ReConnected()
-        {
-            if (Connected == false)
-            {
-                Start();
             }
         }
 
@@ -435,7 +431,7 @@ namespace GameGate.Services
             {
                 if ((HUtil32.GetTickCount() - CheckServerTick) > 60 * 10000) //10分钟分不允许尽兴链接服务器
                 {
-                    ReConnected();
+                    Start();
                     _logger.Debug($"游戏引擎维护时间结束,重新连接游戏引擎[{EndPoint}].");
                 }
                 return;
@@ -448,7 +444,7 @@ namespace GameGate.Services
             }
             if (CheckServerFail && CheckServerFailCount <= ushort.MaxValue)
             {
-                ReConnected();
+                Start();
                 CheckServerFailCount++;
                 _logger.Debug($"链接服务器[{EndPoint}] 失败次数[{CheckServerFailCount}]");
                 return;

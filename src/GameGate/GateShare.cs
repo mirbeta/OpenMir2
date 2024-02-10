@@ -88,7 +88,7 @@ namespace GameGate
         public ushort SessionId { get; set; }
         public byte[] Buffer { get; set; }
         public short BuffLen { get; set; }
-        public ushort ConnectionId { get; set; }
+        public string ConnectionId { get; set; }
 
         public SessionMessage(ushort sessionId, byte[] buffer, short buffLen)
         {

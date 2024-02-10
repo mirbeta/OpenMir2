@@ -6,6 +6,9 @@ using SystemModule.Data;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Enums;
 using SystemModule.Packets.ServerPackets;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace MarketSystem
 {
@@ -36,9 +39,8 @@ namespace MarketSystem
                 _thread.IsBackground = true;
             }
             var config = new TouchSocketConfig();
-            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort))
-                .SetBufferLength(4096);
-            config.SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort));
+            config.SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _clientScoket.Setup(config);
             try
             {
@@ -96,15 +98,14 @@ namespace MarketSystem
             _clientScoket.Send(data, 0, data.Length);
         }
 
-        private void MarketScoketDisconnected(object sender, DisconnectEventArgs e)
+        private Task MarketScoketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            var client = (TcpClient)sender;
             _logger.Error("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]断开连接...");
+            return Task.CompletedTask;
         }
 
-        private void MarketScoketConnected(object sender, MsgEventArgs e)
+        private Task MarketScoketConnected(ITcpClientBase client, ConnectedEventArgs e)
         {
-            var client = (TcpClient)sender;
             _logger.Info("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]连接成功...");
             SendFirstMessage();// 链接成功后进行第一次主动拉取拍卖行数据
             if (_thread != null)
@@ -112,6 +113,7 @@ namespace MarketSystem
                 _thread.Interrupt();
             }
             _thread.Start();
+            return Task.CompletedTask;
         }
 
         private void MarketSocketError(SocketException e)
@@ -256,16 +258,16 @@ namespace MarketSystem
             return true;
         }
 
-        private void MarketSocketRead(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task MarketSocketRead(ITcpClientBase client, ReceivedDataEventArgs e)
         {
-            if (requestInfo is not DataMessageFixedHeaderRequestInfo fixedHeader)
-                return;
+            if (e.RequestInfo is not DataMessageFixedHeaderRequestInfo fixedHeader)
+                return Task.CompletedTask;
             try
             {
                 if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
                 {
                     _logger.Debug($"解析寄售行封包出现异常封包...");
-                    return;
+                    return Task.CompletedTask;
                 }
                 var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
                 ProcessServerData(messageData);
@@ -274,6 +276,7 @@ namespace MarketSystem
             {
                 _logger.Error(exception);
             }
+            return Task.CompletedTask;
         }
 
         private void ProcessServerData(ServerRequestData responsePacket)

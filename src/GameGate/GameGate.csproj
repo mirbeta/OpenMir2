@@ -3,8 +3,6 @@
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
 		<TargetFramework>net8.0</TargetFramework>
-		<LangVersion>11</LangVersion>
-		<RootNamespace>GameGate</RootNamespace>
 		<DebugType>embedded</DebugType>
 		<ServerGarbageCollection>true</ServerGarbageCollection>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

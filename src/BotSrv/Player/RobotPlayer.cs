@@ -10,8 +10,6 @@ using System.Drawing;
 using SystemModule;
 using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
 
 namespace BotSrv.Player
 {

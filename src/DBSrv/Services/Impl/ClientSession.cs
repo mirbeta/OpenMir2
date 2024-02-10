@@ -3,9 +3,11 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace DBSrv.Services.Impl
 {
@@ -15,7 +17,7 @@ namespace DBSrv.Services.Impl
     public class ClientSession
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ScoketClient _clientScoket;
+        private readonly TcpClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
         private readonly SettingConf _setting;
         private string _sockMsg = string.Empty;
@@ -23,38 +25,25 @@ namespace DBSrv.Services.Impl
         public ClientSession(SettingConf conf)
         {
             _setting = conf;
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort));
-            _clientScoket.OnReceivedData += LoginSocketRead;
-            _clientScoket.OnConnected += LoginSocketConnected;
-            _clientScoket.OnDisconnected += LoginSocketDisconnected;
-            _clientScoket.OnError += LoginSocketError;
+            _clientScoket = new TcpClient();
+            _clientScoket.Setup(new TouchSocketConfig().SetRemoteIPHost(new IPHost(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort)).ConfigureContainer(x => { x.AddConsoleLogger(); }));
+
+            _clientScoket.Received += LoginSocketRead;
+            _clientScoket.Connected += LoginSocketConnected;
+            _clientScoket.Disconnected += LoginSocketDisconnected;
             _globaSessionList = new List<GlobaSessionInfo>();
         }
 
-        private void LoginSocketError(object sender, DSCClientErrorEventArgs e)
+        private Task LoginSocketConnected(ITcpClientBase client, ConnectedEventArgs e)
         {
-            switch (e.ErrorCode)
-            {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]拒绝链接...");
-                    break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]关闭连接...");
-                    break;
-                case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]链接超时...");
-                    break;
-            }
+            _logger.Info($"账号服务器[{client.MainSocket.RemoteEndPoint}]链接成功.");
+            return Task.CompletedTask;
         }
 
-        private void LoginSocketConnected(object sender, DSCClientConnectedEventArgs e)
+        private Task LoginSocketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            _logger.Info($"账号服务器[{e.RemoteEndPoint}]链接成功.");
-        }
-
-        private void LoginSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
-        {
-            _logger.Error($"账号服务器[{e.RemoteEndPoint}]断开链接.");
+            _logger.Error($"账号服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            return Task.CompletedTask;
         }
 
         public void Start()
@@ -70,27 +59,14 @@ namespace DBSrv.Services.Impl
             }
         }
 
-        public void CheckConnection()
+        private Task LoginSocketRead(IClient client, ReceivedDataEventArgs e)
         {
-            if (_clientScoket.IsConnected)
-            {
-                return;
-            }
-            if (_clientScoket.IsBusy)
-            {
-                return;
-            }
-            _logger.Debug($"开始接账号服务器[{_clientScoket.RemoteEndPoint}].");
-            _clientScoket.Connect(_setting.LoginServerAddr, _setting.LoginServerPort);
-        }
-
-        private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
-        {
-            _sockMsg += HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            _sockMsg += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
             if (_sockMsg.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
             {
                 ProcessSocketMsg();
             }
+            return Task.CompletedTask;
         }
 
         private void ProcessSocketMsg()
@@ -127,10 +103,7 @@ namespace DBSrv.Services.Impl
         {
             const string sFormatMsg = "({0}/{1})";
             var sSendText = string.Format(sFormatMsg, wIdent, sMsg);
-            if (_clientScoket.IsConnected)
-            {
-                _clientScoket.SendText(sSendText);
-            }
+            _clientScoket.Send(sSendText);
         }
 
         public bool CheckSession(string account, string sIPaddr, int sessionId)
@@ -333,10 +306,7 @@ namespace DBSrv.Services.Impl
 
         public void SendKeepAlivePacket(int userCount)
         {
-            if (_clientScoket.IsConnected)
-            {
-                _clientScoket.SendText("(" + Messages.SS_SERVERINFO + "/" + _setting.ServerName + "/" + "99" + "/" + userCount + ")");
-            }
+            _clientScoket.Send("(" + Messages.SS_SERVERINFO + "/" + _setting.ServerName + "/" + "99" + "/" + userCount + ")");
         }
     }
 }

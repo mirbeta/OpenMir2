@@ -9,18 +9,12 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.ByteManager;
-using SystemModule.Core.Config;
 using SystemModule.Data;
 using SystemModule.DataHandlingAdapters;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.SocketComponents;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace DBSrv.Services.Impl
 {
@@ -59,7 +53,7 @@ namespace DBSrv.Services.Impl
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_setting.GateAddr), _setting.GatePort)
-            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            }).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _socketServer.Setup(touchSocketConfig);
         }
 
@@ -156,12 +150,12 @@ namespace DBSrv.Services.Impl
             }
         }
 
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task Received(ITcpClientBase socketClient, ReceivedDataEventArgs e)
         {
-            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
-                return;
-            var client = (SocketClient)sender;
-            if (int.TryParse(client.ID, out var clientId))
+            if (e.RequestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+                return Task.CompletedTask;
+            var client = (SocketClient)socketClient;
+            if (int.TryParse(client.Id, out var clientId))
             {
                 var gateClient = _gateClients[clientId - 1];
                 ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId - 1, ref gateClient);
@@ -170,32 +164,32 @@ namespace DBSrv.Services.Impl
             {
                 _logger.Info("未知客户端...");
             }
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(SocketClient client, ConnectedEventArgs e)
         {
-            var client = (SocketClient)sender;
             var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
             if (!DBShare.CheckServerIP(endPoint.Address.ToString()))
             {
                 _logger.Warn("非法服务器连接: " + endPoint);
                 client.Close();
-                return;
+                return Task.CompletedTask;
             }
             var selGateInfo = new SelGateInfo();
             selGateInfo.Socket = client.MainSocket;
-            selGateInfo.ConnectionId = client.ID;
+            selGateInfo.ConnectionId = client.Id;
             selGateInfo.RemoteEndPoint = client.MainSocket.RemoteEndPoint;
             selGateInfo.UserList = new List<SessionUserInfo>();
             selGateInfo.nGateID = DBShare.GetGateID(endPoint.Address.ToString());
-            _gateClients[int.Parse(client.ID) - 1] = selGateInfo;
+            _gateClients[int.Parse(client.Id) - 1] = selGateInfo;
             _logger.Info(string.Format(sGateOpen, 0, client.MainSocket.RemoteEndPoint));
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(SocketClient client, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var clientId = int.Parse(client.ID) - 1;
+            var clientId = int.Parse(client.Id) - 1;
             var gateClient = _gateClients[clientId];
             if (gateClient != null && gateClient.UserList != null)
             {
@@ -206,7 +200,8 @@ namespace DBSrv.Services.Impl
                 gateClient.UserList = null;
             }
             _logger.Info(string.Format(sGateClose, clientId, client.MainSocket.RemoteEndPoint));
-            _gateClients[int.Parse(client.ID) - 1] = null;
+            _gateClients[int.Parse(client.Id) - 1] = null;
+            return Task.CompletedTask;
         }
 
         private const string sGateOpen = "角色网关[{0}]({1})已打开...";

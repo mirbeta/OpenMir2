@@ -46,7 +46,7 @@ namespace GameGate
             item.BuffLen = 0;
             item.ServiceId = 0;
             //item.Buffer = IntPtr.Zero;
-            item.ConnectionId = 0;
+            item.ConnectionId = string.Empty;
             item.ServiceId = 0;
             m_pool.Push(item);
         }

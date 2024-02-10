@@ -25,8 +25,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GameServer", "GameServer", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{842C0390-113D-4B3E-B52D-94B74CAF077D}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Clouds", "Clouds", "{D1A90098-6CA7-4C99-93F0-AF26E4A15260}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSvr.Storage.MySQL", "src\Storeages\DBSvr.Storage.MySQL\DBSvr.Storage.MySQL.csproj", "{EF22FC3B-2298-4B25-B826-31E79DF29573}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBSrv.Storage", "src\Storeages\DBSrv.Storage\DBSrv.Storage.csproj", "{E0EE56B2-1816-4068-AB2B-5CC062D43462}"

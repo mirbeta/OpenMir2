@@ -4,17 +4,14 @@ using NLog;
 using System;
 using System.Linq;
 using System.Net;
+using System.Net.Sockets;
+using System.Reflection;
+using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.ByteManager;
-using SystemModule.Core.Config;
 using SystemModule.DataHandlingAdapters;
-using SystemModule.Extensions;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace DBSrv.Services.Impl
 {
@@ -47,7 +44,7 @@ namespace DBSrv.Services.Impl
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_setting.MarketServerAddr), _setting.MarketServerPort)
-            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            }).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _socketServer.Setup(touchSocketConfig);
         }
 
@@ -75,52 +72,56 @@ namespace DBSrv.Services.Impl
             var socketList = _socketServer.GetClients();
             foreach (var client in socketList)
             {
-                if (_socketServer.SocketClientExist(client.ID))
+                if (_socketServer.SocketClientExist(client.Id))
                 {
-                    _socketServer.Send(client.ID, Array.Empty<byte>());//推送拍卖行数据
+                    _socketServer.Send(client.Id, Array.Empty<byte>());//推送拍卖行数据
                 }
             }
-            _logger.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Length}]");
+            _logger.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Count()}]");
         }
 
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task Received(IClient client, ReceivedDataEventArgs e)
         {
-            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
-                return;
-            var client = (SocketClient)sender;
+            if (e.RequestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+            {
+                return Task.CompletedTask;
+            }
+            var clientSoc = (SocketClient)client;
             try
             {
                 if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
                 {
                     _logger.Error($"解析寄售行封包出现异常封包...");
-                    return;
+                    return Task.CompletedTask;
                 }
                 var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
-                ProcessMessagePacket(client.ID, messageData);
+                ProcessMessagePacket(clientSoc.Id, messageData);
             }
             catch (Exception ex)
             {
                 _logger.Error(ex);
             }
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(ITcpClientBase client, ConnectedEventArgs e)
         {
-            var client = (SocketClient)sender;
             var remoteIp = client.MainSocket.RemoteEndPoint.GetIP();
             if (!DBShare.CheckServerIP(remoteIp))
             {
                 _logger.Warn("非法服务器连接: " + remoteIp);
                 client.Close();
-                return;
+                return Task.CompletedTask;
             }
             _logger.Info("拍卖行客户端(GameSrv)连接 " + client.MainSocket.RemoteEndPoint);
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
             _logger.Info("拍卖行客户端(GameSrv)断开连接 " + client.MainSocket.RemoteEndPoint);
+            return Task.CompletedTask;
         }
 
         private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)

@@ -3,8 +3,6 @@ using NLog;
 using System.Net;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
 
 namespace BotSrv.Scenes.Scene
 {
