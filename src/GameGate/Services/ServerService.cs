@@ -22,16 +22,17 @@ namespace GameGate.Services
         private readonly ClientThread _clientThread;
         private readonly IPEndPoint _gateEndPoint;
         private readonly SendQueue _messageSendQueue;
-        private readonly ConcurrentQueue<int> _sessionCloseQueue;
+        private readonly ConcurrentQueue<int> _closeSession;
         private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerMgr => ServerManager.Instance;
         private readonly NetworkMonitor _networkMonitor;
+        private readonly ConcurrentDictionary<string, int> sessionMap = new ConcurrentDictionary<string, int>();
 
         public ServerService(GameGateInfo gameGate)
         {
             _gateInfo = gameGate;
             _networkMonitor = new NetworkMonitor();
-            _sessionCloseQueue = new ConcurrentQueue<int>();
+            _closeSession = new ConcurrentQueue<int>();
             _messageSendQueue = new SendQueue();
             _gateEndPoint = new IPEndPoint(IPAddress.Parse(gameGate.ServerAdress), gameGate.GatePort);
             _clientThread = new ClientThread(_gateEndPoint, gameGate, _networkMonitor);
@@ -96,13 +97,13 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessCloseSessionQueue()
         {
-            if (_sessionCloseQueue.IsEmpty)
+            if (_closeSession.IsEmpty)
             {
                 return;
             }
-            for (var i = 0; i < _sessionCloseQueue.Count; i++)
+            for (var i = 0; i < _closeSession.Count; i++)
             {
-                _sessionCloseQueue.TryDequeue(out var socketId);
+                _closeSession.TryDequeue(out var socketId);
                 _clientThread.UserLeave(socketId); //发送消息给GameSvr断开链接
             }
         }
@@ -149,8 +150,11 @@ namespace GameGate.Services
             }
             if (userSession != null)
             {
-                clientThread.UserEnter(clientId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
-                SessionContainer.AddSession(GateInfo.ServiceId, clientId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, _messageSendQueue));
+                //todo:获取客户端在clientThread中的会话Id
+                var sessionId = clientThread.GetSessionId(clientId);
+                clientThread.UserEnter(sessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
+                SessionContainer.AddSession(GateInfo.ServiceId, sessionId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, _messageSendQueue));
+                sessionMap.TryAdd(clientId, sessionId);
                 _logger.Trace("开始连接: " + sRemoteAddress);
                 _logger.Info($"ThreadId:{GateInfo.ServiceId} IP:[{sRemoteAddress}] SessionId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}/{clientThread.ThreadId}");
             }
@@ -162,11 +166,14 @@ namespace GameGate.Services
             return Task.CompletedTask;
         }
 
-        private Task ServerSocketClientDisconnect(ISocketClient socketClient, DisconnectEventArgs e)
+        private Task ServerSocketClientDisconnect(ISocketClient client, DisconnectEventArgs e)
         {
-            var sRemoteAddress = socketClient.IP;
-            var clientId = socketClient.Id;
-            var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, clientId);
+            if (!sessionMap.TryGetValue(client.Id, out var sessionId))
+            {
+                return Task.CompletedTask;
+            }
+            var sRemoteAddress = client.IP;
+            var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession == null)
             {
                 return Task.CompletedTask;
@@ -180,7 +187,7 @@ namespace GameGate.Services
                     {
                         continue;
                     }
-                    if (clientThread.SessionArray[i].ConnectionId == clientId)
+                    if (clientThread.SessionArray[i].ConnectionId == client.Id)
                     {
                         clientThread.SessionArray[i].Socket?.Close();
                         clientThread.SessionArray[i].SessionIndex = 0;
@@ -198,19 +205,22 @@ namespace GameGate.Services
             {
                 _logger.Trace("断开链接: " + sRemoteAddress);
             }
-            _sessionCloseQueue.Enqueue(socketClient.MainSocket.Handle.ToInt32()); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
-            SessionContainer.CloseSession(GateInfo.ServiceId, clientId);
-            _logger.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{clientId}");
+            _closeSession.Enqueue(client.MainSocket.Handle.ToInt32()); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
+            SessionContainer.CloseSession(GateInfo.ServiceId, sessionId);
+            _logger.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{sessionId}");
             return Task.CompletedTask;
         }
 
         /// <summary>
         /// 收到客户端消息
         /// </summary>
-        private Task ServerSocketClientRead(ISocketClient socketClient, ReceivedDataEventArgs e)
+        private Task ServerSocketClientRead(ISocketClient client, ReceivedDataEventArgs e)
         {
-            var sRemoteAddress = socketClient.IP;
-            var sessionId = socketClient.Id;
+            if (!sessionMap.TryGetValue(client.Id, out var sessionId))
+            {
+                return Task.CompletedTask;
+            }
+            var sRemoteAddress = client.IP;
             var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession != null)
             {
@@ -223,7 +233,7 @@ namespace GameGate.Services
             }
             else
             {
-                socketClient.Close();
+                client.Close();
                 _logger.Debug("非法攻击: " + sRemoteAddress);
             }
             return Task.CompletedTask;

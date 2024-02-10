@@ -166,7 +166,7 @@ namespace GameGate
         /// <summary>
         /// Socket链接ID
         /// </summary>
-        public ushort ConnectionId;
+        public string ConnectionId;
         /// <summary>
         /// 数据处理ThreadId
         /// </summary>

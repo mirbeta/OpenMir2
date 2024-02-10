@@ -3,6 +3,8 @@ using NLog;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
@@ -126,6 +128,36 @@ namespace GameGate.Services
         public void Stop()
         {
             ClientSocket.Close();
+        }
+
+        public ushort GetSessionId(string connectionId)
+        {
+            var length = 4;
+            byte[] randomNumberBytes = new byte[length + 1];
+            using (var randomNumberGenerator = RandomNumberGenerator.Create())
+            {
+                randomNumberGenerator.GetBytes(randomNumberBytes);
+            }
+
+            byte checksum = 0;
+            foreach (byte randomNumberByte in randomNumberBytes)
+            {
+                checksum ^= randomNumberByte;
+            }
+
+            randomNumberBytes[length] = checksum;
+
+            var builder = new StringBuilder();
+            foreach (byte randomNumberByte in randomNumberBytes)
+            {
+                builder.Append(randomNumberByte % 10);
+            }
+
+            if (ushort.TryParse(builder.ToString(), out var sessionId))
+            {
+                return sessionId;
+            }
+            return 0;
         }
 
         public string GetSessionCount()
