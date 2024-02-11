@@ -22,13 +22,13 @@ namespace GameSrv.Services
 
         public DataQueryServer()
         {
+            _tcpClient = new TcpClient();
             _tcpClient.Setup(new TouchSocketConfig()
                 .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort))
                 .ConfigureContainer(a =>
                 {
-                    a.AddConsoleLogger(); //添加一个日志注入
+                    a.AddConsoleLogger();
                 }));
-            
             _tcpClient.Connected = DataScoketConnected; 
             _tcpClient.Disconnected = DataScoketDisconnected;
             _tcpClient.Received = DataSocketRead;
@@ -200,7 +200,7 @@ namespace GameSrv.Services
                         var signBuff = EDCode.DecodeBuff(responsePacket.Sign);
                         if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(signBuff))
                         {
-                            CharacterDataService.Enqueue(respCheckCode, responsePacket);
+                            PlayerDataService.Enqueue(respCheckCode, responsePacket);
                         }
                         else
                         {

@@ -16,7 +16,7 @@ namespace GameSrv.Services
     /// <summary>
     /// 玩家数据处理服务
     /// </summary>
-    public static class CharacterDataService
+    public static class PlayerDataService
     {
         private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private static readonly ConcurrentDictionary<int, ServerRequestData> QueryMap = new ConcurrentDictionary<int, ServerRequestData>();

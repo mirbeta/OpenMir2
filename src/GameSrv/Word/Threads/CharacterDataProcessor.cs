@@ -80,7 +80,7 @@ namespace GameSrv.Word.Threads
                     continue;
                 }
                 saveRcd.IsSaveing = true;
-                if (!CharacterDataService.SaveCharacterData(saveRcd, ref saveRcd.QueryId) || saveRcd.ReTryCount > 50)
+                if (!PlayerDataService.SaveCharacterData(saveRcd, ref saveRcd.QueryId) || saveRcd.ReTryCount > 50)
                 {
                     saveRcd.ReTryCount++;
                 }
@@ -93,7 +93,7 @@ namespace GameSrv.Word.Threads
                 }
             }
             M2Share.FrontEngine.ClearSaveRcdTempList();
-            CharacterDataService.ProcessSaveQueue();
+            PlayerDataService.ProcessSaveQueue();
         }
 
         private void ProcessReadStorage()
@@ -129,7 +129,7 @@ namespace GameSrv.Word.Threads
                 }
             }
             M2Share.FrontEngine.ClearLoadRcdTempList();
-            CharacterDataService.ProcessQueryQueue();
+            PlayerDataService.ProcessQueryQueue();
         }
 
         private static bool LoadCharacterData(LoadDBInfo loadUser, ref bool reTry)
@@ -148,7 +148,7 @@ namespace GameSrv.Word.Threads
                 boReTry = true;// 反回TRUE,则重新加入队列
                 return false;
             }*/
-            if (!CharacterDataService.QueryCharacterData(loadUser.Account, loadUser.ChrName, loadUser.sIPaddr, ref queryId, loadUser.SessionID))
+            if (!PlayerDataService.QueryCharacterData(loadUser.Account, loadUser.ChrName, loadUser.sIPaddr, ref queryId, loadUser.SessionID))
             {
                 M2Share.NetChannel.SendOutConnectMsg(loadUser.GateIdx, loadUser.SocketId, loadUser.GSocketIdx); // 获取数据失败,发送连接断开消息
             }

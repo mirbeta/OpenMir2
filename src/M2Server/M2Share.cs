@@ -34,7 +34,7 @@ namespace M2Server
         /// <summary>
         /// 账号会话信息
         /// </summary>
-        public static IAccountSession AccountSession;
+        public static IAuthentication AccountSession;
         /// <summary>
         /// 脚本执行引擎
         /// </summary>

@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using SystemModule.Data;
+﻿using SystemModule.Data;
 
 namespace M2Server
 {
-    public interface IAccountSession
+    public interface IAuthentication
     {
         void Initialize();
 
@@ -15,7 +14,7 @@ namespace M2Server
 
         int GetSessionCount();
 
-        void GetSessionList(ArrayList list);
+        void GetSessionList(IList<AccountSession> sessions);
 
         void SendHumanLogOutMsg(string userId, int nId);
 

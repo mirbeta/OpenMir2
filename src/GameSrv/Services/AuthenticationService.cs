@@ -1,6 +1,5 @@
 using M2Server;
 using NLog;
-using System.Collections;
 using System.Net;
 using SystemModule;
 using SystemModule.Data;
@@ -11,22 +10,21 @@ using TcpClient = TouchSocket.Sockets.TcpClient;
 namespace GameSrv.Services
 {
     /// <summary>
-    /// 账号会话管理服务
+    /// 账号会话认证服务
     /// </summary>
-    public class AccountSessionService : IAccountSession
+    public class AuthenticationService : IAuthentication
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly IList<AccountSession> _sessionList;
+        private readonly List<AccountSession> _sessionList;
         private readonly TcpClient _tcpClient;
-        private readonly object UserIDSection;
-        private string SocketRecvText = string.Empty;
-        private bool SocketConnected = false;
+        private readonly object _userIdSection;
+        private string _socketRecvText = string.Empty;
 
-        public AccountSessionService()
+        public AuthenticationService()
         {
             _tcpClient = new TcpClient();
             _sessionList = new List<AccountSession>();
-            UserIDSection = new object();
+            _userIdSection = new object();
         }
 
         public void Initialize()
@@ -35,10 +33,10 @@ namespace GameSrv.Services
                 .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sIDSAddr), SystemShare.Config.nIDSPort))
                 .ConfigureContainer(a =>
                 {
-                    a.AddConsoleLogger(); //添加一个日志注入
+                    a.AddConsoleLogger();
                 }));
-            _tcpClient.Connected = DataSocketConnect; //成功连接到服务器
-            _tcpClient.Disconnected = DataSocketDisconnect; //从服务器断开连接，当连接不成功时不会触发。
+            _tcpClient.Connected = DataSocketConnect; 
+            _tcpClient.Disconnected = DataSocketDisconnect;
             _tcpClient.Received = DataSocketRead;
             _logger.Debug("登录服务器连接初始化完成...");
             _tcpClient.Connect();
@@ -46,14 +44,14 @@ namespace GameSrv.Services
 
         private Task DataSocketRead(TcpClient sender, ReceivedDataEventArgs e)
         {
-            HUtil32.EnterCriticalSection(UserIDSection);
+            HUtil32.EnterCriticalSection(_userIdSection);
             try
             {
-                SocketRecvText += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
+                _socketRecvText += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(UserIDSection);
+                HUtil32.LeaveCriticalSection(_userIdSection);
             }
             return Task.CompletedTask;
         }
@@ -61,16 +59,16 @@ namespace GameSrv.Services
         public void SendSocket(string sSendMsg)
         {
             if (_tcpClient == null || !_tcpClient.Online) return;
-            byte[] data = HUtil32.GetBytes(sSendMsg);
+            var data = HUtil32.GetBytes(sSendMsg);
             _tcpClient.Send(data);
         }
 
         public void SendHumanLogOutMsg(string sUserId, int nId)
         {
             const string sFormatMsg = "({0}/{1}/{2})";
-            for (int i = 0; i < _sessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                AccountSession sessInfo = _sessionList[i];
+                var sessInfo = _sessionList[i];
                 if (sessInfo.SessionId == nId && sessInfo.Account == sUserId)
                 {
                     break;
@@ -79,12 +77,12 @@ namespace GameSrv.Services
             SendSocket(string.Format(sFormatMsg, Messages.SS_SOFTOUTSESSION, sUserId, nId));
         }
 
-        public void SendHumanLogOutMsgA(string sUserID, int nID)
+        public void SendHumanLogOutMsgA(string userId, int sessionId)
         {
-            for (int i = _sessionList.Count - 1; i >= 0; i--)
+            for (var i = _sessionList.Count - 1; i >= 0; i--)
             {
-                AccountSession sessInfo = _sessionList[i];
-                if (sessInfo.SessionId == nID && sessInfo.Account == sUserID)
+                var sessInfo = _sessionList[i];
+                if (sessInfo.SessionId == sessionId && sessInfo.Account == userId)
                 {
                     break;
                 }
@@ -112,26 +110,26 @@ namespace GameSrv.Services
         public void Run()
         {
             string sSocketText;
-            string sData = string.Empty;
-            string sCode = string.Empty;
+            var sData = string.Empty;
+            var sCode = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:DecodeSocStr";
-            HUtil32.EnterCriticalSection(UserIDSection);
+            HUtil32.EnterCriticalSection(_userIdSection);
             try
             {
-                if (string.IsNullOrEmpty(SocketRecvText))
+                if (string.IsNullOrEmpty(_socketRecvText))
                 {
                     return;
                 }
-                if (SocketRecvText.IndexOf(')') <= 0)
+                if (_socketRecvText.IndexOf(')') <= 0)
                 {
                     return;
                 }
-                sSocketText = SocketRecvText;
-                SocketRecvText = string.Empty;
+                sSocketText = _socketRecvText;
+                _socketRecvText = string.Empty;
             }
             finally
             {
-                HUtil32.LeaveCriticalSection(UserIDSection);
+                HUtil32.LeaveCriticalSection(_userIdSection);
             }
             try
             {
@@ -142,7 +140,7 @@ namespace GameSrv.Services
                     {
                         break;
                     }
-                    string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
+                    var sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
                     switch (HUtil32.StrToInt(sCode, 0))
                     {
                         case Messages.SS_OPENSESSION:// 100
@@ -174,14 +172,14 @@ namespace GameSrv.Services
                         break;
                     }
                 }
-                HUtil32.EnterCriticalSection(UserIDSection);
+                HUtil32.EnterCriticalSection(_userIdSection);
                 try
                 {
-                    SocketRecvText = sSocketText + SocketRecvText;
+                    _socketRecvText = sSocketText + _socketRecvText;
                 }
                 finally
                 {
-                    HUtil32.LeaveCriticalSection(UserIDSection);
+                    HUtil32.LeaveCriticalSection(_userIdSection);
                 }
             }
             catch
@@ -192,12 +190,12 @@ namespace GameSrv.Services
 
         private static void QueryAccountExpired(string sData)
         {
-            string account = string.Empty;
-            string certstr = HUtil32.GetValidStr3(sData, ref account, '/');
-            int cert = HUtil32.StrToInt(certstr, 0);
+            var account = string.Empty;
+            var certstr = HUtil32.GetValidStr3(sData, ref account, '/');
+            var cert = HUtil32.StrToInt(certstr, 0);
             if (!SystemShare.Config.TestServer)
             {
-                int playTime = SystemShare.WorldEngine.GetPlayExpireTime(account);
+                var playTime = SystemShare.WorldEngine.GetPlayExpireTime(account);
                 if (playTime >= 3600 || playTime < 1800) //大于一个小时或者小于半个小时都不处理
                 {
                     return;
@@ -215,9 +213,9 @@ namespace GameSrv.Services
 
         private void GetAccountExpired(string sData)
         {
-            string account = string.Empty;
-            string certstr = HUtil32.GetValidStr3(sData, ref account, '/');
-            int cert = HUtil32.StrToInt(certstr, 0);
+            var account = string.Empty;
+            var certstr = HUtil32.GetValidStr3(sData, ref account, '/');
+            var cert = HUtil32.StrToInt(certstr, 0);
             if (!SystemShare.Config.TestServer)
             {
                 SystemShare.WorldEngine.AccountExpired(account);
@@ -227,23 +225,23 @@ namespace GameSrv.Services
 
         private void GetPasswdSuccess(string sData)
         {
-            string sAccount = string.Empty;
-            string sSessionID = string.Empty;
-            string sPayCost = string.Empty;
-            string sIPaddr = string.Empty;
-            string sPayMode = string.Empty;
-            string sPlayTime = string.Empty;
+            var sAccount = string.Empty;
+            var sSessionId = string.Empty;
+            var sPayCost = string.Empty;
+            var sIPaddr = string.Empty;
+            var sPayMode = string.Empty;
+            var sPlayTime = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:GetPasswdSuccess";
             try
             {
                 //todo 这里要获取账号剩余游戏时间
                 sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-                sData = HUtil32.GetValidStr3(sData, ref sSessionID, HUtil32.Backslash);
+                sData = HUtil32.GetValidStr3(sData, ref sSessionId, HUtil32.Backslash);
                 sData = HUtil32.GetValidStr3(sData, ref sPayCost, HUtil32.Backslash);// boPayCost
                 sData = HUtil32.GetValidStr3(sData, ref sPayMode, HUtil32.Backslash);// nPayMode
                 sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);// sIPaddr
                 sData = HUtil32.GetValidStr3(sData, ref sPlayTime, HUtil32.Backslash);// playTime
-                NewSession(sAccount, sIPaddr, HUtil32.StrToInt(sSessionID, 0), HUtil32.StrToInt(sPayCost, 0), HUtil32.StrToInt(sPayMode, 0), HUtil32.StrToInt(sPlayTime, 0));
+                NewSession(sAccount, sIPaddr, HUtil32.StrToInt(sSessionId, 0), HUtil32.StrToInt(sPayCost, 0), HUtil32.StrToInt(sPayMode, 0), HUtil32.StrToInt(sPlayTime, 0));
             }
             catch
             {
@@ -253,7 +251,7 @@ namespace GameSrv.Services
 
         private void GetCancelAdmission(string sData)
         {
-            string sC = string.Empty;
+            var sC = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:GetCancelAdmission";
             try
             {
@@ -267,14 +265,14 @@ namespace GameSrv.Services
             }
         }
 
-        private void NewSession(string sAccount, string sIPaddr, int nSessionID, int nPayMent, int nPayMode, long playTime)
+        private void NewSession(string account, string sIPaddr, int sessionId, int payMent, int payMode, long playTime)
         {
-            AccountSession sessInfo = new AccountSession();
-            sessInfo.Account = sAccount;
+            var sessInfo = new AccountSession();
+            sessInfo.Account = account;
             sessInfo.IPaddr = sIPaddr;
-            sessInfo.SessionId = nSessionID;
-            sessInfo.PayMent = nPayMent;
-            sessInfo.PayMode = nPayMode;
+            sessInfo.SessionId = sessionId;
+            sessInfo.PayMent = payMent;
+            sessInfo.PayMode = payMode;
             sessInfo.SessionStatus = 0;
             sessInfo.StartTick = HUtil32.GetTickCount();
             sessInfo.ActiveTick = HUtil32.GetTickCount();
@@ -290,7 +288,7 @@ namespace GameSrv.Services
             const string sExceptionMsg = "[Exception] AccountService:DelSession";
             try
             {
-                for (int i = 0; i < _sessionList.Count; i++)
+                for (var i = 0; i < _sessionList.Count; i++)
                 {
                     sessInfo = _sessionList[i];
                     if (sessInfo.SessionId == sessionId)
@@ -315,24 +313,24 @@ namespace GameSrv.Services
 
         private void ClearSession()
         {
-            for (int i = 0; i < _sessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
                 _sessionList[i] = null;
             }
             _sessionList.Clear();
         }
 
-        public AccountSession GetAdmission(string sAccount, string sIPaddr, int nSessionID, ref int nPayMode, ref int nPayMent, ref long playTime)
+        public AccountSession GetAdmission(string sAccount, string sIPaddr, int sessionId, ref int nPayMode, ref int nPayMent, ref long playTime)
         {
             AccountSession result = null;
-            bool boFound = false;
+            var boFound = false;
             const string sGetFailMsg = "[非法登录] 全局会话验证失败({0}/{1}/{2})";
             nPayMent = 0;
             nPayMode = 0;
             for (var i = 0; i < _sessionList.Count; i++)
             {
                 var sessInfo = _sessionList[i];
-                if (sessInfo.SessionId == nSessionID && sessInfo.Account == sAccount)
+                if (sessInfo.SessionId == sessionId && sessInfo.Account == sAccount)
                 {
                     switch (sessInfo.PayMent)
                     {
@@ -355,7 +353,7 @@ namespace GameSrv.Services
             }
             if (SystemShare.Config.ViewAdmissionFailure && !boFound)
             {
-                _logger.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, nSessionID));
+                _logger.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, sessionId));
             }
             return result;
         }
@@ -367,16 +365,16 @@ namespace GameSrv.Services
 
         private void GetCancelAdmissionA(string sData)
         {
-            string sAccount = string.Empty;
+            var sAccount = string.Empty;
             const string sExceptionMsg = "[Exception] AccountService:GetCancelAdmissionA";
             try
             {
-                string sessionId = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-                int sessionID = HUtil32.StrToInt(sessionId, 0);
+                var sessionData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
+                var sessionId = HUtil32.StrToInt(sessionData, 0);
                 if (!SystemShare.Config.TestServer)
                 {
                     SystemShare.WorldEngine.AccountExpired(sAccount);
-                    DelSession(sessionID);
+                    DelSession(sessionId);
                 }
             }
             catch
@@ -385,7 +383,7 @@ namespace GameSrv.Services
             }
         }
 
-        private static void GetServerLoad(string sData)
+        private static void GetServerLoad(string data)
         {
             /*var sC = string.Empty;
             var s10 = string.Empty;
@@ -406,7 +404,6 @@ namespace GameSrv.Services
 
         private Task DataSocketConnect(ITcpClient client, ConnectedEventArgs e)
         {
-            SocketConnected = true;
             _logger.Info("登录服务器[" + client.RemoteIPHost + "]连接成功...");
             SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
             return Task.CompletedTask;
@@ -419,7 +416,6 @@ namespace GameSrv.Services
             //     return;
             // }
             ClearSession();
-            SocketConnected = false;
             _logger.Error("登录服务器[" + sender.IP + "]断开连接...");
             return Task.CompletedTask;
         }
@@ -434,11 +430,11 @@ namespace GameSrv.Services
             return _sessionList.Count;
         }
 
-        public void GetSessionList(ArrayList List)
+        public void GetSessionList(IList<AccountSession> sessions)
         {
-            for (int i = 0; i < _sessionList.Count; i++)
+            for (var i = 0; i < _sessionList.Count; i++)
             {
-                List.Add(_sessionList[i]);
+                sessions.Add(_sessionList[i]);
             }
         }
     }
