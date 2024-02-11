@@ -183,7 +183,6 @@ namespace LoginGate.Services
 
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg = "")
         {
-            int iLen = 0;
             byte[] sendBuf = new byte[1024];
             if ((_lastLoginSvr == null) || !_lastLoginSvr.IsConnected)
             {
@@ -197,6 +196,7 @@ namespace LoginGate.Services
             cmd.Series = nSeries;
             sendBuf[0] = (byte)'#';
             byte[] tempBuf = null;
+            int iLen;
             if (!string.IsNullOrEmpty(sMsg))
             {
                 byte[] sBuff = HUtil32.GetBytes(sMsg);

@@ -6,17 +6,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.ByteManager;
 using SystemModule.Common;
-using SystemModule.Core.Config;
-using SystemModule.Extensions;
-using SystemModule.SocketComponents;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace LoginSrv.Services
 {
@@ -45,6 +39,8 @@ namespace LoginSrv.Services
 
         public IList<ServerSessionInfo> ServerList => _serverList;
 
+        private static readonly string[] dividerAry = new[] { " ", "\09" };
+
         public void StartServer()
         {
             LoadServerAddr();
@@ -59,13 +55,13 @@ namespace LoginSrv.Services
             _logger.Info($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
 
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
-            var client = (SocketClient)sender;
-            SocketClientRead(client.ID, byteBlock.Buffer, (int)byteBlock.Length);
+            SocketClientRead(socketClient.Id, e.ByteBlock.Buffer, e.ByteBlock.Len);
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(object sender, TouchSocketEventArgs e)
         {
             var client = (SocketClient)sender;
             var remoteEndPoint = client.MainSocket.RemoteEndPoint.GetIP();
@@ -83,7 +79,7 @@ namespace LoginSrv.Services
                 var msgServer = new ServerSessionInfo();
                 msgServer.ReceiveMsg = string.Empty;
                 msgServer.Socket = client.MainSocket;
-                msgServer.SocketId = client.ID;
+                msgServer.SocketId = client.Id;
                 msgServer.EndPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
                 msgServer.SessionList = new List<SessionConnInfo>();
                 _serverList.Add(msgServer);
@@ -94,15 +90,16 @@ namespace LoginSrv.Services
                 _logger.Warn("非法地址连接:" + remoteEndPoint);
                 client.Close();
             }
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
             for (var i = 0; i < _serverList.Count; i++)
             {
                 var msgServer = _serverList[i];
-                if (msgServer.SocketId == client.ID)
+                if (msgServer.SocketId == client.Id)
                 {
                     if (msgServer.ServerIndex == 99)
                     {
@@ -117,6 +114,7 @@ namespace LoginSrv.Services
                     break;
                 }
             }
+            return Task.CompletedTask;
         }
 
         private void SocketClientRead(string socketId, byte[] data, int dataLen)
@@ -494,7 +492,7 @@ namespace LoginSrv.Services
                         if ((string.IsNullOrEmpty(tempName)) || (string.IsNullOrEmpty(msgServer.ServerName)) || (string.Compare(msgServer.ServerName, tempName, StringComparison.OrdinalIgnoreCase) == 0)
                             || (msgServer.ServerIndex == 99))
                         {
-                            msgServer.Socket.SendText(sSendMsg);
+                            msgServer.Socket.Send(HUtil32.GetBytes(sSendMsg));
                         }
                     }
                 }
@@ -566,7 +564,7 @@ namespace LoginSrv.Services
                 {
                     if (_serverList[i].Socket.Connected)
                     {
-                        _serverList[i].Socket.SendText(sSendMsg);
+                        _serverList[i].Socket.Send(HUtil32.GetBytes(sSendMsg));
                     }
                 }
             }
@@ -604,9 +602,9 @@ namespace LoginSrv.Services
                 for (var i = 0; i < LoadList.Count; i++)
                 {
                     var lineText = LoadList[i];
-                    lineText = HUtil32.GetValidStr3(lineText, ref sServerName, new[] { " ", "\09" });
-                    lineText = HUtil32.GetValidStr3(lineText, ref s10, new[] { " ", "\09" });
-                    lineText = HUtil32.GetValidStr3(lineText, ref s14, new[] { " ", "\09" });
+                    lineText = HUtil32.GetValidStr3(lineText, ref sServerName, dividerAry);
+                    lineText = HUtil32.GetValidStr3(lineText, ref s10, dividerAry);
+                    lineText = HUtil32.GetValidStr3(lineText, ref s14, dividerAry);
                     if (!string.IsNullOrEmpty(sServerName))
                     {
                         UserLimit[nC] = new LimitServerUserInfo();

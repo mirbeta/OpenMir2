@@ -720,7 +720,7 @@ namespace DBSrv.Services.Impl
             {
                 var nMapIndex = DBShare.GetMapIndex(sCurMap);
                 var sDefMsg = EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_STARTPLAY, 0, 0, 0, 0));
-                var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIPAddress(), ref nRoutePort);
+                var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIP(), ref nRoutePort);
                 if (_setting.DynamicIpMode)// 使用动态IP
                 {
                     sRouteIp = userInfo.sGateIPaddr;

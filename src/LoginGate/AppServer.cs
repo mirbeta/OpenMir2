@@ -181,7 +181,7 @@ namespace LoginGate
                         {
                             var (remoteendpoint, status, playCount, reviceTotal, sendTotal, threadCount) = clientList[i].GetStatus();
 
-                            table.UpdateCell(i, 0, $"[bold]{serverList[i].EndPoint}[/]");
+                            table.UpdateCell(i, 0, $"[bold]{serverList[i].GetEndPoint()}[/]");
                             table.UpdateCell(i, 1, $"[bold]{remoteendpoint}[/]");
                             table.UpdateCell(i, 2, ($"[bold]{status}[/]"));
                             table.UpdateCell(i, 3, ($"[bold]{playCount}[/]"));

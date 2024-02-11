@@ -3,8 +3,10 @@ using NLog;
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
+using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace LoginGate.Services
@@ -48,17 +50,16 @@ namespace LoginGate.Services
             _clientManager = clientManager;
             _sessionManager = sessionManager;
             _clientSocket = new TcpClient();
-            _clientSocket.OnConnected += ClientSocketConnect;
-            _clientSocket.OnDisconnected += ClientSocketDisconnect;
-            _clientSocket.OnReceivedData += ClientSocketRead;
-            _clientSocket.OnError += ClientSocketError;
+            _clientSocket.Connected += ClientSocketConnect;
+            _clientSocket.Disconnected += ClientSocketDisconnect;
+            _clientSocket.Received += ClientSocketRead;
             SessionArray = new TSessionInfo[GateShare.MaxSession];
             DataBuff = new byte[2048 * 10];
         }
 
-        public bool IsConnected => _clientSocket.IsConnected;
+        public bool IsConnected => _clientSocket.Online;
 
-        public IPEndPoint EndPoint => _clientSocket.RemoteEndPoint;
+        public EndPoint EndPoint => _clientSocket.RemoteIPHost.EndPoint;
 
         public void Start(GameGateInfo gateInfo)
         {
@@ -69,7 +70,7 @@ namespace LoginGate.Services
         {
             if (IsConnected == false)
             {
-                _clientSocket.Connect(EndPoint);
+                _clientSocket.Connect();
             }
             CheckServerFail = !IsConnected;
         }
@@ -83,7 +84,7 @@ namespace LoginGate.Services
                     SessionArray[i].Socket.Close();
                 }
             }
-            _clientSocket.Disconnect();
+            _clientSocket.Close();
         }
 
         public bool SessionIsFull()
@@ -108,7 +109,7 @@ namespace LoginGate.Services
             return SessionArray;
         }
 
-        private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task ClientSocketConnect(ITcpClient client, ConnectedEventArgs e)
         {
             ConnectState = true;
             RestSessionArray();
@@ -117,11 +118,12 @@ namespace LoginGate.Services
             CheckServerTick = HUtil32.GetTickCount();
             CheckServerFailCount = 1;
             //_clientManager.AddClientThread(e.SocketHandle, this);
-            logger.Info($"账号服务器[{EndPoint}]链接成功.");
-            logger.Debug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            logger.Info($"账号服务器[{client.GetIPPort()}]链接成功.");
+            logger.Debug($"线程[{Guid.NewGuid():N}]连接 {client.GetIPPort()} 成功...");
+            return Task.CompletedTask;
         }
 
-        private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private Task ClientSocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
             for (var i = 0; i < GateShare.MaxSession; i++)
             {
@@ -130,7 +132,7 @@ namespace LoginGate.Services
                 {
                     continue;
                 }
-                if (userSession.Socket != null && userSession.Socket == e.Socket)
+                if (userSession.Socket != null && userSession.Socket == client.MainSocket)
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
@@ -141,32 +143,35 @@ namespace LoginGate.Services
             RestSessionArray();
             ConnectState = false;
             //_clientManager.DeleteClientThread(e.SocketHandle);
-            logger.Info($"账号服务器[{e.RemoteEndPoint}]断开链接.");
+            logger.Info($"账号服务器[{client.GetIPPort()}]断开链接.");
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// 收到登录服务器消息 直接发送给客户端
         /// </summary>
-        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task ClientSocketRead(ITcpClient client, ReceivedDataEventArgs e)
         {
-            var nMsgLen = e.BuffLen;
+            var nMsgLen = e.ByteBlock.Len;
             if (nMsgLen <= 0)
             {
-                return;
+                return Task.CompletedTask;
             }
+            var socClient = client as SocketClient;
             if (DataLen > 0)
             {
-                MemoryCopy.BlockCopy(e.Buff, 0, DataBuff, DataLen, nMsgLen);
-                ProcessServerData(DataBuff, DataLen + nMsgLen, e.SocketId);
+                MemoryCopy.BlockCopy(e.ByteBlock.Buffer, 0, DataBuff, DataLen, nMsgLen);
+                ProcessServerData(DataBuff, DataLen + nMsgLen, socClient.Id);
             }
             else
             {
-                ProcessServerData(e.Buff, nMsgLen, e.SocketId);
+                ProcessServerData(e.ByteBlock.Buffer, nMsgLen, socClient.Id);
             }
             ReceiveBytes += nMsgLen;
+            return Task.CompletedTask;
         }
 
-        private void ProcessServerData(byte[] data, int nLen, int socketId)
+        private void ProcessServerData(byte[] data, int nLen, string socketId)
         {
             var srcOffset = 0;
             Span<byte> dataBuff = data;
@@ -222,23 +227,6 @@ namespace LoginGate.Services
             {
                 DataLen = 0;
             }
-        }
-
-        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
-        {
-            switch (e.ErrorCode)
-            {
-                case SocketError.ConnectionRefused:
-                    logger.Info($"账号服务器[{EndPoint}]拒绝链接...失败[{CheckServerFailCount}]次");
-                    break;
-                case SocketError.ConnectionReset:
-                    logger.Info($"账号服务器[{EndPoint}]关闭连接...失败[{CheckServerFailCount}]次");
-                    break;
-                case SocketError.TimedOut:
-                    logger.Info($"账号服务器[{EndPoint}]链接超时...失败[{CheckServerFailCount}]次");
-                    break;
-            }
-            CheckServerFail = true;
         }
 
         private void RestSessionArray()

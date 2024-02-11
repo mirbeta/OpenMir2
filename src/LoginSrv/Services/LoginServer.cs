@@ -7,16 +7,10 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.ByteManager;
-using SystemModule.Core.Config;
 using SystemModule.DataHandlingAdapters;
-using SystemModule.Extensions;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace LoginSrv.Services
 {
@@ -54,18 +48,17 @@ namespace LoginSrv.Services
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_config.sGateAddr), _config.nGatePort)
-            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            }).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
             _serverSocket.Start();
             _logger.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
 
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
-            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
-                return;
-            var client = (SocketClient)sender;
-            if (int.TryParse(client.ID, out var clientId))
+            if (e.RequestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+                return Task.CompletedTask;
+            if (int.TryParse(socketClient.Id, out var clientId))
             {
                 ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId);
             }
@@ -73,30 +66,33 @@ namespace LoginSrv.Services
             {
                 //_logger.Info("未知客户端...");
             }
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(object sender, TouchSocketEventArgs e)
         {
             var client = (SocketClient)sender;
-            var clientId = int.Parse(client.ID);
+            var clientId = int.Parse(client.Id);
             var gateInfo = new LoginGateInfo();
             gateInfo.Socket = client.MainSocket;
-            gateInfo.ConnectionId = client.ID;
+            gateInfo.ConnectionId = client.Id;
             gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, client.MainSocket.RemoteEndPoint.GetIP());//应该改为按策略获取一个对外的公开网关地址
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.KeepAliveTick = HUtil32.GetTickCount();
             _clientManager.AddSession(clientId, gateInfo);
             _logger.Info($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
             loginGates[clientId] = gateInfo;
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            var clientId = int.Parse(client.ID);
+            var clientId = int.Parse(client.Id);
             loginGates[clientId] = null;
             _clientManager.Delete(clientId);
             _logger.Warn($"登录网关[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            return Task.CompletedTask;
         }
 
         private void ProcessGateData(ServerDataPacket packetHead, byte[] data, int socketId)

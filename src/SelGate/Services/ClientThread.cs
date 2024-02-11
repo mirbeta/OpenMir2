@@ -2,8 +2,12 @@ using NLog;
 using SelGate.Package;
 using System;
 using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace SelGate.Services
 {
@@ -15,7 +19,7 @@ namespace SelGate.Services
         /// <summary>
         /// Socket客户端
         /// </summary>
-        private readonly ScoketClient _clientSocket;
+        private readonly TcpClient _clientSocket;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
@@ -69,11 +73,11 @@ namespace SelGate.Services
             ClientId = clientId;
             SessionArray = new TSessionInfo[MaxSession];
             _sessionManager = sessionManager;
-            _clientSocket = new ScoketClient(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
-            _clientSocket.OnConnected += ClientSocketConnect;
-            _clientSocket.OnDisconnected += ClientSocketDisconnect;
-            _clientSocket.OnReceivedData += ClientSocketRead;
-            _clientSocket.OnError += ClientSocketError;
+            _clientSocket = new TcpClient();
+            _clientSocket.Setup(new TouchSocket.Core.TouchSocketConfig().SetRemoteIPHost(new IPHost(IPAddress.Parse(serverAddr), serverPort)));
+            _clientSocket.Connected += ClientSocketConnect;
+            _clientSocket.Disconnected += ClientSocketDisconnect;
+            _clientSocket.Received += ClientSocketRead;
             SockThreadStutas = SockThreadStutas.Connecting;
             KeepAliveTick = HUtil32.GetTickCount();
             KeepAlive = true;
@@ -84,7 +88,7 @@ namespace SelGate.Services
 
         public string GetEndPoint()
         {
-            return _clientSocket.RemoteEndPoint.ToString();
+            return _clientSocket.RemoteIPHost.ToString();
         }
 
         public void Start()
@@ -109,7 +113,7 @@ namespace SelGate.Services
                     SessionArray[i].Socket.Close();
                 }
             }
-            _clientSocket.Disconnect();
+            _clientSocket.Close();
         }
 
         public TSessionInfo[] GetSession()
@@ -117,7 +121,7 @@ namespace SelGate.Services
             return SessionArray;
         }
 
-        private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task ClientSocketConnect(ITcpClient client, ConnectedEventArgs e)
         {
             boGateReady = true;
             RestSessionArray();
@@ -126,11 +130,12 @@ namespace SelGate.Services
             KeepAliveTick = HUtil32.GetTickCount();
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
-            _logger.Info($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
-            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            _logger.Info($"数据库服务器[{client.RemoteIPHost}]链接成功.", 1);
+            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {client.RemoteIPHost} 成功...");
+            return Task.CompletedTask;
         }
 
-        private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private Task ClientSocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
             for (var i = 0; i < MaxSession; i++)
             {
@@ -139,7 +144,7 @@ namespace SelGate.Services
                 {
                     continue;
                 }
-                if (userSession.Socket != null && userSession.Socket == e.Socket)
+                if (userSession.Socket != null && userSession.Socket == client.MainSocket)
                 {
                     userSession.Socket.Close();
                     userSession.Socket = null;
@@ -147,47 +152,33 @@ namespace SelGate.Services
             }
             RestSessionArray();
             GateShare.ServerGateList.Remove(this);
-            _logger.Info($"数据库服务器[{e.RemoteEndPoint}]断开链接.", 1);
+            _logger.Info($"数据库服务器[{client.GetIPPort()}]断开链接.", 1);
             boGateReady = false;
             isConnected = false;
             CheckServerFail = true;
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// 收到数据库服务器 直接发送给客户端
         /// </summary>
-        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task ClientSocketRead(ITcpClient client, ReceivedDataEventArgs e)
         {
-            var nMsgLen = e.BuffLen;
+            var nMsgLen = e.ByteBlock.Len;
             if (nMsgLen <= 0)
             {
-                return;
+                return Task.CompletedTask;
             }
             if (DataLen > 0)
             {
-                MemoryCopy.BlockCopy(e.Buff, 0, DataBuff, DataLen, nMsgLen);
+                MemoryCopy.BlockCopy(e.ByteBlock.Buffer, 0, DataBuff, DataLen, nMsgLen);
                 ProcessServerData(DataBuff, DataLen + nMsgLen);
             }
             else
             {
-                ProcessServerData(e.Buff, nMsgLen);
+                ProcessServerData(e.ByteBlock.Buffer, nMsgLen);
             }
-        }
-
-        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
-        {
-            switch (e.ErrorCode)
-            {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
-                    break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]关闭连接...失败[{CheckServerFailCount}]次", 1);
-                    break;
-                case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
-                    break;
-            }
+            return Task.CompletedTask;
         }
 
         private void ProcessServerData(byte[] data, int nLen)
@@ -294,7 +285,7 @@ namespace SelGate.Services
 
         public void SendSocket(byte[] buffer)
         {
-            if (!_clientSocket.IsConnected)
+            if (!_clientSocket.Online)
             {
                 return;
             }

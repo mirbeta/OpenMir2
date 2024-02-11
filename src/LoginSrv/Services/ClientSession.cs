@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
-using SystemModule.SocketComponents;
 
 namespace LoginSrv.Services
 {
@@ -867,7 +866,7 @@ namespace LoginSrv.Services
         private static void SendGateKickMsg(Socket socket, int sSockIndex)
         {
             var sSendMsg = $"%+-{sSockIndex}$";
-            socket.SendText(sSendMsg);
+            socket.Send(HUtil32.GetBytes(sSendMsg));
         }
     }
 }

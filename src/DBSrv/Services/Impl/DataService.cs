@@ -4,10 +4,12 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.DataHandlingAdapters;
-using SystemModule.Extensions;
 using SystemModule.Packets.ServerPackets;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
 
 namespace DBSrv.Services.Impl
 {
@@ -44,7 +46,7 @@ namespace DBSrv.Services.Impl
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_setting.ServerAddr), _setting.ServerPort)
-            }).SetDataHandlingAdapter(() => new PlayerDataFixedHeaderDataHandlingAdapter());
+            }).SetTcpDataHandlingAdapter(() => new PlayerDataFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
         }
 
@@ -60,36 +62,39 @@ namespace DBSrv.Services.Impl
             _serverSocket.Stop();
         }
 
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        private Task Received(IClient client, ReceivedDataEventArgs e)
         {
-            if (requestInfo is not PlayerDataMessageFixedHeaderRequestInfo fixedHeader)
-                return;
+            if (e.RequestInfo is not PlayerDataMessageFixedHeaderRequestInfo fixedHeader)
+                return Task.CompletedTask;
             if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
             {
                 _logger.Error("验证玩家数据封包头出现异常...");
-                return;
+                return Task.CompletedTask;
             }
-            var client = (SocketClient)sender;
+            var clientSoc = (SocketClient)client;
             var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
-            ProcessMessagePacket(client.ID, messageData);
+            ProcessMessagePacket(clientSoc.Id, messageData);
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(IClient client, ConnectedEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var remoteIp = client.MainSocket.RemoteEndPoint.GetIP();
+            var clientSoc = (SocketClient)client;
+            var remoteIp = clientSoc.MainSocket.RemoteEndPoint.GetIP();
             if (!DBShare.CheckServerIP(remoteIp))
             {
                 _logger.Warn("非法服务器连接: " + remoteIp);
-                client.Close();
+                clientSoc.Close();
             }
             _logger.Info("服务器连接: " + remoteIp);
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(IClient client, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            ClearSocket(client.ID);
+            var clientSoc = (SocketClient)client;
+            ClearSocket(clientSoc.Id);
+            return Task.CompletedTask;
         }
 
         private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)

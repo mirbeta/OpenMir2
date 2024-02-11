@@ -52,7 +52,7 @@ namespace DBSrv
                     if (currentTick - lastSocketTick > 10000)
                     {
                         lastSocketTick = HUtil32.GetTickCount();
-                        _sessionService.CheckConnection();
+                        //_sessionService.CheckConnection();
                     }
                     if (currentTick - lastKeepTick > 7000)
                     {
