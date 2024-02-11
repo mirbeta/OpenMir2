@@ -292,7 +292,7 @@ namespace DBSrv.Services.Impl
         /// <summary>
         /// 用户打开会话
         /// </summary>
-        private static void OpenUser(int sessionId, string sIp, ref SelGateInfo gateInfo)
+        private static void OpenUser(string sessionId, string sIp, ref SelGateInfo gateInfo)
         {
             var sUserIPaddr = string.Empty;
             var sGateIPaddr = HUtil32.GetValidStr3(sIp, ref sUserIPaddr, HUtil32.Backslash);
@@ -326,7 +326,7 @@ namespace DBSrv.Services.Impl
             }
         }
 
-        private void CloseUser(int connId, ref SelGateInfo gateInfo)
+        private void CloseUser(string connId, ref SelGateInfo gateInfo)
         {
             for (var i = 0; i < gateInfo.UserList.Count; i++)
             {
@@ -770,7 +770,7 @@ namespace DBSrv.Services.Impl
             return result;
         }
 
-        private void SendUserSocket(string connectionId, int sessionId, string sSendMsg)
+        private void SendUserSocket(string connectionId, string sessionId, string sSendMsg)
         {
             var message = new ServerDataMessage();
             message.SocketId = sessionId;

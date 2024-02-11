@@ -45,8 +45,26 @@ namespace LoginGate.Services
         }
 
         public string GetEndPoint()
-        { 
+        {
             return _serverSocket.ServerName;
+        }
+
+        public void SendMessage(string connectionId, byte[] data)
+        {
+            _serverSocket.Send(connectionId, data);
+        }
+
+        public void SendMessage(string connectionId, byte[] data, int len)
+        {
+            _serverSocket.Send(connectionId, data, 0, len);
+        }
+
+        public void CloseClient(string connectionId)
+        {
+            if (_serverSocket.TryGetSocketClient(connectionId, out var client))
+            {
+                client.Close();
+            }
         }
 
         /// <summary>
@@ -69,14 +87,14 @@ namespace LoginGate.Services
             }
             _logger.Debug($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
             TSessionInfo sessionInfo = null;
+            
             for (var nIdx = 0; nIdx < GateShare.MaxSession; nIdx++)
             {
                 sessionInfo = clientThread.SessionArray[nIdx];
                 if (sessionInfo == null)
                 {
                     sessionInfo = new TSessionInfo();
-                    sessionInfo.Socket = client.MainSocket;
-                    sessionInfo.ConnectionId = client.MainSocket.Handle.ToInt32();
+                    sessionInfo.ConnectionId = ((SocketClient)client).Id; 
                     sessionInfo.ReceiveTick = HUtil32.GetTickCount();
                     sessionInfo.ClientIP = client.IP;
                     clientThread.SessionArray[nIdx] = sessionInfo;
@@ -99,11 +117,10 @@ namespace LoginGate.Services
         /// <summary>
         /// 游戏客户端断开链接
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private Task ServerSocketClientDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
-            var userSession = _sessionManager.GetSession(client.MainSocket.Handle.ToInt32());
+            var socClient = client as SocketClient;
+            var userSession = _sessionManager.GetSession(socClient.Id);
             if (userSession != null)
             {
                 userSession.UserLeave();
@@ -111,15 +128,13 @@ namespace LoginGate.Services
                 _logger.Info("断开连接: " + client.IP);
                 _logger.Debug($"用户[{client.IP}] 会话ID:[{client.MainSocket.Handle.ToInt32()}] 断开链接.");
             }
-            _sessionManager.CloseSession(client.MainSocket.Handle.ToInt32());
+            _sessionManager.CloseSession(socClient.Id);
             return Task.CompletedTask;
         }
 
         /// <summary>
         /// 读取游戏客户端数据
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="token"></param>
         private Task ServerSocketClientRead(SocketClient client, ReceivedDataEventArgs e)
         {
             var data = new byte[e.ByteBlock.Len];
@@ -127,7 +142,7 @@ namespace LoginGate.Services
             var message = new MessageData();
             message.ClientIP = client.IP;
             message.Body = data;
-            message.ConnectionId = client.MainSocket.Handle.ToInt32();
+            message.ConnectionId = client.Id;
             _serverManager.SendQueue(message);
             return Task.CompletedTask;
         }

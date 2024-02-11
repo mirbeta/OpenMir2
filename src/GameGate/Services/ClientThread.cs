@@ -175,7 +175,7 @@ namespace GameGate.Services
 
         private Task ClientSocketConnect(IClient client, ConnectedEventArgs e)
         {
-            var endPoint = (client as TcpClient).MainSocket.RemoteEndPoint;
+            var endPoint = ((TcpClientBase)client).RemoteIPHost;
             GateReady = true;
             CheckServerTick = HUtil32.GetTickCount();
             Connected = true;
@@ -186,15 +186,15 @@ namespace GameGate.Services
             return Task.CompletedTask;
         }
 
-        private Task ClientSocketDisconnect(object sender, DisconnectEventArgs e)
+        private Task ClientSocketDisconnect(IClient client, DisconnectEventArgs e)
         {
-            var client = sender as TcpClient;
+            var socSocket = ((TcpClientBase)client);
             for (var i = 0; i < GateShare.MaxSession; i++)
             {
                 var userSession = SessionArray[i];
                 if (userSession != null)
                 {
-                    if (userSession.Socket != null && userSession.Socket == client.MainSocket)
+                    if (userSession.Socket != null && userSession.Socket == socSocket.MainSocket)
                     {
                         userSession.Socket.Close();
                         userSession.Socket = null;
@@ -204,7 +204,7 @@ namespace GameGate.Services
             }
             RestSessionArray();
             GateReady = false;
-            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{socSocket.RemoteIPHost}]断开链接.");
             Connected = false;
             CheckServerFail = true;
             return Task.CompletedTask;
@@ -217,10 +217,10 @@ namespace GameGate.Services
         {
             try
             {
-                if (e.RequestInfo is DataMessageFixedHeaderRequestInfo myRequestInfo)
+                if (e.RequestInfo is DataMessageFixedHeaderRequestInfo requestInfo)
                 {
-                    ProcessServerPacket(myRequestInfo.Header, myRequestInfo.Message);
-                    _networkMonitor.Receive(myRequestInfo.BodyLength);
+                    ProcessServerPacket(requestInfo.Header, requestInfo.Message);
+                    _networkMonitor.Receive(requestInfo.BodyLength);
                 }
             }
             catch (Exception exception)

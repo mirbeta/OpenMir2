@@ -70,7 +70,7 @@ namespace LoginGate
                     for (var j = 0; j < clientList[i].SessionArray.Length; j++)
                     {
                         var session = clientList[i].SessionArray[j];
-                        if (session?.Socket == null)
+                        if (session == null)
                         {
                             continue;
                         }
@@ -84,7 +84,6 @@ namespace LoginGate
                         if (success)
                         {
                             _sessionManager.CloseSession(session.ConnectionId);
-                            clientList[i].SessionArray[j].Socket = null;
                             clientList[i].SessionArray[j] = null;
                         }
                     }

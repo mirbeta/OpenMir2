@@ -36,13 +36,13 @@ namespace DBSrv.Services.Impl
 
         private Task LoginSocketConnected(ITcpClientBase client, ConnectedEventArgs e)
         {
-            _logger.Info($"账号服务器[{client.MainSocket.RemoteEndPoint}]链接成功.");
+            _logger.Info($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]链接成功.");
             return Task.CompletedTask;
         }
 
         private Task LoginSocketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            _logger.Error($"账号服务器[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            _logger.Error($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]断开链接.");
             return Task.CompletedTask;
         }
 
@@ -114,7 +114,7 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == account) && (globaSessionInfo.nSessionID == sessionId))
+                    if ((globaSessionInfo.Account == account) && (globaSessionInfo.SessionID == sessionId))
                     {
                         result = true;
                         break;
@@ -133,12 +133,12 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.Account == sAccount) && (globaSessionInfo.SessionID == nSessionId))
                     {
                         boFoundSession = true;
-                        if (!globaSessionInfo.boLoadRcd)
+                        if (!globaSessionInfo.LoadRcd)
                         {
-                            globaSessionInfo.boLoadRcd = true;
+                            globaSessionInfo.LoadRcd = true;
                             result = 1;
                         }
                         break;
@@ -156,9 +156,9 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == sAccount))
+                    if ((globaSessionInfo.Account == sAccount))
                     {
-                        globaSessionInfo.boLoadRcd = false;
+                        globaSessionInfo.LoadRcd = false;
                         result = true;
                     }
                 }
@@ -173,9 +173,9 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        globaSessionInfo.boStartPlay = false;
+                        globaSessionInfo.StartPlay = false;
                         break;
                     }
                 }
@@ -189,9 +189,9 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        globaSessionInfo.boStartPlay = true;
+                        globaSessionInfo.StartPlay = true;
                         break;
                     }
                 }
@@ -206,9 +206,9 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        result = globaSessionInfo.boStartPlay;
+                        result = globaSessionInfo.StartPlay;
                         break;
                     }
                 }
@@ -223,9 +223,9 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        if (globaSessionInfo.sAccount == sAccount)
+                        if (globaSessionInfo.Account == sAccount)
                         {
                             globaSessionInfo = null;
                             _globaSessionList.RemoveAt(i);
@@ -249,14 +249,14 @@ namespace DBSrv.Services.Impl
             sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);
             var globaSessionInfo = new GlobaSessionInfo();
-            globaSessionInfo.sAccount = sAccount;
-            globaSessionInfo.sIPaddr = sIPaddr;
-            globaSessionInfo.nSessionID = HUtil32.StrToInt(s10, 0);
+            globaSessionInfo.Account = sAccount;
+            globaSessionInfo.IPaddr = sIPaddr;
+            globaSessionInfo.SessionID = HUtil32.StrToInt(s10, 0);
             //GlobaSessionInfo.n24 = HUtil32.StrToInt(s14, 0);
-            globaSessionInfo.boStartPlay = false;
-            globaSessionInfo.boLoadRcd = false;
-            globaSessionInfo.dwAddTick = HUtil32.GetTickCount();
-            globaSessionInfo.dAddDate = DateTime.Now;
+            globaSessionInfo.StartPlay = false;
+            globaSessionInfo.LoadRcd = false;
+            globaSessionInfo.AddTick = HUtil32.GetTickCount();
+            globaSessionInfo.AddDate = DateTime.Now;
             _globaSessionList.Add(globaSessionInfo);
             //_logger.Debug($"同步账号服务[{sAccount}]同步会话消息...");
         }
@@ -271,7 +271,7 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId) && (globaSessionInfo.sAccount == sAccount))
+                    if ((globaSessionInfo.SessionID == nSessionId) && (globaSessionInfo.Account == sAccount))
                     {
                         globaSessionInfo = null;
                         _globaSessionList.RemoveAt(i);
@@ -289,7 +289,7 @@ namespace DBSrv.Services.Impl
                 var globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.sIPaddr == sIPaddr))
+                    if ((globaSessionInfo.Account == sAccount) && (globaSessionInfo.IPaddr == sIPaddr))
                     {
                         result = true;
                         break;
@@ -306,7 +306,10 @@ namespace DBSrv.Services.Impl
 
         public void SendKeepAlivePacket(int userCount)
         {
-            _clientScoket.Send("(" + Messages.SS_SERVERINFO + "/" + _setting.ServerName + "/" + "99" + "/" + userCount + ")");
+            if (_clientScoket.Online)
+            {
+                _clientScoket.Send(HUtil32.GetBytes("(" + Messages.SS_SERVERINFO + "/" + _setting.ServerName + "/" + "99" + "/" + userCount + ")"));
+            }
         }
     }
 }

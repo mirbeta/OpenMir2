@@ -60,10 +60,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Properties" />
-	</ItemGroup>
-
-	<ItemGroup>
 	  <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
 	</ItemGroup>
 

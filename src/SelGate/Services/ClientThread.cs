@@ -1,9 +1,8 @@
 using NLog;
-using SelGate.Package;
 using System;
 using System.Net;
-using System.Net.Sockets;
 using System.Threading.Tasks;
+using SelGate.Datas;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
 using TouchSocket.Sockets;
@@ -31,7 +30,7 @@ namespace SelGate.Services
         /// <summary>
         /// 用户会话
         /// </summary>
-        public readonly TSessionInfo[] SessionArray;
+        public readonly SessionInfo[] SessionArray;
         /// <summary>
         ///  网关游戏服务器之间检测是否失败/超时
         /// </summary>
@@ -71,7 +70,7 @@ namespace SelGate.Services
         public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
         {
             ClientId = clientId;
-            SessionArray = new TSessionInfo[MaxSession];
+            SessionArray = new SessionInfo[MaxSession];
             _sessionManager = sessionManager;
             _clientSocket = new TcpClient();
             _clientSocket.Setup(new TouchSocket.Core.TouchSocketConfig().SetRemoteIPHost(new IPHost(IPAddress.Parse(serverAddr), serverPort)));
@@ -106,17 +105,10 @@ namespace SelGate.Services
 
         public void Stop()
         {
-            for (var i = 0; i < SessionArray.Length; i++)
-            {
-                if (SessionArray[i] != null && SessionArray[i].Socket != null)
-                {
-                    SessionArray[i].Socket.Close();
-                }
-            }
             _clientSocket.Close();
         }
 
-        public TSessionInfo[] GetSession()
+        public SessionInfo[] GetSession()
         {
             return SessionArray;
         }
@@ -137,19 +129,6 @@ namespace SelGate.Services
 
         private Task ClientSocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
-            for (var i = 0; i < MaxSession; i++)
-            {
-                var userSession = SessionArray[i];
-                if (userSession == null)
-                {
-                    continue;
-                }
-                if (userSession.Socket != null && userSession.Socket == client.MainSocket)
-                {
-                    userSession.Socket.Close();
-                    userSession.Socket = null;
-                }
-            }
             RestSessionArray();
             GateShare.ServerGateList.Remove(this);
             _logger.Info($"数据库服务器[{client.GetIPPort()}]断开链接.", 1);
@@ -262,9 +241,8 @@ namespace SelGate.Services
             {
                 if (SessionArray[i] != null)
                 {
-                    SessionArray[i].Socket = null;
                     SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
-                    SessionArray[i].SocketId = 0;
+                    SessionArray[i].SocketId = string.Empty;
                     SessionArray[i].ClientIP = string.Empty;
                 }
             }

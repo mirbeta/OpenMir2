@@ -15,7 +15,5 @@ namespace DBSrv.Storage
         bool SaveMarketItem(MarketItem item, byte groupId, byte serverIndex);
 
         IEnumerable<MarketItem> SearchMarketItems(byte groupId, string marketName, string sellWho, string itemName, short itemType, byte itemSet);
-
-
     }
 }

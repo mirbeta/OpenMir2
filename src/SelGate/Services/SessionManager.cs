@@ -14,12 +14,12 @@ namespace SelGate.Services
         /// <summary>
         /// 发送封包（网关-》客户端）
         /// </summary>
-        private readonly Channel<ServerDataMessage> _sendQueue = null;
-        private readonly ConcurrentDictionary<int, ClientSession> _connectionSessions;
+        private readonly Channel<ServerDataMessage> _sendQueue;
+        private readonly ConcurrentDictionary<string, ClientSession> _connectionSessions;
 
         public SessionManager()
         {
-            _connectionSessions = new ConcurrentDictionary<int, ClientSession>();
+            _connectionSessions = new ConcurrentDictionary<string, ClientSession>();
             _sendQueue = Channel.CreateUnbounded<ServerDataMessage>();
         }
 
@@ -47,21 +47,17 @@ namespace SelGate.Services
             }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
         }
 
-        public void AddSession(int sessionId, ClientSession clientSession)
+        public void AddSession(string sessionId, ClientSession clientSession)
         {
             _connectionSessions.TryAdd(sessionId, clientSession);
         }
 
-        public ClientSession GetSession(int sessionId)
+        public ClientSession GetSession(string sessionId)
         {
-            if (_connectionSessions.ContainsKey(sessionId))
-            {
-                return _connectionSessions[sessionId];
-            }
-            return null;
+            return _connectionSessions.GetValueOrDefault(sessionId);
         }
 
-        public void CloseSession(int sessionId)
+        public void CloseSession(string sessionId)
         {
             if (!_connectionSessions.TryRemove(sessionId, out var clientSession))
             {
@@ -69,7 +65,7 @@ namespace SelGate.Services
             }
         }
 
-        public bool CheckSession(int sessionId)
+        public bool CheckSession(string sessionId)
         {
             if (_connectionSessions.ContainsKey(sessionId))
             {

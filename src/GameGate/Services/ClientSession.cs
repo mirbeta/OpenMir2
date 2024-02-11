@@ -2,14 +2,26 @@ using GameGate.Conf;
 using GameGate.Packet;
 using NLog;
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 
 namespace GameGate.Services
 {
+    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
+    public struct ClientMessage
+    {
+        public int Recog;
+        public ushort Ident;
+        public ushort Param;
+        public ushort Tag;
+        public ushort Series;
+    }
+
     /// <summary>
     /// 用户会话封包处理
     /// </summary>
@@ -163,14 +175,11 @@ namespace GameGate.Services
                 if (deCodeLen < 12)
                 {
                     Logger.Debug("解析数据包小于12...解析后长度:" + deCodeLen);
-                    //_session.Socket.Close();//关闭异常会话
+                    _session.Socket.Close();//关闭异常会话
                     return;
                 }
-                var recog = BitConverter.ToInt32(decodeBuff[..4]);
-                var ident = BitConverter.ToUInt16(decodeBuff.Slice(4, 2));
-                var param = BitConverter.ToUInt16(decodeBuff.Slice(6, 2));
-                var tag = BitConverter.ToUInt16(decodeBuff.Slice(8, 2));
-                var series = BitConverter.ToUInt16(decodeBuff.Slice(10, 2));
+
+                var clientMessage = MemoryMarshal.Read<ClientMessage>(decodeBuff);
 
                 //if (Config.EnableOtp)
                 //{
@@ -198,7 +207,7 @@ namespace GameGate.Services
                 int delayMsgCount;
                 int dwDelay;
                 int nInterval;
-                switch (ident)
+                switch (clientMessage.Ident)
                 {
                     case Messages.CM_GUILDUPDATENOTICE:
                     case Messages.CM_GUILDUPDATERANKINFO:
@@ -232,7 +241,7 @@ namespace GameGate.Services
                                 {
                                     gameSpeed.AttackTick = currentTick - Config.MoveNextAttackCompensate;
                                 }
-                                LastDirection = tag;
+                                LastDirection = clientMessage.Tag;
                             }
                             else
                             {
@@ -294,7 +303,7 @@ namespace GameGate.Services
                                     gameSpeed.SpellTick = currentTick - Config.AttackNextSpellCompensate; // 1150
                                 }
 
-                                LastDirection = tag;
+                                LastDirection = clientMessage.Tag;
                             }
                             else
                             {
@@ -324,27 +333,27 @@ namespace GameGate.Services
                         if (Config.IsSpellInterval) // 1380
                         {
                             currentTick = HUtil32.GetTickCount();
-                            if (tag >= 0128)
+                            if (clientMessage.Tag >= 0128)
                             {
                                 return;
                             }
-                            if (TableDef.MaigicDelayArray[tag]) // 过滤武士魔法
+                            if (TableDef.MaigicDelayArray[clientMessage.Tag]) // 过滤武士魔法
                             {
                                 int nSpellInterval;
                                 if (gameSpeed.SpeedLimit)
                                 {
-                                    nSpellInterval = TableDef.MaigicDelayTimeList[tag] + Config.PunishSpellInterval;
+                                    nSpellInterval = TableDef.MaigicDelayTimeList[clientMessage.Tag] + Config.PunishSpellInterval;
                                 }
                                 else
                                 {
-                                    nSpellInterval = TableDef.MaigicDelayTimeList[tag];
+                                    nSpellInterval = TableDef.MaigicDelayTimeList[clientMessage.Tag];
                                 }
                                 nInterval = (currentTick - gameSpeed.SpellTick);
                                 if ((nInterval >= nSpellInterval))
                                 {
                                     int dwNextMove;
                                     int dwNextAtt;
-                                    if (TableDef.MaigicAttackArray[tag])
+                                    if (TableDef.MaigicAttackArray[clientMessage.Tag])
                                     {
                                         dwNextMove = Config.SpellNextMoveCompensate;
                                         dwNextAtt = Config.SpellNextAttackCompensate;
@@ -358,7 +367,7 @@ namespace GameGate.Services
                                     gameSpeed.SpellTick = currentTick;
                                     gameSpeed.MoveTick = currentTick - dwNextMove;
                                     gameSpeed.AttackTick = currentTick - dwNextAtt;
-                                    LastDirection = tag;
+                                    LastDirection = clientMessage.Tag;
                                 }
                                 else
                                 {
@@ -428,7 +437,7 @@ namespace GameGate.Services
                             {
                                 if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                 {
-                                    if (!PeekDelayMsg(ident))
+                                    if (!PeekDelayMsg(clientMessage.Ident))
                                     {
                                         dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.ButchInterval - nInterval) * Config.PunishIntervalRate);
                                         gameSpeed.ButchTick = currentTick + dwDelay;
@@ -445,19 +454,19 @@ namespace GameGate.Services
                     case Messages.CM_TURN:
                         if (Config.IsTurnInterval && (Config.OverSpeedPunishMethod != PunishMethod.TurnPack))
                         {
-                            if (LastDirection != tag)
+                            if (LastDirection != clientMessage.Tag)
                             {
                                 currentTick = HUtil32.GetTickCount();
                                 if (currentTick - gameSpeed.TurnTick >= Config.TurnInterval)
                                 {
-                                    LastDirection = tag;
+                                    LastDirection = clientMessage.Tag;
                                     gameSpeed.TurnTick = currentTick;
                                 }
                                 else
                                 {
                                     if (Config.OverSpeedPunishMethod == PunishMethod.DelaySend)
                                     {
-                                        if (!PeekDelayMsg(ident))
+                                        if (!PeekDelayMsg(clientMessage.Ident))
                                         {
                                             dwDelay = Config.PunishBaseInterval + (int)Math.Round((Config.TurnInterval - (currentTick - gameSpeed.TurnTick)) * Config.PunishIntervalRate);
                                         }
@@ -615,7 +624,7 @@ namespace GameGate.Services
                     case Messages.CM_EAT:
                         if (Config.IsEatInterval)
                         {
-                            if (series == 0 || series == 1 || series == 3)
+                            if (clientMessage.Series == 0 || clientMessage.Series == 1 || clientMessage.Series == 3)
                             {
                                 currentTick = HUtil32.GetTickCount();
                                 if (currentTick - gameSpeed.EatTick > Config.EatInterval)
@@ -625,7 +634,7 @@ namespace GameGate.Services
                                 else
                                 {
                                     CommandMessage eatPacket = default;
-                                    eatPacket.Recog = recog;
+                                    eatPacket.Recog = clientMessage.Recog;
                                     eatPacket.Ident = Messages.SM_EAT_FAIL;
                                     var pszSendBuf = new byte[GateShare.CommandFixedLength];
                                     pszSendBuf[0] = (byte)'#';
@@ -899,7 +908,7 @@ namespace GameGate.Services
                 message.Buffer.AsSpan().CopyTo(sendBuffer[1..]);
                 sendBuffer[buffLen + 1] = (byte)'!';//消息结尾
                 _session.Socket.Send(sendBuffer, SocketFlags.None);*/
-                var buffLen = -bufferLen;
+                var buffLen = -bufferLen;//bufferLen本身为负数，需要使用-来转为整数
                 // 使用 Span<byte> 替代 byte[]
                 Span<byte> sendBuffer = stackalloc byte[buffLen + 2];
                 // 消息头

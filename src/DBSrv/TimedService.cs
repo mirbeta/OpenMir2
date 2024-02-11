@@ -69,7 +69,7 @@ namespace DBSrv
                         syncSaveTick = HUtil32.GetTickCount();
                         ProcessCacheStorage();
                     }
-                    if (currentTick - marketPushTick > _config.SyncMarketInterval) //自定义时间推送一次拍卖行数据到各个GameSrv
+                    if (currentTick - marketPushTick > _config.PushMarketInterval) //自定义时间推送一次拍卖行数据到各个GameSrv
                     {
                         marketPushTick = HUtil32.GetTickCount();
                         _marketService.PushMarketData();

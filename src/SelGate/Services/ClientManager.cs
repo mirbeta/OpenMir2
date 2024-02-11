@@ -16,19 +16,19 @@ namespace SelGate.Services
         private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
-        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        private readonly ConcurrentDictionary<string, ClientThread> _clientThreadMap;
 
         public ClientManager(SessionManager sessionManager, ConfigManager configManager)
         {
             _configManager = configManager;
             _sessionManager = sessionManager;
-            _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
+            _clientThreadMap = new ConcurrentDictionary<string, ClientThread>();
             _clientList = new List<ClientThread>();
         }
 
         public void Initialization()
         {
-            for (var i = 0; i < _configManager.GateConfig.m_nGateCount; i++)
+            for (var i = 0; i < _configManager.GateConfig.GateCount; i++)
             {
                 var serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
                 var serverPort = _configManager.m_xGameGateList[i].nServerPort;
@@ -73,7 +73,7 @@ namespace SelGate.Services
         /// </summary>
         /// <param name="connectionId"></param>
         /// <param name="clientThread"></param>
-        public void AddClientThread(int connectionId, ClientThread clientThread)
+        public void AddClientThread(string connectionId, ClientThread clientThread)
         {
             _clientThreadMap.TryAdd(connectionId, clientThread); //链接成功后建立对应关系
         }
@@ -83,22 +83,18 @@ namespace SelGate.Services
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns></returns>
-        public ClientThread GetClientThread(int connectionId)
+        public ClientThread GetClientThread(string connectionId)
         {
-            if (connectionId > 0)
-            {
-                return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : GetClientThread();
-            }
-            return null;
+            return _clientThreadMap.TryGetValue(connectionId, out var userClient) ? userClient : GetClientThread();
         }
 
         /// <summary>
         /// 从字典删除用户和网关对应关系
         /// </summary>
         /// <param name="connectionId"></param>
-        public void DeleteClientThread(int connectionId)
+        public void DeleteClientThread(string connectionId)
         {
-            _clientThreadMap.TryRemove(connectionId, out var userClinet);
+            _clientThreadMap.TryRemove(connectionId, out var userClient);
         }
 
         public ClientThread GetClientThread()

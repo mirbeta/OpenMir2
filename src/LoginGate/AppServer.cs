@@ -68,6 +68,7 @@ namespace LoginGate
             _logger.Debug("LoginGate is starting.");
             _logger.Info("正在启动服务...", 2);
             Host = await Builder.StartAsync(cancellationToken);
+            GateShare.ServiceProvider = Host.Services;
             await ProcessLoopAsync();
             Stop();
         }

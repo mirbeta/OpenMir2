@@ -34,12 +34,7 @@ namespace PlanesSystem
 
         private PlanesClient()
         {
-            _tcpClient.Setup(new TouchSocketConfig()
-                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort))
-                .ConfigureContainer(a =>
-                {
-                    a.AddConsoleLogger(); //添加一个日志注入
-                }));
+            _tcpClient = new TcpClient();
             _tcpClient.Connected += MsgClientConnect; //成功连接到服务器
             _tcpClient.Disconnected += MsgClientDisconnected; //从服务器断开连接，当连接不成功时不会触发。
             _tcpClient.Received += MsgClientRead;
@@ -48,6 +43,12 @@ namespace PlanesSystem
 
         public void ConnectPlanesServer()
         {
+            _tcpClient.Setup(new TouchSocketConfig()
+                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort))
+                .ConfigureContainer(a =>
+                {
+                    a.AddConsoleLogger(); //添加一个日志注入
+                }));
             _tcpClient.Connect();
         }
 

@@ -28,6 +28,7 @@ namespace LoginGate
         /// </summary>
         public static IList<string> TempBlockIPList = null;
         public static int nMaxConnOfIPaddr = 50;
+        public static IServiceProvider ServiceProvider = null;
 
         public static void LoadBlockIPFile()
         {

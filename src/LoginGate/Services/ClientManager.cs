@@ -160,10 +160,10 @@ namespace LoginGate.Services
         {
             if (clientThread.ConnectState)
             {
-                clientThread.SendPacket(new ServerDataMessage()
+                clientThread.SendClientPacket(new ServerDataMessage()
                 {
                     Type = ServerDataType.KeepAlive,
-                    SocketId = 0
+                    SocketId = string.Empty
                 });
                 clientThread.CheckServerFailCount = 1;
                 if (HUtil32.GetTickCount() - clientThread.KeepAliveTick > GateShare.KeepAliveTickTimeOut) //30s没有LoginSvr服务器心跳回应则超时

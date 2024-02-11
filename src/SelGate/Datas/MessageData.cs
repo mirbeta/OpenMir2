@@ -1,9 +1,9 @@
-namespace LoginGate.Packet
+namespace SelGate.Datas
 {
     public struct MessageData
     {
-        public string ConnectionId;
-        public string ClientIP;
+        public string SessionId;
+
         public byte[] Body;
         public int MsgLen => Body.Length;
     }

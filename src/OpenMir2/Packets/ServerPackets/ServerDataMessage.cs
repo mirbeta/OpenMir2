@@ -27,7 +27,7 @@ namespace SystemModule.Packets.ServerPackets
     public partial struct ServerDataMessage
     {
         public ServerDataType Type { get; set; }
-        public int SocketId { get; set; }
+        public string SocketId { get; set; }
         public short DataLen { get; set; }
         public byte[] Data { get; set; }
     }

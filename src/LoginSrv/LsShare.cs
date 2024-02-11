@@ -142,7 +142,7 @@ namespace LoginSrv
     public struct UserSessionData
     {
         public int SessionId;
-        public int SoketId;
+        public string SoketId;
         public string Msg;
     }
 
@@ -243,7 +243,7 @@ namespace LoginSrv
         public string Account;
         public string UserIPaddr;
         public string GateIPaddr;
-        public int SockIndex;
+        public string SockIndex;
         public int SessionID;
         /// <summary>
         /// 付费账号

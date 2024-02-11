@@ -1,4 +1,5 @@
 using LoginGate.Conf;
+using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -13,31 +14,27 @@ namespace LoginGate.Services
     {
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configManager;
-        private readonly ConcurrentDictionary<int, ClientSession> _sessionMap;
+        private readonly ConcurrentDictionary<string, ClientSession> _sessionMap;
 
         public SessionManager(ConfigManager configManager)
         {
             _configManager = configManager;
-            _sessionMap = new ConcurrentDictionary<int, ClientSession>();
+            _sessionMap = new ConcurrentDictionary<string, ClientSession>();
         }
 
         public void AddSession(TSessionInfo sessionInfo, ClientThread clientThread)
         {
-            var userSession = new ClientSession(sessionInfo, clientThread, _configManager);
+            var userSession = new ClientSession(sessionInfo, clientThread, _configManager, GateShare.ServiceProvider.GetService<ServerService>());
             _sessionMap.TryAdd(sessionInfo.ConnectionId, userSession);
             userSession.UserEnter();
         }
 
-        public ClientSession GetSession(int sessionId)
+        public ClientSession GetSession(string sessionId)
         {
-            if (_sessionMap.ContainsKey(sessionId))
-            {
-                return _sessionMap[sessionId];
-            }
-            return null;
+            return _sessionMap.GetValueOrDefault(sessionId);
         }
 
-        public void CloseSession(int sessionId)
+        public void CloseSession(string sessionId)
         {
             if (_sessionMap.TryRemove(sessionId, out var clientSession))
             {
@@ -45,13 +42,9 @@ namespace LoginGate.Services
             }
         }
 
-        public bool CheckSession(int sessionId)
+        public bool CheckSession(string sessionId)
         {
-            if (_sessionMap.ContainsKey(sessionId))
-            {
-                return true;
-            }
-            return false;
+            return _sessionMap.ContainsKey(sessionId);
         }
 
         public IList<ClientSession> GetAllSession()

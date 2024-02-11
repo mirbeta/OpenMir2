@@ -30,7 +30,7 @@ namespace DBSrv.Conf
             _config.LoginServerPort = ReadWriteInteger("Server", "IDSPort", _config.LoginServerPort);
             _config.MarketServerAddr = ReadWriteString("Server", "MarketAddr", _config.MarketServerAddr);
             _config.MarketServerPort = ReadWriteInteger("Server", "MarketPort", _config.MarketServerPort);
-            _config.SyncMarketInterval = ReadWriteInteger("Server", "SyncMarketInterval", _config.SyncMarketInterval);
+            _config.PushMarketInterval = ReadWriteInteger("Server", "PushMarketInterval", _config.PushMarketInterval);
             _config.ServerName = ReadWriteString("Setup", "ServerName", _config.ServerName);
             _config.boDenyChrName = ReadWriteBool("Setup", "DenyChrName", _config.boDenyChrName);
             _config.DeleteMinLevel = ReadWriteInteger("Setup", "DELMaxLevel", _config.DeleteMinLevel);

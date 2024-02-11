@@ -238,13 +238,13 @@ namespace DBSrv
 
     public class GlobaSessionInfo
     {
-        public string sAccount;
-        public string sIPaddr;
-        public int nSessionID;
-        public long dwAddTick;
-        public DateTime dAddDate;
-        public bool boLoadRcd;
-        public bool boStartPlay;
+        public string Account;
+        public string IPaddr;
+        public int SessionID;
+        public long AddTick;
+        public DateTime AddDate;
+        public bool LoadRcd;
+        public bool StartPlay;
     }
 
     public class SelGateInfo
@@ -279,7 +279,7 @@ namespace DBSrv
         public string sAccount;
         public string sUserIPaddr;
         public string sGateIPaddr;
-        public int SessionId;
+        public string SessionId;
         public int nSessionID;
         public string ConnectionId;
         public string sText;

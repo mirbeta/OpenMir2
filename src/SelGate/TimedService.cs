@@ -60,10 +60,6 @@ namespace SelGate
                         {
                             continue;
                         }
-                        if (session.Socket == null)
-                        {
-                            continue;
-                        }
                         var userClient = _sessionManager.GetSession(session.SocketId);
                         if (userClient == null)
                         {
@@ -74,7 +70,6 @@ namespace SelGate
                         if (success)
                         {
                             _sessionManager.CloseSession(session.SocketId);
-                            clientList[i].SessionArray[j].Socket = null;
                             clientList[i].SessionArray[j] = null;
                         }
                     }
@@ -97,16 +92,11 @@ namespace SelGate
                     for (var j = 0; j < ClientThread.MaxSession; j++)
                     {
                         var userSession = clientList[i].SessionArray[j];
-                        if (userSession?.Socket != null && userSession.Socket.Connected)
+                        if ((HUtil32.GetTickCount() - userSession.dwReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
                         {
-                            if ((HUtil32.GetTickCount() - userSession.dwReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
-                            {
-                                userSession.Socket.Close();
-                                userSession.Socket = null;
-                                _sessionManager.CloseSession(userSession.SocketId);
-                                userSession = null;
-                                logger.Debug("清理超时会话,关闭超时Socket.");
-                            }
+                            _sessionManager.CloseSession(userSession.SocketId);
+                            userSession = null;
+                            logger.Debug("清理超时会话,关闭超时Socket.");
                         }
                     }
                 }

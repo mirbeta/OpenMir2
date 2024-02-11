@@ -31,6 +31,10 @@ namespace SelGate
         /// 会话超时时间
         /// </summary>
         public const int SessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
+        /// <summary>
+        /// ServiceProvider
+        /// </summary>
+        public static IServiceProvider ServiceProvider;
         public static IList<ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()

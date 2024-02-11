@@ -23,12 +23,6 @@ namespace GameSrv.Services
         public DataQueryServer()
         {
             _tcpClient = new TcpClient();
-            _tcpClient.Setup(new TouchSocketConfig()
-                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort))
-                .ConfigureContainer(a =>
-                {
-                    a.AddConsoleLogger();
-                }));
             _tcpClient.Connected = DataScoketConnected; 
             _tcpClient.Disconnected = DataScoketDisconnected;
             _tcpClient.Received = DataSocketRead;
@@ -38,6 +32,12 @@ namespace GameSrv.Services
 
         public void Start()
         {
+            _tcpClient.Setup(new TouchSocketConfig()
+                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort))
+                .ConfigureContainer(a =>
+                {
+                    a.AddConsoleLogger();
+                }));
             _tcpClient.Connect();
         }
 

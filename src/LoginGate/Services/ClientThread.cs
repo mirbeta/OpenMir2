@@ -80,13 +80,6 @@ namespace LoginGate.Services
 
         public void Stop()
         {
-            for (var i = 0; i < SessionArray.Length; i++)
-            {
-                if (SessionArray[i] != null && SessionArray[i].Socket != null)
-                {
-                    SessionArray[i].Socket.Close();
-                }
-            }
             _clientSocket.Close();
         }
 
@@ -96,10 +89,6 @@ namespace LoginGate.Services
             {
                 var userSession = SessionArray[i];
                 if (userSession == null)
-                {
-                    return false;
-                }
-                if (userSession.Socket == null)
                 {
                     return false;
                 }
@@ -121,8 +110,8 @@ namespace LoginGate.Services
             CheckServerTick = HUtil32.GetTickCount();
             CheckServerFailCount = 1;
             //_clientManager.AddClientThread(e.SocketHandle, this);
-            logger.Info($"账号服务器[{client.GetIPPort()}]链接成功.");
-            logger.Debug($"线程[{Guid.NewGuid():N}]连接 {client.GetIPPort()} 成功...");
+            logger.Info($"账号服务器[{((TcpClientBase)client).GetIPPort()}]链接成功.");
+            logger.Debug($"线程[{Guid.NewGuid():N}]连接 {((TcpClientBase)client).GetIPPort()} 成功...");
             return Task.CompletedTask;
         }
 
@@ -135,18 +124,13 @@ namespace LoginGate.Services
                 {
                     continue;
                 }
-                if (userSession.Socket != null && userSession.Socket == client.MainSocket)
-                {
-                    userSession.Socket.Close();
-                    userSession.Socket = null;
-                    SessionArray[i] = null;
-                    logger.Debug("账号服务器断开Socket");
-                }
+                SessionArray[i] = null;
+                logger.Debug("账号服务器断开Socket");
             }
             RestSessionArray();
             ConnectState = false;
             //_clientManager.DeleteClientThread(e.SocketHandle);
-            logger.Info($"账号服务器[{client.GetIPPort()}]断开链接.");
+            logger.Info($"账号服务器[{((SocketClient)client).GetIPPort()}]断开链接.");
             return Task.CompletedTask;
         }
 
@@ -237,15 +221,14 @@ namespace LoginGate.Services
             {
                 if (SessionArray[i] != null)
                 {
-                    SessionArray[i].Socket = null;
                     SessionArray[i].ReceiveTick = HUtil32.GetTickCount();
-                    SessionArray[i].ConnectionId = 0;
+                    SessionArray[i].ConnectionId = string.Empty;
                     SessionArray[i].ClientIP = string.Empty;
                 }
             }
         }
 
-        public void SendPacket(ServerDataMessage packet)
+        public void SendClientPacket(ServerDataMessage packet)
         {
             if (!IsConnected)
             {
@@ -298,7 +281,7 @@ namespace LoginGate.Services
             var count = 0;
             for (var i = 0; i < SessionArray.Length; i++)
             {
-                if (SessionArray[i] != null && SessionArray[i].Socket != null)
+                if (SessionArray[i] != null)
                 {
                     count++;
                 }

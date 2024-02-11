@@ -1,11 +1,9 @@
-using System.Net.Sockets;
 
-namespace SelGate.Package
+namespace SelGate.Datas
 {
-    public class TSessionInfo
+    public class SessionInfo
     {
-        public Socket Socket;
-        public int SocketId;
+        public string SocketId;
         public int dwReceiveTick;
         public string sAccount;
         public string sChrName;

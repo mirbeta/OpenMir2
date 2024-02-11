@@ -119,7 +119,7 @@ namespace LoginSrv.Storage
             {
                 Close(dbConnection);
             }
-            _logger.Info($"账号数据读取成功.[{_accountMap.Count}]");
+            _logger.Info($"账号数据读取成功...[{_accountMap.Count}]");
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)

@@ -97,7 +97,7 @@ namespace LoginGate.Services
                         }
                         try
                         {
-                            userSession.HandleClientPacket(message);
+                            userSession.ProcessClientPacket(message);
                         }
                         catch (Exception e)
                         {

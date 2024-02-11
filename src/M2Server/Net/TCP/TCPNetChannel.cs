@@ -99,17 +99,17 @@ namespace M2Server.Net.TCP
             return Task.CompletedTask;
         }
 
-        private Task Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(IClient client, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            M2Share.NetChannel.CloseGate(client.Id, client.ServiceIP);
+            var socSocket = ((SocketClient)client);
+            M2Share.NetChannel.CloseGate(socSocket.Id, socSocket.GetIPPort());
             return Task.CompletedTask;
         }
 
         public void Initialize()
         {
             var touchSocketConfig = new TouchSocketConfig();
-            touchSocketConfig.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort))
+            touchSocketConfig.SetListenIPHosts(new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort))
                 .SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             tcpService.Setup(touchSocketConfig);
             _logger.Info("游戏网关初始化完成...");
@@ -127,7 +127,7 @@ namespace M2Server.Net.TCP
             if (_receiveQueue.Reader.Count > 0)
                 await _receiveQueue.Reader.Completion;
             _stoppingCancelReads = new CancellationToken(true);
-            tcpService.Stop();
+            await tcpService.StopAsync();
         }
 
         private void LoadRunAddr()

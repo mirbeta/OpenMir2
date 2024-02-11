@@ -18,16 +18,18 @@ namespace LoginGate.Services
         private readonly ClientThread _lastLoginSvr;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configManager;
+        private readonly ServerService _serverService;
         private bool m_KickFlag = false;
         private readonly int m_nSvrObject = 0;
         private int m_dwClientTimeOutTick = 0;
 
-        public ClientSession(TSessionInfo session, ClientThread clientThread, ConfigManager configManager)
+        public ClientSession(TSessionInfo session, ClientThread clientThread, ConfigManager configManager, ServerService serverService)
         {
             _session = session;
             _lastLoginSvr = clientThread;
             _configManager = configManager;
             m_dwClientTimeOutTick = HUtil32.GetTickCount();
+            _serverService = serverService; 
         }
 
         private TSessionInfo Session => _session;
@@ -41,7 +43,7 @@ namespace LoginGate.Services
         /// 发送创建账号，修改密码，更新资料等到LoginSvr
         /// </summary>
         /// <param name="userData"></param>
-        public void HandleClientPacket(MessageData userData)
+        public void ProcessClientPacket(MessageData userData)
         {
             if ((userData.MsgLen >= 5) && Config.DefenceCCPacket)
             {
@@ -77,7 +79,7 @@ namespace LoginGate.Services
                     accountPacket.DataLen = (short)userData.Body.Length;
                     accountPacket.Type = ServerDataType.Data;
                     accountPacket.SocketId = Session.ConnectionId;
-                    _lastLoginSvr.SendPacket(accountPacket);
+                    _lastLoginSvr.SendClientPacket(accountPacket);
                 }
             }
 
@@ -139,10 +141,6 @@ namespace LoginGate.Services
                 if (HUtil32.GetTickCount() - m_dwClientTimeOutTick > Config.ClientTimeOutTime)
                 {
                     m_dwClientTimeOutTick = HUtil32.GetTickCount();
-                    if (_session.Socket == null || _session.Socket.Handle == IntPtr.Zero)
-                    {
-                        return;
-                    }
                     SendDefMessage(Messages.SM_OUTOFCONNECTION, m_nSvrObject, 0, 0, 0);
                     m_KickFlag = true;
                     //BlockUser(this);
@@ -168,17 +166,10 @@ namespace LoginGate.Services
             if (m_KickFlag)
             {
                 m_KickFlag = false;
-                _session.Socket.Close();
+                _serverService.CloseClient(_session.ConnectionId);
                 return;
             }
-            if (_session.Socket != null && _session.Socket.Connected)
-            {
-                _session.Socket.Send(sendData);
-            }
-            else
-            {
-                _logger.Info("Scoket会话失效，无法处理登陆封包", 5);
-            }
+            _serverService.SendMessage(_session.ConnectionId, sendData);
         }
 
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg = "")
@@ -210,7 +201,7 @@ namespace LoginGate.Services
                 iLen = EncryptUtil.Encode(tempBuf, CommandMessage.Size, sendBuf, 1);
             }
             sendBuf[iLen + 1] = (byte)'!';
-            _session.Socket.Send(sendBuf, iLen, SocketFlags.None);
+            _serverService.SendMessage(_session.ConnectionId, sendBuf, iLen);
         }
 
         /// <summary>
@@ -224,7 +215,7 @@ namespace LoginGate.Services
             accountPacket.DataLen = (byte)body.Length;
             accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.ConnectionId;
-            _lastLoginSvr.SendPacket(accountPacket);
+            _lastLoginSvr.SendClientPacket(accountPacket);
         }
 
         /// <summary>
@@ -232,7 +223,7 @@ namespace LoginGate.Services
         /// </summary>
         public void UserLeave()
         {
-            if (Session == null || Session.Socket == null)
+            if (Session == null)
             {
                 return;
             }
@@ -241,25 +232,19 @@ namespace LoginGate.Services
             accountPacket.DataLen = 0;
             accountPacket.Type = ServerDataType.Leave;
             accountPacket.SocketId = Session.ConnectionId;
-            _lastLoginSvr.SendPacket(accountPacket);
+            _lastLoginSvr.SendClientPacket(accountPacket);
             m_KickFlag = false;
         }
 
         public void CloseSession()
         {
-            if (_session.Socket == null)
-            {
-                _logger.Debug($"会话[{_session.ConnectionId}]已经关闭");
-                return;
-            }
-            _session.Socket.Close();
+            _serverService.CloseClient(Session.ConnectionId);
         }
     }
 
     public class TSessionInfo
     {
-        public Socket Socket;
-        public int ConnectionId;
+        public string ConnectionId;
         public int ReceiveTick;
         public string sAccount;
         public string sChrName;

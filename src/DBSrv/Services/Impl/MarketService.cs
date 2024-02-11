@@ -4,8 +4,6 @@ using NLog;
 using System;
 using System.Linq;
 using System.Net;
-using System.Net.Sockets;
-using System.Reflection;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.DataHandlingAdapters;
@@ -160,21 +158,21 @@ namespace DBSrv.Services.Impl
             SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
         }
 
-        private void ProcessMarketPacket(int nQueryId, ServerRequestMessage packet, byte[] sData, string connectionId)
+        private void ProcessMarketPacket(int queryId, ServerRequestMessage packet, byte[] sData, string connectionId)
         {
             switch (packet.Ident)
             {
                 case Messages.DB_LOADMARKET://GameSrv主动拉取拍卖行数据
-                    LoadMarketList(nQueryId, sData, connectionId);
+                    LoadMarketList(queryId, sData, connectionId);
                     break;
                 case Messages.DB_SAVEMARKET://GameSrv保存拍卖行数据
-                    SaveMarketItem(nQueryId, packet.Recog, sData, connectionId);
+                    SaveMarketItem(queryId, packet.Recog, sData, connectionId);
                     break;
                 case Messages.DB_SEARCHMARKET://GameSrv搜索拍卖行数据
-                    SearchMarketItem(nQueryId, packet.Recog, sData, connectionId);
+                    SearchMarketItem(queryId, packet.Recog, sData, connectionId);
                     break;
                 case Messages.DB_LOADUSERMARKET://GameSrv拉取玩家拍卖行数据
-                    QueryMarketUserLoad(nQueryId, packet.Recog, sData, connectionId);
+                    QueryMarketUserLoad(queryId, packet.Recog, sData, connectionId);
                     break;
             }
         }

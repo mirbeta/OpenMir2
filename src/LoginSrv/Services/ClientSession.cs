@@ -723,7 +723,7 @@ namespace LoginSrv.Services
             _sessionManager.AddSession(nSessionId, connInfo);
         }
 
-        private void SendGateMsg(Socket socket, int sSockIndex, string sMsg)
+        private void SendGateMsg(Socket socket, string sSockIndex, string sMsg)
         {
             if (socket.Connected)
             {
@@ -863,7 +863,7 @@ namespace LoginSrv.Services
             return result;
         }
 
-        private static void SendGateKickMsg(Socket socket, int sSockIndex)
+        private static void SendGateKickMsg(Socket socket, string sSockIndex)
         {
             var sSendMsg = $"%+-{sSockIndex}$";
             socket.Send(HUtil32.GetBytes(sSendMsg));

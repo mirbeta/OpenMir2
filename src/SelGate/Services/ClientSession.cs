@@ -1,8 +1,8 @@
 using NLog;
 using SelGate.Conf;
-using SelGate.Package;
 using System;
 using System.Net.Sockets;
+using SelGate.Datas;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
@@ -14,22 +14,24 @@ namespace SelGate.Services
     /// </summary>
     public class ClientSession
     {
-        private readonly TSessionInfo _session;
+        private readonly SessionInfo _session;
         private bool _kickFlag = false;
         private int _clientTimeOutTick = 0;
         private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ClientThread _lastDbSvr;
         private readonly ConfigManager _configManager;
+        private readonly ServerService _serverService;
 
-        public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
+        public ClientSession(ConfigManager configManager, SessionInfo session, ClientThread clientThread, ServerService serverService)
         {
             _session = session;
             _lastDbSvr = clientThread;
+            _serverService = serverService;
             _configManager = configManager;
             _clientTimeOutTick = HUtil32.GetTickCount();
         }
 
-        private TSessionInfo Session => _session;
+        private SessionInfo Session => _session;
 
         private GateConfig Config => _configManager.GateConfig;
 
@@ -40,9 +42,9 @@ namespace SelGate.Services
         /// 发送创建角色，删除角色，恢复角色，创建名字等功能
         /// </summary>
         /// <param name="userData"></param>
-        public void HandleUserPacket(TMessageData userData)
+        public void HandleUserPacket(MessageData userData)
         {
-            if ((userData.MsgLen >= 5) && Config.m_fDefenceCCPacket)
+            if ((userData.MsgLen >= 5) && Config.DefenceCCPacket)
             {
                 var sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
@@ -107,7 +109,7 @@ namespace SelGate.Services
                 if (HUtil32.GetTickCount() - _clientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
                     _clientTimeOutTick = HUtil32.GetTickCount();
-                    _session.Socket.Close();
+                    _serverService.CloseClient(Session.SocketId);
                     success = true;
                 }
             }
@@ -121,21 +123,10 @@ namespace SelGate.Services
             if (_kickFlag)
             {
                 _kickFlag = false;
-                _session.Socket.Close();
+                _serverService.CloseClient(Session.SocketId);
                 return;
             }
-            if (_session.Socket != null && _session.Socket.Connected)
-            {
-                var sendLen = _session.Socket.Send(sendData);
-                if (sendLen <= 0)
-                {
-                    _logger.Warn("发送人物数据包失败.");
-                }
-            }
-            else
-            {
-                _logger.Debug("Scoket会话失效，无法处理登陆封包");
-            }
+            _serverService.SendMessage(Session.SocketId, sendData);
         }
 
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
@@ -167,7 +158,7 @@ namespace SelGate.Services
                 iLen = EncryptUtil.Encode(TempBuf, CommandMessage.Size, SendBuf);
             }
             SendBuf[iLen + 1] = (byte)'!';
-            _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
+            _serverService.SendMessage(Session.SocketId, SendBuf, iLen + 2);
         }
 
         /// <summary>
@@ -191,7 +182,7 @@ namespace SelGate.Services
         /// </summary>
         public void UserLeave()
         {
-            if (_session == null || _session.Socket == null)
+            if (_session == null)
             {
                 return;
             }
@@ -209,7 +200,7 @@ namespace SelGate.Services
 
         public void CloseSession()
         {
-            _session.Socket.Close();
+            _serverService.CloseClient(Session.SocketId);
         }
     }
 

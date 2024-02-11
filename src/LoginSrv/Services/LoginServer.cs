@@ -176,7 +176,7 @@ namespace LoginSrv.Services
             SendMessage(connectionId, SerializerUtil.Serialize(messagePacket));
         }
 
-        private void ReceiveCloseUser(int sSockIndex, LoginGateInfo gateInfo)
+        private void ReceiveCloseUser(string sSockIndex, LoginGateInfo gateInfo)
         {
             const string sCloseMsg = "Close: {0}";
             for (var i = 0; i < gateInfo.UserList.Count; i++)
