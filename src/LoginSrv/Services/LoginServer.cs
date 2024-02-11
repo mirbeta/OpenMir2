@@ -91,7 +91,7 @@ namespace LoginSrv.Services
             var clientId = int.Parse(client.Id);
             loginGates[clientId] = null;
             _clientManager.Delete(clientId);
-            _logger.Warn($"登录网关[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            _logger.Warn($"登录网关[{client.ServiceIP}:{client.ServicePort}]断开链接.");
             return Task.CompletedTask;
         }
 

@@ -2,10 +2,10 @@ using LoginGate.Conf;
 using NLog;
 using System;
 using System.Net;
-using System.Net.Sockets;
 using System.Threading.Tasks;
 using SystemModule;
 using SystemModule.Packets.ServerPackets;
+using TouchSocket.Core;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
 
@@ -63,7 +63,10 @@ namespace LoginGate.Services
 
         public void Start(GameGateInfo gateInfo)
         {
-            _clientSocket.Connect(gateInfo.LoginServer, gateInfo.LoginPort);
+            var config = new TouchSocketConfig();
+            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(gateInfo.LoginServer), gateInfo.LoginPort));
+            _clientSocket.Setup(config);
+            _clientSocket.Connect();
         }
 
         public void ReConnected()
@@ -150,28 +153,27 @@ namespace LoginGate.Services
         /// <summary>
         /// 收到登录服务器消息 直接发送给客户端
         /// </summary>
-        private Task ClientSocketRead(ITcpClient client, ReceivedDataEventArgs e)
+        private Task ClientSocketRead(IClient client, ReceivedDataEventArgs e)
         {
             var nMsgLen = e.ByteBlock.Len;
             if (nMsgLen <= 0)
             {
                 return Task.CompletedTask;
             }
-            var socClient = client as SocketClient;
             if (DataLen > 0)
             {
                 MemoryCopy.BlockCopy(e.ByteBlock.Buffer, 0, DataBuff, DataLen, nMsgLen);
-                ProcessServerData(DataBuff, DataLen + nMsgLen, socClient.Id);
+                ProcessServerData(DataBuff, DataLen + nMsgLen);
             }
             else
             {
-                ProcessServerData(e.ByteBlock.Buffer, nMsgLen, socClient.Id);
+                ProcessServerData(e.ByteBlock.Buffer, nMsgLen);
             }
             ReceiveBytes += nMsgLen;
             return Task.CompletedTask;
         }
 
-        private void ProcessServerData(byte[] data, int nLen, string socketId)
+        private void ProcessServerData(byte[] data, int nLen)
         {
             var srcOffset = 0;
             Span<byte> dataBuff = data;
