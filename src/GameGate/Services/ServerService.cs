@@ -108,10 +108,10 @@ namespace GameGate.Services
             }
         }
 
-        public void Send(SessionMessage sessionMessage)
+        public Task Send(SessionMessage sessionMessage)
         {
-            _serverSocket.Send(sessionMessage.ConnectionId, sessionMessage.Buffer, 0, sessionMessage.BuffLen);
             _networkMonitor.Send(sessionMessage.BuffLen);
+            return _serverSocket.SendAsync(sessionMessage.ConnectionId, sessionMessage.Buffer, 0, sessionMessage.BuffLen);
         }
 
         /// <summary>

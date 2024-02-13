@@ -44,7 +44,7 @@ namespace GameGate
                     {
                         try
                         {
-                            ServerMgr.Send(sendPacket);
+                            _ = ServerMgr.Send(sendPacket);
                         }
                         catch (Exception e)
                         {
