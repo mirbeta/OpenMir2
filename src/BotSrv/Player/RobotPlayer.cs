@@ -7,8 +7,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv.Player
@@ -5041,17 +5043,17 @@ namespace BotSrv.Player
 
         private void MainOutMessage(string msg)
         {
-            BotShare.logger.Info($"机器人:[{ChrName}] {msg}");
+            BotShare.LogService.Info($"机器人:[{ChrName}] {msg}");
         }
 
         private void MainOutErrorMessage(string msg)
         {
-            BotShare.logger.Error($"机器人:[{ChrName}] {msg}");
+            BotShare.LogService.Error($"机器人:[{ChrName}] {msg}");
         }
 
         private void MainOutWarnMessage(string msg)
         {
-            BotShare.logger.Warn($"机器人:[{ChrName}] {msg}");
+            BotShare.LogService.Warn($"机器人:[{ChrName}] {msg}");
         }
     }
 }

@@ -1,6 +1,11 @@
 ﻿using System.Text;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using ScriptSystem.Processings;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -1833,7 +1838,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    LogService.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < LoadList.Count; i++)
                 {
@@ -1847,7 +1852,7 @@ namespace ScriptSystem
             }
             else
             {
-                SystemShare.Logger.Error("file not found => " + sListFileName);
+                LogService.Error("file not found => " + sListFileName);
             }
             return result;
         }

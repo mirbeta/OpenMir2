@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("GuildWar", "", 10)]
     public class GuildWarCommand : GameCommand

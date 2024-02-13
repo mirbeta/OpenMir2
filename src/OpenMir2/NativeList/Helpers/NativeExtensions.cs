@@ -1,8 +1,8 @@
 ﻿using System;
-using SystemModule.NativeList.Interfaces.Entities;
-using SystemModule.NativeList.Utils;
+using OpenMir2.NativeList.Interfaces.Entities;
+using OpenMir2.NativeList.Utils;
 
-namespace SystemModule.NativeList.Helpers
+namespace OpenMir2.NativeList.Helpers
 {
     public static unsafe class NativeExtensions
     {

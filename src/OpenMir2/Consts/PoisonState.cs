@@ -1,4 +1,4 @@
-namespace SystemModule.Consts
+namespace OpenMir2.Consts
 {
     /// <summary>
     /// 中毒状态定义

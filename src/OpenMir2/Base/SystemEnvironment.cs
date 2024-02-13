@@ -8,7 +8,7 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 
-namespace SystemModule.Base
+namespace OpenMir2.Base
 {
     public static class ServerEnvironment
     {

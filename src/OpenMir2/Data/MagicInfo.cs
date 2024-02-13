@@ -1,8 +1,8 @@
 ﻿using System.IO;
-using SystemModule.Extensions;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2.Extensions;
+using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule.Data
+namespace OpenMir2.Data
 {
     public class MagicInfo : ClientPacket
     {

@@ -2,7 +2,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace SystemModule.Base
+namespace OpenMir2.Base
 {
     public static partial class NativeMethods
     {

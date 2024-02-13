@@ -1,9 +1,11 @@
 ﻿using BotSrv.Player;
 using System.Collections;
 using System.Collections.Generic;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
-using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv.Objects

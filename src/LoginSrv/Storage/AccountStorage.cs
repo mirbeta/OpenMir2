@@ -4,14 +4,14 @@ using NLog;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using SystemModule.Extensions;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2.Extensions;
+using OpenMir2.Packets.ClientPackets;
 
 namespace LoginSrv.Storage
 {
     public class AccountStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly ConfigManager _configManager;
         private readonly Dictionary<string, AccountQuick> _accountMap;
 
@@ -25,18 +25,18 @@ namespace LoginSrv.Storage
 
         public void Initialization()
         {
-            _logger.Info("正在连接SQL服务器...");
+            LogService.Info("正在连接SQL服务器...");
             var dbConnection = new MySqlConnection(Config.ConnctionString);
             try
             {
                 dbConnection.Open();
-                _logger.Info("连接SQL服务器成功...");
+                LogService.Info("连接SQL服务器成功...");
                 LoadQuickList();
             }
             catch (Exception ex)
             {
-                _logger.Error("[错误] SQL 连接失败!请检查SQL设置...");
-                _logger.Error(ex);
+                LogService.Error("[错误] SQL 连接失败!请检查SQL设置...");
+                LogService.Error(ex);
             }
             finally
             {
@@ -64,8 +64,8 @@ namespace LoginSrv.Storage
                     }
                     catch (Exception e)
                     {
-                        _logger.Error("打开数据库[MySql]失败.");
-                        _logger.Error(e);
+                        LogService.Error("打开数据库[MySql]失败.");
+                        LogService.Error(e);
                         result = false;
                     }
                     break;
@@ -112,14 +112,14 @@ namespace LoginSrv.Storage
             }
             catch (Exception ex)
             {
-                _logger.Error("读取账号列表失败.");
-                _logger.Error(ex);
+                LogService.Error("读取账号列表失败.");
+                LogService.Error(ex);
             }
             finally
             {
                 Close(dbConnection);
             }
-            _logger.Info($"账号数据读取成功...[{_accountMap.Count}]");
+            LogService.Info($"账号数据读取成功...[{_accountMap.Count}]");
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
@@ -168,8 +168,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception ex)
             {
-                _logger.Error("获取账号信息失败");
-                _logger.Error(ex);
+                LogService.Error("获取账号信息失败");
+                LogService.Error(ex);
                 return false;
             }
             finally
@@ -205,7 +205,7 @@ namespace LoginSrv.Storage
         public int GetAccountPlayTime(string account)
         {
             var strSql = "SELECT Seconds FROM ACCOUNT WHERE Account=@Account";
-            _logger.Debug("[SQL QUERY] " + strSql);
+            LogService.Debug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -226,8 +226,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception e)
             {
-                _logger.Error($"获取账号[{account}]游戏时间失败");
-                _logger.Error(e);
+                LogService.Error($"获取账号[{account}]游戏时间失败");
+                LogService.Error(e);
             }
             finally
             {
@@ -239,7 +239,7 @@ namespace LoginSrv.Storage
         public void UpdateAccountPlayTime(string account, long gameTime)
         {
             var strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
-            _logger.Debug("[SQL QUERY] " + strSql);
+            LogService.Debug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -256,8 +256,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception e)
             {
-                _logger.Error($"更新账号[{account}]游戏时间失败");
-                _logger.Error(e);
+                LogService.Error($"更新账号[{account}]游戏时间失败");
+                LogService.Error(e);
             }
             finally
             {
@@ -318,8 +318,8 @@ namespace LoginSrv.Storage
             catch (Exception ex)
             {
                 beginTransaction.Rollback();
-                _logger.Error("创建账号失败." + ex.Message);
-                _logger.Error(ex);
+                LogService.Error("创建账号失败." + ex.Message);
+                LogService.Error(ex);
             }
             finally
             {
@@ -348,8 +348,8 @@ namespace LoginSrv.Storage
             catch (Exception ex)
             {
                 result = 0;
-                _logger.Error("[Exception] UpdateRecord");
-                _logger.Error(ex);
+                LogService.Error("[Exception] UpdateRecord");
+                LogService.Error(ex);
             }
             finally
             {
@@ -379,8 +379,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception E)
             {
-                _logger.Error("[Exception] ChanggePassword");
-                _logger.Error(E);
+                LogService.Error("[Exception] ChanggePassword");
+                LogService.Error(E);
                 return result;
             }
             finally
@@ -414,8 +414,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception E)
             {
-                _logger.Error("[Exception] UpdateRecord");
-                _logger.Error(E);
+                LogService.Error("[Exception] UpdateRecord");
+                LogService.Error(E);
                 return result;
             }
             finally
@@ -448,8 +448,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception E)
             {
-                _logger.Error("[Exception] UpdateRecord");
-                _logger.Error(E);
+                LogService.Error("[Exception] UpdateRecord");
+                LogService.Error(E);
                 return result;
             }
             finally
@@ -522,8 +522,8 @@ namespace LoginSrv.Storage
             catch (Exception ex)
             {
                 beginTransaction.Rollback();
-                _logger.Error("创建账号失败." + ex.Message);
-                _logger.Error(ex);
+                LogService.Error("创建账号失败." + ex.Message);
+                LogService.Error(ex);
             }
             finally
             {

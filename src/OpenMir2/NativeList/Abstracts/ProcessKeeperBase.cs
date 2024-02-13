@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using SystemModule.NativeList.Helpers;
-using SystemModule.NativeList.Interfaces.Entities;
+using OpenMir2.NativeList.Helpers;
+using OpenMir2.NativeList.Interfaces.Entities;
 
-namespace SystemModule.NativeList.Abstracts
+namespace OpenMir2.NativeList.Abstracts
 {
     /// <summary>
     /// Object that represents external application in this application.

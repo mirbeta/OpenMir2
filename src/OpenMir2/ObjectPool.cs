@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace SystemModule
+namespace OpenMir2
 {
     public class ObjectPool<T>
     {

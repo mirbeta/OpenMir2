@@ -1,12 +1,13 @@
 ﻿using M2Server;
 using NLog;
+using OpenMir2;
 using SystemModule;
 
 namespace GameSrv.Word.Threads
 {
     public class MerchantProcessor : TimerScheduledService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
 
         public MerchantProcessor() : base(TimeSpan.FromMilliseconds(200), "MerchantProcessor")
         {
@@ -20,12 +21,12 @@ namespace GameSrv.Word.Threads
 
         protected override void Startup(CancellationToken stoppingToken)
         {
-            _logger.Info("商人管理线程初始化完成...");
+            LogService.Info("商人管理线程初始化完成...");
         }
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            _logger.Info("商人管理线程停止ֹ...");
+            LogService.Info("商人管理线程停止ֹ...");
         }
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
@@ -37,8 +38,8 @@ namespace GameSrv.Word.Threads
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error("[异常] MerchantProcessor::OnElapseAsync error");
-                M2Share.Logger.Error(ex);
+                LogService.Error("[异常] MerchantProcessor::OnElapseAsync error");
+                LogService.Error(ex);
             }
             return Task.CompletedTask;
         }

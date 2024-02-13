@@ -1,6 +1,8 @@
 using M2Server;
 using NLog;
 using System.Net;
+using OpenMir2;
+using OpenMir2.Data;
 using SystemModule;
 using SystemModule.Data;
 using TouchSocket.Core;
@@ -14,7 +16,7 @@ namespace GameSrv.Services
     /// </summary>
     public class AuthenticationService : IAuthentication
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly List<AccountSession> _sessionList;
         private readonly TcpClient _tcpClient;
         private readonly object _userIdSection;
@@ -38,7 +40,7 @@ namespace GameSrv.Services
             _tcpClient.Connected = DataSocketConnect; 
             _tcpClient.Disconnected = DataSocketDisconnect;
             _tcpClient.Received = DataSocketRead;
-            _logger.Debug("登录服务器连接初始化完成...");
+            LogService.Debug("登录服务器连接初始化完成...");
             _tcpClient.Connect();
         }
 
@@ -184,7 +186,7 @@ namespace GameSrv.Services
             }
             catch
             {
-                _logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -245,7 +247,7 @@ namespace GameSrv.Services
             }
             catch
             {
-                _logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -260,8 +262,8 @@ namespace GameSrv.Services
             }
             catch (Exception e)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
         }
 
@@ -306,8 +308,8 @@ namespace GameSrv.Services
             }
             catch (Exception e)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
         }
 
@@ -353,7 +355,7 @@ namespace GameSrv.Services
             }
             if (SystemShare.Config.ViewAdmissionFailure && !boFound)
             {
-                _logger.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, sessionId));
+                LogService.Error(string.Format(sGetFailMsg, sAccount, sIPaddr, sessionId));
             }
             return result;
         }
@@ -379,7 +381,7 @@ namespace GameSrv.Services
             }
             catch
             {
-                _logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -404,7 +406,7 @@ namespace GameSrv.Services
 
         private Task DataSocketConnect(ITcpClient client, ConnectedEventArgs e)
         {
-            _logger.Info("登录服务器[" + client.RemoteIPHost + "]连接成功...");
+            LogService.Info("登录服务器[" + client.RemoteIPHost + "]连接成功...");
             SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
             return Task.CompletedTask;
         }
@@ -416,7 +418,7 @@ namespace GameSrv.Services
             //     return;
             // }
             ClearSession();
-            _logger.Error("登录服务器[" + sender.IP + "]断开连接...");
+            LogService.Error("登录服务器[" + sender.IP + "]断开连接...");
             return Task.CompletedTask;
         }
 

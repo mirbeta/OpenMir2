@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
     public static class StringExtension
     {

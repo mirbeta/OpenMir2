@@ -1,6 +1,8 @@
 using GameSrv.Services;
 using M2Server;
 using NLog;
+using OpenMir2;
+using OpenMir2.Data;
 using SystemModule;
 using SystemModule.Data;
 
@@ -8,7 +10,7 @@ namespace GameSrv.Word.Threads
 {
     public class CharacterDataProcessor : TimerScheduledService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly object UserCriticalSection = new object();
 
         public CharacterDataProcessor() : base(TimeSpan.FromMilliseconds(500), "StorageProcessor")
@@ -23,12 +25,12 @@ namespace GameSrv.Word.Threads
 
         protected override void Startup(CancellationToken stoppingToken)
         {
-            _logger.Info("玩家数据数据线程启动...");
+            LogService.Info("玩家数据数据线程启动...");
         }
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            _logger.Info("玩家数据数据线程停止...");
+            LogService.Info("玩家数据数据线程停止...");
         }
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
@@ -40,7 +42,7 @@ namespace GameSrv.Word.Threads
                 var saveRcdList = M2Share.FrontEngine.GetSaveRcdList();
                 if (!GameShare.DataServer.IsConnected && saveRcdList.Count > 0)
                 {
-                    _logger.Error("DBServer 断开链接，保存玩家数据失败.");
+                    LogService.Error("DBServer 断开链接，保存玩家数据失败.");
                     HUtil32.EnterCriticalSection(UserCriticalSection);
                     try
                     {
@@ -59,8 +61,8 @@ namespace GameSrv.Word.Threads
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(ex.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex.StackTrace);
             }
             return Task.CompletedTask;
         }
@@ -110,7 +112,7 @@ namespace GameSrv.Word.Threads
                 if (!LoadCharacterData(loadDbInfo, ref boReTryLoadDb))
                 {
                     M2Share.NetChannel.CloseUser(loadDbInfo.GateIdx, loadDbInfo.SocketId);
-                    _logger.Debug("读取用户数据失败，踢出用户.");
+                    LogService.Debug("读取用户数据失败，踢出用户.");
                 }
                 else
                 {

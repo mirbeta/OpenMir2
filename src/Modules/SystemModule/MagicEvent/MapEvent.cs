@@ -1,4 +1,8 @@
-﻿using SystemModule.Enums;
+﻿using OpenMir2;
+using SystemModule.Actors;
+using SystemModule.Data;
+using SystemModule.Enums;
+using SystemModule.Maps;
 
 namespace SystemModule.MagicEvent
 {

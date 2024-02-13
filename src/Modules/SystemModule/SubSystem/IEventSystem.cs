@@ -1,6 +1,7 @@
 ﻿using SystemModule.MagicEvent;
+using SystemModule.Maps;
 
-namespace SystemModule
+namespace SystemModule.SubSystem
 {
     public interface IEventSystem
     {

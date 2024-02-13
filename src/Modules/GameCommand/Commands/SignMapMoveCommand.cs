@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 回到上次死亡地点
@@ -37,8 +37,8 @@ namespace CommandSystem.Commands
             //}
             //catch (Exception E)
             //{
-            //    M2Share.Logger.Error("[Exceptioin] PlayerActor.SysMsgCmdPositionMove");
-            //    M2Share.Logger.Error(e.Message);
+            //    LogService.Error("[Exceptioin] PlayerActor.SysMsgCmdPositionMove");
+            //    LogService.Error(e.Message);
             //}
         }
     }

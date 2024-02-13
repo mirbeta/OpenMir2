@@ -1,7 +1,8 @@
+using OpenMir2;
+using OpenMir2.Enums;
 using SystemModule;
-using SystemModule.Enums;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     public partial class RobotPlayer
     {
@@ -75,7 +76,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error("RoboPlayObject.IsNeedAvoid");
+                LogService.Error("RoboPlayObject.IsNeedAvoid");
             }
             return result;
         }

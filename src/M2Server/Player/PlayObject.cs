@@ -1,13 +1,20 @@
 ﻿using M2Server.Actor;
 using System.Collections;
 using System.Runtime.CompilerServices;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
+using SystemModule.Castles;
+using SystemModule.Const;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.MagicEvent;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using SystemModule.Maps;
 
 namespace M2Server.Player
 {
@@ -1110,7 +1117,7 @@ namespace M2Server.Player
                 }
                 catch (Exception)
                 {
-                    M2Share.Logger.Error(sExceptionMsg);
+                    LogService.Error(sExceptionMsg);
                 }
             }
         }
@@ -1472,8 +1479,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.StackTrace);
             }
             // ReadAllBook();
         }
@@ -1759,7 +1766,7 @@ namespace M2Server.Player
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(ex);
+                LogService.Error(ex);
             }
             if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && killObject.Race == ActorRace.Play)
             {
@@ -1900,8 +1907,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(e.Message);
             }
             return result;
         }
@@ -3273,7 +3280,7 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(e.StackTrace);
+                LogService.Error(e.StackTrace);
                 KickException();
             }
         }
@@ -3367,8 +3374,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
             return result;
         }
@@ -3503,8 +3510,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
             base.MakeGhost();
             if (Ghost)
@@ -3553,7 +3560,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -3786,7 +3793,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
             return result;
         }

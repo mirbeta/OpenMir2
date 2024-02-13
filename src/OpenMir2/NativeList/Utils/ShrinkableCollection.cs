@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using SystemModule.NativeList.Abstracts;
-using SystemModule.NativeList.Helpers;
+using OpenMir2.NativeList.Abstracts;
+using OpenMir2.NativeList.Helpers;
 
-namespace SystemModule.NativeList.Utils
+namespace OpenMir2.NativeList.Utils
 {
     /// <summary>
     /// Non-abstract realization of the <see cref="ShrinkableCollectionBase{TItem}"/> to use it as is and as composition.

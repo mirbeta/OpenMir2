@@ -1,13 +1,12 @@
 using GameGate.Conf;
-using NLog;
 using System.Collections.Concurrent;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
+using OpenMir2;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
-using NetworkMonitor = SystemModule.NetworkMonitor;
+using NetworkMonitor = OpenMir2.NetworkMonitor;
 
 namespace GameGate.Services
 {
@@ -16,7 +15,6 @@ namespace GameGate.Services
     /// </summary>
     public class ServerService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpService _serverSocket;
         private readonly GameGateInfo _gateInfo;
         private readonly ClientThread _clientThread;
@@ -60,11 +58,11 @@ namespace GameGate.Services
 
         public void Start(CancellationToken stoppingToken)
         {
-            _serverSocket.Start();
             _clientThread.Start();
             _clientThread.RestSessionArray();
             _messageSendQueue.StartProcessQueueSend(stoppingToken);
-            _logger.Info($"游戏网关[{_gateEndPoint}]已启动...");
+            _serverSocket.StartAsync();
+            LogService.Info($"游戏网关[{_gateEndPoint}]已启动...");
         }
 
         public void Stop()
@@ -122,12 +120,12 @@ namespace GameGate.Services
             var connectedClient = client as TcpClient;
             var sRemoteAddress = connectedClient.GetIPPort();
             var clientId = e.Id;
-            _logger.Debug($"客户端 IP:{sRemoteAddress} ThreadId:{GateInfo.ServiceId} SessionId:{e.Id} RunPort:{_gateEndPoint}");
+            LogService.Debug($"客户端 IP:{sRemoteAddress} ThreadId:{GateInfo.ServiceId} SessionId:{e.Id} RunPort:{_gateEndPoint}");
             var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out var threadId);
             if (clientThread == null || threadId < 0)
             {
                 //todo 直接断开玩家连接，提示客户端链接失败
-                _logger.Debug("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
+                LogService.Debug("获取GameSvr服务器实例失败，请确认GameGate和GameSvr是否链接正常。");
                 return Task.CompletedTask;
             }
             SessionInfo userSession = null;
@@ -155,13 +153,13 @@ namespace GameGate.Services
                 clientThread.UserEnter(sessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
                 SessionContainer.AddSession(GateInfo.ServiceId, sessionId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, _messageSendQueue));
                 sessionMap.TryAdd(clientId, sessionId);
-                _logger.Trace("开始连接: " + sRemoteAddress);
-                _logger.Info($"ThreadId:{GateInfo.ServiceId} IP:[{sRemoteAddress}] SessionId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}/{clientThread.ThreadId}");
+                LogService.Info("开始连接: " + sRemoteAddress);
+                LogService.Info($"ThreadId:{GateInfo.ServiceId} IP:[{sRemoteAddress}] SessionId:[{userSession.SessionId}] GameSrv:{clientThread.EndPoint}/{clientThread.ThreadId}");
             }
             else
             {
                 e.Socket.Close();
-                _logger.Trace("禁止连接: " + sRemoteAddress);
+                LogService.Info("禁止连接: " + sRemoteAddress);
             }
             return Task.CompletedTask;
         }
@@ -199,15 +197,15 @@ namespace GameGate.Services
                         break;
                     }
                 }
-                _logger.Trace("断开链接: " + sRemoteAddress);
+                LogService.Info("断开链接: " + sRemoteAddress);
             }
             else
             {
-                _logger.Trace("断开链接: " + sRemoteAddress);
+                LogService.Info("断开链接: " + sRemoteAddress);
             }
             _closeSession.Enqueue(client.MainSocket.Handle.ToInt32()); //等待通知GameSvr断开用户会话,否则会出现退出游戏后再次登陆游戏提示账号已经登陆
             SessionContainer.CloseSession(GateInfo.ServiceId, sessionId);
-            _logger.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{sessionId}");
+            LogService.Debug($"用户断开链接 Ip:[{sRemoteAddress}] ThreadId:{_gateInfo.ServiceId} SessionId:{sessionId}");
             return Task.CompletedTask;
         }
 
@@ -234,7 +232,7 @@ namespace GameGate.Services
             else
             {
                 client.Close();
-                _logger.Debug("非法攻击: " + sRemoteAddress);
+                LogService.Debug("非法攻击: " + sRemoteAddress);
             }
             return Task.CompletedTask;
         }

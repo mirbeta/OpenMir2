@@ -1,10 +1,17 @@
-﻿using SystemModule;
-using SystemModule.Common;
+﻿using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using ScriptSystem.Consts;
+using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Maps;
 
-namespace ScriptSystem
+namespace ScriptSystem.Processings
 {
     /// <summary>
     /// 脚本命令执行处理模块
@@ -2342,7 +2349,7 @@ namespace ScriptSystem
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfOPENYBDEAL");
+                LogService.Error("{异常} TNormNpc.ActionOfOPENYBDEAL");
             }
         }
 
@@ -2447,7 +2454,7 @@ namespace ScriptSystem
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfQUERYYBSELL");
+                LogService.Error("{异常} TNormNpc.ActionOfQUERYYBSELL");
             }
         }
 
@@ -2554,7 +2561,7 @@ namespace ScriptSystem
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfQueryTrustDeal");
+                LogService.Error("{异常} TNormNpc.ActionOfQueryTrustDeal");
             }
         }
 
@@ -2591,7 +2598,7 @@ namespace ScriptSystem
             }
             catch
             {
-                SystemShare.Logger.Error("saving fail.... => " + sListFileName);
+                LogService.Error("saving fail.... => " + sListFileName);
             }
         }
 
@@ -5760,7 +5767,7 @@ namespace ScriptSystem
             }
             catch
             {
-                SystemShare.Logger.Error("{异常} TNormNpc.ActionOfTHROWITEM");
+                LogService.Error("{异常} TNormNpc.ActionOfTHROWITEM");
             }
         }
 
@@ -5862,7 +5869,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("saving fail.... => " + sListFileName);
+                    LogService.Error("saving fail.... => " + sListFileName);
                 }
             }
         }
@@ -5977,7 +5984,7 @@ namespace ScriptSystem
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             string sMsg = string.Format(sOutMessage, sErrMsg, sCmd, normNpc.ChrName, normNpc.MapName, normNpc.CurrX, normNpc.CurrY, questActionInfo.sParam1, questActionInfo.sParam2, questActionInfo.sParam3, questActionInfo.sParam4, questActionInfo.sParam5, questActionInfo.sParam6);
-            SystemShare.Logger.Error(sMsg);
+            LogService.Error(sMsg);
         }
 
         public void Dispose(object obj)

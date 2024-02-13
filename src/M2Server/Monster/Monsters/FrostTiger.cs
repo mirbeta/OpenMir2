@@ -1,6 +1,7 @@
 ﻿using M2Server.Magic;
+using OpenMir2;
+using OpenMir2.Consts;
 using SystemModule;
-using SystemModule.Consts;
 
 namespace M2Server.Monster.Monsters
 {

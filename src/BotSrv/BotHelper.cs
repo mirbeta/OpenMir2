@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv

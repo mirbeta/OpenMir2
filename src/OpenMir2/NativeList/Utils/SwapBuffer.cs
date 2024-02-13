@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule.NativeList.Helpers;
+using OpenMir2.NativeList.Helpers;
 
-namespace SystemModule.NativeList.Utils
+namespace OpenMir2.NativeList.Utils
 {
     /// <summary>
     /// Special buffer that was created for multi-thread writing and single reading.

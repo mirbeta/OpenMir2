@@ -1,8 +1,11 @@
-﻿using SystemModule.Data;
+﻿using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
+using SystemModule.Actors;
+using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Maps;
 
-namespace SystemModule
+namespace SystemModule.SubSystem
 {
     public interface IWorldEngine
     {

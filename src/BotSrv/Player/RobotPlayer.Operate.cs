@@ -2,8 +2,11 @@ using BotSrv.Objects;
 using BotSrv.Scenes;
 using System;
 using System.Drawing;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 using SystemModule.Packets.ServerPackets;
 

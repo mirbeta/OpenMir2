@@ -6,9 +6,9 @@ using System.Net;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.DataHandlingAdapters;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -20,7 +20,7 @@ namespace LoginSrv.Services
     /// </summary>
     public class LoginServer
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly TcpService _serverSocket;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
@@ -51,7 +51,7 @@ namespace LoginSrv.Services
             }).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
             _serverSocket.Start();
-            _logger.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
+            LogService.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
 
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
@@ -64,7 +64,7 @@ namespace LoginSrv.Services
             }
             else
             {
-                //_logger.Info("未知客户端...");
+                //LogService.Info("未知客户端...");
             }
             return Task.CompletedTask;
         }
@@ -80,7 +80,7 @@ namespace LoginSrv.Services
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.KeepAliveTick = HUtil32.GetTickCount();
             _clientManager.AddSession(clientId, gateInfo);
-            _logger.Info($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
+            LogService.Info($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
             loginGates[clientId] = gateInfo;
             return Task.CompletedTask;
         }
@@ -91,7 +91,7 @@ namespace LoginSrv.Services
             var clientId = int.Parse(client.Id);
             loginGates[clientId] = null;
             _clientManager.Delete(clientId);
-            _logger.Warn($"登录网关[{client.ServiceIP}:{client.ServicePort}]断开链接.");
+            LogService.Warn($"登录网关[{client.ServiceIP}:{client.ServicePort}]断开链接.");
             return Task.CompletedTask;
         }
 
@@ -99,7 +99,7 @@ namespace LoginSrv.Services
         {
             if (packetHead.PacketCode != Grobal2.PacketCode)
             {
-                _logger.Debug($"解析登录网关封包出现异常...");
+                LogService.Debug($"解析登录网关封包出现异常...");
                 return;
             }
             var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
@@ -150,7 +150,7 @@ namespace LoginSrv.Services
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e);
+                            LogService.Error(e);
                         }
                     }
                 }
@@ -184,7 +184,7 @@ namespace LoginSrv.Services
                 var userInfo = gateInfo.UserList[i];
                 if (userInfo.SockIndex == sSockIndex)
                 {
-                    _logger.Debug(string.Format(sCloseMsg, userInfo.UserIPaddr));
+                    LogService.Debug(string.Format(sCloseMsg, userInfo.UserIPaddr));
                     if (!userInfo.SelServer)
                     {
                         SessionDel(userInfo.Account, userInfo.SessionID);
@@ -230,7 +230,7 @@ namespace LoginSrv.Services
             userInfo.LastUpdatePwdTick = HUtil32.GetTickCount();
             userInfo.LastGetBackPwdTick = HUtil32.GetTickCount();
             gateInfo.UserList.Add(userInfo);
-            _logger.Debug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
+            LogService.Debug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
         }
 
         /// <summary>

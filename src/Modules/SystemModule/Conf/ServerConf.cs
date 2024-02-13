@@ -1,6 +1,7 @@
-﻿using SystemModule.Common;
+﻿using OpenMir2;
+using OpenMir2.Common;
 
-namespace SystemModule
+namespace SystemModule.Conf
 {
     public class ServerConf : ConfigFile
     {

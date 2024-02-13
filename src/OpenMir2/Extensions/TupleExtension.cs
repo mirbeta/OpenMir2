@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
     /// <summary>
     /// 元组扩展

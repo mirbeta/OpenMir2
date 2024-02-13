@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace SystemModule
+namespace OpenMir2
 {
     /// <summary>
     /// 时间戳ID

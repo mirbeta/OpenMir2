@@ -1,15 +1,17 @@
 ﻿using M2Server;
 using M2Server.Player;
 using NLog;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Enums;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
 namespace GameSrv.Robots
 {
     public class RobotObject : PlayObject, IRobotObject
     {
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly char[] LoadSriptSpitConst = new[] { ' ', '/', '\t' };
         private readonly IList<AutoRunInfo> _autoRunList;
         public string ScriptFileName = string.Empty;
@@ -331,7 +333,7 @@ namespace GameSrv.Robots
 
         private void OutErrorMessage(string sActionType, string sRunCmd, string sParam1, string sParam2, string sParam3, string sParam4)
         {
-            _logger.Error($"机器人脚本错误 ActionType:{sActionType} RunCmd:{sRunCmd} Params1:{sParam1} Params2:{sParam2} Params3:{sParam3} Params4:{sParam4}");
+            LogService.Error($"机器人脚本错误 ActionType:{sActionType} RunCmd:{sRunCmd} Params1:{sParam1} Params2:{sParam2} Params3:{sParam3} Params4:{sParam4}");
         }
 
         /// <summary>

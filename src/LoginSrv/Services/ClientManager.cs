@@ -5,7 +5,6 @@ namespace LoginSrv.Services
 {
     public class ClientManager
     {
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConcurrentDictionary<int, LoginGateInfo> _gateInfos = new ConcurrentDictionary<int, LoginGateInfo>();
 
         public int Gates => _gateInfos.Count;
@@ -39,7 +38,7 @@ namespace LoginSrv.Services
                     {
                         for (var j = 0; j < gateInfo.UserList.Count; j++)
                         {
-                            _logger.Debug("Close: " + gateInfo.UserList[j].UserIPaddr);
+                            LogService.Debug("Close: " + gateInfo.UserList[j].UserIPaddr);
                             gateInfo.UserList[j].Socket.Close();
                             gateInfo.UserList[j] = null;
                         }

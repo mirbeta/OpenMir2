@@ -1,4 +1,4 @@
-﻿namespace M2Server.Notices
+﻿namespace SystemModule.SubSystem
 {
     public interface INoticeSystem
     {

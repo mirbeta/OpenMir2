@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Castles;
+
+namespace SystemModule.SubSystem
 {
     public interface IGuildSystem
     {

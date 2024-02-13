@@ -1,8 +1,8 @@
-using MemoryPack;
 using System.Runtime.InteropServices;
-using SystemModule.Packets.ClientPackets;
+using MemoryPack;
+using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule.Packets.ServerPackets
+namespace OpenMir2.Packets.ServerPackets
 {
     /// <summary>
     /// 封包消息头

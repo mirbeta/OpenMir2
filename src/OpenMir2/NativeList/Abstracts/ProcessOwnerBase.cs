@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace SystemModule.NativeList.Abstracts
+namespace OpenMir2.NativeList.Abstracts
 {
     /// <summary>
     /// Improved version of <see cref="ProcessKeeperBase"/>

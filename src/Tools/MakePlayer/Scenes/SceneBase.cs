@@ -1,4 +1,6 @@
 using NLog;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 
@@ -6,7 +8,7 @@ namespace MakePlayer.Scenes
 {
     public class SceneBase
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         public SceneType Scenetype;
         public Action? NotifyEvent;
         public int NotifyEventTick = 0;

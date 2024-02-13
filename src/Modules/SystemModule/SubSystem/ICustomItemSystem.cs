@@ -1,4 +1,4 @@
-﻿namespace SystemModule
+﻿namespace SystemModule.SubSystem
 {
     public interface ICustomItemSystem
     {

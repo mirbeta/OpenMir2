@@ -1,7 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("ShowDenyAccountLogon", "", 10)]
     public class ShowDenyAccountLogonCommand : GameCommand

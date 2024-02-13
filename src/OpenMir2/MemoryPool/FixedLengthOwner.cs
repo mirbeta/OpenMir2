@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Buffers;
 
-namespace SystemModule.MemoryPool
+namespace OpenMir2.MemoryPool
 {
     public sealed partial class FixedLengthOwner<T> : IMemoryOwner<T>
     {

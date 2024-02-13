@@ -7,8 +7,8 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.Common;
+using OpenMir2;
+using OpenMir2.Common;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -19,7 +19,7 @@ namespace LoginSrv.Services
     /// </summary>
     public class SessionServer
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly IList<ServerSessionInfo> _serverList = null;
         private readonly TcpService _serverSocket;
         private readonly AccountStorage _accountStorage;
@@ -52,7 +52,7 @@ namespace LoginSrv.Services
             });
             _serverSocket.Setup(touchSocketConfig);
             _serverSocket.Start();
-            _logger.Info($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
+            LogService.Info($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
 
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
@@ -83,11 +83,11 @@ namespace LoginSrv.Services
                 msgServer.EndPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
                 msgServer.SessionList = new List<SessionConnInfo>();
                 _serverList.Add(msgServer);
-                _logger.Debug($"{client.MainSocket.RemoteEndPoint}链接成功.");
+                LogService.Debug($"{client.MainSocket.RemoteEndPoint}链接成功.");
             }
             else
             {
-                _logger.Warn("非法地址连接:" + remoteEndPoint);
+                LogService.Warn("非法地址连接:" + remoteEndPoint);
                 client.Close();
             }
             return Task.CompletedTask;
@@ -103,11 +103,11 @@ namespace LoginSrv.Services
                 {
                     if (msgServer.ServerIndex == 99)
                     {
-                        _logger.Warn($"[{msgServer.ServerName}]数据库服务器[{msgServer.EndPoint}]断开链接.");
+                        LogService.Warn($"[{msgServer.ServerName}]数据库服务器[{msgServer.EndPoint}]断开链接.");
                     }
                     else
                     {
-                        _logger.Warn($"[{msgServer.ServerName}]游戏服务器[{msgServer.EndPoint}]断开链接.");
+                        LogService.Warn($"[{msgServer.ServerName}]游戏服务器[{msgServer.EndPoint}]断开链接.");
                     }
                     msgServer = null;
                     _serverList.RemoveAt(i);
@@ -217,7 +217,7 @@ namespace LoginSrv.Services
                         if ((certUser.AvailableType == 2) || ((certUser.AvailableType >= 6) && (certUser.AvailableType <= 10)))
                         {
                             SendServerMsg(Messages.ISM_QUERYPLAYTIME, certUser.ServerName, certUser.LoginID + "/" + seconds);
-                            _logger.Debug($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
+                            LogService.Debug($"[GameServer/Send] ISM_QUERYPLAYTIME : {certUser.LoginID} PlayTime: ({seconds})");
                         }
                     }
                 }
@@ -238,10 +238,10 @@ namespace LoginSrv.Services
             {
                 seconds = seconds - 60;//减去一分钟游戏时间
                 _accountStorage.UpdateAccountPlayTime(account, seconds);
-                _logger.Debug($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
+                LogService.Debug($"账号:[{account}] 数据库时间:{seconds} 引擎时间:[{gameTime}]");
                 if (seconds < gameTime)
                 {
-                    _logger.Debug($"账号[{account}]游戏时间异常.");
+                    LogService.Debug($"账号[{account}]游戏时间异常.");
                 }
                 else
                 {
@@ -268,14 +268,14 @@ namespace LoginSrv.Services
             else
             {
                 SendServerMsg(Messages.ISM_QUERYPLAYTIME, serverName, account + "/" + seconds);
-                _logger.Debug($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
+                LogService.Debug($"[GameServer/Send] ISM_QUERYPLAYTIME : {account} PlayTime: ({seconds})");
             }
         }
 
         private void SendCancelAdmissionUser(string serverName, CertUser certUser)
         {
             SendServerMsg(Messages.SS_CLOSESESSION, serverName, certUser.LoginID + "/" + certUser.Certification);
-            _logger.Debug($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
+            LogService.Debug($"[GameServer/Send] ISM_CANCELADMISSION : {certUser.LoginID} TO ({certUser.Addr})");
         }
 
         /// <summary>
@@ -473,7 +473,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
         }
 
@@ -499,7 +499,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
         }
 
@@ -549,7 +549,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
             return result;
         }
@@ -570,7 +570,7 @@ namespace LoginSrv.Services
             }
             catch (Exception e)
             {
-                _logger.Error(e.StackTrace);
+                LogService.Error(e.StackTrace);
             }
         }
 
@@ -619,7 +619,7 @@ namespace LoginSrv.Services
             }
             else
             {
-                _logger.Error("[Critical Failure] file not found. UserLimit.txt");
+                LogService.Error("[Critical Failure] file not found. UserLimit.txt");
             }
         }
 
@@ -675,7 +675,7 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
             return status;
         }

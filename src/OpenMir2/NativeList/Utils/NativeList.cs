@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Threading;
-using SystemModule.NativeList.Abstracts;
-using SystemModule.NativeList.Helpers;
+using OpenMir2.NativeList.Abstracts;
+using OpenMir2.NativeList.Helpers;
 
-namespace SystemModule.NativeList.Utils
+namespace OpenMir2.NativeList.Utils
 {
     public sealed unsafe class NativeList<TItem> : NativeStructureBase, IList<TItem> where TItem : unmanaged
     {

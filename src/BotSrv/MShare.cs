@@ -4,8 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Enums;
 using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SystemModule.Data
+namespace OpenMir2.Data
 {
     public struct MonsterInfo
     {

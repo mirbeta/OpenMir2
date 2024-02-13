@@ -4,6 +4,8 @@ using GameSrv.Module;
 using GameSrv.Services;
 using GameSrv.Word.Threads;
 using M2Server;
+using OpenMir2;
+using OpenMir2.Data;
 using PlanesSystem;
 using SystemModule;
 using SystemModule.Data;

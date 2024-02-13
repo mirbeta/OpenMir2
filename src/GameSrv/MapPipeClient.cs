@@ -1,19 +1,20 @@
 using NLog;
 using System.Text;
+using OpenMir2;
 using SystemModule;
+using SystemModule.Data;
 
 namespace GameSrv
 {
     public class MapPipeClient
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly NamePipeClient[] pipeClientMaps = new NamePipeClient[100];
 
         private void PipeStream()
         {
             try
             {
-                _logger.Info("Connecting to MapSrv...");
+                LogService.Info("Connecting to MapSrv...");
                 for (int i = 0; i < pipeClientMaps.Length; i++)
                 {
                     pipeClientMaps[i] = new NamePipeClient();

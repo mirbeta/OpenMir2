@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 
-namespace SystemModule.DataHandlingAdapters
+namespace OpenMir2.DataHandlingAdapters
 {
     public class PlayerDataFixedHeaderDataHandlingAdapter : CustomFixedHeaderDataHandlingAdapter<PlayerDataMessageFixedHeaderRequestInfo>
     {

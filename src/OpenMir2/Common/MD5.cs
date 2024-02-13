@@ -1,6 +1,6 @@
 using System.Text;
 
-namespace SystemModule.Common
+namespace OpenMir2.Common
 {
     /// <summary>
     /// MD5相关操作类

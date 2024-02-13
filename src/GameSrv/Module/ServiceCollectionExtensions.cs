@@ -8,7 +8,6 @@ namespace GameSrv.Module
 {
     public static class ServiceCollectionExtensions
     {
-        private static readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly IModuleConfigurationManager _modulesConfig = new ModuleConfigurationManager();
 
         public static IServiceCollection AddModules(this IServiceCollection services)
@@ -109,12 +108,12 @@ namespace GameSrv.Module
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error($"加载依赖项{expectedPath} 发生异常:{ex.Message},{ex.StackTrace}");
+                    LogService.Error($"加载依赖项{expectedPath} 发生异常:{ex.Message},{ex.StackTrace}");
                 }
             }
             else
             {
-                _logger.Error($"依赖项不存在:{expectedPath}");
+                LogService.Error($"依赖项不存在:{expectedPath}");
             }
             return null;
         }

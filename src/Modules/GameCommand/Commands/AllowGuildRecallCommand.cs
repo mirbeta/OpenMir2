@@ -1,7 +1,7 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("Allowguildrecall", "", "")]
     public class AllowGuildRecallCommand : GameCommand

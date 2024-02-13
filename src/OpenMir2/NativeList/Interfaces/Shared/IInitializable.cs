@@ -1,4 +1,4 @@
-﻿namespace SystemModule.NativeList.Interfaces.Shared
+﻿namespace OpenMir2.NativeList.Interfaces.Shared
 {
     /// <summary>
     /// Opposite to Disposable objects - objects that require an initialization to work.

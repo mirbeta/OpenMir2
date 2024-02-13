@@ -1,6 +1,10 @@
 ﻿using System.Collections;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
+using SystemModule.Castles;
 using SystemModule.Data;
 
 namespace M2Server.Guild
@@ -420,7 +424,7 @@ namespace M2Server.Guild
             }
             catch
             {
-                M2Share.Logger.Error("保存行会信息失败!!! " + sFileName);
+                LogService.Error("保存行会信息失败!!! " + sFileName);
             }
         }
 
@@ -451,8 +455,8 @@ namespace M2Server.Guild
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error("[Exceptiion] TGuild.SendGuildMsg GuildName = " + GuildName + " Msg = " + sMsg);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error("[Exceptiion] TGuild.SendGuildMsg GuildName = " + GuildName + " Msg = " + sMsg);
+                LogService.Error(e.Message);
             }
         }
 

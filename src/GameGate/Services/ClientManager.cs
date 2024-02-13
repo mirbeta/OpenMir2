@@ -1,4 +1,3 @@
-using NLog;
 using System.Collections.Concurrent;
 using System.Linq;
 
@@ -9,7 +8,6 @@ namespace GameGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly ClientManager instance = new ClientManager();
         public static ClientManager Instance => instance;
         private static ServerManager ServerManager => ServerManager.Instance;

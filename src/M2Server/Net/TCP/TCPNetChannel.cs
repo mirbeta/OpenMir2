@@ -2,12 +2,14 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Channels;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Common;
-using SystemModule.DataHandlingAdapters;
+using SystemModule.Actors;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -15,7 +17,7 @@ namespace M2Server.Net.TCP
 {
     public class TCPNetChannel : INetChannel
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly TcpService tcpService;
         private readonly object RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;
@@ -63,7 +65,7 @@ namespace M2Server.Net.TCP
                 if (_gameGates.Length > 20)
                 {
                     clientSoc.Close();
-                    _logger.Error("超过网关最大链接数量.关闭链接");
+                    LogService.Error("超过网关最大链接数量.关闭链接");
                     return Task.CompletedTask;
                 }
                 if (Whitelist.Contains(HUtil32.IpToInt(clientSoc.ServiceIP)))
@@ -83,17 +85,17 @@ namespace M2Server.Net.TCP
                     gateInfo.SendChecked = 0;
                     gateInfo.SendBlockCount = 0;
                     _gameGates[int.Parse(clientSoc.Id) - 1] = new ChannelMessageHandler(gateInfo);
-                    _logger.Info(string.Format(sGateOpen, clientSoc.MainSocket.RemoteEndPoint));
+                    LogService.Info(string.Format(sGateOpen, clientSoc.MainSocket.RemoteEndPoint));
                 }
                 else
                 {
                     clientSoc.Close();
-                    _logger.Warn($"关闭非白名单网关地址链接. IP:{clientSoc.MainSocket.RemoteEndPoint}");
+                    LogService.Warn($"关闭非白名单网关地址链接. IP:{clientSoc.MainSocket.RemoteEndPoint}");
                 }
             }
             else
             {
-                _logger.Error(string.Format(sKickGate, clientSoc.MainSocket.RemoteEndPoint));
+                LogService.Error(string.Format(sKickGate, clientSoc.MainSocket.RemoteEndPoint));
                 clientSoc.Close();
             }
             return Task.CompletedTask;
@@ -112,13 +114,13 @@ namespace M2Server.Net.TCP
             touchSocketConfig.SetListenIPHosts(new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort))
                 .SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             tcpService.Setup(touchSocketConfig);
-            _logger.Info("游戏网关初始化完成...");
+            LogService.Info("游戏网关初始化完成...");
         }
 
         public Task Start(CancellationToken cancellationToken = default)
         {
             tcpService.Start();
-            _logger.Info($"游戏网关[{SystemShare.Config.sGateAddr}:{SystemShare.Config.nGatePort}]已启动...");
+            LogService.Info($"游戏网关[{SystemShare.Config.sGateAddr}:{SystemShare.Config.nGatePort}]已启动...");
             return StartMessageThread(cancellationToken);
         }
 
@@ -221,8 +223,8 @@ namespace M2Server.Net.TCP
             }
             catch (Exception e)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
         }
 
@@ -259,7 +261,7 @@ namespace M2Server.Net.TCP
                         var gateInfo = _gameGates[i].GateInfo;
                         if (gateInfo.Socket == null)
                         {
-                            _logger.Error("Socket异常，无需关闭");
+                            LogService.Error("Socket异常，无需关闭");
                             return;
                         }
                         for (var j = 0; j < gateInfo.UserList.Count; j++)
@@ -282,7 +284,7 @@ namespace M2Server.Net.TCP
                         gateInfo.BoUsed = false;
                         gateInfo.Socket = null;
                         _gameGates[i].Stop();
-                        _logger.Error(string.Format(sGateClose, endPoint));
+                        LogService.Error(string.Format(sGateClose, endPoint));
                         break;
                     }
                 }
@@ -324,7 +326,7 @@ namespace M2Server.Net.TCP
             ClientOutMessage outMessage = new ClientOutMessage();
             outMessage.MessagePacket = msgHeader;
             outMessage.CommandPacket = defMsg;
-            _logger.Info("待实现");
+            LogService.Info("待实现");
             //AddGateBuffer(gateIdx, SerializerUtil.Serialize(outMessage));
         }
 

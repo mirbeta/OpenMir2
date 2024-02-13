@@ -1,6 +1,6 @@
-using SystemModule.Common;
+using OpenMir2.Common;
 
-namespace SystemModule.Data
+namespace OpenMir2.Data
 {
     public struct NoticeMsg
     {

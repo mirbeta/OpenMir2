@@ -2,7 +2,7 @@
 using System.Buffers;
 using System.Diagnostics.CodeAnalysis;
 
-namespace SystemModule.MemoryPool
+namespace OpenMir2.MemoryPool
 {
     public sealed partial class FixedLengthOwner<T>
     {

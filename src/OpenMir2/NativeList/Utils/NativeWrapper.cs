@@ -1,8 +1,8 @@
 ﻿using System;
-using SystemModule.NativeList.Abstracts;
-using SystemModule.NativeList.Interfaces.Entities;
+using OpenMir2.NativeList.Abstracts;
+using OpenMir2.NativeList.Interfaces.Entities;
 
-namespace SystemModule.NativeList.Utils
+namespace OpenMir2.NativeList.Utils
 {
     /// <summary>
     /// Simple wrapper to manage a native structure 

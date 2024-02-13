@@ -4,8 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
 using System.Linq;
@@ -13,13 +11,12 @@ using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LogLevel = NLog.LogLevel;
+using Serilog;
 
 namespace GameGate
 {
     internal class Program
     {
-        private static Logger _logger;
         private static PeriodicTimer _timer;
         private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
@@ -39,33 +36,33 @@ namespace GameGate
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
-                ChanggeLogLevel(LogLevel.Info);
                 if (_timer != null)
                 {
                     _timer.Dispose();
                 }
+
                 AnsiConsole.Reset();
             };
 
-            var config = new ConfigurationBuilder().Build();
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            _logger = LogManager.Setup()
-                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
-                .GetCurrentClassLogger();
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+            LogService.Logger = Log.Logger;
 
-            var builder = new HostBuilder()
-                .ConfigureServices((hostContext, services) =>
-                {
-                    //services.AddSingleton<CloudClient>();
-                    services.AddHostedService<TimedService>();
-                    services.AddHostedService<AppService>();
-                }).ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                    logging.AddNLog(config);
-                });
-            await builder.StartAsync(CancellationToken.Token);
+            var builder = Host.CreateApplicationBuilder(args);
+            builder.Services.AddHostedService<TimedService>();
+            builder.Services.AddHostedService<AppService>();
+            builder.Logging.AddConfiguration(configuration.GetSection("Logging"));
+            builder.Logging.AddSerilog(dispose: true);
+
+            var host = builder.Build();
+            await host.StartAsync(CancellationToken.Token);
+            //启动后台服务
             await ProcessLoopAsync();
             Stop();
         }
@@ -75,7 +72,6 @@ namespace GameGate
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
                 ctx.Spinner(Spinner.Known.Dots);
-                LogManager.Shutdown();
             });
         }
 
@@ -135,18 +131,9 @@ namespace GameGate
             return Task.CompletedTask;
         }
 
-        private static void ChanggeLogLevel(LogLevel logLevel)
-        {
-            LogManager.Configuration.Variables["MirLevel"] = logLevel.ToString();
-            LogManager.ReconfigExistingLoggers();
-            LogManager.Configuration.Reload();
-        }
-
         private static async Task ShowServerStatus()
         {
             //GateShare.ShowLog = false;
-            ChanggeLogLevel(LogLevel.Off);
-
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
             var serverList = ServerManager.Instance.GetServerList();
             var table = new Table().Expand().BorderColor(Color.Grey);

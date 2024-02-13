@@ -1,16 +1,22 @@
-using M2Server.Actor;
-using M2Server.Monster.Monsters;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using M2Server.Actor;
+using M2Server.Monster.Monsters;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.NativeList.Utils;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
+using SystemModule.Castles;
 using SystemModule.Data;
-using SystemModule.Enums;
 using SystemModule.MagicEvent;
-using SystemModule.NativeList.Utils;
+using SystemModule.MagicEvent.Events;
+using SystemModule.Maps;
 
-namespace M2Server
+namespace M2Server.Maps
 {
     public class Envirnoment:IEnvirnoment,IDisposable
     {
@@ -154,8 +160,8 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(ex);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex);
             }
             return result;
         }
@@ -283,8 +289,8 @@ namespace M2Server
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(ex);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex);
             }
             return result;
         }
@@ -419,8 +425,8 @@ namespace M2Server
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.StackTrace);
             }
             return result;
         }
@@ -685,7 +691,7 @@ namespace M2Server
                 }
                 catch
                 {
-                    M2Share.Logger.Error(string.Format(sExceptionMsg, cellType));
+                    LogService.Error(string.Format(sExceptionMsg, cellType));
                 }
             }
             else
@@ -841,7 +847,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
             return false;
         }
@@ -890,7 +896,7 @@ namespace M2Server
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -1022,7 +1028,7 @@ namespace M2Server
             }
             catch (Exception)
             {
-                M2Share.Logger.Error("[Exception] TEnvirnoment.LoadMapData");
+                LogService.Error("[Exception] TEnvirnoment.LoadMapData");
             }
             return result;
         }
@@ -1290,7 +1296,7 @@ namespace M2Server
             int nEndX = nX + nRage;
             int nStartY = nY - nRage;
             int nEndY = nY + nRage;
-            M2Share.Logger.Error("todo GetMapBaseObjects");
+            LogService.Error("todo GetMapBaseObjects");
             return true;
         }
 

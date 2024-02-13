@@ -1,5 +1,4 @@
 using GameGate.Conf;
-using NLog;
 using System;
 using System.Net;
 using System.Net.Sockets;
@@ -8,13 +7,12 @@ using System.Text;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.DataHandlingAdapters;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
-using NetworkMonitor = SystemModule.NetworkMonitor;
-using TcpClient = TouchSocket.Sockets.TcpClient;
+using NetworkMonitor = OpenMir2.NetworkMonitor;
 
 namespace GameGate.Services
 {
@@ -59,10 +57,6 @@ namespace GameGate.Services
         /// Session管理
         /// </summary>
         private static SessionContainer SessionContainer => SessionContainer.Instance;
-        /// <summary>
-        /// 日志
-        /// </summary>
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly NetworkMonitor _networkMonitor;
         /// <summary>
         /// 发送封包（网关-》客户端）
@@ -113,11 +107,19 @@ namespace GameGate.Services
         {
             try
             {
-                ClientSocket.Connect();
+                ClientSocket.ConnectAsync();
             }
-            catch (SocketException ex)
+            catch (SocketException error)
             {
-                ClientSocketError(null, ex.SocketErrorCode);
+                ClientSocketError(null, error.SocketErrorCode);
+            }
+            catch (TimeoutException ex)
+            {
+                ClientSocketError(null, SocketError.TimedOut);
+            }
+            catch (Exception ex)
+            {
+                ClientSocketError(null, SocketError.SocketError);
             }
         }
 
@@ -181,8 +183,8 @@ namespace GameGate.Services
             Connected = true;
             RunningState = RunningState.Runing;
             RestSessionArray();
-            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{endPoint}]链接成功.");
-            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {endPoint} 成功...");
+            LogService.Info($"[{LocalEndPoint}] 游戏引擎[{endPoint}]链接成功.");
+            LogService.Debug($"线程[{Guid.NewGuid():N}]连接 {endPoint} 成功...");
             return Task.CompletedTask;
         }
 
@@ -204,7 +206,7 @@ namespace GameGate.Services
             }
             RestSessionArray();
             GateReady = false;
-            _logger.Info($"[{LocalEndPoint}] 游戏引擎[{socSocket.RemoteIPHost}]断开链接.");
+            LogService.Info($"[{LocalEndPoint}] 游戏引擎[{socSocket.RemoteIPHost}]断开链接.");
             Connected = false;
             CheckServerFail = true;
             return Task.CompletedTask;
@@ -225,7 +227,7 @@ namespace GameGate.Services
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                LogService.Error(exception.Message);
             }
             return Task.CompletedTask;
         }
@@ -235,15 +237,15 @@ namespace GameGate.Services
             switch (e)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Warn($"游戏网关[{LocalEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...");
+                    LogService.Warn($"游戏网关[{LocalEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...");
                     Connected = false;
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Info($"游戏引擎[{EndPoint}]主动关闭连接游戏网关[{LocalEndPoint}]...");
+                    LogService.Info($"游戏引擎[{EndPoint}]主动关闭连接游戏网关[{LocalEndPoint}]...");
                     Connected = false;
                     break;
                 case SocketError.TimedOut:
-                    _logger.Info($"游戏网关[{LocalEndPoint}]链接游戏引擎时[{EndPoint}]超时...");
+                    LogService.Info($"游戏网关[{LocalEndPoint}]链接游戏引擎[{EndPoint}]超时...");
                     Connected = false;
                     break;
             }
@@ -320,7 +322,7 @@ namespace GameGate.Services
                            }
                            catch (Exception ex)
                            {
-                               _logger.Error(ex);
+                               LogService.Error(ex.Message);
                            }
                            finally
                            {
@@ -432,7 +434,7 @@ namespace GameGate.Services
                 if ((HUtil32.GetTickCount() - CheckServerTick) > 60 * 10000) //10分钟分不允许尽兴链接服务器
                 {
                     Start();
-                    _logger.Debug($"游戏引擎维护时间结束,重新连接游戏引擎[{EndPoint}].");
+                    LogService.Debug($"游戏引擎维护时间结束,重新连接游戏引擎[{EndPoint}].");
                 }
                 return;
             }
@@ -446,12 +448,12 @@ namespace GameGate.Services
             {
                 Start();
                 CheckServerFailCount++;
-                _logger.Debug($"链接服务器[{EndPoint}] 失败次数[{CheckServerFailCount}]");
+                LogService.Debug($"链接服务器[{EndPoint}] 失败次数[{CheckServerFailCount}]");
                 return;
             }
             if (CheckServerFailCount >= ushort.MaxValue)
             {
-                _logger.Debug("超过最大重试次数，请重启程序后再次确认链接是否正常。");
+                LogService.Debug("超过最大重试次数，请重启程序后再次确认链接是否正常。");
                 return;
             }
             CheckServerTimeOut();
@@ -464,7 +466,7 @@ namespace GameGate.Services
                 CheckServerFail = true;
                 Stop();
                 CheckServerFailCount++;
-                _logger.Debug($"服务器[{EndPoint}]长时间没有响应,断开链接.失败次数:[{CheckServerFailCount}]");
+                LogService.Debug($"服务器[{EndPoint}]长时间没有响应,断开链接.失败次数:[{CheckServerFailCount}]");
             }
         }
 

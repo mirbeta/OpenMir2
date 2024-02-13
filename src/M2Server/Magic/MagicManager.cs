@@ -2,11 +2,15 @@
 using M2Server.Event.Events;
 using M2Server.Monster;
 using M2Server.Player;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Enums;
-using SystemModule.MagicEvent;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.MagicEvent.Events;
 
 namespace M2Server.Magic
 {

@@ -1,4 +1,4 @@
-﻿namespace ScriptSystem
+﻿namespace ScriptSystem.Consts
 {
     /// <summary>
     /// 执行指令编码定义

@@ -1,9 +1,13 @@
 using M2Server.Magic;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
-using SystemModule.Data;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Player
 {
@@ -953,8 +957,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.StackTrace);
             }
             return result;
         }

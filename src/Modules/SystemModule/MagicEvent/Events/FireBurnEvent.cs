@@ -1,4 +1,7 @@
-﻿namespace SystemModule.MagicEvent
+﻿using OpenMir2;
+using SystemModule.Actors;
+
+namespace SystemModule.MagicEvent.Events
 {
     /// <summary>
     /// 火墙

@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2.Enums;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定玩家职业

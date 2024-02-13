@@ -13,15 +13,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.Hosts;
+using OpenMir2;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace LoginSrv
 {
     public class AppServer : ServiceHost
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private PeriodicTimer _timer;
 
         public AppServer()
@@ -68,11 +67,11 @@ namespace LoginSrv
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Info("正在启动服务器...");
+            LogService.Info("正在启动服务器...");
             Host = await Builder.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
-            _logger.Info("正在等待服务器连接...");
+            LogService.Info("正在等待服务器连接...");
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)

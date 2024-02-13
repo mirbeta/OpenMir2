@@ -1,17 +1,20 @@
-﻿using GameSrv.NPC;
-using M2Server;
+﻿using M2Server;
 using NLog;
 using System.Diagnostics;
+using GameSrv.Npc;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
 using SystemModule;
-using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.MagicEvent;
+using SystemModule.MagicEvent.Events;
 
 namespace GameSrv.Maps
 {
     public class Map
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         private static Thread _makeStoneMinesThread;
 
         public static void StartMakeStoneThread()
@@ -25,7 +28,7 @@ namespace GameSrv.Maps
 
         public static int LoadMapInfo()
         {
-            logger.Info("正在加载地图数据...");
+            LogService.Info("正在加载地图数据...");
             var sFlag = string.Empty;
             var sCommand = string.Empty;
             var sLine = string.Empty;
@@ -375,13 +378,13 @@ namespace GameSrv.Maps
                     }
                 }
             }
-            logger.Info($"地图数据加载成功...[{SystemShare.MapMgr.Maps.Count}]");
+            LogService.Info($"地图数据加载成功...[{SystemShare.MapMgr.Maps.Count}]");
             return result;
         }
 
         public static int LoadMinMap()
         {
-            logger.Info("正在加小地图数据文件...");
+            LogService.Info("正在加小地图数据文件...");
             var sMapNo = string.Empty;
             var sMapIdx = string.Empty;
             var result = 0;
@@ -403,7 +406,7 @@ namespace GameSrv.Maps
                         {
                             if (M2Share.MiniMapList.ContainsKey(sMapNo))
                             {
-                                M2Share.Logger.Error($"重复小地图配置信息[{sMapNo}]");
+                                LogService.Error($"重复小地图配置信息[{sMapNo}]");
                                 continue;
                             }
                             M2Share.MiniMapList.TryAdd(sMapNo, nIdx);
@@ -411,7 +414,7 @@ namespace GameSrv.Maps
                     }
                 }
             }
-            logger.Info("小地图数据加载成功...");
+            LogService.Info("小地图数据加载成功...");
             return result;
         }
 
@@ -423,7 +426,7 @@ namespace GameSrv.Maps
             var sw = new Stopwatch();
             sw.Start();
             var mineMapList = SystemShare.MapMgr.GetMineMaps();
-            logger.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
+            LogService.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
             for (var i = 0; i < mineMapList.Count; i++)
             {
                 var mineEnvir = mineMapList[i];
@@ -441,7 +444,7 @@ namespace GameSrv.Maps
                 }
             }
             sw.Stop();
-            logger.Debug($"地图矿物数据初始化完成. 耗时:{sw.Elapsed}");
+            LogService.Debug($"地图矿物数据初始化完成. 耗时:{sw.Elapsed}");
         }
 
         private static Merchant LoadMapQuest(string sName)

@@ -1,8 +1,13 @@
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using ScriptSystem.Consts;
+using ScriptSystem.Processings;
 using SystemModule;
-using SystemModule.Common;
-using SystemModule.Data;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Actors;
+using SystemModule.Const;
 
 namespace ScriptSystem
 {
@@ -272,7 +277,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    LogService.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -285,7 +290,7 @@ namespace ScriptSystem
             }
             else
             {
-                SystemShare.Logger.Error("file not found => " + sListFileName);
+                LogService.Error("file not found => " + sListFileName);
             }
             return result;
         }
@@ -361,7 +366,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    LogService.Error("loading fail.... => " + sListFileName);
                 }
             }
             int nDay = HUtil32.StrToInt(sDay, 0);
@@ -525,7 +530,7 @@ namespace ScriptSystem
                         //  result = QuestCheckConditionCheckUserDateType(playerActor,playerActor.ChrName, m_sPath + questConditionInfo.sParam1, questConditionInfo.sParam3, questConditionInfo.sParam4, questConditionInfo.sParam5);
                         break;
                     case (int)ConditionCode.CHECKRANDOMNO:
-                        SystemShare.Logger.Error("TODO nSC_CHECKRANDOMNO...");
+                        LogService.Error("TODO nSC_CHECKRANDOMNO...");
                         //result = GotoLable_QuestCheckCondition_CheckRandomNo(playerActor,sMsg);
                         break;
                     case (int)ConditionCode.CHECKDIEMON:
@@ -946,7 +951,7 @@ namespace ScriptSystem
                     case ExecutionCode.Goto:
                         if (!JmpToLable(playerActor, normNpc, questActionInfo.sParam1))
                         {
-                            SystemShare.Logger.Error("[脚本死循环] NPC:" + normNpc.ChrName + " 位置:" + normNpc.MapName + '(' + normNpc.CurrX + ':' + normNpc.CurrY + ')' + " 命令:" + ExecutionCode.Goto + ' ' + questActionInfo.sParam1);
+                            LogService.Error("[脚本死循环] NPC:" + normNpc.ChrName + " 位置:" + normNpc.MapName + '(' + normNpc.CurrX + ':' + normNpc.CurrY + ')' + " 命令:" + ExecutionCode.Goto + ' ' + questActionInfo.sParam1);
                             result = false;
                             return result;
                         }
@@ -980,27 +985,27 @@ namespace ScriptSystem
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             string sMsg = string.Format(sOutMessage, sErrMsg, sCmd, normNpc.ChrName, normNpc.MapName, normNpc.CurrX, normNpc.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
-            SystemShare.Logger.Error(sMsg);
+            LogService.Error(sMsg);
         }
 
         private void ScriptActionError(INormNpc normNpc, IPlayerActor playerActor, string sErrMsg, QuestActionInfo QuestActionInfo, string sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             string sMsg = string.Format(sOutMessage, sErrMsg, sCmd, normNpc.ChrName, normNpc.MapName, normNpc.CurrX, normNpc.CurrY, QuestActionInfo.sParam1, QuestActionInfo.sParam2, QuestActionInfo.sParam3, QuestActionInfo.sParam4, QuestActionInfo.sParam5, QuestActionInfo.sParam6);
-            SystemShare.Logger.Error(sMsg);
+            LogService.Error(sMsg);
         }
 
         private void ScriptConditionError(INormNpc normNpc, IPlayerActor playerActor, string sErrMsg, QuestConditionInfo QuestConditionInfo, ConditionCode sCmd)
         {
             const string sOutMessage = "[脚本错误] {0} 脚本命令:{1} NPC名称:{2} 地图:{3}({4}:{5}) 参数1:{6} 参数2:{7} 参数3:{8} 参数4:{9} 参数5:{10} 参数6:{11}";
             string sMsg = string.Format(sOutMessage, sErrMsg, sCmd, normNpc.ChrName, normNpc.MapName, normNpc.CurrX, normNpc.CurrY, QuestConditionInfo.sParam1, QuestConditionInfo.sParam2, QuestConditionInfo.sParam3, QuestConditionInfo.sParam4, QuestConditionInfo.sParam5, QuestConditionInfo.sParam6);
-            SystemShare.Logger.Error(sMsg);
+            LogService.Error(sMsg);
         }
 
         private void ScriptConditionError(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo QuestConditionInfo, string sCmd)
         {
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + normNpc.ChrName + " 地图:" + normNpc.MapName + " 座标:" + normNpc.CurrX + ':' + normNpc.CurrY + " 参数1:" + QuestConditionInfo.sParam1 + " 参数2:" + QuestConditionInfo.sParam2 + " 参数3:" + QuestConditionInfo.sParam3 + " 参数4:" + QuestConditionInfo.sParam4 + " 参数5:" + QuestConditionInfo.sParam5;
-            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
+            LogService.Error("[脚本参数不正确] " + sMsg);
         }
 
         public void Dispose(object obj)

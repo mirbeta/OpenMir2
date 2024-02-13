@@ -1,14 +1,13 @@
 using GameGate.Conf;
 using GameGate.Packet;
-using NLog;
 using System;
-using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
+using MD5 = OpenMir2.MD5;
 
 namespace GameGate.Services
 {
@@ -27,7 +26,6 @@ namespace GameGate.Services
     /// </summary>
     public class ClientSession : IDisposable
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly SessionSpeedRule gameSpeed;
         private readonly SessionInfo _session;
         private readonly object _syncObj;
@@ -164,7 +162,7 @@ namespace GameGate.Services
                         return;
                     }
                     _session.Socket.Close(); //关闭异常会话
-                    Logger.Info("异常消息封包，关闭会话...");
+                    LogService.Info("异常消息封包，关闭会话...");
                     return;
                 }
 
@@ -174,7 +172,7 @@ namespace GameGate.Services
 
                 if (deCodeLen < 12)
                 {
-                    Logger.Debug("解析数据包小于12...解析后长度:" + deCodeLen);
+                    LogService.Debug("解析数据包小于12...解析后长度:" + deCodeLen);
                     _session.Socket.Close();//关闭异常会话
                     return;
                 }
@@ -200,7 +198,7 @@ namespace GameGate.Services
 
                 if (packetLen > Config.NomClientPacketSize)
                 {
-                    Logger.Info("Kick off user,over nom client packet size: " + packetLen);
+                    LogService.Info("Kick off user,over nom client packet size: " + packetLen);
                     // Misc.KickUser(m_pUserOBJ.nIPAddr);
                     return;
                 }
@@ -213,7 +211,7 @@ namespace GameGate.Services
                     case Messages.CM_GUILDUPDATERANKINFO:
                         if (packetLen > Config.MaxClientPacketSize)
                         {
-                            Logger.Info("Kick off user,over max client packet size: " + packetLen);
+                            LogService.Info("Kick off user,over max client packet size: " + packetLen);
                             // Misc.KickUser(m_pUserOBJ.nIPAddr);
                             return;
                         }
@@ -571,7 +569,7 @@ namespace GameGate.Services
                                     //    //var fChatFilter = AbusiveFilter.CheckChatFilter(ref szChatBuffer, ref Succeed);
                                     //    //if ((fChatFilter > 0) && !Succeed)
                                     //    //{
-                                    //    //    _logger.Info("Kick off user,saying in filter");
+                                    //    //    LogService.Info("Kick off user,saying in filter");
                                     //    //    return;
                                     //    //}
                                     //    //if (fChatFilter == 2)
@@ -594,7 +592,7 @@ namespace GameGate.Services
                                     //var fChatFilter = GateShare.AbusiveFilter.CheckChatFilter(ref tempStr, ref isSucceed);
                                     //if ((fChatFilter > 0) && !isSucceed)
                                     //{
-                                    //    Logger.Info("Kick off user,saying in filter");
+                                    //    LogService.Info("Kick off user,saying in filter");
                                     //    return;
                                     //}
                                     //if (fChatFilter == 2)
@@ -679,7 +677,7 @@ namespace GameGate.Services
                 ClientLogin(tempStr, packetLen, "", ref success);
                 if (!success)
                 {
-                    Logger.Info("客户端登陆消息处理失败，剔除链接");
+                    LogService.Info("客户端登陆消息处理失败，剔除链接");
                     Kick(1);
                 }
             }
@@ -880,7 +878,7 @@ namespace GameGate.Services
             }
             if (magicId > 0)
             {
-                Logger.Debug($"发送延时处理消息:User:[{_session.ChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
+                LogService.Debug($"发送延时处理消息:User:[{_session.ChrName}] MagicID:[{magicId}] DelayTime:[{delayTime}]");
             }
         }
 
@@ -983,10 +981,10 @@ namespace GameGate.Services
                                 switch (commandMessage.Series)
                                 {
                                     case 1:
-                                        Logger.Debug("封机器码");
+                                        LogService.Debug("封机器码");
                                         break;
                                     case 2:
-                                        Logger.Debug("清理机器码");
+                                        LogService.Debug("清理机器码");
                                         GateShare.HardwareFilter.ClearDeny();
                                         GateShare.HardwareFilter.SaveDenyList();
                                         break;
@@ -1035,7 +1033,7 @@ namespace GameGate.Services
                     break;
             }
 
-            Logger.Debug(sendMsg);
+            LogService.Debug(sendMsg);
 
             //defMsg.UID = m_nSvrObject;
             //defMsg.Cmd = Messages.SM_SYSMESSAGE;
@@ -1075,7 +1073,7 @@ namespace GameGate.Services
             {
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
-                    Logger.Info($"[ClientLogin] Kicked 1: {loginData}");
+                    LogService.Info($"[ClientLogin] Kicked 1: {loginData}");
                     success = false;
                     return;
                 }
@@ -1103,7 +1101,7 @@ namespace GameGate.Services
                     }
                     if (szClientVerNo.Length < 8)
                     {
-                        Logger.Info($"[ClientLogin] Kicked 2: {sHumName} clientVer validation failed.");
+                        LogService.Info($"[ClientLogin] Kicked 2: {sHumName} clientVer validation failed.");
                         success = false;
                         return;
                     }
@@ -1122,7 +1120,7 @@ namespace GameGate.Services
                     {
                         if (string.IsNullOrEmpty(szHarewareId) || (szHarewareId.Length > 256) || ((szHarewareId.Length % 2) != 0))
                         {
-                            Logger.Info($"[ClientLogin] Kicked 3: {sHumName}");
+                            LogService.Info($"[ClientLogin] Kicked 3: {sHumName}");
                             SendKickMsg(4);
                             return;
                         }
@@ -1171,18 +1169,18 @@ namespace GameGate.Services
                         }
                         if (fMatch)
                         {
-                            Logger.Info($"[ClientLogin] Kicked 5: {sHumName}", 1);
+                            LogService.Info($"[ClientLogin] Kicked 5: {sHumName}", 1);
                             SendKickMsg(4);
                             return;
                         }
                         HardwareHeader pHardwareHeader = ClientPacket.ToPacket<HardwareHeader>(dest);
                         //todo session会话里面需要存用户ip
-                        Logger.Info($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {addr}");
+                        LogService.Info($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {addr}");
                         if (pHardwareHeader.dwMagicCode == 0x13F13F13)
                         {
                             if (MD5.MD5Match(MD5.EmptyDigest, pHardwareHeader.xMd5Digest))
                             {
-                                Logger.Info($"[ClientLogin] Kicked 6: {sHumName}");
+                                LogService.Info($"[ClientLogin] Kicked 6: {sHumName}");
                                 SendKickMsg(4);
                                 return;
                             }
@@ -1190,7 +1188,7 @@ namespace GameGate.Services
                             bool overClientCount = false;
                             if (GateShare.HardwareFilter.IsFilter(hardWareDigest, ref overClientCount))
                             {
-                                Logger.Info($"[ClientLogin] Kicked 7: {sHumName}");
+                                LogService.Info($"[ClientLogin] Kicked 7: {sHumName}");
                                 if (overClientCount)
                                 {
                                     SendKickMsg(5);
@@ -1204,7 +1202,7 @@ namespace GameGate.Services
                         }
                         else
                         {
-                            Logger.Info($"[ClientLogin] Kicked 8: {sHumName}");
+                            LogService.Info($"[ClientLogin] Kicked 8: {sHumName}");
                             SendKickMsg(4);
                             return;
                         }
@@ -1236,23 +1234,23 @@ namespace GameGate.Services
 
                     SendLoginMessage(loginDataPacket[..(ServerMessage.PacketSize + packetHeader.PackLength)]);
 
-                    //Logger.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
+                    //LogService.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
                     success = true;
                     HandleLogin = true;
                     /*var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);
-                    _logger.Info($"动态密钥:{secretKey.AccountSecretKey}", 1);
-                    _logger.Info($"动态验证码：{secretKey.ManualEntryKey}", 1);
-                    _logger.Info($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后验证新的密钥,容错5秒.", 1);*/
+                    LogService.Info($"动态密钥:{secretKey.AccountSecretKey}", 1);
+                    LogService.Info($"动态验证码：{secretKey.ManualEntryKey}", 1);
+                    LogService.Info($"{_authenticator.DefaultClockDriftTolerance.TotalMilliseconds}秒后验证新的密钥,容错5秒.", 1);*/
                 }
                 else
                 {
-                    Logger.Info($"[ClientLogin] Kicked 2: {loginData}");
+                    LogService.Info($"[ClientLogin] Kicked 2: {loginData}");
                     success = false;
                 }
             }
             else
             {
-                Logger.Info($"[ClientLogin] Kicked 0: {loginData}");
+                LogService.Info($"[ClientLogin] Kicked 0: {loginData}");
                 success = false;
             }
         }

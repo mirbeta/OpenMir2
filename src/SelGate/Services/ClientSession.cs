@@ -1,11 +1,10 @@
 using NLog;
 using SelGate.Conf;
 using System;
-using System.Net.Sockets;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SelGate.Datas;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
 
 namespace SelGate.Services
 {
@@ -17,7 +16,7 @@ namespace SelGate.Services
         private readonly SessionInfo _session;
         private bool _kickFlag = false;
         private int _clientTimeOutTick = 0;
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly ClientThread _lastDbSvr;
         private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
@@ -78,7 +77,7 @@ namespace SelGate.Services
                     _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
                     break;
                 default:
-                    _logger.Debug($"错误的数据包索引:[{cltCmd.Ident}]");
+                    LogService.Debug($"错误的数据包索引:[{cltCmd.Ident}]");
                     break;
             }
             if (!success)
@@ -101,7 +100,7 @@ namespace SelGate.Services
                     _kickFlag = true;
                     //BlockUser(this);
                     success = true;
-                    _logger.Trace($"Client Connect Time Out: {Session.ClientIP}");
+                    LogService.Trace($"Client Connect Time Out: {Session.ClientIP}");
                 }
             }
             else
@@ -174,7 +173,7 @@ namespace SelGate.Services
             accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.SocketId;
             _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
-            _logger.Debug("[UserEnter] " + sendStr);
+            LogService.Debug("[UserEnter] " + sendStr);
         }
 
         /// <summary>
@@ -195,7 +194,7 @@ namespace SelGate.Services
             accountPacket.SocketId = Session.SocketId;
             _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
             _kickFlag = false;
-            _logger.Debug("[UserLeave] " + sendStr);
+            LogService.Debug("[UserLeave] " + sendStr);
         }
 
         public void CloseSession()

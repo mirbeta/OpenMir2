@@ -1,6 +1,6 @@
 using System;
 using System.IO;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2.Packets.ClientPackets;
 
 namespace GameGate.Packet
 {

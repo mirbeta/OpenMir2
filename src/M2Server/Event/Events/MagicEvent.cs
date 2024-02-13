@@ -1,4 +1,5 @@
 ﻿using SystemModule;
+using SystemModule.Actors;
 using SystemModule.MagicEvent;
 
 namespace M2Server.Event.Events

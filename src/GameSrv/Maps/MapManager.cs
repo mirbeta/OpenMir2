@@ -1,14 +1,19 @@
 ﻿using M2Server;
 using M2Server.Event.Events;
+using M2Server.Maps;
 using NLog;
+using OpenMir2;
+using OpenMir2.Data;
 using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Data;
+using SystemModule.Maps;
+using SystemModule.SubSystem;
 
 namespace GameSrv.Maps
 {
     public class MapManager : IMapSystem
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, IEnvirnoment> _mapList = new Dictionary<string, IEnvirnoment>(StringComparer.OrdinalIgnoreCase);
         /// <summary>
         /// 地图上门列表
@@ -103,7 +108,7 @@ namespace GameSrv.Maps
                 }
                 else
                 {
-                    _logger.Error("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
+                    LogService.Error("地图名称重复 [" + sMapName + "]，请确认配置文件是否正确.");
                 }
                 if (envirnoment.DoorList.Count > 0)
                 {
@@ -116,7 +121,7 @@ namespace GameSrv.Maps
             }
             else
             {
-                _logger.Error("地图文件:" + sMapName + ".map" + "未找到,或者加载出错!!!");
+                LogService.Error("地图文件:" + sMapName + ".map" + "未找到,或者加载出错!!!");
             }
         }
 
@@ -183,7 +188,7 @@ namespace GameSrv.Maps
             {
                 this.Maps[i].AddDoorToMap();
             }
-            _logger.Info("地图环境加载成功...");
+            LogService.Info("地图环境加载成功...");
         }
 
         public static void ProcessMapDoor()

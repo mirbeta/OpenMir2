@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using SystemModule;
-using SystemModule.Common;
+using OpenMir2;
+using OpenMir2.Common;
 
 namespace DBSrv
 {

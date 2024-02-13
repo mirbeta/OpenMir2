@@ -1,12 +1,17 @@
 using M2Server;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.MagicEvent;
-using SystemModule.Packets.ClientPackets;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     public partial class RobotPlayer
     {
@@ -304,7 +309,7 @@ namespace RobotSystem
             }
             catch (Exception ex)
             {
-                SystemShare.Logger.Error(ex.StackTrace);
+                LogService.Error(ex.StackTrace);
             }
             base.Run();
         }
@@ -591,7 +596,7 @@ namespace RobotSystem
             }
             catch (Exception)
             {
-                SystemShare.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
             VisibleFlag nVisibleFlag;
@@ -686,7 +691,7 @@ namespace RobotSystem
             }
             catch (Exception)
             {
-                SystemShare.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
             try
@@ -784,7 +789,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
+                LogService.Error(ChrName + ',' + MapName + ',' + CurrX + ',' + CurrY + ',' + " SearchViewRange");
                 KickException();
             }
         }

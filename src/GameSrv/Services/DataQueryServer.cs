@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using M2Server;
 using NLog;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
@@ -14,7 +15,7 @@ namespace GameSrv.Services
     /// </summary>
     public class DataQueryServer
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly TcpClient _tcpClient;
         private byte[] ReceiveBuffer { get; set; }
         private int BuffLen { get; set; }
@@ -85,13 +86,13 @@ namespace GameSrv.Services
 
         private Task DataScoketDisconnected(ITcpClientBase sender, DisconnectEventArgs e)
         {
-            _logger.Error("数据库服务器[" + sender.GetIPPort() + "]断开连接...");
+            LogService.Error("数据库服务器[" + sender.GetIPPort() + "]断开连接...");
             return Task.CompletedTask;
         }
 
         private Task DataScoketConnected(ITcpClient client, ConnectedEventArgs e)
         {
-            _logger.Info("数据库服务器[" + client.RemoteIPHost + "]连接成功...");
+            LogService.Info("数据库服务器[" + client.RemoteIPHost + "]连接成功...");
             return Task.CompletedTask;
         }
 
@@ -114,7 +115,7 @@ namespace GameSrv.Services
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                LogService.Error(exception);
             }
             finally
             {
@@ -139,7 +140,7 @@ namespace GameSrv.Services
                         srcOffset++;
                         dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                         nLen -= 1;
-                        _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        LogService.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
                     var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
@@ -175,7 +176,7 @@ namespace GameSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
         }
 
@@ -210,7 +211,7 @@ namespace GameSrv.Services
                 }
                 else
                 {
-                    _logger.Error("错误的封包数据");
+                    LogService.Error("错误的封包数据");
                 }
             }
             finally

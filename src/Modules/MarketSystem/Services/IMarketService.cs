@@ -1,8 +1,8 @@
-﻿using SystemModule;
-using SystemModule.Data;
-using SystemModule.Packets.ServerPackets;
+﻿using OpenMir2.Data;
+using OpenMir2.Packets.ServerPackets;
+using SystemModule.Actors;
 
-namespace MarketSystem
+namespace MarketSystem.Services
 {
     public interface IMarketService
     {

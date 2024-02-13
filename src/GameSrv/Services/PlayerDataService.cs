@@ -1,9 +1,10 @@
 using M2Server;
 using NLog;
 using System.Collections.Concurrent;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Packets.ServerPackets;
 
 namespace GameSrv.Services
 {
@@ -18,7 +19,7 @@ namespace GameSrv.Services
     /// </summary>
     public static class PlayerDataService
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
+        
         private static readonly ConcurrentDictionary<int, ServerRequestData> QueryMap = new ConcurrentDictionary<int, ServerRequestData>();
         private static readonly ConcurrentQueue<QueryPlayData> QueryProcessList = new ConcurrentQueue<QueryPlayData>();
         private static readonly ConcurrentQueue<int> SaveProcessList = new ConcurrentQueue<int>();
@@ -27,7 +28,7 @@ namespace GameSrv.Services
         public static void Enqueue(int queryId, ServerRequestData data)
         {
             QueryMap.TryAdd(queryId, data);
-            Logger.Debug($"执行任务Id:{queryId}成功");
+            LogService.Debug($"执行任务Id:{queryId}成功");
         }
 
         private static bool GetDataSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
@@ -111,7 +112,7 @@ namespace GameSrv.Services
                 SaveProcessList.Enqueue(queryId);
                 return true;
             }
-            Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+            LogService.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             return false;
         }
 
@@ -140,7 +141,7 @@ namespace GameSrv.Services
             {
                 if (queryData.QueryCount >= 60) //60秒后放弃
                 {
-                    Logger.Warn("超过最大查询次数,放弃此次保存.");
+                    LogService.Warn("超过最大查询次数,放弃此次保存.");
                     return;
                 }
                 var nIdent = 0;
@@ -174,10 +175,10 @@ namespace GameSrv.Services
                 {
                     QueryId = queryId
                 });
-                Logger.Debug($"查询玩家数据任务ID:[{queryId}]");
+                LogService.Debug($"查询玩家数据任务ID:[{queryId}]");
                 return true;
             }
-            Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+            LogService.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             return false;
         }
 

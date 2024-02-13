@@ -6,8 +6,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Enums;
 using SystemModule.Packets.ServerPackets;
 
 namespace BotSrv.Scenes.Scene

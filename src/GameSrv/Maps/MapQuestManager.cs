@@ -1,5 +1,6 @@
-﻿using GameSrv.NPC;
+﻿using GameSrv.Npc;
 using M2Server.Player;
+using OpenMir2.Data;
 using SystemModule;
 using SystemModule.Data;
 

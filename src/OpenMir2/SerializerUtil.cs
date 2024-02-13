@@ -1,8 +1,8 @@
-using MemoryPack;
 using System;
 using System.Runtime.CompilerServices;
+using MemoryPack;
 
-namespace SystemModule
+namespace OpenMir2
 {
     public static class SerializerUtil
     {

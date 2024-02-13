@@ -2,6 +2,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using OpenMir2;
+using RobotSystem.Event;
 using SystemModule;
 using SystemModule.ModuleEvent;
 
@@ -9,7 +11,7 @@ namespace RobotSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
 
         public void Configure(IHostEnvironment env)
         {
@@ -24,12 +26,12 @@ namespace RobotSystem
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("Robot(机器人)插件启动...");
+            LogService.Info("Robot(机器人)插件启动...");
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("Robot(机器人)插件停止...");
+            LogService.Info("Robot(机器人)插件停止...");
         }
     }
 }

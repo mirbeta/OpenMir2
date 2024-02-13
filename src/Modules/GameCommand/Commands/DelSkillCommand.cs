@@ -1,8 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2.Packets.ClientPackets;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 删除指定玩家技能

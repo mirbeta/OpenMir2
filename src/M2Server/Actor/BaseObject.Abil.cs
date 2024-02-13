@@ -1,9 +1,9 @@
 ﻿using M2Server.Monster;
-using SystemModule;
-using SystemModule.Consts;
-using SystemModule.Data;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 
 namespace M2Server.Actor
 {

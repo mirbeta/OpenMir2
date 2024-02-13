@@ -1,5 +1,7 @@
-﻿using NLog;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
+using OpenMir2;
+using OpenMir2.Enums;
+using SystemModule.Actors;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -10,7 +12,6 @@ namespace SystemModule
     /// </summary>
     public sealed class ActorMgr
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConcurrentQueue<int> _generateQueue = new ConcurrentQueue<int>();
         private readonly IList<int> ActorIds = new List<int>(1000);
         /// <summary>
@@ -153,7 +154,7 @@ namespace SystemModule
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            _logger.Debug($"对象数:[{_actorsMap.Count}] 玩家/怪物:[{PlayerCount}/{MonsterCount}] 死亡角色:[{PlayerGhostCount}] 死亡怪物:[{MonsterDeathCount}] 释放怪物:[{MonsterDisposeCount}]");
+            LogService.Debug($"对象数:[{_actorsMap.Count}] 玩家/怪物:[{PlayerCount}/{MonsterCount}] 死亡角色:[{PlayerGhostCount}] 死亡怪物:[{MonsterDeathCount}] 释放怪物:[{MonsterDisposeCount}]");
         }
     }
 }

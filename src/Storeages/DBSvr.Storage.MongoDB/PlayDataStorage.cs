@@ -1,17 +1,16 @@
 using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
 using MongoDB.Driver;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.MongoDB
 {
     public class PlayDataStorage : IPlayDataStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> _mirQuickMap;
         private readonly Dictionary<int, int> _quickIndexIdMap;
         private readonly PlayQuickList _mirQuickIdList;
@@ -86,8 +85,8 @@ namespace DBSrv.Storage.MongoDB
             }
             catch (Exception e)
             {
-                _logger.Error("打开数据库[MySql]失败.");
-                _logger.Error(e.StackTrace);
+                LogService.Error("打开数据库[MySql]失败.");
+                LogService.Error(e.StackTrace);
                 success = false;
             }
             return dbConnection;

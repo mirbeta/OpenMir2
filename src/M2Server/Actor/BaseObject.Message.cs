@@ -1,4 +1,8 @@
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
 using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -381,7 +385,7 @@ namespace M2Server.Actor
         {
             if (Envir == null)
             {
-                M2Share.Logger.Error(ChrName + " SendRefMsg nil PEnvir ");
+                LogService.Error(ChrName + " SendRefMsg nil PEnvir ");
                 return;
             }
             if (ObMode || FixedHideMode)

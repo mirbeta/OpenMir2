@@ -3,17 +3,19 @@ using MySqlConnector;
 using NLog;
 using System.Data;
 using System.Text.Json;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Extensions;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
 using SystemModule.Data;
-using SystemModule.Enums;
-using SystemModule.Extensions;
-using SystemModule.Packets.ClientPackets;
 
 namespace GameSrv.DB
 {
     public class MySqlDB : IDataSource
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         private IDbConnection _dbConnection;
 
         public int LoadItemsDB()
@@ -84,7 +86,7 @@ namespace GameSrv.DB
                         }
                         else
                         {
-                            logger.Error($"加载物品(Idx:{idx} Name:{stdItem.Name})数据失败!!!");
+                            LogService.Error($"加载物品(Idx:{idx} Name:{stdItem.Name})数据失败!!!");
                             result = -100;
                             return result;
                         }
@@ -97,7 +99,7 @@ namespace GameSrv.DB
             }
             catch (Exception ex)
             {
-                logger.Error(ex.StackTrace);
+                LogService.Error(ex.StackTrace);
                 return result;
             }
             finally
@@ -161,7 +163,7 @@ namespace GameSrv.DB
             }
             catch (Exception ex)
             {
-                logger.Error(ex.StackTrace);
+                LogService.Error(ex.StackTrace);
             }
             finally
             {
@@ -232,12 +234,12 @@ namespace GameSrv.DB
                     GameShare.LocalDb.LoadMonitems(monster.Name, ref monster.ItemList);
                     //if (SystemShare.WorldEngine.MonsterList.ContainsKey(monster.Name))
                     //{
-                    //    logger.Warn($"怪物名称[{monster.Name}]重复,请确认数据是否正常.");
+                    //    LogService.Warn($"怪物名称[{monster.Name}]重复,请确认数据是否正常.");
                     //    continue;
                     //}
                     //if (monster.ItemList == null || monster.ItemList.Count <= 0)
                     //{
-                    //    logger.Debug($"怪物[{monster.Name}]爆率文件为空.");
+                    //    LogService.Debug($"怪物[{monster.Name}]爆率文件为空.");
                     //}
                     SystemShare.WorldEngine.AddMonsterList(monster);
                     result = 1;
@@ -258,7 +260,7 @@ namespace GameSrv.DB
         {
             if (!Open())
             {
-                logger.Error("读取物品寄售列表失败.");
+                LogService.Error("读取物品寄售列表失败.");
                 return;
             }
             try
@@ -285,7 +287,7 @@ namespace GameSrv.DB
                         M2Share.SellOffItemList.Add(DealOffInfo);
                     }
                 }
-                logger.Info($"读取物品寄售列表成功...[{M2Share.SellOffItemList.Count}]");
+                LogService.Info($"读取物品寄售列表成功...[{M2Share.SellOffItemList.Count}]");
             }
             finally
             {
@@ -302,7 +304,7 @@ namespace GameSrv.DB
         {
             if (!Open())
             {
-                logger.Error("保存物品寄售数据失败.");
+                LogService.Error("保存物品寄售数据失败.");
                 return;
             }
             DealOffInfo DealOffInfo;
@@ -330,7 +332,7 @@ namespace GameSrv.DB
                         }
                     }
                 }
-                logger.Info($"保存物品寄售列表成功...[{M2Share.SellOffItemList.Count}]");
+                LogService.Info($"保存物品寄售列表成功...[{M2Share.SellOffItemList.Count}]");
             }
             catch (Exception)
             {
@@ -382,8 +384,8 @@ namespace GameSrv.DB
                 }
                 catch (Exception e)
                 {
-                    logger.Error(SystemShare.Config.ConnctionString);
-                    logger.Error(e.StackTrace);
+                    LogService.Error(SystemShare.Config.ConnctionString);
+                    LogService.Error(e.StackTrace);
                     return false;
                 }
             }

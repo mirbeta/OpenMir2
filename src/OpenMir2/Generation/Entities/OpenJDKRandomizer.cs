@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using SystemModule.Generation.Interfaces.Entities;
+using OpenMir2.Generation.Interfaces.Entities;
 
-namespace SystemModule.Generation.Entities
+namespace OpenMir2.Generation.Entities
 {
     /// <summary>
     /// Randomizer that was created under influence of OpenJDK Randomizer.

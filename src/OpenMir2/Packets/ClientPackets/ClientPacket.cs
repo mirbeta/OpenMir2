@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace SystemModule.Packets.ClientPackets
+namespace OpenMir2.Packets.ClientPackets
 {
     public abstract class ClientPacket
     {

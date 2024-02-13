@@ -1,8 +1,8 @@
 ﻿using M2Server.Npc;
-using SystemModule;
-using SystemModule.Data;
+using OpenMir2;
+using OpenMir2.Data;
 
-namespace GameSrv.NPC
+namespace GameSrv.Npc
 {
     /// <summary>
     /// 练功师

@@ -1,5 +1,6 @@
 ﻿using SystemModule;
 using SystemModule.MagicEvent;
+using SystemModule.Maps;
 
 namespace M2Server.Event.Events
 {

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using MemoryPack;
 using System.Runtime.InteropServices;
+using MemoryPack;
 
-namespace SystemModule.Packets.ClientPackets
+namespace OpenMir2.Packets.ClientPackets
 {
     [MemoryPackable(SerializeLayout.Sequential)]
     [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Ansi, Size = 40)]

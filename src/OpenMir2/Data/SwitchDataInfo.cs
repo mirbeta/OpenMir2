@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule.Data
+namespace OpenMir2.Data
 {
     public class SwitchDataInfo
     {

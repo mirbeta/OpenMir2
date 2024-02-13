@@ -1,4 +1,4 @@
-﻿namespace SystemModule.NativeList.Interfaces.Entities
+﻿namespace OpenMir2.NativeList.Interfaces.Entities
 {
     /// <summary>
     /// Wraps the native structure. Extends the <see cref="INativeHandle"/> interface.

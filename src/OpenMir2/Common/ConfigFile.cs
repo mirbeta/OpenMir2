@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace SystemModule.Common
+namespace OpenMir2.Common
 {
     /// <summary>
     /// Provides methods for reading and writing to an conf file.

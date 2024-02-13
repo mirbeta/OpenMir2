@@ -1,5 +1,7 @@
+using OpenMir2;
+using OpenMir2.Common;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Data;
 
 namespace M2Server.Castle
 {

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ServerPackets;
 
 namespace SelGate.Services
 {

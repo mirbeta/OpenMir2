@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using SystemModule.NativeList.Abstracts;
-using SystemModule.NativeList.Interfaces.Entities;
+using OpenMir2.NativeList.Abstracts;
+using OpenMir2.NativeList.Interfaces.Entities;
 
-namespace SystemModule.NativeList.Utils
+namespace OpenMir2.NativeList.Utils
 {
     /// <summary>
     /// This is like a array but in the native heap.

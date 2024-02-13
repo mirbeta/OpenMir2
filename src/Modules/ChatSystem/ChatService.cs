@@ -1,6 +1,7 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
 using NLog;
+using OpenMir2;
 using SystemModule;
 
 namespace ChatSystem
@@ -11,7 +12,7 @@ namespace ChatSystem
     /// </summary>
     public class ChatService : IChatService
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         private readonly MqttFactory mqttFactory;
         private readonly IMqttClient chatClient;
 
@@ -25,7 +26,7 @@ namespace ChatSystem
 
         private Task ClientConnectedAsync(MqttClientConnectedEventArgs arg)
         {
-            logger.Info("链接世界聊天频道服务器成功...");
+            LogService.Info("链接世界聊天频道服务器成功...");
             return Task.CompletedTask;
         }
 
@@ -40,7 +41,7 @@ namespace ChatSystem
             {
                 return;
             }
-            logger.Info("开始链接世界聊天频道...");
+            LogService.Info("开始链接世界聊天频道...");
             var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(SystemShare.Config.ChatSrvAddr, SystemShare.Config.ChatSrvPort).Build();
             try
             {
@@ -48,19 +49,19 @@ namespace ChatSystem
                 var response = await chatClient.ConnectAsync(chatClientOptions, cancellationToken);
                 if (response.ResultCode == MqttClientConnectResultCode.Success)
                 {
-                    logger.Info("链接世界聊天频道成功...");
+                    LogService.Info("链接世界聊天频道成功...");
                 }
                 else
                 {
-                    logger.Info("链接世界聊天频道失败...");
+                    LogService.Info("链接世界聊天频道失败...");
                 }
             }
             catch (OperationCanceledException)
             {
-                logger.Warn("链接世界聊天频道超时,请确认配置是否正确.");
+                LogService.Warn("链接世界聊天频道超时,请确认配置是否正确.");
                 return;
             }
-            logger.Info("链接世界聊天频道初始化完成...");
+            LogService.Info("链接世界聊天频道初始化完成...");
         }
 
         private async Task ClientDisconnectedAsync(MqttClientDisconnectedEventArgs arg)
@@ -69,12 +70,12 @@ namespace ChatSystem
             {
                 await chatClient.ConnectAsync(chatClient.Options);
             }
-            logger.Info("与世界聊天频道失去链接...");
+            LogService.Info("与世界聊天频道失去链接...");
         }
 
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
-            logger.Info("断开世界聊天频道...");
+            LogService.Info("断开世界聊天频道...");
             await chatClient.DisconnectAsync(new MqttClientDisconnectOptionsBuilder().WithReason(MqttClientDisconnectOptionsReason.NormalDisconnection).Build(), cancellationToken);
         }
 
@@ -90,7 +91,7 @@ namespace ChatSystem
                 {
                     await chatClient.ConnectAsync(chatClient.Options, timeout.Token);
                 }
-                logger.Info("与世界聊天频道失去链接...");
+                LogService.Info("与世界聊天频道失去链接...");
             }
         }
 

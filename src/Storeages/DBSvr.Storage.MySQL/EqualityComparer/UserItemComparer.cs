@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule.Packets.ClientPackets;
 
 namespace DBSrv.Storage.MySQL.EqualityComparer

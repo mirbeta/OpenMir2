@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Data
+﻿namespace OpenMir2.Data
 {
     /// <summary>
     /// 怪物掉落物品

@@ -8,16 +8,19 @@ using ScriptSystem;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
 using SystemModule;
-using SystemModule.Common;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.SubSystem;
 
 namespace M2Server
 {
     public static class M2Share
     {
-        public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
         /// <summary>
         /// 启动路径
         /// </summary>

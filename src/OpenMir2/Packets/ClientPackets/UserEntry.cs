@@ -1,7 +1,7 @@
 using System.IO;
-using SystemModule.Extensions;
+using OpenMir2.Extensions;
 
-namespace SystemModule.Packets.ClientPackets
+namespace OpenMir2.Packets.ClientPackets
 {
     public class UserEntry : ClientPacket
     {

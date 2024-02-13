@@ -1,6 +1,6 @@
-﻿using SystemModule.Common;
+﻿using OpenMir2.Common;
 
-namespace RobotSystem
+namespace RobotSystem.Conf
 {
     public class RobotPlayerConf : ConfigFile
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using SystemModule.NativeList.Helpers;
-using SystemModule.NativeList.Interfaces.Entities;
+using OpenMir2.NativeList.Helpers;
+using OpenMir2.NativeList.Interfaces.Entities;
 
-namespace SystemModule.NativeList.Abstracts
+namespace OpenMir2.NativeList.Abstracts
 {
     /// <summary>
     /// Basic class for object which hold structure in unmanaged memory.

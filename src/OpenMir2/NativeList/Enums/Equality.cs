@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace SystemModule.NativeList.Enums
+namespace OpenMir2.NativeList.Enums
 {
     /// <summary>
     /// Enum for comparer method to avoid non human friendly result of integer number.

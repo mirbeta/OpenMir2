@@ -1,64 +1,62 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net8.0</TargetFramework>
-		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
-		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
-		<LangVersion>10</LangVersion>
-	</PropertyGroup>
-	
-	<Choose>
-		<When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+        <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
+        <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
 
-		</When>
-		
-		<When Condition="$(Configuration)=='Release'">
-			<PropertyGroup>
-				<DebugSymbols>false</DebugSymbols>
-				<Optimize>true</Optimize>
-				<DefineConstants>TRACE</DefineConstants>
-			</PropertyGroup>
-		</When>
+    <Choose>
+        <When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
 
-		<When Condition="$(Configuration)=='Debug'">
-			<Choose>
-				<When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
-					<PropertyGroup>
-						<OutputPath>D:\MirServer\LoginGate</OutputPath>
-					</PropertyGroup>
-				</When>
-				<When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
-					<PropertyGroup>
-						<OutputPath>/Volumes/Data/Mirserver/LoginGate</OutputPath>
-					</PropertyGroup>
-				</When>
-				<When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
-					<PropertyGroup>
-						<OutputPath>/Volumes/opt/Mirserver/LoginGate</OutputPath>
-					</PropertyGroup>
-				</When>
-			</Choose>
-		</When>
-	</Choose>
-	
-	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
-		<PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20" />
-		<PackageReference Include="NLog" Version="5.2.8" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
-	</ItemGroup>
+        </When>
 
-	<ItemGroup>
-		<None Include="..\..\nlog.config">
-			<Link>nlog.config</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
+        <When Condition="$(Configuration)=='Release'">
+            <PropertyGroup>
+                <DebugSymbols>false</DebugSymbols>
+                <Optimize>true</Optimize>
+                <DefineConstants>TRACE</DefineConstants>
+            </PropertyGroup>
+        </When>
 
-	<ItemGroup>
-	  <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
-	</ItemGroup>
+        <When Condition="$(Configuration)=='Debug'">
+            <Choose>
+                <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+                    <PropertyGroup>
+                        <OutputPath>D:\MirServer\LoginGate</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/Data/Mirserver/LoginGate</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/opt/Mirserver/LoginGate</OutputPath>
+                    </PropertyGroup>
+                </When>
+            </Choose>
+        </When>
+    </Choose>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0"/>
+        <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Include="..\..\nlog.config">
+            <Link>nlog.config</Link>
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\OpenMir2\OpenMir2.csproj"/>
+    </ItemGroup>
 
 </Project>

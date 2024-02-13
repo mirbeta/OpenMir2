@@ -1,4 +1,4 @@
-﻿namespace SystemModule.NativeList.Interfaces.Shared
+﻿namespace OpenMir2.NativeList.Interfaces.Shared
 {
     /// <summary>
     /// This interface was created to make possible to see that the object was initialized.

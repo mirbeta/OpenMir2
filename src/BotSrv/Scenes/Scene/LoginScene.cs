@@ -1,6 +1,8 @@
 ﻿using BotSrv.Player;
 using NLog;
 using System.Net;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 
@@ -11,7 +13,7 @@ namespace BotSrv.Scenes.Scene
     /// </summary>
     public class LoginScene : SceneBase
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         private readonly ScoketClient _clientSocket;
 
         public LoginScene(RobotPlayer robotClient) : base(SceneType.Login, robotClient)
@@ -83,7 +85,7 @@ namespace BotSrv.Scenes.Scene
 
         private void SendNewAccount(string sAccount, string sPassword)
         {
-            logger.Info("创建帐号");
+            LogService.Info("创建帐号");
             ConnectionStep = ConnectionStep.NewAccount;
             var ue = new UserEntry();
             ue.Account = sAccount;
@@ -107,7 +109,7 @@ namespace BotSrv.Scenes.Scene
 
         private void SendLogin(string uid, string passwd)
         {
-            logger.Info("开始登陆");
+            LogService.Info("开始登陆");
             RobotClient.LoginId = uid;
             RobotClient.LoginPasswd = passwd;
             var msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
@@ -123,15 +125,15 @@ namespace BotSrv.Scenes.Scene
             MShare.g_wAvailIPHour = msg.Tag;
             if ((MShare.g_wAvailIDHour % 60) > 0)
             {
-                logger.Info("个人帐户的期限: 剩余 " + (MShare.g_wAvailIDHour / 60) + " 小时 " + (MShare.g_wAvailIDHour % 60) + " 分钟.");
+                LogService.Info("个人帐户的期限: 剩余 " + (MShare.g_wAvailIDHour / 60) + " 小时 " + (MShare.g_wAvailIDHour % 60) + " 分钟.");
             }
             else if (MShare.g_wAvailIDHour > 0)
             {
-                logger.Info("个人帐户的期限: 剩余 " + MShare.g_wAvailIDHour + " 分钟.");
+                LogService.Info("个人帐户的期限: 剩余 " + MShare.g_wAvailIDHour + " 分钟.");
             }
             else
             {
-                logger.Info("帐号登录成功！");
+                LogService.Info("帐号登录成功！");
             }
             var sServerName = string.Empty;
             var sText = EDCode.DeCodeString(sBody);
@@ -147,7 +149,7 @@ namespace BotSrv.Scenes.Scene
 
         private void SendSelectServer(string svname)
         {
-            logger.Info($"选择服务器：{svname}");
+            LogService.Info($"选择服务器：{svname}");
             ConnectionStep = ConnectionStep.SelServer;
             var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(svname));
@@ -179,14 +181,14 @@ namespace BotSrv.Scenes.Scene
             }
             else
             {
-                logger.Warn($"Socket Close: {_clientSocket.RemoteEndPoint}");
+                LogService.Warn($"Socket Close: {_clientSocket.RemoteEndPoint}");
             }
         }
 
         private void CloseSocket()
         {
             _clientSocket.Disconnect();//断开登录网关链接
-            logger.Info("主动断开");
+            LogService.Info("主动断开");
         }
 
         #region Socket Events
@@ -220,7 +222,7 @@ namespace BotSrv.Scenes.Scene
             }
             else if ((RobotClient.DScreen.CurrentScene == RobotClient.LoginScene) && !MShare.SendLogin)
             {
-                logger.Info("游戏连接已关闭...");
+                LogService.Info("游戏连接已关闭...");
             }
         }
 
@@ -229,13 +231,13 @@ namespace BotSrv.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
+                    LogService.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
+                    LogService.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
+                    LogService.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
         }

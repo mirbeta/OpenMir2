@@ -5,15 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly Dictionary<string, int> _NameQuickMap;
         private readonly Dictionary<int, int> _IndexQuickIdMap;
         private readonly PlayQuickList _mirQuickIdList;
@@ -180,7 +180,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error($"获取角色[{nIndex}]数据失败." + e.StackTrace);
+                LogService.Error($"获取角色[{nIndex}]数据失败." + e.StackTrace);
                 return false;
             }
             finally
@@ -260,8 +260,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetChrRecord");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.GetChrRecord");
+                LogService.Error(ex.StackTrace);
                 return null;
             }
         }
@@ -301,8 +301,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetAbilGetRecord");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.GetAbilGetRecord");
+                LogService.Error(ex.StackTrace);
             }
             return humanRcd;
         }
@@ -337,7 +337,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetBonusAbilRecord");
+                LogService.Error("[Exception] PlayDataStorage.GetBonusAbilRecord");
             }
         }
 
@@ -368,8 +368,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error($"[Exception] GetMagicRecord");
-                _logger.Error(ex.StackTrace);
+                LogService.Error($"[Exception] GetMagicRecord");
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -397,7 +397,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetItemRecord:" + ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.GetItemRecord:" + ex.StackTrace);
             }
         }
 
@@ -425,7 +425,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch
             {
-                _logger.Error("[Exception] PlayDataStorage.GetBagItemRecord");
+                LogService.Error("[Exception] PlayDataStorage.GetBagItemRecord");
             }
         }
 
@@ -453,8 +453,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetStorageRecord");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.GetStorageRecord");
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -479,7 +479,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch
             {
-                _logger.Error("[Exception] PlayDataStorage.GetPlayerStatus");
+                LogService.Error("[Exception] PlayDataStorage.GetPlayerStatus");
             }
         }
 
@@ -535,7 +535,7 @@ namespace DBSrv.Storage.MySQL
             catch
             {
                 result = false;
-                _logger.Error("[Exception] PlayDataStorage.DeleteRecord");
+                LogService.Error("[Exception] PlayDataStorage.DeleteRecord");
             }
             finally
             {
@@ -598,7 +598,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception)
             {
-                _logger.Error("[Exception] PlayDataStorage.GetQryChar");
+                LogService.Error("[Exception] PlayDataStorage.GetQryChar");
                 return false;
             }
             finally
@@ -634,7 +634,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.QueryItemAttr:" + ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.QueryItemAttr:" + ex.StackTrace);
             }
         }
     }

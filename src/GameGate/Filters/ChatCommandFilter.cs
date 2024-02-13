@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using SystemModule.Common;
+using OpenMir2.Common;
 
 namespace GameGate.Filters
 {

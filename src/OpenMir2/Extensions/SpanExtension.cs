@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
     public static class SpanExtension
     {

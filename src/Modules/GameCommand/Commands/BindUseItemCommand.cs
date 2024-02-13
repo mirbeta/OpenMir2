@@ -1,8 +1,10 @@
-﻿using SystemModule;
-using SystemModule.Data;
+﻿using OpenMir2;
+using OpenMir2.Data;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("BindUseItem", "", CommandHelp.GameCommandBindUseItemHelpMsg, 10)]
     public class BindUseItemCommand : GameCommand

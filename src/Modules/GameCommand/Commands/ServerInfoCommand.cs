@@ -1,7 +1,7 @@
 ﻿using System.Text;
-using SystemModule;
+using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("ServerInfo", "查看服务器信息", 10)]
     public class ServerInfoCommand : GameCommand
@@ -26,7 +26,7 @@ namespace CommandSystem.Commands
             //{
             //    M2Share.dwStartTimeTick = HUtil32.GetTickCount();
             //}
-            //M2Share.Logger.Error(sb.ToString());
+            //LogService.Error(sb.ToString());
 
             //TGateInfo GateInfo;
             //sb.Clear();
@@ -60,7 +60,7 @@ namespace CommandSystem.Commands
             //}
             //if (sb.Length > 0)
             //{
-            //    M2Share.Logger.Error(sb.ToString());
+            //    LogService.Error(sb.ToString());
             //}
         }
     }

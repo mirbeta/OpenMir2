@@ -1,13 +1,7 @@
 using GameGate.Filters;
 using GameGate.Services;
-using System;
-using System.Buffers;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using SystemModule.Common;
-using SystemModule.Packets.ServerPackets;
 
 namespace GameGate
 {
@@ -42,7 +36,7 @@ namespace GameGate
         /// 聊天过滤命令列表
         /// </summary>
         public static ConcurrentDictionary<string, byte> ChatCommandFilterMap;
-        public static readonly ArrayPool<byte> BytePool = ArrayPool<byte>.Shared;
+        public static readonly System.Buffers.ArrayPool<byte> BytePool = System.Buffers.ArrayPool<byte>.Shared;
         public static Dictionary<string, ClientSession> PunishList;
         public static HardwareFilter HardwareFilter;
         public static AbusiveFilter AbusiveFilter;

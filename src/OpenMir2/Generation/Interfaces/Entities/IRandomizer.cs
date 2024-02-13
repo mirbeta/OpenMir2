@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Generation.Interfaces.Entities
+﻿namespace OpenMir2.Generation.Interfaces.Entities
 {
     /// <summary>
     /// Representation of randomizer in form of interface, 

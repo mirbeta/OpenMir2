@@ -1,5 +1,5 @@
 using System.Collections;
-using SystemModule;
+using OpenMir2;
 
 namespace GameGate.Filters
 {

@@ -1,13 +1,16 @@
 using M2Server;
 using NLog;
+using OpenMir2;
+using OpenMir2.Data;
 using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Data;
 
 namespace RobotSystem
 {
     public class RobotProcessor : TimerScheduledService
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         /// <summary>
         /// 假人列表
         /// </summary>
@@ -30,17 +33,17 @@ namespace RobotSystem
 
         public override void Initialize(CancellationToken cancellationToken)
         {
-            logger.Debug("初始化Robot(机器人)处理插件...");
+            LogService.Debug("初始化Robot(机器人)处理插件...");
         }
 
         protected override void Startup(CancellationToken stoppingToken)
         {
-            logger.Info("机器人管理线程初始化完成...");
+            LogService.Info("机器人管理线程初始化完成...");
         }
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            logger.Info("机器人管理线程停止ֹ...");
+            LogService.Info("机器人管理线程停止ֹ...");
         }
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
@@ -55,8 +58,8 @@ namespace RobotSystem
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error("[Exception] RobotProcessor::ExecuteInternal");
-                logger.Error(ex);
+                LogService.Error("[Exception] RobotProcessor::ExecuteInternal");
+                LogService.Error(ex);
             }
             return Task.CompletedTask;
         }
@@ -160,8 +163,8 @@ namespace RobotSystem
             }
             catch (Exception ex)
             {
-                logger.Error(sExceptionMsg);
-                logger.Error(ex.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex.StackTrace);
             }
         }
 

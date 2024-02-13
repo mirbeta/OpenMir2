@@ -1,7 +1,10 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
+using SystemModule.Maps;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 移动到某地图XY坐标处
@@ -51,8 +54,8 @@ namespace CommandSystem.Commands
             }
             catch (Exception e)
             {
-                SystemShare.Logger.Error("[Exceptioin] PlayerActor.SysMsgCmdPositionMove");
-                SystemShare.Logger.Error(e.Message);
+                LogService.Error("[Exceptioin] PlayerActor.SysMsgCmdPositionMove");
+                LogService.Error(e.Message);
             }
         }
     }

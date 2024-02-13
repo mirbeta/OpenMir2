@@ -6,7 +6,6 @@
         <LangVersion>11</LangVersion>
         <ImplicitUsings>disable</ImplicitUsings>
 		<EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
-        <RootNamespace>SystemModule</RootNamespace>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -22,10 +21,12 @@
       <PackageReference Include="MemoryPack" Version="1.10.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
       <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
-      <PackageReference Include="NLog" Version="5.2.8" />
-      <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
       <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
       <PackageReference Include="TouchSocket" Version="2.0.0-beta.273" />
+      <PackageReference Include="Serilog" Version="3.1.1" />
+      <PackageReference Include="Serilog.Extensions.Logging" Version="8.0.0" />
+      <PackageReference Include="Serilog.Settings.Configuration" Version="8.0.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="5.0.1" />
     </ItemGroup>
 
     <ItemGroup>

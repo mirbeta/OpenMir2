@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using NLog;
+using OpenMir2;
 using SystemModule;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
@@ -13,7 +14,7 @@ namespace PlanesSystem
     /// </summary>
     public class PlanesClient
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private string sRecvMsg = string.Empty;
         private readonly TcpClient _tcpClient;
         private readonly PlanesMessage _groupMessageHandle;
@@ -113,8 +114,8 @@ namespace PlanesSystem
             }
             catch (Exception ex)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(ex.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -129,14 +130,14 @@ namespace PlanesSystem
 
         private Task MsgClientConnect(ITcpClient client, ConnectedEventArgs e)
         {
-            _logger.Info("连接主服务器(" + client.RemoteIPHost + ")成功...");
+            LogService.Info("连接主服务器(" + client.RemoteIPHost + ")成功...");
             //todo 链接主服务器成功后需要发消息链接主服务器告知主服务器当前服务器IP和端口，保持登录数据同步
             return Task.CompletedTask;
         }
 
         private Task MsgClientDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            _logger.Error("节点服务器(" + client.GetIPPort() + ")断开连接...");
+            LogService.Error("节点服务器(" + client.GetIPPort() + ")断开连接...");
             return Task.CompletedTask;
         }
 

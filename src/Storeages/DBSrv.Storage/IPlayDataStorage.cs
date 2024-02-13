@@ -1,6 +1,6 @@
 using DBSrv.Storage.Model;
 using System.Collections.Specialized;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage
 {

@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Actors;
+
+namespace SystemModule.Data
 {
     /// <summary>
     /// 守卫

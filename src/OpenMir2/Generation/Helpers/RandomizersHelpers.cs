@@ -1,8 +1,8 @@
 ﻿using System;
-using SystemModule.Generation.Interfaces.Entities;
-using SystemModule.NativeList.Helpers;
+using OpenMir2.Generation.Interfaces.Entities;
+using OpenMir2.NativeList.Helpers;
 
-namespace SystemModule.Generation.Helpers
+namespace OpenMir2.Generation.Helpers
 {
     public static class RandomizersHelpers
     {

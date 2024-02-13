@@ -1,6 +1,8 @@
-﻿using SystemModule.Data;
+﻿using OpenMir2.Data;
+using SystemModule.Actors;
+using SystemModule.Maps;
 
-namespace SystemModule
+namespace SystemModule.SubSystem
 {
     public interface IMapSystem
     {

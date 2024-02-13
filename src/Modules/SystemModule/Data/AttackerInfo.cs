@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Castles;
+
+namespace SystemModule.Data
 {
     public struct AttackerInfo : IDisposable
     {

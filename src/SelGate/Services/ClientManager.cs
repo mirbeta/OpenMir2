@@ -3,7 +3,7 @@ using SelGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using SystemModule;
+using OpenMir2;
 
 namespace SelGate.Services
 {
@@ -12,7 +12,7 @@ namespace SelGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
@@ -34,7 +34,7 @@ namespace SelGate.Services
                 var serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    _logger.Debug($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    LogService.Debug($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
                 _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager));

@@ -1,7 +1,7 @@
-﻿using SystemModule;
-using SystemModule.Common;
+﻿using OpenMir2.Common;
+using SystemModule;
 
-namespace CommandSystem
+namespace CommandModule.Conf
 {
     public class GameCmdConf : ConfigFile
     {

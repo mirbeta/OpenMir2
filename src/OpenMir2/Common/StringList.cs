@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace SystemModule.Common
+namespace OpenMir2.Common
 {
     public sealed class StringList : IDisposable
     {

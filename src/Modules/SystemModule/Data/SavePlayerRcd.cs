@@ -1,4 +1,5 @@
-﻿using SystemModule.Packets.ServerPackets;
+﻿using OpenMir2.Packets.ServerPackets;
+using SystemModule.Actors;
 
 namespace SystemModule.Data
 {

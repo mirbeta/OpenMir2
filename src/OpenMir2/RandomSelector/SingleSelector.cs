@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.RandomSelector
+namespace OpenMir2.RandomSelector
 {
     /// <summary>
     /// 单选器

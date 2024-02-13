@@ -1,7 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("ReloadRobotManage", "重新加载机器人管理列表", 10)]
     public class ReloadRobotManageCommand : GameCommand

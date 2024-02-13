@@ -1,11 +1,16 @@
 ﻿using M2Server.Actor;
 using M2Server.Monster.Monsters;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
+using SystemModule.Castles;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
 
 namespace M2Server.Player
 {
@@ -346,7 +351,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg1);
+                LogService.Error(sExceptionMsg1);
             }
             ProcessMessage processMsg = default;
             try
@@ -390,8 +395,8 @@ namespace M2Server.Player
                 {
                     MakeGhost();//用于处理 人物异常退出，但人物还在游戏中问题
                 }
-                M2Share.Logger.Error(Format(sExceptionMsg2, ChrName, processMsg.wIdent, processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(Format(sExceptionMsg2, ChrName, processMsg.wIdent, processMsg.ActorId, processMsg.wParam, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3, processMsg.Msg));
+                LogService.Error(e.Message);
             }
             bool boTakeItem = false;
             // 检查身上的装备有没不符合
@@ -727,8 +732,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg4);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(sExceptionMsg4);
+                LogService.Error(e.Message);
             }
             if (AutoGetExpPoint > 0 && (AutoGetExpEnvir == null || AutoGetExpEnvir == Envir) && (HUtil32.GetTickCount() - AutoGetExpTick) > AutoGetExpTime)
             {
@@ -839,7 +844,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        //M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
+                                        //LogService.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -989,7 +994,7 @@ namespace M2Server.Player
                     ClientGuildUpdateRankInfo(processMsg.Msg);
                     break;
                 case Messages.CM_1042:
-                    M2Share.Logger.Warn("[非法数据] " + ChrName);
+                    LogService.Warn("[非法数据] " + ChrName);
                     break;
                 case Messages.CM_ADJUST_BONUS:
                     ClientAdjustBonus(processMsg.nParam1, processMsg.Msg);
@@ -1027,7 +1032,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        //M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
+                                        //LogService.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1078,7 +1083,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        //M2Share.Logger.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, delayTime, nMsgCount));
+                                        //LogService.Warn(Format(CommandHelp.WalkOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1137,7 +1142,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        // M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
+                                        // LogService.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
@@ -1185,7 +1190,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        //M2Share.Logger.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
+                                        //LogService.Warn(Format(CommandHelp.RunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, ""); // 如果超速则发送攻击失败信息
@@ -1248,7 +1253,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        //M2Share.Logger.Warn(Format(CommandHelp.HitOverSpeed, ChrName, delayTime, nMsgCount));
+                                        //LogService.Warn(Format(CommandHelp.HitOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1303,7 +1308,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        // M2Share.Logger.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
+                                        // LogService.Warn(Format(CommandHelp.BunOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -1358,7 +1363,7 @@ namespace M2Server.Player
                                     }
                                     if (SystemShare.Config.ViewHackMessage)
                                     {
-                                        // M2Share.Logger.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, delayTime, nMsgCount));
+                                        // LogService.Warn(Format(CommandHelp.SpellOverSpeed, ChrName, delayTime, nMsgCount));
                                     }
                                 }
                                 SendRefMsg(Messages.RM_MOVEFAIL, 0, 0, 0, 0, "");// 如果超速则发送攻击失败信息
@@ -2217,8 +2222,8 @@ namespace M2Server.Player
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(ex.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -2272,7 +2277,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 

@@ -1,5 +1,8 @@
 ﻿using M2Server;
+using OpenMir2;
 using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Maps;
 
 namespace GameSrv.Word
 {
@@ -17,7 +20,7 @@ namespace GameSrv.Word
                     merchant.Initialize();
                     if (merchant.AddtoMapSuccess && !merchant.IsHide)
                     {
-                        _logger.Warn("Merchant Initalize fail..." + merchant.ChrName + ' ' + merchant.MapName + '(' + merchant.CurrX + ':' + merchant.CurrY + ')');
+                        LogService.Warn("Merchant Initalize fail..." + merchant.ChrName + ' ' + merchant.MapName + '(' + merchant.CurrX + ':' + merchant.CurrY + ')');
                         MerchantList.RemoveAt(i);
                     }
                     else
@@ -28,7 +31,7 @@ namespace GameSrv.Word
                 }
                 else
                 {
-                    _logger.Error(merchant.ChrName + " - Merchant Initalize fail... (m.PEnvir=nil)");
+                    LogService.Error(merchant.ChrName + " - Merchant Initalize fail... (m.PEnvir=nil)");
                     MerchantList.RemoveAt(i);
                 }
             }
@@ -46,7 +49,7 @@ namespace GameSrv.Word
                     normNpc.Initialize();
                     if (normNpc.AddtoMapSuccess && !normNpc.IsHide)
                     {
-                        _logger.Warn(normNpc.ChrName + " Npc Initalize fail... ");
+                        LogService.Warn(normNpc.ChrName + " Npc Initalize fail... ");
                         QuestNpcList.RemoveAt(i);
                     }
                     else
@@ -56,7 +59,7 @@ namespace GameSrv.Word
                 }
                 else
                 {
-                    _logger.Error(normNpc.ChrName + " Npc Initalize fail... (npc.PEnvir=nil) ");
+                    LogService.Error(normNpc.ChrName + " Npc Initalize fail... (npc.PEnvir=nil) ");
                     QuestNpcList.RemoveAt(i);
                 }
             }
@@ -104,7 +107,7 @@ namespace GameSrv.Word
             }
             catch
             {
-                _logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
             ProcessMerchantTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (ProcessMerchantTimeMin > ProcessMerchantTimeMax)
@@ -153,7 +156,7 @@ namespace GameSrv.Word
             }
             catch
             {
-                _logger.Error("[Exceptioin] WorldServer.ProcessNpcs");
+                LogService.Error("[Exceptioin] WorldServer.ProcessNpcs");
             }
             ProcessNpcTimeMin = HUtil32.GetTickCount() - dwRunTick;
             if (ProcessNpcTimeMin > ProcessNpcTimeMax) ProcessNpcTimeMax = ProcessNpcTimeMin;

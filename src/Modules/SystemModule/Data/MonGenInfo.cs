@@ -1,4 +1,7 @@
-﻿namespace SystemModule
+﻿using SystemModule.Actors;
+using SystemModule.Maps;
+
+namespace SystemModule.Data
 {
     /// <summary>
     /// 怪物刷新信息

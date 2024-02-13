@@ -1,11 +1,17 @@
-using GameSrv.NPC;
 using M2Server;
 using M2Server.Npc;
 using ScriptSystem;
 using System.Collections;
+using GameSrv.Npc;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using ScriptSystem.Consts;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Data;
+using SystemModule.Maps;
 
 namespace GameSrv.DB
 {
@@ -140,7 +146,7 @@ namespace GameSrv.DB
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(ex.StackTrace);
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -895,7 +901,7 @@ namespace GameSrv.DB
                         {
                             if (M2Share.UnbindList.ContainsKey(n10))
                             {
-                                M2Share.Logger.Warn($"重复解包物品[{sItemName}]...");
+                                LogService.Warn($"重复解包物品[{sItemName}]...");
                                 continue;
                             }
                             M2Share.UnbindList.Add(n10, sItemName);

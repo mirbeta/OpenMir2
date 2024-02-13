@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-
-namespace SystemModule
+﻿namespace SystemModule.Data
 {
     /// <summary>
     /// 地图上的对象

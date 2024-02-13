@@ -1,4 +1,4 @@
-﻿namespace SystemModule
+﻿namespace SystemModule.Const
 {
     public static class MagicConst
     {

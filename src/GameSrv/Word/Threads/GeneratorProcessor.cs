@@ -1,13 +1,14 @@
 using NLog;
 using System.Diagnostics;
+using OpenMir2;
+using OpenMir2.Generation.Entities;
 using SystemModule;
-using SystemModule.Generation.Entities;
 
 namespace GameSrv.Word.Threads
 {
     public class GeneratorProcessor : TimerScheduledService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly StandardRandomizer _standardRandomizer = new StandardRandomizer();
         private readonly Stopwatch sw = new Stopwatch();
 
@@ -29,12 +30,12 @@ namespace GameSrv.Word.Threads
 
         protected override void Startup(CancellationToken stoppingToken)
         {
-            _logger.Info("Id生成器启动...");
+            LogService.Info("Id生成器启动...");
         }
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            _logger.Info("Id生成器停止...");
+            LogService.Info("Id生成器停止...");
         }
 
         private void GenerateIdThread()
@@ -65,7 +66,7 @@ namespace GameSrv.Word.Threads
                     SystemShare.ActorMgr.AddToQueue(sequence);
                 }
                 sw.Stop();
-                _logger.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{SystemShare.ActorMgr.GenerateQueueCount}]");
+                LogService.Debug($"Id生成完毕 耗时:{sw.Elapsed} 可用数:[{SystemShare.ActorMgr.GenerateQueueCount}]");
             }
         }
     }

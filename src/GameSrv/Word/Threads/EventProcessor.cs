@@ -1,11 +1,12 @@
 using NLog;
+using OpenMir2;
 using SystemModule;
 
 namespace GameSrv.Word.Threads
 {
     public class EventProcessor : TimerScheduledService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
 
         public EventProcessor() : base(TimeSpan.FromMilliseconds(20), "EventProcessor")
         {
@@ -19,12 +20,12 @@ namespace GameSrv.Word.Threads
 
         protected override void Startup(CancellationToken stoppingToken)
         {
-            _logger.Info("事件管理线程初始化完成...");
+            LogService.Info("事件管理线程初始化完成...");
         }
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            _logger.Info("事件管理线程停止ֹ...");
+            LogService.Info("事件管理线程停止ֹ...");
         }
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)

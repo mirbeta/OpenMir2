@@ -1,11 +1,12 @@
 using NLog;
+using OpenMir2;
 using SystemModule;
 
 namespace GameSrv.Word.Threads
 {
     public class TimedRobotProcessor : TimerScheduledService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
 
         public TimedRobotProcessor() : base(TimeSpan.FromMilliseconds(20), "TimedRobotProcessor")
         {
@@ -19,12 +20,12 @@ namespace GameSrv.Word.Threads
 
         protected override void Startup(CancellationToken stoppingToken)
         {
-            _logger.Info("脚本机器人线程启动...");
+            LogService.Info("脚本机器人线程启动...");
         }
 
         protected override void Stopping(CancellationToken stoppingToken)
         {
-            _logger.Info("脚本机器人线程停止...");
+            LogService.Info("脚本机器人线程停止...");
         }
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
@@ -40,8 +41,8 @@ namespace GameSrv.Word.Threads
             }
             catch (Exception e)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
             return Task.CompletedTask;
         }

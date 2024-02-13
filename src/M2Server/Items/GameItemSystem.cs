@@ -1,6 +1,7 @@
-﻿using SystemModule;
-using SystemModule.Data;
-using SystemModule.Packets.ClientPackets;
+﻿using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
+using SystemModule.SubSystem;
 
 namespace M2Server.Items
 {

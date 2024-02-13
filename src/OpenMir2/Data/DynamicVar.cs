@@ -1,6 +1,6 @@
-﻿using SystemModule.Enums;
+﻿using OpenMir2.Enums;
 
-namespace SystemModule.Data
+namespace OpenMir2.Data
 {
     public class DynamicVar
     {

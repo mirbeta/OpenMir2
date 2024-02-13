@@ -1,6 +1,9 @@
-﻿using SystemModule.Data;
+﻿using OpenMir2.Data;
+using SystemModule.Actors;
+using SystemModule.Data;
+using SystemModule.Maps;
 
-namespace SystemModule
+namespace SystemModule.Castles
 {
     public interface IUserCastle
     {

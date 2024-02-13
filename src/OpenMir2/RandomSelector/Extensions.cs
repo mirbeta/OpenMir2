@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SystemModule.RandomSelector
+namespace OpenMir2.RandomSelector
 {
     public static partial class Extensions
     {

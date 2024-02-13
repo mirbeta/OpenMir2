@@ -1,4 +1,8 @@
-﻿namespace SystemModule
+﻿using SystemModule.Actors;
+using SystemModule.Castles;
+using SystemModule.Maps;
+
+namespace SystemModule.SubSystem
 {
     public interface ICastleSystem
     {

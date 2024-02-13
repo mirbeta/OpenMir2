@@ -2,7 +2,7 @@
 using MediatR;
 using SystemModule.ModuleEvent;
 
-namespace EventLogSystem
+namespace EventLogSystem.Event
 {
     public class MessageEventHandler : INotificationHandler<GameMessageEvent>
     {

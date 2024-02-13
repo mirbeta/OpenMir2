@@ -1,16 +1,14 @@
 ﻿using GameGate.Services;
 using Microsoft.Extensions.Hosting;
-using NLog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
+using OpenMir2;
 
 namespace GameGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static ClientManager ClientManager => ClientManager.Instance;
         private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
@@ -65,7 +63,7 @@ namespace GameGate
                     {
                         continue;
                     }
-                    _logger.Debug($"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(500)}");
+                    LogService.Debug($"{serverList[i].GateInfo.ServiceId} {serverList[i].NetworkMonitor.UpdateStatsAsync(500)}");
                 }
             }
         }
@@ -173,7 +171,7 @@ namespace GameGate
                     }
                     clientList[i].ProcessIdleSession();
                 }
-                _logger.Debug("清理空闲或无效客户端会话...");
+                LogService.Debug("清理空闲或无效客户端会话...");
             }
         }
 

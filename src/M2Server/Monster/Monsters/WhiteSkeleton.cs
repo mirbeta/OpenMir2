@@ -1,4 +1,6 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using OpenMir2.Enums;
+using SystemModule;
 using SystemModule.Enums;
 
 namespace M2Server.Monster.Monsters

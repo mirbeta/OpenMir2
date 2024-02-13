@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Data
+﻿namespace OpenMir2.Data
 {
     public record struct GoldChangeInfo
     {

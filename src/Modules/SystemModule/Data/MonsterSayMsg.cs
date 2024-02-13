@@ -1,4 +1,5 @@
-﻿using SystemModule.Enums;
+﻿using OpenMir2.Enums;
+using SystemModule.Enums;
 
 namespace SystemModule.Data
 {

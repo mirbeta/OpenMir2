@@ -1,10 +1,17 @@
-﻿using SystemModule;
-using SystemModule.Common;
-using SystemModule.Data;
+﻿using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using ScriptSystem.Consts;
+using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Castles;
+using SystemModule.Const;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Maps;
 
-namespace ScriptSystem
+namespace ScriptSystem.Processings
 {
     /// <summary>
     /// 脚本命令检查处理模块
@@ -642,7 +649,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    LogService.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -727,7 +734,7 @@ namespace ScriptSystem
                                 }
                                 catch
                                 {
-                                    SystemShare.Logger.Error("Save fail.... => " + sListFileName);
+                                    LogService.Error("Save fail.... => " + sListFileName);
                                 }
                             }
                         }
@@ -738,7 +745,7 @@ namespace ScriptSystem
             }
             else
             {
-                SystemShare.Logger.Error("file not found => " + sListFileName);
+                LogService.Error("file not found => " + sListFileName);
             }
         }
 
@@ -781,7 +788,7 @@ namespace ScriptSystem
                     }
                     catch
                     {
-                        SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                        LogService.Error("loading fail.... => " + sListFileName);
                     }
                     for (int i = 0; i < loadList.Count; i++)
                     {
@@ -877,7 +884,7 @@ namespace ScriptSystem
                                     }
                                     catch
                                     {
-                                        SystemShare.Logger.Error("Save fail.... => " + sListFileName);
+                                        LogService.Error("Save fail.... => " + sListFileName);
                                     }
                                 }
                             }
@@ -888,7 +895,7 @@ namespace ScriptSystem
                 }
                 else
                 {
-                    SystemShare.Logger.Error("file not found => " + sListFileName);
+                    LogService.Error("file not found => " + sListFileName);
                 }
             }
         }
@@ -3076,12 +3083,12 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    LogService.Error("loading fail.... => " + sListFileName);
                 }
             }
             else
             {
-                SystemShare.Logger.Info("file not found => " + sListFileName);
+                LogService.Info("file not found => " + sListFileName);
             }
             if (nItemCount < 0 && baseObject.Race == ActorRace.Play)
             {
@@ -4515,7 +4522,7 @@ namespace ScriptSystem
                 }
                 catch
                 {
-                    SystemShare.Logger.Error("loading fail.... => " + sListFileName);
+                    LogService.Error("loading fail.... => " + sListFileName);
                 }
                 for (int i = 0; i < loadList.Count; i++)
                 {
@@ -4529,7 +4536,7 @@ namespace ScriptSystem
             }
             else
             {
-                SystemShare.Logger.Error("file not found => " + sListFileName);
+                LogService.Error("file not found => " + sListFileName);
             }
             return success;
         }
@@ -4724,7 +4731,7 @@ namespace ScriptSystem
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + normNpc.ChrName + " 地图:" + normNpc.MapName + " 座标:" + normNpc.CurrX + ':' + normNpc.CurrY + " 参数1:"
                   + questConditionInfo.sParam1 + " 参数2:" + questConditionInfo.sParam2 + " 参数3:" + questConditionInfo.sParam3 + " 参数4:" + questConditionInfo.sParam4 + " 参数5:"
                   + questConditionInfo.sParam5;
-            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
+            LogService.Error("[脚本参数不正确] " + sMsg);
         }
 
         private void ScriptConditionError(INormNpc normNpc, IActor baseObject, QuestConditionInfo questConditionInfo, string sCmd)
@@ -4732,7 +4739,7 @@ namespace ScriptSystem
             string sMsg = "Cmd:" + sCmd + " NPC名称:" + normNpc.ChrName + " 地图:" + normNpc.MapName + " 座标:" + normNpc.CurrX + ':' + normNpc.CurrY + " 参数1:"
                  + questConditionInfo.sParam1 + " 参数2:" + questConditionInfo.sParam2 + " 参数3:" + questConditionInfo.sParam3 + " 参数4:" + questConditionInfo.sParam4 + " 参数5:"
                   + questConditionInfo.sParam5;
-            SystemShare.Logger.Error("[脚本参数不正确] " + sMsg);
+            LogService.Error("[脚本参数不正确] " + sMsg);
         }
 
         private void Dispose(object obj)

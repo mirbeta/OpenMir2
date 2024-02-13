@@ -1,5 +1,7 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
 using SystemModule.MagicEvent;
+using SystemModule.MagicEvent.Events;
 
 namespace M2Server.Monster.Monsters
 {

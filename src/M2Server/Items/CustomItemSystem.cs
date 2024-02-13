@@ -1,7 +1,9 @@
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Common;
-using SystemModule.Data;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.SubSystem;
 
 namespace M2Server.Items
 {

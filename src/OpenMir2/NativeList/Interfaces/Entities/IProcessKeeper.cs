@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using SystemModule.NativeList.Interfaces.Shared;
+using OpenMir2.NativeList.Interfaces.Shared;
 
-namespace SystemModule.NativeList.Interfaces.Entities
+namespace OpenMir2.NativeList.Interfaces.Entities
 {
     /// <summary>
     /// This interface was created for the objects that work as wrapper for another application.

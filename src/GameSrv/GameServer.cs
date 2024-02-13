@@ -8,7 +8,7 @@ namespace GameSrv
 {
     public class ServerBase
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly IServiceProvider serviceProvider;
 
         protected ServerBase(IServiceProvider serviceProvider)
@@ -37,7 +37,7 @@ namespace GameSrv
 
             await M2Share.NetChannel.Start(stoppingToken);
 
-            _logger.Info("初始化游戏世界服务线程完成...");
+            LogService.Info("初始化游戏世界服务线程完成...");
         }
 
         public async Task Stopping(CancellationToken cancellationToken)
@@ -59,7 +59,7 @@ namespace GameSrv
             await M2Share.NetChannel.StopAsync(cancellationToken);
             GameShare.DataServer.Stop();
 
-            _logger.Info("游戏世界服务线程停止...");
+            LogService.Info("游戏世界服务线程停止...");
         }
     }
 }

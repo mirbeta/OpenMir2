@@ -1,4 +1,4 @@
-namespace SystemModule
+namespace OpenMir2
 {
     public class Grobal2
     {

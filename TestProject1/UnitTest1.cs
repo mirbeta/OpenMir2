@@ -1,9 +1,8 @@
-using MemoryPack;
 using System.Text;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
 
-namespace TestProject1
+namespace GameSrvTest
 {
     public class Tests
     {

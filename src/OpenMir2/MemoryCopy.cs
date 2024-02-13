@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SystemModule
+namespace OpenMir2
 {
     public static class MemoryCopy
     {

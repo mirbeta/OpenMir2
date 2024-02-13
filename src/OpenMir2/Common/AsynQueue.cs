@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SystemModule.Common
+namespace OpenMir2.Common
 {
     [Serializable]
     public class EventArgs<T> : EventArgs

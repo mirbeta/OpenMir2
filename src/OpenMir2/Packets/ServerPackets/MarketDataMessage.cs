@@ -1,8 +1,8 @@
-using MemoryPack;
 using System.Collections.Generic;
-using SystemModule.Data;
+using MemoryPack;
+using OpenMir2.Data;
 
-namespace SystemModule.Packets.ServerPackets
+namespace OpenMir2.Packets.ServerPackets
 {
     [MemoryPackable]
     public partial struct MarketDataMessage

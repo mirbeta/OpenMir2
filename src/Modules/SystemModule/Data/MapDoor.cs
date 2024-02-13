@@ -1,6 +1,6 @@
-﻿using SystemModule.Data;
+﻿using OpenMir2.Data;
 
-namespace SystemModule
+namespace SystemModule.Data
 {
     public record struct MapDoor
     {

@@ -1,8 +1,9 @@
-﻿using EventLogSystem.Services;
+﻿using EventLogSystem.Event;
+using EventLogSystem.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
+using OpenMir2;
 using SystemModule;
 using SystemModule.ModuleEvent;
 
@@ -10,8 +11,6 @@ namespace EventLogSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
-
         public void Configure(IHostEnvironment env)
         {
             throw new NotImplementedException();
@@ -25,12 +24,12 @@ namespace EventLogSystem
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("GameEvent(日志事件)插件启动...");
+            LogService.Info("GameEvent(日志事件)插件启动...");
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("GameEvent(日志事件)插件停止...");
+            LogService.Info("GameEvent(日志事件)插件停止...");
         }
     }
 }

@@ -2,6 +2,7 @@ using GameSrv.Word;
 using M2Server;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using OpenMir2;
 using PlanesSystem;
 using SystemModule;
 using SystemModule.Enums;
@@ -10,7 +11,6 @@ namespace GameSrv
 {
     public class TimedService : BackgroundService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly PeriodicTimer _timer;
         private int CheckIntervalTime { get; set; }
         private int SaveIntervalTime { get; set; }
@@ -50,13 +50,13 @@ namespace GameSrv
             }
             catch (OperationCanceledException)
             {
-                _logger.Debug("TimedService is stopping.");
+                LogService.Debug("TimedService is stopping.");
             }
         }
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.Info("后台服务停止");
+            LogService.Info("后台服务停止");
             _timer.Dispose();
             return base.StopAsync(cancellationToken);
         }
@@ -218,7 +218,7 @@ namespace GameSrv
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
         }
 
@@ -228,7 +228,7 @@ namespace GameSrv
             {
                 return;
             }
-            _logger.Debug("定时保存角色数据");
+            LogService.Debug("定时保存角色数据");
             if (SystemShare.WorldEngine.PlayObjectCount > 0)
             {
                 ScheduledSaveData = true;
@@ -242,7 +242,7 @@ namespace GameSrv
                 }
                 ScheduledSaveData = false;
             }
-            _logger.Debug("定时保存角色数据完毕.");
+            LogService.Debug("定时保存角色数据完毕.");
         }
 
         private void ProcessGameNotice()

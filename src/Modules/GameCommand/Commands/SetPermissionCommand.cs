@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定玩家权限
@@ -33,7 +35,7 @@ namespace CommandSystem.Commands
             }
             if (SystemShare.Config.ShowMakeItemMsg)
             {
-                SystemShare.Logger.Warn(string.Format(sOutFormatMsg, PlayerActor.ChrName, mIPlayerActor.ChrName, mIPlayerActor.Permission, nPerission));
+                LogService.Warn(string.Format(sOutFormatMsg, PlayerActor.ChrName, mIPlayerActor.ChrName, mIPlayerActor.Permission, nPerission));
             }
             mIPlayerActor.Permission = (byte)nPerission;
             PlayerActor.SysMsg(sHumanName + " 当前权限为: " + mIPlayerActor.Permission, MsgColor.Red, MsgType.Hint);

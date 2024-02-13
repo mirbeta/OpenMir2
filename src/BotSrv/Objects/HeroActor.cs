@@ -1,9 +1,10 @@
 using BotSrv.Player;
 using BotSrv.Scenes;
 using System;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Enums;
 using SystemModule;
-using SystemModule.Consts;
-using SystemModule.Enums;
 
 namespace BotSrv.Objects
 {
@@ -851,7 +852,7 @@ namespace BotSrv.Objects
                         if (nAbsX <= BotConst.MagicRange && nAbsY <= BotConst.MagicRange)
                         {
                             result = true;
-                            BotShare.logger.Info($"怪物目标：{MShare.AutoTagget.UserName} ({MShare.AutoTagget.CurrX},{MShare.AutoTagget.CurrY}) 正在使用魔法攻击");
+                            BotShare.LogService.Info($"怪物目标：{MShare.AutoTagget.UserName} ({MShare.AutoTagget.CurrX},{MShare.AutoTagget.CurrY}) 正在使用魔法攻击");
                             if (_robotClient.CanNextAction() && _robotClient.ServerAcceptNextAction())
                                 if (CanNextSpell())
                                 {
@@ -1162,7 +1163,7 @@ namespace BotSrv.Objects
                         if (nAbsX <= BotConst.MagicRange && nAbsY <= BotConst.MagicRange)
                         {
                             result = true;
-                            BotShare.logger.Info($"怪物目标：{MShare.AutoTagget.UserName} ({MShare.AutoTagget.CurrX},{MShare.AutoTagget.CurrY}) 正在使用魔法攻击");
+                            BotShare.LogService.Info($"怪物目标：{MShare.AutoTagget.UserName} ({MShare.AutoTagget.CurrX},{MShare.AutoTagget.CurrY}) 正在使用魔法攻击");
                             if (_robotClient.CanNextAction() && _robotClient.ServerAcceptNextAction())
                             {
                                 AttackTaggetEEE(ref result, magicKey);

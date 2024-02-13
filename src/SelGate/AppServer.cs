@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
 using SelGate.Conf;
 using SelGate.Services;
 using Spectre.Console;
@@ -11,14 +9,12 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule.Hosts;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace SelGate
 {
     public class AppServer : ServiceHost
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly PeriodicTimer _timer;
 
         public AppServer()
@@ -35,11 +31,6 @@ namespace SelGate
             };
             Builder.ConfigureLogging(ConfigureLogging);
             Builder.ConfigureServices(ConfigureServices);
-        }
-
-        public override void Initialize()
-        {
-
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -117,7 +108,7 @@ namespace SelGate
         {
             var config = Host.Services.GetService<ConfigManager>();
             config?.ReLoadConfig();
-            _logger.Info("重新读取配置文件完成...");
+            LogService.Info("重新读取配置文件完成...");
             return Task.CompletedTask;
         }
 

@@ -1,6 +1,6 @@
 ﻿using MemoryPack;
 
-namespace SystemModule.Data
+namespace OpenMir2.Data
 {
     [MemoryPackable]
     public partial struct RecordHeader

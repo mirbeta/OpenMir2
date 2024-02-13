@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定玩家等级
@@ -33,7 +35,7 @@ namespace CommandSystem.Commands
                 PlayerActor.SysMsg(sHumanName + " 等级调整完成。", MsgColor.Green, MsgType.Hint);
                 if (SystemShare.Config.ShowMakeItemMsg)
                 {
-                    SystemShare.Logger.Warn("[等级调整] " + PlayerActor.ChrName + "(" + mIPlayerActor.ChrName + " " + nOLevel + " -> " + mIPlayerActor.Abil.Level + ")");
+                    LogService.Warn("[等级调整] " + PlayerActor.ChrName + "(" + mIPlayerActor.ChrName + " " + nOLevel + " -> " + mIPlayerActor.Abil.Level + ")");
                 }
             }
             else

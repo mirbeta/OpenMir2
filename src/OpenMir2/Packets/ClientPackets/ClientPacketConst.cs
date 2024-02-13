@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Packets.ClientPackets
+﻿namespace OpenMir2.Packets.ClientPackets
 {
     public static class ClientPacketConst
     {

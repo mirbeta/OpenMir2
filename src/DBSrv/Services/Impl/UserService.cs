@@ -1,18 +1,17 @@
 using DBSrv.Conf;
 using DBSrv.Storage;
 using DBSrv.Storage.Model;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.Data;
-using SystemModule.DataHandlingAdapters;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -24,7 +23,6 @@ namespace DBSrv.Services.Impl
     /// </summary>
     public class UserService : IService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly SettingConf _setting;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
@@ -62,7 +60,7 @@ namespace DBSrv.Services.Impl
             _socketServer.Start();
             _playRecordStorage.LoadQuickList();
             StartMessageThread(CancellationToken.None);
-            _logger.Info($"玩家数据网关服务[{_setting.GateAddr}:{_setting.GatePort}]已启动.等待链接...");
+            LogService.Info($"玩家数据网关服务[{_setting.GateAddr}:{_setting.GatePort}]已启动.等待链接...");
         }
 
         public void Stop()
@@ -105,7 +103,7 @@ namespace DBSrv.Services.Impl
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e);
+                            LogService.Error(e);
                         }
                     }
                 }
@@ -162,7 +160,7 @@ namespace DBSrv.Services.Impl
             }
             else
             {
-                _logger.Info("未知客户端...");
+                LogService.Info("未知客户端...");
             }
             return Task.CompletedTask;
         }
@@ -172,7 +170,7 @@ namespace DBSrv.Services.Impl
             var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
             if (!DBShare.CheckServerIP(endPoint.Address.ToString()))
             {
-                _logger.Warn("非法服务器连接: " + endPoint);
+                LogService.Warn("非法服务器连接: " + endPoint);
                 client.Close();
                 return Task.CompletedTask;
             }
@@ -183,7 +181,7 @@ namespace DBSrv.Services.Impl
             selGateInfo.UserList = new List<SessionUserInfo>();
             selGateInfo.nGateID = DBShare.GetGateID(endPoint.Address.ToString());
             _gateClients[int.Parse(client.Id) - 1] = selGateInfo;
-            _logger.Info(string.Format(sGateOpen, 0, client.MainSocket.RemoteEndPoint));
+            LogService.Info(string.Format(sGateOpen, 0, client.MainSocket.RemoteEndPoint));
             return Task.CompletedTask;
         }
 
@@ -199,7 +197,7 @@ namespace DBSrv.Services.Impl
                 }
                 gateClient.UserList = null;
             }
-            _logger.Info(string.Format(sGateClose, clientId, client.MainSocket.RemoteEndPoint));
+            LogService.Info(string.Format(sGateClose, clientId, client.MainSocket.RemoteEndPoint));
             _gateClients[int.Parse(client.Id) - 1] = null;
             return Task.CompletedTask;
         }
@@ -213,7 +211,7 @@ namespace DBSrv.Services.Impl
             {
                 if (packetHead.PacketCode != Grobal2.PacketCode)
                 {
-                    _logger.Debug($"解析角色网关封包出现异常...");
+                    LogService.Debug($"解析角色网关封包出现异常...");
                     return;
                 }
                 var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
@@ -243,7 +241,7 @@ namespace DBSrv.Services.Impl
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
         }
 
@@ -286,7 +284,7 @@ namespace DBSrv.Services.Impl
             var message = new ServerDataMessage();
             message.Type = ServerDataType.KeepAlive;
             SendPacket(connectionId, message);
-            _logger.Debug("响应角色网关心跳...");
+            LogService.Debug("响应角色网关心跳...");
         }
 
         /// <summary>
@@ -359,16 +357,16 @@ namespace DBSrv.Services.Impl
                         if (QueryChr(sText, ref userInfo, ref gateInfo))
                         {
                             userInfo.boChrQueryed = true;
-                            _logger.Debug("[QueryChr]:" + sText);
+                            LogService.Debug("[QueryChr]:" + sText);
                         }
                         else
                         {
-                            _logger.Debug("[QueryChr]:" + sText);
+                            LogService.Debug("[QueryChr]:" + sText);
                         }
                     }
                     else
                     {
-                        _logger.Warn("[Hacker Attack] QueryChr:" + userInfo.sUserIPaddr);
+                        LogService.Warn("[Hacker Attack] QueryChr:" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Messages.CM_NEWCHR:
@@ -389,7 +387,7 @@ namespace DBSrv.Services.Impl
                     }
                     else
                     {
-                        _logger.Warn("[Hacker Attack] NEWCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
+                        LogService.Warn("[Hacker Attack] NEWCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Messages.CM_DELCHR:
@@ -408,7 +406,7 @@ namespace DBSrv.Services.Impl
                     }
                     else
                     {
-                        _logger.Warn("[Hacker Attack] DELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
+                        LogService.Warn("[Hacker Attack] DELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
                 case Messages.CM_SELCHR:
@@ -428,7 +426,7 @@ namespace DBSrv.Services.Impl
                     }
                     else
                     {
-                        _logger.Warn("Double send SELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
+                        LogService.Warn("Double send SELCHR " + userInfo.sAccount + "/" + userInfo.sUserIPaddr);
                     }
                     break;
             }
@@ -658,7 +656,7 @@ namespace DBSrv.Services.Impl
             {
                 msg = Messages.MakeMessage(Messages.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
-            _logger.Info("创建角色:{0} 结果:{1}", sChrName, nCode == 1 ? "成功" : "失败");
+            LogService.Info("创建角色:{0} 结果:{1}", sChrName, nCode == 1 ? "成功" : "失败");
             var sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
             return nCode == 1;
@@ -729,7 +727,7 @@ namespace DBSrv.Services.Impl
                 SendUserSocket(curGate.ConnectionId, userInfo.SessionId, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
-                _logger.Debug($"玩家获取游戏网关信息 RunGame:{sRouteIp} Port:{nRoutePort + nMapIndex}");
+                LogService.Debug($"玩家获取游戏网关信息 RunGame:{sRouteIp} Port:{nRoutePort + nMapIndex}");
             }
             else
             {

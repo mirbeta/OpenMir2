@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
     /// <summary>
     /// DateExtensions

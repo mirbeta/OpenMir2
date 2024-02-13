@@ -2,14 +2,18 @@
 using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
-using ScriptSystem;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using ScriptSystem.Consts;
 using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Data;
-using SystemModule.Enums;
 using SystemModule.ModuleEvent;
-using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.NPC
+namespace GameSrv.Npc
 {
     /// <summary>
     /// 交易NPC类
@@ -167,7 +171,7 @@ namespace GameSrv.NPC
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(e.Message);
             }
             base.Run();
         }
@@ -273,7 +277,7 @@ namespace GameSrv.NPC
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, CurrX, CurrY, e.Message, ConditionCode.CHECK));
+                LogService.Error(Format(sExceptionMsg, ChrName, CurrX, CurrY, e.Message, ConditionCode.CHECK));
             }
         }
 
@@ -948,8 +952,8 @@ namespace GameSrv.NPC
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, sData));
-                M2Share.Logger.Error(ex.StackTrace);
+                LogService.Error(Format(sExceptionMsg, sData));
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -1705,7 +1709,7 @@ namespace GameSrv.NPC
             }
             catch
             {
-                M2Share.Logger.Error("Failure in loading upgradinglist - " + ChrName);
+                LogService.Error("Failure in loading upgradinglist - " + ChrName);
             }
         }
 
@@ -1717,7 +1721,7 @@ namespace GameSrv.NPC
             }
             catch
             {
-                M2Share.Logger.Error("Failure in saving upgradinglist - " + ChrName);
+                LogService.Error("Failure in saving upgradinglist - " + ChrName);
             }
         }
 
@@ -1764,8 +1768,8 @@ namespace GameSrv.NPC
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
         }
 

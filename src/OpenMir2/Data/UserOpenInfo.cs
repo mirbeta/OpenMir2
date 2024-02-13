@@ -1,6 +1,6 @@
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ServerPackets;
 
-namespace SystemModule.Data
+namespace OpenMir2.Data
 {
     public class UserOpenInfo
     {

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Net.Sockets;
+using OpenMir2;
 using SystemModule;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
@@ -35,7 +36,7 @@ namespace PlanesSystem
                 new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort)
             });
             _serverSocket.Setup(touchSocketConfig);
-            //M2Share.Logger.Info($"节点数据服务[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]已启动.");
+            //LogService.Info($"节点数据服务[{ModuleShare.Config.MasterSrvAddr}:{ModuleShare.Config.MasterSrvPort}]已启动.");
         }
 
         private void DecodeSocStr_SendOtherServer(TServerMsgInfo ps, string msgstr)
@@ -95,7 +96,7 @@ namespace PlanesSystem
             }
             catch (Exception)
             {
-                //M2Share.Logger.Error(ex.StackTrace);
+                //LogService.Error(ex.StackTrace);
             }
         }
 
@@ -151,7 +152,7 @@ namespace PlanesSystem
                     serverMsgInfo.Socket = client.MainSocket;
                     serverMsgInfo.SocData = string.Empty;
                     serverMsgInfo.SocketId = client.Id;
-                    //M2Share.Logger.Info($"节点服务器({endPoint})链接成功...");
+                    //LogService.Info($"节点服务器({endPoint})链接成功...");
                     srvArray[i] = serverMsgInfo;
                     break;
                 }
@@ -173,7 +174,7 @@ namespace PlanesSystem
                 {
                     serverMsgInfo.Socket = null;
                     serverMsgInfo.SocData = "";
-                    //M2Share.Logger.Error($"节点服务器({client.MainSocket.RemoteEndPoint})断开连接...");
+                    //LogService.Error($"节点服务器({client.MainSocket.RemoteEndPoint})断开连接...");
                     srvArray[i] = null;
                     break;
                 }
@@ -200,7 +201,7 @@ namespace PlanesSystem
             }
             catch
             {
-                //M2Share.Logger.Error(sExceptionMsg);
+                //LogService.Error(sExceptionMsg);
             }
         }
     }

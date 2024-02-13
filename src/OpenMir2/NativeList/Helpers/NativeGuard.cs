@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace SystemModule.NativeList.Helpers
+namespace OpenMir2.NativeList.Helpers
 {
     public static unsafe class NativeGuard
     {

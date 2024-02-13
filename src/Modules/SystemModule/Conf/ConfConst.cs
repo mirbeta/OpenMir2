@@ -1,4 +1,4 @@
-namespace SystemModule
+namespace SystemModule.Conf
 {
     public static class ConfConst
     {
