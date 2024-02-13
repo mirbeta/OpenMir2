@@ -6,8 +6,8 @@ using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using OpenMir2;
 using SelGate.Datas;
-using SystemModule;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -18,7 +18,7 @@ namespace SelGate.Services
     /// </summary>
     public class ServerService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly TcpService _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
@@ -92,11 +92,11 @@ namespace SelGate.Services
             var clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
             {
-                _logger.Info("获取服务器实例失败。");
+                LogService.Info("获取服务器实例失败。");
                 return Task.CompletedTask;
             }
             var sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
-            _logger.Trace($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetEndPoint()}");
+            LogService.Trace($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetEndPoint()}");
             SessionInfo sessionInfo = null;
             for (var nIdx = 0; nIdx < ClientThread.MaxSession; nIdx++)
             {
@@ -112,7 +112,7 @@ namespace SelGate.Services
             }
             if (sessionInfo != null)
             {
-                _logger.Info("开始连接: " + sRemoteAddress);
+                LogService.Info("开始连接: " + sRemoteAddress);
                 _clientManager.AddClientThread(sessionInfo.SocketId, clientThread);//链接成功后建立对应关系
                 var userSession = new ClientSession(_configManager, sessionInfo, clientThread,GateShare.ServiceProvider.GetService<ServerService>());
                 userSession.UserEnter();
@@ -121,7 +121,7 @@ namespace SelGate.Services
             else
             {
                 e.Socket.Close();
-                _logger.Info("禁止连接: " + sRemoteAddress);
+                LogService.Info("禁止连接: " + sRemoteAddress);
             }
             return Task.CompletedTask;
         }
@@ -139,14 +139,14 @@ namespace SelGate.Services
                 {
                     userSession.UserLeave();
                     userSession.CloseSession();
-                    _logger.Info("断开连接: " + sRemoteAddr);
+                    LogService.Info("断开连接: " + sRemoteAddr);
                 }
                 _sessionManager.CloseSession(nSockIndex);
             }
             else
             {
-                _logger.Info("断开链接: " + sRemoteAddr);
-                _logger.Debug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{clientSoc.Id}]");
+                LogService.Info("断开链接: " + sRemoteAddr);
+                LogService.Debug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddr}] ConnectionId:[{clientSoc.Id}]");
             }
             _clientManager.DeleteClientThread(nSockIndex);
             return Task.CompletedTask;
@@ -160,14 +160,14 @@ namespace SelGate.Services
             var userClient = _clientManager.GetClientThread(clientSoc.Id);
             if (userClient == null)
             {
-                _logger.Info("非法攻击: " + sRemoteAddress);
-                _logger.Debug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                LogService.Info("非法攻击: " + sRemoteAddress);
+                LogService.Debug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
                 return Task.CompletedTask;
             }
             if (!userClient.boGateReady)
             {
-                _logger.Info("未就绪: " + sRemoteAddress);
-                _logger.Debug($"游戏引擎链接失败 Server:[{userClient.GetEndPoint()}] ConnectionId:[{connectionId}]");
+                LogService.Info("未就绪: " + sRemoteAddress);
+                LogService.Debug($"游戏引擎链接失败 Server:[{userClient.GetEndPoint()}] ConnectionId:[{connectionId}]");
                 return Task.CompletedTask;
             }
             var data = new byte[e.ByteBlock.Len];

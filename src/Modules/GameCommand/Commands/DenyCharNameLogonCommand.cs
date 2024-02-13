@@ -1,7 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 将指定玩家添加到禁止人物列表

@@ -1,8 +1,9 @@
 using System.Collections;
+using OpenMir2.Enums;
 using SystemModule;
-using SystemModule.Enums;
+using SystemModule.Const;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     public partial class RobotPlayer
     {

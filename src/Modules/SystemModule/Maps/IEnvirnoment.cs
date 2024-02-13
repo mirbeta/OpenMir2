@@ -1,7 +1,10 @@
-﻿using SystemModule.Data;
+﻿using OpenMir2.Data;
+using SystemModule.Actors;
+using SystemModule.Data;
 using SystemModule.MagicEvent;
+using SystemModule.MagicEvent.Events;
 
-namespace SystemModule
+namespace SystemModule.Maps
 {
     public interface IEnvirnoment
     {

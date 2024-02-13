@@ -1,6 +1,6 @@
 ﻿using MemoryPack;
 
-namespace SystemModule.Packets.ClientPackets
+namespace OpenMir2.Packets.ClientPackets
 {
     [MemoryPackable]
     public partial record struct ShortMessage

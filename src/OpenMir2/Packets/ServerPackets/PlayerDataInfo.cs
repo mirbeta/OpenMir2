@@ -1,9 +1,9 @@
-﻿using MemoryPack;
-using System.Runtime.Serialization;
-using SystemModule.Data;
-using SystemModule.Packets.ClientPackets;
+﻿using System.Runtime.Serialization;
+using MemoryPack;
+using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule.Packets.ServerPackets
+namespace OpenMir2.Packets.ServerPackets
 {
     [MemoryPackable]
     public partial class CharacterDataInfo

@@ -1,10 +1,15 @@
 ﻿using M2Server;
 using M2Server.Npc;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Castles;
+using SystemModule.Const;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
-namespace GameSrv.NPC
+namespace GameSrv.Npc
 {
     /// <summary>
     /// 行会NPC类
@@ -98,7 +103,7 @@ namespace GameSrv.NPC
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(ex);
+                LogService.Error(ex);
             }
         }
 

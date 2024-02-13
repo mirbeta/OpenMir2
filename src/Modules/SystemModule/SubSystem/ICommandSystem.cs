@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Actors;
+
+namespace SystemModule.SubSystem
 {
     public interface ICommandSystem
     {

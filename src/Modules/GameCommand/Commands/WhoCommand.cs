@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 当前服务器在线人数

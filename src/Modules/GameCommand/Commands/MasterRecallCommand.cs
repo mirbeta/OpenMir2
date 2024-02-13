@@ -1,7 +1,8 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 师徒传送，师父可以将徒弟传送到自己身边，徒弟必须允许传送。

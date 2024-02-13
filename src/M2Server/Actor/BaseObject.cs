@@ -1,12 +1,18 @@
 ﻿using M2Server.Items;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
+using SystemModule.Castles;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.MagicEvent;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Maps;
 
 namespace M2Server.Actor
 {
@@ -685,8 +691,8 @@ namespace M2Server.Actor
             }
             catch (Exception ex)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(ex.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex.StackTrace);
             }
             return result;
         }
@@ -1519,7 +1525,7 @@ namespace M2Server.Actor
             bool result = true;
             if (Envir == null)
             {
-                M2Share.Logger.Error("Walk nil PEnvir");
+                LogService.Error("Walk nil PEnvir");
                 return true;
             }
             try
@@ -1564,8 +1570,8 @@ namespace M2Server.Actor
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(Format(sExceptionMsg, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(e.Message);
             }
             return result;
         }
@@ -2827,7 +2833,7 @@ namespace M2Server.Actor
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 

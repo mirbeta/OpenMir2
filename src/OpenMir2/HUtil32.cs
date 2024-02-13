@@ -2,10 +2,10 @@ using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 
-namespace SystemModule
+namespace OpenMir2
 {
     public partial class HUtil32
     {

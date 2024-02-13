@@ -1,15 +1,14 @@
-using Microsoft.Extensions.Hosting;
-using NLog;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Hosting;
 
-namespace SystemModule
+namespace OpenMir2
 {
     public abstract class TimerScheduledService : BackgroundService
     {
-        private readonly ILogger _logger = LogManager.GetCurrentClassLogger();
+        //private readonly ILogger LogService = Log.ForContext<TimerScheduledService>();
         private readonly PeriodicTimer _timer;
         private readonly Stopwatch _stopwatch;
 
@@ -30,7 +29,7 @@ namespace SystemModule
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug($"Thread [{Name}] has started");
+           // LogService.Debug($"Thread [{Name}] has started");
             Startup(cancellationToken);
             return base.StartAsync(cancellationToken);
         }
@@ -39,7 +38,7 @@ namespace SystemModule
         {
             Stopping(cancellationToken);
             _timer.Dispose();
-            _logger.Debug($"Thread [{Name}] has finished");
+           // LogService.Debug($"Thread [{Name}] has finished");
             return base.StopAsync(cancellationToken);
         }
 
@@ -56,7 +55,7 @@ namespace SystemModule
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex, "Execute exception");
+                        //LogService.Error(ex, "Execute exception");
                     }
                     finally
                     {
@@ -68,7 +67,7 @@ namespace SystemModule
             }
             catch (OperationCanceledException operationCancelledException)
             {
-                _logger.Warn(operationCancelledException, "service stopped");
+                //LogService.Warn(operationCancelledException, "service stopped");
             }
         }
 

@@ -1,7 +1,9 @@
-﻿using SystemModule;
-using SystemModule.MagicEvent;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
+using SystemModule.MagicEvent.Events;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("TestFire", "", 10)]
     public class TestFireCommand : GameCommand

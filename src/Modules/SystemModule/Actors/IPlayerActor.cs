@@ -1,10 +1,14 @@
 using System.Collections;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using SystemModule.Castles;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.MagicEvent;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Maps;
 
-namespace SystemModule
+namespace SystemModule.Actors
 {
     /// <summary>
     /// 玩家对象

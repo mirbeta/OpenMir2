@@ -1,4 +1,4 @@
-using SystemModule.Common;
+using OpenMir2.Common;
 
 namespace M2Server.Guild
 {

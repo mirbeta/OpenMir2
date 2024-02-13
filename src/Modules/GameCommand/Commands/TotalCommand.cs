@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 总在线数

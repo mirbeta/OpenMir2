@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using SystemModule.NativeList.Interfaces.Shared;
+using OpenMir2.NativeList.Interfaces.Shared;
 
-namespace SystemModule.NativeList.Abstracts
+namespace OpenMir2.NativeList.Abstracts
 {
     /// <summary>
     /// Basic class which includes implementation of <see cref="IDisposable"/> and <see cref="IDisposeIndication"/>

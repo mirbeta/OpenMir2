@@ -1,7 +1,9 @@
-﻿using SystemModule;
-using SystemModule.Data;
+﻿using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Player
 {
@@ -242,7 +244,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error("{异常} PlayObject.ClientCancelSellOffIng");
+                LogService.Error("{异常} PlayObject.ClientCancelSellOffIng");
             }
         }
 
@@ -375,7 +377,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error("{异常} PlayObject.ClientBuySellOffItme");
+                LogService.Error("{异常} PlayObject.ClientBuySellOffItme");
             }
         }
 
@@ -419,7 +421,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error("{异常} PlayObject.GetSellOffGlod");
+                LogService.Error("{异常} PlayObject.GetSellOffGlod");
             }
         }
 

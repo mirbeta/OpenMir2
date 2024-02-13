@@ -1,5 +1,9 @@
 ﻿using M2Server.Npc;
+using OpenMir2;
+using OpenMir2.Enums;
 using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Data;
 using SystemModule.Enums;
 
 namespace M2Server.Monster.Monsters
@@ -184,8 +188,8 @@ namespace M2Server.Monster.Monsters
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(e.Message);
                 KickException();
             }
             n24 = 2;
@@ -210,7 +214,7 @@ namespace M2Server.Monster.Monsters
             }
             catch
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
         }

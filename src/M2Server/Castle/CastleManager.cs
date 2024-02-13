@@ -1,12 +1,17 @@
 ﻿using NLog;
+using OpenMir2;
+using OpenMir2.Common;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
+using SystemModule.Castles;
+using SystemModule.Maps;
+using SystemModule.SubSystem;
 
 namespace M2Server.Castle
 {
     public class CastleManager : ICastleSystem
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         public readonly IList<IUserCastle> CastleList;
 
         public CastleManager()
@@ -78,7 +83,7 @@ namespace M2Server.Castle
                 castle = CastleList[i];
                 castle.Initialize();
             }
-            _logger.Debug("城堡城初始完成...");
+            LogService.Debug("城堡城初始完成...");
         }
 
         // 城堡皇宫所在地图
@@ -162,11 +167,11 @@ namespace M2Server.Castle
                         CastleList.Add(castle);
                     }
                 }
-                _logger.Info($"已读取 [{CastleList.Count}] 个城堡信息...");
+                LogService.Info($"已读取 [{CastleList.Count}] 个城堡信息...");
             }
             else
             {
-                _logger.Error("城堡列表文件未找到!!!");
+                LogService.Error("城堡列表文件未找到!!!");
             }
         }
 

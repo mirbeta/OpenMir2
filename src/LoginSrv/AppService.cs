@@ -10,7 +10,7 @@ namespace LoginSrv
 {
     public class AppService : BackgroundService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly ConfigManager _configManager;
         private readonly SessionServer _masSocService;
         private readonly LoginServer _loginService;
@@ -26,14 +26,14 @@ namespace LoginSrv
 
         protected override Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            stoppingToken.Register(() => _logger.Debug("LoginSrv is stopping."));
+            stoppingToken.Register(() => LogService.Debug("LoginSrv is stopping."));
             _loginService.Start(stoppingToken);
             return Task.CompletedTask;
         }
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("LoginSrv is starting.");
+            LogService.Debug("LoginSrv is starting.");
             LsShare.Initialization();
             LoadConfig();
             _loginService.StartServer();
@@ -50,7 +50,7 @@ namespace LoginSrv
 
         public override Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("LoginSrv is stopping.");
+            LogService.Debug("LoginSrv is stopping.");
             return base.StopAsync(cancellationToken);
         }
     }

@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 进入/退出隐身模式(进入模式后别人看不到自己)(支持权限分配)

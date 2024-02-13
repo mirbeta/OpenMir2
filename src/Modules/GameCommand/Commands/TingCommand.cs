@@ -1,7 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 将指定人物随机传送(支持权限分配)

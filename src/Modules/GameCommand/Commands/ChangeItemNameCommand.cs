@@ -1,7 +1,8 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定物品名称

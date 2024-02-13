@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using SystemModule.Data;
+using OpenMir2.Data;
 
-namespace SystemModule.Packets.ClientPackets
+namespace OpenMir2.Packets.ClientPackets
 {
     public class UserMagic : ClientPacket
     {

@@ -1,8 +1,10 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 造指定物品(支持权限分配，小于最大权限受允许、禁止制造列表限制)
@@ -67,7 +69,7 @@ namespace CommandSystem.Commands
                     PlayerActor.SendAddItem(userItem);
                     if (PlayerActor.Permission >= 6)
                     {
-                        SystemShare.Logger.Warn("[制造物品] " + PlayerActor.ChrName + " " + sItemName + "(" + userItem.MakeIndex + ")");
+                        LogService.Warn("[制造物品] " + PlayerActor.ChrName + " " + sItemName + "(" + userItem.MakeIndex + ")");
                     }
                     if (stdItem.NeedIdentify == 1)
                     {

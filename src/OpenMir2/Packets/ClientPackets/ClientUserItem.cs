@@ -1,7 +1,7 @@
 ﻿using System.IO;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ServerPackets;
 
-namespace SystemModule.Packets.ClientPackets
+namespace OpenMir2.Packets.ClientPackets
 {
     public class ItemAttr
     {

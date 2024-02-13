@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("ReloadAbuse", "无用", 10)]
     public class ReloadAbuseCommand : GameCommand

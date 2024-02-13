@@ -1,6 +1,6 @@
-﻿using SystemModule.Packets.ClientPackets;
+﻿using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule
+namespace SystemModule.Data
 {
     public record struct MapItem
     {

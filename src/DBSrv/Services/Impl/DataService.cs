@@ -1,13 +1,12 @@
 ﻿using DBSrv.Conf;
 using DBSrv.Storage;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.DataHandlingAdapters;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -19,7 +18,6 @@ namespace DBSrv.Services.Impl
     /// </summary>
     public class DataService : IService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IPlayDataStorage _playDataStorage;
         private readonly ICacheStorage _cacheStorage;
         private readonly TcpService _serverSocket;
@@ -54,7 +52,7 @@ namespace DBSrv.Services.Impl
         {
             _serverSocket.Start();
             _playDataStorage.LoadQuickList();
-            _logger.Info($"玩家数据存储服务[{_setting.ServerAddr}:{_setting.ServerPort}]已启动.等待链接...");
+            LogService.Info($"玩家数据存储服务[{_setting.ServerAddr}:{_setting.ServerPort}]已启动.等待链接...");
         }
 
         public void Stop()
@@ -68,7 +66,7 @@ namespace DBSrv.Services.Impl
                 return Task.CompletedTask;
             if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
             {
-                _logger.Error("验证玩家数据封包头出现异常...");
+                LogService.Error("验证玩家数据封包头出现异常...");
                 return Task.CompletedTask;
             }
             var clientSoc = (SocketClient)client;
@@ -83,10 +81,10 @@ namespace DBSrv.Services.Impl
             var remoteIp = clientSoc.MainSocket.RemoteEndPoint.GetIP();
             if (!DBShare.CheckServerIP(remoteIp))
             {
-                _logger.Warn("非法服务器连接: " + remoteIp);
+                LogService.Warn("非法服务器连接: " + remoteIp);
                 clientSoc.Close();
             }
-            _logger.Info("服务器连接: " + remoteIp);
+            LogService.Info("服务器连接: " + remoteIp);
             return Task.CompletedTask;
         }
 
@@ -129,7 +127,7 @@ namespace DBSrv.Services.Impl
                 {
                     client.Close();
                 }
-                _logger.Error($"关闭错误的任务{nQueryId}查询请求.");
+                LogService.Error($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
             var responsePack = new ServerRequestData();
@@ -219,7 +217,7 @@ namespace DBSrv.Services.Impl
                 nCheckCode = _loginService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionID, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    _logger.Warn("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionID);
+                    LogService.Warn("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionID);
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)
@@ -250,7 +248,7 @@ namespace DBSrv.Services.Impl
                 var messagePacket = new ServerRequestMessage(Messages.DBR_LOADHUMANRCD, 1, 0, 0, 1);
                 responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
                 SendRequest(connectionId, queryId, responsePack, loadHumData);
-                _logger.Debug($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
+                LogService.Debug($"获取玩家[{loadHumanPacket.ChrName}]数据成功");
             }
             else
             {
@@ -267,7 +265,7 @@ namespace DBSrv.Services.Impl
                 var saveHumDataPacket = SerializerUtil.Deserialize<SaveCharacterData>(sMsg);
                 if (saveHumDataPacket == null)
                 {
-                    _logger.Error("保存玩家数据出错.");
+                    LogService.Error("保存玩家数据出错.");
                     return;
                 }
                 var sUserId = saveHumDataPacket.Account;
@@ -317,7 +315,7 @@ namespace DBSrv.Services.Impl
             }
             catch (Exception e)
             {
-                _logger.Error(e);
+                LogService.Error(e);
             }
         }
 
@@ -326,7 +324,7 @@ namespace DBSrv.Services.Impl
             var saveHumDataPacket = SerializerUtil.Deserialize<SaveCharacterData>(sMsg);
             if (saveHumDataPacket == null)
             {
-                _logger.Error("保存玩家数据出错.");
+                LogService.Error("保存玩家数据出错.");
                 return;
             }
             var sChrName = saveHumDataPacket.ChrName;

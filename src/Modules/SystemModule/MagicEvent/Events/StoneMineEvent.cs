@@ -1,4 +1,7 @@
-﻿namespace SystemModule.MagicEvent
+﻿using OpenMir2;
+using SystemModule.Maps;
+
+namespace SystemModule.MagicEvent.Events
 {
     /// <summary>
     /// 矿石事件

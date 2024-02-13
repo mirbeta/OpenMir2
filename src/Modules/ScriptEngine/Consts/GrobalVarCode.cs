@@ -1,4 +1,4 @@
-﻿namespace ScriptSystem
+﻿namespace ScriptSystem.Consts
 {
     /// <summary>
     /// 全局变量编码定义

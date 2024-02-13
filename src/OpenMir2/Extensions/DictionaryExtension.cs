@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
     /// <summary>
     /// DictionaryExtension

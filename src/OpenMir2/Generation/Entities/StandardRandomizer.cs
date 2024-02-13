@@ -1,7 +1,7 @@
 ﻿using System;
-using SystemModule.Generation.Interfaces.Entities;
+using OpenMir2.Generation.Interfaces.Entities;
 
-namespace SystemModule.Generation.Entities
+namespace OpenMir2.Generation.Entities
 {
     /// <summary>
     /// Copy paste from standard library.

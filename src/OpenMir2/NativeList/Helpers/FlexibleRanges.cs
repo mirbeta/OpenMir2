@@ -1,6 +1,6 @@
-﻿using SystemModule.NativeList.Utils;
+﻿using OpenMir2.NativeList.Utils;
 
-namespace SystemModule.NativeList.Helpers
+namespace OpenMir2.NativeList.Helpers
 {
     /// <summary>
     /// Helper class to make easier creation of <see cref="FlexibleRange{TItem}"/>

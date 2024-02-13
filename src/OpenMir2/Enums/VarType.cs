@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Enums
+﻿namespace OpenMir2.Enums
 {
     /// <summary>
     /// 脚本变量类型

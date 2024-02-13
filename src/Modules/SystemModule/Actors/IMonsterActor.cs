@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Data;
+
+namespace SystemModule.Actors
 {
     public interface IMonsterActor : IActor
     {

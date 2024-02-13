@@ -1,4 +1,4 @@
-﻿namespace SystemModule.NativeList.Interfaces.Shared
+﻿namespace OpenMir2.NativeList.Interfaces.Shared
 {
     /// <summary>
     /// Special interface to mark that the object is already disposed.

@@ -1,16 +1,12 @@
-﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
+using OpenMir2;
 using SystemModule;
-using SystemModule.ModuleEvent;
 
 namespace UserStallSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
-
         public void Configure(IHostEnvironment env)
         {
 
@@ -24,13 +20,13 @@ namespace UserStallSystem
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("UserStall(摆摊)插件启动...");
+            LogService.Info("UserStall(摆摊)插件启动...");
             //SystemShare.ServiceProvider.GetService<IMarketService>().Start();
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("UserStall(摆摊)插件停止...");
+            LogService.Info("UserStall(摆摊)插件停止...");
             //SystemShare.ServiceProvider.GetService<IMarketService>().Stop();
         }
     }

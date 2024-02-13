@@ -1,7 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 查询师徒当前所在位置

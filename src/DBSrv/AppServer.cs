@@ -6,8 +6,6 @@ using DBSrv.Storage.Model;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
 using System.IO;
@@ -16,54 +14,22 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.Common;
-using SystemModule.Hosts;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using Microsoft.Extensions.Configuration;
+using OpenMir2;
+using OpenMir2.Common;
+using Serilog;
 
 namespace DBSrv
 {
-    public class AppServer : ServiceHost
+    public class AppServer 
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static PeriodicTimer _timer;
         private static SettingConf _setting;
+        private readonly IHost _host;
 
         public AppServer()
         {
-            Builder.ConfigureLogging(ConfigureLogging);
-            Builder.ConfigureServices(ConfigureServices);
-        }
-
-        public override void Initialize()
-        {
-            _logger.Info("初始化配置文件...");
-            var configManager = new ConfigManager();
-            configManager.LoadConfig();
-            _setting = configManager.GetConfig;
-            _logger.Info("配置文件读取完成...");
-        }
-
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            DBShare.Initialization();
-            _logger.Info("正在读取基础配置信息...");
-            DBShare.LoadConfig();
-            _logger.Info($"加载IP授权文件列表成功...[{DBShare.ServerIpCount}]");
-            _logger.Info("读取基础配置信息完成...");
-            LoadServerInfo();
-            LoadChrNameList("DenyChrName.txt");
-            LoadClearMakeIndexList("ClearMakeIndex.txt");
-            Host = await Builder.StartAsync(cancellationToken);
-        }
-
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await Host.StopAsync(cancellationToken);
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
+            var builder = Host.CreateApplicationBuilder();
             if (!Enum.TryParse<StoragePolicy>(_setting.StoreageType, true, out var storagePolicy))
             {
                 throw new Exception("数据存储配置文件错误或者不支持该存储类型");
@@ -71,33 +37,69 @@ namespace DBSrv
             switch (storagePolicy)
             {
                 case StoragePolicy.MySQL:
-                    LoadAssembly(services, "MySQL");
+                    LoadAssembly(builder.Services, "MySQL");
                     break;
                 case StoragePolicy.MongoDB:
-                    LoadAssembly(services, "MongoDB");
+                    LoadAssembly(builder.Services, "MongoDB");
                     break;
                 case StoragePolicy.Sqlite:
-                    LoadAssembly(services, "Sqlite");
+                    LoadAssembly(builder.Services, "Sqlite");
                     break;
                 case StoragePolicy.Local:
-                    LoadAssembly(services, "Local");
+                    LoadAssembly(builder.Services, "Local");
                     break;
             }
-            services.AddSingleton(_setting);
-            services.AddSingleton<ClientSession>();
-            services.AddSingleton<UserService>();
-            services.AddSingleton<DataService>();
-            services.AddSingleton<MarketService>();
-            services.AddSingleton<ICacheStorage, CacheStorageService>();
-            services.AddHostedService<TimedService>();
-            services.AddHostedService<AppService>();
+            builder.Services.AddSingleton(_setting);
+            builder.Services.AddSingleton<ClientSession>();
+            builder.Services.AddSingleton<UserService>();
+            builder.Services.AddSingleton<DataService>();
+            builder.Services.AddSingleton<MarketService>();
+            builder.Services.AddSingleton<ICacheStorage, CacheStorageService>();
+            builder.Services.AddHostedService<TimedService>();
+            builder.Services.AddHostedService<AppService>();
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+            builder.Logging.AddSerilog();
+            
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+            LogService.Logger = Log.Logger;
+
+            _host = builder.Build();
         }
 
-        private void ConfigureLogging(ILoggingBuilder logging)
+        public void Initialize()
         {
-            logging.ClearProviders();
-            logging.SetMinimumLevel(LogLevel.Trace);
-            logging.AddNLog(Configuration);
+            LogService.Info("初始化配置文件...");
+            var configManager = new ConfigManager();
+            configManager.LoadConfig();
+            _setting = configManager.GetConfig;
+            LogService.Info("配置文件读取完成...");
+        }
+
+        public async Task StartAsync(CancellationToken cancellationToken)
+        {
+            DBShare.Initialization();
+            LogService.Info("正在读取基础配置信息...");
+            DBShare.LoadConfig();
+            LogService.Info($"加载IP授权文件列表成功...[{DBShare.ServerIpCount}]");
+            LogService.Info("读取基础配置信息完成...");
+            LoadServerInfo();
+            LoadChrNameList("DenyChrName.txt");
+            LoadClearMakeIndexList("ClearMakeIndex.txt");
+            await _host.StartAsync(cancellationToken);
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await _host.StopAsync(cancellationToken);
         }
 
         private void LoadAssembly(IServiceCollection services, string storageName)
@@ -149,7 +151,7 @@ namespace DBSrv
             services.AddSingleton(playDataStorage);
             services.AddSingleton(playRecordStorage);
             services.AddSingleton(marketStorage);
-            _logger.Info($"[{storageName}]数据存储引擎初始化成功.");
+            LogService.Info($"[{storageName}]数据存储引擎初始化成功.");
         }
 
         /// <summary>
@@ -168,12 +170,12 @@ namespace DBSrv
                 }
                 catch (Exception ex)
                 {
-                    _logger.Error($"加载依赖项{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
+                    LogService.Error($"加载依赖项{expectedPath}发生异常：{ex.Message},{ex.StackTrace}");
                 }
             }
             else
             {
-                _logger.Error($"依赖项不存在：{expectedPath}");
+                LogService.Error($"依赖项不存在：{expectedPath}");
             }
             return null;
         }
@@ -235,7 +237,7 @@ namespace DBSrv
         private async Task ShowServerStatus()
         {
             DBShare.ShowLog = false;
-            var userService = Host.Services.GetService<UserService>();
+            var userService = _host.Services.GetService<UserService>();
             if (userService == null)
             {
                 return;
@@ -298,7 +300,7 @@ namespace DBSrv
             loadList.LoadFromFile(DBShare.GateConfFileName);
             if (loadList.Count <= 0)
             {
-                _logger.Error("加载游戏服务配置文件ServerInfo.txt失败.");
+                LogService.Error("加载游戏服务配置文件ServerInfo.txt失败.");
                 return;
             }
             var nRouteIdx = 0;
@@ -343,7 +345,7 @@ namespace DBSrv
                     nRouteIdx++;
                 }
             }
-            _logger.Info($"读取网关配置信息成功.[{DBShare.RouteInfo.Where(x => x != null).Sum(x => x.GateCount)}]");
+            LogService.Info($"读取网关配置信息成功.[{DBShare.RouteInfo.Where(x => x != null).Sum(x => x.GateCount)}]");
             DBShare.MapList.Clear();
             if (File.Exists(_setting.MapFile))
             {

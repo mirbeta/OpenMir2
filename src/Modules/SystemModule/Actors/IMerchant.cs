@@ -1,7 +1,7 @@
-﻿using SystemModule.Data;
-using SystemModule.Packets.ClientPackets;
+﻿using OpenMir2.Packets.ClientPackets;
+using SystemModule.Data;
 
-namespace SystemModule
+namespace SystemModule.Actors
 {
     public interface IMerchant : INormNpc
     {

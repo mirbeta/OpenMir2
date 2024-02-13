@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using SystemModule.NativeList.Interfaces.Shared;
-using SystemModule.NativeList.Utils;
+using OpenMir2.NativeList.Interfaces.Shared;
+using OpenMir2.NativeList.Utils;
 
-namespace SystemModule.NativeList.Helpers
+namespace OpenMir2.NativeList.Helpers
 {
     public static class ArgumentsGuard
     {

@@ -2,19 +2,17 @@ using DBSrv.Conf;
 using DBSrv.Services.Impl;
 using DBSrv.Storage;
 using Microsoft.Extensions.Hosting;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv
 {
     public class TimedService : BackgroundService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly PeriodicTimer _timer;
         private readonly SettingConf _config;
         private readonly UserService _userService;
@@ -78,14 +76,14 @@ namespace DBSrv
             }
             catch (OperationCanceledException operationCancelledException)
             {
-                _logger.Warn(operationCancelledException, "service stopped");
+                
             }
         }
 
         private void ProcessCacheStorage()
         {
             //从内存获取保存数据，刷新到数据库，减少数据库压力，和防止大量数据保存超时
-            _logger.Info("同步玩家缓存数据.");
+            LogService.Info("同步玩家缓存数据.");
             using IEnumerator<CharacterDataInfo> playList = _cacheStorage.QueryCacheData();
             while (playList.MoveNext())
             {
@@ -96,15 +94,15 @@ namespace DBSrv
                 }
                 if (_playDataStorage.Update(play.Header.Name, play))
                 {
-                    _logger.Debug($"{play.Header.Name}同步成功.");
+                    LogService.Debug($"{play.Header.Name}同步成功.");
                 }
                 else
                 {
-                    _logger.Debug($"{play.Header.Name}同步失败.");
+                    LogService.Debug($"{play.Header.Name}同步失败.");
                 }
                 _cacheStorage.Delete(play.Header.Name);//处理完从缓存删除
             }
-            _logger.Info("同步玩家缓存数据完成.");
+            LogService.Info("同步玩家缓存数据完成.");
         }
     }
 }

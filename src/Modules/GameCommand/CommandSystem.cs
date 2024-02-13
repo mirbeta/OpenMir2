@@ -1,13 +1,16 @@
-﻿using NLog;
-using System.Reflection;
+﻿using System.Reflection;
+using CommandModule.Conf;
+using OpenMir2;
 using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Conf;
 using SystemModule.Enums;
+using SystemModule.SubSystem;
 
-namespace CommandSystem
+namespace CommandModule
 {
     public class GameCommandSystem : ICommandSystem
     {
-        private readonly Logger Logger = LogManager.GetCurrentClassLogger();
         private readonly GameCmdConf CommandConf;
         private readonly GameCommands GameCommands = new GameCommands();
         private static readonly Dictionary<string, GameCommand> CommandMaps = new(StringComparer.OrdinalIgnoreCase);
@@ -20,16 +23,16 @@ namespace CommandSystem
 
         public void RegisterCommand()
         {
-            Logger.Info("读取游戏命令配置...");
+            LogService.Info("读取游戏命令配置...");
             CommandConf.LoadConfig(GameCommands);
             var customCommandMap = RegisterCustomCommand();
             if (customCommandMap == null)
             {
-                Logger.Info("读取自定义命令配置失败.");
+                LogService.Info("读取自定义命令配置失败.");
                 return;
             }
             RegisterCommandGroups(customCommandMap);
-            Logger.Info("读取游戏命令配置完成...");
+            LogService.Info("读取游戏命令配置完成...");
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace CommandSystem
             var commands = GameCommands.GetType().GetFields();
             if (commands.Length <= 0)
             {
-                Logger.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
+                LogService.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
                 return null;
             }
             var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
@@ -59,7 +62,7 @@ namespace CommandSystem
                 }
                 if (customCommandMap.ContainsKey(commandInfo.Name))
                 {
-                    Logger.Warn($"游戏命令[{commandInfo.Name}]重复定义,请确认配置文件是否正确.");
+                    LogService.Warn($"游戏命令[{commandInfo.Name}]重复定义,请确认配置文件是否正确.");
                     continue;
                 }
                 customCommandMap.Add(commandInfo.Name, customCmd);
@@ -83,7 +86,7 @@ namespace CommandSystem
                 if (commandAttribute == null) continue;
                 if (CommandMaps.ContainsKey(commandAttribute.Name))
                 {
-                    SystemShare.Logger.Error($"重复游戏命令: {commandAttribute.Name}");
+                    LogService.Error($"重复游戏命令: {commandAttribute.Name}");
                     continue;
                 }
                 var gameCommand = (GameCommand)Activator.CreateInstance(commands[i]);
@@ -101,7 +104,7 @@ namespace CommandSystem
                 var executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null)
                 {
-                    SystemShare.Logger.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
+                    LogService.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
                     continue;
                 }
                 gameCommand.Register(commandAttribute, executeMethod);

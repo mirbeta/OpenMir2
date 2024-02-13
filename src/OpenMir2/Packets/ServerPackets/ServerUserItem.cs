@@ -1,8 +1,8 @@
-﻿using MemoryPack;
-using System.Runtime.InteropServices;
-using SystemModule.Packets.ClientPackets;
+﻿using System.Runtime.InteropServices;
+using MemoryPack;
+using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule.Packets.ServerPackets
+namespace OpenMir2.Packets.ServerPackets
 {
     [MemoryPackable]
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

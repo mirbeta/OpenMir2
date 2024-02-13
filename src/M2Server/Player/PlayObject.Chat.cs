@@ -1,4 +1,6 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
 namespace M2Server.Player
@@ -219,8 +221,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, sData));
-                M2Share.Logger.Error(e.StackTrace);
+                LogService.Error(Format(sExceptionMsg, sData));
+                LogService.Error(e.StackTrace);
             }
         }
 
@@ -399,8 +401,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, sData));
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(Format(sExceptionMsg, sData));
+                LogService.Error(e.Message);
             }
         }
     }

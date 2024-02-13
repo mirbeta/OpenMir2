@@ -1,20 +1,20 @@
-﻿using NLog;
-using System.Net;
+﻿using System.Net;
 using System.Net.Sockets;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Data;
-using SystemModule.DataHandlingAdapters;
+using SystemModule.Actors;
 using SystemModule.Enums;
-using SystemModule.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
 
-namespace MarketSystem
+namespace MarketSystem.Services
 {
     public class MarketService : IMarketService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpClient _clientScoket;
         private readonly MarketManager _marketManager;
         private readonly Dictionary<int, MarketUser> _marketUsers;
@@ -100,13 +100,13 @@ namespace MarketSystem
 
         private Task MarketScoketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            _logger.Error("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]断开连接...");
+            LogService.Error("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]断开连接...");
             return Task.CompletedTask;
         }
 
         private Task MarketScoketConnected(ITcpClientBase client, ConnectedEventArgs e)
         {
-            _logger.Info("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]连接成功...");
+            LogService.Info("数据库(寄售行)服务器[" + client.MainSocket.RemoteEndPoint + "]连接成功...");
             SendFirstMessage();// 链接成功后进行第一次主动拉取拍卖行数据
             if (_thread != null)
             {
@@ -121,13 +121,13 @@ namespace MarketSystem
             switch (e.SocketErrorCode)
             {
                 case SocketError.ConnectionRefused:
-                    _logger.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]拒绝链接...");
+                    LogService.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]拒绝链接...");
                     break;
                 case SocketError.ConnectionReset:
-                    _logger.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]关闭连接...");
+                    LogService.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]关闭连接...");
                     break;
                 case SocketError.TimedOut:
-                    _logger.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]链接超时...");
+                    LogService.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]链接超时...");
                     break;
             }
         }
@@ -254,7 +254,7 @@ namespace MarketSystem
                 MarketNPC = marketNpc
             };
             SendRequest(1, request, requestData);
-            _logger.Info($"发送用户[{chrName}]个人拍卖行数据请求");
+            LogService.Info($"发送用户[{chrName}]个人拍卖行数据请求");
             return true;
         }
 
@@ -266,7 +266,7 @@ namespace MarketSystem
             {
                 if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
                 {
-                    _logger.Debug($"解析寄售行封包出现异常封包...");
+                    LogService.Debug($"解析寄售行封包出现异常封包...");
                     return Task.CompletedTask;
                 }
                 var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
@@ -274,7 +274,7 @@ namespace MarketSystem
             }
             catch (Exception exception)
             {
-                _logger.Error(exception);
+                LogService.Error(exception);
             }
             return Task.CompletedTask;
         }
@@ -302,16 +302,16 @@ namespace MarketSystem
                         {
                             case Messages.DB_LOADMARKETSUCCESS:
                                 _marketManager.OnMsgReadData(SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
-                                _logger.Info("加载拍卖行数据成功...");
+                                LogService.Info("加载拍卖行数据成功...");
                                 break;
                             case Messages.DB_LOADMARKETFAIL:
                                 if (commandMessage.Param == 1)
                                 {
-                                    _logger.Info("拍卖行物品列表为空...");
+                                    LogService.Info("拍卖行物品列表为空...");
                                 }
                                 else
                                 {
-                                    _logger.Info("获取拍卖行数据失败...");
+                                    LogService.Info("获取拍卖行数据失败...");
                                 }
                                 _marketManager.OnMsgReadData();
                                 break;
@@ -323,7 +323,7 @@ namespace MarketSystem
                                 }
                                 else
                                 {
-                                    _logger.Debug("玩家不在线,拍卖行数据无需返回给玩家");
+                                    LogService.Debug("玩家不在线,拍卖行数据无需返回给玩家");
                                 }
                                 break;
                             case Messages.DB_SEARCHMARKETSUCCESS:
@@ -336,10 +336,10 @@ namespace MarketSystem
                                     }
                                     else
                                     {
-                                        _logger.Debug("玩家不在线,拍卖行数据无需返回给玩家");
+                                        LogService.Debug("玩家不在线,拍卖行数据无需返回给玩家");
                                     }
                                 }
-                                _logger.Info("搜索拍卖行数据成功...");
+                                LogService.Info("搜索拍卖行数据成功...");
                                 break;
                             case Messages.DB_SRARCHMARKETFAIL:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
@@ -352,10 +352,10 @@ namespace MarketSystem
                                     }
                                     else
                                     {
-                                        _logger.Debug("玩家不在线,拍卖行数据无需返回给玩家");
+                                        LogService.Debug("玩家不在线,拍卖行数据无需返回给玩家");
                                     }
                                 }
-                                _logger.Info("搜索拍卖行数据失败...");
+                                LogService.Info("搜索拍卖行数据失败...");
                                 break;
                             case Messages.DB_SAVEMARKETSUCCESS:// 保存结果需要返回给玩家
                                 var saveUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
@@ -374,22 +374,22 @@ namespace MarketSystem
                                 else
                                 {
                                     //todo 把物品还给玩家，或者需要通过邮件发送给玩家
-                                    _logger.Debug("玩家不在线,拍卖行数据无法返回给玩家");
+                                    LogService.Debug("玩家不在线,拍卖行数据无法返回给玩家");
                                 }
-                                _logger.Info("保存拍卖行数据成功...");
+                                LogService.Info("保存拍卖行数据成功...");
                                 break;
                         }
                     }
                     else
                     {
-                        _logger.Warn("非法拍卖行数据封包，解析失败...");
+                        LogService.Warn("非法拍卖行数据封包，解析失败...");
                         SystemShare.Config.LoadDBErrorCount++;
                     }
                 }
             }
             else
             {
-                _logger.Error("错误的封包数据");
+                LogService.Error("错误的封包数据");
             }
         }
 

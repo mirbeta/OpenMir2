@@ -1,4 +1,4 @@
-﻿namespace SystemModule
+﻿namespace SystemModule.Actors
 {
     public interface INormNpc : IActor
     {

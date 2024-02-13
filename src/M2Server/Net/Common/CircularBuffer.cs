@@ -1,10 +1,11 @@
 using NLog;
+using OpenMir2;
 
 namespace M2Server.Net.Common
 {
    public class CircularBuffer: Stream
    {
-	   private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+	   
 	    private int ChunkSize = 8192;
         private readonly Queue<byte[]> bufferQueue = new Queue<byte[]>();
         private readonly Queue<byte[]> bufferCache = new Queue<byte[]>();
@@ -35,7 +36,7 @@ namespace M2Server.Net.Common
                 }
                 if (c < 0)
                 {
-	                _logger.Error("CircularBuffer count < 0: {0}, {1}, {2}", this.bufferQueue.Count, this.LastIndex, this.FirstIndex);
+	                //LogService.Error("CircularBuffer count < 0: {0}, {1}, {2}", this.bufferQueue.Count, this.LastIndex, this.FirstIndex);
                 }
                 return c;
             }

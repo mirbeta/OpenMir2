@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace SystemModule.Base
+namespace OpenMir2.Base
 {
     internal static class LinuxLoadValue
     {

@@ -1,8 +1,11 @@
-﻿using NLog;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using OpenMir2;
+using OpenMir2.Common;
+using ScriptSystem.Consts;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Data;
 
 namespace ScriptSystem
@@ -12,7 +15,6 @@ namespace ScriptSystem
     /// </summary>
     public class ScriptParsers : IScriptParsers
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> ConditionCodeDefMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, int> ExecutionCodeDefMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, string> CallScriptDict = new Dictionary<string, string>();
@@ -30,7 +32,7 @@ namespace ScriptSystem
                     {
                         if (ConditionCodeDefMap.ContainsKey(codeField.CommandName))
                         {
-                            _logger.Warn($"重复脚本检测编码[{codeField.CommandName}]定义");
+                            LogService.Warn($"重复脚本检测编码[{codeField.CommandName}]定义");
                             continue;
                         }
                         ConditionCodeDefMap.Add(codeField.CommandName, i);
@@ -49,7 +51,7 @@ namespace ScriptSystem
                     {
                         if (ExecutionCodeDefMap.ContainsKey(codeField.CommandName))
                         {
-                            _logger.Warn($"重复脚本执行编码[{codeField.CommandName}]定义");
+                            LogService.Warn($"重复脚本执行编码[{codeField.CommandName}]定义");
                             continue;
                         }
                         ExecutionCodeDefMap.Add(codeField.CommandName, i);
@@ -57,7 +59,7 @@ namespace ScriptSystem
                 }
             }
 
-            _logger.Info("初始化脚本编码定义成功...");
+            LogService.Info("初始化脚本编码定义成功...");
         }
 
         public void LoadScript(INormNpc NPC, string sPatch, string scriptName)
@@ -172,7 +174,7 @@ namespace ScriptSystem
                     }
                     else
                     {
-                        _logger.Error("script error, load fail: " + sCallScriptFile + sLabName);
+                        LogService.Error("script error, load fail: " + sCallScriptFile + sLabName);
                     }
                 }
                 else
@@ -223,7 +225,7 @@ namespace ScriptSystem
                         }
                         else
                         {
-                            _logger.Error("script error, load fail: " + definesFile);
+                            LogService.Error("script error, load fail: " + definesFile);
                         }
                         stringList[i] = "";
                         continue;
@@ -898,7 +900,7 @@ namespace ScriptSystem
                                     }
                                     else
                                     {
-                                        _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
+                                        LogService.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
                                 }
@@ -911,7 +913,7 @@ namespace ScriptSystem
                                     }
                                     else
                                     {
-                                        _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
+                                        LogService.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
                                 }
@@ -924,7 +926,7 @@ namespace ScriptSystem
                                     }
                                     else
                                     {
-                                        _logger.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
+                                        LogService.Error("脚本错误: " + line + " 第:" + i + " 行: " + sScritpFileName);
                                     }
                                     break;
                                 }
@@ -965,7 +967,7 @@ namespace ScriptSystem
             }
             else
             {
-                _logger.Error("Script file not found: " + sScritpFileName);
+                LogService.Error("Script file not found: " + sScritpFileName);
             }
         }
 

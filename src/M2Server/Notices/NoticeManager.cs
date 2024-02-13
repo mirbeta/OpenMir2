@@ -1,5 +1,7 @@
-using SystemModule.Common;
-using SystemModule.Data;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using SystemModule.SubSystem;
 
 namespace M2Server.Notices
 {
@@ -36,7 +38,7 @@ namespace M2Server.Notices
                 }
                 catch
                 {
-                    M2Share.Logger.Error("Error in loading notice text. file name is " + fileName);
+                    LogService.Error("Error in loading notice text. file name is " + fileName);
                 }
             }
         }
@@ -81,7 +83,7 @@ namespace M2Server.Notices
                         }
                         catch (Exception)
                         {
-                            M2Share.Logger.Error("Error in loading notice text. file name is " + fileName);
+                            LogService.Error("Error in loading notice text. file name is " + fileName);
                         }
                         NoticeList[i].sMsg = sStr;
                         break;

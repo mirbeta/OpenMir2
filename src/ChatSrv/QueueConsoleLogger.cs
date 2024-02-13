@@ -1,13 +1,12 @@
 using MQTTnet.Diagnostics;
 using NLog;
 using System;
+using OpenMir2;
 
 namespace GameGate
 {
     public class QueueConsoleLogger : IMqttNetLogger
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
         public bool IsEnabled => true;
 
         public void Publish(MqttNetLogLevel logLevel, string source, string message, object[]? parameters, Exception? exception)
@@ -19,7 +18,7 @@ namespace GameGate
                     {
                         message = string.Format(message, parameters);
                     }
-                    _logger.Trace(message);
+                    LogService.Info(message);
                     break;
 
                 case MqttNetLogLevel.Info:
@@ -27,7 +26,7 @@ namespace GameGate
                     {
                         message = string.Format(message, parameters);
                     }
-                    _logger.Info(message);
+                    LogService.Info(message);
                     break;
 
                 case MqttNetLogLevel.Warning:
@@ -35,7 +34,7 @@ namespace GameGate
                     {
                         message = string.Format(message, parameters);
                     }
-                    _logger.Warn(message);
+                    LogService.Warn(message);
                     break;
 
                 case MqttNetLogLevel.Error:
@@ -43,7 +42,7 @@ namespace GameGate
                     {
                         message = string.Format(message, parameters);
                     }
-                    _logger.Error(message);
+                    LogService.Error(message);
                     break;
             }
         }

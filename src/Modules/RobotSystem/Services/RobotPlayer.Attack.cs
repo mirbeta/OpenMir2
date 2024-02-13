@@ -1,10 +1,12 @@
 using M2Server.Monster;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Const;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     public partial class RobotPlayer
     {
@@ -146,7 +148,7 @@ namespace RobotSystem
             }
             catch
             {
-                // SystemShare.Logger.Error(format("{%s} RoboPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
+                // LogService.Error(format("{%s} RoboPlayObject.WarrorAttackTarget Code:%d", new byte[] { nCode }));
             }
             return result;
         }
@@ -199,7 +201,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error("RoboPlayObject.WizardAttackTarget");
+                LogService.Error("RoboPlayObject.WizardAttackTarget");
             }
             return result;
         }
@@ -427,7 +429,7 @@ namespace RobotSystem
             }
             catch
             {
-                // SystemShare.Logger.Error('{异常} RoboPlayObject.TaoistAttackTarget');
+                // LogService.Error('{异常} RoboPlayObject.TaoistAttackTarget');
             }
             return result;
         }
@@ -511,7 +513,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error("RoboPlayObject.AttackTarget");
+                LogService.Error("RoboPlayObject.AttackTarget");
             }
             return result;
         }

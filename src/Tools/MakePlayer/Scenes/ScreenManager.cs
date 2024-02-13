@@ -6,7 +6,7 @@ namespace MakePlayer.Scenes
 {
     public class ScreenManager
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         private readonly PlayClient client;
         public SceneType Scenetype;
         public SceneBase CurrentScene = null;
@@ -56,12 +56,12 @@ namespace MakePlayer.Scenes
 
         public void AddSysMsg(string msg)
         {
-            logger.Info(msg);
+            LogService.Info(msg);
         }
 
         public static void AddChatBoardString(string str)
         {
-            logger.Info(str);
+            LogService.Info(str);
         }
     }
 }

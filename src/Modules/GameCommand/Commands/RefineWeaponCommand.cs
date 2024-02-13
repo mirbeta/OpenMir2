@@ -1,7 +1,9 @@
-﻿using SystemModule;
-using SystemModule.Enums;
+﻿using OpenMir2;
+using OpenMir2.Enums;
+using SystemModule;
+using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整物品属性
@@ -36,7 +38,7 @@ namespace CommandSystem.Commands
             PlayerActor.RecalcAbilitys();
             PlayerActor.SendMsg(PlayerActor, Messages.RM_ABILITY, 0, 0, 0, 0);
             PlayerActor.SendMsg(PlayerActor, Messages.RM_SUBABILITY, 0, 0, 0, 0);
-            SystemShare.Logger.Warn("[武器调整]" + PlayerActor.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
+            LogService.Warn("[武器调整]" + PlayerActor.ChrName + " DC:" + nDc + " MC" + nMc + " SC" + nSc + " HIT:" + nHit);
         }
     }
 }

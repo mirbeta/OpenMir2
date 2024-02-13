@@ -1,13 +1,15 @@
 ﻿using M2Server;
 using NLog;
+using OpenMir2;
+using OpenMir2.Common;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.SubSystem;
 
 namespace GameSrv.Robots
 {
     public class RobotManage : IAutoBotSystem
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly IList<RobotObject> RobotHumanList;
 
         public RobotManage()

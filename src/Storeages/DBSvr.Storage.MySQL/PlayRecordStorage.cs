@@ -5,13 +5,13 @@ using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SystemModule.Data;
+using OpenMir2.Data;
 
 namespace DBSrv.Storage.MySQL
 {
     public class PlayRecordStorage : IPlayRecordStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private int _recordCount;
         private readonly Dictionary<string, int> _quickList;
         private readonly Dictionary<int, string> _indexQuickList;
@@ -106,8 +106,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error("打开数据库[MySql]失败.");
-                _logger.Error(e.StackTrace);
+                LogService.Error("打开数据库[MySql]失败.");
+                LogService.Error(e.StackTrace);
                 succes = false;
             }
             return connection;
@@ -305,7 +305,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error(e.Message);
+                LogService.Error(e.Message);
             }
             finally
             {
@@ -364,7 +364,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error(e.Source);
+                LogService.Error(e.Source);
                 return false;
             }
             finally

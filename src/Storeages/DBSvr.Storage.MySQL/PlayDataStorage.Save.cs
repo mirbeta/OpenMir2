@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.MySQL
 {
@@ -63,13 +63,13 @@ namespace DBSrv.Storage.MySQL
                 SaveBonusability(context, playerId, humanRcd.Data.BonusAbil);
                 SaveStatus(context, playerId, humanRcd.Data.StatusTimeArr);
                 context.Commit();
-                _logger.Debug($"保存角色[{humanRcd.Header.Name}]数据成功");
+                LogService.Debug($"保存角色[{humanRcd.Header.Name}]数据成功");
             }
             catch (Exception ex)
             {
                 result = false;
                 context.RollBack();
-                _logger.Error($"保存角色[{humanRcd.Header.Name}]数据失败. " + ex.Message);
+                LogService.Error($"保存角色[{humanRcd.Header.Name}]数据失败. " + ex.Message);
             }
             finally
             {
@@ -131,7 +131,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateRecord:" + ex.Message);
+                LogService.Error("[Exception] PlayDataStorage.UpdateRecord:" + ex.Message);
             }
         }
 
@@ -165,7 +165,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateRecord");
+                LogService.Error("[Exception] PlayDataStorage.UpdateRecord");
             }
         }
 
@@ -236,8 +236,8 @@ namespace DBSrv.Storage.MySQL
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("[Exception] PlayDataStorage.SaveItem (Clear Item)");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error("[Exception] PlayDataStorage.SaveItem (Clear Item)");
+                        LogService.Error(ex.StackTrace);
                     }
                 }
 
@@ -265,15 +265,15 @@ namespace DBSrv.Storage.MySQL
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("[Exception] PlayDataStorage.SaveItem (Update Item)");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error("[Exception] PlayDataStorage.SaveItem (Update Item)");
+                        LogService.Error(ex.StackTrace);
                     }
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.SaveItem");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.SaveItem");
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -314,8 +314,8 @@ namespace DBSrv.Storage.MySQL
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("[Exception] PlayDataStorage.UpdateBagItem (Delete Item)");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error("[Exception] PlayDataStorage.UpdateBagItem (Delete Item)");
+                        LogService.Error(ex.StackTrace);
                     }
                 }
                 if (chgList.Length > 0)
@@ -342,14 +342,14 @@ namespace DBSrv.Storage.MySQL
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("[Exception] PlayDataStorage.UpdateBagItem (Update Item)");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error("[Exception] PlayDataStorage.UpdateBagItem (Update Item)");
+                        LogService.Error(ex.StackTrace);
                     }
                 }
             }
             catch
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateBagItem");
+                LogService.Error("[Exception] PlayDataStorage.UpdateBagItem");
             }
         }
 
@@ -390,8 +390,8 @@ namespace DBSrv.Storage.MySQL
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("[Exception] PlayDataStorage.SaveStorageItem (Delete Item)");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error("[Exception] PlayDataStorage.SaveStorageItem (Delete Item)");
+                        LogService.Error(ex.StackTrace);
                     }
                 }
 
@@ -419,14 +419,14 @@ namespace DBSrv.Storage.MySQL
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("[Exception] PlayDataStorage.SaveStorageItem (Update Item)");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error("[Exception] PlayDataStorage.SaveStorageItem (Update Item)");
+                        LogService.Error(ex.StackTrace);
                     }
                 }
             }
             catch
             {
-                _logger.Error("[Exception] PlayDataStorage.SaveStorageItem");
+                LogService.Error("[Exception] PlayDataStorage.SaveStorageItem");
             }
         }
 
@@ -457,8 +457,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.SaveMagics");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.SaveMagics");
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -484,8 +484,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.SaveBonusability");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.SaveBonusability");
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -501,7 +501,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch
             {
-                _logger.Error("[Exception] PlayDataStorage.SaveQuest");
+                LogService.Error("[Exception] PlayDataStorage.SaveQuest");
             }
         }
 
@@ -532,8 +532,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateStatus (Update characters_status)");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.UpdateStatus (Update characters_status)");
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -564,8 +564,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateItemAttr (Update item attr)");
-                _logger.Error(e.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.UpdateItemAttr (Update item attr)");
+                LogService.Error(e.StackTrace);
             }
         }
 
@@ -594,7 +594,7 @@ namespace DBSrv.Storage.MySQL
                 }
                 catch
                 {
-                    _logger.Error("[Exception] UpdateChrRecord");
+                    LogService.Error("[Exception] UpdateChrRecord");
                     result = false;
                 }
             }
@@ -617,8 +617,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error("[Exception] PlayDataStorage.UpdateRecord (Delete item attr)");
-                _logger.Error(e.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.UpdateRecord (Delete item attr)");
+                LogService.Error(e.StackTrace);
             }
         }
 
@@ -642,8 +642,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] PlayDataStorage.ClearItemAttr");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.ClearItemAttr");
+                LogService.Error(ex.StackTrace);
             }
         }
 

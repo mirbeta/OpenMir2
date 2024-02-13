@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using NLog;
+using OpenMir2;
 using SystemModule;
 
 namespace ChatSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
 
         public void Configure(IHostEnvironment env)
         {
@@ -22,12 +23,12 @@ namespace ChatSystem
 
         public void Startup(CancellationToken cancellationToken = default)
         {
-            logger.Info("聊天系统插件启动...");
+            LogService.Info("聊天系统插件启动...");
         }
 
         public void Stopping(CancellationToken cancellationToken = default)
         {
-            logger.Info("聊天系统插件停止...");
+            LogService.Info("聊天系统插件停止...");
         }
     }
 }

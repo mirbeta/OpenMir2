@@ -1,11 +1,15 @@
-﻿using GameSrv.NPC;
+﻿using GameSrv.Npc;
 using M2Server;
 using M2Server.Monster;
 using M2Server.Monster.Monsters;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Data;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using ThreadState = System.Threading.ThreadState;
 
 namespace GameSrv.Word
 {
@@ -140,7 +144,7 @@ namespace GameSrv.Word
         /// </summary>
         public void InitializationMonsterThread()
         {
-            _logger.Debug($"Run monster threads:[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
+            LogService.Debug($"Run monster threads:[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
 
             int monsterThreads = SystemShare.Config.ProcessMonsterMultiThreadLimit;//处理线程+预留线程
 
@@ -161,7 +165,7 @@ namespace GameSrv.Word
                 };
                 MobThreading[i].Start();
             }
-            _logger.Info($"怪物线程初始化完成...[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
+            LogService.Info($"怪物线程初始化完成...[{SystemShare.Config.ProcessMonsterMultiThreadLimit}]");
         }
 
         /// <summary>
@@ -202,7 +206,7 @@ namespace GameSrv.Word
             {
                 return;
             }
-            _logger.Debug($"MonsterProcess Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
+            LogService.Debug($"MonsterProcess Thread:{monsterThread.Id} Monsters:{mongenList.Count} starting work.");
 
             while (true)
             {
@@ -346,7 +350,7 @@ namespace GameSrv.Word
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(e.StackTrace);
+                    LogService.Error(e.StackTrace);
                 }
                 finally
                 {
@@ -753,7 +757,7 @@ namespace GameSrv.Word
                 }
                 if (!outofrange)
                 {
-                    //_logger.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
+                    //LogService.Error($"创建怪物失败 名称:{sMonName} 地图:[{sMapName}] X:{nX} Y:{nY} ");
                     return null;
                 }
             }
@@ -829,7 +833,7 @@ namespace GameSrv.Word
             }
             catch
             {
-                _logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
             return result;
         }

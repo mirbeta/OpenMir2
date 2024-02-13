@@ -1,9 +1,11 @@
 ﻿using M2Server.Actor;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
-using SystemModule.Data;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Actors;
 
 namespace M2Server.Player
 {

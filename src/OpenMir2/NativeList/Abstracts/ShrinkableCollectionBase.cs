@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
 
-namespace SystemModule.NativeList.Abstracts
+namespace OpenMir2.NativeList.Abstracts
 {
     /// <summary>
     /// Basic class for shrinkable buffer, 

@@ -1,13 +1,12 @@
 ﻿using DBSrv.Conf;
 using DBSrv.Storage;
-using NLog;
 using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.DataHandlingAdapters;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -19,7 +18,6 @@ namespace DBSrv.Services.Impl
     /// </summary>
     public class MarketService : IService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ICacheStorage _cacheStorage;
         private readonly IMarketStorage _marketStorage;
         private readonly TcpService _socketServer;
@@ -49,7 +47,7 @@ namespace DBSrv.Services.Impl
         public void Start()
         {
             _socketServer.Start();
-            _logger.Info($"拍卖行数据库服务[{_setting.MarketServerAddr}:{_setting.MarketServerPort}]已启动.等待链接...");
+            LogService.Info($"拍卖行数据库服务[{_setting.MarketServerAddr}:{_setting.MarketServerPort}]已启动.等待链接...");
         }
 
         public void Stop()
@@ -64,7 +62,7 @@ namespace DBSrv.Services.Impl
             var marketItems = _marketStorage.QueryMarketItems(groupId);
             if (!marketItems.Any())
             {
-                _logger.Info("拍卖行数据为空,跳过推送拍卖行数据.");
+                LogService.Info("拍卖行数据为空,跳过推送拍卖行数据.");
                 return;
             }
             var socketList = _socketServer.GetClients();
@@ -75,7 +73,7 @@ namespace DBSrv.Services.Impl
                     _socketServer.Send(client.Id, Array.Empty<byte>());//推送拍卖行数据
                 }
             }
-            _logger.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Count()}]");
+            LogService.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Count()}]");
         }
 
         private Task Received(IClient client, ReceivedDataEventArgs e)
@@ -89,7 +87,7 @@ namespace DBSrv.Services.Impl
             {
                 if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
                 {
-                    _logger.Error($"解析寄售行封包出现异常封包...");
+                    LogService.Error($"解析寄售行封包出现异常封包...");
                     return Task.CompletedTask;
                 }
                 var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
@@ -97,7 +95,7 @@ namespace DBSrv.Services.Impl
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
             return Task.CompletedTask;
         }
@@ -107,18 +105,18 @@ namespace DBSrv.Services.Impl
             var remoteIp = client.MainSocket.RemoteEndPoint.GetIP();
             if (!DBShare.CheckServerIP(remoteIp))
             {
-                _logger.Warn("非法服务器连接: " + remoteIp);
+                LogService.Warn("非法服务器连接: " + remoteIp);
                 client.Close();
                 return Task.CompletedTask;
             }
-            _logger.Info("拍卖行客户端(GameSrv)连接 " + client.MainSocket.RemoteEndPoint);
+            LogService.Info("拍卖行客户端(GameSrv)连接 " + client.MainSocket.RemoteEndPoint);
             return Task.CompletedTask;
         }
 
         private Task Disconnected(object sender, DisconnectEventArgs e)
         {
             var client = (SocketClient)sender;
-            _logger.Info("拍卖行客户端(GameSrv)断开连接 " + client.MainSocket.RemoteEndPoint);
+            LogService.Info("拍卖行客户端(GameSrv)断开连接 " + client.MainSocket.RemoteEndPoint);
             return Task.CompletedTask;
         }
 
@@ -152,7 +150,7 @@ namespace DBSrv.Services.Impl
                 }
                 _socketServer.TryGetSocketClient(connectionId, out var client);
                 client.Close();
-                _logger.Error($"关闭错误的任务{nQueryId}查询请求.");
+                LogService.Error($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
             SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
@@ -184,7 +182,7 @@ namespace DBSrv.Services.Impl
             {
                 var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"服务器组[{userMarket.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                LogService.Info($"服务器组[{userMarket.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
             var userItemLoad = _marketStorage.QueryMarketItemsCount(userMarket.GroupId, userMarket.SearchWho);
@@ -193,7 +191,7 @@ namespace DBSrv.Services.Impl
             marketLoadMessgae.IsBusy = 0;
             marketLoadMessgae.MarketNPC = userMarket.MarketNPC;
             SendSuccessMessage(connectionId, actorId, Messages.DB_LOADUSERMARKETSUCCESS, marketLoadMessgae);
-            _logger.Info($"获取服务器组[{userMarket.GroupId}] 用户[{userMarket.SearchWho}]个人拍卖行数据...");
+            LogService.Info($"获取服务器组[{userMarket.GroupId}] 用户[{userMarket.SearchWho}]个人拍卖行数据...");
         }
 
         private void SearchMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)
@@ -203,7 +201,7 @@ namespace DBSrv.Services.Impl
             {
                 var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                LogService.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
             var searchItems = _marketStorage.SearchMarketItems(marketSearch.GroupId, marketSearch.MarketName, marketSearch.SearchItem, marketSearch.SearchWho, marketSearch.ItemType, marketSearch.ItemSet);
@@ -211,14 +209,14 @@ namespace DBSrv.Services.Impl
             {
                 var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 1, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                LogService.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
             var marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = searchItems.ToList();
             marketItemMessgae.TotalCount = searchItems.Count();
             SendSuccessMessage(connectionId, actorId, Messages.DB_SEARCHMARKETSUCCESS, marketItemMessgae);
-            _logger.Info($"服务器组[{marketSearch.GroupId}]搜索拍卖行数据...");
+            LogService.Info($"服务器组[{marketSearch.GroupId}]搜索拍卖行数据...");
         }
 
         private void LoadMarketList(int nQueryId, byte[] sData, string connectionId)
@@ -226,7 +224,7 @@ namespace DBSrv.Services.Impl
             var marketMessage = SerializerUtil.Deserialize<MarketRegisterMessage>(sData);
             if (string.IsNullOrEmpty(marketMessage.Token) || string.IsNullOrEmpty(marketMessage.ServerName))
             {
-                _logger.Warn($"SocketId:{connectionId} QueryId:[{nQueryId}] 非法获取拍卖行数据...");
+                LogService.Warn($"SocketId:{connectionId} QueryId:[{nQueryId}] 非法获取拍卖行数据...");
                 return;
             }
             var marketItems = _marketStorage.QueryMarketItems(marketMessage.GroupId);
@@ -234,14 +232,14 @@ namespace DBSrv.Services.Impl
             {
                 var messagePacket = new ServerRequestMessage(Messages.DB_LOADMARKETFAIL, 0, 1, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"当前服务器组[{marketMessage.GroupId}]拍卖行数据为空,读取拍卖行数据失败.");
+                LogService.Info($"当前服务器组[{marketMessage.GroupId}]拍卖行数据为空,读取拍卖行数据失败.");
                 return;
             }
             var marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = marketItems.ToList();
             marketItemMessgae.TotalCount = marketItems.Count();
             SendSuccessMessage(connectionId, 0, Messages.DB_LOADMARKETSUCCESS, marketItemMessgae);
-            _logger.Info($"服务器组[{marketMessage.GroupId}] [{marketMessage.ServerName}]读取拍卖行数据成功.当前拍卖行物品数据:[{marketItemMessgae.TotalCount}]");
+            LogService.Info($"服务器组[{marketMessage.GroupId}] [{marketMessage.ServerName}]读取拍卖行数据成功.当前拍卖行物品数据:[{marketItemMessgae.TotalCount}]");
         }
 
         private void SaveMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)
@@ -249,18 +247,18 @@ namespace DBSrv.Services.Impl
             var saveMessage = SerializerUtil.Deserialize<MarketSaveDataItem>(sData);
             if (saveMessage.GroupId == 0 || string.IsNullOrEmpty(saveMessage.ServerName))
             {
-                _logger.Warn($"任务[{nQueryId}]非法获取拍卖行数据...");
+                LogService.Warn($"任务[{nQueryId}]非法获取拍卖行数据...");
                 return;
             }
             var marketItems = _marketStorage.SaveMarketItem(saveMessage.Item, saveMessage.GroupId, saveMessage.ServerIndex);
             if (!marketItems)
             {
-                _logger.Info("当前服务器分组拍卖行数据为空,推送拍卖行数据失败.");
+                LogService.Info("当前服务器分组拍卖行数据为空,推送拍卖行数据失败.");
                 return;
             }
             var marketItemsCount = _marketStorage.QueryMarketItems(saveMessage.GroupId);
             SendSuccessMessage(connectionId, actorId, Messages.DB_SAVEMARKETSUCCESS, saveMessage);
-            _logger.Info($"服务器组[{saveMessage.GroupId}] [{saveMessage.ServerName}]保存拍卖行数据成功.当前拍卖行物品数据:[{marketItemsCount}]");
+            LogService.Info($"服务器组[{saveMessage.GroupId}] [{saveMessage.ServerName}]保存拍卖行数据成功.当前拍卖行物品数据:[{marketItemsCount}]");
         }
 
         private void SendSuccessMessage<T>(string connectionId, int actorId, byte messageId, T data)

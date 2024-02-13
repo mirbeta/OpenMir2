@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Generation.Interfaces.Entities
+﻿namespace OpenMir2.Generation.Interfaces.Entities
 {
     /// <summary>
     /// General interface for all three dimensions generators.

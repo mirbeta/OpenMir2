@@ -1,4 +1,8 @@
+using OpenMir2;
+using OpenMir2.Enums;
 using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Data;
 using SystemModule.Enums;
 
 namespace M2Server.Actor
@@ -55,7 +59,7 @@ namespace M2Server.Actor
             const string sExceptionMsg = "[Exception] TBaseObject::SearchViewRange {0} {1} {2} {3} {4}";
             if (Envir == null)
             {
-                M2Share.Logger.Error("SearchViewRange nil PEnvir");
+                LogService.Error("SearchViewRange nil PEnvir");
                 return;
             }
             int n24 = 0;
@@ -121,8 +125,8 @@ namespace M2Server.Actor
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(e.Message);
                 KickException();
             }
             n24 = 2;
@@ -147,7 +151,7 @@ namespace M2Server.Actor
             }
             catch
             {
-                M2Share.Logger.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
+                LogService.Error(Format(sExceptionMsg, n24, ChrName, MapName, CurrX, CurrY));
                 KickException();
             }
         }

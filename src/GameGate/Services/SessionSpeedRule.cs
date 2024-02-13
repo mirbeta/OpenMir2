@@ -1,4 +1,4 @@
-﻿using SystemModule;
+﻿using OpenMir2;
 
 namespace GameGate.Services
 {

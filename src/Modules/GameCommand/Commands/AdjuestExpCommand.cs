@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整指定玩家经验值
@@ -33,7 +35,7 @@ namespace CommandSystem.Commands
                 PlayerActor.SysMsg(sHumanName + " 经验调整完成。", MsgColor.Green, MsgType.Hint);
                 if (SystemShare.Config.ShowMakeItemMsg)
                 {
-                    SystemShare.Logger.Warn("[经验调整] " + PlayerActor.ChrName + '(' + mIPlayerActor.ChrName + ' ' + dwOExp + " -> " + mIPlayerActor.Abil.Exp + ')');
+                    LogService.Warn("[经验调整] " + PlayerActor.ChrName + '(' + mIPlayerActor.ChrName + ' ' + dwOExp + " -> " + mIPlayerActor.Abil.Exp + ')');
                 }
             }
             else

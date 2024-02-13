@@ -1,7 +1,11 @@
 ﻿using M2Server.Magic;
 using M2Server.Monster;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -543,7 +547,7 @@ namespace M2Server.Actor
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -768,8 +772,8 @@ namespace M2Server.Actor
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
             return false;
         }

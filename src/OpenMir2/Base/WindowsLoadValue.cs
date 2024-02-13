@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
 
-namespace SystemModule.Base
+namespace OpenMir2.Base
 {
     internal static class WindowsLoadValue
     {

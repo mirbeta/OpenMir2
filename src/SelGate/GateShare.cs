@@ -1,8 +1,8 @@
 using SelGate.Services;
 using System;
 using System.Collections.Generic;
-using SystemModule;
-using SystemModule.Common;
+using OpenMir2;
+using OpenMir2.Common;
 
 namespace SelGate
 {

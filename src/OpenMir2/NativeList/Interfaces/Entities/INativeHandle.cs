@@ -1,7 +1,7 @@
 ﻿using System;
-using SystemModule.NativeList.Interfaces.Shared;
+using OpenMir2.NativeList.Interfaces.Shared;
 
-namespace SystemModule.NativeList.Interfaces.Entities
+namespace OpenMir2.NativeList.Interfaces.Entities
 {
     /// <summary>
     /// Generic interfaces for native structures, has to be used for example for the GDI handle

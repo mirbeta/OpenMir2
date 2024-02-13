@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
 #if NETCOREAPP3_1_OR_GREATER
     /// <summary>

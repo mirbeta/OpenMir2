@@ -1,7 +1,10 @@
+using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
+using SystemModule.Castles;
 using SystemModule.Data;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Maps;
 
-namespace SystemModule
+namespace SystemModule.Actors
 {
     public interface IActor
     {

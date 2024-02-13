@@ -9,7 +9,7 @@ namespace DBSrv.Storage.MongoDB
 {
     public class PlayRecordStorage : IPlayRecordStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private int _recordCount;
         private readonly Dictionary<string, int> _quickList;
         private readonly Dictionary<int, string> _indexQuickList;

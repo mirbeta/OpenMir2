@@ -1,7 +1,8 @@
-﻿using MediatR;
+﻿using MarketSystem.Services;
+using MediatR;
 using SystemModule.ModuleEvent;
 
-namespace MarketSystem
+namespace MarketSystem.Event
 {
     public class MessageEventHandler : INotificationHandler<UserSelectMessageEvent>
     {

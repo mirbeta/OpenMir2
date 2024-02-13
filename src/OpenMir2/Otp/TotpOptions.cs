@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text;
-using SystemModule.Extensions;
+using OpenMir2.Extensions;
 
-namespace SystemModule.Otp
+namespace OpenMir2.Otp
 {
     public sealed class TotpOptions
     {

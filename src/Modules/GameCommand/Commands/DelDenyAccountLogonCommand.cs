@@ -1,7 +1,8 @@
 ﻿using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("DelDenyAccountLogon", "", "登录帐号", 10)]
     public class DelDenyAccountLogonCommand : GameCommand

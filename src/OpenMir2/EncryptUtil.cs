@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SystemModule
+namespace OpenMir2
 {
     /// <summary>
     /// 游戏数据包加解密工具类

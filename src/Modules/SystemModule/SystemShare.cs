@@ -1,18 +1,22 @@
 using MediatR;
-using NLog;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Text.RegularExpressions;
-using SystemModule.Common;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using SystemModule.Actors;
+using SystemModule.Conf;
+using SystemModule.Conf.Model;
 using SystemModule.Data;
 using SystemModule.Enums;
+using SystemModule.SubSystem;
 
 namespace SystemModule
 {
     public static class SystemShare
     {
-        public static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-
         public static IWorldEngine WorldEngine { get; set; }
 
         public static ActorMgr ActorMgr { get; set; }

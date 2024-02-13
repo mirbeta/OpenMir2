@@ -1,7 +1,8 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 using SystemModule.Enums;
+using SystemModule.Maps;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 清楚指定地图怪物

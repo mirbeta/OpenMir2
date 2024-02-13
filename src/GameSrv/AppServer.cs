@@ -1,78 +1,67 @@
 ﻿using GameSrv.Module;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
+using OpenMir2;
+using Serilog;
 using Spectre.Console;
 using SystemModule;
-using SystemModule.Hosts;
+using IModuleInitializer = SystemModule.IModuleInitializer;
 
 namespace GameSrv
 {
-    public class AppServer : ServiceHost
+    public class AppServer 
     {
-        private static readonly PeriodicTimer _timer;
+        private readonly IHost _host;
 
         public AppServer()
         {
             PrintUsage();
-
-            //Console.CancelKeyPress += delegate
-            //{
-            //    //GateShare.ShowLog = true;
-            //    if (_timer != null)
-            //    {
-            //        _timer.Dispose();
-            //    }
-            //    AnsiConsole.Reset();
-            //};
-
-            Builder.ConfigureLogging(ConfigureLogging);
-            Builder.ConfigureServices(ConfigureServices);
-        }
-
-        public override void Initialize()
-        {
-
-        }
-
-        public static void ConfigureServices(IServiceCollection services)
-        {
-            services.AddModules();
-            services.AddSingleton<GameApp>();
-            services.AddHostedService<AppService>();
-            services.AddHostedService<TimedService>();
-            services.AddScoped<IMediator, Mediator>();
-
+            
+            var builder = Host.CreateApplicationBuilder();
+            builder.Services.AddModules();
+            builder.Services.AddSingleton<GameApp>();
+            builder.Services.AddHostedService<AppService>();
+            builder.Services.AddHostedService<TimedService>();
+            builder.Services.AddScoped<IMediator, Mediator>();
             foreach (var module in GameShare.Modules)
             {
                 var moduleInitializerType = module.Assembly.GetTypes().FirstOrDefault(t => typeof(IModuleInitializer).IsAssignableFrom(t));
                 if ((moduleInitializerType != null) && (moduleInitializerType != typeof(IModuleInitializer)))
                 {
                     var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
-                    services.AddSingleton(typeof(IModuleInitializer), moduleInitializer);
-                    moduleInitializer.ConfigureServices(services);
+                    builder.Services.AddSingleton(typeof(IModuleInitializer), moduleInitializer);
+                    moduleInitializer.ConfigureServices(builder.Services);
                 }
             }
+
+            builder.Logging.ClearProviders();
+            builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
+            builder.Logging.AddSerilog();
+            
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+            LogService.Logger = Log.Logger;
+
+            _host = builder.Build();
         }
 
-        private void ConfigureLogging(ILoggingBuilder logging)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            logging.ClearProviders();
-            logging.SetMinimumLevel(LogLevel.Trace);
-            logging.AddNLog(Configuration);
+            await _host.StartAsync(cancellationToken);
         }
 
-        public override async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
-            Host = await Builder.StartAsync(cancellationToken);
-            await Host.RunAsync(cancellationToken);
-        }
-
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await Host.StopAsync(cancellationToken);
+            await _host.StopAsync(cancellationToken);
         }
 
         private static void Stop()

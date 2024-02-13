@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SystemModule.RandomSelector
+namespace OpenMir2.RandomSelector
 {
     /// <summary>
     /// 多选器

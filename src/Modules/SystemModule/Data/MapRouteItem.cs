@@ -1,4 +1,6 @@
-﻿namespace SystemModule
+﻿using SystemModule.Maps;
+
+namespace SystemModule.Data
 {
     /// <summary>
     /// 地图连接对象

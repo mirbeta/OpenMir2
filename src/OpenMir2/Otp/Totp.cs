@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 
-namespace SystemModule.Otp
+namespace OpenMir2.Otp
 {
     /// <summary>
     /// Time-Based One-Time Password

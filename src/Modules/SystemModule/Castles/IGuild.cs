@@ -1,7 +1,9 @@
 ﻿using System.Collections;
+using OpenMir2.Data;
+using SystemModule.Actors;
 using SystemModule.Data;
 
-namespace SystemModule
+namespace SystemModule.Castles
 {
     public interface IGuild
     {

@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using SystemModule.NativeList.Enums;
-using SystemModule.NativeList.Helpers;
+using OpenMir2.NativeList.Enums;
+using OpenMir2.NativeList.Helpers;
 
-namespace SystemModule.NativeList.Abstracts
+namespace OpenMir2.NativeList.Abstracts
 {
     /// <summary>
     /// Base class for comparing several objects.

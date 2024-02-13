@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SystemModule.Otp
+namespace OpenMir2.Otp
 {
     /// <summary>
     /// Base32Encode

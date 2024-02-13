@@ -1,16 +1,15 @@
 using DBSrv.Services.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenMir2;
 
 namespace DBSrv
 {
     public class AppService : IHostedService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly IHost _host;
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly UserService _userService;
@@ -34,11 +33,11 @@ namespace DBSrv
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-            cancellationToken.Register(() => _logger.Debug("DBSrv is stopping."));
-            _logger.Debug("DBSrv is starting.");
+            cancellationToken.Register(() => LogService.Debug("DBSrv is stopping."));
+            LogService.Debug("DBSrv is starting.");
             _appLifetime.ApplicationStarted.Register(() =>
             {
-                _logger.Debug("Application has started");
+                LogService.Debug("Application has started");
                 _applicationTask = Task.Run(() =>
                 {
                     try
@@ -58,8 +57,8 @@ namespace DBSrv
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex, "Unhandled exception!");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error(ex);
+                        LogService.Error(ex.StackTrace);
                         _exitCode = 1;
                     }
                 }, cancellationToken);
@@ -80,8 +79,8 @@ namespace DBSrv
             {
                 await _applicationTask;
             }
-            _logger.Debug("DBSrv is stopping.");
-            _logger.Debug($"Exiting with return code: {_exitCode}");
+            LogService.Debug("DBSrv is stopping.");
+            LogService.Debug($"Exiting with return code: {_exitCode}");
             _appLifetime.StopApplication();
             // Exit code may be null if the user cancelled via Ctrl+C/SIGTERM
             Environment.Exit(Environment.ExitCode);
@@ -89,10 +88,10 @@ namespace DBSrv
 
         private async void OnShutdown()
         {
-            _logger.Debug("Application is stopping");
-            _logger.Info("数据引擎世界服务已停止...");
-            _logger.Info("数据服务已停止...");
-            _logger.Info("goodbye!");
+            LogService.Debug("Application is stopping");
+            LogService.Info("数据引擎世界服务已停止...");
+            LogService.Info("数据服务已停止...");
+            LogService.Info("goodbye!");
             _cancellationTokenSource.CancelAfter(3000);
             await _host.StopAsync(_cancellationTokenSource.Token);
         }

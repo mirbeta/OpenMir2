@@ -1,8 +1,8 @@
 ﻿using System;
-using SystemModule.NativeList.Abstracts;
-using SystemModule.NativeList.Enums;
+using OpenMir2.NativeList.Abstracts;
+using OpenMir2.NativeList.Enums;
 
-namespace SystemModule.NativeList.Utils
+namespace OpenMir2.NativeList.Utils
 {
     public class DoubleComparer : ComparerBase<double>
     {

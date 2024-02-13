@@ -1,12 +1,13 @@
 using M2Server;
 using NLog;
+using OpenMir2;
 using SystemModule;
 
 namespace GameSrv.Word.Threads
 {
     public class ActorBuffProcessor: TimerScheduledService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
 
         public ActorBuffProcessor() : base(TimeSpan.FromMilliseconds(50), "ActorBuffProcessor")
         {
@@ -15,7 +16,7 @@ namespace GameSrv.Word.Threads
 
         public override void Initialize(CancellationToken cancellationToken)
         {
-            _logger.Info("技能Buff处理器初始化...");
+            LogService.Info("技能Buff处理器初始化...");
         }
 
         protected override Task ExecuteInternal(CancellationToken cancellationToken)
@@ -26,19 +27,19 @@ namespace GameSrv.Word.Threads
             }
             catch (Exception e)
             {
-                _logger.Error(e.StackTrace);
+                LogService.Error(e.StackTrace);
             }
             return Task.CompletedTask;
         }
 
         protected override void Startup(CancellationToken cancellationToken)
         {
-            _logger.Info("技能Buff处理器启动...");
+            LogService.Info("技能Buff处理器启动...");
         }
 
         protected override void Stopping(CancellationToken cancellationToken)
         {
-            _logger.Info("技能Buff处理器停止...");
+            LogService.Info("技能Buff处理器停止...");
         }
     }
 }

@@ -5,12 +5,13 @@ using NLog;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenMir2;
 
 namespace GameGate
 {
     public class AppService : IHostedService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly MqttServer _mqttServer;
 
         public AppService()
@@ -25,7 +26,7 @@ namespace GameGate
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Info("ChatService is starting.");
+            LogService.Info("ChatService is starting.");
             _mqttServer.StartedAsync += e =>
             {
                 Console.WriteLine("MQTT server started.");
@@ -56,7 +57,7 @@ namespace GameGate
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            _logger.Info("ChatService is stopping.");
+            LogService.Info("ChatService is stopping.");
             return _mqttServer.StopAsync();
         }
     }

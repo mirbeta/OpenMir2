@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整沙巴克所属行会

@@ -1,9 +1,11 @@
 using System.Collections;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
 using SystemModule;
-using SystemModule.Data;
-using SystemModule.Enums;
+using SystemModule.Const;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     public partial class RobotPlayer
     {
@@ -469,7 +471,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error("WalkToRightPos:" + ChrName);
+                LogService.Error("WalkToRightPos:" + ChrName);
             }
             return false;
         }
@@ -873,7 +875,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error(Format("RobotPlayObject::ActThink Name:{0} Code:{1} ", ChrName, nCode));
+                LogService.Error(Format("RobotPlayObject::ActThink Name:{0} Code:{1} ", ChrName, nCode));
             }
             return result;
         }

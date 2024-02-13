@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
+using OpenMir2;
 
 namespace LoginSrv
 {
     public class TimedService : BackgroundService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly LoginServer _loginService;
         private readonly SessionServer _sessionService;
         private int _processMonSocTick;
@@ -91,7 +91,7 @@ namespace LoginSrv
                 }
                 if (builder.Length > 0)
                 {
-                    _logger.Debug(builder.ToString());
+                    LogService.Debug(builder.ToString());
                 }
             }
         }
@@ -119,22 +119,22 @@ namespace LoginSrv
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Warn($"数据库服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
+                                LogService.Warn($"数据库服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logger.Warn($"[{sServerName}]数据库服务器响应超时,关闭链接.");
+                                LogService.Warn($"[{sServerName}]数据库服务器响应超时,关闭链接.");
                             }
                         }
                         else
                         {
                             if (string.IsNullOrEmpty(sServerName))
                             {
-                                _logger.Warn($"游戏服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
+                                LogService.Warn($"游戏服务器[{msgServer.IPaddr}]响应超时,关闭链接.");
                             }
                             else
                             {
-                                _logger.Warn($"[{sServerName}]游戏服务器响应超时,关闭链接.");
+                                LogService.Warn($"[{sServerName}]游戏服务器响应超时,关闭链接.");
                             }
                         }
                     }

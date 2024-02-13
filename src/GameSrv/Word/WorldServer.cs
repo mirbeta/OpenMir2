@@ -2,22 +2,27 @@ using GameSrv.Services;
 using M2Server;
 using M2Server.Actor;
 using M2Server.Event.Events;
-using M2Server.Guild;
 using M2Server.Player;
-using NLog;
 using PlanesSystem;
 using System.Collections;
+using M2Server.Maps;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
+using SystemModule.Actors;
+using SystemModule.Castles;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using SystemModule.Maps;
+using SystemModule.SubSystem;
 
 namespace GameSrv.Word
 {
     public partial class WorldServer : IWorldEngine
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private int ProcessMapDoorTick { get; set; }
         private int ProcessMerchantTimeMax { get; set; }
         private int ProcessMerchantTimeMin { get; set; }
@@ -115,10 +120,10 @@ namespace GameSrv.Word
 
         public void Initialize()
         {
-            _logger.Info("正在初始化NPC脚本...");
+            LogService.Info("正在初始化NPC脚本...");
             MerchantInitialize();
             NpCinitialize();
-            _logger.Info("初始化NPC脚本完成...");
+            LogService.Info("初始化NPC脚本完成...");
         }
 
         public void AddMonsterList(MonsterInfo monsterInfo)
@@ -163,7 +168,7 @@ namespace GameSrv.Word
             }
             catch (Exception e)
             {
-                _logger.Error(e.StackTrace);
+                LogService.Error(e.StackTrace);
             }
         }
 
@@ -359,7 +364,7 @@ namespace GameSrv.Word
                         playObject.ServerIndex = (byte)SystemShare.MapMgr.GetMapOfServerIndex(playObject.MapName);
                         if (playObject.Abil.HP != 14)
                         {
-                            _logger.Warn(string.Format(sChangeServerFail1, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
+                            LogService.Warn(string.Format(sChangeServerFail1, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         }
                         SendSwitchData(playObject, playObject.ServerIndex);
                         SendChangeServer(playObject, playObject.ServerIndex);
@@ -379,7 +384,7 @@ namespace GameSrv.Word
                     }
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
-                        _logger.Warn(string.Format(sChangeServerFail2, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
+                        LogService.Warn(string.Format(sChangeServerFail2, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         playObject.MapName = SystemShare.Config.HomeMap;
                         envir = SystemShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
                         playObject.CurrX = SystemShare.Config.HomeX;
@@ -389,7 +394,7 @@ namespace GameSrv.Word
                     playObject.OnEnvirnomentChanged();
                     if (playObject.Envir == null)
                     {
-                        _logger.Error(sErrorEnvirIsNil);
+                        LogService.Error(sErrorEnvirIsNil);
                         goto ReGetMap;
                     }
                     else
@@ -409,7 +414,7 @@ namespace GameSrv.Word
                     var envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
-                        _logger.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
+                        LogService.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                         playObject.MapName = SystemShare.Config.HomeMap;
                         envir = SystemShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
                         playObject.CurrX = SystemShare.Config.HomeX;
@@ -419,7 +424,7 @@ namespace GameSrv.Word
                     {
                         if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                         {
-                            _logger.Warn(string.Format(sChangeServerFail4, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
+                            LogService.Warn(string.Format(sChangeServerFail4, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
                             playObject.MapName = SystemShare.Config.HomeMap;
                             envir = SystemShare.MapMgr.FindMap(SystemShare.Config.HomeMap);
                             playObject.CurrX = SystemShare.Config.HomeX;
@@ -430,7 +435,7 @@ namespace GameSrv.Word
                         playObject.OnEnvirnomentChanged();
                         if (playObject.Envir == null)
                         {
-                            _logger.Error(sErrorEnvirIsNil);
+                            LogService.Error(sErrorEnvirIsNil);
                             goto ReGetMap;
                         }
                         else
@@ -461,8 +466,8 @@ namespace GameSrv.Word
             }
             catch (Exception ex)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(ex.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex.StackTrace);
             }
             return result;
         }
@@ -493,7 +498,7 @@ namespace GameSrv.Word
                             {
                                 if (userOpenInfo.FailCount >= 50) //超过错误查询次数
                                 {
-                                    _logger.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
+                                    LogService.Warn($"获取玩家数据[{userOpenInfo.ChrName}]失败.");
                                     LoadPlayerQueue.Add(i);
                                     M2Share.NetChannel.SendOutConnectMsg(userOpenInfo.LoadUser.GateIdx, userOpenInfo.LoadUser.SocketId, userOpenInfo.LoadUser.GSocketIdx);
                                     continue;
@@ -563,8 +568,8 @@ namespace GameSrv.Word
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(sExceptionMsg1);
-                    _logger.Error(e.StackTrace);
+                    LogService.Error(sExceptionMsg1);
+                    LogService.Error(e.StackTrace);
                 }
             }
             try
@@ -601,7 +606,7 @@ namespace GameSrv.Word
             }
             catch
             {
-                _logger.Error(sExceptionMsg3);
+                LogService.Error(sExceptionMsg3);
             }
             ProcessPlayObjectData();
             ProcessHumanLoopTime++;
@@ -713,8 +718,8 @@ namespace GameSrv.Word
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] WorldServer::ProcessHumans");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] WorldServer::ProcessHumans");
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -728,7 +733,7 @@ namespace GameSrv.Word
             if (OtherUserNameList.TryGetValue(sName, out var groupServer))
             {
                 nServerIndex = groupServer.nServerIdx;
-                _logger.Info($"玩家在[{nServerIndex}]服务器上.");
+                LogService.Info($"玩家在[{nServerIndex}]服务器上.");
                 return true;
             }
             return false;

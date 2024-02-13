@@ -1,12 +1,12 @@
 using GameGate.Conf;
 using System;
 using System.IO;
-using SystemModule.Common;
+using OpenMir2.Common;
 
 namespace GameGate.Filters
 {
     /// <summary>
-    /// ÎÄ×Ö¹ýÂË
+    /// ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½
     /// </summary>
     public class AbusiveFilter
     {

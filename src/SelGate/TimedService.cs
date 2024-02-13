@@ -4,13 +4,13 @@ using SelGate.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule;
+using OpenMir2;
 
 namespace SelGate
 {
     public class TimedService : BackgroundService
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private int _processClearSessionTick = 0;
@@ -96,11 +96,11 @@ namespace SelGate
                         {
                             _sessionManager.CloseSession(userSession.SocketId);
                             userSession = null;
-                            logger.Debug("清理超时会话,关闭超时Socket.");
+                            LogService.Debug("清理超时会话,关闭超时Socket.");
                         }
                     }
                 }
-                logger.Debug("Cleanup timeout session...");
+                LogService.Debug("Cleanup timeout session...");
             }
         }
 
@@ -139,13 +139,13 @@ namespace SelGate
                 {
                     clientThread.ReConnected();
                     clientThread.CheckServerFailCount++;
-                    logger.Debug($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
+                    LogService.Debug($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;
                 }
                 clientThread.CheckServerFail = true;
                 clientThread.Stop();
                 clientThread.CheckServerFailCount++;
-                logger.Debug($"服务器[{clientThread.GetEndPoint()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
+                LogService.Debug($"服务器[{clientThread.GetEndPoint()}]链接超时.失败次数:[{clientThread.CheckServerFailCount}]");
             }
         }
     }

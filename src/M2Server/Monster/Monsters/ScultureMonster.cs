@@ -1,5 +1,7 @@
-﻿using SystemModule;
-using SystemModule.Consts;
+﻿using OpenMir2;
+using OpenMir2.Consts;
+using SystemModule;
+using SystemModule.Actors;
 
 namespace M2Server.Monster.Monsters
 {

@@ -1,20 +1,18 @@
-﻿using NLog;
-using System.Buffers;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
+﻿using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Extensions;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SystemModule;
-using SystemModule.Data;
-using SystemModule.Extensions;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using SystemModule.Actors;
 
 namespace M2Server.Net
 {
     public class ChannelMessageHandler
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ChannelGate _channelGate;
         private readonly SocketSendQueue _sendQueue;
         private object RunSocketSection{ get; }
@@ -98,8 +96,8 @@ namespace M2Server.Net
             }
             catch (Exception e)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(e.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.StackTrace);
             }
         }
 
@@ -133,8 +131,8 @@ namespace M2Server.Net
             }
             catch (Exception ex)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(ex.StackTrace);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex.StackTrace);
             }
         }
 
@@ -227,8 +225,8 @@ namespace M2Server.Net
             }
             catch (Exception ex)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(ex);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex);
             }
         }
 
@@ -275,13 +273,13 @@ namespace M2Server.Net
                     {
                         result = false;
                     }
-                    _logger.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
+                    LogService.Debug($"Account:[{sAccount}] ChrName:[{sChrName}] Code:[{sCodeStr}] ClientVersion:[{sClientVersion}] HWID:[{sHwid}]");
                 }
             }
             catch (Exception ex)
             {
-                _logger.Error(sExceptionMsg);
-                _logger.Error(ex);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(ex);
             }
             return result;
         }
@@ -340,7 +338,7 @@ namespace M2Server.Net
                                 gateUser.Account = sDisable;
                                 gateUser.Certification = false;
                                 CloseUser(nSocket);
-                                _logger.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionId} Address:{gateUser.IPaddr}");
+                                LogService.Warn($"会话验证失败.Account:{sAccount} SessionId:{nSessionId} Address:{gateUser.IPaddr}");
                             }
                         }
                         else
@@ -354,7 +352,7 @@ namespace M2Server.Net
             }
             catch
             {
-                _logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -534,7 +532,7 @@ namespace M2Server.Net
                             }
                             catch (Exception ex)
                             {
-                                M2Share.Logger.Error(ex.StackTrace);
+                                LogService.Error(ex.StackTrace);
                             }
                             //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }

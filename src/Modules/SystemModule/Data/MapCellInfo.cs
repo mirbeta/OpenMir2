@@ -1,6 +1,7 @@
-﻿using SystemModule.NativeList.Utils;
+﻿using OpenMir2;
+using OpenMir2.NativeList.Utils;
 
-namespace SystemModule
+namespace SystemModule.Data
 {
     public struct MapCellInfo
     {

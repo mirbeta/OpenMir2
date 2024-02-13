@@ -1,7 +1,9 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 随机传送一个指定玩家和他身边的人

@@ -1,17 +1,25 @@
+using System.Collections;
 using M2Server;
 using M2Server.Actor;
 using M2Server.Magic;
+using M2Server.Maps;
 using M2Server.Monster.Monsters;
 using M2Server.Player;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using RobotSystem.Data;
-using System.Collections;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.Maps;
+using SystemModule.SubSystem;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     /// <summary>
     /// 假人
@@ -330,7 +338,7 @@ namespace RobotSystem
             }
             catch (Exception)
             {
-                SystemShare.Logger.Error(Format(sExceptionMsg, sData));
+                LogService.Error(Format(sExceptionMsg, sData));
             }
         }
 
@@ -436,7 +444,7 @@ namespace RobotSystem
                             var sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
                             Whisper(sChrName, "你猜我是谁.");
                             //Whisper(sChrName, m_AISayMsgList[(SystemShare.RandomNumber.Random(m_AISayMsgList.Count)).Next()]);
-                            SystemShare.Logger.Error("TODO Hear...");
+                            LogService.Error("TODO Hear...");
                         }
                     }
                     break;
@@ -677,7 +685,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error("RoboPlayObject.SearchPickUpItem");
+                LogService.Error("RoboPlayObject.SearchPickUpItem");
             }
             return result;
         }
@@ -1165,7 +1173,7 @@ namespace RobotSystem
             }
             catch (Exception ex)
             {
-                SystemShare.Logger.Error(ex.Message);
+                LogService.Error(ex.Message);
             }
             return result;
         }
@@ -1865,7 +1873,7 @@ namespace RobotSystem
             }
             catch (Exception)
             {
-                SystemShare.Logger.Error(Format("RoboPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, nTargetX, nTargetY));
+                LogService.Error(Format("RoboPlayObject.AutoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, nTargetX, nTargetY));
             }
             return result;
         }
@@ -1923,7 +1931,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error("RoboPlayObject.Thinking");
+                LogService.Error("RoboPlayObject.Thinking");
             }
             return result;
         }
@@ -2336,7 +2344,7 @@ namespace RobotSystem
             }
             catch
             {
-                SystemShare.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
             return result;
         }
@@ -3809,7 +3817,7 @@ namespace RobotSystem
             }
             catch (Exception)
             {
-                SystemShare.Logger.Error("RoboPlayObject.CheckHeroAmulet");
+                LogService.Error("RoboPlayObject.CheckHeroAmulet");
             }
             return result;
         }

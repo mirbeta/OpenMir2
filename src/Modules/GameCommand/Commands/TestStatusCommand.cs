@@ -1,7 +1,8 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("TestStatus", "", 10)]
     public class TestStatusCommand : GameCommand

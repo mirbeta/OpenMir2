@@ -1,7 +1,11 @@
 ﻿using M2Server.Actor;
 using M2Server.Player;
 using System.Text;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
 using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Data;
 using SystemModule.Enums;
 
@@ -1840,7 +1844,7 @@ namespace M2Server.Npc
             }
             catch
             {
-                M2Share.Logger.Error("{异常} TNormNpc.SetValValue1");
+                LogService.Error("{异常} TNormNpc.SetValValue1");
             }
             return result;
         }
@@ -1877,7 +1881,7 @@ namespace M2Server.Npc
             }
             catch
             {
-                M2Share.Logger.Error("{异常} TNormNpc.SetValValue2");
+                LogService.Error("{异常} TNormNpc.SetValValue2");
             }
             return result;
         }

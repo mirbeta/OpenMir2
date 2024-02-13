@@ -7,7 +7,7 @@ namespace DBSrv.Storage.MySQL
 {
     public class StorageContext : IDisposable
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly StorageOption _storageOption;
         private MySqlConnection? _connection;
         private MySqlTransaction? _transaction;
@@ -27,8 +27,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error("打开数据库[MySql]失败.");
-                _logger.Error(e.StackTrace);
+                LogService.Error("打开数据库[MySql]失败.");
+                LogService.Error(e.StackTrace);
                 success = false;
             }
         }
@@ -51,7 +51,7 @@ namespace DBSrv.Storage.MySQL
             }
             else
             {
-                _logger.Warn("[警告] 获取MySQL链接事物失败.");
+                LogService.Warn("[警告] 获取MySQL链接事物失败.");
             }
         }
 

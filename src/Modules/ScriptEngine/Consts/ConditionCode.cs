@@ -1,4 +1,4 @@
-﻿namespace ScriptSystem
+﻿namespace ScriptSystem.Consts
 {
     /// <summary>
     /// 条件检测编码定义

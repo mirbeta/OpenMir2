@@ -1,10 +1,11 @@
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using RobotSystem.Conf;
 using SystemModule;
-using SystemModule.Common;
-using SystemModule.Data;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     public partial class RobotPlayer
     {

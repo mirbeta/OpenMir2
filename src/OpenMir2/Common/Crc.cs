@@ -1,6 +1,6 @@
 using System;
 
-namespace SystemModule.Common
+namespace OpenMir2.Common
 {
     /// <summary>
     /// Crc相关。

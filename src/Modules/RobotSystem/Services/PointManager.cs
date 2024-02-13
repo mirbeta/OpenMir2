@@ -1,8 +1,11 @@
-﻿using SystemModule;
+﻿using OpenMir2.Enums;
+using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Data;
-using SystemModule.Enums;
+using SystemModule.Maps;
+using SystemModule.SubSystem;
 
-namespace RobotSystem
+namespace RobotSystem.Services
 {
     public class PointManager : IPointManager
     {

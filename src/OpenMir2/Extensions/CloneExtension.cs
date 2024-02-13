@@ -1,8 +1,4 @@
-﻿using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-
-namespace SystemModule.Extensions
+﻿namespace OpenMir2.Extensions
 {
     public static class CloneExtension
     {

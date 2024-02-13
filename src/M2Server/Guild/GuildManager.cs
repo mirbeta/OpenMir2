@@ -1,12 +1,15 @@
 ﻿using NLog;
+using OpenMir2;
+using OpenMir2.Common;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Castles;
+using SystemModule.SubSystem;
 
 namespace M2Server.Guild
 {
     public class GuildManager : IGuildSystem
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private readonly IList<IGuild> GuildList;
 
         public GuildManager()
@@ -25,7 +28,7 @@ namespace M2Server.Guild
                 SaveGuildList();
                 result = true;
             }
-            _logger.Debug($"创建行会: {sGuildName} 掌门人: {sChief} 结果: {result}");
+            LogService.Debug($"创建行会: {sGuildName} 掌门人: {sChief} 结果: {result}");
             return result;
         }
 
@@ -48,7 +51,7 @@ namespace M2Server.Guild
                     break;
                 }
             }
-            _logger.Debug($"删除行会: {sGuildName} 结果: {result}");
+            LogService.Debug($"删除行会: {sGuildName} 结果: {result}");
             return result;
         }
 
@@ -94,16 +97,16 @@ namespace M2Server.Guild
                     var guild = GuildList[i];
                     if (!guild.LoadGuild())
                     {
-                        _logger.Warn(guild.GuildName + " 读取出错!!!");
+                        LogService.Warn(guild.GuildName + " 读取出错!!!");
                         GuildList.RemoveAt(i);
                         SaveGuildList();
                     }
                 }
-                _logger.Info($"已读取 [{GuildList.Count}] 个行会信息...");
+                LogService.Info($"已读取 [{GuildList.Count}] 个行会信息...");
             }
             else
             {
-                _logger.Error("行会信息文件未找到!!!");
+                LogService.Error("行会信息文件未找到!!!");
             }
         }
 
@@ -136,7 +139,7 @@ namespace M2Server.Guild
             }
             catch
             {
-                _logger.Error("行会信息保存失败!!!");
+                LogService.Error("行会信息保存失败!!!");
             }
         }
 

@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
-using SystemModule;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem
+namespace CommandModule
 {
     public class GameCommand
     {

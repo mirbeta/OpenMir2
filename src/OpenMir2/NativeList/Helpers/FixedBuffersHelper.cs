@@ -2,7 +2,7 @@
 using System.Runtime.CompilerServices;
 using System.Text;
 
-namespace SystemModule.NativeList.Helpers
+namespace OpenMir2.NativeList.Helpers
 {
     public static unsafe class FixedBuffersHelper
     {

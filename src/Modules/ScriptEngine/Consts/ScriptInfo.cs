@@ -1,6 +1,6 @@
 using System.Collections;
 
-namespace ScriptSystem
+namespace ScriptSystem.Consts
 {
     [AttributeUsage(AttributeTargets.Field)]
     public class ScriptDefName : Attribute

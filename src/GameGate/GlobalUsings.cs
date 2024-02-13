@@ -1,0 +1,25 @@
+global using Microsoft.Extensions.Hosting;
+global using OpenMir2;
+global using Microsoft.Extensions.DependencyInjection;
+global using Microsoft.Extensions.Logging;
+global using Spectre.Console;
+global using System;
+global using System.IO;
+global using System.Linq;
+global using System.Text;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using System.Collections.Concurrent;
+global using System.Collections.Generic;
+global using System.Threading;
+global using System.Threading.Tasks;
+global using OpenMir2.Packets.ServerPackets;
+global using OpenMir2.Packets.ClientPackets;
+global using TouchSocket.Sockets;
+global using System.Net;
+global using TouchSocket.Core;
+global using System.Diagnostics;
+global using OpenMir2;
+global using OpenMir2.Common;
+global using TcpClient = TouchSocket.Sockets.TcpClient;
+

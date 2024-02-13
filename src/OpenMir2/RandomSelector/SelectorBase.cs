@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SystemModule.RandomSelector
+namespace OpenMir2.RandomSelector
 {
     public abstract class SelectorBase<T>
     {

@@ -1,4 +1,4 @@
-﻿namespace SystemModule.Otp
+﻿namespace OpenMir2.Otp
 {
     public enum OtpHashAlgorithm
     {

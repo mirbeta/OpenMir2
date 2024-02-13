@@ -1,7 +1,10 @@
-﻿using SystemModule;
-using SystemModule.Enums;
+﻿using OpenMir2;
+using OpenMir2.Enums;
+using ScriptSystem.Consts;
+using SystemModule;
+using SystemModule.Actors;
 
-namespace ScriptSystem
+namespace ScriptSystem.Processings
 {
     /// <summary>
     /// 全局变量脚本处理模块
@@ -134,7 +137,7 @@ namespace ScriptSystem
                 //}
                 //else
                 //{
-                //    M2Share.Logger.Error(string.Format("未知全局变量:{0}", nIdx));
+                //    LogService.Error(string.Format("未知全局变量:{0}", nIdx));
                 //}
             }
         }

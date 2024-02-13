@@ -1,10 +1,9 @@
 using DBSrv.Conf;
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using SystemModule;
+using OpenMir2;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
@@ -16,7 +15,6 @@ namespace DBSrv.Services.Impl
     /// </summary>
     public class ClientSession
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
         private readonly SettingConf _setting;
@@ -36,13 +34,13 @@ namespace DBSrv.Services.Impl
 
         private Task LoginSocketConnected(ITcpClientBase client, ConnectedEventArgs e)
         {
-            _logger.Info($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]链接成功.");
+            LogService.Info($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]链接成功.");
             return Task.CompletedTask;
         }
 
         private Task LoginSocketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            _logger.Error($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]断开链接.");
+            LogService.Error($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]断开链接.");
             return Task.CompletedTask;
         }
 
@@ -258,7 +256,7 @@ namespace DBSrv.Services.Impl
             globaSessionInfo.AddTick = HUtil32.GetTickCount();
             globaSessionInfo.AddDate = DateTime.Now;
             _globaSessionList.Add(globaSessionInfo);
-            //_logger.Debug($"同步账号服务[{sAccount}]同步会话消息...");
+            //LogService.Debug($"同步账号服务[{sAccount}]同步会话消息...");
         }
 
         private void ProcessDelSession(string sData)

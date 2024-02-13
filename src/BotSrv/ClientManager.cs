@@ -6,13 +6,14 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using OpenMir2;
 using SystemModule;
 
 namespace BotSrv
 {
     public class ClientManager
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
         private int g_dwProcessTimeMin = 0;
         private int g_dwProcessTimeMax = 0;
         private int g_nPosition = 0;
@@ -33,7 +34,7 @@ namespace BotSrv
 
         public Task Start(CancellationToken stoppingToken)
         {
-            logger.Info("消息处理线程启动...");
+            LogService.Info("消息处理线程启动...");
             return ProcessReviceMessage(stoppingToken);
         }
 
@@ -57,7 +58,7 @@ namespace BotSrv
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(ex);
+                        LogService.Error(ex);
                     }
                 }
             }
@@ -101,7 +102,7 @@ namespace BotSrv
             _clientList.Remove(robotClient);
             if (robotClient != null)
             {
-                logger.Info("机器人[{0}] 会话ID:{1}]掉线或断开链接.", robotClient.ChrName, sessionId);
+                LogService.Info("机器人[{0}] 会话ID:{1}]掉线或断开链接.", robotClient.ChrName, sessionId);
             }
         }
 

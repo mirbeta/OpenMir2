@@ -1,13 +1,11 @@
-using NLog;
 using System;
 using System.IO;
-using SystemModule.Common;
+using OpenMir2.Common;
 
 namespace GameGate.Conf
 {
     public class ConfigManager : ConfigFile
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private static readonly string fileName = Path.Combine(AppContext.BaseDirectory, "config.conf");
         private static readonly ConfigManager instance = new ConfigManager(fileName);
         public static ConfigManager Instance => instance;
@@ -51,12 +49,12 @@ namespace GameGate.Conf
                 GateList[i].GatePort = ReadWriteInteger("GameGate", "GatePort" + (i + 1), GateList[i].GatePort);
                 if (string.IsNullOrEmpty(GateList[i].ServerAdress) || GateList[i].ServerPort <= 0)
                 {
-                    logger.Info("配置文件节点[ServerAddr{I}]配置错误或端口错误.", i);
+                    LogService.Info("配置文件节点[ServerAddr{I}]配置错误或端口错误.", i);
                     continue;
                 }
                 if (string.IsNullOrEmpty(GateList[i].GateAddress) || GateList[i].GatePort <= 0)
                 {
-                    logger.Info("配置文件节点[GateAddress{I}]配置错误或端口错误.", i);
+                    LogService.Info("配置文件节点[GateAddress{I}]配置错误或端口错误.", i);
                     continue;
                 }
             }

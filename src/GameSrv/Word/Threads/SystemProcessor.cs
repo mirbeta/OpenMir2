@@ -1,5 +1,6 @@
 using M2Server;
 using NLog;
+using OpenMir2;
 using PlanesSystem;
 using SystemModule;
 
@@ -7,7 +8,7 @@ namespace GameSrv.Word.Threads
 {
     public class SystemProcessor : TimerScheduledService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         private int RunTimeTick;
         private int ShowOnlineTick { get; set; }
         private int SendOnlineHumTime { get; set; }
@@ -60,7 +61,7 @@ namespace GameSrv.Word.Threads
             {
                 ShowOnlineTick = HUtil32.GetTickCount();
                 M2Share.NoticeMgr.LoadingNotice();
-                _logger.Info("在线数: " + SystemShare.WorldEngine.PlayObjectCount);
+                LogService.Info("在线数: " + SystemShare.WorldEngine.PlayObjectCount);
                 SystemShare.CastleMgr.Save();
             }
             if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
@@ -91,7 +92,7 @@ namespace GameSrv.Word.Threads
                     {
                         if (M2Share.DenySayMsgList.TryRemove(denyList[i], out long _))
                         {
-                            M2Share.Logger.Debug($"解除玩家禁言[{denyList[i]}]");
+                            LogService.Debug($"解除玩家禁言[{denyList[i]}]");
                         }
                     }
                 }

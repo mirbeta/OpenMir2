@@ -1,12 +1,15 @@
 using NLog;
+using OpenMir2;
+using OpenMir2.Data;
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.SubSystem;
 
 namespace GameSrv.Services
 {
     public class FrontEngine : IFrontEngine
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         public readonly object UserCriticalSection;
         public readonly IList<SavePlayerRcd> m_SaveRcdList;
         private readonly IList<GoldChangeInfo> m_ChangeGoldList;

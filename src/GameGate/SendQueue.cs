@@ -1,15 +1,14 @@
 using GameGate.Services;
-using NLog;
 using System;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
+using Serilog;
 
 namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Channel<SessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
@@ -48,7 +47,7 @@ namespace GameGate
                         }
                         catch (Exception e)
                         {
-                            logger.Error(e.StackTrace);
+                            LogService.Error(e.StackTrace);
                         }
                         finally
                         {

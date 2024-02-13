@@ -1,4 +1,4 @@
-namespace SystemModule.RandomSelector
+namespace OpenMir2.RandomSelector
 {
     public class SelectorOption
     {

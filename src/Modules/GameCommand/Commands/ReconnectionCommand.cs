@@ -1,7 +1,8 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 此命令用于改变客户端连接网关的

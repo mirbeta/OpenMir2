@@ -16,7 +16,7 @@ namespace GameGate
 {
     internal class Program
     {
-        private static Logger _logger;
+        private static Logger LogService;
         private static readonly PeriodicTimer _timer;
         private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
@@ -28,13 +28,13 @@ namespace GameGate
 
             var config = new ConfigurationBuilder().Build();
 
-            _logger = LogManager.Setup()
+            LogService = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
 
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
-            _logger.Info(new StringBuilder()
+            LogService.Info(new StringBuilder()
                 .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
                 .Append($"Minimum work threads: {workThreads}, ")
                 .Append($"Minimum completion port threads: {completionPortThreads})").ToString());
@@ -115,7 +115,7 @@ namespace GameGate
 
         private static Task ReLoadConfig()
         {
-            _logger.Info("重新读取配置文件完成...");
+            LogService.Info("重新读取配置文件完成...");
             return Task.CompletedTask;
         }
 

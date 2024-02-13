@@ -1,6 +1,7 @@
-using SystemModule.Enums;
+using OpenMir2.Enums;
+using SystemModule.Maps;
 
-namespace SystemModule
+namespace SystemModule.SubSystem
 {
     public interface IPointManager
     {

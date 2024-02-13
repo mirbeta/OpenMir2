@@ -4,12 +4,18 @@ using M2Server.Items;
 using M2Server.Magic;
 using M2Server.Monster;
 using System.Text.RegularExpressions;
+using OpenMir2;
+using OpenMir2.Common;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Common;
+using SystemModule.Actors;
+using SystemModule.Castles;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.MagicEvent;
-using SystemModule.Packets.ClientPackets;
+using SystemModule.MagicEvent.Events;
+using SystemModule.Maps;
 
 namespace M2Server.Player
 {
@@ -467,7 +473,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
             return result;
         }
@@ -561,7 +567,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
             return result;
         }
@@ -811,7 +817,7 @@ namespace M2Server.Player
             }
             catch
             {
-                M2Share.Logger.Error(sExceptionMsg);
+                LogService.Error(sExceptionMsg);
             }
         }
 
@@ -979,7 +985,7 @@ namespace M2Server.Player
         {
             if (Envir == null)
             {
-                M2Share.Logger.Error("CretInNearXY nil PEnvir");
+                LogService.Error("CretInNearXY nil PEnvir");
                 return false;
             }
             for (int cX = nX - 1; cX <= nX + 1; cX++)
@@ -1518,8 +1524,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(Format("[Exception] PlayObject.DoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, targetX, targetY));
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(Format("[Exception] PlayObject.DoSpell MagID:{0} X:{1} Y:{2}", userMagic.MagIdx, targetX, targetY));
+                LogService.Error(e.Message);
             }
             return result;
         }

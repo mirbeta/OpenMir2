@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Text;
-using SystemModule.NativeList.Abstracts;
-using SystemModule.NativeList.Enums;
-using SystemModule.NativeList.Helpers;
+using OpenMir2.NativeList.Abstracts;
+using OpenMir2.NativeList.Enums;
+using OpenMir2.NativeList.Helpers;
 
-namespace SystemModule.NativeList.Utils
+namespace OpenMir2.NativeList.Utils
 {
     /// <summary>
     /// A range of values with ability to set any type that you want.

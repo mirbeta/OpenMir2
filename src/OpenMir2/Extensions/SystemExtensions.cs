@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Globalization;
 using System.Reflection;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
     /// <summary>
     /// 为System提供扩展。

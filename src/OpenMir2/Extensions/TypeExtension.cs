@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using TouchSocket.Core;
 
-namespace SystemModule.Extensions
+namespace OpenMir2.Extensions
 {
     /// <summary>
     /// TypeExtension

@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("Authally", "", "")]
     internal class AuthallyCommand : GameCommand

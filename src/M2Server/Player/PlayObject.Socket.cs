@@ -1,6 +1,6 @@
-﻿using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+﻿using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 
 namespace M2Server.Player
 {

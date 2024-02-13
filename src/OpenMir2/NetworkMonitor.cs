@@ -1,6 +1,6 @@
 using System.Threading;
 
-namespace SystemModule
+namespace OpenMir2
 {
     /// <summary>
     ///  A monitor for the networking I/O. From COPS V6 Enhanced Edition.

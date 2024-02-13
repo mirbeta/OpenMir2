@@ -1,10 +1,15 @@
 using M2Server.Actor;
 using M2Server.Items;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Consts;
+using SystemModule.Actors;
+using SystemModule.Const;
 using SystemModule.Data;
 using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Player
 {
@@ -209,8 +214,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error("TUserHumah.ClientUserBuyItem wIdent = " + nIdent);
+                LogService.Error(e.Message);
             }
         }
 
@@ -1512,8 +1517,8 @@ namespace M2Server.Player
             }
             catch (Exception e)
             {
-                M2Share.Logger.Error(sExceptionMsg);
-                M2Share.Logger.Error(e.Message);
+                LogService.Error(sExceptionMsg);
+                LogService.Error(e.Message);
             }
         }
 

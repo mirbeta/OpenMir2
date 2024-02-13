@@ -1,4 +1,6 @@
 using MakePlayer.Cliens;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
 using SystemModule.Packets.ClientPackets;
 

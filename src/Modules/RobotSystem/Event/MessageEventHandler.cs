@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using SystemModule.ModuleEvent;
 
-namespace RobotSystem
+namespace RobotSystem.Event
 {
     public class MessageEventHandler : INotificationHandler<UserSelectMessageEvent>
     {

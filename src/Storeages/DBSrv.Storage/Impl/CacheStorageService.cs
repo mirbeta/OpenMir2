@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.Impl
 {

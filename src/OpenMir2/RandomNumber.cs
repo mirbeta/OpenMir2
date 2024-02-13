@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace SystemModule
+namespace OpenMir2
 {
     /// <summary>
     /// 生成随机数类

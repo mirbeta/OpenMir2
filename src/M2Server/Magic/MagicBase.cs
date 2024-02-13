@@ -1,8 +1,9 @@
 using M2Server.Player;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using SystemModule;
-using SystemModule.Data;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
 namespace M2Server.Magic
 {

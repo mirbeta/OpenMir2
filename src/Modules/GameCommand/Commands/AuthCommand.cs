@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 此命令允许或禁止公会联盟

@@ -1,5 +1,6 @@
 ﻿using BotSrv.Player;
 using System;
+using OpenMir2;
 using SystemModule;
 
 namespace BotSrv.Scenes

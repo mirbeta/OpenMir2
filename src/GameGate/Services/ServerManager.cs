@@ -1,12 +1,10 @@
 ﻿using GameGate.Conf;
-using NLog;
 using System;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using SystemModule;
+using OpenMir2;
 
 namespace GameGate.Services
 {
@@ -191,7 +189,6 @@ namespace GameGate.Services
         /// </summary>
         private class ClientMessageWorkThread : IDisposable
         {
-            private readonly Logger _logger = LogManager.GetCurrentClassLogger();
             private readonly ManualResetEvent _resetEvent;
             private string _threadId;
             private readonly CancellationTokenSource _cts;
@@ -209,7 +206,7 @@ namespace GameGate.Services
                 ThreadState = MessageThreadState.Stop;
                 _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
                 _cts.Token.Register(() =>
-                    _logger.Debug($"消息消费线程[{_threadId}]已停止处理.")
+                    LogService.Debug($"消息消费线程[{_threadId}]已停止处理.")
                 );
             }
 
@@ -219,7 +216,7 @@ namespace GameGate.Services
                 {
                     _threadId = Guid.NewGuid().ToString("N");
                     ThreadState = MessageThreadState.Runing;
-                    _logger.Debug($"消息消费线程[{_threadId}]已启动.");
+                    LogService.Debug($"消息消费线程[{_threadId}]已启动.");
                     while (await _messageQueue.WaitToReadAsync(_cts.Token))
                     {
                         _resetEvent.WaitOne();
@@ -228,12 +225,12 @@ namespace GameGate.Services
                             var clientSession = SessionContainer.GetSession(message.ServiceId, message.SessionId);
                             if (clientSession == null)
                             {
-                                _logger.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话不存在");
+                                LogService.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话不存在");
                                 return;
                             }
                             if (clientSession.Session == null)
                             {
-                                _logger.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话已经失效");
+                                LogService.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话已经失效");
                                 return;
                             }
                             try
@@ -242,7 +239,7 @@ namespace GameGate.Services
                             }
                             catch (Exception e)
                             {
-                                _logger.Error(e);
+                                LogService.Error(e.Message);
                             }
                         }
                     }

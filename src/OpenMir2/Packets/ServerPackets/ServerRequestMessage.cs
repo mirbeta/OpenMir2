@@ -1,7 +1,7 @@
-﻿using MemoryPack;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
+using MemoryPack;
 
-namespace SystemModule.Packets.ServerPackets
+namespace OpenMir2.Packets.ServerPackets
 {
     /// <summary>
     /// 请求消息定义

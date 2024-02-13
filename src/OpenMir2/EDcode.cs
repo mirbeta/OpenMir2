@@ -1,7 +1,7 @@
 using System;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule
+namespace OpenMir2
 {
     public static class EDCode
     {

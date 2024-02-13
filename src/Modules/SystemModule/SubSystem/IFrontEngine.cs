@@ -1,6 +1,7 @@
-﻿using SystemModule.Data;
+﻿using OpenMir2.Data;
+using SystemModule.Data;
 
-namespace SystemModule
+namespace SystemModule.SubSystem
 {
     public interface IFrontEngine
     {

@@ -1,6 +1,7 @@
 ﻿using BotSrv.Player;
 using System.Drawing;
 using System.IO;
+using OpenMir2;
 using SystemModule;
 
 namespace BotSrv.Maps

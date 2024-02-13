@@ -1,7 +1,7 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 using SystemModule.Enums;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 此命令允许或禁止夫妻传送

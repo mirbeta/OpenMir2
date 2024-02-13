@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 
-namespace SystemModule
+namespace OpenMir2
 {
     public class ReaderWriterLockWrapper
     {

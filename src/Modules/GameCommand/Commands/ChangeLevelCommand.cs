@@ -1,6 +1,8 @@
-﻿using SystemModule;
+﻿using OpenMir2;
+using SystemModule;
+using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     /// <summary>
     /// 调整自己的等级
@@ -23,7 +25,7 @@ namespace CommandSystem.Commands
             //   M2Share.EventSource.AddEventLog(17, PlayerActor.MapName + "\09" + PlayerActor.CurrX + "\09" + PlayerActor.CurrY+ "\09" + PlayerActor.ChrName + "\09" + PlayerActor.Abil.Level + "\09" + "0" + "\09" + "=(" + nLevel + ")" + "\09" + "0");
             if (SystemShare.Config.ShowMakeItemMsg)
             {
-                SystemShare.Logger.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.Abil.Level));
+                LogService.Warn(string.Format(CommandHelp.GameCommandLevelConsoleMsg, PlayerActor.ChrName, nOLevel, PlayerActor.Abil.Level));
             }
         }
     }

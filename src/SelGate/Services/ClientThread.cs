@@ -2,9 +2,9 @@ using NLog;
 using System;
 using System.Net;
 using System.Threading.Tasks;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 using SelGate.Datas;
-using SystemModule;
-using SystemModule.Packets.ServerPackets;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
 
@@ -57,7 +57,7 @@ namespace SelGate.Services
         /// <summary>
         /// Logger
         /// </summary>
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        
         /// <summary>
         /// 数据缓冲区
         /// </summary>
@@ -122,8 +122,8 @@ namespace SelGate.Services
             KeepAliveTick = HUtil32.GetTickCount();
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
-            _logger.Info($"数据库服务器[{client.RemoteIPHost}]链接成功.", 1);
-            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {client.RemoteIPHost} 成功...");
+            LogService.Info($"数据库服务器[{client.RemoteIPHost}]链接成功.", 1);
+            LogService.Debug($"线程[{Guid.NewGuid():N}]连接 {client.RemoteIPHost} 成功...");
             return Task.CompletedTask;
         }
 
@@ -131,7 +131,7 @@ namespace SelGate.Services
         {
             RestSessionArray();
             GateShare.ServerGateList.Remove(this);
-            _logger.Info($"数据库服务器[{client.GetIPPort()}]断开链接.", 1);
+            LogService.Info($"数据库服务器[{client.GetIPPort()}]断开链接.", 1);
             boGateReady = false;
             isConnected = false;
             CheckServerFail = true;
@@ -173,7 +173,7 @@ namespace SelGate.Services
                     srcOffset++;
                     dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                     nLen -= 1;
-                    _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                    LogService.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                     continue;
                 }
                 var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
@@ -189,7 +189,7 @@ namespace SelGate.Services
                         CheckServerFail = false;
                         boGateReady = true;
                         isConnected = true;
-                        _logger.Debug("DBSrv Heartbeat Response");
+                        LogService.Debug("DBSrv Heartbeat Response");
                         break;
                     case ServerDataType.Leave:
                         _sessionManager.CloseSession(messageData.SocketId);
@@ -253,7 +253,7 @@ namespace SelGate.Services
             var messageData = new ServerDataMessage();
             messageData.Type = ServerDataType.KeepAlive;
             SendSocket(SerializerUtil.Serialize(messageData));
-            _logger.Debug("Send DBSrv Heartbeat.");
+            LogService.Debug("Send DBSrv Heartbeat.");
         }
 
         public void SendBuffer(string sendText)

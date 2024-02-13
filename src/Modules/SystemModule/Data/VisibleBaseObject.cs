@@ -1,6 +1,7 @@
-﻿using SystemModule.Enums;
+﻿using SystemModule.Actors;
+using SystemModule.Enums;
 
-namespace SystemModule
+namespace SystemModule.Data
 {
     /// <summary>
     /// 可见的精灵

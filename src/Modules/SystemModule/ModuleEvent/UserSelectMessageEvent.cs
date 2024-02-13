@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using SystemModule.Actors;
 
 namespace SystemModule.ModuleEvent
 {

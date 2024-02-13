@@ -1,15 +1,14 @@
-using NLog;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using SystemModule.Data;
-using SystemModule.Packets.ClientPackets;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
 
 namespace DBSrv.Storage.MySQL
 {
     public class MarketStoageService : IMarketStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly StorageOption _storageOption;
 
         public MarketStoageService(StorageOption storageOption)
@@ -96,8 +95,8 @@ namespace DBSrv.Storage.MySQL
             catch (Exception ex)
             {
                 context.RollBack();
-                _logger.Error("[Exception] PlayDataStorage.CreateCharacters");
-                _logger.Error(ex.StackTrace);
+                LogService.Error("[Exception] PlayDataStorage.CreateCharacters");
+                LogService.Error(ex.StackTrace);
                 return false;
             }
             return true;

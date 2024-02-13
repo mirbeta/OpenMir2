@@ -1,4 +1,5 @@
 ﻿using BotSrv.Player;
+using OpenMir2;
 using SystemModule;
 
 namespace BotSrv.Objects

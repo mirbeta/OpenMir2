@@ -1,7 +1,7 @@
-﻿using SystemModule.Data;
-using SystemModule.Packets.ClientPackets;
+﻿using OpenMir2.Data;
+using OpenMir2.Packets.ClientPackets;
 
-namespace SystemModule
+namespace SystemModule.SubSystem
 {
     public interface IItemSystem
     {

@@ -1,5 +1,6 @@
 using SystemModule;
 using SystemModule.Data;
+using SystemModule.Maps;
 
 namespace M2Server.Maps.AutoPath
 {

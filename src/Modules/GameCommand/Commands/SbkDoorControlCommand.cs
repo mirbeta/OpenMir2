@@ -1,6 +1,6 @@
-﻿using SystemModule;
+﻿using SystemModule.Actors;
 
-namespace CommandSystem.Commands
+namespace CommandModule.Commands
 {
     [Command("SbkDoorControl", "", 10)]
     public class SbkDoorControlCommand : GameCommand
