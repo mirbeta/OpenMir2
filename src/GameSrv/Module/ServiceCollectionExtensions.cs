@@ -1,8 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Runtime.Loader;
-using NLog;
 
 namespace GameSrv.Module
 {
@@ -12,14 +9,14 @@ namespace GameSrv.Module
 
         public static IServiceCollection AddModules(this IServiceCollection services)
         {
-            var modules = _modulesConfig.GetModules();
+            IEnumerable<ModuleInfo> modules = _modulesConfig.GetModules();
             if (modules == null)
             {
                 return services;
             }
-            foreach (var module in modules)
+            foreach (ModuleInfo module in modules)
             {
-                var modulePath = Path.Combine(AppContext.BaseDirectory, module.Id);
+                string modulePath = Path.Combine(AppContext.BaseDirectory, module.Id);
                 if (!File.Exists(modulePath))
                 {
                     continue;
@@ -45,15 +42,15 @@ namespace GameSrv.Module
         private static void TryLoadModuleAssembly(string moduleFolderPath, ModuleInfo module)
         {
             const string binariesFolderName = "plugins";
-            var modulePath = Path.Combine(AppContext.BaseDirectory, binariesFolderName, module.Id);
+            string modulePath = Path.Combine(AppContext.BaseDirectory, binariesFolderName, module.Id);
 
-            var binariesFolder = new DirectoryInfo(modulePath);
+            DirectoryInfo binariesFolder = new DirectoryInfo(modulePath);
 
             if (Directory.Exists(modulePath))
             {
-                var context = new AssemblyLoadContext(modulePath);
+                AssemblyLoadContext context = new AssemblyLoadContext(modulePath);
                 context.Resolving += ContextResolving;
-                foreach (var file in binariesFolder.GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
+                foreach (FileSystemInfo file in binariesFolder.GetFileSystemInfos("*.dll", SearchOption.AllDirectories))
                 {
                     Assembly assembly;
                     try
@@ -91,19 +88,19 @@ namespace GameSrv.Module
                 }
             }
         }
-        
+
         /// <summary>
         /// 加载依赖项
         /// </summary>
         /// <returns></returns>
         private static Assembly ContextResolving(AssemblyLoadContext context, AssemblyName assemblyName)
         {
-            var expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
+            string expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
             if (File.Exists(expectedPath))
             {
                 try
                 {
-                    using var stream = File.OpenRead(expectedPath);
+                    using FileStream stream = File.OpenRead(expectedPath);
                     return context.LoadFromStream(stream);
                 }
                 catch (Exception ex)

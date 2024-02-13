@@ -1,7 +1,6 @@
 using OpenMir2;
 using OpenMir2.Data;
 using OpenMir2.Packets.ServerPackets;
-using SystemModule;
 
 namespace MarketSystem.Services
 {
@@ -45,7 +44,11 @@ namespace MarketSystem.Services
 
         protected void ReLoad()
         {
-            if (!IsEmpty) RemoveAll();
+            if (!IsEmpty)
+            {
+                RemoveAll();
+            }
+
             Load();
             LogService.Info("重载拍卖行物品列表...");
         }
@@ -87,7 +90,7 @@ namespace MarketSystem.Services
 
         public MarketItem GetItem(int index, ref bool selected)
         {
-            var marketItem = GetItem(index);
+            MarketItem marketItem = GetItem(index);
             selected = false;
             if (marketItem != null)
             {
@@ -107,11 +110,11 @@ namespace MarketSystem.Services
 
         public bool IsExistIndex(int index, ref int money)
         {
-            var result = false;
+            bool result = false;
             money = 0;
             for (int i = 0; i < Items.Count; i++)
             {
-                var pInfo = Items[i];
+                MarketItem pInfo = Items[i];
                 if (pInfo != null)
                 {
                     if (pInfo.Index == index)
@@ -127,14 +130,14 @@ namespace MarketSystem.Services
 
         public bool IsMyItem(int index, string charName)
         {
-            var result = false;
+            bool result = false;
             if (string.IsNullOrEmpty(charName))
             {
                 return false;
             }
             for (int i = 0; i < Items.Count; i++)
             {
-                var pInfo = Items[i];
+                MarketItem pInfo = Items[i];
                 if (pInfo != null)
                 {
                     if (pInfo.Index == index && string.Compare(pInfo.SellWho, charName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -149,7 +152,7 @@ namespace MarketSystem.Services
 
         public bool Select(int index)
         {
-            var result = false;
+            bool result = false;
             if (CheckIndex(index))
             {
                 FSelectedIndex = index;
@@ -197,8 +200,8 @@ namespace MarketSystem.Services
         private void OnMsgWriteData(MarketItem marketItem)
         {
             //新增拍卖行数据实时同步到DBSrv,避免数据不一致的情况,并由DBSrv定时广播给所有GameSrv
-            var request = new ServerRequestMessage(Messages.DB_SAVEMARKET, 0, 0, 0, 0);
-            var requestData = new MarketSaveDataItem() { Item = marketItem };
+            ServerRequestMessage request = new ServerRequestMessage(Messages.DB_SAVEMARKET, 0, 0, 0, 0);
+            MarketSaveDataItem requestData = new MarketSaveDataItem() { Item = marketItem };
             // M2Share.MarketService.SendRequest(1, request, requestData);
             LogService.Info("发送拍卖行数据同步消息，物品名称:{0} 物品编号:{1} 售卖人:{2}", marketItem.SellItem.Item.Name, marketItem.SellItem.MakeIndex, marketItem.SellWho);
         }

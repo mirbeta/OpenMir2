@@ -144,9 +144,9 @@ namespace ScriptSystem.Processings
 
         internal void GetGrobalVarStr(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            var sIdx = sVariable.Substring(1, sVariable.Length - 1);
-            var sID = HUtil32.GetValidStr3(sIdx, ref sIdx, "/");
-            var n18 = SystemShare.GetValNameNo(sID);
+            string sIdx = sVariable[1..];
+            string sID = HUtil32.GetValidStr3(sIdx, ref sIdx, "/");
+            int n18 = SystemShare.GetValNameNo(sID);
             if (n18 >= 0)
             {
                 if (HUtil32.RangeInDefined(n18, 0, 499))
@@ -337,7 +337,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetDealGoldPlay(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            var PoseHuman = (IPlayerActor)playerActor.GetPoseCreate();
+            IPlayerActor PoseHuman = (IPlayerActor)playerActor.GetPoseCreate();
             if ((PoseHuman != null) && (PoseHuman.GetPoseCreate() == playerActor) && (PoseHuman.Race == ActorRace.Play))
             {
                 sMsg = CombineStr(sMsg, $"<{sVariable}>", PoseHuman.ChrName);
@@ -379,7 +379,7 @@ namespace ScriptSystem.Processings
         internal void GetHighLevelInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highLevelPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            IPlayerActor highLevelPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
             if (highLevelPlay != null)
             {
                 sText = highLevelPlay.GetMyInfo();
@@ -400,7 +400,7 @@ namespace ScriptSystem.Processings
         internal void GetHighPkInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highPvpPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            IPlayerActor highPvpPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
             if (highPvpPlay != null)
             {
                 sText = highPvpPlay.GetMyInfo();
@@ -421,7 +421,7 @@ namespace ScriptSystem.Processings
         internal void GetHighDcInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highDcPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            IPlayerActor highDcPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
             if (highDcPlay != null)
             {
                 sText = highDcPlay.GetMyInfo();
@@ -442,7 +442,7 @@ namespace ScriptSystem.Processings
         internal void GetHighMcInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highMcPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            IPlayerActor highMcPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
             if (highMcPlay != null)
             {
                 sText = highMcPlay.GetMyInfo();
@@ -463,7 +463,7 @@ namespace ScriptSystem.Processings
         internal void GetHighScInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highScPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            IPlayerActor highScPlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
             if (highScPlay != null)
             {
                 sText = highScPlay.GetMyInfo();
@@ -484,7 +484,7 @@ namespace ScriptSystem.Processings
         internal void GetHighOlineInfo(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
             string sText = string.Empty;
-            var highOnlinePlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
+            IPlayerActor highOnlinePlay = (IPlayerActor)SystemShare.ActorMgr.Get(SystemShare.HighLevelHuman);
             if (highOnlinePlay != null)
             {
                 sText = highOnlinePlay.GetMyInfo();

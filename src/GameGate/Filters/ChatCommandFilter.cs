@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using OpenMir2.Common;
-
-namespace GameGate.Filters
+﻿namespace GameGate.Filters
 {
     public class ChatCommandFilter
     {
@@ -26,9 +22,9 @@ namespace GameGate.Filters
             LoadChatCmdFilterList();
         }
 
-        void LoadChatCmdFilterList()
+        private void LoadChatCmdFilterList()
         {
-            var loadList = new StringList();
+            StringList loadList = new StringList();
             if (!File.Exists(ChatCommandFile))
             {
                 loadList.SaveToFile(ChatCommandFile);

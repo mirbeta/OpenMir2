@@ -19,21 +19,21 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sSkillName = @params.Length > 1 ? @params[1] : "";
-            var nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sSkillName = @params.Length > 1 ? @params[1] : "";
+            int nLevel = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
             if (!string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?' || string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sSkillName) || nLevel < 0 || !(nLevel >= 0 && nLevel <= 3))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var magic = SystemShare.WorldEngine.FindMagic(sSkillName);
+            OpenMir2.Data.MagicInfo magic = SystemShare.WorldEngine.FindMagic(sSkillName);
             if (magic == null)
             {
 
@@ -46,7 +46,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg($"{sSkillName} 技能已修炼过了!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var userMagic = new UserMagic();
+            UserMagic userMagic = new UserMagic();
             userMagic.Magic = magic;
             userMagic.MagIdx = magic.MagicId;
             userMagic.Level = (byte)nLevel;

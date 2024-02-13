@@ -6,7 +6,7 @@ namespace MakePlayer.Scenes
 {
     public class ScreenManager
     {
-        
+
         private readonly PlayClient client;
         public SceneType Scenetype;
         public SceneBase CurrentScene = null;

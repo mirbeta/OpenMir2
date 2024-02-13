@@ -9,7 +9,7 @@ namespace LoginSrv
         private static async Task Main(string[] args)
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var serviceRunner = new AppServer();
+            AppServer serviceRunner = new AppServer();
             await serviceRunner.StartAsync(CancellationToken.None);
         }
     }

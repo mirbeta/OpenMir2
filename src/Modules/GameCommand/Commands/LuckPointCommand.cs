@@ -18,15 +18,15 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sCtr = @params.Length > 1 ? @params[1] : "";
-            var sPoint = @params.Length > 2 ? @params[2] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sCtr = @params.Length > 1 ? @params[1] : "";
+            string sPoint = @params.Length > 2 ? @params[2] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[0] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
@@ -37,8 +37,8 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandLuckPointMsg, sHumanName, mIPlayerActor.BodyLuckLevel, mIPlayerActor.BodyLuck, mIPlayerActor.Luck), MsgColor.Green, MsgType.Hint);
                 return;
             }
-            var nPoint = (byte)HUtil32.StrToInt(sPoint, 0);
-            var cMethod = sCtr[0];
+            byte nPoint = (byte)HUtil32.StrToInt(sPoint, 0);
+            char cMethod = sCtr[0];
             switch (cMethod)
             {
                 case '=':

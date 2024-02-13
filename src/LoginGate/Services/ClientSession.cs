@@ -36,7 +36,7 @@ public class ClientSession
     {
         if (userData.MsgLen >= 5 && Config.DefenceCCPacket)
         {
-            var sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
+            string sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
             if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
             {
                 //if (g_pLogMgr.CheckLevel(6))
@@ -49,23 +49,23 @@ public class ClientSession
             }
         }
 
-        var tempBuff = userData.Body[2..^1]; //跳过#....! 只保留消息内容
-        var nDeCodeLen = 0;
-        var packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-        var sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
+        byte[] tempBuff = userData.Body[2..^1]; //跳过#....! 只保留消息内容
+        int nDeCodeLen = 0;
+        Span<byte> packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+        string sReviceMsg = HUtil32.GetString(userData.Body, 0, userData.Body.Length);
         if (!string.IsNullOrEmpty(sReviceMsg))
         {
-            var nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
+            int nPos = sReviceMsg.IndexOf("*", StringComparison.OrdinalIgnoreCase);
             if (nPos > 0)
             {
-                var s10 = sReviceMsg[..(nPos - 1)];
-                var s1C = sReviceMsg.Substring(nPos, sReviceMsg.Length - nPos);
+                string s10 = sReviceMsg[..(nPos - 1)];
+                string s1C = sReviceMsg[nPos..];
                 sReviceMsg = s10 + s1C;
             }
 
             if (!string.IsNullOrEmpty(sReviceMsg))
             {
-                var accountPacket = new ServerDataMessage();
+                ServerDataMessage accountPacket = new ServerDataMessage();
                 accountPacket.Data = userData.Body;
                 accountPacket.DataLen = (short)userData.Body.Length;
                 accountPacket.Type = ServerDataType.Data;
@@ -166,9 +166,13 @@ public class ClientSession
 
     private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg = "")
     {
-        var sendBuf = new byte[1024];
-        if (_lastLoginSvr == null || !_lastLoginSvr.IsConnected) return;
-        var cmd = new CommandMessage();
+        byte[] sendBuf = new byte[1024];
+        if (_lastLoginSvr == null || !_lastLoginSvr.IsConnected)
+        {
+            return;
+        }
+
+        CommandMessage cmd = new CommandMessage();
         cmd.Recog = nRecog;
         cmd.Ident = wIdent;
         cmd.Param = nParam;
@@ -179,7 +183,7 @@ public class ClientSession
         int iLen;
         if (!string.IsNullOrEmpty(sMsg))
         {
-            var sBuff = HUtil32.GetBytes(sMsg);
+            byte[] sBuff = HUtil32.GetBytes(sMsg);
             tempBuf = new byte[CommandMessage.Size + sBuff.Length];
             Array.Copy(sBuff, 0, tempBuf, 13, sBuff.Length);
             iLen = EncryptUtil.Encode(tempBuf, CommandMessage.Size + sMsg.Length, sendBuf);
@@ -199,8 +203,8 @@ public class ClientSession
     /// </summary>
     public void UserEnter()
     {
-        var body = HUtil32.GetBytes($"{_session.ClientIP}/{_session.ClientIP}");
-        var accountPacket = new ServerDataMessage();
+        byte[] body = HUtil32.GetBytes($"{_session.ClientIP}/{_session.ClientIP}");
+        ServerDataMessage accountPacket = new ServerDataMessage();
         accountPacket.Data = body;
         accountPacket.DataLen = (byte)body.Length;
         accountPacket.Type = ServerDataType.Enter;
@@ -213,8 +217,12 @@ public class ClientSession
     /// </summary>
     public void UserLeave()
     {
-        if (Session == null) return;
-        var accountPacket = new ServerDataMessage();
+        if (Session == null)
+        {
+            return;
+        }
+
+        ServerDataMessage accountPacket = new ServerDataMessage();
         accountPacket.Data = Array.Empty<byte>();
         accountPacket.DataLen = 0;
         accountPacket.Type = ServerDataType.Leave;

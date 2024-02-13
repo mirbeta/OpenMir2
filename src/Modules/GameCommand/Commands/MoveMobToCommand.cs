@@ -18,19 +18,19 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMonName = @params[0];
-            var oleMap = @params[1];
-            var newMap = @params[2];
-            var nX = (short)(@params[3] == null ? 0 : HUtil32.StrToInt(@params[3], 0));
-            var nY = (short)(@params[4] == null ? 0 : HUtil32.StrToInt(@params[4], 0));
-            var x = (short)(@params[5] == null ? 0 : HUtil32.StrToInt(@params[5], 0));
-            var y = (short)(@params[6] == null ? 0 : HUtil32.StrToInt(@params[6], 0));
+            string sMonName = @params[0];
+            string oleMap = @params[1];
+            string newMap = @params[2];
+            short nX = (short)(@params[3] == null ? 0 : HUtil32.StrToInt(@params[3], 0));
+            short nY = (short)(@params[4] == null ? 0 : HUtil32.StrToInt(@params[4], 0));
+            short x = (short)(@params[5] == null ? 0 : HUtil32.StrToInt(@params[5], 0));
+            short y = (short)(@params[6] == null ? 0 : HUtil32.StrToInt(@params[6], 0));
             if (string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(oleMap) || string.IsNullOrEmpty(newMap) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boMoveAll = sMonName == "ALL";
+            bool boMoveAll = sMonName == "ALL";
             if (nX < 0)
             {
                 nX = 0;
@@ -47,8 +47,8 @@ namespace CommandModule.Commands
             {
                 y = 0;
             }
-            var srcEnvir = SystemShare.MapMgr.FindMap(oleMap);// 原地图
-            var denEnvir = SystemShare.MapMgr.FindMap(newMap);// 新地图
+            SystemModule.Maps.IEnvirnoment srcEnvir = SystemShare.MapMgr.FindMap(oleMap);// 原地图
+            SystemModule.Maps.IEnvirnoment denEnvir = SystemShare.MapMgr.FindMap(newMap);// 新地图
             if (srcEnvir == null || denEnvir == null)
             {
                 return;

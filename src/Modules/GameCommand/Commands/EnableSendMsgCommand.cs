@@ -17,13 +17,13 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = SystemShare.DisableSendMsgList.Count - 1; i >= 0; i--)
+            for (int i = SystemShare.DisableSendMsgList.Count - 1; i >= 0; i--)
             {
                 if (SystemShare.DisableSendMsgList.Count <= 0)
                 {

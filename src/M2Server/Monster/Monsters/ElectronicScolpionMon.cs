@@ -1,5 +1,4 @@
 ﻿using OpenMir2;
-using SystemModule;
 
 namespace M2Server.Monster.Monsters
 {
@@ -16,8 +15,8 @@ namespace M2Server.Monster.Monsters
         private void LightingAttack(byte nDir)
         {
             Dir = nDir;
-            var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
-            var nDamage = TargetCret.GetMagStruckDamage(this, nPower);
+            int nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+            int nDamage = TargetCret.GetMagStruckDamage(this, nPower);
             if (nDamage > 0)
             {
                 int btGetBackHp = HUtil32.LoByte(WAbil.MP);

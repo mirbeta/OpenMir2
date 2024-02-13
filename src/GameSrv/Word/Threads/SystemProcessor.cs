@@ -1,14 +1,10 @@
-using M2Server;
-using NLog;
-using OpenMir2;
 using PlanesSystem;
-using SystemModule;
 
 namespace GameSrv.Word.Threads
 {
     public class SystemProcessor : TimerScheduledService
     {
-        
+
         private int RunTimeTick;
         private int ShowOnlineTick { get; set; }
         private int SendOnlineHumTime { get; set; }

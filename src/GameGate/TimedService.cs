@@ -1,9 +1,4 @@
 ﻿using GameGate.Services;
-using Microsoft.Extensions.Hosting;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
-using OpenMir2;
 
 namespace GameGate
 {
@@ -29,7 +24,7 @@ namespace GameGate
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var startTick = HUtil32.GetTickCount();
+            int startTick = HUtil32.GetTickCount();
             ProcessDelayTick = startTick;
             ProcessDelayCloseTick = startTick;
             ProcessClearSessionTick = startTick;
@@ -38,7 +33,7 @@ namespace GameGate
             ShowMonitorTick = startTick;
             while (await _periodicTimer.WaitForNextTickAsync(stoppingToken))
             {
-                var currentTick = HUtil32.GetTickCount();
+                int currentTick = HUtil32.GetTickCount();
                 ProcessDelayMsg(currentTick);
                 ClearIdleSession(currentTick);
                 KeepAlive(currentTick);
@@ -52,12 +47,12 @@ namespace GameGate
             if (currentTick - ShowMonitorTick > 10000)
             {
                 ShowMonitorTick = HUtil32.GetTickCount();
-                var serverList = ServerManager.GetServerList();
+                ServerService[] serverList = ServerManager.GetServerList();
                 if (serverList == null)
                 {
                     return;
                 }
-                for (var i = 0; i < serverList.Length; i++)
+                for (int i = 0; i < serverList.Length; i++)
                 {
                     if (serverList[i] == null)
                     {
@@ -76,12 +71,12 @@ namespace GameGate
             if (currentTick - CheckServerConnectTick > 10000)
             {
                 CheckServerConnectTick = HUtil32.GetTickCount();
-                var clientList = ClientManager.GetClients();
+                ClientThread[] clientList = ClientManager.GetClients();
                 if (clientList == null)
                 {
                     return;
                 }
-                for (var i = 0; i < clientList.Length; i++)
+                for (int i = 0; i < clientList.Length; i++)
                 {
                     if (clientList[i] == null)
                     {
@@ -100,21 +95,21 @@ namespace GameGate
             if (currentTick - ProcessDelayTick > 200)
             {
                 ProcessDelayTick = currentTick;
-                var sessionList = SessionContainer.GetSessions();
+                ClientSession[][] sessionList = SessionContainer.GetSessions();
                 if (sessionList == null)
                 {
                     return;
                 }
-                for (var i = 0; i < sessionList.Length; i++)
+                for (int i = 0; i < sessionList.Length; i++)
                 {
-                    var serverSession = sessionList[i];
+                    ClientSession[] serverSession = sessionList[i];
                     if (serverSession == null)
                     {
                         continue;
                     }
                     for (int j = 0; j < serverSession.Length; j++)
                     {
-                        var clientSession = serverSession[j];
+                        ClientSession clientSession = serverSession[j];
                         if (clientSession == null)
                         {
                             continue;
@@ -134,12 +129,12 @@ namespace GameGate
             if (currentTick - ProcessDelayCloseTick > 4000)
             {
                 ProcessDelayCloseTick = HUtil32.GetTickCount();
-                var serverList = ServerManager.GetServerList();
+                ServerService[] serverList = ServerManager.GetServerList();
                 if (serverList == null)
                 {
                     return;
                 }
-                for (var i = 0; i < serverList.Length; i++)
+                for (int i = 0; i < serverList.Length; i++)
                 {
                     if (serverList[i] == null)
                     {
@@ -158,12 +153,12 @@ namespace GameGate
             if (currentTick - ProcessClearSessionTick > 120000)
             {
                 ProcessClearSessionTick = HUtil32.GetTickCount();
-                var clientList = ClientManager.GetClients();
+                ClientThread[] clientList = ClientManager.GetClients();
                 if (clientList == null)
                 {
                     return;
                 }
-                for (var i = 0; i < clientList.Length; i++)
+                for (int i = 0; i < clientList.Length; i++)
                 {
                     if (clientList[i] == null)
                     {

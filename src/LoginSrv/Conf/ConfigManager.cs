@@ -1,8 +1,8 @@
+using OpenMir2;
+using OpenMir2.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using OpenMir2;
-using OpenMir2.Common;
 
 namespace LoginSrv.Conf
 {
@@ -74,7 +74,7 @@ namespace LoginSrv.Conf
         private int LoadConfigInteger(string sSection, string sIdent, int nDefault)
         {
             int result;
-            var nLoadInteger = ReadWriteInteger(sSection, sIdent, -1);
+            int nLoadInteger = ReadWriteInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteInteger(sSection, sIdent, nDefault);
@@ -90,7 +90,7 @@ namespace LoginSrv.Conf
         private bool LoadConfigBoolean(string sSection, string sIdent, bool boDefault)
         {
             bool result;
-            var nLoadInteger = ReadWriteInteger(sSection, sIdent, -1);
+            int nLoadInteger = ReadWriteInteger(sSection, sIdent, -1);
             if (nLoadInteger < 0)
             {
                 WriteBool(sSection, sIdent, boDefault);
@@ -120,7 +120,7 @@ namespace LoginSrv.Conf
             {
                 LoadList.LoadFromFile(sFileName);
                 nRouteIdx = 0;
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     sLineText = LoadList[i];
                     if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
@@ -149,7 +149,7 @@ namespace LoginSrv.Conf
                                 {
                                     if (sGate[0] == '*')
                                     {
-                                        sGate = sGate.Substring(1, sGate.Length - 1);
+                                        sGate = sGate[1..];
                                         Config.GateRoute[nRouteIdx].Gate[nSelGateIdx].boEnable = false;
                                     }
                                     else
@@ -176,10 +176,10 @@ namespace LoginSrv.Conf
         private void GenServerNameList(Config Config)
         {
             Config.ServerNameList.Clear();
-            for (var i = 0; i < Config.RouteCount; i++)
+            for (int i = 0; i < Config.RouteCount; i++)
             {
                 bool boD = true;
-                for (var j = 0; j < Config.ServerNameList.Count; j++)
+                for (int j = 0; j < Config.ServerNameList.Count; j++)
                 {
                     if (Config.ServerNameList[j] == Config.GateRoute[i].ServerName)
                     {

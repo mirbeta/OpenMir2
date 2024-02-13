@@ -17,14 +17,14 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sDearName = @params.Length > 1 ? @params[1] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sDearName = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sDearName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 if (string.Compare(sDearName, "无", StringComparison.OrdinalIgnoreCase) == 0)

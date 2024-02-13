@@ -68,15 +68,15 @@ namespace OpenMir2.Otp
         /// <returns>computed totp code and code ttl</returns>
         public virtual (string Code, int Ttl) ComputeWithTtl(byte[] securityToken)
         {
-            var currentStep = GetCurrentTimeStepNumber();
-            var ttl = Ttl(currentStep);
+            long currentStep = GetCurrentTimeStepNumber();
+            int ttl = Ttl(currentStep);
             if (ttl < 1)
             {
                 //going to be expired
                 currentStep++;
                 ttl = TimeStepSeconds;
             }
-            var totp = Compute(securityToken, currentStep);
+            string totp = Compute(securityToken, currentStep);
             return (totp, ttl);
         }
 
@@ -99,18 +99,22 @@ namespace OpenMir2.Otp
         public virtual bool Verify(byte[] securityToken, string code, TimeSpan? timeToleration = null)
         {
             if (string.IsNullOrWhiteSpace(code))
+            {
                 return false;
+            }
 
             if (code.Length != _codeSize)
+            {
                 return false;
+            }
 
-            var step = GetCurrentTimeStepNumber();
-            var futureStep = timeToleration is { TotalSeconds: > TimeStepSeconds }
+            long step = GetCurrentTimeStepNumber();
+            int futureStep = timeToleration is { TotalSeconds: > TimeStepSeconds }
                 ? Math.Min((int)(timeToleration.Value.TotalSeconds / TimeStepSeconds), MaxTimeSteps)
                 : 1;
-            for (var i = 0; i < futureStep; i++)
+            for (int i = 0; i < futureStep; i++)
             {
-                var totp = Compute(securityToken, step - i);
+                string totp = Compute(securityToken, step - i);
                 if (totp == code)
                 {
                     return true;
@@ -127,18 +131,18 @@ namespace OpenMir2.Otp
                 OtpHashAlgorithm.SHA512 => new HMACSHA512(securityToken),
                 _ => new HMACSHA1(securityToken)
             };
-            var stepBytes = BitConverter.GetBytes(counter);
+            byte[] stepBytes = BitConverter.GetBytes(counter);
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(stepBytes); // need BigEndian
             }
             // See https://tools.ietf.org/html/rfc4226
-            var hashResult = hmac.ComputeHash(stepBytes);
+            byte[] hashResult = hmac.ComputeHash(stepBytes);
 
-            var offset = hashResult[^1] & 0xf;
-            var p = $"{hashResult[offset]:X2}{hashResult[offset + 1]:X2}{hashResult[offset + 2]:X2}{hashResult[offset + 3]:X2}";
-            var num = Convert.ToInt64(p, 16) & 0x7FFFFFFF;
-            var code = (num % _base).ToString("");
+            int offset = hashResult[^1] & 0xf;
+            string p = $"{hashResult[offset]:X2}{hashResult[offset + 1]:X2}{hashResult[offset + 2]:X2}{hashResult[offset + 3]:X2}";
+            long num = Convert.ToInt64(p, 16) & 0x7FFFFFFF;
+            string code = (num % _base).ToString("");
             return code.PadLeft(_codeSize, '0');
         }
 

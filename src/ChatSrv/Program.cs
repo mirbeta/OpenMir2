@@ -26,14 +26,14 @@ namespace GameGate
             GCSettings.LatencyMode = GCLatencyMode.SustainedLowLatency;
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
-            var config = new ConfigurationBuilder().Build();
+            IConfigurationRoot config = new ConfigurationBuilder().Build();
 
             LogService = LogManager.Setup()
                 .SetupExtensions(ext => ext.RegisterConfigSettings(config))
                 .GetCurrentClassLogger();
 
             ThreadPool.SetMaxThreads(200, 200);
-            ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
+            ThreadPool.GetMinThreads(out int workThreads, out int completionPortThreads);
             LogService.Info(new StringBuilder()
                 .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
                 .Append($"Minimum work threads: {workThreads}, ")
@@ -41,7 +41,7 @@ namespace GameGate
 
             PrintUsage();
 
-            var builder = new HostBuilder()
+            IHostBuilder builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddHostedService<AppService>();
@@ -81,7 +81,7 @@ namespace GameGate
                     return;
                 }
 
-                var firstTwoCharacters = input[..2];
+                string firstTwoCharacters = input[..2];
 
                 if (firstTwoCharacters switch
                 {
@@ -182,31 +182,31 @@ namespace GameGate
         {
             AnsiConsole.WriteLine();
 
-            var table = new Table()
+            Table table = new Table()
             {
                 Border = TableBorder.None,
                 Expand = true,
             }.HideHeaders();
             table.AddColumn(new TableColumn("One"));
 
-            var header = new FigletText("OpenMir2")
+            FigletText header = new FigletText("OpenMir2")
             {
                 Color = Color.Fuchsia
             };
-            var header2 = new FigletText("Chat Server")
+            FigletText header2 = new FigletText("Chat Server")
             {
                 Color = Color.Aqua
             };
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
             sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
             sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            var markup = new Markup(sb.ToString());
+            Markup markup = new Markup(sb.ToString());
 
             table.AddColumn(new TableColumn("Two"));
 
-            var rightTable = new Table()
+            Table rightTable = new Table()
                 .HideHeaders()
                 .Border(TableBorder.None)
                 .AddColumn(new TableColumn("Content"));

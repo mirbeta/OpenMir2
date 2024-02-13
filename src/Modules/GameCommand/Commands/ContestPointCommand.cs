@@ -17,14 +17,14 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sGuildName = @params.Length > 0 ? @params[0] : "";
+            string sGuildName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sGuildName) || !string.IsNullOrEmpty(sGuildName) && sGuildName[0] == '?')
             {
                 PlayerActor.SysMsg("查看行会战的得分数。", MsgColor.Red, MsgType.Hint);
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = SystemShare.GuildMgr.FindGuild(sGuildName);
+            SystemModule.Castles.IGuild guild = SystemShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
                 // PlayerActor.SysMsg($"{sGuildName} 的得分为: {guild.ContestPoint}", MsgColor.Green, MsgType.Hint);

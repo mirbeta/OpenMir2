@@ -17,12 +17,12 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumName = @params.Length > 0 ? @params[0] : "";
+            string sHumName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumName))
             {
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null)
             {
                 mIPlayerActor.BoKickFlag = true;

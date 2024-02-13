@@ -18,7 +18,7 @@ namespace M2Server.Items
 
         ~CustomItemSystem()
         {
-            for (var i = 0; i < ItemNameList.Count; i++)
+            for (int i = 0; i < ItemNameList.Count; i++)
             {
                 ItemNameList[i] = null;
             }
@@ -27,11 +27,15 @@ namespace M2Server.Items
 
         public string GetCustomItemName(int nMakeIndex, int nItemIndex)
         {
-            var result = string.Empty;
-            for (var i = ItemNameList.Count - 1; i >= 0; i--)
+            string result = string.Empty;
+            for (int i = ItemNameList.Count - 1; i >= 0; i--)
             {
-                var itemName = ItemNameList[i];
-                if (itemName.nMakeIndex != nMakeIndex || itemName.nItemIndex != nItemIndex) continue;
+                ItemName itemName = ItemNameList[i];
+                if (itemName.nMakeIndex != nMakeIndex || itemName.nItemIndex != nItemIndex)
+                {
+                    continue;
+                }
+
                 result = itemName.sItemName;
                 break;
             }
@@ -41,7 +45,7 @@ namespace M2Server.Items
         public bool AddCustomItemName(int nMakeIndex, int nItemIndex, string sItemName)
         {
             ItemName itemName;
-            for (var i = ItemNameList.Count - 1; i >= 0; i--)
+            for (int i = ItemNameList.Count - 1; i >= 0; i--)
             {
                 itemName = ItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
@@ -59,9 +63,9 @@ namespace M2Server.Items
 
         public void DelCustomItemName(int nMakeIndex, int nItemIndex)
         {
-            for (var i = 0; i < ItemNameList.Count; i++)
+            for (int i = 0; i < ItemNameList.Count; i++)
             {
-                var itemName = ItemNameList[i];
+                ItemName itemName = ItemNameList[i];
                 if (itemName.nMakeIndex == nMakeIndex && itemName.nItemIndex == nItemIndex)
                 {
                     ItemNameList.RemoveAt(i);
@@ -75,25 +79,29 @@ namespace M2Server.Items
         /// </summary>
         public void LoadCustomItemName()
         {
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sItemName = string.Empty;
-            var sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
-            using var loadList = new StringList();
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sItemName = string.Empty;
+            string sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
+            using StringList loadList = new StringList();
             if (File.Exists(sFileName))
             {
                 ItemNameList.Clear();
                 loadList.LoadFromFile(sFileName);
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
-                    var sLineText = loadList[i].Trim();
+                    string sLineText = loadList[i].Trim();
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, new[] { ' ', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, new[] { ' ', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '\t' });
-                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
-                    if (nMakeIndex < 0 || nItemIndex < 0) continue;
-                    var itemName = new ItemName();
+                    int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    if (nMakeIndex < 0 || nItemIndex < 0)
+                    {
+                        continue;
+                    }
+
+                    ItemName itemName = new ItemName();
                     itemName.nMakeIndex = nMakeIndex;
                     itemName.nItemIndex = nItemIndex;
                     itemName.sItemName = sItemName;
@@ -113,7 +121,7 @@ namespace M2Server.Items
         /// <returns></returns>
         public static string GetItemName(UserItem userItem)
         {
-            var result = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
+            string result = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
             if (userItem.Desc[13] == 1)
             {
                 result = M2Share.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
@@ -126,11 +134,11 @@ namespace M2Server.Items
         /// </summary>
         public void SaveCustomItemName()
         {
-            var sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
-            var saveList = new StringList();
-            for (var i = ItemNameList.Count - 1; i >= 0; i--)
+            string sFileName = M2Share.GetEnvirFilePath("ItemNameList.txt");
+            StringList saveList = new StringList();
+            for (int i = ItemNameList.Count - 1; i >= 0; i--)
             {
-                var itemName = ItemNameList[i];
+                ItemName itemName = ItemNameList[i];
                 saveList.Add(itemName.nMakeIndex + "\t" + itemName.nItemIndex + "\t" + itemName.sItemName);
             }
             saveList.SaveToFile(sFileName);
@@ -143,7 +151,7 @@ namespace M2Server.Items
         /// <returns></returns>
         public static int GetItemAddValuePointColor(UserItem UserItem)
         {
-            var result = 0;
+            int result = 0;
             // if (Settings.Config.boRandomnameColor)
             // {
             //     for (var I = 0; I <= 7; I ++ )

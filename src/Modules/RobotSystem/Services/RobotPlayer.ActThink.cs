@@ -1,7 +1,7 @@
-using System.Collections;
 using OpenMir2;
 using OpenMir2.Data;
 using OpenMir2.Enums;
+using System.Collections;
 using SystemModule;
 using SystemModule.Const;
 
@@ -11,10 +11,10 @@ namespace RobotSystem.Services
     {
         private MapWalkXY FindGoodPathA(MapWalkXY[] WalkStep, int nRange, int nType)
         {
-            var n10 = int.MaxValue;
+            int n10 = int.MaxValue;
             MapWalkXY result = default;
             MapWalkXY MapWalkXY = default;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0 && Math.Abs(WalkStep[i].X - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].Y - TargetCret.CurrY) >= nRange)
                 {
@@ -27,11 +27,11 @@ namespace RobotSystem.Services
             }
             if (MapWalkXY.WalkStep > 0 && Master != null)
             {
-                var nMonCount = MapWalkXY.MonCount;
-                var nMastrRange = MapWalkXY.MastrRange;
+                int nMonCount = MapWalkXY.MonCount;
+                int nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
-                var MapWalkXYA = MapWalkXY;
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                MapWalkXY MapWalkXYA = MapWalkXY;
+                for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount && Math.Abs(WalkStep[i].X - TargetCret.CurrX) >= nRange && Math.Abs(WalkStep[i].Y - TargetCret.CurrY) >= nRange)
                     {
@@ -58,8 +58,8 @@ namespace RobotSystem.Services
         {
             MapWalkXY result = default;
             MapWalkXY MapWalkXY = default;
-            var n10 = int.MaxValue;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            int n10 = int.MaxValue;
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0)
                 {
@@ -72,11 +72,11 @@ namespace RobotSystem.Services
             }
             if (MapWalkXY.WalkStep > 0 && Master != null)
             {
-                var nMonCount = MapWalkXY.MonCount;
-                var nMastrRange = MapWalkXY.MastrRange;
+                int nMonCount = MapWalkXY.MonCount;
+                int nMastrRange = MapWalkXY.MastrRange;
                 n10 = int.MaxValue;
-                var MapWalkXYA = MapWalkXY;
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                MapWalkXY MapWalkXYA = MapWalkXY;
+                for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount)
                     {
@@ -101,14 +101,14 @@ namespace RobotSystem.Services
 
         private MapWalkXY FindMinRange(MapWalkXY[] WalkStep)
         {
-            var n10 = int.MaxValue;
+            int n10 = int.MaxValue;
             MapWalkXY result = default;
             MapWalkXY MapWalkXY = default;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (WalkStep[i].WalkStep > 0)
                 {
-                    var n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
+                    int n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
                     if (n1C < n10)
                     {
                         n10 = n1C;
@@ -118,13 +118,13 @@ namespace RobotSystem.Services
             }
             if (MapWalkXY.WalkStep > 0)
             {
-                var nMonCount = MapWalkXY.MonCount;
-                var MapWalkXYA = MapWalkXY;
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                int nMonCount = MapWalkXY.MonCount;
+                MapWalkXY MapWalkXYA = MapWalkXY;
+                for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (WalkStep[i].WalkStep > 0 && WalkStep[i].MonCount <= nMonCount)
                     {
-                        var n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
+                        int n1C = Math.Abs(WalkStep[i].X - TargetCret.CurrX) + Math.Abs(WalkStep[i].Y - TargetCret.CurrY);
                         if (n1C <= n10)
                         {
                             n10 = n1C;
@@ -169,11 +169,11 @@ namespace RobotSystem.Services
             {
                 walkStep = new MapWalkXY[8];
             }
-            var result = false;
+            bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -202,8 +202,8 @@ namespace RobotSystem.Services
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            var result = false;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            bool result = false;
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, nRange, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -229,11 +229,11 @@ namespace RobotSystem.Services
             {
                 walkStep = new MapWalkXY[8];
             }
-            var result = false;
+            bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(nTargetX, nTargetY, i, nRange, ref nCurrX, ref nCurrY) && Envir.CanWalkEx(nCurrX, nCurrY, false))
                 {
@@ -255,12 +255,12 @@ namespace RobotSystem.Services
 
         public bool FindPos(ref MapWalkXY[] walkStep, int nRange, bool boFlag)
         {
-            var result = false;
+            bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -282,7 +282,7 @@ namespace RobotSystem.Services
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -303,12 +303,12 @@ namespace RobotSystem.Services
 
         public bool ActThink__FindPos(MapWalkXY[] walkStep, int nRange, bool boFlag)
         {
-            var result = false;
+            bool result = false;
             byte btDir = 0;
             short nCurrX = 0;
             short nCurrY = 0;
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 1, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -330,7 +330,7 @@ namespace RobotSystem.Services
                 return result;
             }
             //FillChar(WalkStep, sizeof(TMapWalkXY) * 8, 0);
-            for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+            for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, i, 2, ref nCurrX, ref nCurrY) && CanMove(nCurrX, nCurrY, false))
                 {
@@ -354,7 +354,7 @@ namespace RobotSystem.Services
             MapWalkXY[] walkStep = null;
             try
             {
-                var boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
+                bool boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || Job == 0;
                 MapWalkXY mapWalkXy;
                 int nRange;
                 if (Job == 0 || wMagicID <= 0)
@@ -372,7 +372,7 @@ namespace RobotSystem.Services
                     {
                         nRange = 6;
                     }
-                    for (var i = nRange; i >= 1; i--)
+                    for (int i = nRange; i >= 1; i--)
                     {
                         if (FindPosOfTarget(ref walkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
                         {
@@ -387,7 +387,7 @@ namespace RobotSystem.Services
                             }
                         }
                     }
-                    for (var i = 2; i >= 1; i--)
+                    for (int i = 2; i >= 1; i--)
                     {
                         if (FindPosOfSelf(ref walkStep, i, boFlag))
                         {
@@ -422,7 +422,7 @@ namespace RobotSystem.Services
                         nRange = 1;
                     }
                     boFlag = Race == 108 || new ArrayList(new int[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID) || nRange == 1;
-                    for (var i = 2; i >= 1; i--)
+                    for (int i = 2; i >= 1; i--)
                     {
                         if (FindPosOfSelf(ref walkStep, i, boFlag))
                         {
@@ -437,7 +437,7 @@ namespace RobotSystem.Services
                             }
                         }
                     }
-                    for (var i = 2; i >= 1; i--)
+                    for (int i = 2; i >= 1; i--)
                     {
                         if (ActThinkFindPosOfSelf(ref walkStep, i, boFlag))
                         {
@@ -452,7 +452,7 @@ namespace RobotSystem.Services
                             }
                         }
                     }
-                    for (var i = nRange; i >= 1; i--)
+                    for (int i = nRange; i >= 1; i--)
                     {
                         if (FindPosOfTarget(ref walkStep, TargetCret.CurrX, TargetCret.CurrY, i, boFlag))
                         {
@@ -481,11 +481,11 @@ namespace RobotSystem.Services
             short nX = 0;
             short nY = 0;
             MapWalkXY[] WalkStep = null;
-            var nRange = HUtil32._MAX(SystemShare.RandomNumber.Random(3), 2);
-            var boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
+            int nRange = HUtil32._MAX(SystemShare.RandomNumber.Random(3), 2);
+            bool boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
             byte btDir;
             MapWalkXY mapWalkXy;
-            for (var i = nRange; i >= 1; i--)
+            for (int i = nRange; i >= 1; i--)
             {
                 if (FindPosOfSelf(ref WalkStep, i, boFlag))
                 {
@@ -497,7 +497,7 @@ namespace RobotSystem.Services
                         {
                             if (Race != 108)
                             {
-                                for (var j = nRange; j >= 1; j--)// 再跑1次
+                                for (int j = nRange; j >= 1; j--)// 再跑1次
                                 {
                                     if (Envir.GetNextPosition(mapWalkXy.X, mapWalkXy.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= mapWalkXy.MonCount)
                                     {
@@ -512,7 +512,7 @@ namespace RobotSystem.Services
                     }
                 }
             }
-            for (var i = nRange; i >= 1; i--)
+            for (int i = nRange; i >= 1; i--)
             {
                 if (ActThinkFindPosOfSelf(ref WalkStep, i, boFlag))
                 {
@@ -522,7 +522,7 @@ namespace RobotSystem.Services
                         btDir = SystemShare.GetNextDirection(CurrX, CurrY, mapWalkXy.X, mapWalkXy.Y);
                         if (GotoNextOne(mapWalkXy.X, mapWalkXy.Y, Race != 108))
                         {
-                            for (var j = nRange; j >= 1; j--)
+                            for (int j = nRange; j >= 1; j--)
                             {
                                 // 再跑1次
                                 if (Envir.GetNextPosition(mapWalkXy.X, mapWalkXy.Y, btDir, j, ref nX, ref nY) && Envir.CanWalkEx(nX, nY, true) && GetNearTargetCount(nX, nY) <= mapWalkXy.MonCount)
@@ -544,11 +544,11 @@ namespace RobotSystem.Services
 
         private bool FollowTarget(short wMagicID)
         {
-            var nRange = 2;
+            int nRange = 2;
             MapWalkXY[] WalkStep = null;
             MapWalkXY MapWalkXY;
-            var boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
-            for (var i = nRange; i >= 1; i--)
+            bool boFlag = Race == 108 || new ArrayList(new short[] { MagicConst.SKILL_FIREBALL, MagicConst.SKILL_FIREBALL2, MagicConst.SKILL_FIRECHARM }).Contains(wMagicID);
+            for (int i = nRange; i >= 1; i--)
             {
                 if (FindPosOfSelf(ref WalkStep, i, boFlag))
                 {
@@ -563,7 +563,7 @@ namespace RobotSystem.Services
                     }
                 }
             }
-            for (var i = nRange; i >= 1; i--)
+            for (int i = nRange; i >= 1; i--)
             {
                 if (ActThinkFindPosOfSelf(ref WalkStep, i, boFlag))
                 {
@@ -591,7 +591,7 @@ namespace RobotSystem.Services
             }
             if (GetPoseCreate() == TargetCret || TargetCret.GetPoseCreate() == this)
             {
-                var btNewDir = SystemShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+                byte btNewDir = SystemShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, btNewDir, 1, ref nTargetX, ref nTargetY))
                 {
                     if (Envir.CanWalk(nTargetX, nTargetY, true))
@@ -690,12 +690,12 @@ namespace RobotSystem.Services
 
         private bool RunPosAttack(int magicId)
         {
-            var walkStep = new MapWalkXY[2];
+            MapWalkXY[] walkStep = new MapWalkXY[2];
             int nRange;
-            var result = false;
-            var btDir = SystemShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
-            var btNewDir1 = RunPosAttackGetNextRunPos(btDir, true);
-            var btNewDir2 = RunPosAttackGetNextRunPos(btDir, false);
+            bool result = false;
+            byte btDir = SystemShare.GetNextDirection(CurrX, CurrY, TargetCret.CurrX, TargetCret.CurrY);
+            byte btNewDir1 = RunPosAttackGetNextRunPos(btDir, true);
+            byte btNewDir2 = RunPosAttackGetNextRunPos(btDir, false);
             if (Job == 0)
             {
                 nRange = 1;
@@ -720,7 +720,7 @@ namespace RobotSystem.Services
                 walkStep[0] = FindPosOfDir(btNewDir1, nRange, false);
                 walkStep[1] = FindPosOfDir(btNewDir2, nRange, false);
             }
-            var nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
+            int nNearTargetCount = GetNearTargetCount(CurrX, CurrY);
             MapWalkXY mapWalkXY = default;
             if (walkStep[0].WalkStep > 0 && walkStep[1].WalkStep > 0)
             {
@@ -783,9 +783,9 @@ namespace RobotSystem.Services
 
         private bool ActThink(short magicId)
         {
-            var result = false;
-            var nCode = 0;
-            var nThinkCount = 0;
+            bool result = false;
+            int nCode = 0;
+            int nThinkCount = 0;
             try
             {
                 while (true)

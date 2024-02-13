@@ -18,14 +18,14 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            int nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (string.IsNullOrEmpty(sHumanName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

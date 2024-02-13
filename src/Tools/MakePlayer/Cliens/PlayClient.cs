@@ -2,7 +2,6 @@ using MakePlayer.Option;
 using MakePlayer.Scenes;
 using MakePlayer.Scenes.Scene;
 using OpenMir2;
-using SystemModule;
 
 namespace MakePlayer.Cliens
 {
@@ -57,7 +56,7 @@ namespace MakePlayer.Cliens
 
         public void ProcessPacket(byte[] reviceBuffer)
         {
-            var sockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
+            string sockText = HUtil32.GetString(reviceBuffer, 0, reviceBuffer.Length);
             if (!string.IsNullOrEmpty(sockText))
             {
                 while (sockText.Length >= 2)
@@ -66,7 +65,7 @@ namespace MakePlayer.Cliens
                     {
                         break;
                     }
-                    var sData = string.Empty;
+                    string sData = string.Empty;
                     sockText = HUtil32.ArrestStringEx(sockText, "#", "!", ref sData);
                     if (string.IsNullOrEmpty(sData))
                     {
@@ -87,9 +86,9 @@ namespace MakePlayer.Cliens
             {
                 return;
             }
-            var sDefMsg = sDataBlock[..Messages.DefBlockSize];
-            var sBody = sDataBlock.Substring(Messages.DefBlockSize, sDataBlock.Length - Messages.DefBlockSize);
-            var defMsg = EDCode.DecodePacket(sDefMsg);
+            string sDefMsg = sDataBlock[..Messages.DefBlockSize];
+            string sBody = sDataBlock[Messages.DefBlockSize..];
+            OpenMir2.Packets.ClientPackets.CommandMessage defMsg = EDCode.DecodePacket(sDefMsg);
             DScreen.CurrentScene.ProcessPacket(defMsg, sBody);
         }
 

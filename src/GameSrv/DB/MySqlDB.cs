@@ -1,26 +1,19 @@
-using M2Server;
 using MySqlConnector;
-using NLog;
-using System.Data;
-using System.Text.Json;
-using OpenMir2;
-using OpenMir2.Data;
 using OpenMir2.Enums;
 using OpenMir2.Extensions;
-using OpenMir2.Packets.ClientPackets;
-using SystemModule;
-using SystemModule.Data;
+using System.Data;
+using System.Text.Json;
 
 namespace GameSrv.DB
 {
     public class MySqlDB : IDataSource
     {
-        
+
         private IDbConnection _dbConnection;
 
         public int LoadItemsDB()
         {
-            var result = -1;
+            int result = -1;
             const string sSQLString = "SELECT * FROM stditems";
             try
             {
@@ -30,12 +23,12 @@ namespace GameSrv.DB
                 {
                     return result;
                 }
-                using (var dr = Query(sSQLString))
+                using (IDataReader dr = Query(sSQLString))
                 {
                     while (dr.Read())
                     {
-                        var stdItem = new StdItem();
-                        var idx = dr.GetInt32("ID");
+                        StdItem stdItem = new StdItem();
+                        int idx = dr.GetInt32("ID");
                         stdItem.Name = dr.GetString("NAME");
                         stdItem.StdMode = dr.GetByte("StdMode");
                         stdItem.Shape = dr.GetByte("SHAPE");
@@ -113,7 +106,7 @@ namespace GameSrv.DB
         public int LoadMagicDB()
         {
             const string sSQLString = "select * from magics";
-            var result = -1;
+            int result = -1;
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
@@ -122,10 +115,10 @@ namespace GameSrv.DB
                 {
                     return result;
                 }
-                using var dr = Query(sSQLString);
+                using IDataReader dr = Query(sSQLString);
                 while (dr.Read())
                 {
-                    var magic = new MagicInfo
+                    MagicInfo magic = new MagicInfo
                     {
                         MagicId = dr.GetUInt16("MagId"),
                         MagicName = dr.GetString("MagName"),
@@ -175,7 +168,7 @@ namespace GameSrv.DB
 
         public int LoadMonsterDB()
         {
-            var result = 0;
+            int result = 0;
             const string sSQLString = "select * from monsters";
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
@@ -185,10 +178,10 @@ namespace GameSrv.DB
                 {
                     return result;
                 }
-                using var dr = Query(sSQLString);
+                using IDataReader dr = Query(sSQLString);
                 while (dr.Read())
                 {
-                    var monster = new MonsterInfo
+                    MonsterInfo monster = new MonsterInfo
                     {
                         ItemList = new List<MonsterDropItem>(),
                         Name = dr.GetString("NAME").Trim(),
@@ -266,18 +259,18 @@ namespace GameSrv.DB
             try
             {
                 const string sSQLString = "select * from goldsales";
-                using var dr = Query(sSQLString);
+                using IDataReader dr = Query(sSQLString);
                 while (dr.Read())
                 {
-                    var sDealChrName = dr.GetString("DealChrName");
-                    var sBuyChrName = dr.GetString("BuyChrName");
-                    var dSellDateTime = dr.GetDateTime("SellDateTime");
-                    var nState = dr.GetByte("State");
-                    var nSellGold = dr.GetInt16("SellGold");
-                    var sUseItems = dr.GetString("UseItems");
+                    string sDealChrName = dr.GetString("DealChrName");
+                    string sBuyChrName = dr.GetString("BuyChrName");
+                    DateTime dSellDateTime = dr.GetDateTime("SellDateTime");
+                    byte nState = dr.GetByte("State");
+                    short nSellGold = dr.GetInt16("SellGold");
+                    string sUseItems = dr.GetString("UseItems");
                     if ((!string.IsNullOrEmpty(sDealChrName)) && (!string.IsNullOrEmpty(sBuyChrName)) && (nState < 4))
                     {
-                        var DealOffInfo = new DealOffInfo();
+                        DealOffInfo DealOffInfo = new DealOffInfo();
                         DealOffInfo.sDealChrName = sDealChrName;
                         DealOffInfo.sBuyChrName = sBuyChrName;
                         DealOffInfo.dSellDateTime = dSellDateTime;
@@ -314,12 +307,12 @@ namespace GameSrv.DB
                 if (M2Share.SellOffItemList.Count > 0)
                 {
                     Execute(sSQLString);
-                    for (var i = 0; i < M2Share.SellOffItemList.Count; i++)
+                    for (int i = 0; i < M2Share.SellOffItemList.Count; i++)
                     {
                         DealOffInfo = M2Share.SellOffItemList[i];
                         if (DealOffInfo != null)
                         {
-                            var command = new MySqlCommand();
+                            MySqlCommand command = new MySqlCommand();
                             command.Connection = (MySqlConnection)_dbConnection;
                             command.CommandText = SaveSellItemSql;
                             command.Parameters.AddWithValue("@DealChrName", DealOffInfo.sDealChrName);
@@ -358,7 +351,7 @@ namespace GameSrv.DB
 
         private IDataReader Query(string sSQLString)
         {
-            var command = new MySqlCommand();
+            MySqlCommand command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.CommandText = sSQLString;
             return command.ExecuteReader();
@@ -366,7 +359,7 @@ namespace GameSrv.DB
 
         private int Execute(string sSQLString)
         {
-            var command = new MySqlCommand();
+            MySqlCommand command = new MySqlCommand();
             command.Connection = (MySqlConnection)_dbConnection;
             command.CommandText = sSQLString;
             return command.ExecuteNonQuery();

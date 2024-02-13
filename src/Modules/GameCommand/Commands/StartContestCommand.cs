@@ -28,9 +28,9 @@ namespace CommandModule.Commands
             IList<IPlayerActor> list14 = new List<IPlayerActor>();
             IList<IGuild> guildList = new List<IGuild>();
             SystemShare.WorldEngine.GetMapRageHuman(PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, ref list10);
-            for (var i = 0; i < list10.Count; i++)
+            for (int i = 0; i < list10.Count; i++)
             {
-                mIPlayerActor = list10[i] as IPlayerActor;
+                mIPlayerActor = list10[i];
                 if (!mIPlayerActor.ObMode || !mIPlayerActor.AdminMode)
                 {
                     mIPlayerActor.FightZoneDieCount = 0;
@@ -39,7 +39,7 @@ namespace CommandModule.Commands
                         continue;
                     }
                     bo19 = false;
-                    for (var j = 0; j < list14.Count; j++)
+                    for (int j = 0; j < list14.Count; j++)
                     {
                         IPlayerActorA = list14[j];
                         if (mIPlayerActor.MyGuild == IPlayerActorA.MyGuild)
@@ -55,7 +55,7 @@ namespace CommandModule.Commands
             }
             PlayerActor.SysMsg("行会争霸赛已经开始。", MsgColor.Green, MsgType.Hint);
             SystemShare.WorldEngine.CryCry(Messages.RM_CRY, PlayerActor.Envir, PlayerActor.CurrX, PlayerActor.CurrY, 1000, SystemShare.Config.CryMsgFColor, SystemShare.Config.CryMsgBColor, "- 行会战争已爆发。");
-            var s20 = "";
+            string s20 = "";
             //for (var i = 0; i < guildList.Count; i++)
             //{
             //    guild = guildList[i];

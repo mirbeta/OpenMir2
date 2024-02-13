@@ -646,7 +646,7 @@ namespace M2Server.Actor
                 }
                 if (newX >= 0 && Envir.Width - 1 >= newX && newY >= 0 && Envir.Height - 1 >= newY)
                 {
-                    var canWalk = true;
+                    bool canWalk = true;
                     if (fearFire)//怪物不进入火墙才判断是否能走动
                     {
                         canWalk = !Envir.CanSafeWalk(newX, newY);
@@ -1241,7 +1241,10 @@ namespace M2Server.Actor
         public bool AddItemToBag(UserItem userItem)
         {
             if (ItemList.Count >= Grobal2.MaxBagItem)
+            {
                 return false;
+            }
+
             ItemList.Add(userItem);
             WeightChanged();
             return true;
@@ -1326,8 +1329,8 @@ namespace M2Server.Actor
             bool result = false;
             if ((Math.Abs(targetObject.CurrX - CurrX) <= 2) && (Math.Abs(targetObject.CurrY - CurrY) <= 2))
             {
-                var nX = targetObject.CurrX - CurrX;
-                var nY = targetObject.CurrY - CurrY;
+                int nX = targetObject.CurrX - CurrX;
+                int nY = targetObject.CurrY - CurrY;
                 if ((Math.Abs(nX) <= 1) && (Math.Abs(nY) <= 1))
                 {
                     GetAttackDir(targetObject, ref btDir);
@@ -1366,7 +1369,7 @@ namespace M2Server.Actor
 
         internal bool AddToMap()
         {
-            var result = Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
+            bool result = Envir.AddMapObject(CurrX, CurrY, CellType, this.ActorId, this);
             if (!FixedHideMode)
             {
                 SendRefMsg(Messages.RM_TURN, Dir, CurrX, CurrY, 0, "");
@@ -1458,7 +1461,7 @@ namespace M2Server.Actor
             int maxHp = 0;
             if ((Race == ActorRace.MonsterWhiteskeleton) || (Race == ActorRace.MonsterElfmonster) || (Race == ActorRace.MonsterElfwarrior))
             {
-                var slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
+                byte slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
                 WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round((slaveExpLevel * 0.1 + 0.3) * 3.0 * slaveExpLevel + HUtil32.HiWord(WAbil.DC)));
                 maxHp = maxHp + HUtil32.Round((slaveExpLevel * 0.1 + 0.3) * WAbil.MaxHP) * slaveExpLevel;
                 maxHp = maxHp + WAbil.MaxHP;
@@ -1473,7 +1476,7 @@ namespace M2Server.Actor
             }
             else
             {
-                var slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
+                byte slaveExpLevel = ((MonsterObject)this).SlaveExpLevel;
                 maxHp = WAbil.MaxHP;
                 WAbil.DC = (ushort)HUtil32.MakeLong(HUtil32.LoWord(WAbil.DC), (ushort)HUtil32.Round(slaveExpLevel * 2.0 + HUtil32.HiWord(WAbil.DC)));
                 maxHp = maxHp + HUtil32.Round(WAbil.MaxHP * 0.15) * slaveExpLevel;
@@ -1494,7 +1497,7 @@ namespace M2Server.Actor
             //or 代表运算, 需要两个运算数，即两个数的位运算，只有其中一个是1就返回1; 都是0才返回0
             //and 表示 当对应位均为1时返回1，其余为0
             //从上面算法得到，最终 nStatus得到是1,
-            var nStatus = M2Share.ActorBuffSystem.GetBuffStatus(this);
+            int nStatus = M2Share.ActorBuffSystem.GetBuffStatus(this);
             return nStatus | (CharStatusEx & 0x0000FFFF);
         }
 
@@ -1777,7 +1780,7 @@ namespace M2Server.Actor
             {
                 return true;
             }
-            var result = Envir.Flag.SafeArea;
+            bool result = Envir.Flag.SafeArea;
             if (result) //安全区
             {
                 if ((Envir.MapName != SystemShare.Config.RedHomeMap) || (Math.Abs(CurrX - SystemShare.Config.RedHomeX) > SystemShare.Config.SafeZoneSize) || (Math.Abs(CurrY - SystemShare.Config.RedHomeY) > SystemShare.Config.SafeZoneSize))
@@ -1938,7 +1941,10 @@ namespace M2Server.Actor
         public bool MakePosion(int nType, ushort nTime, int nPoint)
         {
             if (nType >= Grobal2.MAX_STATUS_ATTRIBUTE)
+            {
                 return false;
+            }
+
             int nOldCharStatus = CharStatus;
             M2Share.ActorBuffSystem.AddBuff(this, (BuffType)nType, nTime, nPoint);
             //if (StatusTimeArr[nType] > 0)
@@ -2424,7 +2430,7 @@ namespace M2Server.Actor
         {
             if (ExpHitter != null)
             {
-                var fightExp = ((AnimalObject)this).FightExp; //后续移动到AnimalObject实现,减少一次转换
+                int fightExp = ((AnimalObject)this).FightExp; //后续移动到AnimalObject实现,减少一次转换
                 if (ExpHitter.Master != null) //如果是角色下属杀死对象
                 {
                     ExpHitter.Master.SendMsg(Messages.RM_PLAYERKILLMONSTER, this.ActorId, fightExp, 0, 0);

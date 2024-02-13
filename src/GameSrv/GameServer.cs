@@ -1,14 +1,10 @@
 ﻿using GameSrv.Maps;
-using M2Server;
-using Microsoft.Extensions.DependencyInjection;
-using NLog;
-using SystemModule;
 
 namespace GameSrv
 {
     public class ServerBase
     {
-        
+
         private readonly IServiceProvider serviceProvider;
 
         protected ServerBase(IServiceProvider serviceProvider)
@@ -28,9 +24,9 @@ namespace GameSrv
             _ = GameShare.ActorBuffProcessor.StartAsync(stoppingToken);
             Map.StartMakeStoneThread();
 
-            var modules = serviceProvider.GetServices<IModuleInitializer>();
+            IEnumerable<IModuleInitializer> modules = serviceProvider.GetServices<IModuleInitializer>();
 
-            foreach (var module in modules)
+            foreach (IModuleInitializer module in modules)
             {
                 module.Startup(stoppingToken);
             }
@@ -42,12 +38,12 @@ namespace GameSrv
 
         public async Task Stopping(CancellationToken cancellationToken)
         {
-            var modules = serviceProvider.GetServices<IModuleInitializer>();
-            foreach (var module in modules)
+            IEnumerable<IModuleInitializer> modules = serviceProvider.GetServices<IModuleInitializer>();
+            foreach (IModuleInitializer module in modules)
             {
                 module.Stopping(cancellationToken);
             }
-            
+
             await GameShare.GeneratorProcessor.StopAsync(cancellationToken);
             await GameShare.SystemProcess.StopAsync(cancellationToken);
             await GameShare.UserProcessor.StopAsync(cancellationToken);

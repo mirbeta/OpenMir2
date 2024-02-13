@@ -10,7 +10,7 @@ namespace LoginSrv
 {
     public class AppService : BackgroundService
     {
-        
+
         private readonly ConfigManager _configManager;
         private readonly SessionServer _masSocService;
         private readonly LoginServer _loginService;

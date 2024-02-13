@@ -5,7 +5,7 @@ namespace BotSrv.Scenes
 {
     public class ScreenManager
     {
-        
+
         private readonly RobotPlayer robotClient;
         public SceneBase CurrentScene = null;
 

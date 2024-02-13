@@ -43,7 +43,7 @@ public class GateConfig : ConfigFile
     {
         GateCount = 1;
         GameGateList = new GameGateInfo[32];
-        for (var i = 0; i < GameGateList.Length; i++)
+        for (int i = 0; i < GameGateList.Length; i++)
         {
             GameGateList[i].LoginServer = "127.0.0.1";
             GameGateList[i].LoginPort = 5500;

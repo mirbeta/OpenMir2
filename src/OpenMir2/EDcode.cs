@@ -1,5 +1,5 @@
-using System;
 using OpenMir2.Packets.ClientPackets;
+using System;
 
 namespace OpenMir2
 {
@@ -88,7 +88,7 @@ namespace OpenMir2
             byte[] encBuf = EncryptUtil.Decode(str, str.Length, ref nLen);
             return HUtil32.GetString(encBuf);
         }
-        
+
         /// <summary>
         /// 解密字符串
         /// </summary>
@@ -211,7 +211,7 @@ namespace OpenMir2
         public static string EncodeMessage<T>(T packet) where T : class
         {
             byte[] data = SerializerUtil.Serialize(packet);
-            var newData = data[1..];
+            byte[] newData = data[1..];
             int buffSize = data.Length;
             if (buffSize <= 0)
             {

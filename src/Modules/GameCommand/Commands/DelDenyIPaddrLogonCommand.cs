@@ -14,16 +14,16 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sIPaddr = @params.Length > 0 ? @params[0] : "";
+            string sIPaddr = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sIPaddr))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boDelete = false;
+            bool boDelete = false;
             try
             {
-                for (var i = SystemShare.DenyIPAddrList.Count - 1; i >= 0; i--)
+                for (int i = SystemShare.DenyIPAddrList.Count - 1; i >= 0; i--)
                 {
                     if (SystemShare.DenyIPAddrList.Count <= 0)
                     {

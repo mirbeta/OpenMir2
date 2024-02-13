@@ -18,8 +18,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var nHungerPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : -1;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            int nHungerPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : -1;
             if (PlayerActor.Permission < 6)
             {
                 return;
@@ -29,7 +29,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 mIPlayerActor.HungerStatus = nHungerPoint;

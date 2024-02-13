@@ -1,6 +1,5 @@
 using M2Server.Actor;
 using OpenMir2;
-using SystemModule;
 using SystemModule.Actors;
 
 namespace M2Server.Monster.Monsters

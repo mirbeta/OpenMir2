@@ -1,6 +1,4 @@
-﻿using NLog;
-
-namespace BotSrv
+﻿namespace BotSrv
 {
     public static class BotShare
     {

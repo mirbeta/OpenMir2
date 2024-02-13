@@ -25,7 +25,7 @@
     }
 
     public enum VariableType
-    { 
+    {
         /// <summary>
         /// 变量P
         /// </summary>

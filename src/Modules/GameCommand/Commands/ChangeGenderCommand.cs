@@ -18,9 +18,9 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sSex = @params.Length > 1 ? @params[1] : "";
-            var nSex = -1;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sSex = @params.Length > 1 ? @params[1] : "";
+            int nSex = -1;
             if (sSex == "Man" || sSex == "男" || sSex == "0")
             {
                 nSex = 0;
@@ -38,7 +38,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.Gender != playSex)

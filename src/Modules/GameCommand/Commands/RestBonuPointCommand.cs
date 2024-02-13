@@ -18,14 +18,14 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumName = @params.Length > 0 ? @params[0] : "";
+            string sHumName = @params.Length > 0 ? @params[0] : "";
             int nTotleUsePoint;
             if (string.IsNullOrEmpty(sHumName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null)
             {
                 nTotleUsePoint = mIPlayerActor.BonusAbil.DC + mIPlayerActor.BonusAbil.MC + mIPlayerActor.BonusAbil.SC + mIPlayerActor.BonusAbil.AC + mIPlayerActor.BonusAbil.MAC

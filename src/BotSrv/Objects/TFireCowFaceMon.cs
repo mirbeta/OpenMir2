@@ -14,8 +14,13 @@ public class TFireCowFaceMon : TGasKuDeGi
         int L;
         L = m_nChrLight;
         if (L < 2)
+        {
             if (m_boUseEffect)
+            {
                 L = 2;
+            }
+        }
+
         result = L;
         return result;
     }

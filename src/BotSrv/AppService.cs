@@ -1,12 +1,10 @@
 ﻿using BotSrv.Player;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using NLog;
+using OpenMir2;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
-using SystemModule;
 
 namespace BotSrv
 {
@@ -68,9 +66,9 @@ namespace BotSrv
                         {
                             _options.TotalChrCount = 0;
                         }
-                        for (var i = 0; i < _options.ChrCount; i++)
+                        for (int i = 0; i < _options.ChrCount; i++)
                         {
-                            var playClient = new RobotPlayer();
+                            RobotPlayer playClient = new RobotPlayer();
                             playClient.NewAccount = _options.NewAccount;
                             playClient.LoginId = string.Concat(_options.LoginAccount, g_nLoginIndex);
                             playClient.LoginPasswd = playClient.LoginId;

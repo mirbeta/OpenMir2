@@ -16,17 +16,29 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            if (@params == null) return;
-            var sItemName = @params.Length > 0 ? @params[0] : ""; //物品名称
-            var nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1; //数量
-            var sParam = @params.Length > 2 ? @params[2] : ""; //可选参数（持久力）
+            if (@params == null)
+            {
+                return;
+            }
+
+            string sItemName = @params.Length > 0 ? @params[0] : ""; //物品名称
+            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1; //数量
+            string sParam = @params.Length > 2 ? @params[2] : ""; //可选参数（持久力）
             if (string.IsNullOrEmpty(sItemName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (nCount <= 0) nCount = 1;
-            if (nCount > 10) nCount = 10;
+            if (nCount <= 0)
+            {
+                nCount = 1;
+            }
+
+            if (nCount > 10)
+            {
+                nCount = 10;
+            }
+
             if (PlayerActor.Permission < Command.PermissionMax)
             {
                 if (!SystemShare.CanMakeItem(sItemName))
@@ -46,13 +58,17 @@ namespace CommandModule.Commands
                 }
                 nCount = 1;
             }
-            for (var i = 0; i < nCount; i++)
+            for (int i = 0; i < nCount; i++)
             {
-                if (PlayerActor.ItemList.Count >= Grobal2.MaxBagItem) return;
+                if (PlayerActor.ItemList.Count >= Grobal2.MaxBagItem)
+                {
+                    return;
+                }
+
                 UserItem userItem = null;
                 if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
                 {
-                    var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem.Price >= 15000 && !SystemShare.Config.TestServer && PlayerActor.Permission < 5)
                     {
                         return;

@@ -70,7 +70,7 @@ namespace M2Server.Player
                 HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             string sUserItemName = string.Empty;
-            var bo11 = false;
+            bool bo11 = false;
             if (!SellOffConfirm)
             {
                 for (int i = this.ItemList.Count - 1; i >= 0; i--)
@@ -521,13 +521,13 @@ namespace M2Server.Player
                 && string.Compare(sBuyChrName, this.ChrName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 // 不能自己寄售给自己
-                var dealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
+                DealOffInfo dealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
                 StdItem stdItem;
                 if (SellOffItemList.Count > 0)
                 {
                     for (int i = 0; i < SellOffItemList.Count; i++)
                     {
-                        var userItem = SellOffItemList[i];
+                        UserItem userItem = SellOffItemList[i];
                         stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && userItem != null && userItem.MakeIndex > 0)
                         {

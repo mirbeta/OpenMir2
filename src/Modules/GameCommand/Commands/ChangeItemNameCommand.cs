@@ -17,16 +17,16 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMakeIndex = @params.Length > 0 ? @params[0] : "";
-            var sItemIndex = @params.Length > 1 ? @params[1] : "";
-            var sItemName = @params.Length > 2 ? @params[2] : "";
+            string sMakeIndex = @params.Length > 0 ? @params[0] : "";
+            string sItemIndex = @params.Length > 1 ? @params[1] : "";
+            string sItemName = @params.Length > 2 ? @params[2] : "";
             if (string.IsNullOrEmpty(sMakeIndex) || string.IsNullOrEmpty(sItemIndex) || string.IsNullOrEmpty(sItemName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-            var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+            int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+            int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
             if (nMakeIndex <= 0 || nItemIndex < 0)
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

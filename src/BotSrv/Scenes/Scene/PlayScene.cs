@@ -2,15 +2,13 @@
 using BotSrv.Maps;
 using BotSrv.Objects;
 using BotSrv.Player;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
-using OpenMir2;
-using OpenMir2.Enums;
-using OpenMir2.Packets.ServerPackets;
-using SystemModule;
-using SystemModule.Packets.ServerPackets;
 
 namespace BotSrv.Scenes.Scene
 {
@@ -71,7 +69,7 @@ namespace BotSrv.Scenes.Scene
         private void ClearDropItemA()
         {
             TDropItem dropItem;
-            for (var i = MShare.g_DropedItemList.Count - 1; i >= 0; i--)
+            for (int i = MShare.g_DropedItemList.Count - 1; i >= 0; i--)
             {
                 dropItem = MShare.g_DropedItemList[i];
                 if (dropItem == null)
@@ -94,8 +92,8 @@ namespace BotSrv.Scenes.Scene
             {
                 return;
             }
-            var movetick = false;
-            var tick = HUtil32.GetTickCount();
+            bool movetick = false;
+            int tick = HUtil32.GetTickCount();
             if (MShare.SpeedRate)
             {
                 if (tick - m_dwMoveTime >= (95 - MShare.g_MoveSpeedRate / 2))
@@ -112,14 +110,14 @@ namespace BotSrv.Scenes.Scene
                     movetick = true;
                 }
             }
-            var i = 0;
+            int i = 0;
             while (true)
             {
                 if (i >= ActorList.Count)
                 {
                     break;
                 }
-                var actor = ActorList[i];
+                Actor actor = ActorList[i];
                 if (actor.Death && MShare.g_gcGeneral[8] && !actor.m_boItemExplore && (actor.Race != 0) && actor.IsIdle())
                 {
                     i++;
@@ -222,9 +220,9 @@ namespace BotSrv.Scenes.Scene
             int ccy = 0;
             Actor result = null;
             nowsel = -1;
-            for (var k = ccy + 8; k >= ccy - 1; k--)
+            for (int k = ccy + 8; k >= ccy - 1; k--)
             {
-                for (var i = ActorList.Count - 1; i >= 0; i--)
+                for (int i = ActorList.Count - 1; i >= 0; i--)
                 {
                     if (ActorList[i] != MShare.MySelf)
                     {
@@ -261,9 +259,9 @@ namespace BotSrv.Scenes.Scene
             if (result == null)
             {
                 nowsel = -1;
-                for (var k = ccy + 8; k >= ccy - 1; k--)
+                for (int k = ccy + 8; k >= ccy - 1; k--)
                 {
-                    for (var i = ActorList.Count - 1; i >= 0; i--)
+                    for (int i = ActorList.Count - 1; i >= 0; i--)
                     {
                         if (ActorList[i] != MShare.MySelf)
                         {
@@ -315,7 +313,7 @@ namespace BotSrv.Scenes.Scene
         {
             int ccy = 0;
             bool result = false;
-            for (var k = ccy + 2; k >= ccy - 1; k--)
+            for (int k = ccy + 2; k >= ccy - 1; k--)
             {
                 if (MShare.MySelf.CurrY == k)
                 {
@@ -337,7 +335,7 @@ namespace BotSrv.Scenes.Scene
             int ccy = 0;
             TDropItem result = null;
             inames = "";
-            for (var i = 0; i < MShare.g_DropedItemList.Count; i++)
+            for (int i = 0; i < MShare.g_DropedItemList.Count; i++)
             {
                 TDropItem dropItem = MShare.g_DropedItemList[i];
                 if ((dropItem.X == ccx) && (dropItem.Y == ccy))
@@ -354,7 +352,7 @@ namespace BotSrv.Scenes.Scene
 
         public void GetXyDropItemsList(int nX, int nY, ref ArrayList itemList)
         {
-            for (var i = 0; i < MShare.g_DropedItemList.Count; i++)
+            for (int i = 0; i < MShare.g_DropedItemList.Count; i++)
             {
                 TDropItem dropItem = MShare.g_DropedItemList[i];
                 if ((dropItem.X == nX) && (dropItem.Y == nY))
@@ -367,7 +365,7 @@ namespace BotSrv.Scenes.Scene
         public TDropItem GetXyDropItems(int nX, int nY)
         {
             TDropItem result = null;
-            for (var i = 0; i < MShare.g_DropedItemList.Count; i++)
+            for (int i = 0; i < MShare.g_DropedItemList.Count; i++)
             {
                 TDropItem dropItem = MShare.g_DropedItemList[i];
                 if ((dropItem.X == nX) && (dropItem.Y == nY))
@@ -413,7 +411,7 @@ namespace BotSrv.Scenes.Scene
         private bool CrashManEx(int mx, int my)
         {
             bool result = false;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 Actor actor = ActorList[i];
                 if (actor == MShare.MySelf)
@@ -457,7 +455,7 @@ namespace BotSrv.Scenes.Scene
         public bool CrashMan(int mx, int my)
         {
             bool result = false;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 Actor actor = ActorList[i];
                 if (actor == null || actor == MShare.MySelf)
@@ -485,7 +483,7 @@ namespace BotSrv.Scenes.Scene
             {
                 return result;
             }
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 if (ActorList[i].RecogId == id)
                 {
@@ -499,7 +497,7 @@ namespace BotSrv.Scenes.Scene
         public Actor FindActor(string sName)
         {
             Actor result = null;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 Actor actor = ActorList[i];
                 if (string.Compare(actor.UserName, sName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -514,7 +512,7 @@ namespace BotSrv.Scenes.Scene
         public Actor FindActorXY(int x, int y)
         {
             Actor result = null;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 Actor a = ActorList[i];
                 if ((a.CurrX == x) && (a.CurrY == y))
@@ -532,7 +530,7 @@ namespace BotSrv.Scenes.Scene
         public bool IsValidActor(Actor actor)
         {
             bool result = false;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 if (ActorList[i] == actor)
                 {
@@ -552,7 +550,7 @@ namespace BotSrv.Scenes.Scene
         {
             Actor actor;
             Actor result = null;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 if (ActorList[i].RecogId == chrid)
                 {
@@ -887,7 +885,7 @@ namespace BotSrv.Scenes.Scene
 
         public void ActorDied(Actor actor)
         {
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 if (ActorList[i] == actor)
                 {
@@ -896,7 +894,7 @@ namespace BotSrv.Scenes.Scene
                 }
             }
             bool flag = false;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 if (!ActorList[i].Death)
                 {
@@ -915,7 +913,7 @@ namespace BotSrv.Scenes.Scene
         {
             if (level == 0)
             {
-                for (var i = 0; i < ActorList.Count; i++)
+                for (int i = 0; i < ActorList.Count; i++)
                 {
                     if (ActorList[i] == actor)
                     {
@@ -987,7 +985,7 @@ namespace BotSrv.Scenes.Scene
 
         public void DelActor(object actor)
         {
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 if (ActorList[i] == actor)
                 {
@@ -1002,7 +1000,7 @@ namespace BotSrv.Scenes.Scene
         public Actor ButchAnimal(int x, int y)
         {
             Actor result = null;
-            for (var i = 0; i < ActorList.Count; i++)
+            for (int i = 0; i < ActorList.Count; i++)
             {
                 Actor a = ActorList[i];
                 if (a.Death)
@@ -1190,12 +1188,12 @@ namespace BotSrv.Scenes.Scene
 
         public static bool IsMySlaveObject(Actor atc)
         {
-            var result = false;
+            bool result = false;
             if (MShare.MySelf == null)
             {
                 return result;
             }
-            for (var i = 0; i < MShare.MySelf.SlaveObject.Count; i++)
+            for (int i = 0; i < MShare.MySelf.SlaveObject.Count; i++)
             {
                 if (atc == MShare.MySelf.SlaveObject[i])
                 {

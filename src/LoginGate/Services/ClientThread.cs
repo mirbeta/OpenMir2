@@ -51,7 +51,7 @@ public class ClientThread
 
     public void Start(GameGateInfo gateInfo)
     {
-        var config = new TouchSocketConfig();
+        TouchSocketConfig config = new TouchSocketConfig();
         config.SetRemoteIPHost(new IPHost(IPAddress.Parse(gateInfo.LoginServer), gateInfo.LoginPort));
         _clientSocket.Setup(config);
         _clientSocket.Connect();
@@ -59,7 +59,11 @@ public class ClientThread
 
     public void ReConnected()
     {
-        if (IsConnected == false) _clientSocket.Connect();
+        if (IsConnected == false)
+        {
+            _clientSocket.Connect();
+        }
+
         CheckServerFail = !IsConnected;
     }
 
@@ -70,10 +74,13 @@ public class ClientThread
 
     public bool SessionIsFull()
     {
-        for (var i = 0; i < GateShare.MaxSession; i++)
+        for (int i = 0; i < GateShare.MaxSession; i++)
         {
-            var userSession = SessionArray[i];
-            if (userSession == null) return false;
+            TSessionInfo userSession = SessionArray[i];
+            if (userSession == null)
+            {
+                return false;
+            }
         }
 
         return true;
@@ -100,10 +107,14 @@ public class ClientThread
 
     private Task ClientSocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
     {
-        for (var i = 0; i < GateShare.MaxSession; i++)
+        for (int i = 0; i < GateShare.MaxSession; i++)
         {
-            var userSession = SessionArray[i];
-            if (userSession == null) continue;
+            TSessionInfo userSession = SessionArray[i];
+            if (userSession == null)
+            {
+                continue;
+            }
+
             SessionArray[i] = null;
             LogService.Debug("账号服务器断开Socket");
         }
@@ -120,8 +131,12 @@ public class ClientThread
     /// </summary>
     private Task ClientSocketRead(IClient client, ReceivedDataEventArgs e)
     {
-        var nMsgLen = e.ByteBlock.Len;
-        if (nMsgLen <= 0) return Task.CompletedTask;
+        int nMsgLen = e.ByteBlock.Len;
+        if (nMsgLen <= 0)
+        {
+            return Task.CompletedTask;
+        }
+
         if (DataLen > 0)
         {
             MemoryCopy.BlockCopy(e.ByteBlock.Buffer, 0, DataBuff, DataLen, nMsgLen);
@@ -138,12 +153,12 @@ public class ClientThread
 
     private void ProcessServerData(byte[] data, int nLen)
     {
-        var srcOffset = 0;
+        int srcOffset = 0;
         Span<byte> dataBuff = data;
         while (nLen > ServerDataPacket.FixedHeaderLen)
         {
-            var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-            var message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
+            Span<byte> packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+            ServerDataPacket message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
             if (message.PacketCode != Grobal2.PacketCode)
             {
                 srcOffset++;
@@ -153,9 +168,13 @@ public class ClientThread
                 continue;
             }
 
-            var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
-            if (nCheckMsgLen > nLen) break;
-            var messageData =
+            int nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+            if (nCheckMsgLen > nLen)
+            {
+                break;
+            }
+
+            ServerDataMessage messageData =
                 SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
             switch (messageData.Type)
             {
@@ -171,11 +190,18 @@ public class ClientThread
             }
 
             nLen -= nCheckMsgLen;
-            if (nLen <= 0) break;
+            if (nLen <= 0)
+            {
+                break;
+            }
+
             dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
             DataLen = nLen;
             srcOffset = 0;
-            if (nLen < ServerDataPacket.FixedHeaderLen) break;
+            if (nLen < ServerDataPacket.FixedHeaderLen)
+            {
+                break;
+            }
         }
 
         if (nLen > 0) //有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
@@ -191,30 +217,36 @@ public class ClientThread
 
     private void RestSessionArray()
     {
-        for (var i = 0; i < GateShare.MaxSession; i++)
+        for (int i = 0; i < GateShare.MaxSession; i++)
+        {
             if (SessionArray[i] != null)
             {
                 SessionArray[i].ReceiveTick = HUtil32.GetTickCount();
                 SessionArray[i].ConnectionId = string.Empty;
                 SessionArray[i].ClientIP = string.Empty;
             }
+        }
     }
 
     public void SendClientPacket(ServerDataMessage packet)
     {
-        if (!IsConnected) return;
+        if (!IsConnected)
+        {
+            return;
+        }
+
         SendMessage(SerializerUtil.Serialize(packet));
     }
 
     private void SendMessage(byte[] sendBuffer)
     {
-        var serverMessage = new ServerDataPacket
+        ServerDataPacket serverMessage = new ServerDataPacket
         {
             PacketCode = Grobal2.PacketCode,
             PacketLen = (ushort)sendBuffer.Length
         };
-        var dataBuff = SerializerUtil.Serialize(serverMessage);
-        var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+        byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+        byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
         MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
         MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
         _clientSocket.Send(data);
@@ -223,7 +255,7 @@ public class ClientThread
 
     private string SendStatistics()
     {
-        var sendStr = SendBytes switch
+        string sendStr = SendBytes switch
         {
             > 1024 * 1000 => $"↑{SendBytes / (1024 * 1000)}M",
             > 1024 => $"↑{SendBytes / 1024}K",
@@ -235,7 +267,7 @@ public class ClientThread
 
     private string ReceiveStatistics()
     {
-        var receiveStr = ReceiveBytes switch
+        string receiveStr = ReceiveBytes switch
         {
             > 1024 * 1000 => $"↓{ReceiveBytes / (1024 * 1000)}M",
             > 1024 => $"↓{ReceiveBytes / 1024}K",
@@ -247,11 +279,20 @@ public class ClientThread
 
     private string GetSessionCount()
     {
-        var count = 0;
-        for (var i = 0; i < SessionArray.Length; i++)
+        int count = 0;
+        for (int i = 0; i < SessionArray.Length; i++)
+        {
             if (SessionArray[i] != null)
+            {
                 count++;
-        if (count > Counter) Counter = count;
+            }
+        }
+
+        if (count > Counter)
+        {
+            Counter = count;
+        }
+
         return count + "/" + Counter;
     }
 

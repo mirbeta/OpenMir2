@@ -1,5 +1,5 @@
-﻿using System;
-using OpenMir2.Packets.ClientPackets;
+﻿using OpenMir2.Packets.ClientPackets;
+using System;
 
 namespace OpenMir2.Data
 {

@@ -1,12 +1,4 @@
-﻿using System.Net;
-using M2Server;
-using NLog;
-using OpenMir2;
-using OpenMir2.Packets.ServerPackets;
-using SystemModule;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
-using TcpClient = TouchSocket.Sockets.TcpClient;
+﻿using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace GameSrv.Services
 {
@@ -15,7 +7,7 @@ namespace GameSrv.Services
     /// </summary>
     public class DataQueryServer
     {
-        
+
         private readonly TcpClient _tcpClient;
         private byte[] ReceiveBuffer { get; set; }
         private int BuffLen { get; set; }
@@ -24,7 +16,7 @@ namespace GameSrv.Services
         public DataQueryServer()
         {
             _tcpClient = new TcpClient();
-            _tcpClient.Connected = DataScoketConnected; 
+            _tcpClient.Connected = DataScoketConnected;
             _tcpClient.Disconnected = DataScoketDisconnected;
             _tcpClient.Received = DataSocketRead;
             SocketWorking = false;
@@ -60,11 +52,11 @@ namespace GameSrv.Services
             {
                 return false;
             }
-            var requestPacket = new ServerRequestData();
+            ServerRequestData requestPacket = new ServerRequestData();
             requestPacket.QueryId = queryId;
             requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
             requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
-            var signId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
+            int signId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
             requestPacket.Sign = EDCode.EncodeBuffer(BitConverter.GetBytes(signId));
             SendMessage(SerializerUtil.Serialize(requestPacket));
             return true;
@@ -72,13 +64,13 @@ namespace GameSrv.Services
 
         private void SendMessage(byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _tcpClient.Send(data);
@@ -101,8 +93,8 @@ namespace GameSrv.Services
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
-                var nMsgLen = e.ByteBlock.Len;
-                var packetData = e.ByteBlock.Buffer;
+                int nMsgLen = e.ByteBlock.Len;
+                byte[] packetData = e.ByteBlock.Buffer;
                 if (BuffLen > 0)
                 {
                     MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
@@ -128,13 +120,13 @@ namespace GameSrv.Services
         {
             try
             {
-                var srcOffset = 0;
-                var nLen = buffLen;
-                var dataBuff = buff;
+                int srcOffset = 0;
+                int nLen = buffLen;
+                Span<byte> dataBuff = buff;
                 while (nLen >= ServerDataPacket.FixedHeaderLen)
                 {
-                    var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                    var message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
+                    Span<byte> packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                    ServerDataPacket message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
                     if (message.PacketCode != Grobal2.PacketCode)
                     {
                         srcOffset++;
@@ -143,13 +135,13 @@ namespace GameSrv.Services
                         LogService.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                         continue;
                     }
-                    var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                    int nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
                     if (nCheckMsgLen > nLen)
                     {
                         break;
                     }
                     SocketWorking = true;
-                    var messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                    ServerRequestData messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                     ProcessServerData(messageData);
                     nLen -= nCheckMsgLen;
                     if (nLen <= 0)
@@ -184,21 +176,25 @@ namespace GameSrv.Services
         {
             try
             {
-                if (!SocketWorking) return;
+                if (!SocketWorking)
+                {
+                    return;
+                }
+
                 if (responsePacket != null)
                 {
-                    var respCheckCode = responsePacket.QueryId;
-                    var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + ServerDataPacket.FixedHeaderLen;
+                    int respCheckCode = responsePacket.QueryId;
+                    int nLen = responsePacket.Message.Length + responsePacket.Packet.Length + ServerDataPacket.FixedHeaderLen;
                     if (nLen >= 12)
                     {
-                        var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
+                        int queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                         if (queryId <= 0 || responsePacket.Sign.Length <= 0)
                         {
                             SystemShare.Config.LoadDBErrorCount++;
                             return;
                         }
-                        var signatureBuff = BitConverter.GetBytes(queryId);
-                        var signBuff = EDCode.DecodeBuff(responsePacket.Sign);
+                        byte[] signatureBuff = BitConverter.GetBytes(queryId);
+                        byte[] signBuff = EDCode.DecodeBuff(responsePacket.Sign);
                         if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(signBuff))
                         {
                             PlayerDataService.Enqueue(respCheckCode, responsePacket);

@@ -1,18 +1,17 @@
 ﻿using LoginSrv.Services;
 using Microsoft.Extensions.Hosting;
-using NLog;
+using OpenMir2;
 using System;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
 
 namespace LoginSrv
 {
     public class TimedService : BackgroundService
     {
-        
+
         private readonly LoginServer _loginService;
         private readonly SessionServer _sessionService;
         private int _processMonSocTick;
@@ -43,11 +42,11 @@ namespace LoginSrv
             if (HUtil32.GetTickCount() - _processMonSocTick > 20000)
             {
                 _processMonSocTick = HUtil32.GetTickCount();
-                var builder = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
                 int serverListCount = _sessionService.ServerList.Count;
-                for (var i = 0; i < serverListCount; i++)
+                for (int i = 0; i < serverListCount; i++)
                 {
-                    var msgServer = _sessionService.ServerList[i];
+                    ServerSessionInfo msgServer = _sessionService.ServerList[i];
                     if (!string.IsNullOrEmpty(msgServer.ServerName))
                     {
                         builder.Append(msgServer.ServerName + "/" + msgServer.ServerIndex + "/" + msgServer.OnlineCount + "/");
@@ -101,19 +100,23 @@ namespace LoginSrv
             if (HUtil32.GetTickCount() - _processServerStatusTick > 10000)
             {
                 _processServerStatusTick = HUtil32.GetTickCount();
-                var serverList = _sessionService.ServerList;
+                System.Collections.Generic.IList<ServerSessionInfo> serverList = _sessionService.ServerList;
                 if (!serverList.Any())
                 {
                     return;
                 }
-                for (var i = 0; i < serverList.Count; i++)
+                for (int i = 0; i < serverList.Count; i++)
                 {
                     ServerSessionInfo msgServer = serverList[i];
-                    var sServerName = msgServer.ServerName;
+                    string sServerName = msgServer.ServerName;
                     if (!string.IsNullOrEmpty(sServerName))
                     {
-                        var tickTime = HUtil32.GetTickCount() - msgServer.KeepAliveTick;
-                        if (tickTime <= 20000) continue;
+                        int tickTime = HUtil32.GetTickCount() - msgServer.KeepAliveTick;
+                        if (tickTime <= 20000)
+                        {
+                            continue;
+                        }
+
                         msgServer.Socket.Close();
                         if (msgServer.ServerIndex == 99)
                         {

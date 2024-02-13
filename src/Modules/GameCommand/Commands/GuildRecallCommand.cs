@@ -29,15 +29,15 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg("本地图不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mCastle = SystemShare.CastleMgr.InCastleWarArea(PlayerActor);
+            SystemModule.Castles.IUserCastle mCastle = SystemShare.CastleMgr.InCastleWarArea(PlayerActor);
             if (mCastle != null && mCastle.UnderWar)
             {
                 PlayerActor.SysMsg("攻城区域不允许使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nRecallCount = 0;
-            var nNoRecallCount = 0;
-            var dwValue = (HUtil32.GetTickCount() - PlayerActor.GroupRcallTick) / 1000;
+            int nRecallCount = 0;
+            int nNoRecallCount = 0;
+            int dwValue = (HUtil32.GetTickCount() - PlayerActor.GroupRcallTick) / 1000;
             PlayerActor.GroupRcallTick = PlayerActor.GroupRcallTick + dwValue * 1000;
             if (PlayerActor.Permission >= 6)
             {

@@ -1,10 +1,10 @@
 using DBSrv.Services.Impl;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenMir2;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
 
 namespace DBSrv
 {
@@ -100,7 +100,7 @@ namespace DBSrv
         {
             while (true)
             {
-                var cmdline = Console.ReadLine();
+                string cmdline = Console.ReadLine();
                 if (string.IsNullOrEmpty(cmdline))
                 {
                     continue;

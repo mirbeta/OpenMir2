@@ -17,15 +17,15 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMapName = @params.Length > 0 ? @params[0] : "";
-            var sMonName = @params.Length > 1 ? @params[1] : "";
-            var sItems = @params.Length > 2 ? @params[2] : "";
+            string sMapName = @params.Length > 0 ? @params[0] : "";
+            string sMonName = @params.Length > 1 ? @params[1] : "";
+            string sItems = @params.Length > 2 ? @params[2] : "";
             if (string.IsNullOrEmpty(sMapName) || string.IsNullOrEmpty(sMonName) || string.IsNullOrEmpty(sItems))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nMonCount = 0;
+            int nMonCount = 0;
             IEnvirnoment envir = null;
             if (sMonName == "*")
             {

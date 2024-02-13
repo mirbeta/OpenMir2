@@ -1,5 +1,4 @@
 using System.Collections;
-using OpenMir2;
 
 namespace GameGate.Filters
 {
@@ -60,7 +59,7 @@ namespace GameGate.Filters
 
         public static void AddToBlockIPList(string szIP)
         {
-            var nIP = 0L;
+            long nIP = 0L;
             if (g_BlockIPList.IndexOf(szIP) < 0)
             {
                 nIP = HUtil32.IpToInt(szIP);
@@ -95,7 +94,7 @@ namespace GameGate.Filters
 
         public static void AddToTempBlockIPList(string szIP)
         {
-            var nIP = 0L;
+            long nIP = 0L;
             if (g_TempBlockIPList.IndexOf(szIP) < 0)
             {
                 nIP = HUtil32.IpToInt(szIP);

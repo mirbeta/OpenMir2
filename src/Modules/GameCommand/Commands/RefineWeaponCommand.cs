@@ -1,6 +1,5 @@
 ﻿using OpenMir2;
 using OpenMir2.Enums;
-using SystemModule;
 using SystemModule.Actors;
 
 namespace CommandModule.Commands
@@ -18,10 +17,10 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var nDc = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
-            var nMc = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            var nSc = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
-            var nHit = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 0;
+            int nDc = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            int nMc = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            int nSc = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            int nHit = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 0;
             if (nDc + nMc + nSc > 10)
             {
                 return;

@@ -1,5 +1,4 @@
 ﻿using OpenMir2;
-using SystemModule;
 
 namespace M2Server.Monster.Monsters
 {

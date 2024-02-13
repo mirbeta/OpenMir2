@@ -1,5 +1,5 @@
-using System.Collections;
 using OpenMir2.Enums;
+using System.Collections;
 using SystemModule;
 using SystemModule.Const;
 
@@ -15,14 +15,14 @@ namespace RobotSystem.Services
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var baseObject = VisibleActors[i].BaseObject;
+                    SystemModule.Actors.IActor baseObject = VisibleActors[i].BaseObject;
                     if (baseObject != null)
                     {
                         if (!baseObject.Death)
                         {
                             if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
                             {
-                                var nC = Math.Abs(nX - baseObject.CurrX) + Math.Abs(nY - baseObject.CurrY);
+                                int nC = Math.Abs(nX - baseObject.CurrX) + Math.Abs(nY - baseObject.CurrY);
                                 if (nC <= n10)
                                 {
                                     result++;
@@ -56,7 +56,7 @@ namespace RobotSystem.Services
             short nTargetY = 0;
             if (magicId == MagicConst.SKILL_MOOTEBO && Master != null && TargetCret != null && AllowUseMagic(MagicConst.SKILL_MOOTEBO) && TargetCret.Abil.Level < Abil.Level && CheckMagicInterval(27, 1000 * 10))
             {
-                var btNewDir = SystemShare.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
+                byte btNewDir = SystemShare.GetNextDirection(TargetCret.CurrX, TargetCret.CurrY, Master.CurrX, Master.CurrY);
                 if (Envir.GetNextPosition(TargetCret.CurrX, TargetCret.CurrY, GetBackDir(btNewDir), 1, ref nTargetX, ref nTargetY))
                 {
                     result = Envir.CanWalk(nTargetX, nTargetY, true);
@@ -87,7 +87,7 @@ namespace RobotSystem.Services
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var targetObject = VisibleActors[i].BaseObject;
+                    SystemModule.Actors.IActor targetObject = VisibleActors[i].BaseObject;
                     if (Math.Abs(CurrX - targetObject.CurrX) <= 1 && Math.Abs(CurrY - targetObject.CurrY) <= 1)
                     {
                         if (!targetObject.Death && targetObject != this && IsProperTarget(targetObject))
@@ -124,7 +124,7 @@ namespace RobotSystem.Services
                     }
                     else
                     {
-                        var nRange = 1;
+                        int nRange = 1;
                         if (magicId == 43)
                         {
                             nRange = 4;

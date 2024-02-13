@@ -18,8 +18,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumName = @params.Length > 0 ? @params[0] : "";
-            var nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            string sHumName = @params.Length > 0 ? @params[0] : "";
+            int nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (PlayerActor.Permission < 6)
             {
                 return;
@@ -29,7 +29,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.GameGold + nPoint < 2000000)

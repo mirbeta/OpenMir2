@@ -1,16 +1,10 @@
 using GameSrv.Services;
-using M2Server;
-using NLog;
-using OpenMir2;
-using OpenMir2.Data;
-using SystemModule;
-using SystemModule.Data;
 
 namespace GameSrv.Word.Threads
 {
     public class CharacterDataProcessor : TimerScheduledService
     {
-        
+
         private readonly object UserCriticalSection = new object();
 
         public CharacterDataProcessor() : base(TimeSpan.FromMilliseconds(500), "StorageProcessor")
@@ -39,7 +33,7 @@ namespace GameSrv.Word.Threads
             try
             {
                 M2Share.FrontEngine.ProcessGameDate();
-                var saveRcdList = M2Share.FrontEngine.GetSaveRcdList();
+                IList<SavePlayerRcd> saveRcdList = M2Share.FrontEngine.GetSaveRcdList();
                 if (!GameShare.DataServer.IsConnected && saveRcdList.Count > 0)
                 {
                     LogService.Error("DBServer 断开链接，保存玩家数据失败.");
@@ -69,10 +63,10 @@ namespace GameSrv.Word.Threads
 
         private static void ProcessSaveStorage()
         {
-            var saveRcdTempList = M2Share.FrontEngine.GetTempSaveRcdList();
-            for (var i = 0; i < saveRcdTempList.Count; i++)
+            IList<SavePlayerRcd> saveRcdTempList = M2Share.FrontEngine.GetTempSaveRcdList();
+            for (int i = 0; i < saveRcdTempList.Count; i++)
             {
-                var saveRcd = saveRcdTempList[i];
+                SavePlayerRcd saveRcd = saveRcdTempList[i];
                 if (saveRcd == null)
                 {
                     continue;
@@ -100,11 +94,11 @@ namespace GameSrv.Word.Threads
 
         private void ProcessReadStorage()
         {
-            var boReTryLoadDb = false;
-            var loadRcdTempList = M2Share.FrontEngine.GetLoadTempList();
-            for (var i = 0; i < loadRcdTempList.Count; i++)
+            bool boReTryLoadDb = false;
+            IList<LoadDBInfo> loadRcdTempList = M2Share.FrontEngine.GetLoadTempList();
+            for (int i = 0; i < loadRcdTempList.Count; i++)
             {
-                var loadDbInfo = loadRcdTempList[i];
+                LoadDBInfo loadDbInfo = loadRcdTempList[i];
                 if (loadDbInfo.SessionID == 0)
                 {
                     continue;
@@ -136,8 +130,8 @@ namespace GameSrv.Word.Threads
 
         private static bool LoadCharacterData(LoadDBInfo loadUser, ref bool reTry)
         {
-            var queryId = 0;
-            var result = false;
+            int queryId = 0;
+            bool result = false;
             reTry = false;
             if (M2Share.FrontEngine.InSaveRcdList(loadUser.ChrName))
             {
@@ -156,7 +150,7 @@ namespace GameSrv.Word.Threads
             }
             else
             {
-                var userOpenInfo = new UserOpenInfo
+                UserOpenInfo userOpenInfo = new UserOpenInfo
                 {
                     ChrName = loadUser.ChrName,
                     LoadUser = loadUser,

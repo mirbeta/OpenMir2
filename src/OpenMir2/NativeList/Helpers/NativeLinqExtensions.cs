@@ -1,7 +1,7 @@
-﻿using System;
+﻿using OpenMir2.NativeList.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using OpenMir2.NativeList.Utils;
 
 namespace OpenMir2.NativeList.Helpers
 {

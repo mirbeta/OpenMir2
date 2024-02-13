@@ -15,10 +15,10 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMapName = @params.Length > 0 ? @params[0] : "";
-            var sMapMode = @params.Length > 1 ? @params[1] : "";
-            var sParam1 = @params.Length > 2 ? @params[2] : "";
-            var sParam2 = @params.Length > 3 ? @params[3] : "";
+            string sMapName = @params.Length > 0 ? @params[0] : "";
+            string sMapMode = @params.Length > 1 ? @params[1] : "";
+            string sParam1 = @params.Length > 2 ? @params[2] : "";
+            string sParam2 = @params.Length > 3 ? @params[3] : "";
             if (PlayerActor.Permission < 6)
             {
                 return;

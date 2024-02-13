@@ -1,8 +1,8 @@
-﻿using System;
+﻿using OpenMir2.NativeList.Helpers;
+using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2.NativeList.Helpers;
 
 namespace OpenMir2.NativeList.Utils
 {

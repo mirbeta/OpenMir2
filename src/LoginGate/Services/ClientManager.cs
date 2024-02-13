@@ -24,18 +24,27 @@ public class ClientManager
 
     public void Initialization()
     {
-        var serverList = _serverManager.GetServerList();
-        for (var i = 0; i < serverList.Count; i++) _serverGateList.Add(new ClientThread(this, _sessionManager));
+        IList<ServerService> serverList = _serverManager.GetServerList();
+        for (int i = 0; i < serverList.Count; i++)
+        {
+            _serverGateList.Add(new ClientThread(this, _sessionManager));
+        }
     }
 
     public void Start()
     {
-        for (var i = 0; i < _serverGateList.Count; i++) _serverGateList[i].Start(_configManager.GameGates[i]);
+        for (int i = 0; i < _serverGateList.Count; i++)
+        {
+            _serverGateList[i].Start(_configManager.GameGates[i]);
+        }
     }
 
     public void Stop()
     {
-        for (var i = 0; i < _serverGateList.Count; i++) _serverGateList[i].Stop();
+        for (int i = 0; i < _serverGateList.Count; i++)
+        {
+            _serverGateList[i].Stop();
+        }
     }
 
     public IList<ClientThread> ServerGateList()
@@ -65,12 +74,18 @@ public class ClientManager
         Task.Factory.StartNew(async () =>
         {
             while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
-                if (_sendQueue.Reader.TryRead(out var message))
+            {
+                if (_sendQueue.Reader.TryRead(out ServerDataMessage message))
                 {
-                    var userSession = _sessionManager.GetSession(message.SocketId);
-                    if (userSession == null) continue;
+                    ClientSession userSession = _sessionManager.GetSession(message.SocketId);
+                    if (userSession == null)
+                    {
+                        continue;
+                    }
+
                     userSession.ProcessSvrData(message.Data);
                 }
+            }
         }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
     }
 
@@ -89,7 +104,10 @@ public class ClientManager
     public ClientThread GetClientThread(int socketId)
     {
         if (socketId > 0)
-            return _clientThreadMap.TryGetValue(socketId, out var userClinet) ? userClinet : GetClientThread();
+        {
+            return _clientThreadMap.TryGetValue(socketId, out ClientThread userClinet) ? userClinet : GetClientThread();
+        }
+
         return null;
     }
 
@@ -98,7 +116,7 @@ public class ClientManager
     /// </summary>
     public void DeleteClientThread(int socketId)
     {
-        _clientThreadMap.TryRemove(socketId, out var clientThread);
+        _clientThreadMap.TryRemove(socketId, out ClientThread clientThread);
     }
 
     /// <summary>
@@ -108,7 +126,10 @@ public class ClientManager
     public ClientThread GetClientThread()
     {
         if (!_serverGateList.Any())
+        {
             return null;
+        }
+
         ClientThread clientThread;
         if (_serverGateList.Count == 1)
         {
@@ -116,7 +137,7 @@ public class ClientManager
         }
         else
         {
-            var random = RandomNumber.GetInstance().Random(_serverGateList.Count);
+            int random = RandomNumber.GetInstance().Random(_serverGateList.Count);
             clientThread = _serverGateList[random];
         }
 

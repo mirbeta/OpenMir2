@@ -15,9 +15,9 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sItem = @params.Length > 1 ? @params[1] : "";
-            var sType = @params.Length > 2 ? @params[2] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sItem = @params.Length > 1 ? @params[1] : "";
+            string sType = @params.Length > 2 ? @params[2] : "";
 
             //IPlayerActor m_IPlayerActor;
             //TUserItem UserItem = null;

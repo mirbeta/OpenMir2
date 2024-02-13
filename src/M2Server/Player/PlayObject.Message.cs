@@ -1545,7 +1545,7 @@ namespace M2Server.Player
                         CharDesc turnmessage = default;
                         turnmessage.Feature = baseObject.GetFeature(baseObject);
                         turnmessage.Status = baseObject.CharStatus;
-                        var sendActonMsg = EDCode.EncodePacket(turnmessage);
+                        string sendActonMsg = EDCode.EncodePacket(turnmessage);
                         nObjCount = GetChrColor(baseObject);
                         if (!string.IsNullOrEmpty(processMsg.Msg))
                         {
@@ -1977,7 +1977,7 @@ namespace M2Server.Player
                     CharDesc showmessage = default;
                     showmessage.Feature = baseObject.GetFeature(this);
                     showmessage.Status = baseObject.CharStatus;
-                    var sendMsg = EDCode.EncodePacket(showmessage);
+                    string sendMsg = EDCode.EncodePacket(showmessage);
                     nObjCount = GetChrColor(baseObject);
                     if (!string.IsNullOrEmpty(processMsg.Msg))
                     {

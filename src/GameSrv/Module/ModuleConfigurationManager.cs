@@ -1,5 +1,4 @@
 ﻿using System.Text.Json;
-using SystemModule;
 
 namespace GameSrv.Module
 {
@@ -9,14 +8,14 @@ namespace GameSrv.Module
 
         public IEnumerable<ModuleInfo> GetModules()
         {
-            var modulesPath = Path.Combine(SystemShare.BasePath, ModulesFilename);
+            string modulesPath = Path.Combine(SystemShare.BasePath, ModulesFilename);
             if (!File.Exists(modulesPath))
             {
                 return null;
             }
-            using var reader = new StreamReader(modulesPath);
+            using StreamReader reader = new StreamReader(modulesPath);
             string content = reader.ReadToEnd();
-            var options = new JsonSerializerOptions
+            JsonSerializerOptions options = new JsonSerializerOptions
             {
                 WriteIndented = true,
             };

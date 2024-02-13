@@ -1,37 +1,31 @@
 ﻿using GameSrv.Module;
 using MediatR;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using OpenMir2;
 using Serilog;
-using Spectre.Console;
-using SystemModule;
 using IModuleInitializer = SystemModule.IModuleInitializer;
 
 namespace GameSrv
 {
-    public class AppServer 
+    public class AppServer
     {
         private readonly IHost _host;
 
         public AppServer()
         {
             PrintUsage();
-            
-            var builder = Host.CreateApplicationBuilder();
+
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder();
             builder.Services.AddModules();
             builder.Services.AddSingleton<GameApp>();
             builder.Services.AddHostedService<AppService>();
             builder.Services.AddHostedService<TimedService>();
             builder.Services.AddScoped<IMediator, Mediator>();
-            foreach (var module in GameShare.Modules)
+            foreach (ModuleInfo module in GameShare.Modules)
             {
-                var moduleInitializerType = module.Assembly.GetTypes().FirstOrDefault(t => typeof(IModuleInitializer).IsAssignableFrom(t));
+                Type moduleInitializerType = module.Assembly.GetTypes().FirstOrDefault(t => typeof(IModuleInitializer).IsAssignableFrom(t));
                 if ((moduleInitializerType != null) && (moduleInitializerType != typeof(IModuleInitializer)))
                 {
-                    var moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
+                    IModuleInitializer moduleInitializer = (IModuleInitializer)Activator.CreateInstance(moduleInitializerType);
                     builder.Services.AddSingleton(typeof(IModuleInitializer), moduleInitializer);
                     moduleInitializer.ConfigureServices(builder.Services);
                 }
@@ -40,8 +34,8 @@ namespace GameSrv
             builder.Logging.ClearProviders();
             builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
             builder.Logging.AddSerilog();
-            
-            var configuration = new ConfigurationBuilder()
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();

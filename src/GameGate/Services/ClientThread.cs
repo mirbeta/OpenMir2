@@ -1,17 +1,8 @@
 using GameGate.Conf;
-using System;
-using System.Net;
+using OpenMir2.DataHandlingAdapters;
 using System.Net.Sockets;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
-using OpenMir2;
-using OpenMir2.DataHandlingAdapters;
-using OpenMir2.Packets.ServerPackets;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
 using NetworkMonitor = OpenMir2.NetworkMonitor;
 
 namespace GameGate.Services
@@ -93,7 +84,7 @@ namespace GameGate.Services
 
         public void Initialize()
         {
-            var config = new TouchSocketConfig();
+            TouchSocketConfig config = new TouchSocketConfig();
             config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort));
             config.SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             config.ConfigurePlugins(x =>
@@ -113,11 +104,11 @@ namespace GameGate.Services
             {
                 ClientSocketError(null, error.SocketErrorCode);
             }
-            catch (TimeoutException ex)
+            catch (TimeoutException)
             {
                 ClientSocketError(null, SocketError.TimedOut);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 ClientSocketError(null, SocketError.SocketError);
             }
@@ -130,9 +121,9 @@ namespace GameGate.Services
 
         public ushort GetSessionId(string connectionId)
         {
-            var length = 4;
+            int length = 4;
             byte[] randomNumberBytes = new byte[length + 1];
-            using (var randomNumberGenerator = RandomNumberGenerator.Create())
+            using (RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create())
             {
                 randomNumberGenerator.GetBytes(randomNumberBytes);
             }
@@ -145,13 +136,13 @@ namespace GameGate.Services
 
             randomNumberBytes[length] = checksum;
 
-            var builder = new StringBuilder();
+            StringBuilder builder = new StringBuilder();
             foreach (byte randomNumberByte in randomNumberBytes)
             {
                 builder.Append(randomNumberByte % 10);
             }
 
-            if (ushort.TryParse(builder.ToString(), out var sessionId))
+            if (ushort.TryParse(builder.ToString(), out ushort sessionId))
             {
                 return sessionId;
             }
@@ -160,8 +151,8 @@ namespace GameGate.Services
 
         public string GetSessionCount()
         {
-            var sessionCount = 0;
-            for (var i = 0; i < SessionArray.Length; i++)
+            int sessionCount = 0;
+            for (int i = 0; i < SessionArray.Length; i++)
             {
                 if (SessionArray[i] != null && SessionArray[i].Socket != null)
                 {
@@ -177,7 +168,7 @@ namespace GameGate.Services
 
         private Task ClientSocketConnect(IClient client, ConnectedEventArgs e)
         {
-            var endPoint = ((TcpClientBase)client).RemoteIPHost;
+            IPHost endPoint = ((TcpClientBase)client).RemoteIPHost;
             GateReady = true;
             CheckServerTick = HUtil32.GetTickCount();
             Connected = true;
@@ -190,10 +181,10 @@ namespace GameGate.Services
 
         private Task ClientSocketDisconnect(IClient client, DisconnectEventArgs e)
         {
-            var socSocket = ((TcpClientBase)client);
-            for (var i = 0; i < GateShare.MaxSession; i++)
+            TcpClientBase socSocket = ((TcpClientBase)client);
+            for (int i = 0; i < GateShare.MaxSession; i++)
             {
-                var userSession = SessionArray[i];
+                SessionInfo userSession = SessionArray[i];
                 if (userSession != null)
                 {
                     if (userSession.Socket != null && userSession.Socket == socSocket.MainSocket)
@@ -265,7 +256,7 @@ namespace GameGate.Services
                     CheckServerTick = HUtil32.GetTickCount();
                     break;
                 case Grobal2.GM_SERVERUSERINDEX:
-                    var userSession = SessionContainer.GetSession(ThreadId, packetHeader.SessionId);
+                    ClientSession userSession = SessionContainer.GetSession(ThreadId, packetHeader.SessionId);
                     if (userSession != null)
                     {
                         userSession.SvrListIdx = packetHeader.SessionIndex;
@@ -277,8 +268,8 @@ namespace GameGate.Services
                 case Grobal2.GM_DATA:
                     unsafe
                     {
-                        var packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
-                        var sendMsg = new ServerSessionMessage();
+                        int packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
+                        ServerSessionMessage sendMsg = new ServerSessionMessage();
                         sendMsg.SessionId = packetHeader.SessionId;
                         sendMsg.BuffLen = (short)packetHeader.PackLength;
                         //sendMsg.Buffer = GateShare.BytePool.Rent(packetLen);
@@ -309,9 +300,9 @@ namespace GameGate.Services
                {
                    while (await _messageChannel.Reader.WaitToReadAsync(stoppingToken))
                    {
-                       if (_messageChannel.Reader.TryRead(out var message))
+                       if (_messageChannel.Reader.TryRead(out ServerSessionMessage message))
                        {
-                           var userSession = SessionContainer.GetSession(ThreadId, message.SessionId);
+                           ClientSession userSession = SessionContainer.GetSession(ThreadId, message.SessionId);
                            if (userSession == null)
                            {
                                continue;
@@ -335,7 +326,7 @@ namespace GameGate.Services
 
         public void RestSessionArray()
         {
-            for (var i = 0; i < GateShare.MaxSession; i++)
+            for (int i = 0; i < GateShare.MaxSession; i++)
             {
                 if (SessionArray[i] != null)
                 {
@@ -350,7 +341,7 @@ namespace GameGate.Services
 
         private void SendServerMsg(ushort command, ushort sessionId, int nSocket, ushort userIndex, string data, int nLen)
         {
-            var serverMessage = new ServerMessage
+            ServerMessage serverMessage = new ServerMessage
             {
                 PacketCode = Grobal2.PacketCode,
                 Socket = nSocket,
@@ -359,11 +350,11 @@ namespace GameGate.Services
                 SessionIndex = userIndex,
                 PackLength = nLen
             };
-            var sendBuffer = SerializerUtil.Serialize(serverMessage);
+            byte[] sendBuffer = SerializerUtil.Serialize(serverMessage);
             if (!string.IsNullOrEmpty(data))
             {
-                var strBuff = HUtil32.GetBytes(data);
-                var tempBuff = new byte[ServerMessage.PacketSize + data.Length];
+                byte[] strBuff = HUtil32.GetBytes(data);
+                byte[] tempBuff = new byte[ServerMessage.PacketSize + data.Length];
                 MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 MemoryCopy.BlockCopy(strBuff, 0, tempBuff, sendBuffer.Length, data.Length);
                 Send(tempBuff);
@@ -408,10 +399,10 @@ namespace GameGate.Services
         /// </summary>
         public void ProcessIdleSession()
         {
-            var currentTick = HUtil32.GetTickCount();
-            for (var j = 0; j < SessionArray.Length; j++)
+            int currentTick = HUtil32.GetTickCount();
+            for (int j = 0; j < SessionArray.Length; j++)
             {
-                var userSession = SessionArray[j];
+                SessionInfo userSession = SessionArray[j];
                 if (userSession != null && userSession.Socket != null)
                 {
                     if ((currentTick - userSession.ReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 

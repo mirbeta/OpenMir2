@@ -33,12 +33,12 @@ namespace RobotSystem.Services
             Abil.Level = (byte)conf.ReadWriteInteger("Info", "Level", 1);
             Abil.MaxExp = GetLevelExp(Abil.Level);
             ProtectStatus = conf.ReadWriteBool("Info", "ProtectStatus", false);// 是否守护模式
-            var nAttatckMode = (byte)conf.ReadWriteInteger("Info", "AttatckMode", 6);// 攻击模式
+            byte nAttatckMode = (byte)conf.ReadWriteInteger("Info", "AttatckMode", 6);// 攻击模式
             if (nAttatckMode <= 6)
             {
                 AttatckMode = (AttackMode)nAttatckMode;
             }
-            var sLineText = conf.ReadWriteString("Info", "UseSkill", "");
+            string sLineText = conf.ReadWriteString("Info", "UseSkill", "");
             if (!string.IsNullOrEmpty(sLineText))
             {
                 tempList = new List<string>();
@@ -46,15 +46,15 @@ namespace RobotSystem.Services
                 tempList = sLineText.Split(",").ToList();
                 for (int i = 0; i < tempList.Count; i++)
                 {
-                    var sMagicName = tempList[i].Trim();
+                    string sMagicName = tempList[i].Trim();
                     if (FindMagic(sMagicName) == null)
                     {
-                        var magic = SystemShare.WorldEngine.FindMagic(sMagicName);
+                        MagicInfo magic = SystemShare.WorldEngine.FindMagic(sMagicName);
                         if (magic != null)
                         {
                             if (magic.Job == 99 || magic.Job == (byte)Job)
                             {
-                                var userMagic = new UserMagic();
+                                UserMagic userMagic = new UserMagic();
                                 userMagic.Magic = magic;
                                 userMagic.MagIdx = magic.MagicId;
                                 userMagic.Level = 3;
@@ -74,7 +74,7 @@ namespace RobotSystem.Services
                 tempList = sLineText.Split(",").ToList();
                 for (int i = 0; i < tempList.Count; i++)
                 {
-                    var sItemName = tempList[i].Trim();
+                    string sItemName = tempList[i].Trim();
                     stdItem = SystemShare.ItemSystem.GetStdItem(sItemName);
                     if (stdItem != null)
                     {
@@ -104,7 +104,7 @@ namespace RobotSystem.Services
             }
             for (int i = 0; i < 9; i++)
             {
-                var sSayMsg = conf.ReadWriteString("MonSay", i.ToString(), "");
+                string sSayMsg = conf.ReadWriteString("MonSay", i.ToString(), "");
                 if (!string.IsNullOrEmpty(sSayMsg))
                 {
                     AiSayMsgList.Add(sSayMsg);
@@ -164,12 +164,12 @@ namespace RobotSystem.Services
             {
                 Directory.CreateDirectory(FilePath + "RobotIni");
             }
-            var sFileName = Path.Combine(FilePath, "RobotIni", sName + ".txt");
+            string sFileName = Path.Combine(FilePath, "RobotIni", sName + ".txt");
             if (File.Exists(sFileName))
             {
                 return sFileName;
             }
-            var result = Path.Combine(FilePath, "RobotIni", "默认.txt");
+            string result = Path.Combine(FilePath, "RobotIni", "默认.txt");
             switch (nType)
             {
                 case 0:

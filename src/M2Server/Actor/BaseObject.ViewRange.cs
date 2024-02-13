@@ -82,7 +82,7 @@ namespace M2Server.Actor
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             n24 = 1;
-                            var nIdx = 0;
+                            int nIdx = 0;
                             while (true)
                             {
                                 if (cellInfo.Count <= nIdx)

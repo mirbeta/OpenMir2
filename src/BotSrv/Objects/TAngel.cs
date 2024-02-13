@@ -17,7 +17,11 @@ namespace BotSrv.Objects
             int cf;
             int result = 0;
             TMonsterAction pm = ActorConst.GetRaceByPM(Race, m_wAppearance);
-            if (pm == null) return result;
+            if (pm == null)
+            {
+                return result;
+            }
+
             if (Death)
             {
                 result = pm.ActDie.start + m_btDir * (pm.ActDie.frame + pm.ActDie.skip) + (pm.ActDie.frame - 1);
@@ -26,11 +30,18 @@ namespace BotSrv.Objects
             {
                 m_nDefFrameCount = pm.ActStand.frame;
                 if (m_nCurrentDefFrame < 0)
+                {
                     cf = 0;
+                }
                 else if (m_nCurrentDefFrame >= pm.ActStand.frame)
+                {
                     cf = 0;
+                }
                 else
+                {
                     cf = m_nCurrentDefFrame;
+                }
+
                 result = pm.ActStand.start + m_btDir * (pm.ActStand.frame + pm.ActStand.skip) + cf;
             }
 

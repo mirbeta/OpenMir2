@@ -1,3 +1,4 @@
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -5,7 +6,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using OpenMir2.Packets.ServerPackets;
 
 namespace SelGate.Services
 {
@@ -34,9 +34,9 @@ namespace SelGate.Services
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_sendQueue.Reader.TryRead(out var message))
+                    while (_sendQueue.Reader.TryRead(out ServerDataMessage message))
                     {
-                        var userSession = GetSession(message.SocketId);
+                        ClientSession userSession = GetSession(message.SocketId);
                         if (userSession == null)
                         {
                             continue;
@@ -59,7 +59,7 @@ namespace SelGate.Services
 
         public void CloseSession(string sessionId)
         {
-            if (!_connectionSessions.TryRemove(sessionId, out var clientSession))
+            if (!_connectionSessions.TryRemove(sessionId, out ClientSession clientSession))
             {
                 Console.WriteLine($"移除用户会话失败:[{sessionId}]");
             }

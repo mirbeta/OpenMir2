@@ -18,15 +18,15 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sTime = @params.Length > 1 ? @params[1] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sTime = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sTime) || string.IsNullOrEmpty(sHumanName) ||
                 !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandShutupHelpMsg), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var dwTime = (uint)HUtil32.StrToInt(sTime, 5);
+            uint dwTime = (uint)HUtil32.StrToInt(sTime, 5);
             HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
             try
             {

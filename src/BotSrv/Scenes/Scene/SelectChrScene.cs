@@ -1,16 +1,13 @@
 ﻿using BotSrv.Player;
-using NLog;
-using System;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
+using System;
 
 namespace BotSrv.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
-        
+
         private readonly ScoketClient ClientSocket;
         private int NewIndex = 0;
         private readonly SelChar[] ChrArr;
@@ -118,7 +115,7 @@ namespace BotSrv.Scenes.Scene
             string str = EDCode.DeCodeString(body);
             int select = 0;
             int nChrCount = 0;
-            for (var i = 0; i < 1; i++)
+            for (int i = 0; i < 1; i++)
             {
                 str = HUtil32.GetValidStr3(str, ref chrname, HUtil32.Backslash);
                 str = HUtil32.GetValidStr3(str, ref job, HUtil32.Backslash);
@@ -172,8 +169,8 @@ namespace BotSrv.Scenes.Scene
                     }
                     break;
             }
-            var sJob = (byte)RandomNumber.GetInstance().Random(2);
-            var sSex = (byte)RandomNumber.GetInstance().Random(1);
+            byte sJob = (byte)RandomNumber.GetInstance().Random(2);
+            byte sSex = (byte)RandomNumber.GetInstance().Random(1);
             SendNewChr(RobotClient.LoginId, sChrName, sHair, sJob, sSex);
             LogService.Info($"创建角色 {sChrName}");
         }
@@ -212,14 +209,14 @@ namespace BotSrv.Scenes.Scene
 
         private void SendNewChr(string uid, string uname, byte shair, byte sjob, byte ssex)
         {
-            var msg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + uname + "/" + shair + "/" + sjob + "/" + ssex));
         }
 
         public void SendQueryChr()
         {
             ConnectionStep = ConnectionStep.QueryChr;
-            var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
+            CommandMessage DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(RobotClient.LoginId + "/" + RobotClient.Certification));
             LogService.Info("查询角色.");
         }
@@ -276,7 +273,7 @@ namespace BotSrv.Scenes.Scene
 
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
                 BotShare.ClientMgr.AddPacket(RobotClient.SessionId, sData);

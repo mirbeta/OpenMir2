@@ -90,7 +90,7 @@ namespace RobotSystem.Services
             {
                 for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var baseObject = VisibleActors[i].BaseObject;
+                    SystemModule.Actors.IActor baseObject = VisibleActors[i].BaseObject;
                     if (baseObject != null)
                     {
                         if (!baseObject.Death)

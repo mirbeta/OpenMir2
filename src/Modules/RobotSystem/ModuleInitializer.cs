@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
 using OpenMir2;
 using RobotSystem.Event;
 using SystemModule;
@@ -11,7 +10,7 @@ namespace RobotSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
-        
+
 
         public void Configure(IHostEnvironment env)
         {

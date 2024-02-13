@@ -1,10 +1,5 @@
 ﻿using GameGate.Conf;
-using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
-using OpenMir2;
 
 namespace GameGate.Services
 {
@@ -41,7 +36,7 @@ namespace GameGate.Services
         public void Initialize()
         {
             _serverServices = new ServerService[ConfigManager.GateConfig.ServerWorkThread];
-            for (var i = 0; i < _serverServices.Length; i++)
+            for (int i = 0; i < _serverServices.Length; i++)
             {
                 _serverServices[i] = new ServerService(ConfigManager.GateList[i]);
                 _serverServices[i].Initialize();
@@ -50,7 +45,7 @@ namespace GameGate.Services
 
         public void Start(CancellationToken stoppingToken)
         {
-            for (var i = 0; i < _serverServices.Length; i++)
+            for (int i = 0; i < _serverServices.Length; i++)
             {
                 if (_serverServices[i] == null)
                 {
@@ -62,7 +57,7 @@ namespace GameGate.Services
 
         public void Stop()
         {
-            for (var i = 0; i < _serverServices.Length; i++)
+            for (int i = 0; i < _serverServices.Length; i++)
             {
                 if (_serverServices[i] == null)
                 {
@@ -122,7 +117,7 @@ namespace GameGate.Services
                 if (ConfigManager.GateConfig.MessageWorkThread > RunMessageThreadCount)
                 {
                     Array.Resize(ref _messageWorkThreads, ConfigManager.GateConfig.MessageWorkThread);
-                    for (var i = 0; i < ConfigManager.GateConfig.MessageWorkThread; i++)
+                    for (int i = 0; i < ConfigManager.GateConfig.MessageWorkThread; i++)
                     {
                         if (_messageWorkThreads[i] == null)
                         {
@@ -136,7 +131,7 @@ namespace GameGate.Services
                 }
                 else
                 {
-                    for (var i = _messageWorkThreads.Length - 1; i >= ConfigManager.GateConfig.MessageWorkThread; i--)
+                    for (int i = _messageWorkThreads.Length - 1; i >= ConfigManager.GateConfig.MessageWorkThread; i--)
                     {
                         if (_messageWorkThreads[i] == null)
                         {
@@ -167,8 +162,11 @@ namespace GameGate.Services
             //4.按权重分配
             threadId = -1;
             if (!_serverServices.Any())
+            {
                 return null;
-            var availableList = _serverServices.Where(x => x.ClientThread.Running == RunningState.Runing).ToArray();//允许分配玩家连接
+            }
+
+            ServerService[] availableList = _serverServices.Where(x => x.ClientThread.Running == RunningState.Runing).ToArray();//允许分配玩家连接
             if (availableList.Length == 1)
             {
                 threadId = 1;
@@ -179,7 +177,7 @@ namespace GameGate.Services
                 threadId = serviceId;
                 return availableList[serviceId].ClientThread;
             }
-            var random = RandomNumber.GetInstance().Random(availableList.Length);
+            int random = RandomNumber.GetInstance().Random(availableList.Length);
             threadId = random;
             return availableList[random].ClientThread;
         }
@@ -220,9 +218,9 @@ namespace GameGate.Services
                     while (await _messageQueue.WaitToReadAsync(_cts.Token))
                     {
                         _resetEvent.WaitOne();
-                        if (_messageQueue.TryRead(out var message))
+                        if (_messageQueue.TryRead(out ClientPacketMessage message))
                         {
-                            var clientSession = SessionContainer.GetSession(message.ServiceId, message.SessionId);
+                            ClientSession clientSession = SessionContainer.GetSession(message.ServiceId, message.SessionId);
                             if (clientSession == null)
                             {
                                 LogService.Debug($"ServiceId:[{message.ServiceId}] SocketId:[{message.SessionId}] Session会话不存在");

@@ -1,17 +1,12 @@
-using M2Server;
-using NLog;
-using OpenMir2;
-using SystemModule;
-
 namespace GameSrv.Word.Threads
 {
-    public class ActorBuffProcessor: TimerScheduledService
+    public class ActorBuffProcessor : TimerScheduledService
     {
-        
+
 
         public ActorBuffProcessor() : base(TimeSpan.FromMilliseconds(50), "ActorBuffProcessor")
         {
-            
+
         }
 
         public override void Initialize(CancellationToken cancellationToken)

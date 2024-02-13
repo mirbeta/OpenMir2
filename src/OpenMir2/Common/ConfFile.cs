@@ -211,7 +211,7 @@ namespace OpenMir2.Common
             bool isCurSecComment = false;
             Dictionary<string, string> curSec = null;
             string str = "";
-            Label_02A6:
+        Label_02A6:
             str = this.ReadLine(rd);
             if (str != null)
             {
@@ -278,7 +278,7 @@ namespace OpenMir2.Common
                 }
                 goto Label_02A6;
             }
-            Label_02AE:
+        Label_02AE:
             rd.Close();
             return true;
         }

@@ -18,9 +18,9 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sCastleName = @params.Length > 0 ? @params[0] : "";
-            var sCtr = @params.Length > 1 ? @params[1] : "";
-            var sGold = @params.Length > 2 ? @params[2] : "";
+            string sCastleName = @params.Length > 0 ? @params[0] : "";
+            string sCtr = @params.Length > 1 ? @params[1] : "";
+            string sGold = @params.Length > 2 ? @params[2] : "";
             if (!string.IsNullOrEmpty(sCastleName) && sCastleName[0] == '?')
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, ""), MsgColor.Red, MsgType.Hint);
@@ -30,20 +30,20 @@ namespace CommandModule.Commands
             {
                 IList<string> list = new List<string>();
                 SystemShare.CastleMgr.GetCastleGoldInfo(list);
-                for (var i = 0; i < list.Count; i++)
+                for (int i = 0; i < list.Count; i++)
                 {
                     PlayerActor.SysMsg(list[i], MsgColor.Green, MsgType.Hint);
                 }
                 return;
             }
-            var castle = SystemShare.CastleMgr.Find(sCastleName);
+            SystemModule.Castles.IUserCastle castle = SystemShare.CastleMgr.Find(sCastleName);
             if (castle == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var ctr = sCtr[1];
-            var nGold = HUtil32.StrToInt(sGold, -1);
+            char ctr = sCtr[1];
+            int nGold = HUtil32.StrToInt(sGold, -1);
             if (!new List<char>(new[] { '=', '-', '+' }).Contains(ctr) || nGold < 0 || nGold > 100000000)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandParamUnKnow, this.Command.Name, CommandHelp.GameCommandSbkGoldHelpMsg), MsgColor.Red, MsgType.Hint);

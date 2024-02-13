@@ -60,19 +60,19 @@ namespace M2Server
             if (ActorBuffs.Any())
             {
                 Operate();
-                var currentTickCount = HUtil32.GetTickCount();
-                var idx = 0;
-                var actorCount = ActorBuffs.Count;
+                int currentTickCount = HUtil32.GetTickCount();
+                int idx = 0;
+                int actorCount = ActorBuffs.Count;
                 while (true)
                 {
                     if (idx >= actorCount)
                     {
                         break;
                     }
-                    var actor = ActorBuffs[idx];
-                    if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs))
+                    IActor actor = ActorBuffs[idx];
+                    if (ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> actorBuffs))
                     {
-                        for (var j = 0; j < actorBuffs.Count; j++)
+                        for (int j = 0; j < actorBuffs.Count; j++)
                         {
                             if (currentTickCount >= actorBuffs[j].DestroyTick)
                             {
@@ -111,7 +111,7 @@ namespace M2Server
             //    StatusTimeArr[nType] = nTime;
             //}
 
-            if (ActorBuffMap.TryGetValue(actor.ActorId, out var buffs))
+            if (ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> buffs))
             {
                 if (buffs.FirstOrDefault(x => x.BuffType == buffType) == null) // 不存在就直接添加,否则直接更新时间
                 {
@@ -126,9 +126,13 @@ namespace M2Server
                 }
                 else
                 {
-                    for (var i = 0; i < buffs.Count; i++)
+                    for (int i = 0; i < buffs.Count; i++)
                     {
-                        if (buffs[i].BuffType != buffType) continue;
+                        if (buffs[i].BuffType != buffType)
+                        {
+                            continue;
+                        }
+
                         buffs[i].StateVal = stateval;
                         buffs[i].StateTick = duraTime;
                         buffs[i].DestroyTick = HUtil32.GetTickCount() + 40000;
@@ -137,7 +141,7 @@ namespace M2Server
             }
             else
             {
-                var buffState = new ActorBuffData()
+                ActorBuffData buffState = new ActorBuffData()
                 {
                     ActorId = actor.ActorId,
                     BuffType = buffType,
@@ -160,13 +164,13 @@ namespace M2Server
         private void Operate()
         {
             bool boChg = false;
-            var boNeedRecalc = false;
+            bool boNeedRecalc = false;
             for (int i = 0; i < ActorBuffs.Count; i++)
             {
-                var actor = ActorBuffs[i];
+                IActor actor = ActorBuffs[i];
                 if (actor.Race == ActorRace.Play)
                 {
-                    if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs))
+                    if (ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> actorBuffs))
                     {
                         for (int j = 0; j < actorBuffs.Count; j++)
                         {
@@ -232,9 +236,9 @@ namespace M2Server
                     {
                         actor.PoisoningTick = HUtil32.GetTickCount();
 
-                        if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuff))
+                        if (ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> actorBuff))
                         {
-                            for (var j = 0; j < actorBuff.Count; j++)
+                            for (int j = 0; j < actorBuff.Count; j++)
                             {
                                 if (actorBuff[j].BuffType == BuffType.GreenPoison)
                                 {
@@ -260,8 +264,12 @@ namespace M2Server
 
         public int GetBuff(IActor actor, BuffType buffType)
         {
-            if (!ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs)) return 0;
-            for (var i = 0; i < actorBuffs.Count; i++)
+            if (!ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> actorBuffs))
+            {
+                return 0;
+            }
+
+            for (int i = 0; i < actorBuffs.Count; i++)
             {
                 if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffType)
                 {
@@ -274,7 +282,7 @@ namespace M2Server
         public int GetBuffStatus(IActor actor)
         {
             int nStatus = 0;
-            if (ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs))
+            if (ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> actorBuffs))
             {
                 for (int i = 0; i < actorBuffs.Count; i++)
                 {
@@ -294,8 +302,12 @@ namespace M2Server
 
         public bool HasBuff(IActor actor, BuffType buffType)
         {
-            if (!ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs)) return false;
-            for (var i = 0; i < actorBuffs.Count; i++)
+            if (!ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> actorBuffs))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < actorBuffs.Count; i++)
             {
                 if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffType)
                 {
@@ -307,8 +319,12 @@ namespace M2Server
 
         public bool TryUpdate(IActor actor, BuffType buffType, int duraTime)
         {
-            if (!ActorBuffMap.TryGetValue(actor.ActorId, out var actorBuffs)) return false;
-            for (var i = 0; i < actorBuffs.Count; i++)
+            if (!ActorBuffMap.TryGetValue(actor.ActorId, out IList<ActorBuffData> actorBuffs))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < actorBuffs.Count; i++)
             {
                 if (actorBuffs[i].ActorId == actor.ActorId && actorBuffs[i].BuffType == buffType)
                 {

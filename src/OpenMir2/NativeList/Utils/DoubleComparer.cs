@@ -1,6 +1,6 @@
-﻿using System;
-using OpenMir2.NativeList.Abstracts;
+﻿using OpenMir2.NativeList.Abstracts;
 using OpenMir2.NativeList.Enums;
+using System;
 
 namespace OpenMir2.NativeList.Utils
 {

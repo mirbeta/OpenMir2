@@ -2,7 +2,6 @@
 using OpenMir2.Enums;
 using SystemModule;
 using SystemModule.Actors;
-using SystemModule.Enums;
 
 namespace M2Server.Actor
 {
@@ -34,7 +33,7 @@ namespace M2Server.Actor
             {
                 return false;
             }
-            var result = false;
+            bool result = false;
             if (IsProperTarget(targetObject))
             {
                 if (targetObject.HitPoint > 0)
@@ -68,7 +67,7 @@ namespace M2Server.Actor
 
         private bool AttackDirect(IActor targetObject, int nSecPwr)
         {
-            var result = false;
+            bool result = false;
             if ((Race == ActorRace.Play) || (targetObject.Race == ActorRace.Play) || !(InSafeZone() && targetObject.InSafeZone()))
             {
                 if (IsProperTarget(targetObject))
@@ -93,13 +92,13 @@ namespace M2Server.Actor
         /// </summary>
         internal bool SwordLongAttack(ref int nSecPwr)
         {
-            var result = false;
+            bool result = false;
             short nX = 0;
             short nY = 0;
             nSecPwr = HUtil32.Round((nSecPwr * SystemShare.Config.SwordLongPowerRate) / 100.0);
             if (Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref nX, ref nY))
             {
-                var baseObject = Envir.GetMovingObject(nX, nY, true);
+                IActor baseObject = Envir.GetMovingObject(nX, nY, true);
                 if (baseObject != null)
                 {
                     if ((nSecPwr > 0) && IsProperTarget(baseObject))
@@ -119,16 +118,16 @@ namespace M2Server.Actor
         /// <returns></returns>
         internal bool SwordWideAttack(ref int nSecPwr)
         {
-            var result = false;
+            bool result = false;
             byte nC = 0;
             short nX = 0;
             short nY = 0;
             while (true)
             {
-                var nDir = (byte)((Dir + SystemShare.Config.WideAttack[nC]) % 8);
+                byte nDir = (byte)((Dir + SystemShare.Config.WideAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
-                    var targetObject = Envir.GetMovingObject(nX, nY, true);
+                    IActor targetObject = Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (targetObject != null) && IsProperTarget(targetObject))
                     {
                         result = AttackDirect(targetObject, nSecPwr);
@@ -146,16 +145,16 @@ namespace M2Server.Actor
 
         internal bool CrsWideAttack(int nSecPwr)
         {
-            var result = false;
-            var nC = 0;
+            bool result = false;
+            int nC = 0;
             short nX = 0;
             short nY = 0;
             while (true)
             {
-                var nDir = (byte)((Dir + SystemShare.Config.CrsAttack[nC]) % 8);
+                byte nDir = (byte)((Dir + SystemShare.Config.CrsAttack[nC]) % 8);
                 if (Envir.GetNextPosition(CurrX, CurrY, nDir, 1, ref nX, ref nY))
                 {
-                    var targetObject = Envir.GetMovingObject(nX, nY, true);
+                    IActor targetObject = Envir.GetMovingObject(nX, nY, true);
                     if ((nSecPwr > 0) && (targetObject != null) && IsProperTarget(targetObject))
                     {
                         result = AttackDirect(targetObject, nSecPwr);

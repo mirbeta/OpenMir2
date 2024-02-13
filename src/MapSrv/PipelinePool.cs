@@ -20,7 +20,7 @@ namespace MapSrv
             {
                 if (ServerPool.Count < Pipeline.MaxNumberOfServerInstances)
                 {
-                    var pipe = new Pipeline();
+                    Pipeline pipe = new Pipeline();
                     pipe.Start();
                     ServerPool.TryAdd(pipe.ID, pipe);
                 }
@@ -39,11 +39,18 @@ namespace MapSrv
             {
                 Console.WriteLine($"开始尝试释放,管道{Id}");
                 if (ServerPool.TryRemove(Id, out Pipeline pipe))
+                {
                     Console.WriteLine($"管道{Id},已经关闭,并完成资源释放");
+                }
                 else
+                {
                     Console.WriteLine($"未找到ID为{Id}的管道");
+                }
+
                 if (ServerPool.Count == 0)
+                {
                     CreatePipeLine();
+                }
             }
         }
 

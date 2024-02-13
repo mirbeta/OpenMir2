@@ -1,5 +1,5 @@
-﻿using System.Collections;
-using OpenMir2;
+﻿using OpenMir2;
+using System.Collections;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Enums;
@@ -19,10 +19,10 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sCtr = @params.Length > 1 ? @params[1] : "";
-            var nPoint = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
-            var ctr = '1';
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sCtr = @params.Length > 1 ? @params[1] : "";
+            int nPoint = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            char ctr = '1';
             int nCreditPoint;
             if (!string.IsNullOrEmpty(sCtr))
             {
@@ -34,7 +34,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

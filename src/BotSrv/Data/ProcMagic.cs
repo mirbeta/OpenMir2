@@ -1,6 +1,5 @@
 ﻿using BotSrv.Objects;
 using OpenMir2.Packets.ClientPackets;
-using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv.Data
 {

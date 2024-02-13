@@ -21,9 +21,9 @@ namespace CommandModule.Commands
             }
             try
             {
-                var sMapName = @params.Length > 0 ? @params[0] : "";
-                var sX = @params.Length > 1 ? @params[1] : "";
-                var sY = @params.Length > 2 ? @params[2] : "";
+                string sMapName = @params.Length > 0 ? @params[0] : "";
+                string sX = @params.Length > 1 ? @params[1] : "";
+                string sY = @params.Length > 2 ? @params[2] : "";
                 IEnvirnoment envir = null;
                 if (string.IsNullOrEmpty(sMapName) || string.IsNullOrEmpty(sX) || string.IsNullOrEmpty(sY) || !string.IsNullOrEmpty(sMapName) && sMapName[0] == '?')
                 {
@@ -35,8 +35,8 @@ namespace CommandModule.Commands
                     envir = SystemShare.MapMgr.FindMap(sMapName);
                     if (envir != null)
                     {
-                        var nX = HUtil32.StrToInt16(sX, 0);
-                        var nY = HUtil32.StrToInt16(sY, 0);
+                        short nX = HUtil32.StrToInt16(sX, 0);
+                        short nY = HUtil32.StrToInt16(sY, 0);
                         if (envir.CanWalk(nX, nY, true))
                         {
                             PlayerActor.SpaceMove(sMapName, nX, nY, 0);

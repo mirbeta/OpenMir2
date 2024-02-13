@@ -1,6 +1,5 @@
 using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
-using NLog;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,7 +8,7 @@ namespace DBSrv.Storage.MongoDB
 {
     public class PlayRecordStorage : IPlayRecordStorage
     {
-        
+
         private int _recordCount;
         private readonly Dictionary<string, int> _quickList;
         private readonly Dictionary<int, string> _indexQuickList;
@@ -59,13 +58,13 @@ namespace DBSrv.Storage.MongoDB
 
         private PlayerRecordData GetRecord(int nIndex, ref bool success)
         {
-            var humRecord = new PlayerRecordData();
+            PlayerRecordData humRecord = new PlayerRecordData();
             return humRecord;
         }
 
         public int FindByName(string sChrName, ArrayList ChrList)
         {
-            for (var i = 0; i < _quickList.Count; i++)
+            for (int i = 0; i < _quickList.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_QuickList[i], sChrName, sChrName.Length))
                 //{
@@ -77,7 +76,11 @@ namespace DBSrv.Storage.MongoDB
 
         public PlayerRecordData GetBy(int nIndex, ref bool success)
         {
-            if (nIndex > 0) return GetRecord(nIndex, ref success);
+            if (nIndex > 0)
+            {
+                return GetRecord(nIndex, ref success);
+            }
+
             success = false;
             return default;
         }
@@ -88,7 +91,7 @@ namespace DBSrv.Storage.MongoDB
             _quickIdList.GetChrList(sAccount, ref ChrNameList);
             if (ChrNameList != null)
             {
-                for (var i = 0; i < ChrNameList.Count; i++)
+                for (int i = 0; i < ChrNameList.Count; i++)
                 {
                     ChrList.Add(ChrNameList[i]);
                 }
@@ -98,13 +101,13 @@ namespace DBSrv.Storage.MongoDB
 
         public int ChrCountOfAccount(string sAccount)
         {
-            var result = 0;
+            int result = 0;
             IList<PlayQuick> ChrList = null;
             _quickIdList.GetChrList(sAccount, ref ChrList);
-            var success = false;
+            bool success = false;
             if (ChrList != null)
             {
-                for (var i = 0; i < ChrList.Count; i++)
+                for (int i = 0; i < ChrList.Count; i++)
                 {
                     PlayerRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
                     if (success && !HumDBRecord.Deleted)
@@ -162,7 +165,7 @@ namespace DBSrv.Storage.MongoDB
         public bool Delete(string sName)
         {
             IList<PlayQuick> ChrNameList = null;
-            var result = false;
+            bool result = false;
             int n10 = _quickList[sName];
             if (n10 < 0)
             {
@@ -176,7 +179,7 @@ namespace DBSrv.Storage.MongoDB
             //}
             if (result)
             {
-                var n14 = _quickIdList.GetChrList(HumRecord.sAccount, ref ChrNameList);
+                int n14 = _quickIdList.GetChrList(HumRecord.sAccount, ref ChrNameList);
                 if (n14 >= 0)
                 {
                     _quickIdList.DelRecord(n14, HumRecord.sChrName);
@@ -192,7 +195,7 @@ namespace DBSrv.Storage.MongoDB
 
         public bool Update(int nIndex, ref PlayerRecordData HumDBRecord)
         {
-            var result = false;
+            bool result = false;
             if (nIndex < 0)
             {
                 return false;

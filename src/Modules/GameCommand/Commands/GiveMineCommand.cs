@@ -19,9 +19,9 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMineName = @params.Length > 0 ? @params[0] : "";
-            var nMineCount = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            var nDura = @params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            string sMineName = @params.Length > 0 ? @params[0] : "";
+            int nMineCount = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            int nDura = @params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0;
             if (PlayerActor.Permission < this.Command.PermissionMin)
             {
                 PlayerActor.SysMsg(CommandHelp.GameCommandPermissionTooLow, MsgColor.Red, MsgType.Hint);
@@ -38,12 +38,12 @@ namespace CommandModule.Commands
                 nDura = SystemShare.RandomNumber.Random(18) + 3;
             }
             // 如纯度不填,则随机给纯度
-            for (var i = 0; i < nMineCount; i++)
+            for (int i = 0; i < nMineCount; i++)
             {
-                var userItem = new UserItem();
+                UserItem userItem = new UserItem();
                 if (SystemShare.ItemSystem.CopyToUserItemFromName(sMineName, ref userItem))
                 {
-                    var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem != null && stdItem.StdMode == 43)
                     {
                         if (PlayerActor.IsAddWeightAvailable(stdItem.Weight * nMineCount))

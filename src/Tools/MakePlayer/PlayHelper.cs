@@ -6,11 +6,11 @@
 
         public static void LoadSayListFile()
         {
-            var filePath = Path.Combine(AppContext.BaseDirectory, "SayMessage.txt");
+            string filePath = Path.Combine(AppContext.BaseDirectory, "SayMessage.txt");
             if (File.Exists(filePath))
             {
                 string line;
-                var sr = new StreamReader(filePath, System.Text.Encoding.ASCII);
+                StreamReader sr = new StreamReader(filePath, System.Text.Encoding.ASCII);
                 while (!string.IsNullOrEmpty(line = sr.ReadLine()))
                 {
                     SayMsgList.Add(line);

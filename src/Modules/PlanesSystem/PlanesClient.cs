@@ -1,7 +1,5 @@
-using System.Net;
-using System.Net.Sockets;
-using NLog;
 using OpenMir2;
+using System.Net;
 using SystemModule;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
@@ -14,7 +12,7 @@ namespace PlanesSystem
     /// </summary>
     public class PlanesClient
     {
-        
+
         private string sRecvMsg = string.Empty;
         private readonly TcpClient _tcpClient;
         private readonly PlanesMessage _groupMessageHandle;

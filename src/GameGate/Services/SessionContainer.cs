@@ -21,7 +21,7 @@ namespace GameGate.Services
         private SessionContainer()
         {
             _sessionMap = new ClientSession[ConfigManager.GateConfig.ServerWorkThread][];
-            for (var i = 0; i < _sessionMap.Length; i++)
+            for (int i = 0; i < _sessionMap.Length; i++)
             {
                 _sessionMap[i] = new ClientSession[GateShare.MaxSession];
             }

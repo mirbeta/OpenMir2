@@ -4,7 +4,6 @@ using OpenMir2.Enums;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Data;
-using SystemModule.Enums;
 
 namespace M2Server.Actor
 {
@@ -34,7 +33,7 @@ namespace M2Server.Actor
 
         public void SendMsg(int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "")
         {
-            var boSend = false;
+            bool boSend = false;
             if (IsRobot)
             {
                 switch (wIdent)
@@ -98,7 +97,7 @@ namespace M2Server.Actor
 
         public void SendMsg(IActor baseObject, int wIdent, int wParam, int nParam1, int nParam2, int nParam3, string sMsg = "")
         {
-            var boSend = false;
+            bool boSend = false;
             if (IsRobot)
             {
                 switch (wIdent)

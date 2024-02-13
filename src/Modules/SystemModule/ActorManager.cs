@@ -1,9 +1,8 @@
-﻿using System.Collections.Concurrent;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Enums;
+using System.Collections.Concurrent;
 using SystemModule.Actors;
 using SystemModule.Data;
-using SystemModule.Enums;
 
 namespace SystemModule
 {
@@ -30,7 +29,7 @@ namespace SystemModule
 
         public int GetNextIdentity()
         {
-            return _generateQueue.TryDequeue(out var sequence) ? sequence : HUtil32.Sequence();
+            return _generateQueue.TryDequeue(out int sequence) ? sequence : HUtil32.Sequence();
         }
 
         public int GenerateQueueCount => _generateQueue.Count;
@@ -52,17 +51,17 @@ namespace SystemModule
 
         public IActor Get(int actorId)
         {
-            return _actorsMap.TryGetValue(actorId, out var actor) ? actor : null;
+            return _actorsMap.TryGetValue(actorId, out IActor actor) ? actor : null;
         }
 
         public T Get<T>(int actorId) where T : IActor
         {
-            return _actorsMap.TryGetValue(actorId, out var actor) ? (T)actor : default;
+            return _actorsMap.TryGetValue(actorId, out IActor actor) ? (T)actor : default;
         }
 
         private void SendMessage(int actorId, SendMessage sendMessage)
         {
-            if (_actorsMap.TryGetValue(actorId, out var actor))
+            if (_actorsMap.TryGetValue(actorId, out IActor actor))
             {
                 actor.AddMessage(sendMessage);
             }
@@ -92,12 +91,12 @@ namespace SystemModule
 
         public object GetOhter(int objectId)
         {
-            return _ohterMap.TryGetValue(objectId, out var obj) ? obj : null;
+            return _ohterMap.TryGetValue(objectId, out object obj) ? obj : null;
         }
 
         public void RevomeOhter(int actorId)
         {
-            _ohterMap.TryRemove(actorId, out var actor);
+            _ohterMap.TryRemove(actorId, out object actor);
         }
 
         /// <summary>
@@ -105,9 +104,9 @@ namespace SystemModule
         /// </summary>
         public void CleanObject()
         {
-            foreach (var actorId in ActorIds)
+            foreach (int actorId in ActorIds)
             {
-                if (_actorsMap.TryRemove(actorId, out var actor))
+                if (_actorsMap.TryRemove(actorId, out IActor actor))
                 {
                     if (actor.Race != ActorRace.Play)
                     {
@@ -127,10 +126,10 @@ namespace SystemModule
             ActorIds.Clear();
             PlayerCount = 0;
             MonsterCount = 0;
-            using var actors = _actorsMap.GetEnumerator();
+            using IEnumerator<KeyValuePair<int, IActor>> actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
-                var actor = actors.Current.Value;
+                IActor actor = actors.Current.Value;
                 if (!actor.Death && !actor.Ghost)
                 {
                     if (actor.Race == ActorRace.Play)
@@ -147,7 +146,11 @@ namespace SystemModule
                 {
                     MonsterDeathCount++;
                 }
-                if (!actor.Ghost || actor.GhostTick <= 0) continue;
+                if (!actor.Ghost || actor.GhostTick <= 0)
+                {
+                    continue;
+                }
+
                 if ((HUtil32.GetTickCount() - actor.GhostTick) <= 20000)//死亡对象清理时间
                 {
                     continue;

@@ -17,7 +17,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             IActor baseObject;
             if (!string.IsNullOrEmpty(sHumanName))
             {

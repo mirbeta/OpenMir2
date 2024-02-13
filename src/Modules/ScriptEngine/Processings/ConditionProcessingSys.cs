@@ -199,9 +199,9 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckOpen(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
-            var n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
-            var n10 = playerActor.GetQuestUnitOpenStatus(n14);
+            int n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
+            int n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
+            int n10 = playerActor.GetQuestUnitOpenStatus(n14);
             if (n10 == 0)
             {
                 if (n18 != 0)
@@ -500,7 +500,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var nOnlineMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nOnlineMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nOnlineMin < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nOnlineMin);
@@ -511,7 +511,7 @@ namespace ScriptSystem.Processings
                 }
             }
             long nOnlineTime = (HUtil32.GetTickCount() - playerActor.LogonTick) / 60000;
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -545,7 +545,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var nErrorCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nErrorCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nErrorCount < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nErrorCount);
@@ -555,7 +555,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -601,7 +601,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var payMent = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
+            int payMent = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
             if (payMent < 1)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam1, ref payMent);
@@ -630,16 +630,16 @@ namespace ScriptSystem.Processings
             int nValue = 0;
             VarInfo varInfo;
             success = false;
-            var nDayCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
-            var boDeleteExprie = string.Compare(questConditionInfo.sParam6, "清理", StringComparison.Ordinal) == 0;
-            var boNoCompareHumanName = string.Compare(questConditionInfo.sParam6, "1", StringComparison.Ordinal) == 0;
-            var cMethod = questConditionInfo.sParam2[0];
+            int nDayCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
+            bool boDeleteExprie = string.Compare(questConditionInfo.sParam6, "清理", StringComparison.Ordinal) == 0;
+            bool boNoCompareHumanName = string.Compare(questConditionInfo.sParam6, "1", StringComparison.Ordinal) == 0;
+            char cMethod = questConditionInfo.sParam2[0];
             if (nDayCount < 0)
             {
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CHECKNAMEDATELIST);
                 return;
             }
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1);
+            string sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1);
             if (File.Exists(sListFileName))
             {
                 loadList = new StringList();
@@ -905,7 +905,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var nCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
+            int nCount = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             if (nCount < 0)
             {
                 if (baseObject.Race == ActorRace.Play)
@@ -923,8 +923,8 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var sMapName = questConditionInfo.sParam1;
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            string sMapName = questConditionInfo.sParam1;
+            IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
@@ -935,8 +935,8 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMAPHUMANCOUNT);
                 return;
             }
-            var nHumanCount = SystemShare.WorldEngine.GetMapHuman(envir.MapName);
-            var cMethod = questConditionInfo.sParam2[1];
+            int nHumanCount = SystemShare.WorldEngine.GetMapHuman(envir.MapName);
+            char cMethod = questConditionInfo.sParam2[1];
             switch (cMethod)
             {
                 case '=':
@@ -991,8 +991,8 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMAPMONCOUNT);
                 return;
             }
-            var nMonCount = SystemShare.WorldEngine.GetMapMonster(envir, null);
-            var cMethod = questConditionInfo.sParam2[1];
+            int nMonCount = SystemShare.WorldEngine.GetMapMonster(envir, null);
+            char cMethod = questConditionInfo.sParam2[1];
             switch (cMethod)
             {
                 case '=':
@@ -1043,7 +1043,7 @@ namespace ScriptSystem.Processings
             }
             GetVarValue(playerActor, questConditionInfo.sParam1, ref sMapName);
             sMapName = GetLineVariableText(playerActor, questConditionInfo.sParam1); // 地图支持变量
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.ISONMAP);
@@ -1065,7 +1065,7 @@ namespace ScriptSystem.Processings
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nCount);
             }
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
@@ -1076,7 +1076,7 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKMONMAP);
                 return;
             }
-            var monList = new List<IActor>();
+            List<IActor> monList = new List<IActor>();
             int nMapRangeCount = SystemShare.WorldEngine.GetMapMonster(envir, monList);
             for (int i = monList.Count - 1; i >= 0; i--)
             {
@@ -1105,12 +1105,12 @@ namespace ScriptSystem.Processings
         {
             IActor aObject;
             success = false;
-            var sMapName = questConditionInfo.sParam1;
-            var nX = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
-            var nY = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
-            var nRange = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
-            var cMethod = questConditionInfo.sParam5[1];
-            var nCount = HUtil32.StrToInt(questConditionInfo.sParam6, -1);
+            string sMapName = questConditionInfo.sParam1;
+            int nX = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nY = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
+            int nRange = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
+            char cMethod = questConditionInfo.sParam5[1];
+            int nCount = HUtil32.StrToInt(questConditionInfo.sParam6, -1);
             if (nX < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nX);
@@ -1127,13 +1127,13 @@ namespace ScriptSystem.Processings
             {
                 GetVarValue(baseObject, questConditionInfo.sParam6, ref nCount);
             }
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null || nX < 0 || nY < 0 || nRange < 0 || nCount < 0)
             {
                 ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKRANGEMONCOUNT);
                 return;
             }
-            var monList = new List<IActor>();
+            List<IActor> monList = new List<IActor>();
             int nMapRangeCount = envir.GetRangeBaseObject(nX, nY, nRange, true, monList);
             for (int i = monList.Count - 1; i >= 0; i--)
             {
@@ -1189,7 +1189,7 @@ namespace ScriptSystem.Processings
             int nCount;
             char cMethod = ' ';
             int nMapRangeCount;
-            var groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(playerActor.GroupOwner);
+            IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(playerActor.GroupOwner);
             if (playerActor.GroupOwner != 0 && groupOwnerPlay != null)
             {
                 nRange = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
@@ -1214,7 +1214,7 @@ namespace ScriptSystem.Processings
                 nMapRangeCount = 0;
                 for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                 {
-                    var groupHuman = groupOwnerPlay.GroupMembers[i];
+                    IPlayerActor groupHuman = groupOwnerPlay.GroupMembers[i];
                     if (groupHuman.Envir == playerActor.Envir)
                     {
                         if (Math.Abs(playerActor.CurrX - groupHuman.CurrX) <= nRange &&
@@ -1265,8 +1265,8 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CHECKONLINEPLAYCOUNT);
                 return;
             }
-            var cMethod = questConditionInfo.sParam1[0];
-            var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            char cMethod = questConditionInfo.sParam1[0];
+            int nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nCount);
@@ -1322,7 +1322,7 @@ namespace ScriptSystem.Processings
                 return false;
             }
             userItem = playerActor.UseItems[nWhere];
-            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playerActor.SysMsg("你身上没有戴指定物品！！！", MsgColor.Red, MsgType.Hint);
@@ -1345,7 +1345,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nLevel);
@@ -1355,7 +1355,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1405,7 +1405,7 @@ namespace ScriptSystem.Processings
                     }
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             for (int i = 0; i < baseObject.SlaveList.Count; i++)
             {
                 aObject = baseObject.SlaveList[i];
@@ -1450,8 +1450,8 @@ namespace ScriptSystem.Processings
             success = false;
             int nSlavenRange;
             IActor aObject;
-            var sChrName = questConditionInfo.sParam1;
-            var nRange = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
+            string sChrName = questConditionInfo.sParam1;
+            int nRange = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             if (nRange < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam3, ref nRange);
@@ -1461,7 +1461,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var boFind = false;
+            bool boFind = false;
             for (int i = 0; i < baseObject.SlaveList.Count; i++)
             {
                 aObject = baseObject.SlaveList[i];
@@ -1475,7 +1475,7 @@ namespace ScriptSystem.Processings
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sChrName);
             }
-            var cMethod = questConditionInfo.sParam2[1];
+            char cMethod = questConditionInfo.sParam2[1];
             for (int i = 0; i < baseObject.SlaveList.Count; i++)
             {
                 aObject = baseObject.SlaveList[i];
@@ -1522,17 +1522,17 @@ namespace ScriptSystem.Processings
             success = false;
             string sName = string.Empty;
             bool boFoundVar = false;
-            var sType = questConditionInfo.sParam1;
-            var sVarName = questConditionInfo.sParam2;
-            var sMethod = questConditionInfo.sParam3;
+            string sType = questConditionInfo.sParam1;
+            string sVarName = questConditionInfo.sParam2;
+            string sMethod = questConditionInfo.sParam3;
             long nVarValue = HUtil32.StrToInt(questConditionInfo.sParam4, 0);
-            var sVarValue = questConditionInfo.sParam4;
+            string sVarValue = questConditionInfo.sParam4;
             if (sType == "" || sVarName == "" || sMethod == "")
             {
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CHECKVAR);
                 return;
             }
-            var cMethod = sMethod[1];
+            char cMethod = sMethod[1];
             Dictionary<string, DynamicVar> dynamicVarList = GeDynamicVarList(playerActor, sType, ref sName);
             if (dynamicVarList == null)
             {
@@ -1623,7 +1623,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var nGold = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nGold = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nGold < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nGold);
@@ -1633,7 +1633,7 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CHECKCASTLEGOLD);
                 return;
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1669,7 +1669,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var nContribution = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nContribution = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nContribution < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nContribution);
@@ -1679,7 +1679,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1715,7 +1715,7 @@ namespace ScriptSystem.Processings
             ref bool success)
         {
             success = false;
-            var nCreditPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nCreditPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCreditPoint < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nCreditPoint);
@@ -1725,7 +1725,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -1826,10 +1826,10 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckBonusPoint(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nTotlePoint = playerActor.BonusAbil.DC + playerActor.BonusAbil.MC + playerActor.BonusAbil.SC + playerActor.BonusAbil.AC + playerActor.BonusAbil.MAC + playerActor.BonusAbil.HP + playerActor.BonusAbil.MP + playerActor.BonusAbil.Hit + playerActor.BonusAbil.Speed;
+            int nTotlePoint = playerActor.BonusAbil.DC + playerActor.BonusAbil.MC + playerActor.BonusAbil.SC + playerActor.BonusAbil.AC + playerActor.BonusAbil.MAC + playerActor.BonusAbil.HP + playerActor.BonusAbil.MP + playerActor.BonusAbil.Hit + playerActor.BonusAbil.Speed;
             nTotlePoint = nTotlePoint + playerActor.BonusPoint;
-            var cMethod = questConditionInfo.sParam1[0];
-            var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            char cMethod = questConditionInfo.sParam1[0];
+            int nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nCount);
@@ -1903,10 +1903,10 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckHp(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var cMethodMin = questConditionInfo.sParam1[0];
-            var cMethodMax = questConditionInfo.sParam3[1];
-            var nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
+            char cMethodMin = questConditionInfo.sParam1[0];
+            char cMethodMax = questConditionInfo.sParam3[1];
+            int nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
             if (nMin < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nMin);
@@ -1953,7 +1953,7 @@ namespace ScriptSystem.Processings
 
         public bool ConditionOfCheckMP_CheckHigh(char cMethodMax, IActor baseObject, long nMax)
         {
-            var success = false;
+            bool success = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -1989,10 +1989,10 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckMp(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var cMethodMin = questConditionInfo.sParam1[0];
-            var cMethodMax = questConditionInfo.sParam3[1];
-            var nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
+            char cMethodMin = questConditionInfo.sParam1[0];
+            char cMethodMax = questConditionInfo.sParam3[1];
+            int nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
             if (nMin < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nMin);
@@ -2073,10 +2073,10 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckDc(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var cMethodMin = questConditionInfo.sParam1[0];
-            var cMethodMax = questConditionInfo.sParam3[1];
-            var nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
+            char cMethodMin = questConditionInfo.sParam1[0];
+            char cMethodMax = questConditionInfo.sParam3[1];
+            int nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
             if (nMin < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nMin);
@@ -2164,7 +2164,7 @@ namespace ScriptSystem.Processings
 
         public bool ConditionOfCheckMC_CheckHigh(IActor baseObject, char cMethodMax, long nMax)
         {
-            var success = false;
+            bool success = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -2199,7 +2199,7 @@ namespace ScriptSystem.Processings
 
         private bool ConditionOfCheckSC_CheckHigh(char cMethodMax, IActor baseObject, long nMax)
         {
-            var success = false;
+            bool success = false;
             switch (cMethodMax)
             {
                 case '=':
@@ -2235,10 +2235,10 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckSc(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var cMethodMin = questConditionInfo.sParam1[0];
-            var cMethodMax = questConditionInfo.sParam3[1];
-            var nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
-            var nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
+            char cMethodMin = questConditionInfo.sParam1[0];
+            char cMethodMax = questConditionInfo.sParam3[1];
+            int nMin = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nMax = HUtil32.StrToInt(questConditionInfo.sParam4, -1);
             if (nMin < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nMin);
@@ -2286,7 +2286,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckExp(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var dwExp = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int dwExp = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (dwExp < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref dwExp);
@@ -2296,7 +2296,7 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKEXP);
                 return;
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2331,7 +2331,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckFlourishPoint(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nPoint);
@@ -2345,8 +2345,8 @@ namespace ScriptSystem.Processings
             {
                 return;
             }
-            var guild = playerActor.MyGuild;
-            var cMethod = questConditionInfo.sParam1[0];
+            IGuild guild = playerActor.MyGuild;
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2392,7 +2392,7 @@ namespace ScriptSystem.Processings
                 return;
             }
             IGuild guild = playerActor.MyGuild;
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2427,7 +2427,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckGuildAuraePoint(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nPoint);
@@ -2441,8 +2441,8 @@ namespace ScriptSystem.Processings
             {
                 return;
             }
-            var guild = playerActor.MyGuild;
-            var cMethod = questConditionInfo.sParam1[0];
+            IGuild guild = playerActor.MyGuild;
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2477,7 +2477,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckGuildBuildPoint(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nPoint);
@@ -2491,8 +2491,8 @@ namespace ScriptSystem.Processings
             {
                 return;
             }
-            var guild = playerActor.MyGuild;
-            var cMethod = questConditionInfo.sParam1[0];
+            IGuild guild = playerActor.MyGuild;
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2527,7 +2527,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckStabilityPoint(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nPoint < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nPoint);
@@ -2541,8 +2541,8 @@ namespace ScriptSystem.Processings
             {
                 return;
             }
-            var guild = playerActor.MyGuild;
-            var cMethod = questConditionInfo.sParam1[0];
+            IGuild guild = playerActor.MyGuild;
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2577,7 +2577,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckGameGold(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nGameGold = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nGameGold = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nGameGold < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nGameGold);
@@ -2587,7 +2587,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2622,7 +2622,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckGamePoint(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nGamePoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nGamePoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nGamePoint < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nGamePoint);
@@ -2632,7 +2632,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2674,7 +2674,7 @@ namespace ScriptSystem.Processings
             {
                 return;
             }
-            var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nCount);
@@ -2684,7 +2684,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             //var groupOwner = (IPlayerActor)M2Share.ActorMgr.Get(playerActor.GroupOwner);
             //switch (cMethod)
             //{
@@ -2750,7 +2750,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckCastleChageDay(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nDay < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nDay);
@@ -2760,8 +2760,8 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CASTLECHANGEDAY);
                 return;
             }
-            var nChangeDay = HUtil32.GetDayCount(DateTime.Now, playerActor.Castle.ChangeDate);
-            var cMethod = questConditionInfo.sParam1[0];
+            int nChangeDay = HUtil32.GetDayCount(DateTime.Now, playerActor.Castle.ChangeDate);
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2800,7 +2800,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckCastleWarDay(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nDay < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nDay);
@@ -2810,8 +2810,8 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CASTLEWARDAY);
                 return;
             }
-            var nWarDay = HUtil32.GetDayCount(DateTime.Now, playerActor.Castle.WarDate);
-            var cMethod = questConditionInfo.sParam1[0];
+            int nWarDay = HUtil32.GetDayCount(DateTime.Now, playerActor.Castle.WarDate);
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -2848,12 +2848,12 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckCastleDoorStatus(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nDay = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nDay < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nDay);
             }
-            var nDoorStatus = -1;
+            int nDoorStatus = -1;
             if (string.Compare(questConditionInfo.sParam1, "损坏", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nDoorStatus = 0;
@@ -2993,8 +2993,8 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckItemType(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nWhere = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
-            var nType = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nWhere = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
+            int nType = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nWhere < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref nWhere);
@@ -3013,7 +3013,7 @@ namespace ScriptSystem.Processings
             {
                 success = false;
             }
-            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null && stdItem.StdMode == nType)
             {
                 success = true;
@@ -3023,7 +3023,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckLevelEx(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref nLevel);
@@ -3033,7 +3033,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -3072,9 +3072,9 @@ namespace ScriptSystem.Processings
             string sVar = string.Empty;
             string sValue = string.Empty;
             int nValue = 0;
-            var sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1);
-            var nItemCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
-            var loadList = new StringList();
+            string sListFileName = SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1);
+            int nItemCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            StringList loadList = new StringList();
             if (File.Exists(sListFileName))
             {
                 try
@@ -3106,14 +3106,14 @@ namespace ScriptSystem.Processings
                 {
                     continue;
                 }
-                var sItemName = loadList[i];
+                string sItemName = loadList[i];
                 if (nItemCount <= 0)
                 {
                     break;
                 }
                 for (int j = 0; j < baseObject.ItemList.Count; j++)
                 {
-                    var userItem = baseObject.ItemList[j];
+                    UserItem userItem = baseObject.ItemList[j];
                     if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.Ordinal) == 0)
                     {
                         nItemCount -= 1;
@@ -3164,7 +3164,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckMarryCount(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nCount);
@@ -3174,7 +3174,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -3214,7 +3214,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckMemBerLevel(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nLevel);
@@ -3224,7 +3224,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -3259,7 +3259,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckMemberType(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nType = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nType = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nType < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam2, ref nType);
@@ -3269,7 +3269,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -3305,22 +3305,22 @@ namespace ScriptSystem.Processings
         {
             success = false;
             string sName = string.Empty;
-            var loadList = new StringList();
+            StringList loadList = new StringList();
             try
             {
-                var sChrName = playerActor.ChrName;
-                var sCharIPaddr = playerActor.LoginIpAddr;
+                string sChrName = playerActor.ChrName;
+                string sCharIPaddr = playerActor.LoginIpAddr;
                 if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1)))
                 {
                     loadList.LoadFromFile(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1));
                     for (int i = 0; i < loadList.Count; i++)
                     {
-                        var sLine = loadList[i];
+                        string sLine = loadList[i];
                         if (sLine[0] == ';')
                         {
                             continue;
                         }
-                        var sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\09" });
+                        string sIPaddr = HUtil32.GetValidStr3(sLine, ref sName, new string[] { " ", "/", "\09" });
                         sIPaddr = sIPaddr.Trim();
                         if (sName == sChrName && sIPaddr == sCharIPaddr)
                         {
@@ -3387,7 +3387,7 @@ namespace ScriptSystem.Processings
             {
                 btSex = 1;
             }
-            var poseHuman = (IPlayerActor)baseObject.GetPoseCreate();
+            IPlayerActor poseHuman = (IPlayerActor)baseObject.GetPoseCreate();
             if (poseHuman != null)
             {
                 if (poseHuman.Gender == (PlayerGender)btSex)
@@ -3413,7 +3413,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckPoseLevel(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nLevel = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nLevel < 0)
             {
                 if (baseObject.Race == ActorRace.Play)
@@ -3431,7 +3431,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             IActor poseHuman = baseObject.GetPoseCreate();
             if (poseHuman != null)
             {
@@ -3505,7 +3505,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckSlaveCount(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int nCount = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (nCount < 0)
             {
                 if (baseObject.Race == ActorRace.Play)
@@ -3523,7 +3523,7 @@ namespace ScriptSystem.Processings
                     return;
                 }
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -3569,8 +3569,8 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckMapName(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var sChrName = baseObject.ChrName;
-            var sMapName = questConditionInfo.sParam1;
+            string sChrName = baseObject.ChrName;
+            string sMapName = questConditionInfo.sParam1;
             if (SystemShare.MapMgr.FindMap(sMapName) == null)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam1, ref sMapName);
@@ -3584,7 +3584,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckSkill(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var nSkillLevel = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
+            int nSkillLevel = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             if (nSkillLevel < 0)
             {
                 if (baseObject.Race == ActorRace.Play)
@@ -3599,12 +3599,12 @@ namespace ScriptSystem.Processings
             }
             if (baseObject.Race == ActorRace.Play)
             {
-                var userMagic = baseObject.GetMagicInfo(questConditionInfo.sParam1);
+                UserMagic userMagic = baseObject.GetMagicInfo(questConditionInfo.sParam1);
                 if (userMagic == null)
                 {
                     return;
                 }
-                var cMethod = questConditionInfo.sParam2[1];
+                char cMethod = questConditionInfo.sParam2[1];
                 switch (cMethod)
                 {
                     case '=':
@@ -3640,8 +3640,8 @@ namespace ScriptSystem.Processings
         private void ConditionOfAnsiContainsText(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var sValue1 = questConditionInfo.sParam1;
-            var sValue2 = questConditionInfo.sParam2;
+            string sValue1 = questConditionInfo.sParam1;
+            string sValue2 = questConditionInfo.sParam2;
             sValue1 = GetLineVariableText(playerActor, questConditionInfo.sParam1);
             sValue2 = GetLineVariableText(playerActor, questConditionInfo.sParam2);
             GetVarValue(playerActor, sValue1, ref sValue1);
@@ -3652,8 +3652,8 @@ namespace ScriptSystem.Processings
         private void ConditionOfCompareText(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var sValue1 = GetLineVariableText(playerActor, questConditionInfo.sParam1);
-            var sValue2 = GetLineVariableText(playerActor, questConditionInfo.sParam2);
+            string sValue1 = GetLineVariableText(playerActor, questConditionInfo.sParam1);
+            string sValue2 = GetLineVariableText(playerActor, questConditionInfo.sParam2);
             GetVarValue(playerActor, sValue1, ref sValue1);
             GetVarValue(playerActor, sValue2, ref sValue2);
             success = string.Compare(sValue1, sValue2, StringComparison.OrdinalIgnoreCase) == 0;
@@ -3662,7 +3662,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckPkPoint(INormNpc normNpc, IPlayerActor baseObject, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = false;
-            var pvpPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
+            int pvpPoint = HUtil32.StrToInt(questConditionInfo.sParam2, -1);
             if (pvpPoint < 0)
             {
                 GetVarValue(baseObject, questConditionInfo.sParam2, ref pvpPoint);
@@ -3672,7 +3672,7 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKPKPOINTEX);
                 return;
             }
-            var cMethod = questConditionInfo.sParam1[0];
+            char cMethod = questConditionInfo.sParam1[0];
             switch (cMethod)
             {
                 case '=':
@@ -3778,10 +3778,10 @@ namespace ScriptSystem.Processings
                 ScriptConditionError(normNpc, baseObject, questConditionInfo, ConditionCode.CHECKINCURRRECT);
                 return;
             }
-            var nLeft = HUtil32._MAX(nX - nRange, 0);
-            var nRight = HUtil32._MIN(nX + nRange, baseObject.Envir.Width);
-            var nTop = HUtil32._MAX(nY - nRange, 0);
-            var nBottom = HUtil32._MIN(nY + nRange, baseObject.Envir.Height);
+            int nLeft = HUtil32._MAX(nX - nRange, 0);
+            int nRight = HUtil32._MIN(nX + nRange, baseObject.Envir.Width);
+            int nTop = HUtil32._MAX(nY - nRange, 0);
+            int nBottom = HUtil32._MIN(nY + nRange, baseObject.Envir.Height);
             success = false;
             //var currRect = new TRect(nLeft, nTop, nRight, nBottom);
             //success = baseObject.CurrX >= currRect.Left && baseObject.CurrY >= currRect.Top && baseObject.CurrX <= currRect.Right && baseObject.CurrY <= currRect.Bottom;
@@ -3792,7 +3792,7 @@ namespace ScriptSystem.Processings
             success = false;
             if (playerActor.MyGuild != null)
             {
-                var sChrName = questConditionInfo.sParam1;
+                string sChrName = questConditionInfo.sParam1;
                 sChrName = GetLineVariableText(playerActor, sChrName);
                 GetVarValue(playerActor, sChrName, ref sChrName);
                 success = playerActor.MyGuild.IsMember(sChrName);
@@ -3805,9 +3805,9 @@ namespace ScriptSystem.Processings
             string sVar = string.Empty;
             string sValue = string.Empty;
             int nValue = 0;
-            var nPostion = -1;
+            int nPostion = -1;
             GetVarValue(playerActor, questConditionInfo.sParam2, ref sValue);
-            var loadList = new StringList();
+            StringList loadList = new StringList();
             try
             {
                 if (File.Exists(SystemShare.GetEnvirFilePath(normNpc.Path, questConditionInfo.sParam1)))
@@ -3827,7 +3827,7 @@ namespace ScriptSystem.Processings
             }
             if (questConditionInfo.sParam3 != "")
             {
-                var varInfo = GetVarValue(playerActor, questConditionInfo.sParam3, ref sVar, ref sValue, ref nValue);
+                VarInfo varInfo = GetVarValue(playerActor, questConditionInfo.sParam3, ref sVar, ref sValue, ref nValue);
                 switch (varInfo.VarAttr)
                 {
                     case VarAttr.aNone:
@@ -4024,9 +4024,9 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckDura(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            var n1C = 0;
-            var nMaxDura = 0;
-            var nDura = 0;
+            int n1C = 0;
+            int nMaxDura = 0;
+            int nDura = 0;
             playerActor.QuestCheckItem(questConditionInfo.sParam1, ref n1C, ref nMaxDura, ref nDura);
             if (HUtil32.Round(nDura / 1000.0) < questConditionInfo.nParam2)
             {
@@ -4043,10 +4043,10 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckItem(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            var n1C = 0;
-            var nMaxDura = 0;
-            var nDura = 0;
-            var s01 = questConditionInfo.sParam1;
+            int n1C = 0;
+            int nMaxDura = 0;
+            int nDura = 0;
+            string s01 = questConditionInfo.sParam1;
             GetVarValue(playerActor, questConditionInfo.sParam1, ref s01);
             playerActor.QuestCheckItem(s01, ref n1C, ref nMaxDura, ref nDura);
             if (n1C < questConditionInfo.nParam2)
@@ -4104,9 +4104,9 @@ namespace ScriptSystem.Processings
         private void ConditionCheckUnit(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
-            var n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
-            var n10 = playerActor.GetQuestUnitStatus(n14);
+            int n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
+            int n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
+            int n10 = playerActor.GetQuestUnitStatus(n14);
             if (n10 == 0)
             {
                 if (n18 != 0)
@@ -4160,7 +4160,7 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheckGold(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
+            int n14 = HUtil32.StrToInt(questConditionInfo.sParam1, -1);
             if (n14 < 0)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam1, ref n14);
@@ -4174,9 +4174,9 @@ namespace ScriptSystem.Processings
         private void ConditionOfCheck(INormNpc normNpc, IPlayerActor playerActor, QuestConditionInfo questConditionInfo, ref bool success)
         {
             success = true;
-            var n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
-            var n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
-            var n10 = playerActor.GetQuestFalgStatus(n14);
+            int n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
+            int n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
+            int n10 = playerActor.GetQuestFalgStatus(n14);
             if (n10 == 0)
             {
                 if (n18 != 0)
@@ -4250,7 +4250,7 @@ namespace ScriptSystem.Processings
             {
                 Dispose(loadList);
             }
-            var cMethod = questConditionInfo.sParam2[1];
+            char cMethod = questConditionInfo.sParam2[1];
             long nPostion = HUtil32.StrToInt(questConditionInfo.sParam3, -1);
             if (questConditionInfo.sParam4 != "" && playerActor.Race == ActorRace.Play)
             {
@@ -4341,12 +4341,12 @@ namespace ScriptSystem.Processings
             {
                 ScriptConditionError(normNpc, playerActor, questConditionInfo, ConditionCode.CHECKSLAVENAME);
             }
-            var sSlaveName = questConditionInfo.sParam1;
+            string sSlaveName = questConditionInfo.sParam1;
             if (playerActor.Race == ActorRace.Play)
             {
                 GetVarValue(playerActor, questConditionInfo.sParam1, ref sSlaveName);
             }
-            for (var i = 0; i < playerActor.SlaveList.Count; i++)
+            for (int i = 0; i < playerActor.SlaveList.Count; i++)
             {
                 IActor aObject = playerActor.SlaveList[i];
                 if (string.Compare(sSlaveName, aObject.ChrName, StringComparison.Ordinal) == 0)
@@ -4441,15 +4441,15 @@ namespace ScriptSystem.Processings
             string s02 = GetLineVariableText(playerActor, questConditionInfo.sParam2);// 路径支持变量
             if (s02[0] == '\\')
             {
-                s02 = s02.Substring(1, s02.Length - 1);
+                s02 = s02[1..];
             }
             if (s02[1] == '\\')
             {
-                s02 = s02.Substring(2, s02.Length - 2);
+                s02 = s02[2..];
             }
             if (s02[2] == '\\')
             {
-                s02 = s02.Substring(3, s02.Length - 3);
+                s02 = s02[3..];
             }
             if (!GotoLableCheckStringList(s01, s02))
             {
@@ -4491,15 +4491,15 @@ namespace ScriptSystem.Processings
             GetValValue(playerActor, questConditionInfo.sParam1, ref s01);
             if (questConditionInfo.sParam2[0] == '\\')
             {
-                s02 = questConditionInfo.sParam2.Substring(1, questConditionInfo.sParam2.Length - 1);
+                s02 = questConditionInfo.sParam2[1..];
             }
             if (questConditionInfo.sParam2[1] == '\\')
             {
-                s02 = questConditionInfo.sParam2.Substring(2, questConditionInfo.sParam2.Length - 2);
+                s02 = questConditionInfo.sParam2[2..];
             }
             if (questConditionInfo.sParam2[2] == '\\')
             {
-                s02 = questConditionInfo.sParam2.Substring(3, questConditionInfo.sParam2.Length - 3);
+                s02 = questConditionInfo.sParam2[3..];
             }
             s02 = GetLineVariableText(playerActor, s02);
             if (!GotoLable_CheckAnsiContainsTextList(s01, s02))
@@ -4673,8 +4673,12 @@ namespace ScriptSystem.Processings
             bool success = false;
             n140 = -1;
             n180 = questConditionInfo.nParam2;
-            var n100 = SystemShare.GetValNameNo(questConditionInfo.sParam1);
-            if (n100 <= 0) return success;
+            int n100 = SystemShare.GetValNameNo(questConditionInfo.sParam1);
+            if (n100 <= 0)
+            {
+                return success;
+            }
+
             if (HUtil32.RangeInDefined(n100, 0, 99))
             {
                 n140 = SystemShare.Config.GlobalVal[n100];// G

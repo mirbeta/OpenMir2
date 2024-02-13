@@ -107,7 +107,7 @@ namespace SystemModule.SubSystem
         void ProcessNpcs();
 
         void ProcessMerchants();
-        
+
         void ProcessHumans();
 
         void AddUserOpenInfo(UserOpenInfo UserOpenInfo);

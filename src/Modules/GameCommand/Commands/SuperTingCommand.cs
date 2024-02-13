@@ -18,8 +18,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sRange = @params.Length > 1 ? @params[1] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sRange = @params.Length > 1 ? @params[1] : "";
             IPlayerActor moveHuman;
             IList<IPlayerActor> humanList;
             if (string.IsNullOrEmpty(sRange) || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
@@ -27,15 +27,15 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            int nRange = HUtil32._MAX(10, HUtil32.StrToInt(sRange, 2));
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 humanList = new List<IPlayerActor>();
                 SystemShare.WorldEngine.GetMapRageHuman(mIPlayerActor.Envir, mIPlayerActor.CurrX, mIPlayerActor.CurrY, nRange, ref humanList);
-                for (var i = 0; i < humanList.Count; i++)
+                for (int i = 0; i < humanList.Count; i++)
                 {
-                    moveHuman = humanList[i] as IPlayerActor;
+                    moveHuman = humanList[i];
                     if (moveHuman != PlayerActor)
                     {
                         moveHuman.MapRandomMove(moveHuman.HomeMap, 0);

@@ -13,7 +13,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            var boFlag = !PlayerActor.SuperMan;
+            bool boFlag = !PlayerActor.SuperMan;
             PlayerActor.SuperMan = boFlag;
             if (PlayerActor.SuperMan)
             {

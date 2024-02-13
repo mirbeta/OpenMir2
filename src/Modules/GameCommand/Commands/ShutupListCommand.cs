@@ -17,7 +17,7 @@ namespace CommandModule.Commands
             HUtil32.EnterCriticalSection(SystemShare.DenySayMsgList);
             try
             {
-                var nCount = SystemShare.DenySayMsgList.Count;
+                int nCount = SystemShare.DenySayMsgList.Count;
                 if (SystemShare.DenySayMsgList.Count <= 0)
                 {
                     PlayerActor.SysMsg(CommandHelp.GameCommandShutupListIsNullMsg, MsgColor.Green, MsgType.Hint);

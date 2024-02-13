@@ -1,16 +1,15 @@
 ﻿using Microsoft.Extensions.Hosting;
-using NLog;
+using OpenMir2;
 using SelGate.Services;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
 
 namespace SelGate
 {
     public class TimedService : BackgroundService
     {
-        
+
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private int _processClearSessionTick = 0;
@@ -42,8 +41,8 @@ namespace SelGate
             if (HUtil32.GetTickCount() - _processDelayTick > 20 * 1000)
             {
                 _processDelayTick = HUtil32.GetTickCount();
-                var clientList = _clientManager.GetClients;
-                for (var i = 0; i < clientList.Count; i++)
+                System.Collections.Generic.IList<ClientThread> clientList = _clientManager.GetClients;
+                for (int i = 0; i < clientList.Count; i++)
                 {
                     if (clientList[i] == null)
                     {
@@ -53,19 +52,19 @@ namespace SelGate
                     {
                         continue;
                     }
-                    for (var j = 0; j < clientList[i].SessionArray.Length; j++)
+                    for (int j = 0; j < clientList[i].SessionArray.Length; j++)
                     {
-                        var session = clientList[i].SessionArray[j];
+                        Datas.SessionInfo session = clientList[i].SessionArray[j];
                         if (session == null)
                         {
                             continue;
                         }
-                        var userClient = _sessionManager.GetSession(session.SocketId);
+                        ClientSession userClient = _sessionManager.GetSession(session.SocketId);
                         if (userClient == null)
                         {
                             continue;
                         }
-                        var success = false;
+                        bool success = false;
                         userClient.HandleDelayMsg(ref success);
                         if (success)
                         {
@@ -82,16 +81,16 @@ namespace SelGate
             if (HUtil32.GetTickCount() - _processClearSessionTick > 20 * 1000)
             {
                 _processClearSessionTick = HUtil32.GetTickCount();
-                var clientList = _clientManager.GetClients;
-                for (var i = 0; i < clientList.Count; i++)
+                System.Collections.Generic.IList<ClientThread> clientList = _clientManager.GetClients;
+                for (int i = 0; i < clientList.Count; i++)
                 {
                     if (clientList[i] == null)
                     {
                         continue;
                     }
-                    for (var j = 0; j < ClientThread.MaxSession; j++)
+                    for (int j = 0; j < ClientThread.MaxSession; j++)
                     {
-                        var userSession = clientList[i].SessionArray[j];
+                        Datas.SessionInfo userSession = clientList[i].SessionArray[j];
                         if ((HUtil32.GetTickCount() - userSession.dwReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
                         {
                             _sessionManager.CloseSession(userSession.SocketId);
@@ -109,8 +108,8 @@ namespace SelGate
             if (HUtil32.GetTickCount() - _lastChekSocketTick > 10000)
             {
                 _lastChekSocketTick = HUtil32.GetTickCount();
-                var clientList = _clientManager.GetClients;
-                for (var i = 0; i < clientList.Count; i++)
+                System.Collections.Generic.IList<ClientThread> clientList = _clientManager.GetClients;
+                for (int i = 0; i < clientList.Count; i++)
                 {
                     if (clientList[i] == null)
                     {

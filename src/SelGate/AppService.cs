@@ -1,15 +1,15 @@
 using Microsoft.Extensions.Hosting;
+using OpenMir2;
 using SelGate.Conf;
 using SelGate.Services;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
 
 namespace SelGate
 {
     public class AppService : BackgroundService
     {
-        
+
         private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
         private readonly ClientManager _clientManager;

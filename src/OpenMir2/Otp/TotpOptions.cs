@@ -1,6 +1,6 @@
-﻿using System;
+﻿using OpenMir2.Extensions;
+using System;
 using System.Text;
-using OpenMir2.Extensions;
 
 namespace OpenMir2.Otp
 {
@@ -22,7 +22,10 @@ namespace OpenMir2.Otp
             set
             {
                 if (value is > 9 or < 4)
+                {
                     throw new ArgumentOutOfRangeException(nameof(value), value, @"Size out of range, allowed range 4~9");
+                }
+
                 _size = value;
             }
         }

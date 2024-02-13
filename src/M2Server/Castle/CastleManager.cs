@@ -1,5 +1,4 @@
-﻿using NLog;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Common;
 using SystemModule;
 using SystemModule.Actors;
@@ -11,7 +10,7 @@ namespace M2Server.Castle
 {
     public class CastleManager : ICastleSystem
     {
-        
+
         public readonly IList<IUserCastle> CastleList;
 
         public CastleManager()

@@ -1,14 +1,13 @@
 using LoginSrv.Conf;
 using LoginSrv.Storage;
-using NLog;
+using OpenMir2;
+using OpenMir2.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using OpenMir2;
-using OpenMir2.Common;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -19,7 +18,7 @@ namespace LoginSrv.Services
     /// </summary>
     public class SessionServer
     {
-        
+
         private readonly IList<ServerSessionInfo> _serverList = null;
         private readonly TcpService _serverSocket;
         private readonly AccountStorage _accountStorage;
@@ -45,7 +44,7 @@ namespace LoginSrv.Services
         {
             LoadServerAddr();
             LoadUserLimit();
-            var touchSocketConfig = new TouchSocketConfig();
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_config.sServerAddr), _config.nServerPort)
@@ -63,10 +62,10 @@ namespace LoginSrv.Services
 
         private Task Connecting(object sender, TouchSocketEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var remoteEndPoint = client.MainSocket.RemoteEndPoint.GetIP();
-            var boAllowed = false;
-            for (var i = 0; i < LsShare.ServerAddr.Length; i++)
+            SocketClient client = (SocketClient)sender;
+            string remoteEndPoint = client.MainSocket.RemoteEndPoint.GetIP();
+            bool boAllowed = false;
+            for (int i = 0; i < LsShare.ServerAddr.Length; i++)
             {
                 if (remoteEndPoint == LsShare.ServerAddr[i])
                 {
@@ -76,7 +75,7 @@ namespace LoginSrv.Services
             }
             if (boAllowed)
             {
-                var msgServer = new ServerSessionInfo();
+                ServerSessionInfo msgServer = new ServerSessionInfo();
                 msgServer.ReceiveMsg = string.Empty;
                 msgServer.Socket = client.MainSocket;
                 msgServer.SocketId = client.Id;
@@ -95,10 +94,10 @@ namespace LoginSrv.Services
 
         private Task Disconnected(object sender, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            for (var i = 0; i < _serverList.Count; i++)
+            SocketClient client = (SocketClient)sender;
+            for (int i = 0; i < _serverList.Count; i++)
             {
-                var msgServer = _serverList[i];
+                ServerSessionInfo msgServer = _serverList[i];
                 if (msgServer.SocketId == client.Id)
                 {
                     if (msgServer.ServerIndex == 99)
@@ -119,17 +118,17 @@ namespace LoginSrv.Services
 
         private void SocketClientRead(string socketId, byte[] data, int dataLen)
         {
-            var sReviceMsg = string.Empty;
-            var sMsg = string.Empty;
-            var sCode = string.Empty;
-            var sAccount = string.Empty;
-            var sServerName = string.Empty;
-            var sIndex = string.Empty;
-            var sOnlineCount = string.Empty;
-            var sPayMentMode = string.Empty;
-            for (var i = 0; i < _serverList.Count; i++)
+            string sReviceMsg = string.Empty;
+            string sMsg = string.Empty;
+            string sCode = string.Empty;
+            string sAccount = string.Empty;
+            string sServerName = string.Empty;
+            string sIndex = string.Empty;
+            string sOnlineCount = string.Empty;
+            string sPayMentMode = string.Empty;
+            for (int i = 0; i < _serverList.Count; i++)
             {
-                var msgServer = _serverList[i];
+                ServerSessionInfo msgServer = _serverList[i];
                 if (msgServer.SocketId == socketId)
                 {
                     sReviceMsg = msgServer.ReceiveMsg + HUtil32.GetString(data, 0, dataLen);
@@ -141,7 +140,7 @@ namespace LoginSrv.Services
                             break;
                         }
                         sMsg = HUtil32.GetValidStr3(sMsg, ref sCode, '/');
-                        var nCode = HUtil32.StrToInt(sCode, -1);
+                        int nCode = HUtil32.StrToInt(sCode, -1);
                         switch (nCode)
                         {
                             case Messages.SS_SOFTOUTSESSION:
@@ -206,10 +205,10 @@ namespace LoginSrv.Services
             {
                 return;
             }
-            var seconds = _accountStorage.GetAccountPlayTime(account);
-            for (var i = 0; i < LsShare.CertList.Count; i++)
+            int seconds = _accountStorage.GetAccountPlayTime(account);
+            for (int i = 0; i < LsShare.CertList.Count; i++)
             {
-                var certUser = LsShare.CertList[i];
+                CertUser certUser = LsShare.CertList[i];
                 if (string.Compare(LsShare.CertList[i].LoginID, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
@@ -233,7 +232,7 @@ namespace LoginSrv.Services
             {
                 return;
             }
-            var seconds = _accountStorage.GetAccountPlayTime(account);//获取历史时间
+            int seconds = _accountStorage.GetAccountPlayTime(account);//获取历史时间
             if (seconds > 0)
             {
                 seconds = seconds - 60;//减去一分钟游戏时间
@@ -250,9 +249,9 @@ namespace LoginSrv.Services
             }
             if (seconds == 0)
             {
-                for (var i = 0; i < LsShare.CertList.Count; i++)
+                for (int i = 0; i < LsShare.CertList.Count; i++)
                 {
-                    var certUser = LsShare.CertList[i];
+                    CertUser certUser = LsShare.CertList[i];
                     if (string.Compare(LsShare.CertList[i].LoginID, account, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
@@ -291,12 +290,12 @@ namespace LoginSrv.Services
             {
                 return;
             }
-            var seconds = _accountStorage.GetAccountPlayTime(account);
+            int seconds = _accountStorage.GetAccountPlayTime(account);
             if (seconds == 0)
             {
-                for (var i = 0; i < LsShare.CertList.Count; i++)
+                for (int i = 0; i < LsShare.CertList.Count; i++)
                 {
-                    var certUser = LsShare.CertList[i];
+                    CertUser certUser = LsShare.CertList[i];
                     if (string.Compare(LsShare.CertList[i].LoginID, account, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         if (!LsShare.CertList[i].FreeMode && !LsShare.CertList[i].Closing)
@@ -318,9 +317,9 @@ namespace LoginSrv.Services
 
         private void CloseUser(ServerSessionInfo serverInfo, string account, int sessionId)
         {
-            for (var i = serverInfo.SessionList.Count - 1; i >= 0; i--)
+            for (int i = serverInfo.SessionList.Count - 1; i >= 0; i--)
             {
-                var connInfo = serverInfo.SessionList[i];
+                SessionConnInfo connInfo = serverInfo.SessionList[i];
                 if ((connInfo.Account == account) || (connInfo.SessionID == sessionId))
                 {
                     SendServerMsg(Messages.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
@@ -332,10 +331,10 @@ namespace LoginSrv.Services
 
         private void RefServerLimit(string serverName)
         {
-            var nCount = 0;
-            for (var i = 0; i < _serverList.Count; i++)
+            int nCount = 0;
+            for (int i = 0; i < _serverList.Count; i++)
             {
-                var msgServer = _serverList[i];
+                ServerSessionInfo msgServer = _serverList[i];
                 if (msgServer == null)
                 {
                     continue;
@@ -345,7 +344,7 @@ namespace LoginSrv.Services
                     nCount += msgServer.OnlineCount;
                 }
             }
-            for (var i = 0; i < UserLimit.Length; i++)
+            for (int i = 0; i < UserLimit.Length; i++)
             {
                 if (UserLimit[i] == null)
                 {
@@ -361,8 +360,8 @@ namespace LoginSrv.Services
 
         public bool IsNotUserFull(string serverName)
         {
-            var result = true;
-            for (var i = 0; i < UserLimit.Length; i++)
+            bool result = true;
+            for (int i = 0; i < UserLimit.Length; i++)
             {
                 if (UserLimit[i].ServerName == serverName)
                 {
@@ -383,16 +382,16 @@ namespace LoginSrv.Services
         {
             for (int i = 0; i < _serverList.Count; i++)
             {
-                var sessionServer = _serverList[i];
+                ServerSessionInfo sessionServer = _serverList[i];
                 if (sessionServer == null)
                 {
                     continue;
                 }
                 if (sessionServer.PayMentMode == 3)
                 {
-                    for (var j = sessionServer.SessionList.Count - 1; j >= 0; j--)
+                    for (int j = sessionServer.SessionList.Count - 1; j >= 0; j--)
                     {
-                        var connInfo = sessionServer.SessionList[j];
+                        SessionConnInfo connInfo = sessionServer.SessionList[j];
                         if (!connInfo.Kicked && !_config.TestServer && !connInfo.IsPayMent)
                         {
                             if (HUtil32.GetTickCount() - connInfo.StartTick > 60 * 60 * 1000)
@@ -423,11 +422,11 @@ namespace LoginSrv.Services
                 {
                     return;
                 }
-                var msgServerSort = _serverList[nIndex];
+                ServerSessionInfo msgServerSort = _serverList[nIndex];
                 _serverList.RemoveAt(nIndex);
-                for (var nC = 0; nC < _serverList.Count; nC++)
+                for (int nC = 0; nC < _serverList.Count; nC++)
                 {
-                    var msgServer = _serverList[nC];
+                    ServerSessionInfo msgServer = _serverList[nC];
                     if (msgServer == null)
                     {
                         continue;
@@ -439,10 +438,10 @@ namespace LoginSrv.Services
                             _serverList.Insert(nC, msgServerSort);
                             return;
                         }
-                        var nNewIndex = nC + 1;
+                        int nNewIndex = nC + 1;
                         if (nNewIndex < _serverList.Count)
                         {
-                            for (var n10 = nNewIndex; n10 < _serverList.Count; n10++)
+                            for (int n10 = nNewIndex; n10 < _serverList.Count; n10++)
                             {
                                 msgServer = _serverList[n10];
                                 if (string.Compare(msgServer.ServerName, msgServerSort.ServerName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -450,7 +449,7 @@ namespace LoginSrv.Services
                                     if (msgServer.ServerIndex < msgServerSort.ServerIndex)
                                     {
                                         _serverList.Insert(n10, msgServerSort);
-                                        for (var n14 = n10 + 1; n14 < _serverList.Count; n14++)
+                                        for (int n14 = n10 + 1; n14 < _serverList.Count; n14++)
                                         {
                                             msgServer = _serverList[n14];
                                             if ((string.Compare(msgServer.ServerName, msgServerSort.ServerName, StringComparison.OrdinalIgnoreCase) == 0) && (msgServer.ServerIndex == msgServerSort.ServerIndex))
@@ -482,11 +481,11 @@ namespace LoginSrv.Services
             const string sFormatMsg = "({0}/{1})";
             try
             {
-                var tempName = GetLimitName(sServerName);
-                var sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
-                for (var i = 0; i < _serverList.Count; i++)
+                string tempName = GetLimitName(sServerName);
+                string sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
+                for (int i = 0; i < _serverList.Count; i++)
                 {
-                    var msgServer = _serverList[i];
+                    ServerSessionInfo msgServer = _serverList[i];
                     if (msgServer.Socket.Connected)
                     {
                         if ((string.IsNullOrEmpty(tempName)) || (string.IsNullOrEmpty(msgServer.ServerName)) || (string.Compare(msgServer.ServerName, tempName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -505,15 +504,15 @@ namespace LoginSrv.Services
 
         private void LoadServerAddr()
         {
-            var nServerIdx = 0;
-            var sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerAddr.txt");
+            int nServerIdx = 0;
+            string sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerAddr.txt");
             if (File.Exists(sFileName))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if ((!string.IsNullOrEmpty(sLineText)) && (sLineText[i] != ';'))
                     {
                         if (HUtil32.TagCount(sLineText, '.') == 3)
@@ -533,13 +532,13 @@ namespace LoginSrv.Services
 
         private int GetOnlineHumCount()
         {
-            var result = 0;
-            var nCount = 0;
+            int result = 0;
+            int nCount = 0;
             try
             {
-                for (var i = 0; i < _serverList.Count; i++)
+                for (int i = 0; i < _serverList.Count; i++)
                 {
-                    var msgServer = _serverList[i];
+                    ServerSessionInfo msgServer = _serverList[i];
                     if (msgServer.ServerIndex != 99)
                     {
                         nCount += msgServer.OnlineCount;
@@ -559,8 +558,8 @@ namespace LoginSrv.Services
             const string sFormatMsg = "({0}/{1})";
             try
             {
-                var sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
-                for (var i = 0; i < _serverList.Count; i++)
+                string sSendMsg = string.Format(sFormatMsg, wIdent, sMsg);
+                for (int i = 0; i < _serverList.Count; i++)
                 {
                     if (_serverList[i].Socket.Connected)
                     {
@@ -576,8 +575,8 @@ namespace LoginSrv.Services
 
         private string GetLimitName(string sServerName)
         {
-            var result = string.Empty;
-            for (var i = 0; i < UserLimit.Length; i++)
+            string result = string.Empty;
+            for (int i = 0; i < UserLimit.Length; i++)
             {
                 if (string.Compare(UserLimit[i].ServerName, sServerName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -590,18 +589,18 @@ namespace LoginSrv.Services
 
         private void LoadUserLimit()
         {
-            var nC = 0;
-            var sServerName = string.Empty;
-            var s10 = string.Empty;
-            var s14 = string.Empty;
-            var sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UserLimit.txt");
+            int nC = 0;
+            string sServerName = string.Empty;
+            string s10 = string.Empty;
+            string s14 = string.Empty;
+            string sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "UserLimit.txt");
             if (File.Exists(sFileName))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var lineText = LoadList[i];
+                    string lineText = LoadList[i];
                     lineText = HUtil32.GetValidStr3(lineText, ref sServerName, dividerAry);
                     lineText = HUtil32.GetValidStr3(lineText, ref s10, dividerAry);
                     lineText = HUtil32.GetValidStr3(lineText, ref s14, dividerAry);
@@ -631,12 +630,12 @@ namespace LoginSrv.Services
         public ServerStatus GetServerStatus(string sServerName)
         {
             ServerStatus status = 0;
-            var boServerOnLine = false;
+            bool boServerOnLine = false;
             try
             {
-                for (var i = 0; i < _serverList.Count; i++)
+                for (int i = 0; i < _serverList.Count; i++)
                 {
-                    var msgServer = _serverList[i];
+                    ServerSessionInfo msgServer = _serverList[i];
                     if ((msgServer.ServerIndex != 99) && (msgServer.ServerName == sServerName))
                     {
                         boServerOnLine = true;
@@ -646,7 +645,7 @@ namespace LoginSrv.Services
                 {
                     return status;
                 }
-                for (var i = 0; i < UserLimit.Length; i++)
+                for (int i = 0; i < UserLimit.Length; i++)
                 {
                     if (UserLimit[i].ServerName == sServerName)
                     {

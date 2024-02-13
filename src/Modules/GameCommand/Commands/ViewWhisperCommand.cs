@@ -17,13 +17,13 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sChrName = @params.Length > 0 ? @params[0] : "";
+            string sChrName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sChrName) || !string.IsNullOrEmpty(sChrName) && sChrName[1] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sChrName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sChrName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.WhisperHuman == PlayerActor)

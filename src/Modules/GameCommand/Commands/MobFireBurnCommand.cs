@@ -20,22 +20,22 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMap = @params.Length > 0 ? @params[0] : "";//地图号
-            var sX = @params.Length > 1 ? @params[1] : "";//坐标X
-            var sY = @params.Length > 2 ? @params[2] : "";//坐标Y
-            var sType = @params.Length > 3 ? @params[3] : "";//光环效果
-            var sTime = @params.Length > 4 ? @params[4] : "";//持续时间
-            var sPoint = @params.Length > 5 ? @params[5] : "";//未知
+            string sMap = @params.Length > 0 ? @params[0] : "";//地图号
+            string sX = @params.Length > 1 ? @params[1] : "";//坐标X
+            string sY = @params.Length > 2 ? @params[2] : "";//坐标Y
+            string sType = @params.Length > 3 ? @params[3] : "";//光环效果
+            string sTime = @params.Length > 4 ? @params[4] : "";//持续时间
+            string sPoint = @params.Length > 5 ? @params[5] : "";//未知
             if (string.IsNullOrEmpty(sMap) || sMap != "" && sMap[1] == '?')
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMobFireBurnHelpMsg, this.Command.Name, sMap, sX, sY, sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nX = (short)HUtil32.StrToInt(sX, -1);
-            var nY = (short)HUtil32.StrToInt(sY, -1);
-            var nType = (byte)HUtil32.StrToInt(sType, -1);
-            var nTime = HUtil32.StrToInt(sTime, -1);
-            var nPoint = HUtil32.StrToInt(sPoint, -1);
+            short nX = (short)HUtil32.StrToInt(sX, -1);
+            short nY = (short)HUtil32.StrToInt(sY, -1);
+            byte nType = (byte)HUtil32.StrToInt(sType, -1);
+            int nTime = HUtil32.StrToInt(sTime, -1);
+            int nPoint = HUtil32.StrToInt(sPoint, -1);
             if (nPoint < 0)
             {
                 nPoint = 1;
@@ -46,12 +46,12 @@ namespace CommandModule.Commands
                     sType, sTime, sPoint), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = SystemShare.MapMgr.FindMap(sMap);
+            SystemModule.Maps.IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMap);
             if (envir != null)
             {
-                var oldEnvir = PlayerActor.Envir;
+                SystemModule.Maps.IEnvirnoment oldEnvir = PlayerActor.Envir;
                 PlayerActor.Envir = envir;
-                var fireBurnEvent = new FireBurnEvent(PlayerActor, nX, nY, nType, nTime * 1000, nPoint);
+                FireBurnEvent fireBurnEvent = new FireBurnEvent(PlayerActor, nX, nY, nType, nTime * 1000, nPoint);
                 SystemShare.EventMgr.AddEvent(fireBurnEvent);
                 PlayerActor.Envir = oldEnvir;
                 return;

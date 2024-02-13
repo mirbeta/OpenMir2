@@ -1,6 +1,5 @@
 ﻿using OpenMir2;
 using OpenMir2.Data;
-using SystemModule;
 using SystemModule.Data;
 
 namespace M2Server.Player

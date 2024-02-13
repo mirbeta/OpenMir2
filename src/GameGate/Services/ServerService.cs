@@ -1,11 +1,4 @@
 using GameGate.Conf;
-using System.Collections.Concurrent;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
-using OpenMir2;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
 using NetworkMonitor = OpenMir2.NetworkMonitor;
 
 namespace GameGate.Services
@@ -46,9 +39,9 @@ namespace GameGate.Services
         {
             _serverSocket.Setup(new TouchSocketConfig()
                 .SetListenIPHosts(new IPHost(IPAddress.Parse(_gateInfo.ServerAdress), _gateInfo.GatePort))
-                .ConfigureContainer(a => 
+                .ConfigureContainer(a =>
                 {
-                    a.AddConsoleLogger(); 
+                    a.AddConsoleLogger();
                 }));
             _serverSocket.Connecting += ServerSocketClientConnect;
             _serverSocket.Disconnected += ServerSocketClientDisconnect;
@@ -99,9 +92,9 @@ namespace GameGate.Services
             {
                 return;
             }
-            for (var i = 0; i < _closeSession.Count; i++)
+            for (int i = 0; i < _closeSession.Count; i++)
             {
-                _closeSession.TryDequeue(out var socketId);
+                _closeSession.TryDequeue(out int socketId);
                 _clientThread.UserLeave(socketId); //发送消息给GameSvr断开链接
             }
         }
@@ -117,11 +110,11 @@ namespace GameGate.Services
         /// </summary>
         private Task ServerSocketClientConnect(IClient client, ConnectingEventArgs e)
         {
-            var connectedClient = client as TcpClient;
-            var sRemoteAddress = connectedClient.GetIPPort();
-            var clientId = e.Id;
+            TcpClient connectedClient = client as TcpClient;
+            string sRemoteAddress = connectedClient.GetIPPort();
+            string clientId = e.Id;
             LogService.Debug($"客户端 IP:{sRemoteAddress} ThreadId:{GateInfo.ServiceId} SessionId:{e.Id} RunPort:{_gateEndPoint}");
-            var clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out var threadId);
+            ClientThread clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out int threadId);
             if (clientThread == null || threadId < 0)
             {
                 //todo 直接断开玩家连接，提示客户端链接失败
@@ -129,7 +122,7 @@ namespace GameGate.Services
                 return Task.CompletedTask;
             }
             SessionInfo userSession = null;
-            for (var nIdx = 0; nIdx < clientThread.SessionArray.Length; nIdx++)
+            for (int nIdx = 0; nIdx < clientThread.SessionArray.Length; nIdx++)
             {
                 userSession = clientThread.SessionArray[nIdx];
                 if (userSession == null)
@@ -149,7 +142,7 @@ namespace GameGate.Services
             if (userSession != null)
             {
                 //todo:获取客户端在clientThread中的会话Id
-                var sessionId = clientThread.GetSessionId(clientId);
+                ushort sessionId = clientThread.GetSessionId(clientId);
                 clientThread.UserEnter(sessionId, userSession.SckHandle, sRemoteAddress); //通知GameSvr有新玩家进入游戏
                 SessionContainer.AddSession(GateInfo.ServiceId, sessionId, new ClientSession(GateInfo.ServiceId, userSession, clientThread, _messageSendQueue));
                 sessionMap.TryAdd(clientId, sessionId);
@@ -166,17 +159,17 @@ namespace GameGate.Services
 
         private Task ServerSocketClientDisconnect(ISocketClient client, DisconnectEventArgs e)
         {
-            if (!sessionMap.TryGetValue(client.Id, out var sessionId))
+            if (!sessionMap.TryGetValue(client.Id, out int sessionId))
             {
                 return Task.CompletedTask;
             }
-            var sRemoteAddress = client.IP;
-            var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
+            string sRemoteAddress = client.IP;
+            ClientSession clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession == null)
             {
                 return Task.CompletedTask;
             }
-            var clientThread = clientSession.ServerThread;
+            ClientThread clientThread = clientSession.ServerThread;
             if (clientThread != null)
             {
                 for (int i = 0; i < clientThread.SessionArray.Length; i++)
@@ -214,17 +207,17 @@ namespace GameGate.Services
         /// </summary>
         private Task ServerSocketClientRead(ISocketClient client, ReceivedDataEventArgs e)
         {
-            if (!sessionMap.TryGetValue(client.Id, out var sessionId))
+            if (!sessionMap.TryGetValue(client.Id, out int sessionId))
             {
                 return Task.CompletedTask;
             }
-            var sRemoteAddress = client.IP;
-            var clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
+            string sRemoteAddress = client.IP;
+            ClientSession clientSession = SessionContainer.GetSession(GateInfo.ServiceId, sessionId);
             if (clientSession != null)
             {
                 //var buff = new IntPtr(NativeMemory.AllocZeroed((uint)token.BytesReceived));
                 //MemoryCopy.BlockCopy(token.ReceiveBuffer, token.Offset, buff.ToPointer(), 0, token.BytesReceived);
-                var buff = new byte[e.ByteBlock.Len];
+                byte[] buff = new byte[e.ByteBlock.Len];
                 MemoryCopy.BlockCopy(e.ByteBlock.Buffer, 0, buff, 0, e.ByteBlock.Len);
                 ServerMgr.SendMessageQueue(new ClientPacketMessage(GateInfo.ServiceId, sessionId, buff, (ushort)buff.Length));
                 _networkMonitor.Receive(e.ByteBlock.Len);

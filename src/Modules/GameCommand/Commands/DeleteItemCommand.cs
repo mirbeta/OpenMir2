@@ -20,9 +20,9 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : ""; //玩家名称
-            var sItemName = @params.Length > 1 ? @params[1] : ""; //物品名称
-            var nCount = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0; //数量
+            string sHumanName = @params.Length > 0 ? @params[0] : ""; //玩家名称
+            string sItemName = @params.Length > 1 ? @params[1] : ""; //物品名称
+            int nCount = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0; //数量
             StdItem stdItem;
             UserItem userItem;
             if (string.IsNullOrEmpty(sHumanName) || string.IsNullOrEmpty(sItemName))
@@ -30,14 +30,14 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nItemCount = 0;
-            for (var i = mIPlayerActor.ItemList.Count - 1; i >= 0; i--)
+            int nItemCount = 0;
+            for (int i = mIPlayerActor.ItemList.Count - 1; i >= 0; i--)
             {
                 if (mIPlayerActor.ItemList.Count <= 0)
                 {

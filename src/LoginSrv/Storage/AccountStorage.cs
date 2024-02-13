@@ -1,17 +1,17 @@
 using LoginSrv.Conf;
 using MySqlConnector;
 using NLog;
+using OpenMir2.Extensions;
+using OpenMir2.Packets.ClientPackets;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using OpenMir2.Extensions;
-using OpenMir2.Packets.ClientPackets;
 
 namespace LoginSrv.Storage
 {
     public class AccountStorage
     {
-        
+
         private readonly ConfigManager _configManager;
         private readonly Dictionary<string, AccountQuick> _accountMap;
 
@@ -26,7 +26,7 @@ namespace LoginSrv.Storage
         public void Initialization()
         {
             LogService.Info("正在连接SQL服务器...");
-            var dbConnection = new MySqlConnection(Config.ConnctionString);
+            MySqlConnection dbConnection = new MySqlConnection(Config.ConnctionString);
             try
             {
                 dbConnection.Open();
@@ -93,15 +93,15 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.CommandText = sSQL;
                 command.Connection = dbConnection;
-                using var dr = command.ExecuteReader();
+                using MySqlDataReader dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    var nIndex = dr.GetInt32("Id");
-                    var sAccount = dr.GetString("Account");
-                    var boDeleted = dr.GetByte("State");
+                    int nIndex = dr.GetInt32("Id");
+                    string sAccount = dr.GetString("Account");
+                    byte boDeleted = dr.GetByte("State");
                     if (boDeleted == 0 && (!string.IsNullOrEmpty(sAccount)))
                     {
                         _accountMap.Add(sAccount, new AccountQuick(sAccount, nIndex));
@@ -124,7 +124,7 @@ namespace LoginSrv.Storage
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
         {
-            if (_accountMap.TryGetValue(sName, out var accountQuick))
+            if (_accountMap.TryGetValue(sName, out AccountQuick accountQuick))
             {
                 List.Add(new AccountQuick(accountQuick.Account, accountQuick.Index));
             }
@@ -139,7 +139,7 @@ namespace LoginSrv.Storage
             {
                 return false;
             }
-            var command = new MySqlCommand();
+            MySqlCommand command = new MySqlCommand();
             command.CommandText = string.Format(sSQL, nIndex);
             command.Connection = dbConnection;
             try
@@ -181,7 +181,7 @@ namespace LoginSrv.Storage
 
         public int Index(string account)
         {
-            if (_accountMap.TryGetValue(account, out var accountQuick))
+            if (_accountMap.TryGetValue(account, out AccountQuick accountQuick))
             {
                 return accountQuick.Index;
             }
@@ -204,7 +204,7 @@ namespace LoginSrv.Storage
 
         public int GetAccountPlayTime(string account)
         {
-            var strSql = "SELECT Seconds FROM ACCOUNT WHERE Account=@Account";
+            string strSql = "SELECT Seconds FROM ACCOUNT WHERE Account=@Account";
             LogService.Debug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -214,11 +214,11 @@ namespace LoginSrv.Storage
             int result = 0;
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@Account", account);
-                var obj = command.ExecuteScalar();
+                object obj = command.ExecuteScalar();
                 if (obj != null)
                 {
                     result = (int)obj;
@@ -238,7 +238,7 @@ namespace LoginSrv.Storage
 
         public void UpdateAccountPlayTime(string account, long gameTime)
         {
-            var strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
+            string strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
             LogService.Debug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -247,7 +247,7 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@Seconds", gameTime);
@@ -267,17 +267,17 @@ namespace LoginSrv.Storage
 
         private int CreateAccount(AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             const string sqlStr = "INSERT INTO account (Account, PassWord, PassFailCount, PassFailTime, ValidFrom, ValidUntil, Seconds, StopUntil, PayMode, State, CreateTime, ModifyTime, LastLoginTime) VALUES (@Account, @PassWord, @PassFailCount, @PassFailTime,@ValidFrom, @ValidUntil, @Seconds,@StopUntil, @PayMode, @State, @CreateTime, @ModifyTime, @LastLoginTime);";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return 0;
             }
-            var beginTransaction = dbConnection.BeginTransaction();
+            MySqlTransaction beginTransaction = dbConnection.BeginTransaction();
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Transaction = beginTransaction;
                 command.CommandText = sqlStr;
                 command.Connection = dbConnection;
@@ -336,8 +336,8 @@ namespace LoginSrv.Storage
             {
                 return 0;
             }
-            var result = 0;
-            var command = new MySqlCommand();
+            int result = 0;
+            MySqlCommand command = new MySqlCommand();
             command.Connection = dbConnection;
             command.CommandText = string.Format(sUpdateRecord2, DateTimeOffset.Now.ToUnixTimeSeconds(), account);
             try
@@ -365,10 +365,10 @@ namespace LoginSrv.Storage
             {
                 return 0;
             }
-            var result = 0;
+            int result = 0;
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = "UPDATE account SET PassWord = @PassWord, PassFailCount = 0, PassFailTime = 0, ModifyTime = @ModifyTime WHERE Id = @Id;";
                 command.Parameters.AddWithValue("@PassWord", newPassword);
@@ -392,7 +392,7 @@ namespace LoginSrv.Storage
 
         public int UpdateLoginRecord(AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             const string strSql = "UPDATE account SET ModifyTime=@ModifyTime, PassFailCount=@PassFailCount, PassFailTime=@PassFailTime,LastLoginTime=@LastLoginTime WHERE Id=@Id";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -401,7 +401,7 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
@@ -427,7 +427,7 @@ namespace LoginSrv.Storage
 
         public int UpdateRecord(AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             const string strSql = "UPDATE account SET ModifyTime=@ModifyTime, PassFailCount=@PassFailCount, PassFailTime=@PassFailTime WHERE Id=@Id";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -436,7 +436,7 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
@@ -479,16 +479,16 @@ namespace LoginSrv.Storage
 
         public int UpdateAccount(int nIndex, ref AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return 0;
             }
-            var beginTransaction = dbConnection.BeginTransaction();
+            MySqlTransaction beginTransaction = dbConnection.BeginTransaction();
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Transaction = beginTransaction;
                 command.CommandText = "UPDATE account SET PassWord = @PassWord, PassFailCount = @PassFailCount, PassFailTime = @PassFailTime, ModifyTime = @ModifyTime, LastLoginTime = @LastLoginTime WHERE Id = @Id;";
                 command.Connection = dbConnection;
@@ -535,14 +535,14 @@ namespace LoginSrv.Storage
         public bool Add(AccountRecord accountRecord)
         {
             bool result;
-            var sAccount = accountRecord.UserEntry.Account;
+            string sAccount = accountRecord.UserEntry.Account;
             if (Index(sAccount) > 0)
             {
                 result = false;
             }
             else
             {
-                var nIndex = CreateAccount(accountRecord);
+                int nIndex = CreateAccount(accountRecord);
                 if (nIndex > 0)
                 {
                     _accountMap.Add(sAccount, new AccountQuick(sAccount, nIndex));
@@ -558,7 +558,7 @@ namespace LoginSrv.Storage
 
         public bool Delete(int nIndex, ref AccountRecord accountRecord)
         {
-            var result = false;
+            bool result = false;
             if (nIndex < 0)
             {
                 return false;
@@ -567,7 +567,7 @@ namespace LoginSrv.Storage
             {
                 return false;
             }
-            var up = DeleteAccount(accountRecord.UserEntry.Account);
+            int up = DeleteAccount(accountRecord.UserEntry.Account);
             if (up > 0)
             {
                 _accountMap.Remove(accountRecord.UserEntry.Account);

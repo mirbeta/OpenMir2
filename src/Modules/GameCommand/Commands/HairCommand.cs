@@ -15,14 +15,14 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var nHair = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            int nHair = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (string.IsNullOrEmpty(sHumanName) || nHair < 0)
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor != null)
             {
                 mIPlayerActor.Hair = (byte)nHair;

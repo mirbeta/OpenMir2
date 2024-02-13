@@ -1,8 +1,8 @@
-﻿using System;
+﻿using OpenMir2.NativeList.Helpers;
+using OpenMir2.NativeList.Interfaces.Entities;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using OpenMir2.NativeList.Helpers;
-using OpenMir2.NativeList.Interfaces.Entities;
 
 namespace OpenMir2.NativeList.Abstracts
 {

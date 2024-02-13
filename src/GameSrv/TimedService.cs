@@ -1,10 +1,5 @@
 using GameSrv.Word;
-using M2Server;
-using Microsoft.Extensions.Hosting;
-using NLog;
-using OpenMir2;
 using PlanesSystem;
-using SystemModule;
 using SystemModule.Enums;
 
 namespace GameSrv
@@ -20,7 +15,7 @@ namespace GameSrv
         /// <summary>
         /// 是否正在保存数据
         /// </summary>
-        private bool ScheduledSaveData{ get; set; }
+        private bool ScheduledSaveData { get; set; }
         private int SendOnlineTick { get; set; }
 
         public TimedService()
@@ -30,7 +25,7 @@ namespace GameSrv
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-            var currentTick = HUtil32.GetTickCount();
+            int currentTick = HUtil32.GetTickCount();
             CheckIntervalTime = currentTick;
             SaveIntervalTime = currentTick;
             ClearIntervalTime = currentTick;
@@ -63,8 +58,12 @@ namespace GameSrv
 
         private void ExecuteInternal()
         {
-            if (!M2Share.StartReady) return;
-            var currentTick = HUtil32.GetTickCount();
+            if (!M2Share.StartReady)
+            {
+                return;
+            }
+
+            int currentTick = HUtil32.GetTickCount();
             if ((currentTick - CheckIntervalTime) > 10 * 1000) //10s一次检查链接
             {
                 CheckIntervalTime = HUtil32.GetTickCount();
@@ -232,7 +231,7 @@ namespace GameSrv
             if (SystemShare.WorldEngine.PlayObjectCount > 0)
             {
                 ScheduledSaveData = true;
-                foreach (var play in SystemShare.WorldEngine.GetPlayObjects())
+                foreach (SystemModule.Actors.IPlayerActor play in SystemShare.WorldEngine.GetPlayObjects())
                 {
                     if (M2Share.FrontEngine.InSaveRcdList(play.ChrName))
                     {

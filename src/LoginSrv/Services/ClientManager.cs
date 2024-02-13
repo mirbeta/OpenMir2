@@ -11,7 +11,7 @@ namespace LoginSrv.Services
 
         public LoginGateInfo GetSession(int sessionId)
         {
-            if (_gateInfos.TryGetValue(sessionId, out var userInfo))
+            if (_gateInfos.TryGetValue(sessionId, out LoginGateInfo userInfo))
             {
                 return userInfo;
             }
@@ -32,11 +32,11 @@ namespace LoginSrv.Services
         {
             if (_gateInfos.ContainsKey(socketId))
             {
-                if (_gateInfos.TryRemove(socketId, out var gateInfo))
+                if (_gateInfos.TryRemove(socketId, out LoginGateInfo gateInfo))
                 {
                     if (gateInfo != null && gateInfo.UserList != null)
                     {
-                        for (var j = 0; j < gateInfo.UserList.Count; j++)
+                        for (int j = 0; j < gateInfo.UserList.Count; j++)
                         {
                             LogService.Debug("Close: " + gateInfo.UserList[j].UserIPaddr);
                             gateInfo.UserList[j].Socket.Close();

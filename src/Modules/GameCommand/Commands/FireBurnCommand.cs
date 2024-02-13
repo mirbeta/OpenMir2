@@ -16,9 +16,9 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var nInt = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
-            var nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            var nN = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            int nInt = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            int nTime = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            int nN = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
             if (PlayerActor.Permission < 6)
             {
                 return;
@@ -28,7 +28,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var fireBurnEvent = new FireBurnEvent(PlayerActor, PlayerActor.CurrX, PlayerActor.CurrY, (byte)nInt, nTime, nN);
+            FireBurnEvent fireBurnEvent = new FireBurnEvent(PlayerActor, PlayerActor.CurrX, PlayerActor.CurrY, (byte)nInt, nTime, nN);
             SystemShare.EventMgr.AddEvent(fireBurnEvent);
         }
     }

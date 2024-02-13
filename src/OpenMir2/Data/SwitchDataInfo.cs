@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using OpenMir2.Packets.ClientPackets;
+using System.Collections.Generic;
 
 namespace OpenMir2.Data
 {

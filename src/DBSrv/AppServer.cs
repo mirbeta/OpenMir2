@@ -3,9 +3,13 @@ using DBSrv.Services.Impl;
 using DBSrv.Storage;
 using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using OpenMir2;
+using OpenMir2.Common;
+using Serilog;
 using Spectre.Console;
 using System;
 using System.IO;
@@ -14,14 +18,10 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
-using OpenMir2;
-using OpenMir2.Common;
-using Serilog;
 
 namespace DBSrv
 {
-    public class AppServer 
+    public class AppServer
     {
         private static PeriodicTimer _timer;
         private static SettingConf _setting;
@@ -29,8 +29,8 @@ namespace DBSrv
 
         public AppServer()
         {
-            var builder = Host.CreateApplicationBuilder();
-            if (!Enum.TryParse<StoragePolicy>(_setting.StoreageType, true, out var storagePolicy))
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder();
+            if (!Enum.TryParse<StoragePolicy>(_setting.StoreageType, true, out StoragePolicy storagePolicy))
             {
                 throw new Exception("数据存储配置文件错误或者不支持该存储类型");
             }
@@ -61,8 +61,8 @@ namespace DBSrv
             builder.Logging.ClearProviders();
             builder.Logging.AddConfiguration(builder.Configuration.GetSection("Logging"));
             builder.Logging.AddSerilog();
-            
-            var configuration = new ConfigurationBuilder()
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppContext.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
@@ -78,7 +78,7 @@ namespace DBSrv
         public void Initialize()
         {
             LogService.Info("初始化配置文件...");
-            var configManager = new ConfigManager();
+            ConfigManager configManager = new ConfigManager();
             configManager.LoadConfig();
             _setting = configManager.GetConfig;
             LogService.Info("配置文件读取完成...");
@@ -104,22 +104,22 @@ namespace DBSrv
 
         private void LoadAssembly(IServiceCollection services, string storageName)
         {
-            var storageFileName = $"DBSrv.Storage.{storageName}.dll";
-            var storagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, storageFileName);
+            string storageFileName = $"DBSrv.Storage.{storageName}.dll";
+            string storagePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, storageFileName);
             if (!File.Exists(storagePath))
             {
                 throw new Exception($"{storageFileName} 存储策略文件不存在,服务启动失败.");
             }
-            var context = new AssemblyLoadContext(storagePath);
+            AssemblyLoadContext context = new AssemblyLoadContext(storagePath);
             context.Resolving += ContextResolving;
-            var assembly = context.LoadFromAssemblyPath(storagePath);
+            Assembly assembly = context.LoadFromAssemblyPath(storagePath);
             if (assembly == null)
             {
                 throw new Exception($"获取{storageName}数据存储实例失败，请确认文件是否正确.");
             }
-            var playDataStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayDataStorage", true);
-            var playRecordStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayRecordStorage", true);
-            var marketStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.MarketStoageService", true);
+            Type playDataStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayDataStorage", true);
+            Type playRecordStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.PlayRecordStorage", true);
+            Type marketStorageType = assembly.GetType($"DBSrv.Storage.{storageName}.MarketStoageService", true);
             if (playDataStorageType == null)
             {
                 throw new ArgumentNullException(nameof(storageName), "获取数据存储实例失败，请确认文件是否正确或程序版本是否正确.");
@@ -132,10 +132,10 @@ namespace DBSrv
             {
                 throw new ArgumentNullException(nameof(storageName), "获取拍卖行存储实例失败，请确认文件是否正确或程序版本是否正确.");
             }
-            var storageOption = new StorageOption(_setting.ConnctionString);
-            var playDataStorage = (IPlayDataStorage)Activator.CreateInstance(playDataStorageType, storageOption);
-            var playRecordStorage = (IPlayRecordStorage)Activator.CreateInstance(playRecordStorageType, storageOption);
-            var marketStorage = (IMarketStorage)Activator.CreateInstance(marketStorageType, storageOption);
+            StorageOption storageOption = new StorageOption(_setting.ConnctionString);
+            IPlayDataStorage playDataStorage = (IPlayDataStorage)Activator.CreateInstance(playDataStorageType, storageOption);
+            IPlayRecordStorage playRecordStorage = (IPlayRecordStorage)Activator.CreateInstance(playRecordStorageType, storageOption);
+            IMarketStorage marketStorage = (IMarketStorage)Activator.CreateInstance(marketStorageType, storageOption);
             if (playDataStorage == null)
             {
                 throw new ArgumentNullException(nameof(storageName), "创建数据存储实例失败，请确认文件是否正确或程序版本是否正确.");
@@ -160,12 +160,12 @@ namespace DBSrv
         /// <returns></returns>
         private Assembly ContextResolving(AssemblyLoadContext context, AssemblyName assemblyName)
         {
-            var expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
+            string expectedPath = Path.Combine(AppContext.BaseDirectory, assemblyName.Name + ".dll");
             if (File.Exists(expectedPath))
             {
                 try
                 {
-                    using var stream = File.OpenRead(expectedPath);
+                    using FileStream stream = File.OpenRead(expectedPath);
                     return context.LoadFromStream(stream);
                 }
                 catch (Exception ex)
@@ -204,7 +204,7 @@ namespace DBSrv
                     return;
                 }
 
-                var firstTwoCharacters = input[..2];
+                string firstTwoCharacters = input[..2];
 
                 if (firstTwoCharacters switch
                 {
@@ -237,14 +237,14 @@ namespace DBSrv
         private async Task ShowServerStatus()
         {
             DBShare.ShowLog = false;
-            var userService = _host.Services.GetService<UserService>();
+            UserService userService = _host.Services.GetService<UserService>();
             if (userService == null)
             {
                 return;
             }
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var serverList = userService.GetGates.ToArray();
-            var table = new Table().Expand().BorderColor(Color.Grey);
+            SelGateInfo[] serverList = userService.GetGates.ToArray();
+            Table table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]ServerName[/]");
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
@@ -259,7 +259,7 @@ namespace DBSrv
                  .Cropping(VerticalOverflowCropping.Bottom)
                  .StartAsync(async ctx =>
                  {
-                     foreach (var _ in Enumerable.Range(0, serverList.Length))
+                     foreach (int _ in Enumerable.Range(0, serverList.Length))
                      {
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
@@ -268,7 +268,7 @@ namespace DBSrv
                      {
                          for (int i = 0; i < serverList.Length; i++)
                          {
-                             var (serverIp, status, sessionCount, reviceTotal, sendTotal, queueCount) = serverList[i].GetStatus();
+                             (string serverIp, string status, string sessionCount, string reviceTotal, string sendTotal, string queueCount) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, "[bold][blue]SelGate[/][/]");
                              table.UpdateCell(i, 1, ($"[bold]{serverIp}[/]"));
@@ -285,14 +285,14 @@ namespace DBSrv
 
         private void LoadServerInfo()
         {
-            var sSelGateIPaddr = string.Empty;
-            var sGameGateIPaddr = string.Empty;
-            var sGameGate = string.Empty;
-            var sGameGatePort = string.Empty;
-            var sMapName = string.Empty;
-            var sMapInfo = string.Empty;
-            var sServerIndex = string.Empty;
-            var loadList = new StringList();
+            string sSelGateIPaddr = string.Empty;
+            string sGameGateIPaddr = string.Empty;
+            string sGameGate = string.Empty;
+            string sGameGatePort = string.Empty;
+            string sMapName = string.Empty;
+            string sMapInfo = string.Empty;
+            string sServerIndex = string.Empty;
+            StringList loadList = new StringList();
             if (!File.Exists(DBShare.GateConfFileName))
             {
                 return;
@@ -303,11 +303,11 @@ namespace DBSrv
                 LogService.Error("加载游戏服务配置文件ServerInfo.txt失败.");
                 return;
             }
-            var nRouteIdx = 0;
-            var nGateIdx = 0;
-            for (var i = 0; i < loadList.Count; i++)
+            int nRouteIdx = 0;
+            int nGateIdx = 0;
+            for (int i = 0; i < loadList.Count; i++)
             {
-                var sLineText = loadList[i].Trim();
+                string sLineText = loadList[i].Trim();
                 if (!string.IsNullOrEmpty(sLineText) && !sLineText.StartsWith(";"))
                 {
                     sGameGate = HUtil32.GetValidStr3(sLineText, ref sSelGateIPaddr, new[] { " ", "\09" });
@@ -322,7 +322,7 @@ namespace DBSrv
                     while (!string.IsNullOrEmpty(sGameGate))
                     {
                         sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGateIPaddr, new[] { " ", "\09" });
-                        var gamrGates = sGameGate.Split(",");
+                        string[] gamrGates = sGameGate.Split(",");
                         if (gamrGates.Length == 0)
                         {
                             sGameGate = HUtil32.GetValidStr3(sGameGate, ref sGameGatePort, new[] { " ", "\09" });
@@ -351,15 +351,15 @@ namespace DBSrv
             {
                 loadList.Clear();
                 loadList.LoadFromFile(_setting.MapFile);
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
-                    var sLineText = loadList[i];
+                    string sLineText = loadList[i];
                     if ((!string.IsNullOrEmpty(sLineText)) && (sLineText[0] == '['))
                     {
                         sLineText = HUtil32.ArrestStringEx(sLineText, "[", "]", ref sMapName);
                         sMapInfo = HUtil32.GetValidStr3(sMapName, ref sMapName, new[] { " ", "\09" });
                         sServerIndex = HUtil32.GetValidStr3(sMapInfo, ref sMapInfo, new[] { " ", "\09" });
-                        var nServerIndex = HUtil32.StrToInt(sServerIndex, 0);
+                        int nServerIndex = HUtil32.StrToInt(sServerIndex, 0);
                         DBShare.MapList.Add(sMapName, nServerIndex);
                     }
                 }
@@ -395,15 +395,15 @@ namespace DBSrv
             if (File.Exists(sFileName))
             {
                 DBShare.ClearMakeIndex.LoadFromFile(sFileName);
-                var i = 0;
+                int i = 0;
                 while (true)
                 {
                     if (DBShare.ClearMakeIndex.Count <= i)
                     {
                         break;
                     }
-                    var sLineText = DBShare.ClearMakeIndex[i];
-                    var nIndex = HUtil32.StrToInt(sLineText, -1);
+                    string sLineText = DBShare.ClearMakeIndex[i];
+                    int nIndex = HUtil32.StrToInt(sLineText, -1);
                     if (nIndex < 0)
                     {
                         DBShare.ClearMakeIndex.RemoveAt(i);

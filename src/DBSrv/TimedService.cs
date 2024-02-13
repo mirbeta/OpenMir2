@@ -2,12 +2,12 @@ using DBSrv.Conf;
 using DBSrv.Services.Impl;
 using DBSrv.Storage;
 using Microsoft.Extensions.Hosting;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
-using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv
 {
@@ -36,12 +36,12 @@ namespace DBSrv
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            var currentTick = HUtil32.GetTickCount();
-            var lastSocketTick = currentTick;
-            var lastKeepTick = currentTick;
-            var lastClearTick = currentTick;
-            var syncSaveTick = currentTick;
-            var marketPushTick = currentTick;
+            int currentTick = HUtil32.GetTickCount();
+            int lastSocketTick = currentTick;
+            int lastKeepTick = currentTick;
+            int lastClearTick = currentTick;
+            int syncSaveTick = currentTick;
+            int marketPushTick = currentTick;
             try
             {
                 while (await _timer.WaitForNextTickAsync(stoppingToken))
@@ -74,9 +74,9 @@ namespace DBSrv
                     }
                 }
             }
-            catch (OperationCanceledException operationCancelledException)
+            catch (OperationCanceledException)
             {
-                
+
             }
         }
 
@@ -87,7 +87,7 @@ namespace DBSrv
             using IEnumerator<CharacterDataInfo> playList = _cacheStorage.QueryCacheData();
             while (playList.MoveNext())
             {
-                var play = playList.Current;
+                CharacterDataInfo play = playList.Current;
                 if (play == null)
                 {
                     continue;

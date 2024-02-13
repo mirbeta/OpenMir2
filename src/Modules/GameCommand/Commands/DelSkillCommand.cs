@@ -18,9 +18,9 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sSkillName = @params.Length > 1 ? @params[1] : "";
-            var herostr = @params.Length > 2 ? @params[2] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sSkillName = @params.Length > 1 ? @params[1] : "";
+            string herostr = @params.Length > 2 ? @params[2] : "";
             bool boDelAll;
             UserMagic userMagic;
             if (string.IsNullOrEmpty(sHumanName) || (string.IsNullOrEmpty(sSkillName)))
@@ -36,13 +36,13 @@ namespace CommandModule.Commands
             {
                 boDelAll = false;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = mIPlayerActor.MagicList.Count - 1; i >= 0; i--)
+            for (int i = mIPlayerActor.MagicList.Count - 1; i >= 0; i--)
             {
                 if (mIPlayerActor.MagicList.Count <= 0)
                 {

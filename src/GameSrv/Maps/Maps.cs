@@ -1,20 +1,8 @@
-﻿using M2Server;
-using NLog;
-using System.Diagnostics;
-using GameSrv.Npc;
-using OpenMir2;
-using OpenMir2.Common;
-using OpenMir2.Data;
-using SystemModule;
-using SystemModule.Data;
-using SystemModule.MagicEvent;
-using SystemModule.MagicEvent.Events;
-
-namespace GameSrv.Maps
+﻿namespace GameSrv.Maps
 {
     public class Map
     {
-        
+
         private static Thread _makeStoneMinesThread;
 
         public static void StartMakeStoneThread()
@@ -29,21 +17,21 @@ namespace GameSrv.Maps
         public static int LoadMapInfo()
         {
             LogService.Info("正在加载地图数据...");
-            var sFlag = string.Empty;
-            var sCommand = string.Empty;
-            var sLine = string.Empty;
-            var sReConnectMap = string.Empty;
-            var result = -1;
-            var sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
+            string sFlag = string.Empty;
+            string sCommand = string.Empty;
+            string sLine = string.Empty;
+            string sReConnectMap = string.Empty;
+            int result = -1;
+            string sFileName = M2Share.GetEnvirFilePath("MapInfo.txt");
             if (File.Exists(sFileName))
             {
-                using var loadList = new StringList();
+                using StringList loadList = new StringList();
                 loadList.LoadFromFile(sFileName);
                 if (loadList.Count < 0)
                 {
                     return result;
                 }
-                var count = 0;
+                int count = 0;
                 while (true)
                 {
                     if (count >= loadList.Count)
@@ -52,7 +40,7 @@ namespace GameSrv.Maps
                     }
                     if (HUtil32.CompareLStr("ConnectMapInfo", loadList[count]))
                     {
-                        var sMapInfoFile = HUtil32.GetValidStr3(loadList[count], ref sFlag, new[] { ' ', '\t' });
+                        string sMapInfoFile = HUtil32.GetValidStr3(loadList[count], ref sFlag, new[] { ' ', '\t' });
                         loadList.RemoveAt(count);
                         if (!string.IsNullOrEmpty(sMapInfoFile))
                         {
@@ -64,24 +52,24 @@ namespace GameSrv.Maps
                 result = 1;
                 // 加载地图设置
                 string sMapName;
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
                     sFlag = loadList[i];
                     if (!string.IsNullOrEmpty(sFlag) && sFlag[0] == '[')
                     {
                         sMapName = string.Empty;
-                        var MapFlag = new MapInfoFlag
+                        MapInfoFlag MapFlag = new MapInfoFlag
                         {
                             SafeArea = false
                         };
                         sFlag = HUtil32.ArrestStringEx(sFlag, "[", "]", ref sMapName);
-                        var sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, HUtil32.Separator);
+                        string sMapDesc = HUtil32.GetValidStrCap(sMapName, ref sMapName, HUtil32.Separator);
                         if (!string.IsNullOrEmpty(sMapDesc) && sMapDesc[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMapDesc, "\"", "\"", ref sMapDesc);
                         }
-                        var s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, HUtil32.Separator).Trim();
-                        var nServerIndex = (byte)HUtil32.StrToInt(s4C, 0);
+                        string s4C = HUtil32.GetValidStr3(sMapDesc, ref sMapDesc, HUtil32.Separator).Trim();
+                        byte nServerIndex = (byte)HUtil32.StrToInt(s4C, 0);
                         if (string.IsNullOrEmpty(sMapName))
                         {
                             continue;
@@ -357,7 +345,7 @@ namespace GameSrv.Maps
                 }
 
                 // 加载地图连接点
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
                     sFlag = loadList[i];
                     if (!string.IsNullOrEmpty(sFlag) && sFlag[0] != '[' && sFlag[0] != ';')
@@ -365,15 +353,15 @@ namespace GameSrv.Maps
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
                         sMapName = sCommand;
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
-                        var nX = HUtil32.StrToInt(sCommand, 0);
+                        int nX = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
-                        var n18 = HUtil32.StrToInt(sCommand, 0);
+                        int n18 = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, new[] { ' ', ',', '-', '>', '\t' });
-                        var s44 = sCommand;
+                        string s44 = sCommand;
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, HUtil32.Separator);
-                        var n1C = HUtil32.StrToInt(sCommand, 0);
+                        int n1C = HUtil32.StrToInt(sCommand, 0);
                         sFlag = HUtil32.GetValidStr3(sFlag, ref sCommand, new[] { ' ', ',', ';', '\t' });
-                        var n20 = HUtil32.StrToInt(sCommand, 0);
+                        int n20 = HUtil32.StrToInt(sCommand, 0);
                         SystemShare.MapMgr.AddMapRoute(sMapName, nX, n18, s44, n1C, n20);
                     }
                 }
@@ -385,23 +373,23 @@ namespace GameSrv.Maps
         public static int LoadMinMap()
         {
             LogService.Info("正在加小地图数据文件...");
-            var sMapNo = string.Empty;
-            var sMapIdx = string.Empty;
-            var result = 0;
-            var sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
+            string sMapNo = string.Empty;
+            string sMapIdx = string.Empty;
+            int result = 0;
+            string sFileName = M2Share.GetEnvirFilePath("MiniMap.txt");
             if (File.Exists(sFileName))
             {
                 M2Share.MiniMapList.Clear();
-                var tMapList = new StringList();
+                StringList tMapList = new StringList();
                 tMapList.LoadFromFile(sFileName);
-                for (var i = 0; i < tMapList.Count; i++)
+                for (int i = 0; i < tMapList.Count; i++)
                 {
-                    var tStr = tMapList[i];
+                    string tStr = tMapList[i];
                     if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
                     {
                         tStr = HUtil32.GetValidStr3(tStr, ref sMapNo, HUtil32.Separator);
                         tStr = HUtil32.GetValidStr3(tStr, ref sMapIdx, HUtil32.Separator);
-                        var nIdx = (short)HUtil32.StrToInt(sMapIdx, 0);
+                        short nIdx = (short)HUtil32.StrToInt(sMapIdx, 0);
                         if (nIdx > 0)
                         {
                             if (M2Share.MiniMapList.ContainsKey(sMapNo))
@@ -423,18 +411,18 @@ namespace GameSrv.Maps
         /// </summary>
         private static void MakeStoneMines()
         {
-            var sw = new Stopwatch();
+            Stopwatch sw = new Stopwatch();
             sw.Start();
-            var mineMapList = SystemShare.MapMgr.GetMineMaps();
+            IList<SystemModule.Maps.IEnvirnoment> mineMapList = SystemShare.MapMgr.GetMineMaps();
             LogService.Info($"初始化地图矿物数据...[{mineMapList.Count}]");
-            for (var i = 0; i < mineMapList.Count; i++)
+            for (int i = 0; i < mineMapList.Count; i++)
             {
-                var mineEnvir = mineMapList[i];
+                SystemModule.Maps.IEnvirnoment mineEnvir = mineMapList[i];
                 for (short nW = 0; nW < mineEnvir.Width; nW++)
                 {
                     for (short nH = 0; nH < mineEnvir.Height; nH++)
                     {
-                        var mine = new StoneMineEvent(mineEnvir, nW, nH, Grobal2.ET_MINE);
+                        StoneMineEvent mine = new StoneMineEvent(mineEnvir, nW, nH, Grobal2.ET_MINE);
                         if (!mine.AddToMap)
                         {
                             M2Share.CellObjectMgr.Remove(mine.Id);
@@ -449,7 +437,7 @@ namespace GameSrv.Maps
 
         private static Merchant LoadMapQuest(string sName)
         {
-            var questNPC = new Merchant
+            Merchant questNPC = new Merchant
             {
                 MapName = "0",
                 CurrX = 0,
@@ -467,17 +455,17 @@ namespace GameSrv.Maps
 
         private static void LoadSubMapInfo(StringList loadList, string sFileName)
         {
-            var fileDir = M2Share.GetEnvirFilePath("MapInfo");
+            string fileDir = M2Share.GetEnvirFilePath("MapInfo");
             if (!Directory.Exists(fileDir))
             {
                 Directory.CreateDirectory(fileDir);
             }
-            var sFilePatchName = fileDir + sFileName;
+            string sFilePatchName = fileDir + sFileName;
             if (File.Exists(sFilePatchName))
             {
-                var loadMapList = new StringList();
+                StringList loadMapList = new StringList();
                 loadMapList.LoadFromFile(sFilePatchName);
-                for (var i = 0; i < loadMapList.Count; i++)
+                for (int i = 0; i < loadMapList.Count; i++)
                 {
                     loadList.Add(loadMapList[i]);
                 }

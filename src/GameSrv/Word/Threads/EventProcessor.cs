@@ -1,12 +1,8 @@
-using NLog;
-using OpenMir2;
-using SystemModule;
-
 namespace GameSrv.Word.Threads
 {
     public class EventProcessor : TimerScheduledService
     {
-        
+
 
         public EventProcessor() : base(TimeSpan.FromMilliseconds(20), "EventProcessor")
         {
@@ -30,11 +26,11 @@ namespace GameSrv.Word.Threads
 
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
-            var eventList = SystemShare.EventMgr.Events;
-            var closedEventList = SystemShare.EventMgr.ClosedEvents;
-            for (var i = eventList.Count - 1; i >= 0; i--)
+            IList<SystemModule.MagicEvent.MapEvent> eventList = SystemShare.EventMgr.Events;
+            IList<SystemModule.MagicEvent.MapEvent> closedEventList = SystemShare.EventMgr.ClosedEvents;
+            for (int i = eventList.Count - 1; i >= 0; i--)
             {
-                var executeEvent = eventList[i];
+                SystemModule.MagicEvent.MapEvent executeEvent = eventList[i];
                 if (executeEvent == null)
                 {
                     continue;
@@ -51,9 +47,9 @@ namespace GameSrv.Word.Threads
                 }
             }
 
-            for (var i = closedEventList.Count - 1; i >= 0; i--)
+            for (int i = closedEventList.Count - 1; i >= 0; i--)
             {
-                var executeEvent = closedEventList[i];
+                SystemModule.MagicEvent.MapEvent executeEvent = closedEventList[i];
                 if ((HUtil32.GetTickCount() - executeEvent.CloseTick) > 5 * 60 * 1000)
                 {
                     closedEventList[i] = null;

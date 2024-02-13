@@ -3,7 +3,6 @@ using MakePlayer.Option;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using OpenMir2;
-using SystemModule;
 
 namespace MakePlayer
 {
@@ -52,17 +51,17 @@ namespace MakePlayer
                         {
                             _options.TotalChrCount = 0;
                         }
-                        for (var i = 0; i < _options.ChrCount; i++)
+                        for (int i = 0; i < _options.ChrCount; i++)
                         {
-                            var playClient = new PlayClient(_options);
+                            PlayClient playClient = new PlayClient(_options);
                             playClient.SessionId = Guid.NewGuid().ToString("N");
                             playClient.CreateAccount = _options.NewAccount;
-                            var loginAccount = string.Concat(_options.LoginAccount, _loginIndex);
+                            string loginAccount = string.Concat(_options.LoginAccount, _loginIndex);
                             if (loginAccount.Length > 10)
                             {
                                 loginAccount = string.Concat(loginAccount.AsSpan(2, 8), RandomNumber.GetInstance().GenerateRandomNumber(3));
                             }
-                            var loginPasswd = loginAccount;
+                            string loginPasswd = loginAccount;
                             playClient.ChrName = loginAccount;
                             playClient.ServerName = _options.ServerName;
                             playClient.RunTick = HUtil32.GetTickCount() + (i + 1) * 3000;

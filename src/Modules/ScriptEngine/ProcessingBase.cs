@@ -1,13 +1,11 @@
-﻿using System.Text;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Common;
 using OpenMir2.Data;
 using OpenMir2.Enums;
 using ScriptSystem.Processings;
+using System.Text;
 using SystemModule;
 using SystemModule.Actors;
-using SystemModule.Data;
-using SystemModule.Enums;
 
 namespace ScriptSystem
 {
@@ -236,7 +234,7 @@ namespace ScriptSystem
                     result = true;
                     return result;
                 case "$RUNDATETIME":// 开区间隔时间 显示为XX小时。
-                    var ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(SystemShare.StartTime);
+                    TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(SystemShare.StartTime);
                     sValue = $"服务器运行:[{ts.Days}天{ts.Hours}小时{ts.Minutes}分{ts.Seconds}秒]";
                     nDataType = 0;
                     result = true;
@@ -1078,7 +1076,7 @@ namespace ScriptSystem
                 return false;
             }
             bool result = false;
-            var n01 = SystemShare.GetValNameNo(sMsg);
+            int n01 = SystemShare.GetValNameNo(sMsg);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 600, 699))
@@ -1188,14 +1186,14 @@ namespace ScriptSystem
             long n10;
             sVar = sData;
             sValue = sData;
-            var result = new VarInfo { VarType = VarType.None, VarAttr = VarAttr.aNone };
+            VarInfo result = new VarInfo { VarType = VarType.None, VarAttr = VarAttr.aNone };
             if (sData == "")
             {
                 return result;
             }
-            var sVarName = sData;
-            var sName = sData;
-            if (sData[0] == '<' && sData[sData.Length - 1] == '>')// <$STR(S0)>
+            string sVarName = sData;
+            string sName = sData;
+            if (sData[0] == '<' && sData[^1] == '>')// <$STR(S0)>
             {
                 sData = HUtil32.ArrestStringEx(sData, "<", ">", ref sName);
             }
@@ -1225,7 +1223,7 @@ namespace ScriptSystem
             }
             else if (sName[0] == '$')
             {
-                sName = sName.Substring(2 - 1, sName.Length - 1);
+                sName = sName[2 - 1..^0];
                 n10 = SystemShare.GetValNameNo(sName);
                 if (n10 >= 0)
                 {
@@ -1283,8 +1281,8 @@ namespace ScriptSystem
             string sVarType = "";
             string sData = sVar;
             string sName = "";
-            var result = VarType.None;
-            if (sData[0] == '<' && sData[sData.Length - 1] == '>')
+            VarType result = VarType.None;
+            if (sData[0] == '<' && sData[^1] == '>')
             {
                 sData = HUtil32.ArrestStringEx(sData, "<", ">", ref sName);
             }
@@ -1337,13 +1335,13 @@ namespace ScriptSystem
 
         private VarType GetValNameValue(IPlayerActor playerActor, string sVar, ref string sValue, ref int nValue)
         {
-            var result = VarType.None;
-            var sName = string.Empty;
+            VarType result = VarType.None;
+            string sName = string.Empty;
             if (sVar == "")
             {
                 return result;
             }
-            var sData = sVar;
+            string sData = sVar;
             if (sData[0] == '<' && sData[^1] == '>')
             {
                 sData = HUtil32.ArrestStringEx(sData, "<", ">", ref sName); // <$STR(S0)>
@@ -1354,9 +1352,9 @@ namespace ScriptSystem
             }
             if (sName[0] == '$')
             {
-                sName = sName.Substring(1, sName.Length - 1);// $S0
+                sName = sName[1..];// $S0
             }
-            var n01 = SystemShare.GetValNameNo(sName);
+            int n01 = SystemShare.GetValNameNo(sName);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 0, 99))
@@ -1439,9 +1437,9 @@ namespace ScriptSystem
 
         public string GetLineVariableText(IPlayerActor playerActor, string sMsg)
         {
-            var nC = 0;
-            var sText = string.Empty;
-            var tempstr = sMsg;
+            int nC = 0;
+            string sText = string.Empty;
+            string tempstr = sMsg;
             while (true)
             {
                 if (tempstr.IndexOf('>') <= 0)
@@ -1469,7 +1467,7 @@ namespace ScriptSystem
             bool boFoundVar;
             if (HUtil32.IsStringNumber(sVariable))//检查发送字符串是否有数字
             {
-                string sIdx = sVariable.Substring(1, sVariable.Length - 1);
+                string sIdx = sVariable[1..];
                 int nIdx = HUtil32.StrToInt(sIdx, -1);
                 if (nIdx == -1)
                 {
@@ -1635,12 +1633,12 @@ namespace ScriptSystem
 
         protected bool SetDynamicValue(IPlayerActor playerActor, string sVar, string sValue, int nValue)
         {
-            var result = false;
-            var sVarName = "";
-            var sVarType = "";
-            var sName = "";
-            var sData = sVar;
-            if (sData[0] == '<' && sData[sData.Length - 1] == '>')
+            bool result = false;
+            string sVarName = "";
+            string sVarType = "";
+            string sName = "";
+            string sData = sVar;
+            if (sData[0] == '<' && sData[^1] == '>')
             {
                 sData = HUtil32.ArrestStringEx(sData, "<", ">", ref sName);
             }
@@ -1663,12 +1661,12 @@ namespace ScriptSystem
             {
                 return false;
             }
-            var dynamicVarList = GeDynamicVarList(playerActor, sVarType, ref sName);
+            Dictionary<string, DynamicVar> dynamicVarList = GeDynamicVarList(playerActor, sVarType, ref sName);
             if (dynamicVarList == null)
             {
                 return false;
             }
-            if (dynamicVarList.TryGetValue(sVarName, out var dynamicVar))
+            if (dynamicVarList.TryGetValue(sVarName, out DynamicVar dynamicVar))
             {
                 switch (dynamicVar.VarType)
                 {
@@ -1687,14 +1685,14 @@ namespace ScriptSystem
 
         protected bool SetValNameValue(IPlayerActor playerActor, string sVar, string sValue, int nValue)
         {
-            var sName = string.Empty;
-            var result = false;
+            string sName = string.Empty;
+            bool result = false;
             if (sVar == "")
             {
                 return false;
             }
-            var sData = sVar;
-            if (sData[0] == '<' && sData[sData.Length - 1] == '>') // <$STR(S0)>
+            string sData = sVar;
+            if (sData[0] == '<' && sData[^1] == '>') // <$STR(S0)>
             {
                 sData = HUtil32.ArrestStringEx(sData, "<", ">", ref sName);
             }
@@ -1704,9 +1702,9 @@ namespace ScriptSystem
             }
             if (sName[0] == '$')// $S0
             {
-                sName = sName.Substring(1, sName.Length - 1);
+                sName = sName[1..];
             }
-            var n01 = SystemShare.GetValNameNo(sName);
+            int n01 = SystemShare.GetValNameNo(sName);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 0, 499))
@@ -1811,11 +1809,11 @@ namespace ScriptSystem
         private string CombineStr(string sMsg, string variable, string variableVal)
         {
             string result;
-            var varIndex = sMsg.IndexOf(variable, StringComparison.Ordinal);
+            int varIndex = sMsg.IndexOf(variable, StringComparison.Ordinal);
             if (varIndex > -1)
             {
-                var s14 = sMsg.Substring(1 - 1, varIndex);
-                var s18 = sMsg.Substring(variable.Length + varIndex, sMsg.Length - (variable.Length + varIndex));
+                string s14 = sMsg[..varIndex];
+                string s18 = sMsg[(variable.Length + varIndex)..];
                 result = s14 + variableVal + s18;
             }
             else
@@ -1831,7 +1829,7 @@ namespace ScriptSystem
             sListFileName = SystemShare.GetEnvirFilePath(sListFileName);
             if (File.Exists(sListFileName))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 try
                 {
                     LoadList.LoadFromFile(sListFileName);
@@ -1863,7 +1861,7 @@ namespace ScriptSystem
             if (n10 > -1)
             {
                 ReadOnlySpan<char> s18 = sMsg.AsSpan()[(sStr.Length + n10)..sMsg.Length];
-                var builder = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
                 builder.Append(sMsg[..n10]);
                 builder.Append(sText);
                 builder.Append(s18);

@@ -6,8 +6,6 @@ using OpenMir2.Data;
 using OpenMir2.Enums;
 using SystemModule;
 using SystemModule.Actors;
-using SystemModule.Data;
-using SystemModule.Enums;
 
 namespace M2Server.Actor
 {
@@ -230,7 +228,7 @@ namespace M2Server.Actor
                     Envir.VerifyMapTime(CurrX, CurrY, this);// 刷新在地图上位置的时间
                 }
                 // 检查HP/MP值是否大于最大值，大于则降低到正常大小
-                var needRecalc = false;
+                bool needRecalc = false;
                 if (WAbil.HP > WAbil.MaxHP)
                 {
                     needRecalc = true;
@@ -516,8 +514,8 @@ namespace M2Server.Actor
                 int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 7);
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    var stdItem = SystemShare.ItemSystem.GetStdItem(ItemList[i].Index);
-                    var boCanNotDrop = false;
+                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(ItemList[i].Index);
+                    bool boCanNotDrop = false;
                     if (stdItem != null)
                     {
                         if (M2Share.MonDropLimitLIst.TryGetValue(stdItem.Name, value: out MonsterLimitDrop monDrop))
@@ -623,7 +621,7 @@ namespace M2Server.Actor
                         {
                             WalkTick = WalkTick + 800 + M2Share.RandomNumber.Random(1000);
                         }
-                        var nDamage = GetMagStruckDamage(null, processMsg.nParam1);
+                        int nDamage = GetMagStruckDamage(null, processMsg.nParam1);
                         if (nDamage > 0)
                         {
                             StruckDamage(nDamage);
@@ -813,7 +811,7 @@ namespace M2Server.Actor
 
         public virtual int GetMagStruckDamage(IActor baseObject, int nDamage)
         {
-            var n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
+            int n14 = HUtil32.LoByte(WAbil.MAC) + M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiByte(WAbil.MAC) - HUtil32.LoByte(WAbil.MAC)) + 1);
             nDamage = (ushort)HUtil32._MAX(0, nDamage - n14);
             if ((LifeAttrib == Grobal2.LA_UNDEAD) && (baseObject != null))
             {
@@ -876,7 +874,7 @@ namespace M2Server.Actor
             }
             if (baseObject.Master != null)
             {
-                var slaveExpLevel = ((MonsterObject)baseObject).SlaveExpLevel;
+                byte slaveExpLevel = ((MonsterObject)baseObject).SlaveExpLevel;
                 if (slaveExpLevel <= Grobal2.SlaveMaxLevel)
                 {
                     return SystemShare.Config.SlaveColor[slaveExpLevel];
@@ -891,7 +889,7 @@ namespace M2Server.Actor
             {
                 power = 0;
             }
-            var result = basePower + M2Share.RandomNumber.Random(power + 1);
+            int result = basePower + M2Share.RandomNumber.Random(power + 1);
             if (AutoChangeColor)
             {
                 result = result * AutoChangeIdx + 1;

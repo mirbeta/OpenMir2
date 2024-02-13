@@ -1,6 +1,6 @@
-﻿using System.Reflection;
-using CommandModule.Conf;
+﻿using CommandModule.Conf;
 using OpenMir2;
+using System.Reflection;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Conf;
@@ -25,7 +25,7 @@ namespace CommandModule
         {
             LogService.Info("读取游戏命令配置...");
             CommandConf.LoadConfig(GameCommands);
-            var customCommandMap = RegisterCustomCommand();
+            Dictionary<string, GameCmd> customCommandMap = RegisterCustomCommand();
             if (customCommandMap == null)
             {
                 LogService.Info("读取自定义命令配置失败.");
@@ -40,22 +40,22 @@ namespace CommandModule
         /// </summary>
         private Dictionary<string, GameCmd> RegisterCustomCommand()
         {
-            var commands = GameCommands.GetType().GetFields();
+            FieldInfo[] commands = GameCommands.GetType().GetFields();
             if (commands.Length <= 0)
             {
                 LogService.Info("获取游戏命令类型失败,请确认游戏命令是否注册.");
                 return null;
             }
-            var customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
-            for (var i = 0; i < commands.Length; i++)
+            Dictionary<string, GameCmd> customCommandMap = new Dictionary<string, GameCmd>(StringComparer.OrdinalIgnoreCase);
+            for (int i = 0; i < commands.Length; i++)
             {
-                var customCmd = (GameCmd)commands[i].GetValue(GameCommands);
+                GameCmd customCmd = (GameCmd)commands[i].GetValue(GameCommands);
                 if (customCmd == null || string.IsNullOrEmpty(customCmd.CmdName))
                 {
                     continue;
                 }
-                var commandAttribute = (RegisterCommandAttribute)commands[i].GetCustomAttribute(typeof(RegisterCommandAttribute), true);
-                var commandInfo = (CommandAttribute)commandAttribute?.HandleType.GetCustomAttribute(typeof(CommandAttribute), true);
+                RegisterCommandAttribute commandAttribute = (RegisterCommandAttribute)commands[i].GetCustomAttribute(typeof(RegisterCommandAttribute), true);
+                CommandAttribute commandInfo = (CommandAttribute)commandAttribute?.HandleType.GetCustomAttribute(typeof(CommandAttribute), true);
                 if (commandInfo == null)
                 {
                     continue;
@@ -75,33 +75,37 @@ namespace CommandModule
         /// </summary>
         private void RegisterCommandGroups(IReadOnlyDictionary<string, GameCmd> customCommands)
         {
-            var commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToArray();//只有继承GameCommand，才添加到命令Map中
+            Type[] commands = Assembly.GetExecutingAssembly().GetTypes().Where(x => x.IsSubclassOf(typeof(GameCommand))).ToArray();//只有继承GameCommand，才添加到命令Map中
             if (commands.Length <= 0)
             {
                 return;
             }
-            for (var i = 0; i < commands.Length; i++)
+            for (int i = 0; i < commands.Length; i++)
             {
-                var commandAttribute = (CommandAttribute)commands[i].GetCustomAttribute(typeof(CommandAttribute), true);
-                if (commandAttribute == null) continue;
+                CommandAttribute commandAttribute = (CommandAttribute)commands[i].GetCustomAttribute(typeof(CommandAttribute), true);
+                if (commandAttribute == null)
+                {
+                    continue;
+                }
+
                 if (CommandMaps.ContainsKey(commandAttribute.Name))
                 {
                     LogService.Error($"重复游戏命令: {commandAttribute.Name}");
                     continue;
                 }
-                var gameCommand = (GameCommand)Activator.CreateInstance(commands[i]);
+                GameCommand gameCommand = (GameCommand)Activator.CreateInstance(commands[i]);
                 if (gameCommand == null)
                 {
                     continue;
                 }
-                if (customCommands.TryGetValue(commandAttribute.Name, out var customCommand))
+                if (customCommands.TryGetValue(commandAttribute.Name, out GameCmd customCommand))
                 {
                     commandAttribute.Command = commandAttribute.Name;
                     commandAttribute.Name = customCommand.CmdName;
                     commandAttribute.PermissionMax = customCommand.PerMissionMax;
                     commandAttribute.PermissionMin = customCommand.PerMissionMin;
                 }
-                var executeMethod = gameCommand.GetType().GetMethod("Execute");
+                MethodInfo executeMethod = gameCommand.GetType().GetMethod("Execute");
                 if (executeMethod == null)
                 {
                     LogService.Error(customCommand != null ? $"游戏命令:{customCommand.CmdName}未注册命令执行方法." : $"游戏命令:{commandAttribute.Name}未注册命令执行方法.");
@@ -121,7 +125,9 @@ namespace CommandModule
         public bool Execute(IPlayerActor PlayerActor, string line)
         {
             if (PlayerActor == null)
+            {
                 throw new ArgumentException("IPlayerActor");
+            }
 
             //string sCMD = string.Empty;
             //string sParam1 = string.Empty;
@@ -162,13 +168,15 @@ namespace CommandModule
             //    sC = HUtil32.GetValidStr3(sC, ref sParam7, CommandSplitLine);
             //}
 
-            if (!ExtractCommandAndParameters(line, out var commandName, out var parameters))
+            if (!ExtractCommandAndParameters(line, out string commandName, out string parameters))
+            {
                 return false;
+            }
 
-            var output = string.Empty;
-            var found = false;
+            string output = string.Empty;
+            bool found = false;
 
-            if (CommandMaps.TryGetValue(commandName, out var command))
+            if (CommandMaps.TryGetValue(commandName, out GameCommand command))
             {
                 output = command.Handle(parameters, PlayerActor);
                 found = true;
@@ -189,13 +197,16 @@ namespace CommandModule
 
         public void ExecCmd(string line)
         {
-            var found = false;
+            bool found = false;
 
-            if (!ExtractCommandAndParameters(line, out var command, out var parameters))
+            if (!ExtractCommandAndParameters(line, out string command, out string parameters))
+            {
                 return;
+            }
+
             string output;
 
-            if (CommandMaps.TryGetValue(command, out var commond))
+            if (CommandMaps.TryGetValue(command, out GameCommand commond))
             {
                 output = commond.Handle(parameters);
                 found = true;
@@ -221,15 +232,23 @@ namespace CommandModule
             parameters = string.Empty;
 
             if (string.IsNullOrEmpty(line))
+            {
                 return false;
+            }
 
             if (line[0] != '@') // 检查命令首字母是否为指定的字符串
+            {
                 return false;
+            }
 
             line = line[1..];
             command = line.Split(' ')[0]; // 取命令
             parameters = string.Empty;
-            if (line.Contains(' ')) parameters = line[(line.IndexOf(' ') + 1)..].Trim(); // 取命令参数
+            if (line.Contains(' '))
+            {
+                parameters = line[(line.IndexOf(' ') + 1)..].Trim(); // 取命令参数
+            }
+
             return true;
         }
 
@@ -243,11 +262,15 @@ namespace CommandModule
 
             public override string Fallback(string[] parameters = null, IPlayerActor PlayerActor = null)
             {
-                var output = "Available commands: ";
-                var commandList = CommandMaps.Values.ToList();
-                foreach (var pair in commandList)
+                string output = "Available commands: ";
+                List<GameCommand> commandList = CommandMaps.Values.ToList();
+                foreach (GameCommand pair in commandList)
                 {
-                    if (PlayerActor != null && pair.Command.PermissionMin > PlayerActor.Permission) continue;
+                    if (PlayerActor != null && pair.Command.PermissionMin > PlayerActor.Permission)
+                    {
+                        continue;
+                    }
+
                     output += pair.Command.Name + ", ";
                 }
                 output = output[..^2] + ".";
@@ -271,11 +294,14 @@ namespace CommandModule
             public override string Handle(string parameters, IPlayerActor PlayerActor = null)
             {
                 if (parameters == string.Empty)
+                {
                     return this.Fallback();
-                var @params = parameters.Split(' ');
-                var group = @params[0];
-                var command = @params.Count() > 1 ? @params[1] : string.Empty;
-                var output = $"Unknown command: {group} {command}";
+                }
+
+                string[] @params = parameters.Split(' ');
+                string group = @params[0];
+                string command = @params.Count() > 1 ? @params[1] : string.Empty;
+                string output = $"Unknown command: {group} {command}";
                 return output;
             }
         }

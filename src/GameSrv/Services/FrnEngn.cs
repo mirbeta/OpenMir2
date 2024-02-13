@@ -1,15 +1,8 @@
-using NLog;
-using OpenMir2;
-using OpenMir2.Data;
-using SystemModule;
-using SystemModule.Data;
-using SystemModule.SubSystem;
-
 namespace GameSrv.Services
 {
     public class FrontEngine : IFrontEngine
     {
-        
+
         public readonly object UserCriticalSection;
         public readonly IList<SavePlayerRcd> m_SaveRcdList;
         private readonly IList<GoldChangeInfo> m_ChangeGoldList;
@@ -99,7 +92,7 @@ namespace GameSrv.Services
                 if (m_ChangeGoldList.Any())
                 {
                     changeGoldList = new List<GoldChangeInfo>();
-                    for (var i = 0; i < m_ChangeGoldList.Count; i++)
+                    for (int i = 0; i < m_ChangeGoldList.Count; i++)
                     {
                         changeGoldList.Add(m_ChangeGoldList[i]);
                     }
@@ -187,7 +180,7 @@ namespace GameSrv.Services
         /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
-            var goldInfo = new GoldChangeInfo
+            GoldChangeInfo goldInfo = new GoldChangeInfo
             {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,
@@ -219,7 +212,7 @@ namespace GameSrv.Services
             {
                 for (int i = 0; i < m_LoadRcdList.Count; i++)
                 {
-                    var loadRcdInfo = m_LoadRcdList[i];
+                    LoadDBInfo loadRcdInfo = m_LoadRcdList[i];
                     if (loadRcdInfo.GateIdx == nGateIndex && loadRcdInfo.SocketId == nSocket)
                     {
                         m_LoadRcdList.RemoveAt(i);

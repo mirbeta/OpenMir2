@@ -1,11 +1,7 @@
-﻿using M2Server;
-using M2Server.Castle;
+﻿using M2Server.Castle;
 using M2Server.Monster.Monsters;
-using OpenMir2;
-using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Const;
-using SystemModule.Data;
 using SystemModule.Enums;
 
 namespace GameSrv.Npc

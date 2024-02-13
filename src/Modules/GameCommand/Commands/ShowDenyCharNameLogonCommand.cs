@@ -17,7 +17,7 @@ namespace CommandModule.Commands
                     PlayerActor.SysMsg("禁止登录角色列表为空。", MsgColor.Green, MsgType.Hint);
                     return;
                 }
-                for (var i = 0; i < SystemShare.DenyChrNameList.Count; i++)
+                for (int i = 0; i < SystemShare.DenyChrNameList.Count; i++)
                 {
                     //PlayerActor.SysMsg(Settings.g_DenyChrNameList[i], MsgColor.c_Green, MsgType.t_Hint);
                 }

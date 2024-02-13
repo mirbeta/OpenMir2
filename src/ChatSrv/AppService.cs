@@ -1,23 +1,22 @@
 using Microsoft.Extensions.Hosting;
 using MQTTnet;
 using MQTTnet.Server;
-using NLog;
+using OpenMir2;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
 
 namespace GameGate
 {
     public class AppService : IHostedService
     {
-        
+
         private readonly MqttServer _mqttServer;
 
         public AppService()
         {
-            var mqttFactory = new MqttFactory(new QueueConsoleLogger());
-            var mqttServerOptions = mqttFactory.CreateServerOptionsBuilder()
+            MqttFactory mqttFactory = new MqttFactory(new QueueConsoleLogger());
+            MqttServerOptions mqttServerOptions = mqttFactory.CreateServerOptionsBuilder()
                 .WithDefaultEndpoint()
                 .WithDefaultEndpointPort(7883)
                 .Build();

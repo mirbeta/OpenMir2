@@ -1,16 +1,13 @@
 using M2Server;
-using NLog;
 using OpenMir2;
 using OpenMir2.Data;
-using SystemModule;
 using SystemModule.Actors;
-using SystemModule.Data;
 
 namespace RobotSystem
 {
     public class RobotProcessor : TimerScheduledService
     {
-        
+
         /// <summary>
         /// 假人列表
         /// </summary>
@@ -71,7 +68,7 @@ namespace RobotSystem
 
         private void RegenRobotPlayer(RoBotLogon ai)
         {
-            var playObject = CreateRobotPlayObject(ai);
+            IRobotPlayer playObject = CreateRobotPlayObject(ai);
             if (playObject != null)
             {
                 short homeX = 0;
@@ -103,14 +100,18 @@ namespace RobotSystem
             }
             try
             {
-                var dwCurTick = HUtil32.GetTickCount();
-                var nIdx = ProcBotHubIdx;
-                var boCheckTimeLimit = false;
-                var dwCheckTime = HUtil32.GetTickCount();
+                int dwCurTick = HUtil32.GetTickCount();
+                int nIdx = ProcBotHubIdx;
+                bool boCheckTimeLimit = false;
+                int dwCheckTime = HUtil32.GetTickCount();
                 while (true)
                 {
-                    if (BotPlayObjectList.Count <= nIdx) break;
-                    var robotPlayer = BotPlayObjectList[nIdx];
+                    if (BotPlayObjectList.Count <= nIdx)
+                    {
+                        break;
+                    }
+
+                    IRobotPlayer robotPlayer = BotPlayObjectList[nIdx];
                     if (dwCurTick - robotPlayer.RunTick > robotPlayer.RunTime)
                     {
                         robotPlayer.RunTick = dwCurTick;
@@ -159,7 +160,10 @@ namespace RobotSystem
                         break;
                     }
                 }
-                if (!boCheckTimeLimit) ProcBotHubIdx = 0;
+                if (!boCheckTimeLimit)
+                {
+                    ProcBotHubIdx = 0;
+                }
             }
             catch (Exception ex)
             {

@@ -1,6 +1,5 @@
 ﻿using M2Server.Monster.Monsters;
 using M2Server.Player;
-using NLog;
 using OpenMir2;
 using OpenMir2.Common;
 using OpenMir2.Data;
@@ -16,7 +15,7 @@ namespace M2Server.Castle
 {
     public class UserCastle : IUserCastle
     {
-        
+
         private int _power;
         /// <summary>
         /// 科技等级
@@ -114,9 +113,17 @@ namespace M2Server.Castle
             if (SystemShare.MapMgr.GetMapOfServerIndex(MapName) == M2Share.ServerIndex)
             {
                 PalaceEnvir = SystemShare.MapMgr.FindMap(PalaceMap);
-                if (PalaceEnvir == null) LogService.Warn($"皇宫地图{PalaceMap}没找到!!!");
+                if (PalaceEnvir == null)
+                {
+                    LogService.Warn($"皇宫地图{PalaceMap}没找到!!!");
+                }
+
                 SecretEnvir = SystemShare.MapMgr.FindMap(SecretMap);
-                if (SecretEnvir == null) LogService.Warn($"密道地图{SecretMap}没找到!!!");
+                if (SecretEnvir == null)
+                {
+                    LogService.Warn($"密道地图{SecretMap}没找到!!!");
+                }
+
                 CastleEnvir = SystemShare.MapMgr.FindMap(MapName);
                 if (CastleEnvir != null)
                 {
@@ -167,7 +174,11 @@ namespace M2Server.Castle
                     for (int i = 0; i < Archers.Length; i++)
                     {
                         ObjUnit = Archers[i];
-                        if (ObjUnit.nHP <= 0) continue;
+                        if (ObjUnit.nHP <= 0)
+                        {
+                            continue;
+                        }
+
                         ObjUnit.BaseObject = SystemShare.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
                         {
@@ -183,12 +194,20 @@ namespace M2Server.Castle
                     for (int i = 0; i < Guards.Length; i++)
                     {
                         ObjUnit = Guards[i];
-                        if (ObjUnit.nHP <= 0) continue;
+                        if (ObjUnit.nHP <= 0)
+                        {
+                            continue;
+                        }
+
                         ObjUnit.BaseObject = SystemShare.WorldEngine.RegenMonsterByName(MapName, ObjUnit.nX, ObjUnit.nY, ObjUnit.sName);
                         if (ObjUnit.BaseObject != null)
+                        {
                             ObjUnit.BaseObject.WAbil.HP = Guards[i].nHP;
+                        }
                         else
+                        {
                             LogService.Warn("[错误信息] 城堡初始化守卫失败(检查怪物数据库里有没守卫怪物)");
+                        }
                     }
                     //for (int i = 0; i < CastleEnvir.DoorList.Count; i++)
                     //{
@@ -225,9 +244,16 @@ namespace M2Server.Castle
             string sabukwallPath = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleDir, ConfigDir);
             string guildName = string.Empty;
             if (!Directory.Exists(sabukwallPath))
+            {
                 Directory.CreateDirectory(sabukwallPath);
+            }
+
             string sFileName = Path.Combine(sabukwallPath, CastleConst.AttackSabukWallList);
-            if (!File.Exists(sFileName)) return;
+            if (!File.Exists(sFileName))
+            {
+                return;
+            }
+
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sFileName);
             for (int i = 0; i < AttackWarList.Count; i++)
@@ -240,7 +266,11 @@ namespace M2Server.Castle
                 string sData = loadList[i];
                 string s20 = HUtil32.GetValidStr3(sData, ref guildName, new[] { ' ', '\t' });
                 IGuild guild = SystemShare.GuildMgr.FindGuild(guildName);
-                if (guild == null) continue;
+                if (guild == null)
+                {
+                    continue;
+                }
+
                 AttackerInfo attackerInfo = new AttackerInfo();
                 HUtil32.ArrestStringEx(s20, "\"", "\"", ref s20);
                 if (DateTime.TryParse(s20, out DateTime time))
@@ -264,7 +294,10 @@ namespace M2Server.Castle
         {
             string sabukwallPath = Path.Combine(M2Share.BasePath, SystemShare.Config.CastleDir, ConfigDir);
             if (!Directory.Exists(sabukwallPath))
+            {
                 Directory.CreateDirectory(sabukwallPath);
+            }
+
             string sFileName = Path.Combine(sabukwallPath, CastleConst.AttackSabukWallList);
             using StringList loadLis = new StringList(AttackWarList.Count);
             for (int i = 0; i < AttackWarList.Count; i++)
@@ -282,7 +315,11 @@ namespace M2Server.Castle
             const string sExceptionMsg = "[Exception] TUserCastle::Run";
             try
             {
-                if (M2Share.ServerIndex != SystemShare.MapMgr.GetMapOfServerIndex(MapName)) return;
+                if (M2Share.ServerIndex != SystemShare.MapMgr.GetMapOfServerIndex(MapName))
+                {
+                    return;
+                }
+
                 int Year = DateTime.Now.Year;
                 int Month = DateTime.Now.Month;
                 int Day = DateTime.Now.Day;
@@ -348,9 +385,21 @@ namespace M2Server.Castle
                 }
                 if (UnderWar)
                 {
-                    if (LeftWall.BaseObject != null) LeftWall.BaseObject.StoneMode = false;
-                    if (CenterWall.BaseObject != null) CenterWall.BaseObject.StoneMode = false;
-                    if (RightWall.BaseObject != null) RightWall.BaseObject.StoneMode = false;
+                    if (LeftWall.BaseObject != null)
+                    {
+                        LeftWall.BaseObject.StoneMode = false;
+                    }
+
+                    if (CenterWall.BaseObject != null)
+                    {
+                        CenterWall.BaseObject.StoneMode = false;
+                    }
+
+                    if (RightWall.BaseObject != null)
+                    {
+                        RightWall.BaseObject.StoneMode = false;
+                    }
+
                     if (!ShowOverMsg)
                     {
                         if ((HUtil32.GetTickCount() - StartCastleWarTick) > (SystemShare.Config.CastleWarTime - SystemShare.Config.ShowCastleWarEndMsgTime)) // 3 * 60 * 60 * 1000 - 10 * 60 * 1000
@@ -369,9 +418,20 @@ namespace M2Server.Castle
                 }
                 else
                 {
-                    if (LeftWall.BaseObject != null) LeftWall.BaseObject.StoneMode = true;
-                    if (CenterWall.BaseObject != null) CenterWall.BaseObject.StoneMode = true;
-                    if (RightWall.BaseObject != null) RightWall.BaseObject.StoneMode = true;
+                    if (LeftWall.BaseObject != null)
+                    {
+                        LeftWall.BaseObject.StoneMode = true;
+                    }
+
+                    if (CenterWall.BaseObject != null)
+                    {
+                        CenterWall.BaseObject.StoneMode = true;
+                    }
+
+                    if (RightWall.BaseObject != null)
+                    {
+                        RightWall.BaseObject.StoneMode = true;
+                    }
                 }
             }
             catch
@@ -392,8 +452,16 @@ namespace M2Server.Castle
             {
                 return false;
             }
-            if (envir == CastleEnvir && Math.Abs(HomeX - nX) < WarRangeX && Math.Abs(HomeY - nY) < WarRangeY) return true;
-            if (envir == PalaceEnvir || envir == SecretEnvir) return true;
+            if (envir == CastleEnvir && Math.Abs(HomeX - nX) < WarRangeX && Math.Abs(HomeY - nY) < WarRangeY)
+            {
+                return true;
+            }
+
+            if (envir == PalaceEnvir || envir == SecretEnvir)
+            {
+                return true;
+            }
+
             for (int i = 0; i < EnvirList.Count; i++)// 增加取得城堡所有地图列表
             {
                 if (string.Compare(EnvirList[i], envir.MapName, StringComparison.OrdinalIgnoreCase) == 0)
@@ -452,7 +520,7 @@ namespace M2Server.Castle
             bool result = true;
             for (int i = 0; i < playObjectList.Count; i++)
             {
-                IPlayerActor playObject = (IPlayerActor)playObjectList[i];
+                IPlayerActor playObject = playObjectList[i];
                 if (!playObject.Death && playObject.MyGuild != guild)
                 {
                     result = false;
@@ -540,7 +608,11 @@ namespace M2Server.Castle
 
         public bool IsDefenseAllyGuild(GuildInfo guild)
         {
-            if (!UnderWar) return false; // 如果未开始攻城，则无效
+            if (!UnderWar)
+            {
+                return false; // 如果未开始攻城，则无效
+            }
+
             return MasterGuild != null && MasterGuild.IsAllyGuild(guild);
         }
 
@@ -551,7 +623,11 @@ namespace M2Server.Castle
         /// <returns></returns>
         public bool IsDefenseGuild(GuildInfo guild)
         {
-            if (!UnderWar) return false;// 如果未开始攻城，则无效
+            if (!UnderWar)
+            {
+                return false;// 如果未开始攻城，则无效
+            }
+
             return guild == MasterGuild;
         }
 
@@ -601,13 +677,25 @@ namespace M2Server.Castle
             bool result = false;
             ArcherUnit ObjUnit = LeftWall;
             if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.Death && ObjUnit.BaseObject.CurrX == nX &&
-                ObjUnit.BaseObject.CurrY == nY) result = true;
+                ObjUnit.BaseObject.CurrY == nY)
+            {
+                result = true;
+            }
+
             ObjUnit = CenterWall;
             if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.Death && ObjUnit.BaseObject.CurrX == nX &&
-                ObjUnit.BaseObject.CurrY == nY) result = true;
+                ObjUnit.BaseObject.CurrY == nY)
+            {
+                result = true;
+            }
+
             ObjUnit = RightWall;
             if (ObjUnit.BaseObject != null && ObjUnit.BaseObject.Death && ObjUnit.BaseObject.CurrX == nX &&
-                ObjUnit.BaseObject.CurrY == nY) result = true;
+                ObjUnit.BaseObject.CurrY == nY)
+            {
+                result = true;
+            }
+
             return result;
         }
 
@@ -620,7 +708,11 @@ namespace M2Server.Castle
         {
             const string WarDateMsg = "{0}年{1}月{2}日";
             string result = string.Empty;
-            if (AttackWarList.Count <= 0) return result;
+            if (AttackWarList.Count <= 0)
+            {
+                return result;
+            }
+
             AttackerInfo AttackerInfo = AttackWarList[0];
             int Year = AttackerInfo.AttackDate.Year;
             int Month = AttackerInfo.AttackDate.Month;
@@ -690,9 +782,13 @@ namespace M2Server.Castle
             if (nInGold > 0)
             {
                 if (TotalGold + nInGold < SystemShare.Config.CastleGoldMax)
+                {
                     TotalGold += nInGold;
+                }
                 else
+                {
                     TotalGold = SystemShare.Config.CastleGoldMax;
+                }
             }
             if ((HUtil32.GetTickCount() - SaveTick) > 10 * 60 * 1000)
             {
@@ -896,7 +992,11 @@ namespace M2Server.Castle
 
         public bool AddAttackerInfo(GuildInfo Guild)
         {
-            if (InAttackerList(Guild)) return false;
+            if (InAttackerList(Guild))
+            {
+                return false;
+            }
+
             AttackerInfo AttackerInfo = new AttackerInfo();
             AttackerInfo.AttackDate = M2Share.AddDateTimeOfDay(DateTime.Now, SystemShare.Config.StartCastleWarDays);
             AttackerInfo.sGuildName = Guild.GuildName;

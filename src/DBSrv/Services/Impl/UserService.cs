@@ -1,17 +1,17 @@
 using DBSrv.Conf;
 using DBSrv.Storage;
 using DBSrv.Storage.Model;
+using OpenMir2;
+using OpenMir2.Data;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using OpenMir2;
-using OpenMir2.Data;
-using OpenMir2.DataHandlingAdapters;
-using OpenMir2.Packets.ClientPackets;
-using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -47,7 +47,7 @@ namespace DBSrv.Services.Impl
 
         public void Initialize()
         {
-            var touchSocketConfig = new TouchSocketConfig();
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_setting.GateAddr), _setting.GatePort)
@@ -65,12 +65,12 @@ namespace DBSrv.Services.Impl
 
         public void Stop()
         {
-            for (var i = 0; i < _gateClients.Length; i++)
+            for (int i = 0; i < _gateClients.Length; i++)
             {
-                var gateInfo = _gateClients[i];
+                SelGateInfo gateInfo = _gateClients[i];
                 if (gateInfo != null)
                 {
-                    for (var ii = 0; ii < gateInfo.UserList.Count; ii++)
+                    for (int ii = 0; ii < gateInfo.UserList.Count; ii++)
                     {
                         gateInfo.UserList[ii] = null;
                     }
@@ -90,11 +90,11 @@ namespace DBSrv.Services.Impl
             {
                 while (await _reviceQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (_reviceQueue.Reader.TryRead(out var message))
+                    if (_reviceQueue.Reader.TryRead(out UserGateMessage message))
                     {
                         try
                         {
-                            var selGata = _gateClients[message.ConnectionId];
+                            SelGateInfo selGata = _gateClients[message.ConnectionId];
                             if (selGata == null)
                             {
                                 continue;
@@ -112,12 +112,12 @@ namespace DBSrv.Services.Impl
 
         private void ProcessMessage(SelGateInfo gateInfo, ServerDataMessage packet)
         {
-            var sTemp = string.Empty;
-            var sText = HUtil32.GetString(packet.Data, 0, packet.DataLen);
+            string sTemp = string.Empty;
+            string sText = HUtil32.GetString(packet.Data, 0, packet.DataLen);
             HUtil32.ArrestStringEx(sText, "%", "$", ref sTemp);
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            for (int i = 0; i < gateInfo.UserList.Count; i++)
             {
-                var userInfo = gateInfo.UserList[i];
+                SessionUserInfo userInfo = gateInfo.UserList[i];
                 if (userInfo != null)
                 {
                     if (userInfo.SessionId == packet.SocketId)
@@ -127,7 +127,7 @@ namespace DBSrv.Services.Impl
                         {
                             continue;
                         }
-                        var sData = string.Empty;
+                        string sData = string.Empty;
                         if (HUtil32.TagCount(userInfo.sText, '!') <= 0)
                         {
                             return;
@@ -151,11 +151,14 @@ namespace DBSrv.Services.Impl
         private Task Received(ITcpClientBase socketClient, ReceivedDataEventArgs e)
         {
             if (e.RequestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
-                return Task.CompletedTask;
-            var client = (SocketClient)socketClient;
-            if (int.TryParse(client.Id, out var clientId))
             {
-                var gateClient = _gateClients[clientId - 1];
+                return Task.CompletedTask;
+            }
+
+            SocketClient client = (SocketClient)socketClient;
+            if (int.TryParse(client.Id, out int clientId))
+            {
+                SelGateInfo gateClient = _gateClients[clientId - 1];
                 ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId - 1, ref gateClient);
             }
             else
@@ -167,14 +170,14 @@ namespace DBSrv.Services.Impl
 
         private Task Connecting(SocketClient client, ConnectedEventArgs e)
         {
-            var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
+            IPEndPoint endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
             if (!DBShare.CheckServerIP(endPoint.Address.ToString()))
             {
                 LogService.Warn("非法服务器连接: " + endPoint);
                 client.Close();
                 return Task.CompletedTask;
             }
-            var selGateInfo = new SelGateInfo();
+            SelGateInfo selGateInfo = new SelGateInfo();
             selGateInfo.Socket = client.MainSocket;
             selGateInfo.ConnectionId = client.Id;
             selGateInfo.RemoteEndPoint = client.MainSocket.RemoteEndPoint;
@@ -187,11 +190,11 @@ namespace DBSrv.Services.Impl
 
         private Task Disconnected(SocketClient client, DisconnectEventArgs e)
         {
-            var clientId = int.Parse(client.Id) - 1;
-            var gateClient = _gateClients[clientId];
+            int clientId = int.Parse(client.Id) - 1;
+            SelGateInfo gateClient = _gateClients[clientId];
             if (gateClient != null && gateClient.UserList != null)
             {
-                for (var ii = 0; ii < gateClient.UserList.Count; ii++)
+                for (int ii = 0; ii < gateClient.UserList.Count; ii++)
                 {
                     gateClient.UserList[ii] = null;
                 }
@@ -214,16 +217,16 @@ namespace DBSrv.Services.Impl
                     LogService.Debug($"解析角色网关封包出现异常...");
                     return;
                 }
-                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
+                ServerDataMessage messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
                 switch (messageData.Type)
                 {
                     case ServerDataType.KeepAlive:
                         SendKeepAlivePacket(gateInfo.ConnectionId);
                         break;
                     case ServerDataType.Enter:
-                        var sData = string.Empty;
-                        var sTemp = string.Empty;
-                        var sText = HUtil32.GetString(messageData.Data, 0, messageData.DataLen);
+                        string sData = string.Empty;
+                        string sTemp = string.Empty;
+                        string sText = HUtil32.GetString(messageData.Data, 0, messageData.DataLen);
                         HUtil32.ArrestStringEx(sText, "%", "$", ref sData);
                         sData = HUtil32.GetValidStr3(sData, ref sTemp, HUtil32.Backslash);
                         OpenUser(messageData.SocketId, sData, ref gateInfo);
@@ -232,7 +235,7 @@ namespace DBSrv.Services.Impl
                         CloseUser(messageData.SocketId, ref gateInfo);
                         break;
                     case ServerDataType.Data:
-                        var userMessage = new UserGateMessage();
+                        UserGateMessage userMessage = new UserGateMessage();
                         userMessage.ConnectionId = connectionId;
                         userMessage.Packet = messageData;
                         _reviceQueue.Writer.TryWrite(userMessage);
@@ -247,10 +250,10 @@ namespace DBSrv.Services.Impl
 
         public int GetUserCount()
         {
-            var nUserCount = 0;
-            for (var i = 0; i < _gateClients.Length; i++)
+            int nUserCount = 0;
+            for (int i = 0; i < _gateClients.Length; i++)
             {
-                var gateInfo = _gateClients[i];
+                SelGateInfo gateInfo = _gateClients[i];
                 if (gateInfo == null)
                 {
                     continue;
@@ -262,8 +265,12 @@ namespace DBSrv.Services.Impl
 
         private bool NewChrData(string sAccount, string sChrName, int nSex, int nJob, int nHair)
         {
-            if (_playDataStorage.Index(sChrName) != -1) return false;
-            var chrRecord = new CharacterDataInfo();
+            if (_playDataStorage.Index(sChrName) != -1)
+            {
+                return false;
+            }
+
+            CharacterDataInfo chrRecord = new CharacterDataInfo();
             chrRecord.Header = new RecordHeader
             {
                 Name = sChrName,
@@ -281,7 +288,7 @@ namespace DBSrv.Services.Impl
 
         private void SendKeepAlivePacket(string connectionId)
         {
-            var message = new ServerDataMessage();
+            ServerDataMessage message = new ServerDataMessage();
             message.Type = ServerDataType.KeepAlive;
             SendPacket(connectionId, message);
             LogService.Debug("响应角色网关心跳...");
@@ -292,11 +299,11 @@ namespace DBSrv.Services.Impl
         /// </summary>
         private static void OpenUser(string sessionId, string sIp, ref SelGateInfo gateInfo)
         {
-            var sUserIPaddr = string.Empty;
-            var sGateIPaddr = HUtil32.GetValidStr3(sIp, ref sUserIPaddr, HUtil32.Backslash);
+            string sUserIPaddr = string.Empty;
+            string sGateIPaddr = HUtil32.GetValidStr3(sIp, ref sUserIPaddr, HUtil32.Backslash);
             SessionUserInfo userInfo;
-            var success = false;
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            bool success = false;
+            for (int i = 0; i < gateInfo.UserList.Count; i++)
             {
                 userInfo = gateInfo.UserList[i];
                 if ((userInfo != null) && (userInfo.SessionId == sessionId))
@@ -326,9 +333,9 @@ namespace DBSrv.Services.Impl
 
         private void CloseUser(string connId, ref SelGateInfo gateInfo)
         {
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            for (int i = 0; i < gateInfo.UserList.Count; i++)
             {
-                var userInfo = gateInfo.UserList[i];
+                SessionUserInfo userInfo = gateInfo.UserList[i];
                 if ((userInfo != null) && (userInfo.SessionId == connId))
                 {
                     if (!_loginService.GetGlobaSessionStatus(userInfo.nSessionID))
@@ -345,9 +352,9 @@ namespace DBSrv.Services.Impl
 
         private void DeCodeUserMsg(string sData, SelGateInfo gateInfo, ref SessionUserInfo userInfo)
         {
-            var sDefMsg = sData[..Messages.DefBlockSize];
-            var sText = sData.Substring(Messages.DefBlockSize, sData.Length - Messages.DefBlockSize);
-            var clientPacket = EDCode.DecodePacket(sDefMsg);
+            string sDefMsg = sData[..Messages.DefBlockSize];
+            string sText = sData[Messages.DefBlockSize..];
+            CommandMessage clientPacket = EDCode.DecodePacket(sDefMsg);
             switch (clientPacket.Ident)
             {
                 case Messages.CM_QUERYCHR:
@@ -438,12 +445,12 @@ namespace DBSrv.Services.Impl
         /// <returns></returns>
         private bool QueryChr(string sData, ref SessionUserInfo userInfo, ref SelGateInfo curGate)
         {
-            var sAccount = string.Empty;
-            var sSendMsg = string.Empty;
-            var result = false;
-            var sSessionId = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
-            var nSessionId = HUtil32.StrToInt(sSessionId, -2);
-            var nChrCount = 0;
+            string sAccount = string.Empty;
+            string sSendMsg = string.Empty;
+            bool result = false;
+            string sSessionId = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
+            int nSessionId = HUtil32.StrToInt(sSessionId, -2);
+            int nChrCount = 0;
             if (_loginService.CheckSession(sAccount, userInfo.sUserIPaddr, nSessionId))
             {
                 _loginService.SetGlobaSessionNoPlay(nSessionId);
@@ -452,18 +459,18 @@ namespace DBSrv.Services.Impl
                 IList<PlayQuick> chrList = new List<PlayQuick>();
                 if ((_playRecordStorage.FindByAccount(sAccount, ref chrList) >= 0))
                 {
-                    for (var i = 0; i < chrList.Count; i++)
+                    for (int i = 0; i < chrList.Count; i++)
                     {
-                        var quickId = chrList[i];
+                        PlayQuick quickId = chrList[i];
                         if (quickId.SelectID != userInfo.nSelGateID) // 如果选择ID不对,则跳过
                         {
                             continue;
                         }
-                        var humRecord = _playRecordStorage.GetBy(quickId.Index, ref result);
+                        PlayerRecordData humRecord = _playRecordStorage.GetBy(quickId.Index, ref result);
                         if (result && !humRecord.Deleted)
                         {
-                            var sChrName = quickId.ChrName;
-                            var nIndex = _playDataStorage.Index(sChrName);
+                            string sChrName = quickId.ChrName;
+                            int nIndex = _playDataStorage.Index(sChrName);
                             if ((nIndex < 0) || (nChrCount >= 2))
                             {
                                 continue;
@@ -498,17 +505,20 @@ namespace DBSrv.Services.Impl
         /// </summary>
         private void OutOfConnect(SessionUserInfo userInfo)
         {
-            var msg = Messages.MakeMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            var sMsg = EDCode.EncodeMessage(msg);
+            CommandMessage msg = Messages.MakeMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            string sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
         }
 
         private int DelChrSnameToLevel(string sName)
         {
             QueryChr chrRecord = null;
-            var nIndex = _playDataStorage.Index(sName);
+            int nIndex = _playDataStorage.Index(sName);
             if (nIndex < 0)
+            {
                 return 0;
+            }
+
             if (_playDataStorage.GetQryChar(nIndex, ref chrRecord))
             {
                 return chrRecord.Level;
@@ -522,17 +532,17 @@ namespace DBSrv.Services.Impl
         private void DeleteChr(string sData, ref SessionUserInfo userInfo)
         {
             CommandMessage msg;
-            var sChrName = EDCode.DeCodeString(sData);
-            var boCheck = false;
-            var nIndex = _playRecordStorage.Index(sChrName);
+            string sChrName = EDCode.DeCodeString(sData);
+            bool boCheck = false;
+            int nIndex = _playRecordStorage.Index(sChrName);
             if (nIndex >= 0)
             {
-                var humRecord = _playRecordStorage.Get(nIndex, ref boCheck);
+                PlayerRecordData humRecord = _playRecordStorage.Get(nIndex, ref boCheck);
                 if (boCheck)
                 {
                     if (humRecord.sAccount == userInfo.sAccount)
                     {
-                        var nLevel = DelChrSnameToLevel(sChrName);
+                        int nLevel = DelChrSnameToLevel(sChrName);
                         if (nLevel < _setting.DeleteMinLevel)
                         {
                             humRecord.Deleted = true;
@@ -549,7 +559,7 @@ namespace DBSrv.Services.Impl
             {
                 msg = Messages.MakeMessage(Messages.SM_DELCHR_FAIL, 0, 0, 0, 0);
             }
-            var sMsg = EDCode.EncodeMessage(msg);
+            string sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
         }
 
@@ -558,14 +568,14 @@ namespace DBSrv.Services.Impl
         /// </summary>
         private bool NewChr(string sData, ref SessionUserInfo userInfo)
         {
-            var sAccount = string.Empty;
-            var sChrName = string.Empty;
-            var sHair = string.Empty;
-            var sJob = string.Empty;
-            var sSex = string.Empty;
+            string sAccount = string.Empty;
+            string sChrName = string.Empty;
+            string sHair = string.Empty;
+            string sJob = string.Empty;
+            string sSex = string.Empty;
             CommandMessage msg;
-            var nCode = -1;
-            var data = EDCode.DeCodeString(sData);
+            int nCode = -1;
+            string data = EDCode.DeCodeString(sData);
             data = HUtil32.GetValidStr3(data, ref sAccount, HUtil32.Backslash);
             data = HUtil32.GetValidStr3(data, ref sChrName, HUtil32.Backslash);
             data = HUtil32.GetValidStr3(data, ref sHair, HUtil32.Backslash);
@@ -615,7 +625,7 @@ namespace DBSrv.Services.Impl
                 }
                 if (_playRecordStorage.ChrCountOfAccount(sAccount) < 2)
                 {
-                    var humRecord = new PlayerRecordData();
+                    PlayerRecordData humRecord = new PlayerRecordData();
                     humRecord.sChrName = sChrName;
                     humRecord.sAccount = sAccount;
                     humRecord.Deleted = false;
@@ -657,7 +667,7 @@ namespace DBSrv.Services.Impl
                 msg = Messages.MakeMessage(Messages.SM_NEWCHR_FAIL, nCode, 0, 0, 0);
             }
             LogService.Info("创建角色:{0} 结果:{1}", sChrName, nCode == 1 ? "成功" : "失败");
-            var sMsg = EDCode.EncodeMessage(msg);
+            string sMsg = EDCode.EncodeMessage(msg);
             SendUserSocket(userInfo.ConnectionId, userInfo.SessionId, sMsg);
             return nCode == 1;
         }
@@ -668,22 +678,22 @@ namespace DBSrv.Services.Impl
         /// <returns></returns>
         private bool SelectChr(string sData, SelGateInfo curGate, ref SessionUserInfo userInfo)
         {
-            var sAccount = string.Empty;
-            var sCurMap = string.Empty;
-            var nRoutePort = 0;
-            var result = false;
-            var sChrName = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
-            var boDataOk = false;
+            string sAccount = string.Empty;
+            string sCurMap = string.Empty;
+            int nRoutePort = 0;
+            bool result = false;
+            string sChrName = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sAccount, HUtil32.Backslash);
+            bool boDataOk = false;
             if (string.Compare(userInfo.sAccount, sAccount, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 int nIndex;
                 IList<PlayQuick> chrList = new List<PlayQuick>();
                 if (_playRecordStorage.FindByAccount(sAccount, ref chrList) >= 0)
                 {
-                    for (var i = 0; i < chrList.Count; i++)
+                    for (int i = 0; i < chrList.Count; i++)
                     {
                         nIndex = chrList[i].Index;
-                        var humRecord = _playRecordStorage.GetBy(nIndex, ref result);
+                        PlayerRecordData humRecord = _playRecordStorage.GetBy(nIndex, ref result);
                         if (result)
                         {
                             if (humRecord.sChrName == sChrName)
@@ -706,7 +716,7 @@ namespace DBSrv.Services.Impl
                 nIndex = _playDataStorage.Index(sChrName);
                 if (nIndex >= 0)
                 {
-                    var chrRecord = _playDataStorage.Query(nIndex);
+                    CharacterData chrRecord = _playDataStorage.Query(nIndex);
                     if (!string.IsNullOrEmpty(chrRecord.ChrName))
                     {
                         sCurMap = chrRecord.CurMap;
@@ -716,14 +726,14 @@ namespace DBSrv.Services.Impl
             }
             if (boDataOk)
             {
-                var nMapIndex = DBShare.GetMapIndex(sCurMap);
-                var sDefMsg = EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_STARTPLAY, 0, 0, 0, 0));
-                var sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIP(), ref nRoutePort);
+                int nMapIndex = DBShare.GetMapIndex(sCurMap);
+                string sDefMsg = EDCode.EncodeMessage(Messages.MakeMessage(Messages.SM_STARTPLAY, 0, 0, 0, 0));
+                string sRouteIp = GateRouteIp(curGate.RemoteEndPoint.GetIP(), ref nRoutePort);
                 if (_setting.DynamicIpMode)// 使用动态IP
                 {
                     sRouteIp = userInfo.sGateIPaddr;
                 }
-                var sRouteMsg = EDCode.EncodeString(sRouteIp + "/" + (nRoutePort + nMapIndex));
+                string sRouteMsg = EDCode.EncodeString(sRouteIp + "/" + (nRoutePort + nMapIndex));
                 SendUserSocket(curGate.ConnectionId, userInfo.SessionId, sDefMsg + sRouteMsg);
                 _loginService.SetGlobaSessionPlay(userInfo.nSessionID);
                 result = true;
@@ -742,19 +752,19 @@ namespace DBSrv.Services.Impl
         /// <returns></returns>
         private static string GetGameGateRoute(GateRouteInfo routeInfo, ref int nGatePort)
         {
-            var nGateIndex = RandomNumber.GetInstance().Random(routeInfo.GateCount);
-            var result = routeInfo.GameGateIP[nGateIndex];
+            int nGateIndex = RandomNumber.GetInstance().Random(routeInfo.GateCount);
+            string result = routeInfo.GameGateIP[nGateIndex];
             nGatePort = routeInfo.GameGatePort[nGateIndex];
             return result;
         }
 
         private static string GateRouteIp(string sGateIp, ref int nPort)
         {
-            var result = string.Empty;
+            string result = string.Empty;
             nPort = 0;
-            for (var i = 0; i < DBShare.RouteInfo.Length; i++)
+            for (int i = 0; i < DBShare.RouteInfo.Length; i++)
             {
-                var routeInfo = DBShare.RouteInfo[i];
+                GateRouteInfo routeInfo = DBShare.RouteInfo[i];
                 if (routeInfo == null)
                 {
                     continue;
@@ -770,7 +780,7 @@ namespace DBSrv.Services.Impl
 
         private void SendUserSocket(string connectionId, string sessionId, string sSendMsg)
         {
-            var message = new ServerDataMessage();
+            ServerDataMessage message = new ServerDataMessage();
             message.SocketId = sessionId;
             message.Data = HUtil32.GetBytes("#" + sSendMsg + "!");
             message.DataLen = (short)message.Data.Length;
@@ -781,19 +791,22 @@ namespace DBSrv.Services.Impl
         private void SendPacket(string connectionId, ServerDataMessage packet)
         {
             if (!_socketServer.SocketClientExist(connectionId))
+            {
                 return;
+            }
+
             SendMessage(connectionId, SerializerUtil.Serialize(packet));
         }
 
         private void SendMessage(string connectionId, byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _socketServer.Send(connectionId, data);

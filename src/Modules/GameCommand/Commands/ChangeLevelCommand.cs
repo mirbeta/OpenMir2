@@ -17,8 +17,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sParam1 = @params.Length > 0 ? @params[0] : "";
-            var nLevel = HUtil32.StrToInt(sParam1, 1);
+            string sParam1 = @params.Length > 0 ? @params[0] : "";
+            int nLevel = HUtil32.StrToInt(sParam1, 1);
             int nOLevel = PlayerActor.Abil.Level;
             PlayerActor.Abil.Level = (byte)HUtil32._MIN(MessageSettings.MAXUPLEVEL, nLevel);
             PlayerActor.HasLevelUp(1);// 等级调整记录日志

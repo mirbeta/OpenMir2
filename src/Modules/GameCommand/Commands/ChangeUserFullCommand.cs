@@ -18,8 +18,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sUserCount = @params.Length > 0 ? @params[0] : "";
-            var nCount = HUtil32.StrToInt(sUserCount, -1);
+            string sUserCount = @params.Length > 0 ? @params[0] : "";
+            int nCount = HUtil32.StrToInt(sUserCount, -1);
             if (string.IsNullOrEmpty(sUserCount) || nCount < 1 || !string.IsNullOrEmpty(sUserCount))
             {
                 PlayerActor.SysMsg("设置服务器最高上线人数。", MsgColor.Red, MsgType.Hint);

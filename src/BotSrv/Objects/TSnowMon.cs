@@ -1,6 +1,5 @@
 ﻿using BotSrv.Player;
 using OpenMir2;
-using SystemModule;
 
 namespace BotSrv.Objects;
 
@@ -29,16 +28,25 @@ public class TSnowMon : Actor
         if (m_boUseEffect)
         {
             if (m_boMsgMuch)
+            {
                 dwEffectFrameTimetime = HUtil32.Round(m_dwEffectFrameTime * 2 / 3);
+            }
             else
+            {
                 dwEffectFrameTimetime = m_dwEffectFrameTime;
+            }
+
             if (MShare.GetTickCount() - m_dwEffectStartTime > dwEffectFrameTimetime)
             {
                 m_dwEffectStartTime = MShare.GetTickCount();
                 if (m_nEffectFrame < m_nEffectEnd)
+                {
                     m_nEffectFrame++;
+                }
                 else
+                {
                     m_boUseEffect = false;
+                }
             }
         }
     }

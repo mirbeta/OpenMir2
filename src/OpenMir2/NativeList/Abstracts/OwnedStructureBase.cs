@@ -1,6 +1,6 @@
-﻿using System;
-using OpenMir2.NativeList.Helpers;
+﻿using OpenMir2.NativeList.Helpers;
 using OpenMir2.NativeList.Interfaces.Entities;
+using System;
 
 namespace OpenMir2.NativeList.Abstracts
 {

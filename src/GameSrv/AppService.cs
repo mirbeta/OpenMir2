@@ -1,18 +1,12 @@
 using GameSrv.Word;
-using M2Server;
 using McMaster.Extensions.CommandLineUtils;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using NLog;
-using Spectre.Console;
-using SystemModule;
 using SystemModule.Enums;
 
 namespace GameSrv
 {
     public class AppService : IHostedService, IDisposable
     {
-        
+
         private readonly IHostApplicationLifetime _appLifetime;
         private readonly IHost Host;
         private readonly GameApp _mirApp;
@@ -144,8 +138,8 @@ namespace GameSrv
             if (SystemShare.WorldEngine.PlayObjectCount > 0) //服务器关闭，强制保存玩家数据
             {
                 LogService.Debug("保存玩家数据");
-                var playObjectList = SystemShare.WorldEngine.GetPlayObjects();
-                foreach (var play in playObjectList)
+                IEnumerable<SystemModule.Actors.IPlayerActor> playObjectList = SystemShare.WorldEngine.GetPlayObjects();
+                foreach (SystemModule.Actors.IPlayerActor play in playObjectList)
                 {
                     WorldServer.SaveHumanRcd(play);
                 }
@@ -158,7 +152,7 @@ namespace GameSrv
 
         private async Task StopService(string sIPaddr, int nPort, bool isTransfer)
         {
-            var playerCount = SystemShare.WorldEngine.PlayObjectCount;
+            int playerCount = SystemShare.WorldEngine.PlayObjectCount;
             if (playerCount == 0)
             {
                 LogService.Info("没有玩家在线，游戏引擎服务已停止...Bye!");
@@ -169,18 +163,18 @@ namespace GameSrv
             // 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
             await Task.Factory.StartNew(async () =>
             {
-                var shutdownSeconds = SystemShare.Config.ShutdownSeconds;
+                int shutdownSeconds = SystemShare.Config.ShutdownSeconds;
                 LogService.Debug("网关停止新玩家连接");
                 M2Share.NetChannel.SendServerStopMsg();//通知网关停止分配新的玩家连接
                 await Task.Delay(5000);//强制5秒延迟，防止玩家在倒计时结束前进入游戏
                 while (true)
                 {
-                    var playObjectList = SystemShare.WorldEngine.GetPlayObjects();
+                    IEnumerable<SystemModule.Actors.IPlayerActor> playObjectList = SystemShare.WorldEngine.GetPlayObjects();
                     if (shutdownSeconds <= 0)
                     {
                         if (isTransfer)
                         {
-                            foreach (var playObject in playObjectList)
+                            foreach (SystemModule.Actors.IPlayerActor playObject in playObjectList)
                             {
                                 if (playObject.Ghost || playObject.Death)//死亡或者下线的玩家不进行转移
                                 {
@@ -191,9 +185,9 @@ namespace GameSrv
                         }
                         break;//转移结束后跳出循环
                     }
-                    foreach (var playObject in playObjectList)
+                    foreach (SystemModule.Actors.IPlayerActor playObject in playObjectList)
                     {
-                        var closeMsg = isTransfer ? string.Format(CloseTransferMessgae, shutdownSeconds) : string.Format(CloseServerMessage, shutdownSeconds);
+                        string closeMsg = isTransfer ? string.Format(CloseTransferMessgae, shutdownSeconds) : string.Format(CloseServerMessage, shutdownSeconds);
                         playObject.SysMsg(closeMsg, MsgColor.Red, MsgType.Notice);
                         LogService.Info(closeMsg);
                     }
@@ -227,9 +221,9 @@ namespace GameSrv
             {
                 LogService.Info("检查是否有其他可用服务器.");
                 //如果有多机负载转移在线玩家到新服务器
-                var sIPaddr = string.Empty;
-                var nPort = 0;
-                var isMultiServer = GameShare.GetMultiServerAddrPort(SystemShare.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
+                string sIPaddr = string.Empty;
+                int nPort = 0;
+                bool isMultiServer = GameShare.GetMultiServerAddrPort(SystemShare.ServerIndex, ref sIPaddr, ref nPort);//如果有可用服务器，那就切换过去
                 if (isMultiServer)
                 {
                     LogService.Info($"玩家转移目标服务器[{sIPaddr}:{nPort}].");
@@ -248,7 +242,7 @@ namespace GameSrv
         {
             while (true)
             {
-                var cmdline = Console.ReadLine();
+                string cmdline = Console.ReadLine();
                 if (string.IsNullOrEmpty(cmdline))
                 {
                     continue;
@@ -296,7 +290,7 @@ namespace GameSrv
                 {
                     while (await _timer.WaitForNextTickAsync(cancellationToken))
                     {
-                        var monsterCount = 0;
+                        int monsterCount = 0;
                         /*for (var i = 0; i < SystemShare.WorldEngine.MobThreads.Length; i++)
                         {
                             monsterCount += SystemShare.WorldEngine.MobThreads[i].MonsterCount;

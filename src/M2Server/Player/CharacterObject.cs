@@ -134,7 +134,7 @@ namespace M2Server.Player
         /// <returns></returns>
         public override int GetMagStruckDamage(IActor baseObject, int nDamage)
         {
-            var damage = base.GetMagStruckDamage(baseObject, nDamage);
+            int damage = base.GetMagStruckDamage(baseObject, nDamage);
             if ((damage > 0) && AbilMagBubbleDefence)
             {
                 damage = (ushort)HUtil32.Round(damage / 1.0e2 * (MagBubbleDefenceLevel + 2) * 8.0);//魔法盾减伤

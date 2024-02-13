@@ -4,8 +4,8 @@ using LoginSrv.Storage;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
 using NLog.Extensions.Logging;
+using OpenMir2;
 using Spectre.Console;
 using System;
 using System.IO;
@@ -13,14 +13,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
 using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace LoginSrv
 {
     public class AppServer : ServiceHost
     {
-        
+
         private PeriodicTimer _timer;
 
         public AppServer()
@@ -107,7 +106,7 @@ namespace LoginSrv
                 {
                     continue;
                 }
-                var firstTwoCharacters = input[..2];
+                string firstTwoCharacters = input[..2];
 
                 if (firstTwoCharacters switch
                 {
@@ -141,9 +140,9 @@ namespace LoginSrv
         {
             LsShare.ShowLog = false;
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var masSocService = (SessionServer)Host.Services.GetService(typeof(SessionServer));
-            var serverList = masSocService?.ServerList;
-            var table = new Table().Expand().BorderColor(Color.Grey);
+            SessionServer masSocService = (SessionServer)Host.Services.GetService(typeof(SessionServer));
+            System.Collections.Generic.IList<ServerSessionInfo> serverList = masSocService?.ServerList;
+            Table table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]Server[/]");
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
@@ -155,7 +154,7 @@ namespace LoginSrv
                  .Cropping(VerticalOverflowCropping.Top)
                  .StartAsync(async ctx =>
                  {
-                     foreach (var _ in Enumerable.Range(0, 10))
+                     foreach (int _ in Enumerable.Range(0, 10))
                      {
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
@@ -164,10 +163,10 @@ namespace LoginSrv
                      {
                          for (int i = 0; i < serverList.Count; i++)
                          {
-                             var msgServer = serverList[i];
+                             ServerSessionInfo msgServer = serverList[i];
                              if (!string.IsNullOrEmpty(msgServer.ServerName))
                              {
-                                 var serverType = msgServer.ServerIndex == 99 ? " (DB)" : " (GameSrv)";
+                                 string serverType = msgServer.ServerIndex == 99 ? " (DB)" : " (GameSrv)";
                                  table.UpdateCell(i, 0, $"[bold]{msgServer.ServerName}{serverType}[/]");
                                  table.UpdateCell(i, 1, ($"[bold]{msgServer.EndPoint}[/]"));
                                  if (!msgServer.Socket.Connected)
@@ -194,32 +193,32 @@ namespace LoginSrv
         {
             AnsiConsole.WriteLine();
 
-            var table = new Table()
+            Table table = new Table()
             {
                 Border = TableBorder.None,
                 Expand = true,
             }.HideHeaders();
             table.AddColumn(new TableColumn("One"));
 
-            var header = new FigletText("OpenMir2")
+            FigletText header = new FigletText("OpenMir2")
             {
                 Color = Color.Fuchsia
             };
-            var header2 = new FigletText("LoginSrv")
+            FigletText header2 = new FigletText("LoginSrv")
             {
                 Color = Color.Aqua
             };
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
             sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
             sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
             sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            var markup = new Markup(sb.ToString());
+            Markup markup = new Markup(sb.ToString());
 
             table.AddColumn(new TableColumn("Two"));
 
-            var rightTable = new Table()
+            Table rightTable = new Table()
                 .HideHeaders()
                 .Border(TableBorder.None)
                 .AddColumn(new TableColumn("Content"));

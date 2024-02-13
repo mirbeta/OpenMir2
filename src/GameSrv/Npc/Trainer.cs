@@ -1,6 +1,4 @@
 ﻿using M2Server.Npc;
-using OpenMir2;
-using OpenMir2.Data;
 
 namespace GameSrv.Npc
 {

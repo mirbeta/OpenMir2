@@ -1,7 +1,7 @@
-﻿using System;
+﻿using OpenMir2.NativeList.Interfaces.Shared;
+using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using OpenMir2.NativeList.Interfaces.Shared;
 
 namespace OpenMir2.NativeList.Abstracts
 {

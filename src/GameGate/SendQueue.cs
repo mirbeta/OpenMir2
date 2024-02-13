@@ -1,9 +1,5 @@
 using GameGate.Services;
-using System;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
-using Serilog;
 
 namespace GameGate
 {
@@ -39,7 +35,7 @@ namespace GameGate
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (_sendQueue.Reader.TryRead(out var sendPacket))
+                    if (_sendQueue.Reader.TryRead(out SessionMessage sendPacket))
                     {
                         try
                         {

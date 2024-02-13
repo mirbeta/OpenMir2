@@ -1,4 +1,3 @@
-using SystemModule;
 using SystemModule.MagicEvent;
 using SystemModule.Maps;
 using SystemModule.SubSystem;

@@ -1,8 +1,4 @@
-﻿using GameSrv.Npc;
-using M2Server.Player;
-using OpenMir2.Data;
-using SystemModule;
-using SystemModule.Data;
+﻿using M2Server.Player;
 
 namespace GameSrv.Maps
 {

@@ -1,12 +1,11 @@
-﻿using NLog;
-using OpenMir2;
+﻿using OpenMir2;
 using SystemModule;
 
 namespace PlanesSystem
 {
     public class PlanesService : IPlanesService
     {
-        
+
 
         public void Start()
         {

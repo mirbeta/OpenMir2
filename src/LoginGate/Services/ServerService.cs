@@ -51,7 +51,10 @@ public class ServerService
 
     public void CloseClient(string connectionId)
     {
-        if (_serverSocket.TryGetSocketClient(connectionId, out var client)) client.Close();
+        if (_serverSocket.TryGetSocketClient(connectionId, out SocketClient client))
+        {
+            client.Close();
+        }
     }
 
     /// <summary>
@@ -59,8 +62,8 @@ public class ServerService
     /// </summary>
     private Task ServerSocketClientConnect(ITcpClientBase client, ConnectedEventArgs e)
     {
-        var sRemoteAddress = client.GetIPPort();
-        var clientThread = _clientManager.GetClientThread();
+        string sRemoteAddress = client.GetIPPort();
+        ClientThread clientThread = _clientManager.GetClientThread();
         if (clientThread == null)
         {
             LogService.Debug("获取登陆服务失败。");
@@ -77,7 +80,7 @@ public class ServerService
         LogService.Debug($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.EndPoint}");
         TSessionInfo sessionInfo = null;
 
-        for (var nIdx = 0; nIdx < GateShare.MaxSession; nIdx++)
+        for (int nIdx = 0; nIdx < GateShare.MaxSession; nIdx++)
         {
             sessionInfo = clientThread.SessionArray[nIdx];
             if (sessionInfo == null)
@@ -110,8 +113,8 @@ public class ServerService
     /// </summary>
     private Task ServerSocketClientDisconnect(ITcpClientBase client, DisconnectEventArgs e)
     {
-        var socClient = client as SocketClient;
-        var userSession = _sessionManager.GetSession(socClient.Id);
+        SocketClient socClient = client as SocketClient;
+        ClientSession userSession = _sessionManager.GetSession(socClient.Id);
         if (userSession != null)
         {
             userSession.UserLeave();
@@ -129,9 +132,9 @@ public class ServerService
     /// </summary>
     private Task ServerSocketClientRead(SocketClient client, ReceivedDataEventArgs e)
     {
-        var data = new byte[e.ByteBlock.Len];
+        byte[] data = new byte[e.ByteBlock.Len];
         Buffer.BlockCopy(e.ByteBlock.Buffer, 0, data, 0, data.Length);
-        var message = new MessageData();
+        MessageData message = new MessageData();
         message.ClientIP = client.IP;
         message.Body = data;
         message.ConnectionId = client.Id;

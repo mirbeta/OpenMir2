@@ -15,8 +15,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            bool boAll = @params.Length > 1 ? bool.Parse(@params[1]) : false;
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

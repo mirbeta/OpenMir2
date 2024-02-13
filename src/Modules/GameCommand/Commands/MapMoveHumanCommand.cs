@@ -17,16 +17,16 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sSrcMap = @params.Length > 0 ? @params[0] : "";
-            var sDenMap = @params.Length > 1 ? @params[1] : "";
+            string sSrcMap = @params.Length > 0 ? @params[0] : "";
+            string sDenMap = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sDenMap) || string.IsNullOrEmpty(sSrcMap) ||
                 !string.IsNullOrEmpty(sSrcMap) && sSrcMap[0] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var srcEnvir = SystemShare.MapMgr.FindMap(sSrcMap);
-            var denEnvir = SystemShare.MapMgr.FindMap(sDenMap);
+            SystemModule.Maps.IEnvirnoment srcEnvir = SystemShare.MapMgr.FindMap(sSrcMap);
+            SystemModule.Maps.IEnvirnoment denEnvir = SystemShare.MapMgr.FindMap(sDenMap);
             if (srcEnvir == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandMapMoveMapNotFound, sSrcMap), MsgColor.Red,
@@ -41,9 +41,9 @@ namespace CommandModule.Commands
             }
             IList<IPlayerActor> humanList = new List<IPlayerActor>();
             SystemShare.WorldEngine.GetMapRageHuman(srcEnvir, srcEnvir.Width / 2, srcEnvir.Height / 2, 1000, ref humanList, true);
-            for (var i = 0; i < humanList.Count; i++)
+            for (int i = 0; i < humanList.Count; i++)
             {
-                var moveHuman = (IPlayerActor)humanList[i];
+                IPlayerActor moveHuman = humanList[i];
                 if (moveHuman != PlayerActor)
                 {
                     moveHuman.MapRandomMove(sDenMap, 0);

@@ -15,15 +15,15 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMap = @params[2];
-            var nX = HUtil32.StrToInt16(@params[0], 0);
-            var nY = HUtil32.StrToInt16(@params[1], 0);
+            string sMap = @params[2];
+            short nX = HUtil32.StrToInt16(@params[0], 0);
+            short nY = HUtil32.StrToInt16(@params[1], 0);
             if (!string.IsNullOrEmpty(sMap) && nX >= 0 && nY >= 0)
             {
-                var map = SystemShare.MapMgr.FindMap(sMap);
+                SystemModule.Maps.IEnvirnoment map = SystemShare.MapMgr.FindMap(sMap);
                 if (map != null && map.IsValidCell(nX, nY))
                 {
-                    ref var cellInfo = ref map.GetCellInfo(nX, nY, out var cellSuccess);
+                    ref SystemModule.Data.MapCellInfo cellInfo = ref map.GetCellInfo(nX, nY, out bool cellSuccess);
                     if (cellSuccess)
                     {
                         PlayerActor.SysMsg("标志: " + cellInfo.Attribute, MsgColor.Green, MsgType.Hint);

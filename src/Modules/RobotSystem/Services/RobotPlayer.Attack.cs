@@ -62,7 +62,7 @@ namespace RobotSystem.Services
                 {
                     if (TargetCret != null)
                     {
-                        var crazyMode = false;
+                        bool crazyMode = false;
                         if (TargetCret.Race == ActorRace.Play)
                         {
                             crazyMode = ((MonsterObject)TargetCret).CrazyMode;

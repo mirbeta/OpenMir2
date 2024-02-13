@@ -1,7 +1,7 @@
-﻿using System.Runtime.Serialization;
-using MemoryPack;
+﻿using MemoryPack;
 using OpenMir2.Data;
 using OpenMir2.Packets.ClientPackets;
+using System.Runtime.Serialization;
 
 namespace OpenMir2.Packets.ServerPackets
 {
@@ -37,7 +37,7 @@ namespace OpenMir2.Packets.ServerPackets
         public SaveCharacterData(string account, string chrName, CharacterDataInfo characterData)
         {
             Account = account;
-            ChrName = chrName;  
+            ChrName = chrName;
             CharacterData = characterData;
         }
     }

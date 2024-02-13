@@ -17,7 +17,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sParam1 = string.Empty;
+            string sParam1 = string.Empty;
             if (@params.Length > 0)
             {
                 sParam1 = @params.Length > 0 ? @params[0] : "";
@@ -32,7 +32,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(CommandHelp.GameCommandReloadGuildOnMasterserver, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = SystemShare.GuildMgr.FindGuild(sParam1);
+            SystemModule.Castles.IGuild guild = SystemShare.GuildMgr.FindGuild(sParam1);
             if (guild == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandReloadGuildNotFoundGuildMsg, sParam1), MsgColor.Red, MsgType.Hint);

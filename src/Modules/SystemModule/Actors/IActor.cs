@@ -439,7 +439,7 @@ namespace SystemModule.Actors
         bool MagDefenceUp(int nSec);
 
         ushort GetFeatureEx();
-        
+
         void ApplyMeatQuality();
 
         bool MakePosion(int nType, ushort nTime, int nPoint);

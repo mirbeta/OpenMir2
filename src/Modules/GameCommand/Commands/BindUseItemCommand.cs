@@ -16,12 +16,12 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sItem = @params.Length > 1 ? @params[1] : "";
-            var sType = @params.Length > 2 ? @params[2] : "";
-            var sLight = @params.Length > 3 ? @params[3] : "";
-            var nBind = -1;
-            var nItem = SystemShare.GetUseItemIdx(sItem);
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sItem = @params.Length > 1 ? @params[1] : "";
+            string sType = @params.Length > 2 ? @params[2] : "";
+            string sLight = @params.Length > 3 ? @params[3] : "";
+            int nBind = -1;
+            int nItem = SystemShare.GetUseItemIdx(sItem);
             if (string.Compare(sType, "帐号", StringComparison.OrdinalIgnoreCase) == 0)
             {
                 nBind = 0;
@@ -38,26 +38,26 @@ namespace CommandModule.Commands
             {
                 nBind = 3;
             }
-            var boLight = sLight == "1";
+            bool boLight = sLight == "1";
             if (nItem < 0 || nBind < 0 || string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var userItem = mIPlayerActor.UseItems[nItem];
+            OpenMir2.Packets.ClientPackets.UserItem userItem = mIPlayerActor.UseItems[nItem];
             if (userItem.Index == 0)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandBindUseItemNoItemMsg, sHumanName, sItem), MsgColor.Red, MsgType.Hint);
                 return;
             }
             int nItemIdx = userItem.Index;
-            var nMakeIdex = userItem.MakeIndex;
+            int nMakeIdex = userItem.MakeIndex;
             ItemBind itemBind;
             string sBindName;
             bool boFind;
@@ -69,7 +69,7 @@ namespace CommandModule.Commands
                     HUtil32.EnterCriticalSection(SystemShare.ItemBindAccount);
                     try
                     {
-                        for (var i = 0; i < SystemShare.ItemBindAccount.Count; i++)
+                        for (int i = 0; i < SystemShare.ItemBindAccount.Count; i++)
                         {
                             itemBind = SystemShare.ItemBindAccount[i];
                             if (itemBind.nItemIdx == nItemIdx && itemBind.nMakeIdex == nMakeIdex)
@@ -107,7 +107,7 @@ namespace CommandModule.Commands
                     HUtil32.EnterCriticalSection(SystemShare.ItemBindChrName);
                     try
                     {
-                        for (var i = 0; i < SystemShare.ItemBindChrName.Count; i++)
+                        for (int i = 0; i < SystemShare.ItemBindChrName.Count; i++)
                         {
                             itemBind = SystemShare.ItemBindChrName[i];
                             if (itemBind.nItemIdx == nItemIdx && itemBind.nMakeIdex == nMakeIdex)
@@ -146,7 +146,7 @@ namespace CommandModule.Commands
                     HUtil32.EnterCriticalSection(SystemShare.ItemBindIPaddr);
                     try
                     {
-                        for (var i = 0; i < SystemShare.ItemBindIPaddr.Count; i++)
+                        for (int i = 0; i < SystemShare.ItemBindIPaddr.Count; i++)
                         {
                             itemBind = SystemShare.ItemBindIPaddr[i];
                             if (itemBind.nItemIdx == nItemIdx && itemBind.nMakeIdex == nMakeIdex)
@@ -181,7 +181,7 @@ namespace CommandModule.Commands
                     break;
                 case 3:// 人物装备死亡不爆绑定
                     sBindName = PlayerActor.ChrName;
-                    for (var i = 0; i < SystemShare.ItemBindDieNoDropName.Count; i++)
+                    for (int i = 0; i < SystemShare.ItemBindDieNoDropName.Count; i++)
                     {
                         //ItemBind = Settings.g_ItemBindDieNoDropName[i];
                         //if ((ItemBind.nItemIdx == nItemIdx) && (ItemBind.sBindName == sBindName))

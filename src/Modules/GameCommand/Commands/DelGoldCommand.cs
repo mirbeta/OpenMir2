@@ -18,13 +18,13 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumName = @params.Length > 0 ? @params[0] : "";
-            var nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            string sHumName = @params.Length > 0 ? @params[0] : "";
+            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0)
             {
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (string.IsNullOrEmpty(sHumName) || nCount <= 0)
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -53,7 +53,7 @@ namespace CommandModule.Commands
             }
             else
             {
-                var nServerIndex = 0;
+                int nServerIndex = 0;
                 if (SystemShare.WorldEngine.FindOtherServerUser(sHumName, ref nServerIndex))
                 {
                     PlayerActor.SysMsg(sHumName + "现在" + nServerIndex + "号服务器上", MsgColor.Green, MsgType.Hint);

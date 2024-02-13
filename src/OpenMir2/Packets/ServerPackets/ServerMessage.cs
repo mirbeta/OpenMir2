@@ -1,6 +1,6 @@
-using System.Runtime.InteropServices;
 using MemoryPack;
 using OpenMir2.Packets.ClientPackets;
+using System.Runtime.InteropServices;
 
 namespace OpenMir2.Packets.ServerPackets
 {

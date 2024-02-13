@@ -1,23 +1,15 @@
 using GameSrv.Services;
-using M2Server;
 using M2Server.Actor;
 using M2Server.Event.Events;
+using M2Server.Maps;
 using M2Server.Player;
+using OpenMir2.Enums;
 using PlanesSystem;
 using System.Collections;
-using M2Server.Maps;
-using OpenMir2;
-using OpenMir2.Data;
-using OpenMir2.Enums;
-using OpenMir2.Packets.ClientPackets;
-using OpenMir2.Packets.ServerPackets;
-using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Castles;
-using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Maps;
-using SystemModule.SubSystem;
 
 namespace GameSrv.Word
 {
@@ -174,7 +166,7 @@ namespace GameSrv.Word
 
         private int GetMonRace(string sMonName)
         {
-            if (MonsterList.TryGetValue(sMonName, out var value))
+            if (MonsterList.TryGetValue(sMonName, out MonsterInfo value))
             {
                 return value.Race;
             }
@@ -183,7 +175,7 @@ namespace GameSrv.Word
 
         private int GetMonsterThreadId(string sMonName)
         {
-            if (MonsterThreadMap.TryGetValue(sMonName, out var threadId))
+            if (MonsterThreadMap.TryGetValue(sMonName, out int threadId))
             {
                 return threadId;
             }
@@ -207,14 +199,14 @@ namespace GameSrv.Word
 
         private bool ProcessHumansIsLogined(string sChrName)
         {
-            var result = false;
+            bool result = false;
             if (M2Share.FrontEngine.InSaveRcdList(sChrName))
             {
                 result = true;
             }
             else
             {
-                for (var i = 0; i < PlayObjectList.Count; i++)
+                for (int i = 0; i < PlayObjectList.Count; i++)
                 {
                     if (string.Compare(PlayObjectList[i].ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -236,7 +228,7 @@ namespace GameSrv.Word
             const string sChangeServerFail3 = "chg-server-fail-3 [{0}] -> [{1}] [{2}]";
             const string sChangeServerFail4 = "chg-server-fail-4 [{0}] -> [{1}] [{2}]";
             const string sErrorEnvirIsNil = "[Error] PlayObject.PEnvir = nil";
-            ReGetMap:
+        ReGetMap:
             try
             {
                 playObject = new PlayObject();
@@ -267,7 +259,7 @@ namespace GameSrv.Word
                         playObject.CurrY = GetRandHomeY(playObject);
                         if (playObject.Abil.Level == 0)
                         {
-                            var abil = playObject.Abil;
+                            Ability abil = playObject.Abil;
                             abil.Level = 1;
                             abil.AC = 0;
                             abil.MAC = 0;
@@ -285,7 +277,7 @@ namespace GameSrv.Word
                             playObject.IsNewHuman = true;
                         }
                     }
-                    var envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    IEnvirnoment envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
                         playObject.MapFileName = envir.MapFileName;
@@ -304,7 +296,7 @@ namespace GameSrv.Word
                         }
                     }
                     playObject.MyGuild = SystemShare.GuildMgr.MemberOfGuild(playObject.ChrName);
-                    var userCastle = SystemShare.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
+                    IUserCastle userCastle = SystemShare.CastleMgr.InCastleWarArea(envir, playObject.CurrX, playObject.CurrY);
                     if (envir != null && userCastle != null && (userCastle.PalaceEnvir == envir || userCastle.UnderWar))
                     {
                         userCastle = SystemShare.CastleMgr.IsCastleMember(playObject);
@@ -324,7 +316,11 @@ namespace GameSrv.Word
                             }
                         }
                     }
-                    if (SystemShare.MapMgr.FindMap(playObject.MapName) == null) playObject.Abil.HP = 0;
+                    if (SystemShare.MapMgr.FindMap(playObject.MapName) == null)
+                    {
+                        playObject.Abil.HP = 0;
+                    }
+
                     if (playObject.Abil.HP <= 0)
                     {
                         playObject.ClearStatusTime();
@@ -373,14 +369,21 @@ namespace GameSrv.Word
                         return result;
                     }
                     playObject.MapFileName = envir.MapFileName;
-                    var nC = 0;
+                    int nC = 0;
                     while (true)
                     {
-                        if (envir.CanWalk(playObject.CurrX, playObject.CurrY, true)) break;
+                        if (envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
+                        {
+                            break;
+                        }
+
                         playObject.CurrX = (short)(playObject.CurrX - 3 + M2Share.RandomNumber.Random(6));
                         playObject.CurrY = (short)(playObject.CurrY - 3 + M2Share.RandomNumber.Random(6));
                         nC++;
-                        if (nC >= 5) break;
+                        if (nC >= 5)
+                        {
+                            break;
+                        }
                     }
                     if (!envir.CanWalk(playObject.CurrX, playObject.CurrY, true))
                     {
@@ -398,7 +401,10 @@ namespace GameSrv.Word
                         goto ReGetMap;
                     }
                     else
+                    {
                         playObject.BoReadyRun = false;
+                    }
+
                     playObject.MapFileName = envir.MapFileName;
                 }
                 else
@@ -411,7 +417,7 @@ namespace GameSrv.Word
                     playObject.Abil = switchDataInfo.Abil;
                     LoadSwitchData(switchDataInfo, ref playObject);
                     DelSwitchData(switchDataInfo);
-                    var envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
+                    IEnvirnoment envir = SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, playObject.MapName);
                     if (envir != null)
                     {
                         LogService.Warn(string.Format(sChangeServerFail3, M2Share.ServerIndex, playObject.ServerIndex, playObject.MapName));
@@ -487,9 +493,9 @@ namespace GameSrv.Word
                     try
                     {
                         //没有进入游戏前 不删除和清空列表
-                        for (var i = 0; i < LoadPlayList.Count; i++)
+                        for (int i = 0; i < LoadPlayList.Count; i++)
                         {
-                            var userOpenInfo = LoadPlayList[i];
+                            UserOpenInfo userOpenInfo = LoadPlayList[i];
                             if (userOpenInfo == null)
                             {
                                 continue;
@@ -532,15 +538,15 @@ namespace GameSrv.Word
                             }
                             LoadPlayList[i] = null;
                         }
-                        for (var i = 0; i < LoadPlayerQueue.Count; i++)
+                        for (int i = 0; i < LoadPlayerQueue.Count; i++)
                         {
                             LoadPlayList.RemoveAt(i);
                         }
                         LoadPlayerQueue.Clear();
                         //LoadPlayList.Clear();
-                        for (var i = 0; i < ChangeHumanDbGoldList.Count; i++)
+                        for (int i = 0; i < ChangeHumanDbGoldList.Count; i++)
                         {
-                            var goldChangeInfo = ChangeHumanDbGoldList[i];
+                            GoldChangeInfo goldChangeInfo = ChangeHumanDbGoldList[i];
                             playObject = GetPlayObject(goldChangeInfo.sGameMasterName);
                             if (playObject != null)
                             {
@@ -553,13 +559,13 @@ namespace GameSrv.Word
                     {
                         HUtil32.LeaveCriticalSection(LoadPlaySection);
                     }
-                    for (var i = 0; i < NewHumanList.Count; i++)
+                    for (int i = 0; i < NewHumanList.Count; i++)
                     {
                         playObject = NewHumanList[i];
                         M2Share.NetChannel.SetGateUserList(playObject.GateIdx, playObject.SocketId, playObject);
                     }
                     NewHumanList.Clear();
-                    for (var i = 0; i < ListOfGateIdx.Count; i++)
+                    for (int i = 0; i < ListOfGateIdx.Count; i++)
                     {
                         M2Share.NetChannel.CloseUser(ListOfGateIdx[i], ListOfSocket[i]);
                     }
@@ -574,7 +580,7 @@ namespace GameSrv.Word
             }
             try
             {
-                for (var i = 0; i < PlayObjectFreeList.Count; i++)
+                for (int i = 0; i < PlayObjectFreeList.Count; i++)
                 {
                     playObject = PlayObjectFreeList[i];
                     if ((HUtil32.GetTickCount() - playObject.GhostTick) > SystemShare.Config.HumanFreeDelayTime)// 5 * 60 * 1000
@@ -620,14 +626,18 @@ namespace GameSrv.Word
         {
             try
             {
-                var dwCurTick = HUtil32.GetTickCount();
-                var nIdx = ProcHumIdx;
-                var boCheckTimeLimit = false;
-                var dwCheckTime = HUtil32.GetTickCount();
+                int dwCurTick = HUtil32.GetTickCount();
+                int nIdx = ProcHumIdx;
+                bool boCheckTimeLimit = false;
+                int dwCheckTime = HUtil32.GetTickCount();
                 while (true)
                 {
-                    if (PlayObjectList.Count <= nIdx) break;
-                    var playObject = PlayObjectList[nIdx];
+                    if (PlayObjectList.Count <= nIdx)
+                    {
+                        break;
+                    }
+
+                    IPlayerActor playObject = PlayObjectList[nIdx];
                     if (playObject == null)
                     {
                         continue;
@@ -661,7 +671,7 @@ namespace GameSrv.Word
                                         playObject.ShowLineNoticeTick = HUtil32.GetTickCount();
                                         if (M2Share.LineNoticeList.Count > playObject.ShowLineNoticeIdx)
                                         {
-                                            var lineNoticeMsg = SystemShare.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
+                                            string lineNoticeMsg = SystemShare.ManageNPC.GetLineVariableText(playObject, M2Share.LineNoticeList[playObject.ShowLineNoticeIdx]);
                                             switch (lineNoticeMsg[0])
                                             {
                                                 case 'R':
@@ -714,7 +724,10 @@ namespace GameSrv.Word
                         break;
                     }
                 }
-                if (!boCheckTimeLimit) ProcHumIdx = 0;
+                if (!boCheckTimeLimit)
+                {
+                    ProcHumIdx = 0;
+                }
             }
             catch (Exception ex)
             {
@@ -730,7 +743,7 @@ namespace GameSrv.Word
 
         public bool FindOtherServerUser(string sName, ref int nServerIndex)
         {
-            if (OtherUserNameList.TryGetValue(sName, out var groupServer))
+            if (OtherUserNameList.TryGetValue(sName, out ServerGruopInfo groupServer))
             {
                 nServerIndex = groupServer.nServerIdx;
                 LogService.Info($"玩家在[{nServerIndex}]服务器上.");
@@ -741,20 +754,30 @@ namespace GameSrv.Word
 
         public void CryCry(short wIdent, IEnvirnoment pMap, int nX, int nY, int nWide, byte btFColor, byte btBColor, string sMsg)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                var playObject = PlayObjectList[i];
+                IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == pMap && playObject.BanShout &&
                     Math.Abs(playObject.CurrX - nX) < nWide && Math.Abs(playObject.CurrY - nY) < nWide)
+                {
                     playObject.SendMsg(null, wIdent, 0, btFColor, btBColor, 0, sMsg);
+                }
             }
         }
 
         public void ProcessUserMessage(IPlayerActor playObject, CommandMessage defMsg, string buff)
         {
-            if (playObject.OffLineFlag) return;
-            var sMsg = string.Empty;
-            if (!string.IsNullOrEmpty(buff)) sMsg = buff;
+            if (playObject.OffLineFlag)
+            {
+                return;
+            }
+
+            string sMsg = string.Empty;
+            if (!string.IsNullOrEmpty(buff))
+            {
+                sMsg = buff;
+            }
+
             switch (defMsg.Ident)
             {
                 case Messages.CM_SPELL:
@@ -834,7 +857,11 @@ namespace GameSrv.Word
                     playObject.SendMsg(playObject, defMsg.Ident, defMsg.Series, defMsg.Recog, defMsg.Param, defMsg.Tag, sMsg);
                     break;
             }
-            if (!playObject.BoReadyRun) return;
+            if (!playObject.BoReadyRun)
+            {
+                return;
+            }
+
             switch (defMsg.Ident)
             {
                 case Messages.CM_TURN:
@@ -869,9 +896,9 @@ namespace GameSrv.Word
 
         public void GetIsmChangeServerReceive(string flName)
         {
-            for (var i = 0; i < PlayObjectFreeList.Count; i++)
+            for (int i = 0; i < PlayObjectFreeList.Count; i++)
             {
-                var hum = PlayObjectFreeList[i];
+                IPlayerActor hum = PlayObjectFreeList[i];
                 if (hum.SwitchDataTempFile == flName)
                 {
                     hum.SwitchDataOk = true;
@@ -882,8 +909,8 @@ namespace GameSrv.Word
 
         public void OtherServerUserLogon(int sNum, string uname)
         {
-            var name = string.Empty;
-            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
+            string name = string.Empty;
+            string apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             OtherUserNameList.Add(name, new ServerGruopInfo()
             {
@@ -894,8 +921,8 @@ namespace GameSrv.Word
 
         public void OtherServerUserLogout(int sNum, string uname)
         {
-            var name = string.Empty;
-            var apmode = HUtil32.GetValidStr3(uname, ref name, ':');
+            string name = string.Empty;
+            string apmode = HUtil32.GetValidStr3(uname, ref name, ':');
             OtherUserNameList.Remove(name);
             // for (var i = m_OtherUserNameList.Count - 1; i >= 0; i--)
             // {
@@ -910,11 +937,11 @@ namespace GameSrv.Word
         public IPlayerActor GetPlayObject(string sName)
         {
             IPlayerActor result = null;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    var playObject = PlayObjectList[i];
+                    IPlayerActor playObject = PlayObjectList[i];
                     if (!playObject.Ghost)
                     {
                         if (!(playObject.IsPasswordLocked && playObject.ObMode && playObject.AdminMode))
@@ -933,7 +960,7 @@ namespace GameSrv.Word
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                for (var i = 0; i < PlayObjectList.Count; i++)
+                for (int i = 0; i < PlayObjectList.Count; i++)
                 {
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -954,7 +981,7 @@ namespace GameSrv.Word
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
             try
             {
-                for (var i = 0; i < PlayObjectList.Count; i++)
+                for (int i = 0; i < PlayObjectList.Count; i++)
                 {
                     if (string.Compare(PlayObjectList[i].ChrName, sName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
@@ -976,10 +1003,10 @@ namespace GameSrv.Word
         /// <returns></returns>
         public int GetMapOfRangeHumanCount(IEnvirnoment envir, int nX, int nY, int nRange)
         {
-            var result = 0;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            int result = 0;
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                var playObject = PlayObjectList[i];
+                IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Ghost && playObject.Envir == envir)
                 {
                     if (Math.Abs(playObject.CurrX - nX) < nRange && Math.Abs(playObject.CurrY - nY) < nRange)
@@ -993,11 +1020,11 @@ namespace GameSrv.Word
 
         public bool GetHumPermission(string sUserName, ref string sIPaddr, ref byte btPermission)
         {
-            var result = false;
+            bool result = false;
             btPermission = SystemShare.Config.StartPermission;
-            for (var i = 0; i < AdminList.Count; i++)
+            for (int i = 0; i < AdminList.Count; i++)
             {
-                var adminInfo = AdminList[i];
+                AdminInfo adminInfo = AdminList[i];
                 if (string.Compare(adminInfo.ChrName, sUserName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     btPermission = adminInfo.Level;
@@ -1024,9 +1051,9 @@ namespace GameSrv.Word
 
         private void KickOnlineUser(string sChrName)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                var playObject = PlayObjectList[i];
+                IPlayerActor playObject = PlayObjectList[i];
                 if (string.Compare(playObject.ChrName, sChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playObject.BoKickFlag = true;
@@ -1037,8 +1064,8 @@ namespace GameSrv.Word
 
         private static void SendChangeServer(IPlayerActor playObject, byte nServerIndex)
         {
-            var sIPaddr = string.Empty;
-            var nPort = 0;
+            string sIPaddr = string.Empty;
+            int nPort = 0;
             const string sMsg = "{0}/{1}";
             if (M2Share.GetMultiServerAddrPort(nServerIndex, ref sIPaddr, ref nPort))
             {
@@ -1053,7 +1080,7 @@ namespace GameSrv.Word
             {
                 return;
             }
-            var saveRcd = new SavePlayerRcd
+            SavePlayerRcd saveRcd = new SavePlayerRcd
             {
                 Account = playObject.UserAccount,
                 ChrName = playObject.ChrName,
@@ -1072,7 +1099,7 @@ namespace GameSrv.Word
 
         private void GetHumData(IPlayerActor playObject, ref CharacterDataInfo humanRcd)
         {
-            var humData = humanRcd.Data;
+            CharacterData humData = humanRcd.Data;
             playObject.UserAccount = humData.Account;
             playObject.ChrName = humData.ChrName;
             playObject.MapName = humData.CurMap;
@@ -1150,7 +1177,7 @@ namespace GameSrv.Word
             ServerUserItem[] bagItems = humanRcd.Data.BagItems;
             if (bagItems != null)
             {
-                for (var i = 0; i < bagItems.Length; i++)
+                for (int i = 0; i < bagItems.Length; i++)
                 {
                     if (bagItems[i] == null)
                     {
@@ -1165,16 +1192,16 @@ namespace GameSrv.Word
             MagicRcd[] humMagic = humanRcd.Data.Magic;
             if (humMagic != null)
             {
-                for (var i = 0; i < humMagic.Length; i++)
+                for (int i = 0; i < humMagic.Length; i++)
                 {
                     if (humMagic[i] == null)
                     {
                         continue;
                     }
-                    var magicInfo = FindMagic(humMagic[i].MagIdx);
+                    MagicInfo magicInfo = FindMagic(humMagic[i].MagIdx);
                     if (magicInfo != null)
                     {
-                        var userMagic = new UserMagic();
+                        UserMagic userMagic = new UserMagic();
                         userMagic.Magic = magicInfo;
                         userMagic.MagIdx = humMagic[i].MagIdx;
                         userMagic.Level = humMagic[i].Level;
@@ -1187,7 +1214,7 @@ namespace GameSrv.Word
             ServerUserItem[] storageItems = humanRcd.Data.StorageItems;
             if (storageItems != null)
             {
-                for (var i = 0; i < storageItems.Length; i++)
+                for (int i = 0; i < storageItems.Length; i++)
                 {
                     if (storageItems[i] == null)
                     {
@@ -1203,9 +1230,9 @@ namespace GameSrv.Word
 
         private static CharacterDataInfo MakeSaveRcd(IPlayerActor playObject)
         {
-            var humanRcd = new CharacterDataInfo();
-            var playerInfo = humanRcd.Data;
-            var playAbil = humanRcd.Data.Abil;
+            CharacterDataInfo humanRcd = new CharacterDataInfo();
+            CharacterData playerInfo = humanRcd.Data;
+            Ability playAbil = humanRcd.Data.Abil;
             playerInfo.ServerIndex = M2Share.ServerIndex;
             playerInfo.ChrName = playObject.ChrName;
             playerInfo.CurMap = playObject.MapName;
@@ -1287,14 +1314,14 @@ namespace GameSrv.Word
             {
                 BagItems = new ServerUserItem[Grobal2.MaxBagItem];
             }
-            for (var i = 0; i < playObject.ItemList.Count; i++)
+            for (int i = 0; i < playObject.ItemList.Count; i++)
             {
                 if (i < Grobal2.MaxBagItem)
                 {
                     BagItems[i] = playObject.ItemList[i].ToServerItem();
                 }
             }
-            for (var i = 0; i < BagItems.Length; i++)
+            for (int i = 0; i < BagItems.Length; i++)
             {
                 if (BagItems[i] == null)
                 {
@@ -1306,13 +1333,13 @@ namespace GameSrv.Word
             {
                 HumMagic = new MagicRcd[Grobal2.MaxMagicCount];
             }
-            for (var i = 0; i < playObject.MagicList.Count; i++)
+            for (int i = 0; i < playObject.MagicList.Count; i++)
             {
                 if (i >= Grobal2.MaxMagicCount)
                 {
                     break;
                 }
-                var userMagic = playObject.MagicList[i];
+                UserMagic userMagic = playObject.MagicList[i];
                 if (HumMagic[i] == null)
                 {
                     HumMagic[i] = new MagicRcd();
@@ -1322,7 +1349,7 @@ namespace GameSrv.Word
                 HumMagic[i].MagicKey = userMagic.Key;
                 HumMagic[i].TranPoint = userMagic.TranPoint;
             }
-            for (var i = 0; i < HumMagic.Length; i++)
+            for (int i = 0; i < HumMagic.Length; i++)
             {
                 if (HumMagic[i] == null)
                 {
@@ -1334,7 +1361,7 @@ namespace GameSrv.Word
             {
                 StorageItems = new ServerUserItem[50];
             }
-            for (var i = 0; i < playObject.StorageItemList.Count; i++)
+            for (int i = 0; i < playObject.StorageItemList.Count; i++)
             {
                 if (i >= StorageItems.Length)
                 {
@@ -1342,7 +1369,7 @@ namespace GameSrv.Word
                 }
                 StorageItems[i] = playObject.StorageItemList[i].ToServerItem();
             }
-            for (var i = 0; i < StorageItems.Length; i++)
+            for (int i = 0; i < StorageItems.Length; i++)
             {
                 if (StorageItems[i] == null)
                 {
@@ -1361,9 +1388,14 @@ namespace GameSrv.Word
             if (M2Share.StartPointList.Count > 0)
             {
                 if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
+                {
                     I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
+                }
                 else
+                {
                     I = 0;
+                }
+
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
@@ -1398,9 +1430,9 @@ namespace GameSrv.Word
         public MagicInfo FindMagic(int nMagIdx)
         {
             MagicInfo result = null;
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
-                var magic = MagicList[i];
+                MagicInfo magic = MagicList[i];
                 if (magic.MagicId == nMagIdx)
                 {
                     result = magic;
@@ -1424,30 +1456,33 @@ namespace GameSrv.Word
         public void CloseDoor(IEnvirnoment envir, MapDoor door)
         {
             if (!door.Status.Opened)
+            {
                 return;
+            }
+
             door.Status.Opened = false;
             SendDoorStatus(envir, door.nX, door.nY, Messages.RM_DOORCLOSE, 0, door.nX, door.nY);
         }
 
         private static void SendDoorStatus(IEnvirnoment envir, int nX, int nY, short wIdent, short wX, int nDoorX, int nDoorY)
         {
-            var n1C = nX - 12;
-            var n24 = nX + 12;
-            var n20 = nY - 12;
-            var n28 = nY + 12;
-            for (var n10 = n1C; n10 <= n24; n10++)
+            int n1C = nX - 12;
+            int n24 = nX + 12;
+            int n20 = nY - 12;
+            int n28 = nY + 12;
+            for (int n10 = n1C; n10 <= n24; n10++)
             {
-                for (var n14 = n20; n14 <= n28; n14++)
+                for (int n14 = n20; n14 <= n28; n14++)
                 {
-                    ref var cellInfo = ref envir.GetCellInfo(n10, n14, out var cellSuccess);
+                    ref MapCellInfo cellInfo = ref envir.GetCellInfo(n10, n14, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
-                        for (var i = 0; i < cellInfo.ObjList.Count; i++)
+                        for (int i = 0; i < cellInfo.ObjList.Count; i++)
                         {
-                            var cellObject = cellInfo.ObjList[i];
+                            CellObject cellObject = cellInfo.ObjList[i];
                             if (cellObject.CellObjId > 0 && cellObject.ActorObject)
                             {
-                                var baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
+                                IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                 if (baseObject != null && !baseObject.Ghost && baseObject.Race == ActorRace.Play)
                                 {
                                     baseObject.SendMsg(baseObject, wIdent, wX, nDoorX, nDoorY, 0);
@@ -1462,12 +1497,12 @@ namespace GameSrv.Word
         private void ProcessMapDoor()
         {
             IList<IEnvirnoment> doorList = SystemShare.MapMgr.GetDoorMapList();
-            for (var i = 0; i < doorList.Count; i++)
+            for (int i = 0; i < doorList.Count; i++)
             {
-                var envir = doorList[i];
-                for (var j = 0; j < envir.DoorList.Count; j++)
+                IEnvirnoment envir = doorList[i];
+                for (int j = 0; j < envir.DoorList.Count; j++)
                 {
-                    var door = envir.DoorList[j];
+                    MapDoor door = envir.DoorList[j];
                     if (door.Status.Opened)
                     {
                         if ((HUtil32.GetTickCount() - door.Status.OpenTick) > 5 * 1000)
@@ -1481,14 +1516,14 @@ namespace GameSrv.Word
 
         private void ProcessEvents()
         {
-            for (var i = MagicEventList.Count - 1; i >= 0; i--)
+            for (int i = MagicEventList.Count - 1; i >= 0; i--)
             {
-                var magicEvent = MagicEventList[i];
+                MagicEvent magicEvent = MagicEventList[i];
                 if (magicEvent != null)
                 {
-                    for (var j = magicEvent.ObjectList.Count - 1; j >= 0; j--)
+                    for (int j = magicEvent.ObjectList.Count - 1; j >= 0; j--)
                     {
-                        var baseObject = magicEvent.ObjectList[j];
+                        IActor baseObject = magicEvent.ObjectList[j];
                         if (baseObject.Race >= ActorRace.Animal && !((AnimalObject)baseObject).HolySeize)
                         {
                             magicEvent.ObjectList.RemoveAt(j);
@@ -1500,12 +1535,19 @@ namespace GameSrv.Word
                     }
                     if (magicEvent.ObjectList.Count <= 0 || (HUtil32.GetTickCount() - magicEvent.StartTick) > magicEvent.Time || (HUtil32.GetTickCount() - magicEvent.StartTick) > 180000)
                     {
-                        var count = 0;
+                        int count = 0;
                         while (true)
                         {
-                            if (magicEvent.Events[count] != null) magicEvent.Events[count].Close();
+                            if (magicEvent.Events[count] != null)
+                            {
+                                magicEvent.Events[count].Close();
+                            }
+
                             count++;
-                            if (count >= 8) break;
+                            if (count >= 8)
+                            {
+                                break;
+                            }
                         }
 
                         MagicEventList.RemoveAt(i);
@@ -1516,9 +1558,9 @@ namespace GameSrv.Word
 
         public MagicInfo FindMagic(string sMagicName)
         {
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
-                var magic = MagicList[i];
+                MagicInfo magic = MagicList[i];
                 if (magic.MagicName.Equals(sMagicName, StringComparison.OrdinalIgnoreCase))
                 {
                     return magic;
@@ -1537,18 +1579,30 @@ namespace GameSrv.Word
 
         public int GetMapRangeMonster(Envirnoment envir, int nX, int nY, int nRange, IList<IActor> list)
         {
-            var result = 0;
-            if (envir == null) return result;
-            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
+            int result = 0;
+            if (envir == null)
             {
-                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
+                return result;
+            }
+
+            for (int i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
+            {
+                for (int j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
-                    var monGen = MonGenInfoThreadMap[i][j];
-                    if (monGen == null) continue;
-                    if (monGen.Envir != null && monGen.Envir != envir) continue;
-                    for (var k = 0; k < monGen.CertList.Count; k++)
+                    MonGenInfo monGen = MonGenInfoThreadMap[i][j];
+                    if (monGen == null)
                     {
-                        var baseObject = monGen.CertList[k];
+                        continue;
+                    }
+
+                    if (monGen.Envir != null && monGen.Envir != envir)
+                    {
+                        continue;
+                    }
+
+                    for (int k = 0; k < monGen.CertList.Count; k++)
+                    {
+                        IMonsterActor baseObject = monGen.CertList[k];
                         if (!baseObject.Death && !baseObject.Ghost && baseObject.Envir == envir &&
                             Math.Abs(baseObject.CurrX - nX) <= nRange && Math.Abs(baseObject.CurrY - nY) <= nRange)
                         {
@@ -1567,19 +1621,27 @@ namespace GameSrv.Word
             {
                 list = new List<IActor>();
             }
-            var result = 0;
-            if (envir == null) return result;
-            for (var i = 0; i < MonGenInfoThreadMap.Count; i++)
+            int result = 0;
+            if (envir == null)
+            {
+                return result;
+            }
+
+            for (int i = 0; i < MonGenInfoThreadMap.Count; i++)
             {
                 if (MonGenInfoThreadMap.TryGetValue(i, out IList<MonGenInfo> mongenList))
                 {
-                    for (var j = 0; j < mongenList.Count; j++)
+                    for (int j = 0; j < mongenList.Count; j++)
                     {
-                        var monGen = mongenList[j];
-                        if (monGen == null) continue;
-                        for (var k = 0; k < monGen.CertList.Count; k++)
+                        MonGenInfo monGen = mongenList[j];
+                        if (monGen == null)
                         {
-                            var monObject = monGen.CertList[k];
+                            continue;
+                        }
+
+                        for (int k = 0; k < monGen.CertList.Count; k++)
+                        {
+                            IMonsterActor monObject = monGen.CertList[k];
                             if (!monObject.Death && !monObject.Ghost && monObject.Envir == envir)
                             {
                                 list.Add(monObject);
@@ -1594,22 +1656,29 @@ namespace GameSrv.Word
 
         public int GetMapHuman(string sMapName)
         {
-            var result = 0;
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
-            if (envir == null) return result;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            int result = 0;
+            IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
+            if (envir == null)
             {
-                var playObject = PlayObjectList[i];
-                if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir) result++;
+                return result;
+            }
+
+            for (int i = 0; i < PlayObjectList.Count; i++)
+            {
+                IPlayerActor playObject = PlayObjectList[i];
+                if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir)
+                {
+                    result++;
+                }
             }
             return result;
         }
 
         public void GetMapRageHuman(IEnvirnoment envir, int nRageX, int nRageY, int nRage, ref IList<IPlayerActor> list, bool botPlay = false)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                var playObject = PlayObjectList[i];
+                IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost && playObject.Envir == envir &&
                     Math.Abs(playObject.CurrX - nRageX) <= nRage && Math.Abs(playObject.CurrY - nRageY) <= nRage)
                 {
@@ -1635,11 +1704,13 @@ namespace GameSrv.Word
         /// </summary>
         public void SendBroadCastMsgExt(string sMsg, MsgType msgType)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
-                var playObject = PlayObjectList[i];
+                IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Ghost)
+                {
                     playObject.SysMsg(sMsg, MsgColor.Red, msgType);
+                }
             }
         }
 
@@ -1675,9 +1746,9 @@ namespace GameSrv.Word
             }
             else
             {
-                for (var i = 0; i < PlayObjectList.Count; i++)
+                for (int i = 0; i < PlayObjectList.Count; i++)
                 {
-                    var playObject = PlayObjectList[i];
+                    IPlayerActor playObject = PlayObjectList[i];
                     if (!playObject.Ghost)
                     {
                         playObject.SysMsg(sMsg, MsgColor.Red, msgType);
@@ -1688,21 +1759,21 @@ namespace GameSrv.Word
 
         public void sub4AE514(GoldChangeInfo goldChangeInfo)
         {
-            var goldChange = goldChangeInfo;
+            GoldChangeInfo goldChange = goldChangeInfo;
             HUtil32.EnterCriticalSection(LoadPlaySection);
             ChangeHumanDbGoldList.Add(goldChange);
         }
 
         public void ClearMonSayMsg()
         {
-            for (var i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
+            for (int i = 0; i < SystemShare.Config.ProcessMonsterMultiThreadLimit; i++)
             {
-                for (var j = 0; j < MonGenInfoThreadMap[i].Count; j++)
+                for (int j = 0; j < MonGenInfoThreadMap[i].Count; j++)
                 {
-                    var monGen = MonGenInfoThreadMap[i][j];
-                    for (var k = 0; k < monGen.CertList.Count; k++)
+                    MonGenInfo monGen = MonGenInfoThreadMap[i][j];
+                    for (int k = 0; k < monGen.CertList.Count; k++)
                     {
-                        var monBaseObject = monGen.CertList[k];
+                        IMonsterActor monBaseObject = monGen.CertList[k];
                         //monBaseObject.SayMsgList = null;
                     }
                 }
@@ -1716,9 +1787,14 @@ namespace GameSrv.Word
             {
                 int I;
                 if (M2Share.StartPointList.Count > SystemShare.Config.StartPointSize)
+                {
                     I = M2Share.RandomNumber.Random(SystemShare.Config.StartPointSize);
+                }
                 else
+                {
                     I = 0;
+                }
+
                 result = M2Share.GetStartPointInfo(I, ref nX, ref nY);
             }
             else
@@ -1732,7 +1808,7 @@ namespace GameSrv.Word
 
         public void SendQuestMsg(string sQuestName)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 IPlayerActor playObject = PlayObjectList[i];
                 if (!playObject.Death && !playObject.Ghost)
@@ -1765,7 +1841,7 @@ namespace GameSrv.Word
         public void GuildMemberReGetRankName(IGuild guild)
         {
             short nRankNo = 0;
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (PlayObjectList[i].MyGuild == guild)
                 {
@@ -1776,7 +1852,7 @@ namespace GameSrv.Word
 
         public int GetPlayExpireTime(string account)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -1788,7 +1864,7 @@ namespace GameSrv.Word
 
         public void SetPlayExpireTime(string account, int playTime)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -1800,7 +1876,7 @@ namespace GameSrv.Word
 
         public void AccountExpired(string account)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -1812,7 +1888,7 @@ namespace GameSrv.Word
 
         public void TimeAccountExpired(string account)
         {
-            for (var i = 0; i < PlayObjectList.Count; i++)
+            for (int i = 0; i < PlayObjectList.Count; i++)
             {
                 if (string.Compare(PlayObjectList[i].UserAccount, account, StringComparison.OrdinalIgnoreCase) == 0)
                 {

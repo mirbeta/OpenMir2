@@ -1,10 +1,10 @@
+using OpenMir2;
+using OpenMir2.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using OpenMir2;
-using OpenMir2.Common;
 
 namespace DBSrv
 {
@@ -38,8 +38,8 @@ namespace DBSrv
         /// <returns></returns>
         public static bool CheckDenyChrName(string sChrName)
         {
-            var result = true;
-            for (var i = 0; i < DenyChrNameList.Count; i++)
+            bool result = true;
+            for (int i = 0; i < DenyChrNameList.Count; i++)
             {
                 if (string.Compare(sChrName, DenyChrNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -57,11 +57,11 @@ namespace DBSrv
             _gateIdList.Clear();
             if (File.Exists(GateIdConfFileName))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(GateIdConfFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i];
+                    string sLineText = LoadList[i];
                     if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';'))
                     {
                         continue;
@@ -94,9 +94,9 @@ namespace DBSrv
             ServerIpList.Clear();
             try
             {
-                var stringList = new StringList();
+                StringList stringList = new StringList();
                 stringList.LoadFromFile(ServerIpConfFileNmae);
-                for (var i = 0; i < stringList.Count; i++)
+                for (int i = 0; i < stringList.Count; i++)
                 {
                     if (ServerIpList.Contains(stringList[i]))
                     {
@@ -126,10 +126,10 @@ namespace DBSrv
                 bool result = true;
                 bool boIsTwoByte = false;
                 char FirstChr = '\0';
-                var bytesCount = 0;
+                int bytesCount = 0;
                 for (int i = 0; i < sChrName.Length; i++)
                 {
-                    var bytes = HUtil32.GetByteCount(sChrName[i]);
+                    int bytes = HUtil32.GetByteCount(sChrName[i]);
                     switch (bytes)
                     {
                         case 1:
@@ -150,7 +150,7 @@ namespace DBSrv
                     return false;
                 }
 
-                for (var i = 0; i < sChrName.Length; i++)
+                for (int i = 0; i < sChrName.Length; i++)
                 {
                     Chr = sChrName[i];
                     if (boIsTwoByte)
@@ -196,7 +196,7 @@ namespace DBSrv
         public static bool InClearMakeIndexList(int nIndex)
         {
             bool result = false;
-            for (var i = 0; i < ClearMakeIndex.Count; i++)
+            for (int i = 0; i < ClearMakeIndex.Count; i++)
             {
                 //if (nIndex == ((int)g_ClearMakeIndex.Values[i]))
                 //{

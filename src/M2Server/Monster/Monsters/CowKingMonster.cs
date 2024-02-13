@@ -1,5 +1,4 @@
 ﻿using OpenMir2;
-using SystemModule;
 using SystemModule.Actors;
 
 namespace M2Server.Monster.Monsters
@@ -27,7 +26,7 @@ namespace M2Server.Monster.Monsters
 
         protected override void Attack(IActor targetBaseObject, byte nDir)
         {
-            var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+            int nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             HitMagAttackTarget(targetBaseObject, nPower / 2, nPower / 2, true);
         }
 
@@ -56,7 +55,7 @@ namespace M2Server.Monster.Monsters
                     MapRandomMove(Envir.MapName, 0);
                     return;
                 }
-                var oldCrazyCount = CrazyCount;
+                int oldCrazyCount = CrazyCount;
                 CrazyCount = 7 - WAbil.HP / (WAbil.MaxHP / 7);
                 if (CrazyCount >= 2 && CrazyCount != oldCrazyCount)
                 {

@@ -1,9 +1,9 @@
 ﻿using M2Server.Actor;
 using M2Server.Player;
-using System.Text;
 using OpenMir2;
 using OpenMir2.Data;
 using OpenMir2.Enums;
+using System.Text;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Data;
@@ -1760,7 +1760,7 @@ namespace M2Server.Npc
                 return false;
             }
             bool result = false;
-            var n01 = M2Share.GetValNameNo(sMsg);
+            int n01 = M2Share.GetValNameNo(sMsg);
             if (n01 >= 0)
             {
                 if (HUtil32.RangeInDefined(n01, 600, 699))

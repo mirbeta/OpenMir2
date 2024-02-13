@@ -7,7 +7,7 @@ namespace DBSrv.Storage.MySQL
 {
     public class StorageContext : IDisposable
     {
-        
+
         private readonly StorageOption _storageOption;
         private MySqlConnection? _connection;
         private MySqlTransaction? _transaction;

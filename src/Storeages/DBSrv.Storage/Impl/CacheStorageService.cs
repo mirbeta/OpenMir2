@@ -1,7 +1,7 @@
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.Impl
 {
@@ -20,7 +20,7 @@ namespace DBSrv.Storage.Impl
         public CharacterDataInfo Get(string sChrName, out bool exist)
         {
             exist = false;
-            if (_cacheMap.TryGetValue(sChrName, out var humDataInfo))
+            if (_cacheMap.TryGetValue(sChrName, out CharacterDataInfo? humDataInfo))
             {
                 exist = true;
                 return humDataInfo;
@@ -30,7 +30,7 @@ namespace DBSrv.Storage.Impl
 
         public void Delete(string ChrName)
         {
-            if (_cacheMap.TryRemove(ChrName, out var _))
+            if (_cacheMap.TryRemove(ChrName, out CharacterDataInfo _))
             {
 
             }

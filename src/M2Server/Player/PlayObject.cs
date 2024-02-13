@@ -1,12 +1,12 @@
 ﻿using M2Server.Actor;
-using System.Collections;
-using System.Runtime.CompilerServices;
 using OpenMir2;
 using OpenMir2.Consts;
 using OpenMir2.Data;
 using OpenMir2.Enums;
 using OpenMir2.Packets.ClientPackets;
 using OpenMir2.Packets.ServerPackets;
+using System.Collections;
+using System.Runtime.CompilerServices;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Castles;
@@ -1247,7 +1247,11 @@ namespace M2Server.Player
                 // 检查背包中的物品是否合法
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    if (!string.IsNullOrEmpty(SystemShare.ItemSystem.GetStdItemName(ItemList[i].Index))) continue;
+                    if (!string.IsNullOrEmpty(SystemShare.ItemSystem.GetStdItemName(ItemList[i].Index)))
+                    {
+                        continue;
+                    }
+
                     Dispose(ItemList[i]);
                     ItemList.RemoveAt(i);
                 }
@@ -1256,7 +1260,11 @@ namespace M2Server.Player
                 {
                     for (int i = 0; i < UseItems.Length; i++)
                     {
-                        if (UseItems[i] == null || UseItems[i].Index <= 0) continue;
+                        if (UseItems[i] == null || UseItems[i].Index <= 0)
+                        {
+                            continue;
+                        }
+
                         StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)
                         {
@@ -1563,7 +1571,11 @@ namespace M2Server.Player
             }
             userItem.DuraMax -= (ushort)((userItem.DuraMax - userItem.Dura) / SystemShare.Config.RepairItemDecDura);
             ushort nDura = (ushort)HUtil32._MIN(5000, userItem.DuraMax - userItem.Dura);
-            if (nDura <= 0) return false;
+            if (nDura <= 0)
+            {
+                return false;
+            }
+
             userItem.Dura += nDura;
             SendMsg(Messages.RM_DURACHANGE, 1, userItem.Dura, userItem.DuraMax, 0);
             SysMsg(MessageSettings.WeaponRepairSuccess, MsgColor.Green, MsgType.Hint);
@@ -1619,7 +1631,7 @@ namespace M2Server.Player
         /// </summary>
         private void KillTargetTrigger(int actorId, int fightExp)
         {
-            var killObject = SystemShare.ActorMgr.Get(actorId);
+            IActor killObject = SystemShare.ActorMgr.Get(actorId);
             if (killObject == null)
             {
                 return;
@@ -1643,21 +1655,17 @@ namespace M2Server.Player
             // 是否执行任务脚本
             if (Envir.IsCheapStuff())// 地图是否有任务脚本
             {
-                IMerchant QuestNPC;
                 if (GroupOwner != 0)
                 {
                     IPlayerActor groupOwnerPlay = (IPlayerActor)SystemShare.ActorMgr.Get(GroupOwner);
                     for (int i = 0; i < groupOwnerPlay.GroupMembers.Count; i++)
                     {
                         IPlayerActor groupHuman = groupOwnerPlay.GroupMembers[i];
-                        bool tCheck;
                         if (!groupHuman.Death && Envir == groupHuman.Envir && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && Math.Abs(CurrX - groupHuman.CurrX) <= 12 && this == groupHuman)
                         {
-                            tCheck = false;
                         }
                         else
                         {
-                            tCheck = true;
                         }
                         //QuestNPC = Envir.GetQuestNpc(groupHuman, ChrName, "", tCheck);
                         //if (QuestNPC != null)
@@ -1919,7 +1927,7 @@ namespace M2Server.Player
             {
                 return false;
             }
-            var result = IsAttackTarget(baseObject);//先检查攻击模式
+            bool result = IsAttackTarget(baseObject);//先检查攻击模式
             if (result)
             {
                 if (baseObject.Race == ActorRace.Play)
@@ -2113,7 +2121,7 @@ namespace M2Server.Player
                     stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
                     ApplyItemParameters(UseItems[i], stdItem);
                     ApplyItemParametersEx(UseItems[i]);
-   
+
                     if (stdItem != null)
                     {
                         if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
@@ -2129,374 +2137,374 @@ namespace M2Server.Player
                             case ItemLocation.Weapon:
                             case ItemLocation.ArmRingl:
                             case ItemLocation.ArmRingr:
-                            {
-                                if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
                                 {
-                                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (-stdItem.SpecialPwr));
+                                    if ((stdItem.SpecialPwr <= -1) && (stdItem.SpecialPwr >= -50))
+                                    {
+                                        AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (-stdItem.SpecialPwr));
+                                    }
+                                    if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
+                                    {
+                                        AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
+                                    }
+                                    switch (stdItem.Shape)
+                                    {
+                                        case ItemShapeConst.CCHO_WEAPON:
+                                            choWeapon = true;
+                                            break;
+                                        case ItemShapeConst.BONESET_WEAPON_SHAPE when (stdItem.StdMode == 6):
+                                            bonesetWeapon = true;
+                                            break;
+                                        case DragonConst.DRAGON_WEAPON_SHAPE:
+                                            dragonsetWeapon = true;
+                                            break;
+                                    }
+                                    break;
                                 }
-                                if ((stdItem.SpecialPwr <= -51) && (stdItem.SpecialPwr >= -100))
-                                {
-                                    AddAbil.UndeadPower = (byte)(AddAbil.UndeadPower + (stdItem.SpecialPwr + 50));
-                                }
-                                switch (stdItem.Shape)
-                                {
-                                    case ItemShapeConst.CCHO_WEAPON:
-                                        choWeapon = true;
-                                        break;
-                                    case ItemShapeConst.BONESET_WEAPON_SHAPE when (stdItem.StdMode == 6):
-                                        bonesetWeapon = true;
-                                        break;
-                                    case DragonConst.DRAGON_WEAPON_SHAPE:
-                                        dragonsetWeapon = true;
-                                        break;
-                                }
-                                break;
-                            }
                             case ItemLocation.Necklace:
-                            {
-                                switch (stdItem.Shape)
                                 {
-                                    case ItemShapeConst.NECTLACE_FASTTRAINING_ITEM:
-                                        FastTrain = true;
-                                        break;
-                                    case ItemShapeConst.NECTLACE_SEARCH_ITEM:
-                                        ProbeNecklace = true;
-                                        break;
-                                    case ItemShapeConst.NECKLACE_GI_ITEM:
-                                        cghi[1] = true;
-                                        break;
-                                    case ItemShapeConst.NECKLACE_OF_MANATOHEALTH:
-                                        mhNecklace = true;
-                                        MoXieSuite = MoXieSuite + stdItem.AniCount;
-                                        break;
-                                    case ItemShapeConst.NECKLACE_OF_SUCKHEALTH:
-                                        shNecklace = true;
-                                        SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
-                                        break;
-                                    case ItemShapeConst.NECKLACE_OF_HPPUP:
-                                        hppNecklace = true;
-                                        break;
-                                    case ItemShapeConst.CCHO_NECKLACE:
-                                        choNecklace = true;
-                                        break;
-                                    case ItemShapeConst.PSET_NECKLACE_SHAPE:
-                                        psetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.HSET_NECKLACE_SHAPE:
-                                        hsetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.YSET_NECKLACE_SHAPE:
-                                        ysetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.BUGSET_NECKLACE_SHAPE:
-                                        bugsetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.PTSET_NECKLACE_SHAPE:
-                                        ptsetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.KSSET_NECKLACE_SHAPE:
-                                        kssetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.RUBYSET_NECKLACE_SHAPE:
-                                        rubysetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_PTSET_NECKLACE_SHAPE:
-                                        strongPtsetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_KSSET_NECKLACE_SHAPE:
-                                        strongKssetNecklace = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_RUBYSET_NECKLACE_SHAPE:
-                                        strongRubysetNecklace = true;
-                                        break;
-                                    case DragonConst.DRAGON_NECKLACE_SHAPE:
-                                        dragonsetNecklace = true;
-                                        break;
+                                    switch (stdItem.Shape)
+                                    {
+                                        case ItemShapeConst.NECTLACE_FASTTRAINING_ITEM:
+                                            FastTrain = true;
+                                            break;
+                                        case ItemShapeConst.NECTLACE_SEARCH_ITEM:
+                                            ProbeNecklace = true;
+                                            break;
+                                        case ItemShapeConst.NECKLACE_GI_ITEM:
+                                            cghi[1] = true;
+                                            break;
+                                        case ItemShapeConst.NECKLACE_OF_MANATOHEALTH:
+                                            mhNecklace = true;
+                                            MoXieSuite = MoXieSuite + stdItem.AniCount;
+                                            break;
+                                        case ItemShapeConst.NECKLACE_OF_SUCKHEALTH:
+                                            shNecklace = true;
+                                            SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
+                                            break;
+                                        case ItemShapeConst.NECKLACE_OF_HPPUP:
+                                            hppNecklace = true;
+                                            break;
+                                        case ItemShapeConst.CCHO_NECKLACE:
+                                            choNecklace = true;
+                                            break;
+                                        case ItemShapeConst.PSET_NECKLACE_SHAPE:
+                                            psetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.HSET_NECKLACE_SHAPE:
+                                            hsetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.YSET_NECKLACE_SHAPE:
+                                            ysetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.BUGSET_NECKLACE_SHAPE:
+                                            bugsetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.PTSET_NECKLACE_SHAPE:
+                                            ptsetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.KSSET_NECKLACE_SHAPE:
+                                            kssetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.RUBYSET_NECKLACE_SHAPE:
+                                            rubysetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_PTSET_NECKLACE_SHAPE:
+                                            strongPtsetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_KSSET_NECKLACE_SHAPE:
+                                            strongKssetNecklace = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_RUBYSET_NECKLACE_SHAPE:
+                                            strongRubysetNecklace = true;
+                                            break;
+                                        case DragonConst.DRAGON_NECKLACE_SHAPE:
+                                            dragonsetNecklace = true;
+                                            break;
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                             case ItemLocation.Ringr:
                             case ItemLocation.Ringl:
-                            {
-                                switch (stdItem.Shape)
                                 {
-                                    case ItemShapeConst.RING_TRANSPARENT_ITEM:
-                                        StatusTimeArr[PoisonState.STATETRANSPARENT] = 60000;
-                                        HideMode = true;
-                                        break;
-                                    case ItemShapeConst.RING_SPACEMOVE_ITEM:
-                                        Teleport = true;
-                                        break;
-                                    case ItemShapeConst.RING_MAKESTONE_ITEM:
-                                        Paralysis = true;
-                                        break;
-                                    case ItemShapeConst.RING_REVIVAL_ITEM:
-                                        Revival = true;
-                                        break;
-                                    case ItemShapeConst.RING_FIREBALL_ITEM:
-                                        FlameRing = true;
-                                        break;
-                                    case ItemShapeConst.RING_HEALING_ITEM:
-                                        RecoveryRing = true;
-                                        break;
-                                    case ItemShapeConst.RING_ANGERENERGY_ITEM:
-                                        AngryRing = true;
-                                        break;
-                                    case ItemShapeConst.RING_MAGICSHIELD_ITEM:
-                                        MagicShield = true;
-                                        break;
-                                    case ItemShapeConst.RING_SUPERSTRENGTH_ITEM:
-                                        MuscleRing = true;
-                                        break;
-                                    case ItemShapeConst.RING_CHUN_ITEM:
-                                        cghi[0] = true;
-                                        break;
-                                    case ItemShapeConst.RING_OF_MANATOHEALTH:
-                                        mhRing = true;
-                                        MoXieSuite = MoXieSuite + stdItem.AniCount;
-                                        break;
-                                    case ItemShapeConst.RING_OF_SUCKHEALTH:
-                                        shRing = true;
-                                        SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
-                                        break;
-                                    case ItemShapeConst.RING_OF_HPUP:
-                                        hpRing = true;
-                                        break;
-                                    case ItemShapeConst.RING_OF_MPUP:
-                                        mpRing = true;
-                                        break;
-                                    case ItemShapeConst.RING_OF_HPMPUP:
-                                        hpmpRing = true;
-                                        break;
-                                    case ItemShapeConst.RING_OH_HPPUP:
-                                        hppRing = true;
-                                        break;
-                                    case ItemShapeConst.CCHO_RING:
-                                        choRing = true;
-                                        break;
-                                    case ItemShapeConst.PSET_RING_SHAPE:
-                                        psetRing = true;
-                                        break;
-                                    case ItemShapeConst.HSET_RING_SHAPE:
-                                        hsetRing = true;
-                                        break;
-                                    case ItemShapeConst.YSET_RING_SHAPE:
-                                        ysetRing = true;
-                                        break;
-                                    case ItemShapeConst.BUGSET_RING_SHAPE:
-                                        bugsetRing = true;
-                                        break;
-                                    case ItemShapeConst.PTSET_RING_SHAPE:
-                                        ptsetRing = true;
-                                        break;
-                                    case ItemShapeConst.KSSET_RING_SHAPE:
-                                        kssetRing = true;
-                                        break;
-                                    case ItemShapeConst.RUBYSET_RING_SHAPE:
-                                        rubysetRing = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_PTSET_RING_SHAPE:
-                                        strongPtsetRing = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_KSSET_RING_SHAPE:
-                                        strongKssetRing = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_RUBYSET_RING_SHAPE:
-                                        strongRubysetRing = true;
-                                        break;
-                                    case DragonConst.DRAGON_RING_SHAPE:
+                                    switch (stdItem.Shape)
                                     {
-                                        if ((i == ItemLocation.Ringl))
-                                        {
-                                            dragonsetRingLeft = true;
-                                        }
-                                        if ((i == ItemLocation.Ringr))
-                                        {
-                                            dragonsetRingRight = true;
-                                        }
-                                        break;
+                                        case ItemShapeConst.RING_TRANSPARENT_ITEM:
+                                            StatusTimeArr[PoisonState.STATETRANSPARENT] = 60000;
+                                            HideMode = true;
+                                            break;
+                                        case ItemShapeConst.RING_SPACEMOVE_ITEM:
+                                            Teleport = true;
+                                            break;
+                                        case ItemShapeConst.RING_MAKESTONE_ITEM:
+                                            Paralysis = true;
+                                            break;
+                                        case ItemShapeConst.RING_REVIVAL_ITEM:
+                                            Revival = true;
+                                            break;
+                                        case ItemShapeConst.RING_FIREBALL_ITEM:
+                                            FlameRing = true;
+                                            break;
+                                        case ItemShapeConst.RING_HEALING_ITEM:
+                                            RecoveryRing = true;
+                                            break;
+                                        case ItemShapeConst.RING_ANGERENERGY_ITEM:
+                                            AngryRing = true;
+                                            break;
+                                        case ItemShapeConst.RING_MAGICSHIELD_ITEM:
+                                            MagicShield = true;
+                                            break;
+                                        case ItemShapeConst.RING_SUPERSTRENGTH_ITEM:
+                                            MuscleRing = true;
+                                            break;
+                                        case ItemShapeConst.RING_CHUN_ITEM:
+                                            cghi[0] = true;
+                                            break;
+                                        case ItemShapeConst.RING_OF_MANATOHEALTH:
+                                            mhRing = true;
+                                            MoXieSuite = MoXieSuite + stdItem.AniCount;
+                                            break;
+                                        case ItemShapeConst.RING_OF_SUCKHEALTH:
+                                            shRing = true;
+                                            SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
+                                            break;
+                                        case ItemShapeConst.RING_OF_HPUP:
+                                            hpRing = true;
+                                            break;
+                                        case ItemShapeConst.RING_OF_MPUP:
+                                            mpRing = true;
+                                            break;
+                                        case ItemShapeConst.RING_OF_HPMPUP:
+                                            hpmpRing = true;
+                                            break;
+                                        case ItemShapeConst.RING_OH_HPPUP:
+                                            hppRing = true;
+                                            break;
+                                        case ItemShapeConst.CCHO_RING:
+                                            choRing = true;
+                                            break;
+                                        case ItemShapeConst.PSET_RING_SHAPE:
+                                            psetRing = true;
+                                            break;
+                                        case ItemShapeConst.HSET_RING_SHAPE:
+                                            hsetRing = true;
+                                            break;
+                                        case ItemShapeConst.YSET_RING_SHAPE:
+                                            ysetRing = true;
+                                            break;
+                                        case ItemShapeConst.BUGSET_RING_SHAPE:
+                                            bugsetRing = true;
+                                            break;
+                                        case ItemShapeConst.PTSET_RING_SHAPE:
+                                            ptsetRing = true;
+                                            break;
+                                        case ItemShapeConst.KSSET_RING_SHAPE:
+                                            kssetRing = true;
+                                            break;
+                                        case ItemShapeConst.RUBYSET_RING_SHAPE:
+                                            rubysetRing = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_PTSET_RING_SHAPE:
+                                            strongPtsetRing = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_KSSET_RING_SHAPE:
+                                            strongKssetRing = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_RUBYSET_RING_SHAPE:
+                                            strongRubysetRing = true;
+                                            break;
+                                        case DragonConst.DRAGON_RING_SHAPE:
+                                            {
+                                                if ((i == ItemLocation.Ringl))
+                                                {
+                                                    dragonsetRingLeft = true;
+                                                }
+                                                if ((i == ItemLocation.Ringr))
+                                                {
+                                                    dragonsetRingRight = true;
+                                                }
+                                                break;
+                                            }
                                     }
+                                    break;
                                 }
-                                break;
-                            }
                         }
                         switch (i)
                         {
                             case ItemLocation.ArmRingl:
                             case ItemLocation.ArmRingr:
-                            {
-                                switch (stdItem.Shape)
                                 {
-                                    case ItemShapeConst.ARMRING_HAP_ITEM:
-                                        cghi[2] = true;
-                                        break;
-                                    case ItemShapeConst.BRACELET_OF_MANATOHEALTH:
-                                        mhBracelet = true;
-                                        MoXieSuite = MoXieSuite + stdItem.AniCount;
-                                        break;
-                                    case ItemShapeConst.BRACELET_OF_SUCKHEALTH:
-                                        shBracelet = true;
-                                        SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
-                                        break;
-                                    case ItemShapeConst.BRACELET_OF_HPUP:
-                                        hpBracelet = true;
-                                        break;
-                                    case ItemShapeConst.BRACELET_OF_MPUP:
-                                        mpBracelet = true;
-                                        break;
-                                    case ItemShapeConst.BRACELET_OF_HPMPUP:
-                                        hpmpBracelet = true;
-                                        break;
-                                    case ItemShapeConst.BRACELET_OF_HPPUP:
-                                        hppBracelet = true;
-                                        break;
-                                    case ItemShapeConst.CCHO_BRACELET:
-                                        choBracelet = true;
-                                        break;
-                                    case ItemShapeConst.PSET_BRACELET_SHAPE:
-                                        psetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.HSET_BRACELET_SHAPE:
-                                        hsetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.YSET_BRACELET_SHAPE:
-                                        ysetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.BUGSET_BRACELET_SHAPE:
-                                        bugsetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.PTSET_BRACELET_SHAPE:
-                                        ptsetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.KSSET_BRACELET_SHAPE:
-                                        kssetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.RUBYSET_BRACELET_SHAPE:
-                                        rubysetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_PTSET_BRACELET_SHAPE:
-                                        strongPtsetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_KSSET_BRACELET_SHAPE:
-                                        strongKssetBracelet = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_RUBYSET_BRACELET_SHAPE:
-                                        strongRubysetBracelet = true;
-                                        break;
-                                    case DragonConst.DRAGON_BRACELET_SHAPE:
+                                    switch (stdItem.Shape)
                                     {
-                                        if ((i == ItemLocation.ArmRingl))
-                                        {
-                                            dragonsetBraceletLeft = true;
-                                        }
-                                        if ((i == ItemLocation.ArmRingr))
-                                        {
-                                            dragonsetBraceletRight = true;
-                                        }
-                                        break;
+                                        case ItemShapeConst.ARMRING_HAP_ITEM:
+                                            cghi[2] = true;
+                                            break;
+                                        case ItemShapeConst.BRACELET_OF_MANATOHEALTH:
+                                            mhBracelet = true;
+                                            MoXieSuite = MoXieSuite + stdItem.AniCount;
+                                            break;
+                                        case ItemShapeConst.BRACELET_OF_SUCKHEALTH:
+                                            shBracelet = true;
+                                            SuckupEnemyHealthRate = SuckupEnemyHealthRate + stdItem.AniCount;
+                                            break;
+                                        case ItemShapeConst.BRACELET_OF_HPUP:
+                                            hpBracelet = true;
+                                            break;
+                                        case ItemShapeConst.BRACELET_OF_MPUP:
+                                            mpBracelet = true;
+                                            break;
+                                        case ItemShapeConst.BRACELET_OF_HPMPUP:
+                                            hpmpBracelet = true;
+                                            break;
+                                        case ItemShapeConst.BRACELET_OF_HPPUP:
+                                            hppBracelet = true;
+                                            break;
+                                        case ItemShapeConst.CCHO_BRACELET:
+                                            choBracelet = true;
+                                            break;
+                                        case ItemShapeConst.PSET_BRACELET_SHAPE:
+                                            psetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.HSET_BRACELET_SHAPE:
+                                            hsetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.YSET_BRACELET_SHAPE:
+                                            ysetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.BUGSET_BRACELET_SHAPE:
+                                            bugsetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.PTSET_BRACELET_SHAPE:
+                                            ptsetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.KSSET_BRACELET_SHAPE:
+                                            kssetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.RUBYSET_BRACELET_SHAPE:
+                                            rubysetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_PTSET_BRACELET_SHAPE:
+                                            strongPtsetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_KSSET_BRACELET_SHAPE:
+                                            strongKssetBracelet = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_RUBYSET_BRACELET_SHAPE:
+                                            strongRubysetBracelet = true;
+                                            break;
+                                        case DragonConst.DRAGON_BRACELET_SHAPE:
+                                            {
+                                                if ((i == ItemLocation.ArmRingl))
+                                                {
+                                                    dragonsetBraceletLeft = true;
+                                                }
+                                                if ((i == ItemLocation.ArmRingr))
+                                                {
+                                                    dragonsetBraceletRight = true;
+                                                }
+                                                break;
+                                            }
                                     }
+                                    break;
                                 }
-                                break;
-                            }
                             case ItemLocation.Helmet:
-                            {
-                                switch (stdItem.Shape)
                                 {
-                                    case ItemShapeConst.HELMET_IL_ITEM:
-                                        cghi[3] = true;
-                                        break;
-                                    case ItemShapeConst.CCHO_HELMET:
-                                        choHelmet = true;
-                                        break;
-                                    case ItemShapeConst.BONESET_HELMET_SHAPE:
-                                        bonesetHelmet = true;
-                                        break;
-                                    case DragonConst.DRAGON_HELMET_SHAPE:
-                                        dragonsetHelmet = true;
-                                        break;
+                                    switch (stdItem.Shape)
+                                    {
+                                        case ItemShapeConst.HELMET_IL_ITEM:
+                                            cghi[3] = true;
+                                            break;
+                                        case ItemShapeConst.CCHO_HELMET:
+                                            choHelmet = true;
+                                            break;
+                                        case ItemShapeConst.BONESET_HELMET_SHAPE:
+                                            bonesetHelmet = true;
+                                            break;
+                                        case DragonConst.DRAGON_HELMET_SHAPE:
+                                            dragonsetHelmet = true;
+                                            break;
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                             case ItemLocation.Dress:
-                            {
-                                switch (stdItem.Shape)
                                 {
-                                    case ItemShapeConst.DRESS_SHAPE_WING:
-                                        dsetWingdress = true;
-                                        break;
-                                    case ItemShapeConst.BONESET_DRESS_SHAPE:
-                                        bonesetDress = true;
-                                        break;
-                                    case DragonConst.DRAGON_DRESS_SHAPE:
-                                        dragonsetDress = true;
-                                        break;
+                                    switch (stdItem.Shape)
+                                    {
+                                        case ItemShapeConst.DRESS_SHAPE_WING:
+                                            dsetWingdress = true;
+                                            break;
+                                        case ItemShapeConst.BONESET_DRESS_SHAPE:
+                                            bonesetDress = true;
+                                            break;
+                                        case DragonConst.DRAGON_DRESS_SHAPE:
+                                            dragonsetDress = true;
+                                            break;
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                             case ItemLocation.Belt:
-                            {
-                                switch (stdItem.Shape)
                                 {
-                                    case ItemShapeConst.PTSET_BELT_SHAPE:
-                                        ptsetBelt = true;
-                                        break;
-                                    case ItemShapeConst.KSSET_BELT_SHAPE:
-                                        kssetBelt = true;
-                                        break;
-                                    case ItemShapeConst.RUBYSET_BELT_SHAPE:
-                                        rubysetBelt = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_PTSET_BELT_SHAPE:
-                                        strongPtsetBelt = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_KSSET_BELT_SHAPE:
-                                        strongKssetBelt = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_RUBYSET_BELT_SHAPE:
-                                        strongRubysetBelt = true;
-                                        break;
-                                    case DragonConst.DRAGON_BELT_SHAPE:
-                                        dragonsetBelt = true;
-                                        break;
+                                    switch (stdItem.Shape)
+                                    {
+                                        case ItemShapeConst.PTSET_BELT_SHAPE:
+                                            ptsetBelt = true;
+                                            break;
+                                        case ItemShapeConst.KSSET_BELT_SHAPE:
+                                            kssetBelt = true;
+                                            break;
+                                        case ItemShapeConst.RUBYSET_BELT_SHAPE:
+                                            rubysetBelt = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_PTSET_BELT_SHAPE:
+                                            strongPtsetBelt = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_KSSET_BELT_SHAPE:
+                                            strongKssetBelt = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_RUBYSET_BELT_SHAPE:
+                                            strongRubysetBelt = true;
+                                            break;
+                                        case DragonConst.DRAGON_BELT_SHAPE:
+                                            dragonsetBelt = true;
+                                            break;
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                             case ItemLocation.Boots:
-                            {
-                                switch (stdItem.Shape)
                                 {
-                                    case ItemShapeConst.PTSET_BOOTS_SHAPE:
-                                        ptsetBoots = true;
-                                        break;
-                                    case ItemShapeConst.KSSET_BOOTS_SHAPE:
-                                        kssetBoots = true;
-                                        break;
-                                    case ItemShapeConst.RUBYSET_BOOTS_SHAPE:
-                                        rubysetBoots = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_PTSET_BOOTS_SHAPE:
-                                        strongPtsetBoots = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_KSSET_BOOTS_SHAPE:
-                                        strongKssetBoots = true;
-                                        break;
-                                    case ItemShapeConst.STRONG_RUBYSET_BOOTS_SHAPE:
-                                        strongRubysetBoots = true;
-                                        break;
-                                    case DragonConst.DRAGON_BOOTS_SHAPE:
-                                        dragonsetBoots = true;
-                                        break;
+                                    switch (stdItem.Shape)
+                                    {
+                                        case ItemShapeConst.PTSET_BOOTS_SHAPE:
+                                            ptsetBoots = true;
+                                            break;
+                                        case ItemShapeConst.KSSET_BOOTS_SHAPE:
+                                            kssetBoots = true;
+                                            break;
+                                        case ItemShapeConst.RUBYSET_BOOTS_SHAPE:
+                                            rubysetBoots = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_PTSET_BOOTS_SHAPE:
+                                            strongPtsetBoots = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_KSSET_BOOTS_SHAPE:
+                                            strongKssetBoots = true;
+                                            break;
+                                        case ItemShapeConst.STRONG_RUBYSET_BOOTS_SHAPE:
+                                            strongRubysetBoots = true;
+                                            break;
+                                        case DragonConst.DRAGON_BOOTS_SHAPE:
+                                            dragonsetBoots = true;
+                                            break;
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                             case ItemLocation.Charm:
-                            {
-                                if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE))
                                 {
-                                    AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 1));
+                                    if ((stdItem.StdMode == 53) && (stdItem.Shape == ItemShapeConst.SHAPE_OF_LUCKYLADLE))
+                                    {
+                                        AddAbil.Luck = (byte)(HUtil32._MIN(255, AddAbil.Luck + 1));
+                                    }
+                                    break;
                                 }
-                                break;
-                            }
                         }
 
                         switch (stdItem.StdMode)
@@ -3090,7 +3098,7 @@ namespace M2Server.Player
                         ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
-                            var nIdx = 0;
+                            int nIdx = 0;
                             while (true)
                             {
                                 if (cellInfo.Count <= nIdx)
@@ -4181,7 +4189,7 @@ namespace M2Server.Player
             UserMagic result = null;
             for (int i = 0; i < this.MagicList.Count; i++)
             {
-                var userMagic = this.MagicList[i];
+                UserMagic userMagic = this.MagicList[i];
                 if (string.Compare(userMagic.Magic.MagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = userMagic;

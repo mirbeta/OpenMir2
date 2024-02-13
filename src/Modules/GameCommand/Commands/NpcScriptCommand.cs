@@ -11,8 +11,8 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            var sScriptFileName = string.Empty;
-            var baseObject = PlayerActor.GetPoseCreate();
+            string sScriptFileName = string.Empty;
+            IActor baseObject = PlayerActor.GetPoseCreate();
             //if (baseObject != null)
             //{
             //    for (var i = 0; i < SystemShare.WorldEngine.MerchantList.Count; i++)
@@ -49,7 +49,7 @@ namespace CommandModule.Commands
             //}
             if (File.Exists(sScriptFileName))
             {
-                using var loadList = new StringList();
+                using StringList loadList = new StringList();
                 try
                 {
                     loadList.LoadFromFile(sScriptFileName);
@@ -58,9 +58,9 @@ namespace CommandModule.Commands
                 {
                     PlayerActor.SysMsg("读取脚本文件错误: " + sScriptFileName, MsgColor.Red, MsgType.Hint);
                 }
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
-                    var sScriptLine = loadList[i].Trim();
+                    string sScriptLine = loadList[i].Trim();
                     sScriptLine = HUtil32.ReplaceChar(sScriptLine, ' ', ',');
                     PlayerActor.SysMsg(i + "," + sScriptLine, MsgColor.Blue, MsgType.Hint);
                 }

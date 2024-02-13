@@ -18,13 +18,13 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumName = @params.Length > 0 ? @params[0] : "";
+            string sHumName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor targerIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (targerIPlayerActor != null)
             {
                 targerIPlayerActor.BonusPoint = 0;

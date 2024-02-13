@@ -14,7 +14,7 @@ public class SessionManager
 
     public void AddSession(TSessionInfo sessionInfo, ClientThread clientThread)
     {
-        var userSession = new ClientSession(sessionInfo, clientThread, _configManager,
+        ClientSession userSession = new ClientSession(sessionInfo, clientThread, _configManager,
             GateShare.ServiceProvider.GetService<ServerService>());
         _sessionMap.TryAdd(sessionInfo.ConnectionId, userSession);
         userSession.UserEnter();
@@ -27,7 +27,10 @@ public class SessionManager
 
     public void CloseSession(string sessionId)
     {
-        if (_sessionMap.TryRemove(sessionId, out var clientSession)) clientSession.CloseSession();
+        if (_sessionMap.TryRemove(sessionId, out ClientSession clientSession))
+        {
+            clientSession.CloseSession();
+        }
     }
 
     public bool CheckSession(string sessionId)

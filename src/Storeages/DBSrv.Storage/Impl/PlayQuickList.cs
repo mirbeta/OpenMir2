@@ -23,7 +23,7 @@ namespace DBSrv.Storage.Impl
         public void AddRecord(string sAccount, string sChrName, int nIndex, int nSelIndex)
         {
             IList<PlayQuick> ChrList;
-            var playQuick = new PlayQuick();
+            PlayQuick playQuick = new PlayQuick();
             playQuick.Account = sAccount;
             playQuick.ChrName = sChrName;
             playQuick.Index = nIndex;
@@ -74,14 +74,14 @@ namespace DBSrv.Storage.Impl
                 }
                 else
                 {
-                    var nLow = 0;
-                    var nHigh = m_List.Count - 1;
+                    int nLow = 0;
+                    int nHigh = m_List.Count - 1;
                     nMed = (nHigh - nLow) / 2 + nLow;
                     while (true)
                     {
                         if ((nHigh - nLow) == 1)
                         {
-                            var n20 = string.Compare(sAccount, quickList[nHigh].Account, StringComparison.OrdinalIgnoreCase);
+                            int n20 = string.Compare(sAccount, quickList[nHigh].Account, StringComparison.OrdinalIgnoreCase);
                             if (n20 > 0)
                             {
                                 ChrList = new List<PlayQuick>();
@@ -135,7 +135,7 @@ namespace DBSrv.Storage.Impl
                         }
                         else
                         {
-                            var n1C = string.Compare(sAccount, quickList[nMed].Account, StringComparison.OrdinalIgnoreCase);
+                            int n1C = string.Compare(sAccount, quickList[nMed].Account, StringComparison.OrdinalIgnoreCase);
                             if (n1C > 0)
                             {
                                 nLow = nMed;
@@ -163,10 +163,10 @@ namespace DBSrv.Storage.Impl
             {
                 return;
             }
-            var ChrList = m_List[sChrName];
-            for (var i = 0; i < ChrList.Count; i++)
+            IList<PlayQuick> ChrList = m_List[sChrName];
+            for (int i = 0; i < ChrList.Count; i++)
             {
-                var QuickID = ChrList[i];
+                PlayQuick? QuickID = ChrList[i];
                 if (QuickID.ChrName == sChrName)
                 {
                     QuickID = null;
@@ -187,7 +187,7 @@ namespace DBSrv.Storage.Impl
             int nMed;
             int n20;
             int n24;
-            var result = -1;
+            int result = -1;
             if (m_List.Count == 0)
             {
                 return result;

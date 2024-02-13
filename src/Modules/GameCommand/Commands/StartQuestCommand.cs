@@ -13,7 +13,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sQuestName = @params.Length > 0 ? @params[0] : "";
+            string sQuestName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sQuestName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

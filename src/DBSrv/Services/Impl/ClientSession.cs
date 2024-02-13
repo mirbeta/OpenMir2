@@ -1,9 +1,9 @@
 using DBSrv.Conf;
+using OpenMir2;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
-using OpenMir2;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
@@ -51,7 +51,7 @@ namespace DBSrv.Services.Impl
 
         public void Stop()
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
                 _globaSessionList[i] = null;
             }
@@ -69,9 +69,9 @@ namespace DBSrv.Services.Impl
 
         private void ProcessSocketMsg()
         {
-            var sData = string.Empty;
-            var sCode = string.Empty;
-            var sScoketText = _sockMsg;
+            string sData = string.Empty;
+            string sCode = string.Empty;
+            string sScoketText = _sockMsg;
             while (sScoketText.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
             {
                 sScoketText = HUtil32.ArrestStringEx(sScoketText, "(", ")", ref sData);
@@ -79,8 +79,8 @@ namespace DBSrv.Services.Impl
                 {
                     break;
                 }
-                var sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
-                var nIdent = HUtil32.StrToInt(sCode, 0);
+                string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
+                int nIdent = HUtil32.StrToInt(sCode, 0);
                 switch (nIdent)
                 {
                     case Messages.SS_OPENSESSION:
@@ -100,16 +100,16 @@ namespace DBSrv.Services.Impl
         public void SendSocketMsg(short wIdent, string sMsg)
         {
             const string sFormatMsg = "({0}/{1})";
-            var sSendText = string.Format(sFormatMsg, wIdent, sMsg);
+            string sSendText = string.Format(sFormatMsg, wIdent, sMsg);
             _clientScoket.Send(sSendText);
         }
 
         public bool CheckSession(string account, string sIPaddr, int sessionId)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.Account == account) && (globaSessionInfo.SessionID == sessionId))
@@ -124,11 +124,11 @@ namespace DBSrv.Services.Impl
 
         public int CheckSessionLoadRcd(string sAccount, string sIPaddr, int nSessionId, ref bool boFoundSession)
         {
-            var result = -1;
+            int result = -1;
             boFoundSession = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.Account == sAccount) && (globaSessionInfo.SessionID == nSessionId))
@@ -148,10 +148,10 @@ namespace DBSrv.Services.Impl
 
         public bool SetSessionSaveRcd(string sAccount)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.Account == sAccount))
@@ -166,9 +166,9 @@ namespace DBSrv.Services.Impl
 
         public void SetGlobaSessionNoPlay(int nSessionId)
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.SessionID == nSessionId))
@@ -182,9 +182,9 @@ namespace DBSrv.Services.Impl
 
         public void SetGlobaSessionPlay(int nSessionId)
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.SessionID == nSessionId))
@@ -198,10 +198,10 @@ namespace DBSrv.Services.Impl
 
         public bool GetGlobaSessionStatus(int nSessionId)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.SessionID == nSessionId))
@@ -216,9 +216,9 @@ namespace DBSrv.Services.Impl
 
         public void CloseSession(string sAccount, int nSessionId)
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.SessionID == nSessionId))
@@ -236,17 +236,17 @@ namespace DBSrv.Services.Impl
 
         private void ProcessAddSession(string sData)
         {
-            var sAccount = string.Empty;
-            var s10 = string.Empty;
-            var s14 = string.Empty;
-            var s18 = string.Empty;
-            var sIPaddr = string.Empty;
+            string sAccount = string.Empty;
+            string s10 = string.Empty;
+            string s14 = string.Empty;
+            string s18 = string.Empty;
+            string sIPaddr = string.Empty;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s10, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);
-            var globaSessionInfo = new GlobaSessionInfo();
+            GlobaSessionInfo globaSessionInfo = new GlobaSessionInfo();
             globaSessionInfo.Account = sAccount;
             globaSessionInfo.IPaddr = sIPaddr;
             globaSessionInfo.SessionID = HUtil32.StrToInt(s10, 0);
@@ -261,12 +261,12 @@ namespace DBSrv.Services.Impl
 
         private void ProcessDelSession(string sData)
         {
-            var sAccount = string.Empty;
+            string sAccount = string.Empty;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-            var nSessionId = HUtil32.StrToInt(sData, 0);
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            int nSessionId = HUtil32.StrToInt(sData, 0);
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.SessionID == nSessionId) && (globaSessionInfo.Account == sAccount))
@@ -281,10 +281,10 @@ namespace DBSrv.Services.Impl
 
         public bool GetSession(string sAccount, string sIPaddr)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
                     if ((globaSessionInfo.Account == sAccount) && (globaSessionInfo.IPaddr == sIPaddr))

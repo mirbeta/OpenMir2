@@ -1,16 +1,8 @@
-using M2Server;
 using M2Server.Npc;
-using ScriptSystem;
-using System.Collections;
-using GameSrv.Npc;
-using OpenMir2;
-using OpenMir2.Common;
-using OpenMir2.Data;
 using ScriptSystem.Consts;
-using SystemModule;
+using System.Collections;
 using SystemModule.Actors;
 using SystemModule.Const;
-using SystemModule.Data;
 using SystemModule.Maps;
 
 namespace GameSrv.DB
@@ -488,7 +480,11 @@ namespace GameSrv.DB
                 Directory.CreateDirectory(sFileDir);
             }
             string sFilePatchName = sFileDir + sFileName;
-            if (!File.Exists(sFilePatchName)) return;
+            if (!File.Exists(sFilePatchName))
+            {
+                return;
+            }
+
             using StringList loadList = new StringList();
             loadList.LoadFromFile(sFilePatchName);
             for (int i = 0; i < loadList.Count; i++)
@@ -541,9 +537,9 @@ namespace GameSrv.DB
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.MapName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.X = (short) HUtil32.StrToInt(sData, 0);
+                        monGenInfo.X = (short)HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.Y = (short) HUtil32.StrToInt(sData, 0);
+                        monGenInfo.Y = (short)HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, _textSpitConst);
                         if (!string.IsNullOrEmpty(sData) && sData[0] == '\"')
                         {
@@ -551,13 +547,13 @@ namespace GameSrv.DB
                         }
                         monGenInfo.MonName = sData;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.Range = (byte) HUtil32.StrToInt(sData, 0);
+                        monGenInfo.Range = (byte)HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.Count = (ushort) HUtil32.StrToInt(sData, 0);
+                        monGenInfo.Count = (ushort)HUtil32.StrToInt(sData, 0);
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
                         monGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
-                        monGenInfo.MissionGenRate = (byte) HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
+                        monGenInfo.MissionGenRate = (byte)HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
                         if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
                         {
                             monGenInfo.CertList = new List<IMonsterActor>();

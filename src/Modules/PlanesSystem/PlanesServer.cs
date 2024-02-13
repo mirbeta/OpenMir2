@@ -1,6 +1,6 @@
+using OpenMir2;
 using System.Net;
 using System.Net.Sockets;
-using OpenMir2;
 using SystemModule;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
@@ -30,7 +30,7 @@ namespace PlanesSystem
 
         public void StartPlanesServer()
         {
-            var touchSocketConfig = new TouchSocketConfig();
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort)
@@ -48,7 +48,11 @@ namespace PlanesSystem
                 {
                     continue;
                 }
-                if (serverMsgInfo.Socket == null) continue;
+                if (serverMsgInfo.Socket == null)
+                {
+                    continue;
+                }
+
                 if (serverMsgInfo.SocketId != ps.SocketId)
                 {
                     SendSocket(serverMsgInfo.Socket, msgstr);
@@ -117,7 +121,7 @@ namespace PlanesSystem
         {
             for (int i = 0; i < srvArray.Length; i++)
             {
-                var serverMsgInfo = srvArray[i];
+                TServerMsgInfo serverMsgInfo = srvArray[i];
                 if (serverMsgInfo == null)
                 {
                     continue;
@@ -131,9 +135,9 @@ namespace PlanesSystem
 
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
-            if (int.TryParse(socketClient.Id, out var clientId))
+            if (int.TryParse(socketClient.Id, out int clientId))
             {
-                var serverInfo = srvArray[clientId - 1];
+                TServerMsgInfo serverInfo = srvArray[clientId - 1];
                 serverInfo.SocData += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
             }
             return Task.CompletedTask;
@@ -141,11 +145,11 @@ namespace PlanesSystem
 
         private Task Connecting(object sender, TouchSocketEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
+            SocketClient client = (SocketClient)sender;
+            IPEndPoint endPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
             for (int i = 0; i < srvArray.Length; i++)
             {
-                var serverMsgInfo = srvArray[i];
+                TServerMsgInfo serverMsgInfo = srvArray[i];
                 if (serverMsgInfo == null)
                 {
                     serverMsgInfo = new TServerMsgInfo();
@@ -162,10 +166,10 @@ namespace PlanesSystem
 
         private Task Disconnected(object sender, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            for (var i = 0; i < srvArray.Length; i++)
+            SocketClient client = (SocketClient)sender;
+            for (int i = 0; i < srvArray.Length; i++)
             {
-                var serverMsgInfo = srvArray[i];
+                TServerMsgInfo serverMsgInfo = srvArray[i];
                 if (serverMsgInfo == null)
                 {
                     continue;

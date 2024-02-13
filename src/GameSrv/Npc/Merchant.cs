@@ -1,16 +1,10 @@
 ﻿using GameSrv.DB;
-using M2Server;
 using M2Server.Items;
 using M2Server.Npc;
-using OpenMir2;
-using OpenMir2.Data;
 using OpenMir2.Enums;
-using OpenMir2.Packets.ClientPackets;
 using ScriptSystem.Consts;
-using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Const;
-using SystemModule.Data;
 using SystemModule.ModuleEvent;
 
 namespace GameSrv.Npc
@@ -119,8 +113,8 @@ namespace GameSrv.Npc
         {
             try
             {
-                var dwCurrentTick = HUtil32.GetTickCount();
-                var dwDelayTick = ProcessRefillIndex * 500;
+                int dwCurrentTick = HUtil32.GetTickCount();
+                int dwDelayTick = ProcessRefillIndex * 500;
                 if (dwCurrentTick < dwDelayTick)
                 {
                     dwDelayTick = 0;
@@ -178,7 +172,7 @@ namespace GameSrv.Npc
 
         private void AddItemPrice(ushort nIndex, double nPrice)
         {
-            var itemPrice = new ItemPrice
+            ItemPrice itemPrice = new ItemPrice
             {
                 wIndex = nIndex,
                 nPrice = nPrice
@@ -189,12 +183,12 @@ namespace GameSrv.Npc
 
         private void CheckItemPrice(ushort nIndex)
         {
-            for (var i = 0; i < ItemPriceList.Count; i++)
+            for (int i = 0; i < ItemPriceList.Count; i++)
             {
-                var itemPrice = ItemPriceList[i];
+                ItemPrice itemPrice = ItemPriceList[i];
                 if (itemPrice.wIndex == nIndex)
                 {
-                    var n10 = itemPrice.nPrice;
+                    double n10 = itemPrice.nPrice;
                     if (Math.Round(n10 * 1.1) > n10)
                     {
                         n10 = HUtil32.Round(n10 * 1.1);
@@ -202,7 +196,7 @@ namespace GameSrv.Npc
                     return;
                 }
             }
-            var stdItem = SystemShare.ItemSystem.GetStdItem(nIndex);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(nIndex);
             if (stdItem != null)
             {
                 AddItemPrice(nIndex, HUtil32.Round(stdItem.Price * 1.1));
@@ -219,10 +213,10 @@ namespace GameSrv.Npc
             {
                 ushort nIndex;
                 Goods goods;
-                for (var i = 0; i < RefillGoodsList.Count; i++)
+                for (int i = 0; i < RefillGoodsList.Count; i++)
                 {
                     goods = RefillGoodsList[i];
-                    var goodCout = goods.Count;
+                    int goodCout = goods.Count;
                     if ((HUtil32.GetTickCount() - goods.RefillTick) > (goods.RefillTime * 60 * 1000))
                     {
                         goods.RefillTick = HUtil32.GetTickCount();
@@ -230,7 +224,7 @@ namespace GameSrv.Npc
                         if (nIndex > 0)
                         {
                             IList<UserItem> refillList = GetRefillList(nIndex);
-                            var nRefillCount = refillList?.Count ?? 0;
+                            int nRefillCount = refillList?.Count ?? 0;
                             if (goodCout > nRefillCount)
                             {
                                 CheckItemPrice(nIndex);
@@ -248,13 +242,13 @@ namespace GameSrv.Npc
                         }
                     }
                 }
-                for (var i = 0; i < GoodsList.Count; i++)
+                for (int i = 0; i < GoodsList.Count; i++)
                 {
                     IList<UserItem> refillList20 = GoodsList[i];
                     if (refillList20.Count > 1000)
                     {
-                        var bo21 = false;
-                        for (var j = 0; j < RefillGoodsList.Count; j++)
+                        bool bo21 = false;
+                        for (int j = 0; j < RefillGoodsList.Count; j++)
                         {
                             goods = RefillGoodsList[j];
                             nIndex = SystemShare.ItemSystem.GetStdItemIdx(goods.ItemName);
@@ -287,7 +281,7 @@ namespace GameSrv.Npc
             {
                 return null;
             }
-            for (var i = 0; i < GoodsList.Count; i++)
+            for (int i = 0; i < GoodsList.Count; i++)
             {
                 IList<UserItem> goods = GoodsList[i];
                 if (goods.Count > 0)
@@ -308,9 +302,9 @@ namespace GameSrv.Npc
                 list = new List<UserItem>();
                 GoodsList.Add(list);
             }
-            for (var i = 0; i < nInt; i++)
+            for (int i = 0; i < nInt; i++)
             {
-                var goodItem = new UserItem();
+                UserItem goodItem = new UserItem();
                 if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref goodItem))
                 {
                     list.Insert(0, goodItem);
@@ -324,7 +318,7 @@ namespace GameSrv.Npc
 
         private static void RefillDelReFillItem(ref IList<UserItem> list, int nInt)
         {
-            for (var i = list.Count - 1; i >= 0; i--)
+            for (int i = list.Count - 1; i >= 0; i--)
             {
                 if (nInt <= 0)
                 {
@@ -338,8 +332,8 @@ namespace GameSrv.Npc
 
         private bool CheckItemType(int nStdMode)
         {
-            var result = false;
-            for (var i = 0; i < ItemTypeList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < ItemTypeList.Count; i++)
             {
                 if (ItemTypeList[i] == nStdMode)
                 {
@@ -353,9 +347,9 @@ namespace GameSrv.Npc
         private double GetItemPrice(ushort nIndex)
         {
             double result = -1;
-            for (var i = 0; i < ItemPriceList.Count; i++)
+            for (int i = 0; i < ItemPriceList.Count; i++)
             {
-                var itemPrice = ItemPriceList[i];
+                ItemPrice itemPrice = ItemPriceList[i];
                 if (itemPrice.wIndex == nIndex)
                 {
                     result = itemPrice.nPrice;
@@ -364,7 +358,7 @@ namespace GameSrv.Npc
             }
             if (result < 0)
             {
-                var stdItem = SystemShare.ItemSystem.GetStdItem(nIndex);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(nIndex);
                 if (stdItem != null)
                 {
                     if (CheckItemType(stdItem.StdMode))
@@ -383,18 +377,18 @@ namespace GameSrv.Npc
             int nDc;
             int nSc;
             int nMc;
-            var nDcMin = 0;
-            var nDcMax = 0;
-            var nScMin = 0;
-            var nScMax = 0;
-            var nMcMin = 0;
-            var nMcMax = 0;
-            var nDura = 0;
-            var nItemCount = 0;
+            int nDcMin = 0;
+            int nDcMax = 0;
+            int nScMin = 0;
+            int nScMax = 0;
+            int nMcMin = 0;
+            int nMcMax = 0;
+            int nDura = 0;
+            int nItemCount = 0;
             IList<double> duraList = new List<double>();
-            for (var i = itemList.Count - 1; i >= 0; i--)
+            for (int i = itemList.Count - 1; i >= 0; i--)
             {
-                var userItem = itemList[i];
+                UserItem userItem = itemList[i];
                 if (SystemShare.ItemSystem.GetStdItemName(userItem.Index) == SystemShare.Config.BlackStone)
                 {
                     duraList.Add(Math.Round(userItem.Dura / 1.0e3));
@@ -414,7 +408,7 @@ namespace GameSrv.Npc
                 {
                     if (M2Share.IsAccessory(userItem.Index))
                     {
-                        var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                        StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null)
                         {
                             SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
@@ -499,9 +493,9 @@ namespace GameSrv.Npc
                     }
                 }
             }
-            for (var i = 0; i < duraList.Count; i++)
+            for (int i = 0; i < duraList.Count; i++)
             {
-                for (var j = duraList.Count - 1; j > i; j--)
+                for (int j = duraList.Count - 1; j > i; j--)
                 {
                     if (duraList[j] > duraList[j - 1])
                     {
@@ -509,7 +503,7 @@ namespace GameSrv.Npc
                     }
                 }
             }
-            for (var i = 0; i < duraList.Count; i++)
+            for (int i = 0; i < duraList.Count; i++)
             {
                 nDura = nDura + (int)duraList[i];
                 nItemCount++;
@@ -524,7 +518,7 @@ namespace GameSrv.Npc
             btMc = (byte)(nMcMin / 5 + nMcMax / 3);
             if (delItemList != null)
             {
-                var objectId = HUtil32.Sequence();
+                int objectId = HUtil32.Sequence();
                 SystemShare.ActorMgr.AddOhter(objectId, delItemList);
                 user.SendMsg(user, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }
@@ -532,9 +526,9 @@ namespace GameSrv.Npc
 
         private void UpgradeWapon(IPlayerActor user)
         {
-            var upgradeSuccess = false;
+            bool upgradeSuccess = false;
             WeaponUpgradeInfo upgradeInfo;
-            for (var i = 0; i < UpgradeWeaponList.Count; i++)
+            for (int i = 0; i < UpgradeWeaponList.Count; i++)
             {
                 upgradeInfo = UpgradeWeaponList[i];
                 if (upgradeInfo.UserName == user.ChrName)
@@ -564,7 +558,7 @@ namespace GameSrv.Npc
                     UserName = user.ChrName,
                     UserItem = new UserItem(user.UseItems[ItemLocation.Weapon])
                 };
-                var stdItem = SystemShare.ItemSystem.GetStdItem(user.UseItems[ItemLocation.Weapon].Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(user.UseItems[ItemLocation.Weapon].Index);
                 if (stdItem.NeedIdentify == 1)
                 {
                     //  M2Share.EventSource.AddEventLog(25, user.MapName + "\t" + user.CurrX + "\t" + user.CurrY + "\t" + user.ChrName + "\t" + stdItem.Name + "\t" + user.UseItems[ItemLocation.Weapon].MakeIndex + "\t" + '1' + "\t" + '0');
@@ -598,13 +592,13 @@ namespace GameSrv.Npc
         private void GetBackupgWeapon(IPlayerActor user)
         {
             WeaponUpgradeInfo upgradeInfo = default;
-            var nFlag = 0;
+            int nFlag = 0;
             if (!user.IsEnoughBag())
             {
                 M2Share.ScriptEngine.GotoLable(user, this.ActorId, ScriptFlagConst.sGETBACKUPGFULL);
                 return;
             }
-            for (var i = 0; i < UpgradeWeaponList.Count; i++)
+            for (int i = 0; i < UpgradeWeaponList.Count; i++)
             {
                 if (string.Compare(UpgradeWeaponList[i].UserName, user.ChrName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -652,7 +646,7 @@ namespace GameSrv.Npc
                 }
                 else if (HUtil32.RangeInDefined(upgradeInfo.Dura, 18, 255))
                 {
-                    var r = M2Share.RandomNumber.Random(upgradeInfo.Dura - 18);
+                    int r = M2Share.RandomNumber.Random(upgradeInfo.Dura - 18);
                     if (HUtil32.RangeInDefined(r, 1, 4))
                     {
                         upgradeInfo.UserItem.DuraMax += 1000;
@@ -740,8 +734,8 @@ namespace GameSrv.Npc
                         upgradeInfo.UserItem.Desc[ItemAttr.WeaponUpgrade] = 1;
                     }
                 }
-                var userItem = upgradeInfo.UserItem;
-                var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                UserItem userItem = upgradeInfo.UserItem;
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem.NeedIdentify == 1)
                 {
                     //  M2Share.EventSource.AddEventLog(24, user.MapName + "\t" + user.CurrX + "\t" + user.CurrY + "\t" + user.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + '0');
@@ -775,7 +769,7 @@ namespace GameSrv.Npc
             {
                 if (Castle != null && Castle.IsMasterGuild(playObject.MyGuild)) //沙巴克成员修复物品打折
                 {
-                    var n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (SystemShare.Config.CastleMemberPriceRate / 100.0)));//80%
+                    int n14 = HUtil32._MAX(60, HUtil32.Round(PriceRate * (SystemShare.Config.CastleMemberPriceRate / 100.0)));//80%
                     result = HUtil32.Round(nPrice / 100.0 * n14);
                 }
                 else
@@ -792,7 +786,7 @@ namespace GameSrv.Npc
 
         public override void UserSelect(IPlayerActor playObject, string sData)
         {
-            var sLabel = string.Empty;
+            string sLabel = string.Empty;
             const string sExceptionMsg = "[Exception] TMerchant::UserSelect... Data: {0}";
             base.UserSelect(playObject, sData);
             try
@@ -801,9 +795,9 @@ namespace GameSrv.Npc
                 {
                     if (!playObject.Death && !string.IsNullOrEmpty(sData) && sData[0] == '@')
                     {
-                        var sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
+                        string sMsg = HUtil32.GetValidStr3(sData, ref sLabel, '\r');
                         playObject.ScriptLable = sData;
-                        var boCanJmp = playObject.LableIsCanJmp(sLabel);
+                        bool boCanJmp = playObject.LableIsCanJmp(sLabel);
                         if (string.Compare(sLabel, ScriptFlagConst.sSL_SENDMSG, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (string.IsNullOrEmpty(sMsg))
@@ -944,7 +938,7 @@ namespace GameSrv.Npc
                         {
                             if (!boCanJmp)
                             {
-                                SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel,NormNpc = this});
+                                SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel, NormNpc = this });
                             }
                         }
                     }
@@ -970,18 +964,18 @@ namespace GameSrv.Npc
         /// </summary>
         private void UserSelectBuyItem(IPlayerActor user, int nInt)
         {
-            var sSendMsg = string.Empty;
-            var n10 = 0;
-            for (var i = 0; i < GoodsList.Count; i++)
+            string sSendMsg = string.Empty;
+            int n10 = 0;
+            for (int i = 0; i < GoodsList.Count; i++)
             {
                 IList<UserItem> goods = GoodsList[i];
-                var userItem = goods[0];
-                var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                UserItem userItem = goods[0];
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
-                    var sName = CustomItemSystem.GetItemName(userItem);
-                    var nPrice = GetUserPrice(user, GetItemPrice(userItem.Index));
-                    var nStock = goods.Count;
+                    string sName = CustomItemSystem.GetItemName(userItem);
+                    int nPrice = GetUserPrice(user, GetItemPrice(userItem.Index));
+                    int nStock = goods.Count;
                     short nSubMenu;
                     if (stdItem.StdMode <= 4 || stdItem.StdMode == 42 || stdItem.StdMode == 31)
                     {
@@ -1010,10 +1004,10 @@ namespace GameSrv.Npc
 
         private void UserSelectMakeDurg(IPlayerActor user)
         {
-            var sSendMsg = string.Empty;
-            for (var i = 0; i < GoodsList.Count; i++)
+            string sSendMsg = string.Empty;
+            for (int i = 0; i < GoodsList.Count; i++)
             {
-                var stdItem = SystemShare.ItemSystem.GetStdItem(GoodsList[i][0].Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(GoodsList[i][0].Index);
                 if (stdItem != null)
                 {
                     sSendMsg = sSendMsg + stdItem.Name + '/' + 0 + '/' + SystemShare.Config.MakeDurgPrice + '/' + 1 + '/';
@@ -1066,7 +1060,7 @@ namespace GameSrv.Npc
 
         public void LoadNpcData()
         {
-            var sFile = ScriptName + '-' + MapName;
+            string sFile = ScriptName + '-' + MapName;
             LocalDb.LoadGoodRecord(this, sFile);
             LocalDb.LoadGoodPriceRecord(this, sFile);
             LoadUpgradeList();
@@ -1074,7 +1068,7 @@ namespace GameSrv.Npc
 
         private void SaveNpcData()
         {
-            var sFile = ScriptName + '-' + MapName;
+            string sFile = ScriptName + '-' + MapName;
             LocalDb.SaveGoodRecord(this, sFile);
             LocalDb.SaveGoodPriceRecord(this, sFile);
         }
@@ -1084,9 +1078,9 @@ namespace GameSrv.Npc
         /// </summary>
         private void ClearExpreUpgradeListData()
         {
-            for (var i = UpgradeWeaponList.Count - 1; i >= 0; i--)
+            for (int i = UpgradeWeaponList.Count - 1; i >= 0; i--)
             {
-                var upgradeInfo = UpgradeWeaponList[i];
+                WeaponUpgradeInfo upgradeInfo = UpgradeWeaponList[i];
                 if ((DateTime.Now - upgradeInfo.UpgradeTime).TotalDays >= SystemShare.Config.ClearExpireUpgradeWeaponDays)
                 {
                     Dispose(upgradeInfo);
@@ -1099,7 +1093,7 @@ namespace GameSrv.Npc
         {
             ItemTypeList.Clear();
             Path = ScriptFlagConst.sMarket_Def;
-            var scriptPath = ScriptName + '-' + MapName;
+            string scriptPath = ScriptName + '-' + MapName;
             M2Share.ScriptParsers.LoadScriptFile(this, "Market_Def", scriptPath, true);
         }
 
@@ -1140,10 +1134,10 @@ namespace GameSrv.Npc
 
         private double GetUserItemPrice(UserItem userItem)
         {
-            var itemPrice = GetItemPrice(userItem.Index);
+            double itemPrice = GetItemPrice(userItem.Index);
             if (itemPrice > 0)
             {
-                var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.StdMode > 4 && stdItem.DuraMax > 0 && userItem.DuraMax > 0)
                 {
                     double n20;
@@ -1181,8 +1175,8 @@ namespace GameSrv.Npc
                             }
                         case > 4:
                             {
-                                var n14 = 0;
-                                var nC = 0;
+                                int n14 = 0;
+                                int nC = 0;
                                 while (true)
                                 {
                                     if (stdItem.StdMode == 5 || stdItem.StdMode == 6)
@@ -1229,30 +1223,30 @@ namespace GameSrv.Npc
 
         public void ClientBuyItem(IPlayerActor playObject, string sItemName, int nInt)
         {
-            var bo29 = false;
-            var n1C = 1;
-            for (var i = 0; i < GoodsList.Count; i++)
+            bool bo29 = false;
+            int n1C = 1;
+            for (int i = 0; i < GoodsList.Count; i++)
             {
                 if (bo29)
                 {
                     break;
                 }
                 IList<UserItem> list20 = GoodsList[i];
-                var userItem = list20[0];
-                var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                UserItem userItem = list20[0];
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
-                    var sUserItemName = CustomItemSystem.GetItemName(userItem);
+                    string sUserItemName = CustomItemSystem.GetItemName(userItem);
                     if (playObject.IsAddWeightAvailable(stdItem.Weight))
                     {
                         if (sUserItemName == sItemName)
                         {
-                            for (var j = 0; j < list20.Count; j++)
+                            for (int j = 0; j < list20.Count; j++)
                             {
                                 userItem = list20[j];
                                 if (stdItem.StdMode <= 4 || stdItem.StdMode == 42 || stdItem.StdMode == 31 || userItem.MakeIndex == nInt)
                                 {
-                                    var nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
+                                    int nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
                                     if (playObject.Gold >= nPrice && nPrice > 0)
                                     {
                                         if (playObject.AddItemToBag(userItem))
@@ -1314,27 +1308,27 @@ namespace GameSrv.Npc
 
         public void ClientGetDetailGoodsList(IPlayerActor playObject, string sItemName, int nInt)
         {
-            var sSendMsg = string.Empty;
-            var nItemCount = 0;
-            for (var i = 0; i < GoodsList.Count; i++)
+            string sSendMsg = string.Empty;
+            int nItemCount = 0;
+            for (int i = 0; i < GoodsList.Count; i++)
             {
                 IList<UserItem> list20 = GoodsList[i];
                 if (list20.Count <= 0)
                 {
                     continue;
                 }
-                var userItem = list20[0];
-                var item = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                UserItem userItem = list20[0];
+                StdItem item = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                 if (item != null && item.Name == sItemName)
                 {
                     if (list20.Count - 1 < nInt)
                     {
                         nInt = HUtil32._MAX(0, list20.Count - 10);
                     }
-                    for (var j = list20.Count - 1; j >= 0; j--)
+                    for (int j = list20.Count - 1; j >= 0; j--)
                     {
                         userItem = list20[j];
-                        var clientItem = new ClientItem();
+                        ClientItem clientItem = new ClientItem();
                         SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Dura = userItem.Dura;
@@ -1355,7 +1349,7 @@ namespace GameSrv.Npc
 
         public void ClientQuerySellPrice(IPlayerActor playObject, UserItem userItem)
         {
-            var nC = GetSellItemPrice(GetUserItemPrice(userItem));
+            int nC = GetSellItemPrice(GetUserItemPrice(userItem));
             if (nC >= 0)
             {
                 playObject.SendMsg(Messages.RM_SENDBUYPRICE, 0, nC, 0, 0);
@@ -1373,8 +1367,8 @@ namespace GameSrv.Npc
 
         private static bool ClientSellItem_sub_4A1C84(UserItem userItem)
         {
-            var result = true;
-            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            bool result = true;
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null && (stdItem.StdMode == 25 || stdItem.StdMode == 30))
             {
                 if (userItem.Dura < 4000)
@@ -1387,8 +1381,8 @@ namespace GameSrv.Npc
 
         public bool ClientSellItem(IPlayerActor playObject, UserItem userItem)
         {
-            var result = false;
-            var nPrice = GetSellItemPrice(GetUserItemPrice(userItem));
+            bool result = false;
+            int nPrice = GetSellItemPrice(GetUserItemPrice(userItem));
             if (nPrice > 0 && ClientSellItem_sub_4A1C84(userItem))
             {
                 if (playObject.IncGold(nPrice))
@@ -1406,7 +1400,7 @@ namespace GameSrv.Npc
                     }
                     playObject.SendMsg(Messages.RM_USERSELLITEM_OK, 0, playObject.Gold, 0, 0);
                     AddItemToGoodsList(userItem);
-                    var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         // M2Share.EventSource.AddEventLog(10, playObject.MapName + "\t" + playObject.CurrX + "\t" + playObject.CurrY + "\t" + playObject.ChrName + "\t" + stdItem.Name + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -1447,14 +1441,14 @@ namespace GameSrv.Npc
             {
                 return false;
             }
-            var result = true;
+            bool result = true;
             string s20;
             int n1C;
-            for (var i = 0; i < list10.Count; i++)
+            for (int i = 0; i < list10.Count; i++)
             {
                 s20 = list10[i].ItemName;
                 n1C = list10[i].ItemCount;
-                for (var j = 0; j < playObject.ItemList.Count; j++)
+                for (int j = 0; j < playObject.ItemList.Count; j++)
                 {
                     if (SystemShare.ItemSystem.GetStdItemName(playObject.ItemList[j].Index) == s20)
                     {
@@ -1470,17 +1464,17 @@ namespace GameSrv.Npc
             if (result)
             {
                 IList<DeleteItem> list28 = null;
-                for (var i = 0; i < list10.Count; i++)
+                for (int i = 0; i < list10.Count; i++)
                 {
                     s20 = list10[i].ItemName;
                     n1C = list10[i].ItemCount;
-                    for (var j = playObject.ItemList.Count - 1; j >= 0; j--)
+                    for (int j = playObject.ItemList.Count - 1; j >= 0; j--)
                     {
                         if (n1C <= 0)
                         {
                             break;
                         }
-                        var userItem = playObject.ItemList[j];
+                        UserItem userItem = playObject.ItemList[j];
                         if (SystemShare.ItemSystem.GetStdItemName(userItem.Index) == s20)
                         {
                             if (list28 == null)
@@ -1500,7 +1494,7 @@ namespace GameSrv.Npc
                 }
                 if (list28 != null)
                 {
-                    var objectId = HUtil32.Sequence();
+                    int objectId = HUtil32.Sequence();
                     SystemShare.ActorMgr.AddOhter(objectId, list28);
                     playObject.SendMsg(this, Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
                 }
@@ -1511,18 +1505,18 @@ namespace GameSrv.Npc
         public void ClientMakeDrugItem(IPlayerActor playObject, string sItemName)
         {
             byte n14 = 1;
-            for (var i = 0; i < GoodsList.Count; i++)
+            for (int i = 0; i < GoodsList.Count; i++)
             {
                 IList<UserItem> list1C = GoodsList[i];
-                var makeItem = list1C[0];
-                var stdItem = SystemShare.ItemSystem.GetStdItem(makeItem.Index);
+                UserItem makeItem = list1C[0];
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(makeItem.Index);
                 if (stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (playObject.Gold >= SystemShare.Config.MakeDurgPrice)
                     {
                         if (ClientMakeDrugCheckNeedItem(playObject, sItemName))
                         {
-                            var userItem = new UserItem();
+                            UserItem userItem = new UserItem();
                             SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem);
                             if (playObject.AddItemToBag(userItem))
                             {
@@ -1565,7 +1559,7 @@ namespace GameSrv.Npc
         /// </summary>
         public void ClientQueryRepairCost(IPlayerActor playObject, UserItem userItem)
         {
-            var nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
+            int nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
             if (nPrice > 0 && userItem.DuraMax > userItem.Dura)
             {
                 int nRepairPrice;
@@ -1609,7 +1603,7 @@ namespace GameSrv.Npc
         /// <returns></returns>
         public void ClientRepairItem(IPlayerActor playObject, UserItem userItem)
         {
-            var supRepair = string.Compare(playObject.ScriptLable, ScriptFlagConst.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0;
+            bool supRepair = string.Compare(playObject.ScriptLable, ScriptFlagConst.SuperRepair, StringComparison.OrdinalIgnoreCase) == 0;
             if (supRepair && !IsSupRepair)
             {
                 return;//不支持特殊修理
@@ -1624,12 +1618,12 @@ namespace GameSrv.Npc
                 playObject.SendMsg(Messages.RM_USERREPAIRITEM_FAIL, 0, 0, 0, 0);
                 return;
             }
-            var nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
+            int nPrice = GetUserPrice(playObject, GetUserItemPrice(userItem));
             if (supRepair)
             {
                 nPrice = nPrice * SystemShare.Config.SuperRepairPriceRate;
             }
-            var stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 if (nPrice > 0 && userItem.DuraMax > userItem.Dura && stdItem.StdMode != 43)
@@ -1748,19 +1742,19 @@ namespace GameSrv.Npc
             const string sExceptionMsg = "[Exception] TMerchant::ClearData";
             try
             {
-                for (var i = 0; i < GoodsList.Count; i++)
+                for (int i = 0; i < GoodsList.Count; i++)
                 {
                     IList<UserItem> itemList = GoodsList[i];
-                    for (var j = 0; j < itemList.Count; j++)
+                    for (int j = 0; j < itemList.Count; j++)
                     {
-                        var userItem = itemList[j];
+                        UserItem userItem = itemList[j];
                         Dispose(userItem);
                     }
                 }
                 GoodsList.Clear();
-                for (var i = 0; i < ItemPriceList.Count; i++)
+                for (int i = 0; i < ItemPriceList.Count; i++)
                 {
-                    var itemPrice = ItemPriceList[i];
+                    ItemPrice itemPrice = ItemPriceList[i];
                     Dispose(itemPrice);
                 }
                 ItemPriceList.Clear();
@@ -1780,14 +1774,14 @@ namespace GameSrv.Npc
                 return;
             }
             playObject.BoChangeItemNameFlag = false;
-            var sWhere = sLabel[ScriptFlagConst.UseItemName.Length..];
-            var btWhere = (byte)HUtil32.StrToInt(sWhere, -1);
+            string sWhere = sLabel[ScriptFlagConst.UseItemName.Length..];
+            byte btWhere = (byte)HUtil32.StrToInt(sWhere, -1);
             if (btWhere >= 0 && btWhere <= playObject.UseItems.Length)
             {
-                var userItem = playObject.UseItems[btWhere];
+                UserItem userItem = playObject.UseItems[btWhere];
                 if (userItem.Index == 0)
                 {
-                    var sMsg = Format(MessageSettings.YourUseItemIsNul, SystemShare.GetUseItemName(btWhere));
+                    string sMsg = Format(MessageSettings.YourUseItemIsNul, SystemShare.GetUseItemName(btWhere));
                     playObject.SendMsg(this, Messages.RM_MENU_OK, 0, playObject.ActorId, 0, 0, sMsg);
                     return;
                 }

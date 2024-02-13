@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using OpenMir2.Common;
-
 namespace GameGate.Conf
 {
     public class ConfigManager : ConfigFile
@@ -41,7 +37,7 @@ namespace GameGate.Conf
             {
                 GateConfig.ServerWorkThread = 50;
             }
-            for (var i = 0; i < GateConfig.ServerWorkThread; i++)
+            for (int i = 0; i < GateConfig.ServerWorkThread; i++)
             {
                 GateList[i].ServerAdress = ReadWriteString("GameGate", "ServerAddr" + (i + 1), GateList[i].ServerAdress);
                 GateList[i].ServerPort = ReadWriteInteger("GameGate", "ServerPort" + (i + 1), GateList[i].ServerPort);
@@ -157,7 +153,7 @@ namespace GameGate.Conf
             GateConfig.PunishIntervalRate = ReadWriteFloat("Float", "PunishIntervalRate", GateConfig.PunishIntervalRate);
 
             //魔法间隔控制
-            for (var i = 0; i < TableDef.MaigicDelayTimeList.Length; i++)
+            for (int i = 0; i < TableDef.MaigicDelayTimeList.Length; i++)
             {
                 if (!string.IsNullOrEmpty(TableDef.MaigicNameList[i]))
                 {

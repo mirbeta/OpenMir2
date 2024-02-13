@@ -22,7 +22,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var userCount = HUtil32.StrToInt(@params[0], 1);
+            int userCount = HUtil32.StrToInt(@params[0], 1);
             //if (@params.Length >= 3)
             //{
             //    sMapName = string.IsNullOrEmpty(@params[1]) ? "" : @params[1];

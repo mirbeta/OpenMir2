@@ -18,12 +18,12 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sX = @params.Length > 0 ? @params[0] : "";
-            var sY = @params.Length > 1 ? @params[1] : "";
+            string sX = @params.Length > 0 ? @params[0] : "";
+            string sY = @params.Length > 1 ? @params[1] : "";
             if (PlayerActor.Teleport)
             {
-                var nX = HUtil32.StrToInt16(sX, -1);
-                var nY = HUtil32.StrToInt16(sY, -1);
+                short nX = HUtil32.StrToInt16(sX, -1);
+                short nY = HUtil32.StrToInt16(sY, -1);
                 if (!PlayerActor.Envir.Flag.boNOPOSITIONMOVE)
                 {
                     if (PlayerActor.Envir.CanWalkOfItem(nX, nY, SystemShare.Config.boUserMoveCanDupObj, SystemShare.Config.boUserMoveCanOnItem))

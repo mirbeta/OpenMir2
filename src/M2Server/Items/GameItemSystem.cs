@@ -24,7 +24,10 @@ namespace M2Server.Items
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
                 result = StdItemList[nItemIdx];
-                if (string.IsNullOrEmpty(result.Name)) result = null;
+                if (string.IsNullOrEmpty(result.Name))
+                {
+                    result = null;
+                }
             }
             return result;
         }
@@ -32,10 +35,14 @@ namespace M2Server.Items
         public StdItem GetStdItem(string sItemName)
         {
             StdItem result = null;
-            if (string.IsNullOrEmpty(sItemName)) return null;
-            for (var i = 0; i < StdItemList.Count; i++)
+            if (string.IsNullOrEmpty(sItemName))
             {
-                var stdItem = StdItemList[i];
+                return null;
+            }
+
+            for (int i = 0; i < StdItemList.Count; i++)
+            {
+                StdItem stdItem = StdItemList[i];
                 if (string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = stdItem;
@@ -47,7 +54,7 @@ namespace M2Server.Items
 
         public int GetStdItemWeight(int nItemIdx)
         {
-            var result = 0;
+            int result = 0;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
@@ -63,7 +70,7 @@ namespace M2Server.Items
 
         public void Clear()
         {
-            for (var i = 0; i < StdItemList.Count; i++)
+            for (int i = 0; i < StdItemList.Count; i++)
             {
                 StdItemList[i] = null;
             }
@@ -74,7 +81,7 @@ namespace M2Server.Items
 
         public string GetStdItemName(int nItemIdx)
         {
-            var result = string.Empty;
+            string result = string.Empty;
             nItemIdx -= 1;
             if (nItemIdx >= 0 && StdItemList.Count > nItemIdx)
             {
@@ -86,10 +93,14 @@ namespace M2Server.Items
         public ushort GetStdItemIdx(string sItemName)
         {
             ushort result = 0;
-            if (string.IsNullOrEmpty(sItemName)) return result;
-            for (var i = 0; i < StdItemList.Count; i++)
+            if (string.IsNullOrEmpty(sItemName))
             {
-                var stdItem = StdItemList[i];
+                return result;
+            }
+
+            for (int i = 0; i < StdItemList.Count; i++)
+            {
+                StdItem stdItem = StdItemList[i];
                 if (stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase))
                 {
                     result = (ushort)(i + 1);
@@ -101,12 +112,24 @@ namespace M2Server.Items
 
         public bool CopyToUserItemFromName(string sItemName, ref UserItem item)
         {
-            if (string.IsNullOrEmpty(sItemName)) return false;
-            for (var i = 0; i < StdItemList.Count; i++)
+            if (string.IsNullOrEmpty(sItemName))
             {
-                var stdItem = StdItemList[i];
-                if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase)) continue;
-                if (item == null) item = new UserItem();
+                return false;
+            }
+
+            for (int i = 0; i < StdItemList.Count; i++)
+            {
+                StdItem stdItem = StdItemList[i];
+                if (!stdItem.Name.Equals(sItemName, StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                if (item == null)
+                {
+                    item = new UserItem();
+                }
+
                 item.Index = (ushort)(i + 1);
                 item.MakeIndex = M2Share.GetItemNumber();
                 item.Dura = stdItem.DuraMax;
@@ -118,8 +141,8 @@ namespace M2Server.Items
 
         private int GetUpgrade(int count, int ran)
         {
-            var result = 0;
-            for (var i = 0; i < count; i++)
+            int result = 0;
+            for (int i = 0; i < count; i++)
             {
                 if (M2Share.RandomNumber.Random(ran) == 0)
                 {
@@ -136,8 +159,8 @@ namespace M2Server.Items
         public int GetUpgrade2(int x, int a)
         {
             int iProb;
-            var result = 0;
-            for (var i = x; i >= 1; i--)
+            int result = 0;
+            for (int i = x; i >= 1; i--)
             {
                 if (i > x / 2)
                 {
@@ -158,7 +181,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomWeapon(UserItem pu)
         {
-            var up = GetUpgrade(12, 15);
+            int up = GetUpgrade(12, 15);
             if (M2Share.RandomNumber.Random(15) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);//DC
@@ -166,7 +189,7 @@ namespace M2Server.Items
             up = GetUpgrade(12, 15);
             if (M2Share.RandomNumber.Random(20) == 0)
             {
-                var incp = (1 + up) / 3;
+                int incp = (1 + up) / 3;
                 if (incp > 0)
                 {
                     if (M2Share.RandomNumber.Random(3) != 0)
@@ -197,7 +220,7 @@ namespace M2Server.Items
             up = GetUpgrade(12, 12);
             if (M2Share.RandomNumber.Random(3) < 2)
             {
-                var n = (1 + up) * 2000;
+                int n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -210,7 +233,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomDress(UserItem pu)
         {
-            var up = GetUpgrade(6, 15);
+            int up = GetUpgrade(6, 15);
             if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
@@ -238,7 +261,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 10);
             if (M2Share.RandomNumber.Random(8) < 6)
             {
-                var n = (1 + up) * 2000;
+                int n = (1 + up) * 2000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -246,7 +269,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomNecklace(UserItem pu)
         {
-            var up = GetUpgrade(6, 30);
+            int up = GetUpgrade(6, 30);
             if (M2Share.RandomNumber.Random(60) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC(HIT)
@@ -274,7 +297,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(20) < 15)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -282,7 +305,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomBarcelet(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(20) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
@@ -310,7 +333,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(20) < 15)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -318,7 +341,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomNecklace19(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);
@@ -346,7 +369,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 10);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -354,7 +377,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomRings(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(30) == 0)
             {
                 pu.Desc[2] = (byte)(1 + up); // DC
@@ -372,7 +395,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -380,7 +403,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomRings23(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);
@@ -408,7 +431,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -416,7 +439,7 @@ namespace M2Server.Items
 
         private void UpgradeRandomHelmet(UserItem pu)
         {
-            var up = GetUpgrade(6, 20);
+            int up = GetUpgrade(6, 20);
             if (M2Share.RandomNumber.Random(40) == 0)
             {
                 pu.Desc[0] = (byte)(1 + up);// AC
@@ -444,7 +467,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 12);
             if (M2Share.RandomNumber.Random(4) < 3)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -452,12 +475,12 @@ namespace M2Server.Items
 
         private void RandomSetUnknownHelmet(UserItem pu)
         {
-            var up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
+            int up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
             if (up > 0)
             {
                 pu.Desc[0] = (byte)up;// AC
             }
-            var sum = up;
+            int sum = up;
             up = GetUpgrade(4, 3) + GetUpgrade(4, 8) + GetUpgrade(4, 20);
             if (up > 0)
             {
@@ -485,7 +508,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 30);
             if (up > 0)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -526,12 +549,12 @@ namespace M2Server.Items
 
         private void RandomSetUnknownRing(UserItem pu)
         {
-            var up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
+            int up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
             if (up > 0)
             {
                 pu.Desc[2] = (byte)up;// DC
             }
-            var sum = up;
+            int sum = up;
             up = GetUpgrade(3, 4) + GetUpgrade(3, 8) + GetUpgrade(6, 20);
             if (up > 0)
             {
@@ -547,7 +570,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 30);
             if (up > 0)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -582,12 +605,12 @@ namespace M2Server.Items
 
         private void RandomSetUnknownBracelet(UserItem pu)
         {
-            var up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
+            int up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
             if (up > 0)
             {
                 pu.Desc[0] = (byte)up; // AC
             }
-            var sum = up;
+            int sum = up;
             up = GetUpgrade(3, 5) + GetUpgrade(5, 20);
             if (up > 0)
             {
@@ -615,7 +638,7 @@ namespace M2Server.Items
             up = GetUpgrade(6, 30);
             if (up > 0)
             {
-                var n = (1 + up) * 1000;
+                int n = (1 + up) * 1000;
                 pu.DuraMax = (ushort)HUtil32._MIN(65000, pu.DuraMax + n);
                 pu.Dura = (ushort)HUtil32._MIN(65000, pu.Dura + n);
             }
@@ -708,7 +731,7 @@ namespace M2Server.Items
         public int GetUpgradeStdItem(StdItem stdItem, UserItem userItem, ref ClientItem clientItem)
         {
             CopyItemToClientItem(stdItem, ref clientItem);
-            var count = 0;
+            int count = 0;
             switch (stdItem.StdMode)
             {
                 case 5:
@@ -1144,7 +1167,7 @@ namespace M2Server.Items
 
         private byte GetAttackSpeed(byte bStdAtkSpd, byte bUserAtkSpd)
         {
-            var iTemp = RealAttackSpeed(bStdAtkSpd) + RealAttackSpeed(bUserAtkSpd);
+            int iTemp = RealAttackSpeed(bStdAtkSpd) + RealAttackSpeed(bUserAtkSpd);
             return (byte)NaturalAttackSpeed(iTemp);
         }
 
@@ -1154,7 +1177,7 @@ namespace M2Server.Items
         /// <returns></returns>
         public byte UpgradeAttackSpeed(byte bUserAtkSpd, int iUpValue)
         {
-            var iTemp = RealAttackSpeed(bUserAtkSpd) + iUpValue;
+            int iTemp = RealAttackSpeed(bUserAtkSpd) + iUpValue;
             return (byte)NaturalAttackSpeed(iTemp);
         }
 

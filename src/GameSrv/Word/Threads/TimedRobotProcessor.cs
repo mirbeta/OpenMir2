@@ -1,12 +1,8 @@
-using NLog;
-using OpenMir2;
-using SystemModule;
-
 namespace GameSrv.Word.Threads
 {
     public class TimedRobotProcessor : TimerScheduledService
     {
-        
+
 
         public TimedRobotProcessor() : base(TimeSpan.FromMilliseconds(20), "TimedRobotProcessor")
         {

@@ -1,9 +1,9 @@
-﻿using System.Net;
-using System.Net.Sockets;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Data;
 using OpenMir2.DataHandlingAdapters;
 using OpenMir2.Packets.ServerPackets;
+using System.Net;
+using System.Net.Sockets;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Enums;
@@ -38,7 +38,7 @@ namespace MarketSystem.Services
                 _thread = new Thread(CheckConnected);
                 _thread.IsBackground = true;
             }
-            var config = new TouchSocketConfig();
+            TouchSocketConfig config = new TouchSocketConfig();
             config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort));
             config.SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _clientScoket.Setup(config);
@@ -74,11 +74,11 @@ namespace MarketSystem.Services
             {
                 return false;
             }
-            var requestPacket = new ServerRequestData();
+            ServerRequestData requestPacket = new ServerRequestData();
             requestPacket.QueryId = queryId;
             requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
             requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
-            var signId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
+            int signId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
             requestPacket.Sign = EDCode.EncodeBuffer(BitConverter.GetBytes(signId));
             SendMessage(SerializerUtil.Serialize(requestPacket));
             return true;
@@ -86,13 +86,13 @@ namespace MarketSystem.Services
 
         private void SendMessage(byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _clientScoket.Send(data, 0, data.Length);
@@ -148,8 +148,8 @@ namespace MarketSystem.Services
 
         private void RequireLoadUserMarket(IPlayerActor user, string MarketName, short ItemType, byte UserMode, string OtherName, string ItemName)
         {
-            var IsOk = false;
-            var marKetReqInfo = new MarKetReqInfo();
+            bool IsOk = false;
+            MarKetReqInfo marKetReqInfo = new MarKetReqInfo();
             marKetReqInfo.UserName = user.ChrName;
             marKetReqInfo.MarketName = MarketName;
             marKetReqInfo.SearchWho = OtherName;
@@ -222,16 +222,16 @@ namespace MarketSystem.Services
             {
                 return;
             }
-            var request = new ServerRequestMessage(Messages.DB_LOADMARKET, 0, 0, 0, 0);
-            var requestData = new MarketRegisterMessage() { ServerIndex = SystemShare.ServerIndex, ServerName = SystemShare.Config.ServerName, GroupId = 1, Token = SystemShare.Config.MarketToken };
+            ServerRequestMessage request = new ServerRequestMessage(Messages.DB_LOADMARKET, 0, 0, 0, 0);
+            MarketRegisterMessage requestData = new MarketRegisterMessage() { ServerIndex = SystemShare.ServerIndex, ServerName = SystemShare.Config.ServerName, GroupId = 1, Token = SystemShare.Config.MarketToken };
             SendRequest(1, request, requestData);
             IsFirstData = true;
         }
 
         public bool RequestLoadPageUserMarket(int actorId, MarKetReqInfo marKetReqInfo)
         {
-            var request = new ServerRequestMessage(Messages.DB_SEARCHMARKET, actorId, 0, 0, 0);
-            var requestData = new MarketSearchMessage
+            ServerRequestMessage request = new ServerRequestMessage(Messages.DB_SEARCHMARKET, actorId, 0, 0, 0);
+            MarketSearchMessage requestData = new MarketSearchMessage
             {
                 UserName = marKetReqInfo.UserName,
                 MarketName = marKetReqInfo.MarketName,
@@ -247,8 +247,8 @@ namespace MarketSystem.Services
 
         public bool SendUserMarketSellReady(int actorId, string chrName, int marketNpc)
         {
-            var request = new ServerRequestMessage(Messages.DB_LOADUSERMARKET, actorId, 0, 0, 0);
-            var requestData = new MarketSearchMessage
+            ServerRequestMessage request = new ServerRequestMessage(Messages.DB_LOADUSERMARKET, actorId, 0, 0, 0);
+            MarketSearchMessage requestData = new MarketSearchMessage
             {
                 UserName = chrName,
                 MarketNPC = marketNpc
@@ -261,7 +261,10 @@ namespace MarketSystem.Services
         private Task MarketSocketRead(ITcpClientBase client, ReceivedDataEventArgs e)
         {
             if (e.RequestInfo is not DataMessageFixedHeaderRequestInfo fixedHeader)
+            {
                 return Task.CompletedTask;
+            }
+
             try
             {
                 if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
@@ -269,7 +272,7 @@ namespace MarketSystem.Services
                     LogService.Debug($"解析寄售行封包出现异常封包...");
                     return Task.CompletedTask;
                 }
-                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
+                ServerRequestData messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
                 ProcessServerData(messageData);
             }
             catch (Exception exception)
@@ -283,21 +286,21 @@ namespace MarketSystem.Services
         {
             if (responsePacket != null)
             {
-                var respCheckCode = responsePacket.QueryId;
-                var nLen = responsePacket.Message.Length + responsePacket.Packet.Length + ServerDataPacket.FixedHeaderLen;
+                int respCheckCode = responsePacket.QueryId;
+                int nLen = responsePacket.Message.Length + responsePacket.Packet.Length + ServerDataPacket.FixedHeaderLen;
                 if (nLen >= 12)
                 {
-                    var queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
+                    int queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
                     if (queryId <= 0 || responsePacket.Sign.Length <= 0)
                     {
                         SystemShare.Config.LoadDBErrorCount++;
                         return;
                     }
-                    var signatureBuff = BitConverter.GetBytes(queryId);
-                    var signBuff = EDCode.DecodeBuff(responsePacket.Sign);
+                    byte[] signatureBuff = BitConverter.GetBytes(queryId);
+                    byte[] signBuff = EDCode.DecodeBuff(responsePacket.Sign);
                     if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(signBuff))
                     {
-                        var commandMessage = SerializerUtil.Deserialize<ServerRequestMessage>(responsePacket.Message, true);
+                        ServerRequestMessage commandMessage = SerializerUtil.Deserialize<ServerRequestMessage>(responsePacket.Message, true);
                         switch (commandMessage.Ident)
                         {
                             case Messages.DB_LOADMARKETSUCCESS:
@@ -316,7 +319,7 @@ namespace MarketSystem.Services
                                 _marketManager.OnMsgReadData();
                                 break;
                             case Messages.DB_LOADUSERMARKETSUCCESS:
-                                var user = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                IPlayerActor user = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                 if (user != null)
                                 {
                                     ReadyToSellUserMarket(user, SerializerUtil.Deserialize<MarkerUserLoadMessage>(responsePacket.Packet));
@@ -329,7 +332,7 @@ namespace MarketSystem.Services
                             case Messages.DB_SEARCHMARKETSUCCESS:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                    IPlayerActor searchUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                     if (searchUser != null)
                                     {
                                         SendUserMarketList(searchUser, 0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
@@ -344,7 +347,7 @@ namespace MarketSystem.Services
                             case Messages.DB_SRARCHMARKETFAIL:
                                 if (commandMessage.Recog > 0) // 搜索数据需要返回给玩家
                                 {
-                                    var searchUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                    IPlayerActor searchUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                     if (searchUser != null && commandMessage.Param <= 1)
                                     {
                                         //searchUser.SendUserMarketList(0, SerializerUtil.Deserialize<MarketDataMessage>(responsePacket.Packet));
@@ -358,7 +361,7 @@ namespace MarketSystem.Services
                                 LogService.Info("搜索拍卖行数据失败...");
                                 break;
                             case Messages.DB_SAVEMARKETSUCCESS:// 保存结果需要返回给玩家
-                                var saveUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
+                                IPlayerActor saveUser = SystemShare.ActorMgr.Get<IPlayerActor>(commandMessage.Recog);
                                 if (saveUser != null)
                                 {
                                     if (commandMessage.Tag == 1)
@@ -399,23 +402,23 @@ namespace MarketSystem.Services
             {
                 return;
             }
-            var page = 0;
+            int page = 0;
             byte bFirstSend = 0;
             if (nextPage == 0)
             {
                 page = 1;
                 bFirstSend = 1;
             }
-            var marketUser = _marketUsers[user.ActorId];
+            MarketUser marketUser = _marketUsers[user.ActorId];
             if (nextPage == 1)
             {
                 page = marketUser.CurrPage + 1;
             }
             marketUser.CurrPage = page;
-            var maxpage = (int)Math.Ceiling(marketData.TotalCount / (double)MarketConst.MAKET_ITEMCOUNT_PER_PAGE);
-            var marketItems = marketData.List.Skip((page - 1) * MarketConst.MAKET_ITEMCOUNT_PER_PAGE).Take(MarketConst.MAKET_ITEMCOUNT_PER_PAGE).ToList();
-            var sendMsg = string.Empty;
-            var cnt = 0;
+            int maxpage = (int)Math.Ceiling(marketData.TotalCount / (double)MarketConst.MAKET_ITEMCOUNT_PER_PAGE);
+            List<MarketItem> marketItems = marketData.List.Skip((page - 1) * MarketConst.MAKET_ITEMCOUNT_PER_PAGE).Take(MarketConst.MAKET_ITEMCOUNT_PER_PAGE).ToList();
+            string sendMsg = string.Empty;
+            int cnt = 0;
             if (marketItems.Count > 0)
             {
                 for (int i = 0; i < marketItems.Count; i++)
@@ -430,7 +433,11 @@ namespace MarketSystem.Services
 
         private void ReadyToSellUserMarket(IPlayerActor user, MarkerUserLoadMessage readyItem)
         {
-            if (readyItem.IsBusy != MarketConst.UMRESULT_SUCCESS) return;
+            if (readyItem.IsBusy != MarketConst.UMRESULT_SUCCESS)
+            {
+                return;
+            }
+
             if (readyItem.SellCount < MarketConst.MARKET_MAX_SELL_COUNT)
             {
                 user.SendMsg(Messages.RM_MARKET_RESULT, 0, readyItem.MarketNPC, MarketConst.UMResult_ReadyToSell, 0);

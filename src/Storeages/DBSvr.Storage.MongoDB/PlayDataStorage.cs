@@ -1,11 +1,11 @@
 using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
 using MongoDB.Driver;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using OpenMir2;
-using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.MongoDB
 {
@@ -60,13 +60,13 @@ namespace DBSrv.Storage.MongoDB
             try
             {
                 humDataInfo.CountDocuments("{}");
-                var users = humDataInfo.AsQueryable().ToList();
+                List<CharacterDataInfo> users = humDataInfo.AsQueryable().ToList();
             }
             finally
             {
                 //Close(dbConnection);
             }
-            for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
+            for (int nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
                 _mirQuickIdList.AddRecord(AccountList[nIndex].Account, ChrNameList[nIndex], 0, AccountList[nIndex].SelectID);
             }
@@ -77,7 +77,7 @@ namespace DBSrv.Storage.MongoDB
 
         private MongoClient Open(ref bool success)
         {
-            var dbConnection = new MongoClient(_storageOption.ConnectionString);
+            MongoClient dbConnection = new MongoClient(_storageOption.ConnectionString);
             try
             {
                 dbConnection.GetDatabase("mir2");
@@ -293,7 +293,7 @@ namespace DBSrv.Storage.MongoDB
         public int Find(string sChrName, StringDictionary List)
         {
             int result;
-            for (var i = 0; i < _mirQuickMap.Count; i++)
+            for (int i = 0; i < _mirQuickMap.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_MirQuickList[i], sChrName, sChrName.Length))
                 //{
@@ -306,7 +306,7 @@ namespace DBSrv.Storage.MongoDB
 
         public bool Delete(int nIndex)
         {
-            for (var i = 0; i < _mirQuickMap.Count; i++)
+            for (int i = 0; i < _mirQuickMap.Count; i++)
             {
                 //if (((int)m_MirQuickList.Values[i]) == nIndex)
                 //{

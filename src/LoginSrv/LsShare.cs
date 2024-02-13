@@ -1,8 +1,8 @@
 using LoginSrv.Conf;
-using System.Collections.Generic;
-using System.Net.Sockets;
 using OpenMir2.Common;
 using OpenMir2.Packets.ClientPackets;
+using System.Collections.Generic;
+using System.Net.Sockets;
 
 namespace LoginSrv
 {
@@ -26,9 +26,9 @@ namespace LoginSrv
             {
                 return false;
             }
-            var result = true;
-            var nLen = account.Length;
-            var i = 0;
+            bool result = true;
+            int nLen = account.Length;
+            int i = 0;
             while (true)
             {
                 if (i >= nLen)
@@ -77,7 +77,7 @@ namespace LoginSrv
             StringList SaveList = new StringList();
             SaveList.Add(";No space allowed");
             SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) + GenSpaceString("Public", 17) + "Gate...");
-            for (var i = 0; i < Config.RouteCount; i++)
+            for (int i = 0; i < Config.RouteCount; i++)
             {
                 sC = GenSpaceString(Config.GateRoute[i].ServerName, 15) +
                      GenSpaceString(Config.GateRoute[i].Title, 15) +
@@ -112,7 +112,7 @@ namespace LoginSrv
         public static string GetGatePublicAddr(Config Config, string sGateIP)
         {
             string result = sGateIP;
-            for (var i = 0; i < Config.RouteCount; i++)
+            for (int i = 0; i < Config.RouteCount; i++)
             {
                 if (Config.GateRoute[i].RemoteAddr == sGateIP)
                 {
@@ -126,7 +126,7 @@ namespace LoginSrv
         private static string GenSpaceString(string sStr, int nSpaceCOunt)
         {
             string result = sStr + " ";
-            for (var i = 0; i <= nSpaceCOunt - sStr.Length; i++)
+            for (int i = 0; i <= nSpaceCOunt - sStr.Length; i++)
             {
                 result = result + " ";
             }

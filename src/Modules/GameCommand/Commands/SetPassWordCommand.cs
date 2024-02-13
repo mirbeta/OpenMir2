@@ -219,11 +219,11 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
+            IPlayerActor targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
             if (targetObject != null)
             {
-                var nFlag = HUtil32.StrToInt(@params[1], 0);
-                var nValue = HUtil32.StrToInt(@params[2], 0);
+                int nFlag = HUtil32.StrToInt(@params[1], 0);
+                int nValue = HUtil32.StrToInt(@params[2], 0);
                 PlayerActor.SetQuestFlagStatus(nFlag, nValue);
                 if (PlayerActor.GetQuestFalgStatus(nFlag) == 1)
                 {
@@ -254,11 +254,11 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
+            IPlayerActor targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
             if (targetObject != null)
             {
-                var nFlag = HUtil32.StrToInt(@params[1], 0);
-                var nValue = HUtil32.StrToInt(@params[2], 0);
+                int nFlag = HUtil32.StrToInt(@params[1], 0);
+                int nValue = HUtil32.StrToInt(@params[2], 0);
                 PlayerActor.SetQuestUnitOpenStatus(nFlag, nValue);
                 if (PlayerActor.GetQuestUnitOpenStatus(nFlag) == 1)
                 {
@@ -289,11 +289,11 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
+            IPlayerActor targetObject = SystemShare.WorldEngine.GetPlayObject(@params[0]);
             if (targetObject != null)
             {
-                var nFlag = HUtil32.StrToInt(@params[1], 0);
-                var nValue = HUtil32.StrToInt(@params[2], 0);
+                int nFlag = HUtil32.StrToInt(@params[1], 0);
+                int nValue = HUtil32.StrToInt(@params[2], 0);
                 PlayerActor.SetQuestUnitStatus(nFlag, nValue);
                 if (PlayerActor.GetQuestUnitStatus(nFlag) == 1)
                 {

@@ -1,11 +1,3 @@
-using M2Server;
-using NLog;
-using System.Collections.Concurrent;
-using OpenMir2;
-using OpenMir2.Packets.ServerPackets;
-using SystemModule;
-using SystemModule.Data;
-
 namespace GameSrv.Services
 {
     public class QueryPlayData
@@ -19,7 +11,7 @@ namespace GameSrv.Services
     /// </summary>
     public static class PlayerDataService
     {
-        
+
         private static readonly ConcurrentDictionary<int, ServerRequestData> QueryMap = new ConcurrentDictionary<int, ServerRequestData>();
         private static readonly ConcurrentQueue<QueryPlayData> QueryProcessList = new ConcurrentQueue<QueryPlayData>();
         private static readonly ConcurrentQueue<int> SaveProcessList = new ConcurrentQueue<int>();
@@ -33,17 +25,17 @@ namespace GameSrv.Services
 
         private static bool GetDataSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
         {
-            var result = false;
+            bool result = false;
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
-                if (QueryMap.TryGetValue(queryId, out var respPack))
+                if (QueryMap.TryGetValue(queryId, out ServerRequestData respPack))
                 {
                     if (respPack == null)
                     {
                         return false;
                     }
-                    var serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
+                    ServerRequestMessage serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
                     if (serverPacket == null)
                     {
                         return false;
@@ -64,8 +56,11 @@ namespace GameSrv.Services
 
         public static bool GetPlayData(int queryId, ref CharacterDataInfo playerData)
         {
-            if (!LoadPlayDataMap.TryGetValue(queryId, out var loadPlayDataPacket))
+            if (!LoadPlayDataMap.TryGetValue(queryId, out LoadPlayerDataPacket loadPlayDataPacket))
+            {
                 return false;
+            }
+
             LoadPlayDataMap.TryRemove(queryId, out _);
             playerData = loadPlayDataPacket.HumDataInfo;
             return true;
@@ -76,8 +71,8 @@ namespace GameSrv.Services
         /// </summary>
         public static bool QueryCharacterData(string account, string chrName, string addr, ref int queryId, int certCode)
         {
-            var result = false;
-            var loadHum = new LoadCharacterData()
+            bool result = false;
+            LoadCharacterData loadHum = new LoadCharacterData()
             {
                 Account = account,
                 ChrName = chrName,
@@ -105,8 +100,8 @@ namespace GameSrv.Services
         private static bool SaveRcd(SavePlayerRcd saveRcd, ref int queryId)
         {
             queryId = GetQueryId();
-            var packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
-            var saveHumData = new SaveCharacterData(saveRcd.Account, saveRcd.ChrName, saveRcd.CharacterData);
+            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
+            SaveCharacterData saveHumData = new SaveCharacterData(saveRcd.Account, saveRcd.ChrName, saveRcd.CharacterData);
             if (GameShare.DataServer.SendRequest(queryId, packet, saveHumData))
             {
                 SaveProcessList.Enqueue(queryId);
@@ -119,10 +114,10 @@ namespace GameSrv.Services
         public static void ProcessSaveQueue()
         {
             //todo 保存数据优化一下流程，M2Server.需等待DBSrv结果，异步通知即可
-            if (SaveProcessList.TryPeek(out var queryId))
+            if (SaveProcessList.TryPeek(out int queryId))
             {
-                var nIdent = 0;
-                var nRecog = 0;
+                int nIdent = 0;
+                int nRecog = 0;
                 byte[] data = null;
                 if (GetDataSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
                 {
@@ -137,21 +132,21 @@ namespace GameSrv.Services
 
         public static void ProcessQueryQueue()
         {
-            if (QueryProcessList.TryDequeue(out var queryData))
+            if (QueryProcessList.TryDequeue(out QueryPlayData queryData))
             {
                 if (queryData.QueryCount >= 60) //60秒后放弃
                 {
                     LogService.Warn("超过最大查询次数,放弃此次保存.");
                     return;
                 }
-                var nIdent = 0;
-                var nRecog = 0;
+                int nIdent = 0;
+                int nRecog = 0;
                 byte[] data = null;
                 if (GetDataSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
                 {
                     if (nIdent == Messages.DBR_LOADHUMANRCD && nRecog == 1 && data.Length > 0)
                     {
-                        var responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(EDCode.DecodeBuff(data));
+                        LoadPlayerDataPacket responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(EDCode.DecodeBuff(data));
                         responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
                         LoadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
                     }
@@ -168,7 +163,7 @@ namespace GameSrv.Services
         private static bool LoadRcd(LoadCharacterData loadHuman, ref int queryId)
         {
             queryId = GetQueryId();
-            var packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
+            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
             if (GameShare.DataServer.SendRequest(queryId, packet, loadHuman))
             {
                 QueryProcessList.Enqueue(new QueryPlayData()

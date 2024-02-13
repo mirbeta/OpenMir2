@@ -1,5 +1,4 @@
 ﻿using OpenMir2.Data;
-using SystemModule.Data;
 
 namespace M2Server
 {

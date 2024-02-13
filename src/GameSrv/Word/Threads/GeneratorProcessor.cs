@@ -1,14 +1,10 @@
-using NLog;
-using System.Diagnostics;
-using OpenMir2;
 using OpenMir2.Generation.Entities;
-using SystemModule;
 
 namespace GameSrv.Word.Threads
 {
     public class GeneratorProcessor : TimerScheduledService
     {
-        
+
         private readonly StandardRandomizer _standardRandomizer = new StandardRandomizer();
         private readonly Stopwatch sw = new Stopwatch();
 
@@ -44,9 +40,9 @@ namespace GameSrv.Word.Threads
             {
                 sw.Reset();
                 sw.Start();
-                for (var i = 0; i < 100000; i++)
+                for (int i = 0; i < 100000; i++)
                 {
-                    var sequence = _standardRandomizer.NextInteger();
+                    int sequence = _standardRandomizer.NextInteger();
                     if (SystemShare.ActorMgr.ContainsKey(sequence))
                     {
                         while (true)
@@ -61,7 +57,10 @@ namespace GameSrv.Word.Threads
                     while (sequence < 0)
                     {
                         sequence = Environment.TickCount + HUtil32.Sequence();
-                        if (sequence > 0) break;
+                        if (sequence > 0)
+                        {
+                            break;
+                        }
                     }
                     SystemShare.ActorMgr.AddToQueue(sequence);
                 }

@@ -12,7 +12,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            var baseObject = PlayerActor.GetPoseCreate();
+            IActor baseObject = PlayerActor.GetPoseCreate();
             if (baseObject != null)
             {
                 //for (var i = 0; i < SystemShare.WorldEngine.MerchantList.Count; i++)

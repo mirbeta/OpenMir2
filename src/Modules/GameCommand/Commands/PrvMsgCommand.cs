@@ -16,13 +16,13 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = PlayerActor.LockWhisperList.Count - 1; i >= 0; i--)
+            for (int i = PlayerActor.LockWhisperList.Count - 1; i >= 0; i--)
             {
                 if (PlayerActor.LockWhisperList.Count <= 0)
                 {

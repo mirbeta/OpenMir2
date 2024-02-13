@@ -18,21 +18,21 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sCastleName = @params.Length > 0 ? @params[0] : "";
-            var sGuildName = @params.Length > 1 ? @params[1] : "";
-            var boFlag = @params.Length > 2 && bool.Parse(@params[2]);
+            string sCastleName = @params.Length > 0 ? @params[0] : "";
+            string sGuildName = @params.Length > 1 ? @params[1] : "";
+            bool boFlag = @params.Length > 2 && bool.Parse(@params[2]);
             if (string.IsNullOrEmpty(sCastleName) || string.IsNullOrEmpty(sGuildName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var castle = SystemShare.CastleMgr.Find(sCastleName);
+            SystemModule.Castles.IUserCastle castle = SystemShare.CastleMgr.Find(sCastleName);
             if (castle == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandSbkGoldCastleNotFoundMsg, sCastleName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var guild = SystemShare.GuildMgr.FindGuild(sGuildName);
+            SystemModule.Castles.IGuild guild = SystemShare.GuildMgr.FindGuild(sGuildName);
             if (guild != null)
             {
                 //M2Share.EventSource.AddEventLog(27, castle.OwnGuild + "\09" + '0' + "\09" + '1' + "\09" + "sGuildName" + "\09" + PlayerActor.ChrName + "\09" + '0' + "\09" + '1' + "\09" + '0');

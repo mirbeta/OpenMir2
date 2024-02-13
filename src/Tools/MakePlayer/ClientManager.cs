@@ -1,8 +1,7 @@
 using MakePlayer.Cliens;
+using OpenMir2;
 using System.Collections.Concurrent;
 using System.Threading.Channels;
-using OpenMir2;
-using SystemModule;
 
 namespace MakePlayer
 {
@@ -37,7 +36,7 @@ namespace MakePlayer
             {
                 while (await _reviceQueue.Reader.WaitToReadAsync(_cancellation.Token))
                 {
-                    if (_reviceQueue.Reader.TryRead(out var message))
+                    if (_reviceQueue.Reader.TryRead(out RecvicePacket message))
                     {
                         if (_clients.ContainsKey(message.SessionId))
                         {
@@ -55,7 +54,7 @@ namespace MakePlayer
 
         public static void AddPacket(string socHandle, byte[] reviceBuff)
         {
-            var clientPacket = new RecvicePacket
+            RecvicePacket clientPacket = new RecvicePacket
             {
                 SessionId = socHandle,
                 ReviceBuffer = reviceBuff
@@ -77,8 +76,8 @@ namespace MakePlayer
         public static void Run()
         {
             dwRunTick = HUtil32.GetTickCount();
-            var boProcessLimit = false;
-            for (var i = g_nPosition; i < _clientList.Count; i++)
+            bool boProcessLimit = false;
+            for (int i = g_nPosition; i < _clientList.Count; i++)
             {
                 _clientList[i].Run();
                 if (((HUtil32.GetTickCount() - dwRunTick) > 50))

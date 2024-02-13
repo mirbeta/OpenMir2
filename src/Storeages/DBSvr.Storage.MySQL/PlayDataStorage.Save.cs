@@ -1,10 +1,10 @@
 using DBSrv.Storage.Model;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using OpenMir2.Packets.ClientPackets;
-using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.MySQL
 {
@@ -12,7 +12,7 @@ namespace DBSrv.Storage.MySQL
     {
         public bool Update(string chrName, CharacterDataInfo humanRcd)
         {
-            if (_NameQuickMap.TryGetValue(chrName, out var playerId))
+            if (_NameQuickMap.TryGetValue(chrName, out int playerId))
             {
                 if (SaveRecord(playerId, ref humanRcd))
                 {
@@ -25,7 +25,7 @@ namespace DBSrv.Storage.MySQL
 
         public bool UpdateQryChar(int nIndex, QueryChr queryChrRcd)
         {
-            var result = false;
+            bool result = false;
             if ((nIndex >= 0) && (_NameQuickMap.Count > nIndex))
             {
                 if (UpdateChrRecord(nIndex, queryChrRcd))
@@ -43,14 +43,14 @@ namespace DBSrv.Storage.MySQL
         /// <returns></returns>
         private bool SaveRecord(int playerId, ref CharacterDataInfo humanRcd)
         {
-            using var context = new StorageContext(_storageOption);
-            var success = false;
+            using StorageContext context = new StorageContext(_storageOption);
+            bool success = false;
             context.Open(ref success);
             if (!success)
             {
                 return false;
             }
-            var result = true;
+            bool result = true;
             try
             {
                 context.BeginTransaction();
@@ -80,12 +80,12 @@ namespace DBSrv.Storage.MySQL
 
         private void SaveRecord(StorageContext context, int playerId, CharacterData hd)
         {
-            var strSql = new StringBuilder();
+            StringBuilder strSql = new StringBuilder();
             strSql.AppendLine("UPDATE characters SET ServerIndex = @ServerIndex, LoginID = @LoginID,MapName = @MapName, CX = @CX, CY = @CY, Level = @Level, Dir = @Dir, Hair = @Hair, Sex = @Sex, Job = Job, Gold = @Gold, ");
             strSql.AppendLine("GamePoint = @GamePoint, HomeMap = @HomeMap, HomeX = @HomeX, HomeY = @HomeY, PkPoint = @PkPoint, ReLevel = @ReLevel, AttatckMode = @AttatckMode, FightZoneDieCount = @FightZoneDieCount, BodyLuck = @BodyLuck, IncHealth = @IncHealth, IncSpell = @IncSpell,");
             strSql.AppendLine("IncHealing = @IncHealing, CreditPoint = @CreditPoint, BonusPoint =@BonusPoint, HungerStatus =@HungerStatus, PayMentPoint = @PayMentPoint, LockLogon = @LockLogon, MarryCount = @MarryCount, AllowGroupReCall = @AllowGroupReCall, ");
             strSql.AppendLine("GroupRcallTime = @GroupRcallTime, AllowGuildReCall = @AllowGuildReCall, IsMaster = @IsMaster, MasterName = @MasterName, DearName = @DearName, StoragePwd = @StoragePwd, Deleted = @Deleted,LASTUPDATE = now() WHERE ID = @ID;");
-            var command = context.CreateCommand();
+            MySqlConnector.MySqlCommand command = context.CreateCommand();
             command.CommandText = strSql.ToString();
             command.Parameters.AddWithValue("@Id", playerId);
             command.Parameters.AddWithValue("@ServerIndex", hd.ServerIndex);
@@ -138,7 +138,7 @@ namespace DBSrv.Storage.MySQL
         private void SaveAblity(StorageContext context, int playerId, Ability Abil)
         {
             const string UpdateAblitySql = "UPDATE characters_ablity SET Level = @Level,Ac = @Ac, Mac = @Mac, Dc = @Dc, Mc = @Mc, Sc = @Sc, Hp = @Hp, Mp = @Mp, MaxHP = @MaxHP,MAxMP = @MAxMP, Exp = @Exp, MaxExp = @MaxExp, Weight = @Weight, MaxWeight = @MaxWeight, WearWeight = @WearWeight,MaxWearWeight = @MaxWearWeight, HandWeight = @HandWeight, MaxHandWeight = @MaxHandWeight,ModifyTime=now() WHERE PlayerId = @PlayerId;";
-            var command = context.CreateCommand();
+            MySqlConnector.MySqlCommand command = context.CreateCommand();
             command.CommandText = UpdateAblitySql;
             command.Parameters.AddWithValue("@PlayerId", playerId);
             command.Parameters.AddWithValue("@Level", Abil.Level);
@@ -171,7 +171,7 @@ namespace DBSrv.Storage.MySQL
 
         private void ComparerUserItem(ServerUserItem[] newItems, ServerUserItem[] oldItems, ref ServerUserItem[] chg, ref ServerUserItem[] del)
         {
-            for (var i = 0; i < newItems.Length; i++)
+            for (int i = 0; i < newItems.Length; i++)
             {
                 if (oldItems[i] == null)
                 {
@@ -204,25 +204,25 @@ namespace DBSrv.Storage.MySQL
 
         private void SaveItem(StorageContext context, int playerId, ServerUserItem[] userItems)
         {
-            var useSize = userItems.Length;
-            var playData = new CharacterDataInfo();
+            int useSize = userItems.Length;
+            CharacterDataInfo playData = new CharacterDataInfo();
             GetItemRecord(playerId, context, ref playData);
-            var oldItems = playData.Data.HumItems;
-            var useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
-            var delItem = new ServerUserItem[useSize];
-            var chgList = new ServerUserItem[useSize];
+            ServerUserItem[] oldItems = playData.Data.HumItems;
+            int useItemCount = oldItems.Where(x => x != null).Count(x => x.MakeIndex == 0 && x.Index == 0);
+            ServerUserItem[] delItem = new ServerUserItem[useSize];
+            ServerUserItem[] chgList = new ServerUserItem[useSize];
             ComparerUserItem(userItems, oldItems, ref chgList, ref delItem);
             try
             {
                 if (delItem.Length > 0)
                 {
-                    for (var i = 0; i < delItem.Length; i++)
+                    for (int i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
                         {
                             continue;
                         }
-                        var command = context.CreateCommand();
+                        MySqlConnector.MySqlCommand command = context.CreateCommand();
                         command.CommandText = ClearUseItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
@@ -243,13 +243,13 @@ namespace DBSrv.Storage.MySQL
 
                 if (chgList.Length > 0)
                 {
-                    for (var i = 0; i < chgList.Length; i++)
+                    for (int i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
                         {
                             continue;
                         }
-                        var command = context.CreateCommand();
+                        MySqlConnector.MySqlCommand command = context.CreateCommand();
                         command.CommandText = UpdateUseItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
@@ -284,23 +284,23 @@ namespace DBSrv.Storage.MySQL
         {
             try
             {
-                var playData = new CharacterDataInfo();
+                CharacterDataInfo playData = new CharacterDataInfo();
                 GetBagItemRecord(playerId, context, ref playData);
-                var oldItems = playData.Data.BagItems;
-                var bagSize = bagItems.Length;
-                var newItems = bagItems;
-                var delItem = new ServerUserItem[bagSize];
-                var chgList = new ServerUserItem[bagSize];
+                ServerUserItem[] oldItems = playData.Data.BagItems;
+                int bagSize = bagItems.Length;
+                ServerUserItem[] newItems = bagItems;
+                ServerUserItem[] delItem = new ServerUserItem[bagSize];
+                ServerUserItem[] chgList = new ServerUserItem[bagSize];
                 ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
                 if (delItem.Length > 0)
                 {
-                    for (var i = 0; i < delItem.Length; i++)
+                    for (int i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
                         {
                             continue;
                         }
-                        var command = context.CreateCommand();
+                        MySqlConnector.MySqlCommand command = context.CreateCommand();
                         command.CommandText = ClearBagItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
@@ -320,13 +320,13 @@ namespace DBSrv.Storage.MySQL
                 }
                 if (chgList.Length > 0)
                 {
-                    for (var i = 0; i < chgList.Length; i++)
+                    for (int i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
                         {
                             continue;
                         }
-                        var command = context.CreateCommand();
+                        MySqlConnector.MySqlCommand command = context.CreateCommand();
                         command.CommandText = UpdateBagItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
@@ -360,23 +360,23 @@ namespace DBSrv.Storage.MySQL
         {
             try
             {
-                var storageSize = storageItems.Length;
-                var playData = new CharacterDataInfo();
+                int storageSize = storageItems.Length;
+                CharacterDataInfo playData = new CharacterDataInfo();
                 GetStorageRecord(playerId, context, ref playData);
-                var oldItems = playData.Data.StorageItems;
-                var newItems = storageItems;
-                var delItem = new ServerUserItem[storageSize];
-                var chgList = new ServerUserItem[storageSize];
+                ServerUserItem[] oldItems = playData.Data.StorageItems;
+                ServerUserItem[] newItems = storageItems;
+                ServerUserItem[] delItem = new ServerUserItem[storageSize];
+                ServerUserItem[] chgList = new ServerUserItem[storageSize];
                 ComparerUserItem(newItems, oldItems, ref chgList, ref delItem);
                 if (delItem.Length > 0)
                 {
-                    for (var i = 0; i < delItem.Length; i++)
+                    for (int i = 0; i < delItem.Length; i++)
                     {
                         if (delItem[i] == null)
                         {
                             continue;
                         }
-                        var command = context.CreateCommand();
+                        MySqlConnector.MySqlCommand command = context.CreateCommand();
                         command.CommandText = ClearStorageItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
@@ -397,13 +397,13 @@ namespace DBSrv.Storage.MySQL
 
                 if (chgList.Length > 0)
                 {
-                    for (var i = 0; i < chgList.Length; i++)
+                    for (int i = 0; i < chgList.Length; i++)
                     {
                         if (chgList[i] == null)
                         {
                             continue;
                         }
-                        var command = context.CreateCommand();
+                        MySqlConnector.MySqlCommand command = context.CreateCommand();
                         command.CommandText = UpdateStorageItemSql;
                         command.Parameters.AddWithValue("@PlayerId", playerId);
                         command.Parameters.AddWithValue("@Position", i);
@@ -432,15 +432,15 @@ namespace DBSrv.Storage.MySQL
 
         private void SaveMagics(StorageContext context, int playerId, MagicRcd[] humanRcd)
         {
-            var delcommand = context.CreateCommand();
+            MySqlConnector.MySqlCommand delcommand = context.CreateCommand();
             delcommand.CommandText = "DELETE FROM characters_magic WHERE PlayerId=@PlayerId";
             delcommand.Parameters.AddWithValue("@PlayerId", playerId);
             delcommand.ExecuteNonQuery();
             try
             {
                 const string sStrSql = "INSERT INTO characters_magic(PlayerId,MagicId,Level,Usekey,CurrTrain) VALUES ({0},{1},{2},'{3}',{4});";
-                var strSqlList = new List<string>();
-                for (var i = 0; i < humanRcd.Length; i++)
+                List<string> strSqlList = new List<string>();
+                for (int i = 0; i < humanRcd.Length; i++)
                 {
                     if (humanRcd[i].MagIdx > 0)
                     {
@@ -451,7 +451,7 @@ namespace DBSrv.Storage.MySQL
                 {
                     return;
                 }
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = string.Join("\r\n", strSqlList);
                 command.ExecuteNonQuery();
             }
@@ -467,7 +467,7 @@ namespace DBSrv.Storage.MySQL
             const string sSqlStr = "UPDATE characters_bonusability SET AC=@AC, MAC=@MAC, DC=@DC, MC=@MC, SC=@SC, HP=@HP, MP=@MP, HIT=@HIT, SPEED=@SPEED, RESERVED=@RESERVED WHERE PlayerId=@PlayerId";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlStr;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@AC", bonusAbil.AC);
@@ -494,7 +494,7 @@ namespace DBSrv.Storage.MySQL
             const string sSqlStr4 = "DELETE FROM characters_quest WHERE PlayerId=@PlayerId";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlStr4;
                 command.Parameters.AddWithValue("@PlayerId", id);
                 command.ExecuteNonQuery();
@@ -510,7 +510,7 @@ namespace DBSrv.Storage.MySQL
             try
             {
                 const string updatrStatusSql = "UPDATE characters_status SET Status0=@Status0,Status1=@Status1,Status2=@Status2,Status3=@Status3,Status4=@Status4,Status5=@Status5,Status6=@Status6,Status7=@Status7,Status8=@Status8,Status9=@Status9,Status10=@Status10,Status11=@Status11,Status12=@Status12,Status13=@Status13,Status14=@Status14 WHERE PlayerId=@PlayerId;";
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = updatrStatusSql;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@Status0", statusTimeArr[0]);
@@ -542,14 +542,14 @@ namespace DBSrv.Storage.MySQL
             try
             {
                 const string updateItemAttrSql = "UPDATE characters_item_attr SET VALUE0={0},VALUE1={1},VALUE2={2},VALUE3={3},VALUE4={4},VALUE5={5},VALUE6={6},VALUE7={7},VALUE8={8},VALUE9={9},VALUE10={10},VALUE11={11},VALUE12={12},VALUE13={13} WHERE PlayerId={14} AND MakeIndex={15};";
-                var strSqlList = new List<string>();
-                for (var i = 0; i < userItems.Length; i++)
+                List<string> strSqlList = new List<string>();
+                for (int i = 0; i < userItems.Length; i++)
                 {
                     if (userItems[i] == null)
                     {
                         continue;
                     }
-                    var userItem = userItems[i];
+                    ServerUserItem userItem = userItems[i];
                     strSqlList.Add(string.Format(updateItemAttrSql, userItem.Desc[0], userItem.Desc[1],
                         userItem.Desc[2], userItem.Desc[3], userItem.Desc[4], userItem.Desc[5], userItem.Desc[6], userItem.Desc[7], userItem.Desc[8], userItem.Desc[9],
                         userItem.Desc[10], userItem.Desc[11], userItem.Desc[12], userItem.Desc[13], playerId, userItem.MakeIndex));
@@ -558,7 +558,7 @@ namespace DBSrv.Storage.MySQL
                 {
                     return;
                 }
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = string.Join("\r\n", strSqlList);
                 command.ExecuteNonQuery();
             }
@@ -572,19 +572,19 @@ namespace DBSrv.Storage.MySQL
         private bool UpdateChrRecord(int playerId, QueryChr queryChrRcd)
         {
             const string sStrString = "UPDATE characters SET Sex=@Sex, Job=@Job WHERE ID=@Id";
-            using var context = new StorageContext(_storageOption);
-            var success = false;
+            using StorageContext context = new StorageContext(_storageOption);
+            bool success = false;
             context.Open(ref success);
             if (!success)
             {
                 return false;
             }
-            var result = false;
+            bool result = false;
             try
             {
                 try
                 {
-                    var command = context.CreateCommand();
+                    MySqlConnector.MySqlCommand command = context.CreateCommand();
                     command.CommandText = sStrString;
                     command.Parameters.AddWithValue("@Sex", queryChrRcd.Sex);
                     command.Parameters.AddWithValue("@Job", queryChrRcd.Job);
@@ -609,7 +609,7 @@ namespace DBSrv.Storage.MySQL
         {
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = "DELETE FROM characters_item_attr WHERE PlayerId=@PlayerId AND MakeIndex in (@MakeIndex)";
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@MakeIndex", string.Join(",", makeIndex));
@@ -631,12 +631,12 @@ namespace DBSrv.Storage.MySQL
             const string clearItemAttrSql = "UPDATE characters_item_attr SET MakeIndex=0,VALUE0=0,VALUE1=0,VALUE2=0,VALUE3=0,VALUE4=0,VALUE5=0,VALUE6=0,VALUE7=0,VALUE8=0,VALUE9=0,VALUE10=0,VALUE11=0,VALUE12=0,VALUE13=0 WHERE PlayerId={0} AND MakeIndex ={1};";
             try
             {
-                var strSqlList = new List<string>();
-                for (var i = 0; i < makeIndex.Count(); i++)
+                List<string> strSqlList = new List<string>();
+                for (int i = 0; i < makeIndex.Count(); i++)
                 {
                     strSqlList.Add(string.Format(clearItemAttrSql, playerId, makeIndex[i]));
                 }
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = string.Join("\r\n", strSqlList);
                 command.ExecuteNonQuery();
             }

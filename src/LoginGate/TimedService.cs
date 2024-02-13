@@ -28,10 +28,14 @@
         if (HUtil32.GetTickCount() - _heartInterval > 10000)
         {
             _heartInterval = HUtil32.GetTickCount();
-            var clientList = _clientManager.ServerGateList();
-            for (var i = 0; i < clientList.Count; i++)
+            IList<ClientThread> clientList = _clientManager.ServerGateList();
+            for (int i = 0; i < clientList.Count; i++)
             {
-                if (clientList[i] == null) continue;
+                if (clientList[i] == null)
+                {
+                    continue;
+                }
+
                 _clientManager.ProcessClientHeart(clientList[i]);
             }
         }
@@ -42,18 +46,34 @@
         if (HUtil32.GetTickCount() - _processDelayTick > 1000)
         {
             _processDelayTick = HUtil32.GetTickCount();
-            var clientList = _clientManager.ServerGateList();
-            for (var i = 0; i < clientList.Count; i++)
+            IList<ClientThread> clientList = _clientManager.ServerGateList();
+            for (int i = 0; i < clientList.Count; i++)
             {
-                if (clientList[i] == null) continue;
-                if (clientList[i].SessionArray == null) continue;
-                for (var j = 0; j < clientList[i].SessionArray.Length; j++)
+                if (clientList[i] == null)
                 {
-                    var session = clientList[i].SessionArray[j];
-                    if (session == null) continue;
-                    var userSession = _sessionManager.GetSession(session.ConnectionId);
-                    if (userSession == null) continue;
-                    var success = false;
+                    continue;
+                }
+
+                if (clientList[i].SessionArray == null)
+                {
+                    continue;
+                }
+
+                for (int j = 0; j < clientList[i].SessionArray.Length; j++)
+                {
+                    TSessionInfo session = clientList[i].SessionArray[j];
+                    if (session == null)
+                    {
+                        continue;
+                    }
+
+                    ClientSession userSession = _sessionManager.GetSession(session.ConnectionId);
+                    if (userSession == null)
+                    {
+                        continue;
+                    }
+
+                    bool success = false;
                     userSession.HandleDelayMsg(ref success);
                     if (success)
                     {

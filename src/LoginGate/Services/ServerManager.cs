@@ -24,18 +24,26 @@ public class ServerManager
 
     public void Start()
     {
-        for (var i = 0; i < _serverServices.Count; i++)
+        for (int i = 0; i < _serverServices.Count; i++)
         {
-            if (_serverServices[i] == null) continue;
+            if (_serverServices[i] == null)
+            {
+                continue;
+            }
+
             _serverServices[i].Start(_configManager.GameGates[i]);
         }
     }
 
     public void Stop()
     {
-        for (var i = 0; i < _serverServices.Count; i++)
+        for (int i = 0; i < _serverServices.Count; i++)
         {
-            if (_serverServices[i] == null) continue;
+            if (_serverServices[i] == null)
+            {
+                continue;
+            }
+
             _serverServices[i].Stop();
         }
     }
@@ -62,9 +70,10 @@ public class ServerManager
         Task.Factory.StartNew(async () =>
         {
             while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
-                if (_messageQueue.Reader.TryRead(out var message))
+            {
+                if (_messageQueue.Reader.TryRead(out MessageData message))
                 {
-                    var userSession = _sessionManager.GetSession(message.ConnectionId);
+                    ClientSession userSession = _sessionManager.GetSession(message.ConnectionId);
                     if (userSession == null)
                     {
                         LogService.Warn("非法攻击: " + message.ClientIP);
@@ -90,14 +99,15 @@ public class ServerManager
                         LogService.Error(e);
                     }
                 }
+            }
         }, stoppingToken, TaskCreationOptions.LongRunning, TaskScheduler.Current);
     }
 
     public void Initialization()
     {
-        for (var i = 0; i < _configManager.GetConfig.GateCount; i++)
+        for (int i = 0; i < _configManager.GetConfig.GateCount; i++)
         {
-            var gateService = (ServerService)_serviceProvider.GetService(typeof(ServerService));
+            ServerService gateService = (ServerService)_serviceProvider.GetService(typeof(ServerService));
             AddServer(gateService);
         }
 

@@ -14,15 +14,15 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sAccount = @params.Length > 0 ? @params[0] : "";
-            var sFixDeny = @params.Length > 1 ? @params[1] : "";
+            string sAccount = @params.Length > 0 ? @params[0] : "";
+            string sFixDeny = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sAccount))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var boDelete = false;
-            for (var i = 0; i < SystemShare.DenyAccountList.Count; i++)
+            bool boDelete = false;
+            for (int i = 0; i < SystemShare.DenyAccountList.Count; i++)
             {
                 //if ((sAccount).CompareTo((M2Share.g_DenyAccountList[i])) == 0)
                 //{

@@ -42,7 +42,7 @@ namespace ScriptSystem
                 playerActor.LastNpc = 0;
             }
             ScriptInfo script = null;
-            var scriptList = normNpc.ScriptList;
+            IList<ScriptInfo> scriptList = normNpc.ScriptList;
             if (string.Compare("@main", sLabel, StringComparison.OrdinalIgnoreCase) == 0)
             {
                 for (int i = 0; i < scriptList.Count; i++)
@@ -84,7 +84,7 @@ namespace ScriptSystem
             }
             if (script != null)
             {
-                if (script.RecordList.TryGetValue(sLabel, out var sayingRecord))
+                if (script.RecordList.TryGetValue(sLabel, out SayingRecord sayingRecord))
                 {
                     if (boExtJmp && sayingRecord.boExtJmp == false)
                     {
@@ -130,7 +130,7 @@ namespace ScriptSystem
 
         public void GotoLable(IPlayerActor playerActor, int actorId, string sLabel, bool boExtJmp = false)
         {
-            var normNpc = SystemShare.ActorMgr.Get<INormNpc>(actorId);
+            INormNpc normNpc = SystemShare.ActorMgr.Get<INormNpc>(actorId);
             if (normNpc == null)
             {
                 return;
@@ -402,7 +402,7 @@ namespace ScriptSystem
             int nDura = 0;
             for (int i = 0; i < conditionList.Count; i++)
             {
-                var questConditionInfo = conditionList[i];
+                QuestConditionInfo questConditionInfo = conditionList[i];
                 if (ConditionScript.IsRegister(questConditionInfo.CmdCode))
                 {
                     ConditionScript.Execute(normNpc, playerActor, questConditionInfo, ref result);
@@ -512,17 +512,34 @@ namespace ScriptSystem
                     }*/
                 }
                 if (HUtil32.IsStringNumber(questConditionInfo.sParam1))
+                {
                     questConditionInfo.nParam1 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
+                }
+
                 if (HUtil32.IsStringNumber(questConditionInfo.sParam2))
+                {
                     questConditionInfo.nParam2 = HUtil32.StrToInt(questConditionInfo.sParam2, 1);
+                }
+
                 if (HUtil32.IsStringNumber(questConditionInfo.sParam3))
+                {
                     questConditionInfo.nParam3 = HUtil32.StrToInt(questConditionInfo.sParam3, 1);
+                }
+
                 if (HUtil32.IsStringNumber(questConditionInfo.sParam4))
+                {
                     questConditionInfo.nParam4 = HUtil32.StrToInt(questConditionInfo.sParam4, 0);
+                }
+
                 if (HUtil32.IsStringNumber(questConditionInfo.sParam5))
+                {
                     questConditionInfo.nParam5 = HUtil32.StrToInt(questConditionInfo.sParam5, 0);
+                }
+
                 if (HUtil32.IsStringNumber(questConditionInfo.sParam6))
+                {
                     questConditionInfo.nParam6 = HUtil32.StrToInt(questConditionInfo.sParam6, 0);
+                }
 
                 switch (questConditionInfo.CmdCode)
                 {
@@ -619,7 +636,7 @@ namespace ScriptSystem
 
         private void GoToQuest(IPlayerActor playerActor, INormNpc npc, int nQuest)
         {
-            var ScriptList = npc.ScriptList;
+            IList<ScriptInfo> ScriptList = npc.ScriptList;
             for (int i = 0; i < ScriptList.Count; i++)
             {
                 ScriptInfo script = ScriptList[i];

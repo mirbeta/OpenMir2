@@ -13,7 +13,7 @@ namespace CommandModule.Commands
         {
             IList<IActor> baseObjectList = new List<IActor>();
             PlayerActor.Envir.GetRangeBaseObject(PlayerActor.CurrX, PlayerActor.CurrY, 2, true, baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            for (int i = 0; i < baseObjectList.Count; i++)
             {
                 //PlayerActor.SysMsg(baseObjectList[i].GetBaseObjectInfo(), MsgColor.Green, MsgType.Hint);
             }

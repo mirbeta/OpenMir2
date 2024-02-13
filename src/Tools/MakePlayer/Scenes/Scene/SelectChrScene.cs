@@ -1,8 +1,6 @@
 using MakePlayer.Cliens;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
 
 namespace MakePlayer.Scenes.Scene
 {
@@ -146,15 +144,15 @@ namespace MakePlayer.Scenes.Scene
                 SetNotifyEvent(NewChr, RandomNumber.GetInstance().Random(1000, 3000));
                 return;
             }
-            var sName = string.Empty;
-            var sJob = string.Empty;
-            var sHair = string.Empty;
-            var sLevel = string.Empty;
-            var sSex = string.Empty;
-            var nChrCount = 0;
-            var nSelect = 0;
-            var sText = EDCode.DeCodeString(sData);
-            for (var i = 0; i < _chrArr.Length; i++)
+            string sName = string.Empty;
+            string sJob = string.Empty;
+            string sHair = string.Empty;
+            string sLevel = string.Empty;
+            string sSex = string.Empty;
+            int nChrCount = 0;
+            int nSelect = 0;
+            string sText = EDCode.DeCodeString(sData);
+            for (int i = 0; i < _chrArr.Length; i++)
             {
                 sText = HUtil32.GetValidStr3(sText, ref sName, '/');
                 sText = HUtil32.GetValidStr3(sText, ref sJob, '/');
@@ -167,7 +165,7 @@ namespace MakePlayer.Scenes.Scene
                     if (sName[0] == '*')
                     {
                         nSelect = i;
-                        sName = sName.Substring(1, sName.Length - 1);
+                        sName = sName[1..];
                     }
                     ClientGetReceiveChrsAddChr(sName, Convert.ToByte(sJob), Convert.ToByte(sHair), Convert.ToInt32(sLevel), Convert.ToByte(sSex));
                     nChrCount++;
@@ -223,8 +221,8 @@ namespace MakePlayer.Scenes.Scene
                     }
                     break;
             }
-            var sJob = (byte)RandomNumber.GetInstance().Random(2);
-            var sSex = (byte)RandomNumber.GetInstance().Random(1);
+            byte sJob = (byte)RandomNumber.GetInstance().Random(2);
+            byte sSex = (byte)RandomNumber.GetInstance().Random(1);
             SendNewChr(_play.LoginId, sChrName, sHair, sJob, sSex);
         }
 
@@ -233,30 +231,30 @@ namespace MakePlayer.Scenes.Scene
             MainOutMessage($"选择人物：{sChrName}");
             _play.ConnectionStep = ConnectionStep.SelChr;
             _play.ChrName = sChrName;
-            var defMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
+            CommandMessage defMsg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(_play.LoginId + "/" + sChrName));
         }
 
         private void SendQueryChr()
         {
             _play.ConnectionStep = ConnectionStep.QueryChr;
-            var defMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
+            CommandMessage defMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(_play.LoginId + "/" + _play.Certification));
             MainOutMessage("查询角色.");
         }
 
         private void SendNewChr(string uid, string uname, byte shair, byte sjob, byte ssex)
         {
-            var msg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + uname + "/" + shair + "/" + sjob + "/" + ssex));
             MainOutMessage("创建角色.");
         }
 
         private void ClientGetStartPlay(string body)
         {
-            var addr = string.Empty;
-            var str = EDCode.DeCodeString(body);
-            var sport = HUtil32.GetValidStr3(str, ref addr, HUtil32.Backslash);
+            string addr = string.Empty;
+            string str = EDCode.DeCodeString(body);
+            string sport = HUtil32.GetValidStr3(str, ref addr, HUtil32.Backslash);
             _play.RunServerPort = HUtil32.StrToInt(sport, 0);
             _play.RunServerAddr = addr;
             _play.ConnectionStep = ConnectionStep.Play;

@@ -18,15 +18,15 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sX = @params.Length > 0 ? @params[0] : "";
-            var sY = @params.Length > 1 ? @params[1] : "";
+            string sX = @params.Length > 0 ? @params[0] : "";
+            string sY = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sX) || string.IsNullOrEmpty(sY))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nX = HUtil32.StrToInt16(sX, 0);
-            var nY = HUtil32.StrToInt16(sY, 0);
+            short nX = HUtil32.StrToInt16(sX, 0);
+            short nY = HUtil32.StrToInt16(sY, 0);
             SystemShare.BoMission = true;
             SystemShare.MissionMap = PlayerActor.MapName;
             SystemShare.MissionX = nX;

@@ -117,7 +117,7 @@ namespace M2Server.Actor
             {
                 case Messages.RM_STRUCK:
                     {
-                        var struckObject = SystemShare.ActorMgr.Get(processMsg.nParam3);
+                        IActor struckObject = SystemShare.ActorMgr.Get(processMsg.nParam3);
                         if (processMsg.ActorId == ActorId && struckObject != null)
                         {
                             SetLastHiter(struckObject);
@@ -166,7 +166,7 @@ namespace M2Server.Actor
 
         protected virtual void Attack(IActor targetObject, byte nDir)
         {
-            var nPower = GetBaseAttackPoewr();
+            int nPower = GetBaseAttackPoewr();
             AttackDir(targetObject, nPower, nDir);
             SendAttackMsg(Messages.RM_HIT, Dir, CurrX, CurrY);
         }
@@ -177,7 +177,7 @@ namespace M2Server.Actor
             {
                 int n10 = TargetX;
                 int n14 = TargetY;
-                var nDir = Direction.Down;
+                byte nDir = Direction.Down;
                 if (n10 > CurrX)
                 {
                     nDir = Direction.Right;
@@ -219,8 +219,8 @@ namespace M2Server.Actor
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 WalkTo(nDir, false);
-                var n20 = M2Share.RandomNumber.Random(3);
-                for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                int n20 = M2Share.RandomNumber.Random(3);
+                for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                 {
                     if (nOldX == CurrX && nOldY == CurrY)
                     {
@@ -363,9 +363,9 @@ namespace M2Server.Actor
             IList<IActor> baseObjectList = new List<IActor>();
             Dir = M2Share.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
             Envir.GetBaseObjects(targetObject.CurrX, targetObject.CurrY, false, ref baseObjectList);
-            for (var i = 0; i < baseObjectList.Count; i++)
+            for (int i = 0; i < baseObjectList.Count; i++)
             {
-                var baseObject = baseObjectList[i];
+                IActor baseObject = baseObjectList[i];
                 if (IsProperTarget(baseObject))
                 {
                     int nDamage = 0;
@@ -388,10 +388,10 @@ namespace M2Server.Actor
         protected virtual void SearchTarget()
         {
             IActor searchTarget = null;
-            var n10 = 999;
-            for (var i = 0; i < VisibleActors.Count; i++)
+            int n10 = 999;
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
-                var baseObject = VisibleActors[i].BaseObject;
+                IActor baseObject = VisibleActors[i].BaseObject;
                 if (baseObject.Death || baseObject.Ghost || (baseObject.Envir != Envir) || (Math.Abs(baseObject.CurrX - CurrX) > 15) || (Math.Abs(baseObject.CurrY - CurrY) > 15))
                 {
                     ClearTargetCreat(baseObject);
@@ -401,7 +401,7 @@ namespace M2Server.Actor
                 {
                     if (IsProperTarget(baseObject) && (!baseObject.HideMode || CoolEye))
                     {
-                        var nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
+                        int nC = Math.Abs(CurrX - baseObject.CurrX) + Math.Abs(CurrY - baseObject.CurrY);
                         if (nC < n10)
                         {
                             n10 = nC;
@@ -424,7 +424,11 @@ namespace M2Server.Actor
 
         protected virtual void Wondering()
         {
-            if (M2Share.RandomNumber.Random(20) != 0) return;
+            if (M2Share.RandomNumber.Random(20) != 0)
+            {
+                return;
+            }
+
             if (M2Share.RandomNumber.Random(4) == 1)
             {
                 TurnTo(M2Share.RandomNumber.RandomByte(8));

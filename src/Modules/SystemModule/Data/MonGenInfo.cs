@@ -39,7 +39,7 @@ namespace SystemModule.Data
         /// 创建时间
         /// </summary>
         public int StartTick;
-        
+
         /// <summary>
         /// 添加对象到列表
         /// 返回true则当前线程怪物列表未满

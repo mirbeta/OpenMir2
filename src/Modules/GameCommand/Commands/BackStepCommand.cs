@@ -17,8 +17,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var nType = (byte)(@params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0);
-            var nCount = (byte)(@params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0);
+            byte nType = (byte)(@params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0);
+            byte nCount = (byte)(@params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0);
             if (PlayerActor.Permission < 6)
             {
                 return;

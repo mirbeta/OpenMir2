@@ -1,10 +1,9 @@
-using NLog;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 using OpenMir2;
 using OpenMir2.Packets.ServerPackets;
 using SelGate.Datas;
+using System;
+using System.Net;
+using System.Threading.Tasks;
 using TouchSocket.Sockets;
 using TcpClient = TouchSocket.Sockets.TcpClient;
 
@@ -57,7 +56,7 @@ namespace SelGate.Services
         /// <summary>
         /// Logger
         /// </summary>
-        
+
         /// <summary>
         /// 数据缓冲区
         /// </summary>
@@ -143,7 +142,7 @@ namespace SelGate.Services
         /// </summary>
         private Task ClientSocketRead(ITcpClient client, ReceivedDataEventArgs e)
         {
-            var nMsgLen = e.ByteBlock.Len;
+            int nMsgLen = e.ByteBlock.Len;
             if (nMsgLen <= 0)
             {
                 return Task.CompletedTask;
@@ -162,12 +161,12 @@ namespace SelGate.Services
 
         private void ProcessServerData(byte[] data, int nLen)
         {
-            var srcOffset = 0;
+            int srcOffset = 0;
             Span<byte> dataBuff = data;
             while (nLen > ServerDataPacket.FixedHeaderLen)
             {
-                var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                var message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
+                Span<byte> packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                ServerDataPacket message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
                 if (message.PacketCode != Grobal2.PacketCode)
                 {
                     srcOffset++;
@@ -176,12 +175,12 @@ namespace SelGate.Services
                     LogService.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                     continue;
                 }
-                var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                int nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
                 if (nCheckMsgLen > nLen)
                 {
                     break;
                 }
-                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                ServerDataMessage messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 switch (messageData.Type)
                 {
                     case ServerDataType.KeepAlive:
@@ -237,7 +236,7 @@ namespace SelGate.Services
 
         public void RestSessionArray()
         {
-            for (var i = 0; i < MaxSession; i++)
+            for (int i = 0; i < MaxSession; i++)
             {
                 if (SessionArray[i] != null)
                 {
@@ -250,7 +249,7 @@ namespace SelGate.Services
 
         public void SendKeepAlive()
         {
-            var messageData = new ServerDataMessage();
+            ServerDataMessage messageData = new ServerDataMessage();
             messageData.Type = ServerDataType.KeepAlive;
             SendSocket(SerializerUtil.Serialize(messageData));
             LogService.Debug("Send DBSrv Heartbeat.");
@@ -272,13 +271,13 @@ namespace SelGate.Services
 
         private void SendMessage(byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _clientSocket.Send(data);

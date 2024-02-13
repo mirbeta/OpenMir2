@@ -47,7 +47,7 @@ namespace WebApi
                 //    Type = SecuritySchemeType.ApiKey
                 //});
                 //声明一个Scheme，注意下面的Id要和上面AddSecurityDefinition中的参数name一致
-                var scheme = new OpenApiSecurityScheme()
+                OpenApiSecurityScheme scheme = new OpenApiSecurityScheme()
                 {
                     Reference = new OpenApiReference() { Type = ReferenceType.SecurityScheme, Id = "JwtBearer" }
                 };

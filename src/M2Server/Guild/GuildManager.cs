@@ -1,5 +1,4 @@
-﻿using NLog;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Common;
 using SystemModule;
 using SystemModule.Castles;
@@ -9,7 +8,7 @@ namespace M2Server.Guild
 {
     public class GuildManager : IGuildSystem
     {
-        
+
         private readonly IList<IGuild> GuildList;
 
         public GuildManager()
@@ -19,10 +18,10 @@ namespace M2Server.Guild
 
         public bool AddGuild(string sGuildName, string sChief)
         {
-            var result = false;
+            bool result = false;
             if (M2Share.CheckGuildName(sGuildName) && FindGuild(sGuildName) == null)
             {
-                var guild = new GuildInfo(sGuildName);
+                GuildInfo guild = new GuildInfo(sGuildName);
                 guild.SetGuildInfo(sChief);
                 GuildList.Add(guild);
                 SaveGuildList();
@@ -34,10 +33,10 @@ namespace M2Server.Guild
 
         public bool DelGuild(string sGuildName)
         {
-            var result = false;
-            for (var i = 0; i < GuildList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < GuildList.Count; i++)
             {
-                var guild = GuildList[i];
+                IGuild guild = GuildList[i];
                 if (string.Compare(guild.GuildName, sGuildName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (guild.RankList.Count > 1)
@@ -57,7 +56,7 @@ namespace M2Server.Guild
 
         public void ClearGuildInf()
         {
-            for (var i = 0; i < GuildList.Count; i++)
+            for (int i = 0; i < GuildList.Count; i++)
             {
                 GuildList[i] = null;
             }
@@ -66,7 +65,7 @@ namespace M2Server.Guild
 
         public IGuild FindGuild(string sGuildName)
         {
-            for (var i = 0; i < GuildList.Count; i++)
+            for (int i = 0; i < GuildList.Count; i++)
             {
                 if (GuildList[i].GuildName == sGuildName)
                 {
@@ -81,20 +80,20 @@ namespace M2Server.Guild
             GuildList.Clear();
             if (File.Exists(SystemShare.Config.GuildFile))
             {
-                using var loadList = new StringList();
+                using StringList loadList = new StringList();
                 loadList.LoadFromFile(SystemShare.Config.GuildFile);
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
-                    var sGuildName = loadList[i].Trim();
+                    string sGuildName = loadList[i].Trim();
                     if (!string.IsNullOrEmpty(sGuildName))
                     {
-                        var guild = new GuildInfo(sGuildName);
+                        GuildInfo guild = new GuildInfo(sGuildName);
                         GuildList.Add(guild);
                     }
                 }
-                for (var i = GuildList.Count - 1; i >= 0; i--)
+                for (int i = GuildList.Count - 1; i >= 0; i--)
                 {
-                    var guild = GuildList[i];
+                    IGuild guild = GuildList[i];
                     if (!guild.LoadGuild())
                     {
                         LogService.Warn(guild.GuildName + " 读取出错!!!");
@@ -112,7 +111,7 @@ namespace M2Server.Guild
 
         public IGuild MemberOfGuild(string sName)
         {
-            for (var i = 0; i < GuildList.Count; i++)
+            for (int i = 0; i < GuildList.Count; i++)
             {
                 if (GuildList[i].IsMember(sName))
                 {
@@ -128,8 +127,8 @@ namespace M2Server.Guild
             {
                 return;
             }
-            var saveList = new StringList();
-            for (var i = 0; i < GuildList.Count; i++)
+            StringList saveList = new StringList();
+            for (int i = 0; i < GuildList.Count; i++)
             {
                 saveList.Add(GuildList[i].GuildName);
             }
@@ -145,13 +144,13 @@ namespace M2Server.Guild
 
         public void Run()
         {
-            for (var i = 0; i < GuildList.Count; i++)
+            for (int i = 0; i < GuildList.Count; i++)
             {
-                var guild = GuildList[i];
-                var boChanged = false;
-                for (var j = guild.GuildWarList.Count - 1; j >= 0; j--)
+                IGuild guild = GuildList[i];
+                bool boChanged = false;
+                for (int j = guild.GuildWarList.Count - 1; j >= 0; j--)
                 {
-                    var warGuild = guild.GuildWarList[j];
+                    SystemModule.Data.WarGuild warGuild = guild.GuildWarList[j];
                     if ((HUtil32.GetTickCount() - warGuild.WarTick) > warGuild.WarTime) //行会战时间到
                     {
                         guild.EndGuildWar(warGuild.Guild);

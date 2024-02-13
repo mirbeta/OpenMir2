@@ -1,8 +1,8 @@
-﻿using System.Reflection;
-using System.Runtime.InteropServices;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Common;
 using ScriptSystem.Consts;
+using System.Reflection;
+using System.Runtime.InteropServices;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Const;
@@ -22,12 +22,12 @@ namespace ScriptSystem
 
         public ScriptParsers()
         {
-            var conditionFields = typeof(ConditionCode).GetFields();
+            FieldInfo[] conditionFields = typeof(ConditionCode).GetFields();
             if (conditionFields.Length > 0)
             {
                 for (int i = 0; i < conditionFields.Length; i++)
                 {
-                    var codeField = conditionFields[i].GetCustomAttribute<ScriptDefName>();
+                    ScriptDefName codeField = conditionFields[i].GetCustomAttribute<ScriptDefName>();
                     if (codeField != null)
                     {
                         if (ConditionCodeDefMap.ContainsKey(codeField.CommandName))
@@ -40,13 +40,13 @@ namespace ScriptSystem
                 }
             }
 
-            var executionFields = typeof(ExecutionCode).GetFields();
+            FieldInfo[] executionFields = typeof(ExecutionCode).GetFields();
 
             if (executionFields.Length > 0)
             {
                 for (int i = 0; i < executionFields.Length; i++)
                 {
-                    var codeField = executionFields[i].GetCustomAttribute<ScriptDefName>();
+                    ScriptDefName codeField = executionFields[i].GetCustomAttribute<ScriptDefName>();
                     if (codeField != null)
                     {
                         if (ExecutionCodeDefMap.ContainsKey(codeField.CommandName))
@@ -73,16 +73,16 @@ namespace ScriptSystem
 
         private static bool LoadScriptCallScript(string sFileName, string sLabel, StringList List)
         {
-            var result = false;
+            bool result = false;
             if (File.Exists(sFileName))
             {
-                var callStrList = new StringList();
+                StringList callStrList = new StringList();
                 callStrList.LoadFromFile(sFileName);
                 sLabel = '[' + sLabel + ']';
-                var findLab = false;
-                for (var i = 0; i < callStrList.Count; i++)
+                bool findLab = false;
+                for (int i = 0; i < callStrList.Count; i++)
                 {
-                    var sLine = callStrList[i].Trim();
+                    string sLine = callStrList[i].Trim();
                     if (!string.IsNullOrEmpty(sLine))
                     {
                         if (!findLab)
@@ -111,7 +111,7 @@ namespace ScriptSystem
 
         private static string GetCallScriptPath(string path)
         {
-            var sCallScriptFile = path;
+            string sCallScriptFile = path;
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 if (sCallScriptFile.StartsWith("\\\\"))
@@ -140,23 +140,23 @@ namespace ScriptSystem
 
         private void LoadCallScript(ref StringList LoadList, ref bool success)
         {
-            var callCount = ScriptHelper.GetScriptCallCount(LoadList.Text);
+            int callCount = ScriptHelper.GetScriptCallCount(LoadList.Text);
             if (callCount <= 0)
             {
                 success = true;
                 return;
             }
-            var sLable = string.Empty;
-            var callList = new StringList(1024);
-            for (var i = 0; i < LoadList.Count; i++)
+            string sLable = string.Empty;
+            StringList callList = new StringList(1024);
+            for (int i = 0; i < LoadList.Count; i++)
             {
-                var sLine = LoadList[i].Trim();
+                string sLine = LoadList[i].Trim();
                 if (!string.IsNullOrEmpty(sLine) && sLine[0] == '#' && HUtil32.CompareLStr(sLine, "#CALL"))
                 {
                     sLine = HUtil32.ArrestStringEx(sLine, "[", "]", ref sLable);
-                    var sCallScriptFile = GetCallScriptPath(sLable.Trim());
-                    var sLabName = sLine.Trim();
-                    var sFileName = SystemShare.GetEnvirFilePath("QuestDiary", sCallScriptFile);
+                    string sCallScriptFile = GetCallScriptPath(sLable.Trim());
+                    string sLabName = sLine.Trim();
+                    string sFileName = SystemShare.GetEnvirFilePath("QuestDiary", sCallScriptFile);
                     if (CallScriptDict.ContainsKey(sFileName))
                     {
                         callCount--;
@@ -188,13 +188,13 @@ namespace ScriptSystem
 
         private string LoadScriptDefineInfo(StringList stringList, ICollection<DefineInfo> List)
         {
-            var result = string.Empty;
-            var defFile = string.Empty;
-            var defineName = string.Empty;
-            var defText = string.Empty;
-            for (var i = 0; i < stringList.Count; i++)
+            string result = string.Empty;
+            string defFile = string.Empty;
+            string defineName = string.Empty;
+            string defText = string.Empty;
+            for (int i = 0; i < stringList.Count; i++)
             {
-                var line = stringList[i].Trim();
+                string line = stringList[i].Trim();
                 if (!string.IsNullOrEmpty(line) && line[0] == '#')
                 {
                     if (HUtil32.CompareLStr(line, "#SETHOME"))
@@ -208,18 +208,18 @@ namespace ScriptSystem
                         line = HUtil32.GetValidStr3(line, ref defFile, TextSpitConst);
                         line = HUtil32.GetValidStr3(line, ref defineName, TextSpitConst);
                         line = HUtil32.GetValidStr3(line, ref defText, TextSpitConst);
-                        var DefineInfo = new DefineInfo { Name = defineName.ToUpper(), Text = defText };
+                        DefineInfo DefineInfo = new DefineInfo { Name = defineName.ToUpper(), Text = defText };
                         List.Add(DefineInfo);
                         stringList[i] = "";
                         continue;
                     }
                     if (HUtil32.CompareLStr(line, "#INCLUDE"))
                     {
-                        var definesFile = HUtil32.GetValidStr3(line, ref defFile, TextSpitConst).Trim();
+                        string definesFile = HUtil32.GetValidStr3(line, ref defFile, TextSpitConst).Trim();
                         definesFile = SystemShare.GetEnvirFilePath("Defines", definesFile);
                         if (File.Exists(definesFile))
                         {
-                            using var LoadStrList = new StringList();
+                            using StringList LoadStrList = new StringList();
                             LoadStrList.LoadFromFile(definesFile);
                             result = LoadScriptDefineInfo(LoadStrList, List);
                         }
@@ -237,7 +237,7 @@ namespace ScriptSystem
 
         private static ScriptInfo LoadMakeNewScript(INormNpc NPC)
         {
-            var scriptInfo = new ScriptInfo
+            ScriptInfo scriptInfo = new ScriptInfo
             {
                 IsQuest = false,
                 RecordList = new Dictionary<string, SayingRecord>(StringComparer.OrdinalIgnoreCase)
@@ -248,15 +248,15 @@ namespace ScriptSystem
 
         private bool LoadScriptFileQuestCondition(string sText, ref QuestConditionInfo questConditionInfo)
         {
-            var result = false;
-            var sCmd = string.Empty;
-            var sParam1 = string.Empty;
-            var sParam2 = string.Empty;
-            var sParam3 = string.Empty;
-            var sParam4 = string.Empty;
-            var sParam5 = string.Empty;
-            var sParam6 = string.Empty;
-            var nCMDCode = 0;
+            bool result = false;
+            string sCmd = string.Empty;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            string sParam4 = string.Empty;
+            string sParam5 = string.Empty;
+            string sParam6 = string.Empty;
+            int nCMDCode = 0;
             sText = HUtil32.GetValidStrCap(sText, ref sCmd, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam1, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam2, TextSpitConst);
@@ -266,7 +266,7 @@ namespace ScriptSystem
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
             if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
-                var sActName = string.Empty;
+                string sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName))
                 {
@@ -283,7 +283,7 @@ namespace ScriptSystem
             }
             sCmd = sCmd.ToUpper();
 
-            if (ConditionCodeDefMap.TryGetValue(sCmd, out var code))
+            if (ConditionCodeDefMap.TryGetValue(sCmd, out int code))
             {
                 if (code == (int)ConditionCode.CHECK)
                 {
@@ -330,7 +330,7 @@ namespace ScriptSystem
                 }
             }
 
-            L001:
+        L001:
             if (nCMDCode > 0)
             {
                 questConditionInfo.CmdCode = nCMDCode;
@@ -395,15 +395,15 @@ namespace ScriptSystem
 
         private bool LoadScriptFileQuestAction(string sText, ref QuestActionInfo questActionInfo)
         {
-            var sCmd = string.Empty;
-            var sParam1 = string.Empty;
-            var sParam2 = string.Empty;
-            var sParam3 = string.Empty;
-            var sParam4 = string.Empty;
-            var sParam5 = string.Empty;
-            var sParam6 = string.Empty;
-            var nCMDCode = 0;
-            var result = false;
+            string sCmd = string.Empty;
+            string sParam1 = string.Empty;
+            string sParam2 = string.Empty;
+            string sParam3 = string.Empty;
+            string sParam4 = string.Empty;
+            string sParam5 = string.Empty;
+            string sParam6 = string.Empty;
+            int nCMDCode = 0;
+            bool result = false;
             sText = HUtil32.GetValidStrCap(sText, ref sCmd, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam1, TextSpitConst);
             sText = HUtil32.GetValidStrCap(sText, ref sParam2, TextSpitConst);
@@ -413,7 +413,7 @@ namespace ScriptSystem
             sText = HUtil32.GetValidStrCap(sText, ref sParam6, TextSpitConst);
             if (sCmd.IndexOf(".", StringComparison.OrdinalIgnoreCase) > -1) //支持脚本变量
             {
-                var sActName = string.Empty;
+                string sActName = string.Empty;
                 sCmd = HUtil32.GetValidStrCap(sCmd, ref sActName, '.');
                 if (!string.IsNullOrEmpty(sActName))
                 {
@@ -430,7 +430,7 @@ namespace ScriptSystem
             }
             sCmd = sCmd.ToUpper();
 
-            if (ExecutionCodeDefMap.TryGetValue(sCmd, out var code))
+            if (ExecutionCodeDefMap.TryGetValue(sCmd, out int code))
             {
                 if (code == (int)ExecutionCode.Set)
                 {
@@ -503,7 +503,7 @@ namespace ScriptSystem
                 }
             }
 
-            L001:
+        L001:
             if (nCMDCode > 0)
             {
                 questActionInfo.nCmdCode = nCMDCode;
@@ -577,30 +577,30 @@ namespace ScriptSystem
         /// <returns></returns>
         public void LoadScriptFile(INormNpc NPC, string sPatch, string sScritpName, bool boFlag)
         {
-            var command = string.Empty;
-            var questName = string.Empty;
-            var s44 = string.Empty;
-            var slabName = string.Empty;
-            var boDefine = false;
+            string command = string.Empty;
+            string questName = string.Empty;
+            string s44 = string.Empty;
+            string slabName = string.Empty;
+            bool boDefine = false;
             ScriptInfo Script = null;
             SayingRecord SayingRecord = null;
             SayingProcedure SayingProcedure = null;
-            var scriptType = 0;
-            var questCount = 0;
-            var sScritpFileName = SystemShare.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
+            int scriptType = 0;
+            int questCount = 0;
+            string sScritpFileName = SystemShare.GetEnvirFilePath(sPatch, GetScriptCrossPath($"{sScritpName}.txt"));
             if (File.Exists(sScritpFileName))
             {
                 CallScriptDict.Clear();
-                var stringList = new StringList();
+                StringList stringList = new StringList();
                 stringList.LoadFromFile(sScritpFileName);
-                var success = false;
+                bool success = false;
                 while (!success)
                 {
                     LoadCallScript(ref stringList, ref success);
                 }
                 IList<DefineInfo> defineList = new List<DefineInfo>();
-                var defline = LoadScriptDefineInfo(stringList, defineList);
-                var defineInfo = new DefineInfo { Name = "@HOME" };
+                string defline = LoadScriptDefineInfo(stringList, defineList);
+                DefineInfo defineInfo = new DefineInfo { Name = "@HOME" };
                 if (string.IsNullOrEmpty(defline))
                 {
                     defline = "@main";
@@ -609,9 +609,9 @@ namespace ScriptSystem
                 defineList.Add(defineInfo);
                 int n24;
                 // 常量处理
-                for (var i = 0; i < stringList.Count; i++)
+                for (int i = 0; i < stringList.Count; i++)
                 {
-                    var line = stringList[i].Trim();
+                    string line = stringList[i].Trim();
                     if (!string.IsNullOrEmpty(line))
                     {
                         if (line[0] == '[')
@@ -629,10 +629,10 @@ namespace ScriptSystem
                                 if (boDefine)
                                 {
                                     // 将Define 好的常量换成指定值
-                                    for (var n20 = 0; n20 < defineList.Count; n20++)
+                                    for (int n20 = 0; n20 < defineList.Count; n20++)
                                     {
                                         defineInfo = defineList[n20];
-                                        var n1C = 0;
+                                        int n1C = 0;
                                         while (true)
                                         {
                                             n24 = line.ToUpper().IndexOf(defineInfo.Name, StringComparison.OrdinalIgnoreCase);
@@ -640,8 +640,8 @@ namespace ScriptSystem
                                             {
                                                 break;
                                             }
-                                            var s58 = line[..n24];
-                                            var s5C = line[(defineInfo.Name.Length + n24)..];
+                                            string s58 = line[..n24];
+                                            string s5C = line[(defineInfo.Name.Length + n24)..];
                                             line = s58 + defineInfo.Text + s5C;
                                             stringList[i] = line;
                                             n1C++;
@@ -657,15 +657,15 @@ namespace ScriptSystem
                     }
                 }
                 // 释放常量定义内容
-                for (var i = 0; i < defineList.Count; i++)
+                for (int i = 0; i < defineList.Count; i++)
                 {
                     defineList[i] = null;
                 }
                 defineList.Clear();
-                var nQuestIdx = 0;
-                for (var i = 0; i < stringList.Count; i++)
+                int nQuestIdx = 0;
+                for (int i = 0; i < stringList.Count; i++)
                 {
-                    var line = stringList[i].Trim();
+                    string line = stringList[i].Trim();
                     if (string.IsNullOrEmpty(line) || line[0] == ';' || line[0] == '/')
                     {
                         continue;
@@ -675,7 +675,7 @@ namespace ScriptSystem
                         if (line.StartsWith("%"))// 物品价格倍率
                         {
                             line = line[1..];
-                            var nPriceRate = HUtil32.StrToInt(line, -1);
+                            int nPriceRate = HUtil32.StrToInt(line, -1);
                             if (nPriceRate >= 55)
                             {
                                 ((IMerchant)NPC).PriceRate = nPriceRate;
@@ -685,7 +685,7 @@ namespace ScriptSystem
                         if (line.StartsWith("+"))// 物品交易类型
                         {
                             line = line[1..];
-                            var nItemType = HUtil32.StrToInt(line, -1);
+                            int nItemType = HUtil32.StrToInt(line, -1);
                             if (nItemType >= 0)
                             {
                                 ((IMerchant)NPC).ItemTypeList.Add(nItemType);
@@ -799,7 +799,7 @@ namespace ScriptSystem
                         Script.IsQuest = true;
                         if (HUtil32.CompareLStr(line, "#IF"))
                         {
-                            var questFlag = string.Empty;
+                            string questFlag = string.Empty;
                             HUtil32.ArrestStringEx(line, "[", "]", ref questFlag);
                             Script.QuestInfo[nQuestIdx].wFlag = HUtil32.StrToInt16(questFlag, 0);
                             HUtil32.GetValidStr3(s38, ref s44, new[] { '=', ' ', '\t' });
@@ -893,7 +893,7 @@ namespace ScriptSystem
                                 break;
                             case 11:
                                 {
-                                    var questConditionInfo = new QuestConditionInfo();
+                                    QuestConditionInfo questConditionInfo = new QuestConditionInfo();
                                     if (LoadScriptFileQuestCondition(line.Trim(), ref questConditionInfo))
                                     {
                                         SayingProcedure.ConditionList.Add(questConditionInfo);
@@ -906,7 +906,7 @@ namespace ScriptSystem
                                 }
                             case 12:
                                 {
-                                    var questActionInfo = new QuestActionInfo();
+                                    QuestActionInfo questActionInfo = new QuestActionInfo();
                                     if (LoadScriptFileQuestAction(line.Trim(), ref questActionInfo))
                                     {
                                         SayingProcedure.ActionList.Add(questActionInfo);
@@ -919,7 +919,7 @@ namespace ScriptSystem
                                 }
                             case 13:
                                 {
-                                    var questActionInfo = new QuestActionInfo();
+                                    QuestActionInfo questActionInfo = new QuestActionInfo();
                                     if (LoadScriptFileQuestAction(line.Trim(), ref questActionInfo))
                                     {
                                         SayingProcedure.ElseActionList.Add(questActionInfo);
@@ -937,9 +937,9 @@ namespace ScriptSystem
                     }
                     if (scriptType == 20 && boFlag)
                     {
-                        var sItemName = string.Empty;
-                        var sItemCount = string.Empty;
-                        var sItemRefillTime = string.Empty;
+                        string sItemName = string.Empty;
+                        string sItemCount = string.Empty;
+                        string sItemRefillTime = string.Empty;
                         line = HUtil32.GetValidStrCap(line, ref sItemName, TextSpitConst);
                         line = HUtil32.GetValidStrCap(line, ref sItemCount, TextSpitConst);
                         line = HUtil32.GetValidStrCap(line, ref sItemRefillTime, TextSpitConst);
@@ -949,7 +949,7 @@ namespace ScriptSystem
                             {
                                 HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
                             }
-                            var goods = new Goods
+                            Goods goods = new Goods
                             {
                                 ItemName = sItemName,
                                 Count = HUtil32.StrToInt(sItemCount, 0),
@@ -979,7 +979,7 @@ namespace ScriptSystem
         /// <returns></returns>
         private static string FormatLabelStr(string sLabel, ref bool boChange)
         {
-            var result = sLabel;
+            string result = sLabel;
             if (sLabel.IndexOf(")", StringComparison.OrdinalIgnoreCase) > -1)
             {
                 HUtil32.GetValidStr3(sLabel, ref result, '(');
@@ -994,9 +994,9 @@ namespace ScriptSystem
         /// <returns></returns>
         protected string InitializeProcedure(string sMsg)
         {
-            var nC = 0;
-            var sCmd = string.Empty;
-            var tempstr = sMsg;
+            int nC = 0;
+            string sCmd = string.Empty;
+            string tempstr = sMsg;
             while (true)
             {
                 if (tempstr.IndexOf(">", StringComparison.OrdinalIgnoreCase) < -1)
@@ -1034,16 +1034,16 @@ namespace ScriptSystem
         /// <returns></returns>
         private string InitializeSayMsg(string sMsg, List<string> StringList, IList<string> OldStringList, IList<string> ScriptNameList)
         {
-            var nC = 0;
-            var s10 = string.Empty;
-            var tempstr = sMsg;
+            int nC = 0;
+            string s10 = string.Empty;
+            string tempstr = sMsg;
             string sLabel;
-            var sname = string.Empty;
+            string sname = string.Empty;
             int nIdx;
-            var nChangeIndex = 1;
-            var nNotIdx = -1;
-            var boChange = false;
-            var boAddResetLabel = false;
+            int nChangeIndex = 1;
+            int nNotIdx = -1;
+            bool boChange = false;
+            bool boAddResetLabel = false;
             while (true)
             {
                 if (string.IsNullOrEmpty(tempstr))
@@ -1146,8 +1146,8 @@ namespace ScriptSystem
         /// </summary>
         private static void InitializeVariable(string sLabel, ref string sMsg)
         {
-            var s14 = string.Empty;
-            var sLabel2 = sLabel.ToUpper();
+            string s14 = string.Empty;
+            string sLabel2 = sLabel.ToUpper();
             if (sLabel2 == GrobalVarCode.sVAR_SERVERNAME)
             {
                 sMsg = sMsg.Replace("<" + sLabel + ">", GrobalVarCode.tVAR_SERVERNAME);

@@ -1,19 +1,18 @@
 using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
-using NLog;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using OpenMir2;
-using OpenMir2.Packets.ClientPackets;
-using OpenMir2.Packets.ServerPackets;
 
 namespace DBSrv.Storage.MySQL
 {
     public partial class PlayDataStorage : IPlayDataStorage
     {
-        
+
         private readonly Dictionary<string, int> _NameQuickMap;
         private readonly Dictionary<int, int> _IndexQuickIdMap;
         private readonly PlayQuickList _mirQuickIdList;
@@ -35,8 +34,8 @@ namespace DBSrv.Storage.MySQL
             _mirQuickIdList.Clear();
             IList<PlayQuick> accountList = new List<PlayQuick>();
             IList<string> chrNameList = new List<string>();
-            using var context = new StorageContext(_storageOption);
-            var success = false;
+            using StorageContext context = new StorageContext(_storageOption);
+            bool success = false;
             context.Open(ref success);
             if (!success)
             {
@@ -44,16 +43,16 @@ namespace DBSrv.Storage.MySQL
             }
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
-                using var dr = command.ExecuteReader();
-                var nIndex = 0;
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
+                int nIndex = 0;
                 while (dr.Read())
                 {
                     nIndex = dr.GetInt32("Id");
-                    var boDeleted = dr.GetBoolean("Deleted");
-                    var sAccount = dr.GetString("LoginID");
-                    var sChrName = dr.GetString("ChrName");
+                    bool boDeleted = dr.GetBoolean("Deleted");
+                    string sAccount = dr.GetString("LoginID");
+                    string sChrName = dr.GetString("ChrName");
                     if (!boDeleted && (!string.IsNullOrEmpty(sChrName)))
                     {
                         _NameQuickMap.Add(sChrName, nIndex);
@@ -73,7 +72,7 @@ namespace DBSrv.Storage.MySQL
             {
                 context.Dispose();
             }
-            for (var nIndex = 0; nIndex < accountList.Count; nIndex++)
+            for (int nIndex = 0; nIndex < accountList.Count; nIndex++)
             {
                 _mirQuickIdList.AddRecord(accountList[nIndex].Account, chrNameList[nIndex], 0, accountList[nIndex].SelectID);
             }
@@ -84,7 +83,7 @@ namespace DBSrv.Storage.MySQL
 
         public int Index(string sName)
         {
-            if (_NameQuickMap.TryGetValue(sName, out var Index))
+            if (_NameQuickMap.TryGetValue(sName, out int Index))
             {
                 return Index;
             }
@@ -93,7 +92,7 @@ namespace DBSrv.Storage.MySQL
 
         public int Get(int nIndex, ref CharacterDataInfo humanRcd)
         {
-            var result = -1;
+            int result = -1;
             if (nIndex < 0)
             {
                 return result;
@@ -115,7 +114,7 @@ namespace DBSrv.Storage.MySQL
             {
                 return false;
             }
-            if (_NameQuickMap.TryGetValue(chrName, out var nIndex))
+            if (_NameQuickMap.TryGetValue(chrName, out int nIndex))
             {
                 if (GetRecord(nIndex, ref humanRcd))
                 {
@@ -129,10 +128,10 @@ namespace DBSrv.Storage.MySQL
         public CharacterData Query(int playerId)
         {
             CharacterData playData;
-            using var context = new StorageContext(_storageOption);
+            using StorageContext context = new StorageContext(_storageOption);
             try
             {
-                var success = false;
+                bool success = false;
                 context.Open(ref success);
                 if (!success)
                 {
@@ -153,15 +152,15 @@ namespace DBSrv.Storage.MySQL
 
         private bool GetRecord(int nIndex, ref CharacterDataInfo humanRcd)
         {
-            var playerId = _IndexQuickIdMap[nIndex];
+            int playerId = _IndexQuickIdMap[nIndex];
             if (playerId == 0)
             {
                 return false;
             }
-            using var context = new StorageContext(_storageOption);
+            using StorageContext context = new StorageContext(_storageOption);
             try
             {
-                var success = false;
+                bool success = false;
                 context.Open(ref success);
                 if (!success)
                 {
@@ -196,10 +195,10 @@ namespace DBSrv.Storage.MySQL
             try
             {
                 CharacterData humInfoData = null;
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@Id", playerId);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     humInfoData = new CharacterData();
@@ -268,13 +267,13 @@ namespace DBSrv.Storage.MySQL
 
         private Ability GetAbilGetRecord(int playerId, StorageContext context)
         {
-            var humanRcd = new Ability();
+            Ability humanRcd = new Ability();
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = "select * from characters_ablity where playerId=@playerId";
                 command.Parameters.AddWithValue("@playerId", playerId);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     humanRcd.Level = dr.GetByte("Level");
@@ -312,10 +311,10 @@ namespace DBSrv.Storage.MySQL
             const string sSqlString = "SELECT * FROM characters_bonusability WHERE PlayerId=@PlayerId";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     humanRcd.Data.BonusAbil = new NakedAbility
@@ -346,15 +345,15 @@ namespace DBSrv.Storage.MySQL
             const string sSqlString = "SELECT * FROM characters_magic WHERE PlayerId=@PlayerId";
             try
             {
-                for (var i = 0; i < humanRcd.Data.Magic.Length; i++)
+                for (int i = 0; i < humanRcd.Data.Magic.Length; i++)
                 {
                     humanRcd.Data.Magic[i] = new MagicRcd();
                 }
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                using var dr = command.ExecuteReader();
-                var position = 0;
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
+                int position = 0;
                 while (dr.Read())
                 {
                     humanRcd.Data.Magic[position].MagIdx = dr.GetUInt16("MagicId");
@@ -378,13 +377,13 @@ namespace DBSrv.Storage.MySQL
             const string sSqlString = "SELECT * FROM characters_item WHERE PlayerId=@PlayerId";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    var nPosition = dr.GetInt32("Position");
+                    int nPosition = dr.GetInt32("Position");
                     humanRcd.Data.HumItems[nPosition] = new ServerUserItem();
                     humanRcd.Data.HumItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.HumItems[nPosition].Index = dr.GetUInt16("StdIndex");
@@ -406,13 +405,13 @@ namespace DBSrv.Storage.MySQL
             const string sSqlString = "SELECT * FROM characters_bagitem WHERE PlayerId=@PlayerId";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    var nPosition = dr.GetInt32("Position");
+                    int nPosition = dr.GetInt32("Position");
                     humanRcd.Data.BagItems[nPosition] = new ServerUserItem();
                     humanRcd.Data.BagItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.BagItems[nPosition].Index = dr.GetUInt16("StdIndex");
@@ -434,13 +433,13 @@ namespace DBSrv.Storage.MySQL
             const string sSqlString = "SELECT * FROM characters_storageitem WHERE PlayerId=@PlayerId";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    var nPosition = dr.GetInt32("Position");
+                    int nPosition = dr.GetInt32("Position");
                     humanRcd.Data.StorageItems[nPosition] = new ServerUserItem();
                     humanRcd.Data.StorageItems[nPosition].MakeIndex = dr.GetInt32("MakeIndex");
                     humanRcd.Data.StorageItems[nPosition].Index = dr.GetUInt16("StdIndex");
@@ -463,13 +462,13 @@ namespace DBSrv.Storage.MySQL
             const string sSqlString = "SELECT * FROM characters_status WHERE PlayerId=@PlayerId";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 if (dr.Read())
                 {
-                    for (var i = 0; i < 15; i++)
+                    for (int i = 0; i < 15; i++)
                     {
                         humanRcd.Data.StatusTimeArr[i] = dr.GetUInt16($"Status{i}");
                     }
@@ -485,7 +484,7 @@ namespace DBSrv.Storage.MySQL
 
         public int Find(string sChrName, StringDictionary list)
         {
-            for (var i = 0; i < _NameQuickMap.Count; i++)
+            for (int i = 0; i < _NameQuickMap.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_MirQuickList[i], sChrName, sChrName.Length))
                 //{
@@ -497,7 +496,7 @@ namespace DBSrv.Storage.MySQL
 
         public bool Delete(int nIndex)
         {
-            for (var i = 0; i < _NameQuickMap.Count; i++)
+            for (int i = 0; i < _NameQuickMap.Count; i++)
             {
                 //if (((int)m_MirQuickList.Values[i]) == nIndex)
                 //{
@@ -516,10 +515,10 @@ namespace DBSrv.Storage.MySQL
         private bool DeleteRecord(int nIndex)
         {
             const string sqlString = "UPDATE characters SET DELETED=1, LastUpdate=now() WHERE ID=@Id";
-            var result = true;
-            var playerId = _IndexQuickIdMap[nIndex];
-            using var context = new StorageContext(_storageOption);
-            var success = false;
+            bool result = true;
+            int playerId = _IndexQuickIdMap[nIndex];
+            using StorageContext context = new StorageContext(_storageOption);
+            bool success = false;
             context.Open(ref success);
             if (!success)
             {
@@ -527,7 +526,7 @@ namespace DBSrv.Storage.MySQL
             }
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sqlString;
                 command.Parameters.AddWithValue("@Id", playerId);
                 command.ExecuteNonQuery();
@@ -571,8 +570,8 @@ namespace DBSrv.Storage.MySQL
             {
                 return false;
             }
-            using var context = new StorageContext(_storageOption);
-            var success = false;
+            using StorageContext context = new StorageContext(_storageOption);
+            bool success = false;
             context.Open(ref success);
             if (!success)
             {
@@ -580,10 +579,10 @@ namespace DBSrv.Storage.MySQL
             }
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSql;
                 command.Parameters.AddWithValue("@Id", nIndex);
-                using var dr = command.ExecuteReader();
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     queryChrRcd = new QueryChr();
@@ -610,7 +609,7 @@ namespace DBSrv.Storage.MySQL
 
         private void QueryItemAttr(StorageContext context, int playerId, ref ServerUserItem[] userItems)
         {
-            var makeIndexs = userItems.Where(x => x != null && x.MakeIndex > 0).Select(x => x.MakeIndex).ToList();
+            List<int> makeIndexs = userItems.Where(x => x != null && x.MakeIndex > 0).Select(x => x.MakeIndex).ToList();
             if (!makeIndexs.Any())
             {
                 return;
@@ -618,12 +617,12 @@ namespace DBSrv.Storage.MySQL
             const string sSqlString = "SELECT * FROM characters_item_attr WHERE PlayerId=@PlayerId and MakeIndex in (@MakeIndex)";
             try
             {
-                var command = context.CreateCommand();
+                MySqlConnector.MySqlCommand command = context.CreateCommand();
                 command.CommandText = sSqlString;
                 command.Parameters.AddWithValue("@PlayerId", playerId);
                 command.Parameters.AddWithValue("@MakeIndex", string.Join(",", makeIndexs));
-                using var dr = command.ExecuteReader();
-                var nPosition = 0;
+                using MySqlConnector.MySqlDataReader dr = command.ExecuteReader();
+                int nPosition = 0;
                 while (dr.Read())
                 {
                     userItems[nPosition].Desc[nPosition] = dr.GetByte($"VALUE{nPosition}");

@@ -1,14 +1,7 @@
-﻿using M2Server;
-using M2Server.Event.Events;
+﻿using M2Server.Event.Events;
 using M2Server.Maps;
-using NLog;
-using OpenMir2;
-using OpenMir2.Data;
-using SystemModule;
 using SystemModule.Actors;
-using SystemModule.Data;
 using SystemModule.Maps;
-using SystemModule.SubSystem;
 
 namespace GameSrv.Maps
 {
@@ -33,7 +26,7 @@ namespace GameSrv.Maps
         {
             for (int i = 0; i < M2Share.StartPointList.Count; i++)
             {
-                var startPoint = M2Share.StartPointList[i];
+                StartPoint startPoint = M2Share.StartPointList[i];
                 if (string.IsNullOrEmpty(startPoint.MapName) && startPoint.Type > 0)
                 {
                     IEnvirnoment envir = FindMap(startPoint.MapName);
@@ -96,7 +89,7 @@ namespace GameSrv.Maps
                 ServerIndex = nServerNumber,
                 Flag = mapFlag,
             };
-            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out var minMap))
+            if (M2Share.MiniMapList.TryGetValue(envirnoment.MapName, out short minMap))
             {
                 envirnoment.MinMap = minMap;
             }

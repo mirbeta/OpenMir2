@@ -1,6 +1,6 @@
-using System.Collections.Generic;
 using MemoryPack;
 using OpenMir2.Data;
+using System.Collections.Generic;
 
 namespace OpenMir2.Packets.ServerPackets
 {

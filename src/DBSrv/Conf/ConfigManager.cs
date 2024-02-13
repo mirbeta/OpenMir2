@@ -1,6 +1,6 @@
+using OpenMir2.Common;
 using System;
 using System.IO;
-using OpenMir2.Common;
 
 namespace DBSrv.Conf
 {
@@ -35,7 +35,7 @@ namespace DBSrv.Conf
             _config.boDenyChrName = ReadWriteBool("Setup", "DenyChrName", _config.boDenyChrName);
             _config.DeleteMinLevel = ReadWriteInteger("Setup", "DELMaxLevel", _config.DeleteMinLevel);
             _config.Interval = ReadWriteInteger("DBClear", "Interval", _config.Interval);
-            var dynamicIpMode = ReadWriteInteger("Setup", "DynamicIPMode", -1);
+            int dynamicIpMode = ReadWriteInteger("Setup", "DynamicIPMode", -1);
             if (dynamicIpMode < 0)
             {
                 WriteBool("Setup", "DynamicIPMode", _config.DynamicIpMode);

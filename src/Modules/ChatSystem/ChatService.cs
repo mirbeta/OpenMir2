@@ -1,6 +1,5 @@
 ﻿using MQTTnet;
 using MQTTnet.Client;
-using NLog;
 using OpenMir2;
 using SystemModule;
 
@@ -12,7 +11,7 @@ namespace ChatSystem
     /// </summary>
     public class ChatService : IChatService
     {
-        
+
         private readonly MqttFactory mqttFactory;
         private readonly IMqttClient chatClient;
 
@@ -42,11 +41,11 @@ namespace ChatSystem
                 return;
             }
             LogService.Info("开始链接世界聊天频道...");
-            var chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(SystemShare.Config.ChatSrvAddr, SystemShare.Config.ChatSrvPort).Build();
+            MqttClientOptions chatClientOptions = new MqttClientOptionsBuilder().WithTcpServer(SystemShare.Config.ChatSrvAddr, SystemShare.Config.ChatSrvPort).Build();
             try
             {
-                using var timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-                var response = await chatClient.ConnectAsync(chatClientOptions, cancellationToken);
+                using CancellationTokenSource timeoutToken = new CancellationTokenSource(TimeSpan.FromSeconds(5));
+                MqttClientConnectResult response = await chatClient.ConnectAsync(chatClientOptions, cancellationToken);
                 if (response.ResultCode == MqttClientConnectResultCode.Success)
                 {
                     LogService.Info("链接世界聊天频道成功...");
@@ -87,7 +86,7 @@ namespace ChatSystem
             }
             if (!await chatClient.TryPingAsync())
             {
-                using (var timeout = new CancellationTokenSource(5000))
+                using (CancellationTokenSource timeout = new CancellationTokenSource(5000))
                 {
                     await chatClient.ConnectAsync(chatClient.Options, timeout.Token);
                 }

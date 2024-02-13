@@ -115,7 +115,7 @@ namespace OpenMir2
             int dstPos = dstOffset;
             int no = noInit;
             byte remainder = remainderInit;
-            var startLen = len - pos;
+            int startLen = len - pos;
             for (int i = 0; i < startLen; i++)
             {
                 byte c = (byte)(srcBuf[pos] ^ BySeed);

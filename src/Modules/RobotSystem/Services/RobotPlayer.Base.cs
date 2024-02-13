@@ -17,7 +17,7 @@ namespace RobotSystem.Services
     {
         public override void Run()
         {
-            var boFind = false;
+            bool boFind = false;
             try
             {
                 if (!Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
@@ -153,10 +153,10 @@ namespace RobotSystem.Services
                                 if (HUtil32.GetTickCount() - AutoRepairItemTick > 15000)
                                 {
                                     AutoRepairItemTick = HUtil32.GetTickCount();
-                                    var boRecalcAbilitys = false;
+                                    bool boRecalcAbilitys = false;
                                     StdItem stdItem;
                                     UserItem userItem;
-                                    for (var nWhere = 0; nWhere < UseItemNames.Length; nWhere++)
+                                    for (int nWhere = 0; nWhere < UseItemNames.Length; nWhere++)
                                     {
                                         if (string.IsNullOrEmpty(UseItemNames[nWhere]))
                                         {
@@ -186,9 +186,9 @@ namespace RobotSystem.Services
                                     }
                                     if (BagItemNames.Count > 0)
                                     {
-                                        for (var i = 0; i < BagItemNames.Count; i++)
+                                        for (int i = 0; i < BagItemNames.Count; i++)
                                         {
-                                            for (var j = 0; j < ItemList.Count; j++)
+                                            for (int j = 0; j < ItemList.Count; j++)
                                             {
                                                 userItem = ItemList[j];
                                                 if (userItem != null)
@@ -223,7 +223,7 @@ namespace RobotSystem.Services
                                             }
                                         }
                                     }
-                                    for (var nWhere = 0; nWhere <= UseItems.Length - 1; nWhere++)
+                                    for (int nWhere = 0; nWhere <= UseItems.Length - 1; nWhere++)
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
@@ -252,8 +252,8 @@ namespace RobotSystem.Services
                                 if (HUtil32.GetTickCount() - AutoAddHealthTick > 5000)
                                 {
                                     AutoAddHealthTick = HUtil32.GetTickCount();
-                                    var nPercent = WAbil.HP * 100 / WAbil.MaxHP;
-                                    var nValue = WAbil.MaxHP / 10;
+                                    int nPercent = WAbil.HP * 100 / WAbil.MaxHP;
+                                    int nValue = WAbil.MaxHP / 10;
                                     if (nPercent < SystemShare.Config.nRenewPercent)
                                     {
                                         if (WAbil.HP + nValue >= WAbil.MaxHP)
@@ -316,7 +316,7 @@ namespace RobotSystem.Services
 
         public override bool IsProperTarget(IActor baseObject)
         {
-            var result = false;
+            bool result = false;
             if (baseObject != null)
             {
                 if (base.IsProperTarget(baseObject))
@@ -360,7 +360,7 @@ namespace RobotSystem.Services
                     {
                         if (baseObject.Race == ActorRace.Play)
                         {
-                            var targetPvpLevel = ((IPlayerActor)baseObject).PvpLevel();
+                            byte targetPvpLevel = ((IPlayerActor)baseObject).PvpLevel();
                             if (PvpLevel() >= 2)
                             {
                                 result = targetPvpLevel < 2;
@@ -453,7 +453,7 @@ namespace RobotSystem.Services
             }
             if (VisibleItems.Count > 0)
             {
-                for (var i = 0; i < VisibleItems.Count; i++)
+                for (int i = 0; i < VisibleItems.Count; i++)
                 {
                     VisibleItems[i].VisibleFlag = 0;
                 }
@@ -461,30 +461,30 @@ namespace RobotSystem.Services
             MapEvent mapEvent;
             try
             {
-                var nStartX = (short)(CurrX - ViewRange);
-                var nEndX = (short)(CurrX + ViewRange);
-                var nStartY = (short)(CurrY - ViewRange);
-                var nEndY = (short)(CurrY + ViewRange);
-                var dwRunTick = HUtil32.GetTickCount();
-                for (var nX = nStartX; nX <= nEndX; nX++)
+                short nStartX = (short)(CurrX - ViewRange);
+                short nEndX = (short)(CurrX + ViewRange);
+                short nStartY = (short)(CurrY - ViewRange);
+                short nEndY = (short)(CurrY + ViewRange);
+                int dwRunTick = HUtil32.GetTickCount();
+                for (short nX = nStartX; nX <= nEndX; nX++)
                 {
-                    for (var nY = nStartY; nY <= nEndY; nY++)
+                    for (short nY = nStartY; nY <= nEndY; nY++)
                     {
-                        ref var cellInfo = ref Envir.GetCellInfo(nX, nY, out var cellSuccess);
+                        ref MapCellInfo cellInfo = ref Envir.GetCellInfo(nX, nY, out bool cellSuccess);
                         if (cellSuccess && cellInfo.IsAvailable)
                         {
                             if (cellInfo.ObjList == null)
                             {
                                 continue;
                             }
-                            var nIdx = 0;
+                            int nIdx = 0;
                             while (true)
                             {
                                 if (cellInfo.Count <= nIdx)
                                 {
                                     break;
                                 }
-                                var cellObject = cellInfo.ObjList[nIdx];
+                                CellObject cellObject = cellInfo.ObjList[nIdx];
                                 if (HUtil32.GetTickCount() - dwRunTick > 500)
                                 {
                                     break;
@@ -543,7 +543,7 @@ namespace RobotSystem.Services
                                                     }
                                                     continue;
                                                 }
-                                                var mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
+                                                MapItem mapItem = M2Share.CellObjectMgr.Get<MapItem>(cellObject.CellObjId);
                                                 if (mapItem.ItemId == 0)
                                                 {
                                                     continue;
@@ -602,7 +602,7 @@ namespace RobotSystem.Services
             VisibleFlag nVisibleFlag;
             try
             {
-                var n18 = 0;
+                int n18 = 0;
                 while (true)
                 {
                     try
@@ -696,7 +696,7 @@ namespace RobotSystem.Services
             }
             try
             {
-                var position = 0;
+                int position = 0;
                 while (true)
                 {
                     try
@@ -841,7 +841,7 @@ namespace RobotSystem.Services
                         {
                             DisableSayMsg = false;
                         }
-                        var boDisableSayMsg = DisableSayMsg;
+                        bool boDisableSayMsg = DisableSayMsg;
                         //g_DenySayMsgList.Lock;
                         //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                         //{
@@ -903,8 +903,8 @@ namespace RobotSystem.Services
                 return;
             }
             IList<DeleteItem> dropItemList = new List<DeleteItem>();
-            var nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
-            var nC = 0;
+            int nRate = PvpLevel() > 2 ? 15 : 30; //PVP红名掉落几率
+            int nC = 0;
             while (true)
             {
                 if (SystemShare.RandomNumber.Random(nRate) == 0)
@@ -917,7 +917,7 @@ namespace RobotSystem.Services
                     int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[nC], dropWide, true, baseObject, this.ActorId))
                     {
-                        var stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[nC].Index);
+                        StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -943,7 +943,7 @@ namespace RobotSystem.Services
             }
             if (dropItemList.Count > 0)
             {
-                var objectId = HUtil32.Sequence();
+                int objectId = HUtil32.Sequence();
                 SystemShare.ActorMgr.AddOhter(objectId, dropItemList);
                 SendMsg(Messages.RM_SENDDELITEMLIST, 0, objectId, 0, 0);
             }

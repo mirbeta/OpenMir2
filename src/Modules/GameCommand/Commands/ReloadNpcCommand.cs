@@ -11,7 +11,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            var sParam = string.Empty;
+            string sParam = string.Empty;
             if (@params != null)
             {
                 sParam = @params.Length > 0 ? @params[0] : "";

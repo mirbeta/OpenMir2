@@ -1,6 +1,5 @@
 ﻿using BotSrv.Player;
 using OpenMir2;
-using SystemModule;
 
 namespace BotSrv.Objects
 {
@@ -11,18 +10,35 @@ namespace BotSrv.Objects
             int prv;
             long m_dwFrameTimetime;
             if (m_nCurrentAction == Messages.SM_WALK || m_nCurrentAction == Messages.SM_BACKSTEP ||
-                m_nCurrentAction == Messages.SM_RUN || m_nCurrentAction == Messages.SM_HORSERUN) return;
+                m_nCurrentAction == Messages.SM_RUN || m_nCurrentAction == Messages.SM_HORSERUN)
+            {
+                return;
+            }
+
             m_boMsgMuch = false;
-            if (m_MsgList.Count >= BotConst.MSGMUCH) m_boMsgMuch = true;
+            if (m_MsgList.Count >= BotConst.MSGMUCH)
+            {
+                m_boMsgMuch = true;
+            }
+
             RunFrameAction(m_nCurrentFrame - m_nStartFrame);
             prv = m_nCurrentFrame;
             if (m_nCurrentAction != 0)
             {
-                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame) m_nCurrentFrame = m_nStartFrame;
+                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame)
+                {
+                    m_nCurrentFrame = m_nStartFrame;
+                }
+
                 if (m_boMsgMuch)
+                {
                     m_dwFrameTimetime = HUtil32.Round(m_dwFrameTime * 2 / 3);
+                }
                 else
+                {
                     m_dwFrameTimetime = m_dwFrameTime;
+                }
+
                 if (MShare.GetTickCount() - m_dwStartTime > m_dwFrameTimetime)
                 {
                     if (m_nCurrentFrame < m_nEndFrame)
@@ -48,14 +64,20 @@ namespace BotSrv.Objects
                     {
                         m_dwDefFrameTime = MShare.GetTickCount();
                         m_nCurrentDefFrame++;
-                        if (m_nCurrentDefFrame >= m_nDefFrameCount) m_nCurrentDefFrame = 0;
+                        if (m_nCurrentDefFrame >= m_nDefFrameCount)
+                        {
+                            m_nCurrentDefFrame = 0;
+                        }
                     }
 
                     DefaultMotion();
                 }
             }
 
-            if (prv != m_nCurrentFrame) m_dwLoadSurfaceTime = MShare.GetTickCount();
+            if (prv != m_nCurrentFrame)
+            {
+                m_dwLoadSurfaceTime = MShare.GetTickCount();
+            }
         }
 
         public TArcherMon(RobotPlayer robotClient) : base(robotClient)

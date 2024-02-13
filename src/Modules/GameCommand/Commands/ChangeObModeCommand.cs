@@ -14,7 +14,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(IPlayerActor PlayerActor)
         {
-            var boFlag = !PlayerActor.ObMode;
+            bool boFlag = !PlayerActor.ObMode;
             if (boFlag)
             {
                 PlayerActor.SendRefMsg(Messages.RM_DISAPPEAR, 0, 0, 0, 0, "");// 发送刷新数据到客户端，解决隐身有影子问题

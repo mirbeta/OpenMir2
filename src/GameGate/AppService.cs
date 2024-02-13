@@ -1,11 +1,6 @@
 using GameGate.Conf;
 using GameGate.Filters;
 using GameGate.Services;
-using Microsoft.Extensions.Hosting;
-using System.Diagnostics;
-using System.Threading;
-using System.Threading.Tasks;
-using OpenMir2;
 
 namespace GameGate
 {
@@ -14,7 +9,7 @@ namespace GameGate
         private static ConfigManager ConfigManager => ConfigManager.Instance;
         private static SessionContainer SessionContainer => SessionContainer.Instance;
         private static ServerManager ServerManager => ServerManager.Instance;
-        
+
         public Task StartingAsync(CancellationToken cancellationToken)
         {
             LogService.Debug("GameGate is starting.");
@@ -28,7 +23,7 @@ namespace GameGate
             LogService.Info("配置信息加载完成...");
             return Task.CompletedTask;
         }
-        
+
         public Task StartAsync(CancellationToken cancellationToken)
         {
             ServerManager.Initialize();
@@ -70,7 +65,7 @@ namespace GameGate
             LogService.Info("服务停止成功...");
             return Task.CompletedTask;
         }
-        
+
         public Task StoppingAsync(CancellationToken cancellationToken)
         {
             LogService.Info("正在停止服务...");

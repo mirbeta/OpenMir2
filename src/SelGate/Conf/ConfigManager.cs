@@ -12,7 +12,7 @@ namespace SelGate.Conf
             Load();
             GateConfig = new GateConfig();
             m_xGameGateList = new TGameGateList[32];
-            for (var i = 0; i < m_xGameGateList.Length; i++)
+            for (int i = 0; i < m_xGameGateList.Length; i++)
             {
                 m_xGameGateList[i].sServerAdress = "127.0.0.1";
                 m_xGameGateList[i].nServerPort = 5100;

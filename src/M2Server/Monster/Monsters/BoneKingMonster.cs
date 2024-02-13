@@ -41,7 +41,7 @@ namespace M2Server.Monster.Monsters
 
         protected override void Attack(IActor targetBaseObject, byte nDir)
         {
-            var nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
+            int nPower = GetAttackPower(HUtil32.LoByte(WAbil.DC), Math.Abs(HUtil32.HiByte(WAbil.DC) - HUtil32.LoByte(WAbil.DC)));
             HitMagAttackTarget(targetBaseObject, 0, nPower, true);
         }
 

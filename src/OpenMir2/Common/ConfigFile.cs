@@ -263,7 +263,7 @@ namespace OpenMir2.Common
             StreamReader rd = new StreamReader(File.Open(FileName, FileMode.Open, FileAccess.Read, FileShare.ReadWrite), Encoding.GetEncoding("GB2312"));
             bool isCurSecComment = false;
             Dictionary<string, string> curSec = null;
-            Label_02A6:
+        Label_02A6:
             string str = rd.ReadLine();
             if (str != null)
             {
@@ -334,7 +334,7 @@ namespace OpenMir2.Common
                 }
                 goto Label_02A6;
             }
-            Label_02AE:
+        Label_02AE:
             rd.Close();
             rd.Dispose();
         }

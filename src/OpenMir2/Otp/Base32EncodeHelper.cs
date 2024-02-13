@@ -22,14 +22,14 @@ namespace OpenMir2.Otp
             }
 
             base32String = base32String.TrimEnd(paddingChar); //remove padding characters
-            var byteCount = base32String.Length * 5 / 8; //this must be TRUNCATED
-            var returnArray = new byte[byteCount];
+            int byteCount = base32String.Length * 5 / 8; //this must be TRUNCATED
+            byte[] returnArray = new byte[byteCount];
 
             byte curByte = 0, bitsRemaining = 8;
-            var arrayIndex = 0;
-            foreach (var c in base32String)
+            int arrayIndex = 0;
+            foreach (char c in base32String)
             {
-                var cValue = CharToValue(c);
+                int cValue = CharToValue(c);
 
                 int mask;
                 if (bitsRemaining > 5)
@@ -64,13 +64,13 @@ namespace OpenMir2.Otp
                 return string.Empty;
             }
 
-            var charCount = (int)Math.Ceiling(base32Bytes.Length / 5d) * 8;
-            var returnArray = new char[charCount];
+            int charCount = (int)Math.Ceiling(base32Bytes.Length / 5d) * 8;
+            char[] returnArray = new char[charCount];
 
             byte nextChar = 0, bitsRemaining = 5;
-            var arrayIndex = 0;
+            int arrayIndex = 0;
 
-            foreach (var b in base32Bytes)
+            foreach (byte b in base32Bytes)
             {
                 nextChar = (byte)(nextChar | (b >> (8 - bitsRemaining)));
                 returnArray[arrayIndex++] = ValueToChar(nextChar);
@@ -90,7 +90,10 @@ namespace OpenMir2.Otp
             if (arrayIndex != charCount)
             {
                 returnArray[arrayIndex++] = ValueToChar(nextChar);
-                while (arrayIndex != charCount) returnArray[arrayIndex++] = paddingChar; //padding
+                while (arrayIndex != charCount)
+                {
+                    returnArray[arrayIndex++] = paddingChar; //padding
+                }
             }
 
             return new string(returnArray);
@@ -98,7 +101,7 @@ namespace OpenMir2.Otp
 
         private static int CharToValue(char c)
         {
-            var value = (int)c;
+            int value = c;
             return value switch
             {
                 //65-90 == uppercase letters

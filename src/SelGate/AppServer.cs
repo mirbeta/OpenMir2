@@ -86,7 +86,7 @@ namespace SelGate
                     return;
                 }
 
-                var firstTwoCharacters = input[..2];
+                string firstTwoCharacters = input[..2];
 
                 if (firstTwoCharacters switch
                 {
@@ -106,7 +106,7 @@ namespace SelGate
 
         private Task ReLoadConfig()
         {
-            var config = Host.Services.GetService<ConfigManager>();
+            ConfigManager config = Host.Services.GetService<ConfigManager>();
             config?.ReLoadConfig();
             LogService.Info("重新读取配置文件完成...");
             return Task.CompletedTask;
@@ -174,32 +174,32 @@ namespace SelGate
         {
             AnsiConsole.WriteLine();
 
-            var table = new Table()
+            Table table = new Table()
             {
                 Border = TableBorder.None,
                 Expand = true,
             }.HideHeaders();
             table.AddColumn(new TableColumn("One"));
 
-            var header = new FigletText("OpenMir2")
+            FigletText header = new FigletText("OpenMir2")
             {
                 Color = Color.Fuchsia
             };
-            var header2 = new FigletText("Sel Gate")
+            FigletText header2 = new FigletText("Sel Gate")
             {
                 Color = Color.Aqua
             };
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
             sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
             sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
             sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            var markup = new Markup(sb.ToString());
+            Markup markup = new Markup(sb.ToString());
 
             table.AddColumn(new TableColumn("Two"));
 
-            var rightTable = new Table()
+            Table rightTable = new Table()
                 .HideHeaders()
                 .Border(TableBorder.None)
                 .AddColumn(new TableColumn("Content"));

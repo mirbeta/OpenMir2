@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OpenMir2.Hosts
 {
-    public abstract class ServiceHost 
+    public abstract class ServiceHost
     {
         protected readonly IConfigurationRoot Configuration;
 

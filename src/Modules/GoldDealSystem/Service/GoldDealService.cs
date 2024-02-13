@@ -13,7 +13,7 @@ namespace GoldDealSystem.Service
         /// 人物上线,检查是否有交易结束还没得到元宝 
         /// 交易成功后修改数据标识
         /// </summary>
-        private void UpdateSellOffInfo(IPlayerActor playerActor,int code)
+        private void UpdateSellOffInfo(IPlayerActor playerActor, int code)
         {
             if (playerActor.SaleDeal)// 已开通元宝服务
             {
@@ -54,7 +54,7 @@ namespace GoldDealSystem.Service
         /// <summary>
         /// 客户端增加寄售物品到出售框中
         /// </summary>
-        private void ClientAddSellOffItem(IPlayerActor playerActor,int nItemIdx, string sItemName)
+        private void ClientAddSellOffItem(IPlayerActor playerActor, int nItemIdx, string sItemName)
         {
             if (nItemIdx <= 0 || string.IsNullOrEmpty(sItemName))
             {
@@ -67,7 +67,7 @@ namespace GoldDealSystem.Service
                 HUtil32.GetValidStr3(sItemName, ref sItemName, ' ');
             }
             string sUserItemName = string.Empty;
-            var bo11 = false;
+            bool bo11 = false;
             if (!playerActor.SellOffConfirm)
             {
                 for (int i = playerActor.ItemList.Count - 1; i >= 0; i--)
@@ -86,7 +86,7 @@ namespace GoldDealSystem.Service
                         // 取自定义物品名称
                         if (userItem.Desc[13] == 1)
                         {
-                           // sUserItemName = SystemShare.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
+                            // sUserItemName = SystemShare.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index);
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
@@ -121,7 +121,7 @@ namespace GoldDealSystem.Service
         /// <summary>
         /// 客户端删除出售物品窗里的物品
         /// </summary>
-        private void ClientDelSellOffItem(IPlayerActor playerActor,int nItemIdx, string sItemName)
+        private void ClientDelSellOffItem(IPlayerActor playerActor, int nItemIdx, string sItemName)
         {
             if (nItemIdx <= 0 || string.IsNullOrEmpty(sItemName))
             {
@@ -152,7 +152,7 @@ namespace GoldDealSystem.Service
                     {
                         if (userItem.Desc[13] == 1)
                         {
-                           // sUserItemName = SystemShare.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index); // 取自定义物品名称
+                            // sUserItemName = SystemShare.CustomItemMgr.GetCustomItemName(userItem.MakeIndex, userItem.Index); // 取自定义物品名称
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
@@ -248,7 +248,7 @@ namespace GoldDealSystem.Service
         /// <summary>
         /// 购买人取消交易
         /// </summary>
-        private void ClientBuyCancelSellOff(IPlayerActor playerActor,string dealChrName)
+        private void ClientBuyCancelSellOff(IPlayerActor playerActor, string dealChrName)
         {
             for (int i = SystemShare.SellOffItemList.Count - 1; i >= 0; i--)
             {
@@ -275,7 +275,7 @@ namespace GoldDealSystem.Service
         /// <summary>
         /// 购买寄售物品
         /// </summary>
-        private void ClientBuySellOffItme(IPlayerActor playerActor,string dealChrName)
+        private void ClientBuySellOffItme(IPlayerActor playerActor, string dealChrName)
         {
             try
             {
@@ -469,7 +469,7 @@ namespace GoldDealSystem.Service
         /// 查询玩家是否操作过寄售
         /// </summary>
         /// <returns></returns>
-        public bool SellOffInTime(IPlayerActor playerActor,int nCode)
+        public bool SellOffInTime(IPlayerActor playerActor, int nCode)
         {
             bool result = false;
             if (SystemShare.SellOffItemList.Count > 0)
@@ -510,7 +510,7 @@ namespace GoldDealSystem.Service
         /// <param name="nSellGold">元宝数</param>
         /// <param name="nGameDiamond">金刚石数</param>
         /// <param name="nCode">金刚石特征,类型上限表示</param>
-        private void ClientSellOffEnd(IPlayerActor playerActor,string sBuyChrName, int nSellGold, int nGameDiamond, int nCode)
+        private void ClientSellOffEnd(IPlayerActor playerActor, string sBuyChrName, int nSellGold, int nGameDiamond, int nCode)
         {
             playerActor.SellOffConfirm = true;
             bool bo11 = false;
@@ -518,13 +518,13 @@ namespace GoldDealSystem.Service
                 && string.Compare(sBuyChrName, playerActor.ChrName, StringComparison.OrdinalIgnoreCase) != 0)
             {
                 // 不能自己寄售给自己
-                var dealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
+                DealOffInfo dealOffInfo = new DealOffInfo() { UseItems = new UserItem[9] };
                 StdItem stdItem;
                 if (playerActor.SellOffItemList.Count > 0)
                 {
-                    for (int i = 0; i <playerActor. SellOffItemList.Count; i++)
+                    for (int i = 0; i < playerActor.SellOffItemList.Count; i++)
                     {
-                        var userItem = playerActor.SellOffItemList[i];
+                        UserItem userItem = playerActor.SellOffItemList[i];
                         stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && userItem != null && userItem.MakeIndex > 0)
                         {
@@ -607,10 +607,10 @@ namespace GoldDealSystem.Service
                 for (int i = playerActor.SellOffItemList.Count - 1; i >= 0; i--)
                 {
                     playerActor.ItemList.Add(playerActor.SellOffItemList[i]);
-                    playerActor. SellOffItemList.RemoveAt(i);
+                    playerActor.SellOffItemList.RemoveAt(i);
                 }
             }
-            playerActor. SellOffConfirm = false;// 确认元宝寄售标志 
+            playerActor.SellOffConfirm = false;// 确认元宝寄售标志 
         }
 
         private void Dispose(object obj)

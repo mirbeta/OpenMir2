@@ -1,4 +1,3 @@
-using System;
 using OpenMir2.Common;
 
 namespace LoginGate.Conf;
@@ -13,7 +12,7 @@ public class ConfigManager : ConfigFile
         Load();
         GetConfig = new GateConfig();
         GameGates = new GameGateInfo[32];
-        for (var i = 0; i < GameGates.Length; i++)
+        for (int i = 0; i < GameGates.Length; i++)
         {
             GameGates[i].LoginServer = "127.0.0.1";
             GameGates[i].LoginPort = 5500;
@@ -51,7 +50,7 @@ public class ConfigManager : ConfigFile
         GetConfig.GateCount = ReadWriteInteger("LoginGate", "Count", GetConfig.GateCount);
         GetConfig.ShowLogLevel = ReadWriteInteger("LoginGate", "ShowLogLevel", GetConfig.ShowLogLevel);
         GetConfig.ShowDebug = ReadWriteBool("LoginGate", "ShowDebug", GetConfig.ShowDebug);
-        for (var i = 0; i < GetConfig.GateCount; i++)
+        for (int i = 0; i < GetConfig.GateCount; i++)
         {
             GameGates[i].LoginServer = ReadWriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginServer);
             GameGates[i].LoginPort = ReadWriteInteger("LoginGate", "ServerPort" + i, GameGates[i].LoginPort);
@@ -80,7 +79,7 @@ public class ConfigManager : ConfigFile
         WriteInteger("LoginGate", "Count", GetConfig.GateCount);
         WriteInteger("LoginGate", "ShowLogLevel", GetConfig.ShowLogLevel);
         WriteBool("LoginGate", "ShowDebug", GetConfig.ShowDebug);
-        for (var i = 0; i < GetConfig.GateCount; i++)
+        for (int i = 0; i < GetConfig.GateCount; i++)
         {
             WriteString("LoginGate", "ServerAddr" + i, GameGates[i].LoginServer);
             WriteInteger("LoginGate", "ServerPort" + i, GameGates[i].LoginPort);

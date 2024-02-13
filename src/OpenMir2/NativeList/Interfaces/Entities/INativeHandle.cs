@@ -1,5 +1,5 @@
-﻿using System;
-using OpenMir2.NativeList.Interfaces.Shared;
+﻿using OpenMir2.NativeList.Interfaces.Shared;
+using System;
 
 namespace OpenMir2.NativeList.Interfaces.Entities
 {

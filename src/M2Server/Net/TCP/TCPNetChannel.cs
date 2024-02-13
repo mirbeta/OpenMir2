@@ -1,12 +1,11 @@
-﻿using NLog;
-using System.Net;
-using System.Net.Sockets;
-using System.Threading.Channels;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Common;
 using OpenMir2.DataHandlingAdapters;
 using OpenMir2.Packets.ClientPackets;
 using OpenMir2.Packets.ServerPackets;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Enums;
@@ -17,7 +16,7 @@ namespace M2Server.Net.TCP
 {
     public class TCPNetChannel : INetChannel
     {
-        
+
         private readonly TcpService tcpService;
         private readonly object RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;
@@ -44,8 +43,11 @@ namespace M2Server.Net.TCP
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
             if (e.RequestInfo is not DataMessageFixedHeaderRequestInfo gateMessage)
+            {
                 return Task.CompletedTask;
-            var gateId = int.Parse(socketClient.Id) - 1;
+            }
+
+            int gateId = int.Parse(socketClient.Id) - 1;
             _receiveQueue.Writer.TryWrite(new ReceiveData()
             {
                 Data = gateMessage.Message,
@@ -59,7 +61,7 @@ namespace M2Server.Net.TCP
         {
             const string sKickGate = "服务器未就绪: {0}";
             const string sGateOpen = "游戏网关[{0}]已打开...";
-            var clientSoc = (SocketClient)client;
+            SocketClient clientSoc = (SocketClient)client;
             if (M2Share.StartReady)
             {
                 if (_gameGates.Length > 20)
@@ -70,7 +72,7 @@ namespace M2Server.Net.TCP
                 }
                 if (Whitelist.Contains(HUtil32.IpToInt(clientSoc.ServiceIP)))
                 {
-                    var gateInfo = new ChannelGate();
+                    ChannelGate gateInfo = new ChannelGate();
                     gateInfo.SendMsgCount = 0;
                     gateInfo.SendRemainCount = 0;
                     gateInfo.SendTick = HUtil32.GetTickCount();
@@ -103,14 +105,14 @@ namespace M2Server.Net.TCP
 
         private Task Disconnected(IClient client, DisconnectEventArgs e)
         {
-            var socSocket = ((SocketClient)client);
+            SocketClient socSocket = ((SocketClient)client);
             M2Share.NetChannel.CloseGate(socSocket.Id, socSocket.GetIPPort());
             return Task.CompletedTask;
         }
 
         public void Initialize()
         {
-            var touchSocketConfig = new TouchSocketConfig();
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort))
                 .SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
             tcpService.Setup(touchSocketConfig);
@@ -127,28 +129,31 @@ namespace M2Server.Net.TCP
         public async Task StopAsync(CancellationToken cancellationToken = default)
         {
             if (_receiveQueue.Reader.Count > 0)
+            {
                 await _receiveQueue.Reader.Completion;
+            }
+
             _stoppingCancelReads = new CancellationToken(true);
             await tcpService.StopAsync();
         }
 
         private void LoadRunAddr()
         {
-            var sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "!runaddr.txt");
+            string sFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "!runaddr.txt");
             if (File.Exists(sFileName))
             {
-                var runAddrList = new StringList();
+                StringList runAddrList = new StringList();
                 runAddrList.LoadFromFile(sFileName);
                 M2Share.TrimStringList(runAddrList);
-                for (var i = 0; i < runAddrList.Count; i++)
+                for (int i = 0; i < runAddrList.Count; i++)
                 {
                     if (!string.IsNullOrEmpty(runAddrList[i]))
                     {
                         Whitelist.Add(HUtil32.IpToInt(runAddrList[i]));
                     }
                 }
-                var localEntity = Dns.GetHostEntry(Dns.GetHostName());
-                for (var i = 0; i < localEntity.AddressList.Length; i++)
+                IPHostEntry localEntity = Dns.GetHostEntry(Dns.GetHostName());
+                for (int i = 0; i < localEntity.AddressList.Length; i++)
                 {
                     if (localEntity.AddressList[i].AddressFamily == AddressFamily.InterNetwork)
                     {
@@ -170,21 +175,21 @@ namespace M2Server.Net.TCP
             const string accountExpiredMsg = "账号付费时间已到,本机已被强行离线,请充值后再继续进行游戏!";
             try
             {
-                for (var i = 0; i < _gameGates.Length; i++)
+                for (int i = 0; i < _gameGates.Length; i++)
                 {
                     if (_gameGates[i] == null)
                     {
                         continue;
                     }
-                    var gateInfo = _gameGates[i].GateInfo;
+                    ChannelGate gateInfo = _gameGates[i].GateInfo;
                     if (gateInfo.BoUsed && gateInfo.Socket != null && gateInfo.UserList != null)
                     {
                         HUtil32.EnterCriticalSection(RunSocketSection);
                         try
                         {
-                            for (var j = 0; j < gateInfo.UserList.Count; j++)
+                            for (int j = 0; j < gateInfo.UserList.Count; j++)
                             {
-                                var gateUserInfo = gateInfo.UserList[j];
+                                SessionUser gateUserInfo = gateInfo.UserList[j];
                                 if (gateUserInfo == null)
                                 {
                                     continue;
@@ -230,7 +235,7 @@ namespace M2Server.Net.TCP
 
         public void CloseAllGate()
         {
-            for (var i = 0; i < _gameGates.Length; i++)
+            for (int i = 0; i < _gameGates.Length; i++)
             {
                 _gameGates[i].GateInfo.Socket.Close();
             }
@@ -258,15 +263,15 @@ namespace M2Server.Net.TCP
                     }
                     if (_gameGates[i].ConnectionId == connectionId)
                     {
-                        var gateInfo = _gameGates[i].GateInfo;
+                        ChannelGate gateInfo = _gameGates[i].GateInfo;
                         if (gateInfo.Socket == null)
                         {
                             LogService.Error("Socket异常，无需关闭");
                             return;
                         }
-                        for (var j = 0; j < gateInfo.UserList.Count; j++)
+                        for (int j = 0; j < gateInfo.UserList.Count; j++)
                         {
-                            var gateUser = gateInfo.UserList[j];
+                            SessionUser gateUser = gateInfo.UserList[j];
                             if (gateUser != null)
                             {
                                 if (gateUser.PlayObject != null)
@@ -299,13 +304,13 @@ namespace M2Server.Net.TCP
         {
             if (_gameGates.Length > 0)
             {
-                for (var i = 0; i < _gameGates.Length; i++) //循环网关发送消息游戏引擎停止服务消息
+                for (int i = 0; i < _gameGates.Length; i++) //循环网关发送消息游戏引擎停止服务消息
                 {
                     if (_gameGates[i] == null)
                     {
                         continue;
                     }
-                    var gateInfo = _gameGates[i].GateInfo;
+                    ChannelGate gateInfo = _gameGates[i].GateInfo;
                     if (gateInfo.Socket != null && gateInfo.Socket.Connected)
                     {
                         _gameGates[i].SendCheck(Grobal2.GM_STOP);
@@ -316,8 +321,8 @@ namespace M2Server.Net.TCP
 
         public void SendOutConnectMsg(int gateIdx, int nSocket, ushort nGsIdx)
         {
-            var defMsg = Messages.MakeMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
-            var msgHeader = new ServerMessage();
+            CommandMessage defMsg = Messages.MakeMessage(Messages.SM_OUTOFCONNECTION, 0, 0, 0, 0);
+            ServerMessage msgHeader = new ServerMessage();
             msgHeader.PacketCode = Grobal2.PacketCode;
             msgHeader.Socket = nSocket;
             msgHeader.SessionId = nGsIdx;
@@ -344,13 +349,13 @@ namespace M2Server.Net.TCP
             {
                 if (_gameGates.Length > 0)
                 {
-                    for (var i = 0; i < _gameGates.Length; i++)
+                    for (int i = 0; i < _gameGates.Length; i++)
                     {
                         if (_gameGates[i] == null)
                         {
                             continue;
                         }
-                        var gateInfo = _gameGates[i].GateInfo;
+                        ChannelGate gateInfo = _gameGates[i].GateInfo;
                         if (gateInfo.Socket != null && gateInfo.Socket.Connected)
                         {
                             if (HUtil32.GetTickCount() - gateInfo.SendTick >= 1000)
@@ -374,16 +379,16 @@ namespace M2Server.Net.TCP
 
         private static void SendGateTestMsg(int nIndex)
         {
-            var defMsg = new CommandMessage();
-            var msgHdr = new ServerMessage
+            CommandMessage defMsg = new CommandMessage();
+            ServerMessage msgHdr = new ServerMessage
             {
                 PacketCode = Grobal2.PacketCode,
                 Socket = 0,
                 Ident = Messages.GM_TEST,
                 PackLength = 100
             };
-            var nLen = msgHdr.PackLength + ServerMessage.PacketSize;
-            var clientOutMessage = new ClientOutMessage();
+            int nLen = msgHdr.PackLength + ServerMessage.PacketSize;
+            ClientOutMessage clientOutMessage = new ClientOutMessage();
             clientOutMessage.CommandPacket = defMsg;
             clientOutMessage.MessagePacket = msgHdr;
             M2Share.NetChannel.AddGateBuffer(nIndex, SerializerUtil.Serialize(clientOutMessage));
@@ -426,7 +431,7 @@ namespace M2Server.Net.TCP
             {
                 while (await _receiveQueue.Reader.WaitToReadAsync(_stoppingCancelReads))
                 {
-                    while (_receiveQueue.Reader.TryRead(out var message))
+                    while (_receiveQueue.Reader.TryRead(out ReceiveData message))
                     {
                         _gameGates[message.GateId].ProcessDataBuffer(message.Packet, message.Data);
                     }

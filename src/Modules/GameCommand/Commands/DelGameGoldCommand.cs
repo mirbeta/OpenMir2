@@ -18,14 +18,14 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumName = @params.Length > 0 ? @params[0] : ""; //玩家名称
-            var nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0; //数量
+            string sHumName = @params.Length > 0 ? @params[0] : ""; //玩家名称
+            int nPoint = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0; //数量
             if (string.IsNullOrEmpty(sHumName) || nPoint <= 0)
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumName);
             if (mIPlayerActor != null)
             {
                 if (mIPlayerActor.GameGold > nPoint)

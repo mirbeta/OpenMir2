@@ -3,12 +3,12 @@ using M2Server.Event.Events;
 using M2Server.Items;
 using M2Server.Magic;
 using M2Server.Monster;
-using System.Text.RegularExpressions;
 using OpenMir2;
 using OpenMir2.Common;
 using OpenMir2.Data;
 using OpenMir2.Enums;
 using OpenMir2.Packets.ClientPackets;
+using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Castles;
@@ -59,7 +59,7 @@ namespace M2Server.Player
                 return;
             }
             MapItem mapItem = default;
-            var success = Envir.GetItem(CurrX, CurrY, ref mapItem);
+            bool success = Envir.GetItem(CurrX, CurrY, ref mapItem);
             if (!success)
             {
                 return;
@@ -395,8 +395,8 @@ namespace M2Server.Player
             bool result = false;
             try
             {
-                var nOldX = CurrX;
-                var nOldY = CurrY;
+                short nOldX = CurrX;
+                short nOldY = CurrY;
                 Dir = btDir;
                 bool canWalk = SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll;
                 switch (btDir)
@@ -484,8 +484,8 @@ namespace M2Server.Player
             bool result = false;
             try
             {
-                var nOldX = CurrX;
-                var nOldY = CurrY;
+                short nOldX = CurrX;
+                short nOldY = CurrY;
                 Dir = btDir;
                 bool canWalk = SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll;
                 switch (btDir)
@@ -2783,9 +2783,17 @@ namespace M2Server.Player
                     break;
                 }
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sText, '\\');
-                if (string.IsNullOrEmpty(sText)) continue;
+                if (string.IsNullOrEmpty(sText))
+                {
+                    continue;
+                }
+
                 MatchCollection matches = M2Share.MatchScriptLabel(sText);
-                if (matches.Count <= 0) continue;
+                if (matches.Count <= 0)
+                {
+                    continue;
+                }
+
                 foreach (Match item in matches)
                 {
                     string sCmdStr = item.Value;

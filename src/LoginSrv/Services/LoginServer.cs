@@ -1,14 +1,13 @@
 using LoginSrv.Conf;
-using NLog;
+using OpenMir2;
+using OpenMir2.DataHandlingAdapters;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using OpenMir2;
-using OpenMir2.DataHandlingAdapters;
-using OpenMir2.Packets.ServerPackets;
 using TouchSocket.Core;
 using TouchSocket.Sockets;
 
@@ -20,7 +19,7 @@ namespace LoginSrv.Services
     /// </summary>
     public class LoginServer
     {
-        
+
         private readonly TcpService _serverSocket;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
@@ -44,7 +43,7 @@ namespace LoginSrv.Services
 
         public void StartServer()
         {
-            var touchSocketConfig = new TouchSocketConfig();
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_config.sGateAddr), _config.nGatePort)
@@ -57,8 +56,11 @@ namespace LoginSrv.Services
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
             if (e.RequestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+            {
                 return Task.CompletedTask;
-            if (int.TryParse(socketClient.Id, out var clientId))
+            }
+
+            if (int.TryParse(socketClient.Id, out int clientId))
             {
                 ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId);
             }
@@ -71,9 +73,9 @@ namespace LoginSrv.Services
 
         private Task Connecting(object sender, TouchSocketEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var clientId = int.Parse(client.Id);
-            var gateInfo = new LoginGateInfo();
+            SocketClient client = (SocketClient)sender;
+            int clientId = int.Parse(client.Id);
+            LoginGateInfo gateInfo = new LoginGateInfo();
             gateInfo.Socket = client.MainSocket;
             gateInfo.ConnectionId = client.Id;
             gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, client.MainSocket.RemoteEndPoint.GetIP());//应该改为按策略获取一个对外的公开网关地址
@@ -87,8 +89,8 @@ namespace LoginSrv.Services
 
         private Task Disconnected(object sender, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var clientId = int.Parse(client.Id);
+            SocketClient client = (SocketClient)sender;
+            int clientId = int.Parse(client.Id);
             loginGates[clientId] = null;
             _clientManager.Delete(clientId);
             LogService.Warn($"登录网关[{client.ServiceIP}:{client.ServicePort}]断开链接.");
@@ -102,7 +104,7 @@ namespace LoginSrv.Services
                 LogService.Debug($"解析登录网关封包出现异常...");
                 return;
             }
-            var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
+            ServerDataMessage messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
             AddToQueue(socketId, messageData);
         }
 
@@ -125,11 +127,11 @@ namespace LoginSrv.Services
             {
                 while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_messageQueue.Reader.TryRead(out var loginPacket))
+                    while (_messageQueue.Reader.TryRead(out MessagePacket loginPacket))
                     {
                         try
                         {
-                            var gateInfo = _clientManager.GetSession(loginPacket.ConnectionId);
+                            LoginGateInfo gateInfo = _clientManager.GetSession(loginPacket.ConnectionId);
                             switch (loginPacket.Pakcet.Type)
                             {
                                 case ServerDataType.Data:
@@ -160,7 +162,7 @@ namespace LoginSrv.Services
 
         private void ProcessUserMessage(int sessionId, ServerDataMessage dataMessage)
         {
-            var dataMsg = HUtil32.GetString(dataMessage.Data, 0, dataMessage.DataLen);
+            string dataMsg = HUtil32.GetString(dataMessage.Data, 0, dataMessage.DataLen);
             _clientSession.Enqueue(new UserSessionData()
             {
                 SessionId = sessionId,
@@ -171,7 +173,7 @@ namespace LoginSrv.Services
 
         private void SendKeepAlivePacket(string connectionId)
         {
-            var messagePacket = new ServerDataMessage();
+            ServerDataMessage messagePacket = new ServerDataMessage();
             messagePacket.Type = ServerDataType.KeepAlive;
             SendMessage(connectionId, SerializerUtil.Serialize(messagePacket));
         }
@@ -179,9 +181,9 @@ namespace LoginSrv.Services
         private void ReceiveCloseUser(string sSockIndex, LoginGateInfo gateInfo)
         {
             const string sCloseMsg = "Close: {0}";
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            for (int i = 0; i < gateInfo.UserList.Count; i++)
             {
-                var userInfo = gateInfo.UserList[i];
+                UserInfo userInfo = gateInfo.UserList[i];
                 if (userInfo.SockIndex == sSockIndex)
                 {
                     LogService.Debug(string.Format(sCloseMsg, userInfo.UserIPaddr));
@@ -198,13 +200,13 @@ namespace LoginSrv.Services
 
         private void ReceiveOpenUser(ServerDataMessage dataMessage, LoginGateInfo gateInfo)
         {
-            var sSockIndex = dataMessage.SocketId;
-            var sIPaddr = HUtil32.GetString(dataMessage.Data, 0, dataMessage.Data.Length);
+            string sSockIndex = dataMessage.SocketId;
+            string sIPaddr = HUtil32.GetString(dataMessage.Data, 0, dataMessage.Data.Length);
             UserInfo userInfo;
-            var sUserIPaddr = string.Empty;
+            string sUserIPaddr = string.Empty;
             const string sOpenMsg = "Open: {0}/{1}";
-            var sGateIPaddr = HUtil32.GetValidStr3(sIPaddr, ref sUserIPaddr, '/');
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            string sGateIPaddr = HUtil32.GetValidStr3(sIPaddr, ref sUserIPaddr, '/');
+            for (int i = 0; i < gateInfo.UserList.Count; i++)
             {
                 userInfo = gateInfo.UserList[i];
                 if (userInfo.SockIndex == sSockIndex)
@@ -238,12 +240,12 @@ namespace LoginSrv.Services
         /// </summary>
         public void SessionClearKick()
         {
-            var sessionList = _sessionManager.GetSessions();
+            SessionConnInfo[] sessionList = _sessionManager.GetSessions();
             if (sessionList != null)
             {
-                for (var i = sessionList.Length - 1; i >= 0; i--)
+                for (int i = sessionList.Length - 1; i >= 0; i--)
                 {
-                    var connInfo = sessionList[i];
+                    SessionConnInfo connInfo = sessionList[i];
                     if (connInfo.Kicked && (HUtil32.GetTickCount() - connInfo.KickTick) > 5 * 1000)
                     {
                         SessionDel(connInfo.Account, connInfo.SessionID);
@@ -260,13 +262,13 @@ namespace LoginSrv.Services
 
         private void SendMessage(string connectionId, byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             if (_serverSocket.SocketClientExist(connectionId))

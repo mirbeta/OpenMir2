@@ -1,6 +1,3 @@
-using System.Collections.Concurrent;
-using System.Linq;
-
 namespace GameGate.Services
 {
     /// <summary>
@@ -35,7 +32,7 @@ namespace GameGate.Services
         {
             if (!string.IsNullOrEmpty(connectionId))
             {
-                return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
+                return _clientThreadMap.TryGetValue(connectionId, out ClientThread userClinet) ? userClinet : null;
             }
             return null;
         }
@@ -45,7 +42,7 @@ namespace GameGate.Services
         /// </summary>
         public void DeleteClientThread(string connectionId)
         {
-            _clientThreadMap.TryRemove(connectionId, out var userClinet);
+            _clientThreadMap.TryRemove(connectionId, out ClientThread userClinet);
         }
 
         public ClientThread[] GetClients()

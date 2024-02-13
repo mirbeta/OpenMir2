@@ -16,7 +16,7 @@ namespace CommandModule.Commands
         {
             if (PlayerActor.RecallSuite || PlayerActor.Permission >= 6)
             {
-                var dwValue = (short)((HUtil32.GetTickCount() - PlayerActor.GroupRcallTick) / 1000);
+                short dwValue = (short)((HUtil32.GetTickCount() - PlayerActor.GroupRcallTick) / 1000);
                 PlayerActor.GroupRcallTick = PlayerActor.GroupRcallTick + dwValue * 1000;
                 if (PlayerActor.Permission >= 6)
                 {
@@ -34,9 +34,9 @@ namespace CommandModule.Commands
                 {
                     if (PlayerActor.GroupOwner == PlayerActor.ActorId)
                     {
-                        for (var i = 0; i < PlayerActor.GroupMembers.Count; i++)
+                        for (int i = 0; i < PlayerActor.GroupMembers.Count; i++)
                         {
-                            var mIPlayerActor = PlayerActor.GroupMembers[i];
+                            IPlayerActor mIPlayerActor = PlayerActor.GroupMembers[i];
                             if (mIPlayerActor.AllowGroupReCall)
                             {
                                 if (mIPlayerActor.Envir.Flag.NoReCall)

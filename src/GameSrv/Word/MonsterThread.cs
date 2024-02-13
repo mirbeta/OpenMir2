@@ -1,7 +1,4 @@
-﻿using OpenMir2;
-using SystemModule;
-
-namespace GameSrv.Word
+﻿namespace GameSrv.Word
 {
     public class MonsterThread
     {

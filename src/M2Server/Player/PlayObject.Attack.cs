@@ -626,7 +626,7 @@ namespace M2Server.Player
 
         protected override bool IsAttackTarget(IActor targetObject)
         {
-            var result = false;
+            bool result = false;
             switch (AttatckMode)
             {
                 case AttackMode.HAM_ALL:
@@ -769,7 +769,11 @@ namespace M2Server.Player
                 {
                     return IsProperIsFriend(targetObject.Master);
                 }
-                if (targetObject.Race > ActorRace.Play) return result;
+                if (targetObject.Race > ActorRace.Play)
+                {
+                    return result;
+                }
+
                 IPlayerActor playObject = (IPlayerActor)targetObject;
                 if (!playObject.InGuildWarArea)
                 {
@@ -1302,7 +1306,7 @@ namespace M2Server.Player
                     return false;
                 }
                 IsFilterAction = true;
-                var dwCheckTime = HUtil32.GetTickCount() - MoveTick;
+                int dwCheckTime = HUtil32.GetTickCount() - MoveTick;
                 if (dwCheckTime < SystemShare.Config.RunIntervalTime)
                 {
                     MoveCount++;

@@ -17,8 +17,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sIPaddr = @params.Length > 0 ? @params[0] : "";
-            var sFixDeny = @params.Length > 1 ? @params[3] : "";
+            string sIPaddr = @params.Length > 0 ? @params[0] : "";
+            string sFixDeny = @params.Length > 1 ? @params[3] : "";
             if (string.IsNullOrEmpty(sIPaddr))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

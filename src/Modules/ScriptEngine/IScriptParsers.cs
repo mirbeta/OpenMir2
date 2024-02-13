@@ -1,5 +1,4 @@
-﻿using SystemModule;
-using SystemModule.Actors;
+﻿using SystemModule.Actors;
 
 namespace ScriptSystem
 {

@@ -1,8 +1,7 @@
 ﻿using BotSrv.Player;
+using OpenMir2;
 using System.Drawing;
 using System.IO;
-using OpenMir2;
-using SystemModule;
 
 namespace BotSrv.Maps
 {
@@ -124,12 +123,12 @@ namespace BotSrv.Maps
 
         public bool ReLoadMapData(bool IntActor = false)
         {
-            var result = false;
+            bool result = false;
             if ((MShare.MySelf != null) && (m_nCurrentMap != null) && (m_MapBuf != null))
             {
-                for (var nX = MShare.MySelf.CurrX - 32; nX <= MShare.MySelf.CurrX + 32; nX++)
+                for (int nX = MShare.MySelf.CurrX - 32; nX <= MShare.MySelf.CurrX + 32; nX++)
                 {
-                    for (var nY = MShare.MySelf.CurrY - 32; nY <= MShare.MySelf.CurrY + 32; nY++)
+                    for (int nY = MShare.MySelf.CurrY - 32; nY <= MShare.MySelf.CurrY + 32; nY++)
                     {
                         if ((nX >= 0) && (nX < m_MapHeader.wWidth) && (nY >= 0) && (nY < m_MapHeader.wHeight))
                         {
@@ -137,9 +136,9 @@ namespace BotSrv.Maps
                         }
                     }
                 }
-                for (var i = 0; i < robotClient.PlayScene.ActorList.Count; i++)
+                for (int i = 0; i < robotClient.PlayScene.ActorList.Count; i++)
                 {
-                    var Actor = robotClient.PlayScene.ActorList[i];
+                    Objects.Actor Actor = robotClient.PlayScene.ActorList[i];
                     if (Actor == MShare.MySelf)
                     {
                         continue;
@@ -186,12 +185,12 @@ namespace BotSrv.Maps
                 {
                     case 6:
                         nAline = MapInfo.PacketSize * m_MapHeader.wHeight;
-                        for (var i = nLx; i < nRx; i++)
+                        for (int i = nLx; i < nRx; i++)
                         {
                             if ((i >= 0) && (i < m_MapHeader.wWidth))
                             {
                                 m_nCurrentMap.Seek(MapHeader.PacketSize + (nAline * i) + (MapInfo.PacketSize * nTy), SeekOrigin.Begin);
-                                var readData = new byte[MapInfo.PacketSize];
+                                byte[] readData = new byte[MapInfo.PacketSize];
                                 m_nCurrentMap.Read(readData, 0, MapInfo.PacketSize);
                                 m_MArr[i - nLx, 0] = new MapInfo(readData);
                             }
@@ -199,14 +198,14 @@ namespace BotSrv.Maps
                         break;
                     case 2:
                         nAline = TMapInfo_2.PacketSize * m_MapHeader.wHeight;
-                        for (var i = nLx; i < nRx; i++)
+                        for (int i = nLx; i < nRx; i++)
                         {
                             if ((i >= 0) && (i < m_MapHeader.wWidth))
                             {
                                 m_nCurrentMap.Seek(MapHeader.PacketSize + (nAline * i) + (TMapInfo_2.PacketSize * nTy), SeekOrigin.Begin);
-                                for (var j = 0; j < nBy - nTy; j++)
+                                for (int j = 0; j < nBy - nTy; j++)
                                 {
-                                    var readData = new byte[TMapInfo_2.PacketSize];
+                                    byte[] readData = new byte[TMapInfo_2.PacketSize];
                                     m_nCurrentMap.Read(readData, 0, TMapInfo_2.PacketSize);
                                     m_MArr[i - nLx, j] = new MapInfo(readData);
                                 }
@@ -215,14 +214,14 @@ namespace BotSrv.Maps
                         break;
                     default:
                         nAline = TMapInfo_Old.PacketSize * m_MapHeader.wHeight;
-                        for (var i = nLx; i < nRx; i++)
+                        for (int i = nLx; i < nRx; i++)
                         {
                             if ((i >= 0) && (i < m_MapHeader.wWidth))
                             {
                                 m_nCurrentMap.Seek(MapHeader.PacketSize + (nAline * i) + (TMapInfo_Old.PacketSize * nTy), SeekOrigin.Begin);
-                                for (var j = 0; j < nBy - nTy; j++)
+                                for (int j = 0; j < nBy - nTy; j++)
                                 {
-                                    var readData = new byte[TMapInfo_Old.PacketSize];
+                                    byte[] readData = new byte[TMapInfo_Old.PacketSize];
                                     m_nCurrentMap.Read(readData, 0, readData.Length);
                                     m_MArr[i - nLx, j] = new MapInfo(readData);
                                 }
@@ -253,8 +252,8 @@ namespace BotSrv.Maps
         {
             if ((cx == xx / BotConst.LOGICALMAPUNIT) && (cy == yy / BotConst.LOGICALMAPUNIT))
             {
-                var ax = xx - m_nBlockLeft;
-                var ay = yy - m_nBlockTop;
+                int ax = xx - m_nBlockLeft;
+                int ay = yy - m_nBlockTop;
                 m_MArr[ax, ay].wFrImg = (ushort)(m_MArr[ax, ay].wFrImg & 0x7FFF);
                 m_MArr[ax, ay].wBkImg = (ushort)(m_MArr[ax, ay].wBkImg & 0x7FFF);
             }
@@ -262,8 +261,8 @@ namespace BotSrv.Maps
 
         public void UpdateMapPos(int mx, int my)
         {
-            var cx = mx / BotConst.LOGICALMAPUNIT;
-            var cy = my / BotConst.LOGICALMAPUNIT;
+            int cx = mx / BotConst.LOGICALMAPUNIT;
+            int cy = my / BotConst.LOGICALMAPUNIT;
             m_nBlockLeft = HUtil32._MAX(0, (cx - 1) * BotConst.LOGICALMAPUNIT);
             m_nBlockTop = HUtil32._MAX(0, (cy - 1) * BotConst.LOGICALMAPUNIT);
             UpdateMapSquare(cx, cy);
@@ -295,13 +294,13 @@ namespace BotSrv.Maps
                 m_nCurrentMap.Dispose();
                 m_nCurrentMap = null;
             }
-            var sFileName = $"{MAP_BASEPATH}{m_sCurrentMap}{".map"}";
+            string sFileName = $"{MAP_BASEPATH}{m_sCurrentMap}{".map"}";
             if (File.Exists(sFileName))
             {
                 m_nCurrentMap = File.Open(sFileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 if (m_nCurrentMap != null)
                 {
-                    var headerData = new byte[MapHeader.PacketSize];
+                    byte[] headerData = new byte[MapHeader.PacketSize];
                     m_nCurrentMap.Read(headerData, 0, headerData.Length);
                     m_MapHeader = new MapHeader(headerData);
                     if (headerData.Length == 0)
@@ -317,8 +316,8 @@ namespace BotSrv.Maps
 
         public void MarkCanWalk(int mx, int my, bool bowalk)
         {
-            var cx = mx - m_nBlockLeft;
-            var cy = my - m_nBlockTop;
+            int cx = mx - m_nBlockLeft;
+            int cy = my - m_nBlockTop;
             if ((cx < 0) || (cy < 0))
             {
                 return;
@@ -335,13 +334,13 @@ namespace BotSrv.Maps
 
         public bool CanMove(int mx, int my)
         {
-            var cx = mx - m_nBlockLeft;
-            var cy = my - m_nBlockTop;
+            int cx = mx - m_nBlockLeft;
+            int cy = my - m_nBlockTop;
             if ((cx < 0) || (cy < 0))
             {
                 return false;
             }
-            var result = ((robotClient.Map.m_MArr[cx, cy].wBkImg & 0x8000) + (robotClient.Map.m_MArr[cx, cy].wFrImg & 0x8000)) == 0;
+            bool result = ((robotClient.Map.m_MArr[cx, cy].wBkImg & 0x8000) + (robotClient.Map.m_MArr[cx, cy].wFrImg & 0x8000)) == 0;
             if (result)
             {
                 if ((robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x80) > 0)
@@ -357,13 +356,13 @@ namespace BotSrv.Maps
 
         public bool CanFly(int mx, int my)
         {
-            var cx = mx - m_nBlockLeft;
-            var cy = my - m_nBlockTop;
+            int cx = mx - m_nBlockLeft;
+            int cy = my - m_nBlockTop;
             if ((cx < 0) || (cy < 0))
             {
                 return false;
             }
-            var result = (robotClient.Map.m_MArr[cx, cy].wFrImg & 0x8000) == 0;
+            bool result = (robotClient.Map.m_MArr[cx, cy].wFrImg & 0x8000) == 0;
             if (result)
             {
                 if ((robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x80) > 0)
@@ -379,9 +378,9 @@ namespace BotSrv.Maps
 
         public int GetDoor(int mx, int my)
         {
-            var result = 0;
-            var cx = mx - m_nBlockLeft;
-            var cy = my - m_nBlockTop;
+            int result = 0;
+            int cx = mx - m_nBlockLeft;
+            int cy = my - m_nBlockTop;
             if ((robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x80) > 0)
             {
                 result = robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x7F;
@@ -391,9 +390,9 @@ namespace BotSrv.Maps
 
         public bool IsDoorOpen(int mx, int my)
         {
-            var result = false;
-            var cx = mx - m_nBlockLeft;
-            var cy = my - m_nBlockTop;
+            bool result = false;
+            int cx = mx - m_nBlockLeft;
+            int cy = my - m_nBlockTop;
             if ((robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x80) > 0)
             {
                 result = (robotClient.Map.m_MArr[cx, cy].btDoorOffset & 0x80) != 0;
@@ -403,18 +402,18 @@ namespace BotSrv.Maps
 
         public void OpenDoor(int mx, int my)
         {
-            var cx = mx - m_nBlockLeft;
-            var cy = my - m_nBlockTop;
+            int cx = mx - m_nBlockLeft;
+            int cy = my - m_nBlockTop;
             if ((cx < 0) || (cy < 0))
             {
                 return;
             }
             if ((robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x80) > 0)
             {
-                var idx = robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x7F;
-                for (var i = cx - 10; i <= cx + 10; i++)
+                int idx = robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x7F;
+                for (int i = cx - 10; i <= cx + 10; i++)
                 {
-                    for (var j = cy - 10; j <= cy + 10; j++)
+                    for (int j = cy - 10; j <= cy + 10; j++)
                     {
                         if ((i > 0) && (j > 0))
                         {
@@ -430,18 +429,18 @@ namespace BotSrv.Maps
 
         public void CloseDoor(int mx, int my)
         {
-            var cx = mx - m_nBlockLeft;
-            var cy = my - m_nBlockTop;
+            int cx = mx - m_nBlockLeft;
+            int cy = my - m_nBlockTop;
             if ((cx < 0) || (cy < 0))
             {
                 return;
             }
             if ((robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x80) > 0)
             {
-                var idx = robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x7F;
-                for (var i = cx - 8; i <= cx + 10; i++)
+                int idx = robotClient.Map.m_MArr[cx, cy].btDoorIndex & 0x7F;
+                for (int i = cx - 8; i <= cx + 10; i++)
                 {
-                    for (var j = cy - 8; j <= cy + 10; j++)
+                    for (int j = cy - 8; j <= cy + 10; j++)
                     {
                         if ((robotClient.Map.m_MArr[i, j].btDoorIndex & 0x7F) == idx)
                         {

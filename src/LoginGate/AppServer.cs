@@ -69,17 +69,29 @@ public class AppServer : ServiceHost
         do
         {
             input = Console.ReadLine();
-            if (string.IsNullOrWhiteSpace(input)) continue;
-            if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?")) return;
-            if (input.Length < 2) return;
-            var firstTwoCharacters = input[..2];
+            if (string.IsNullOrWhiteSpace(input))
+            {
+                continue;
+            }
+
+            if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
+            {
+                return;
+            }
+
+            if (input.Length < 2)
+            {
+                return;
+            }
+
+            string firstTwoCharacters = input[..2];
             if (firstTwoCharacters switch
-                {
-                    "/s" => ShowServerStatus(),
-                    "/c" => ClearConsole(),
-                    "/q" => Exit(),
-                    _ => null
-                } is Task task)
+            {
+                "/s" => ShowServerStatus(),
+                "/c" => ClearConsole(),
+                "/q" => Exit(),
+                _ => null
+            } is Task task)
             {
                 await task;
                 continue;
@@ -103,14 +115,26 @@ public class AppServer : ServiceHost
     private async Task ShowServerStatus()
     {
         //GateShare.ShowLog = false;
-        if (_timer == null) _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-        var clientManager = (ClientManager)Host.Services.GetService(typeof(ClientManager));
-        if (clientManager == null) return;
-        var serverManager = (ServerManager)Host.Services.GetService(typeof(ServerManager));
-        if (serverManager == null) return;
-        var clientList = clientManager.Clients;
-        var serverList = serverManager.GetServerList();
-        var table = new Table().Expand().BorderColor(Color.Grey);
+        if (_timer == null)
+        {
+            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
+        }
+
+        ClientManager clientManager = (ClientManager)Host.Services.GetService(typeof(ClientManager));
+        if (clientManager == null)
+        {
+            return;
+        }
+
+        ServerManager serverManager = (ServerManager)Host.Services.GetService(typeof(ServerManager));
+        if (serverManager == null)
+        {
+            return;
+        }
+
+        IList<ClientThread> clientList = clientManager.Clients;
+        IList<ServerService> serverList = serverManager.GetServerList();
+        Table table = new Table().Expand().BorderColor(Color.Grey);
         table.AddColumn("[yellow]LocalEndPoint[/]");
         table.AddColumn("[yellow]RemoteEndPoint[/]");
         table.AddColumn("[yellow]Status[/]");
@@ -126,19 +150,21 @@ public class AppServer : ServiceHost
             .Cropping(VerticalOverflowCropping.Bottom)
             .StartAsync(async ctx =>
             {
-                foreach (var _ in Enumerable.Range(0, 10))
+                foreach (int _ in Enumerable.Range(0, 10))
+                {
                     table.AddRow(new[]
                     {
                         new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"),
                         new Markup("-"), new Markup("-")
                     });
+                }
 
                 while (await _timer.WaitForNextTickAsync())
                 {
                     AnsiConsole.Clear();
-                    for (var i = 0; i < clientList.Count; i++)
+                    for (int i = 0; i < clientList.Count; i++)
                     {
-                        var (remoteendpoint, status, playCount, reviceTotal, sendTotal, threadCount) =
+                        (string remoteendpoint, string status, string playCount, string reviceTotal, string sendTotal, string threadCount) =
                             clientList[i].GetStatus();
 
                         table.UpdateCell(i, 0, $"[bold]{serverList[i].GetEndPoint()}[/]");
@@ -160,32 +186,32 @@ public class AppServer : ServiceHost
     {
         AnsiConsole.WriteLine();
 
-        var table = new Table()
+        Table table = new Table()
         {
             Border = TableBorder.None,
             Expand = true
         }.HideHeaders();
         table.AddColumn(new TableColumn("One"));
 
-        var header = new FigletText("OpenMir2")
+        FigletText header = new FigletText("OpenMir2")
         {
             Color = Color.Fuchsia
         };
-        var header2 = new FigletText("Login Gate")
+        FigletText header2 = new FigletText("Login Gate")
         {
             Color = Color.Aqua
         };
 
-        var sb = new StringBuilder();
+        StringBuilder sb = new StringBuilder();
         sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
         sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
         sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
         sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-        var markup = new Markup(sb.ToString());
+        Markup markup = new Markup(sb.ToString());
 
         table.AddColumn(new TableColumn("Two"));
 
-        var rightTable = new Table()
+        Table rightTable = new Table()
             .HideHeaders()
             .Border(TableBorder.None)
             .AddColumn(new TableColumn("Content"));

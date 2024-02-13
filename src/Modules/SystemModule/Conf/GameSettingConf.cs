@@ -18,47 +18,88 @@ namespace SystemModule.Conf
             }
 
             nInteger = ReadWriteInteger("Config", "NoFog", -1);
-            if (nInteger <= -1) WriteBool("Config", "NoFog", SystemShare.Config.ClientConf.boNoFog);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "NoFog", SystemShare.Config.ClientConf.boNoFog);
+            }
 
             nInteger = ReadWriteInteger("Config", "StallSystem", -1);
-            if (nInteger <= -1) WriteBool("Config", "StallSystem", SystemShare.Config.ClientConf.boStallSystem);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "StallSystem", SystemShare.Config.ClientConf.boStallSystem);
+            }
 
             nInteger = ReadWriteInteger("Config", "SafeZoneStall", -1);
-            if (nInteger <= -1) WriteBool("Config", "SafeZoneStall", MessageSettings.boSafeZoneStall);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "SafeZoneStall", MessageSettings.boSafeZoneStall);
+            }
 
             nInteger = ReadWriteInteger("Config", "ShowHpBar", -1);
-            if (nInteger <= -1) WriteBool("Config", "ShowHpBar", SystemShare.Config.ClientConf.boShowHpBar);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "ShowHpBar", SystemShare.Config.ClientConf.boShowHpBar);
+            }
 
             nInteger = ReadWriteInteger("Config", "ShowHpNumber", -1);
-            if (nInteger <= -1) WriteBool("Config", "ShowHpNumber", SystemShare.Config.ClientConf.boShowHpNumber);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "ShowHpNumber", SystemShare.Config.ClientConf.boShowHpNumber);
+            }
 
             nInteger = ReadWriteInteger("Config", "NoStruck", -1);
-            if (nInteger <= -1) WriteBool("Config", "NoStruck", SystemShare.Config.ClientConf.boNoStruck);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "NoStruck", SystemShare.Config.ClientConf.boNoStruck);
+            }
 
             nInteger = ReadWriteInteger("Config", "FastMove", -1);
-            if (nInteger <= -1) WriteBool("Config", "FastMove", SystemShare.Config.ClientConf.boFastMove);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "FastMove", SystemShare.Config.ClientConf.boFastMove);
+            }
 
             nInteger = ReadWriteInteger("Config", "ShowFriend", -1);
-            if (nInteger <= -1) WriteBool("Config", "ShowFriend", SystemShare.Config.ClientConf.boShowFriend);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "ShowFriend", SystemShare.Config.ClientConf.boShowFriend);
+            }
 
             nInteger = ReadWriteInteger("Config", "ShowRelationship", -1);
-            if (nInteger <= -1) WriteBool("Config", "ShowRelationship", SystemShare.Config.ClientConf.boShowRelationship);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "ShowRelationship", SystemShare.Config.ClientConf.boShowRelationship);
+            }
 
             nInteger = ReadWriteInteger("Config", "ShowMail", -1);
-            if (nInteger <= -1) WriteBool("Config", "ShowMail", SystemShare.Config.ClientConf.boShowMail);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "ShowMail", SystemShare.Config.ClientConf.boShowMail);
+            }
 
             nInteger = ReadWriteInteger("Config", "ShowRecharging", -1);
-            if (nInteger <= -1) WriteBool("Config", "ShowRecharging", SystemShare.Config.ClientConf.boShowRecharging);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "ShowRecharging", SystemShare.Config.ClientConf.boShowRecharging);
+            }
 
             nInteger = ReadWriteInteger("Config", "ShowHelp", -1);
-            if (nInteger <= -1) WriteBool("Config", "ShowHelp", SystemShare.Config.ClientConf.boShowHelp);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "ShowHelp", SystemShare.Config.ClientConf.boShowHelp);
+            }
 
             nInteger = ReadWriteInteger("Config", "SecondCardSystem", -1);
-            if (nInteger <= -1) WriteBool("Config", "SecondCardSystem", MessageSettings.boSecondCardSystem);
+            if (nInteger <= -1)
+            {
+                WriteBool("Config", "SecondCardSystem", MessageSettings.boSecondCardSystem);
+            }
 
             nInteger = ReadWriteInteger("Config", "ExpErienceLevel", -1);
-            if (nInteger <= -1) WriteInteger("Config", "ExpErienceLevel", MessageSettings.ExpErienceLevel);
-
+            if (nInteger <= -1)
+            {
+                WriteInteger("Config", "ExpErienceLevel", MessageSettings.ExpErienceLevel);
+            }
 
             string sString = ReadWriteString("Config", "BadManHomeMap", "");
             if (string.IsNullOrEmpty(sString))
@@ -66,9 +107,16 @@ namespace SystemModule.Conf
                 WriteString("Config", "BadManHomeMap", "3");
             }
             nInteger = ReadWriteInteger("Config", "BadManStartX", -1);
-            if (nInteger <= -1) WriteInteger("Config", "BadManStartX", MessageSettings.BADMANSTARTX);
+            if (nInteger <= -1)
+            {
+                WriteInteger("Config", "BadManStartX", MessageSettings.BADMANSTARTX);
+            }
+
             nInteger = ReadWriteInteger("Config", "BadManStartY", -1);
-            if (nInteger <= -1) WriteInteger("Config", "BadManStartY", MessageSettings.BADMANSTARTY);
+            if (nInteger <= -1)
+            {
+                WriteInteger("Config", "BadManStartY", MessageSettings.BADMANSTARTY);
+            }
 
             sString = ReadWriteString("Config", "RECHARGINGMAP", ""); //充值地图
             if (string.IsNullOrEmpty(sString))

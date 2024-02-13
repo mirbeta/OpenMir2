@@ -20,7 +20,7 @@ namespace CommandModule.Commands
                 }
                 if (nCount > 0)
                 {
-                    for (var i = 0; i < SystemShare.DenyIPAddrList.Count; i++)
+                    for (int i = 0; i < SystemShare.DenyIPAddrList.Count; i++)
                     {
                         //PlayerActor.SysMsg(Settings.g_DenyIPAddrList[i], MsgColor.c_Green, MsgType.t_Hint);
                     }

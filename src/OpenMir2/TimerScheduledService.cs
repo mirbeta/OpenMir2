@@ -1,8 +1,8 @@
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 
 namespace OpenMir2
 {
@@ -29,7 +29,7 @@ namespace OpenMir2
 
         public override Task StartAsync(CancellationToken cancellationToken)
         {
-           // LogService.Debug($"Thread [{Name}] has started");
+            // LogService.Debug($"Thread [{Name}] has started");
             Startup(cancellationToken);
             return base.StartAsync(cancellationToken);
         }
@@ -38,7 +38,7 @@ namespace OpenMir2
         {
             Stopping(cancellationToken);
             _timer.Dispose();
-           // LogService.Debug($"Thread [{Name}] has finished");
+            // LogService.Debug($"Thread [{Name}] has finished");
             return base.StopAsync(cancellationToken);
         }
 
@@ -53,7 +53,7 @@ namespace OpenMir2
                     {
                         await ExecuteInternal(stoppingToken);
                     }
-                    catch (Exception ex)
+                    catch (Exception)
                     {
                         //LogService.Error(ex, "Execute exception");
                     }
@@ -65,7 +65,7 @@ namespace OpenMir2
                     }
                 }
             }
-            catch (OperationCanceledException operationCancelledException)
+            catch (OperationCanceledException)
             {
                 //LogService.Warn(operationCancelledException, "service stopped");
             }

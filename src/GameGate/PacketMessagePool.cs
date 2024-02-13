@@ -1,5 +1,3 @@
-using System.Collections.Concurrent;
-
 namespace GameGate
 {
     public class PacketMessagePool
@@ -30,7 +28,7 @@ namespace GameGate
         /// <returns>要被从池里删除的对象</returns>
         public SessionMessage Pop()
         {
-            if (m_pool.TryPop(out var pop))
+            if (m_pool.TryPop(out SessionMessage pop))
             {
                 return pop;
             }

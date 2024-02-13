@@ -3,12 +3,7 @@ using GameSrv.Maps;
 using GameSrv.Module;
 using GameSrv.Services;
 using GameSrv.Word.Threads;
-using M2Server;
-using OpenMir2;
-using OpenMir2.Data;
 using PlanesSystem;
-using SystemModule;
-using SystemModule.Data;
 
 namespace GameSrv
 {
@@ -61,10 +56,10 @@ namespace GameSrv
         /// <returns></returns>
         public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort)
         {
-            var result = false;
-            for (var i = 0; i < M2Share.ServerTableList.Length; i++)
+            bool result = false;
+            for (int i = 0; i < M2Share.ServerTableList.Length; i++)
             {
-                var routeInfo = M2Share.ServerTableList[i];
+                TRouteInfo routeInfo = M2Share.ServerTableList[i];
                 if (routeInfo == null)
                 {
                     continue;
@@ -85,7 +80,7 @@ namespace GameSrv
 
         private static string GetRandpmRoute(TRouteInfo routeInfo, ref int gatePort)
         {
-            var random = RandomNumber.GetInstance().Random(routeInfo.GateCount);
+            int random = RandomNumber.GetInstance().Random(routeInfo.GateCount);
             gatePort = routeInfo.GameGatePort[random];
             return routeInfo.GameGateIP[random];
         }

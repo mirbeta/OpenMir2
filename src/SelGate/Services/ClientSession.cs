@@ -1,10 +1,9 @@
-using NLog;
-using SelGate.Conf;
-using System;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
 using OpenMir2.Packets.ServerPackets;
+using SelGate.Conf;
 using SelGate.Datas;
+using System;
 
 namespace SelGate.Services
 {
@@ -16,7 +15,7 @@ namespace SelGate.Services
         private readonly SessionInfo _session;
         private bool _kickFlag = false;
         private int _clientTimeOutTick = 0;
-        
+
         private readonly ClientThread _lastDbSvr;
         private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
@@ -45,7 +44,7 @@ namespace SelGate.Services
         {
             if ((userData.MsgLen >= 5) && Config.DefenceCCPacket)
             {
-                var sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
+                string sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     //if (LogManager.g_pLogMgr.CheckLevel(6))
@@ -57,11 +56,11 @@ namespace SelGate.Services
                     //return;
                 }
             }
-            var success = false;
-            var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
-            var nDeCodeLen = 0;
-            var packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-            var cltCmd = SerializerUtil.Deserialize<CommandMessage>(packBuff);
+            bool success = false;
+            byte[] tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
+            int nDeCodeLen = 0;
+            Span<byte> packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            CommandMessage cltCmd = SerializerUtil.Deserialize<CommandMessage>(packBuff);
             switch (cltCmd.Ident)
             {
                 case Messages.CM_QUERYCHR:
@@ -69,7 +68,7 @@ namespace SelGate.Services
                 case Messages.CM_DELCHR:
                 case Messages.CM_SELCHR:
                     _clientTimeOutTick = HUtil32.GetTickCount();
-                    var accountPacket = new ServerDataMessage();
+                    ServerDataMessage accountPacket = new ServerDataMessage();
                     accountPacket.Data = userData.Body;
                     accountPacket.DataLen = (byte)userData.Body.Length;
                     accountPacket.Type = ServerDataType.Data;
@@ -148,7 +147,7 @@ namespace SelGate.Services
             Array.Copy(SerializerUtil.Serialize(Cmd), 0, TempBuf, 0, CommandMessage.Size);
             if (!string.IsNullOrEmpty(sMsg))
             {
-                var sBuff = HUtil32.GetBytes(sMsg);
+                byte[] sBuff = HUtil32.GetBytes(sMsg);
                 Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
                 iLen = EncryptUtil.Encode(TempBuf, CommandMessage.Size + sMsg.Length, SendBuf);
             }
@@ -165,9 +164,9 @@ namespace SelGate.Services
         /// </summary>
         public void UserEnter()
         {
-            var sendStr = $"%K{_session.SocketId}/{_session.ClientIP}/{_session.ClientIP}$";
-            var body = HUtil32.GetBytes(sendStr);
-            var accountPacket = new ServerDataMessage();
+            string sendStr = $"%K{_session.SocketId}/{_session.ClientIP}/{_session.ClientIP}$";
+            byte[] body = HUtil32.GetBytes(sendStr);
+            ServerDataMessage accountPacket = new ServerDataMessage();
             accountPacket.Data = body;
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Enter;
@@ -185,9 +184,9 @@ namespace SelGate.Services
             {
                 return;
             }
-            var sendStr = $"%L{_session.SocketId}$";
-            var body = HUtil32.GetBytes(sendStr);
-            var accountPacket = new ServerDataMessage();
+            string sendStr = $"%L{_session.SocketId}$";
+            byte[] body = HUtil32.GetBytes(sendStr);
+            ServerDataMessage accountPacket = new ServerDataMessage();
             accountPacket.Data = body;
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Leave;

@@ -26,9 +26,9 @@ namespace CommandModule.Commands
                     return;
                 }
                 PlayerActor.SysMsg(MessageSettings.YourMasterListNowLocateMsg, MsgColor.Green, MsgType.Hint);
-                for (var i = 0; i < PlayerActor.MasterList.Count; i++)
+                for (int i = 0; i < PlayerActor.MasterList.Count; i++)
                 {
-                    var human = (IPlayerActor)PlayerActor.MasterList[i];
+                    IPlayerActor human = (IPlayerActor)PlayerActor.MasterList[i];
                     PlayerActor.SysMsg(human.ChrName + " " + human.Envir.MapDesc + "(" + human.CurrX + ":" + human.CurrY + ")", MsgColor.Green, MsgType.Hint);
                     human.SysMsg(MessageSettings.YourMasterSearchLocateMsg, MsgColor.Green, MsgType.Hint);
                     human.SysMsg(PlayerActor.ChrName + " " + PlayerActor.Envir.MapDesc + "(" + PlayerActor.CurrX + ":" + PlayerActor.CurrY + ")", MsgColor.Green, MsgType.Hint);

@@ -1,9 +1,9 @@
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using OpenMir2.Packets.ClientPackets;
-using OpenMir2.Packets.ServerPackets;
 
 namespace OpenMir2
 {

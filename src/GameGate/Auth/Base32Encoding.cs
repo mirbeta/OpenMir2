@@ -1,5 +1,3 @@
-using System;
-
 namespace GameGate.Auth
 {
     public class Base32Encoding
@@ -90,7 +88,10 @@ namespace GameGate.Auth
             if (arrayIndex != charCount)
             {
                 returnArray[arrayIndex++] = ValueToChar(nextChar);
-                while (arrayIndex != charCount) returnArray[arrayIndex++] = '=';//padding
+                while (arrayIndex != charCount)
+                {
+                    returnArray[arrayIndex++] = '=';//padding
+                }
             }
 
             return new string(returnArray);

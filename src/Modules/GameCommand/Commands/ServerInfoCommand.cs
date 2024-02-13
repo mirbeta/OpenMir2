@@ -9,7 +9,7 @@ namespace CommandModule.Commands
         [ExecuteCommand]
         public void Execute(string[] @params, IPlayerActor PlayerActor)
         {
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
             //sb.AppendLine(string.Format("({0}) [{1}/{2}] [{3}/{4}] [{5}/{6}]", SystemShare.WorldEngine.MonsterCount,
             //       TRunSocket.g_nGateRecvMsgLenMin, TRunSocket.g_nGateRecvMsgLenMax, SystemShare.WorldEngine.OnlineIPlayerActor,
             //       SystemShare.WorldEngine.IPlayerActorCount, SystemShare.WorldEngine.LoadPlayCount, SystemShare.WorldEngine.m_IPlayerActorFreeList.Count));

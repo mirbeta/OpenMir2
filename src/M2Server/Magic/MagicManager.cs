@@ -23,23 +23,23 @@ namespace M2Server.Magic
 
         private static int MagPushArround(BaseObject playObject, int nPushLevel)
         {
-            var result = 0;
-            for (var i = 0; i < playObject.VisibleActors.Count; i++)
+            int result = 0;
+            for (int i = 0; i < playObject.VisibleActors.Count; i++)
             {
-                var targetObject = playObject.VisibleActors[i].BaseObject;
+                IActor targetObject = playObject.VisibleActors[i].BaseObject;
                 if (Math.Abs(playObject.CurrX - targetObject.CurrX) <= 1 && Math.Abs(playObject.CurrY - targetObject.CurrY) <= 1)
                 {
                     if (!targetObject.Death && targetObject != playObject)
                     {
                         if (playObject.Abil.Level > targetObject.Abil.Level && !targetObject.StickMode)
                         {
-                            var levelgap = playObject.Abil.Level - targetObject.Abil.Level;
+                            int levelgap = playObject.Abil.Level - targetObject.Abil.Level;
                             if (M2Share.RandomNumber.Random(20) < 6 + nPushLevel * 3 + levelgap)
                             {
                                 if (playObject.IsProperTarget(targetObject))
                                 {
-                                    var push = (byte)(1 + HUtil32._MAX(0, nPushLevel - 1) + M2Share.RandomNumber.Random(2));
-                                    var nDir = M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, targetObject.CurrX, targetObject.CurrY);
+                                    byte push = (byte)(1 + HUtil32._MAX(0, nPushLevel - 1) + M2Share.RandomNumber.Random(2));
+                                    byte nDir = M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, targetObject.CurrX, targetObject.CurrY);
                                     targetObject.CharPushed(nDir, push);
                                     result++;
                                 }
@@ -53,12 +53,12 @@ namespace M2Server.Magic
 
         private static bool MagBigHealing(PlayObject playObject, int nPower, int nX, int nY)
         {
-            var result = false;
+            bool result = false;
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nX, nY, 1, ref objectList);
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var baseObject = objectList[i];
+                IActor baseObject = objectList[i];
                 if (playObject.IsProperFriend(baseObject))
                 {
                     if (baseObject.WAbil.HP < baseObject.WAbil.MaxHP)
@@ -81,7 +81,7 @@ namespace M2Server.Magic
         /// <returns></returns>
         public static bool IsWarrSkill(int wMagIdx)
         {
-            var result = false;
+            bool result = false;
             switch (wMagIdx)
             {
                 case MagicConst.SKILL_ONESWORD:
@@ -112,9 +112,9 @@ namespace M2Server.Magic
 
         private static ushort GetPower13(UserMagic userMagic, int nInt)
         {
-            var d10 = nInt / 3.0;
-            var d18 = nInt - d10;
-            var result = (ushort)HUtil32.Round(d18 / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1) + d10 + (userMagic.Magic.DefPower + M2Share.RandomNumber.Random(userMagic.Magic.DefMaxPower - userMagic.Magic.DefPower)));
+            double d10 = nInt / 3.0;
+            double d18 = nInt - d10;
+            ushort result = (ushort)HUtil32.Round(d18 / (userMagic.Magic.TrainLv + 1) * (userMagic.Level + 1) + d10 + (userMagic.Magic.DefPower + M2Share.RandomNumber.Random(userMagic.Magic.DefMaxPower - userMagic.Magic.DefPower)));
             return result;
         }
 
@@ -161,9 +161,9 @@ namespace M2Server.Magic
             {
                 targetObject = null;
             }
-            var boTrain = false;
-            var boSpellFail = false;
-            var boSpellFire = true;
+            bool boTrain = false;
+            bool boSpellFail = false;
+            bool boSpellFire = true;
             if (playObject.SoftVersionDateEx == 0 && playObject.ClientTick == 0 || userMagic.Magic.MagicId > 80)
             {
                 return false;
@@ -228,7 +228,7 @@ namespace M2Server.Magic
                     {
                         if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx))
                         {
-                            var stdItem = SystemShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                            OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                             if (stdItem != null)
                             {
                                 MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);
@@ -401,7 +401,7 @@ namespace M2Server.Magic
                     }
                     break;
                 case MagicConst.SKILL_SPACEMOVE:
-                    var targerActors = targetObject == null ? 0 : targetObject.ActorId;
+                    int targerActors = targetObject == null ? 0 : targetObject.ActorId;
                     playObject.SendRefMsg(Messages.RM_MAGICFIRE, 0, HUtil32.MakeWord(userMagic.Magic.EffectType, userMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), targerActors, "");
                     boSpellFire = false;
                     if (MagSaceMove(playObject, userMagic.Level))
@@ -621,7 +621,7 @@ namespace M2Server.Magic
                         {
                             MagicBase.UseAmulet(playObject, 1, 1, nAmuletIdx);
                             nPower = (ushort)(userMagic.Level + 1 + M2Share.RandomNumber.Random(userMagic.Level));
-                            var nTime = playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
+                            int nTime = playObject.GetAttackPower(GetPower13(userMagic, 60) + HUtil32.LoByte(playObject.WAbil.SC) * 10, HUtil32.HiByte(playObject.WAbil.SC) - HUtil32.LoByte(playObject.WAbil.SC) + 1);
                             ((IPlayerActor)targetObject).AttPowerUp(nPower, nTime);
                             boTrain = true;
                             boSpellFail = false;
@@ -678,9 +678,9 @@ namespace M2Server.Magic
             }
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, 9, ref objectList);
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var targetObject = objectList[i];
+                IActor targetObject = objectList[i];
                 if (targetObject.Race >= ActorRace.Animal && targetObject.TargetCret == baseObject)
                 {
                     if (Math.Abs(targetObject.CurrX - baseObject.CurrX) > 1 || Math.Abs(targetObject.CurrY - baseObject.CurrY) > 1 || M2Share.RandomNumber.Random(2) == 0)
@@ -703,7 +703,7 @@ namespace M2Server.Magic
         /// </summary>
         private static bool MagTamming(PlayObject playObject, MonsterObject targetObject, int nTargetX, int nTargetY, byte magicLevel)
         {
-            var result = false;
+            bool result = false;
             if (targetObject.Race > ActorRace.Play && M2Share.RandomNumber.Random(4 - magicLevel) == 0)
             {
                 targetObject.TargetCret = null;
@@ -724,7 +724,7 @@ namespace M2Server.Magic
                                 {
                                     if (!targetObject.NoTame && targetObject.LifeAttrib != Grobal2.LA_UNDEAD && targetObject.Abil.Level < SystemShare.Config.MagTammingLevel && playObject.SlaveList.Count < SystemShare.Config.MagTammingCount)
                                     {
-                                        var n14 = targetObject.Abil.MaxHP / SystemShare.Config.MagTammingHPRate;
+                                        int n14 = targetObject.Abil.MaxHP / SystemShare.Config.MagTammingHPRate;
                                         if (n14 <= 2)
                                         {
                                             n14 = 2;
@@ -826,7 +826,7 @@ namespace M2Server.Magic
 
         private static bool MagTurnUndead(PlayObject playObject, IActor targetObject, int nTargetX, int nTargetY, byte magicLevel)
         {
-            var result = false;
+            bool result = false;
             if (targetObject.SuperMan || targetObject.LifeAttrib != Grobal2.LA_UNDEAD)
             {
                 return false;
@@ -843,7 +843,7 @@ namespace M2Server.Magic
             {
                 if (targetObject.Abil.Level < SystemShare.Config.MagTurnUndeadLevel)
                 {
-                    var level = playObject.Abil.Level - targetObject.Abil.Level;
+                    int level = playObject.Abil.Level - targetObject.Abil.Level;
                     if (M2Share.RandomNumber.Random(100) < (magicLevel << 3) - magicLevel + 15 + level)
                     {
                         targetObject.SetLastHiter(playObject);
@@ -857,8 +857,8 @@ namespace M2Server.Magic
 
         private static bool MagWindTebo(BaseObject playObject, UserMagic userMagic)
         {
-            var result = false;
-            var targetObject = playObject.GetPoseCreate();
+            bool result = false;
+            IActor targetObject = playObject.GetPoseCreate();
             if (targetObject != null && targetObject != playObject && !targetObject.Death && !targetObject.Ghost && playObject.IsProperTarget(targetObject) && !targetObject.StickMode)
             {
                 if (Math.Abs(playObject.CurrX - targetObject.CurrX) <= 1 && Math.Abs(playObject.CurrY - targetObject.CurrY) <= 1 && playObject.Abil.Level > targetObject.Abil.Level)
@@ -875,11 +875,11 @@ namespace M2Server.Magic
 
         private static bool MagSaceMove(PlayObject playObject, int nLevel)
         {
-            var result = false;
+            bool result = false;
             if (M2Share.RandomNumber.Random(11) < nLevel * 2 + 4)
             {
                 playObject.SendRefMsg(Messages.RM_SPACEMOVE_FIRE2, 0, 0, 0, 0, "");
-                var envir = playObject.Envir;
+                SystemModule.Maps.IEnvirnoment envir = playObject.Envir;
                 playObject.MapRandomMove(playObject.HomeMap, 1);
                 if (envir != playObject.Envir && playObject.Race == ActorRace.Play)
                 {
@@ -893,12 +893,12 @@ namespace M2Server.Magic
         private static bool MagGroupAmyounsul(PlayObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, IActor targetObject)
         {
             short nAmuletIdx = 0;
-            var result = false;
+            bool result = false;
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var baseObject = objectList[i];
+                IActor baseObject = objectList[i];
                 if (baseObject.Death || baseObject.Ghost || playObject == baseObject)
                 {
                     continue;
@@ -907,7 +907,7 @@ namespace M2Server.Magic
                 {
                     if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx))
                     {
-                        var stdItem = SystemShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                        OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                         if (stdItem != null)
                         {
                             MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);
@@ -941,19 +941,19 @@ namespace M2Server.Magic
 
         private static bool MagGroupDeDing(BaseObject playObject, UserMagic userMagic, int nTargetX, int nTargetY, IActor targetObject)
         {
-            var result = false;
+            bool result = false;
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var baseObject = objectList[i];
+                IActor baseObject = objectList[i];
                 if (baseObject.Death || baseObject.Ghost || playObject == baseObject)
                 {
                     continue;
                 }
                 if (playObject.IsProperTarget(baseObject))
                 {
-                    var nPower = playObject.GetAttackPower(HUtil32.LoByte(playObject.WAbil.DC), HUtil32.HiByte(playObject.WAbil.DC) - HUtil32.LoByte(playObject.WAbil.DC));
+                    int nPower = playObject.GetAttackPower(HUtil32.LoByte(playObject.WAbil.DC), HUtil32.HiByte(playObject.WAbil.DC) - HUtil32.LoByte(playObject.WAbil.DC));
                     if (M2Share.RandomNumber.Random(baseObject.SpeedPoint) >= playObject.HitPoint)
                     {
                         nPower = 0;
@@ -980,14 +980,14 @@ namespace M2Server.Magic
 
         private static bool MagGroupLightening(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, IActor targetObject, ref bool boSpellFire)
         {
-            var result = false;
+            bool result = false;
             boSpellFire = false;
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(playObject.Envir, nTargetX, nTargetY, HUtil32._MAX(1, userMagic.Level), ref objectList);
             playObject.SendRefMsg(Messages.RM_MAGICFIRE, 0, HUtil32.MakeWord(userMagic.Magic.EffectType, userMagic.Magic.Effect), HUtil32.MakeLong(nTargetX, nTargetY), targetObject.ActorId, "");
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var baseObject = objectList[i];
+                IActor baseObject = objectList[i];
                 if (baseObject.Death || baseObject.Ghost || playObject == baseObject)
                 {
                     continue;
@@ -996,7 +996,7 @@ namespace M2Server.Magic
                 {
                     if (M2Share.RandomNumber.Random(10) >= baseObject.AntiMagic)
                     {
-                        var nPower = playObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(userMagic), userMagic) + HUtil32.LoByte(playObject.WAbil.MC), HUtil32.HiByte(playObject.WAbil.MC) - HUtil32.LoByte(playObject.WAbil.MC) + 1);
+                        int nPower = playObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(userMagic), userMagic) + HUtil32.LoByte(playObject.WAbil.MC), HUtil32.HiByte(playObject.WAbil.MC) - HUtil32.LoByte(playObject.WAbil.MC) + 1);
                         if (baseObject.LifeAttrib == Grobal2.LA_UNDEAD)
                         {
                             nPower = (ushort)HUtil32.Round(nPower * 1.5);
@@ -1019,7 +1019,7 @@ namespace M2Server.Magic
 
         private static bool MagHbFireBall(BaseObject playObject, UserMagic userMagic, short nTargetX, short nTargetY, ref IActor targetObject)
         {
-            var result = false;
+            bool result = false;
             if (!playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetObject))
             {
                 targetObject = null;
@@ -1035,7 +1035,7 @@ namespace M2Server.Magic
                 targetObject = null;
                 return false;
             }
-            var nPower = playObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(userMagic), userMagic) + HUtil32.LoByte(playObject.WAbil.MC), HUtil32.HiByte(playObject.WAbil.MC) - HUtil32.LoByte(playObject.WAbil.MC) + 1);
+            int nPower = playObject.GetAttackPower(MagicBase.GetPower(MagicBase.MPow(userMagic), userMagic) + HUtil32.LoByte(playObject.WAbil.MC), HUtil32.HiByte(playObject.WAbil.MC) - HUtil32.LoByte(playObject.WAbil.MC) + 1);
             playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
             if (targetObject.Race >= ActorRace.Animal)
             {
@@ -1043,13 +1043,13 @@ namespace M2Server.Magic
             }
             if (playObject.Abil.Level > targetObject.Abil.Level && !targetObject.StickMode)
             {
-                var levelgap = playObject.Abil.Level - targetObject.Abil.Level;
+                int levelgap = playObject.Abil.Level - targetObject.Abil.Level;
                 if (M2Share.RandomNumber.Random(20) < 6 + userMagic.Level * 3 + levelgap)
                 {
-                    var push = M2Share.RandomNumber.Random(userMagic.Level) - 1;
+                    int push = M2Share.RandomNumber.Random(userMagic.Level) - 1;
                     if (push > 0)
                     {
-                        var nDir = M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, targetObject.CurrX, targetObject.CurrY);
+                        byte nDir = M2Share.GetNextDirection(playObject.CurrX, playObject.CurrY, targetObject.CurrX, targetObject.CurrY);
                         playObject.SendSelfDelayMsg(Messages.RM_DELAYPUSHED, nDir, HUtil32.MakeLong(nTargetX, nTargetY), push, targetObject.ActorId, "", 600);
                     }
                 }
@@ -1071,27 +1071,27 @@ namespace M2Server.Magic
             }
             if (playObject.Envir.GetEvent(nX, nY - 1) == null)
             {
-                var fireBurnEvent = new FireBurnEvent(playObject, nX, (short)(nY - 1), Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, nX, (short)(nY - 1), Grobal2.ET_FIRE, time * 1000, nDamage);
                 SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX - 1, nY) == null)
             {
-                var fireBurnEvent = new FireBurnEvent(playObject, (short)(nX - 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, (short)(nX - 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX, nY) == null)
             {
-                var fireBurnEvent = new FireBurnEvent(playObject, nX, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, nX, nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX + 1, nY) == null)
             {
-                var fireBurnEvent = new FireBurnEvent(playObject, (short)(nX + 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, (short)(nX + 1), nY, Grobal2.ET_FIRE, time * 1000, nDamage);
                 SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             if (playObject.Envir.GetEvent(nX, nY + 1) == null)
             {
-                var fireBurnEvent = new FireBurnEvent(playObject, nX, (short)(nY + 1), Grobal2.ET_FIRE, time * 1000, nDamage);
+                FireBurnEvent fireBurnEvent = new FireBurnEvent(playObject, nX, (short)(nY + 1), Grobal2.ET_FIRE, time * 1000, nDamage);
                 SystemShare.EventMgr.AddEvent(fireBurnEvent);
             }
             return true;
@@ -1099,12 +1099,12 @@ namespace M2Server.Magic
 
         private static bool MagBigExplosion(BaseObject baseObject, int nPower, int nX, int nY, int nRage)
         {
-            var result = false;
+            bool result = false;
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, nRage, ref objectList);
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var targetObject = objectList[i];
+                IActor targetObject = objectList[i];
                 if (baseObject.IsProperTarget(targetObject))
                 {
                     baseObject.SetTargetCreat(targetObject);
@@ -1118,12 +1118,12 @@ namespace M2Server.Magic
 
         private static bool MagElecBlizzard(BaseObject baseObject, int nPower)
         {
-            var result = false;
+            bool result = false;
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, baseObject.CurrX, baseObject.CurrY, SystemShare.Config.ElecBlizzardRange, ref objectList);
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var targetObject = objectList[i];
+                IActor targetObject = objectList[i];
                 int nPowerPoint;
                 if (targetObject.LifeAttrib != Grobal2.LA_UNDEAD)
                 {
@@ -1145,7 +1145,7 @@ namespace M2Server.Magic
 
         private static int MagMakeHolyCurtain(BaseObject baseObject, int nPower, short nX, short nY)
         {
-            var result = 0;
+            int result = 0;
             if (baseObject.Envir.CanWalk(nX, nY, true))
             {
                 IList<IActor> objectList = new List<IActor>();
@@ -1160,9 +1160,9 @@ namespace M2Server.Magic
                     StartTick = HUtil32.GetTickCount(),
                     Time = nPower * 1000
                 };
-                for (var i = 0; i < objectList.Count; i++)
+                for (int i = 0; i < objectList.Count; i++)
                 {
-                    var targetObject = objectList[i];
+                    IActor targetObject = objectList[i];
                     if (targetObject.Race >= ActorRace.Animal && M2Share.RandomNumber.Random(4) + (baseObject.Abil.Level - 1) > targetObject.Abil.Level && targetObject.Master == null)
                     {
                         targetObject.SendMsg(Messages.RM_MAKEHOLYSEIZEMODE, nPower * 1000, 0, 0, 0);
@@ -1176,7 +1176,7 @@ namespace M2Server.Magic
                 }
                 if (result > 0)
                 {
-                    var holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX - 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
+                    HolyCurtainEvent holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX - 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
                     SystemShare.EventMgr.AddEvent(holyCurtainEvent);
                     magicEvent.Events[0] = holyCurtainEvent;
                     holyCurtainEvent = new HolyCurtainEvent(baseObject.Envir, (short)(nX + 1), (short)(nY - 2), Grobal2.ET_HOLYCURTAIN, nPower * 1000);
@@ -1208,12 +1208,12 @@ namespace M2Server.Magic
 
         private static bool MagMakeGroupTransparent(BaseObject baseObject, int nX, int nY, int nHTime)
         {
-            var result = false;
+            bool result = false;
             IList<IActor> objectList = new List<IActor>();
             BaseObject.GetMapBaseObjects(baseObject.Envir, nX, nY, 1, ref objectList);
-            for (var i = 0; i < objectList.Count; i++)
+            for (int i = 0; i < objectList.Count; i++)
             {
-                var targetObject = objectList[i];
+                IActor targetObject = objectList[i];
                 if (baseObject.IsProperFriend(targetObject))
                 {
                     if (targetObject.StatusTimeArr[PoisonState.STATETRANSPARENT] == 0)
@@ -1229,7 +1229,7 @@ namespace M2Server.Magic
 
         private static bool MabMabe(PlayObject playObject, IActor targetObject, int nPower, int nLevel, short nTargetX, short nTargetY)
         {
-            var result = false;
+            bool result = false;
             if (playObject.MagCanHitTarget(playObject.CurrX, playObject.CurrY, targetObject))
             {
                 if (playObject.IsProperTarget(targetObject))
@@ -1239,7 +1239,7 @@ namespace M2Server.Magic
                         playObject.SendSelfDelayMsg(Messages.RM_DELAYMAGIC, nPower / 3, HUtil32.MakeLong(nTargetX, nTargetY), 2, targetObject.ActorId, "", 600);
                         if (M2Share.RandomNumber.Random(2) + (playObject.Abil.Level - 1) > targetObject.Abil.Level)
                         {
-                            var nLv = playObject.Abil.Level - targetObject.Abil.Level;
+                            int nLv = playObject.Abil.Level - targetObject.Abil.Level;
                             if (M2Share.RandomNumber.Random(SystemShare.Config.MabMabeHitRandRate) < HUtil32._MAX(SystemShare.Config.MabMabeHitMinLvLimit, nLevel * 8 - nLevel + 15 + nLv))
                             {
                                 if (M2Share.RandomNumber.Random(SystemShare.Config.MabMabeHitSucessRate) < nLevel * 2 + 4)
@@ -1268,18 +1268,18 @@ namespace M2Server.Magic
 
         private static bool MagMakeSinSuSlave(PlayObject playObject, UserMagic userMagic)
         {
-            var result = false;
+            bool result = false;
             if (!playObject.CheckServerMakeSlave())
             {
-                var sMonName = SystemShare.Config.Dragon;
+                string sMonName = SystemShare.Config.Dragon;
                 int nExpLevel = userMagic.Level;
-                var nMakeLevel = HUtil32._MIN(4, userMagic.Level);
+                int nMakeLevel = HUtil32._MIN(4, userMagic.Level);
                 if (nExpLevel > 4)
                 {
                     sMonName = string.Concat(SystemShare.Config.Dragon, (nExpLevel / 4) + 4);
                 }
-                var nCount = SystemShare.Config.DragonCount;
-                for (var i = 0; i < SystemShare.Config.DragonArray.Length; i++)
+                int nCount = SystemShare.Config.DragonCount;
+                for (int i = 0; i < SystemShare.Config.DragonArray.Length; i++)
                 {
                     if (SystemShare.Config.DragonArray[i].nHumLevel == 0)
                     {
@@ -1307,13 +1307,13 @@ namespace M2Server.Magic
 
         private static bool MagMakeSlave(BaseObject playObject, UserMagic userMagic)
         {
-            var result = false;
+            bool result = false;
             if (!playObject.CheckServerMakeSlave())
             {
-                var sMonName = SystemShare.Config.Skeleton;
+                string sMonName = SystemShare.Config.Skeleton;
                 int nExpLevel = userMagic.Level;
-                var nCount = SystemShare.Config.SkeletonCount;
-                for (var i = 0; i < SystemShare.Config.SkeletonArray.Length; i++)
+                int nCount = SystemShare.Config.SkeletonCount;
+                for (int i = 0; i < SystemShare.Config.SkeletonArray.Length; i++)
                 {
                     if (SystemShare.Config.SkeletonArray[i].nHumLevel == 0)
                     {
@@ -1342,7 +1342,7 @@ namespace M2Server.Magic
 
         private static bool MagMakeAngelSlave(BaseObject playObject, UserMagic userMagic)
         {
-            var result = false;
+            bool result = false;
             if (!playObject.CheckServerMakeSlave())
             {
                 if (playObject.MakeSlave(SystemShare.Config.Angel, userMagic.Level, userMagic.Level, 1, DwRoyaltySec) != null)

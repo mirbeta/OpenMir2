@@ -20,10 +20,10 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sItemName = @params.Length > 1 ? @params[1] : "";
-            var sItemCount = @params.Length > 2 ? @params[2] : "";
-            var sType = @params.Length > 3 ? @params[3] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sItemName = @params.Length > 1 ? @params[1] : "";
+            string sItemCount = @params.Length > 2 ? @params[2] : "";
+            string sType = @params.Length > 3 ? @params[3] : "";
 
             int nItemCount;
             StdItem stdItem;
@@ -32,20 +32,20 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var nCount = HUtil32.StrToInt(sItemCount, 0);
-            var nType = HUtil32.StrToInt(sType, 0);
+            int nCount = HUtil32.StrToInt(sItemCount, 0);
+            int nType = HUtil32.StrToInt(sType, 0);
             UserItem userItem;
             switch (nType)
             {
                 case 0:
                     nItemCount = 0;
-                    for (var i = 0; i < mIPlayerActor.UseItems.Length; i++)
+                    for (int i = 0; i < mIPlayerActor.UseItems.Length; i++)
                     {
                         if (mIPlayerActor.ItemList.Count >= 46)
                         {
@@ -76,7 +76,7 @@ namespace CommandModule.Commands
 
                 case 1:
                     nItemCount = 0;
-                    for (var i = mIPlayerActor.ItemList.Count - 1; i >= 0; i--)
+                    for (int i = mIPlayerActor.ItemList.Count - 1; i >= 0; i--)
                     {
                         if (mIPlayerActor.ItemList.Count >= 46)
                         {
@@ -109,7 +109,7 @@ namespace CommandModule.Commands
 
                 case 2:
                     nItemCount = 0;
-                    for (var i = mIPlayerActor.StorageItemList.Count - 1; i >= 0; i--)
+                    for (int i = mIPlayerActor.StorageItemList.Count - 1; i >= 0; i--)
                     {
                         if (mIPlayerActor.ItemList.Count >= 46)
                         {

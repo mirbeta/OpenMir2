@@ -17,21 +17,21 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sHumanName) || !string.IsNullOrEmpty(sHumanName) && sHumanName[1] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i < mIPlayerActor.UseItems.Length; i++)
+            for (int i = 0; i < mIPlayerActor.UseItems.Length; i++)
             {
-                var userItem = mIPlayerActor.UseItems[i];
+                OpenMir2.Packets.ClientPackets.UserItem userItem = mIPlayerActor.UseItems[i];
                 if (userItem.Index == 0)
                 {
                     continue;

@@ -15,19 +15,19 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var nRange = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
-            var nType = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            var nTime = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
-            var nPoint = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 0;
+            int nRange = @params.Length > 0 ? HUtil32.StrToInt(@params[0], 0) : 0;
+            int nType = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            int nTime = @params.Length > 2 ? HUtil32.StrToInt(@params[2], 0) : 0;
+            int nPoint = @params.Length > 3 ? HUtil32.StrToInt(@params[3], 0) : 0;
 
             FireBurnEvent fireBurnEvent;
-            var nMinX = PlayerActor.CurrX - nRange;
-            var nMaxX = PlayerActor.CurrX + nRange;
-            var nMinY = PlayerActor.CurrY - nRange;
-            var nMaxY = PlayerActor.CurrY + nRange;
-            for (var nX = nMinX; nX <= nMaxX; nX++)
+            int nMinX = PlayerActor.CurrX - nRange;
+            int nMaxX = PlayerActor.CurrX + nRange;
+            int nMinY = PlayerActor.CurrY - nRange;
+            int nMaxY = PlayerActor.CurrY + nRange;
+            for (int nX = nMinX; nX <= nMaxX; nX++)
             {
-                for (var nY = nMinY; nY <= nMaxY; nY++)
+                for (int nY = nMinY; nY <= nMaxY; nY++)
                 {
                     if (nX < nMaxX && nY == nMinY || nY < nMaxY && nX == nMinX || nX == nMaxX || nY == nMaxY)
                     {

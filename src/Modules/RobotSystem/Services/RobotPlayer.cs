@@ -1,4 +1,3 @@
-using System.Collections;
 using M2Server;
 using M2Server.Actor;
 using M2Server.Magic;
@@ -11,6 +10,7 @@ using OpenMir2.Data;
 using OpenMir2.Enums;
 using OpenMir2.Packets.ClientPackets;
 using RobotSystem.Data;
+using System.Collections;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Const;
@@ -253,7 +253,7 @@ namespace RobotSystem.Services
             }
             try
             {
-                var sParam1 = string.Empty;
+                string sParam1 = string.Empty;
                 if (sData.Length > SystemShare.Config.SayMsgMaxLen)
                 {
                     sData = sData[..SystemShare.Config.SayMsgMaxLen];
@@ -262,7 +262,7 @@ namespace RobotSystem.Services
                 {
                     DisableSayMsg = false;
                 }
-                var boDisableSayMsg = DisableSayMsg;
+                bool boDisableSayMsg = DisableSayMsg;
                 //g_DenySayMsgList.Lock;
                 //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                 //{
@@ -313,7 +313,7 @@ namespace RobotSystem.Services
                                 }
                                 ShoutMsgTick = HUtil32.GetTickCount();
                                 sc = sData[1..];
-                                var sCryCryMsg = "(!)" + ChrName + ": " + sc;
+                                string sCryCryMsg = "(!)" + ChrName + ": " + sc;
                                 if (FilterSendMsg)
                                 {
                                     SendMsg(null, Messages.RM_CRY, 0, 0, 0xFFFF, 0, sCryCryMsg);
@@ -345,9 +345,9 @@ namespace RobotSystem.Services
         private UserMagic FindMagic(short wMagIdx)
         {
             UserMagic result = null;
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
-                var userMagic = MagicList[i];
+                UserMagic userMagic = MagicList[i];
                 if (userMagic.Magic.MagicId == wMagIdx)
                 {
                     result = userMagic;
@@ -360,9 +360,9 @@ namespace RobotSystem.Services
         private UserMagic FindMagic(string sMagicName)
         {
             UserMagic result = null;
-            for (var i = 0; i < MagicList.Count; i++)
+            for (int i = 0; i < MagicList.Count; i++)
             {
-                var userMagic = MagicList[i];
+                UserMagic userMagic = MagicList[i];
                 if (string.Compare(userMagic.Magic.MagicName, sMagicName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = userMagic;
@@ -374,7 +374,7 @@ namespace RobotSystem.Services
 
         private bool RunToNext(short nX, short nY)
         {
-            var result = false;
+            bool result = false;
             if ((HUtil32.GetTickCount() - RunIntervalTick) > SystemShare.Config.nAIRunIntervalTime)
             {
                 result = RobotRunTo(SystemShare.GetNextDirection(CurrX, CurrY, nX, nY), false, nX, nY);
@@ -386,7 +386,7 @@ namespace RobotSystem.Services
 
         private bool WalkToNext(short nX, short nY)
         {
-            var result = false;
+            bool result = false;
             if (HUtil32.GetTickCount() - WalkIntervalTick > SystemShare.Config.nAIWalkIntervalTime)
             {
                 result = WalkTo(SystemShare.GetNextDirection(CurrX, CurrY, nX, nY), false);
@@ -401,7 +401,7 @@ namespace RobotSystem.Services
 
         private bool GotoNextOne(short nX, short nY, bool boRun)
         {
-            var result = false;
+            bool result = false;
             if (Math.Abs(nX - CurrX) <= 2 && Math.Abs(nY - CurrY) <= 2)
             {
                 if (Math.Abs(nX - CurrX) <= 1 && Math.Abs(nY - CurrY) <= 1)
@@ -428,7 +428,7 @@ namespace RobotSystem.Services
                     {
                         DisableSayMsg = false;
                     }
-                    var boDisableSayMsg = DisableSayMsg;
+                    bool boDisableSayMsg = DisableSayMsg;
                     // g_DenySayMsgList.Lock;
                     //if (g_DenySayMsgList.GetIndex(m_sChrName) >= 0)
                     //{
@@ -437,11 +437,11 @@ namespace RobotSystem.Services
                     // g_DenySayMsgList.UnLock;
                     if (!boDisableSayMsg)
                     {
-                        var nPos = sMsg.IndexOf("=>", StringComparison.OrdinalIgnoreCase);
+                        int nPos = sMsg.IndexOf("=>", StringComparison.OrdinalIgnoreCase);
                         if (nPos > 0 && AiSayMsgList.Count > 0)
                         {
-                            var sChrName = sMsg[..(nPos - 1)];
-                            var sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
+                            string sChrName = sMsg[..(nPos - 1)];
+                            string sSendMsg = sMsg.Substring(nPos + 3 - 1, sMsg.Length - nPos - 2);
                             Whisper(sChrName, "你猜我是谁.");
                             //Whisper(sChrName, m_AISayMsgList[(SystemShare.RandomNumber.Random(m_AISayMsgList.Count)).Next()]);
                             LogService.Error("TODO Hear...");
@@ -468,9 +468,9 @@ namespace RobotSystem.Services
 
         private void SearchPickUpItemSetHideItem(MapItem mapItem)
         {
-            for (var i = 0; i < VisibleItems.Count; i++)
+            for (int i = 0; i < VisibleItems.Count; i++)
             {
-                var visibleMapItem = VisibleItems[i];
+                VisibleMapItem visibleMapItem = VisibleItems[i];
                 if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
                 {
                     if (visibleMapItem.MapItem == mapItem)
@@ -484,9 +484,9 @@ namespace RobotSystem.Services
 
         private bool SearchPickUpItemPickUpItem(short nX, short nY)
         {
-            var result = false;
+            bool result = false;
             MapItem mapItem = default;
-            var success = Envir.GetItem(nX, nY, ref mapItem);
+            bool success = Envir.GetItem(nX, nY, ref mapItem);
             if (!success)
             {
                 return false;
@@ -516,7 +516,7 @@ namespace RobotSystem.Services
             else
             {
                 // 捡物品
-                var stdItem = SystemShare.ItemSystem.GetStdItem(mapItem.UserItem.Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(mapItem.UserItem.Index);
                 if (stdItem != null)
                 {
                     UserItem userItem = null;
@@ -565,7 +565,7 @@ namespace RobotSystem.Services
 
         private bool SearchPickUpItem(int nPickUpTime)
         {
-            var result = false;
+            bool result = false;
             VisibleMapItem visibleMapItem = null;
             try
             {
@@ -576,11 +576,11 @@ namespace RobotSystem.Services
                 PickUpItemTick = HUtil32.GetTickCount();
                 if (IsEnoughBag() && TargetCret == null)
                 {
-                    var boFound = false;
+                    bool boFound = false;
                     if (SelMapItem.ItemId > 0)
                     {
                         CanPickIng = true;
-                        for (var i = 0; i < VisibleItems.Count; i++)
+                        for (int i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
@@ -605,12 +605,12 @@ namespace RobotSystem.Services
                             return true;
                         }
                     }
-                    var n01 = 999;
+                    int n01 = 999;
                     VisibleMapItem selVisibleMapItem = null;
                     boFound = false;
                     if (SelMapItem.ItemId > 0)
                     {
-                        for (var i = 0; i < VisibleItems.Count; i++)
+                        for (int i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null && visibleMapItem.VisibleFlag > 0)
@@ -626,14 +626,14 @@ namespace RobotSystem.Services
                     }
                     if (!boFound)
                     {
-                        for (var i = 0; i < VisibleItems.Count; i++)
+                        for (int i = 0; i < VisibleItems.Count; i++)
                         {
                             visibleMapItem = VisibleItems[i];
                             if (visibleMapItem != null)
                             {
                                 if (visibleMapItem.VisibleFlag > 0)
                                 {
-                                    var mapItem = visibleMapItem.MapItem;
+                                    MapItem mapItem = visibleMapItem.MapItem;
                                     if (mapItem.ItemId > 0)
                                     {
                                         if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(SystemShare.ItemSystem.GetStdItemWeight(mapItem.UserItem.Index)))
@@ -642,7 +642,7 @@ namespace RobotSystem.Services
                                             {
                                                 if (Math.Abs(visibleMapItem.nX - CurrX) <= 5 && Math.Abs(visibleMapItem.nY - CurrY) <= 5)
                                                 {
-                                                    var n02 = Math.Abs(visibleMapItem.nX - CurrX) + Math.Abs(visibleMapItem.nY - CurrY);
+                                                    int n02 = Math.Abs(visibleMapItem.nX - CurrX) + Math.Abs(visibleMapItem.nY - CurrY);
                                                     if (n02 < n01)
                                                     {
                                                         n01 = n02;
@@ -697,7 +697,7 @@ namespace RobotSystem.Services
 
         private bool WalkToTargetXy2(short nTargetX, short nTargetY)
         {
-            var result = false;
+            bool result = false;
             if (Transparent && HideMode)
             {
                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;// 隐身,一动就显身
@@ -710,9 +710,9 @@ namespace RobotSystem.Services
             {
                 if ((HUtil32.GetTickCount() - WalkIntervalTick) > TurnIntervalTime)// 转向间隔
                 {
-                    var n10 = nTargetX;
-                    var n14 = nTargetY;
-                    var nDir = Direction.Down;
+                    short n10 = nTargetX;
+                    short n14 = nTargetY;
+                    byte nDir = Direction.Down;
                     if (n10 > CurrX)
                     {
                         nDir = Direction.Right;
@@ -761,8 +761,8 @@ namespace RobotSystem.Services
                     }
                     if (!result)
                     {
-                        var n20 = SystemShare.RandomNumber.Random(3);
-                        for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                        int n20 = SystemShare.RandomNumber.Random(3);
+                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -804,7 +804,7 @@ namespace RobotSystem.Services
                 int n10 = ProtectTargetX;
                 int n14 = ProtectTargetY;
                 WalkIntervalTick = HUtil32.GetTickCount();
-                var nDir = Direction.Down;
+                byte nDir = Direction.Down;
                 if (n10 > CurrX)
                 {
                     nDir = Direction.Right;
@@ -843,16 +843,16 @@ namespace RobotSystem.Services
                         }
                     }
                 }
-                var nOldX = CurrX;
-                var nOldY = CurrY;
+                short nOldX = CurrX;
+                short nOldY = CurrY;
                 if (Math.Abs(CurrX - ProtectTargetX) >= 3 || Math.Abs(CurrY - ProtectTargetY) >= 3)
                 {
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
                     if (!RobotRunTo(nDir, false, ProtectTargetX, ProtectTargetY))
                     {
                         WalkTo(nDir, false);
-                        var n20 = SystemShare.RandomNumber.Random(3);
-                        for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                        int n20 = SystemShare.RandomNumber.Random(3);
+                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -881,8 +881,8 @@ namespace RobotSystem.Services
                 {
                     WalkTo(nDir, false);
                     //m_dwStationTick = HUtil32.GetTickCount();// 增加检测人物站立时间
-                    var n20 = SystemShare.RandomNumber.Random(3);
-                    for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                    int n20 = SystemShare.RandomNumber.Random(3);
+                    for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                     {
                         if (nOldX == CurrX && nOldY == CurrY)
                         {
@@ -913,8 +913,8 @@ namespace RobotSystem.Services
         {
             if (RobotStart && TargetCret == null && !CanPickIng && !Ghost && !Death && !FixedHideMode && !StoneMode && StatusTimeArr[PoisonState.STONE] == 0)
             {
-                var nX = CurrX;
-                var nY = CurrY;
+                short nX = CurrX;
+                short nY = CurrY;
                 if (MPath != null && MPath.Length > 0 && Postion < MPath.Length)
                 {
                     if (!GotoNextOne(MPath[Postion].nX, MPath[Postion].nY, true))
@@ -1008,14 +1008,14 @@ namespace RobotSystem.Services
 
         private IActor StruckMinXY(IActor aObject, IActor bObject)
         {
-            var nA = Math.Abs(CurrX - aObject.CurrX) + Math.Abs(CurrY - aObject.CurrY);
-            var nB = Math.Abs(CurrX - bObject.CurrX) + Math.Abs(CurrY - bObject.CurrY);
+            int nA = Math.Abs(CurrX - aObject.CurrX) + Math.Abs(CurrY - aObject.CurrY);
+            int nB = Math.Abs(CurrX - bObject.CurrX) + Math.Abs(CurrY - bObject.CurrY);
             return nA > nB ? bObject : aObject;
         }
 
         private bool CanWalk(short nCurrX, short nCurrY, short nTargetX, short nTargetY, byte nDir, ref int nStep, bool boFlag)
         {
-            var result = false;
+            bool result = false;
             short nX = 0;
             short nY = 0;
             nStep = 0;
@@ -1065,7 +1065,7 @@ namespace RobotSystem.Services
 
         private bool IsGotoXy(short x1, short y1, short x2, short y2)
         {
-            var nStep = 0;
+            int nStep = 0;
             //0代替-1
             if (!CanWalk(x1, y1, x2, y2, 0, ref nStep, Race != 108))
             {
@@ -1080,8 +1080,8 @@ namespace RobotSystem.Services
 
         private bool GotoNext(short nX, short nY, bool boRun)
         {
-            var result = false;
-            var nStep = 0;
+            bool result = false;
+            int nStep = 0;
             if (Math.Abs(nX - CurrX) <= 2 && Math.Abs(nY - CurrY) <= 2)
             {
                 if (Math.Abs(nX - CurrX) <= 1 && Math.Abs(nY - CurrY) <= 1)
@@ -1099,7 +1099,7 @@ namespace RobotSystem.Services
                 PointInfo[] path = M2Share.FindPath.Find(Envir, CurrX, CurrY, nX, nY, boRun);
                 if (path.Length > 0)
                 {
-                    for (var i = 0; i < path.Length; i++)
+                    for (int i = 0; i < path.Length; i++)
                     {
                         if (path[i].nX != CurrX || path[i].nY != CurrY)
                         {
@@ -1133,14 +1133,14 @@ namespace RobotSystem.Services
 
         protected override bool Operate(ProcessMessage processMsg)
         {
-            var result = false;
+            bool result = false;
             try
             {
                 if (processMsg.wIdent == Messages.RM_STRUCK)
                 {
                     if (processMsg.ActorId == ActorId)
                     {
-                        var attackBaseObject = SystemShare.ActorMgr.Get(processMsg.nParam3);
+                        IActor attackBaseObject = SystemShare.ActorMgr.Get(processMsg.nParam3);
                         if (attackBaseObject != null)
                         {
                             if (attackBaseObject.Race == ActorRace.Play)
@@ -1180,14 +1180,14 @@ namespace RobotSystem.Services
 
         private int GetRangeTargetCountByDir(byte nDir, short nX, short nY, int nRange)
         {
-            var result = 0;
-            var nCurrX = nX;
-            var nCurrY = nY;
-            for (var i = 0; i < nRange; i++)
+            int result = 0;
+            short nCurrX = nX;
+            short nCurrY = nY;
+            for (int i = 0; i < nRange; i++)
             {
                 if (Envir.GetNextPosition(nCurrX, nCurrY, nDir, 1, ref nCurrX, ref nCurrY))
                 {
-                    var baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
+                    IActor baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost && (!baseObject.HideMode || CoolEye) && IsProperTarget(baseObject))
                     {
                         result++;
@@ -1199,14 +1199,14 @@ namespace RobotSystem.Services
 
         private int GetNearTargetCount()
         {
-            var result = 0;
+            int result = 0;
             short nX = 0;
             short nY = 0;
-            for (var n10 = 0; n10 < 7; n10++)
+            for (int n10 = 0; n10 < 7; n10++)
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                 {
-                    var baseObject = Envir.GetMovingObject(nX, nY, true);
+                    IActor baseObject = Envir.GetMovingObject(nX, nY, true);
                     if (baseObject != null && !baseObject.Death && !baseObject.Ghost && IsProperTarget(baseObject))
                     {
                         result++;
@@ -1218,10 +1218,10 @@ namespace RobotSystem.Services
 
         private int GetNearTargetCount(short nCurrX, short nCurrY)
         {
-            var result = 0;
+            int result = 0;
             short nX = 0;
             short nY = 0;
-            var baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
+            IActor baseObject = Envir.GetMovingObject(nCurrX, nCurrY, true);
             if (baseObject != null && !baseObject.Death && !baseObject.Ghost && IsProperTarget(baseObject))
             {
                 result++;
@@ -1244,8 +1244,8 @@ namespace RobotSystem.Services
         {
             if (Master != null)
             {
-                var nCurrX = Master.CurrX;
-                var nCurrY = Master.CurrY;
+                short nCurrX = Master.CurrX;
+                short nCurrY = Master.CurrY;
                 return Math.Abs(nCurrX - nTargetX) + Math.Abs(nCurrY - nTargetY);
             }
             return 0;
@@ -1261,7 +1261,7 @@ namespace RobotSystem.Services
             short nY = 0;
             short nCurrX = 0;
             short nCurrY = 0;
-            var boNeed = false;
+            bool boNeed = false;
             if (!Master.SlaveRelax)
             {
                 if (Envir != Master.Envir || Math.Abs(CurrX - Master.CurrX) > 20 || Math.Abs(CurrY - Master.CurrY) > 20)
@@ -1304,7 +1304,7 @@ namespace RobotSystem.Services
                             {
                                 return;
                             }
-                            for (var k = 0; k < 2; k++)
+                            for (int k = 0; k < 2; k++)
                             {
                                 for (byte j = 0; j < 7; j++)
                                 {
@@ -1321,7 +1321,7 @@ namespace RobotSystem.Services
                         }
                     }
                 }
-                var nStep = Race == 108 ? 0 : 1;
+                int nStep = Race == 108 ? 0 : 1;
                 if (Math.Abs(CurrX - nCurrX) > nStep || Math.Abs(CurrY - nCurrY) > nStep)
                 {
                     if (GotoNextOne(nCurrX, nCurrY, true))
@@ -1332,7 +1332,7 @@ namespace RobotSystem.Services
                     {
                         return;
                     }
-                    for (var j = 0; j < 2; j++)
+                    for (int j = 0; j < 2; j++)
                     {
                         for (byte k = 0; k < 7; k++)
                         {
@@ -1351,8 +1351,8 @@ namespace RobotSystem.Services
 
         private bool FindVisibleActors(IActor actorObject)
         {
-            var result = false;
-            for (var i = 0; i < VisibleActors.Count; i++)
+            bool result = false;
+            for (int i = 0; i < VisibleActors.Count; i++)
             {
                 if (VisibleActors[i].BaseObject == actorObject)
                 {
@@ -1365,8 +1365,8 @@ namespace RobotSystem.Services
 
         private bool AllowUseMagic(short magIdx)
         {
-            var result = false;
-            var userMagic = FindMagic(magIdx);
+            bool result = false;
+            UserMagic userMagic = FindMagic(magIdx);
             if (userMagic != null)
             {
                 if (!MagicManager.IsWarrSkill(userMagic.MagIdx))
@@ -1388,7 +1388,7 @@ namespace RobotSystem.Services
 
         private static bool CheckItemType(int nItemType, StdItem stdItem)
         {
-            var result = false;
+            bool result = false;
             switch (nItemType)
             {
                 case 1:
@@ -1422,11 +1422,11 @@ namespace RobotSystem.Services
         // 自动换毒符
         private bool CheckUserItemType(int nItemType, int nCount)
         {
-            var result = false;
+            bool result = false;
             if (UseItems[ItemLocation.ArmRingl] != null && UseItems[ItemLocation.ArmRingl].Index > 0 &&
                 Math.Round(Convert.ToDouble(UseItems[ItemLocation.ArmRingl].Dura / 100)) >= nCount)
             {
-                var stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                 if (stdItem != null)
                 {
                     result = CheckItemType(nItemType, stdItem);
@@ -1439,10 +1439,10 @@ namespace RobotSystem.Services
         // nType 为指定类型 5 为护身符 1,2 为毒药   3,诅咒术专用
         private int GetUserItemList(int nItemType, int nCount)
         {
-            var result = -1;
-            for (var i = 0; i < ItemList.Count; i++)
+            int result = -1;
+            for (int i = 0; i < ItemList.Count; i++)
             {
-                var stdItem = SystemShare.ItemSystem.GetStdItem(ItemList[i].Index);
+                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (CheckItemType(nItemType, stdItem) && HUtil32.Round(ItemList[i].Dura / 100.0) >= nCount)
@@ -1458,13 +1458,13 @@ namespace RobotSystem.Services
         // 自动换毒符
         private bool UseItem(int nItemType, int nIndex)
         {
-            var result = false;
+            bool result = false;
             if (nIndex >= 0 && nIndex < ItemList.Count)
             {
-                var userItem = ItemList[nIndex];
+                UserItem userItem = ItemList[nIndex];
                 if (UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
-                    var stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (stdItem != null)
                     {
                         if (CheckItemType(nItemType, stdItem))
@@ -1474,7 +1474,7 @@ namespace RobotSystem.Services
                         else
                         {
                             ItemList.RemoveAt(nIndex);
-                            var addUserItem = UseItems[ItemLocation.ArmRingl];
+                            UserItem addUserItem = UseItems[ItemLocation.ArmRingl];
                             if (AddItemToBag(addUserItem))
                             {
                                 UseItems[ItemLocation.ArmRingl] = userItem;
@@ -1512,9 +1512,9 @@ namespace RobotSystem.Services
             IList<BaseObject> baseObjectList = new List<BaseObject>();
             if (Envirnoment.GetMapBaseObjects(nX, nY, nRange, baseObjectList))
             {
-                for (var i = baseObjectList.Count - 1; i >= 0; i--)
+                for (int i = baseObjectList.Count - 1; i >= 0; i--)
                 {
-                    var baseObject = baseObjectList[i];
+                    BaseObject baseObject = baseObjectList[i];
                     if (baseObject.HideMode && !CoolEye || !IsProperTarget(baseObject))
                     {
                         baseObjectList.RemoveAt(i);
@@ -1528,9 +1528,9 @@ namespace RobotSystem.Services
         // 目标是否和自己在一条线上，用来检测直线攻击的魔法是否可以攻击到目标
         private bool CanLineAttack(short nCurrX, short nCurrY)
         {
-            var result = false;
-            var nX = nCurrX;
-            var nY = nCurrY;
+            bool result = false;
+            short nX = nCurrX;
+            short nY = nCurrY;
             //byte btDir = SystemShare.GetNextDirection(nCurrX, nCurrY, TargetCret.CurrX, TargetCret.CurrY);
             while (true)
             {
@@ -1539,7 +1539,7 @@ namespace RobotSystem.Services
                     result = true;
                     break;
                 }
-                var btDir = SystemShare.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
+                byte btDir = SystemShare.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
                 if (!Envir.GetNextPosition(nX, nY, btDir, 1, ref nX, ref nY))
                 {
                     break;
@@ -1555,18 +1555,18 @@ namespace RobotSystem.Services
         // 是否是能直线攻击
         private bool CanLineAttack(int nStep)
         {
-            var result = false;
-            var nX = CurrX;
-            var nY = CurrY;
+            bool result = false;
+            short nX = CurrX;
+            short nY = CurrY;
             //byte btDir = SystemShare.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
-            for (var i = 0; i < nStep; i++)
+            for (int i = 0; i < nStep; i++)
             {
                 if (TargetCret.CurrX == nX && TargetCret.CurrY == nY)
                 {
                     result = true;
                     break;
                 }
-                var btDir = SystemShare.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
+                byte btDir = SystemShare.GetNextDirection(nX, nY, TargetCret.CurrX, TargetCret.CurrY);
                 if (!Envir.GetNextPosition(nX, nY, btDir, 1, ref nX, ref nY))
                 {
                     break;
@@ -1581,11 +1581,11 @@ namespace RobotSystem.Services
 
         private bool CanAttack(short nCurrX, short nCurrY, IActor targetObject, int nRange, ref byte btDir)
         {
-            var result = false;
+            bool result = false;
             short nX = 0;
             short nY = 0;
             btDir = SystemShare.GetNextDirection(nCurrX, nCurrY, targetObject.CurrX, targetObject.CurrY);
-            for (var i = 0; i < nRange; i++)
+            for (int i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(nCurrX, nCurrY, btDir, i, ref nX, ref nY))
                 {
@@ -1604,9 +1604,9 @@ namespace RobotSystem.Services
         {
             short nX = 0;
             short nY = 0;
-            var result = false;
+            bool result = false;
             btDir = SystemShare.GetNextDirection(CurrX, CurrY, targetObject.CurrX, targetObject.CurrY);
-            for (var i = 0; i < nRange; i++)
+            for (int i = 0; i < nRange; i++)
             {
                 if (!Envir.GetNextPosition(CurrX, CurrY, btDir, i, ref nX, ref nY))
                 {
@@ -1628,14 +1628,14 @@ namespace RobotSystem.Services
         private bool IsUseAttackMagic()
         {
             UserMagic userMagic;
-            var result = false;
+            bool result = false;
             switch (Job)
             {
                 case PlayerJob.Warrior:
                     result = true;
                     break;
                 case PlayerJob.Wizard:
-                    for (var i = 0; i < MagicList.Count; i++)
+                    for (int i = 0; i < MagicList.Count; i++)
                     {
                         userMagic = MagicList[i];
                         switch (userMagic.MagIdx)
@@ -1662,7 +1662,7 @@ namespace RobotSystem.Services
                     }
                     break;
                 case PlayerJob.Taoist:
-                    for (var i = 0; i < MagicList.Count; i++)
+                    for (int i = 0; i < MagicList.Count; i++)
                     {
                         userMagic = MagicList[i];
                         if (userMagic.Magic.Job == 2 || userMagic.Magic.Job == 99)
@@ -1713,7 +1713,7 @@ namespace RobotSystem.Services
 
         private bool UseSpell(UserMagic userMagic, short nTargetX, short nTargetY, IActor targetObject)
         {
-            var result = false;
+            bool result = false;
             if (!IsCanSpell)
             {
                 return false;
@@ -1855,7 +1855,7 @@ namespace RobotSystem.Services
 
         private bool AutoSpell(UserMagic userMagic, short nTargetX, short nTargetY, IActor targetObject)
         {
-            var result = false;
+            bool result = false;
             try
             {
                 if (targetObject != null)
@@ -1880,7 +1880,7 @@ namespace RobotSystem.Services
 
         private bool Thinking()
         {
-            var result = false;
+            bool result = false;
             try
             {
                 if (SystemShare.Config.RobotAutoPickUpItem)//&& (g_AllowAIPickUpItemList.Count > 0)
@@ -2103,7 +2103,7 @@ namespace RobotSystem.Services
         /// <returns></returns>
         private bool GetGotoXy(IActor baseObject, byte nCode)
         {
-            var result = false;
+            bool result = false;
             switch (nCode)
             {
                 case 2:// 刺杀位
@@ -2224,7 +2224,7 @@ namespace RobotSystem.Services
         /// <returns></returns>
         private bool RunToTargetXy(short nTargetX, short nTargetY)
         {
-            var result = false;
+            bool result = false;
             if (Transparent && HideMode)
             {
                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;// 隐身,一动就显身
@@ -2239,9 +2239,9 @@ namespace RobotSystem.Services
             }
             if (HUtil32.GetTickCount() - RunIntervalTick > RunIntervalTime) // 跑步使用单独的变量计数
             {
-                var nX = nTargetX;
-                var nY = nTargetY;
-                var nDir = SystemShare.GetNextDirection(CurrX, CurrY, nX, nY);
+                short nX = nTargetX;
+                short nY = nTargetY;
+                byte nDir = SystemShare.GetNextDirection(CurrX, CurrY, nX, nY);
                 if (!RobotRunTo(nDir, false, nTargetX, nTargetY))
                 {
                     result = WalkToTargetXy(nTargetX, nTargetY);
@@ -2265,13 +2265,13 @@ namespace RobotSystem.Services
         private bool RobotRunTo(byte btDir, bool boFlag, short nDestX, short nDestY)
         {
             const string sExceptionMsg = "[Exception] TBaseObject::RunTo";
-            var result = false;
+            bool result = false;
             try
             {
                 int nOldX = CurrX;
                 int nOldY = CurrY;
                 Dir = btDir;
-                var canWalk = SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll || SystemShare.Config.boSafeAreaLimited && InSafeZone();
+                bool canWalk = SystemShare.Config.DiableHumanRun || Permission > 9 && SystemShare.Config.boGMRunAll || SystemShare.Config.boSafeAreaLimited && InSafeZone();
                 switch (btDir)
                 {
                     case Direction.Up:
@@ -2355,7 +2355,7 @@ namespace RobotSystem.Services
         /// <returns></returns>
         private bool WalkToTargetXy(int nTargetX, int nTargetY)
         {
-            var result = false;
+            bool result = false;
             if (Transparent && HideMode)
             {
                 StatusTimeArr[PoisonState.STATETRANSPARENT] = 1;// 隐身,一动就显身
@@ -2368,9 +2368,9 @@ namespace RobotSystem.Services
             {
                 if (HUtil32.GetTickCount() - WalkIntervalTick > WalkIntervalTime)
                 {
-                    var n10 = nTargetX;
-                    var n14 = nTargetY;
-                    var nDir = Direction.Down;
+                    int n10 = nTargetX;
+                    int n14 = nTargetY;
+                    byte nDir = Direction.Down;
                     if (n10 > CurrX)
                     {
                         nDir = Direction.Right;
@@ -2419,8 +2419,8 @@ namespace RobotSystem.Services
                     }
                     if (!result)
                     {
-                        var n20 = SystemShare.RandomNumber.Random(3);
-                        for (var i = Direction.Up; i <= Direction.UpLeft; i++)
+                        int n20 = SystemShare.RandomNumber.Random(3);
+                        for (byte i = Direction.Up; i <= Direction.UpLeft; i++)
                         {
                             if (nOldX == CurrX && nOldY == CurrY)
                             {
@@ -2461,7 +2461,7 @@ namespace RobotSystem.Services
         /// <returns></returns>
         private bool GotoTargetXy(short nTargetX, short nTargetY, int nCode)
         {
-            var result = false;
+            bool result = false;
             switch (nCode)
             {
                 case 0:// 正常模式
@@ -2507,7 +2507,7 @@ namespace RobotSystem.Services
             AutoMagicId = SelectMagic();
             if (AutoMagicId > 0)
             {
-                var userMagic = FindMagic(AutoMagicId);
+                UserMagic userMagic = FindMagic(AutoMagicId);
                 if (userMagic != null)
                 {
                     BoUseAttackMagic = IsUseAttackMagic();
@@ -3612,12 +3612,12 @@ namespace RobotSystem.Services
         // 战士判断使用
         private int CheckTargetXyCount1(int nX, int nY, int nRange)
         {
-            var result = 0;
+            int result = 0;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var baseObject = VisibleActors[i].BaseObject;
+                    IActor baseObject = VisibleActors[i].BaseObject;
                     if (baseObject != null)
                     {
                         if (!baseObject.Death)
@@ -3639,14 +3639,14 @@ namespace RobotSystem.Services
         // 半月弯刀判断目标函数
         private int CheckTargetXyCount2(short nMode)
         {
-            var result = 0;
-            var nC = 0;
-            var n10 = 0;
+            int result = 0;
+            int nC = 0;
+            int n10 = 0;
             short nX = 0;
             short nY = 0;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
                     switch (nMode)
                     {
@@ -3656,7 +3656,7 @@ namespace RobotSystem.Services
                     }
                     if (Envir.GetNextPosition(CurrX, CurrY, (byte)n10, 1, ref nX, ref nY))
                     {
-                        var baseObject = Envir.GetMovingObject(nX, nY, true);
+                        IActor baseObject = Envir.GetMovingObject(nX, nY, true);
                         if (baseObject != null)
                         {
                             if (!baseObject.Death)
@@ -3689,12 +3689,12 @@ namespace RobotSystem.Services
         /// <returns></returns>
         private int CheckTargetXyCount3(int nX, int nY, int nRange, int nCount)
         {
-            var result = 0;
+            int result = 0;
             if (VisibleActors.Count > 0)
             {
-                for (var i = 0; i < VisibleActors.Count; i++)
+                for (int i = 0; i < VisibleActors.Count; i++)
                 {
-                    var baseObject = VisibleActors[i].BaseObject;
+                    IActor baseObject = VisibleActors[i].BaseObject;
                     if (baseObject != null)
                     {
                         if (!baseObject.Death)
@@ -3720,7 +3720,7 @@ namespace RobotSystem.Services
         // 参数 nType 为指定类型 1 为护身符 2 为毒药    nCount 为持久,即数量
         private bool CheckHeroAmulet(int nType, int nCount)
         {
-            var result = false;
+            bool result = false;
             StdItem amuletStdItem;
             try
             {
@@ -3781,10 +3781,10 @@ namespace RobotSystem.Services
                 // 检测人物包裹是否存在毒,护身符
                 if (ItemList.Count > 0)
                 {
-                    for (var i = 0; i < ItemList.Count; i++)
+                    for (int i = 0; i < ItemList.Count; i++)
                     {
                         // 人物包裹不为空
-                        var userItem = ItemList[i];
+                        UserItem userItem = ItemList[i];
                         if (userItem != null)
                         {
                             amuletStdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);

@@ -18,7 +18,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             UserItem userItem;
             UserItem userItem1;
             string s14;
@@ -27,13 +27,13 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var targerObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor targerObject = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (targerObject == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = targerObject.ItemList.Count - 1; i >= 0; i--)
+            for (int i = targerObject.ItemList.Count - 1; i >= 0; i--)
             {
                 if (targerObject.ItemList.Count <= 0)
                 {
@@ -42,7 +42,7 @@ namespace CommandModule.Commands
 
                 userItem = targerObject.ItemList[i];
                 s14 = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
-                for (var j = i - 1; j >= 0; j--)
+                for (int j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.ItemList[j];
                     if (SystemShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
@@ -53,7 +53,7 @@ namespace CommandModule.Commands
                 }
             }
 
-            for (var i = targerObject.StorageItemList.Count - 1; i >= 0; i--)
+            for (int i = targerObject.StorageItemList.Count - 1; i >= 0; i--)
             {
                 if (targerObject.StorageItemList.Count <= 0)
                 {
@@ -61,7 +61,7 @@ namespace CommandModule.Commands
                 }
                 userItem = targerObject.StorageItemList[i];
                 s14 = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
-                for (var j = i - 1; j >= 0; j--)
+                for (int j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.StorageItemList[j];
                     if (SystemShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 &&

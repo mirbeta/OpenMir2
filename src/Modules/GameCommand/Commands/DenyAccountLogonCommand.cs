@@ -14,8 +14,8 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sAccount = @params.Length > 0 ? @params[0] : "";
-            var sFixDeny = @params.Length > 1 ? @params[1] : "";
+            string sAccount = @params.Length > 0 ? @params[0] : "";
+            string sFixDeny = @params.Length > 1 ? @params[1] : "";
             if (string.IsNullOrEmpty(sAccount))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

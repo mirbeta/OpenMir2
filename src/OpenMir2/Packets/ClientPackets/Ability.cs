@@ -1,7 +1,7 @@
-﻿using System;
+﻿using MemoryPack;
+using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using MemoryPack;
 
 namespace OpenMir2.Packets.ClientPackets
 {
@@ -87,7 +87,7 @@ namespace OpenMir2.Packets.ClientPackets
         {
             return (Ability)MemberwiseClone();
         }
-        
+
         public static unsafe T DeepClone<T>(T obj) where T : class
         {
             if (obj == null)

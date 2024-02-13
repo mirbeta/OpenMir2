@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-using OpenMir2.NativeList.Abstracts;
+﻿using OpenMir2.NativeList.Abstracts;
 using OpenMir2.NativeList.Enums;
 using OpenMir2.NativeList.Helpers;
+using System;
+using System.Text;
 
 namespace OpenMir2.NativeList.Utils
 {

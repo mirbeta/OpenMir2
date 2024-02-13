@@ -1,5 +1,5 @@
-﻿using System.IO;
-using OpenMir2.Packets.ServerPackets;
+﻿using OpenMir2.Packets.ServerPackets;
+using System.IO;
 
 namespace OpenMir2.Packets.ClientPackets
 {

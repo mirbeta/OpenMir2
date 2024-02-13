@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
 using System.Threading;
 using System.Threading.Tasks;
-using SystemModule.Hosts;
 
 namespace BotSrv
 {

@@ -1,6 +1,5 @@
 ﻿using BotSrv.Player;
 using OpenMir2;
-using SystemModule;
 
 namespace BotSrv.Objects
 {
@@ -33,16 +32,29 @@ namespace BotSrv.Objects
             }
 
             m_boMsgMuch = false;
-            if (m_MsgList.Count >= 2) m_boMsgMuch = true;
+            if (m_MsgList.Count >= 2)
+            {
+                m_boMsgMuch = true;
+            }
+
             RunFrameAction(m_nCurrentFrame - m_nStartFrame);
             prv = m_nCurrentFrame;
             if (m_nCurrentAction != 0)
             {
-                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame) m_nCurrentFrame = m_nStartFrame;
+                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame)
+                {
+                    m_nCurrentFrame = m_nStartFrame;
+                }
+
                 if (m_boMsgMuch)
+                {
                     dwFrameTimetime = HUtil32.Round(m_dwFrameTime * 2 / 3);
+                }
                 else
+                {
                     dwFrameTimetime = m_dwFrameTime;
+                }
+
                 if (MShare.GetTickCount() - m_dwStartTime > dwFrameTimetime)
                 {
                     if (m_nCurrentFrame < m_nEndFrame)
@@ -60,7 +72,11 @@ namespace BotSrv.Objects
                             }
                             else
                             {
-                                if (m_nCurrentFrame < m_nEndFrame - 1) m_nCurrentFrame++;
+                                if (m_nCurrentFrame < m_nEndFrame - 1)
+                                {
+                                    m_nCurrentFrame++;
+                                }
+
                                 m_nCurEffFrame++;
                                 m_dwStartTime = MShare.GetTickCount();
                             }
@@ -73,7 +89,11 @@ namespace BotSrv.Objects
                     }
                     else
                     {
-                        if (m_boDelActionAfterFinished) DelActor = true;
+                        if (m_boDelActionAfterFinished)
+                        {
+                            DelActor = true;
+                        }
+
                         ActionEnded();
                         m_nCurrentAction = 0;
                         m_boUseMagic = false;
@@ -103,13 +123,19 @@ namespace BotSrv.Objects
                 {
                     m_dwDefFrameTime = MShare.GetTickCount();
                     m_nCurrentDefFrame++;
-                    if (m_nCurrentDefFrame >= m_nDefFrameCount) m_nCurrentDefFrame = 0;
+                    if (m_nCurrentDefFrame >= m_nDefFrameCount)
+                    {
+                        m_nCurrentDefFrame = 0;
+                    }
                 }
 
                 DefaultMotion();
             }
 
-            if (prv != m_nCurrentFrame) m_dwLoadSurfaceTime = MShare.GetTickCount();
+            if (prv != m_nCurrentFrame)
+            {
+                m_dwLoadSurfaceTime = MShare.GetTickCount();
+            }
         }
     }
 }

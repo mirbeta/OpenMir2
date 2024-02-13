@@ -1,6 +1,6 @@
-﻿using System.IO;
-using OpenMir2.Extensions;
+﻿using OpenMir2.Extensions;
 using OpenMir2.Packets.ClientPackets;
+using System.IO;
 
 namespace OpenMir2.Data
 {

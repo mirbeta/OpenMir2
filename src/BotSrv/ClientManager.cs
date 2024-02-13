@@ -1,19 +1,17 @@
 ﻿using BotSrv.Player;
-using NLog;
+using OpenMir2;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using OpenMir2;
-using SystemModule;
 
 namespace BotSrv
 {
     public class ClientManager
     {
-        
+
         private int g_dwProcessTimeMin = 0;
         private int g_dwProcessTimeMax = 0;
         private int g_nPosition = 0;
@@ -47,11 +45,11 @@ namespace BotSrv
         {
             while (await _reviceQueue.Reader.WaitToReadAsync(stoppingToken))
             {
-                if (_reviceQueue.Reader.TryRead(out var message))
+                if (_reviceQueue.Reader.TryRead(out RecvicePacket message))
                 {
                     try
                     {
-                        if (_clients.TryGetValue(message.SessionId, out var client))
+                        if (_clients.TryGetValue(message.SessionId, out RobotPlayer client))
                         {
                             client.ProcessPacket(message.ReviceData);
                         }
@@ -66,7 +64,7 @@ namespace BotSrv
 
         public void AddPacket(string sessionId, string reviceData)
         {
-            var clientPacket = new RecvicePacket();
+            RecvicePacket clientPacket = new RecvicePacket();
             clientPacket.SessionId = sessionId;
             clientPacket.ReviceData = reviceData;
             _reviceQueue.Writer.TryWrite(clientPacket);
@@ -86,7 +84,7 @@ namespace BotSrv
         public void DelClient(string sessionId)
         {
             AutoPlayRunTime findSession = null;
-            foreach (var item in _autoList)
+            foreach (AutoPlayRunTime item in _autoList)
             {
                 if (item.SessionId == sessionId)
                 {
@@ -98,7 +96,7 @@ namespace BotSrv
             {
                 _autoList.Remove(findSession);
             }
-            _clients.TryRemove(sessionId, out var robotClient);
+            _clients.TryRemove(sessionId, out RobotPlayer robotClient);
             _clientList.Remove(robotClient);
             if (robotClient != null)
             {
@@ -109,8 +107,8 @@ namespace BotSrv
         public void Run()
         {
             dwRunTick = HUtil32.GetTickCount();
-            var boProcessLimit = false;
-            for (var i = g_nPosition; i < _clientList.Count; i++)
+            bool boProcessLimit = false;
+            for (int i = g_nPosition; i < _clientList.Count; i++)
             {
                 _clientList[i].Run();
                 if (((HUtil32.GetTickCount() - dwRunTick) > 20))
@@ -137,7 +135,7 @@ namespace BotSrv
             AutoRunTick = HUtil32.GetTickCount();
             if (_autoList.Count > 0)
             {
-                for (var i = 0; i < _autoList.Count; i++)
+                for (int i = 0; i < _autoList.Count; i++)
                 {
                     if ((AutoRunTick - _autoList[i].RunTick) > 800)
                     {

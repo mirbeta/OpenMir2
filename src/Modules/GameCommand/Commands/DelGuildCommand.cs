@@ -18,7 +18,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sGuildName = @params.Length > 0 ? @params[0] : "";
+            string sGuildName = @params.Length > 0 ? @params[0] : "";
             if (SystemShare.ServerIndex != 0)
             {
                 PlayerActor.SysMsg("只能在主服务器上才可以使用此命令删除行会!!!", MsgColor.Red, MsgType.Hint);

@@ -1,10 +1,6 @@
-﻿using NLog;
-using System.Diagnostics;
+﻿using OpenMir2.Base;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using OpenMir2;
-using OpenMir2.Base;
-using SystemModule;
 
 namespace GameSrv
 {
@@ -13,7 +9,7 @@ namespace GameSrv
     /// </summary>
     public class WordStatistics
     {
-        
+
         private readonly string processName;
         private readonly PerformanceCounter MemoryCounter;
         private readonly PerformanceCounter CpuCounter;
@@ -51,7 +47,7 @@ namespace GameSrv
                 LogService.Debug($"使用内存:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedPhysicalMemory)}] 工作内存:[{HUtil32.FormatBytesValue(ServerEnvironment.PrivateWorkingSet)}] GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
             }
             ShowGCStatus();
-            var ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(GameShare.StartTime);
+            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(GameShare.StartTime);
             LogService.Debug("{0}", $"Server Start Time: {DateTimeOffset.FromUnixTimeMilliseconds(GameShare.StartTime):G}");
             LogService.Debug("{0}", $"Total Online Time: {(int)ts.TotalDays} days, {ts.Hours} hours, {ts.Minutes} minutes, {ts.Seconds} seconds");
             LogService.Debug("{0}", $"Online Players[{SystemShare.WorldEngine.OnlinePlayObject}], Max Online Players[{SystemShare.WorldEngine.PlayObjectCount}], Offline Players[{SystemShare.WorldEngine.OfflinePlayCount}], Role Count[{SystemShare.WorldEngine.PlayObjectCount}]");
@@ -73,7 +69,7 @@ namespace GameSrv
 
         private void FreeMemory()
         {
-            var gcMemoryInfo = GC.GetGCMemoryInfo();
+            GCMemoryInfo gcMemoryInfo = GC.GetGCMemoryInfo();
             if (gcMemoryInfo.TotalCommittedBytes > gcMemoryInfo.TotalAvailableMemoryBytes / 2)
             {
                 LogService.Debug("释放内存...");

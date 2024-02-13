@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using NLog;
 using OpenMir2;
 using SystemModule;
 
@@ -8,7 +7,7 @@ namespace ChatSystem
 {
     public class ModuleInitializer : IModuleInitializer
     {
-        
+
 
         public void Configure(IHostEnvironment env)
         {

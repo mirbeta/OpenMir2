@@ -1,9 +1,8 @@
-using NLog;
+using OpenMir2;
 using SelGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using OpenMir2;
 
 namespace SelGate.Services
 {
@@ -12,7 +11,7 @@ namespace SelGate.Services
     /// </summary>
     public class ClientManager
     {
-        
+
         private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
@@ -28,10 +27,10 @@ namespace SelGate.Services
 
         public void Initialization()
         {
-            for (var i = 0; i < _configManager.GateConfig.GateCount; i++)
+            for (int i = 0; i < _configManager.GateConfig.GateCount; i++)
             {
-                var serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
-                var serverPort = _configManager.m_xGameGateList[i].nServerPort;
+                string serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
+                int serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
                     LogService.Debug($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
@@ -43,7 +42,7 @@ namespace SelGate.Services
 
         public void Start()
         {
-            for (var i = 0; i < _clientList.Count; i++)
+            for (int i = 0; i < _clientList.Count; i++)
             {
                 if (_clientList[i] == null)
                 {
@@ -56,7 +55,7 @@ namespace SelGate.Services
 
         public void Stop()
         {
-            for (var i = 0; i < _clientList.Count; i++)
+            for (int i = 0; i < _clientList.Count; i++)
             {
                 if (_clientList[i] == null)
                 {
@@ -85,7 +84,7 @@ namespace SelGate.Services
         /// <returns></returns>
         public ClientThread GetClientThread(string connectionId)
         {
-            return _clientThreadMap.TryGetValue(connectionId, out var userClient) ? userClient : GetClientThread();
+            return _clientThreadMap.TryGetValue(connectionId, out ClientThread userClient) ? userClient : GetClientThread();
         }
 
         /// <summary>
@@ -94,14 +93,14 @@ namespace SelGate.Services
         /// <param name="connectionId"></param>
         public void DeleteClientThread(string connectionId)
         {
-            _clientThreadMap.TryRemove(connectionId, out var userClient);
+            _clientThreadMap.TryRemove(connectionId, out ClientThread userClient);
         }
 
         public ClientThread GetClientThread()
         {
             if (GateShare.ServerGateList.Any())
             {
-                var random = RandomNumber.GetInstance().Random(GateShare.ServerGateList.Count);
+                int random = RandomNumber.GetInstance().Random(GateShare.ServerGateList.Count);
                 return GateShare.ServerGateList[random];
             }
             return null;

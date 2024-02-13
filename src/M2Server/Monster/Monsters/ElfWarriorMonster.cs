@@ -1,8 +1,6 @@
 ﻿using M2Server.Actor;
 using OpenMir2;
 using OpenMir2.Enums;
-using SystemModule;
-using SystemModule.Enums;
 
 namespace M2Server.Monster.Monsters
 {
@@ -43,8 +41,8 @@ namespace M2Server.Monster.Monsters
         private void SpitAttack(byte dir)
         {
             Dir = dir;
-            var wAbil = WAbil;
-            var nDamage = (M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC)) + 1) + HUtil32.LoWord(wAbil.DC));
+            OpenMir2.Packets.ClientPackets.Ability wAbil = WAbil;
+            int nDamage = (M2Share.RandomNumber.Random(Math.Abs(HUtil32.HiWord(wAbil.DC) - HUtil32.LoWord(wAbil.DC)) + 1) + HUtil32.LoWord(wAbil.DC));
             if (nDamage <= 0)
             {
                 return;
@@ -57,7 +55,7 @@ namespace M2Server.Monster.Monsters
             {
                 if (Envir.GetNextPosition(CurrX, CurrY, Dir, nDamage, ref nX, ref nY))
                 {
-                    var baseObject = Envir.GetMovingObject(nX, nY, true);
+                    SystemModule.Actors.IActor baseObject = Envir.GetMovingObject(nX, nY, true);
                     if (baseObject != null && baseObject != this && IsProperTarget(baseObject) && (M2Share.RandomNumber.Random(baseObject.SpeedPoint) < HitPoint))
                     {
                         nDamage = baseObject.GetMagStruckDamage(this, nDamage);

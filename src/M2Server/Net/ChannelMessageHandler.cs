@@ -1,11 +1,11 @@
-﻿using System.Net.Sockets;
-using System.Text;
-using System.Threading.Channels;
-using OpenMir2;
+﻿using OpenMir2;
 using OpenMir2.Data;
 using OpenMir2.Extensions;
 using OpenMir2.Packets.ClientPackets;
 using OpenMir2.Packets.ServerPackets;
+using System.Net.Sockets;
+using System.Text;
+using System.Threading.Channels;
 using SystemModule;
 using SystemModule.Actors;
 
@@ -15,7 +15,7 @@ namespace M2Server.Net
     {
         private readonly ChannelGate _channelGate;
         private readonly SocketSendQueue _sendQueue;
-        private object RunSocketSection{ get; }
+        private object RunSocketSection { get; }
         private readonly CancellationTokenSource _cancellation;
         public readonly string ConnectionId;
 
@@ -54,7 +54,7 @@ namespace M2Server.Net
                 return;
             }
             const string sExceptionMsg = "[Exception] TRunSocket::SendGateBuffers -> SendBuff";
-            var dwRunTick = HUtil32.GetTickCount();
+            int dwRunTick = HUtil32.GetTickCount();
             if (GateInfo.SendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
             {
                 if ((HUtil32.GetTickCount() - GateInfo.SendCheckTick) > M2Share.SocCheckTimeOut) // 2 * 1000
@@ -66,7 +66,7 @@ namespace M2Server.Net
             }
             try
             {
-                var sendBuffLen = sendData.Length;
+                int sendBuffLen = sendData.Length;
                 if (sendBuffLen == 0) //不发送空包
                 {
                     return;
@@ -103,23 +103,27 @@ namespace M2Server.Net
 
         internal void SendCheck(ushort nIdent)
         {
-            var msgHeader = new ServerMessage
+            ServerMessage msgHeader = new ServerMessage
             {
                 PacketCode = Grobal2.PacketCode,
                 Socket = 0,
                 Ident = nIdent,
                 PackLength = 0
             };
-            var data = SerializerUtil.Serialize(msgHeader);
+            byte[] data = SerializerUtil.Serialize(msgHeader);
             _sendQueue.SendMessage(data);
         }
- 
+
         public void ProcessDataBuffer(ServerMessage packetHeader, ReadOnlySpan<byte> message)
         {
             const string sExceptionMsg = "[Exception] GameGate::ProcessReceiveBuffer";
             try
             {
-                if (packetHeader.PacketCode != Grobal2.PacketCode) return;
+                if (packetHeader.PacketCode != Grobal2.PacketCode)
+                {
+                    return;
+                }
+
                 if (packetHeader.PackLength > 0)
                 {
                     ExecGateBuffers(packetHeader, message, packetHeader.PackLength);
@@ -148,7 +152,7 @@ namespace M2Server.Net
                 switch (msgPacket.Ident)
                 {
                     case Grobal2.GM_OPEN:
-                        var sIPaddr = HUtil32.GetString(msgBuff, nMsgLen);
+                        string sIPaddr = HUtil32.GetString(msgBuff, nMsgLen);
                         nUserIdx = OpenNewUser(msgPacket.Socket, msgPacket.SessionId, sIPaddr, GateInfo.UserList);
                         SendNewUserMsg(GateInfo.Socket, msgPacket.Socket, msgPacket.SessionId, nUserIdx + 1);
                         GateInfo.UserCount++;
@@ -179,7 +183,7 @@ namespace M2Server.Net
                         }
                         if (gateUser == null)
                         {
-                            for (var i = 0; i < GateInfo.UserList.Count; i++)
+                            for (int i = 0; i < GateInfo.UserList.Count; i++)
                             {
                                 if (GateInfo.UserList[i] == null)
                                 {
@@ -198,7 +202,7 @@ namespace M2Server.Net
                             {
                                 if (gateUser.Certification && nMsgLen >= 12)
                                 {
-                                    var mesaagePacket = new CommandMessage();
+                                    CommandMessage mesaagePacket = new CommandMessage();
                                     mesaagePacket.Recog = BitConverter.ToInt32(msgBuff[..4]);
                                     mesaagePacket.Ident = BitConverter.ToUInt16(msgBuff.Slice(4, 2));
                                     mesaagePacket.Param = BitConverter.ToUInt16(msgBuff.Slice(6, 2));
@@ -210,7 +214,7 @@ namespace M2Server.Net
                                     }
                                     else
                                     {
-                                        var codeBuff = EDCode.DeCodeString(msgBuff[12..^1]); //var sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
+                                        string codeBuff = EDCode.DeCodeString(msgBuff[12..^1]); //var sMsg = EDCode.DeCodeString(HUtil32.GetString(msgBuff, 12, msgBuff.Length - 13));
                                         SystemShare.WorldEngine.ProcessUserMessage(gateUser.PlayObject, mesaagePacket, codeBuff);
                                     }
                                 }
@@ -232,17 +236,17 @@ namespace M2Server.Net
 
         private bool GetCertification(ReadOnlySpan<char> sMsg, ref string sAccount, ref string sChrName, ref int nSessionId, ref int nVersion, ref bool boFlag, ref byte[] tHwid, ref int gateId)
         {
-            var result = false;
-            var sCodeStr = string.Empty;
-            var sClientVersion = string.Empty;
-            var sHwid = string.Empty;
-            var sIdx = string.Empty;
-            var sGateId = string.Empty;
+            bool result = false;
+            string sCodeStr = string.Empty;
+            string sClientVersion = string.Empty;
+            string sHwid = string.Empty;
+            string sIdx = string.Empty;
+            string sGateId = string.Empty;
             const string sExceptionMsg = "[Exception] ThreadSocket::DoClientCertification -> GetCertification";
             try
             {
-                var packetMsg = sMsg[1..];
-                var sData = EDCode.DeCodeString(packetMsg);
+                ReadOnlySpan<char> packetMsg = sMsg[1..];
+                string sData = EDCode.DeCodeString(packetMsg);
                 if (sData.Length > 2 && sData[0] == '*' && sData[1] == '*')
                 {
                     sData = sData.AsSpan()[2..sData.Length].ToString();
@@ -286,16 +290,16 @@ namespace M2Server.Net
 
         private void DoClientCertification(SessionUser gateUser, int nSocket, string sMsg)
         {
-            var sAccount = string.Empty;
-            var sChrName = string.Empty;
-            var nSessionId = 0;
-            var boFlag = false;
-            var nClientVersion = 0;
-            var nPayMent = 0;
-            var nPayMode = 0;
-            var nPlayTime = 0L;
-            var hwid = MD5.EmptyDigest;
-            var gateIdx = 0;
+            string sAccount = string.Empty;
+            string sChrName = string.Empty;
+            int nSessionId = 0;
+            bool boFlag = false;
+            int nClientVersion = 0;
+            int nPayMent = 0;
+            int nPayMode = 0;
+            long nPlayTime = 0L;
+            byte[] hwid = MD5.EmptyDigest;
+            int gateIdx = 0;
             const string sExceptionMsg = "[Exception] ThreadSocket::DoClientCertification";
             const string sDisable = "*disable*";
             try
@@ -307,7 +311,7 @@ namespace M2Server.Net
                         HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
                         if (GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
                         {
-                            var sessInfo = M2Share.AccountSession.GetAdmission(sAccount, gateUser.IPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
+                            AccountSession sessInfo = M2Share.AccountSession.GetAdmission(sAccount, gateUser.IPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (sessInfo != null && nPayMent > 0)
                             {
                                 gateUser.Certification = true;
@@ -316,7 +320,7 @@ namespace M2Server.Net
                                 gateUser.SessionID = nSessionId;
                                 gateUser.ClientVersion = nClientVersion;
                                 gateUser.SessInfo = sessInfo;
-                                var loadRcdInfo = new LoadDBInfo
+                                LoadDBInfo loadRcdInfo = new LoadDBInfo
                                 {
                                     Account = sAccount,
                                     ChrName = sChrName,
@@ -367,11 +371,11 @@ namespace M2Server.Net
                 HUtil32.EnterCriticalSections(RunSocketSection);
                 try
                 {
-                    for (var i = 0; i < GateInfo.UserList.Count; i++)
+                    for (int i = 0; i < GateInfo.UserList.Count; i++)
                     {
                         if (GateInfo.UserList[i] != null)
                         {
-                            var gateUser = GateInfo.UserList[i];
+                            SessionUser gateUser = GateInfo.UserList[i];
                             if (gateUser == null)
                             {
                                 continue;
@@ -413,7 +417,7 @@ namespace M2Server.Net
 
         private static int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<SessionUser> userList)
         {
-            var gateUser = new SessionUser
+            SessionUser gateUser = new SessionUser
             {
                 Account = string.Empty,
                 ChrName = string.Empty,
@@ -427,7 +431,7 @@ namespace M2Server.Net
                 NewUserTick = HUtil32.GetTickCount(),
                 Certification = false
             };
-            for (var i = 0; i < userList.Count; i++)
+            for (int i = 0; i < userList.Count; i++)
             {
                 if (userList[i] == null)
                 {
@@ -445,14 +449,14 @@ namespace M2Server.Net
             {
                 return;
             }
-            var msgHeader = new ServerMessage();
+            ServerMessage msgHeader = new ServerMessage();
             msgHeader.PacketCode = Grobal2.PacketCode;
             msgHeader.Socket = nSocket;
             msgHeader.SessionId = socketId;
             msgHeader.Ident = Grobal2.GM_SERVERUSERINDEX;
             msgHeader.SessionIndex = (ushort)nUserIdex;
             msgHeader.PackLength = 0;
-            var data = SerializerUtil.Serialize(msgHeader);
+            byte[] data = SerializerUtil.Serialize(msgHeader);
             socket.Send(data, 0, data.Length, SocketFlags.None);
         }
 
@@ -464,9 +468,9 @@ namespace M2Server.Net
             HUtil32.EnterCriticalSection(RunSocketSection);
             try
             {
-                for (var i = 0; i < GateInfo.UserList.Count; i++)
+                for (int i = 0; i < GateInfo.UserList.Count; i++)
                 {
-                    var gateUserInfo = GateInfo.UserList[i];
+                    SessionUser gateUserInfo = GateInfo.UserList[i];
                     if (gateUserInfo != null && gateUserInfo.Socket == nSocket)
                     {
                         gateUserInfo.FrontEngine = null;
@@ -524,7 +528,7 @@ namespace M2Server.Net
                 {
                     while (await SendQueue.Reader.WaitToReadAsync(cancellation.Token))
                     {
-                        while (SendQueue.Reader.TryRead(out var buffer))
+                        while (SendQueue.Reader.TryRead(out byte[] buffer))
                         {
                             try
                             {

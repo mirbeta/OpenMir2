@@ -1,6 +1,6 @@
-﻿using System;
+﻿using OpenMir2.Generation.Interfaces.Entities;
+using System;
 using System.Runtime.CompilerServices;
-using OpenMir2.Generation.Interfaces.Entities;
 
 namespace OpenMir2.Generation.Entities
 {

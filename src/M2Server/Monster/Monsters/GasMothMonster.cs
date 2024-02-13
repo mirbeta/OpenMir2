@@ -1,6 +1,5 @@
 ﻿using OpenMir2;
 using OpenMir2.Consts;
-using SystemModule;
 using SystemModule.Actors;
 
 namespace M2Server.Monster.Monsters
@@ -46,9 +45,17 @@ namespace M2Server.Monster.Monsters
                 {
                     continue;
                 }
-                if (!this.IsProperTarget(BaseObject)) continue;
+                if (!this.IsProperTarget(BaseObject))
+                {
+                    continue;
+                }
+
                 int nC = Math.Abs(this.CurrX - BaseObject.CurrX) + Math.Abs(this.CurrY - BaseObject.CurrY);
-                if (nC >= n10) continue;
+                if (nC >= n10)
+                {
+                    continue;
+                }
+
                 n10 = nC;
                 Creat = BaseObject;
             }

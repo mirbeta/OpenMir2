@@ -1,5 +1,4 @@
 ﻿using OpenMir2;
-using SystemModule;
 using SystemModule.MagicEvent;
 using SystemModule.Maps;
 

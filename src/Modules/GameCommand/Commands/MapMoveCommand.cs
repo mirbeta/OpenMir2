@@ -18,13 +18,13 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMapName = @params.Length > 0 ? @params[0] : "";
+            string sMapName = @params.Length > 0 ? @params[0] : "";
             if (string.IsNullOrEmpty(sMapName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var envir = SystemShare.MapMgr.FindMap(sMapName);
+            SystemModule.Maps.IEnvirnoment envir = SystemShare.MapMgr.FindMap(sMapName);
             if (envir == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.TheMapNotFound, sMapName), MsgColor.Red, MsgType.Hint);

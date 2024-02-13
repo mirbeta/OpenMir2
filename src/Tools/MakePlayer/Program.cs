@@ -12,12 +12,12 @@ namespace MakePlayer
         {
             Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
 
-            var config = new ConfigurationBuilder()
+            IConfigurationRoot config = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("AppSetting.json", true, false)
                 .Build();
 
-            var builder = new HostBuilder()
+            IHostBuilder builder = new HostBuilder()
                   .ConfigureServices((hostContext, services) =>
                   {
                       services.Configure<MakePlayOptions>(config.GetSection("MakePlay"));

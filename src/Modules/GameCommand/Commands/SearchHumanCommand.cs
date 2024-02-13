@@ -18,7 +18,7 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
             if (PlayerActor.ProbeNecklace || PlayerActor.Permission >= 6)
             {
                 if (string.IsNullOrEmpty(sHumanName))
@@ -29,7 +29,7 @@ namespace CommandModule.Commands
                 if (HUtil32.GetTickCount() - PlayerActor.ProbeTick > 10000 || PlayerActor.Permission >= 3)
                 {
                     PlayerActor.ProbeTick = HUtil32.GetTickCount();
-                    var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+                    IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
                     if (mIPlayerActor != null)
                     {
                         PlayerActor.SysMsg(sHumanName + " 现在位于 " + mIPlayerActor.Envir.MapDesc + '(' + mIPlayerActor.Envir.MapName + ") " + mIPlayerActor.CurrX + ':'

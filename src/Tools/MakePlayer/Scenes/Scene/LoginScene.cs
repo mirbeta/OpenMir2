@@ -1,8 +1,6 @@
 using MakePlayer.Cliens;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
 
 namespace MakePlayer.Scenes.Scene
 {
@@ -161,7 +159,7 @@ namespace MakePlayer.Scenes.Scene
         {
             MainOutMessage("创建帐号");
             play.ConnectionStep = ConnectionStep.NewAccount;
-            var ue = new UserEntry();
+            UserEntry ue = new UserEntry();
             ue.Account = sAccount;
             ue.Password = sPassword;
             ue.UserName = sAccount;
@@ -170,30 +168,30 @@ namespace MakePlayer.Scenes.Scene
             ue.Answer = sAccount;
             ue.Phone = "";
             ue.EMail = "";
-            var ua = new UserEntryAdd();
+            UserEntryAdd ua = new UserEntryAdd();
             ua.Quiz2 = sAccount;
             ua.Answer2 = sAccount;
             ua.BirthDay = "1978/01/01";
             ua.MobilePhone = "";
             ua.Memo = "";
             ua.Memo2 = "";
-            var msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
 
         private void SendLogin(string uid, string passwd)
         {
             MainOutMessage("开始登陆");
-            var msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + passwd));
         }
 
         private void ClientGetPasswordOk(CommandMessage msg, string sBody)
         {
-            var g_wAvailIDDay = HUtil32.LoWord(msg.Recog);
-            var g_wAvailIDHour = HUtil32.HiWord(msg.Recog);
-            var g_wAvailIPDay = msg.Param;
-            var g_wAvailIPHour = msg.Tag;
+            ushort g_wAvailIDDay = HUtil32.LoWord(msg.Recog);
+            ushort g_wAvailIDHour = HUtil32.HiWord(msg.Recog);
+            ushort g_wAvailIPDay = msg.Param;
+            ushort g_wAvailIPHour = msg.Tag;
             if (g_wAvailIDHour % 60 > 0)
             {
                 MainOutMessage("个人帐户的期限: 剩余 " + g_wAvailIDHour / 60 + " 小时 " + g_wAvailIDHour % 60 + " 分钟.");
@@ -206,8 +204,8 @@ namespace MakePlayer.Scenes.Scene
             {
                 MainOutMessage("帐号登录成功！");
             }
-            var sServerName = string.Empty;
-            var sText = EDCode.DeCodeString(sBody);
+            string sServerName = string.Empty;
+            string sText = EDCode.DeCodeString(sBody);
             HUtil32.GetValidStr3(sText, ref sServerName, "/");
             ClientGetSelectServer();
             SendSelectServer(sServerName);
@@ -220,11 +218,11 @@ namespace MakePlayer.Scenes.Scene
 
         private void ClientGetServerName(CommandMessage defMsg, string sBody)
         {
-            var sServerName = string.Empty;
-            var sServerStatus = string.Empty;
+            string sServerName = string.Empty;
+            string sServerStatus = string.Empty;
             sBody = EDCode.DeCodeString(sBody);
-            var nCount = HUtil32._MIN(6, defMsg.Series);
-            for (var i = 0; i < nCount; i++)
+            int nCount = HUtil32._MIN(6, defMsg.Series);
+            for (int i = 0; i < nCount; i++)
             {
                 sBody = HUtil32.GetValidStr3(sBody, ref sServerName, '/');
                 sBody = HUtil32.GetValidStr3(sBody, ref sServerStatus, '/');
@@ -245,7 +243,7 @@ namespace MakePlayer.Scenes.Scene
         {
             MainOutMessage($"选择服务器：{svname}");
             play.ConnectionStep = ConnectionStep.SelServer;
-            var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
+            CommandMessage defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(svname));
         }
 
@@ -254,10 +252,10 @@ namespace MakePlayer.Scenes.Scene
         /// </summary>
         private void ClientGetPasswdSuccess(string body)
         {
-            var runaddr = string.Empty;
-            var runport = string.Empty;
-            var certifystr = string.Empty;
-            var str = EDCode.DeCodeString(body);
+            string runaddr = string.Empty;
+            string runport = string.Empty;
+            string certifystr = string.Empty;
+            string str = EDCode.DeCodeString(body);
             str = HUtil32.GetValidStr3(str, ref runaddr, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref runport, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref certifystr, HUtil32.Backslash);

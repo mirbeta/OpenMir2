@@ -1,17 +1,16 @@
 using Microsoft.Extensions.Hosting;
-using NLog;
+using OpenMir2;
 using Spectre.Console;
 using System;
 using System.IO.Pipes;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenMir2;
 
 namespace MapSrv
 {
     public class AppService : IHostedService, IDisposable
     {
-        
+
         private readonly IHostApplicationLifetime _appLifetime;
         private Task? _applicationTask;
         private int? _exitCode;

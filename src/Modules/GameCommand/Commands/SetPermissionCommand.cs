@@ -18,16 +18,16 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sPermission = @params.Length > 1 ? @params[1] : "";
-            var nPerission = HUtil32.StrToInt(sPermission, 0);
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sPermission = @params.Length > 1 ? @params[1] : "";
+            int nPerission = HUtil32.StrToInt(sPermission, 0);
             const string sOutFormatMsg = "[权限调整] {0} [{1} {2} -> {3}]";
             if (string.IsNullOrEmpty(sHumanName) || !(nPerission >= 0 && nPerission <= 10))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

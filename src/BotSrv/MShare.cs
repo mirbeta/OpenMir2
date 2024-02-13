@@ -1,14 +1,12 @@
 using BotSrv.Objects;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using OpenMir2;
-using OpenMir2.Enums;
-using OpenMir2.Packets.ClientPackets;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv
 {
@@ -1363,7 +1361,7 @@ namespace BotSrv
 
         public static bool IsInMyRange(Actor Act)
         {
-            var result = false;
+            bool result = false;
             if ((Act == null) || (MySelf == null))
             {
                 return result;
@@ -1377,7 +1375,7 @@ namespace BotSrv
 
         public static bool IsItemInMyRange(int X, int Y)
         {
-            var result = false;
+            bool result = false;
             if (MySelf == null)
             {
                 return result;

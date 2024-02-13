@@ -112,7 +112,7 @@ namespace M2Server.Magic
             {
                 return;
             }
-            var duration = (ushort)(nCount * 100);
+            ushort duration = (ushort)(nCount * 100);
             if (playObject.UseItems[idx] != null && playObject.UseItems[idx].Dura > duration)
             {
                 playObject.UseItems[idx].Dura -= duration;//减少护身符持久即数量

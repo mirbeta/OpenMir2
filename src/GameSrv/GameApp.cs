@@ -1,33 +1,22 @@
-﻿using GameSrv.DB;
+﻿using CommandModule;
+using GameSrv.DB;
 using GameSrv.Maps;
 using GameSrv.Robots;
 using GameSrv.Services;
 using GameSrv.Word;
-using M2Server;
 using M2Server.Castle;
 using M2Server.Event;
 using M2Server.Guild;
 using M2Server.Items;
 using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using NLog;
 using ScriptSystem;
-using System;
 using System.Collections;
-using System.Collections.Concurrent;
-using CommandModule;
-using GameSrv.Npc;
-using OpenMir2;
-using OpenMir2.Common;
-using OpenMir2.Data;
-using SystemModule;
-using SystemModule.Data;
 
 namespace GameSrv
 {
     public class GameApp : ServerBase
     {
-        
+
 
         public GameApp(IServiceProvider serviceProvider) : base(serviceProvider)
         {
@@ -127,7 +116,7 @@ namespace GameSrv
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
             LogService.Info("正在加载物品数据库...");
-            var nCode = GameShare.CommonDb.LoadItemsDB();
+            int nCode = GameShare.CommonDb.LoadItemsDB();
             if (nCode < 0)
             {
                 LogService.Info($"物品数据库加载失败!!! Code: {nCode}");
@@ -163,7 +152,7 @@ namespace GameSrv
             }
             LogService.Info($"加载技能数据库成功...[{SystemShare.WorldEngine.MagicCount}]");
             LogService.Info("正在加载怪物刷新配置信息...");
-            nCode = GameShare.LocalDb.LoadMonGen(out var mongenCount);
+            nCode = GameShare.LocalDb.LoadMonGen(out int mongenCount);
             if (nCode < 0)
             {
                 LogService.Info($"加载怪物刷新配置信息失败!!! Code: {nCode}");

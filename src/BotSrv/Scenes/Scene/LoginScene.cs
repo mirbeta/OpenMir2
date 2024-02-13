@@ -1,10 +1,7 @@
 ﻿using BotSrv.Player;
-using NLog;
-using System.Net;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
+using System.Net;
 
 namespace BotSrv.Scenes.Scene
 {
@@ -13,7 +10,7 @@ namespace BotSrv.Scenes.Scene
     /// </summary>
     public class LoginScene : SceneBase
     {
-        
+
         private readonly ScoketClient _clientSocket;
 
         public LoginScene(RobotPlayer robotClient) : base(SceneType.Login, robotClient)
@@ -87,7 +84,7 @@ namespace BotSrv.Scenes.Scene
         {
             LogService.Info("创建帐号");
             ConnectionStep = ConnectionStep.NewAccount;
-            var ue = new UserEntry();
+            UserEntry ue = new UserEntry();
             ue.Account = sAccount;
             ue.Password = sPassword;
             ue.UserName = sAccount;
@@ -96,14 +93,14 @@ namespace BotSrv.Scenes.Scene
             ue.Answer = sAccount;
             ue.Phone = "";
             ue.EMail = "";
-            var ua = new UserEntryAdd();
+            UserEntryAdd ua = new UserEntryAdd();
             ua.Quiz2 = sAccount;
             ua.Answer2 = sAccount;
             ua.BirthDay = "1978/01/01";
             ua.MobilePhone = "";
             ua.Memo = "";
             ua.Memo2 = "";
-            var msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
 
@@ -112,7 +109,7 @@ namespace BotSrv.Scenes.Scene
             LogService.Info("开始登陆");
             RobotClient.LoginId = uid;
             RobotClient.LoginPasswd = passwd;
-            var msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + passwd));
             MShare.SendLogin = true;
         }
@@ -135,8 +132,8 @@ namespace BotSrv.Scenes.Scene
             {
                 LogService.Info("帐号登录成功！");
             }
-            var sServerName = string.Empty;
-            var sText = EDCode.DeCodeString(sBody);
+            string sServerName = string.Empty;
+            string sText = EDCode.DeCodeString(sBody);
             HUtil32.GetValidStr3(sText, ref sServerName, "/");
             ClientGetSelectServer();
             SendSelectServer(sServerName);
@@ -151,7 +148,7 @@ namespace BotSrv.Scenes.Scene
         {
             LogService.Info($"选择服务器：{svname}");
             ConnectionStep = ConnectionStep.SelServer;
-            var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
+            CommandMessage defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(svname));
         }
 
@@ -160,10 +157,10 @@ namespace BotSrv.Scenes.Scene
         /// </summary>
         public void ClientGetPasswdSuccess(string body)
         {
-            var runaddr = string.Empty;
-            var runport = string.Empty;
-            var certifystr = string.Empty;
-            var str = EDCode.DeCodeString(body);
+            string runaddr = string.Empty;
+            string runport = string.Empty;
+            string certifystr = string.Empty;
+            string str = EDCode.DeCodeString(body);
             str = HUtil32.GetValidStr3(str, ref runaddr, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref runport, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref certifystr, HUtil32.Backslash);
@@ -244,7 +241,7 @@ namespace BotSrv.Scenes.Scene
 
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
                 BotShare.ClientMgr.AddPacket(RobotClient.SessionId, sData);

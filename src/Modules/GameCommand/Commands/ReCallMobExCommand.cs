@@ -18,10 +18,10 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var sMonName = @params.Length > 0 ? @params[0] : "";
-            var nNameColor = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
-            var nX = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0);
-            var nY = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[3], 0) : 0);
+            string sMonName = @params.Length > 0 ? @params[0] : "";
+            int nNameColor = @params.Length > 0 ? HUtil32.StrToInt(@params[1], 0) : 0;
+            short nX = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[2], 0) : 0);
+            short nY = (short)(@params.Length > 0 ? HUtil32.StrToInt(@params[3], 0) : 0);
             if (string.IsNullOrEmpty(sMonName) || !string.IsNullOrEmpty(sMonName) && sMonName[0] == '?')
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);

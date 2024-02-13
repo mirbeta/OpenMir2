@@ -20,9 +20,9 @@ namespace CommandModule.Commands
             }
             short nX = 0;
             short nY = 0;
-            var sMonName = @params.Length > 0 ? @params[0] : "";//名称
-            var nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1;//数量
-            var nLevel = @params.Length > 2 ? (byte)HUtil32.StrToInt(@params[2], 0) : (byte)0;//怪物等级
+            string sMonName = @params.Length > 0 ? @params[0] : "";//名称
+            int nCount = @params.Length > 1 ? HUtil32.StrToInt(@params[1], 0) : 1;//数量
+            byte nLevel = @params.Length > 2 ? (byte)HUtil32.StrToInt(@params[2], 0) : (byte)0;//怪物等级
             if (string.IsNullOrEmpty(sMonName))
             {
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
@@ -38,7 +38,7 @@ namespace CommandModule.Commands
             }
             nCount = (byte)HUtil32._MIN(64, nCount);
             PlayerActor.GetFrontPosition(ref nX, ref nY);//刷在当前X，Y坐标
-            for (var i = 0; i < nCount; i++)
+            for (int i = 0; i < nCount; i++)
             {
                 IMonsterActor monster = (IMonsterActor)SystemShare.WorldEngine.RegenMonsterByName(PlayerActor.Envir.MapName, nX, nY, sMonName);
                 if (monster != null)

@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
-using System.Text;
 using M2Server.Actor;
 using M2Server.Monster.Monsters;
 using OpenMir2;
@@ -8,6 +5,9 @@ using OpenMir2.Common;
 using OpenMir2.Data;
 using OpenMir2.Enums;
 using OpenMir2.NativeList.Utils;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
 using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Castles;
@@ -18,7 +18,7 @@ using SystemModule.Maps;
 
 namespace M2Server.Maps
 {
-    public class Envirnoment:IEnvirnoment,IDisposable
+    public class Envirnoment : IEnvirnoment, IDisposable
     {
         /// <summary>
         /// 怪物数量
@@ -380,7 +380,7 @@ namespace M2Server.Maps
                 if (canMove && cellInfo.Valid)
                 {
                     CellObject moveObject = default;
-                    ref var oldCellInfo = ref GetCellInfo(nCx, nCy, out bool oldSuccess);
+                    ref MapCellInfo oldCellInfo = ref GetCellInfo(nCx, nCy, out bool oldSuccess);
                     if (oldSuccess && oldCellInfo.IsAvailable)
                     {
                         for (int i = 0; i < oldCellInfo.ObjList.Count; i++)
@@ -442,7 +442,7 @@ namespace M2Server.Maps
         public bool CanWalk(int nX, int nY, bool boFlag)
         {
             bool result = false;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 if (boFlag)
@@ -500,7 +500,7 @@ namespace M2Server.Maps
         public bool CanWalkOfItem(int nX, int nY, bool boFlag, bool boItem)
         {
             bool result = true;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 if (cellInfo.IsAvailable)
@@ -545,7 +545,7 @@ namespace M2Server.Maps
         public bool CanWalkEx(int nX, int nY, bool boFlag)
         {
             bool result = false;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 result = true;
@@ -641,7 +641,7 @@ namespace M2Server.Maps
             {
                 try
                 {
-                    var nIdx = 0;
+                    int nIdx = 0;
                     while (true)
                     {
                         if (cellInfo.Count <= nIdx)
@@ -741,7 +741,7 @@ namespace M2Server.Maps
             int result = 0;
             nCount = 0;
             ChFlag = false;
-            ref var cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Valid)
             {
                 ChFlag = true;
@@ -1062,7 +1062,7 @@ namespace M2Server.Maps
         public int GetXYObjCount(int nX, int nY)
         {
             int result = 0;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1159,7 +1159,7 @@ namespace M2Server.Maps
         public bool CanSafeWalk(int nX, int nY)
         {
             bool result = true;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess)
             {
                 if (cellInfo.ObjList == null)
@@ -1257,7 +1257,7 @@ namespace M2Server.Maps
             {
                 for (int nYy = nY - nRage; nYy <= nY + nRage; nYy++)
                 {
-                    ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+                    ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
                     if (cellSuccess && cellInfo.IsAvailable)
                     {
                         for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1310,7 +1310,7 @@ namespace M2Server.Maps
         /// <returns></returns>
         public void GetBaseObjects(int nX, int nY, bool boFlag, ref IList<IActor> baseObjectList)
         {
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1344,7 +1344,7 @@ namespace M2Server.Maps
         public MapEvent GetEvent(int nX, int nY)
         {
             ChFlag = false;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1361,7 +1361,7 @@ namespace M2Server.Maps
 
         public void SetMapXyFlag(int nX, int nY, bool boFlag)
         {
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess)
             {
                 cellInfo.SetAttribute(boFlag ? CellAttribute.Walk : CellAttribute.LowWall);
@@ -1399,7 +1399,7 @@ namespace M2Server.Maps
         public bool GetXyHuman(int nMapX, int nMapY)
         {
             bool result = false;
-            ref MapCellInfo cellInfo = ref GetCellInfo(nMapX, nMapY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nMapX, nMapY, out bool cellSuccess);
             if (cellSuccess && cellInfo.IsAvailable)
             {
                 for (int i = 0; i < cellInfo.ObjList.Count; i++)
@@ -1421,7 +1421,7 @@ namespace M2Server.Maps
 
         public bool IsValidCell(int nX, int nY)
         {
-            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out var cellSuccess);
+            ref MapCellInfo cellInfo = ref GetCellInfo(nX, nY, out bool cellSuccess);
             if (cellSuccess && cellInfo.Attribute == CellAttribute.LowWall)
             {
                 return false;

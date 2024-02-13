@@ -109,7 +109,11 @@ namespace SystemModule.MagicEvent
         public void Close()
         {
             CloseTick = HUtil32.GetTickCount();
-            if (!Visible) return;
+            if (!Visible)
+            {
+                return;
+            }
+
             Visible = false;
             if (Envirnoment != null)
             {

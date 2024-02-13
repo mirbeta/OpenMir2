@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using OpenMir2;
 using OpenMir2.Common;
 
 namespace LoginGate;
@@ -54,9 +51,9 @@ public class GateShare
 
     private bool IsBlockIP(string sIPaddr)
     {
-        var result = false;
+        bool result = false;
         string sBlockIPaddr;
-        for (var i = 0; i < TempBlockIPList.Count; i++)
+        for (int i = 0; i < TempBlockIPList.Count; i++)
         {
             sBlockIPaddr = TempBlockIPList[i];
             if (string.Compare(sIPaddr, sBlockIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
@@ -66,7 +63,7 @@ public class GateShare
             }
         }
 
-        for (var i = 0; i < BlockIPList.Count; i++)
+        for (int i = 0; i < BlockIPList.Count; i++)
         {
             sBlockIPaddr = BlockIPList[i];
             if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr))
@@ -81,8 +78,8 @@ public class GateShare
 
     private bool IsConnLimited(string sIPaddr)
     {
-        var result = false;
-        var nCount = 0;
+        bool result = false;
+        int nCount = 0;
         //for (var i = 0; i < ServerSocket.Socket.ActiveConnections; i++)
         //{
         //    if ((sIPaddr).CompareTo((ServerSocket.Connections[i].RemoteAddress)) == 0)
@@ -90,7 +87,11 @@ public class GateShare
         //        nCount++;
         //    }
         //}
-        if (nCount > nMaxConnOfIPaddr) result = true;
+        if (nCount > nMaxConnOfIPaddr)
+        {
+            result = true;
+        }
+
         return result;
     }
 }

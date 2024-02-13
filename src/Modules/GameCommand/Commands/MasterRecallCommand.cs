@@ -33,9 +33,9 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg("稍等一会才能再次使用此功能!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            for (var i = 0; i < PlayerActor.MasterList.Count; i++)
+            for (int i = 0; i < PlayerActor.MasterList.Count; i++)
             {
-                var masterHuman = (IPlayerActor)PlayerActor.MasterList[i];
+                IPlayerActor masterHuman = (IPlayerActor)PlayerActor.MasterList[i];
                 if (masterHuman.CanMasterRecall)
                 {
                     PlayerActor.RecallHuman(masterHuman.ChrName);

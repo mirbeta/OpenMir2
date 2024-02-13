@@ -1,7 +1,4 @@
-﻿using M2Server;
-using OpenMir2;
-using SystemModule;
-using SystemModule.Actors;
+﻿using SystemModule.Actors;
 using SystemModule.Maps;
 
 namespace GameSrv.Word
@@ -10,9 +7,9 @@ namespace GameSrv.Word
     {
         private void MerchantInitialize()
         {
-            for (var i = MerchantList.Count - 1; i >= 0; i--)
+            for (int i = MerchantList.Count - 1; i >= 0; i--)
             {
-                var merchant = MerchantList[i];
+                IMerchant merchant = MerchantList[i];
                 merchant.Envir = SystemShare.MapMgr.FindMap(merchant.MapName);
                 if (merchant.Envir != null)
                 {
@@ -39,9 +36,9 @@ namespace GameSrv.Word
 
         private void NpCinitialize()
         {
-            for (var i = QuestNpcList.Count - 1; i >= 0; i--)
+            for (int i = QuestNpcList.Count - 1; i >= 0; i--)
             {
-                var normNpc = QuestNpcList[i];
+                INormNpc normNpc = QuestNpcList[i];
                 normNpc.Envir = SystemShare.MapMgr.FindMap(normNpc.MapName);
                 if (normNpc.Envir != null)
                 {
@@ -67,15 +64,15 @@ namespace GameSrv.Word
 
         public void ProcessMerchants()
         {
-            var boProcessLimit = false;
+            bool boProcessLimit = false;
             const string sExceptionMsg = "[Exception] WorldServer::ProcessMerchants";
-            var dwRunTick = HUtil32.GetTickCount();
+            int dwRunTick = HUtil32.GetTickCount();
             try
             {
-                var dwCurrTick = HUtil32.GetTickCount();
-                for (var i = MerchantPosition; i < MerchantList.Count; i++)
+                int dwCurrTick = HUtil32.GetTickCount();
+                for (int i = MerchantPosition; i < MerchantList.Count; i++)
                 {
-                    var merchantNpc = MerchantList[i];
+                    IMerchant merchantNpc = MerchantList[i];
                     if (!merchantNpc.Ghost)
                     {
                         if ((dwCurrTick - merchantNpc.RunTick) > merchantNpc.RunTime)
@@ -122,13 +119,13 @@ namespace GameSrv.Word
 
         public void ProcessNpcs()
         {
-            var dwRunTick = HUtil32.GetTickCount();
-            var boProcessLimit = false;
+            int dwRunTick = HUtil32.GetTickCount();
+            bool boProcessLimit = false;
             try
             {
-                for (var i = NpcPosition; i < QuestNpcList.Count; i++)
+                for (int i = NpcPosition; i < QuestNpcList.Count; i++)
                 {
-                    var normNpc = QuestNpcList[i];
+                    INormNpc normNpc = QuestNpcList[i];
                     if (!normNpc.Ghost)
                     {
                         if ((HUtil32.GetTickCount() - normNpc.RunTick) > normNpc.RunTime)
@@ -152,43 +149,55 @@ namespace GameSrv.Word
                         break;
                     }
                 }
-                if (!boProcessLimit) NpcPosition = 0;
+                if (!boProcessLimit)
+                {
+                    NpcPosition = 0;
+                }
             }
             catch
             {
                 LogService.Error("[Exceptioin] WorldServer.ProcessNpcs");
             }
             ProcessNpcTimeMin = HUtil32.GetTickCount() - dwRunTick;
-            if (ProcessNpcTimeMin > ProcessNpcTimeMax) ProcessNpcTimeMax = ProcessNpcTimeMin;
+            if (ProcessNpcTimeMin > ProcessNpcTimeMax)
+            {
+                ProcessNpcTimeMax = ProcessNpcTimeMin;
+            }
         }
 
         public int GetMerchantList(IEnvirnoment envir, int nX, int nY, int nRange, IList<IMerchant> tmpList)
         {
-            for (var i = 0; i < MerchantList.Count; i++)
+            for (int i = 0; i < MerchantList.Count; i++)
             {
-                var merchant = MerchantList[i];
+                IMerchant merchant = MerchantList[i];
                 if (merchant.Envir == envir && Math.Abs(merchant.CurrX - nX) <= nRange &&
-                    Math.Abs(merchant.CurrY - nY) <= nRange) tmpList.Add(merchant);
+                    Math.Abs(merchant.CurrY - nY) <= nRange)
+                {
+                    tmpList.Add(merchant);
+                }
             }
             return tmpList.Count;
         }
 
         public int GetNpcList(IEnvirnoment envir, int nX, int nY, int nRange, IList<INormNpc> tmpList)
         {
-            for (var i = 0; i < QuestNpcList.Count; i++)
+            for (int i = 0; i < QuestNpcList.Count; i++)
             {
-                var npc = QuestNpcList[i];
+                INormNpc npc = QuestNpcList[i];
                 if (npc.Envir == envir && Math.Abs(npc.CurrX - nX) <= nRange &&
-                    Math.Abs(npc.CurrY - nY) <= nRange) tmpList.Add(npc);
+                    Math.Abs(npc.CurrY - nY) <= nRange)
+                {
+                    tmpList.Add(npc);
+                }
             }
             return tmpList.Count;
         }
 
         public void ReloadMerchantList()
         {
-            for (var i = 0; i < MerchantList.Count; i++)
+            for (int i = 0; i < MerchantList.Count; i++)
             {
-                var merchant = MerchantList[i];
+                IMerchant merchant = MerchantList[i];
                 if (!merchant.Ghost)
                 {
                     merchant.ClearScript();
@@ -199,9 +208,9 @@ namespace GameSrv.Word
 
         public void ReloadNpcList()
         {
-            for (var i = 0; i < QuestNpcList.Count; i++)
+            for (int i = 0; i < QuestNpcList.Count; i++)
             {
-                var npc = QuestNpcList[i];
+                INormNpc npc = QuestNpcList[i];
                 npc.ClearScript();
                 npc.LoadNPCScript();
             }
@@ -209,7 +218,7 @@ namespace GameSrv.Word
 
         private void ClearMerchantData()
         {
-            for (var i = 0; i < MerchantList.Count; i++)
+            for (int i = 0; i < MerchantList.Count; i++)
             {
                 MerchantList[i].ClearData();
             }

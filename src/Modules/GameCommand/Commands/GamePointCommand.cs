@@ -18,10 +18,10 @@ namespace CommandModule.Commands
             {
                 return;
             }
-            var ctr = '1';
-            var sHumanName = @params.Length > 0 ? @params[0] : "";
-            var sCtr = @params.Length > 1 ? @params[1] : "";
-            var nPoint = @params.Length > 2 ? Convert.ToUInt16(@params[2]) : 0;
+            char ctr = '1';
+            string sHumanName = @params.Length > 0 ? @params[0] : "";
+            string sCtr = @params.Length > 1 ? @params[1] : "";
+            int nPoint = @params.Length > 2 ? Convert.ToUInt16(@params[2]) : 0;
             if (string.IsNullOrEmpty(sHumanName))
             {
                 return;
@@ -36,7 +36,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(Command.CommandHelp, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            var mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
+            IPlayerActor mIPlayerActor = SystemShare.WorldEngine.GetPlayObject(sHumanName);
             if (mIPlayerActor == null)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.NowNotOnLineOrOnOtherServer, sHumanName), MsgColor.Red, MsgType.Hint);

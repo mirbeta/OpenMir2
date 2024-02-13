@@ -3,15 +3,14 @@ using M2Server.Maps.AutoPath;
 using M2Server.Net;
 using M2Server.Net.TCP;
 using M2Server.Notices;
-using NLog;
-using ScriptSystem;
-using System.Collections;
-using System.Collections.Concurrent;
-using System.Text.RegularExpressions;
 using OpenMir2;
 using OpenMir2.Common;
 using OpenMir2.Data;
 using OpenMir2.Enums;
+using ScriptSystem;
+using System.Collections;
+using System.Collections.Concurrent;
+using System.Text.RegularExpressions;
 using SystemModule;
 using SystemModule.Data;
 using SystemModule.Enums;
@@ -208,26 +207,26 @@ namespace M2Server
 
         public static bool IsAccessory(ushort nIndex)
         {
-            var item = SystemShare.ItemSystem.GetStdItem(nIndex);
+            StdItem item = SystemShare.ItemSystem.GetStdItem(nIndex);
             return IsAccessoryMap.Contains(item.StdMode);
         }
 
         public static bool LoadLineNotice(string FileName)
         {
-            var result = false;
+            bool result = false;
             if (File.Exists(FileName))
             {
                 LineNoticeList.Clear();
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(FileName);
-                var i = 0;
+                int i = 0;
                 while (true)
                 {
                     if (LoadList.Count <= i)
                     {
                         break;
                     }
-                    var sText = LoadList[i].Trim();
+                    string sText = LoadList[i].Trim();
                     if (string.IsNullOrEmpty(sText))
                     {
                         LoadList.RemoveAt(i);
@@ -247,10 +246,10 @@ namespace M2Server
         /// <returns></returns>
         public static bool GetMultiServerAddrPort(byte serverIndex, ref string sIPaddr, ref int nPort)
         {
-            var result = false;
-            for (var i = 0; i < ServerTableList.Length; i++)
+            bool result = false;
+            for (int i = 0; i < ServerTableList.Length; i++)
             {
-                var routeInfo = ServerTableList[i];
+                TRouteInfo routeInfo = ServerTableList[i];
                 if (routeInfo == null)
                 {
                     continue;
@@ -278,14 +277,14 @@ namespace M2Server
 
         private static string GetRandpmRoute(TRouteInfo routeInfo, ref int gatePort)
         {
-            var random = RandomNumber.Random(routeInfo.GateCount);
+            int random = RandomNumber.Random(routeInfo.GateCount);
             gatePort = routeInfo.GameGatePort[random];
             return routeInfo.GameGateIP[random];
         }
 
         public static int GetExVersionNO(int nVersionDate, ref int nOldVerstionDate)
         {
-            var result = 0;
+            int result = 0;
             if (nVersionDate > 10000000)
             {
                 while (nVersionDate > 10000000)
@@ -377,7 +376,7 @@ namespace M2Server
 
         public static bool CheckUserItems(int nIdx, StdItem StdItem)
         {
-            var result = false;
+            bool result = false;
             switch (nIdx)
             {
                 case ItemLocation.Dress:
@@ -459,7 +458,7 @@ namespace M2Server
 
         public static DateTime AddDateTimeOfDay(DateTime DateTime, int nDay)
         {
-            var result = DateTime.Now;
+            DateTime result = DateTime.Now;
             //if (nDay > 0)
             //{
             //    nDay -= 1;
@@ -530,12 +529,12 @@ namespace M2Server
 
         public static bool CheckGuildName(string sGuildName)
         {
-            var result = true;
+            bool result = true;
             if (sGuildName.Length > SystemShare.Config.GuildNameLen)
             {
                 return false;
             }
-            for (var i = 0; i < sGuildName.Length - 1; i++)
+            for (int i = 0; i < sGuildName.Length - 1; i++)
             {
                 if (sGuildName[i] < '0' || sGuildName[i] == '/' || sGuildName[i] == '\\' || sGuildName[i] == ':' || sGuildName[i] == '*' || sGuildName[i] == ' '
                     || sGuildName[i] == '\"' || sGuildName[i] == '\'' || sGuildName[i] == '<' || sGuildName[i] == '|' || sGuildName[i] == '?' || sGuildName[i] == '>')
@@ -576,9 +575,9 @@ namespace M2Server
             {
                 return sName;
             }
-            var result = string.Empty;
-            var bo11 = false;
-            for (var i = 0; i < sName.Length; i++)
+            string result = string.Empty;
+            bool bo11 = false;
+            for (int i = 0; i < sName.Length; i++)
             {
                 if (sName[i] >= '0' && sName[i] <= '9' || sName[i] == '-')
                 {
@@ -601,11 +600,11 @@ namespace M2Server
         /// <returns></returns>
         public static int GetValNameNo(string sText)
         {
-            var result = -1;
+            int result = -1;
             ReadOnlySpan<char> valText = sText.AsSpan();
             if (sText.Length >= 2)
             {
-                var valType = char.ToUpper(sText[0]);
+                char valType = char.ToUpper(sText[0]);
                 int nValNo;
                 switch (valType)
                 {
@@ -842,12 +841,12 @@ namespace M2Server
 
         public static string GetStartPointInfo(int nIndex, ref short nX, ref short nY)
         {
-            var result = string.Empty;
+            string result = string.Empty;
             nX = 0;
             nY = 0;
             if (nIndex >= 0 && nIndex < StartPointList.Count)
             {
-                var startPoint = StartPointList[nIndex];
+                StartPoint startPoint = StartPointList[nIndex];
                 if (!string.IsNullOrEmpty(startPoint.MapName))
                 {
                     nX = startPoint.CurrX;
@@ -865,14 +864,14 @@ namespace M2Server
 
         public static void TrimStringList(StringList sList)
         {
-            var n8 = 0;
+            int n8 = 0;
             while (true)
             {
                 if (sList.Count <= n8)
                 {
                     break;
                 }
-                var line = sList[n8].Trim();
+                string line = sList[n8].Trim();
                 if (string.IsNullOrEmpty(line))
                 {
                     sList.RemoveAt(n8);
@@ -884,7 +883,7 @@ namespace M2Server
 
         public static bool CanMakeItem(string sItemName)
         {
-            var result = false;
+            bool result = false;
             //g_DisableMakeItemList.__Lock();
             //try {
             //    for (I = 0; I < g_DisableMakeItemList.Count; I ++ )
@@ -916,8 +915,8 @@ namespace M2Server
 
         public static bool CanMoveMap(string sMapName)
         {
-            var result = true;
-            for (var i = 0; i < DisableMoveMapList.Count; i++)
+            bool result = true;
+            for (int i = 0; i < DisableMoveMapList.Count; i++)
             {
                 //if ((g_DisableMoveMapList[I]).CompareTo((sMapName)) == 0)
                 //{
@@ -930,8 +929,8 @@ namespace M2Server
 
         public static bool CanSellItem(string sItemName)
         {
-            var result = true;
-            for (var i = 0; i < DisableSellOffList.Count; i++)
+            bool result = true;
+            for (int i = 0; i < DisableSellOffList.Count; i++)
             {
                 //if ((g_DisableSellOffList[i]).CompareTo((sItemName)) == 0)
                 //{
@@ -945,23 +944,23 @@ namespace M2Server
         public static bool LoadItemBindIPaddr()
         {
             StringList LoadList = null;
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sBindName = string.Empty;
-            var result = false;
-            var sFileName = GetEnvirFilePath("ItemBindIPaddr.txt");
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sBindName = string.Empty;
+            bool result = false;
+            string sFileName = GetEnvirFilePath("ItemBindIPaddr.txt");
             if (File.Exists(sFileName))
             {
                 LoadList = new StringList();
-                for (var i = 0; i < ItemBindIPaddr.Count; i++)
+                for (int i = 0; i < ItemBindIPaddr.Count; i++)
                 {
                     ItemBindIPaddr[i] = null;
                 }
                 ItemBindIPaddr.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if (sLineText[0] == ';')
                     {
                         continue;
@@ -969,11 +968,11 @@ namespace M2Server
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
-                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
                     {
-                        var ItemBind = new ItemBind
+                        ItemBind ItemBind = new ItemBind
                         {
                             nMakeIdex = nMakeIndex,
                             nItemIdx = nItemIndex,
@@ -993,7 +992,7 @@ namespace M2Server
 
         public static bool SaveItemBindIPaddr()
         {
-            var sFileName = GetEnvirFilePath("ItemBindIPaddr.txt");
+            string sFileName = GetEnvirFilePath("ItemBindIPaddr.txt");
             //SaveList = new StringList();
             //try {
             //    for (I = 0; I < g_ItemBindIPaddr.Count; I++)
@@ -1010,23 +1009,23 @@ namespace M2Server
 
         public static bool LoadItemBindAccount()
         {
-            using var LoadList = new StringList();
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sBindName = string.Empty;
-            var result = false;
-            var sFileName = GetEnvirFilePath("ItemBindAccount.txt");
+            using StringList LoadList = new StringList();
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sBindName = string.Empty;
+            bool result = false;
+            string sFileName = GetEnvirFilePath("ItemBindAccount.txt");
             if (File.Exists(sFileName))
             {
-                for (var i = 0; i < ItemBindAccount.Count; i++)
+                for (int i = 0; i < ItemBindAccount.Count; i++)
                 {
                     ItemBindAccount[i] = null;
                 }
                 ItemBindAccount.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if (sLineText[0] == ';')
                     {
                         continue;
@@ -1034,11 +1033,11 @@ namespace M2Server
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
-                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
                     {
-                        var ItemBind = new ItemBind
+                        ItemBind ItemBind = new ItemBind
                         {
                             nMakeIdex = nMakeIndex,
                             nItemIdx = nItemIndex,
@@ -1058,7 +1057,7 @@ namespace M2Server
 
         public static bool SaveItemBindAccount()
         {
-            var sFileName = GetEnvirFilePath("ItemBindAccount.txt");
+            string sFileName = GetEnvirFilePath("ItemBindAccount.txt");
             //SaveList = new StringList();
             //g_ItemBindAccount.__Lock();
             //try {
@@ -1072,29 +1071,29 @@ namespace M2Server
             //}
             //SaveList.SaveToFile(sFileName);
             //SaveList.Free;
-            var result = true;
+            bool result = true;
             return result;
         }
 
         public static bool LoadItemBindChrName()
         {
-            var sMakeIndex = string.Empty;
-            var sItemIndex = string.Empty;
-            var sBindName = string.Empty;
-            var result = false;
-            var sFileName = GetEnvirFilePath("ItemBindChrName.txt");
-            using var LoadList = new StringList();
+            string sMakeIndex = string.Empty;
+            string sItemIndex = string.Empty;
+            string sBindName = string.Empty;
+            bool result = false;
+            string sFileName = GetEnvirFilePath("ItemBindChrName.txt");
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
-                for (var i = 0; i < ItemBindChrName.Count; i++)
+                for (int i = 0; i < ItemBindChrName.Count; i++)
                 {
                     ItemBindChrName[i] = null;
                 }
                 ItemBindChrName.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if (sLineText[0] == ';')
                     {
                         continue;
@@ -1102,11 +1101,11 @@ namespace M2Server
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sMakeIndex, HUtil32.Separator);
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sBindName, HUtil32.Separator);
-                    var nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
-                    var nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
+                    int nMakeIndex = HUtil32.StrToInt(sMakeIndex, -1);
+                    int nItemIndex = HUtil32.StrToInt(sItemIndex, -1);
                     if ((nMakeIndex > 0) && (nItemIndex > 0) && (!string.IsNullOrEmpty(sBindName)))
                     {
-                        var ItemBind = new ItemBind
+                        ItemBind ItemBind = new ItemBind
                         {
                             nMakeIdex = nMakeIndex,
                             nItemIdx = nItemIndex,
@@ -1126,8 +1125,8 @@ namespace M2Server
 
         public static bool SaveItemBindChrName()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("ItemBindChrName.txt");
+            bool result = false;
+            string sFileName = GetEnvirFilePath("ItemBindChrName.txt");
             //g_ItemBindChrName.__Lock();
             //try {
             //    for (I = 0; I < g_ItemBindChrName.Count; I++)
@@ -1146,8 +1145,8 @@ namespace M2Server
 
         public static bool LoadDisableMakeItem()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("DisableMakeItem.txt");
+            bool result = false;
+            string sFileName = GetEnvirFilePath("DisableMakeItem.txt");
             //var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1174,15 +1173,15 @@ namespace M2Server
 
         public static bool SaveDisableMakeItem()
         {
-            var sFileName = GetEnvirFilePath("DisableMakeItem.txt");
+            string sFileName = GetEnvirFilePath("DisableMakeItem.txt");
             //g_DisableMakeItemList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadUnMasterList()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("UnMaster.txt");
+            bool result = false;
+            string sFileName = GetEnvirFilePath("UnMaster.txt");
             //var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1209,21 +1208,21 @@ namespace M2Server
 
         public static bool SaveUnMasterList()
         {
-            var sFileName = GetEnvirFilePath("UnMaster.txt");
+            string sFileName = GetEnvirFilePath("UnMaster.txt");
             //g_UnMasterList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadUnForceMasterList()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("UnForceMaster.txt");
-            using var LoadList = new StringList();
+            bool result = false;
+            string sFileName = GetEnvirFilePath("UnForceMaster.txt");
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 UnForceMasterList.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     UnForceMasterList.Add(LoadList[i].Trim());
                 }
@@ -1238,15 +1237,15 @@ namespace M2Server
 
         public static bool SaveUnForceMasterList()
         {
-            var sFileName = GetEnvirFilePath("UnForceMaster.txt");
+            string sFileName = GetEnvirFilePath("UnForceMaster.txt");
             //g_UnForceMasterList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadEnableMakeItem()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("EnableMakeItem.txt");
+            bool result = false;
+            string sFileName = GetEnvirFilePath("EnableMakeItem.txt");
             //if (File.Exists(sFileName))
             //{
             //    g_EnableMakeItemList.__Lock();
@@ -1272,21 +1271,21 @@ namespace M2Server
 
         public static bool SaveEnableMakeItem()
         {
-            var sFileName = GetEnvirFilePath("EnableMakeItem.txt");
+            string sFileName = GetEnvirFilePath("EnableMakeItem.txt");
             //g_EnableMakeItemList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadDisableMoveMap()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("DisableMoveMap.txt");
-            var loadList = new StringList();
+            bool result = false;
+            string sFileName = GetEnvirFilePath("DisableMoveMap.txt");
+            StringList loadList = new StringList();
             if (File.Exists(sFileName))
             {
                 DisableMoveMapList.Clear();
                 loadList.LoadFromFile(sFileName);
-                for (var i = 0; i < loadList.Count; i++)
+                for (int i = 0; i < loadList.Count; i++)
                 {
                     DisableMoveMapList.Add(loadList[i].Trim());
                 }
@@ -1301,21 +1300,21 @@ namespace M2Server
 
         public static bool SaveDisableMoveMap()
         {
-            var sFileName = GetEnvirFilePath("DisableMoveMap.txt");
+            string sFileName = GetEnvirFilePath("DisableMoveMap.txt");
             DisableMoveMapList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadAllowSellOffItem()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("DisableSellOffItem.txt");
-            using var LoadList = new StringList();
+            bool result = false;
+            string sFileName = GetEnvirFilePath("DisableSellOffItem.txt");
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 DisableSellOffList.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     DisableSellOffList.Add(LoadList[i].Trim());
                 }
@@ -1330,7 +1329,7 @@ namespace M2Server
 
         public static bool SaveAllowSellOffItem()
         {
-            var sFileName = GetEnvirFilePath("DisableSellOffItem.txt");
+            string sFileName = GetEnvirFilePath("DisableSellOffItem.txt");
             //g_DisableSellOffList.SaveToFile(sFileName);
             return true;
         }
@@ -1358,7 +1357,7 @@ namespace M2Server
 
         public static bool LoadDisableSendMsgList()
         {
-            var sFileName = GetEnvirFilePath("DisableSendMsgList.txt");
+            string sFileName = GetEnvirFilePath("DisableSendMsgList.txt");
             //var LoadList = new ArrayList();
             //if (File.Exists(sFileName))
             //{
@@ -1379,28 +1378,28 @@ namespace M2Server
 
         public static bool LoadMonDropLimitList()
         {
-            var sItemName = string.Empty;
-            var sItemCount = string.Empty;
-            var result = false;
-            var sFileName = GetEnvirFilePath("MonDropLimitList.txt");
-            var LoadList = new StringList();
+            string sItemName = string.Empty;
+            string sItemCount = string.Empty;
+            bool result = false;
+            string sFileName = GetEnvirFilePath("MonDropLimitList.txt");
+            StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 MonDropLimitLIst.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';'))
                     {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new[] { ' ', '/', ',', '\t' });
-                    var nItemCount = HUtil32.StrToInt(sItemCount, -1);
+                    int nItemCount = HUtil32.StrToInt(sItemCount, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
                     {
-                        var MonDrop = new MonsterLimitDrop
+                        MonsterLimitDrop MonDrop = new MonsterLimitDrop
                         {
                             ItemName = sItemName,
                             DropCount = 0,
@@ -1421,12 +1420,12 @@ namespace M2Server
 
         public static bool SaveMonDropLimitList()
         {
-            var sFileName = GetEnvirFilePath("MonDropLimitList.txt");
-            var LoadList = new StringList();
+            string sFileName = GetEnvirFilePath("MonDropLimitList.txt");
+            StringList LoadList = new StringList();
             foreach (KeyValuePair<string, MonsterLimitDrop> item in MonDropLimitLIst)
             {
-                var monDrop = item.Value;
-                var sLineText = monDrop.ItemName + "\t" + monDrop.CountLimit;
+                MonsterLimitDrop monDrop = item.Value;
+                string sLineText = monDrop.ItemName + "\t" + monDrop.CountLimit;
                 LoadList.Add(sLineText);
             }
             LoadList.SaveToFile(sFileName);
@@ -1435,25 +1434,25 @@ namespace M2Server
 
         public static bool LoadDisableTakeOffList()
         {
-            var sItemName = string.Empty;
-            var sItemIdx = string.Empty;
-            var result = false;
-            var sFileName = GetEnvirFilePath("DisableTakeOffList.txt");
-            var LoadList = new StringList();
+            string sItemName = string.Empty;
+            string sItemIdx = string.Empty;
+            bool result = false;
+            string sFileName = GetEnvirFilePath("DisableTakeOffList.txt");
+            StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 LoadList.LoadFromFile(sFileName);
                 DisableTakeOffList.Clear();
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';'))
                     {
                         continue;
                     }
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
                     sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new[] { ' ', '/', ',', '\t' });
-                    var nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
+                    int nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
                     {
                         DisableTakeOffList.Add(nItemIdx, sItemName);
@@ -1470,11 +1469,11 @@ namespace M2Server
 
         public static bool SaveDisableTakeOffList()
         {
-            var sFileName = GetEnvirFilePath("DisableTakeOffList.txt");
-            var LoadList = new StringList();
+            string sFileName = GetEnvirFilePath("DisableTakeOffList.txt");
+            StringList LoadList = new StringList();
             foreach (KeyValuePair<int, string> item in DisableTakeOffList)
             {
-                var sLineText = item.Value + "\t" + item.Key;
+                string sLineText = item.Value + "\t" + item.Key;
                 LoadList.Add(sLineText);
             }
             LoadList.SaveToFile(sFileName);
@@ -1488,9 +1487,9 @@ namespace M2Server
 
         public static void SaveDisableSendMsgList()
         {
-            var sFileName = GetEnvirFilePath("DisableSendMsgList.txt");
-            var LoadList = new StringList();
-            for (var i = 0; i < DisableSendMsgList.Count; i++)
+            string sFileName = GetEnvirFilePath("DisableSendMsgList.txt");
+            StringList LoadList = new StringList();
+            for (int i = 0; i < DisableSendMsgList.Count; i++)
             {
                 LoadList.Add(DisableSendMsgList[i]);
             }
@@ -1499,7 +1498,7 @@ namespace M2Server
 
         public static bool GetDisableSendMsgList(string sHumanName)
         {
-            var result = false;
+            bool result = false;
             //for (I = 0; I < g_DisableSendMsgList.Count; I ++ )
             //{
             //    if ((sHumanName).CompareTo((g_DisableSendMsgList[I])) == 0)
@@ -1513,9 +1512,9 @@ namespace M2Server
 
         public static bool LoadGameLogItemNameList()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("GameLogItemNameList.txt");
-            var LoadList = new StringList();
+            bool result = false;
+            string sFileName = GetEnvirFilePath("GameLogItemNameList.txt");
+            StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 GameLogItemNameList.Clear();
@@ -1525,7 +1524,7 @@ namespace M2Server
                     GameLogItemNameList.Add("*");
                     return true;
                 }
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     GameLogItemNameList.Add(LoadList[i].Trim());
                 }
@@ -1545,7 +1544,7 @@ namespace M2Server
             {
                 return 1;
             }
-            for (var i = 0; i < GameLogItemNameList.Count; i++)
+            for (int i = 0; i < GameLogItemNameList.Count; i++)
             {
                 if (string.Compare(sItemName, GameLogItemNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -1558,15 +1557,15 @@ namespace M2Server
 
         public static bool SaveGameLogItemNameList()
         {
-            var sFileName = GetEnvirFilePath("GameLogItemNameList.txt");
+            string sFileName = GetEnvirFilePath("GameLogItemNameList.txt");
             //g_GameLogItemNameList.SaveToFile(sFileName);
             return true;
         }
 
         public static bool LoadDenyIPAddrList()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("DenyIPAddrList.txt");
+            bool result = false;
+            string sFileName = GetEnvirFilePath("DenyIPAddrList.txt");
             //if (File.Exists(sFileName))
             //{
             //    g_DenyIPAddrList.__Lock();
@@ -1592,8 +1591,8 @@ namespace M2Server
 
         public static bool GetDenyIPAddrList(string sIPaddr)
         {
-            var result = false;
-            for (var i = 0; i < DenyIPAddrList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < DenyIPAddrList.Count; i++)
             {
                 //if ((sIPaddr).CompareTo((g_DenyIPAddrList[I])) == 0)
                 //{
@@ -1606,7 +1605,7 @@ namespace M2Server
 
         public static bool SaveDenyIPAddrList()
         {
-            var sFileName = GetEnvirFilePath("DenyIPAddrList.txt");
+            string sFileName = GetEnvirFilePath("DenyIPAddrList.txt");
             //SaveList = new StringList();
             //g_DenyIPAddrList.__Lock();
             //try {
@@ -1627,8 +1626,8 @@ namespace M2Server
 
         public static bool LoadDenyChrNameList()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("DenyChrNameList.txt");
+            bool result = false;
+            string sFileName = GetEnvirFilePath("DenyChrNameList.txt");
             //if (File.Exists(sFileName))
             //{
             //    g_DenyChrNameList.__Lock();
@@ -1655,7 +1654,7 @@ namespace M2Server
 
         public static bool GetDenyChrNameList(string sChrName)
         {
-            var result = false;
+            bool result = false;
             //for (I = 0; I < g_DenyChrNameList.Count; I ++ )
             //{
             //    if ((sChrName).CompareTo((g_DenyChrNameList[I])) == 0)
@@ -1669,7 +1668,7 @@ namespace M2Server
 
         public static bool SaveDenyChrNameList()
         {
-            var sFileName = GetEnvirFilePath("DenyChrNameList.txt");
+            string sFileName = GetEnvirFilePath("DenyChrNameList.txt");
             //SaveList = new StringList();
             //g_DenyChrNameList.__Lock();
             //try {
@@ -1690,8 +1689,8 @@ namespace M2Server
 
         public static bool LoadDenyAccountList()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("DenyAccountList.txt");
+            bool result = false;
+            string sFileName = GetEnvirFilePath("DenyAccountList.txt");
             if (File.Exists(sFileName))
             {
                 DenyAccountList.Clear();
@@ -1712,8 +1711,8 @@ namespace M2Server
 
         public static bool GetDenyAccountList(string sAccount)
         {
-            var result = false;
-            for (var I = 0; I < DenyAccountList.Count; I++)
+            bool result = false;
+            for (int I = 0; I < DenyAccountList.Count; I++)
             {
                 //if ((sAccount).CompareTo((g_DenyAccountList[I])) == 0)
                 //{
@@ -1726,7 +1725,7 @@ namespace M2Server
 
         public static bool SaveDenyAccountList()
         {
-            var sFileName = GetEnvirFilePath("DenyAccountList.txt");
+            string sFileName = GetEnvirFilePath("DenyAccountList.txt");
             //SaveList = new StringList();
             //g_DenyAccountList.__Lock();
             //try {
@@ -1747,14 +1746,14 @@ namespace M2Server
 
         public static bool LoadNoClearMonList()
         {
-            var result = false;
-            var sFileName = GetEnvirFilePath("NoClearMonList.txt");
-            using var LoadList = new StringList();
+            bool result = false;
+            string sFileName = GetEnvirFilePath("NoClearMonList.txt");
+            using StringList LoadList = new StringList();
             if (File.Exists(sFileName))
             {
                 NoClearMonLIst.Clear();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
                     NoClearMonLIst.Add(LoadList[i].Trim());
                 }
@@ -1769,7 +1768,7 @@ namespace M2Server
 
         public static bool GetNoHptoexpMonList(string sMonName)
         {
-            var result = false;
+            bool result = false;
             //for (var i = 0; i < g_NoHptoexpMonLIst.Count; i++)
             //{
             //    if ((sMonName).CompareTo((g_NoHptoexpMonLIst[i])) == 0)
@@ -1783,7 +1782,7 @@ namespace M2Server
 
         public static bool GetNoClearMonList(string sMonName)
         {
-            var result = false;
+            bool result = false;
             //for (var I = 0; I < g_NoClearMonLIst.Count; I++)
             //{
             //    if ((sMonName).CompareTo((g_NoClearMonLIst[I])) == 0)
@@ -1797,7 +1796,7 @@ namespace M2Server
 
         public static bool SaveNoHptoexpMonList()
         {
-            var sFileName = GetEnvirFilePath("NoHptoExpMonList.txt");
+            string sFileName = GetEnvirFilePath("NoHptoExpMonList.txt");
             //SaveList = new StringList();
             //g_NoHptoexpMonLIst.__Lock();
             //try {
@@ -1815,9 +1814,9 @@ namespace M2Server
 
         public static bool SaveNoClearMonList()
         {
-            var sFileName = GetEnvirFilePath("NoClearMonList.txt");
-            var SaveList = new StringList();
-            for (var I = 0; I < NoClearMonLIst.Count; I++)
+            string sFileName = GetEnvirFilePath("NoClearMonList.txt");
+            StringList SaveList = new StringList();
+            for (int I = 0; I < NoClearMonLIst.Count; I++)
             {
                 //SaveList.Add(g_NoClearMonLIst[I]);
             }
@@ -1827,21 +1826,21 @@ namespace M2Server
 
         public static bool LoadMonSayMsg()
         {
-            var sStatus = string.Empty;
-            var sRate = string.Empty;
-            var sColor = string.Empty;
-            var sMonName = string.Empty;
-            var sSayMsg = string.Empty;
-            var result = false;
-            var sFileName = GetEnvirFilePath("GenMsg.txt");
+            string sStatus = string.Empty;
+            string sRate = string.Empty;
+            string sColor = string.Empty;
+            string sMonName = string.Empty;
+            string sSayMsg = string.Empty;
+            bool result = false;
+            string sFileName = GetEnvirFilePath("GenMsg.txt");
             if (File.Exists(sFileName))
             {
                 MonSayMsgList.Clear();
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(sFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i].Trim();
+                    string sLineText = LoadList[i].Trim();
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new[] { ' ', '/', ',', '\t' });
@@ -1851,12 +1850,12 @@ namespace M2Server
                         sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new[] { ' ', '/', ',', '\t' });
                         if (!string.IsNullOrEmpty(sStatus) && !string.IsNullOrEmpty(sRate) && !string.IsNullOrEmpty(sColor) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sSayMsg))
                         {
-                            var nStatus = HUtil32.StrToInt(sStatus, -1);
-                            var nRate = HUtil32.StrToInt(sRate, -1);
-                            var nColor = HUtil32.StrToInt(sColor, -1);
+                            int nStatus = HUtil32.StrToInt(sStatus, -1);
+                            int nRate = HUtil32.StrToInt(sRate, -1);
+                            int nColor = HUtil32.StrToInt(sColor, -1);
                             if (nStatus >= 0 && nRate >= 0 && nColor >= 0)
                             {
-                                var MonSayMsg = new MonsterSayMsg();
+                                MonsterSayMsg MonSayMsg = new MonsterSayMsg();
                                 switch (nStatus)
                                 {
                                     case 0:
@@ -1947,7 +1946,7 @@ namespace M2Server
             {
                 return true;
             }
-            var nPos = dIPaddr.IndexOf('*');
+            int nPos = dIPaddr.IndexOf('*');
             if (nPos > 0)
             {
                 result = HUtil32.CompareLStr(sIPaddr, dIPaddr, nPos - 1);

@@ -1,8 +1,6 @@
 using MakePlayer.Cliens;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
 
 namespace MakePlayer.Scenes.Scene
 {
@@ -100,10 +98,10 @@ namespace MakePlayer.Scenes.Scene
 
         private void ClientGetAbility(CommandMessage defMsg, string sData)
         {
-            var gold = defMsg.Recog;
-            var job = (byte)defMsg.Param;
-            var gameGold = HUtil32.MakeLong(defMsg.Tag, defMsg.Series);
-            var buff = EDCode.DecodeBuffer(sData);
+            int gold = defMsg.Recog;
+            byte job = (byte)defMsg.Param;
+            int gameGold = HUtil32.MakeLong(defMsg.Tag, defMsg.Series);
+            byte[] buff = EDCode.DecodeBuffer(sData);
             PlayAbil = SerializerUtil.Deserialize<Ability>(buff);
         }
 
@@ -119,7 +117,7 @@ namespace MakePlayer.Scenes.Scene
 
         private void SendClientMessage(int nIdent, int nRecog, int nParam, int nTag, int nSeries)
         {
-            var defMsg = Messages.MakeMessage(nIdent, nRecog, nParam, nTag, nSeries);
+            CommandMessage defMsg = Messages.MakeMessage(nIdent, nRecog, nParam, nTag, nSeries);
             SendSocket(EDCode.EncodeMessage(defMsg));
         }
 
@@ -127,7 +125,7 @@ namespace MakePlayer.Scenes.Scene
         {
             if (_clientSocket.IsConnected)
             {
-                var sSendText = "#" + SendNum + sText + "!";
+                string sSendText = "#" + SendNum + sText + "!";
                 _clientSocket.SendText(sSendText);
                 SendNum++;
                 if (SendNum >= 10)
@@ -141,14 +139,14 @@ namespace MakePlayer.Scenes.Scene
         {
             MainOutMessage($"进入游戏");
             _play.ConnectionStep = ConnectionStep.Play;
-            var sSendMsg = $"**{_play.LoginId}/{_play.ChrName}/{_play.Certification}/{Grobal2.ClientVersionNumber}/{2022080300}";
+            string sSendMsg = $"**{_play.LoginId}/{_play.ChrName}/{_play.Certification}/{Grobal2.ClientVersionNumber}/{2022080300}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
         private void ClientLoginSay(string message)
         {
             _play.SayTick = HUtil32.GetTickCount();
-            var msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(message));
         }
 
@@ -171,8 +169,8 @@ namespace MakePlayer.Scenes.Scene
             {
                 return;
             }
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
-            var nIdx = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
+            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            int nIdx = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
             if (nIdx > 0)
             {
                 //var sData2 = sData[..(nIdx - 1)];

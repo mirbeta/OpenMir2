@@ -1,7 +1,3 @@
-using System;
-using System.IO;
-using OpenMir2.Packets.ClientPackets;
-
 namespace GameGate.Packet
 {
     public class HardwareHeader : ClientPacket

@@ -1,5 +1,5 @@
-using System;
 using Serilog;
+using System;
 
 namespace OpenMir2
 {
@@ -11,7 +11,7 @@ namespace OpenMir2
         {
             Logger.Information(message);
         }
-        
+
         public static void Info(string message, params object[] args)
         {
             Logger.Information(message, args);
@@ -36,7 +36,7 @@ namespace OpenMir2
         {
             Logger.Debug(message);
         }
-        
+
         public static void Debug(string message, params object[] args)
         {
             Logger.Debug(message, args);

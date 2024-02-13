@@ -136,11 +136,14 @@ namespace M2Server.Monster
         private void UpdateMonsterVisible(int acrotId)
         {
             if ((HUtil32.GetTickCount() - SearchTick) <= SearchTime)
+            {
                 return;
+            }
+
             SearchTick = HUtil32.GetTickCount();
             bool boIsVisible = false;
             VisibleBaseObject visibleBaseObject;
-            var baseObject = SystemShare.ActorMgr.Get(acrotId);
+            IActor baseObject = SystemShare.ActorMgr.Get(acrotId);
             if ((baseObject.Race == ActorRace.Play) || (baseObject.Master != null))// 如果是人物或宝宝则置TRUE
             {
                 IsVisibleActive = true;
@@ -213,7 +216,7 @@ namespace M2Server.Monster
             }
             return result;
         }
-         
+
         protected virtual bool AttackTarget()
         {
             byte btDir = 0;
@@ -395,8 +398,8 @@ namespace M2Server.Monster
 
         protected bool GetLongAttackDirDis(IActor baseObject, int dis, ref byte dir)
         {
-            var result = false;
-            var nC = 0;
+            bool result = false;
+            int nC = 0;
             while (true)
             {
                 if (CurrX - nC <= baseObject.CurrX && (CurrX + nC >= baseObject.CurrX) && (CurrY - nC <= baseObject.CurrY) && (CurrY + nC >= baseObject.CurrY) && ((CurrX != baseObject.CurrX) || (CurrY != baseObject.CurrY)))
