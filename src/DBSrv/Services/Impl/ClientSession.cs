@@ -24,23 +24,15 @@ namespace DBSrv.Services.Impl
         {
             _setting = conf;
             _clientScoket = new TcpClient();
-            _clientScoket.Setup(new TouchSocketConfig().SetRemoteIPHost(new IPHost(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort)).ConfigureContainer(x => { x.AddConsoleLogger(); }));
+            var config = new TouchSocketConfig()
+                .SetRemoteIPHost(new IPHost(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort))
+                .ConfigureContainer(x => { x.AddConsoleLogger(); })
+                .ConfigurePlugins(x => { x.UseReconnection(); });
+            _clientScoket.Setup(config);
             _clientScoket.Received += LoginSocketRead;
             _clientScoket.Connected += LoginSocketConnected;
             _clientScoket.Disconnected += LoginSocketDisconnected;
             _globaSessionList = new List<GlobaSessionInfo>();
-        }
-
-        private Task LoginSocketConnected(ITcpClientBase client, ConnectedEventArgs e)
-        {
-            LogService.Info($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]链接成功.");
-            return Task.CompletedTask;
-        }
-
-        private Task LoginSocketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
-        {
-            LogService.Error($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]断开链接.");
-            return Task.CompletedTask;
         }
 
         public void Start()
@@ -61,6 +53,18 @@ namespace DBSrv.Services.Impl
             {
                 _globaSessionList[i] = null;
             }
+        }
+
+        private Task LoginSocketConnected(ITcpClientBase client, ConnectedEventArgs e)
+        {
+            LogService.Info($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]链接成功.");
+            return Task.CompletedTask;
+        }
+
+        private Task LoginSocketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
+        {
+            LogService.Error($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]断开链接.");
+            return Task.CompletedTask;
         }
 
         private Task LoginSocketRead(IClient client, ReceivedDataEventArgs e)
@@ -262,7 +266,7 @@ namespace DBSrv.Services.Impl
             globaSessionInfo.AddTick = HUtil32.GetTickCount();
             globaSessionInfo.AddDate = DateTime.Now;
             _globaSessionList.Add(globaSessionInfo);
-            //LogService.Debug($"同步账号服务[{sAccount}]同步会话消息...");
+            LogService.Debug($"同步账号服务[{sAccount}]同步会话消息...");
         }
 
         private void ProcessDelSession(string sData)

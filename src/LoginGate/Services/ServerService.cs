@@ -21,11 +21,10 @@ public class ServerService
 
     public void Start(GameGateInfo gateInfo)
     {
-        _serverSocket.Setup(
-            new TouchSocket.Core.TouchSocketConfig().SetListenIPHosts(new IPHost(IPAddress.Parse(gateInfo.GateAddress),
-                gateInfo.GatePort)));
+        var config = new TouchSocketConfig().SetListenIPHosts(new IPHost(IPAddress.Parse(gateInfo.GateAddress), gateInfo.GatePort));
+        _serverSocket.Setup(config);
         _serverSocket.Start();
-        LogService.Info($"登录网关[{_serverSocket.ServerName}]已启动...");
+        LogService.Info($"登录网关[{gateInfo.GateAddress}:{gateInfo.GatePort}]已启动...");
     }
 
     public void Stop()

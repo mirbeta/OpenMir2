@@ -1,4 +1,4 @@
-public class AppService : BackgroundService
+public class AppService : IHostedLifecycleService
 {
     private readonly ConfigManager _configManager;
     private readonly ServerManager _serverManager;
@@ -11,42 +11,49 @@ public class AppService : BackgroundService
         _clientManager = clientManager;
     }
 
-    protected override Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        stoppingToken.Register(() => LogService.Debug("LoginGate is stopping."));
-        _serverManager.Start();
-        _clientManager.Start();
-        _serverManager.ProcessLoginMessage(stoppingToken);
-        _clientManager.ProcessSendMessage(stoppingToken);
-        return Task.CompletedTask;
-    }
-
-    public override Task StartAsync(CancellationToken cancellationToken)
+    public Task StartingAsync(CancellationToken cancellationToken)
     {
         GateShare.Initialization();
         _configManager.LoadConfig();
-        Initialization();
-        LogService.Info("服务已启动成功...", 2);
-        LogService.Info("欢迎使用翎风系列游戏软件...", 0);
-        LogService.Info("网站:http://www.gameofmir.com", 0);
-        LogService.Info("论坛:http://bbs.gameofmir.com", 0);
-        base.StartAsync(cancellationToken);
+        _serverManager.Initialization();
+        _clientManager.Initialization();
         return Task.CompletedTask;
     }
 
-    private void Initialization()
+    public Task StartAsync(CancellationToken cancellationToken)
     {
-        _serverManager.Initialization();
-        _clientManager.Initialization();
+        _serverManager.ProcessLoginMessage(cancellationToken);
+        _clientManager.ProcessSendMessage(cancellationToken);
+        return Task.CompletedTask;
     }
 
-    public override Task StopAsync(CancellationToken cancellationToken)
+    public Task StartedAsync(CancellationToken cancellationToken)
     {
-        LogService.Debug("LoginGate is stopping.");
-        LogService.Info("正在停止服务...", 2);
+        _serverManager.Start();
+        _clientManager.Start();
+        LogService.Info("服务已启动成功...");
+        LogService.Info("欢迎使用翎风系列游戏软件...");
+        LogService.Info("网站:http://www.gameofmir.com");
+        LogService.Info("论坛:http://bbs.gameofmir.com");
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        LogService.Info("正在停止服务...");
         _serverManager.Stop();
         _clientManager.Stop();
-        LogService.Info("服务停止成功...", 2);
-        return base.StopAsync(cancellationToken);
+        LogService.Info("服务停止成功...");
+        return Task.CompletedTask;
+    }
+
+    public Task StoppingAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+
+    public Task StoppedAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 }

@@ -2,6 +2,7 @@
 using LoginSrv.Services;
 using LoginSrv.Storage;
 using Microsoft.Extensions.Hosting;
+using OpenMir2;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -41,6 +42,10 @@ namespace LoginSrv
             _loginService.StartServer();
             _masSocService.StartServer();
             _accountStorage.Initialization();
+            LogService.Info("服务已启动成功...");
+            LogService.Info("欢迎使用翎风系列游戏软件...");
+            LogService.Info("网站:http://www.gameofmir.com");
+            LogService.Info("论坛:http://bbs.gameofmir.com");
             return Task.CompletedTask;
         }
 

@@ -59,7 +59,7 @@ namespace LoginSrv
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-           return _serverHost.StopAsync(cancellationToken);
+            return _serverHost.StopAsync(cancellationToken);
         }
 
         private void Stop()
@@ -175,47 +175,19 @@ namespace LoginSrv
 
         private void PrintUsage()
         {
-            AnsiConsole.WriteLine();
-
-            Table table = new Table()
-            {
-                Border = TableBorder.None,
-                Expand = true,
-            }.HideHeaders();
-            table.AddColumn(new TableColumn("One"));
-
-            FigletText header = new FigletText("OpenMir2")
-            {
-                Color = Color.Fuchsia
-            };
-            FigletText header2 = new FigletText("LoginSrv")
-            {
-                Color = Color.Aqua
-            };
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            Markup markup = new Markup(sb.ToString());
-
-            table.AddColumn(new TableColumn("Two"));
-
-            Table rightTable = new Table()
-                .HideHeaders()
-                .Border(TableBorder.None)
-                .AddColumn(new TableColumn("Content"));
-
-            rightTable.AddRow(header)
-                .AddRow(header2)
-                .AddEmptyRow()
-                .AddEmptyRow()
-                .AddRow(markup);
-            table.AddRow(rightTable);
-
-            AnsiConsole.Write(table);
-            AnsiConsole.WriteLine();
+            Console.WriteLine(@"    ___                           __  __   _          ____          ");
+            Console.WriteLine(@"   / _ \   _ __     ___   _ __   |  \/  | (_)  _ __  |___ \         ");
+            Console.WriteLine(@"  | | | | | '_ \   / _ \ | '_ \  | |\/| | | | | '__|   __) |        ");
+            Console.WriteLine(@"  | |_| | | |_) | |  __/ | | | | | |  | | | | | |     / __/         ");
+            Console.WriteLine(@"   \___/  | .__/   \___| |_| |_| |_|  |_| |_| |_|    |_____|        ");
+            Console.WriteLine(@"          |_|                                                       ");
+            Console.WriteLine(@"   _                       _           ____                         ");
+            Console.WriteLine(@"  | |       ___     __ _  (_)  _ __   / ___|   _ __  __   __        ");
+            Console.WriteLine(@"  | |      / _ \   / _` | | | | '_ \  \___ \  | '__| \ \ / /        ");
+            Console.WriteLine(@"  | |___  | (_) | | (_| | | | | | | |  ___) | | |     \ V /         ");
+            Console.WriteLine(@"  |_____|  \___/   \__, | |_| |_| |_| |____/  |_|      \_/          ");
+            Console.WriteLine(@"                   |___/                                            ");
+            Console.WriteLine(@"                                                                    ");
         }
     }
 }

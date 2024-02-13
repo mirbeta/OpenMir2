@@ -40,6 +40,23 @@ namespace SelGate
             });
         }
 
+        private void PrintUsage()
+        {
+            Console.WriteLine(@"                                                                      ");
+            Console.WriteLine(@"   ___                           __  __   _          ____             ");
+            Console.WriteLine(@"  / _ \   _ __     ___   _ __   |  \/  | (_)  _ __  |___ \            ");
+            Console.WriteLine(@" | | | | | '_ \   / _ \ | '_ \  | |\/| | | | | '__|   __) |           ");
+            Console.WriteLine(@" | |_| | | |_) | |  __/ | | | | | |  | | | | | |     / __/            ");
+            Console.WriteLine(@"  \___/  | .__/   \___| |_| |_| |_|  |_| |_| |_|    |_____|           ");
+            Console.WriteLine(@"         |_|                                                          ");
+            Console.WriteLine(@"  ____           _    ____           _                                ");
+            Console.WriteLine(@" / ___|    ___  | |  / ___|   __ _  | |_    ___                       ");
+            Console.WriteLine(@" \___ \   / _ \ | | | |  _   / _` | | __|  / _ \                      ");
+            Console.WriteLine(@"  ___) | |  __/ | | | |_| | | (_| | | |_  |  __/                      ");
+            Console.WriteLine(@" |____/   \___| |_|  \____|  \__,_|  \__|  \___|                      ");
+            Console.WriteLine(@"                                                                      ");
+        }
+
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _serverHost.BuildHost();
@@ -159,51 +176,6 @@ namespace SelGate
             //         }
             //     });
             return Task.CompletedTask;
-        }
-
-        private static void PrintUsage()
-        {
-            AnsiConsole.WriteLine();
-
-            Table table = new Table()
-            {
-                Border = TableBorder.None,
-                Expand = true,
-            }.HideHeaders();
-            table.AddColumn(new TableColumn("One"));
-
-            FigletText header = new FigletText("OpenMir2")
-            {
-                Color = Color.Fuchsia
-            };
-            FigletText header2 = new FigletText("Sel Gate")
-            {
-                Color = Color.Aqua
-            };
-
-            StringBuilder sb = new StringBuilder();
-            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            Markup markup = new Markup(sb.ToString());
-
-            table.AddColumn(new TableColumn("Two"));
-
-            Table rightTable = new Table()
-                .HideHeaders()
-                .Border(TableBorder.None)
-                .AddColumn(new TableColumn("Content"));
-
-            rightTable.AddRow(header)
-                .AddRow(header2)
-                .AddEmptyRow()
-                .AddEmptyRow()
-                .AddRow(markup);
-            table.AddRow(rightTable);
-
-            AnsiConsole.Write(table);
-            AnsiConsole.WriteLine();
         }
     }
 }

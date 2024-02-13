@@ -29,13 +29,17 @@ public class ClientManager
         {
             _serverGateList.Add(new ClientThread(this, _sessionManager));
         }
+        for (int i = 0; i < _serverGateList.Count; i++)
+        {
+            _serverGateList[i].Initialize(_configManager.GameGates[i]);
+        }
     }
 
     public void Start()
     {
         for (int i = 0; i < _serverGateList.Count; i++)
         {
-            _serverGateList[i].Start(_configManager.GameGates[i]);
+            _serverGateList[i].Start();
         }
     }
 
@@ -174,7 +178,6 @@ public class ClientManager
             clientThread.CheckServerTick = HUtil32.GetTickCount();
             if (clientThread.CheckServerFail)
             {
-                clientThread.ReConnected();
                 clientThread.CheckServerFailCount++;
                 LogService.Debug($"重新与服务器[{clientThread.EndPoint}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                 return;

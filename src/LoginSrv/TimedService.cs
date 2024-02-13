@@ -144,10 +144,5 @@ namespace LoginSrv
                 }
             }
         }
-
-        public override void Dispose()
-        {
-            base.Dispose();
-        }
     }
 }

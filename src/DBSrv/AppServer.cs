@@ -23,6 +23,7 @@ namespace DBSrv
         
         public AppServer()
         {
+            PrintUsage();
             ConfigManager configManager = new ConfigManager();
             configManager.LoadConfig();
             _serverHost = new ServerHost();
@@ -38,6 +39,23 @@ namespace DBSrv
                 service.AddHostedService<AppService>();
                 LoadAssembly(service, "MySQL");
             });
+        }
+
+        private void PrintUsage()
+        {
+            Console.WriteLine(@"                                                             ");
+            Console.WriteLine(@"   ___                           __  __   _          ____    ");
+            Console.WriteLine(@"  / _ \   _ __     ___   _ __   |  \/  | (_)  _ __  |___ \   ");
+            Console.WriteLine(@" | | | | | '_ \   / _ \ | '_ \  | |\/| | | | | '__|   __) |  ");
+            Console.WriteLine(@" | |_| | | |_) | |  __/ | | | | | |  | | | | | |     / __/   ");
+            Console.WriteLine(@"  \___/  | .__/   \___| |_| |_| |_|  |_| |_| |_|    |_____|  ");
+            Console.WriteLine(@"         |_|                                                 ");
+            Console.WriteLine(@"  ____    ____    ____                                       ");
+            Console.WriteLine(@" |  _ \  | __ )  / ___|   _ __  __   __                      ");
+            Console.WriteLine(@" | | | | |  _ \  \___ \  | '__| \ \ / /                      ");
+            Console.WriteLine(@" | |_| | | |_) |  ___) | | |     \ V /                       ");
+            Console.WriteLine(@" |____/  |____/  |____/  |_|      \_/                        ");
+            Console.WriteLine(@"                                                             ");
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)

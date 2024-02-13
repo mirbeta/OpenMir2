@@ -7,6 +7,7 @@ public class AppServer
 
     public AppServer()
     {
+        PrintUsage();
         _serverHost = new ServerHost();
         _serverHost.ConfigureServices(service =>
         {
@@ -21,10 +22,28 @@ public class AppServer
         });
     }
 
+    private void PrintUsage()
+    {
+        Console.WriteLine(@"                                                                    ");
+        Console.WriteLine(@"   ___                           __  __   _          ____           ");
+        Console.WriteLine(@"  / _ \   _ __     ___   _ __   |  \/  | (_)  _ __  |___ \          ");
+        Console.WriteLine(@" | | | | | '_ \   / _ \ | '_ \  | |\/| | | | | '__|   __) |         ");
+        Console.WriteLine(@" | |_| | | |_) | |  __/ | | | | | |  | | | | | |     / __/          ");
+        Console.WriteLine(@"  \___/  | .__/   \___| |_| |_| |_|  |_| |_| |_|    |_____|         ");
+        Console.WriteLine(@"         |_|                                                        ");
+        Console.WriteLine(@"  _                       _            ____           _             ");
+        Console.WriteLine(@" | |       ___     __ _  (_)  _ __    / ___|   __ _  | |_    ___    ");
+        Console.WriteLine(@" | |      / _ \   / _` | | | | '_ \  | |  _   / _` | | __|  / _ \   ");
+        Console.WriteLine(@" | |___  | (_) | | (_| | | | | | | | | |_| | | (_| | | |_  |  __/   ");
+        Console.WriteLine(@" |_____|  \___/   \__, | |_| |_| |_|  \____|  \__,_|  \__|  \___|   ");
+        Console.WriteLine(@"                  |___/                                             ");
+        Console.WriteLine(@"                                                                    ");
+    }
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
-        LogService.Debug("LoginGate is starting.");
-        LogService.Info("正在启动服务...", 2);
+        LogService.Info("正在启动服务...");
+        _serverHost.BuildHost();
         await _serverHost.StartAsync(cancellationToken);
         GateShare.ServiceProvider = _serverHost.ServiceProvider;
         await ProcessLoopAsync();

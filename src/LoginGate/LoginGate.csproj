@@ -44,8 +44,8 @@
     </Choose>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0"/>
-        <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20" />
     </ItemGroup>
 
     <ItemGroup>
@@ -56,7 +56,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\OpenMir2\OpenMir2.csproj"/>
+        <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
     </ItemGroup>
 
 </Project>

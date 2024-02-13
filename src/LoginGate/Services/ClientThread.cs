@@ -22,7 +22,7 @@ public class ClientThread
     /// Session管理
     /// </summary>
     private readonly SessionManager _sessionManager;
-
+    private GameGateInfo gameGateInfo;
     /// <summary>
     /// 数据缓冲区
     /// </summary>
@@ -49,22 +49,31 @@ public class ClientThread
 
     public EndPoint EndPoint => _clientSocket.RemoteIPHost.EndPoint;
 
-    public void Start(GameGateInfo gateInfo)
+    public void Initialize(GameGateInfo gateInfo)
     {
-        TouchSocketConfig config = new TouchSocketConfig();
-        config.SetRemoteIPHost(new IPHost(IPAddress.Parse(gateInfo.LoginServer), gateInfo.LoginPort));
+        gameGateInfo = gateInfo;
+        var config = new TouchSocketConfig()
+        .SetRemoteIPHost(new IPHost(IPAddress.Parse(gateInfo.LoginServer), gateInfo.LoginPort)).ConfigureContainer(a =>
+        {
+            a.AddConsoleLogger();
+        });
         _clientSocket.Setup(config);
-        _clientSocket.Connect();
     }
 
-    public void ReConnected()
+    public void Start()
     {
-        if (IsConnected == false)
+        try
         {
             _clientSocket.Connect();
         }
-
-        CheckServerFail = !IsConnected;
+        catch (TimeoutException)
+        {
+            LogService.Error($"链接登录服务器[{gameGateInfo.LoginServer}:{gameGateInfo.LoginPort}]超时.");
+        }
+        catch (Exception)
+        {
+            LogService.Error($"链接登录服务器[{gameGateInfo.LoginServer}:{gameGateInfo.LoginPort}]失败.");
+        }
     }
 
     public void Stop()
