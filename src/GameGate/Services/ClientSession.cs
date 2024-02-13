@@ -1,7 +1,9 @@
 using GameGate.Conf;
 using GameGate.Packet;
+using System;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using TouchSocket.Core;
 using MD5 = OpenMir2.MD5;
 
 namespace GameGate.Services
@@ -902,15 +904,25 @@ namespace GameGate.Services
                 sendBuffer[buffLen + 1] = (byte)'!';//消息结尾
                 _session.Socket.Send(sendBuffer, SocketFlags.None);*/
                 int buffLen = -bufferLen;//bufferLen本身为负数，需要使用-来转为整数
-                // 使用 Span<byte> 替代 byte[]
-                Span<byte> sendBuffer = stackalloc byte[buffLen + 2];
-                // 消息头
-                sendBuffer[0] = (byte)'#';
-                // 消息内容
-                message.Buffer.CopyTo(sendBuffer[1..]);
-                // 消息结尾
-                sendBuffer[buffLen + 1] = (byte)'!';
-                _session.Socket.Send(sendBuffer, SocketFlags.None);
+
+                using var byteBlock = new ByteBlock(buffLen + 2);
+                byteBlock.WriteByte((byte)'#');
+                byteBlock.Write(message.Buffer);
+                byteBlock.WriteByte((byte)'!');
+                byteBlock.SeekToStart();//将游标重置
+                var buffer = new byte[byteBlock.Len];//定义一个数组容器
+                var r = byteBlock.Read(buffer);//读取数据到容器，并返回读取的长度r
+                _session.Socket.Send(buffer, 0, r, SocketFlags.None);
+
+                //// 使用 Span<byte> 替代 byte[]
+                //Span<byte> sendBuffer = stackalloc byte[buffLen + 2];
+                //// 消息头
+                //sendBuffer[0] = (byte)'#';
+                //// 消息内容
+                //message.Buffer.CopyTo(sendBuffer[1..]);
+                //// 消息结尾
+                //sendBuffer[buffLen + 1] = (byte)'!';
+                // _session.Socket.Send(sendBuffer, SocketFlags.None);
             }
             else
             {

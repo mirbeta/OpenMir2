@@ -241,8 +241,6 @@ namespace GameSrv
                     LocalDb.LoadGuardList();
                     LogService.Info("守卫列表加载成功...");
                 }
-                SystemShare.GuildMgr.LoadGuildInfo();
-                SystemShare.CastleMgr.LoadCastleList();
                 SystemShare.WorldEngine.Initialize();
                 M2Share.AutoBot.Initialize();
                 M2Share.StartReady = true;

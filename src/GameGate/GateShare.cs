@@ -36,7 +36,14 @@ namespace GameGate
         /// 聊天过滤命令列表
         /// </summary>
         public static ConcurrentDictionary<string, byte> ChatCommandFilterMap;
-        public static readonly System.Buffers.ArrayPool<byte> BytePool = System.Buffers.ArrayPool<byte>.Shared;
+        /// <summary>
+        /// 字节内存池
+        /// </summary>
+        public static readonly BytePool BytePool = new BytePool(maxArrayLength: 1024 * 1024, maxArraysPerBucket: 50)
+        {
+            AutoZero = true,
+            MaxBucketsToTry = 5
+        };
         public static Dictionary<string, ClientSession> PunishList;
         public static HardwareFilter HardwareFilter;
         public static AbusiveFilter AbusiveFilter;

@@ -121,6 +121,8 @@ namespace GameSrv
         {
             _exitCode = 0;
             await _mirApp.StartUp(cancellationToken);
+            SystemShare.GuildMgr.LoadGuildInfo();
+            SystemShare.CastleMgr.LoadCastleList();
             LogService.Info("初始化游戏世界服务线程完成...");
             LogService.Info("欢迎使用翎风系列游戏软件...");
             LogService.Info("网站:http://www.gameofmir.com");

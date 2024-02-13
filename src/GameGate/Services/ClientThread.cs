@@ -98,7 +98,7 @@ namespace GameGate.Services
         {
             try
             {
-                ClientSocket.ConnectAsync();
+                ClientSocket.Connect();
             }
             catch (SocketException error)
             {
@@ -174,7 +174,7 @@ namespace GameGate.Services
             Connected = true;
             RunningState = RunningState.Runing;
             RestSessionArray();
-            LogService.Info($"[{LocalEndPoint}] 游戏引擎[{endPoint}]链接成功.");
+            LogService.Info($"游戏网关[{LocalEndPoint}] 游戏引擎[{endPoint.EndPoint}]链接成功.");
             LogService.Debug($"线程[{Guid.NewGuid():N}]连接 {endPoint} 成功...");
             return Task.CompletedTask;
         }
@@ -197,7 +197,7 @@ namespace GameGate.Services
             }
             RestSessionArray();
             GateReady = false;
-            LogService.Info($"[{LocalEndPoint}] 游戏引擎[{socSocket.RemoteIPHost}]断开链接.");
+            LogService.Info($"游戏网关[{LocalEndPoint}] 游戏引擎[{socSocket.RemoteIPHost.EndPoint}]断开链接.");
             Connected = false;
             CheckServerFail = true;
             return Task.CompletedTask;
@@ -228,7 +228,7 @@ namespace GameGate.Services
             switch (e)
             {
                 case SocketError.ConnectionRefused:
-                    LogService.Warn($"游戏网关[{LocalEndPoint}]链接游戏引擎[{EndPoint}]拒绝链接...");
+                    LogService.Warn($"游戏网关[{LocalEndPoint}] 链接游戏引擎[{EndPoint}]拒绝链接...");
                     Connected = false;
                     break;
                 case SocketError.ConnectionReset:
@@ -236,7 +236,11 @@ namespace GameGate.Services
                     Connected = false;
                     break;
                 case SocketError.TimedOut:
-                    LogService.Info($"游戏网关[{LocalEndPoint}]链接游戏引擎[{EndPoint}]超时...");
+                    LogService.Info($"游戏网关[{LocalEndPoint}] 链接游戏引擎[{EndPoint}]超时...");
+                    Connected = false;
+                    break;
+                default:
+                    LogService.Info($"游戏网关[{LocalEndPoint}] 链接游戏引擎[{EndPoint}]失败...");
                     Connected = false;
                     break;
             }

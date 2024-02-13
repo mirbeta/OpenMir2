@@ -18,7 +18,7 @@ namespace ScriptSystem
         private readonly Dictionary<string, int> ConditionCodeDefMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, int> ExecutionCodeDefMap = new Dictionary<string, int>(StringComparer.OrdinalIgnoreCase);
         private readonly Dictionary<string, string> CallScriptDict = new Dictionary<string, string>();
-        private readonly char[] TextSpitConst = new[] { ' ', '\t' };
+        private readonly char[] TextSpitConst = [' ', '\t'];
 
         public ScriptParsers()
         {
@@ -59,7 +59,7 @@ namespace ScriptSystem
                 }
             }
 
-            LogService.Info("初始化脚本编码定义成功...");
+            LogService.Info("初始化脚本编码定义...");
         }
 
         public void LoadScript(INormNpc NPC, string sPatch, string scriptName)

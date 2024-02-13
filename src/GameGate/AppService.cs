@@ -34,11 +34,6 @@ namespace GameGate
 
         public Task StartedAsync(CancellationToken cancellationToken)
         {
-            LogService.Info("服务已启动成功...");
-            LogService.Info("欢迎使用翎风系列游戏软件...");
-            LogService.Info("网站:http://www.gameofmir.com");
-            LogService.Info("论坛:http://bbs.gameofmir.com");
-            cancellationToken.Register(() => Debug.WriteLine("GameGate is stopping."));
             if (ConfigManager.GateConfig.UseCloudGate)
             {
                 if (string.IsNullOrEmpty(ConfigManager.GateConfig.CloudAddr) || ConfigManager.GateConfig.CloudPort <= 0)
@@ -53,6 +48,10 @@ namespace GameGate
                 //_cloudClient.Start(cloudEndpoint);
                 LogService.Info("智能反外挂程序已启动...");
             }
+            LogService.Info("服务已启动成功...");
+            LogService.Info("欢迎使用翎风系列游戏软件...");
+            LogService.Info("网站:http://www.gameofmir.com");
+            LogService.Info("论坛:http://bbs.gameofmir.com");
             ServerManager.Start(cancellationToken);
             //await SessionContainer.ProcessSendMessage(stoppingToken);
             return Task.CompletedTask;

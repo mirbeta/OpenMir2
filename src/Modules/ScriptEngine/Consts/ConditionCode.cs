@@ -6,7 +6,7 @@
     public enum ConditionCode : short
     {
         [ScriptDefName("CHECK")]
-        CHECK,
+        CHECK = 1,
         [ScriptDefName("RANDOM")]
         RANDOM,
         [ScriptDefName("GENDER")]

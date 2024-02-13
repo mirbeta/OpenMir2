@@ -49,10 +49,7 @@ namespace GameGate
 
             IHost host = builder.Build();
             await host.StartAsync(CancellationToken.Token);
-            LogService.Info(new StringBuilder()
-               .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
-               .Append($"Minimum work threads: {workThreads}, ")
-               .Append($"Minimum completion port threads: {completionPortThreads})").ToString());
+            LogService.Info($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount} Minimum work threads: {workThreads} Minimum completion port threads: {completionPortThreads}");
             //启动后台服务
             await ProcessLoopAsync();
             Stop();

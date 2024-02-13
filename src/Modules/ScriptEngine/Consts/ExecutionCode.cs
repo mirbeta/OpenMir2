@@ -6,7 +6,7 @@
     public enum ExecutionCode : short
     {
         [ScriptDefName("Set")]
-        Set,
+        Set = 1,
         [ScriptDefName("Take")]
         Take,
         [ScriptDefName("GIVE")]
