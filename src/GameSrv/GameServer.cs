@@ -4,7 +4,6 @@ namespace GameSrv
 {
     public class ServerBase
     {
-
         private readonly IServiceProvider serviceProvider;
 
         protected ServerBase(IServiceProvider serviceProvider)
@@ -12,7 +11,7 @@ namespace GameSrv
             this.serviceProvider = serviceProvider;
         }
 
-        public async Task StartUp(CancellationToken stoppingToken)
+        public Task StartUp(CancellationToken stoppingToken)
         {
             _ = GameShare.GeneratorProcessor.StartAsync(stoppingToken);
             _ = GameShare.SystemProcess.StartAsync(stoppingToken);
@@ -28,12 +27,15 @@ namespace GameSrv
 
             foreach (IModuleInitializer module in modules)
             {
-                module.Startup(stoppingToken);
+                module.Startup(stoppingToken); //启动模块
             }
 
-            await M2Share.NetChannel.Start(stoppingToken);
+            GameShare.DataServer.Start();
+            GameShare.PlanesService.Start();
+            M2Share.Authentication.Start();
+            _ = M2Share.NetChannel.Start(stoppingToken);
 
-            LogService.Info("初始化游戏世界服务线程完成...");
+            return Task.CompletedTask;
         }
 
         public async Task Stopping(CancellationToken cancellationToken)

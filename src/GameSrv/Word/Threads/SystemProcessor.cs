@@ -34,7 +34,7 @@ namespace GameSrv.Word.Threads
         protected override Task ExecuteInternal(CancellationToken stoppingToken)
         {
             M2Share.NetChannel.Run();
-            M2Share.AccountSession.Run();
+            M2Share.Authentication.Run();
             SystemShare.WorldEngine.Run();
             M2Share.AutoBot.Run();
             if (M2Share.ServerIndex == 0)
@@ -63,7 +63,7 @@ namespace GameSrv.Word.Threads
             if ((HUtil32.GetTickCount() - SendOnlineHumTime) > 10000)
             {
                 SendOnlineHumTime = HUtil32.GetTickCount();
-                M2Share.AccountSession.SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
+                M2Share.Authentication.SendOnlineHumCountMsg(SystemShare.WorldEngine.OnlinePlayObject);
             }
         }
 

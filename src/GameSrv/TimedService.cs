@@ -67,8 +67,6 @@ namespace GameSrv
             if ((currentTick - CheckIntervalTime) > 10 * 1000) //10s一次检查链接
             {
                 CheckIntervalTime = HUtil32.GetTickCount();
-                GameShare.DataServer.CheckConnected();
-                //M2Share.AccountSession.CheckConnected();
                 PlanesClient.Instance.CheckConnected();
                 //await GameShare.ChatService.Ping();
             }

@@ -14,7 +14,6 @@ namespace DBSrv
     public class TimedService : BackgroundService
     {
         private readonly PeriodicTimer _timer;
-        private readonly SettingConf _config;
         private readonly UserService _userService;
         private readonly ClientSession _sessionService;
         private readonly DataService _dataService;
@@ -22,9 +21,8 @@ namespace DBSrv
         private readonly ICacheStorage _cacheStorage;
         private readonly IPlayDataStorage _playDataStorage;
 
-        public TimedService(SettingConf config, ICacheStorage cacheStorage, UserService userService, ClientSession session, DataService dataService, IPlayDataStorage playDataStorage, MarketService marketService)
+        public TimedService(ICacheStorage cacheStorage, UserService userService, ClientSession session, DataService dataService, IPlayDataStorage playDataStorage, MarketService marketService)
         {
-            _config = config;
             _userService = userService;
             _sessionService = session;
             _dataService = dataService;
@@ -67,11 +65,11 @@ namespace DBSrv
                         syncSaveTick = HUtil32.GetTickCount();
                         ProcessCacheStorage();
                     }
-                    if (currentTick - marketPushTick > _config.PushMarketInterval) //自定义时间推送一次拍卖行数据到各个GameSrv
-                    {
-                        marketPushTick = HUtil32.GetTickCount();
-                        _marketService.PushMarketData();
-                    }
+                    //if (currentTick - marketPushTick > _config.PushMarketInterval) //自定义时间推送一次拍卖行数据到各个GameSrv
+                    //{
+                    //    marketPushTick = HUtil32.GetTickCount();
+                    //    _marketService.PushMarketData();
+                    //}
                 }
             }
             catch (OperationCanceledException)

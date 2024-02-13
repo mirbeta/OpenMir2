@@ -311,7 +311,7 @@ namespace M2Server.Net
                         HUtil32.ArrestStringEx(sMsg, "#", "!", ref sMsg);
                         if (GetCertification(sMsg, ref sAccount, ref sChrName, ref nSessionId, ref nClientVersion, ref boFlag, ref hwid, ref gateIdx))
                         {
-                            AccountSession sessInfo = M2Share.AccountSession.GetAdmission(sAccount, gateUser.IPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
+                            AccountSession sessInfo = M2Share.Authentication.GetAdmission(sAccount, gateUser.IPaddr, nSessionId, ref nPayMode, ref nPayMent, ref nPlayTime);
                             if (sessInfo != null && nPayMent > 0)
                             {
                                 gateUser.Certification = true;
@@ -394,11 +394,11 @@ namespace M2Server.Net
                                     }
                                     if (gateUser.PlayObject.Ghost && !gateUser.PlayObject.BoReconnection)
                                     {
-                                        M2Share.AccountSession.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.Authentication.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                     if (gateUser.PlayObject.BoSoftClose && gateUser.PlayObject.BoReconnection && gateUser.PlayObject.BoEmergencyClose)
                                     {
-                                        M2Share.AccountSession.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.Authentication.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
                                     }
                                 }
                                 GateInfo.UserList[i] = null;

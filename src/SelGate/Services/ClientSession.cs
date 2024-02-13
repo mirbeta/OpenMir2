@@ -99,7 +99,7 @@ namespace SelGate.Services
                     _kickFlag = true;
                     //BlockUser(this);
                     success = true;
-                    LogService.Trace($"Client Connect Time Out: {Session.ClientIP}");
+                    LogService.Info($"Client Connect Time Out: {Session.ClientIP}");
                 }
             }
             else

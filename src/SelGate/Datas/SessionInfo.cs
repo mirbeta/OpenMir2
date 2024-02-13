@@ -1,5 +1,4 @@
-
-namespace SelGate.Datas
+namespace SelGate
 {
     public class SessionInfo
     {

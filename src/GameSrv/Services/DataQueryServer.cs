@@ -7,7 +7,6 @@ namespace GameSrv.Services
     /// </summary>
     public class DataQueryServer
     {
-
         private readonly TcpClient _tcpClient;
         private byte[] ReceiveBuffer { get; set; }
         private int BuffLen { get; set; }
@@ -23,15 +22,30 @@ namespace GameSrv.Services
             ReceiveBuffer = new byte[10 * 2048];
         }
 
-        public void Start()
+        public void Initialize()
         {
             _tcpClient.Setup(new TouchSocketConfig()
-                .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort))
-                .ConfigureContainer(a =>
-                {
-                    a.AddConsoleLogger();
-                }));
-            _tcpClient.Connect();
+            .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort))
+            .ConfigureContainer(a =>
+            {
+                a.AddConsoleLogger();
+            }));
+        }
+
+        public void Start()
+        {
+            try
+            {
+                _tcpClient.Connect();
+            }
+            catch (TimeoutException)
+            {
+                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]超时.");
+            }
+            catch (Exception)
+            {
+                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]失败.");
+            }
         }
 
         public void Stop()
@@ -40,11 +54,6 @@ namespace GameSrv.Services
         }
 
         public bool IsConnected => _tcpClient.Online;
-
-        public void CheckConnected()
-        {
-            _tcpClient.Connect(SystemShare.Config.sDBAddr, SystemShare.Config.nDBPort);
-        }
 
         public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
         {

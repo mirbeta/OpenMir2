@@ -1,13 +1,12 @@
+using GameSrv.Services;
 using GameSrv.Word;
 using McMaster.Extensions.CommandLineUtils;
 using SystemModule.Enums;
 
 namespace GameSrv
 {
-    public class AppService : IHostedService, IDisposable
+    public class AppService : IHostedLifecycleService, IDisposable
     {
-
-        private readonly IHostApplicationLifetime _appLifetime;
         private readonly IHost Host;
         private readonly GameApp _mirApp;
         private Task _applicationTask;
@@ -16,19 +15,14 @@ namespace GameSrv
         private readonly CommandLineApplication _application;
         private PeriodicTimer _timer;
 
-        public AppService(IHostApplicationLifetime lifetime, GameApp serverApp, IServiceProvider serviceProvider)
+        public AppService(GameApp serverApp, IServiceProvider serviceProvider)
         {
-            _appLifetime = lifetime;
             _mirApp = serverApp;
             _application = new CommandLineApplication();
             Host = serviceProvider.GetService<IHost>();
-        }
-
-        public Task StartAsync(CancellationToken stoppingToken)
-        {
             LogService.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
-            _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+            _cancellationTokenSource = new CancellationTokenSource();
 
             _application.HelpOption("-?|-h|-help");
             _application.OnExecute(() =>
@@ -62,7 +56,7 @@ namespace GameSrv
                 command.Description = "停止游戏服务";
                 command.OnExecute(() =>
                 {
-                    _appLifetime.StopApplication();
+                    StoppingAsync(_cancellationTokenSource.Token);
                     return 0;
                 });
             });
@@ -80,41 +74,57 @@ namespace GameSrv
                 command.Description = "查看系统状态";
                 command.OnExecute(() =>
                 {
-                    ShowWordStatus(stoppingToken);
+                    ShowWordStatus(_cancellationTokenSource.Token);
                 });
             });
+        }
 
-            _appLifetime.ApplicationStarted.Register(() =>
+        public Task StartingAsync(CancellationToken cancellationToken)
+        {
+            try
             {
-                LogService.Debug("Application has started");
-                _applicationTask = Task.Run(async () =>
-                {
-                    try
-                    {
-                        LogService.Info("正在读取配置信息...");
-                        _mirApp.Initialize(stoppingToken);
-                        LogService.Info("读取配置信息完成...");
-                        _mirApp.InitializeWorld(stoppingToken);
-                        await _mirApp.StartUp(stoppingToken);
-                        _exitCode = 0;
-                    }
-                    catch (TaskCanceledException)
-                    {
-                        // This means the application is shutting down, so just swallow this exception
-                    }
-                    catch (Exception ex)
-                    {
-                        LogService.Error(ex);
-                        LogService.Error(ex.StackTrace);
-                        _exitCode = 1;
-                    }
-                }, stoppingToken);
-                ProcessLoopAsync();
-            });
-
-            _appLifetime.ApplicationStopping.Register(OnShutdown);
-
+                LogService.Info("正在读取配置信息...");
+                LogService.Info("读取游戏引擎数据配置文件...");
+                GameShare.GeneratorProcessor.Initialize(cancellationToken);
+                M2Share.FrontEngine = new FrontEngine();
+                GameShare.LoadConfig();
+                _mirApp.LoadServerTable();
+                LogService.Info("初始化游戏引擎数据配置文件完成...");
+                LogService.Info("初始化游戏基础数据...");
+                _mirApp.Initialize(cancellationToken);
+                LogService.Info("初始化游戏基础数据完成...");
+            }
+            catch (Exception ex)
+            {
+                _exitCode = 1;
+                LogService.Error("初始化游戏基础数据失败...", ex);
+            }
             return Task.CompletedTask;
+        }
+
+        public Task StartAsync(CancellationToken stoppingToken)
+        {
+            try
+            {
+                LogService.Info("初始化游戏世界服务...");
+                _mirApp.InitializeWorld(_cancellationTokenSource.Token);
+                LogService.Info("初始化游戏世界服务完成...");
+            }
+            catch (Exception ex)
+            {
+                LogService.Error("初始化游戏世界服务失败...", ex);
+            }
+            return Task.CompletedTask;
+        }
+
+        public async Task StartedAsync(CancellationToken cancellationToken)
+        {
+            _exitCode = 0;
+            await _mirApp.StartUp(cancellationToken);
+            LogService.Info("初始化游戏世界服务线程完成...");
+            LogService.Info("欢迎使用翎风系列游戏软件...");
+            LogService.Info("网站:http://www.gameofmir.com");
+            LogService.Info("论坛:http://bbs.gameofmir.com");
         }
 
         public async Task StopAsync(CancellationToken stoppingToken)
@@ -128,7 +138,7 @@ namespace GameSrv
 
             LogService.Debug($"Exiting with return code: {_exitCode}");
 
-            _appLifetime.StopApplication();
+            //_appLifetime.StopApplication();
             // Exit code may be null if the user cancelled via Ctrl+C/SIGTERM
             Environment.Exit(Environment.ExitCode);
         }
@@ -350,6 +360,17 @@ namespace GameSrv
         public void Dispose()
         {
 
+        }
+
+        public Task StoppingAsync(CancellationToken cancellationToken)
+        {
+            OnShutdown();
+            return Task.CompletedTask;
+        }
+
+        public Task StoppedAsync(CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

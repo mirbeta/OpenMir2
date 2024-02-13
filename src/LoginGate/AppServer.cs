@@ -1,61 +1,39 @@
-public class AppServer : ServiceHost
+using SystemModule;
+
+public class AppServer
 {
-    private static PeriodicTimer _timer;
+    private readonly ServerHost _serverHost;
+    private PeriodicTimer _timer;
 
     public AppServer()
     {
-        PrintUsage();
-        Console.CancelKeyPress += delegate
+        _serverHost = new ServerHost();
+        _serverHost.ConfigureServices(service =>
         {
-            //GateShare.ShowLog = true;
-            if (_timer != null)
-            {
-                _timer.Dispose();
-                _timer = null;
-            }
-
-            AnsiConsole.Reset();
-        };
-        Builder.ConfigureLogging(ConfigureLogging);
-        Builder.ConfigureServices(ConfigureServices);
+            service.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
+            service.AddSingleton<ServerService>();
+            service.AddSingleton<ClientManager>();
+            service.AddSingleton<ClientThread>();
+            service.AddSingleton<ServerManager>();
+            service.AddSingleton<SessionManager>();
+            service.AddHostedService<AppService>();
+            service.AddHostedService<TimedService>();
+        });
     }
 
-    public override void Initialize()
-    {
-    }
-
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
-        services.AddSingleton<ServerService>();
-        services.AddSingleton<ClientManager>();
-        services.AddSingleton<ClientThread>();
-        services.AddSingleton<ServerManager>();
-        services.AddSingleton<SessionManager>();
-        services.AddHostedService<AppService>();
-        services.AddHostedService<TimedService>();
-    }
-
-    private void ConfigureLogging(ILoggingBuilder logging)
-    {
-        logging.ClearProviders();
-        logging.SetMinimumLevel(LogLevel.Trace);
-        logging.AddNLog(Configuration);
-    }
-
-    public override async Task StartAsync(CancellationToken cancellationToken)
+    public async Task StartAsync(CancellationToken cancellationToken)
     {
         LogService.Debug("LoginGate is starting.");
         LogService.Info("正在启动服务...", 2);
-        Host = await Builder.StartAsync(cancellationToken);
-        GateShare.ServiceProvider = Host.Services;
+        await _serverHost.StartAsync(cancellationToken);
+        GateShare.ServiceProvider = _serverHost.ServiceProvider;
         await ProcessLoopAsync();
         Stop();
     }
 
-    public override Task StopAsync(CancellationToken cancellationToken)
+    public Task StopAsync(CancellationToken cancellationToken)
     {
-        return Task.CompletedTask;
+        return _serverHost.StopAsync(cancellationToken);
     }
 
     private void Stop()
@@ -115,18 +93,14 @@ public class AppServer : ServiceHost
     private async Task ShowServerStatus()
     {
         //GateShare.ShowLog = false;
-        if (_timer == null)
-        {
-            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-        }
-
-        ClientManager clientManager = (ClientManager)Host.Services.GetService(typeof(ClientManager));
+        var periodicTimer = _timer ?? new PeriodicTimer(TimeSpan.FromSeconds(5));
+        ClientManager clientManager = (ClientManager)GateShare.ServiceProvider.GetService(typeof(ClientManager));
         if (clientManager == null)
         {
             return;
         }
 
-        ServerManager serverManager = (ServerManager)Host.Services.GetService(typeof(ServerManager));
+        ServerManager serverManager = (ServerManager)GateShare.ServiceProvider.GetService(typeof(ServerManager));
         if (serverManager == null)
         {
             return;
@@ -159,7 +133,7 @@ public class AppServer : ServiceHost
                     });
                 }
 
-                while (await _timer.WaitForNextTickAsync())
+                while (await periodicTimer.WaitForNextTickAsync())
                 {
                     AnsiConsole.Clear();
                     for (int i = 0; i < clientList.Count; i++)
@@ -180,50 +154,5 @@ public class AppServer : ServiceHost
                     ctx.Refresh();
                 }
             });
-    }
-
-    private static void PrintUsage()
-    {
-        AnsiConsole.WriteLine();
-
-        Table table = new Table()
-        {
-            Border = TableBorder.None,
-            Expand = true
-        }.HideHeaders();
-        table.AddColumn(new TableColumn("One"));
-
-        FigletText header = new FigletText("OpenMir2")
-        {
-            Color = Color.Fuchsia
-        };
-        FigletText header2 = new FigletText("Login Gate")
-        {
-            Color = Color.Aqua
-        };
-
-        StringBuilder sb = new StringBuilder();
-        sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-        sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-        sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-        sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-        Markup markup = new Markup(sb.ToString());
-
-        table.AddColumn(new TableColumn("Two"));
-
-        Table rightTable = new Table()
-            .HideHeaders()
-            .Border(TableBorder.None)
-            .AddColumn(new TableColumn("Content"));
-
-        rightTable.AddRow(header)
-            .AddRow(header2)
-            .AddEmptyRow()
-            .AddEmptyRow()
-            .AddRow(markup);
-        table.AddRow(rightTable);
-
-        AnsiConsole.Write(table);
-        AnsiConsole.WriteLine();
     }
 }

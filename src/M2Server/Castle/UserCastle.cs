@@ -315,6 +315,11 @@ namespace M2Server.Castle
             const string sExceptionMsg = "[Exception] TUserCastle::Run";
             try
             {
+                if (string.IsNullOrEmpty(MapName))
+                {
+                    return;
+                }
+
                 if (M2Share.ServerIndex != SystemShare.MapMgr.GetMapOfServerIndex(MapName))
                 {
                     return;
@@ -434,7 +439,7 @@ namespace M2Server.Castle
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
                 LogService.Error(sExceptionMsg);
             }

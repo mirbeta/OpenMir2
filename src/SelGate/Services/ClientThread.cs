@@ -54,10 +54,6 @@ namespace SelGate.Services
         /// </summary>
         private readonly SessionManager _sessionManager;
         /// <summary>
-        /// Logger
-        /// </summary>
-
-        /// <summary>
         /// 数据缓冲区
         /// </summary>
         private readonly byte[] DataBuff;
@@ -91,14 +87,13 @@ namespace SelGate.Services
 
         public void Start()
         {
-            _clientSocket.Connect();
-        }
-
-        public void ReConnected()
-        {
-            if (isConnected == false)
+            try
             {
                 _clientSocket.Connect();
+            }
+            catch (Exception)
+            {
+                LogService.Error("链接数据库服务器失败.");
             }
         }
 

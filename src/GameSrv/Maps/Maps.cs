@@ -2,7 +2,6 @@
 {
     public class Map
     {
-
         private static Thread _makeStoneMinesThread;
 
         public static void StartMakeStoneThread()

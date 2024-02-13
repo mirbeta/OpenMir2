@@ -61,10 +61,10 @@ namespace M2Server.Castle
 
         public void Initialize()
         {
-            IUserCastle castle;
+            LogService.Info("初始化城堡服务...");
             if (CastleList.Count <= 0)
             {
-                castle = new UserCastle(SystemShare.Config.CastleDir);
+                IUserCastle castle = new UserCastle(SystemShare.Config.CastleDir);
                 castle.Initialize();
                 castle.ConfigDir = "0";
                 castle.EnvirList.Add("0151");
@@ -75,14 +75,15 @@ namespace M2Server.Castle
                 castle.EnvirList.Add("0156");
                 CastleList.Add(castle);
                 Save();
-                return;
             }
-            for (int i = 0; i < CastleList.Count; i++)
+            else
             {
-                castle = CastleList[i];
-                castle.Initialize();
+                for (int i = 0; i < CastleList.Count; i++)
+                {
+                    CastleList[i].Initialize();
+                }
             }
-            LogService.Debug("城堡城初始完成...");
+            LogService.Info("城堡城初始完成...");
         }
 
         // 城堡皇宫所在地图

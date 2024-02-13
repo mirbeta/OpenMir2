@@ -9,7 +9,6 @@ namespace GameSrv
     /// </summary>
     public class WordStatistics
     {
-
         private readonly string processName;
         private readonly PerformanceCounter MemoryCounter;
         private readonly PerformanceCounter CpuCounter;

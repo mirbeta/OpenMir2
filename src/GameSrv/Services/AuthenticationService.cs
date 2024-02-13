@@ -32,7 +32,22 @@ namespace GameSrv.Services
             _tcpClient.Disconnected = DataSocketDisconnect;
             _tcpClient.Received = DataSocketRead;
             LogService.Debug("登录服务器连接初始化完成...");
-            _tcpClient.Connect();
+        }
+
+        public void Start()
+        {
+            try
+            {
+                _tcpClient.Connect();
+            }
+            catch (TimeoutException)
+            {
+                LogService.Error($"链接登录服务器[{SystemShare.Config.sIDSAddr}:{SystemShare.Config.nIDSPort}]超时.");
+            }
+            catch (Exception)
+            {
+                LogService.Error($"链接登录服务器[{SystemShare.Config.sIDSAddr}:{SystemShare.Config.nIDSPort}]失败.");
+            }
         }
 
         private Task DataSocketRead(TcpClient sender, ReceivedDataEventArgs e)

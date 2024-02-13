@@ -9,7 +9,6 @@ namespace SelGate
 {
     public class TimedService : BackgroundService
     {
-
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private int _processClearSessionTick = 0;
@@ -54,7 +53,7 @@ namespace SelGate
                     }
                     for (int j = 0; j < clientList[i].SessionArray.Length; j++)
                     {
-                        Datas.SessionInfo session = clientList[i].SessionArray[j];
+                        SessionInfo session = clientList[i].SessionArray[j];
                         if (session == null)
                         {
                             continue;
@@ -90,7 +89,11 @@ namespace SelGate
                     }
                     for (int j = 0; j < ClientThread.MaxSession; j++)
                     {
-                        Datas.SessionInfo userSession = clientList[i].SessionArray[j];
+                        SessionInfo userSession = clientList[i].SessionArray[j];
+                        if (userSession == null)
+                        {
+                            continue;
+                        }
                         if ((HUtil32.GetTickCount() - userSession.dwReceiveTick) > GateShare.SessionTimeOutTime) //清理超时用户会话 
                         {
                             _sessionManager.CloseSession(userSession.SocketId);
@@ -136,7 +139,6 @@ namespace SelGate
             {
                 if (clientThread.CheckServerFail)
                 {
-                    clientThread.ReConnected();
                     clientThread.CheckServerFailCount++;
                     LogService.Debug($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;

@@ -1,5 +1,6 @@
 using NLog;
 using System.Collections.Concurrent;
+using OpenMir2;
 
 namespace LoginSrv.Services
 {

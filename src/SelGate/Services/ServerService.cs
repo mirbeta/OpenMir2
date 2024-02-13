@@ -95,7 +95,7 @@ namespace SelGate.Services
                 return Task.CompletedTask;
             }
             string sRemoteAddress = client.MainSocket.RemoteEndPoint.GetIP();
-            LogService.Trace($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetEndPoint()}");
+            LogService.Info($"用户[{sRemoteAddress}]分配到数据库服务器[{clientThread.ClientId}] Server:{clientThread.GetEndPoint()}");
             SessionInfo sessionInfo = null;
             for (int nIdx = 0; nIdx < ClientThread.MaxSession; nIdx++)
             {

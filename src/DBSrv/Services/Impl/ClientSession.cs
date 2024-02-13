@@ -25,7 +25,6 @@ namespace DBSrv.Services.Impl
             _setting = conf;
             _clientScoket = new TcpClient();
             _clientScoket.Setup(new TouchSocketConfig().SetRemoteIPHost(new IPHost(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort)).ConfigureContainer(x => { x.AddConsoleLogger(); }));
-
             _clientScoket.Received += LoginSocketRead;
             _clientScoket.Connected += LoginSocketConnected;
             _clientScoket.Disconnected += LoginSocketDisconnected;
@@ -46,7 +45,14 @@ namespace DBSrv.Services.Impl
 
         public void Start()
         {
-            _clientScoket.Connect();
+            try
+            {
+                _clientScoket.Connect();
+            }
+            catch (Exception)
+            {
+                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接失败.");
+            }
         }
 
         public void Stop()

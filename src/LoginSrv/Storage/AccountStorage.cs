@@ -6,6 +6,7 @@ using OpenMir2.Packets.ClientPackets;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using OpenMir2;
 
 namespace LoginSrv.Storage
 {

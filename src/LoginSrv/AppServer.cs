@@ -2,9 +2,6 @@ using LoginSrv.Conf;
 using LoginSrv.Services;
 using LoginSrv.Storage;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog.Extensions.Logging;
 using OpenMir2;
 using Spectre.Console;
 using System;
@@ -13,13 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using SystemModule;
 
 namespace LoginSrv
 {
-    public class AppServer : ServiceHost
+    public class AppServer
     {
-
+        private readonly ServerHost _serverHost;
         private PeriodicTimer _timer;
 
         public AppServer()
@@ -35,47 +32,34 @@ namespace LoginSrv
                 AnsiConsole.Reset();
             };
 
-            Builder.ConfigureLogging(ConfigureLogging);
-            Builder.ConfigureServices(ConfigureServices);
+            _serverHost = new ServerHost();
+            _serverHost.ConfigureServices(service =>
+            {
+                service.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "logsrv.conf")));
+                service.AddSingleton<SessionServer>();
+                service.AddSingleton<ClientSession>();
+                service.AddSingleton<SessionManager>();
+                service.AddSingleton<LoginServer>();
+                service.AddSingleton<ClientManager>();
+                service.AddSingleton<AccountStorage>();
+                service.AddHostedService<TimedService>();
+                service.AddHostedService<AppService>();
+            });
         }
 
-        public override void Initialize()
-        {
-
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "logsrv.conf")));
-            services.AddSingleton<SessionServer>();
-            services.AddSingleton<ClientSession>();
-            services.AddSingleton<SessionManager>();
-            services.AddSingleton<LoginServer>();
-            services.AddSingleton<ClientManager>();
-            services.AddSingleton<AccountStorage>();
-            services.AddHostedService<TimedService>();
-            services.AddHostedService<AppService>();
-        }
-
-        private void ConfigureLogging(ILoggingBuilder logging)
-        {
-            logging.ClearProviders();
-            logging.SetMinimumLevel(LogLevel.Trace);
-            logging.AddNLog(Configuration);
-        }
-
-        public override async Task StartAsync(CancellationToken cancellationToken)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
             LogService.Info("正在启动服务器...");
-            Host = await Builder.StartAsync(cancellationToken);
+            _serverHost.BuildHost();
+            await _serverHost.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
             LogService.Info("正在等待服务器连接...");
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+           return _serverHost.StopAsync(cancellationToken);
         }
 
         private void Stop()
@@ -139,8 +123,8 @@ namespace LoginSrv
         private async Task ShowServerStatus()
         {
             LsShare.ShowLog = false;
-            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            SessionServer masSocService = (SessionServer)Host.Services.GetService(typeof(SessionServer));
+            var periodicTimer = _timer ?? new PeriodicTimer(TimeSpan.FromSeconds(5));
+            SessionServer masSocService = (SessionServer)_serverHost.ServiceProvider.GetService(typeof(SessionServer));
             System.Collections.Generic.IList<ServerSessionInfo> serverList = masSocService?.ServerList;
             Table table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]Server[/]");
@@ -159,7 +143,7 @@ namespace LoginSrv
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
 
-                     while (await _timer.WaitForNextTickAsync())
+                     while (await periodicTimer.WaitForNextTickAsync())
                      {
                          for (int i = 0; i < serverList.Count; i++)
                          {

@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using SelGate.Conf;
 using SelGate.Services;
 using Spectre.Console;
@@ -9,12 +7,14 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
+using OpenMir2;
+using SystemModule;
 
 namespace SelGate
 {
-    public class AppServer : ServiceHost
+    public class AppServer 
     {
+        private readonly ServerHost _serverHost;
         private static readonly PeriodicTimer _timer;
 
         public AppServer()
@@ -22,44 +22,35 @@ namespace SelGate
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
-                //GateShare.ShowLog = true;
                 if (_timer != null)
                 {
                     _timer.Dispose();
                 }
                 AnsiConsole.Reset();
             };
-            Builder.ConfigureLogging(ConfigureLogging);
-            Builder.ConfigureServices(ConfigureServices);
+            _serverHost = new ServerHost();
+            _serverHost.ConfigureServices(service =>
+            {
+                service.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
+                service.AddSingleton<ServerService>();
+                service.AddSingleton<SessionManager>();
+                service.AddSingleton<ClientManager>();
+                service.AddHostedService<AppService>();
+                service.AddHostedService<TimedService>();
+            });
         }
 
-        public void ConfigureServices(IServiceCollection services)
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "config.conf")));
-            services.AddSingleton<ServerService>();
-            services.AddSingleton<SessionManager>();
-            services.AddSingleton<ClientManager>();
-            services.AddHostedService<AppService>();
-            services.AddHostedService<TimedService>();
-        }
-
-        private void ConfigureLogging(ILoggingBuilder logging)
-        {
-            logging.ClearProviders();
-            logging.SetMinimumLevel(LogLevel.Trace);
-            logging.AddNLog(Configuration);
-        }
-
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            Host = await Builder.StartAsync(cancellationToken);
+            _serverHost.BuildHost();
+            await _serverHost.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return _serverHost.StopAsync(cancellationToken);
         }
 
         private static void Stop()
@@ -106,7 +97,7 @@ namespace SelGate
 
         private Task ReLoadConfig()
         {
-            ConfigManager config = Host.Services.GetService<ConfigManager>();
+            ConfigManager config = _serverHost.ServiceProvider.GetService<ConfigManager>();
             config?.ReLoadConfig();
             LogService.Info("重新读取配置文件完成...");
             return Task.CompletedTask;

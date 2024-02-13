@@ -1,4 +1,3 @@
-#nullable enable
 using M2Server.Maps.AutoPath;
 using M2Server.Net;
 using M2Server.Net.TCP;
@@ -36,7 +35,7 @@ namespace M2Server
         /// <summary>
         /// 账号会话信息
         /// </summary>
-        public static IAuthentication AccountSession;
+        public static IAuthentication Authentication;
         /// <summary>
         /// 脚本执行引擎
         /// </summary>

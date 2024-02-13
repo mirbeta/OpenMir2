@@ -80,17 +80,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\nlog.config">
-			<Link>nlog.config</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
-	<ItemGroup>
 		<ProjectReference Include="..\M2Server\M2Server.csproj" />
 		<ProjectReference Include="..\Modules\GameCommand\CommandSystem.csproj" />
 		<ProjectReference Include="..\Modules\PlanesSystem\PlanesSystem.csproj" />
 		<ProjectReference Include="..\Modules\ScriptEngine\ScriptSystem.csproj" />
 		<ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>

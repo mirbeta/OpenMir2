@@ -11,11 +11,11 @@ namespace GameSrv.Maps
         /// <summary>
         /// 地图上门列表
         /// </summary>
-        private readonly IList<IEnvirnoment> _mapDoorList = new List<IEnvirnoment>();
+        private readonly List<IEnvirnoment> _mapDoorList = new List<IEnvirnoment>();
         /// <summary>
         /// 矿物地图列表
         /// </summary>
-        private readonly IList<IEnvirnoment> _mapMineList = new List<IEnvirnoment>();
+        private readonly List<IEnvirnoment> _mapMineList = new List<IEnvirnoment>();
 
         public IList<IEnvirnoment> Maps => _mapList.Values.ToList();
 

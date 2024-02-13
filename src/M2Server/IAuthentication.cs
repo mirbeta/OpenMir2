@@ -6,6 +6,8 @@ namespace M2Server
     {
         void Initialize();
 
+        void Start();
+
         void Run();
 
         void Close();

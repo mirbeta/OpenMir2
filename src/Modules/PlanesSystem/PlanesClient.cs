@@ -40,7 +40,7 @@ namespace PlanesSystem
             _groupMessageHandle = new PlanesMessage();
         }
 
-        public void ConnectPlanesServer()
+        public void Initialize()
         {
             _tcpClient.Setup(new TouchSocketConfig()
                 .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MasterSrvAddr), SystemShare.Config.MasterSrvPort))
@@ -48,7 +48,22 @@ namespace PlanesSystem
                 {
                     a.AddConsoleLogger(); //添加一个日志注入
                 }));
-            _tcpClient.Connect();
+        }
+
+        public void Start()
+        {
+            try
+            {
+                _tcpClient.Connect();
+            }
+            catch (TimeoutException)
+            {
+                LogService.Error($"链接主分区服务器[{SystemShare.Config.MasterSrvAddr}:{SystemShare.Config.MasterSrvPort}]超时.");
+            }
+            catch (Exception)
+            {
+                LogService.Error($"链接主分区服务器[{SystemShare.Config.MasterSrvAddr}:{SystemShare.Config.MasterSrvPort}]失败.");
+            }
         }
 
         public void Run()

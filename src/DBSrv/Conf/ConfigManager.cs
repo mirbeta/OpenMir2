@@ -15,7 +15,7 @@ namespace DBSrv.Conf
             Load();
         }
 
-        public SettingConf GetConfig => _config;
+        public SettingConf Setting => _config;
 
         public void LoadConfig()
         {

@@ -16,8 +16,6 @@ namespace GameSrv
 {
     public class GameApp : ServerBase
     {
-
-
         public GameApp(IServiceProvider serviceProvider) : base(serviceProvider)
         {
             M2Share.LogonCostLogList = new ArrayList();
@@ -55,7 +53,7 @@ namespace GameSrv
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
             M2Share.CommandSystem = new GameCommandSystem();
-            M2Share.AccountSession = new AuthenticationService();
+            M2Share.Authentication = new AuthenticationService();
             M2Share.ScriptEngine = new ScriptEngine();
             M2Share.AutoBot = new RobotManage();
             InitializeSystem(serviceProvider);
@@ -103,12 +101,6 @@ namespace GameSrv
         /// <param name="stoppingToken"></param>
         public void Initialize(CancellationToken stoppingToken)
         {
-            LogService.Info("读取游戏引擎数据配置文件...");
-            GameShare.GeneratorProcessor.Initialize(stoppingToken);
-            M2Share.FrontEngine = new FrontEngine();
-            GameShare.LoadConfig();
-            LoadServerTable();
-            LogService.Info("初始化游戏引擎数据配置文件完成...");
             M2Share.CommandSystem.RegisterCommand();
             M2Share.LoadGameLogItemNameList();
             M2Share.LoadDenyIPAddrList();
@@ -217,7 +209,10 @@ namespace GameSrv
             LocalDb.LoadAdminList();
             LogService.Info("管理员列表加载成功...");
             M2Share.NetChannel.Initialize();
-            LogService.Info("正在初始化网络引擎...");
+            LogService.Info("正在初始化网络服务...");
+            SystemShare.CastleMgr.Initialize();
+            GameShare.DataServer.Initialize();
+            M2Share.Authentication.Initialize();
         }
 
         /// <summary>
@@ -246,12 +241,8 @@ namespace GameSrv
                     LocalDb.LoadGuardList();
                     LogService.Info("守卫列表加载成功...");
                 }
-                GameShare.PlanesService.Start();
-                M2Share.AccountSession.Initialize();
                 SystemShare.GuildMgr.LoadGuildInfo();
                 SystemShare.CastleMgr.LoadCastleList();
-                SystemShare.CastleMgr.Initialize();
-                GameShare.DataServer.Start();
                 SystemShare.WorldEngine.Initialize();
                 M2Share.AutoBot.Initialize();
                 M2Share.StartReady = true;
@@ -263,7 +254,10 @@ namespace GameSrv
             }
         }
 
-        private void LoadServerTable()
+        /// <summary>
+        /// 读取服务器列表
+        /// </summary>
+        public void LoadServerTable()
         {
             int nRouteIdx = 0;
             string sIdx = string.Empty;

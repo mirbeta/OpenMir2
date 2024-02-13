@@ -1223,7 +1223,7 @@ namespace ScriptSystem
             }
             else if (sName[0] == '$')
             {
-                sName = sName[2 - 1..^0];
+                sName = sName[1..^0];
                 n10 = SystemShare.GetValNameNo(sName);
                 if (n10 >= 0)
                 {
