@@ -24,6 +24,10 @@ namespace MarketSystem.Services
         public MarketService()
         {
             _clientScoket = new TcpClient();
+            TouchSocketConfig config = new TouchSocketConfig();
+            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort));
+            config.SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            _clientScoket.Setup(config);
             _clientScoket.Connected += MarketScoketConnected;
             _clientScoket.Disconnected += MarketScoketDisconnected;
             _clientScoket.Received += MarketSocketRead;
@@ -38,17 +42,21 @@ namespace MarketSystem.Services
                 _thread = new Thread(CheckConnected);
                 _thread.IsBackground = true;
             }
-            TouchSocketConfig config = new TouchSocketConfig();
-            config.SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.MarketSrvAddr), SystemShare.Config.MarketSrvPort));
-            config.SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
-            _clientScoket.Setup(config);
+            if (_clientScoket.Online)
+            {
+                return;
+            }
             try
             {
                 _clientScoket.Connect();
             }
-            catch (SocketException ex)
+            catch (TimeoutException)
             {
-                MarketSocketError(ex);
+                MarketSocketError(SocketError.TimedOut);
+            }
+            catch (SocketException)
+            {
+                MarketSocketError(SocketError.ConnectionRefused);
             }
         }
 
@@ -65,7 +73,7 @@ namespace MarketSystem.Services
             {
                 return;
             }
-            _clientScoket.Connect();
+            Start();
         }
 
         public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
@@ -116,9 +124,9 @@ namespace MarketSystem.Services
             return Task.CompletedTask;
         }
 
-        private void MarketSocketError(SocketException e)
+        private void MarketSocketError(SocketError errorCode)
         {
-            switch (e.SocketErrorCode)
+            switch (errorCode)
             {
                 case SocketError.ConnectionRefused:
                     LogService.Error("数据库(寄售行)服务器[" + SystemShare.Config.MarketSrvAddr + ":" + SystemShare.Config.MarketSrvPort + "]拒绝链接...");

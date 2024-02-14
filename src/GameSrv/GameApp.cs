@@ -67,13 +67,13 @@ namespace GameSrv
             SystemShare.NpcLimit = 5;
             SystemShare.SocLimit = 10;
             SystemShare.DecLimit = 20;
+            SystemShare.FilterWord = true;
             SystemShare.Config.LoadDBErrorCount = 0;
             SystemShare.Config.LoadDBCount = 0;
             SystemShare.Config.SaveDBCount = 0;
             SystemShare.Config.DBQueryID = 0;
             SystemShare.Config.ItemNumber = 0;
             SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
-            SystemShare.FilterWord = true;
             SystemShare.Config.WinLotteryCount = 0;
             SystemShare.Config.NoWinLotteryCount = 0;
             SystemShare.Config.WinLotteryLevel1 = 0;
@@ -90,9 +90,9 @@ namespace GameSrv
             SystemShare.CastleMgr = new CastleManager();
             SystemShare.MapMgr = new MapManager();
             SystemShare.EventMgr = new EventManager();
-            SystemShare.Mediator = serviceProvider.GetService<IMediator>();
             SystemShare.WorldEngine = new WorldServer();
             SystemShare.ServiceProvider = serviceProvider;
+            SystemShare.Mediator = serviceProvider.GetService<IMediator>();
         }
 
         /// <summary>

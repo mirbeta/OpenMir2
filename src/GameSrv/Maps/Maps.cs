@@ -16,6 +16,7 @@
         public static int LoadMapInfo()
         {
             LogService.Info("正在加载地图数据...");
+            
             string sFlag = string.Empty;
             string sCommand = string.Empty;
             string sLine = string.Empty;
@@ -341,8 +342,14 @@
                         SystemShare.MapMgr.AddMapInfo(sMapName, sMapDesc, nServerIndex, MapFlag, QuestNPC);
                         result = 1;
                     }
+                    
+                    Console.Write("\r正在读取地图数据...[{0}/{1}]", i, loadList.Count);
                 }
-
+                Console.Write("\n"); // 完成后换行
+                Console.SetCursorPosition(0, Console.CursorTop - 1); // 将光标移动到上一行
+                Console.Write(new string(' ', Console.WindowWidth)); // 使用空格覆盖这一行
+                Console.SetCursorPosition(0, Console.CursorTop - 1); // 再次将光标移动到上一行
+                
                 // 加载地图连接点
                 for (int i = 0; i < loadList.Count; i++)
                 {

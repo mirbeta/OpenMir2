@@ -12,7 +12,7 @@ namespace GameGate.Services
     /// </summary>
     public class ClientThread
     {
-        private readonly TcpClient ClientSocket;
+        private readonly TcpClient _clientSocket;
         private readonly GameGateInfo GateInfo;
         private readonly IPEndPoint LocalEndPoint;
         /// <summary>
@@ -63,10 +63,10 @@ namespace GameGate.Services
             CheckServerTick = HUtil32.GetTickCount();
             _networkMonitor = networkMonitor;
             _messageChannel = Channel.CreateUnbounded<ServerSessionMessage>();
-            ClientSocket = new TcpClient();
-            ClientSocket.Connected += ClientSocketConnect;
-            ClientSocket.Disconnected += ClientSocketDisconnect;
-            ClientSocket.Received += ClientSocketRead;
+            _clientSocket = new TcpClient();
+            _clientSocket.Connected += ClientSocketConnect;
+            _clientSocket.Disconnected += ClientSocketDisconnect;
+            _clientSocket.Received += ClientSocketRead;
         }
 
         public bool IsConnected => Connected;
@@ -91,18 +91,18 @@ namespace GameGate.Services
             {
                 x.UseReconnection();
             });
-            ClientSocket.Setup(config);
+            _clientSocket.Setup(config);
         }
 
-        public void Start()
+        public async Task Start()
         {
             try
             {
-                if (ClientSocket.Online)
+                if (_clientSocket.Online)
                 {
                     return;
                 }
-                ClientSocket.Connect();
+                await _clientSocket.ConnectAsync();
             }
             catch (SocketException error)
             {
@@ -120,7 +120,7 @@ namespace GameGate.Services
 
         public void Stop()
         {
-            ClientSocket.Close();
+            _clientSocket.Close();
         }
 
         public ushort GetSessionId(string connectionId)
@@ -395,9 +395,9 @@ namespace GameGate.Services
         /// <param name="sendBuffer"></param>
         internal void Send(byte[] sendBuffer)
         {
-            if (ClientSocket.Online)
+            if (_clientSocket.Online)
             {
-                ClientSocket.Send(sendBuffer);
+                _clientSocket.Send(sendBuffer);
                 _networkMonitor.Send(sendBuffer.Length);
             }
         }

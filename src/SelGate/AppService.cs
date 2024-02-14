@@ -33,15 +33,15 @@ namespace SelGate
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            _serverService.Start();
-            _clientManager.Start();
+            _serverService.ProcessReviceMessage(cancellationToken);
+            _sessionManager.ProcessSendMessage(cancellationToken);
             return Task.CompletedTask;
         }
 
         public Task StartedAsync(CancellationToken cancellationToken)
         {
-            _serverService.ProcessReviceMessage(cancellationToken);
-            _sessionManager.ProcessSendMessage(cancellationToken);
+            _serverService.Start();
+            _clientManager.Start();
             LogService.Info("服务已启动成功...");
             LogService.Info("欢迎使用翎风系列游戏软件...");
             LogService.Info("网站:http://www.gameofmir.com");

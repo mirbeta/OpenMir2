@@ -805,7 +805,7 @@ namespace GameSrv.Npc
                                 return;
                             }
                         }
-                        M2Share.ScriptEngine.GotoLable(playObject, this.ActorId, sLabel, !boCanJmp);
+                        M2Share.ScriptEngine.GotoLable(playObject, ActorId, sLabel, !boCanJmp);
                         if (!boCanJmp)
                         {
                             return;
@@ -936,10 +936,7 @@ namespace GameSrv.Npc
                         }
                         else //插件消息
                         {
-                            if (!boCanJmp)
-                            {
-                                SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel, NormNpc = this });
-                            }
+                            SystemShare.Mediator.Publish(new UserSelectMessageEvent { Actor = playObject, Lable = sLabel, NormNpc = this });
                         }
                     }
                 }
@@ -1117,18 +1114,16 @@ namespace GameSrv.Npc
                     sMsg = ReplaceVariableText(sMsg, "<$UPGRADEWEAPONFEE>", sText);
                     break;
                 case "$USERWEAPON":
+                    if (playObject.UseItems[ItemLocation.Weapon] != null && playObject.UseItems[ItemLocation.Weapon].Index != 0)
                     {
-                        if (playObject.UseItems[ItemLocation.Weapon] != null && playObject.UseItems[ItemLocation.Weapon].Index != 0)
-                        {
-                            sText = SystemShare.ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
-                        }
-                        else
-                        {
-                            sText = "无";
-                        }
-                        sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
-                        break;
+                        sText = SystemShare.ItemSystem.GetStdItemName(playObject.UseItems[ItemLocation.Weapon].Index);
                     }
+                    else
+                    {
+                        sText = "无";
+                    }
+                    sMsg = ReplaceVariableText(sMsg, "<$USERWEAPON>", sText);
+                    break;
             }
         }
 
@@ -1239,7 +1234,7 @@ namespace GameSrv.Npc
                     string sUserItemName = CustomItemSystem.GetItemName(userItem);
                     if (playObject.IsAddWeightAvailable(stdItem.Weight))
                     {
-                        if (sUserItemName == sItemName)
+                        if (sUserItemName.Equals(sItemName))
                         {
                             for (int j = 0; j < list20.Count; j++)
                             {

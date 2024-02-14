@@ -27,7 +27,7 @@ namespace DBSrv.Services.Impl
             _globaSessionList = new List<GlobaSessionInfo>();
         }
 
-        public void Start()
+        public async Task Start()
         {
             try
             {
@@ -35,7 +35,7 @@ namespace DBSrv.Services.Impl
                 {
                     return;
                 }
-                _clientScoket.Connect();
+                await _clientScoket.ConnectAsync();
             }
             catch (TimeoutException)
             {

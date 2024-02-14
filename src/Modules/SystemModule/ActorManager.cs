@@ -22,6 +22,7 @@ namespace SystemModule
         /// </summary>
         private readonly ConcurrentDictionary<int, object> _ohterMap = new ConcurrentDictionary<int, object>();
         private static int PlayerCount { get; set; }
+        private static int NpcCount { get; set; }
         private static int MonsterCount { get; set; }
         private static int MonsterDeathCount { get; set; }
         private static int MonsterDisposeCount { get; set; }
@@ -121,11 +122,12 @@ namespace SystemModule
         /// <summary>
         /// 统计对象数量
         /// </summary>
-        public void Analytics()
+        public string Analytics()
         {
             ActorIds.Clear();
             PlayerCount = 0;
             MonsterCount = 0;
+            NpcCount = 0;
             using IEnumerator<KeyValuePair<int, IActor>> actors = _actorsMap.GetEnumerator();
             while (actors.MoveNext())
             {
@@ -136,6 +138,10 @@ namespace SystemModule
                     {
                         PlayerCount++;
                         PlayerGhostCount++;
+                    }
+                    else if (actor.Race == ActorRace.NPC || actor.Race == ActorRace.Merchant)
+                    {
+                        NpcCount++;
                     }
                     else
                     {
@@ -157,7 +163,7 @@ namespace SystemModule
                 }
                 ActorIds.Add(actors.Current.Key);
             }
-            LogService.Debug($"对象数:[{_actorsMap.Count}] 玩家/怪物:[{PlayerCount}/{MonsterCount}] 死亡角色:[{PlayerGhostCount}] 死亡怪物:[{MonsterDeathCount}] 释放怪物:[{MonsterDisposeCount}]");
+            return $"对象数:[{_actorsMap.Count}] 玩家/NPC/怪物:[{PlayerCount}/{NpcCount}/{MonsterCount}] 死亡角色:[{PlayerGhostCount}] 死亡怪物:[{MonsterDeathCount}] 释放怪物:[{MonsterDisposeCount}]";
         }
     }
 }

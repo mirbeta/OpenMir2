@@ -50,11 +50,15 @@ namespace PlanesSystem
                 }));
         }
 
-        public void Start()
+        public async Task Start()
         {
             try
             {
-                _tcpClient.Connect();
+                if (_tcpClient.Online)
+                {
+                    return;
+                }
+                await _tcpClient.ConnectAsync();
             }
             catch (TimeoutException)
             {
@@ -82,7 +86,7 @@ namespace PlanesSystem
                 {
                     return;
                 }
-                _tcpClient.Connect();
+                _ = Start();
             }
         }
 

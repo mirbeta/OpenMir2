@@ -7,7 +7,6 @@ namespace GameSrv.Services
     /// </summary>
     public class AuthenticationService : IAuthentication
     {
-
         private readonly List<AccountSession> _sessionList;
         private readonly TcpClient _tcpClient;
         private readonly object _userIdSection;
@@ -34,11 +33,15 @@ namespace GameSrv.Services
             LogService.Debug("登录服务器连接初始化完成...");
         }
 
-        public void Start()
+        public async Task Start()
         {
             try
             {
-                _tcpClient.Connect();
+                if (_tcpClient.Online)
+                {
+                    return;
+                }
+                await _tcpClient.ConnectAsync();
             }
             catch (TimeoutException)
             {

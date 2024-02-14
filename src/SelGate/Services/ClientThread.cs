@@ -79,7 +79,7 @@ namespace SelGate.Services
             return _clientSocket.RemoteIPHost.ToString();
         }
 
-        public void Start()
+        public async Task Start()
         {
             try
             {
@@ -87,7 +87,7 @@ namespace SelGate.Services
                 {
                     return;
                 }
-                _clientSocket.Connect();
+                await _clientSocket.ConnectAsync();
             }
             catch (TimeoutException)
             {
@@ -116,7 +116,7 @@ namespace SelGate.Services
             isConnected = true;
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
-            LogService.Info($"数据库服务器[{client.RemoteIPHost}]链接成功.", 1);
+            LogService.Info($"数据库服务器[{client.RemoteIPHost.EndPoint}]链接成功.");
             LogService.Debug($"线程[{Guid.NewGuid():N}]连接 {client.RemoteIPHost} 成功...");
             return Task.CompletedTask;
         }
@@ -125,7 +125,7 @@ namespace SelGate.Services
         {
             RestSessionArray();
             GateShare.ServerGateList.Remove(this);
-            LogService.Info($"数据库服务器[{client.GetIPPort()}]断开链接.", 1);
+            LogService.Info($"数据库服务器[{client.GetIPPort()}]断开链接.");
             boGateReady = false;
             isConnected = false;
             CheckServerFail = true;

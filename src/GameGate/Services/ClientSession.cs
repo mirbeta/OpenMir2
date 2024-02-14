@@ -1176,7 +1176,7 @@ namespace GameGate.Services
                         }
                         if (fMatch)
                         {
-                            LogService.Info($"[ClientLogin] Kicked 5: {sHumName}", 1);
+                            LogService.Info($"[ClientLogin] Kicked 5: {sHumName}");
                             SendKickMsg(4);
                             return;
                         }

@@ -6,7 +6,7 @@ namespace M2Server
     {
         void Initialize();
 
-        void Start();
+        Task Start();
 
         void Run();
 

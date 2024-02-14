@@ -56,7 +56,7 @@ public class ClientThread
         _clientSocket.Setup(config);
     }
 
-    public void Start()
+    public async Task Start()
     {
         try
         {
@@ -64,7 +64,7 @@ public class ClientThread
             {
                 return;
             }
-            _clientSocket.Connect();
+            await _clientSocket.ConnectAsync();
         }
         catch (TimeoutException)
         {
