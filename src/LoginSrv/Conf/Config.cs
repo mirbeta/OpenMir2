@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace LoginSrv.Conf
+﻿namespace LoginSrv.Conf
 {
     public class Config
     {

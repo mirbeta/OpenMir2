@@ -330,7 +330,6 @@ namespace ScriptSystem
                 }
             }
 
-        L001:
             if (nCMDCode > 0)
             {
                 questConditionInfo.CmdCode = nCMDCode;
@@ -503,7 +502,6 @@ namespace ScriptSystem
                 }
             }
 
-        L001:
             if (nCMDCode > 0)
             {
                 questActionInfo.nCmdCode = nCMDCode;

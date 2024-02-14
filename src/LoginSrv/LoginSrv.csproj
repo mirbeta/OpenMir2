@@ -8,6 +8,7 @@
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 
 	<Choose>

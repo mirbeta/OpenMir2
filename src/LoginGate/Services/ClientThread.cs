@@ -7,17 +7,14 @@ public class ClientThread
     /// 用户会话
     /// </summary>
     public readonly TSessionInfo[] SessionArray;
-
     /// <summary>
     /// Socket
     /// </summary>
     private readonly TcpClient _clientSocket;
-
     /// <summary>
     /// Client管理
     /// </summary>
     private readonly ClientManager _clientManager;
-
     /// <summary>
     /// Session管理
     /// </summary>
@@ -27,7 +24,6 @@ public class ClientThread
     /// 数据缓冲区
     /// </summary>
     private readonly byte[] DataBuff;
-
     /// <summary>
     /// 缓存缓冲长度
     /// </summary>
@@ -64,6 +60,10 @@ public class ClientThread
     {
         try
         {
+            if (_clientSocket.Online)
+            {
+                return;
+            }
             _clientSocket.Connect();
         }
         catch (TimeoutException)
@@ -104,7 +104,6 @@ public class ClientThread
     {
         ConnectState = true;
         RestSessionArray();
-        SockThreadStutas = SockThreadStutas.Connected;
         KeepAliveTick = HUtil32.GetTickCount();
         CheckServerTick = HUtil32.GetTickCount();
         CheckServerFailCount = 1;
@@ -320,56 +319,36 @@ public class ClientThread
     /// 网关编号（初始化的时候进行分配）
     /// </summary>
     public readonly int ClientId = 0;
-
     /// <summary>
     ///  网关游戏服务器之间检测是否失败（超时）
     /// </summary>
     public bool CheckServerFail = false;
-
     /// <summary>
     /// 网关游戏服务器之间检测是否失败次数
     /// </summary>
     public int CheckServerFailCount = 1;
-
     /// <summary>
     /// 服务器之间的检查间隔
     /// </summary>
     public int CheckServerTick = 0;
-
     /// <summary>
     /// 网关是否就绪
     /// </summary>
     public bool ConnectState = false;
-
     /// <summary>
     /// 上次心跳链接时间
     /// </summary>
     public int KeepAliveTick;
-
-    /// <summary>
-    /// 服务器链接状态
-    /// </summary>
-    public SockThreadStutas SockThreadStutas;
-
     /// <summary>
     /// 历史最高在线人数
     /// </summary>
     private int Counter = 0;
-
     /// <summary>
     /// 发送总字节数
     /// </summary>
     public int SendBytes;
-
     /// <summary>
     /// 接收总字节数
     /// </summary>
     public int ReceiveBytes;
-}
-
-public enum SockThreadStutas : byte
-{
-    Connecting = 0,
-    Connected = 1,
-    TimeOut = 2
 }

@@ -98,6 +98,10 @@ namespace GameGate.Services
         {
             try
             {
+                if (ClientSocket.Online)
+                {
+                    return;
+                }
                 ClientSocket.Connect();
             }
             catch (SocketException error)

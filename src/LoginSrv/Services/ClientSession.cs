@@ -1,19 +1,12 @@
 ﻿using LoginSrv.Conf;
 using LoginSrv.Storage;
-using OpenMir2;
-using OpenMir2.Packets.ClientPackets;
-using OpenMir2.Packets.ServerPackets;
-using System;
 using System.Net.Sockets;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
 
 namespace LoginSrv.Services
 {
     public class ClientSession
     {
-
         private readonly ConfigManager _configMgr;
         private readonly AccountStorage _accountStorage;
         private readonly SessionServer _sessionService;

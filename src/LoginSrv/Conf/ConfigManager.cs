@@ -1,29 +1,23 @@
-using OpenMir2;
-using OpenMir2.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 namespace LoginSrv.Conf
 {
     public class ConfigManager : ConfigFile
     {
-        private const string sSectionServer = "Server";
-        private const string sDB = "DataBase";
-        private const string sIdentDBServer = "DBServer";
-        private const string sIdentFeeServer = "FeeServer";
-        private const string sIdentLogServer = "LogServer";
-        private const string sIdentGateAddr = "GateAddr";
-        private const string sIdentGatePort = "GatePort";
-        private const string sIdentServerAddr = "ServerAddr";
-        private const string sIdentServerPort = "ServerPort";
-        private const string sIdentMonAddr = "MonAddr";
-        private const string sIdentMonPort = "MonPort";
-        private const string sIdentDBSPort = "DBSPort";
-        private const string sIdentFeePort = "FeePort";
-        private const string sIdentLogPort = "LogPort";
-        private const string sIdentTestServer = "TestServer";
-        private const string sIdentDynamicIPMode = "DynamicIPMode";
+        private const string SectionServer = "Server";
+        private const string DB = "DataBase";
+        private const string IdentDBServer = "DBServer";
+        private const string IdentFeeServer = "FeeServer";
+        private const string IdentLogServer = "LogServer";
+        private const string IdentGateAddr = "GateAddr";
+        private const string IdentGatePort = "GatePort";
+        private const string IdentServerAddr = "ServerAddr";
+        private const string IdentServerPort = "ServerPort";
+        private const string IdentMonAddr = "MonAddr";
+        private const string IdentMonPort = "MonPort";
+        private const string IdentDBSPort = "DBSPort";
+        private const string IdentFeePort = "FeePort";
+        private const string IdentLogPort = "LogPort";
+        private const string IdentTestServer = "TestServer";
+        private const string IdentDynamicIPMode = "DynamicIPMode";
 
         public readonly Config Config;
 
@@ -36,21 +30,21 @@ namespace LoginSrv.Conf
 
         public void LoadConfig()
         {
-            Config.sDBServer = LoadConfigString(sSectionServer, sIdentDBServer, Config.sDBServer);
-            Config.sFeeServer = LoadConfigString(sSectionServer, sIdentFeeServer, Config.sFeeServer);
-            Config.sLogServer = LoadConfigString(sSectionServer, sIdentLogServer, Config.sLogServer);
-            Config.sGateAddr = LoadConfigString(sSectionServer, sIdentGateAddr, Config.sGateAddr);
-            Config.nGatePort = LoadConfigInteger(sSectionServer, sIdentGatePort, Config.nGatePort);
-            Config.sServerAddr = LoadConfigString(sSectionServer, sIdentServerAddr, Config.sServerAddr);
-            Config.nServerPort = LoadConfigInteger(sSectionServer, sIdentServerPort, Config.nServerPort);
-            Config.sMonAddr = LoadConfigString(sSectionServer, sIdentMonAddr, Config.sMonAddr);
-            Config.nMonPort = LoadConfigInteger(sSectionServer, sIdentMonPort, Config.nMonPort);
-            Config.nDBSPort = LoadConfigInteger(sSectionServer, sIdentDBSPort, Config.nDBSPort);
-            Config.nFeePort = LoadConfigInteger(sSectionServer, sIdentFeePort, Config.nFeePort);
-            Config.nLogPort = LoadConfigInteger(sSectionServer, sIdentLogPort, Config.nLogPort);
-            Config.EnableMakingID = LoadConfigBoolean(sSectionServer, sIdentTestServer, Config.EnableMakingID);
-            Config.DynamicIPMode = LoadConfigBoolean(sSectionServer, sIdentDynamicIPMode, Config.DynamicIPMode);
-            Config.ConnctionString = ReadWriteString(sDB, "ConnctionString", Config.ConnctionString);
+            Config.sDBServer = LoadConfigString(SectionServer, IdentDBServer, Config.sDBServer);
+            Config.sFeeServer = LoadConfigString(SectionServer, IdentFeeServer, Config.sFeeServer);
+            Config.sLogServer = LoadConfigString(SectionServer, IdentLogServer, Config.sLogServer);
+            Config.sGateAddr = LoadConfigString(SectionServer, IdentGateAddr, Config.sGateAddr);
+            Config.nGatePort = LoadConfigInteger(SectionServer, IdentGatePort, Config.nGatePort);
+            Config.sServerAddr = LoadConfigString(SectionServer, IdentServerAddr, Config.sServerAddr);
+            Config.nServerPort = LoadConfigInteger(SectionServer, IdentServerPort, Config.nServerPort);
+            Config.sMonAddr = LoadConfigString(SectionServer, IdentMonAddr, Config.sMonAddr);
+            Config.nMonPort = LoadConfigInteger(SectionServer, IdentMonPort, Config.nMonPort);
+            Config.nDBSPort = LoadConfigInteger(SectionServer, IdentDBSPort, Config.nDBSPort);
+            Config.nFeePort = LoadConfigInteger(SectionServer, IdentFeePort, Config.nFeePort);
+            Config.nLogPort = LoadConfigInteger(SectionServer, IdentLogPort, Config.nLogPort);
+            Config.EnableMakingID = LoadConfigBoolean(SectionServer, IdentTestServer, Config.EnableMakingID);
+            Config.DynamicIPMode = LoadConfigBoolean(SectionServer, IdentDynamicIPMode, Config.DynamicIPMode);
+            Config.ConnctionString = ReadWriteString(DB, "ConnctionString", Config.ConnctionString);
             Config.ShowLogLevel = ReadWriteInteger("Server", "ShowLogLevel", Config.ShowLogLevel);
             Config.ShowDebug = ReadWriteBool("Server", "ShowDebug", Config.ShowDebug);
         }

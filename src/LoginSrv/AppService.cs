@@ -1,10 +1,6 @@
 ﻿using LoginSrv.Conf;
 using LoginSrv.Services;
 using LoginSrv.Storage;
-using Microsoft.Extensions.Hosting;
-using OpenMir2;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LoginSrv
 {
@@ -22,7 +18,7 @@ namespace LoginSrv
             _accountStorage = accountStorage;
             _configManager = configManager;
         }
-        
+
         public Task StartingAsync(CancellationToken cancellationToken)
         {
             LsShare.Initialization();
@@ -36,9 +32,9 @@ namespace LoginSrv
             _loginService.Start(cancellationToken);
             return Task.CompletedTask;
         }
-        
+
         public Task StartAsync(CancellationToken cancellationToken)
-        {            
+        {
             _loginService.StartServer();
             _masSocService.StartServer();
             _accountStorage.Initialization();
@@ -51,14 +47,14 @@ namespace LoginSrv
 
         public Task StoppingAsync(CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task StoppedAsync(CancellationToken cancellationToken)
         {
-            throw new System.NotImplementedException();
+            return Task.CompletedTask;
         }
-        
+
         public Task StopAsync(CancellationToken cancellationToken)
         {
             return Task.CompletedTask;

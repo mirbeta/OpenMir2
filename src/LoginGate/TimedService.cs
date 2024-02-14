@@ -35,7 +35,6 @@
                 {
                     continue;
                 }
-
                 _clientManager.ProcessClientHeart(clientList[i]);
             }
         }

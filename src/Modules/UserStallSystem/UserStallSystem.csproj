@@ -39,6 +39,7 @@
     </Choose>
     
     <ItemGroup>
+      <ProjectReference Include="..\..\OpenMir2\OpenMir2.csproj" />
       <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
     </ItemGroup>
 

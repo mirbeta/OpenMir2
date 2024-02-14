@@ -38,9 +38,6 @@ namespace SelGate.Services
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
         public int CheckServerFailCount = 0;
-        public bool KeepAlive;
-        public int KeepAliveTick;
-        public SockThreadStutas SockThreadStutas;
         /// <summary>
         /// 网关是否就绪
         /// </summary>
@@ -72,9 +69,6 @@ namespace SelGate.Services
             _clientSocket.Connected += ClientSocketConnect;
             _clientSocket.Disconnected += ClientSocketDisconnect;
             _clientSocket.Received += ClientSocketRead;
-            SockThreadStutas = SockThreadStutas.Connecting;
-            KeepAliveTick = HUtil32.GetTickCount();
-            KeepAlive = true;
             DataBuff = new byte[2048 * 10];
         }
 
@@ -89,11 +83,19 @@ namespace SelGate.Services
         {
             try
             {
+                if (_clientSocket.Online)
+                {
+                    return;
+                }
                 _clientSocket.Connect();
+            }
+            catch (TimeoutException)
+            {
+                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]超时.");
             }
             catch (Exception)
             {
-                LogService.Error("链接数据库服务器失败.");
+                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]失败.");
             }
         }
 
@@ -112,8 +114,6 @@ namespace SelGate.Services
             boGateReady = true;
             RestSessionArray();
             isConnected = true;
-            SockThreadStutas = SockThreadStutas.Connected;
-            KeepAliveTick = HUtil32.GetTickCount();
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
             LogService.Info($"数据库服务器[{client.RemoteIPHost}]链接成功.", 1);
@@ -179,7 +179,6 @@ namespace SelGate.Services
                 switch (messageData.Type)
                 {
                     case ServerDataType.KeepAlive:
-                        KeepAliveTick = HUtil32.GetTickCount();
                         CheckServerFail = false;
                         boGateReady = true;
                         isConnected = true;
@@ -277,12 +276,5 @@ namespace SelGate.Services
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _clientSocket.Send(data);
         }
-    }
-
-    public enum SockThreadStutas : byte
-    {
-        Connecting = 0,
-        Connected = 1,
-        TimeOut = 2
     }
 }

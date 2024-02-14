@@ -242,6 +242,8 @@ namespace GameSrv
                     LogService.Info("守卫列表加载成功...");
                 }
                 SystemShare.WorldEngine.Initialize();
+                SystemShare.GuildMgr.LoadGuildInfo();
+                SystemShare.CastleMgr.LoadCastleList();
                 M2Share.AutoBot.Initialize();
                 M2Share.StartReady = true;
                 LogService.Info("游戏处理引擎初始化成功...");

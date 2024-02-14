@@ -252,7 +252,7 @@ namespace GameSrv
             }
         }
 
-        public void SaveItemNumber()
+        private void SaveItemNumber()
         {
             SystemShare.ServerConf.SaveVariable();
         }

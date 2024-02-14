@@ -1,7 +1,4 @@
 using LoginSrv.Conf;
-using OpenMir2.Common;
-using OpenMir2.Packets.ClientPackets;
-using System.Collections.Generic;
 using System.Net.Sockets;
 
 namespace LoginSrv

@@ -31,6 +31,10 @@ namespace DBSrv.Services.Impl
         {
             try
             {
+                if (_clientScoket.Online)
+                {
+                    return;
+                }
                 _clientScoket.Connect();
             }
             catch (TimeoutException)

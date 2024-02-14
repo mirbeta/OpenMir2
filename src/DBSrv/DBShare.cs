@@ -102,7 +102,7 @@ namespace DBSrv
             }
             catch
             {
-                //MainOutMessage("加载IP列表文件 " + ServerIpConfFileNmae + " 出错!!!");
+                LogService.Error("加载IP列表文件 " + ServerIpConfFileNmae + " 出错!!!");
             }
         }
 
@@ -182,7 +182,7 @@ namespace DBSrv
             }
             catch (Exception e)
             {
-                Console.WriteLine($"CheckChrName {sChrName} 异常信息:" + e.Message);
+                LogService.Error($"CheckChrName {sChrName} 异常信息:" + e.Message);
                 return false;
             }
         }

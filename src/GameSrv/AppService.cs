@@ -7,11 +7,9 @@ namespace GameSrv
 {
     public class AppService : IHostedLifecycleService, IDisposable
     {
-        private readonly IHost Host;
         private readonly GameApp _mirApp;
-        private Task _applicationTask;
         private int? _exitCode;
-        private CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly CommandLineApplication _application;
         private PeriodicTimer _timer;
 
@@ -19,7 +17,6 @@ namespace GameSrv
         {
             _mirApp = serverApp;
             _application = new CommandLineApplication();
-            Host = serviceProvider.GetService<IHost>();
             LogService.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
             _cancellationTokenSource = new CancellationTokenSource();
@@ -121,28 +118,16 @@ namespace GameSrv
         {
             _exitCode = 0;
             await _mirApp.StartUp(cancellationToken);
-            SystemShare.GuildMgr.LoadGuildInfo();
-            SystemShare.CastleMgr.LoadCastleList();
             LogService.Info("初始化游戏世界服务线程完成...");
             LogService.Info("欢迎使用翎风系列游戏软件...");
             LogService.Info("网站:http://www.gameofmir.com");
             LogService.Info("论坛:http://bbs.gameofmir.com");
         }
 
-        public async Task StopAsync(CancellationToken stoppingToken)
+        public Task StopAsync(CancellationToken stoppingToken)
         {
-            // Wait for the application logic to fully complete any cleanup tasks.
-            // Note that this relies on the cancellation token to be properly used in the application.
-            if (_applicationTask != null)
-            {
-                await _applicationTask;
-            }
-
             LogService.Debug($"Exiting with return code: {_exitCode}");
-
-            //_appLifetime.StopApplication();
-            // Exit code may be null if the user cancelled via Ctrl+C/SIGTERM
-            Environment.Exit(Environment.ExitCode);
+            return Task.CompletedTask;
         }
 
         private void SavePlayer()
@@ -169,7 +154,6 @@ namespace GameSrv
             {
                 LogService.Info("没有玩家在线，游戏引擎服务已停止...Bye!");
                 await _mirApp.Stopping(_cancellationTokenSource.Token);
-                await Host.StopAsync(_cancellationTokenSource.Token);
                 return;
             }
             // 通知游戏网关暂停接收新的连接,发送消息后停止5秒,防止玩家在倒计时结束前进入游戏
@@ -216,7 +200,6 @@ namespace GameSrv
                 LogService.Info("游戏引擎世界服务已停止...");
                 LogService.Info("游戏服务已停止...");
                 LogService.Info("goodbye!");
-                await Host.StopAsync(_cancellationTokenSource.Token);
             }, _cancellationTokenSource.Token);
         }
 

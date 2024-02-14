@@ -1,15 +1,6 @@
 using LoginSrv.Conf;
 using LoginSrv.Services;
 using LoginSrv.Storage;
-using Microsoft.Extensions.DependencyInjection;
-using OpenMir2;
-using Spectre.Console;
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
 
 namespace LoginSrv
@@ -17,7 +8,7 @@ namespace LoginSrv
     public class AppServer
     {
         private readonly ServerHost _serverHost;
-        private PeriodicTimer _timer;
+        private readonly PeriodicTimer _timer;
 
         public AppServer()
         {
@@ -123,7 +114,7 @@ namespace LoginSrv
         private async Task ShowServerStatus()
         {
             LsShare.ShowLog = false;
-            var periodicTimer = _timer ?? new PeriodicTimer(TimeSpan.FromSeconds(5));
+            PeriodicTimer periodicTimer = _timer ?? new PeriodicTimer(TimeSpan.FromSeconds(5));
             SessionServer masSocService = (SessionServer)_serverHost.ServiceProvider.GetService(typeof(SessionServer));
             System.Collections.Generic.IList<ServerSessionInfo> serverList = masSocService?.ServerList;
             Table table = new Table().Expand().BorderColor(Color.Grey);

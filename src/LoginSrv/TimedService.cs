@@ -1,11 +1,4 @@
 ﻿using LoginSrv.Services;
-using Microsoft.Extensions.Hosting;
-using OpenMir2;
-using System;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LoginSrv
 {
