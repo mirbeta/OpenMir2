@@ -428,17 +428,10 @@ namespace LoginSrv.Services
             AccountRecord accountRecord = null;
             try
             {
-<<<<<<< HEAD
-                var sMsg = EDCode.DeCodeString(sData);
-                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginId, new[] { "\t", "\t" });
-                var sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\t", "\t" });
-                var nCode = 0;
-=======
                 string sMsg = EDCode.DeCodeString(sData);
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginId, new[] { "\09", "\t" });
                 string sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\09", "\t" });
                 int nCode = 0;
->>>>>>> dev
                 if (sNewPassword.Length >= 3)
                 {
                     int n10 = _accountStorage.Index(sLoginId);
@@ -609,16 +602,6 @@ namespace LoginSrv.Services
             string sBirthDay = string.Empty;
             CommandMessage defMsg;
             AccountRecord accountRecord = null;
-<<<<<<< HEAD
-            var sMsg = EDCode.DeCodeString(sData);
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\t");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, "\t");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer1, "\t");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest2, "\t");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, "\t");
-            sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, "\t");
-            var nCode = 0;
-=======
             string sMsg = EDCode.DeCodeString(sData);
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\09");
             sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, "\09");
@@ -627,7 +610,6 @@ namespace LoginSrv.Services
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, "\09");
             sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, "\09");
             int nCode = 0;
->>>>>>> dev
             if (!string.IsNullOrEmpty(sAccount))
             {
                 int nIndex = _accountStorage.Index(sAccount);

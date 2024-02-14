@@ -595,17 +595,10 @@ namespace LoginSrv.Services
                 LoadList.LoadFromFile(sFileName);
                 for (int i = 0; i < LoadList.Count; i++)
                 {
-<<<<<<< HEAD
-                    var lineText = LoadList[i];
-                    lineText = HUtil32.GetValidStr3(lineText, ref sServerName, new[] { " ", "\t" });
-                    lineText = HUtil32.GetValidStr3(lineText, ref s10, new[] { " ", "\t" });
-                    lineText = HUtil32.GetValidStr3(lineText, ref s14, new[] { " ", "\t" });
-=======
                     string lineText = LoadList[i];
                     lineText = HUtil32.GetValidStr3(lineText, ref sServerName, dividerAry);
                     lineText = HUtil32.GetValidStr3(lineText, ref s10, dividerAry);
                     lineText = HUtil32.GetValidStr3(lineText, ref s14, dividerAry);
->>>>>>> dev
                     if (!string.IsNullOrEmpty(sServerName))
                     {
                         UserLimit[nC] = new LimitServerUserInfo();
