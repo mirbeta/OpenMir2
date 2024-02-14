@@ -1694,7 +1694,7 @@ namespace GameSrv.Npc
             UpgradeWeaponList.Clear();
             try
             {
-                MySqlDB.LoadUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
+                GameShare.DataSource.LoadUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {
@@ -1706,7 +1706,7 @@ namespace GameSrv.Npc
         {
             try
             {
-                MySqlDB.SaveUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
+                GameShare.DataSource.SaveUpgradeWeaponRecord(ScriptName + '-' + MapName, UpgradeWeaponList);
             }
             catch
             {

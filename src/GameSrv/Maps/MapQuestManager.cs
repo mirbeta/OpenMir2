@@ -5,7 +5,7 @@ namespace GameSrv.Maps
     public class MapQuestManager
     {
         public Dictionary<string, Merchant> questDict = new Dictionary<string, Merchant>();
-        public IList<MapQuestInfo> QuestList = new List<MapQuestInfo>();
+        private IList<MapQuestInfo> QuestList = new List<MapQuestInfo>();
 
         public bool CreateQuest(int nFlag, int nValue, string sMonName, string sItem, string sQuest, bool boGrouped)
         {

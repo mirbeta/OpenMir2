@@ -108,7 +108,7 @@ namespace GameSrv
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
             LogService.Info("正在加载物品数据库...");
-            int nCode = GameShare.CommonDb.LoadItemsDB();
+            int nCode = GameShare.DataSource.LoadItemsDB();
             if (nCode < 0)
             {
                 LogService.Info($"物品数据库加载失败!!! Code: {nCode}");
@@ -128,7 +128,7 @@ namespace GameSrv
                 return;
             }
             LogService.Info("正在加载怪物数据库...");
-            nCode = GameShare.CommonDb.LoadMonsterDB();
+            nCode = GameShare.DataSource.LoadMonsterDB();
             if (nCode < 0)
             {
                 LogService.Info($"加载怪物数据库失败!!! Code: {nCode}");
@@ -136,7 +136,7 @@ namespace GameSrv
             }
             LogService.Info($"加载怪物数据库成功...[{SystemShare.WorldEngine.MonsterCount}]");
             LogService.Info("正在加载技能数据库...");
-            nCode = GameShare.CommonDb.LoadMagicDB();
+            nCode = GameShare.DataSource.LoadMagicDB();
             if (nCode < 0)
             {
                 LogService.Info($"加载技能数据库失败!!! Code: {nCode}");
@@ -179,7 +179,7 @@ namespace GameSrv
             }
             LogService.Info("加载捆装物品信息成功...");
             LogService.Info("加载物品寄售系统...");
-            GameShare.CommonDb.LoadSellOffItemList();
+            GameShare.DataSource.LoadSellOffItemList();
             LogService.Info("正在加载任务地图信息...");
             nCode = GameShare.LocalDb.LoadMapQuest();
             if (nCode < 0)

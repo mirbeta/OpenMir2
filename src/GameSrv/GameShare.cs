@@ -15,7 +15,7 @@ namespace GameSrv
         public static readonly long StartTime;
         public static readonly WordStatistics Statistics;
         public static readonly LocalDb LocalDb;
-        public static readonly MySqlDB CommonDb;
+        public static readonly IDataSource DataSource;
         public static readonly IPlanesService PlanesService;
         public static readonly NetworkMonitor NetworkMonitor;
         public static readonly SystemProcessor SystemProcess;
@@ -34,7 +34,7 @@ namespace GameSrv
         {
             Statistics = new WordStatistics();
             LocalDb = new LocalDb();
-            CommonDb = new MySqlDB();
+            DataSource = new MySqlDB();
             NetworkMonitor = new NetworkMonitor();
             SystemProcess = new SystemProcessor();
             UserProcessor = new UserProcessor();
