@@ -27,8 +27,6 @@ namespace GameGate
                 {
                     _timer.Dispose();
                 }
-
-                AnsiConsole.Reset();
             };
 
             IConfigurationRoot configuration = new ConfigurationBuilder()

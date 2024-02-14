@@ -39,11 +39,11 @@ namespace DBSrv.Services.Impl
             }
             catch (TimeoutException)
             {
-                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接超时.");
+                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接超时...");
             }
             catch (Exception)
             {
-                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接失败.");
+                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接失败...");
             }
         }
 
@@ -57,13 +57,13 @@ namespace DBSrv.Services.Impl
 
         private Task LoginSocketConnected(ITcpClientBase client, ConnectedEventArgs e)
         {
-            LogService.Info($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]链接成功.");
+            LogService.Info($"账号服务器[{client.GetIPPort()}]链接成功.");
             return Task.CompletedTask;
         }
 
         private Task LoginSocketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            LogService.Error($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]断开链接.");
+            LogService.Error($"账号服务器[{client.GetIPPort()}]断开链接.");
             return Task.CompletedTask;
         }
 

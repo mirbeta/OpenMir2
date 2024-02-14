@@ -68,11 +68,11 @@ public class ClientThread
         }
         catch (TimeoutException)
         {
-            LogService.Error($"链接登录服务器[{gameGateInfo.LoginServer}:{gameGateInfo.LoginPort}]超时.");
+            LogService.Error($"链接登录服务器[{gameGateInfo.LoginServer}:{gameGateInfo.LoginPort}]超时...");
         }
         catch (Exception)
         {
-            LogService.Error($"链接登录服务器[{gameGateInfo.LoginServer}:{gameGateInfo.LoginPort}]失败.");
+            LogService.Error($"链接登录服务器[{gameGateInfo.LoginServer}:{gameGateInfo.LoginPort}]失败...");
         }
     }
 

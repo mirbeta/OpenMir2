@@ -51,7 +51,6 @@ namespace DBSrv
                     if (currentTick - lastClearTick > 10000)
                     {
                         lastClearTick = HUtil32.GetTickCount();
-                        _dataService.ClearTimeoutSession();
                     }
                     if (currentTick - syncSaveTick > 300000) //5分钟刷新一次缓存数据到数据库
                     {

@@ -91,11 +91,11 @@ namespace SelGate.Services
             }
             catch (TimeoutException)
             {
-                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]超时.");
+                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]超时...");
             }
             catch (Exception)
             {
-                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]失败.");
+                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]失败...");
             }
         }
 

@@ -39,6 +39,12 @@ namespace LoginSrv.Services
             _serverSocket.Start();
             LogService.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
+        
+        public void StopServer()
+        {
+            _serverSocket.StopAsync();
+            LogService.Info("账号登陆服务已停止.");
+        }
 
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {

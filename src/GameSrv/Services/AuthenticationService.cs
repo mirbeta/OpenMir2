@@ -45,11 +45,11 @@ namespace GameSrv.Services
             }
             catch (TimeoutException)
             {
-                LogService.Error($"链接登录服务器[{SystemShare.Config.sIDSAddr}:{SystemShare.Config.nIDSPort}]超时.");
+                LogService.Error($"链接登录服务器[{SystemShare.Config.sIDSAddr}:{SystemShare.Config.nIDSPort}]超时...");
             }
             catch (Exception)
             {
-                LogService.Error($"链接登录服务器[{SystemShare.Config.sIDSAddr}:{SystemShare.Config.nIDSPort}]失败.");
+                LogService.Error($"链接登录服务器[{SystemShare.Config.sIDSAddr}:{SystemShare.Config.nIDSPort}]失败...");
             }
         }
 

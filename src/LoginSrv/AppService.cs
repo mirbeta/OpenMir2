@@ -57,6 +57,8 @@ namespace LoginSrv
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            _loginService.StopServer();
+            _masSocService.StopServer();
             return Task.CompletedTask;
         }
     }

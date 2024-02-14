@@ -47,7 +47,7 @@ namespace DBSrv
             _userService.Start();
             _dataService.Start();
             _marketService.Start();
-            _sessionService.Start();
+            _ = _sessionService.Start();
             LogService.Info("服务已启动成功...");
             LogService.Info("欢迎使用翎风系列游戏软件...");
             LogService.Info("网站:http://www.gameofmir.com");
@@ -94,12 +94,12 @@ namespace DBSrv
 
         public Task StoppingAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task StoppedAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         private void LoadServerInfo()

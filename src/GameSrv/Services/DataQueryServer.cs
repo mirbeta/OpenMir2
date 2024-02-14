@@ -15,8 +15,8 @@ namespace GameSrv.Services
         public DataQueryServer()
         {
             _tcpClient = new TcpClient();
-            _tcpClient.Connected = DataScoketConnected;
-            _tcpClient.Disconnected = DataScoketDisconnected;
+            _tcpClient.Connected = DataSocketConnected;
+            _tcpClient.Disconnected = DataSocketDisconnected;
             _tcpClient.Received = DataSocketRead;
             SocketWorking = false;
             ReceiveBuffer = new byte[10 * 2048];
@@ -44,11 +44,11 @@ namespace GameSrv.Services
             }
             catch (TimeoutException)
             {
-                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]超时.");
+                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]超时...");
             }
             catch (Exception)
             {
-                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]失败.");
+                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]失败...");
             }
         }
 
@@ -89,13 +89,13 @@ namespace GameSrv.Services
             _tcpClient.Send(data);
         }
 
-        private Task DataScoketDisconnected(ITcpClientBase sender, DisconnectEventArgs e)
+        private Task DataSocketDisconnected(ITcpClientBase sender, DisconnectEventArgs e)
         {
             LogService.Error("数据库服务器[" + sender.GetIPPort() + "]断开连接...");
             return Task.CompletedTask;
         }
 
-        private Task DataScoketConnected(ITcpClient client, ConnectedEventArgs e)
+        private Task DataSocketConnected(ITcpClient client, ConnectedEventArgs e)
         {
             LogService.Info("数据库服务器[" + client.RemoteIPHost + "]连接成功...");
             return Task.CompletedTask;

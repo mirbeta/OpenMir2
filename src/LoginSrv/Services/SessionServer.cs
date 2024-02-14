@@ -43,6 +43,12 @@ namespace LoginSrv.Services
             _serverSocket.Start();
             LogService.Info($"账号数据服务[{_config.sServerAddr}:{_config.nServerPort}]已启动.");
         }
+        
+        public void StopServer()
+        {
+            _serverSocket.Stop();
+            LogService.Info("账号数据服务已关闭.");
+        }
 
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {

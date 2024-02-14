@@ -43,72 +43,11 @@ namespace LoginSrv
             LogService.Info("正在启动服务器...");
             _serverHost.BuildHost();
             await _serverHost.StartAsync(cancellationToken);
-            await ProcessLoopAsync();
-            Stop();
-            LogService.Info("正在等待服务器连接...");
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
             return _serverHost.StopAsync(cancellationToken);
-        }
-
-        private void Stop()
-        {
-            AnsiConsole.Status().Start("Disconnecting...", ctx =>
-            {
-                ctx.Spinner(Spinner.Known.Dots);
-            });
-        }
-
-        private async Task ProcessLoopAsync()
-        {
-            string input = null;
-            do
-            {
-                input = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(input))
-                {
-                    continue;
-                }
-
-                if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
-                {
-                    await Exit();
-                    return;
-                }
-                if (input.Length < 2)
-                {
-                    continue;
-                }
-                string firstTwoCharacters = input[..2];
-
-                if (firstTwoCharacters switch
-                {
-                    "/s" => ShowServerStatus(),
-                    "/c" => ClearConsole(),
-                    "/q" => Exit(),
-                    _ => null
-                } is Task task)
-                {
-                    await task;
-                    continue;
-                }
-
-            } while (input is not "/exit");
-        }
-
-        private static Task Exit()
-        {
-            Environment.Exit(Environment.ExitCode);
-            return Task.CompletedTask;
-        }
-
-        private static Task ClearConsole()
-        {
-            Console.Clear();
-            AnsiConsole.Clear();
-            return Task.CompletedTask;
         }
 
         private async Task ShowServerStatus()
