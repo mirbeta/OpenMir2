@@ -1,12 +1,4 @@
 using DBSrv.Conf;
-using OpenMir2;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
-using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace DBSrv.Services.Impl
 {
@@ -17,14 +9,14 @@ namespace DBSrv.Services.Impl
     {
         private readonly TcpClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
-        private readonly SettingConf _setting;
+        private readonly SettingsModel _setting;
         private string _sockMsg = string.Empty;
 
-        public ClientSession(SettingConf conf)
+        public ClientSession(SettingsModel conf)
         {
             _setting = conf;
             _clientScoket = new TcpClient();
-            var config = new TouchSocketConfig()
+            TouchSocketConfig config = new TouchSocketConfig()
                 .SetRemoteIPHost(new IPHost(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort))
                 .ConfigureContainer(x => { x.AddConsoleLogger(); })
                 .ConfigurePlugins(x => { x.UseReconnection(); });
@@ -40,6 +32,10 @@ namespace DBSrv.Services.Impl
             try
             {
                 _clientScoket.Connect();
+            }
+            catch (TimeoutException)
+            {
+                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接超时.");
             }
             catch (Exception)
             {

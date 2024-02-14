@@ -1,14 +1,6 @@
 ﻿using DBSrv.Conf;
 using DBSrv.Storage;
-using OpenMir2;
 using OpenMir2.DataHandlingAdapters;
-using OpenMir2.Packets.ServerPackets;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading.Tasks;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
 
 namespace DBSrv.Services.Impl
 {
@@ -22,10 +14,10 @@ namespace DBSrv.Services.Impl
         private readonly ICacheStorage _cacheStorage;
         private readonly TcpService _serverSocket;
         private readonly ClientSession _loginService;
-        private readonly SettingConf _setting;
+        private readonly SettingsModel _setting;
         private IList<THumSession> PlaySessionList { get; set; }
 
-        public DataService(SettingConf conf, ClientSession loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
+        public DataService(SettingsModel conf, ClientSession loginService, IPlayDataStorage playDataStorage, ICacheStorage cacheStorage)
         {
             _setting = conf;
             _loginService = loginService;

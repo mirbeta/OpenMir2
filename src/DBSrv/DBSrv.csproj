@@ -7,6 +7,7 @@
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 		<AnalysisLevel>latest</AnalysisLevel>
+		<ImplicitUsings>enable</ImplicitUsings>
 	</PropertyGroup>
 	
 	<Choose>
@@ -54,13 +55,6 @@
 	<ItemGroup>
 		<ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
 		<ProjectReference Include="..\Storeages\DBSrv.Storage\DBSrv.Storage.csproj" />
-	</ItemGroup>
-	
-	<ItemGroup>
-		<None Include="..\..\nlog.config">
-			<Link>nlog.config</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
 	</ItemGroup>
 	
 	<ItemGroup>

@@ -139,6 +139,7 @@ namespace SelGate
             {
                 if (clientThread.CheckServerFail)
                 {
+                    clientThread.Start();
                     clientThread.CheckServerFailCount++;
                     LogService.Debug($"服务器[{clientThread.GetEndPoint()}]建立链接.失败次数:[{clientThread.CheckServerFailCount}]");
                     return;

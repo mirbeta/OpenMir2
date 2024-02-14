@@ -1,8 +1,4 @@
-﻿using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace DBSrv
+﻿namespace DBSrv
 {
     internal class Program
     {

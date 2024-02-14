@@ -49,13 +49,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Include="..\..\nlog.config">
-            <Link>nlog.config</Link>
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
-    <ItemGroup>
         <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
     </ItemGroup>
 

@@ -1,14 +1,5 @@
-using DBSrv.Services.Impl;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using OpenMir2;
-using System;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using DBSrv.Conf;
-using OpenMir2.Common;
+using DBSrv.Services.Impl;
 
 namespace DBSrv
 {
@@ -19,9 +10,6 @@ namespace DBSrv
         private readonly DataService _dataService;
         private readonly MarketService _marketService;
         private readonly IServiceProvider _serviceProvider;
-        private CancellationTokenSource _cancellationTokenSource;
-        private Task _applicationTask;
-        private int _exitCode;
 
         public AppService(IServiceProvider serviceProvider)
         {
@@ -55,7 +43,6 @@ namespace DBSrv
             _dataService.Start();
             _marketService.Start();
             _sessionService.Start();
-            _exitCode = 0;
             return Task.CompletedTask;
         }
 
@@ -68,20 +55,13 @@ namespace DBSrv
             return Task.CompletedTask;
         }
 
-        public async Task StopAsync(CancellationToken cancellationToken)
+        public Task StopAsync(CancellationToken cancellationToken)
         {
             _userService.Stop();
             _dataService.Stop();
             _marketService.Stop();
             _sessionService.Stop();
-            if (_applicationTask != null)
-            {
-                await _applicationTask;
-            }
-            LogService.Debug("DBSrv is stopping.");
-            LogService.Debug($"Exiting with return code: {_exitCode}");
-            // Exit code may be null if the user cancelled via Ctrl+C/SIGTERM
-            Environment.Exit(Environment.ExitCode);
+            return Task.CompletedTask;
         }
 
         private async void OnShutdown()
@@ -186,7 +166,7 @@ namespace DBSrv
             }
             LogService.Info($"读取网关配置信息成功.[{DBShare.RouteInfo.Where(x => x != null).Sum(x => x.GateCount)}]");
             DBShare.MapList.Clear();
-            var settings = _serviceProvider.GetService<SettingConf>();
+            SettingsModel settings = _serviceProvider.GetService<SettingsModel>();
             if (File.Exists(settings.MapFile))
             {
                 loadList.Clear();

@@ -1,20 +1,14 @@
-using OpenMir2;
-using OpenMir2.Common;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Sockets;
 
 namespace DBSrv
 {
     public static class DBShare
     {
+        public static IServiceProvider ServiceProvider { get; set; }
         public static StringList DenyChrNameList = null;
         public static readonly StringList ClearMakeIndex = null;
         public static readonly GateRouteInfo[] RouteInfo = new GateRouteInfo[20];
         public static Dictionary<string, int> MapList;
-        public static bool ShowLog = true;
         private static HashSet<string> ServerIpList = null;
         private static Dictionary<string, short> _gateIdList = null;
         public static readonly string GateConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerInfo.txt");

@@ -1,4 +1,3 @@
-using Microsoft.Extensions.DependencyInjection;
 using OpenMir2;
 using SelGate.Conf;
 using SelGate.Datas;
@@ -113,7 +112,7 @@ namespace SelGate.Services
             {
                 LogService.Info("开始连接: " + sRemoteAddress);
                 _clientManager.AddClientThread(sessionInfo.SocketId, clientThread);//链接成功后建立对应关系
-                ClientSession userSession = new ClientSession(_configManager, sessionInfo, clientThread, GateShare.ServiceProvider.GetService<ServerService>());
+                ClientSession userSession = new ClientSession(_configManager, sessionInfo, clientThread);
                 userSession.UserEnter();
                 _sessionManager.AddSession(sessionInfo.SocketId, userSession);
             }

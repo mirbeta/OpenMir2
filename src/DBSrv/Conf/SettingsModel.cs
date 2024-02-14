@@ -1,6 +1,6 @@
 ﻿namespace DBSrv.Conf
 {
-    public class SettingConf
+    public class SettingsModel
     {
         public bool ShowDebug = false;
         public int ShowLogLevel = 1;

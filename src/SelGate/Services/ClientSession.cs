@@ -4,6 +4,7 @@ using OpenMir2.Packets.ServerPackets;
 using SelGate.Conf;
 using SelGate.Datas;
 using System;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SelGate.Services
 {
@@ -20,11 +21,11 @@ namespace SelGate.Services
         private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
 
-        public ClientSession(ConfigManager configManager, SessionInfo session, ClientThread clientThread, ServerService serverService)
+        public ClientSession(ConfigManager configManager, SessionInfo session, ClientThread clientThread)
         {
             _session = session;
             _lastDbSvr = clientThread;
-            _serverService = serverService;
+            _serverService = GateShare.ServiceProvider.GetService<ServerService>();
             _configManager = configManager;
             _clientTimeOutTick = HUtil32.GetTickCount();
         }

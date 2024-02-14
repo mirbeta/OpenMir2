@@ -1,13 +1,5 @@
-using DBSrv.Conf;
 using DBSrv.Services.Impl;
 using DBSrv.Storage;
-using Microsoft.Extensions.Hosting;
-using OpenMir2;
-using OpenMir2.Packets.ServerPackets;
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace DBSrv
 {
@@ -48,6 +40,7 @@ namespace DBSrv
                     if (currentTick - lastSocketTick > 10000)
                     {
                         lastSocketTick = HUtil32.GetTickCount();
+                        _sessionService.Start();
                         //_sessionService.CheckConnection();
                     }
                     if (currentTick - lastKeepTick > 7000)

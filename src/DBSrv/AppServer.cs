@@ -2,16 +2,8 @@
 using DBSrv.Services.Impl;
 using DBSrv.Storage;
 using DBSrv.Storage.Impl;
-using Microsoft.Extensions.DependencyInjection;
-using OpenMir2;
-using Spectre.Console;
-using System;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
-using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
 
 namespace DBSrv
@@ -20,16 +12,17 @@ namespace DBSrv
     {
         private static PeriodicTimer _timer;
         private readonly ServerHost _serverHost;
-        
+        private readonly AppConfigManager configManager;
+
         public AppServer()
         {
             PrintUsage();
-            ConfigManager configManager = new ConfigManager();
+            configManager = new AppConfigManager();
             configManager.LoadConfig();
             _serverHost = new ServerHost();
             _serverHost.ConfigureServices(service =>
             {
-                service.AddSingleton(configManager.Setting);
+                service.AddSingleton(configManager.Settings);
                 service.AddSingleton<ClientSession>();
                 service.AddSingleton<UserService>();
                 service.AddSingleton<DataService>();
@@ -56,11 +49,13 @@ namespace DBSrv
             Console.WriteLine(@" | |_| | | |_) |  ___) | | |     \ V /                       ");
             Console.WriteLine(@" |____/  |____/  |____/  |_|      \_/                        ");
             Console.WriteLine(@"                                                             ");
+            Console.WriteLine(@"                                                             ");
         }
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _serverHost.BuildHost();
+            DBShare.ServiceProvider = _serverHost.ServiceProvider;
             await _serverHost.StartAsync(cancellationToken);
         }
 
@@ -100,7 +95,7 @@ namespace DBSrv
                 throw new ArgumentNullException(nameof(storageName), "获取拍卖行存储实例失败，请确认文件是否正确或程序版本是否正确.");
             }
             StorageOption storageOption = new StorageOption();
-            storageOption.ConnectionString = "server=10.10.0.199;uid=root;pwd=123456;database=mir2_db;";
+            storageOption.ConnectionString = configManager.Settings.ConnctionString;
             IPlayDataStorage playDataStorage = (IPlayDataStorage)Activator.CreateInstance(playDataStorageType, storageOption);
             IPlayRecordStorage playRecordStorage = (IPlayRecordStorage)Activator.CreateInstance(playRecordStorageType, storageOption);
             IMarketStorage marketStorage = (IMarketStorage)Activator.CreateInstance(marketStorageType, storageOption);
@@ -119,7 +114,7 @@ namespace DBSrv
             services.AddSingleton(playDataStorage);
             services.AddSingleton(playRecordStorage);
             services.AddSingleton(marketStorage);
-            LogService.Info($"[{storageName}]数据存储引擎初始化成功.");
+            LogService.Info($"[{storageName}]数据存储初始化成功.");
         }
 
         /// <summary>
@@ -204,7 +199,6 @@ namespace DBSrv
 
         private async Task ShowServerStatus()
         {
-            DBShare.ShowLog = false;
             UserService userService = _serverHost.ServiceProvider.GetService<UserService>();
             if (userService == null)
             {

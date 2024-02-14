@@ -1,14 +1,6 @@
 ﻿using DBSrv.Conf;
 using DBSrv.Storage;
-using OpenMir2;
 using OpenMir2.DataHandlingAdapters;
-using OpenMir2.Packets.ServerPackets;
-using System;
-using System.Linq;
-using System.Net;
-using System.Threading.Tasks;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
 
 namespace DBSrv.Services.Impl
 {
@@ -21,9 +13,9 @@ namespace DBSrv.Services.Impl
         private readonly ICacheStorage _cacheStorage;
         private readonly IMarketStorage _marketStorage;
         private readonly TcpService _socketServer;
-        private readonly SettingConf _setting;
+        private readonly SettingsModel _setting;
 
-        public MarketService(SettingConf setting, ICacheStorage cacheStorage, IMarketStorage marketStorage)
+        public MarketService(SettingsModel setting, ICacheStorage cacheStorage, IMarketStorage marketStorage)
         {
             _setting = setting;
             _cacheStorage = cacheStorage;

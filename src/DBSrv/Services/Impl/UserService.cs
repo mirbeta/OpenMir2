@@ -1,19 +1,9 @@
 using DBSrv.Conf;
 using DBSrv.Storage;
 using DBSrv.Storage.Model;
-using OpenMir2;
 using OpenMir2.Data;
 using OpenMir2.DataHandlingAdapters;
-using OpenMir2.Packets.ClientPackets;
-using OpenMir2.Packets.ServerPackets;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading;
 using System.Threading.Channels;
-using System.Threading.Tasks;
-using TouchSocket.Core;
-using TouchSocket.Sockets;
 
 namespace DBSrv.Services.Impl
 {
@@ -23,7 +13,7 @@ namespace DBSrv.Services.Impl
     /// </summary>
     public class UserService : IService
     {
-        private readonly SettingConf _setting;
+        private readonly SettingsModel _setting;
         private readonly IPlayDataStorage _playDataStorage;
         private readonly IPlayRecordStorage _playRecordStorage;
         private readonly TcpService _socketServer;
@@ -31,7 +21,7 @@ namespace DBSrv.Services.Impl
         private readonly Channel<UserGateMessage> _reviceQueue;
         private readonly SelGateInfo[] _gateClients;
 
-        public UserService(SettingConf conf, ClientSession sessionService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
+        public UserService(SettingsModel conf, ClientSession sessionService, IPlayRecordStorage playRecord, IPlayDataStorage playData)
         {
             _loginService = sessionService;
             _playRecordStorage = playRecord;
