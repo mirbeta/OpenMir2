@@ -16,7 +16,7 @@ namespace GameSrv.Module
             }
             foreach (ModuleInfo module in modules)
             {
-                string modulePath = Path.Combine(AppContext.BaseDirectory, module.Id);
+                string modulePath = Path.Combine(AppContext.BaseDirectory, "Plugins", module.Id);
                 if (!File.Exists(modulePath))
                 {
                     continue;
