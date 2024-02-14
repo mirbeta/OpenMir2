@@ -2,6 +2,6 @@
 {
     public interface IPlanesService
     {
-        void Start();
+        Task Start();
     }
 }

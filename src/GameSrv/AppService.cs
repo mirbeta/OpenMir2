@@ -1,6 +1,7 @@
 using GameSrv.Services;
 using GameSrv.Word;
 using McMaster.Extensions.CommandLineUtils;
+using System.Threading;
 using SystemModule.Enums;
 
 namespace GameSrv
@@ -8,7 +9,6 @@ namespace GameSrv
     public class AppService : IHostedLifecycleService, IDisposable
     {
         private readonly GameApp _mirApp;
-        private int? _exitCode;
         private readonly CancellationTokenSource _cancellationTokenSource;
         private readonly CommandLineApplication _application;
         private PeriodicTimer _timer;
@@ -93,7 +93,6 @@ namespace GameSrv
             }
             catch (Exception ex)
             {
-                _exitCode = 1;
                 LogService.Error("初始化游戏基础数据失败...", ex);
             }
             return Task.CompletedTask;
@@ -116,17 +115,16 @@ namespace GameSrv
 
         public async Task StartedAsync(CancellationToken cancellationToken)
         {
-            _exitCode = 0;
-            await _mirApp.StartUp(cancellationToken);
+            await _mirApp.StartThreadProcessors(cancellationToken);
             LogService.Info("初始化游戏世界服务线程完成...");
             LogService.Info("欢迎使用翎风系列游戏软件...");
             LogService.Info("网站:http://www.gameofmir.com");
             LogService.Info("论坛:http://bbs.gameofmir.com");
+            await _mirApp.StartedAsync(cancellationToken);
         }
 
         public Task StopAsync(CancellationToken stoppingToken)
         {
-            LogService.Debug($"Exiting with return code: {_exitCode}");
             return Task.CompletedTask;
         }
 

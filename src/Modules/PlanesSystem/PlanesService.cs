@@ -5,7 +5,7 @@ namespace PlanesSystem
 {
     public class PlanesService : IPlanesService
     {
-        public void Start()
+        public Task Start()
         {
             if (SystemShare.ServerIndex == 0)
             {
@@ -14,9 +14,10 @@ namespace PlanesSystem
             else
             {
                 PlanesClient.Instance.Initialize();
-                PlanesClient.Instance.Start();
+                _ = PlanesClient.Instance.Start();
                 LogService.Info($"节点运行模式...主机端口:[{SystemShare.Config.MasterSrvAddr}:{SystemShare.Config.MasterSrvPort}]");
             }
+            return Task.CompletedTask;
         }
     }
 }

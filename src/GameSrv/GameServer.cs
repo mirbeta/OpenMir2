@@ -11,7 +11,7 @@ namespace GameSrv
             this.serviceProvider = serviceProvider;
         }
 
-        public Task StartUp(CancellationToken stoppingToken)
+        public Task StartThreadProcessors(CancellationToken stoppingToken)
         {
             _ = GameShare.GeneratorProcessor.StartAsync(stoppingToken);
             _ = GameShare.SystemProcess.StartAsync(stoppingToken);
@@ -30,12 +30,15 @@ namespace GameSrv
                 module.Startup(stoppingToken); //启动模块
             }
 
-            GameShare.DataServer.Start();
-            GameShare.PlanesService.Start();
-            M2Share.Authentication.Start();
-            _ = M2Share.NetChannel.Start(stoppingToken);
-
             return Task.CompletedTask;
+        }
+
+        public async Task StartedAsync(CancellationToken stoppingToken)
+        {
+            await GameShare.PlanesService.Start();
+            await M2Share.NetChannel.Start(stoppingToken);
+            await GameShare.DataServer.Start();
+            await M2Share.Authentication.Start();
         }
 
         public async Task Stopping(CancellationToken cancellationToken)

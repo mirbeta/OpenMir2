@@ -16,8 +16,7 @@ namespace M2Server.Net.TCP
 {
     public class TCPNetChannel : INetChannel
     {
-
-        private readonly TcpService tcpService;
+        private readonly TcpService _tcpService;
         private readonly object RunSocketSection;
         private readonly Channel<ReceiveData> _receiveQueue;
         private readonly ChannelMessageHandler[] _gameGates;
@@ -32,12 +31,38 @@ namespace M2Server.Net.TCP
             LoadRunAddr();
             _receiveQueue = Channel.CreateUnbounded<ReceiveData>();
             _gameGates = new ChannelMessageHandler[20];
-            tcpService = new TcpService();
-            tcpService.Connected += Connecting;
-            tcpService.Disconnected += Disconnected;
-            tcpService.Received += Received;
+            _tcpService = new TcpService();
+            _tcpService.Connected += Connecting;
+            _tcpService.Disconnected += Disconnected;
+            _tcpService.Received += Received;
             RunSocketSection = new object();
             _stoppingCancelReads = new CancellationToken();
+        }
+
+        public void Initialize()
+        {
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort))
+                .SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
+            _tcpService.Setup(touchSocketConfig);
+            LogService.Info("游戏网关初始化完成...");
+        }
+
+        public Task Start(CancellationToken cancellationToken = default)
+        {
+            _tcpService.Start();
+            LogService.Info($"游戏网关[{SystemShare.Config.sGateAddr}:{SystemShare.Config.nGatePort}]已启动...");
+            return StartMessageThread(cancellationToken);
+        }
+
+        public async Task StopAsync(CancellationToken cancellationToken = default)
+        {
+            if (_receiveQueue.Reader.Count > 0)
+            {
+                await _receiveQueue.Reader.Completion;
+            }
+            _stoppingCancelReads = new CancellationToken(true);
+            await _tcpService.StopAsync();
         }
 
         private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
@@ -108,33 +133,6 @@ namespace M2Server.Net.TCP
             SocketClient socSocket = ((SocketClient)client);
             M2Share.NetChannel.CloseGate(socSocket.Id, socSocket.GetIPPort());
             return Task.CompletedTask;
-        }
-
-        public void Initialize()
-        {
-            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
-            touchSocketConfig.SetListenIPHosts(new IPHost(IPAddress.Parse(SystemShare.Config.sGateAddr), SystemShare.Config.nGatePort))
-                .SetTcpDataHandlingAdapter(() => new PacketFixedHeaderDataHandlingAdapter());
-            tcpService.Setup(touchSocketConfig);
-            LogService.Info("游戏网关初始化完成...");
-        }
-
-        public Task Start(CancellationToken cancellationToken = default)
-        {
-            tcpService.Start();
-            LogService.Info($"游戏网关[{SystemShare.Config.sGateAddr}:{SystemShare.Config.nGatePort}]已启动...");
-            return StartMessageThread(cancellationToken);
-        }
-
-        public async Task StopAsync(CancellationToken cancellationToken = default)
-        {
-            if (_receiveQueue.Reader.Count > 0)
-            {
-                await _receiveQueue.Reader.Completion;
-            }
-
-            _stoppingCancelReads = new CancellationToken(true);
-            await tcpService.StopAsync();
         }
 
         private void LoadRunAddr()
@@ -406,7 +404,7 @@ namespace M2Server.Net.TCP
 
         public void Send(string connectId, byte[] buff)
         {
-            tcpService.Send(connectId, buff);
+            _tcpService.Send(connectId, buff);
         }
 
         /// <summary>
