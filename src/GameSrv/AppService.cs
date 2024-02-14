@@ -13,7 +13,7 @@ namespace GameSrv
         private readonly CommandLineApplication _application;
         private PeriodicTimer _timer;
 
-        public AppService(GameApp serverApp, IServiceProvider serviceProvider)
+        public AppService(GameApp serverApp)
         {
             _mirApp = serverApp;
             _application = new CommandLineApplication();
@@ -355,7 +355,7 @@ namespace GameSrv
 
         public Task StoppedAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
     }
 }
