@@ -186,73 +186,82 @@ namespace M2Server.Castle
                 WriteInteger("Defense", "CastlePalaceDoorY", userCastle.PalaceDoorY);
             }
 
-            if (userCastle.MainDoor.nX != 0)
+            if (userCastle.MainDoor != null)
             {
-                WriteInteger("Defense", "MainDoorX", userCastle.MainDoor.nX);
+                if (userCastle.MainDoor.nX != 0)
+                {
+                    WriteInteger("Defense", "MainDoorX", userCastle.MainDoor.nX);
+                }
+                if (userCastle.MainDoor.nY != 0)
+                {
+                    WriteInteger("Defense", "MainDoorY", userCastle.MainDoor.nY);
+                }
+                if (!string.IsNullOrEmpty(userCastle.MainDoor.sName))
+                {
+                    WriteString("Defense", "MainDoorName", userCastle.MainDoor.sName);
+                }
+                if (userCastle.MainDoor.BaseObject != null)
+                {
+                    WriteBool("Defense", "MainDoorOpen", userCastle.MainDoor.nStatus);
+                    WriteInteger("Defense", "MainDoorHP", userCastle.MainDoor.BaseObject.WAbil.HP);
+                }
             }
-
-            if (userCastle.MainDoor.nY != 0)
+            if (userCastle.LeftWall != null)
             {
-                WriteInteger("Defense", "MainDoorY", userCastle.MainDoor.nY);
+                if (userCastle.LeftWall.nX != 0)
+                {
+                    WriteInteger("Defense", "LeftWallX", userCastle.LeftWall.nX);
+                }
+                if (userCastle.LeftWall.nY != 0)
+                {
+                    WriteInteger("Defense", "LeftWallY", userCastle.LeftWall.nY);
+                }
+                if (!string.IsNullOrEmpty(userCastle.LeftWall.sName))
+                {
+                    WriteString("Defense", "LeftWallName", userCastle.LeftWall.sName);
+                }
+                if (userCastle.LeftWall.BaseObject != null)
+                {
+                    WriteInteger("Defense", "LeftWallHP", userCastle.LeftWall.BaseObject.WAbil.HP);
+                }
             }
-
-            if (!string.IsNullOrEmpty(userCastle.MainDoor.sName))
+            if (userCastle.CenterWall != null)
             {
-                WriteString("Defense", "MainDoorName", userCastle.MainDoor.sName);
+                if (userCastle.CenterWall.nX != 0)
+                {
+                    WriteInteger("Defense", "CenterWallX", userCastle.CenterWall.nX);
+                }
+                if (userCastle.CenterWall.nY != 0)
+                {
+                    WriteInteger("Defense", "CenterWallY", userCastle.CenterWall.nY);
+                }
+                if (!string.IsNullOrEmpty(userCastle.CenterWall.sName))
+                {
+                    WriteString("Defense", "CenterWallName", userCastle.CenterWall.sName);
+                }
+                if (userCastle.CenterWall.BaseObject != null)
+                {
+                    WriteInteger("Defense", "CenterWallHP", userCastle.CenterWall.BaseObject.WAbil.HP);
+                }
             }
-
-            if (userCastle.MainDoor.BaseObject != null)
+            if (userCastle.RightWall != null)
             {
-                WriteBool("Defense", "MainDoorOpen", userCastle.MainDoor.nStatus);
-                WriteInteger("Defense", "MainDoorHP", userCastle.MainDoor.BaseObject.WAbil.HP);
-            }
-            if (userCastle.LeftWall.nX != 0)
-            {
-                WriteInteger("Defense", "LeftWallX", userCastle.LeftWall.nX);
-            }
-            if (userCastle.LeftWall.nY != 0)
-            {
-                WriteInteger("Defense", "LeftWallY", userCastle.LeftWall.nY);
-            }
-            if (!string.IsNullOrEmpty(userCastle.LeftWall.sName))
-            {
-                WriteString("Defense", "LeftWallName", userCastle.LeftWall.sName);
-            }
-            if (userCastle.LeftWall.BaseObject != null)
-            {
-                WriteInteger("Defense", "LeftWallHP", userCastle.LeftWall.BaseObject.WAbil.HP);
-            }
-            if (userCastle.CenterWall.nX != 0)
-            {
-                WriteInteger("Defense", "CenterWallX", userCastle.CenterWall.nX);
-            }
-            if (userCastle.CenterWall.nY != 0)
-            {
-                WriteInteger("Defense", "CenterWallY", userCastle.CenterWall.nY);
-            }
-            if (!string.IsNullOrEmpty(userCastle.CenterWall.sName))
-            {
-                WriteString("Defense", "CenterWallName", userCastle.CenterWall.sName);
-            }
-            if (userCastle.CenterWall.BaseObject != null)
-            {
-                WriteInteger("Defense", "CenterWallHP", userCastle.CenterWall.BaseObject.WAbil.HP);
-            }
-            if (userCastle.RightWall.nX != 0)
-            {
-                WriteInteger("Defense", "RightWallX", userCastle.RightWall.nX);
-            }
-            if (userCastle.RightWall.nY != 0)
-            {
-                WriteInteger("Defense", "RightWallY", userCastle.RightWall.nY);
-            }
-            if (!string.IsNullOrEmpty(userCastle.RightWall.sName))
-            {
-                WriteString("Defense", "RightWallName", userCastle.RightWall.sName);
-            }
-            if (userCastle.RightWall.BaseObject != null)
-            {
-                WriteInteger("Defense", "RightWallHP", userCastle.RightWall.BaseObject.WAbil.HP);
+                if (userCastle.RightWall.nX != 0)
+                {
+                    WriteInteger("Defense", "RightWallX", userCastle.RightWall.nX);
+                }
+                if (userCastle.RightWall.nY != 0)
+                {
+                    WriteInteger("Defense", "RightWallY", userCastle.RightWall.nY);
+                }
+                if (!string.IsNullOrEmpty(userCastle.RightWall.sName))
+                {
+                    WriteString("Defense", "RightWallName", userCastle.RightWall.sName);
+                }
+                if (userCastle.RightWall.BaseObject != null)
+                {
+                    WriteInteger("Defense", "RightWallHP", userCastle.RightWall.BaseObject.WAbil.HP);
+                }
             }
             for (int i = 0; i < userCastle.Archers.Length; i++)
             {

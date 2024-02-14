@@ -11,7 +11,7 @@ namespace GameGate
         /// <summary>
         /// 单线程最大用户数
         /// </summary>
-        public const int MaxSession = 6000;
+        public const int MaxSession = 10000;
         /// <summary>
         /// 消息头加密固定长度
         /// </summary>

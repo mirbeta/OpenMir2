@@ -44,8 +44,8 @@ namespace GameSrv
                 ServerEnvironment.MemoryInfo memoryInfo = ServerEnvironment.GetMemoryStatus();
                 _builder.AppendLine($"CPU使用率:[{ServerEnvironment.CpuLoad.ToString("F")}%]");
                 _builder.AppendLine($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys)}] 内存使用率:[{memoryInfo.dwMemoryLoad}%] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPhys)}]");
-                _builder.AppendLine($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalVirtual)}] 虚拟内存使用率:[{ServerEnvironment.VirtualMemoryLoad}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailVirtual)}]");
-                _builder.AppendLine($"使用内存:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedPhysicalMemory)}] 工作内存:[{HUtil32.FormatBytesValue(ServerEnvironment.PrivateWorkingSet)}] GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
+                _builder.AppendLine($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPageFile)}] 虚拟内存使用率:[{ServerEnvironment.VirtualMemoryLoad}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPageFile)}]");
+                _builder.AppendLine($"已用内存:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedPhysicalMemory)}] 程序内存:[{HUtil32.FormatBytesValue(ServerEnvironment.PrivateWorkingSet)}] 剩余内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys - ServerEnvironment.UsedPhysicalMemory)}]");
             }
             ShowGCStatus();
             TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(GameShare.StartTime);
@@ -88,7 +88,11 @@ namespace GameSrv
 
         private void ShowGCStatus()
         {
-            _builder.AppendLine($"GC回收:[{GC.CollectionCount(0)}]次 GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
+            int gen0 = GC.CollectionCount(0);
+            int gen1 = GC.CollectionCount(1);
+            int gen2 = GC.CollectionCount(2);
+            int total = gen0 + gen1 + gen2;
+            _builder.AppendLine($"GC回收:[{total}]次 GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
             GC.Collect(0, GCCollectionMode.Forced, false);
         }
 

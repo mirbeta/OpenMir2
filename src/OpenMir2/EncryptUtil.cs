@@ -1,4 +1,5 @@
 ﻿using System;
+using TouchSocket.Core;
 
 namespace OpenMir2
 {
@@ -64,6 +65,41 @@ namespace OpenMir2
                 dstPos++;
             }
             return dstPos - dstOffset;
+        }
+
+        /// <summary>
+        /// 加密
+        /// </summary>
+        public static unsafe int Encode(byte[] srcBuf, int len, ValueByteBlock destination, int dstOffset = 0)
+        {
+            int no = 2;
+            byte remainder = 0;
+            int pos = 0;
+            Span<byte> destinationSpan = srcBuf.AsSpan();
+            for (int i = 0; i < len; i++)
+            {
+                byte c = (byte)(destinationSpan[pos] ^ BySeed);
+                pos++;
+                if (no == 6)
+                {
+                    destination.Write((byte)((c & 0x3F) + ByBase));
+                    remainder = (byte)(remainder | ((c >> 2) & 0x30));
+                    destination.Write((byte)(remainder + ByBase));
+                    remainder = 0;
+                }
+                else
+                {
+                    byte temp = (byte)(c >> 2);
+                    destination.Write((byte)(((temp & 0x3C) | (c & 0x3)) + ByBase));
+                    remainder = (byte)((remainder << 2) | (temp & 0x3));
+                }
+                no = no % 6 + 2;
+            }
+            if (no != 2)
+            {
+                destination.Write((byte)(remainder + ByBase));
+            }
+            return destination.Len - dstOffset;
         }
 
         /// <summary>

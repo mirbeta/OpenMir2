@@ -130,7 +130,7 @@ public class ClientThread
         RestSessionArray();
         ConnectState = false;
         //_clientManager.DeleteClientThread(e.SocketHandle);
-        LogService.Info($"账号服务器[{((SocketClient)client).GetIPPort()}]断开链接.");
+        LogService.Info($"账号服务器[{((TcpClientBase)client).RemoteIPHost.EndPoint}]断开链接.");
         return Task.CompletedTask;
     }
 
@@ -182,8 +182,7 @@ public class ClientThread
                 break;
             }
 
-            ServerDataMessage messageData =
-                SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+            ServerDataMessage messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
             switch (messageData.Type)
             {
                 case ServerDataType.KeepAlive:

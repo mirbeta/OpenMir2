@@ -888,7 +888,7 @@ namespace GameGate.Services
         /// 处理GameSvr消息 
         /// 处理后发送到游戏客户端
         /// </summary>
-        public unsafe void ProcessServerPacket(byte serviceId, ServerSessionMessage message)
+        public async Task ProcessServerPacket(byte serviceId, ServerSessionMessage message)
         {
             if (Session.Socket == null)
             {
@@ -897,53 +897,31 @@ namespace GameGate.Services
             short bufferLen = message.BuffLen;
             if (bufferLen < 0)//小包 走路 攻击等
             {
-                /*var buffLen = -bufferLen;
-                Span<byte> sendBuffer = new byte[buffLen + 2];//小包用完即释放
-                sendBuffer[0] = (byte)'#';//消息头
-                message.Buffer.AsSpan().CopyTo(sendBuffer[1..]);
-                sendBuffer[buffLen + 1] = (byte)'!';//消息结尾
-                _session.Socket.Send(sendBuffer, SocketFlags.None);*/
                 int buffLen = -bufferLen;//bufferLen本身为负数，需要使用-来转为整数
-
-                using var byteBlock = new ByteBlock(buffLen + 2);
-                byteBlock.WriteByte((byte)'#');
+                using var byteBlock = new ValueByteBlock(buffLen + 2);
+                byteBlock.Write((byte)'#');
                 byteBlock.Write(message.Buffer);
-                byteBlock.WriteByte((byte)'!');
+                byteBlock.Write((byte)'!');
                 byteBlock.SeekToStart();//将游标重置
                 var buffer = new byte[byteBlock.Len];//定义一个数组容器
-                var r = byteBlock.Read(buffer);//读取数据到容器，并返回读取的长度r
-                _session.Socket.Send(buffer, 0, r, SocketFlags.None);
-
-                //// 使用 Span<byte> 替代 byte[]
-                //Span<byte> sendBuffer = stackalloc byte[buffLen + 2];
-                //// 消息头
-                //sendBuffer[0] = (byte)'#';
-                //// 消息内容
-                //message.Buffer.CopyTo(sendBuffer[1..]);
-                //// 消息结尾
-                //sendBuffer[buffLen + 1] = (byte)'!';
-                // _session.Socket.Send(sendBuffer, SocketFlags.None);
+                byteBlock.Read(buffer);//读取数据到容器，并返回读取的长度r
+                await ClientThread.SendQueue(Session.ConnectionId, buffer, buffer.Length);
+                byteBlock.Dispose();
             }
             else
             {
-                SessionMessage sendMsg = GateShare.PacketMessagePool.Pop(); //大包走对象池,从队列发出去
-                sendMsg.ServiceId = serviceId;
-                sendMsg.ConnectionId = _session.ConnectionId;
-                sendMsg.SessionId = message.SessionId;
                 int sendLen = bufferLen + CommandMessage.Size;
+                using var byteBlock = new ValueByteBlock(sendLen);
+                byteBlock.Write((byte)'#');
 
-                byte[] sendBuffer = GateShare.BytePool.Rent(sendLen);
-                sendBuffer[0] = (byte)'#';//消息头
-
-                int nLen = EncryptUtil.Encode(message.Buffer, CommandMessage.Size, sendBuffer, 1);//消息头
+                int nLen = EncryptUtil.Encode(message.Buffer, CommandMessage.Size, byteBlock, 1);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
-                    MemoryCopy.BlockCopy(message.Buffer, CommandMessage.Size, sendBuffer, nLen + 1, bufferLen - CommandMessage.Size);
+                    byteBlock.Write(message.Buffer, CommandMessage.Size, bufferLen - CommandMessage.Size);
                     nLen = bufferLen - CommandMessage.Size + nLen;
                 }
-                sendBuffer[nLen + 1] = (byte)'!';//消息结尾
-                sendMsg.BuffLen = (short)(nLen + 2);
-                sendMsg.Buffer = sendBuffer;
+
+                byteBlock.Write((byte)'!');
 
                 if (bufferLen > 8)
                 {
@@ -1004,7 +982,11 @@ namespace GameGate.Services
                     }
                 }
 
-                SendPacketMessage(sendMsg);
+                byteBlock.SeekToStart();//将游标重置
+                var buffer = new byte[byteBlock.Len];//定义一个数组容器
+                byteBlock.Read(buffer);//读取数据到容器，并返回读取的长度r
+                await ClientThread.SendQueue(Session.ConnectionId, buffer, buffer.Length);
+                byteBlock.Dispose();
             }
         }
 

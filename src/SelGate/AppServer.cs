@@ -4,7 +4,6 @@ using SelGate.Services;
 using Spectre.Console;
 using System;
 using System.IO;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenMir2;
@@ -60,6 +59,7 @@ namespace SelGate
         public async Task StartAsync(CancellationToken cancellationToken)
         {
             _serverHost.BuildHost();
+            GateShare.ServiceProvider = _serverHost.ServiceProvider;
             await _serverHost.StartAsync(cancellationToken);
             await ProcessLoopAsync();
             Stop();

@@ -44,6 +44,7 @@ namespace GameGate.Services
         /// </summary>
         private RunningState RunningState { get; set; }
         private int CheckServerTick { get; set; }
+        private ServerService ServerService { get; set; }
         /// <summary>
         /// Session管理
         /// </summary>
@@ -82,7 +83,7 @@ namespace GameGate.Services
         /// </summary>
         public int QueueCount => _messageChannel.Reader.Count;
 
-        public void Initialize()
+        public void Initialize(ServerService serverService)
         {
             TouchSocketConfig config = new TouchSocketConfig();
             config.SetRemoteIPHost(new IPHost(IPAddress.Parse(GateInfo.ServerAdress), GateInfo.ServerPort));
@@ -92,6 +93,7 @@ namespace GameGate.Services
                 x.UseReconnection();
             });
             _clientSocket.Setup(config);
+            ServerService = serverService;
         }
 
         public async Task Start()
@@ -106,15 +108,15 @@ namespace GameGate.Services
             }
             catch (SocketException error)
             {
-                ClientSocketError(null, error.SocketErrorCode);
+                ClientSocketError(error.SocketErrorCode);
             }
             catch (TimeoutException)
             {
-                ClientSocketError(null, SocketError.TimedOut);
+                ClientSocketError(SocketError.TimedOut);
             }
             catch (Exception)
             {
-                ClientSocketError(null, SocketError.SocketError);
+                ClientSocketError(SocketError.SocketError);
             }
         }
 
@@ -125,17 +127,21 @@ namespace GameGate.Services
 
         public ushort GetSessionId(string connectionId)
         {
-            int length = 4;
+            int length = 3;
             byte[] randomNumberBytes = new byte[length + 1];
             using (RandomNumberGenerator randomNumberGenerator = RandomNumberGenerator.Create())
             {
                 randomNumberGenerator.GetBytes(randomNumberBytes);
             }
 
+            int hash = connectionId.GetHashCode();
+            byte hashByte = (byte)(hash & 0xFF); // 取哈希码的最低8位
+
             byte checksum = 0;
-            foreach (byte randomNumberByte in randomNumberBytes)
+            for (int i = 0; i < length; i++)
             {
-                checksum ^= randomNumberByte;
+                randomNumberBytes[i] ^= hashByte; // 将每个随机字节与哈希字节进行异或
+                checksum ^= randomNumberBytes[i];
             }
 
             randomNumberBytes[length] = checksum;
@@ -227,7 +233,7 @@ namespace GameGate.Services
             return Task.CompletedTask;
         }
 
-        private void ClientSocketError(object sender, SocketError e)
+        private void ClientSocketError(SocketError e)
         {
             switch (e)
             {
@@ -283,22 +289,13 @@ namespace GameGate.Services
                         //sendMsg.Buffer = GateShare.BytePool.Rent(packetLen);
                         sendMsg.Buffer = new byte[packetLen];
                         MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer, 0, packetLen);
-                        Enqueue(sendMsg);
+                        _messageChannel.Writer.TryWrite(sendMsg);
                     }
                     break;
                 case Messages.GM_TEST:
                     break;
             }
         }
-
-        /// <summary>
-        /// 添加到消息处理队列
-        /// </summary>
-        private void Enqueue(ServerSessionMessage sessionPacket)
-        {
-            _messageChannel.Writer.TryWrite(sessionPacket);
-        }
-
         /// <summary>
         /// 转发GameSvr封包消息
         /// </summary>
@@ -317,7 +314,7 @@ namespace GameGate.Services
                            }
                            try
                            {
-                               userSession.ProcessServerPacket(ThreadId, message);
+                              await userSession.ProcessServerPacket(ThreadId, message);
                            }
                            catch (Exception ex)
                            {
@@ -402,6 +399,11 @@ namespace GameGate.Services
             }
         }
 
+        public Task SendQueue(string connectionId, byte[] data, int len)
+        {
+            return ServerService.Send(connectionId, data, len);
+        }
+
         /// <summary>
         /// 处理超时或空闲会话
         /// </summary>
@@ -432,7 +434,7 @@ namespace GameGate.Services
             {
                 if ((HUtil32.GetTickCount() - CheckServerTick) > 60 * 10000) //10分钟分不允许尽兴链接服务器
                 {
-                    Start();
+                    _ = Start();
                     LogService.Debug($"游戏引擎维护时间结束,重新连接游戏引擎[{EndPoint}].");
                 }
                 return;
@@ -445,7 +447,7 @@ namespace GameGate.Services
             }
             if (CheckServerFail && CheckServerFailCount <= ushort.MaxValue)
             {
-                Start();
+                _ = Start();
                 CheckServerFailCount++;
                 LogService.Debug($"链接服务器[{EndPoint}] 失败次数[{CheckServerFailCount}]");
                 return;

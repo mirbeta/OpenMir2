@@ -1,4 +1,5 @@
 using SystemModule;
+using TouchSocket.Sockets;
 
 public class AppServer
 {
@@ -44,8 +45,8 @@ public class AppServer
     {
         LogService.Info("正在启动服务...");
         _serverHost.BuildHost();
-        await _serverHost.StartAsync(cancellationToken);
         GateShare.ServiceProvider = _serverHost.ServiceProvider;
+        await _serverHost.StartAsync(cancellationToken);
         await ProcessLoopAsync();
         Stop();
     }

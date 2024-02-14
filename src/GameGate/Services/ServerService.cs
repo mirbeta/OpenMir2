@@ -46,13 +46,13 @@ namespace GameGate.Services
             _serverSocket.Connecting += ServerSocketClientConnect;
             _serverSocket.Disconnected += ServerSocketClientDisconnect;
             _serverSocket.Received += ServerSocketClientRead;
-            _clientThread.Initialize();
+            _clientThread.Initialize(this);
         }
 
         public void Start(CancellationToken stoppingToken)
         {
             _serverSocket.StartAsync();
-            _clientThread.Start();
+            _ = _clientThread.Start();
             _clientThread.RestSessionArray();
             _messageSendQueue.StartProcessQueueSend(stoppingToken);
             LogService.Info($"游戏网关[{_gateEndPoint}]已启动...");
@@ -105,13 +105,19 @@ namespace GameGate.Services
             return _serverSocket.SendAsync(sessionMessage.ConnectionId, sessionMessage.Buffer, 0, sessionMessage.BuffLen);
         }
 
+        public Task Send(string connectionId, byte[] data, int len)
+        {
+            _networkMonitor.Send(data.Length);
+            return _serverSocket.SendAsync(connectionId, data, 0, len);
+        }
+
         /// <summary>
         /// 新玩家链接
         /// </summary>
         private Task ServerSocketClientConnect(IClient client, ConnectingEventArgs e)
         {
-            TcpClient connectedClient = client as TcpClient;
-            string sRemoteAddress = connectedClient.GetIPPort();
+            SocketClient connectedClient = client as SocketClient;
+            string sRemoteAddress = connectedClient.IP;
             string clientId = e.Id;
             LogService.Debug($"客户端 IP:{sRemoteAddress} ThreadId:{GateInfo.ServiceId} SessionId:{e.Id} RunPort:{_gateEndPoint}");
             ClientThread clientThread = ServerMgr.GetClientThread(GateInfo.ServiceId, out int threadId);

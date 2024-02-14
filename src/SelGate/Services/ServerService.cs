@@ -16,7 +16,6 @@ namespace SelGate.Services
     /// </summary>
     public class ServerService
     {
-
         private readonly TcpService _serverSocket;
         private readonly SessionManager _sessionManager;
         /// <summary>
@@ -33,15 +32,16 @@ namespace SelGate.Services
             _configManager = configManager;
             _sendQueue = Channel.CreateUnbounded<MessageData>();
             _serverSocket = new TcpService();
-            _serverSocket.Connecting += ServerSocketClientConnect;
+            _serverSocket.Connected += ServerSocketClientConnect;
             _serverSocket.Disconnected += ServerSocketClientDisconnect;
             _serverSocket.Received += ServerSocketClientRead;
         }
 
         public void Start()
         {
-            _serverSocket.Setup(new TouchSocketConfig().SetRemoteIPHost(new IPHost(IPAddress.Any, GateShare.GatePort)));
+            _serverSocket.Setup(new TouchSocketConfig().SetListenIPHosts(new IPHost(IPAddress.Any, GateShare.GatePort)));
             _serverSocket.Start();
+            LogService.Info($"登陆网关[127.0.0.1:{GateShare.GatePort}]已启动.");
         }
 
         public void Stop()
@@ -85,7 +85,7 @@ namespace SelGate.Services
             }
         }
 
-        private Task ServerSocketClientConnect(ITcpClientBase client, ConnectingEventArgs e)
+        private Task ServerSocketClientConnect(ITcpClientBase client, ConnectedEventArgs e)
         {
             ClientThread clientThread = _clientManager.GetClientThread();
             if (clientThread == null)
@@ -118,7 +118,6 @@ namespace SelGate.Services
             }
             else
             {
-                e.Socket.Close();
                 LogService.Info("禁止连接: " + sRemoteAddress);
             }
             return Task.CompletedTask;
@@ -126,9 +125,9 @@ namespace SelGate.Services
 
         private Task ServerSocketClientDisconnect(IClient client, DisconnectEventArgs e)
         {
-            SocketClient clientSoc = client as SocketClient;
+            SocketClient clientSoc = ((SocketClient)client);
             string nSockIndex = clientSoc.Id;
-            string sRemoteAddr = clientSoc.MainSocket.RemoteEndPoint.GetIP();
+            string sRemoteAddr = clientSoc.IP;
             ClientThread clientThread = _clientManager.GetClientThread(nSockIndex);
             if (clientThread != null && clientThread.boGateReady)
             {
@@ -153,19 +152,18 @@ namespace SelGate.Services
         private Task ServerSocketClientRead(IClient client, ReceivedDataEventArgs e)
         {
             SocketClient clientSoc = client as SocketClient;
-            int connectionId = clientSoc.MainSocket.Handle.ToInt32();
-            string sRemoteAddress = clientSoc.MainSocket.RemoteEndPoint.GetIP();
+            string sRemoteAddress = clientSoc.IP;
             ClientThread userClient = _clientManager.GetClientThread(clientSoc.Id);
             if (userClient == null)
             {
                 LogService.Info("非法攻击: " + sRemoteAddress);
-                LogService.Debug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{connectionId}]");
+                LogService.Debug($"获取用户对应网关失败 RemoteAddr:[{sRemoteAddress}] ConnectionId:[{clientSoc.Id}]");
                 return Task.CompletedTask;
             }
             if (!userClient.boGateReady)
             {
                 LogService.Info("未就绪: " + sRemoteAddress);
-                LogService.Debug($"游戏引擎链接失败 Server:[{userClient.GetEndPoint()}] ConnectionId:[{connectionId}]");
+                LogService.Debug($"游戏引擎链接失败 Server:[{userClient.GetEndPoint()}] ConnectionId:[{clientSoc.Id}]");
                 return Task.CompletedTask;
             }
             byte[] data = new byte[e.ByteBlock.Len];

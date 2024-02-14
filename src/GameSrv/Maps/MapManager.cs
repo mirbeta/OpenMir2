@@ -168,6 +168,10 @@ namespace GameSrv.Maps
         /// <returns></returns>
         public int GetMapOfServerIndex(string sMapName)
         {
+            if (string.IsNullOrEmpty(sMapName))
+            {
+                return 0;
+            }
             if (_mapList.TryGetValue(sMapName, out IEnvirnoment envirnoment))
             {
                 return envirnoment.ServerIndex;

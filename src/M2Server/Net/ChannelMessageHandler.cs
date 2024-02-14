@@ -153,7 +153,7 @@ namespace M2Server.Net
                 {
                     case Grobal2.GM_OPEN:
                         string sIPaddr = HUtil32.GetString(msgBuff, nMsgLen);
-                        nUserIdx = OpenNewUser(msgPacket.Socket, msgPacket.SessionId, sIPaddr, GateInfo.UserList);
+                        nUserIdx = OpenNewUser(msgPacket.Socket, msgPacket.SessionId, sIPaddr, ref GateInfo.UserList);
                         SendNewUserMsg(GateInfo.Socket, msgPacket.Socket, msgPacket.SessionId, nUserIdx + 1);
                         GateInfo.UserCount++;
                         break;
@@ -415,7 +415,7 @@ namespace M2Server.Net
             }
         }
 
-        private static int OpenNewUser(int socket, ushort socketId, string sIPaddr, IList<SessionUser> userList)
+        private static int OpenNewUser(int socket, ushort socketId, string sIPaddr, ref IList<SessionUser> userList)
         {
             SessionUser gateUser = new SessionUser
             {
@@ -440,6 +440,7 @@ namespace M2Server.Net
                 }
             }
             userList.Add(gateUser);
+            LogService.Info("新用户链接...");
             return userList.Count - 1;
         }
 

@@ -247,6 +247,10 @@ namespace DBSrv.Services.Impl
                 {
                     continue;
                 }
+                if (gateInfo.UserList == null)
+                {
+                    continue;
+                }
                 nUserCount += gateInfo.UserList.Count;
             }
             return nUserCount;
