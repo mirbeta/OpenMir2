@@ -9,8 +9,9 @@ namespace GameSrv.DB
 {
     public class LocalDb
     {
-        private readonly char[] _textSpitConst = { ' ', '\t' };
-        private readonly char[] _monsterSpitConst = { ' ', '/', '\t' };
+        private static readonly char[] TextSplitConst = { ' ', '\t' };
+        private static readonly char[] MonsterSpitConst = { ' ', '/', '\t' };
+        private static readonly string[] divider = new[] { "/", "\\", " ", "\t" };
 
         public static bool LoadAdminList()
         {
@@ -73,7 +74,7 @@ namespace GameSrv.DB
                     }
                     if (nLv > 0)
                     {
-                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, new[] { "/", "\\", " ", "\t" });
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, divider);
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sChrName, new[] { "/", "\\", " ", "\t" });
                         sLineText = HUtil32.GetValidStrCap(sLineText, ref sIPaddr, new[] { "/", "\\", " ", "\t" });
                         if (string.IsNullOrEmpty(sChrName) || string.IsNullOrEmpty(sIPaddr))
@@ -158,11 +159,11 @@ namespace GameSrv.DB
                 for (int i = 0; i < loadList.Count; i++)
                 {
                     string sLine = loadList[i].Trim();
-                    if (string.IsNullOrEmpty(sLine) || sLine.StartsWith(";"))
+                    if (string.IsNullOrEmpty(sLine) || sLine.StartsWith(';'))
                     {
                         continue;
                     }
-                    if (sLine.StartsWith("["))
+                    if (sLine.StartsWith('['))
                     {
                         if (list28 != null)
                         {
@@ -175,7 +176,7 @@ namespace GameSrv.DB
                     {
                         if (list28 != null)
                         {
-                            sLine = HUtil32.GetValidStr3(sLine, ref sSubName, _textSpitConst);
+                            sLine = HUtil32.GetValidStr3(sLine, ref sSubName, TextSplitConst);
                             int nItemCount = HUtil32.StrToInt(sLine.Trim(), 1);
                             list28.Add(new MakeItem() { ItemName = sSubName, ItemCount = nItemCount });
                         }
@@ -358,21 +359,21 @@ namespace GameSrv.DB
                     string tStr = tMapQuestList[i];
                     if (!string.IsNullOrEmpty(tStr) && tStr[0] != ';')
                     {
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMap, _textSpitConst);
-                        tStr = HUtil32.GetValidStr3(tStr, ref s1C, _textSpitConst);
-                        tStr = HUtil32.GetValidStr3(tStr, ref s20, _textSpitConst);
-                        tStr = HUtil32.GetValidStr3(tStr, ref sMonName, _textSpitConst);
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMap, TextSplitConst);
+                        tStr = HUtil32.GetValidStr3(tStr, ref s1C, TextSplitConst);
+                        tStr = HUtil32.GetValidStr3(tStr, ref s20, TextSplitConst);
+                        tStr = HUtil32.GetValidStr3(tStr, ref sMonName, TextSplitConst);
                         if (!string.IsNullOrEmpty(sMonName) && sMonName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sMonName, "\"", "\"", ref sMonName);
                         }
-                        tStr = HUtil32.GetValidStr3(tStr, ref sItem, _textSpitConst);
+                        tStr = HUtil32.GetValidStr3(tStr, ref sItem, TextSplitConst);
                         if (!string.IsNullOrEmpty(sItem) && sItem[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sItem, "\"", "\"", ref sItem);
                         }
-                        tStr = HUtil32.GetValidStr3(tStr, ref sQuest, _textSpitConst);
-                        tStr = HUtil32.GetValidStr3(tStr, ref s30, _textSpitConst);
+                        tStr = HUtil32.GetValidStr3(tStr, ref sQuest, TextSplitConst);
+                        tStr = HUtil32.GetValidStr3(tStr, ref s30, TextSplitConst);
                         if (!string.IsNullOrEmpty(sMap) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sQuest))
                         {
                             IEnvirnoment map = SystemShare.MapMgr.FindMap(sMap);
@@ -430,20 +431,20 @@ namespace GameSrv.DB
                     string sLineText = tMerchantList[i].Trim();
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sX, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sY, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sName, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sX, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sY, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sName, TextSplitConst);
                         if (!string.IsNullOrEmpty(sName) && sName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sName, "\"", "\"", ref sName);
                         }
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sIsCalste, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, _textSpitConst);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sIsCalste, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, TextSplitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, TextSplitConst);
                         if (!string.IsNullOrEmpty(sScript) && !string.IsNullOrEmpty(sMapName) && !string.IsNullOrEmpty(sAppr))
                         {
                             IMerchant merchantOldNpc = new Merchant()
@@ -518,7 +519,7 @@ namespace GameSrv.DB
                     }
                     if (HUtil32.CompareLStr("loadgen", loadList[i]))
                     {
-                        string sMapGenFile = HUtil32.GetValidStr3(loadList[i], ref sLineText, _textSpitConst);
+                        string sMapGenFile = HUtil32.GetValidStr3(loadList[i], ref sLineText, TextSplitConst);
                         loadList.RemoveAt(i);
                         if (!string.IsNullOrEmpty(sMapGenFile))
                         {
@@ -534,25 +535,25 @@ namespace GameSrv.DB
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
                         monGenInfo = new MonGenInfo();
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSplitConst);
                         monGenInfo.MapName = sData;
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSplitConst);
                         monGenInfo.X = (short)HUtil32.StrToInt(sData, 0);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSplitConst);
                         monGenInfo.Y = (short)HUtil32.StrToInt(sData, 0);
-                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStrCap(sLineText, ref sData, TextSplitConst);
                         if (!string.IsNullOrEmpty(sData) && sData[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sData, "\"", "\"", ref sData);
                         }
                         monGenInfo.MonName = sData;
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSplitConst);
                         monGenInfo.Range = (byte)HUtil32.StrToInt(sData, 0);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSplitConst);
                         monGenInfo.Count = (ushort)HUtil32.StrToInt(sData, 0);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSplitConst);
                         monGenInfo.ZenTime = HUtil32.StrToInt(sData, -1) * 60 * 1000;
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, _textSpitConst);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sData, TextSplitConst);
                         monGenInfo.MissionGenRate = (byte)HUtil32.StrToInt(sData, 0);// 集中座标刷新机率 1 -100
                         if (!string.IsNullOrEmpty(monGenInfo.MapName) && !string.IsNullOrEmpty(monGenInfo.MonName) && monGenInfo.ZenTime > 0 && SystemShare.MapMgr.GetMapInfo(M2Share.ServerIndex, monGenInfo.MapName) != null)
                         {
@@ -617,11 +618,11 @@ namespace GameSrv.DB
                     string s28 = loadList[i];
                     if (!string.IsNullOrEmpty(s28) && s28[0] != ';')
                     {
-                        s28 = HUtil32.GetValidStr3(s28, ref sData, _monsterSpitConst);
+                        s28 = HUtil32.GetValidStr3(s28, ref sData, MonsterSpitConst);
                         int n18 = HUtil32.StrToInt(sData, -1);
-                        s28 = HUtil32.GetValidStr3(s28, ref sData, _monsterSpitConst);
+                        s28 = HUtil32.GetValidStr3(s28, ref sData, MonsterSpitConst);
                         int n1C = HUtil32.StrToInt(sData, -1);
-                        s28 = HUtil32.GetValidStr3(s28, ref sData, _textSpitConst);
+                        s28 = HUtil32.GetValidStr3(s28, ref sData, TextSplitConst);
                         if (!string.IsNullOrEmpty(sData))
                         {
                             if (sData[0] == '\"')
@@ -630,7 +631,7 @@ namespace GameSrv.DB
                             }
                         }
                         string itemName = sData;
-                        s28 = HUtil32.GetValidStr3(s28, ref sData, _textSpitConst);
+                        s28 = HUtil32.GetValidStr3(s28, ref sData, TextSplitConst);
                         int itemCount = HUtil32.StrToInt(sData, 1);
                         if (n18 > 0 && n1C > 0 && !string.IsNullOrEmpty(itemName))
                         {
@@ -670,17 +671,17 @@ namespace GameSrv.DB
                     string sData = loadList[i].Trim();
                     if (!string.IsNullOrEmpty(sData) && sData[0] != ';')
                     {
-                        sData = HUtil32.GetValidStrCap(sData, ref chrName, _textSpitConst);
+                        sData = HUtil32.GetValidStrCap(sData, ref chrName, TextSplitConst);
                         if (!string.IsNullOrEmpty(chrName) && chrName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(chrName, "\"", "\"", ref chrName);
                         }
-                        sData = HUtil32.GetValidStr3(sData, ref type, _textSpitConst);
-                        sData = HUtil32.GetValidStr3(sData, ref mapName, _textSpitConst);
-                        sData = HUtil32.GetValidStr3(sData, ref cX, _textSpitConst);
-                        sData = HUtil32.GetValidStr3(sData, ref cY, _textSpitConst);
-                        sData = HUtil32.GetValidStr3(sData, ref flag, _textSpitConst);
-                        sData = HUtil32.GetValidStr3(sData, ref appr, _textSpitConst);
+                        sData = HUtil32.GetValidStr3(sData, ref type, TextSplitConst);
+                        sData = HUtil32.GetValidStr3(sData, ref mapName, TextSplitConst);
+                        sData = HUtil32.GetValidStr3(sData, ref cX, TextSplitConst);
+                        sData = HUtil32.GetValidStr3(sData, ref cY, TextSplitConst);
+                        sData = HUtil32.GetValidStr3(sData, ref flag, TextSplitConst);
+                        sData = HUtil32.GetValidStr3(sData, ref appr, TextSplitConst);
                         if (!string.IsNullOrEmpty(chrName) && !string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(appr))
                         {
                             NormNpc npc = null;
@@ -771,7 +772,7 @@ namespace GameSrv.DB
                                 {
                                     if (s1C[0] != '@')
                                     {
-                                        s1C = HUtil32.GetValidStr3(s1C, ref s20, _textSpitConst);
+                                        s1C = HUtil32.GetValidStr3(s1C, ref s20, TextSplitConst);
                                         HUtil32.ArrestStringEx(s20, "[", "]", ref s20);
                                         qdDinfo = new TQDDinfo
                                         {
@@ -839,14 +840,14 @@ namespace GameSrv.DB
                     string sLine = loadList[i].Trim();
                     if (!string.IsNullOrEmpty(sLine) && sLine[0] != ';')
                     {
-                        sLine = HUtil32.GetValidStr3(sLine, ref mapName, _textSpitConst);
-                        sLine = HUtil32.GetValidStr3(sLine, ref cX, _textSpitConst);
-                        sLine = HUtil32.GetValidStr3(sLine, ref cY, _textSpitConst);
-                        sLine = HUtil32.GetValidStr3(sLine, ref allSay, _textSpitConst);
-                        sLine = HUtil32.GetValidStr3(sLine, ref range, _textSpitConst);
-                        sLine = HUtil32.GetValidStr3(sLine, ref type, _textSpitConst);
-                        sLine = HUtil32.GetValidStr3(sLine, ref zone, _textSpitConst);
-                        sLine = HUtil32.GetValidStr3(sLine, ref fire, _textSpitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref mapName, TextSplitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref cX, TextSplitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref cY, TextSplitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref allSay, TextSplitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref range, TextSplitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref type, TextSplitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref zone, TextSplitConst);
+                        sLine = HUtil32.GetValidStr3(sLine, ref fire, TextSplitConst);
                         if (!string.IsNullOrEmpty(mapName) && !string.IsNullOrEmpty(cX) && !string.IsNullOrEmpty(cY))
                         {
                             StartPoint startPoint = new StartPoint
@@ -886,8 +887,8 @@ namespace GameSrv.DB
                     string readLine = loadList[i];
                     if (!string.IsNullOrEmpty(readLine) && readLine[0] != ';')
                     {
-                        readLine = HUtil32.GetValidStr3(readLine, ref sData, _textSpitConst);
-                        readLine = HUtil32.GetValidStrCap(readLine, ref sItemName, _textSpitConst);
+                        readLine = HUtil32.GetValidStr3(readLine, ref sData, TextSplitConst);
+                        readLine = HUtil32.GetValidStrCap(readLine, ref sItemName, TextSplitConst);
                         if (!string.IsNullOrEmpty(sItemName) && sItemName[0] == '\"')
                         {
                             HUtil32.ArrestStringEx(sItemName, "\"", "\"", ref sItemName);
@@ -895,12 +896,11 @@ namespace GameSrv.DB
                         int n10 = HUtil32.StrToInt(sData, 0);
                         if (n10 > 0)
                         {
-                            if (M2Share.UnbindList.ContainsKey(n10))
+                            if (!M2Share.UnbindList.TryAdd(n10, sItemName))
                             {
                                 LogService.Warn($"重复解包物品[{sItemName}]...");
                                 continue;
                             }
-                            M2Share.UnbindList.Add(n10, sItemName);
                         }
                         else
                         {
@@ -1019,20 +1019,20 @@ namespace GameSrv.DB
                 string sLineText = loadList[i].Trim();
                 if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                 {
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sX, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sY, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sChrName, _textSpitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sScript, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMapName, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sX, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sY, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sChrName, TextSplitConst);
                     if (!string.IsNullOrEmpty(sChrName) && sChrName[0] == '\"')
                     {
                         HUtil32.ArrestStringEx(sChrName, "\"", "\"", ref sChrName);
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCastle, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, _textSpitConst);
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, _textSpitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sFlag, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sAppr, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCastle, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sCanMove, TextSplitConst);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sMoveTime, TextSplitConst);
                     short nX = (short)HUtil32.StrToInt(sX, 0);
                     short nY = (short)HUtil32.StrToInt(sY, 0);
                     bool boNewNpc = true;
