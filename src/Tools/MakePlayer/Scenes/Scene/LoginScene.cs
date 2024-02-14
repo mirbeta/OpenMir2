@@ -35,8 +35,15 @@ namespace MakePlayer.Scenes.Scene
         public override void OpenScene()
         {
             ConnectionStatus = ConnectionStatus.Failure;
-            _clientSocket.Connect(new IPHost(IPAddress.Parse(LoginAddr), LoginPort));
-            SetNotifyEvent(Login, RandomNumber.GetInstance().Random(1000, 3000));
+            try
+            {
+                _clientSocket.Connect(new IPHost(IPAddress.Parse(LoginAddr), LoginPort));
+                SetNotifyEvent(Login, RandomNumber.GetInstance().Random(1000, 3000));
+            }
+            catch (Exception)
+            {
+                LogService.Error($"链接游戏服务器[{LoginAddr}:{LoginPort}]失败.");
+            }
         }
 
         public override void CloseScene()

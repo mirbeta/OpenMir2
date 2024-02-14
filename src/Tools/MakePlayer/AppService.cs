@@ -24,6 +24,8 @@ namespace MakePlayer
             _options.ChrCount = HUtil32._MIN(_options.ChrCount, _options.TotalChrCount);
             _loginTimeTick = HUtil32.GetTickCount() - 1000 * _options.ChrCount;
             ClientManager.Start();
+            LogService.Info("服务器名称:{0} 服务器IP:{1} 服务器端口:{2}", _options.ServerName, _options.Address, _options.Port);
+            LogService.Info("初始化机器人数量:{0} 登录机器人总数量:{1}", _options.ChrCount, _options.TotalChrCount);
             return base.StartAsync(cancellationToken);
         }
 
