@@ -14,9 +14,12 @@ namespace GameSrv.Services
 
         public AuthenticationService()
         {
-            _tcpClient = new TcpClient();
             _sessionList = new List<AccountSession>();
             _userIdSection = new object();
+            _tcpClient = new TcpClient();
+            _tcpClient.Connected += DataSocketConnect;
+            _tcpClient.Disconnected += DataSocketDisconnect;
+            _tcpClient.Received += DataSocketRead;
         }
 
         public void Initialize()
@@ -26,10 +29,10 @@ namespace GameSrv.Services
                 .ConfigureContainer(a =>
                 {
                     a.AddConsoleLogger();
+                }).ConfigurePlugins(x =>
+                {
+                    x.UseReconnection();
                 }));
-            _tcpClient.Connected = DataSocketConnect;
-            _tcpClient.Disconnected = DataSocketDisconnect;
-            _tcpClient.Received = DataSocketRead;
             LogService.Debug("登录服务器连接初始化完成...");
         }
 

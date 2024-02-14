@@ -2,7 +2,6 @@ namespace GameSrv.Services
 {
     public class FrontEngine : IFrontEngine
     {
-
         public readonly object UserCriticalSection;
         public readonly IList<SavePlayerRcd> m_SaveRcdList;
         private readonly IList<GoldChangeInfo> m_ChangeGoldList;

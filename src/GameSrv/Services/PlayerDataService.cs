@@ -1,190 +1,234 @@
+﻿using TcpClient = TouchSocket.Sockets.TcpClient;
+
 namespace GameSrv.Services
 {
-    public class QueryPlayData
-    {
-        public int QueryId;
-        public int QueryCount;
-    }
-
     /// <summary>
-    /// 玩家数据处理服务
+    /// 玩家数据读写服务
     /// </summary>
-    public static class PlayerDataService
+    public class PlayerDataService
     {
+        private readonly TcpClient _tcpClient;
+        private byte[] ReceiveBuffer { get; set; }
+        private int BuffLen { get; set; }
+        private bool SocketWorking { get; set; }
 
-        private static readonly ConcurrentDictionary<int, ServerRequestData> QueryMap = new ConcurrentDictionary<int, ServerRequestData>();
-        private static readonly ConcurrentQueue<QueryPlayData> QueryProcessList = new ConcurrentQueue<QueryPlayData>();
-        private static readonly ConcurrentQueue<int> SaveProcessList = new ConcurrentQueue<int>();
-        private static readonly ConcurrentDictionary<int, LoadPlayerDataPacket> LoadPlayDataMap = new ConcurrentDictionary<int, LoadPlayerDataPacket>();
-
-        public static void Enqueue(int queryId, ServerRequestData data)
+        public PlayerDataService()
         {
-            QueryMap.TryAdd(queryId, data);
-            LogService.Debug($"执行任务Id:{queryId}成功");
+            _tcpClient = new TcpClient();
+            _tcpClient.Connected = DataSocketConnected;
+            _tcpClient.Disconnected = DataSocketDisconnected;
+            _tcpClient.Received = DataSocketRead;
+            SocketWorking = false;
+            ReceiveBuffer = new byte[10 * 2048];
         }
 
-        private static bool GetDataSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
+        public void Initialize()
         {
-            bool result = false;
+            _tcpClient.Setup(new TouchSocketConfig()
+            .SetRemoteIPHost(new IPHost(IPAddress.Parse(SystemShare.Config.sDBAddr), SystemShare.Config.nDBPort))
+            .ConfigureContainer(a =>
+            {
+                a.AddConsoleLogger();
+            }).ConfigurePlugins(x =>
+            {
+                x.UseReconnection();
+            }));
+        }
+
+        public async Task Start()
+        {
+            try
+            {
+                if (_tcpClient.Online)
+                {
+                    return;
+                }
+                await _tcpClient.ConnectAsync();
+            }
+            catch (TimeoutException)
+            {
+                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]超时...");
+            }
+            catch (Exception)
+            {
+                LogService.Error($"链接数据库服务器[{SystemShare.Config.sDBAddr}:{SystemShare.Config.nDBPort}]失败...");
+            }
+        }
+
+        public void Stop()
+        {
+            _tcpClient.Close();
+        }
+
+        public bool IsConnected => _tcpClient.Online;
+
+        public bool SendRequest<T>(int queryId, ServerRequestMessage message, T packet)
+        {
+            if (!_tcpClient.Online)
+            {
+                return false;
+            }
+            ServerRequestData requestPacket = new ServerRequestData();
+            requestPacket.QueryId = queryId;
+            requestPacket.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(message));
+            requestPacket.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(packet));
+            int signId = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
+            requestPacket.Sign = EDCode.EncodeBuffer(BitConverter.GetBytes(signId));
+            SendMessage(SerializerUtil.Serialize(requestPacket));
+            return true;
+        }
+
+        private void SendMessage(byte[] sendBuffer)
+        {
+            ServerDataPacket serverMessage = new ServerDataPacket
+            {
+                PacketCode = Grobal2.PacketCode,
+                PacketLen = (ushort)sendBuffer.Length
+            };
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
+            MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
+            _tcpClient.Send(data);
+        }
+
+        private Task DataSocketDisconnected(ITcpClientBase sender, DisconnectEventArgs e)
+        {
+            LogService.Error("数据库服务器[" + sender.GetIPPort() + "]断开连接...");
+            return Task.CompletedTask;
+        }
+
+        private Task DataSocketConnected(ITcpClient client, ConnectedEventArgs e)
+        {
+            LogService.Info("数据库服务器[" + client.RemoteIPHost + "]连接成功...");
+            return Task.CompletedTask;
+        }
+
+        private Task DataSocketRead(TcpClient sender, ReceivedDataEventArgs e)
+        {
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
-                if (QueryMap.TryGetValue(queryId, out ServerRequestData respPack))
+                int nMsgLen = e.ByteBlock.Len;
+                byte[] packetData = e.ByteBlock.Buffer;
+                if (BuffLen > 0)
                 {
-                    if (respPack == null)
-                    {
-                        return false;
-                    }
-                    ServerRequestMessage serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
-                    if (serverPacket == null)
-                    {
-                        return false;
-                    }
-                    nIdent = serverPacket.Ident;
-                    nRecog = serverPacket.Recog;
-                    data = respPack.Packet;
-                    result = true;
+                    MemoryCopy.BlockCopy(packetData, 0, ReceiveBuffer, BuffLen, packetData.Length);
+                    ProcessServerPacket(ReceiveBuffer, BuffLen + nMsgLen);
                 }
-                QueryMap.TryRemove(queryId, out _);
+                else
+                {
+                    ProcessServerPacket(packetData, nMsgLen);
+                }
+            }
+            catch (Exception exception)
+            {
+                LogService.Error(exception);
             }
             finally
             {
                 HUtil32.LeaveCriticalSection(M2Share.UserDBCriticalSection);
             }
-            return result;
+            return Task.CompletedTask;
         }
 
-        public static bool GetPlayData(int queryId, ref CharacterDataInfo playerData)
+        private void ProcessServerPacket(Span<byte> buff, int buffLen)
         {
-            if (!LoadPlayDataMap.TryGetValue(queryId, out LoadPlayerDataPacket loadPlayDataPacket))
+            try
             {
-                return false;
-            }
-
-            LoadPlayDataMap.TryRemove(queryId, out _);
-            playerData = loadPlayDataPacket.HumDataInfo;
-            return true;
-        }
-
-        /// <summary>
-        /// 查询角色数据
-        /// </summary>
-        public static bool QueryCharacterData(string account, string chrName, string addr, ref int queryId, int certCode)
-        {
-            bool result = false;
-            LoadCharacterData loadHum = new LoadCharacterData()
-            {
-                Account = account,
-                ChrName = chrName,
-                UserAddr = addr,
-                SessionID = certCode
-            };
-            if (LoadRcd(loadHum, ref queryId))
-            {
-                result = true;
-            }
-            SystemShare.Config.LoadDBCount++;
-            return result;
-        }
-
-        /// <summary>
-        /// 保存玩家数据到DB
-        /// </summary>
-        /// <returns></returns>
-        public static bool SaveCharacterData(SavePlayerRcd saveRcd, ref int queryId)
-        {
-            SystemShare.Config.SaveDBCount++;
-            return SaveRcd(saveRcd, ref queryId);
-        }
-
-        private static bool SaveRcd(SavePlayerRcd saveRcd, ref int queryId)
-        {
-            queryId = GetQueryId();
-            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
-            SaveCharacterData saveHumData = new SaveCharacterData(saveRcd.Account, saveRcd.ChrName, saveRcd.CharacterData);
-            if (GameShare.DataServer.SendRequest(queryId, packet, saveHumData))
-            {
-                SaveProcessList.Enqueue(queryId);
-                return true;
-            }
-            LogService.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
-            return false;
-        }
-
-        public static void ProcessSaveQueue()
-        {
-            //todo 保存数据优化一下流程，M2Server.需等待DBSrv结果，异步通知即可
-            if (SaveProcessList.TryPeek(out int queryId))
-            {
-                int nIdent = 0;
-                int nRecog = 0;
-                byte[] data = null;
-                if (GetDataSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
+                int srcOffset = 0;
+                int nLen = buffLen;
+                Span<byte> dataBuff = buff;
+                while (nLen >= ServerDataPacket.FixedHeaderLen)
                 {
-                    if (nIdent == Messages.DBR_SAVEHUMANRCD && nRecog == 1)
+                    Span<byte> packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                    ServerDataPacket message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
+                    if (message.PacketCode != Grobal2.PacketCode)
                     {
-                        // M2Share.FrontEngine.RemoveSaveList(queryId);
+                        srcOffset++;
+                        dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
+                        nLen -= 1;
+                        LogService.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                        continue;
                     }
-                    SaveProcessList.TryDequeue(out _);
-                }
-            }
-        }
-
-        public static void ProcessQueryQueue()
-        {
-            if (QueryProcessList.TryDequeue(out QueryPlayData queryData))
-            {
-                if (queryData.QueryCount >= 60) //60秒后放弃
-                {
-                    LogService.Warn("超过最大查询次数,放弃此次保存.");
-                    return;
-                }
-                int nIdent = 0;
-                int nRecog = 0;
-                byte[] data = null;
-                if (GetDataSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
-                {
-                    if (nIdent == Messages.DBR_LOADHUMANRCD && nRecog == 1 && data.Length > 0)
+                    int nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                    if (nCheckMsgLen > nLen)
                     {
-                        LoadPlayerDataPacket responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(EDCode.DecodeBuff(data));
-                        responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
-                        LoadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
+                        break;
                     }
-                    QueryProcessList.TryDequeue(out _);
+                    SocketWorking = true;
+                    ServerRequestData messageData = SerializerUtil.Deserialize<ServerRequestData>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                    ProcessServerData(messageData);
+                    nLen -= nCheckMsgLen;
+                    if (nLen <= 0)
+                    {
+                        break;
+                    }
+                    dataBuff = dataBuff.Slice(nCheckMsgLen, nLen);
+                    BuffLen = nLen;
+                    srcOffset = 0;
+                    if (nLen < ServerDataPacket.FixedHeaderLen)
+                    {
+                        break;
+                    }
+                }
+                if (nLen > 0)//有部分数据被处理,需要把剩下的数据拷贝到接收缓冲的头部
+                {
+                    MemoryCopy.BlockCopy(dataBuff, 0, ReceiveBuffer, 0, nLen);
+                    BuffLen = nLen;
                 }
                 else
                 {
-                    queryData.QueryCount++;
-                    QueryProcessList.Enqueue(queryData);
+                    BuffLen = 0;
                 }
             }
+            catch (Exception ex)
+            {
+                LogService.Error(ex);
+            }
         }
 
-        private static bool LoadRcd(LoadCharacterData loadHuman, ref int queryId)
+        private void ProcessServerData(ServerRequestData responsePacket)
         {
-            queryId = GetQueryId();
-            ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            if (GameShare.DataServer.SendRequest(queryId, packet, loadHuman))
+            try
             {
-                QueryProcessList.Enqueue(new QueryPlayData()
+                if (!SocketWorking)
                 {
-                    QueryId = queryId
-                });
-                LogService.Debug($"查询玩家数据任务ID:[{queryId}]");
-                return true;
+                    return;
+                }
+                if (responsePacket != null)
+                {
+                    int respCheckCode = responsePacket.QueryId;
+                    int nLen = responsePacket.Message.Length + responsePacket.Packet.Length + ServerDataPacket.FixedHeaderLen;
+                    if (nLen >= 12)
+                    {
+                        int queryId = HUtil32.MakeLong((ushort)(respCheckCode ^ 170), (ushort)nLen);
+                        if (queryId <= 0 || responsePacket.Sign.Length <= 0)
+                        {
+                            SystemShare.Config.LoadDBErrorCount++;
+                            return;
+                        }
+                        byte[] signatureBuff = BitConverter.GetBytes(queryId);
+                        byte[] signBuff = EDCode.DecodeBuff(responsePacket.Sign);
+                        if (BitConverter.ToInt16(signatureBuff) == BitConverter.ToInt16(signBuff))
+                        {
+                            PlayerDataHandler.Enqueue(respCheckCode, responsePacket);
+                        }
+                        else
+                        {
+                            SystemShare.Config.LoadDBErrorCount++;
+                        }
+                    }
+                }
+                else
+                {
+                    LogService.Error("错误的封包数据");
+                }
             }
-            LogService.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
-            return false;
-        }
-
-        private static int GetQueryId()
-        {
-            SystemShare.Config.DBQueryID++;
-            if (SystemShare.Config.DBQueryID > int.MaxValue - 1)
+            finally
             {
-                SystemShare.Config.DBQueryID = 1;
+                SocketWorking = false;
             }
-            return SystemShare.Config.DBQueryID;
         }
     }
 }

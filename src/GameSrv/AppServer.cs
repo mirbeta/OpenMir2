@@ -40,13 +40,5 @@ namespace GameSrv
         {
             await _serverHost.StopAsync(cancellationToken);
         }
-
-        private static void Stop()
-        {
-            AnsiConsole.Status().Start("Disconnecting...", ctx =>
-            {
-                ctx.Spinner(Spinner.Known.Dots);
-            });
-        }
     }
 }

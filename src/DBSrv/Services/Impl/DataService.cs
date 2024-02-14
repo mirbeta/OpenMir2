@@ -151,7 +151,7 @@ namespace DBSrv.Services.Impl
         private void LoadHumanRcd(int queryId, byte[] data, string connectionId)
         {
             LoadCharacterData loadHumanPacket = SerializerUtil.Deserialize<LoadCharacterData>(data);
-            if (loadHumanPacket.SessionID <= 0)
+            if (loadHumanPacket.SessionId <= 0)
             {
                 return;
             }
@@ -160,10 +160,10 @@ namespace DBSrv.Services.Impl
             int nCheckCode = -1;
             if ((!string.IsNullOrEmpty(loadHumanPacket.Account)) && (!string.IsNullOrEmpty(loadHumanPacket.ChrName)))
             {
-                nCheckCode = _loginService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionID, ref boFoundSession);
+                nCheckCode = _loginService.CheckSessionLoadRcd(loadHumanPacket.Account, loadHumanPacket.UserAddr, loadHumanPacket.SessionId, ref boFoundSession);
                 if ((nCheckCode < 0) || !boFoundSession)
                 {
-                    LogService.Warn("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionID);
+                    LogService.Warn("[非法请求] " + "帐号: " + loadHumanPacket.Account + " IP: " + loadHumanPacket.UserAddr + " 标识: " + loadHumanPacket.SessionId);
                 }
             }
             if ((nCheckCode == 1) || boFoundSession)

@@ -48,7 +48,7 @@ namespace OpenMir2.Packets.ServerPackets
         public string Account { get; set; }
         public string ChrName { get; set; }
         public string UserAddr { get; set; }
-        public int SessionID { get; set; }
+        public int SessionId { get; set; }
     }
 
     [MemoryPackable]

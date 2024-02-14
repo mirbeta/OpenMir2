@@ -27,7 +27,7 @@ namespace GameSrv
         public static readonly CharacterDataProcessor CharacterDataProcessor;
         public static readonly TimedRobotProcessor TimedRobotProcessor;
         public static readonly MapQuestManager QuestManager;
-        public static readonly DataQueryServer DataServer;
+        public static readonly PlayerDataService DataServer;
         public static IList<ModuleInfo> Modules { get; set; } = new List<ModuleInfo>();
 
         static GameShare()
@@ -45,7 +45,7 @@ namespace GameSrv
             TimedRobotProcessor = new TimedRobotProcessor();
             ActorBuffProcessor = new ActorBuffProcessor();
             PlanesService = new PlanesService();
-            DataServer = new DataQueryServer();
+            DataServer = new PlayerDataService();
             QuestManager = new MapQuestManager();
             StartTime = DateTimeOffset.Now.ToUnixTimeMilliseconds();
         }
