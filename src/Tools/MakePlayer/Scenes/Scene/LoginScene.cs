@@ -1,12 +1,17 @@
 using MakePlayer.Cliens;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
+using System.Net;
+using System.Net.Sockets;
+using TouchSocket.Core;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace MakePlayer.Scenes.Scene
 {
     public class LoginScene : SceneBase
     {
-        private readonly ScoketClient _clientSocket;
+        private readonly TcpClient _clientSocket;
         private readonly PlayClient play;
         private readonly string LoginAddr;
         private readonly int LoginPort;
@@ -16,17 +21,21 @@ namespace MakePlayer.Scenes.Scene
             play = playClient;
             LoginAddr = serverAdd;
             LoginPort = port;
-            _clientSocket = new ScoketClient();
-            _clientSocket.OnConnected += LoginSocketConnect;
-            _clientSocket.OnDisconnected += LoginSocketDisconnect;
-            _clientSocket.OnReceivedData += LoginSocketRead;
-            _clientSocket.OnError += LoginSocketError;
+            _clientSocket = new TcpClient();
+            _clientSocket.Connected += LoginSocketConnect;
+            _clientSocket.Disconnected += LoginSocketDisconnect;
+            _clientSocket.Received += LoginSocketRead;
+            _clientSocket.Setup(new TouchSocketConfig()
+                .ConfigureContainer(c =>
+            {
+                c.AddConsoleLogger();
+            }));
         }
 
         public override void OpenScene()
         {
             ConnectionStatus = ConnectionStatus.Failure;
-            _clientSocket.Connect(LoginAddr, LoginPort);
+            _clientSocket.Connect(new IPHost(IPAddress.Parse(LoginAddr), LoginPort));
             SetNotifyEvent(Login, RandomNumber.GetInstance().Random(1000, 3000));
         }
 
@@ -268,25 +277,25 @@ namespace MakePlayer.Scenes.Scene
 
         private void SendSocket(string sendstr)
         {
-            if (_clientSocket.IsConnected)
+            if (_clientSocket.Online)
             {
-                _clientSocket.SendText($"#1{sendstr}!");
+                _clientSocket.Send(HUtil32.GetBytes($"#1{sendstr}!"));
             }
             else
             {
-                MainOutMessage($"Socket Close: {_clientSocket.RemoteEndPoint}");
+                MainOutMessage($"Socket Close: {_clientSocket.GetIPPort()}");
             }
         }
 
         private void CloseSocket()
         {
-            _clientSocket.Disconnect(false);//断开登录网关链接
+            _clientSocket.Close();//断开登录网关链接
             MainOutMessage("主动断开");
         }
 
         #region Socket Events
 
-        private void LoginSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task LoginSocketConnect(ITcpClientBase client, ConnectedEventArgs e)
         {
             ConnectionStatus = ConnectionStatus.Success;
             if (play.CreateAccount)
@@ -297,36 +306,41 @@ namespace MakePlayer.Scenes.Scene
             {
                 SetNotifyEvent(ClientSendLoginMessage, RandomNumber.GetInstance().Random(1000, 3000));
             }
-            MainOutMessage($"连接登陆服务:[{e.RemoteEndPoint}]成功...");
+            MainOutMessage($"连接登陆服务:[{client.GetIPPort()}]成功...");
+            return Task.CompletedTask;
         }
 
-        private void LoginSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private Task LoginSocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
-            MainOutMessage($"登陆服务[{e.RemoteEndPoint}]连接已关闭...");
+            MainOutMessage($"登陆服务[{client.GetIPPort()}]连接已关闭...");
+            return Task.CompletedTask;
         }
 
-        private void LoginSocketError(object sender, DSCClientErrorEventArgs e)
+        private void LoginSocketError(SocketError e)
         {
-            switch (e.ErrorCode)
+            switch (e)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    MainOutMessage($"登陆服务[{_clientSocket.RemoteEndPoint}]拒绝链接...");
+                    MainOutMessage($"登陆服务[{_clientSocket.GetIPPort()}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    MainOutMessage($"登陆服务[{_clientSocket.RemoteEndPoint}]关闭连接...");
+                    MainOutMessage($"登陆服务[{_clientSocket.GetIPPort()}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    MainOutMessage($"登陆服务[{_clientSocket.RemoteEndPoint}]链接超时...");
+                    MainOutMessage($"登陆服务[{_clientSocket.GetIPPort()}]链接超时...");
                     break;
             }
         }
 
-        private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task LoginSocketRead(TcpClient client, ReceivedDataEventArgs e)
         {
-            if (e.BuffLen > 0)
+            if (e.ByteBlock.Len > 0)
             {
-                ClientManager.AddPacket(play.SessionId, e.Buff);
+                var data = new byte[e.ByteBlock.Len];
+                Array.Copy(e.ByteBlock.Buffer, 0, data, 0, data.Length);
+                ClientManager.AddPacket(play.SessionId, data);
             }
+            return Task.CompletedTask;
         }
 
         #endregion

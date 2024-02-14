@@ -1,12 +1,16 @@
 using MakePlayer.Cliens;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
+using System.Net;
+using System.Net.Sockets;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace MakePlayer.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
-        private readonly ScoketClient _clientSocket;
+        private readonly TcpClient _clientSocket;
         private readonly PlayClient _play;
         private readonly SelChar[] _chrArr;
 
@@ -16,16 +20,15 @@ namespace MakePlayer.Scenes.Scene
             _chrArr = new SelChar[2];
             _chrArr[0].UserChr = new UserCharacterInfo();
             _chrArr[1].UserChr = new UserCharacterInfo();
-            _clientSocket = new ScoketClient();
-            _clientSocket.OnConnected += CSocketConnect;
-            _clientSocket.OnDisconnected += CSocketDisconnect;
-            _clientSocket.OnReceivedData += CSocketRead;
-            _clientSocket.OnError += CSocketError;
+            _clientSocket = new TcpClient();
+            _clientSocket.Connected += CSocketConnect;
+            _clientSocket.Disconnected += CSocketDisconnect;
+            _clientSocket.Received += CSocketRead;
         }
 
         public override void OpenScene()
         {
-            _clientSocket.Connect(_play.SelChrAddr, _play.SelChrPort);
+            _clientSocket.Connect(new IPHost(IPAddress.Parse(_play.SelChrAddr), _play.SelChrPort));
         }
 
         public override void CloseScene()
@@ -291,59 +294,64 @@ namespace MakePlayer.Scenes.Scene
 
         private void SendSocket(string sendstr)
         {
-            if (_clientSocket.IsConnected)
+            if (_clientSocket.Online)
             {
-                _clientSocket.SendText($"#1{sendstr}!");
+                _clientSocket.Send(HUtil32.GetBytes($"#1{sendstr}!"));
             }
             else
             {
-                MainOutMessage($"Socket Close {_clientSocket.RemoteEndPoint}");
+                MainOutMessage($"Socket Close {_clientSocket.GetIPPort()}");
             }
         }
 
         private void CloseSocket()
         {
-            _clientSocket.Disconnect(false);//断开登录网关链接
+            _clientSocket.Close();//断开登录网关链接
             MainOutMessage("主动断开");
         }
 
         #region Socket Events
 
-        private void CSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task CSocketConnect(ITcpClientBase client, ConnectedEventArgs e)
         {
             if (_play.ConnectionStep == ConnectionStep.SelServer)
             {
                 SetNotifyEvent(SendQueryChr, RandomNumber.GetInstance().Random(1000, 3000));
                 _play.ConnectionStep = ConnectionStep.SelChr;
             }
-            MainOutMessage($"连接角色服务:[{e.RemoteEndPoint}]成功...");
+            MainOutMessage($"连接角色服务:[{client.GetIPPort()}]成功...");
+            return Task.CompletedTask;
         }
 
-        private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private Task CSocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
-            MainOutMessage($"角色服务[{e.RemoteEndPoint}断开连接...");
+            MainOutMessage($"角色服务[{client.GetIPPort()}断开连接...");
+            return Task.CompletedTask;
         }
 
-        private void CSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task CSocketRead(TcpClient client, ReceivedDataEventArgs e)
         {
-            if (e.BuffLen > 0)
+            if (e.ByteBlock.Len > 0)
             {
-                ClientManager.AddPacket(_play.SessionId, e.Buff);
+                var data = new byte[e.ByteBlock.Len];
+                Array.Copy(e.ByteBlock.Buffer, 0, data, 0, data.Length);
+                ClientManager.AddPacket(_play.SessionId, data);
             }
+            return Task.CompletedTask;
         }
 
-        private void CSocketError(object sender, DSCClientErrorEventArgs e)
+        private void CSocketError(SocketError e)
         {
-            switch (e.ErrorCode)
+            switch (e)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    MainOutMessage($"角色服务[{_clientSocket.RemoteEndPoint}拒绝链接...");
+                    MainOutMessage($"角色服务[{_clientSocket.GetIPPort()}拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    MainOutMessage($"角色服务[{_clientSocket.RemoteEndPoint}关闭连接...");
+                    MainOutMessage($"角色服务[{_clientSocket.GetIPPort()}关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    MainOutMessage($"角色服务[{_clientSocket.RemoteEndPoint}链接超时...");
+                    MainOutMessage($"角色服务[{_clientSocket.GetIPPort()}链接超时...");
                     break;
             }
         }

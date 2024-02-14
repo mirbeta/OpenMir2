@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenMir2;
+using Serilog;
 using System.Text;
 
 namespace MakePlayer
@@ -23,6 +25,11 @@ namespace MakePlayer
                       services.Configure<MakePlayOptions>(config.GetSection("MakePlay"));
                       services.AddHostedService<AppService>();
                   });
+
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(config)
+                .CreateLogger();
+            LogService.Logger = Log.Logger;
 
             await builder.RunConsoleAsync();
         }

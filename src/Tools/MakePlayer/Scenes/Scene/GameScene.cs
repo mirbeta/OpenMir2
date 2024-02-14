@@ -1,12 +1,16 @@
 using MakePlayer.Cliens;
 using OpenMir2;
 using OpenMir2.Packets.ClientPackets;
+using System.Net;
+using System.Net.Sockets;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace MakePlayer.Scenes.Scene
 {
     public class GameScene : SceneBase
     {
-        private readonly ScoketClient _clientSocket;
+        private readonly TcpClient _clientSocket;
         private readonly PlayClient _play;
         private Ability PlayAbil = default;
         private byte SendNum;
@@ -14,17 +18,16 @@ namespace MakePlayer.Scenes.Scene
         public GameScene(PlayClient playClient)
         {
             _play = playClient;
-            _clientSocket = new ScoketClient();
-            _clientSocket.OnConnected += SocketConnect;
-            _clientSocket.OnDisconnected += SocketDisconnect;
-            _clientSocket.OnReceivedData += SocketRead;
-            _clientSocket.OnError += SocketError;
+            _clientSocket = new TcpClient();
+            _clientSocket.Connected += SocketConnect;
+            _clientSocket.Disconnected += SocketDisconnect;
+            _clientSocket.Received += SocketRead;
         }
 
         public override void OpenScene()
         {
             ConnectionStatus = ConnectionStatus.Failure;
-            _clientSocket.Connect(_play.RunServerAddr, _play.RunServerPort);
+            _clientSocket.Connect(new IPHost(IPAddress.Parse(_play.RunServerAddr), _play.RunServerPort));
         }
 
         public override void PlayScene()
@@ -123,10 +126,10 @@ namespace MakePlayer.Scenes.Scene
 
         private void SendSocket(string sText)
         {
-            if (_clientSocket.IsConnected)
+            if (_clientSocket.Online)
             {
                 string sSendText = "#" + SendNum + sText + "!";
-                _clientSocket.SendText(sSendText);
+                _clientSocket.Send(HUtil32.GetBytes(sSendText));
                 SendNum++;
                 if (SendNum >= 10)
                 {
@@ -150,48 +153,53 @@ namespace MakePlayer.Scenes.Scene
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(message));
         }
 
-        private void SocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task SocketConnect(ITcpClientBase client, ConnectedEventArgs e)
         {
             ConnectionStatus = ConnectionStatus.Success;
             SetNotifyEvent(SendRunLogin, RandomNumber.GetInstance().Random(300, 5000));
-            MainOutMessage($"连接游戏服务:[{e.RemoteEndPoint}]成功...");
+            MainOutMessage($"连接游戏服务:[{client.IP}:{client.Port}]成功...");
+            return Task.CompletedTask;
         }
 
-        private void SocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private Task SocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
             ConnectionStatus = ConnectionStatus.Failure;
-            MainOutMessage($"[{e.RemoteEndPoint}] 断开链接");
+            MainOutMessage($"[{client.IP}:{client.Port}] 断开链接");
+            return Task.CompletedTask;
         }
 
-        private void SocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task SocketRead(TcpClient client, ReceivedDataEventArgs e)
         {
-            if (e.BuffLen <= 0)
+            if (e.ByteBlock.Len <= 0)
             {
-                return;
+                return Task.CompletedTask;
             }
-            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            var data = new byte[e.ByteBlock.Len];
+            Array.Copy(e.ByteBlock.Buffer, 0, data, 0, data.Length);
+            string sData = HUtil32.GetString(data, 0, data.Length);
             int nIdx = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
             if (nIdx > 0)
             {
                 //var sData2 = sData[..(nIdx - 1)];
                 //sData = sData2 + sData.Substring(nIdx, sData.Length);
-                _clientSocket.SendText("*");
+                _clientSocket.Send(HUtil32.GetBytes("*"));
             }
-            ClientManager.AddPacket(_play.SessionId, e.Buff);
+            ClientManager.AddPacket(_play.SessionId, data);
+            return Task.CompletedTask;
         }
 
-        private void SocketError(object sender, DSCClientErrorEventArgs e)
+        private void SocketError(SocketError e)
         {
-            switch (e.ErrorCode)
+            switch (e)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    MainOutMessage("游戏服务[" + _clientSocket.RemoteEndPoint + "]拒绝链接...");
+                    MainOutMessage("游戏服务[" + _clientSocket.GetIPPort() + "]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    MainOutMessage("游戏服务[" + _clientSocket.RemoteEndPoint + "]关闭连接...");
+                    MainOutMessage("游戏服务[" + _clientSocket.GetIPPort() + "]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    MainOutMessage("游戏服务[" + _clientSocket.RemoteEndPoint + "]链接超时...");
+                    MainOutMessage("游戏服务[" + _clientSocket.GetIPPort() + "]链接超时...");
                     break;
             }
         }
