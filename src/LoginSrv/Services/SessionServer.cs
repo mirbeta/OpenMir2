@@ -53,11 +53,10 @@ namespace LoginSrv.Services
         private Task Connecting(object sender, TouchSocketEventArgs e)
         {
             SocketClient client = (SocketClient)sender;
-            string remoteEndPoint = client.MainSocket.RemoteEndPoint.GetIP();
             bool boAllowed = false;
             for (int i = 0; i < LsShare.ServerAddr.Length; i++)
             {
-                if (remoteEndPoint == LsShare.ServerAddr[i])
+                if (client.IP == LsShare.ServerAddr[i])
                 {
                     boAllowed = true;
                     break;
@@ -69,14 +68,14 @@ namespace LoginSrv.Services
                 msgServer.ReceiveMsg = string.Empty;
                 msgServer.Socket = client.MainSocket;
                 msgServer.SocketId = client.Id;
-                msgServer.EndPoint = (IPEndPoint)client.MainSocket.RemoteEndPoint;
+                msgServer.EndPoint = new IPEndPoint(IPAddress.Parse(client.IP), client.Port);
                 msgServer.SessionList = new List<SessionConnInfo>();
                 _serverList.Add(msgServer);
                 LogService.Debug($"{client.MainSocket.RemoteEndPoint}链接成功.");
             }
             else
             {
-                LogService.Warn("非法地址连接:" + remoteEndPoint);
+                LogService.Warn("非法地址连接:" + client.IP);
                 client.Close();
             }
             return Task.CompletedTask;

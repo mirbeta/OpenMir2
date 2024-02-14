@@ -1,6 +1,4 @@
 using LoginSrv.Conf;
-using OpenMir2.DataHandlingAdapters;
-using System.Threading.Channels;
 
 namespace LoginSrv.Services
 {
@@ -16,7 +14,6 @@ namespace LoginSrv.Services
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private readonly Channel<MessagePacket> _messageQueue;
-        private readonly LoginGateInfo[] loginGates = new LoginGateInfo[20];
 
         public LoginServer(ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
         {
@@ -34,10 +31,10 @@ namespace LoginSrv.Services
         public void StartServer()
         {
             TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
-            touchSocketConfig.SetListenIPHosts(new IPHost[1]
-            {
+            touchSocketConfig.SetListenIPHosts(
+            [
                 new IPHost(IPAddress.Parse(_config.sGateAddr), _config.nGatePort)
-            }).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            ]).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
             _serverSocket.Start();
             LogService.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
@@ -49,45 +46,33 @@ namespace LoginSrv.Services
             {
                 return Task.CompletedTask;
             }
-
-            if (int.TryParse(socketClient.Id, out int clientId))
-            {
-                ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId);
-            }
-            else
-            {
-                //LogService.Info("未知客户端...");
-            }
+            ProcessGateData(fixedHeader.Header, fixedHeader.Message, socketClient.Id);
             return Task.CompletedTask;
         }
 
         private Task Connecting(object sender, TouchSocketEventArgs e)
         {
             SocketClient client = (SocketClient)sender;
-            int clientId = int.Parse(client.Id);
             LoginGateInfo gateInfo = new LoginGateInfo();
             gateInfo.Socket = client.MainSocket;
             gateInfo.ConnectionId = client.Id;
-            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, client.MainSocket.RemoteEndPoint.GetIP());//应该改为按策略获取一个对外的公开网关地址
+            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, client.IP);//应该改为按策略获取一个对外的公开网关地址
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.KeepAliveTick = HUtil32.GetTickCount();
-            _clientManager.AddSession(clientId, gateInfo);
+            _clientManager.AddSession(client.Id, gateInfo);
             LogService.Info($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
-            loginGates[clientId] = gateInfo;
             return Task.CompletedTask;
         }
 
         private Task Disconnected(object sender, DisconnectEventArgs e)
         {
             SocketClient client = (SocketClient)sender;
-            int clientId = int.Parse(client.Id);
-            loginGates[clientId] = null;
-            _clientManager.Delete(clientId);
+            _clientManager.Delete(client.Id);
             LogService.Warn($"登录网关[{client.ServiceIP}:{client.ServicePort}]断开链接.");
             return Task.CompletedTask;
         }
 
-        private void ProcessGateData(ServerDataPacket packetHead, byte[] data, int socketId)
+        private void ProcessGateData(ServerDataPacket packetHead, byte[] data, string socketId)
         {
             if (packetHead.PacketCode != Grobal2.PacketCode)
             {
@@ -98,7 +83,7 @@ namespace LoginSrv.Services
             AddToQueue(socketId, messageData);
         }
 
-        private void AddToQueue(int socketId, ServerDataMessage messageData)
+        private void AddToQueue(string socketId, ServerDataMessage messageData)
         {
             _messageQueue.Writer.TryWrite(new MessagePacket()
             {
@@ -117,25 +102,25 @@ namespace LoginSrv.Services
             {
                 while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_messageQueue.Reader.TryRead(out MessagePacket loginPacket))
+                    while (_messageQueue.Reader.TryRead(out MessagePacket message))
                     {
                         try
                         {
-                            LoginGateInfo gateInfo = _clientManager.GetSession(loginPacket.ConnectionId);
-                            switch (loginPacket.Pakcet.Type)
+                            LoginGateInfo gateInfo = _clientManager.GetSession(message.ConnectionId);
+                            switch (message.Pakcet.Type)
                             {
                                 case ServerDataType.Data:
-                                    ProcessUserMessage(loginPacket.ConnectionId, loginPacket.Pakcet);
+                                    ProcessUserMessage(message.ConnectionId, message.Pakcet);
                                     break;
                                 case ServerDataType.KeepAlive:
                                     SendKeepAlivePacket(gateInfo.ConnectionId);
                                     gateInfo.KeepAliveTick = HUtil32.GetTickCount();
                                     break;
                                 case ServerDataType.Enter:
-                                    ReceiveOpenUser(loginPacket.Pakcet, gateInfo);
+                                    ReceiveOpenUser(message.Pakcet, gateInfo);
                                     break;
                                 case ServerDataType.Leave:
-                                    ReceiveCloseUser(loginPacket.Pakcet.SocketId, gateInfo);
+                                    ReceiveCloseUser(message.Pakcet.SocketId, gateInfo);
                                     break;
                             }
                             _config.sGateIPaddr = gateInfo.sIPaddr;
@@ -150,7 +135,7 @@ namespace LoginSrv.Services
             _clientSession.Start(stoppingToken);
         }
 
-        private void ProcessUserMessage(int sessionId, ServerDataMessage dataMessage)
+        private void ProcessUserMessage(string sessionId, ServerDataMessage dataMessage)
         {
             string dataMsg = HUtil32.GetString(dataMessage.Data, 0, dataMessage.DataLen);
             _clientSession.Enqueue(new UserSessionData()
@@ -269,7 +254,7 @@ namespace LoginSrv.Services
 
         private struct MessagePacket
         {
-            public int ConnectionId;
+            public string ConnectionId;
             public ServerDataMessage Pakcet;
         }
     }

@@ -1,7 +1,6 @@
 ﻿using LoginSrv.Conf;
 using LoginSrv.Storage;
 using System.Net.Sockets;
-using System.Threading.Channels;
 
 namespace LoginSrv.Services
 {
@@ -253,7 +252,7 @@ namespace LoginSrv.Services
                     {
                         userInfo.PayCost = true;
                         userInfo.Seconds = accountRecord.PlayTime;
-                        userInfo.PayMode = (byte)accountRecord.PayModel;
+                        userInfo.PayMode = accountRecord.PayModel;
                         AddCertUser(userInfo);
                         /*if (CheckBadAccount(userInfo.Account))
                         {

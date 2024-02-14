@@ -138,7 +138,7 @@ namespace LoginSrv
 
     public struct UserSessionData
     {
-        public int SessionId;
+        public string SessionId;
         public string SoketId;
         public string Msg;
     }
@@ -160,7 +160,7 @@ namespace LoginSrv
         public int AccountId;
         public int ErrorCount;
         public int ActionTick;
-        public int PayModel;
+        public byte PayModel;
         public long PlayTime;
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;

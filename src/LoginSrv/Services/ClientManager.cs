@@ -2,11 +2,11 @@ namespace LoginSrv.Services
 {
     public class ClientManager
     {
-        private readonly ConcurrentDictionary<int, LoginGateInfo> _gateInfos = new ConcurrentDictionary<int, LoginGateInfo>();
+        private readonly ConcurrentDictionary<string, LoginGateInfo> _gateInfos = new ConcurrentDictionary<string, LoginGateInfo>();
 
         public int Gates => _gateInfos.Count;
 
-        public LoginGateInfo GetSession(int sessionId)
+        public LoginGateInfo GetSession(string sessionId)
         {
             if (_gateInfos.TryGetValue(sessionId, out LoginGateInfo userInfo))
             {
@@ -15,7 +15,7 @@ namespace LoginSrv.Services
             return null;
         }
 
-        public bool AddSession(int socketId, LoginGateInfo userInfo)
+        public bool AddSession(string socketId, LoginGateInfo userInfo)
         {
             if (_gateInfos.ContainsKey(socketId))
             {
@@ -25,7 +25,7 @@ namespace LoginSrv.Services
             return true;
         }
 
-        public void Delete(int socketId)
+        public void Delete(string socketId)
         {
             if (_gateInfos.ContainsKey(socketId))
             {

@@ -7,7 +7,6 @@ namespace LoginSrv.Storage
 {
     public class AccountStorage
     {
-
         private readonly ConfigManager _configManager;
         private readonly Dictionary<string, AccountQuick> _accountMap;
 
@@ -153,7 +152,7 @@ namespace LoginSrv.Storage
                     accountRecord.ErrorCount = dr.GetInt32("PassFailCount");
                     accountRecord.ActionTick = dr.GetInt32("PassFailTime");
                     accountRecord.PlayTime = dr.GetInt64("Seconds");
-                    accountRecord.PayModel = dr.GetInt32("PayMode");
+                    accountRecord.PayModel = dr.GetByte("PayMode");
                     accountRecord.UserEntry.Account = dr.GetString("Account");
                     accountRecord.UserEntry.Password = dr.GetString("PassWord");
                     accountRecord.UserEntry.UserName = dr.GetString("UserName");
