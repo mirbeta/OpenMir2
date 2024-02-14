@@ -1,12 +1,9 @@
 using GameGate.Conf;
-using System;
-using System.IO;
-using SystemModule.Common;
 
 namespace GameGate.Filters
 {
     /// <summary>
-    /// ÎÄ×Ö¹ýÂË
+    /// ï¿½ï¿½ï¿½Ö¹ï¿½ï¿½ï¿½
     /// </summary>
     public class AbusiveFilter
     {
@@ -31,7 +28,7 @@ namespace GameGate.Filters
 
         public byte CheckChatFilter(ref string chatMsg, ref bool kick)
         {
-            var rplaceCount = 0;
+            int rplaceCount = 0;
             for (int i = 0; i < AbuseList.Count; i++)
             {
                 if (AbuseList[i].Contains(chatMsg))
@@ -45,7 +42,7 @@ namespace GameGate.Filters
                             chatMsg = _configManager.GateConfig.ChatFilterReplace;
                             break;
                         case ChatFilterMethod.ReplaceOne:
-                            var szRplace = string.Empty;
+                            string szRplace = string.Empty;
                             for (int j = 0; j < AbuseList[i].Length; j++)
                             {
                                 szRplace += "*";

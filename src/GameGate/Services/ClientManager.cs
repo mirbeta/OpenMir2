@@ -1,8 +1,3 @@
-using GameGate.Conf;
-using NLog;
-using System.Collections.Concurrent;
-using System.Linq;
-
 namespace GameGate.Services
 {
     /// <summary>
@@ -10,7 +5,6 @@ namespace GameGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private static readonly ClientManager instance = new ClientManager();
         public static ClientManager Instance => instance;
         private static ServerManager ServerManager => ServerManager.Instance;
@@ -21,7 +15,7 @@ namespace GameGate.Services
         {
             _clientThreadMap = new ConcurrentDictionary<string, ClientThread>();
         }
- 
+
         /// <summary>
         /// 添加用户对应网关
         /// </summary>
@@ -38,7 +32,7 @@ namespace GameGate.Services
         {
             if (!string.IsNullOrEmpty(connectionId))
             {
-                return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : null;
+                return _clientThreadMap.TryGetValue(connectionId, out ClientThread userClinet) ? userClinet : null;
             }
             return null;
         }
@@ -48,7 +42,7 @@ namespace GameGate.Services
         /// </summary>
         public void DeleteClientThread(string connectionId)
         {
-            _clientThreadMap.TryRemove(connectionId, out var userClinet);
+            _clientThreadMap.TryRemove(connectionId, out ClientThread userClinet);
         }
 
         public ClientThread[] GetClients()

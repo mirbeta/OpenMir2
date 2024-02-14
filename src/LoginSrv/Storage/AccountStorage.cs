@@ -1,17 +1,12 @@
 using LoginSrv.Conf;
 using MySqlConnector;
-using NLog;
-using System;
-using System.Collections.Generic;
+using OpenMir2.Extensions;
 using System.Data;
-using SystemModule.Extensions;
-using SystemModule.Packets.ClientPackets;
 
 namespace LoginSrv.Storage
 {
     public class AccountStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configManager;
         private readonly Dictionary<string, AccountQuick> _accountMap;
 
@@ -25,18 +20,18 @@ namespace LoginSrv.Storage
 
         public void Initialization()
         {
-            _logger.Info("正在连接SQL服务器...");
-            var dbConnection = new MySqlConnection(Config.ConnctionString);
+            LogService.Info("正在连接SQL服务器...");
+            MySqlConnection dbConnection = new MySqlConnection(Config.ConnctionString);
             try
             {
                 dbConnection.Open();
-                _logger.Info("连接SQL服务器成功...");
+                LogService.Info("连接SQL服务器成功...");
                 LoadQuickList();
             }
             catch (Exception ex)
             {
-                _logger.Error("[错误] SQL 连接失败!请检查SQL设置...");
-                _logger.Error(ex);
+                LogService.Error("[错误] SQL 连接失败!请检查SQL设置...");
+                LogService.Error(ex);
             }
             finally
             {
@@ -64,8 +59,8 @@ namespace LoginSrv.Storage
                     }
                     catch (Exception e)
                     {
-                        _logger.Error("打开数据库[MySql]失败.");
-                        _logger.Error(e);
+                        LogService.Error("打开数据库[MySql]失败.");
+                        LogService.Error(e);
                         result = false;
                     }
                     break;
@@ -93,15 +88,15 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.CommandText = sSQL;
                 command.Connection = dbConnection;
-                using var dr = command.ExecuteReader();
+                using MySqlDataReader dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    var nIndex = dr.GetInt32("Id");
-                    var sAccount = dr.GetString("Account");
-                    var boDeleted = dr.GetByte("State");
+                    int nIndex = dr.GetInt32("Id");
+                    string sAccount = dr.GetString("Account");
+                    byte boDeleted = dr.GetByte("State");
                     if (boDeleted == 0 && (!string.IsNullOrEmpty(sAccount)))
                     {
                         _accountMap.Add(sAccount, new AccountQuick(sAccount, nIndex));
@@ -112,19 +107,19 @@ namespace LoginSrv.Storage
             }
             catch (Exception ex)
             {
-                _logger.Error("读取账号列表失败.");
-                _logger.Error(ex);
+                LogService.Error("读取账号列表失败.");
+                LogService.Error(ex);
             }
             finally
             {
                 Close(dbConnection);
             }
-            _logger.Info($"账号数据读取成功.[{_accountMap.Count}]");
+            LogService.Info($"账号数据读取成功...[{_accountMap.Count}]");
         }
 
         public int FindByName(string sName, ref IList<AccountQuick> List)
         {
-            if (_accountMap.TryGetValue(sName, out var accountQuick))
+            if (_accountMap.TryGetValue(sName, out AccountQuick accountQuick))
             {
                 List.Add(new AccountQuick(accountQuick.Account, accountQuick.Index));
             }
@@ -139,7 +134,7 @@ namespace LoginSrv.Storage
             {
                 return false;
             }
-            var command = new MySqlCommand();
+            MySqlCommand command = new MySqlCommand();
             command.CommandText = string.Format(sSQL, nIndex);
             command.Connection = dbConnection;
             try
@@ -157,7 +152,7 @@ namespace LoginSrv.Storage
                     accountRecord.ErrorCount = dr.GetInt32("PassFailCount");
                     accountRecord.ActionTick = dr.GetInt32("PassFailTime");
                     accountRecord.PlayTime = dr.GetInt64("Seconds");
-                    accountRecord.PayModel = dr.GetInt32("PayMode");
+                    accountRecord.PayModel = dr.GetByte("PayMode");
                     accountRecord.UserEntry.Account = dr.GetString("Account");
                     accountRecord.UserEntry.Password = dr.GetString("PassWord");
                     accountRecord.UserEntry.UserName = dr.GetString("UserName");
@@ -168,8 +163,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception ex)
             {
-                _logger.Error("获取账号信息失败");
-                _logger.Error(ex);
+                LogService.Error("获取账号信息失败");
+                LogService.Error(ex);
                 return false;
             }
             finally
@@ -181,7 +176,7 @@ namespace LoginSrv.Storage
 
         public int Index(string account)
         {
-            if (_accountMap.TryGetValue(account, out var accountQuick))
+            if (_accountMap.TryGetValue(account, out AccountQuick accountQuick))
             {
                 return accountQuick.Index;
             }
@@ -204,8 +199,8 @@ namespace LoginSrv.Storage
 
         public int GetAccountPlayTime(string account)
         {
-            var strSql = "SELECT Seconds FROM ACCOUNT WHERE Account=@Account";
-            _logger.Debug("[SQL QUERY] " + strSql);
+            string strSql = "SELECT Seconds FROM ACCOUNT WHERE Account=@Account";
+            LogService.Debug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -214,11 +209,11 @@ namespace LoginSrv.Storage
             int result = 0;
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@Account", account);
-                var obj = command.ExecuteScalar();
+                object obj = command.ExecuteScalar();
                 if (obj != null)
                 {
                     result = (int)obj;
@@ -226,8 +221,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception e)
             {
-                _logger.Error($"获取账号[{account}]游戏时间失败");
-                _logger.Error(e);
+                LogService.Error($"获取账号[{account}]游戏时间失败");
+                LogService.Error(e);
             }
             finally
             {
@@ -238,8 +233,8 @@ namespace LoginSrv.Storage
 
         public void UpdateAccountPlayTime(string account, long gameTime)
         {
-            var strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
-            _logger.Debug("[SQL QUERY] " + strSql);
+            string strSql = "UPDATE ACCOUNT SET Seconds=@Seconds WHERE Account=@Account";
+            LogService.Debug("[SQL QUERY] " + strSql);
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
@@ -247,7 +242,7 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@Seconds", gameTime);
@@ -256,8 +251,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception e)
             {
-                _logger.Error($"更新账号[{account}]游戏时间失败");
-                _logger.Error(e);
+                LogService.Error($"更新账号[{account}]游戏时间失败");
+                LogService.Error(e);
             }
             finally
             {
@@ -267,17 +262,17 @@ namespace LoginSrv.Storage
 
         private int CreateAccount(AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             const string sqlStr = "INSERT INTO account (Account, PassWord, PassFailCount, PassFailTime, ValidFrom, ValidUntil, Seconds, StopUntil, PayMode, State, CreateTime, ModifyTime, LastLoginTime) VALUES (@Account, @PassWord, @PassFailCount, @PassFailTime,@ValidFrom, @ValidUntil, @Seconds,@StopUntil, @PayMode, @State, @CreateTime, @ModifyTime, @LastLoginTime);";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return 0;
             }
-            var beginTransaction = dbConnection.BeginTransaction();
+            MySqlTransaction beginTransaction = dbConnection.BeginTransaction();
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Transaction = beginTransaction;
                 command.CommandText = sqlStr;
                 command.Connection = dbConnection;
@@ -318,8 +313,8 @@ namespace LoginSrv.Storage
             catch (Exception ex)
             {
                 beginTransaction.Rollback();
-                _logger.Error("创建账号失败." + ex.Message);
-                _logger.Error(ex);
+                LogService.Error("创建账号失败." + ex.Message);
+                LogService.Error(ex);
             }
             finally
             {
@@ -336,8 +331,8 @@ namespace LoginSrv.Storage
             {
                 return 0;
             }
-            var result = 0;
-            var command = new MySqlCommand();
+            int result = 0;
+            MySqlCommand command = new MySqlCommand();
             command.Connection = dbConnection;
             command.CommandText = string.Format(sUpdateRecord2, DateTimeOffset.Now.ToUnixTimeSeconds(), account);
             try
@@ -348,8 +343,8 @@ namespace LoginSrv.Storage
             catch (Exception ex)
             {
                 result = 0;
-                _logger.Error("[Exception] UpdateRecord");
-                _logger.Error(ex);
+                LogService.Error("[Exception] UpdateRecord");
+                LogService.Error(ex);
             }
             finally
             {
@@ -365,10 +360,10 @@ namespace LoginSrv.Storage
             {
                 return 0;
             }
-            var result = 0;
+            int result = 0;
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = "UPDATE account SET PassWord = @PassWord, PassFailCount = 0, PassFailTime = 0, ModifyTime = @ModifyTime WHERE Id = @Id;";
                 command.Parameters.AddWithValue("@PassWord", newPassword);
@@ -379,8 +374,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception E)
             {
-                _logger.Error("[Exception] ChanggePassword");
-                _logger.Error(E);
+                LogService.Error("[Exception] ChanggePassword");
+                LogService.Error(E);
                 return result;
             }
             finally
@@ -392,7 +387,7 @@ namespace LoginSrv.Storage
 
         public int UpdateLoginRecord(AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             const string strSql = "UPDATE account SET ModifyTime=@ModifyTime, PassFailCount=@PassFailCount, PassFailTime=@PassFailTime,LastLoginTime=@LastLoginTime WHERE Id=@Id";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -401,7 +396,7 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
@@ -414,8 +409,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception E)
             {
-                _logger.Error("[Exception] UpdateRecord");
-                _logger.Error(E);
+                LogService.Error("[Exception] UpdateRecord");
+                LogService.Error(E);
                 return result;
             }
             finally
@@ -427,7 +422,7 @@ namespace LoginSrv.Storage
 
         public int UpdateRecord(AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             const string strSql = "UPDATE account SET ModifyTime=@ModifyTime, PassFailCount=@PassFailCount, PassFailTime=@PassFailTime WHERE Id=@Id";
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
@@ -436,7 +431,7 @@ namespace LoginSrv.Storage
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = dbConnection;
                 command.CommandText = strSql;
                 command.Parameters.AddWithValue("@ModifyTime", DateTimeOffset.Now.ToUnixTimeSeconds());
@@ -448,8 +443,8 @@ namespace LoginSrv.Storage
             }
             catch (Exception E)
             {
-                _logger.Error("[Exception] UpdateRecord");
-                _logger.Error(E);
+                LogService.Error("[Exception] UpdateRecord");
+                LogService.Error(E);
                 return result;
             }
             finally
@@ -479,16 +474,16 @@ namespace LoginSrv.Storage
 
         public int UpdateAccount(int nIndex, ref AccountRecord accountRecord)
         {
-            var result = 0;
+            int result = 0;
             MySqlConnection dbConnection = null;
             if (!Open(ref dbConnection))
             {
                 return 0;
             }
-            var beginTransaction = dbConnection.BeginTransaction();
+            MySqlTransaction beginTransaction = dbConnection.BeginTransaction();
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Transaction = beginTransaction;
                 command.CommandText = "UPDATE account SET PassWord = @PassWord, PassFailCount = @PassFailCount, PassFailTime = @PassFailTime, ModifyTime = @ModifyTime, LastLoginTime = @LastLoginTime WHERE Id = @Id;";
                 command.Connection = dbConnection;
@@ -522,8 +517,8 @@ namespace LoginSrv.Storage
             catch (Exception ex)
             {
                 beginTransaction.Rollback();
-                _logger.Error("创建账号失败." + ex.Message);
-                _logger.Error(ex);
+                LogService.Error("创建账号失败." + ex.Message);
+                LogService.Error(ex);
             }
             finally
             {
@@ -535,14 +530,14 @@ namespace LoginSrv.Storage
         public bool Add(AccountRecord accountRecord)
         {
             bool result;
-            var sAccount = accountRecord.UserEntry.Account;
+            string sAccount = accountRecord.UserEntry.Account;
             if (Index(sAccount) > 0)
             {
                 result = false;
             }
             else
             {
-                var nIndex = CreateAccount(accountRecord);
+                int nIndex = CreateAccount(accountRecord);
                 if (nIndex > 0)
                 {
                     _accountMap.Add(sAccount, new AccountQuick(sAccount, nIndex));
@@ -558,7 +553,7 @@ namespace LoginSrv.Storage
 
         public bool Delete(int nIndex, ref AccountRecord accountRecord)
         {
-            var result = false;
+            bool result = false;
             if (nIndex < 0)
             {
                 return false;
@@ -567,7 +562,7 @@ namespace LoginSrv.Storage
             {
                 return false;
             }
-            var up = DeleteAccount(accountRecord.UserEntry.Account);
+            int up = DeleteAccount(accountRecord.UserEntry.Account);
             if (up > 0)
             {
                 _accountMap.Remove(accountRecord.UserEntry.Account);

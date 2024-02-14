@@ -1,5 +1,5 @@
 using Microsoft.Extensions.Hosting;
-using NLog;
+using OpenMir2;
 using SelGate.Conf;
 using SelGate.Services;
 using System.Threading;
@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace SelGate
 {
-    public class AppService : BackgroundService
+    public class AppService : IHostedLifecycleService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configManager;
         private readonly ServerService _serverService;
         private readonly ClientManager _clientManager;
@@ -23,38 +22,51 @@ namespace SelGate
             _sessionManager = sessionManager;
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        public Task StartingAsync(CancellationToken cancellationToken)
         {
-            stoppingToken.Register(() => _logger.Debug("SelGate is stopping."));
-            _serverService.ProcessReviceMessage(stoppingToken);
-            _sessionManager.ProcessSendMessage(stoppingToken);
+            GateShare.Initialization();
+            LogService.Info("正在启动服务...");
+            _configManager.LoadConfig();
+            _clientManager.Initialization();
             return Task.CompletedTask;
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
+        public Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("SelGate is starting.");
-            GateShare.Initialization();
-            _logger.Info("正在启动服务...", 0);
-            _configManager.LoadConfig();
-            _serverService.Start();
-            _clientManager.Initialization();
-            _clientManager.Start();
-            _logger.Info("服务已启动成功...", 2);
-            _logger.Info("欢迎使用翎风系列游戏软件...", 0);
-            _logger.Info("网站:http://www.gameofmir.com", 0);
-            _logger.Info("论坛:http://bbs.gameofmir.com", 0);
-            return base.StartAsync(cancellationToken);
+            _serverService.ProcessReviceMessage(cancellationToken);
+            _sessionManager.ProcessSendMessage(cancellationToken);
+            return Task.CompletedTask;
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public Task StartedAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("SelGate is stopping.");
-            _logger.Info("正在停止服务...", 2);
+            _serverService.Start();
+            _clientManager.Start();
+            LogService.Info("服务已启动成功...");
+            LogService.Info("欢迎使用翎风系列游戏软件...");
+            LogService.Info("网站:http://www.gameofmir.com");
+            LogService.Info("论坛:http://bbs.gameofmir.com");
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            LogService.Debug("SelGate is stopping.");
+            LogService.Info("正在停止服务...");
             _serverService.Stop();
             _clientManager.Stop();
-            _logger.Info("服务停止成功...", 2);
-            return base.StopAsync(cancellationToken);
+            LogService.Info("服务停止成功...");
+            return Task.CompletedTask;
+        }
+
+        public Task StoppingAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task StoppedAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
     }
 }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Concurrent;
-
 namespace GameGate
 {
     public class PacketMessagePool
@@ -31,7 +28,7 @@ namespace GameGate
         /// <returns>要被从池里删除的对象</returns>
         public SessionMessage Pop()
         {
-            if (m_pool.TryPop(out var pop))
+            if (m_pool.TryPop(out SessionMessage pop))
             {
                 return pop;
             }
@@ -47,7 +44,7 @@ namespace GameGate
             item.BuffLen = 0;
             item.ServiceId = 0;
             //item.Buffer = IntPtr.Zero;
-            item.ConnectionId = 0;
+            item.ConnectionId = string.Empty;
             item.ServiceId = 0;
             m_pool.Push(item);
         }

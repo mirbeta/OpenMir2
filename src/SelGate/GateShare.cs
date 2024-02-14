@@ -1,8 +1,8 @@
+using OpenMir2;
+using OpenMir2.Common;
 using SelGate.Services;
 using System;
 using System.Collections.Generic;
-using SystemModule;
-using SystemModule.Common;
 
 namespace SelGate
 {
@@ -31,6 +31,10 @@ namespace SelGate
         /// 会话超时时间
         /// </summary>
         public const int SessionTimeOutTime = 15 * 24 * 60 * 60 * 1000;
+        /// <summary>
+        /// ServiceProvider
+        /// </summary>
+        public static IServiceProvider ServiceProvider;
         public static IList<ClientThread> ServerGateList;
 
         public static void LoadBlockIPFile()
@@ -55,7 +59,7 @@ namespace SelGate
         {
             bool result = false;
             string sBlockIPaddr;
-            for (var i = 0; i < GateShare.TempBlockIPList.Count; i++)
+            for (int i = 0; i < GateShare.TempBlockIPList.Count; i++)
             {
                 sBlockIPaddr = GateShare.TempBlockIPList[i];
                 if (string.Compare(sIPaddr, sBlockIPaddr, StringComparison.OrdinalIgnoreCase) == 0)
@@ -64,7 +68,7 @@ namespace SelGate
                     break;
                 }
             }
-            for (var i = 0; i < GateShare.BlockIPList.Count; i++)
+            for (int i = 0; i < GateShare.BlockIPList.Count; i++)
             {
                 sBlockIPaddr = GateShare.BlockIPList[i];
                 if (HUtil32.CompareLStr(sIPaddr, sBlockIPaddr))

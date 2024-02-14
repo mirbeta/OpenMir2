@@ -1,16 +1,10 @@
-using System;
-using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using GameGate.Services;
-using NLog;
+using System.Threading.Channels;
 
 namespace GameGate
 {
     public class SendQueue
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
         private readonly Channel<SessionMessage> _sendQueue;
         private readonly ServerManager ServerMgr = ServerManager.Instance;
 
@@ -41,15 +35,15 @@ namespace GameGate
             {
                 while (await _sendQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    if (_sendQueue.Reader.TryRead(out var sendPacket))
+                    if (_sendQueue.Reader.TryRead(out SessionMessage sendPacket))
                     {
                         try
                         {
-                            ServerMgr.Send(sendPacket);
+                            _ = ServerMgr.Send(sendPacket);
                         }
                         catch (Exception e)
                         {
-                            logger.Error(e.StackTrace);
+                            LogService.Error(e.StackTrace);
                         }
                         finally
                         {

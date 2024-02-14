@@ -1,11 +1,8 @@
-﻿using NLog;
-using SystemModule.Common;
-
-namespace GameSrv.Robots
+﻿namespace GameSrv.Robots
 {
-    public class RobotManage
+    public class RobotManage : IAutoBotSystem
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         private readonly IList<RobotObject> RobotHumanList;
 
         public RobotManage()
@@ -23,20 +20,32 @@ namespace GameSrv.Robots
 
         private void LoadRobot()
         {
-            var sRobotName = string.Empty;
-            var sScriptFileName = string.Empty;
-            var sFileName = M2Share.GetEnvirFilePath("Robot.txt");
-            if (!File.Exists(sFileName)) return;
-            using var LoadList = new StringList();
-            LoadList.LoadFromFile(sFileName);
-            for (var i = 0; i < LoadList.Count; i++)
+            string sRobotName = string.Empty;
+            string sScriptFileName = string.Empty;
+            string sFileName = M2Share.GetEnvirFilePath("Robot.txt");
+            if (!File.Exists(sFileName))
             {
-                var sLineText = LoadList[i];
-                if (string.IsNullOrEmpty(sLineText) || sLineText[0] == ';') continue;
+                return;
+            }
+
+            using StringList LoadList = new StringList();
+            LoadList.LoadFromFile(sFileName);
+            for (int i = 0; i < LoadList.Count; i++)
+            {
+                string sLineText = LoadList[i];
+                if (string.IsNullOrEmpty(sLineText) || sLineText[0] == ';')
+                {
+                    continue;
+                }
+
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sRobotName, new[] { ' ', '/', '\t' });
                 sLineText = HUtil32.GetValidStr3(sLineText, ref sScriptFileName, new[] { ' ', '/', '\t' });
-                if (string.IsNullOrEmpty(sRobotName) || string.IsNullOrEmpty(sScriptFileName)) continue;
-                var robotHuman = new RobotObject();
+                if (string.IsNullOrEmpty(sRobotName) || string.IsNullOrEmpty(sScriptFileName))
+                {
+                    continue;
+                }
+
+                RobotObject robotHuman = new RobotObject();
                 robotHuman.ChrName = sRobotName;
                 robotHuman.ScriptFileName = sScriptFileName;
                 robotHuman.LoadScript();
@@ -52,11 +61,27 @@ namespace GameSrv.Robots
 
         private void UnLoadRobot()
         {
-            for (var i = 0; i < RobotHumanList.Count; i++)
+            for (int i = 0; i < RobotHumanList.Count; i++)
             {
                 RobotHumanList[i] = null;
             }
             RobotHumanList.Clear();
+        }
+
+        public void Run()
+        {
+            for (int i = 0; i < RobotHumanList.Count; i++)
+            {
+                RobotHumanList[i].Run();
+            }
+        }
+
+        public void Initialize()
+        {
+            for (int i = 0; i < RobotHumanList.Count; i++)
+            {
+                RobotHumanList[i].Initialize();
+            }
         }
     }
 }

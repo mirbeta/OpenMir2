@@ -1,11 +1,11 @@
-using NLog;
-using SelGate.Package;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
+using SelGate.Datas;
 using System;
 using System.Net;
-using SystemModule;
-using SystemModule.Packets.ServerPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+using System.Threading.Tasks;
+using TouchSocket.Sockets;
+using TcpClient = TouchSocket.Sockets.TcpClient;
 
 namespace SelGate.Services
 {
@@ -17,7 +17,7 @@ namespace SelGate.Services
         /// <summary>
         /// Socket客户端
         /// </summary>
-        private readonly ScoketClient _clientSocket;
+        private readonly TcpClient _clientSocket;
         /// <summary>
         /// 网关编号（初始化的时候进行分配）
         /// </summary>
@@ -29,7 +29,7 @@ namespace SelGate.Services
         /// <summary>
         /// 用户会话
         /// </summary>
-        public readonly TSessionInfo[] SessionArray;
+        public readonly SessionInfo[] SessionArray;
         /// <summary>
         ///  网关游戏服务器之间检测是否失败/超时
         /// </summary>
@@ -38,9 +38,6 @@ namespace SelGate.Services
         /// 网关游戏服务器之间检测是否失败次数
         /// </summary>
         public int CheckServerFailCount = 0;
-        public bool KeepAlive;
-        public int KeepAliveTick;
-        public SockThreadStutas SockThreadStutas;
         /// <summary>
         /// 网关是否就绪
         /// </summary>
@@ -54,31 +51,24 @@ namespace SelGate.Services
         /// </summary>
         private readonly SessionManager _sessionManager;
         /// <summary>
-        /// Logger
-        /// </summary>
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        /// <summary>
         /// 数据缓冲区
         /// </summary>
-        private byte[] DataBuff;
+        private readonly byte[] DataBuff;
         /// <summary>
         /// 缓存缓冲长度
         /// </summary>
         private int DataLen;
-        
+
         public ClientThread(int clientId, string serverAddr, int serverPort, SessionManager sessionManager)
         {
             ClientId = clientId;
-            SessionArray = new TSessionInfo[MaxSession];
+            SessionArray = new SessionInfo[MaxSession];
             _sessionManager = sessionManager;
-            _clientSocket = new ScoketClient(new IPEndPoint(IPAddress.Parse(serverAddr), serverPort), 512);
-            _clientSocket.OnConnected += ClientSocketConnect;
-            _clientSocket.OnDisconnected += ClientSocketDisconnect;
-            _clientSocket.OnReceivedData += ClientSocketRead;
-            _clientSocket.OnError += ClientSocketError;
-            SockThreadStutas = SockThreadStutas.Connecting;
-            KeepAliveTick = HUtil32.GetTickCount();
-            KeepAlive = true;
+            _clientSocket = new TcpClient();
+            _clientSocket.Setup(new TouchSocket.Core.TouchSocketConfig().SetRemoteIPHost(new IPHost(IPAddress.Parse(serverAddr), serverPort)));
+            _clientSocket.Connected += ClientSocketConnect;
+            _clientSocket.Disconnected += ClientSocketDisconnect;
+            _clientSocket.Received += ClientSocketRead;
             DataBuff = new byte[2048 * 10];
         }
 
@@ -86,142 +76,113 @@ namespace SelGate.Services
 
         public string GetEndPoint()
         {
-            return _clientSocket.RemoteEndPoint.ToString();
+            return _clientSocket.RemoteIPHost.ToString();
         }
 
-        public void Start()
+        public async Task Start()
         {
-            _clientSocket.Connect();
-        }
-
-        public void ReConnected()
-        {
-            if (isConnected == false)
+            try
             {
-                _clientSocket.Connect();
+                if (_clientSocket.Online)
+                {
+                    return;
+                }
+                await _clientSocket.ConnectAsync();
+            }
+            catch (TimeoutException)
+            {
+                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]超时...");
+            }
+            catch (Exception)
+            {
+                LogService.Error($"链接数据库服务器[{_clientSocket.RemoteIPHost.EndPoint}]失败...");
             }
         }
 
         public void Stop()
         {
-            for (var i = 0; i < SessionArray.Length; i++)
-            {
-                if (SessionArray[i] != null && SessionArray[i].Socket != null)
-                {
-                    SessionArray[i].Socket.Close();
-                }
-            }
-            _clientSocket.Disconnect();
+            _clientSocket.Close();
         }
 
-        public TSessionInfo[] GetSession()
+        public SessionInfo[] GetSession()
         {
             return SessionArray;
         }
 
-        private void ClientSocketConnect(object sender, DSCClientConnectedEventArgs e)
+        private Task ClientSocketConnect(ITcpClient client, ConnectedEventArgs e)
         {
             boGateReady = true;
             RestSessionArray();
             isConnected = true;
-            SockThreadStutas = SockThreadStutas.Connected;
-            KeepAliveTick = HUtil32.GetTickCount();
             GateShare.CheckServerTick = HUtil32.GetTickCount();
             GateShare.ServerGateList.Add(this);
-            _logger.Info($"数据库服务器[{e.RemoteEndPoint}]链接成功.", 1);
-            _logger.Debug($"线程[{Guid.NewGuid():N}]连接 {e.RemoteEndPoint} 成功...");
+            LogService.Info($"数据库服务器[{client.RemoteIPHost.EndPoint}]链接成功.");
+            LogService.Debug($"线程[{Guid.NewGuid():N}]连接 {client.RemoteIPHost} 成功...");
+            return Task.CompletedTask;
         }
 
-        private void ClientSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
+        private Task ClientSocketDisconnect(ITcpClientBase client, DisconnectEventArgs e)
         {
-            for (var i = 0; i < MaxSession; i++)
-            {
-                var userSession = SessionArray[i];
-                if (userSession == null)
-                {
-                    continue;
-                }
-                if (userSession.Socket != null && userSession.Socket == e.Socket)
-                {
-                    userSession.Socket.Close();
-                    userSession.Socket = null;
-                }
-            }
             RestSessionArray();
             GateShare.ServerGateList.Remove(this);
-            _logger.Info($"数据库服务器[{e.RemoteEndPoint}]断开链接.", 1);
+            LogService.Info($"数据库服务器[{client.GetIPPort()}]断开链接.");
             boGateReady = false;
             isConnected = false;
             CheckServerFail = true;
+            return Task.CompletedTask;
         }
 
         /// <summary>
         /// 收到数据库服务器 直接发送给客户端
         /// </summary>
-        private void ClientSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task ClientSocketRead(ITcpClient client, ReceivedDataEventArgs e)
         {
-            var nMsgLen = e.BuffLen;
+            int nMsgLen = e.ByteBlock.Len;
             if (nMsgLen <= 0)
             {
-                return;
+                return Task.CompletedTask;
             }
             if (DataLen > 0)
             {
-                MemoryCopy.BlockCopy(e.Buff, 0, DataBuff, DataLen, nMsgLen);
+                MemoryCopy.BlockCopy(e.ByteBlock.Buffer, 0, DataBuff, DataLen, nMsgLen);
                 ProcessServerData(DataBuff, DataLen + nMsgLen);
             }
             else
             {
-                ProcessServerData(e.Buff, nMsgLen);
+                ProcessServerData(e.ByteBlock.Buffer, nMsgLen);
             }
-        }
-
-        private void ClientSocketError(object sender, DSCClientErrorEventArgs e)
-        {
-            switch (e.ErrorCode)
-            {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...失败[{CheckServerFailCount}]次", 1);
-                    break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]关闭连接...失败[{CheckServerFailCount}]次", 1);
-                    break;
-                case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.Info($"数据库服务器[{_clientSocket.RemoteEndPoint}]链接超时...失败[{CheckServerFailCount}]次", 1);
-                    break;
-            }
+            return Task.CompletedTask;
         }
 
         private void ProcessServerData(byte[] data, int nLen)
         {
-            var srcOffset = 0;
+            int srcOffset = 0;
             Span<byte> dataBuff = data;
             while (nLen > ServerDataPacket.FixedHeaderLen)
             {
-                var packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
-                var message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
+                Span<byte> packetHead = dataBuff[..ServerDataPacket.FixedHeaderLen];
+                ServerDataPacket message = SerializerUtil.Deserialize<ServerDataPacket>(packetHead);
                 if (message.PacketCode != Grobal2.PacketCode)
                 {
                     srcOffset++;
                     dataBuff = dataBuff.Slice(srcOffset, ServerDataPacket.FixedHeaderLen);
                     nLen -= 1;
-                    _logger.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
+                    LogService.Debug($"解析封包出现异常封包，PacketLen:[{dataBuff.Length}] Offset:[{srcOffset}].");
                     continue;
                 }
-                var nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
+                int nCheckMsgLen = Math.Abs(message.PacketLen + ServerDataPacket.FixedHeaderLen);
                 if (nCheckMsgLen > nLen)
                 {
                     break;
-                } 
-                var messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
+                }
+                ServerDataMessage messageData = SerializerUtil.Deserialize<ServerDataMessage>(dataBuff[ServerDataPacket.FixedHeaderLen..]);
                 switch (messageData.Type)
                 {
                     case ServerDataType.KeepAlive:
-                        KeepAliveTick = HUtil32.GetTickCount();
                         CheckServerFail = false;
                         boGateReady = true;
                         isConnected = true;
-                        _logger.Debug("DBSrv Heartbeat Response");
+                        LogService.Debug("DBSrv Heartbeat Response");
                         break;
                     case ServerDataType.Leave:
                         _sessionManager.CloseSession(messageData.SocketId);
@@ -266,16 +227,15 @@ namespace SelGate.Services
                 DataLen = 0;
             }
         }
-                
+
         public void RestSessionArray()
         {
-            for (var i = 0; i < MaxSession; i++)
+            for (int i = 0; i < MaxSession; i++)
             {
                 if (SessionArray[i] != null)
                 {
-                    SessionArray[i].Socket = null;
                     SessionArray[i].dwReceiveTick = HUtil32.GetTickCount();
-                    SessionArray[i].SocketId = 0;
+                    SessionArray[i].SocketId = string.Empty;
                     SessionArray[i].ClientIP = string.Empty;
                 }
             }
@@ -283,10 +243,10 @@ namespace SelGate.Services
 
         public void SendKeepAlive()
         {
-            var messageData = new ServerDataMessage();
+            ServerDataMessage messageData = new ServerDataMessage();
             messageData.Type = ServerDataType.KeepAlive;
             SendSocket(SerializerUtil.Serialize(messageData));
-            _logger.Debug("Send DBSrv Heartbeat.");
+            LogService.Debug("Send DBSrv Heartbeat.");
         }
 
         public void SendBuffer(string sendText)
@@ -296,32 +256,25 @@ namespace SelGate.Services
 
         public void SendSocket(byte[] buffer)
         {
-            if (!_clientSocket.IsConnected)
+            if (!_clientSocket.Online)
             {
-               return;
+                return;
             }
             SendMessage(buffer);
         }
-        
+
         private void SendMessage(byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _clientSocket.Send(data);
         }
-    }
-
-    public enum SockThreadStutas : byte
-    {
-        Connecting = 0,
-        Connected = 1,
-        TimeOut = 2
     }
 }

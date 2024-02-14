@@ -1,9 +1,4 @@
-using System;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using GameGate.Conf;
-using NLog;
 
 namespace GameGate.Services
 {
@@ -26,12 +21,12 @@ namespace GameGate.Services
         private SessionContainer()
         {
             _sessionMap = new ClientSession[ConfigManager.GateConfig.ServerWorkThread][];
-            for (var i = 0; i < _sessionMap.Length; i++)
+            for (int i = 0; i < _sessionMap.Length; i++)
             {
                 _sessionMap[i] = new ClientSession[GateShare.MaxSession];
             }
         }
-        
+
         public void AddSession(byte serviceId, int sessionId, ClientSession clientSession)
         {
             _sessionMap[serviceId][sessionId] = clientSession;

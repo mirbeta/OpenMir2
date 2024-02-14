@@ -1,5 +1,5 @@
 ﻿using BotSrv.Player;
-using SystemModule;
+using OpenMir2;
 
 namespace BotSrv.Objects
 {
@@ -17,16 +17,29 @@ namespace BotSrv.Objects
             long m_dwEffectFrameTimetime;
             long m_dwFrameTimetime;
             if (m_nCurrentAction == Messages.SM_WALK || m_nCurrentAction == Messages.SM_BACKSTEP ||
-                m_nCurrentAction == Messages.SM_RUN || m_nCurrentAction == Messages.SM_HORSERUN) return;
+                m_nCurrentAction == Messages.SM_RUN || m_nCurrentAction == Messages.SM_HORSERUN)
+            {
+                return;
+            }
+
             m_boMsgMuch = false;
-            if (m_MsgList.Count >= BotConst.MSGMUCH) m_boMsgMuch = true;
+            if (m_MsgList.Count >= BotConst.MSGMUCH)
+            {
+                m_boMsgMuch = true;
+            }
+
             RunFrameAction(m_nCurrentFrame - m_nStartFrame);
             if (m_boUseEffect || m_boNowDeath)
             {
                 if (m_boMsgMuch)
+                {
                     m_dwEffectFrameTimetime = HUtil32.Round(m_dwEffectFrameTime * 2 / 3);
+                }
                 else
+                {
                     m_dwEffectFrameTimetime = m_dwEffectFrameTime;
+                }
+
                 if (MShare.GetTickCount() - m_dwEffectStartTime > m_dwEffectFrameTimetime)
                 {
                     m_dwEffectStartTime = MShare.GetTickCount();
@@ -45,11 +58,20 @@ namespace BotSrv.Objects
             prv = m_nCurrentFrame;
             if (m_nCurrentAction != 0)
             {
-                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame) m_nCurrentFrame = m_nStartFrame;
+                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame)
+                {
+                    m_nCurrentFrame = m_nStartFrame;
+                }
+
                 if (m_boMsgMuch)
+                {
                     m_dwFrameTimetime = HUtil32.Round(m_dwFrameTime * 2 / 3);
+                }
                 else
+                {
                     m_dwFrameTimetime = m_dwFrameTime;
+                }
+
                 if (MShare.GetTickCount() - m_dwStartTime > m_dwFrameTimetime)
                 {
                     if (m_nCurrentFrame < m_nEndFrame)
@@ -74,14 +96,20 @@ namespace BotSrv.Objects
                     {
                         m_dwDefFrameTime = MShare.GetTickCount();
                         m_nCurrentDefFrame++;
-                        if (m_nCurrentDefFrame >= m_nDefFrameCount) m_nCurrentDefFrame = 0;
+                        if (m_nCurrentDefFrame >= m_nDefFrameCount)
+                        {
+                            m_nCurrentDefFrame = 0;
+                        }
                     }
 
                     DefaultMotion();
                 }
             }
 
-            if (prv != m_nCurrentFrame || prv != m_nEffectFrame) m_dwLoadSurfaceTime = MShare.GetTickCount();
+            if (prv != m_nCurrentFrame || prv != m_nEffectFrame)
+            {
+                m_dwLoadSurfaceTime = MShare.GetTickCount();
+            }
         }
     }
 }

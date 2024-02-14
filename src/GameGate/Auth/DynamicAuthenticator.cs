@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace GameGate.Auth
 {
@@ -26,7 +22,7 @@ namespace GameGate.Auth
         /// <returns>SetupCode object</returns>
         public SetupCode GenerateSetupCode(string issuer, string accountTitleNoSpaces, string accountSecretKey, int QRPixelsPerModule)
         {
-            var key = Encoding.UTF8.GetBytes(accountSecretKey);
+            byte[] key = Encoding.UTF8.GetBytes(accountSecretKey);
             return GenerateSetupCode(issuer, accountTitleNoSpaces, key, QRPixelsPerModule);
         }
 
@@ -43,7 +39,7 @@ namespace GameGate.Auth
         {
             if (accountTitleNoSpaces == null) { throw new NullReferenceException("Account Title is null"); }
             accountTitleNoSpaces = RemoveWhitespace(accountTitleNoSpaces);
-            var encodedSecretKey = Base32Encoding.ToString(accountSecretKey);
+            string encodedSecretKey = Base32Encoding.ToString(accountSecretKey);
             return new SetupCode()
             {
                 Account = issuer,
@@ -59,10 +55,10 @@ namespace GameGate.Auth
 
         private string UrlEncode(string value)
         {
-            var result = new StringBuilder();
-            var validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
+            StringBuilder result = new StringBuilder();
+            string validChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-_.~";
 
-            foreach (var symbol in value)
+            foreach (char symbol in value)
             {
                 if (validChars.IndexOf(symbol) != -1)
                 {
@@ -84,33 +80,33 @@ namespace GameGate.Auth
 
         internal string GenerateHashedCode(string secret, long iterationNumber, int digits = 6)
         {
-            var key = Encoding.UTF8.GetBytes(secret);
+            byte[] key = Encoding.UTF8.GetBytes(secret);
             return GenerateHashedCode(key, iterationNumber, digits);
         }
 
         internal string GenerateHashedCode(byte[] key, long iterationNumber, int digits = 6)
         {
-            var counter = BitConverter.GetBytes(iterationNumber);
+            byte[] counter = BitConverter.GetBytes(iterationNumber);
 
             if (BitConverter.IsLittleEndian)
             {
                 Array.Reverse(counter);
             }
 
-            var hmac = new HMACSHA1(key);
+            HMACSHA1 hmac = new HMACSHA1(key);
 
-            var hash = hmac.ComputeHash(counter);
+            byte[] hash = hmac.ComputeHash(counter);
 
-            var offset = hash[hash.Length - 1] & 0xf;
+            int offset = hash[^1] & 0xf;
 
             // Convert the 4 bytes into an integer, ignoring the sign.
-            var binary =
+            int binary =
                 ((hash[offset] & 0x7f) << 24)
                 | (hash[offset + 1] << 16)
                 | (hash[offset + 2] << 8)
                 | (hash[offset + 3]);
 
-            var password = binary % (int)Math.Pow(10, digits);
+            int password = binary % (int)Math.Pow(10, digits);
             return password.ToString(new string('0', digits));
         }
 
@@ -131,22 +127,22 @@ namespace GameGate.Auth
 
         private bool ValidateTwoFactorPIN(string accountSecretKey, string twoFactorCodeFromClient, TimeSpan timeTolerance)
         {
-            var codes = GetCurrentPINs(accountSecretKey, timeTolerance);
+            string[] codes = GetCurrentPINs(accountSecretKey, timeTolerance);
             return codes.Any(c => c == twoFactorCodeFromClient);
         }
 
         private string[] GetCurrentPINs(string accountSecretKey, TimeSpan timeTolerance)
         {
-            var codes = new List<string>();
-            var iterationCounter = GetCurrentCounter();
-            var iterationOffset = 0;
+            List<string> codes = new List<string>();
+            long iterationCounter = GetCurrentCounter();
+            int iterationOffset = 0;
             if (timeTolerance.TotalSeconds > 30)
             {
                 iterationOffset = Convert.ToInt32(timeTolerance.TotalSeconds / 30.00);
             }
-            var iterationStart = iterationCounter - iterationOffset;
-            var iterationEnd = iterationCounter + iterationOffset;
-            for (var counter = iterationStart; counter <= iterationEnd; counter++)
+            long iterationStart = iterationCounter - iterationOffset;
+            long iterationEnd = iterationCounter + iterationOffset;
+            for (long counter = iterationStart; counter <= iterationEnd; counter++)
             {
                 codes.Add(GeneratePINAtInterval(accountSecretKey, counter));
             }

@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
+using OpenMir2;
 using Spectre.Console;
 using System;
 using System.IO.Pipes;
@@ -11,7 +10,7 @@ namespace MapSrv
 {
     public class AppService : IHostedService, IDisposable
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         private readonly IHostApplicationLifetime _appLifetime;
         private Task? _applicationTask;
         private int? _exitCode;
@@ -28,13 +27,13 @@ namespace MapSrv
 
         public Task StartAsync(CancellationToken stoppingToken)
         {
-            _logger.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
+            LogService.Debug($"Starting with arguments: {string.Join(" ", Environment.GetCommandLineArgs())}");
 
             _cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
 
             _appLifetime.ApplicationStarted.Register(() =>
             {
-                _logger.Debug("Application has started");
+                LogService.Debug("Application has started");
                 _applicationTask = Task.Run(() =>
                 {
                     try
@@ -48,8 +47,8 @@ namespace MapSrv
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error(ex, "Unhandled exception!");
-                        _logger.Error(ex.StackTrace);
+                        LogService.Error(ex);
+                        LogService.Error(ex.StackTrace);
                         _exitCode = 1;
                     }
                 }, stoppingToken);
@@ -69,7 +68,7 @@ namespace MapSrv
                 await _applicationTask;
             }
 
-            _logger.Debug($"Exiting with return code: {_exitCode}");
+            LogService.Debug($"Exiting with return code: {_exitCode}");
 
             // Exit code may be null if the user cancelled via Ctrl+C/SIGTERM
             Environment.ExitCode = _exitCode.GetValueOrDefault(-1);
@@ -77,7 +76,7 @@ namespace MapSrv
 
         private void OnShutdown()
         {
-            _logger.Debug("Application is stopping");
+            LogService.Debug("Application is stopping");
             _cancellationTokenSource?.CancelAfter(3000);
         }
 

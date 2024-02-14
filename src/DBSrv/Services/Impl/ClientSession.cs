@@ -1,11 +1,4 @@
 using DBSrv.Conf;
-using NLog;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using SystemModule;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
 
 namespace DBSrv.Services.Impl
 {
@@ -14,90 +7,81 @@ namespace DBSrv.Services.Impl
     /// </summary>
     public class ClientSession
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private readonly ScoketClient _clientScoket;
+        private readonly TcpClient _clientScoket;
         private readonly IList<GlobaSessionInfo> _globaSessionList = null;
-        private readonly SettingConf _setting;
+        private readonly SettingsModel _setting;
         private string _sockMsg = string.Empty;
 
-        public ClientSession(SettingConf conf)
+        public ClientSession(SettingsModel conf)
         {
             _setting = conf;
-            _clientScoket = new ScoketClient(new IPEndPoint(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort));
-            _clientScoket.OnReceivedData += LoginSocketRead;
-            _clientScoket.OnConnected += LoginSocketConnected;
-            _clientScoket.OnDisconnected += LoginSocketDisconnected;
-            _clientScoket.OnError += LoginSocketError;
+            _clientScoket = new TcpClient();
+            TouchSocketConfig config = new TouchSocketConfig()
+                .SetRemoteIPHost(new IPHost(IPAddress.Parse(_setting.LoginServerAddr), _setting.LoginServerPort))
+                .ConfigureContainer(x => { x.AddConsoleLogger(); })
+                .ConfigurePlugins(x => { x.UseReconnection(); });
+            _clientScoket.Setup(config);
+            _clientScoket.Received += LoginSocketRead;
+            _clientScoket.Connected += LoginSocketConnected;
+            _clientScoket.Disconnected += LoginSocketDisconnected;
             _globaSessionList = new List<GlobaSessionInfo>();
         }
 
-        private void LoginSocketError(object sender, DSCClientErrorEventArgs e)
+        public async Task Start()
         {
-            switch (e.ErrorCode)
+            try
             {
-                case System.Net.Sockets.SocketError.ConnectionRefused:
-                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]拒绝链接...");
-                    break;
-                case System.Net.Sockets.SocketError.ConnectionReset:
-                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]关闭连接...");
-                    break;
-                case System.Net.Sockets.SocketError.TimedOut:
-                    _logger.Warn("账号服务器[" + _setting.LoginServerAddr + ":" + _setting.LoginServerPort + "]链接超时...");
-                    break;
+                if (_clientScoket.Online)
+                {
+                    return;
+                }
+                await _clientScoket.ConnectAsync();
             }
-        }
-
-        private void LoginSocketConnected(object sender, DSCClientConnectedEventArgs e)
-        {
-            _logger.Info($"账号服务器[{e.RemoteEndPoint}]链接成功.");
-        }
-
-        private void LoginSocketDisconnected(object sender, DSCClientConnectedEventArgs e)
-        {
-            _logger.Error($"账号服务器[{e.RemoteEndPoint}]断开链接.");
-        }
-
-        public void Start()
-        {
-            _clientScoket.Connect();
+            catch (TimeoutException)
+            {
+                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接超时...");
+            }
+            catch (Exception)
+            {
+                LogService.Error($"账号服务器[{_setting.LoginServerAddr}:{_setting.LoginServerPort}]链接失败...");
+            }
         }
 
         public void Stop()
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
                 _globaSessionList[i] = null;
             }
         }
 
-        public void CheckConnection()
+        private Task LoginSocketConnected(ITcpClientBase client, ConnectedEventArgs e)
         {
-            if (_clientScoket.IsConnected)
-            {
-                return;
-            }
-            if (_clientScoket.IsBusy)
-            {
-                return;
-            }
-            _logger.Debug($"开始接账号服务器[{_clientScoket.RemoteEndPoint}].");
-            _clientScoket.Connect(_setting.LoginServerAddr, _setting.LoginServerPort);
+            LogService.Info($"账号服务器[{client.GetIPPort()}]链接成功.");
+            return Task.CompletedTask;
         }
 
-        private void LoginSocketRead(object sender, DSCClientDataInEventArgs e)
+        private Task LoginSocketDisconnected(ITcpClientBase client, DisconnectEventArgs e)
         {
-            _sockMsg += HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            LogService.Error($"账号服务器[{client.GetIPPort()}]断开链接.");
+            return Task.CompletedTask;
+        }
+
+        private Task LoginSocketRead(IClient client, ReceivedDataEventArgs e)
+        {
+            _sockMsg += HUtil32.GetString(e.ByteBlock.Buffer, 0, e.ByteBlock.Len);
             if (_sockMsg.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
             {
                 ProcessSocketMsg();
             }
+            return Task.CompletedTask;
         }
 
         private void ProcessSocketMsg()
         {
-            var sData = string.Empty;
-            var sCode = string.Empty;
-            var sScoketText = _sockMsg;
+            string sData = string.Empty;
+            string sCode = string.Empty;
+            string sScoketText = _sockMsg;
             while (sScoketText.IndexOf(")", StringComparison.OrdinalIgnoreCase) > 0)
             {
                 sScoketText = HUtil32.ArrestStringEx(sScoketText, "(", ")", ref sData);
@@ -105,8 +89,8 @@ namespace DBSrv.Services.Impl
                 {
                     break;
                 }
-                var sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
-                var nIdent = HUtil32.StrToInt(sCode, 0);
+                string sBody = HUtil32.GetValidStr3(sData, ref sCode, HUtil32.Backslash);
+                int nIdent = HUtil32.StrToInt(sCode, 0);
                 switch (nIdent)
                 {
                     case Messages.SS_OPENSESSION:
@@ -126,22 +110,19 @@ namespace DBSrv.Services.Impl
         public void SendSocketMsg(short wIdent, string sMsg)
         {
             const string sFormatMsg = "({0}/{1})";
-            var sSendText = string.Format(sFormatMsg, wIdent, sMsg);
-            if (_clientScoket.IsConnected)
-            {
-                _clientScoket.SendText(sSendText);
-            }
+            string sSendText = string.Format(sFormatMsg, wIdent, sMsg);
+            _clientScoket.Send(sSendText);
         }
 
         public bool CheckSession(string account, string sIPaddr, int sessionId)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == account) && (globaSessionInfo.nSessionID == sessionId))
+                    if ((globaSessionInfo.Account == account) && (globaSessionInfo.SessionID == sessionId))
                     {
                         result = true;
                         break;
@@ -153,19 +134,19 @@ namespace DBSrv.Services.Impl
 
         public int CheckSessionLoadRcd(string sAccount, string sIPaddr, int nSessionId, ref bool boFoundSession)
         {
-            var result = -1;
+            int result = -1;
             boFoundSession = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.Account == sAccount) && (globaSessionInfo.SessionID == nSessionId))
                     {
                         boFoundSession = true;
-                        if (!globaSessionInfo.boLoadRcd)
+                        if (!globaSessionInfo.LoadRcd)
                         {
-                            globaSessionInfo.boLoadRcd = true;
+                            globaSessionInfo.LoadRcd = true;
                             result = 1;
                         }
                         break;
@@ -177,15 +158,15 @@ namespace DBSrv.Services.Impl
 
         public bool SetSessionSaveRcd(string sAccount)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == sAccount))
+                    if ((globaSessionInfo.Account == sAccount))
                     {
-                        globaSessionInfo.boLoadRcd = false;
+                        globaSessionInfo.LoadRcd = false;
                         result = true;
                     }
                 }
@@ -195,14 +176,14 @@ namespace DBSrv.Services.Impl
 
         public void SetGlobaSessionNoPlay(int nSessionId)
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        globaSessionInfo.boStartPlay = false;
+                        globaSessionInfo.StartPlay = false;
                         break;
                     }
                 }
@@ -211,14 +192,14 @@ namespace DBSrv.Services.Impl
 
         public void SetGlobaSessionPlay(int nSessionId)
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        globaSessionInfo.boStartPlay = true;
+                        globaSessionInfo.StartPlay = true;
                         break;
                     }
                 }
@@ -227,15 +208,15 @@ namespace DBSrv.Services.Impl
 
         public bool GetGlobaSessionStatus(int nSessionId)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        result = globaSessionInfo.boStartPlay;
+                        result = globaSessionInfo.StartPlay;
                         break;
                     }
                 }
@@ -245,14 +226,14 @@ namespace DBSrv.Services.Impl
 
         public void CloseSession(string sAccount, int nSessionId)
         {
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId))
+                    if ((globaSessionInfo.SessionID == nSessionId))
                     {
-                        if (globaSessionInfo.sAccount == sAccount)
+                        if (globaSessionInfo.Account == sAccount)
                         {
                             globaSessionInfo = null;
                             _globaSessionList.RemoveAt(i);
@@ -265,40 +246,40 @@ namespace DBSrv.Services.Impl
 
         private void ProcessAddSession(string sData)
         {
-            var sAccount = string.Empty;
-            var s10 = string.Empty;
-            var s14 = string.Empty;
-            var s18 = string.Empty;
-            var sIPaddr = string.Empty;
+            string sAccount = string.Empty;
+            string s10 = string.Empty;
+            string s14 = string.Empty;
+            string s18 = string.Empty;
+            string sIPaddr = string.Empty;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s10, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s14, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref s18, HUtil32.Backslash);
             sData = HUtil32.GetValidStr3(sData, ref sIPaddr, HUtil32.Backslash);
-            var globaSessionInfo = new GlobaSessionInfo();
-            globaSessionInfo.sAccount = sAccount;
-            globaSessionInfo.sIPaddr = sIPaddr;
-            globaSessionInfo.nSessionID = HUtil32.StrToInt(s10, 0);
-            //GlobaSessionInfo.n24 = HUtil32.Str_ToInt(s14, 0);
-            globaSessionInfo.boStartPlay = false;
-            globaSessionInfo.boLoadRcd = false;
-            globaSessionInfo.dwAddTick = HUtil32.GetTickCount();
-            globaSessionInfo.dAddDate = DateTime.Now;
+            GlobaSessionInfo globaSessionInfo = new GlobaSessionInfo();
+            globaSessionInfo.Account = sAccount;
+            globaSessionInfo.IPaddr = sIPaddr;
+            globaSessionInfo.SessionID = HUtil32.StrToInt(s10, 0);
+            //GlobaSessionInfo.n24 = HUtil32.StrToInt(s14, 0);
+            globaSessionInfo.StartPlay = false;
+            globaSessionInfo.LoadRcd = false;
+            globaSessionInfo.AddTick = HUtil32.GetTickCount();
+            globaSessionInfo.AddDate = DateTime.Now;
             _globaSessionList.Add(globaSessionInfo);
-            //_logger.Debug($"同步账号服务[{sAccount}]同步会话消息...");
+            LogService.Debug($"同步账号服务[{sAccount}]同步会话消息...");
         }
 
         private void ProcessDelSession(string sData)
         {
-            var sAccount = string.Empty;
+            string sAccount = string.Empty;
             sData = HUtil32.GetValidStr3(sData, ref sAccount, HUtil32.Backslash);
-            var nSessionId = HUtil32.StrToInt(sData, 0);
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            int nSessionId = HUtil32.StrToInt(sData, 0);
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.nSessionID == nSessionId) && (globaSessionInfo.sAccount == sAccount))
+                    if ((globaSessionInfo.SessionID == nSessionId) && (globaSessionInfo.Account == sAccount))
                     {
                         globaSessionInfo = null;
                         _globaSessionList.RemoveAt(i);
@@ -310,13 +291,13 @@ namespace DBSrv.Services.Impl
 
         public bool GetSession(string sAccount, string sIPaddr)
         {
-            var result = false;
-            for (var i = 0; i < _globaSessionList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < _globaSessionList.Count; i++)
             {
-                var globaSessionInfo = _globaSessionList[i];
+                GlobaSessionInfo globaSessionInfo = _globaSessionList[i];
                 if (globaSessionInfo != null)
                 {
-                    if ((globaSessionInfo.sAccount == sAccount) && (globaSessionInfo.sIPaddr == sIPaddr))
+                    if ((globaSessionInfo.Account == sAccount) && (globaSessionInfo.IPaddr == sIPaddr))
                     {
                         result = true;
                         break;
@@ -333,9 +314,9 @@ namespace DBSrv.Services.Impl
 
         public void SendKeepAlivePacket(int userCount)
         {
-            if (_clientScoket.IsConnected)
+            if (_clientScoket.Online)
             {
-                _clientScoket.SendText("(" + Messages.SS_SERVERINFO + "/" + _setting.ServerName + "/" + "99" + "/" + userCount + ")");
+                _clientScoket.Send(HUtil32.GetBytes("(" + Messages.SS_SERVERINFO + "/" + _setting.ServerName + "/" + "99" + "/" + userCount + ")"));
             }
         }
     }

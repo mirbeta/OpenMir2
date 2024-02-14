@@ -47,11 +47,11 @@ namespace BotSrv.Maps
             {
                 return null;
             }
-            var result = new Point[m_PathMapArray[Y, X].Distance + 1];
+            Point[] result = new Point[m_PathMapArray[Y, X].Distance + 1];
             while (m_PathMapArray[Y, X].Distance > 0)
             {
                 result[m_PathMapArray[Y, X].Distance] = new Point(X, Y);
-                var direction = m_PathMapArray[Y, X].Direction;
+                int direction = m_PathMapArray[Y, X].Direction;
                 X = X - DirToDX(direction);
                 Y = Y - DirToDY(direction);
             }
@@ -153,21 +153,21 @@ namespace BotSrv.Maps
         protected PathcellSuccess[,] FillPathMap(int X1, int Y1, int X2, int Y2)
         {
             WaveCell i;
-            var Finished = (X1 == X2) && (Y1 == Y2);
+            bool Finished = (X1 == X2) && (Y1 == Y2);
             if (Finished)
             {
                 return null;
             }
-            var result = new PathcellSuccess[m_MapHeader.wHeight, m_MapHeader.wWidth];
-            for (var Y = 0; Y < (m_MapHeader.wHeight - 1); Y++)
+            PathcellSuccess[,] result = new PathcellSuccess[m_MapHeader.wHeight, m_MapHeader.wWidth];
+            for (int Y = 0; Y < (m_MapHeader.wHeight - 1); Y++)
             {
-                for (var X = 0; X < (m_MapHeader.wWidth - 1); X++)
+                for (int X = 0; X < (m_MapHeader.wWidth - 1); X++)
                 {
                     result[Y, X].Distance = -1;
                 }
             }
-            var OldWave = new TWave();
-            var NewWave = new TWave();
+            TWave OldWave = new TWave();
+            TWave NewWave = new TWave();
             result[Y1, X1].Distance = 0;
             OldWave.Add(X1, Y1, 0, 0);
             FillPathMap_TestNeighbours();

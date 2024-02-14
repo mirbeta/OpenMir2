@@ -1,22 +1,11 @@
 ﻿using LoginSrv.Conf;
 using LoginSrv.Storage;
-using NLog;
-using System;
 using System.Net.Sockets;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
-using SystemModule.SocketComponents;
-using SystemModule.Sockets;
 
 namespace LoginSrv.Services
 {
     public class ClientSession
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configMgr;
         private readonly AccountStorage _accountStorage;
         private readonly SessionServer _sessionService;
@@ -55,30 +44,36 @@ namespace LoginSrv.Services
         {
             while (await _packetQueue.Reader.WaitToReadAsync(stoppingToken))
             {
-                while (_packetQueue.Reader.TryRead(out var message))
+                while (_packetQueue.Reader.TryRead(out UserSessionData message))
                 {
                     try
                     {
-                        var sMsg = string.Empty;
+                        string sMsg = string.Empty;
                         if (!message.Msg.EndsWith("!"))
                         {
                             return;
                         }
                         HUtil32.ArrestStringEx(message.Msg, "#", "!", ref sMsg);
                         if (string.IsNullOrEmpty(sMsg))
+                        {
                             return;
+                        }
+
                         if (sMsg.Length < Messages.DefBlockSize)
+                        {
                             return;
+                        }
+
                         sMsg = sMsg.AsSpan()[1..sMsg.Length].ToString();
 
-                        var clientSession = _clientManager.GetSession(message.SessionId);
+                        LoginGateInfo clientSession = _clientManager.GetSession(message.SessionId);
                         if (clientSession == null)
                         {
                             continue;
                         }
-                        for (var i = 0; i < clientSession.UserList.Count; i++)
+                        for (int i = 0; i < clientSession.UserList.Count; i++)
                         {
-                            var userInfo = clientSession.UserList[i];
+                            UserInfo userInfo = clientSession.UserList[i];
                             if (userInfo.SockIndex == message.SoketId)
                             {
                                 ProcessUserMsg(clientSession, userInfo, sMsg);
@@ -88,8 +83,8 @@ namespace LoginSrv.Services
                     }
                     catch (Exception ex)
                     {
-                        _logger.Error("[Exception] LoginService.DecodeUserData");
-                        _logger.Error(ex);
+                        LogService.Error("[Exception] LoginService.DecodeUserData");
+                        LogService.Error(ex);
                     }
                 }
             }
@@ -97,9 +92,9 @@ namespace LoginSrv.Services
 
         private void ProcessUserMsg(LoginGateInfo gateInfo, UserInfo userInfo, string sMsg)
         {
-            var sDefMsg = sMsg[..Messages.DefBlockSize];
-            var sData = sMsg.Substring(Messages.DefBlockSize, sMsg.Length - Messages.DefBlockSize);
-            var defMsg = EDCode.DecodePacket(sDefMsg);
+            string sDefMsg = sMsg[..Messages.DefBlockSize];
+            string sData = sMsg[Messages.DefBlockSize..];
+            CommandMessage defMsg = EDCode.DecodePacket(sDefMsg);
             switch (defMsg.Ident)
             {
                 case Messages.CM_SELECTSERVER:
@@ -131,7 +126,7 @@ namespace LoginSrv.Services
                         }
                         else
                         {
-                            _logger.Warn("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
+                            LogService.Warn("[超速操作] 创建帐号/" + userInfo.UserIPaddr);
                         }
                     }
                     else
@@ -151,7 +146,7 @@ namespace LoginSrv.Services
                         }
                         else
                         {
-                            _logger.Warn("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
+                            LogService.Warn("[超速操作] 修改密码 /" + userInfo.UserIPaddr);
                         }
                     }
                     else
@@ -167,7 +162,7 @@ namespace LoginSrv.Services
                     }
                     else
                     {
-                        _logger.Warn("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
+                        LogService.Warn("[超速操作] 更新帐号 /" + userInfo.UserIPaddr);
                     }
                     break;
                 case Messages.CM_GETBACKPASSWORD:
@@ -178,7 +173,7 @@ namespace LoginSrv.Services
                     }
                     else
                     {
-                        _logger.Warn("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
+                        LogService.Warn("[超速操作] 找回密码 /" + userInfo.UserIPaddr);
                     }
                     break;
             }
@@ -189,21 +184,21 @@ namespace LoginSrv.Services
         /// </summary>
         private void AccountLogin(UserInfo userInfo, string sData)
         {
-            var sLoginId = string.Empty;
+            string sLoginId = string.Empty;
             UserEntry userEntry = null;
             AccountRecord accountRecord = null;
             try
             {
                 userInfo.Seconds = 0;
-                var sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId,'/');
-                var nCode = 0;
-                var boNeedUpdate = false;
-                var accountIndex = _accountStorage.Index(sLoginId);
+                string sPassword = HUtil32.GetValidStr3(EDCode.DeCodeString(sData), ref sLoginId, '/');
+                int nCode = 0;
+                bool boNeedUpdate = false;
+                int accountIndex = _accountStorage.Index(sLoginId);
                 if (accountIndex > 0 && _accountStorage.Get(accountIndex, ref accountRecord) > 0)
                 {
                     if (accountRecord == null)
                     {
-                        _logger.Error($"获取账号{sLoginId}资料出错");
+                        LogService.Error($"获取账号{sLoginId}资料出错");
                         _accountStorage.Get(accountIndex, ref accountRecord);
                         return;
                     }
@@ -257,19 +252,19 @@ namespace LoginSrv.Services
                     {
                         userInfo.PayCost = true;
                         userInfo.Seconds = accountRecord.PlayTime;
-                        userInfo.PayMode = (byte)accountRecord.PayModel;
+                        userInfo.PayMode = accountRecord.PayModel;
                         AddCertUser(userInfo);
                         /*if (CheckBadAccount(userInfo.Account))
                         {
                              var szMessage = $"{st.Year}-{st.Month}-{st.Day} {st.Hour}:{st.Minute} {st.Second} {userInfo.Account} {userInfo.UserIPaddr}";
                         }*/
-                        _logger.Debug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏截止时间:[{FormatSecond(userInfo.Seconds)}]");
+                        LogService.Debug($"账号[{userInfo.Account}] 登陆IP:[{userInfo.UserIPaddr}] 游戏截止时间:[{FormatSecond(userInfo.Seconds)}]");
                     }
                     else if (accountRecord.PayModel == 0)
                     {
                         userInfo.PayCost = false;
                     }
-                    var sServerName = GetServerListInfo();
+                    string sServerName = GetServerListInfo();
                     defMsg = Messages.MakeMessage(Messages.SM_PASSOK_SELECTSERVER, 0, 0, 0, _configMgr.Config.ServerNameList.Count);
                     SendGateMsg(userInfo.Socket, userInfo.SockIndex, EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sServerName));
                     SessionAdd(userInfo.Account, userInfo.UserIPaddr, userInfo.SessionID, userInfo.PayCost, accountRecord.PayModel > 0);
@@ -282,17 +277,17 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] LoginService.LoginUser");
-                _logger.Error(ex);
+                LogService.Error("[Exception] LoginService.LoginUser");
+                LogService.Error(ex);
             }
         }
 
         private static string FormatSecond(long second)
         {
-            var days = Math.Floor(second / 86400f);
-            var hours = Math.Floor((second % 86400f) / 3600);
-            var minutes = Math.Floor(((second % 86400f) % 3600) / 60);
-            var seconds = Math.Floor(((second % 86400f) % 3600) % 60);
+            double days = Math.Floor(second / 86400f);
+            double hours = Math.Floor((second % 86400f) / 3600);
+            double minutes = Math.Floor(((second % 86400f) % 3600) / 60);
+            double seconds = Math.Floor(((second % 86400f) % 3600) % 60);
             return $"{days}天{hours}小时{minutes}分钟{seconds}秒";
         }
 
@@ -303,7 +298,7 @@ namespace LoginSrv.Services
 
         private static void AddCertUser(UserInfo pUser)
         {
-            var pCert = new CertUser();
+            CertUser pCert = new CertUser();
             pCert.LoginID = pUser.Account;
             pCert.Addr = pUser.UserIPaddr;
             pCert.IDHour = pUser.Seconds;
@@ -335,7 +330,7 @@ namespace LoginSrv.Services
 
         private static void DelCertUser(int cert)
         {
-            for (var i = LsShare.CertList.Count - 1; i >= 0; i--)
+            for (int i = LsShare.CertList.Count - 1; i >= 0; i--)
             {
                 if (LsShare.CertList[i].Certification == cert)
                 {
@@ -350,42 +345,42 @@ namespace LoginSrv.Services
         /// </summary>
         private void AccountCreate(ref UserInfo userInfo, string sData)
         {
-            var success = false;
+            bool success = false;
             const string sAddNewuserFail = "[新建帐号失败] {0}/{1}";
             try
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.Warn("[新建账号失败] 数据包为空或数据包长度异常");
+                    LogService.Warn("[新建账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
-                var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
+                byte accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
                 if (sData.Length <= accountStrSize)
                 {
                     return;
                 }
-                var ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
-                var uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
-                var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
+                byte[] ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
+                byte[] uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
+                byte[] accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userAccount = ClientPacket.ToPacket<UserAccountPacket>(accountBuff);
+                UserAccountPacket userAccount = ClientPacket.ToPacket<UserAccountPacket>(accountBuff);
                 if (userAccount == null || userAccount.UserEntry == null || userAccount.UserEntryAdd == null)
                 {
-                    _logger.Warn("[新建账号失败] 解析封包出现异常.");
+                    LogService.Warn("[新建账号失败] 解析封包出现异常.");
                     return;
                 }
-                var nErrCode = -1;
+                int nErrCode = -1;
                 if (LsShare.VerifyAccountRule(userAccount.UserEntry.Account))
                 {
                     success = true;
                 }
                 if (success)
                 {
-                    var n10 = _accountStorage.Index(userAccount.UserEntry.Account);
+                    int n10 = _accountStorage.Index(userAccount.UserEntry.Account);
                     if (n10 <= 0)
                     {
-                        var accountRecord = new AccountRecord();
+                        AccountRecord accountRecord = new AccountRecord();
                         accountRecord.UserEntry = userAccount.UserEntry;
                         accountRecord.UserEntryAdd = userAccount.UserEntryAdd;
                         if (!string.IsNullOrEmpty(userAccount.UserEntry.Account))
@@ -403,7 +398,7 @@ namespace LoginSrv.Services
                 }
                 else
                 {
-                    _logger.Warn(string.Format(sAddNewuserFail, userAccount.UserEntry.Account, userAccount.UserEntryAdd.Quiz2));
+                    LogService.Warn(string.Format(sAddNewuserFail, userAccount.UserEntry.Account, userAccount.UserEntryAdd.Quiz2));
                 }
                 CommandMessage defMsg;
                 if (nErrCode == 1)
@@ -418,8 +413,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] LoginsService.AccountCreate");
-                _logger.Error(ex);
+                LogService.Error("[Exception] LoginsService.AccountCreate");
+                LogService.Error(ex);
             }
         }
 
@@ -428,18 +423,25 @@ namespace LoginSrv.Services
         /// </summary>
         private void AccountChangePassword(UserInfo userInfo, string sData)
         {
-            var sLoginId = string.Empty;
-            var sOldPassword = string.Empty;
+            string sLoginId = string.Empty;
+            string sOldPassword = string.Empty;
             AccountRecord accountRecord = null;
             try
             {
+<<<<<<< HEAD
                 var sMsg = EDCode.DeCodeString(sData);
                 sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginId, new[] { "\t", "\t" });
                 var sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\t", "\t" });
                 var nCode = 0;
+=======
+                string sMsg = EDCode.DeCodeString(sData);
+                sMsg = HUtil32.GetValidStr3(sMsg, ref sLoginId, new[] { "\09", "\t" });
+                string sNewPassword = HUtil32.GetValidStr3(sMsg, ref sOldPassword, new[] { "\09", "\t" });
+                int nCode = 0;
+>>>>>>> dev
                 if (sNewPassword.Length >= 3)
                 {
-                    var n10 = _accountStorage.Index(sLoginId);
+                    int n10 = _accountStorage.Index(sLoginId);
                     if (n10 >= 0 && _accountStorage.Get(n10, ref accountRecord) >= 0)
                     {
                         if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 180000)
@@ -480,8 +482,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] LoginService.ChangePassword");
-                _logger.Error(ex);
+                LogService.Error("[Exception] LoginService.ChangePassword");
+                LogService.Error(ex);
             }
         }
 
@@ -491,10 +493,10 @@ namespace LoginSrv.Services
         private void AccountSelectServer(UserInfo userInfo, string sData)
         {
             CommandMessage defMsg;
-            var sSelGateIp = string.Empty;
-            var nSelGatePort = 0;
+            string sSelGateIp = string.Empty;
+            int nSelGatePort = 0;
             const string sSelServerMsg = "Server: {0}/{1}-{2}:{3}";
-            var sServerName = EDCode.DeCodeString(sData);
+            string sServerName = EDCode.DeCodeString(sData);
             if (!string.IsNullOrEmpty(userInfo.Account) && !string.IsNullOrEmpty(sServerName) && _sessionManager.IsLogin(userInfo.SessionID))
             {
                 GetSelGateInfo(sServerName, _configMgr.Config.sGateIPaddr, ref sSelGateIp, ref nSelGatePort);
@@ -504,16 +506,16 @@ namespace LoginSrv.Services
                     {
                         sSelGateIp = userInfo.GateIPaddr;
                     }
-                    _logger.Debug(string.Format(sSelServerMsg, sServerName, _configMgr.Config.sGateIPaddr, sSelGateIp, nSelGatePort));
+                    LogService.Debug(string.Format(sSelServerMsg, sServerName, _configMgr.Config.sGateIPaddr, sSelGateIp, nSelGatePort));
                     userInfo.SelServer = true;
-                    var nPayMode = userInfo.PayMode;
+                    byte nPayMode = userInfo.PayMode;
                     if (_sessionService.IsNotUserFull(sServerName))
                     {
                         _sessionManager.UpdateSession(userInfo.SessionID, sServerName, nPayMode > 0);
                         _sessionService.SendServerMsg(Messages.SS_OPENSESSION, sServerName, userInfo.Account + "/" + userInfo.SessionID + "/" + (userInfo.PayCost ? 1 : 0) + "/" + nPayMode + "/" + userInfo.UserIPaddr + "/" + userInfo.Seconds);
                         if (nPayMode > 0)
                         {
-                            var playTimeSpan = DateTimeOffset.Now.AddSeconds(userInfo.Seconds) - DateTimeOffset.Now;
+                            TimeSpan playTimeSpan = DateTimeOffset.Now.AddSeconds(userInfo.Seconds) - DateTimeOffset.Now;
                             defMsg = Messages.MakeMessage(Messages.SM_SELECTSERVER_OK, (int)Math.Round(playTimeSpan.TotalSeconds, 1), 0, userInfo.PayMode, 0);
                         }
                         else
@@ -543,24 +545,24 @@ namespace LoginSrv.Services
             {
                 if (string.IsNullOrEmpty(sData))
                 {
-                    _logger.Warn("[更新账号失败] 数据包为空或数据包长度异常");
+                    LogService.Warn("[更新账号失败] 数据包为空或数据包长度异常");
                     return;
                 }
-                var accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
+                byte accountStrSize = (byte)Math.Ceiling((decimal)(UserEntry.Size * 4) / 3);
                 if (sData.Length <= accountStrSize)
                 {
                     return;
                 }
-                var ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
-                var uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
-                var accountBuff = new byte[ueBuff.Length + uaBuff.Length];
+                byte[] ueBuff = EDCode.DecodeBuffer(sData[..accountStrSize]);
+                byte[] uaBuff = EDCode.DecodeBuffer(sData[accountStrSize..]);
+                byte[] accountBuff = new byte[ueBuff.Length + uaBuff.Length];
                 Buffer.BlockCopy(ueBuff, 0, accountBuff, 0, ueBuff.Length);
                 Buffer.BlockCopy(uaBuff, 0, accountBuff, ueBuff.Length, uaBuff.Length);
-                var userAccount = ClientPacket.ToPacket<UserAccountPacket>(accountBuff);
-                var nCode = -1;
+                UserAccountPacket userAccount = ClientPacket.ToPacket<UserAccountPacket>(accountBuff);
+                int nCode = -1;
                 if (string.Compare(userInfo.Account, userAccount.UserEntry.Account, StringComparison.OrdinalIgnoreCase) == 0 && LsShare.VerifyAccountRule(userAccount.UserEntry.Account))
                 {
-                    var accountIndex = _accountStorage.Index(userAccount.UserEntry.Account);
+                    int accountIndex = _accountStorage.Index(userAccount.UserEntry.Account);
                     if (accountIndex >= 0)
                     {
                         AccountRecord accountRecord = null;
@@ -588,8 +590,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] LoginService.UpdateUserInfo");
-                _logger.Error(ex);
+                LogService.Error("[Exception] LoginService.UpdateUserInfo");
+                LogService.Error(ex);
             }
         }
 
@@ -598,15 +600,16 @@ namespace LoginSrv.Services
         /// </summary>
         private void AccountGetBackPassword(UserInfo userInfo, string sData)
         {
-            var sAccount = string.Empty;
-            var sQuest1 = string.Empty;
-            var sAnswer1 = string.Empty;
-            var sQuest2 = string.Empty;
-            var sAnswer2 = string.Empty;
-            var sPassword = string.Empty;
-            var sBirthDay = string.Empty;
+            string sAccount = string.Empty;
+            string sQuest1 = string.Empty;
+            string sAnswer1 = string.Empty;
+            string sQuest2 = string.Empty;
+            string sAnswer2 = string.Empty;
+            string sPassword = string.Empty;
+            string sBirthDay = string.Empty;
             CommandMessage defMsg;
             AccountRecord accountRecord = null;
+<<<<<<< HEAD
             var sMsg = EDCode.DeCodeString(sData);
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\t");
             sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, "\t");
@@ -615,9 +618,19 @@ namespace LoginSrv.Services
             sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, "\t");
             sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, "\t");
             var nCode = 0;
+=======
+            string sMsg = EDCode.DeCodeString(sData);
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAccount, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest1, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer1, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sQuest2, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sAnswer2, "\09");
+            sMsg = HUtil32.GetValidStr3(sMsg, ref sBirthDay, "\09");
+            int nCode = 0;
+>>>>>>> dev
             if (!string.IsNullOrEmpty(sAccount))
             {
-                var nIndex = _accountStorage.Index(sAccount);
+                int nIndex = _accountStorage.Index(sAccount);
                 if (nIndex >= 0 && _accountStorage.Get(nIndex, ref accountRecord) >= 0)
                 {
                     if (accountRecord.ErrorCount < 5 || HUtil32.GetTickCount() - accountRecord.ActionTick > 180000)
@@ -701,7 +714,7 @@ namespace LoginSrv.Services
         /// </summary>
         private void SessionKick(string sLoginId)
         {
-            var connInfo = _sessionManager.GetSession(sLoginId);
+            SessionConnInfo connInfo = _sessionManager.GetSession(sLoginId);
             if (connInfo != null && !connInfo.Kicked)
             {
                 _sessionService.SendServerMsg(Messages.SS_CLOSESESSION, connInfo.ServerName, connInfo.Account + "/" + connInfo.SessionID);
@@ -713,7 +726,7 @@ namespace LoginSrv.Services
 
         private void SessionAdd(string sAccount, string sIPaddr, int nSessionId, bool boPayCost, bool payMent)
         {
-            var connInfo = new SessionConnInfo();
+            SessionConnInfo connInfo = new SessionConnInfo();
             connInfo.Account = sAccount;
             connInfo.IPaddr = sIPaddr;
             connInfo.SessionID = nSessionId;
@@ -725,33 +738,33 @@ namespace LoginSrv.Services
             _sessionManager.AddSession(nSessionId, connInfo);
         }
 
-        private void SendGateMsg(Socket socket, int sSockIndex, string sMsg)
+        private void SendGateMsg(Socket socket, string sSockIndex, string sMsg)
         {
             if (socket.Connected)
             {
-                var packet = new ServerDataMessage();
+                ServerDataMessage packet = new ServerDataMessage();
                 packet.SocketId = sSockIndex;
                 packet.Data = HUtil32.GetBytes("#" + sMsg + "!$");
                 packet.DataLen = (short)packet.Data.Length;
                 packet.Type = ServerDataType.Data;
-                var sendBuffer = SerializerUtil.Serialize(packet);
+                byte[] sendBuffer = SerializerUtil.Serialize(packet);
                 SendMessage(socket, sendBuffer);
             }
             else
             {
-                _logger.Error("登陆网关链接断开，消息发送失败");
+                LogService.Error("登陆网关链接断开，消息发送失败");
             }
         }
 
         private static void SendMessage(Socket socket, byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             socket.Send(data);
@@ -760,7 +773,7 @@ namespace LoginSrv.Services
         private void KickUser(LoginGateInfo gateInfo, ref UserInfo userInfo)
         {
             const string sKickMsg = "Kick: {0}";
-            _logger.Debug(string.Format(sKickMsg, userInfo.UserIPaddr));
+            LogService.Debug(string.Format(sKickMsg, userInfo.UserIPaddr));
             SendGateKickMsg(gateInfo.Socket, userInfo.SockIndex);
             gateInfo.UserList.Remove(userInfo);
             userInfo = null;
@@ -779,7 +792,7 @@ namespace LoginSrv.Services
             {
                 sSelGateIp = "";
                 nSelGatePort = 0;
-                for (var i = 0; i < _configMgr.Config.RouteCount; i++)
+                for (int i = 0; i < _configMgr.Config.RouteCount; i++)
                 {
                     if (_configMgr.Config.DynamicIPMode || (_configMgr.Config.GateRoute[i].ServerName == sServerName && _configMgr.Config.GateRoute[i].PublicAddr == sIPaddr))
                     {
@@ -832,8 +845,8 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] LoginService.GetSelGateInfo");
-                _logger.Error(ex);
+                LogService.Error("[Exception] LoginService.GetSelGateInfo");
+                LogService.Error(ex);
             }
         }
 
@@ -843,13 +856,13 @@ namespace LoginSrv.Services
         /// <returns></returns>
         private string GetServerListInfo()
         {
-            var result = string.Empty;
-            var sServerInfo = string.Empty;
+            string result = string.Empty;
+            string sServerInfo = string.Empty;
             try
             {
-                for (var i = 0; i < _configMgr.Config.ServerNameList.Count; i++)
+                for (int i = 0; i < _configMgr.Config.ServerNameList.Count; i++)
                 {
-                    var sServerName = _configMgr.Config.ServerNameList[i];
+                    string sServerName = _configMgr.Config.ServerNameList[i];
                     if (!string.IsNullOrEmpty(sServerName))
                     {
                         sServerInfo = sServerInfo + sServerName + "/" + _sessionService.GetServerStatus(sServerName) + "/";
@@ -859,16 +872,16 @@ namespace LoginSrv.Services
             }
             catch (Exception ex)
             {
-                _logger.Error("[Exception] LoginService.GetServerListInfo");
-                _logger.Error(ex);
+                LogService.Error("[Exception] LoginService.GetServerListInfo");
+                LogService.Error(ex);
             }
             return result;
         }
 
-        private static void SendGateKickMsg(Socket socket, int sSockIndex)
+        private static void SendGateKickMsg(Socket socket, string sSockIndex)
         {
-            var sSendMsg = $"%+-{sSockIndex}$";
-            socket.SendText(sSendMsg);
+            string sSendMsg = $"%+-{sSockIndex}$";
+            socket.Send(HUtil32.GetBytes(sSendMsg));
         }
     }
 }

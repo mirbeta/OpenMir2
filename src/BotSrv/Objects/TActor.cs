@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using BotSrv.Player;
+using OpenMir2;
+using OpenMir2.Consts;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using System.Collections;
 using System.Collections.Generic;
-using BotSrv.Player;
-using SystemModule;
-using SystemModule.Consts;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv.Objects
 {
@@ -318,10 +318,14 @@ namespace BotSrv.Objects
         public void UpdateMsg(short wIdent, ushort nX, ushort nY, int ndir, int nFeature, int nState, string sStr, int nSound)
         {
             TChrMsg Msg;
-            var i = 0;
+            int i = 0;
             while (true)
             {
-                if (i >= m_MsgList.Count) break;
+                if (i >= m_MsgList.Count)
+                {
+                    break;
+                }
+
                 Msg = m_MsgList[i];
                 if (this == MShare.MySelf && Msg.Ident >= 3000 && Msg.Ident <= 3099 || Msg.Ident == wIdent)
                 {
@@ -339,7 +343,11 @@ namespace BotSrv.Objects
             int i = 0;
             while (true)
             {
-                if (i >= m_MsgList.Count) break;
+                if (i >= m_MsgList.Count)
+                {
+                    break;
+                }
+
                 Msg = m_MsgList[i];
                 if (Msg.Ident >= 3000 && Msg.Ident <= 3099)
                 {
@@ -445,8 +453,8 @@ namespace BotSrv.Objects
                         case Messages.CM_THROW:
                             if (m_nFeature != 0)
                             {
-                                //m_nTargetX = (Msg.Feature as TActor).m_nCurrX;
-                                //m_nTargetY = (Msg.Feature as TActor).m_nCurrY;
+                                //m_nTargetX = (Msg.Feature as TActor).CurrX;
+                                //m_nTargetY = (Msg.Feature as TActor).CurrY;
                                 //m_nTargetRecog = (Msg.Feature as TActor).m_nRecogId;
                             }
                             RealActionMsg = Msg;
@@ -459,8 +467,11 @@ namespace BotSrv.Objects
                             break;
                         case Messages.CM_SPELL:
                             if (MShare.MagicTarget != null)
+                            {
                                 Msg.Dir = BotHelper.GetFlyDirection(CurrX, CurrY, MShare.MagicTarget.CurrX,
                                     MShare.MagicTarget.CurrY);
+                            }
+
                             RealActionMsg = Msg;
                             //UseMagic = (TUseMagicInfo)Msg.Feature;
                             //RealActionMsg.Dir = UseMagic.MagicSerial;
@@ -520,7 +531,11 @@ namespace BotSrv.Objects
             if (Msg.Ident == Messages.SM_DEATH || Msg.Ident == Messages.SM_NOWDEATH)
             {
                 Death = true;
-                if (HUtil32.HiByte(Msg.Dir) != 0) m_boItemExplore = true;
+                if (HUtil32.HiByte(Msg.Dir) != 0)
+                {
+                    m_boItemExplore = true;
+                }
+
                 robotClient.PlayScene.ActorDied(this);
             }
         }
@@ -588,7 +603,11 @@ namespace BotSrv.Objects
             int n = 0;
             while (true)
             {
-                if (m_MsgList.Count <= n) break;
+                if (m_MsgList.Count <= n)
+                {
+                    break;
+                }
+
                 Msg = m_MsgList[n];
                 bool fin = false;
                 switch (Msg.Ident)
@@ -598,7 +617,11 @@ namespace BotSrv.Objects
                         {
                             m_CurMagic.ServerMagicCode = 255;
                             m_CurMagic.Target = Msg.X;
-                            if (Msg.Y >= 0 && Msg.Y <= 16) m_CurMagic.EffectType = (MagicType)Msg.Y;
+                            if (Msg.Y >= 0 && Msg.Y <= 16)
+                            {
+                                m_CurMagic.EffectType = (MagicType)Msg.Y;
+                            }
+
                             m_CurMagic.EffectNumber = Msg.Dir % 255;
                             m_CurMagic.targx = Msg.Feature;
                             m_CurMagic.targy = Msg.State;
@@ -635,9 +658,14 @@ namespace BotSrv.Objects
         {
             bool result;
             if (m_nCurrentAction == 0 || m_nCurrentFrame >= m_nEndFrame)
+            {
                 result = true;
+            }
             else
+            {
                 result = false;
+            }
+
             return result;
         }
 
@@ -645,15 +673,20 @@ namespace BotSrv.Objects
         {
             int result;
             if (MShare.GetTickCount() - MShare.LatestSpellTick < MShare.g_dwMagicPKDelayTime)
+            {
                 result = -1;
+            }
             else
+            {
                 result = 1;
+            }
+
             return result;
         }
 
         public int CanRun()
         {
-            var result = 1;
+            int result = 1;
             if (Abil.HP < ActorConst.RUN_MINHEALTH)
             {
                 result = -1;
@@ -663,8 +696,8 @@ namespace BotSrv.Objects
 
         public bool Strucked()
         {
-            var result = false;
-            for (var i = 0; i < m_MsgList.Count; i++)
+            bool result = false;
+            for (int i = 0; i < m_MsgList.Count; i++)
             {
                 if (m_MsgList[i].Ident == Messages.SM_STRUCK)
                 {
@@ -683,7 +716,11 @@ namespace BotSrv.Objects
             short funy;
             short unx = (short)(BotConst.UNITX * step);
             short uny = (short)(BotConst.UNITY * step);
-            if (cur > max) cur = max;
+            if (cur > max)
+            {
+                cur = max;
+            }
+
             m_nRx = CurrX;
             m_nRy = CurrY;
             switch (dir)
@@ -694,41 +731,70 @@ namespace BotSrv.Objects
                     if (ss == step)
                     {
                         funx = (short)-HUtil32.Round(uny / max * cur);
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftY = funx;
                     }
                     else
                     {
                         funx = (short)HUtil32.Round(uny / max * (max - cur));
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftY = funx;
                     }
 
                     break;
                 case Direction.UpRight:
                     if (max >= 6)
+                    {
                         v = 2;
+                    }
                     else
+                    {
                         v = 0;
+                    }
+
                     ss = HUtil32.Round((max - cur + v) / max) * step;
                     m_nRx = (short)(CurrX - ss);
                     m_nRy = (short)(CurrY + ss);
                     if (ss == step)
                     {
                         funx = (short)HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)-HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
                     else
                     {
                         funx = (short)-HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
 
@@ -737,85 +803,145 @@ namespace BotSrv.Objects
                     ss = HUtil32.Round((max - cur) / max) * step;
                     m_nRx = (short)(CurrX - ss);
                     if (ss == step)
+                    {
                         m_nShiftX = (short)HUtil32.Round(unx / max * cur);
+                    }
                     else
+                    {
                         m_nShiftX = (short)-HUtil32.Round(unx / max * (max - cur));
+                    }
+
                     m_nShiftY = 0;
                     break;
                 case Direction.DownRight:
                     if (max >= 6)
+                    {
                         v = 2;
+                    }
                     else
+                    {
                         v = 0;
+                    }
+
                     ss = HUtil32.Round((max - cur - v) / max) * step;
                     m_nRx = (short)(CurrX - ss);
                     m_nRy = (short)(CurrY - ss);
                     if (ss == step)
                     {
                         funx = (short)HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
                     else
                     {
                         funx = (short)-HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)-HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
 
                     break;
                 case Direction.Down:
                     if (max >= 6)
+                    {
                         v = 1;
+                    }
                     else
+                    {
                         v = 0;
+                    }
+
                     ss = HUtil32.Round((max - cur - v) / max) * step;
                     m_nShiftX = 0;
                     m_nRy = (short)(CurrY - ss);
                     if (ss == step)
                     {
                         funy = (short)HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
                     else
                     {
                         funy = (short)-HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
 
                     break;
                 case Direction.DownLeft:
                     if (max >= 6)
+                    {
                         v = 2;
+                    }
                     else
+                    {
                         v = 0;
+                    }
+
                     ss = HUtil32.Round((max - cur - v) / max) * step;
                     m_nRx = (short)(CurrX + ss);
                     m_nRy = (short)(CurrY - ss);
                     if (ss == step)
                     {
                         funx = (short)-HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
                     else
                     {
                         funx = (short)HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)-HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
 
@@ -824,35 +950,61 @@ namespace BotSrv.Objects
                     ss = HUtil32.Round((max - cur) / max) * step;
                     m_nRx = (short)(CurrX + ss);
                     if (ss == step)
+                    {
                         m_nShiftX = (short)-HUtil32.Round(unx / max * cur);
+                    }
                     else
+                    {
                         m_nShiftX = (short)HUtil32.Round(unx / max * (max - cur));
+                    }
+
                     m_nShiftY = 0;
                     break;
                 case Direction.UpLeft:
                     if (max >= 6)
+                    {
                         v = 2;
+                    }
                     else
+                    {
                         v = 0;
+                    }
+
                     ss = HUtil32.Round((max - cur + v) / max) * step;
                     m_nRx = (short)(CurrX + ss);
                     m_nRy = (short)(CurrY + ss);
                     if (ss == step)
                     {
                         funx = (short)-HUtil32.Round(unx / max * cur);
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)-HUtil32.Round(uny / max * cur);
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
                     else
                     {
                         funx = (short)HUtil32.Round(unx / max * (max - cur));
-                        if (funx % 2 != 0) funx = (short)(funx + 1);
+                        if (funx % 2 != 0)
+                        {
+                            funx = (short)(funx + 1);
+                        }
+
                         m_nShiftX = funx;
                         funy = (short)HUtil32.Round(uny / max * (max - cur));
-                        if (funy % 2 != 0) funy = (short)(funy + 1);
+                        if (funy % 2 != 0)
+                        {
+                            funy = (short)(funy + 1);
+                        }
+
                         m_nShiftY = funy;
                     }
 
@@ -890,23 +1042,38 @@ namespace BotSrv.Objects
             int cf;
             int result = 0;
             TMonsterAction pm = ActorConst.GetRaceByPM(Race, m_wAppearance);
-            if (pm == null) return result;
+            if (pm == null)
+            {
+                return result;
+            }
+
             if (Death)
             {
                 if (m_boSkeleton)
+                {
                     result = pm.ActDeath.start;
+                }
                 else
+                {
                     result = pm.ActDie.start + m_btDir * (pm.ActDie.frame + pm.ActDie.skip) + (pm.ActDie.frame - 1);
+                }
             }
             else
             {
                 m_nDefFrameCount = pm.ActStand.frame;
                 if (m_nCurrentDefFrame < 0)
+                {
                     cf = 0;
+                }
                 else if (m_nCurrentDefFrame >= pm.ActStand.frame)
+                {
                     cf = 0;
+                }
                 else
+                {
                     cf = m_nCurrentDefFrame;
+                }
+
                 result = pm.ActStand.start + m_btDir * (pm.ActStand.frame + pm.ActStand.skip) + cf;
             }
 
@@ -917,8 +1084,13 @@ namespace BotSrv.Objects
         {
             m_boReverseFrame = false;
             if (m_boWarMode)
+            {
                 if (MShare.GetTickCount() - m_dwWarModeTime > 4 * 1000)
+                {
                     m_boWarMode = false;
+                }
+            }
+
             m_nCurrentFrame = GetDefaultFrame(m_boWarMode);
             Shift(m_btDir, 0, 1, 1);
         }
@@ -952,10 +1124,19 @@ namespace BotSrv.Objects
         {
             bool result;
             if (this == MShare.MySelf)
+            {
                 result = MShare.GetTickCount() - m_dwWaitMagicRequest > 1800;
+            }
             else
+            {
                 result = MShare.GetTickCount() - m_dwWaitMagicRequest > 900;
-            if (result) m_CurMagic.ServerMagicCode = 0;
+            }
+
+            if (result)
+            {
+                m_CurMagic.ServerMagicCode = 0;
+            }
+
             return result;
         }
 
@@ -964,22 +1145,42 @@ namespace BotSrv.Objects
             long dwFrameTimetime;
             if (m_nCurrentAction == Messages.SM_WALK || m_nCurrentAction == Messages.SM_BACKSTEP ||
                 m_nCurrentAction == Messages.SM_RUN || m_nCurrentAction == Messages.SM_HORSERUN ||
-                m_nCurrentAction == Messages.SM_RUSH || m_nCurrentAction == Messages.SM_RUSHKUNG) return;
+                m_nCurrentAction == Messages.SM_RUSH || m_nCurrentAction == Messages.SM_RUSHKUNG)
+            {
+                return;
+            }
+
             m_boMsgMuch = false;
             if (this != MShare.MySelf)
+            {
                 if (m_MsgList.Count >= 2)
+                {
                     m_boMsgMuch = true;
+                }
+            }
+
             RunFrameAction(m_nCurrentFrame - m_nStartFrame);
-            var prv = m_nCurrentFrame;
+            int prv = m_nCurrentFrame;
             if (m_nCurrentAction != 0)
             {
-                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame) m_nCurrentFrame = m_nStartFrame;
+                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame)
+                {
+                    m_nCurrentFrame = m_nStartFrame;
+                }
+
                 if (this != MShare.MySelf && m_boUseMagic)
+                {
                     dwFrameTimetime = HUtil32.Round(m_dwFrameTime / 1.8);
+                }
                 else if (m_boMsgMuch)
+                {
                     dwFrameTimetime = HUtil32.Round(m_dwFrameTime * 2 / 3);
+                }
                 else
+                {
                     dwFrameTimetime = m_dwFrameTime;
+                }
+
                 if (MShare.GetTickCount() - m_dwStartTime > dwFrameTimetime)
                 {
                     if (m_nCurrentFrame < m_nEndFrame)
@@ -997,7 +1198,11 @@ namespace BotSrv.Objects
                             }
                             else
                             {
-                                if (m_nCurrentFrame < m_nEndFrame - 1) m_nCurrentFrame++;
+                                if (m_nCurrentFrame < m_nEndFrame - 1)
+                                {
+                                    m_nCurrentFrame++;
+                                }
+
                                 m_nCurEffFrame++;
                                 m_dwStartTime = MShare.GetTickCount();
                             }
@@ -1010,7 +1215,11 @@ namespace BotSrv.Objects
                     }
                     else
                     {
-                        if (m_boDelActionAfterFinished) DelActor = true;
+                        if (m_boDelActionAfterFinished)
+                        {
+                            DelActor = true;
+                        }
+
                         if (this == MShare.MySelf)
                         {
                             if (robotClient.ServerAcceptNextAction())
@@ -1043,7 +1252,7 @@ namespace BotSrv.Objects
                         {
                             if (m_CurMagic.ServerMagicCode > 0)
                             {
-                                //robotClient.g_PlayScene.NewMagic(this, m_CurMagic.ServerMagicCode, m_CurMagic.EffectNumber, m_nCurrX, m_nCurrY, m_CurMagic.targx, m_CurMagic.targy, m_CurMagic.target, m_CurMagic.EffectType, m_CurMagic.Recusion, m_CurMagic.anitime, ref boFly, m_CurMagic.magfirelv);
+                                //robotClient.g_PlayScene.NewMagic(this, m_CurMagic.ServerMagicCode, m_CurMagic.EffectNumber, CurrX, CurrY, m_CurMagic.targx, m_CurMagic.targy, m_CurMagic.target, m_CurMagic.EffectType, m_CurMagic.Recusion, m_CurMagic.anitime, ref boFly, m_CurMagic.magfirelv);
                             }
                             m_CurMagic.ServerMagicCode = 0;
                         }
@@ -1064,13 +1273,19 @@ namespace BotSrv.Objects
                 {
                     m_dwDefFrameTime = MShare.GetTickCount();
                     m_nCurrentDefFrame++;
-                    if (m_nCurrentDefFrame >= m_nDefFrameCount) m_nCurrentDefFrame = 0;
+                    if (m_nCurrentDefFrame >= m_nDefFrameCount)
+                    {
+                        m_nCurrentDefFrame = 0;
+                    }
                 }
 
                 DefaultMotion();
             }
 
-            if (prv != m_nCurrentFrame) m_dwLoadSurfaceTime = MShare.GetTickCount();
+            if (prv != m_nCurrentFrame)
+            {
+                m_dwLoadSurfaceTime = MShare.GetTickCount();
+            }
         }
 
         public bool Move()
@@ -1084,8 +1299,16 @@ namespace BotSrv.Objects
             result = false;
             fastmove = false;
             normmove = false;
-            if (m_nCurrentAction == Messages.SM_BACKSTEP) fastmove = true;
-            if (m_nCurrentAction == Messages.SM_RUSH || m_nCurrentAction == Messages.SM_RUSHKUNG) normmove = true;
+            if (m_nCurrentAction == Messages.SM_BACKSTEP)
+            {
+                fastmove = true;
+            }
+
+            if (m_nCurrentAction == Messages.SM_RUSH || m_nCurrentAction == Messages.SM_RUSHKUNG)
+            {
+                normmove = true;
+            }
+
             if (!fastmove && !normmove)
             {
                 m_boMoveSlow = false;
@@ -1105,7 +1328,9 @@ namespace BotSrv.Objects
 
                 m_nSkipTick = 0;
                 if (Race == 0 && this == MShare.MySelf)
+                {
                     if (new ArrayList(new[] { 5, 9, 11, 13 }).Contains(m_nCurrentAction))
+                    {
                         switch (m_nCurrentFrame - m_nStartFrame)
                         {
                             case 1:
@@ -1113,6 +1338,8 @@ namespace BotSrv.Objects
                             case 4:
                                 break;
                         }
+                    }
+                }
             }
 
             result = false;
@@ -1122,13 +1349,22 @@ namespace BotSrv.Objects
                 m_nCurrentAction == Messages.SM_HORSERUN || m_nCurrentAction == Messages.SM_RUSH ||
                 m_nCurrentAction == Messages.SM_RUSHKUNG)
             {
-                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame) m_nCurrentFrame = m_nStartFrame - 1;
+                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame)
+                {
+                    m_nCurrentFrame = m_nStartFrame - 1;
+                }
+
                 if (m_nCurrentFrame < m_nEndFrame)
                 {
                     m_nCurrentFrame++;
                     if (m_boMsgMuch && !normmove)
+                    {
                         if (m_nCurrentFrame < m_nEndFrame)
+                        {
                             m_nCurrentFrame++;
+                        }
+                    }
+
                     curstep = m_nCurrentFrame - m_nStartFrame + 1;
                     maxstep = m_nEndFrame - m_nStartFrame + 1;
                     Shift(m_btDir, m_nMoveStep, curstep, maxstep);
@@ -1156,13 +1392,16 @@ namespace BotSrv.Objects
                 }
 
                 if (m_nCurrentAction == Messages.SM_RUSH)
+                {
                     if (this == MShare.MySelf)
                     {
                         MShare.g_dwDizzyDelayStart = MShare.GetTickCount();
                         MShare.g_dwDizzyDelayTime = 300;
                     }
+                }
 
                 if (m_nCurrentAction == Messages.SM_RUSHKUNG)
+                {
                     if (m_nCurrentFrame >= m_nEndFrame - 3)
                     {
                         CurrX = m_nActBeforeX;
@@ -1173,19 +1412,29 @@ namespace BotSrv.Objects
                         m_boUseCboLib = false;
                         m_boLockEndFrame = true;
                     }
+                }
 
                 result = true;
             }
 
             if (m_nCurrentAction == Messages.SM_BACKSTEP)
             {
-                if (m_nCurrentFrame > m_nEndFrame || m_nCurrentFrame < m_nStartFrame) m_nCurrentFrame = m_nEndFrame + 1;
+                if (m_nCurrentFrame > m_nEndFrame || m_nCurrentFrame < m_nStartFrame)
+                {
+                    m_nCurrentFrame = m_nEndFrame + 1;
+                }
+
                 if (m_nCurrentFrame > m_nStartFrame)
                 {
                     m_nCurrentFrame -= 1;
                     if (m_boMsgMuch || fastmove)
+                    {
                         if (m_nCurrentFrame > m_nStartFrame)
+                        {
                             m_nCurrentFrame -= 1;
+                        }
+                    }
+
                     curstep = m_nEndFrame - m_nCurrentFrame + 1;
                     maxstep = m_nEndFrame - m_nStartFrame + 1;
                     Shift(BotHelper.GetBack(m_btDir), m_nMoveStep, curstep, maxstep);
@@ -1212,7 +1461,11 @@ namespace BotSrv.Objects
                 result = true;
             }
 
-            if (prv != m_nCurrentFrame) m_dwLoadSurfaceTime = MShare.GetTickCount();
+            if (prv != m_nCurrentFrame)
+            {
+                m_dwLoadSurfaceTime = MShare.GetTickCount();
+            }
+
             return result;
         }
 
@@ -1228,7 +1481,7 @@ namespace BotSrv.Objects
 
         public bool CanCancelAction()
         {
-            var result = false;
+            bool result = false;
             if (m_nCurrentAction == Messages.SM_HIT)
             {
                 if (!m_boUseEffect)

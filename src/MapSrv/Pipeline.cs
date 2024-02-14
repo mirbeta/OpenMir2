@@ -43,8 +43,11 @@ namespace MapSrv
                 Reader = new StreamReader(Server);
                 while (true)
                 {
-                    var input = TryReadLine();
-                    if (string.IsNullOrEmpty(input)) break;
+                    string input = TryReadLine();
+                    if (string.IsNullOrEmpty(input))
+                    {
+                        break;
+                    }
                     //Do Somethin....
                     Console.WriteLine($"Server {ID} Get Message:{input}");
                     Writer.WriteLine($"Server Get Message:{input}");
@@ -69,7 +72,7 @@ namespace MapSrv
         private string TryReadLine()
         {
             int TimeOutCount = 0;
-            var thread = new Thread(readerThread);
+            Thread thread = new Thread(readerThread);
             thread.Start();
             Get.Set();
             while (!Got.WaitOne(ServerWaitReadMillisecs))

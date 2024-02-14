@@ -2,13 +2,16 @@
 
 	<PropertyGroup>
 		<OutputType>Exe</OutputType>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 	</PropertyGroup>
 	
 	<Choose>
+		<When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
+
+		</When>
 		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>
 				<DebugSymbols>false</DebugSymbols>
@@ -38,21 +41,18 @@
 	</Choose>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-		<PackageReference Include="NLog" Version="5.1.3" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
-		<PackageReference Include="Spectre.Console" Version="0.46.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+	  <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\nlog.config">
-			<Link>nlog.config</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net7</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
         <RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
         <RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
@@ -12,6 +12,10 @@
     </PropertyGroup>
 
     <Choose>
+        <When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
+
+        </When>
+        
         <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
             <PropertyGroup>
                 <OutputPath>D:\MirServer\DBServer</OutputPath>
@@ -31,9 +35,9 @@
 
     
     <ItemGroup>
-      <PackageReference Include="MongoDB.Bson" Version="2.19.1" />
-      <PackageReference Include="MongoDB.Driver" Version="2.19.1" />
-      <PackageReference Include="NLog" Version="5.1.3" />
+      <PackageReference Include="MongoDB.Bson" Version="2.23.1" />
+      <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
+      <PackageReference Include="NLog" Version="5.2.8" />
     </ItemGroup>
 
     <ItemGroup>

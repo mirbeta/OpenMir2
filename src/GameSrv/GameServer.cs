@@ -1,68 +1,63 @@
 ﻿using GameSrv.Maps;
-using NLog;
-using SystemModule.Enums;
 
 namespace GameSrv
 {
     public class ServerBase
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private readonly IServiceProvider serviceProvider;
 
-        protected ServerBase()
+        protected ServerBase(IServiceProvider serviceProvider)
         {
-            
+            this.serviceProvider = serviceProvider;
         }
 
-        public async Task StartUp(CancellationToken stoppingToken)
+        public Task StartUp(CancellationToken stoppingToken)
         {
-            await M2Share.GeneratorProcessor.StartAsync(stoppingToken);
-            await M2Share.SystemProcess.StartAsync(stoppingToken);
-            await M2Share.UserProcessor.StartAsync(stoppingToken);
-            await M2Share.RobotProcessor.StartAsync(stoppingToken);
-            await M2Share.MerchantProcessor.StartAsync(stoppingToken);
-            await M2Share.EventProcessor.StartAsync(stoppingToken);
-            await M2Share.StorageProcessor.StartAsync(stoppingToken);
-            await M2Share.TimedRobotProcessor.StartAsync(stoppingToken);
-            await M2Share.SocketMgr.StartMessageThread();
-            await M2Share.ChatChannel.Start();
-            M2Share.DataServer.Start();
-            M2Share.MarketService.Start();
-            M2Share.SocketMgr.Start();
-            _logger.Info("初始化游戏世界服务线程完成...");
-            M2Share.StartReady = true;
+            _ = GameShare.GeneratorProcessor.StartAsync(stoppingToken);
+            _ = GameShare.SystemProcess.StartAsync(stoppingToken);
+            _ = GameShare.UserProcessor.StartAsync(stoppingToken);
+            _ = GameShare.MerchantProcessor.StartAsync(stoppingToken);
+            _ = GameShare.EventProcessor.StartAsync(stoppingToken);
+            _ = GameShare.CharacterDataProcessor.StartAsync(stoppingToken);
+            _ = GameShare.TimedRobotProcessor.StartAsync(stoppingToken);
+            _ = GameShare.ActorBuffProcessor.StartAsync(stoppingToken);
             Map.StartMakeStoneThread();
-        }
 
-        public static async Task Stopping(CancellationToken cancellationToken)
-        {
-            await M2Share.GeneratorProcessor.StopAsync(cancellationToken);
-            await M2Share.SystemProcess.StopAsync(cancellationToken);
-            await M2Share.UserProcessor.StopAsync(cancellationToken);
-            await M2Share.RobotProcessor.StopAsync(cancellationToken);
-            await M2Share.MerchantProcessor.StopAsync(cancellationToken);
-            await M2Share.EventProcessor.StopAsync(cancellationToken);
-            await M2Share.StorageProcessor.StopAsync(cancellationToken);
-            await M2Share.TimedRobotProcessor.StopAsync(cancellationToken);
-            await M2Share.SocketMgr.StopAsync();
-            M2Share.DataServer.Stop();
-            M2Share.MarketService.Stop();
-            await M2Share.ChatChannel.Stop();
-        }
+            IEnumerable<IModuleInitializer> modules = serviceProvider.GetServices<IModuleInitializer>();
 
-        private static void ProcessGameNotice()
-        {
-            if (M2Share.Config.SendOnlineCount && (HUtil32.GetTickCount() - M2Share.SendOnlineTick) > M2Share.Config.SendOnlineTime)
+            foreach (IModuleInitializer module in modules)
             {
-                M2Share.SendOnlineTick = HUtil32.GetTickCount();
-                string sMsg = string.Format(Settings.SendOnlineCountMsg, HUtil32.Round(M2Share.WorldEngine.OnlinePlayObject * (M2Share.Config.SendOnlineCountRate / 10.0)));
-                M2Share.WorldEngine.SendBroadCastMsg(sMsg, MsgType.System);
+                module.Startup(stoppingToken); //启动模块
             }
+
+            GameShare.DataServer.Start();
+            GameShare.PlanesService.Start();
+            M2Share.Authentication.Start();
+            _ = M2Share.NetChannel.Start(stoppingToken);
+
+            return Task.CompletedTask;
         }
 
-        public static void SaveItemNumber()
+        public async Task Stopping(CancellationToken cancellationToken)
         {
-            ProcessGameNotice();
-            M2Share.ServerConf.SaveVariable();
+            IEnumerable<IModuleInitializer> modules = serviceProvider.GetServices<IModuleInitializer>();
+            foreach (IModuleInitializer module in modules)
+            {
+                module.Stopping(cancellationToken);
+            }
+
+            await GameShare.GeneratorProcessor.StopAsync(cancellationToken);
+            await GameShare.SystemProcess.StopAsync(cancellationToken);
+            await GameShare.UserProcessor.StopAsync(cancellationToken);
+            await GameShare.MerchantProcessor.StopAsync(cancellationToken);
+            await GameShare.EventProcessor.StopAsync(cancellationToken);
+            await GameShare.CharacterDataProcessor.StopAsync(cancellationToken);
+            await GameShare.TimedRobotProcessor.StopAsync(cancellationToken);
+            await GameShare.ActorBuffProcessor.StopAsync(cancellationToken);
+            await M2Share.NetChannel.StopAsync(cancellationToken);
+            GameShare.DataServer.Stop();
+
+            LogService.Info("游戏世界服务线程停止...");
         }
     }
 }

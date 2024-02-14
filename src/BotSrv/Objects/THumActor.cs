@@ -1,9 +1,9 @@
-﻿using System.Collections;
+﻿using BotSrv.Player;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using System.Collections;
 using System.Collections.Generic;
-using BotSrv.Player;
-using SystemModule;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
 
 namespace BotSrv.Objects
 {
@@ -24,8 +24,13 @@ namespace BotSrv.Objects
         protected void CalcActorWinFrame()
         {
             if (m_btEffect == 50)
+            {
                 m_nCboHumWinOffSet = 352;
-            else if (m_btEffect != 0) m_nCboHumWinOffSet = (m_btEffect - 1) * 2000;
+            }
+            else if (m_btEffect != 0)
+            {
+                m_nCboHumWinOffSet = (m_btEffect - 1) * 2000;
+            }
         }
 
         public override void ActionEnded()
@@ -96,11 +101,18 @@ namespace BotSrv.Objects
             {
                 m_nDefFrameCount = THumAction.HA.ActStand.frame;
                 if (m_nCurrentDefFrame < 0)
+                {
                     cf = 0;
+                }
                 else if (m_nCurrentDefFrame >= THumAction.HA.ActStand.frame)
+                {
                     cf = 0;
+                }
                 else
+                {
                     cf = m_nCurrentDefFrame;
+                }
+
                 result = THumAction.HA.ActStand.start +
                          m_btDir * (THumAction.HA.ActStand.frame + THumAction.HA.ActStand.skip) + cf;
             }
@@ -123,7 +135,7 @@ namespace BotSrv.Objects
             //    if ((frame == 5) && this.m_boDigFragment)
             //    {
             //        this.m_boDigFragment = false;
-            //        var __event = ClMain.EventMan.GetEvent(this.m_nCurrX, this.m_nCurrY, Grobal2.ET_PILESTONES);
+            //        var __event = ClMain.EventMan.GetEvent(this.CurrX, this.CurrY, Grobal2.ET_PILESTONES);
             //        if (__event != null)
             //        {
             //            __event.m_nEventParam = __event.m_nEventParam + 1;
@@ -135,7 +147,7 @@ namespace BotSrv.Objects
             //    if ((frame == 5) && this.m_boDigFragment)
             //    {
             //        this.m_boDigFragment = false;
-            //        var __event = ClMain.EventMan.GetEvent(this.m_nCurrX, this.m_nCurrY, Grobal2.ET_PILESTONES);
+            //        var __event = ClMain.EventMan.GetEvent(this.CurrX, this.CurrY, Grobal2.ET_PILESTONES);
             //        if (__event != null)
             //        {
             //            __event.m_nEventParam = __event.m_nEventParam + 1;
@@ -190,9 +202,16 @@ namespace BotSrv.Objects
             {
                 m_dwGenAnicountTime = MShare.GetTickCount();
                 m_nGenAniCount++;
-                if (m_nGenAniCount > 100000) m_nGenAniCount = 0;
+                if (m_nGenAniCount > 100000)
+                {
+                    m_nGenAniCount = 0;
+                }
             }
-            if (new ArrayList(new[] { 5, 9, 11, 13, 39 }).Contains(m_nCurrentAction)) return;
+            if (new ArrayList(new[] { 5, 9, 11, 13, 39 }).Contains(m_nCurrentAction))
+            {
+                return;
+            }
+
             m_boMsgMuch = this != MShare.MySelf && m_MsgList.Count >= 2;
             bss = new ArrayList(new[] { 105, 109 }).Contains(m_CurMagic.EffectNumber);
             off = m_nCurrentFrame - m_nStartFrame;
@@ -200,15 +219,23 @@ namespace BotSrv.Objects
             prv = m_nCurrentFrame;
             if (m_nCurrentAction != 0)
             {
-                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame) m_nCurrentFrame = m_nStartFrame;
+                if (m_nCurrentFrame < m_nStartFrame || m_nCurrentFrame > m_nEndFrame)
+                {
+                    m_nCurrentFrame = m_nStartFrame;
+                }
+
                 if (m_boMsgMuch)
                 {
                     if (m_boUseCboLib)
                     {
                         if (m_btIsHero == 1)
+                        {
                             dwFrameTimetime = HUtil32.Round(m_dwFrameTime / 1.50);
+                        }
                         else
+                        {
                             dwFrameTimetime = HUtil32.Round(m_dwFrameTime / 1.55);
+                        }
                     }
                     else
                     {
@@ -220,9 +247,13 @@ namespace BotSrv.Objects
                     if (m_boUseCboLib)
                     {
                         if (m_btIsHero == 1)
+                        {
                             dwFrameTimetime = HUtil32.Round(m_dwFrameTime / 1.28);
+                        }
                         else
+                        {
                             dwFrameTimetime = HUtil32.Round(m_dwFrameTime / 1.32);
+                        }
                     }
                     else
                     {
@@ -235,7 +266,10 @@ namespace BotSrv.Objects
                 }
 
                 if (MShare.SpeedRate)
+                {
                     dwFrameTimetime = HUtil32._MAX(0, dwFrameTimetime - HUtil32._MIN(10, MShare.g_MoveSpeedRate));
+                }
+
                 if (MShare.GetTickCount() - m_dwStartTime > dwFrameTimetime)
                 {
                     if (m_nCurrentFrame < m_nEndFrame)
@@ -254,7 +288,11 @@ namespace BotSrv.Objects
                             }
                             else
                             {
-                                if (m_nCurrentFrame < m_nEndFrame - 1) m_nCurrentFrame++;
+                                if (m_nCurrentFrame < m_nEndFrame - 1)
+                                {
+                                    m_nCurrentFrame++;
+                                }
+
                                 m_nCurEffFrame++;
                                 m_dwStartTime = MShare.GetTickCount();
                             }
@@ -330,9 +368,11 @@ namespace BotSrv.Objects
                                     break;
                             }
                             if (sskill)
+                            {
                                 //TUseMagicInfo _wvar1 = this.m_CurMagic;
-                                //ClMain.g_PlayScene.NewMagic(this, _wvar1.ServerMagicCode, _wvar1.EffectNumber, this.m_nCurrX, this.m_nCurrY, _wvar1.targx, _wvar1.targy, _wvar1.target, _wvar1.EffectType, _wvar1.Recusion, _wvar1.anitime, ref boFly, _wvar1.magfirelv, _wvar1.Poison);
+                                //ClMain.g_PlayScene.NewMagic(this, _wvar1.ServerMagicCode, _wvar1.EffectNumber, this.CurrX, this.CurrY, _wvar1.targx, _wvar1.targy, _wvar1.target, _wvar1.EffectType, _wvar1.Recusion, _wvar1.anitime, ref boFly, _wvar1.magfirelv, _wvar1.Poison);
                                 m_boNewMagic = false;
+                            }
                         }
                         switch (m_CurMagic.EffectNumber)
                         {
@@ -349,19 +389,28 @@ namespace BotSrv.Objects
                             if (m_CurMagic.ServerMagicCode > 0 && (!bss || m_boNewMagic))
                             {
                                 //TUseMagicInfo _wvar2 = this.m_CurMagic;
-                                //ClMain.g_PlayScene.NewMagic(this, _wvar2.ServerMagicCode, _wvar2.EffectNumber, this.m_nCurrX, this.m_nCurrY, _wvar2.targx, _wvar2.targy, _wvar2.target, _wvar2.EffectType, _wvar2.Recusion, _wvar2.anitime, ref boFly, _wvar2.magfirelv, _wvar2.Poison);
+                                //ClMain.g_PlayScene.NewMagic(this, _wvar2.ServerMagicCode, _wvar2.EffectNumber, this.CurrX, this.CurrY, _wvar2.targx, _wvar2.targy, _wvar2.target, _wvar2.EffectType, _wvar2.Recusion, _wvar2.anitime, ref boFly, _wvar2.magfirelv, _wvar2.Poison);
                             }
 
-                            if (this == MShare.MySelf) MShare.LatestSpellTick = MShare.GetTickCount();
+                            if (this == MShare.MySelf)
+                            {
+                                MShare.LatestSpellTick = MShare.GetTickCount();
+                            }
+
                             m_CurMagic.ServerMagicCode = 0;
                         }
                     }
                 }
 
                 if (Race == ActorRace.Play)
+                {
                     m_nCurrentDefFrame = 0;
+                }
                 else
+                {
                     m_nCurrentDefFrame = -10;
+                }
+
                 m_dwDefFrameTime = MShare.GetTickCount();
             }
             else if (MShare.GetTickCount() - m_dwSmoothMoveTime > 200)
@@ -370,21 +419,32 @@ namespace BotSrv.Objects
                 {
                     m_dwDefFrameTime = MShare.GetTickCount();
                     m_nCurrentDefFrame++;
-                    if (m_nCurrentDefFrame >= m_nDefFrameCount) m_nCurrentDefFrame = 0;
+                    if (m_nCurrentDefFrame >= m_nDefFrameCount)
+                    {
+                        m_nCurrentDefFrame = 0;
+                    }
                 }
 
                 DefaultMotion();
             }
 
-            if (prv != m_nCurrentFrame) m_dwLoadSurfaceTime = MShare.GetTickCount();
+            if (prv != m_nCurrentFrame)
+            {
+                m_dwLoadSurfaceTime = MShare.GetTickCount();
+            }
         }
 
         public override int light()
         {
             int L = m_nChrLight;
             if (L < m_nMagLight)
+            {
                 if (m_boUseMagic || m_boHitEffect)
+                {
                     L = m_nMagLight;
+                }
+            }
+
             return L;
         }
     }

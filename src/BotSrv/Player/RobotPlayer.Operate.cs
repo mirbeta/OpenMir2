@@ -1,12 +1,11 @@
-using System;
-using System.Drawing;
 using BotSrv.Objects;
 using BotSrv.Scenes;
-using SystemModule;
-using SystemModule.Enums;
-using SystemModule.Packets;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
+using System;
+using System.Drawing;
 
 namespace BotSrv.Player
 {
@@ -14,7 +13,7 @@ namespace BotSrv.Player
     {
         public void ProcessPacket(string str)
         {
-            var data = string.Empty;
+            string data = string.Empty;
             if (!string.IsNullOrEmpty(str))
             {
                 while (str.Length >= 2)
@@ -39,18 +38,18 @@ namespace BotSrv.Player
                 }
             }
         }
-        
+
         private void DecodeMessagePacket(string datablock)
         {
-            var body = string.Empty;
+            string body = string.Empty;
             string data;
-            var str = string.Empty;
-            var str3 = string.Empty;
+            string str = string.Empty;
+            string str3 = string.Empty;
             CharDesc desc;
             MessageBodyWL wl;
             int i;
             int j;
-            var n = 0;
+            int n = 0;
             Actor Actor;
             //TClEvent __event;
             if (datablock[0] == '+') //动作包
@@ -66,8 +65,8 @@ namespace BotSrv.Player
             {
                 body = datablock[Messages.DefBlockSize..];
             }
-            var head = datablock[..Messages.DefBlockSize];
-            var msg = EDCode.DecodePacket(head);
+            string head = datablock[..Messages.DefBlockSize];
+            CommandMessage msg = EDCode.DecodePacket(head);
             if (msg.Ident == 0)
             {
                 return;
@@ -510,7 +509,7 @@ namespace BotSrv.Player
                     }
                     break;
                 case Messages.SM_FLYAXE:
-                    var mbw = EDCode.DecodeBuffer<MessageBodyW>(body);
+                    MessageBodyW mbw = EDCode.DecodeBuffer<MessageBodyW>(body);
                     Actor = PlayScene.FindActor(msg.Recog);
                     if (Actor != null)
                     {
@@ -591,7 +590,7 @@ namespace BotSrv.Player
                     MShare.g_nMyDecDamage = HUtil32.HiByte(HUtil32.HiWord(msg.Recog));
                     break;
                 case Messages.SM_DAYCHANGING:
-                    
+
                     break;
                 case Messages.SM_WINEXP:
                     MShare.MySelf.Abil.Exp = msg.Recog;
@@ -640,7 +639,7 @@ namespace BotSrv.Player
                         Actor.Abil.MaxHP = msg.Tag;
                         if (MShare.OpenAutoPlay && TimerAutoPlay.Enabled) //  自己受人攻击,小退
                         {
-                            var Actor2 = PlayScene.FindActor(wl.Tag1);
+                            Actor Actor2 = PlayScene.FindActor(wl.Tag1);
                             if (Actor2 == null || (Actor2.Race != 0 && Actor2.m_btIsHero != 1))
                             {
                                 return;

@@ -1,4 +1,4 @@
-﻿using SystemModule.Data;
+﻿using OpenMir2.Data;
 
 namespace DBSrv.Storage.Model
 {

@@ -1,5 +1,5 @@
 ﻿using BotSrv.Player;
-using SystemModule;
+using OpenMir2;
 
 namespace BotSrv.Objects
 {
@@ -23,9 +23,13 @@ namespace BotSrv.Objects
                 {
                     m_dwEffectStartTime = MShare.GetTickCount();
                     if (m_nEffectFrame < m_nEffectEnd)
+                    {
                         m_nEffectFrame++;
+                    }
                     else
+                    {
                         m_boUseEffect = false;
+                    }
                 }
             }
             base.Run();

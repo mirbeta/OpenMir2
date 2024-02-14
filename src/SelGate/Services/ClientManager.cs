@@ -1,9 +1,8 @@
-using NLog;
+using OpenMir2;
 using SelGate.Conf;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using SystemModule;
 
 namespace SelGate.Services
 {
@@ -12,29 +11,29 @@ namespace SelGate.Services
     /// </summary>
     public class ClientManager
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         private readonly IList<ClientThread> _clientList;
         private readonly SessionManager _sessionManager;
         private readonly ConfigManager _configManager;
-        private readonly ConcurrentDictionary<int, ClientThread> _clientThreadMap;
+        private readonly ConcurrentDictionary<string, ClientThread> _clientThreadMap;
 
         public ClientManager(SessionManager sessionManager, ConfigManager configManager)
         {
             _configManager = configManager;
             _sessionManager = sessionManager;
-            _clientThreadMap = new ConcurrentDictionary<int, ClientThread>();
+            _clientThreadMap = new ConcurrentDictionary<string, ClientThread>();
             _clientList = new List<ClientThread>();
         }
 
         public void Initialization()
         {
-            for (var i = 0; i < _configManager.GateConfig.m_nGateCount; i++)
+            for (int i = 0; i < _configManager.GateConfig.GateCount; i++)
             {
-                var serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
-                var serverPort = _configManager.m_xGameGateList[i].nServerPort;
+                string serverAddr = _configManager.m_xGameGateList[i].sServerAdress;
+                int serverPort = _configManager.m_xGameGateList[i].nServerPort;
                 if (string.IsNullOrEmpty(serverAddr) || serverPort == -1)
                 {
-                    _logger.Debug($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
+                    LogService.Debug($"角色网关配置文件服务器节点[ServerAddr{i}]配置获取失败.");
                     return;
                 }
                 _clientList.Add(new ClientThread(i, serverAddr, serverPort, _sessionManager));
@@ -43,7 +42,7 @@ namespace SelGate.Services
 
         public void Start()
         {
-            for (var i = 0; i < _clientList.Count; i++)
+            for (int i = 0; i < _clientList.Count; i++)
             {
                 if (_clientList[i] == null)
                 {
@@ -56,7 +55,7 @@ namespace SelGate.Services
 
         public void Stop()
         {
-            for (var i = 0; i < _clientList.Count; i++)
+            for (int i = 0; i < _clientList.Count; i++)
             {
                 if (_clientList[i] == null)
                 {
@@ -73,7 +72,7 @@ namespace SelGate.Services
         /// </summary>
         /// <param name="connectionId"></param>
         /// <param name="clientThread"></param>
-        public void AddClientThread(int connectionId, ClientThread clientThread)
+        public void AddClientThread(string connectionId, ClientThread clientThread)
         {
             _clientThreadMap.TryAdd(connectionId, clientThread); //链接成功后建立对应关系
         }
@@ -83,29 +82,25 @@ namespace SelGate.Services
         /// </summary>
         /// <param name="connectionId"></param>
         /// <returns></returns>
-        public ClientThread GetClientThread(int connectionId)
+        public ClientThread GetClientThread(string connectionId)
         {
-            if (connectionId > 0)
-            {
-                return _clientThreadMap.TryGetValue(connectionId, out var userClinet) ? userClinet : GetClientThread();
-            }
-            return null;
+            return _clientThreadMap.TryGetValue(connectionId, out ClientThread userClient) ? userClient : GetClientThread();
         }
 
         /// <summary>
         /// 从字典删除用户和网关对应关系
         /// </summary>
         /// <param name="connectionId"></param>
-        public void DeleteClientThread(int connectionId)
+        public void DeleteClientThread(string connectionId)
         {
-            _clientThreadMap.TryRemove(connectionId, out var userClinet);
+            _clientThreadMap.TryRemove(connectionId, out ClientThread userClient);
         }
 
         public ClientThread GetClientThread()
         {
             if (GateShare.ServerGateList.Any())
             {
-                var random = RandomNumber.GetInstance().Random(GateShare.ServerGateList.Count);
+                int random = RandomNumber.GetInstance().Random(GateShare.ServerGateList.Count);
                 return GateShare.ServerGateList[random];
             }
             return null;

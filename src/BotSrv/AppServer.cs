@@ -1,10 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using NLog.Extensions.Logging;
-using SystemModule.Hosts;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace BotSrv
 {
@@ -18,7 +17,7 @@ namespace BotSrv
 
         public override void Initialize()
         {
-           
+
         }
 
         public void ConfigureServices(IServiceCollection services)

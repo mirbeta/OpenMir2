@@ -1,5 +1,5 @@
 ﻿using BotSrv.Player;
-using SystemModule;
+using OpenMir2;
 
 namespace BotSrv.Objects
 {
@@ -24,9 +24,14 @@ namespace BotSrv.Objects
             if (m_boUseEffect)
             {
                 if (m_boUseMagic)
+                {
                     dwEffectFrameTime = HUtil32.Round(m_dwEffectFrameTime / 3);
+                }
                 else
+                {
                     dwEffectFrameTime = m_dwEffectFrameTime;
+                }
+
                 if (MShare.GetTickCount() - m_dwEffectStartTime > dwEffectFrameTime)
                 {
                     m_dwEffectStartTime = MShare.GetTickCount();
@@ -56,7 +61,10 @@ namespace BotSrv.Objects
                     }
                 }
             }
-            if (nEffectFrame != m_nEffectFrame) m_dwLoadSurfaceTime = MShare.GetTickCount();
+            if (nEffectFrame != m_nEffectFrame)
+            {
+                m_dwLoadSurfaceTime = MShare.GetTickCount();
+            }
         }
     }
 }

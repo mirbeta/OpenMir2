@@ -1,16 +1,13 @@
-﻿using System;
-using BotSrv.Player;
-using NLog;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+﻿using BotSrv.Player;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using System;
 
 namespace BotSrv.Scenes.Scene
 {
     public class SelectChrScene : SceneBase
     {
-        private readonly static Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly ScoketClient ClientSocket;
         private int NewIndex = 0;
         private readonly SelChar[] ChrArr;
@@ -48,7 +45,7 @@ namespace BotSrv.Scenes.Scene
             RobotClient.ChrName = chrname;
             CommandMessage msg = Messages.MakeMessage(Messages.CM_SELCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(RobotClient.LoginId + "/" + chrname));
-            logger.Info($"选择角色 {chrname}");
+            LogService.Info($"选择角色 {chrname}");
         }
 
         private void SendDelChr(string chrname)
@@ -118,7 +115,7 @@ namespace BotSrv.Scenes.Scene
             string str = EDCode.DeCodeString(body);
             int select = 0;
             int nChrCount = 0;
-            for (var i = 0; i < 1; i++)
+            for (int i = 0; i < 1; i++)
             {
                 str = HUtil32.GetValidStr3(str, ref chrname, HUtil32.Backslash);
                 str = HUtil32.GetValidStr3(str, ref job, HUtil32.Backslash);
@@ -172,15 +169,15 @@ namespace BotSrv.Scenes.Scene
                     }
                     break;
             }
-            var sJob = (byte)RandomNumber.GetInstance().Random(2);
-            var sSex = (byte)RandomNumber.GetInstance().Random(1);
+            byte sJob = (byte)RandomNumber.GetInstance().Random(2);
+            byte sSex = (byte)RandomNumber.GetInstance().Random(1);
             SendNewChr(RobotClient.LoginId, sChrName, sHair, sJob, sSex);
-            logger.Info($"创建角色 {sChrName}");
+            LogService.Info($"创建角色 {sChrName}");
         }
 
         public void ClientGetStartPlay(string body)
         {
-            logger.Info("准备进入游戏");
+            LogService.Info("准备进入游戏");
             string addr = string.Empty;
             string Str = EDCode.DeCodeString(body);
             string sport = HUtil32.GetValidStr3(Str, ref addr, HUtil32.Backslash);
@@ -204,7 +201,7 @@ namespace BotSrv.Scenes.Scene
             //MShare.g_ConnectionStep = TConnectionStep.cnsPlay;
             //CloseSocket();//断开游戏网关链接
             //ClientSocket.Host = addr;
-            //ClientSocket.Port = HUtil32.Str_ToInt(sport, 0);
+            //ClientSocket.Port = HUtil32.StrToInt(sport, 0);
             //ClientSocket.Connect();
             //robotClient.SocStr = string.Empty;
             //robotClient.BufferStr = string.Empty;
@@ -212,16 +209,16 @@ namespace BotSrv.Scenes.Scene
 
         private void SendNewChr(string uid, string uname, byte shair, byte sjob, byte ssex)
         {
-            var msg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_NEWCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + uname + "/" + shair + "/" + sjob + "/" + ssex));
         }
 
         public void SendQueryChr()
         {
             ConnectionStep = ConnectionStep.QueryChr;
-            var DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
+            CommandMessage DefMsg = Messages.MakeMessage(Messages.CM_QUERYCHR, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(DefMsg) + EDCode.EncodeString(RobotClient.LoginId + "/" + RobotClient.Certification));
-            logger.Info("查询角色.");
+            LogService.Info("查询角色.");
         }
 
         private void SendSocket(string sendstr)
@@ -232,7 +229,7 @@ namespace BotSrv.Scenes.Scene
             }
             else
             {
-                logger.Warn($"Socket Close {ClientSocket.RemoteEndPoint}");
+                LogService.Warn($"Socket Close {ClientSocket.RemoteEndPoint}");
             }
         }
 
@@ -246,7 +243,7 @@ namespace BotSrv.Scenes.Scene
                 SetNotifyEvent(SendQueryChr, 1000);
                 ConnectionStep = ConnectionStep.SelChr;
             }
-            logger.Info($"连接角色网关:[{MShare.SelChrAddr}:{MShare.SelChrPort}]");
+            LogService.Info($"连接角色网关:[{MShare.SelChrAddr}:{MShare.SelChrPort}]");
         }
 
         private void CSocketDisconnect(object sender, DSCClientConnectedEventArgs e)
@@ -263,20 +260,20 @@ namespace BotSrv.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
+                    LogService.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
+                    LogService.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    logger.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
+                    LogService.Warn($"角色服务器[{ClientSocket.RemoteEndPoint}链接超时...");
                     break;
             }
         }
 
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
                 BotShare.ClientMgr.AddPacket(RobotClient.SessionId, sData);

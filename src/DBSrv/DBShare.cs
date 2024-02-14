@@ -1,20 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Net;
 using System.Net.Sockets;
-using SystemModule;
-using SystemModule.Common;
 
 namespace DBSrv
 {
     public static class DBShare
     {
+        public static IServiceProvider ServiceProvider { get; set; }
         public static StringList DenyChrNameList = null;
         public static readonly StringList ClearMakeIndex = null;
         public static readonly GateRouteInfo[] RouteInfo = new GateRouteInfo[20];
         public static Dictionary<string, int> MapList;
-        public static bool ShowLog = true;
         private static HashSet<string> ServerIpList = null;
         private static Dictionary<string, short> _gateIdList = null;
         public static readonly string GateConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "ServerInfo.txt");
@@ -22,7 +16,7 @@ namespace DBSrv
         private static readonly string GateIdConfFileName = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "SelectID.txt");
 
         public static int ServerIpCount => ServerIpList.Count;
-        
+
         public static int GetMapIndex(string sMap)
         {
             if (string.IsNullOrEmpty(sMap))
@@ -38,8 +32,8 @@ namespace DBSrv
         /// <returns></returns>
         public static bool CheckDenyChrName(string sChrName)
         {
-            var result = true;
-            for (var i = 0; i < DenyChrNameList.Count; i++)
+            bool result = true;
+            for (int i = 0; i < DenyChrNameList.Count; i++)
             {
                 if (string.Compare(sChrName, DenyChrNameList[i], StringComparison.OrdinalIgnoreCase) == 0)
                 {
@@ -57,11 +51,11 @@ namespace DBSrv
             _gateIdList.Clear();
             if (File.Exists(GateIdConfFileName))
             {
-                var LoadList = new StringList();
+                StringList LoadList = new StringList();
                 LoadList.LoadFromFile(GateIdConfFileName);
-                for (var i = 0; i < LoadList.Count; i++)
+                for (int i = 0; i < LoadList.Count; i++)
                 {
-                    var sLineText = LoadList[i];
+                    string sLineText = LoadList[i];
                     if ((string.IsNullOrEmpty(sLineText)) || (sLineText[0] == ';'))
                     {
                         continue;
@@ -94,9 +88,9 @@ namespace DBSrv
             ServerIpList.Clear();
             try
             {
-                var stringList = new StringList();
+                StringList stringList = new StringList();
                 stringList.LoadFromFile(ServerIpConfFileNmae);
-                for (var i = 0; i < stringList.Count; i++)
+                for (int i = 0; i < stringList.Count; i++)
                 {
                     if (ServerIpList.Contains(stringList[i]))
                     {
@@ -108,7 +102,7 @@ namespace DBSrv
             }
             catch
             {
-                //MainOutMessage("加载IP列表文件 " + ServerIpConfFileNmae + " 出错!!!");
+                LogService.Error("加载IP列表文件 " + ServerIpConfFileNmae + " 出错!!!");
             }
         }
 
@@ -126,10 +120,10 @@ namespace DBSrv
                 bool result = true;
                 bool boIsTwoByte = false;
                 char FirstChr = '\0';
-                var bytesCount = 0;
+                int bytesCount = 0;
                 for (int i = 0; i < sChrName.Length; i++)
                 {
-                    var bytes = HUtil32.GetByteCount(sChrName[i]);
+                    int bytes = HUtil32.GetByteCount(sChrName[i]);
                     switch (bytes)
                     {
                         case 1:
@@ -150,7 +144,7 @@ namespace DBSrv
                     return false;
                 }
 
-                for (var i = 0; i < sChrName.Length; i++)
+                for (int i = 0; i < sChrName.Length; i++)
                 {
                     Chr = sChrName[i];
                     if (boIsTwoByte)
@@ -188,7 +182,7 @@ namespace DBSrv
             }
             catch (Exception e)
             {
-                Console.WriteLine($"CheckChrName {sChrName} 异常信息:" + e.Message);
+                LogService.Error($"CheckChrName {sChrName} 异常信息:" + e.Message);
                 return false;
             }
         }
@@ -196,7 +190,7 @@ namespace DBSrv
         public static bool InClearMakeIndexList(int nIndex)
         {
             bool result = false;
-            for (var i = 0; i < ClearMakeIndex.Count; i++)
+            for (int i = 0; i < ClearMakeIndex.Count; i++)
             {
                 //if (nIndex == ((int)g_ClearMakeIndex.Values[i]))
                 //{
@@ -238,13 +232,13 @@ namespace DBSrv
 
     public class GlobaSessionInfo
     {
-        public string sAccount;
-        public string sIPaddr;
-        public int nSessionID;
-        public long dwAddTick;
-        public DateTime dAddDate;
-        public bool boLoadRcd;
-        public bool boStartPlay;
+        public string Account;
+        public string IPaddr;
+        public int SessionID;
+        public long AddTick;
+        public DateTime AddDate;
+        public bool LoadRcd;
+        public bool StartPlay;
     }
 
     public class SelGateInfo
@@ -260,7 +254,7 @@ namespace DBSrv
 
         public SelGateInfo()
         {
-  
+
         }
 
         public (string serverIp, string Status, string playCount, string reviceTotal, string sendTotal, string queueCount) GetStatus()
@@ -279,7 +273,7 @@ namespace DBSrv
         public string sAccount;
         public string sUserIPaddr;
         public string sGateIPaddr;
-        public int SessionId;
+        public string SessionId;
         public int nSessionID;
         public string ConnectionId;
         public string sText;

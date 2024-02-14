@@ -1,11 +1,7 @@
-﻿using System;
+﻿using BotSrv.Player;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
 using System.Net;
-using BotSrv.Player;
-using NLog;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
 
 namespace BotSrv.Scenes.Scene
 {
@@ -14,7 +10,7 @@ namespace BotSrv.Scenes.Scene
     /// </summary>
     public class LoginScene : SceneBase
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly ScoketClient _clientSocket;
 
         public LoginScene(RobotPlayer robotClient) : base(SceneType.Login, robotClient)
@@ -86,9 +82,9 @@ namespace BotSrv.Scenes.Scene
 
         private void SendNewAccount(string sAccount, string sPassword)
         {
-            logger.Info("创建帐号");
+            LogService.Info("创建帐号");
             ConnectionStep = ConnectionStep.NewAccount;
-            var ue = new UserEntry();
+            UserEntry ue = new UserEntry();
             ue.Account = sAccount;
             ue.Password = sPassword;
             ue.UserName = sAccount;
@@ -97,23 +93,23 @@ namespace BotSrv.Scenes.Scene
             ue.Answer = sAccount;
             ue.Phone = "";
             ue.EMail = "";
-            var ua = new UserEntryAdd();
+            UserEntryAdd ua = new UserEntryAdd();
             ua.Quiz2 = sAccount;
             ua.Answer2 = sAccount;
             ua.BirthDay = "1978/01/01";
             ua.MobilePhone = "";
             ua.Memo = "";
             ua.Memo2 = "";
-            var msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_ADDNEWUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeBuffer(ue) + EDCode.EncodeBuffer(ua));
         }
 
         private void SendLogin(string uid, string passwd)
         {
-            logger.Info("开始登陆");
+            LogService.Info("开始登陆");
             RobotClient.LoginId = uid;
             RobotClient.LoginPasswd = passwd;
-            var msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_IDPASSWORD, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(uid + "/" + passwd));
             MShare.SendLogin = true;
         }
@@ -126,18 +122,18 @@ namespace BotSrv.Scenes.Scene
             MShare.g_wAvailIPHour = msg.Tag;
             if ((MShare.g_wAvailIDHour % 60) > 0)
             {
-                logger.Info("个人帐户的期限: 剩余 " + (MShare.g_wAvailIDHour / 60) + " 小时 " + (MShare.g_wAvailIDHour % 60) + " 分钟.");
+                LogService.Info("个人帐户的期限: 剩余 " + (MShare.g_wAvailIDHour / 60) + " 小时 " + (MShare.g_wAvailIDHour % 60) + " 分钟.");
             }
             else if (MShare.g_wAvailIDHour > 0)
             {
-                logger.Info("个人帐户的期限: 剩余 " + MShare.g_wAvailIDHour + " 分钟.");
+                LogService.Info("个人帐户的期限: 剩余 " + MShare.g_wAvailIDHour + " 分钟.");
             }
             else
             {
-                logger.Info("帐号登录成功！");
+                LogService.Info("帐号登录成功！");
             }
-            var sServerName = string.Empty;
-            var sText = EDCode.DeCodeString(sBody);
+            string sServerName = string.Empty;
+            string sText = EDCode.DeCodeString(sBody);
             HUtil32.GetValidStr3(sText, ref sServerName, "/");
             ClientGetSelectServer();
             SendSelectServer(sServerName);
@@ -150,9 +146,9 @@ namespace BotSrv.Scenes.Scene
 
         private void SendSelectServer(string svname)
         {
-            logger.Info($"选择服务器：{svname}");
+            LogService.Info($"选择服务器：{svname}");
             ConnectionStep = ConnectionStep.SelServer;
-            var defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
+            CommandMessage defMsg = Messages.MakeMessage(Messages.CM_SELECTSERVER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(svname));
         }
 
@@ -161,10 +157,10 @@ namespace BotSrv.Scenes.Scene
         /// </summary>
         public void ClientGetPasswdSuccess(string body)
         {
-            var runaddr = string.Empty;
-            var runport = string.Empty;
-            var certifystr = string.Empty;
-            var str = EDCode.DeCodeString(body);
+            string runaddr = string.Empty;
+            string runport = string.Empty;
+            string certifystr = string.Empty;
+            string str = EDCode.DeCodeString(body);
             str = HUtil32.GetValidStr3(str, ref runaddr, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref runport, HUtil32.Backslash);
             str = HUtil32.GetValidStr3(str, ref certifystr, HUtil32.Backslash);
@@ -182,14 +178,14 @@ namespace BotSrv.Scenes.Scene
             }
             else
             {
-                logger.Warn($"Socket Close: {_clientSocket.RemoteEndPoint}");
+                LogService.Warn($"Socket Close: {_clientSocket.RemoteEndPoint}");
             }
         }
 
         private void CloseSocket()
         {
             _clientSocket.Disconnect();//断开登录网关链接
-            logger.Info("主动断开");
+            LogService.Info("主动断开");
         }
 
         #region Socket Events
@@ -223,7 +219,7 @@ namespace BotSrv.Scenes.Scene
             }
             else if ((RobotClient.DScreen.CurrentScene == RobotClient.LoginScene) && !MShare.SendLogin)
             {
-                logger.Info("游戏连接已关闭...");
+                LogService.Info("游戏连接已关闭...");
             }
         }
 
@@ -232,20 +228,20 @@ namespace BotSrv.Scenes.Scene
             switch (e.ErrorCode)
             {
                 case System.Net.Sockets.SocketError.ConnectionRefused:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
+                    LogService.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]拒绝链接...");
                     break;
                 case System.Net.Sockets.SocketError.ConnectionReset:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
+                    LogService.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]关闭连接...");
                     break;
                 case System.Net.Sockets.SocketError.TimedOut:
-                    logger.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
+                    LogService.Warn($"游戏服务器[{_clientSocket.RemoteEndPoint}]链接超时...");
                     break;
             }
         }
 
         private void CSocketRead(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
                 BotShare.ClientMgr.AddPacket(RobotClient.SessionId, sData);

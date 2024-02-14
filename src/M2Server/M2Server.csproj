@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Collections.Pooled" Version="2.0.0-preview.27" />
+        <PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+        <PackageReference Include="MySqlConnector" Version="2.3.5" />
+        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
+        <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+        <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20" />
+        <PackageReference Include="NLog" Version="5.2.8" />
+        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Modules\ScriptEngine\ScriptSystem.csproj" />
+      <ProjectReference Include="..\Modules\SystemModule\SystemModule.csproj" />
+      <ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
+    </ItemGroup>
+
+</Project>

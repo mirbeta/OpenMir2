@@ -5,7 +5,7 @@ namespace BotSrv.Scenes
 {
     public class ScreenManager
     {
-        private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         private readonly RobotPlayer robotClient;
         public SceneBase CurrentScene = null;
 
@@ -51,12 +51,12 @@ namespace BotSrv.Scenes
 
         public void AddSysMsg(string msg)
         {
-            logger.Info(msg);
+            LogService.Info(msg);
         }
 
         public static void AddChatBoardString(string str)
         {
-            logger.Info(str);
+            LogService.Info(str);
         }
     }
 }

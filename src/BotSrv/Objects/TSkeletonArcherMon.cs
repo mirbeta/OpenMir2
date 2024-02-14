@@ -1,5 +1,5 @@
 ﻿using BotSrv.Player;
-using SystemModule;
+using OpenMir2;
 
 namespace BotSrv.Objects
 {
@@ -18,10 +18,16 @@ namespace BotSrv.Objects
         {
             long m_dwFrameTimetime;
             if (m_boMsgMuch)
+            {
                 m_dwFrameTimetime = HUtil32.Round(m_dwFrameTime * 2 / 3);
+            }
             else
+            {
                 m_dwFrameTimetime = m_dwFrameTime;
+            }
+
             if (m_nCurrentAction != 0)
+            {
                 if (MShare.GetTickCount() - m_dwStartTime > m_dwFrameTimetime)
                 {
                     if (m_nCurrentFrame < m_nEndFrame)
@@ -33,6 +39,7 @@ namespace BotSrv.Objects
                         m_boNowDeath = false;
                     }
                 }
+            }
 
             base.Run();
         }

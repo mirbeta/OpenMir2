@@ -1,25 +1,13 @@
-﻿using System;
-using System.Linq;
-using System.Runtime;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using GameGate.Conf;
+﻿using GameGate.Conf;
 using GameGate.Services;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
-using Spectre.Console;
-using LogLevel = NLog.LogLevel;
+using Serilog;
+using System.Runtime;
 
 namespace GameGate
 {
     internal class Program
     {
-        private static Logger _logger;
         private static PeriodicTimer _timer;
         private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
@@ -30,42 +18,37 @@ namespace GameGate
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
             ThreadPool.SetMaxThreads(200, 200);
-            ThreadPool.GetMinThreads(out var workThreads, out var completionPortThreads);
-            Console.WriteLine(new StringBuilder()
-                .Append($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount}, ")
-                .Append($"Minimum work threads: {workThreads}, ")
-                .Append($"Minimum completion port threads: {completionPortThreads})").ToString());
+            ThreadPool.GetMinThreads(out int workThreads, out int completionPortThreads);
 
             PrintUsage();
             Console.CancelKeyPress += delegate
             {
-                ChanggeLogLevel(LogLevel.Info);
                 if (_timer != null)
                 {
                     _timer.Dispose();
                 }
-                AnsiConsole.Reset();
             };
 
-            var config = new ConfigurationBuilder().Build();
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(AppContext.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
 
-            _logger = LogManager.Setup()
-                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
-                .GetCurrentClassLogger();
+            Log.Logger = new LoggerConfiguration()
+                .ReadFrom.Configuration(configuration)
+                .CreateLogger();
+            LogService.Logger = Log.Logger;
 
-            var builder = new HostBuilder()
-                .ConfigureServices((hostContext, services) =>
-                {
-                    //services.AddSingleton<CloudClient>();
-                    services.AddHostedService<TimedService>();
-                    services.AddHostedService<AppService>();
-                }).ConfigureLogging(logging =>
-                {
-                    logging.ClearProviders();
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                    logging.AddNLog(config);
-                });
-            await builder.StartAsync(CancellationToken.Token);
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+            builder.Services.AddHostedService<TimedService>();
+            builder.Services.AddHostedService<AppService>();
+            builder.Logging.AddConfiguration(configuration.GetSection("Logging"));
+            builder.Logging.AddSerilog(dispose: true);
+
+            IHost host = builder.Build();
+            await host.StartAsync(CancellationToken.Token);
+            LogService.Info($"ThreadPool.ThreadCount: {ThreadPool.ThreadCount} Minimum work threads: {workThreads} Minimum completion port threads: {completionPortThreads}");
+            //启动后台服务
             await ProcessLoopAsync();
             Stop();
         }
@@ -75,7 +58,6 @@ namespace GameGate
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
                 ctx.Spinner(Spinner.Known.Dots);
-                LogManager.Shutdown();
             });
         }
 
@@ -95,7 +77,7 @@ namespace GameGate
                     return;
                 }
 
-                var firstTwoCharacters = input[..2];
+                string firstTwoCharacters = input[..2];
 
                 if (firstTwoCharacters switch
                 {
@@ -135,21 +117,12 @@ namespace GameGate
             return Task.CompletedTask;
         }
 
-        private static void ChanggeLogLevel(LogLevel logLevel)
-        {
-            LogManager.Configuration.Variables["MirLevel"] = logLevel.ToString();
-            LogManager.ReconfigExistingLoggers();
-            LogManager.Configuration.Reload();
-        }
-        
         private static async Task ShowServerStatus()
         {
             //GateShare.ShowLog = false;
-            ChanggeLogLevel(LogLevel.Off);
-            
             _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var serverList = ServerManager.Instance.GetServerList();
-            var table = new Table().Expand().BorderColor(Color.Grey);
+            ServerService[] serverList = ServerManager.Instance.GetServerList();
+            Table table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]Id[/]");
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
@@ -167,16 +140,16 @@ namespace GameGate
                  .Cropping(VerticalOverflowCropping.Bottom)
                  .StartAsync(async ctx =>
                  {
-                     foreach (var _ in Enumerable.Range(0, serverList.Length))
+                     foreach (int _ in Enumerable.Range(0, serverList.Length))
                      {
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
 
                      while (await _timer.WaitForNextTickAsync(CancellationToken.Token))
                      {
-                         for (var i = 0; i < serverList.Length; i++)
+                         for (int i = 0; i < serverList.Length; i++)
                          {
-                             var (endPoint, status, playCount, reviceTotal, sendTotal, totalrevice, totalSend, queueCount, threads) = serverList[i].GetStatus();
+                             (string endPoint, string status, string playCount, string reviceTotal, string sendTotal, string totalrevice, string totalSend, string queueCount, int threads) = serverList[i].GetStatus();
 
                              table.UpdateCell(i, 0, $"[bold]{endPoint}[/]");
                              table.UpdateCell(i, 1, $"[bold]{status}[/]");
@@ -195,48 +168,19 @@ namespace GameGate
 
         private static void PrintUsage()
         {
-            AnsiConsole.WriteLine();
-
-            var table = new Table()
-            {
-                Border = TableBorder.None,
-                Expand = true,
-            }.HideHeaders();
-            table.AddColumn(new TableColumn("One"));
-
-            var header = new FigletText("OpenMir2")
-            {
-                Color = Color.Fuchsia
-            };
-            var header2 = new FigletText("Game Gate")
-            {
-                Color = Color.Aqua
-            };
-
-            var sb = new StringBuilder();
-            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            var markup = new Markup(sb.ToString());
-
-            table.AddColumn(new TableColumn("Two"));
-
-            var rightTable = new Table()
-                .HideHeaders()
-                .Border(TableBorder.None)
-                .AddColumn(new TableColumn("Content"));
-
-            rightTable.AddRow(header)
-                .AddRow(header2)
-                .AddEmptyRow()
-                .AddEmptyRow()
-                .AddRow(markup);
-            table.AddRow(rightTable);
-
-            AnsiConsole.Write(table);
-            AnsiConsole.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine(@"   ___                           __  __   _          ____                  ");
+            Console.WriteLine(@"  / _ \   _ __     ___   _ __   |  \/  | (_)  _ __  |___ \                 ");
+            Console.WriteLine(@" | | | | | '_ \   / _ \ | '_ \  | |\/| | | | | '__|   __) |                ");
+            Console.WriteLine(@" | |_| | | |_) | |  __/ | | | | | |  | | | | | |     / __/                 ");
+            Console.WriteLine(@"  \___/  | .__/   \___| |_| |_| |_|  |_| |_| |_|    |_____|                ");
+            Console.WriteLine(@"         |_|                                                               ");
+            Console.WriteLine(@"   ____                               ____           _                     ");
+            Console.WriteLine(@"  / ___|   __ _   _ __ ___     ___   / ___|   __ _  | |_    ___            ");
+            Console.WriteLine(@" | |  _   / _` | | '_ ` _ \   / _ \ | |  _   / _` | | __|  / _ \           ");
+            Console.WriteLine(@" | |_| | | (_| | | | | | | | |  __/ | |_| | | (_| | | |_  |  __/           ");
+            Console.WriteLine(@"  \____|  \__,_| |_| |_| |_|  \___|  \____|  \__,_|  \__|  \___|           ");
+            Console.WriteLine(@"                                                                           ");
         }
-
     }
 }

@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    </PropertyGroup>
+
+    <Choose>
+        <When Condition="$(Configuration)=='Release'">
+            <PropertyGroup>
+                <DebugSymbols>false</DebugSymbols>
+                <Optimize>true</Optimize>
+                <DefineConstants>TRACE</DefineConstants>
+            </PropertyGroup>
+        </When>
+
+        <When Condition="$(Configuration)=='Debug'">
+            <Choose>
+                <When Condition="$([MSBuild]::IsOSPlatform('Windows'))">
+                    <PropertyGroup>
+                        <OutputPath>D:\MirServer\Mir200</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('OSX'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/Data/Mirserver/Mir200</OutputPath>
+                    </PropertyGroup>
+                </When>
+                <When Condition="$([MSBuild]::IsOSPlatform('Linux'))">
+                    <PropertyGroup>
+                        <OutputPath>/Volumes/opt/Mirserver/Mir200</OutputPath>
+                    </PropertyGroup>
+                </When>
+            </Choose>
+        </When>
+
+    </Choose>
+
+    <ItemGroup>
+        <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+    </ItemGroup>
+
+</Project>

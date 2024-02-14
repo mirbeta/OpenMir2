@@ -1,44 +1,41 @@
-using System.Collections.Concurrent;
-using NLog;
-using SystemModule.Data;
-using SystemModule.Packets.ServerPackets;
-
 namespace GameSrv.Services
 {
     public class QueryPlayData
     {
         public int QueryId;
-        public int QuetyCount;
-        public Action CallBack;
+        public int QueryCount;
     }
 
+    /// <summary>
+    /// 玩家数据处理服务
+    /// </summary>
     public static class PlayerDataService
     {
-        private static readonly Logger Logger = LogManager.GetCurrentClassLogger();
-        private static readonly ConcurrentDictionary<int, ServerRequestData> ReceivedMap = new ConcurrentDictionary<int, ServerRequestData>();
+
+        private static readonly ConcurrentDictionary<int, ServerRequestData> QueryMap = new ConcurrentDictionary<int, ServerRequestData>();
         private static readonly ConcurrentQueue<QueryPlayData> QueryProcessList = new ConcurrentQueue<QueryPlayData>();
         private static readonly ConcurrentQueue<int> SaveProcessList = new ConcurrentQueue<int>();
         private static readonly ConcurrentDictionary<int, LoadPlayerDataPacket> LoadPlayDataMap = new ConcurrentDictionary<int, LoadPlayerDataPacket>();
 
         public static void Enqueue(int queryId, ServerRequestData data)
         {
-            ReceivedMap.TryAdd(queryId, data);
-            Logger.Debug($"执行任务Id:{queryId}成功");
+            QueryMap.TryAdd(queryId, data);
+            LogService.Debug($"执行任务Id:{queryId}成功");
         }
 
-        private static bool GetDbSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
+        private static bool GetDataSrvMessage(int queryId, ref int nIdent, ref int nRecog, ref byte[] data)
         {
             bool result = false;
             HUtil32.EnterCriticalSection(M2Share.UserDBCriticalSection);
             try
             {
-                if (ReceivedMap.TryGetValue(queryId, out var respPack))
+                if (QueryMap.TryGetValue(queryId, out ServerRequestData respPack))
                 {
                     if (respPack == null)
                     {
                         return false;
                     }
-                    var serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
+                    ServerRequestMessage serverPacket = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(respPack.Message));
                     if (serverPacket == null)
                     {
                         return false;
@@ -48,7 +45,7 @@ namespace GameSrv.Services
                     data = respPack.Packet;
                     result = true;
                 }
-                ReceivedMap.TryRemove(queryId, out _);
+                QueryMap.TryRemove(queryId, out _);
             }
             finally
             {
@@ -57,30 +54,36 @@ namespace GameSrv.Services
             return result;
         }
 
-        public static bool GetPlayData(int queryId, ref PlayerDataInfo playerData)
+        public static bool GetPlayData(int queryId, ref CharacterDataInfo playerData)
         {
-            if (!LoadPlayDataMap.TryGetValue(queryId, out var loadPlayDataPacket))
+            if (!LoadPlayDataMap.TryGetValue(queryId, out LoadPlayerDataPacket loadPlayDataPacket))
+            {
                 return false;
+            }
+
             LoadPlayDataMap.TryRemove(queryId, out _);
             playerData = loadPlayDataPacket.HumDataInfo;
             return true;
         }
 
-        public static bool LoadHumRcdFromDB(string sAccount, string sChrName, string sStr, ref int queryId, int nCertCode)
+        /// <summary>
+        /// 查询角色数据
+        /// </summary>
+        public static bool QueryCharacterData(string account, string chrName, string addr, ref int queryId, int certCode)
         {
             bool result = false;
-            var loadHum = new LoadPlayerDataMessage()
+            LoadCharacterData loadHum = new LoadCharacterData()
             {
-                Account = sAccount,
-                ChrName = sChrName,
-                UserAddr = sStr,
-                SessionID = nCertCode
+                Account = account,
+                ChrName = chrName,
+                UserAddr = addr,
+                SessionID = certCode
             };
             if (LoadRcd(loadHum, ref queryId))
             {
                 result = true;
             }
-            M2Share.Config.nLoadDBCount++;
+            SystemShare.Config.LoadDBCount++;
             return result;
         }
 
@@ -88,9 +91,9 @@ namespace GameSrv.Services
         /// 保存玩家数据到DB
         /// </summary>
         /// <returns></returns>
-        public static bool SaveHumRcdToDB(SavePlayerRcd saveRcd, ref int queryId)
+        public static bool SaveCharacterData(SavePlayerRcd saveRcd, ref int queryId)
         {
-            M2Share.Config.nSaveDBCount++;
+            SystemShare.Config.SaveDBCount++;
             return SaveRcd(saveRcd, ref queryId);
         }
 
@@ -98,28 +101,29 @@ namespace GameSrv.Services
         {
             queryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_SAVEHUMANRCD, saveRcd.SessionID, 0, 0, 0);
-            SavePlayerDataMessage saveHumData = new SavePlayerDataMessage(saveRcd.Account, saveRcd.ChrName, saveRcd.HumanRcd);
-            if (M2Share.DataServer.SendRequest(queryId, packet, saveHumData))
+            SaveCharacterData saveHumData = new SaveCharacterData(saveRcd.Account, saveRcd.ChrName, saveRcd.CharacterData);
+            if (GameShare.DataServer.SendRequest(queryId, packet, saveHumData))
             {
                 SaveProcessList.Enqueue(queryId);
                 return true;
             }
-            Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+            LogService.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             return false;
         }
 
         public static void ProcessSaveQueue()
         {
-            if (SaveProcessList.TryPeek(out var queryId))//todo 保存数据优化一下流程，GameSrv无需等待DBSrv结果，异步通知即可
+            //todo 保存数据优化一下流程，M2Server.需等待DBSrv结果，异步通知即可
+            if (SaveProcessList.TryPeek(out int queryId))
             {
                 int nIdent = 0;
                 int nRecog = 0;
                 byte[] data = null;
-                if (GetDbSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
+                if (GetDataSrvMessage(queryId, ref nIdent, ref nRecog, ref data))
                 {
                     if (nIdent == Messages.DBR_SAVEHUMANRCD && nRecog == 1)
                     {
-                        M2Share.FrontEngine.RemoveSaveList(queryId);
+                        // M2Share.FrontEngine.RemoveSaveList(queryId);
                     }
                     SaveProcessList.TryDequeue(out _);
                 }
@@ -128,21 +132,21 @@ namespace GameSrv.Services
 
         public static void ProcessQueryQueue()
         {
-            if (QueryProcessList.TryDequeue(out var queryData))
+            if (QueryProcessList.TryDequeue(out QueryPlayData queryData))
             {
-                if (queryData.QuetyCount >= 10000)
+                if (queryData.QueryCount >= 60) //60秒后放弃
                 {
-                    Logger.Warn("超过最大查询次数,放弃此次保存.");
+                    LogService.Warn("超过最大查询次数,放弃此次保存.");
                     return;
                 }
                 int nIdent = 0;
                 int nRecog = 0;
                 byte[] data = null;
-                if (GetDbSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
+                if (GetDataSrvMessage(queryData.QueryId, ref nIdent, ref nRecog, ref data))
                 {
                     if (nIdent == Messages.DBR_LOADHUMANRCD && nRecog == 1 && data.Length > 0)
                     {
-                        var responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(EDCode.DecodeBuff(data));
+                        LoadPlayerDataPacket responsePacket = SerializerUtil.Deserialize<LoadPlayerDataPacket>(EDCode.DecodeBuff(data));
                         responsePacket.ChrName = EDCode.DeCodeString(responsePacket.ChrName);
                         LoadPlayDataMap.TryAdd(queryData.QueryId, responsePacket);
                     }
@@ -150,38 +154,37 @@ namespace GameSrv.Services
                 }
                 else
                 {
-                    queryData.QuetyCount++;
+                    queryData.QueryCount++;
                     QueryProcessList.Enqueue(queryData);
                 }
             }
         }
 
-        private static bool LoadRcd(LoadPlayerDataMessage loadHuman, ref int queryId)
+        private static bool LoadRcd(LoadCharacterData loadHuman, ref int queryId)
         {
-            int nQueryId = GetQueryId();
+            queryId = GetQueryId();
             ServerRequestMessage packet = new ServerRequestMessage(Messages.DB_LOADHUMANRCD, 0, 0, 0, 0);
-            if (M2Share.DataServer.SendRequest(nQueryId, packet, loadHuman))
+            if (GameShare.DataServer.SendRequest(queryId, packet, loadHuman))
             {
                 QueryProcessList.Enqueue(new QueryPlayData()
                 {
-                    QueryId = nQueryId
+                    QueryId = queryId
                 });
-                queryId = nQueryId;
-                Logger.Debug($"查询玩家数据任务ID:[{queryId}]");
+                LogService.Debug($"查询玩家数据任务ID:[{queryId}]");
                 return true;
             }
-            Logger.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
+            LogService.Warn("DBSvr链接丢失，请确认DBSvr服务状态是否正常。");
             return false;
         }
 
         private static int GetQueryId()
         {
-            M2Share.Config.nDBQueryID++;
-            if (M2Share.Config.nDBQueryID > int.MaxValue - 1)
+            SystemShare.Config.DBQueryID++;
+            if (SystemShare.Config.DBQueryID > int.MaxValue - 1)
             {
-                M2Share.Config.nDBQueryID = 1;
+                SystemShare.Config.DBQueryID = 1;
             }
-            return M2Share.Config.nDBQueryID;
+            return SystemShare.Config.DBQueryID;
         }
     }
 }

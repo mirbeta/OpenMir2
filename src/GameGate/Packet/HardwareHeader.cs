@@ -1,8 +1,3 @@
-using System;
-using System.IO;
-using SystemModule.Packets;
-using SystemModule.Packets.ClientPackets;
-
 namespace GameGate.Packet
 {
     public class HardwareHeader : ClientPacket

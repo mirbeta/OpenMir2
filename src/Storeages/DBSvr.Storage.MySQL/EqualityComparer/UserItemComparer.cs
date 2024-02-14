@@ -1,5 +1,5 @@
+using OpenMir2.Packets.ClientPackets;
 using System.Collections.Generic;
-using SystemModule.Packets.ClientPackets;
 
 namespace DBSrv.Storage.MySQL.EqualityComparer
 {
@@ -8,13 +8,25 @@ namespace DBSrv.Storage.MySQL.EqualityComparer
         public bool Equals(UserItem x, UserItem y)
         {
             if (ReferenceEquals(x, y))
+            {
                 return true;
-            if (ReferenceEquals(x, null))
+            }
+
+            if (x is null)
+            {
                 return false;
-            if (ReferenceEquals(y, null))
+            }
+
+            if (y is null)
+            {
                 return false;
+            }
+
             if (x.GetType() != y.GetType())
+            {
                 return false;
+            }
+
             return x.MakeIndex == y.MakeIndex || x.Index == y.Index;
         }
 
@@ -22,7 +34,7 @@ namespace DBSrv.Storage.MySQL.EqualityComparer
         {
             unchecked
             {
-                var hashCode = obj.MakeIndex;
+                int hashCode = obj.MakeIndex;
                 hashCode = (hashCode * 397) ^ (obj.Index != 0 ? obj.Index.GetHashCode() : 0);
                 return hashCode;
             }

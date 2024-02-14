@@ -2,16 +2,17 @@ using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
 using MySqlConnector;
 using NLog;
+using OpenMir2;
+using OpenMir2.Data;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using SystemModule.Data;
 
 namespace DBSrv.Storage.MySQL
 {
     public class PlayRecordStorage : IPlayRecordStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         private int _recordCount;
         private readonly Dictionary<string, int> _quickList;
         private readonly Dictionary<int, string> _indexQuickList;
@@ -37,8 +38,8 @@ namespace DBSrv.Storage.MySQL
             _quickList.Clear();
             _quickIdList.Clear();
             _deletedList.Clear();
-            var connSuccess = false;
-            var connection = Open(ref connSuccess);
+            bool connSuccess = false;
+            MySqlConnection connection = Open(ref connSuccess);
             if (!connSuccess)
             {
                 return;
@@ -47,13 +48,13 @@ namespace DBSrv.Storage.MySQL
             IList<string> ChrNameList = new List<string>();
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = connection;
                 command.CommandText = "select * from characters_indexes where IsDeleted < 2"; //排除异常数据
-                using var dr = command.ExecuteReader();
+                using MySqlDataReader dr = command.ExecuteReader();
                 while (dr.Read())
                 {
-                    var DBRecord = new PlayerRecordData();
+                    PlayerRecordData DBRecord = new PlayerRecordData();
                     DBRecord.Id = dr.GetInt32("Id");
                     DBRecord.sAccount = dr.GetString("Account");
                     DBRecord.sChrName = dr.GetString("ChrName");
@@ -88,7 +89,7 @@ namespace DBSrv.Storage.MySQL
                 connection.Close();
                 connection.Dispose();
             }
-            for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
+            for (int nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
                 _quickIdList.AddRecord(AccountList[nIndex].Account, ChrNameList[nIndex], AccountList[nIndex].Index, AccountList[nIndex].SelectID);
             }
@@ -98,7 +99,7 @@ namespace DBSrv.Storage.MySQL
 
         private MySqlConnection Open(ref bool succes)
         {
-            var connection = new MySqlConnection(_storageOption.ConnectionString);
+            MySqlConnection connection = new MySqlConnection(_storageOption.ConnectionString);
             try
             {
                 connection.Open();
@@ -106,8 +107,8 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error("打开数据库[MySql]失败.");
-                _logger.Error(e.StackTrace);
+                LogService.Error("打开数据库[MySql]失败.");
+                LogService.Error(e.StackTrace);
                 succes = false;
             }
             return connection;
@@ -129,8 +130,8 @@ namespace DBSrv.Storage.MySQL
 
         private PlayerRecordData GetRecord(int nIndex, ref bool success)
         {
-            var connSuccess = false;
-            var connection = Open(ref connSuccess);
+            bool connSuccess = false;
+            MySqlConnection connection = Open(ref connSuccess);
             if (!connSuccess)
             {
                 return default;
@@ -139,11 +140,11 @@ namespace DBSrv.Storage.MySQL
             PlayerRecordData humRecord = null;
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.CommandText = sSqlStrig;
                 command.Connection = connection;
                 command.Parameters.AddWithValue("@Id", nIndex);
-                using var dr = command.ExecuteReader();
+                using MySqlDataReader dr = command.ExecuteReader();
                 if (dr.Read())
                 {
                     humRecord = new PlayerRecordData();
@@ -171,7 +172,7 @@ namespace DBSrv.Storage.MySQL
 
         public int FindByName(string sChrName, ArrayList ChrList)
         {
-            for (var i = 0; i < _quickList.Count; i++)
+            for (int i = 0; i < _quickList.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_QuickList[i], sChrName, sChrName.Length))
                 //{
@@ -183,7 +184,11 @@ namespace DBSrv.Storage.MySQL
 
         public PlayerRecordData GetBy(int nIndex, ref bool success)
         {
-            if (nIndex > 0) return GetRecord(nIndex, ref success);
+            if (nIndex > 0)
+            {
+                return GetRecord(nIndex, ref success);
+            }
+
             success = false;
             return default;
         }
@@ -194,7 +199,7 @@ namespace DBSrv.Storage.MySQL
             _quickIdList.GetChrList(sAccount, ref ChrNameList);
             if (ChrNameList != null)
             {
-                for (var i = 0; i < ChrNameList.Count; i++)
+                for (int i = 0; i < ChrNameList.Count; i++)
                 {
                     ChrList.Add(ChrNameList[i]);
                 }
@@ -204,13 +209,13 @@ namespace DBSrv.Storage.MySQL
 
         public int ChrCountOfAccount(string sAccount)
         {
-            var result = 0;
+            int result = 0;
             IList<PlayQuick> ChrList = null;
             _quickIdList.GetChrList(sAccount, ref ChrList);
-            var success = false;
+            bool success = false;
             if (ChrList != null)
             {
-                for (var i = 0; i < ChrList.Count; i++)
+                for (int i = 0; i < ChrList.Count; i++)
                 {
                     PlayerRecordData HumDBRecord = GetBy(ChrList[i].Index, ref success);
                     if (success && !HumDBRecord.Deleted)
@@ -264,18 +269,18 @@ namespace DBSrv.Storage.MySQL
 
         private bool UpdateRecord(PlayerRecordData HumRecord, bool boNew, ref int nIndex)
         {
-            var connSuccess = false;
-            var connection = Open(ref connSuccess);
+            bool connSuccess = false;
+            MySqlConnection connection = Open(ref connSuccess);
             if (!connSuccess)
             {
                 return false;
             }
-            var result = false;
+            bool result = false;
             try
             {
                 if (boNew && (!HumRecord.Header.Deleted) && (!string.IsNullOrEmpty(HumRecord.Header.Name)))
                 {
-                    var command = new MySqlCommand();
+                    MySqlCommand command = new MySqlCommand();
                     command.Connection = connection;
                     command.CommandText = InsertChrIndexes;
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
@@ -283,7 +288,7 @@ namespace DBSrv.Storage.MySQL
                     command.Parameters.AddWithValue("@SelectID", HumRecord.Selected);
                     command.Parameters.AddWithValue("@IsDeleted", HumRecord.Deleted);
                     command.ExecuteNonQuery();
-                    var id = command.LastInsertedId;
+                    long id = command.LastInsertedId;
                     nIndex = (int)id;
                     result = true;
                     _indexQuickList.Add(nIndex, HumRecord.sChrName);
@@ -291,7 +296,7 @@ namespace DBSrv.Storage.MySQL
                 else
                 {
                     HumRecord.Header.Deleted = false;
-                    var command = new MySqlCommand();
+                    MySqlCommand command = new MySqlCommand();
                     command.Connection = connection;
                     command.CommandText = UpdateChrIndexes;
                     command.Parameters.AddWithValue("@Account", HumRecord.sAccount);
@@ -305,7 +310,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error(e.Message);
+                LogService.Error(e.Message);
             }
             finally
             {
@@ -318,7 +323,7 @@ namespace DBSrv.Storage.MySQL
         public bool Delete(string sName)
         {
             IList<PlayQuick> ChrNameList = null;
-            var result = false;
+            bool result = false;
             if (_quickList.TryGetValue(sName, out int nIndex))
             {
                 if (nIndex < 0)
@@ -334,7 +339,7 @@ namespace DBSrv.Storage.MySQL
             PlayerRecordData HumRecord = Get(nIndex, ref result);
             if (result)
             {
-                var n14 = _quickIdList.GetChrList(HumRecord.sAccount, ref ChrNameList);
+                int n14 = _quickIdList.GetChrList(HumRecord.sAccount, ref ChrNameList);
                 if (n14 >= 0)
                 {
                     _quickIdList.DelRecord(n14, HumRecord.sChrName);
@@ -346,15 +351,15 @@ namespace DBSrv.Storage.MySQL
         private bool DeleteRecord(int nIndex)
         {
             const string DeleteChrIndexes = "UPDATE characters_indexes SET IsDeleted = @IsDeleted,ModifyDate = now() WHERE Id = @Id;";
-            var connSuccess = false;
-            var connection = Open(ref connSuccess);
+            bool connSuccess = false;
+            MySqlConnection connection = Open(ref connSuccess);
             if (!connSuccess)
             {
                 return false;
             }
             try
             {
-                var command = new MySqlCommand();
+                MySqlCommand command = new MySqlCommand();
                 command.Connection = connection;
                 command.CommandText = DeleteChrIndexes;
                 command.Parameters.AddWithValue("@IsDeleted", 2);
@@ -364,7 +369,7 @@ namespace DBSrv.Storage.MySQL
             }
             catch (Exception e)
             {
-                _logger.Error(e.Source);
+                LogService.Error(e.Source);
                 return false;
             }
             finally

@@ -1,5 +1,5 @@
+using OpenMir2.Packets.ServerPackets;
 using System.Collections.Generic;
-using SystemModule.Packets.ServerPackets;
 
 namespace DBSrv.Storage
 {
@@ -11,13 +11,13 @@ namespace DBSrv.Storage
         /// <summary>
         /// 添加角色数据到内存缓存
         /// </summary>
-        void Add(string chrName, PlayerDataInfo playerData);
+        void Add(string chrName, CharacterDataInfo playerData);
 
         /// <summary>
         /// 从缓存取出角色数据
         /// </summary>
         /// <returns></returns>
-        PlayerDataInfo Get(string chrName, out bool exist);
+        CharacterDataInfo Get(string chrName, out bool exist);
 
         /// <summary>
         /// 从缓存删除角色数据
@@ -29,6 +29,6 @@ namespace DBSrv.Storage
         /// 从缓存取出所有角色数据
         /// </summary>
         /// <returns></returns>
-        IEnumerator<PlayerDataInfo> QueryCacheData();
+        IEnumerator<CharacterDataInfo> QueryCacheData();
     }
 }

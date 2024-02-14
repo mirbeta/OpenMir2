@@ -1,5 +1,7 @@
-﻿namespace GameSrv.Robots {
-    public class AutoRunInfo {
+﻿namespace GameSrv.Robots
+{
+    public class AutoRunInfo
+    {
         /// <summary>
         /// 上一次运行时间记录
         /// </summary>
@@ -26,7 +28,10 @@
         public int nParam2;
         public int nParam3;
         public int nParam4;
-        public bool boStatus;
+        /// <summary>
+        /// 状态
+        /// </summary>
+        public bool Status;
     }
 }
 

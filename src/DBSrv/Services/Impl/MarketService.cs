@@ -1,20 +1,6 @@
 ﻿using DBSrv.Conf;
 using DBSrv.Storage;
-using NLog;
-using System;
-using System.Linq;
-using System.Net;
-using SystemModule;
-using SystemModule.ByteManager;
-using SystemModule.Core.Config;
-using SystemModule.DataHandlingAdapters;
-using SystemModule.Extensions;
-using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
+using OpenMir2.DataHandlingAdapters;
 
 namespace DBSrv.Services.Impl
 {
@@ -24,13 +10,12 @@ namespace DBSrv.Services.Impl
     /// </summary>
     public class MarketService : IService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ICacheStorage _cacheStorage;
         private readonly IMarketStorage _marketStorage;
         private readonly TcpService _socketServer;
-        private readonly SettingConf _setting;
+        private readonly SettingsModel _setting;
 
-        public MarketService(SettingConf setting, ICacheStorage cacheStorage, IMarketStorage marketStorage)
+        public MarketService(SettingsModel setting, ICacheStorage cacheStorage, IMarketStorage marketStorage)
         {
             _setting = setting;
             _cacheStorage = cacheStorage;
@@ -43,231 +28,235 @@ namespace DBSrv.Services.Impl
 
         public void Initialize()
         {
-            var touchSocketConfig = new TouchSocketConfig();
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
             touchSocketConfig.SetListenIPHosts(new IPHost[1]
             {
                 new IPHost(IPAddress.Parse(_setting.MarketServerAddr), _setting.MarketServerPort)
-            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            }).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _socketServer.Setup(touchSocketConfig);
         }
 
         public void Start()
         {
             _socketServer.Start();
-            _logger.Info($"拍卖行数据库服务[{_setting.MarketServerAddr}:{_setting.MarketServerPort}]已启动.等待链接...");
+            LogService.Info($"拍卖行数据库服务[{_setting.MarketServerAddr}:{_setting.MarketServerPort}]已启动.等待链接...");
         }
 
         public void Stop()
         {
             _socketServer.Stop();
         }
-        
+
         public void PushMarketData()
         {
             //todo 根据服务器分组推送到各个GameSrv或者推送到所有GameSrv
             byte groupId = 0;//GroupID为0时查询所有区服的拍卖行数据
-            var marketItems = _marketStorage.QueryMarketItems(groupId);
+            System.Collections.Generic.IEnumerable<OpenMir2.Data.MarketItem> marketItems = _marketStorage.QueryMarketItems(groupId);
             if (!marketItems.Any())
             {
-                _logger.Info("拍卖行数据为空,跳过推送拍卖行数据.");
+                LogService.Info("拍卖行数据为空,跳过推送拍卖行数据.");
                 return;
             }
-            var socketList = _socketServer.GetClients();
-            foreach (var client in socketList)
+            System.Collections.Generic.IEnumerable<SocketClient> socketList = _socketServer.GetClients();
+            foreach (SocketClient client in socketList)
             {
-                if (_socketServer.SocketClientExist(client.ID))
+                if (_socketServer.SocketClientExist(client.Id))
                 {
-                    _socketServer.Send(client.ID, Array.Empty<byte>());//推送拍卖行数据
+                    _socketServer.Send(client.Id, Array.Empty<byte>());//推送拍卖行数据
                 }
             }
-            _logger.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Length}]");
+            LogService.Info($"推送拍卖行数据成功.当前拍卖行物品数据:[{marketItems.Count()}],在线服务器:[{socketList.Count()}]");
         }
-        
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+
+        private Task Received(IClient client, ReceivedDataEventArgs e)
         {
-            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
-                return;
-            var client = (SocketClient)sender;
+            if (e.RequestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+            {
+                return Task.CompletedTask;
+            }
+            SocketClient clientSoc = (SocketClient)client;
             try
             {
                 if (fixedHeader.Header.PacketCode != Grobal2.PacketCode)
                 {
-                    _logger.Error($"解析寄售行封包出现异常封包...");
-                    return;
+                    LogService.Error($"解析寄售行封包出现异常封包...");
+                    return Task.CompletedTask;
                 }
-                var messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
-                ProcessMessagePacket(client.ID, messageData);
+                ServerRequestData messageData = SerializerUtil.Deserialize<ServerRequestData>(fixedHeader.Message);
+                ProcessMessagePacket(clientSoc.Id, messageData);
             }
             catch (Exception ex)
             {
-                _logger.Error(ex);
+                LogService.Error(ex);
             }
+            return Task.CompletedTask;
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Connecting(ITcpClientBase client, ConnectedEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var remoteIp = client.MainSocket.RemoteEndPoint.GetIP();
+            string remoteIp = client.MainSocket.RemoteEndPoint.GetIP();
             if (!DBShare.CheckServerIP(remoteIp))
             {
-                _logger.Warn("非法服务器连接: " + remoteIp);
+                LogService.Warn("非法服务器连接: " + remoteIp);
                 client.Close();
-                return;
+                return Task.CompletedTask;
             }
-            _logger.Info("拍卖行客户端(GameSrv)连接 " + client.MainSocket.RemoteEndPoint);
+            LogService.Info("拍卖行客户端(GameSrv)连接 " + client.MainSocket.RemoteEndPoint);
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(object sender, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            _logger.Info("拍卖行客户端(GameSrv)断开连接 " + client.MainSocket.RemoteEndPoint);
+            SocketClient client = (SocketClient)sender;
+            LogService.Info("拍卖行客户端(GameSrv)断开连接 " + client.MainSocket.RemoteEndPoint);
+            return Task.CompletedTask;
         }
 
         private void ProcessMessagePacket(string connectionId, ServerRequestData requestData)
         {
             int nQueryId = requestData.QueryId;
-            var requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
-            var packetLen = requestData.Message.Length + requestData.Packet.Length + ServerDataPacket.FixedHeaderLen;
-            if (packetLen >= Messages.DefBlockSize && nQueryId > 0 && requestData.Packet != null && requestData.Sgin != null)
+            ServerRequestMessage requestMessage = SerializerUtil.Deserialize<ServerRequestMessage>(EDCode.DecodeBuff(requestData.Message));
+            int packetLen = requestData.Message.Length + requestData.Packet.Length + ServerDataPacket.FixedHeaderLen;
+            if (packetLen >= Messages.DefBlockSize && nQueryId > 0 && requestData.Packet != null && requestData.Sign != null)
             {
-                var sData = EDCode.DecodeBuff(requestData.Packet);
-                var queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
+                byte[] sData = EDCode.DecodeBuff(requestData.Packet);
+                int queryId = HUtil32.MakeLong((ushort)(nQueryId ^ 170), (ushort)packetLen);
                 if (queryId <= 0)
                 {
                     SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
-                if (requestData.Sgin.Length <= 0)
+                if (requestData.Sign.Length <= 0)
                 {
                     SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
                     return;
                 }
-                var signatureBuff = BitConverter.GetBytes(queryId);
-                var signatureId = BitConverter.ToInt16(signatureBuff);
-                var sginBuff = EDCode.DecodeBuff(requestData.Sgin);
-                var sgin = BitConverter.ToInt16(sginBuff);
-                if (sgin == signatureId)
+                byte[] signatureBuff = BitConverter.GetBytes(queryId);
+                short signatureId = BitConverter.ToInt16(signatureBuff);
+                byte[] signBuff = EDCode.DecodeBuff(requestData.Sign);
+                short signId = BitConverter.ToInt16(signBuff);
+                if (signId == signatureId)
                 {
                     ProcessMarketPacket(nQueryId, requestMessage, sData, connectionId);
                     return;
                 }
-                _socketServer.TryGetSocketClient(connectionId, out var client);
+                _socketServer.TryGetSocketClient(connectionId, out SocketClient client);
                 client.Close();
-                _logger.Error($"关闭错误的任务{nQueryId}查询请求.");
+                LogService.Error($"关闭错误的任务{nQueryId}查询请求.");
                 return;
             }
             SendFailMessage(nQueryId, connectionId, new ServerRequestMessage(Messages.DBR_FAIL, 0, 0, 0, 0));
         }
 
-        private void ProcessMarketPacket(int nQueryId, ServerRequestMessage packet, byte[] sData, string connectionId)
+        private void ProcessMarketPacket(int queryId, ServerRequestMessage packet, byte[] sData, string connectionId)
         {
             switch (packet.Ident)
             {
                 case Messages.DB_LOADMARKET://GameSrv主动拉取拍卖行数据
-                    LoadMarketList(nQueryId, sData, connectionId);
+                    LoadMarketList(queryId, sData, connectionId);
                     break;
                 case Messages.DB_SAVEMARKET://GameSrv保存拍卖行数据
-                    SaveMarketItem(nQueryId, packet.Recog, sData, connectionId);
+                    SaveMarketItem(queryId, packet.Recog, sData, connectionId);
                     break;
                 case Messages.DB_SEARCHMARKET://GameSrv搜索拍卖行数据
-                    SearchMarketItem(nQueryId, packet.Recog, sData, connectionId);
+                    SearchMarketItem(queryId, packet.Recog, sData, connectionId);
                     break;
                 case Messages.DB_LOADUSERMARKET://GameSrv拉取玩家拍卖行数据
-                    QueryMarketUserLoad(nQueryId, packet.Recog, sData, connectionId);
+                    QueryMarketUserLoad(queryId, packet.Recog, sData, connectionId);
                     break;
             }
         }
 
         private void QueryMarketUserLoad(int nQueryId, int actorId, byte[] sData, string connectionId)
         {
-            var userMarket = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
+            MarketSearchMessage userMarket = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
             if (userMarket.GroupId == 0)
             {
-                var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
+                ServerRequestMessage messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"服务器组[{userMarket.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                LogService.Info($"服务器组[{userMarket.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
-            var userItemLoad = _marketStorage.QueryMarketItemsCount(userMarket.GroupId, userMarket.SearchWho);
-            var marketLoadMessgae = new MarkerUserLoadMessage();
+            int userItemLoad = _marketStorage.QueryMarketItemsCount(userMarket.GroupId, userMarket.SearchWho);
+            MarkerUserLoadMessage marketLoadMessgae = new MarkerUserLoadMessage();
             marketLoadMessgae.SellCount = userItemLoad;
             marketLoadMessgae.IsBusy = 0;
             marketLoadMessgae.MarketNPC = userMarket.MarketNPC;
             SendSuccessMessage(connectionId, actorId, Messages.DB_LOADUSERMARKETSUCCESS, marketLoadMessgae);
-            _logger.Info($"获取服务器组[{userMarket.GroupId}] 用户[{userMarket.SearchWho}]个人拍卖行数据...");
+            LogService.Info($"获取服务器组[{userMarket.GroupId}] 用户[{userMarket.SearchWho}]个人拍卖行数据...");
         }
 
         private void SearchMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)
         {
-            var marketSearch = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
+            MarketSearchMessage marketSearch = SerializerUtil.Deserialize<MarketSearchMessage>(sData);
             if (marketSearch.GroupId == 0)
             {
-                var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
+                ServerRequestMessage messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 0, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                LogService.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
-            var searchItems = _marketStorage.SearchMarketItems(marketSearch.GroupId,marketSearch.MarketName, marketSearch.SearchItem, marketSearch.SearchWho, marketSearch.ItemType, marketSearch.ItemSet);
+            System.Collections.Generic.IEnumerable<OpenMir2.Data.MarketItem> searchItems = _marketStorage.SearchMarketItems(marketSearch.GroupId, marketSearch.MarketName, marketSearch.SearchItem, marketSearch.SearchWho, marketSearch.ItemType, marketSearch.ItemSet);
             if (!searchItems.Any())
             {
-                var messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 1, 0, 0);
+                ServerRequestMessage messagePacket = new ServerRequestMessage(Messages.DB_SRARCHMARKETFAIL, 0, 1, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
+                LogService.Info($"服务器组[{marketSearch.GroupId}]拍卖行数据为空,搜索拍卖行数据失败.");
                 return;
             }
-            var marketItemMessgae = new MarketDataMessage();
+            MarketDataMessage marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = searchItems.ToList();
             marketItemMessgae.TotalCount = searchItems.Count();
             SendSuccessMessage(connectionId, actorId, Messages.DB_SEARCHMARKETSUCCESS, marketItemMessgae);
-            _logger.Info($"服务器组[{marketSearch.GroupId}]搜索拍卖行数据...");
+            LogService.Info($"服务器组[{marketSearch.GroupId}]搜索拍卖行数据...");
         }
-        
+
         private void LoadMarketList(int nQueryId, byte[] sData, string connectionId)
         {
-            var marketMessage = SerializerUtil.Deserialize<MarketRegisterMessage>(sData);
+            MarketRegisterMessage marketMessage = SerializerUtil.Deserialize<MarketRegisterMessage>(sData);
             if (string.IsNullOrEmpty(marketMessage.Token) || string.IsNullOrEmpty(marketMessage.ServerName))
             {
-                _logger.Warn($"SocketId:{connectionId} QueryId:[{nQueryId}] 非法获取拍卖行数据...");
+                LogService.Warn($"SocketId:{connectionId} QueryId:[{nQueryId}] 非法获取拍卖行数据...");
                 return;
             }
-            var marketItems = _marketStorage.QueryMarketItems(marketMessage.GroupId);
+            System.Collections.Generic.IEnumerable<OpenMir2.Data.MarketItem> marketItems = _marketStorage.QueryMarketItems(marketMessage.GroupId);
             if (!marketItems.Any())
             {
-                var messagePacket = new ServerRequestMessage(Messages.DB_LOADMARKETFAIL, 0, 1, 0, 0);
+                ServerRequestMessage messagePacket = new ServerRequestMessage(Messages.DB_LOADMARKETFAIL, 0, 1, 0, 0);
                 SendFailMessage(nQueryId, connectionId, messagePacket);
-                _logger.Info($"当前服务器组[{marketMessage.GroupId}]拍卖行数据为空,读取拍卖行数据失败.");
+                LogService.Info($"当前服务器组[{marketMessage.GroupId}]拍卖行数据为空,读取拍卖行数据失败.");
                 return;
             }
-            var marketItemMessgae = new MarketDataMessage();
+            MarketDataMessage marketItemMessgae = new MarketDataMessage();
             marketItemMessgae.List = marketItems.ToList();
             marketItemMessgae.TotalCount = marketItems.Count();
             SendSuccessMessage(connectionId, 0, Messages.DB_LOADMARKETSUCCESS, marketItemMessgae);
-            _logger.Info($"服务器组[{marketMessage.GroupId}] [{marketMessage.ServerName}]读取拍卖行数据成功.当前拍卖行物品数据:[{marketItemMessgae.TotalCount}]");
+            LogService.Info($"服务器组[{marketMessage.GroupId}] [{marketMessage.ServerName}]读取拍卖行数据成功.当前拍卖行物品数据:[{marketItemMessgae.TotalCount}]");
         }
 
         private void SaveMarketItem(int nQueryId, int actorId, byte[] sData, string connectionId)
         {
-            var saveMessage = SerializerUtil.Deserialize<MarketSaveDataItem>(sData);
+            MarketSaveDataItem saveMessage = SerializerUtil.Deserialize<MarketSaveDataItem>(sData);
             if (saveMessage.GroupId == 0 || string.IsNullOrEmpty(saveMessage.ServerName))
             {
-                _logger.Warn($"任务[{nQueryId}]非法获取拍卖行数据...");
+                LogService.Warn($"任务[{nQueryId}]非法获取拍卖行数据...");
                 return;
             }
-            var marketItems = _marketStorage.SaveMarketItem(saveMessage.Item, saveMessage.GroupId, saveMessage.ServerIndex);
+            bool marketItems = _marketStorage.SaveMarketItem(saveMessage.Item, saveMessage.GroupId, saveMessage.ServerIndex);
             if (!marketItems)
             {
-                _logger.Info("当前服务器分组拍卖行数据为空,推送拍卖行数据失败.");
+                LogService.Info("当前服务器分组拍卖行数据为空,推送拍卖行数据失败.");
                 return;
             }
-            var marketItemsCount = _marketStorage.QueryMarketItems(saveMessage.GroupId);
+            System.Collections.Generic.IEnumerable<OpenMir2.Data.MarketItem> marketItemsCount = _marketStorage.QueryMarketItems(saveMessage.GroupId);
             SendSuccessMessage(connectionId, actorId, Messages.DB_SAVEMARKETSUCCESS, saveMessage);
-            _logger.Info($"服务器组[{saveMessage.GroupId}] [{saveMessage.ServerName}]保存拍卖行数据成功.当前拍卖行物品数据:[{marketItemsCount}]");
+            LogService.Info($"服务器组[{saveMessage.GroupId}] [{saveMessage.ServerName}]保存拍卖行数据成功.当前拍卖行物品数据:[{marketItemsCount}]");
         }
 
         private void SendSuccessMessage<T>(string connectionId, int actorId, byte messageId, T data)
         {
-            var responsePack = new ServerRequestData();
-            var messagePacket = new ServerRequestMessage(messageId, actorId, 0, 0, 0);
+            ServerRequestData responsePack = new ServerRequestData();
+            ServerRequestMessage messagePacket = new ServerRequestMessage(messageId, actorId, 0, 0, 0);
             responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
             responsePack.Packet = EDCode.EncodeBuffer(SerializerUtil.Serialize(data));
             SendRequest(connectionId, 1, responsePack);
@@ -275,7 +264,7 @@ namespace DBSrv.Services.Impl
 
         private void SendFailMessage(int nQueryId, string connectionId, ServerRequestMessage messagePacket)
         {
-            var responsePack = new ServerRequestData();
+            ServerRequestData responsePack = new ServerRequestData();
             responsePack.Message = EDCode.EncodeBuffer(SerializerUtil.Serialize(messagePacket));
             SendRequest(connectionId, nQueryId, responsePack);
         }
@@ -283,7 +272,7 @@ namespace DBSrv.Services.Impl
         private void SendRequest(string connectionId, int queryId, ServerRequestData requestPacket)
         {
             requestPacket.QueryId = queryId;
-            var queryPart = 0;
+            int queryPart = 0;
             if (requestPacket.Packet != null)
             {
                 queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + requestPacket.Packet.Length + ServerDataPacket.FixedHeaderLen));
@@ -293,20 +282,20 @@ namespace DBSrv.Services.Impl
                 requestPacket.Packet = Array.Empty<byte>();
                 queryPart = HUtil32.MakeLong((ushort)(queryId ^ 170), (ushort)(requestPacket.Message.Length + ServerDataPacket.FixedHeaderLen));
             }
-            var nCheckCode = BitConverter.GetBytes(queryPart);
-            requestPacket.Sgin = EDCode.EncodeBuffer(nCheckCode);
+            byte[] nCheckCode = BitConverter.GetBytes(queryPart);
+            requestPacket.Sign = EDCode.EncodeBuffer(nCheckCode);
             SendMessage(connectionId, SerializerUtil.Serialize(requestPacket));
         }
 
         private void SendMessage(string connectionId, byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             _socketServer.Send(connectionId, data);

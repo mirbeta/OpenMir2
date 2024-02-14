@@ -1,65 +1,35 @@
-﻿using System.Collections;
-using System.Collections.Concurrent;
-using GameSrv.Castle;
-using GameSrv.DataSource;
-using GameSrv.Event;
-using GameSrv.GameCommand;
-using GameSrv.Guild;
-using GameSrv.Items;
-using GameSrv.Magic;
+﻿using CommandModule;
+using GameSrv.DB;
 using GameSrv.Maps;
-using GameSrv.Network;
-using GameSrv.Notices;
-using GameSrv.Planes;
 using GameSrv.Robots;
-using GameSrv.Script;
 using GameSrv.Services;
-using GameSrv.World;
-using GameSrv.World.Managers;
-using NLog;
-using SystemModule.Common;
-using SystemModule.Data;
+using GameSrv.Word;
+using M2Server.Castle;
+using M2Server.Event;
+using M2Server.Guild;
+using M2Server.Items;
+using MediatR;
+using ScriptSystem;
+using System.Collections;
 
 namespace GameSrv
 {
     public class GameApp : ServerBase
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-
-        public GameApp()
+        public GameApp(IServiceProvider serviceProvider) : base(serviceProvider)
         {
-            M2Share.HumLimit = 30;
-            M2Share.MonLimit = 30;
-            M2Share.ZenLimit = 5;
-            M2Share.NpcLimit = 5;
-            M2Share.SocLimit = 10;
-            M2Share.DecLimit = 20;
-            M2Share.Config.nLoadDBErrorCount = 0;
-            M2Share.Config.nLoadDBCount = 0;
-            M2Share.Config.nSaveDBCount = 0;
-            M2Share.Config.nDBQueryID = 0;
-            M2Share.Config.ItemNumber = 0;
-            M2Share.Config.ItemNumberEx = int.MaxValue / 2;
-            M2Share.StartReady = false;
-            M2Share.FilterWord = true;
-            M2Share.Config.WinLotteryCount = 0;
-            M2Share.Config.NoWinLotteryCount = 0;
-            M2Share.Config.WinLotteryLevel1 = 0;
-            M2Share.Config.WinLotteryLevel2 = 0;
-            M2Share.Config.WinLotteryLevel3 = 0;
-            M2Share.Config.WinLotteryLevel4 = 0;
-            M2Share.Config.WinLotteryLevel5 = 0;
-            M2Share.Config.WinLotteryLevel6 = 0;
             M2Share.LogonCostLogList = new ArrayList();
+            M2Share.CustomItemMgr = new CustomItemSystem();
             M2Share.MakeItemList = new Dictionary<string, IList<MakeItem>>(StringComparer.OrdinalIgnoreCase);
             M2Share.StartPointList = new List<StartPoint>();
             M2Share.ServerTableList = new TRouteInfo[20];
             M2Share.DenySayMsgList = new ConcurrentDictionary<string, long>(StringComparer.OrdinalIgnoreCase);
             M2Share.MiniMapList = new ConcurrentDictionary<string, short>(StringComparer.OrdinalIgnoreCase);
+            //M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
+            M2Share.AbuseTextList = new StringList();
+            M2Share.SellOffItemList = new List<DealOffInfo>();
             M2Share.UnbindList = new Dictionary<int, string>();
             M2Share.LineNoticeList = new List<string>();
-            M2Share.QuestDiaryList = new List<IList<TQDDinfo>>();
-            M2Share.AbuseTextList = new StringList();
             M2Share.MonSayMsgList = new Dictionary<string, IList<MonsterSayMsg>>(StringComparer.OrdinalIgnoreCase);
             M2Share.DisableMakeItemList = new List<string>();
             M2Share.EnableMakeItemList = new List<string>();
@@ -79,92 +49,114 @@ namespace GameSrv
             M2Share.ItemBindIPaddr = new List<ItemBind>();
             M2Share.ItemBindAccount = new List<ItemBind>();
             M2Share.ItemBindChrName = new List<ItemBind>();
-            M2Share.ProcessMsgCriticalSection = new object();
             M2Share.ProcessHumanCriticalSection = new object();
             M2Share.UserDBCriticalSection = new object();
             M2Share.DynamicVarList = new Dictionary<string, DynamicVar>(StringComparer.OrdinalIgnoreCase);
-            M2Share.SellOffItemList = new List<DealOffInfo>();
+            M2Share.CommandSystem = new GameCommandSystem();
+            M2Share.Authentication = new AuthenticationService();
+            M2Share.ScriptEngine = new ScriptEngine();
+            M2Share.AutoBot = new RobotManage();
+            InitializeSystem(serviceProvider);
         }
 
+        private static void InitializeSystem(IServiceProvider serviceProvider)
+        {
+            SystemShare.HumLimit = 30;
+            SystemShare.MonLimit = 30;
+            SystemShare.ZenLimit = 5;
+            SystemShare.NpcLimit = 5;
+            SystemShare.SocLimit = 10;
+            SystemShare.DecLimit = 20;
+            SystemShare.FilterWord = true;
+            SystemShare.Config.LoadDBErrorCount = 0;
+            SystemShare.Config.LoadDBCount = 0;
+            SystemShare.Config.SaveDBCount = 0;
+            SystemShare.Config.DBQueryID = 0;
+            SystemShare.Config.ItemNumber = 0;
+            SystemShare.Config.ItemNumberEx = int.MaxValue / 2;
+            SystemShare.Config.WinLotteryCount = 0;
+            SystemShare.Config.NoWinLotteryCount = 0;
+            SystemShare.Config.WinLotteryLevel1 = 0;
+            SystemShare.Config.WinLotteryLevel2 = 0;
+            SystemShare.Config.WinLotteryLevel3 = 0;
+            SystemShare.Config.WinLotteryLevel4 = 0;
+            SystemShare.Config.WinLotteryLevel5 = 0;
+            SystemShare.Config.WinLotteryLevel6 = 0;
+            SystemShare.ManageNPC = new Merchant();
+            SystemShare.RobotNPC = new Merchant();
+            SystemShare.FunctionNPC = new Merchant();
+            SystemShare.ItemSystem = new GameItemSystem();
+            SystemShare.GuildMgr = new GuildManager();
+            SystemShare.CastleMgr = new CastleManager();
+            SystemShare.MapMgr = new MapManager();
+            SystemShare.EventMgr = new EventManager();
+            SystemShare.WorldEngine = new WorldServer();
+            SystemShare.ServiceProvider = serviceProvider;
+            SystemShare.Mediator = serviceProvider.GetService<IMediator>();
+        }
+
+        /// <summary>
+        /// 初始化游戏基础配置
+        /// </summary>
+        /// <param name="stoppingToken"></param>
         public void Initialize(CancellationToken stoppingToken)
         {
-            _logger.Info("读取游戏引擎数据配置文件...");
-            M2Share.GeneratorProcessor.Initialize(stoppingToken);
-            M2Share.DataServer = new DBService();
-            M2Share.MarketService = new MarketService();
-            M2Share.ChatChannel = new ChatChannelService();
-            M2Share.ScriptSystem = new ScriptSystem();
-            M2Share.SocketMgr = new ThreadSocketMgr();
-            M2Share.EventSource = new GameEventSource();
-            M2Share.MapMgr = new MapManager();
-            M2Share.CustomItemMgr = new CustomItem();
-            M2Share.NoticeMgr = new NoticeManager();
-            M2Share.GuildMgr = new GuildManager();
-            M2Share.MarketManager = new MarketManager();
-            M2Share.EventMgr = new EventManager();
-            M2Share.CastleMgr = new CastleManager();
-            M2Share.FrontEngine = new FrontEngine();
-            M2Share.WorldEngine = new WorldServer();
-            M2Share.RobotMgr = new RobotManage();
-            M2Share.LoadConfig();
-            LoadServerTable();
-            _logger.Info("初始化游戏引擎数据配置文件完成...");
-            CommandMgr.RegisterCommand();
+            M2Share.CommandSystem.RegisterCommand();
             M2Share.LoadGameLogItemNameList();
             M2Share.LoadDenyIPAddrList();
             M2Share.LoadDenyAccountList();
             M2Share.LoadDenyChrNameList();
             M2Share.LoadNoClearMonList();
-            _logger.Info("正在加载物品数据库...");
-            var nCode = M2Share.CommonDb.LoadItemsDB();
+            LogService.Info("正在加载物品数据库...");
+            int nCode = GameShare.CommonDb.LoadItemsDB();
             if (nCode < 0)
             {
-                _logger.Info($"物品数据库加载失败!!! Code: {nCode}");
+                LogService.Info($"物品数据库加载失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"物品数据库加载成功...[{M2Share.WorldEngine.StdItemList.Count}]");
+            LogService.Info($"物品数据库加载成功...[{SystemShare.ItemSystem.ItemCount}]");
             nCode = Map.LoadMinMap();
             if (nCode < 0)
             {
-                _logger.Info($"小地图数据加载失败!!! Code: {nCode}");
+                LogService.Info($"小地图数据加载失败!!! Code: {nCode}");
                 return;
             }
             nCode = Map.LoadMapInfo();
             if (nCode < 0)
             {
-                _logger.Info($"地图数据加载失败!!! Code: {nCode}");
+                LogService.Info($"地图数据加载失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info("正在加载怪物数据库...");
-            nCode = M2Share.CommonDb.LoadMonsterDB();
+            LogService.Info("正在加载怪物数据库...");
+            nCode = GameShare.CommonDb.LoadMonsterDB();
             if (nCode < 0)
             {
-                _logger.Info($"加载怪物数据库失败!!! Code: {nCode}");
+                LogService.Info($"加载怪物数据库失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"加载怪物数据库成功...[{M2Share.WorldEngine.MonsterList.Count}]");
-            _logger.Info("正在加载技能数据库...");
-            nCode = M2Share.CommonDb.LoadMagicDB();
+            LogService.Info($"加载怪物数据库成功...[{SystemShare.WorldEngine.MonsterCount}]");
+            LogService.Info("正在加载技能数据库...");
+            nCode = GameShare.CommonDb.LoadMagicDB();
             if (nCode < 0)
             {
-                _logger.Info($"加载技能数据库失败!!! Code: {nCode}");
+                LogService.Info($"加载技能数据库失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"加载技能数据库成功...[{M2Share.WorldEngine.MagicList.Count}]");
-            _logger.Info("正在加载怪物刷新配置信息...");
-            nCode = M2Share.LocalDb.LoadMonGen(out var mongenCount);
+            LogService.Info($"加载技能数据库成功...[{SystemShare.WorldEngine.MagicCount}]");
+            LogService.Info("正在加载怪物刷新配置信息...");
+            nCode = GameShare.LocalDb.LoadMonGen(out int mongenCount);
             if (nCode < 0)
             {
-                _logger.Info($"加载怪物刷新配置信息失败!!! Code: {nCode}");
+                LogService.Info($"加载怪物刷新配置信息失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info($"加载怪物刷新配置信息成功...[{mongenCount}]");
-            _logger.Info("初始化怪物处理线程...");
-            M2Share.WorldEngine.InitializeMonster();
-            _logger.Info("初始化怪物处理完成...");
-            _logger.Info("正加载怪物说话配置信息...");
+            LogService.Info($"加载怪物刷新配置信息成功...[{mongenCount}]");
+            LogService.Info("初始化怪物处理线程...");
+            SystemShare.WorldEngine.InitializeMonster();
+            LogService.Info("初始化怪物处理完成...");
+            LogService.Info("正加载怪物说话配置信息...");
             M2Share.LoadMonSayMsg();
-            _logger.Info($"加载怪物说话配置信息成功...[{M2Share.MonSayMsgList.Count}]");
+            LogService.Info($"加载怪物说话配置信息成功...[{M2Share.MonSayMsgList.Count}]");
             M2Share.LoadDisableTakeOffList();
             M2Share.LoadMonDropLimitList();
             M2Share.LoadDisableMakeItem();
@@ -178,101 +170,101 @@ namespace GameSrv
             M2Share.LoadItemBindChrName();
             M2Share.LoadUnMasterList();
             M2Share.LoadUnForceMasterList();
-            _logger.Info("正在加载捆装物品信息...");
-            nCode = M2Share.LocalDb.LoadUnbindList();
+            LogService.Info("正在加载捆装物品信息...");
+            nCode = GameShare.LocalDb.LoadUnbindList();
             if (nCode < 0)
             {
-                _logger.Info($"加载捆装物品信息失败!!! Code: {nCode}");
+                LogService.Info($"加载捆装物品信息失败!!! Code: {nCode}");
                 return;
             }
-            _logger.Info("加载捆装物品信息成功...");
-            _logger.Info("加载物品寄售系统...");
-            M2Share.CommonDb.LoadSellOffItemList();
-            _logger.Info("正在加载任务地图信息...");
-            nCode = M2Share.LocalDb.LoadMapQuest();
+            LogService.Info("加载捆装物品信息成功...");
+            LogService.Info("加载物品寄售系统...");
+            GameShare.CommonDb.LoadSellOffItemList();
+            LogService.Info("正在加载任务地图信息...");
+            nCode = GameShare.LocalDb.LoadMapQuest();
             if (nCode < 0)
             {
-                _logger.Info("加载任务地图信息失败!!!");
+                LogService.Info("加载任务地图信息失败!!!");
                 return;
             }
-            _logger.Info("加载任务地图信息成功...");
-            _logger.Info("正在加载任务说明信息...");
-            nCode = M2Share.LocalDb.LoadQuestDiary();
+            LogService.Info("加载任务地图信息成功...");
+            LogService.Info("正在加载任务说明信息...");
+            nCode = GameShare.LocalDb.LoadQuestDiary();
             if (nCode < 0)
             {
-                _logger.Info("加载任务说明信息失败!!!");
+                LogService.Info("加载任务说明信息失败!!!");
                 return;
             }
-            _logger.Info("加载任务说明信息成功...");
+            LogService.Info("加载任务说明信息成功...");
             if (LoadAbuseInformation(".\\!abuse.txt"))
             {
-                _logger.Info("加载文字过滤信息成功...");
+                LogService.Info("加载文字过滤信息成功...");
             }
-            _logger.Info("正在加载公告提示信息...");
-            if (!M2Share.LoadLineNotice(M2Share.GetNoticeFilePath("LineNotice.txt")))
+            LogService.Info("正在加载公告提示信息...");
+            if (!M2Share.LoadLineNotice(SystemShare.GetNoticeFilePath("LineNotice.txt")))
             {
-                _logger.Info("加载公告提示信息失败!!!");
+                LogService.Info("加载公告提示信息失败!!!");
             }
-            _logger.Info("加载公告提示信息成功...");
+            LogService.Info("加载公告提示信息成功...");
             LocalDb.LoadAdminList();
-            _logger.Info("管理员列表加载成功...");
-            M2Share.SocketMgr.Initialize();
-            _logger.Info("正在初始化网络引擎...");
+            LogService.Info("管理员列表加载成功...");
+            M2Share.NetChannel.Initialize();
+            LogService.Info("正在初始化网络服务...");
+            SystemShare.CastleMgr.Initialize();
+            GameShare.DataServer.Initialize();
+            M2Share.Authentication.Initialize();
         }
 
-        public void StartServer(CancellationToken stoppingToken)
+        /// <summary>
+        /// 初始化游戏世界服务
+        /// </summary>
+        /// <param name="stoppingToken"></param>
+        public void InitializeWorld(CancellationToken stoppingToken)
         {
             try
             {
-                M2Share.MapMgr.LoadMapDoor();
-                M2Share.LocalDb.LoadMerchant();
-                _logger.Info("交易NPC列表加载成功...");
-                M2Share.LocalDb.LoadNpcs();
-                _logger.Info("管理NPC列表加载成功...");
-                M2Share.LocalDb.LoadMakeItem();
-                _logger.Info("炼制物品信息加载成功...");
-                M2Share.LocalDb.LoadStartPoint();
-                _logger.Info("回城点配置加载成功...");
-                _logger.Info("正在初始安全区光圈...");
-                M2Share.MapMgr.MakeSafePkZone();
-                _logger.Info("安全区光圈初始化成功...");
-                M2Share.WorldEngine.InitializationMonsterThread();
-                if (!M2Share.Config.VentureServer)
+                SystemShare.MapMgr.LoadMapDoor();
+                GameShare.LocalDb.LoadMerchant();
+                LogService.Info("交易NPC列表加载成功...");
+                GameShare.LocalDb.LoadNpcs();
+                LogService.Info("管理NPC列表加载成功...");
+                GameShare.LocalDb.LoadMakeItem();
+                LogService.Info("炼制物品信息加载成功...");
+                GameShare.LocalDb.LoadStartPoint();
+                LogService.Info("回城点配置加载成功...");
+                LogService.Info("正在初始安全区光圈...");
+                SystemShare.MapMgr.MakeSafePkZone();
+                LogService.Info("安全区光圈初始化成功...");
+                SystemShare.WorldEngine.InitializationMonsterThread();
+                if (!SystemShare.Config.VentureServer)
                 {
                     LocalDb.LoadGuardList();
-                    _logger.Info("守卫列表加载成功...");
+                    LogService.Info("守卫列表加载成功...");
                 }
-                _logger.Info("游戏处理引擎初始化成功...");
-                if (M2Share.ServerIndex == 0)
-                {
-                    PlanesServer.Instance.StartPlanesServer();
-                    _logger.Debug("主机运行模式...");
-                }
-                else
-                {
-                    PlanesClient.Instance.ConnectPlanesServer();
-                    _logger.Info($"节点运行模式...主机端口:[{M2Share.Config.MasterSrvAddr}:{M2Share.Config.MasterSrvPort}]");
-                }
-                IdSrvClient.Instance.Initialize();
-                M2Share.GuildMgr.LoadGuildInfo();
-                M2Share.CastleMgr.LoadCastleList();
-                M2Share.CastleMgr.Initialize();
-                M2Share.WorldEngine.Initialize();
+                SystemShare.WorldEngine.Initialize();
+                SystemShare.GuildMgr.LoadGuildInfo();
+                SystemShare.CastleMgr.LoadCastleList();
+                M2Share.AutoBot.Initialize();
+                M2Share.StartReady = true;
+                LogService.Info("游戏处理引擎初始化成功...");
             }
             catch (Exception ex)
             {
-                _logger.Error(ex.StackTrace);
+                LogService.Error(ex);
             }
         }
 
-        private static void LoadServerTable()
+        /// <summary>
+        /// 读取服务器列表
+        /// </summary>
+        public void LoadServerTable()
         {
             int nRouteIdx = 0;
             string sIdx = string.Empty;
             string sSelGateIPaddr = string.Empty;
             string sGameGateIPaddr = string.Empty;
             string sGameGatePort = string.Empty;
-            string sFileName = Path.Combine(M2Share.BasePath, "!servertable.txt");
+            string sFileName = Path.Combine(SystemShare.BasePath, "!servertable.txt");
             if (File.Exists(sFileName))
             {
                 StringList loadList = new StringList();
@@ -320,7 +312,7 @@ namespace GameSrv
         /// </summary>
         /// <param name="fileName"></param>
         /// <returns></returns>
-        private static bool LoadAbuseInformation(string fileName)
+        private bool LoadAbuseInformation(string fileName)
         {
             int lineCount = 0;
             bool result = false;

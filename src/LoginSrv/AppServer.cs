@@ -1,28 +1,14 @@
 using LoginSrv.Conf;
 using LoginSrv.Services;
 using LoginSrv.Storage;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
-using Spectre.Console;
-using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using SystemModule;
-using SystemModule.Hosts;
-using LogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace LoginSrv
 {
-    public class AppServer : ServiceHost
+    public class AppServer
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
-        private PeriodicTimer _timer;
+        private readonly ServerHost _serverHost;
+        private readonly PeriodicTimer _timer;
 
         public AppServer()
         {
@@ -37,114 +23,40 @@ namespace LoginSrv
                 AnsiConsole.Reset();
             };
 
-            Builder.ConfigureLogging(ConfigureLogging);
-            Builder.ConfigureServices(ConfigureServices);
-        }
-        
-        public override void Initialize()
-        {
-
-        }
-
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "logsrv.conf")));
-            services.AddSingleton<SessionServer>();
-            services.AddSingleton<ClientSession>();
-            services.AddSingleton<SessionManager>();
-            services.AddSingleton<LoginServer>();
-            services.AddSingleton<ClientManager>();
-            services.AddSingleton<AccountStorage>();
-            services.AddHostedService<TimedService>();
-            services.AddHostedService<AppService>();
-        }
-
-        private void ConfigureLogging(ILoggingBuilder logging)
-        {
-            logging.ClearProviders();
-            logging.SetMinimumLevel(LogLevel.Trace);
-            logging.AddNLog(Configuration);
-        }
-
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            _logger.Info("正在启动服务器...");
-            Host = await Builder.StartAsync(cancellationToken);
-            await ProcessLoopAsync();
-            Stop();
-            _logger.Info("正在等待服务器连接...");
-        }
-
-        public override Task StopAsync(CancellationToken cancellationToken)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        private void Stop()
-        {
-            AnsiConsole.Status().Start("Disconnecting...", ctx =>
+            _serverHost = new ServerHost();
+            _serverHost.ConfigureServices(service =>
             {
-                ctx.Spinner(Spinner.Known.Dots);
+                service.AddSingleton(new ConfigManager(Path.Combine(AppContext.BaseDirectory, "logsrv.conf")));
+                service.AddSingleton<SessionServer>();
+                service.AddSingleton<ClientSession>();
+                service.AddSingleton<SessionManager>();
+                service.AddSingleton<LoginServer>();
+                service.AddSingleton<ClientManager>();
+                service.AddSingleton<AccountStorage>();
+                service.AddHostedService<TimedService>();
+                service.AddHostedService<AppService>();
             });
         }
 
-        private async Task ProcessLoopAsync()
+        public async Task StartAsync(CancellationToken cancellationToken)
         {
-            string input = null;
-            do
-            {
-                input = Console.ReadLine();
-                if (string.IsNullOrWhiteSpace(input))
-                {
-                    continue;
-                }
-
-                if (input.StartsWith("/exit") && AnsiConsole.Confirm("Do you really want to exit?"))
-                {
-                    await Exit();
-                    return;
-                }
-                if (input.Length < 2)
-                {
-                    continue;
-                }
-                var firstTwoCharacters = input[..2];
-
-                if (firstTwoCharacters switch
-                {
-                    "/s" => ShowServerStatus(),
-                    "/c" => ClearConsole(),
-                    "/q" => Exit(),
-                    _ => null
-                } is Task task)
-                {
-                    await task;
-                    continue;
-                }
-
-            } while (input is not "/exit");
+            LogService.Info("正在启动服务器...");
+            _serverHost.BuildHost();
+            await _serverHost.StartAsync(cancellationToken);
         }
 
-        private static Task Exit()
+        public Task StopAsync(CancellationToken cancellationToken)
         {
-            Environment.Exit(Environment.ExitCode);
-            return Task.CompletedTask;
-        }
-
-        private static Task ClearConsole()
-        {
-            Console.Clear();
-            AnsiConsole.Clear();
-            return Task.CompletedTask;
+            return _serverHost.StopAsync(cancellationToken);
         }
 
         private async Task ShowServerStatus()
         {
             LsShare.ShowLog = false;
-            _timer = new PeriodicTimer(TimeSpan.FromSeconds(2));
-            var masSocService = (SessionServer)Host.Services.GetService(typeof(SessionServer));
-            var serverList = masSocService?.ServerList;
-            var table = new Table().Expand().BorderColor(Color.Grey);
+            PeriodicTimer periodicTimer = _timer ?? new PeriodicTimer(TimeSpan.FromSeconds(5));
+            SessionServer masSocService = (SessionServer)_serverHost.ServiceProvider.GetService(typeof(SessionServer));
+            System.Collections.Generic.IList<ServerSessionInfo> serverList = masSocService?.ServerList;
+            Table table = new Table().Expand().BorderColor(Color.Grey);
             table.AddColumn("[yellow]Server[/]");
             table.AddColumn("[yellow]EndPoint[/]");
             table.AddColumn("[yellow]Status[/]");
@@ -156,19 +68,19 @@ namespace LoginSrv
                  .Cropping(VerticalOverflowCropping.Top)
                  .StartAsync(async ctx =>
                  {
-                     foreach (var _ in Enumerable.Range(0, 10))
+                     foreach (int _ in Enumerable.Range(0, 10))
                      {
                          table.AddRow(new[] { new Markup("-"), new Markup("-"), new Markup("-"), new Markup("-") });
                      }
 
-                     while (await _timer.WaitForNextTickAsync())
+                     while (await periodicTimer.WaitForNextTickAsync())
                      {
                          for (int i = 0; i < serverList.Count; i++)
                          {
-                             var msgServer = serverList[i];
+                             ServerSessionInfo msgServer = serverList[i];
                              if (!string.IsNullOrEmpty(msgServer.ServerName))
                              {
-                                 var serverType = msgServer.ServerIndex == 99 ? " (DB)" : " (GameSrv)";
+                                 string serverType = msgServer.ServerIndex == 99 ? " (DB)" : " (GameSrv)";
                                  table.UpdateCell(i, 0, $"[bold]{msgServer.ServerName}{serverType}[/]");
                                  table.UpdateCell(i, 1, ($"[bold]{msgServer.EndPoint}[/]"));
                                  if (!msgServer.Socket.Connected)
@@ -193,47 +105,19 @@ namespace LoginSrv
 
         private void PrintUsage()
         {
-            AnsiConsole.WriteLine();
-
-            var table = new Table()
-            {
-                Border = TableBorder.None,
-                Expand = true,
-            }.HideHeaders();
-            table.AddColumn(new TableColumn("One"));
-
-            var header = new FigletText("OpenMir2")
-            {
-                Color = Color.Fuchsia
-            };
-            var header2 = new FigletText("LoginSrv")
-            {
-                Color = Color.Aqua
-            };
-
-            var sb = new StringBuilder();
-            sb.Append("[bold fuchsia]/s[/] [aqua]查看[/] 网关状况\n");
-            sb.Append("[bold fuchsia]/r[/] [aqua]重读[/] 配置文件\n");
-            sb.Append("[bold fuchsia]/c[/] [aqua]清空[/] 清除屏幕\n");
-            sb.Append("[bold fuchsia]/q[/] [aqua]退出[/] 退出程序\n");
-            var markup = new Markup(sb.ToString());
-
-            table.AddColumn(new TableColumn("Two"));
-
-            var rightTable = new Table()
-                .HideHeaders()
-                .Border(TableBorder.None)
-                .AddColumn(new TableColumn("Content"));
-
-            rightTable.AddRow(header)
-                .AddRow(header2)
-                .AddEmptyRow()
-                .AddEmptyRow()
-                .AddRow(markup);
-            table.AddRow(rightTable);
-
-            AnsiConsole.Write(table);
-            AnsiConsole.WriteLine();
+            Console.WriteLine(@"    ___                           __  __   _          ____          ");
+            Console.WriteLine(@"   / _ \   _ __     ___   _ __   |  \/  | (_)  _ __  |___ \         ");
+            Console.WriteLine(@"  | | | | | '_ \   / _ \ | '_ \  | |\/| | | | | '__|   __) |        ");
+            Console.WriteLine(@"  | |_| | | |_) | |  __/ | | | | | |  | | | | | |     / __/         ");
+            Console.WriteLine(@"   \___/  | .__/   \___| |_| |_| |_|  |_| |_| |_|    |_____|        ");
+            Console.WriteLine(@"          |_|                                                       ");
+            Console.WriteLine(@"   _                       _           ____                         ");
+            Console.WriteLine(@"  | |       ___     __ _  (_)  _ __   / ___|   _ __  __   __        ");
+            Console.WriteLine(@"  | |      / _ \   / _` | | | | '_ \  \___ \  | '__| \ \ / /        ");
+            Console.WriteLine(@"  | |___  | (_) | | (_| | | | | | | |  ___) | | |     \ V /         ");
+            Console.WriteLine(@"  |_____|  \___/   \__, | |_| |_| |_| |____/  |_|      \_/          ");
+            Console.WriteLine(@"                   |___/                                            ");
+            Console.WriteLine(@"                                                                    ");
         }
     }
 }

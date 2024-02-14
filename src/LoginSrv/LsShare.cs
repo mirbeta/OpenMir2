@@ -1,8 +1,5 @@
 using LoginSrv.Conf;
-using System.Collections.Generic;
 using System.Net.Sockets;
-using SystemModule.Common;
-using SystemModule.Packets.ClientPackets;
 
 namespace LoginSrv
 {
@@ -26,9 +23,9 @@ namespace LoginSrv
             {
                 return false;
             }
-            var result = true;
-            var nLen = account.Length;
-            var i = 0;
+            bool result = true;
+            int nLen = account.Length;
+            int i = 0;
             while (true)
             {
                 if (i >= nLen)
@@ -77,7 +74,7 @@ namespace LoginSrv
             StringList SaveList = new StringList();
             SaveList.Add(";No space allowed");
             SaveList.Add(GenSpaceString(";Server", 15) + GenSpaceString("Title", 15) + GenSpaceString("Remote", 17) + GenSpaceString("Public", 17) + "Gate...");
-            for (var i = 0; i < Config.RouteCount; i++)
+            for (int i = 0; i < Config.RouteCount; i++)
             {
                 sC = GenSpaceString(Config.GateRoute[i].ServerName, 15) +
                      GenSpaceString(Config.GateRoute[i].Title, 15) +
@@ -112,7 +109,7 @@ namespace LoginSrv
         public static string GetGatePublicAddr(Config Config, string sGateIP)
         {
             string result = sGateIP;
-            for (var i = 0; i < Config.RouteCount; i++)
+            for (int i = 0; i < Config.RouteCount; i++)
             {
                 if (Config.GateRoute[i].RemoteAddr == sGateIP)
                 {
@@ -126,7 +123,7 @@ namespace LoginSrv
         private static string GenSpaceString(string sStr, int nSpaceCOunt)
         {
             string result = sStr + " ";
-            for (var i = 0; i <= nSpaceCOunt - sStr.Length; i++)
+            for (int i = 0; i <= nSpaceCOunt - sStr.Length; i++)
             {
                 result = result + " ";
             }
@@ -141,8 +138,8 @@ namespace LoginSrv
 
     public struct UserSessionData
     {
-        public int SessionId;
-        public int SoketId;
+        public string SessionId;
+        public string SoketId;
         public string Msg;
     }
 
@@ -163,7 +160,7 @@ namespace LoginSrv
         public int AccountId;
         public int ErrorCount;
         public int ActionTick;
-        public int PayModel;
+        public byte PayModel;
         public long PlayTime;
         public UserEntry UserEntry;
         public UserEntryAdd UserEntryAdd;
@@ -243,7 +240,7 @@ namespace LoginSrv
         public string Account;
         public string UserIPaddr;
         public string GateIPaddr;
-        public int SockIndex;
+        public string SockIndex;
         public int SessionID;
         /// <summary>
         /// 付费账号

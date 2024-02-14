@@ -1,8 +1,6 @@
-﻿using System.Diagnostics;
+﻿using OpenMir2.Base;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using NLog;
-using SystemModule.Base;
 
 namespace GameSrv
 {
@@ -11,7 +9,7 @@ namespace GameSrv
     /// </summary>
     public class WordStatistics
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+        private StringBuilder _builder = new StringBuilder();
         private readonly string processName;
         private readonly PerformanceCounter MemoryCounter;
         private readonly PerformanceCounter CpuCounter;
@@ -31,63 +29,70 @@ namespace GameSrv
 
         public void ShowServerStatus()
         {
-            _logger.Debug("{0}", "=".PadLeft(64, '='));
-            _logger.Info(string.Format(TITLE_FORMAT_S, M2Share.Config.ServerName, DateTimeOffset.Now.ToString("G"),
-      M2Share.NetworkMonitor.UpdateStatsAsync(1000), M2Share.WorldEngine.OnlinePlayObject, M2Share.WorldEngine.PlayObjectCount,
-      M2Share.SystemProcess.ElapsedMilliseconds, M2Share.UserProcessor.ElapsedMilliseconds,
-      M2Share.RobotProcessor.ElapsedMilliseconds, AppVersion));
+            _builder.AppendLine();
+            _builder.AppendLine($"{"=".PadLeft(64, '=')}");
+            _builder.AppendLine(string.Format(TITLE_FORMAT_S, SystemShare.Config.ServerName, DateTimeOffset.Now.ToString("G"),
+            GameShare.NetworkMonitor.UpdateStatsAsync(1000), SystemShare.WorldEngine.OnlinePlayObject, SystemShare.WorldEngine.PlayObjectCount,
+            GameShare.SystemProcess.ElapsedMilliseconds, GameShare.UserProcessor.ElapsedMilliseconds,
+            0, AppVersion));
 
-            M2Share.ActorMgr.Analytics();
+            _builder.AppendLine(SystemShare.ActorMgr.Analytics());
 
             if (!RuntimeInformation.IsOSPlatform(OSPlatform.OSX))//todo 待实现MACOS下的状态显示
             {
                 ServerEnvironment.GetCPULoad();
                 ServerEnvironment.MemoryInfo memoryInfo = ServerEnvironment.GetMemoryStatus();
-                _logger.Debug("CPU使用率:[{0}%]", ServerEnvironment.CpuLoad.ToString("F"));
-                _logger.Debug($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys)}] 内存使用率:[{memoryInfo.dwMemoryLoad}%] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPhys)}]");
-                _logger.Debug($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalVirtual)}] 虚拟内存使用率:[{ServerEnvironment.VirtualMemoryLoad}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailVirtual)}]");
-                _logger.Debug($"使用内存:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedPhysicalMemory)}] 工作内存:[{HUtil32.FormatBytesValue(ServerEnvironment.PrivateWorkingSet)}] GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
+                _builder.AppendLine($"CPU使用率:[{ServerEnvironment.CpuLoad.ToString("F")}%]");
+                _builder.AppendLine($"物理内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys)}] 内存使用率:[{memoryInfo.dwMemoryLoad}%] 空闲内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPhys)}]");
+                _builder.AppendLine($"虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPageFile)}] 虚拟内存使用率:[{ServerEnvironment.VirtualMemoryLoad}%] 空闲虚拟内存:[{HUtil32.FormatBytesValue(memoryInfo.ullAvailPageFile)}]");
+                _builder.AppendLine($"已用内存:[{HUtil32.FormatBytesValue(ServerEnvironment.UsedPhysicalMemory)}] 程序内存:[{HUtil32.FormatBytesValue(ServerEnvironment.PrivateWorkingSet)}] 剩余内存:[{HUtil32.FormatBytesValue(memoryInfo.ullTotalPhys - ServerEnvironment.UsedPhysicalMemory)}]");
             }
             ShowGCStatus();
-            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
-            _logger.Debug("{0}", $"Server Start Time: {DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime):G}");
-            _logger.Debug("{0}", $"Total Online Time: {(int)ts.TotalDays} days, {ts.Hours} hours, {ts.Minutes} minutes, {ts.Seconds} seconds");
-            _logger.Debug("{0}", $"Online Players[{M2Share.WorldEngine.OnlinePlayObject}], Max Online Players[{M2Share.WorldEngine.PlayObjectCount}], Offline Players[{M2Share.WorldEngine.OfflinePlayCount}], Role Count[{M2Share.WorldEngine.PlayObjectCount}]");
-            _logger.Debug("{0}", $"Total Bytes Sent: {HUtil32.FormatBytesValue(M2Share.NetworkMonitor.TotalBytesSent)}, Total Packets Sent: {HUtil32.FormatBytesValue(M2Share.NetworkMonitor.TotalPacketsSent)}");
-            _logger.Debug("{0}", $"Total Bytes Recv: {HUtil32.FormatBytesValue(M2Share.NetworkMonitor.TotalBytesRecv)}, Total Packets Recv: {HUtil32.FormatBytesValue(M2Share.NetworkMonitor.TotalPacketsRecv)}");
-            _logger.Debug("{0}", $"System Thread: {M2Share.SystemProcess.ElapsedMilliseconds:N0}ms");
-            _logger.Debug("{0} - {1}", $"User Thread: [{M2Share.UserProcessor.ElapsedMilliseconds:N0}ms]", $"RobotUser Thread: [{M2Share.RobotProcessor.ElapsedMilliseconds:N0}ms] Online/Queue:({M2Share.WorldEngine.RobotPlayerCount}/{M2Share.WorldEngine.RobotLogonQueue.Count})");
-            _logger.Debug("{0} - {1}", $"Event Thread: [{M2Share.EventProcessor.ElapsedMilliseconds:N0}ms]", $"Storage Thread: [{M2Share.StorageProcessor.ElapsedMilliseconds:N0}ms]");
-            _logger.Debug("{0} - {1}", $"Merchant Thread: [{M2Share.MerchantProcessor.ElapsedMilliseconds:N0}ms]", $"TimedBot Thread: [{M2Share.TimedRobotProcessor.ElapsedMilliseconds:N0}ms]");
-            _logger.Debug("{0} {1}", $"Generator Thread: [{M2Share.GeneratorProcessor.ElapsedMilliseconds}ms]", $"Identities Remaining: ");
-            //_logger.Debug("{0}", $"\tMonster: {IdentityGenerator.Monster.IdentitiesCount()}");
-            //_logger.Debug("{0}", $"\tFurniture: {IdentityGenerator.Furniture.IdentitiesCount()}");
-            //_logger.Debug("{0}", $"\tMapItem: {IdentityGenerator.MapItem.IdentitiesCount()}");
-            //_logger.Debug("{0}", $"\tTraps: {IdentityGenerator.Traps.IdentitiesCount()}");
-            _logger.Debug("{0}", "=".PadLeft(64, '='));
+            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(GameShare.StartTime);
+            _builder.AppendLine($"Server Start Time: {DateTimeOffset.FromUnixTimeMilliseconds(GameShare.StartTime):G}");
+            _builder.AppendLine($"Total Online Time: {(int)ts.TotalDays} days, {ts.Hours} hours, {ts.Minutes} minutes, {ts.Seconds} seconds");
+            _builder.AppendLine($"Online Players[{SystemShare.WorldEngine.OnlinePlayObject}], Max Online Players[{SystemShare.WorldEngine.PlayObjectCount}], Offline Players[{SystemShare.WorldEngine.OfflinePlayCount}], Role Count[{SystemShare.WorldEngine.PlayObjectCount}]");
+            _builder.AppendLine($"Total Bytes Sent: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalBytesSent)}, Total Packets Sent: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalPacketsSent)}");
+            _builder.AppendLine($"Total Bytes Recv: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalBytesRecv)}, Total Packets Recv: {HUtil32.FormatBytesValue(GameShare.NetworkMonitor.TotalPacketsRecv)}");
+            _builder.AppendLine($"System Thread: {GameShare.SystemProcess.ElapsedMilliseconds:N0}ms");
+            //_builder.AppendLine("{0} - {1}", $"User Thread: [{GameShare.UserProcessor.ElapsedMilliseconds:N0}ms]", $"RobotUser Thread: [{GameShare.RobotProcessor.ElapsedMilliseconds:N0}ms] Online/Queue:({SystemShare.WorldEngine.RobotPlayerCount}/{SystemShare.WorldEngine.RobotLogonQueueCount})");
+            _builder.AppendLine($"Event Thread: [{GameShare.EventProcessor.ElapsedMilliseconds:N0}ms] - Storage Thread: [{GameShare.CharacterDataProcessor.ElapsedMilliseconds:N0}ms]");
+            _builder.AppendLine($"Merchant Thread: [{GameShare.MerchantProcessor.ElapsedMilliseconds:N0}ms] - TimedBot Thread: [{GameShare.TimedRobotProcessor.ElapsedMilliseconds:N0}ms]");
+            _builder.AppendLine($"Generator Thread: [{GameShare.GeneratorProcessor.ElapsedMilliseconds}ms] Identities Remaining: ");
+            //LogService.Debug("{0}", $"\tMonster: {IdentityGenerator.Monster.IdentitiesCount()}");
+            //LogService.Debug("{0}", $"\tFurniture: {IdentityGenerator.Furniture.IdentitiesCount()}");
+            //LogService.Debug("{0}", $"\tMapItem: {IdentityGenerator.MapItem.IdentitiesCount()}");
+            //LogService.Debug("{0}", $"\tTraps: {IdentityGenerator.Traps.IdentitiesCount()}");
+            _builder.AppendLine("=".PadLeft(64, '='));
+            LogService.Info(_builder.ToString());
+            _builder.Clear();
             FreeMemory();
             //GetRunTime();
         }
 
         private void FreeMemory()
         {
-            var gcMemoryInfo = GC.GetGCMemoryInfo();
+            GCMemoryInfo gcMemoryInfo = GC.GetGCMemoryInfo();
             if (gcMemoryInfo.TotalCommittedBytes > gcMemoryInfo.TotalAvailableMemoryBytes / 2)
             {
-                _logger.Debug("释放内存...");
+                LogService.Debug("清理内存...");
                 GC.Collect(GC.MaxGeneration, GCCollectionMode.Aggressive);
             }
         }
 
         private void GetRunTime()
         {
-            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(M2Share.StartTime);
-            _logger.Debug($"服务器运行:[{ts.Days}天{ts.Hours}小时{ts.Minutes}分{ts.Seconds}秒]");
+            TimeSpan ts = DateTimeOffset.Now - DateTimeOffset.FromUnixTimeMilliseconds(GameShare.StartTime);
+            LogService.Info($"服务器运行:[{ts.Days}天{ts.Hours}小时{ts.Minutes}分{ts.Seconds}秒]");
         }
 
         private void ShowGCStatus()
         {
-            _logger.Debug($"GC回收:[{GC.CollectionCount(0)}]次 GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
+            int gen0 = GC.CollectionCount(0);
+            int gen1 = GC.CollectionCount(1);
+            int gen2 = GC.CollectionCount(2);
+            int total = gen0 + gen1 + gen2;
+            _builder.AppendLine($"GC回收:[{total}]次 GC内存:[{HUtil32.FormatBytesValue(GC.GetTotalMemory(false))}] ");
             GC.Collect(0, GCCollectionMode.Forced, false);
         }
 

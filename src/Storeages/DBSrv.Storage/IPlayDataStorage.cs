@@ -1,6 +1,6 @@
 using DBSrv.Storage.Model;
+using OpenMir2.Packets.ServerPackets;
 using System.Collections.Specialized;
-using SystemModule.Packets.ServerPackets;
 
 namespace DBSrv.Storage
 {
@@ -13,19 +13,19 @@ namespace DBSrv.Storage
 
         int Index(string sName);
 
-        int Get(int nIndex, ref PlayerDataInfo HumanRCD);
+        int Get(int nIndex, ref CharacterDataInfo HumanRCD);
 
-        bool Get(string chrName, ref PlayerDataInfo HumanRCD);
+        bool Get(string chrName, ref CharacterDataInfo HumanRCD);
 
-        PlayerInfoData Query(int playerId);
+        CharacterData Query(int playerId);
 
         bool GetQryChar(int nIndex, ref QueryChr QueryChrRcd);
 
-        bool Update(string chrName, PlayerDataInfo HumanRCD);
+        bool Update(string chrName, CharacterDataInfo HumanRCD);
 
         bool UpdateQryChar(int nIndex, QueryChr QueryChrRcd);
 
-        bool Add(PlayerDataInfo HumanRCD);
+        bool Add(CharacterDataInfo HumanRCD);
 
         int Find(string sChrName, StringDictionary List);
 

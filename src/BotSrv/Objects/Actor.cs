@@ -1600,7 +1600,11 @@ namespace BotSrv.Objects
             int nRace;
             int nPos;
             result = 0;
-            if (Appr >= 1000) return result;
+            if (Appr >= 1000)
+            {
+                return result;
+            }
+
             nRace = Appr / 10;
             nPos = Appr % 10;
             switch (nRace)
@@ -1619,7 +1623,11 @@ namespace BotSrv.Objects
                     break;
                 case 4:
                     result = nPos * 360;
-                    if (nPos == 1) result = 600;
+                    if (nPos == 1)
+                    {
+                        result = 600;
+                    }
+
                     break;
                 case 5:
                     result = nPos * 430;

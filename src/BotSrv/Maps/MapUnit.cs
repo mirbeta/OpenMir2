@@ -35,8 +35,8 @@ namespace BotSrv.Maps
 
         public MapHeader(byte[] data)
         {
-            using var stream = new MemoryStream(data, 0, data.Length);
-            using var reader = new BinaryReader(stream);
+            using MemoryStream stream = new MemoryStream(data, 0, data.Length);
+            using BinaryReader reader = new BinaryReader(stream);
 
             wWidth = reader.ReadUInt16();
             wHeight = reader.ReadUInt16();
@@ -109,8 +109,8 @@ namespace BotSrv.Maps
 
         public MapInfo(byte[] data)
         {
-            using var stream = new MemoryStream(data, 0, data.Length);
-            using var reader = new BinaryReader(stream);
+            using MemoryStream stream = new MemoryStream(data, 0, data.Length);
+            using BinaryReader reader = new BinaryReader(stream);
 
             wBkImg = reader.ReadUInt16();
             wMidImg = reader.ReadUInt16();
@@ -207,7 +207,7 @@ namespace BotSrv.Maps
 
         public bool Next()
         {
-            var result = FPos < (FCount - 1);
+            bool result = FPos < (FCount - 1);
             if (result)
             {
                 FPos++;

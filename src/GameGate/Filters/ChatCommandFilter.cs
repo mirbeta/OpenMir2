@@ -1,8 +1,4 @@
-﻿using System;
-using System.IO;
-using SystemModule.Common;
-
-namespace GameGate.Filters
+﻿namespace GameGate.Filters
 {
     public class ChatCommandFilter
     {
@@ -17,7 +13,7 @@ namespace GameGate.Filters
 
         public ChatCommandFilter()
         {
-           
+
         }
 
         public void LoadChatCommandFilterList()
@@ -26,9 +22,9 @@ namespace GameGate.Filters
             LoadChatCmdFilterList();
         }
 
-        void LoadChatCmdFilterList()
+        private void LoadChatCmdFilterList()
         {
-            var loadList = new StringList();
+            StringList loadList = new StringList();
             if (!File.Exists(ChatCommandFile))
             {
                 loadList.SaveToFile(ChatCommandFile);

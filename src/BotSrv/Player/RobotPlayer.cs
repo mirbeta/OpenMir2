@@ -1,17 +1,15 @@
 using BotSrv.Data;
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Drawing;
 using BotSrv.Maps;
 using BotSrv.Objects;
 using BotSrv.Scenes;
 using BotSrv.Scenes.Scene;
-using SystemModule;
-using SystemModule.Enums;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.SocketComponents.AsyncSocketClient;
-using SystemModule.SocketComponents.Event;
+using OpenMir2;
+using OpenMir2.Enums;
+using OpenMir2.Packets.ClientPackets;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace BotSrv.Player
 {
@@ -38,13 +36,13 @@ namespace BotSrv.Player
         private readonly short _actionKey = 0;
         private CommandMessage _waitingMsg;
         private string _waitingStr = string.Empty;
-        private string _whisperName = string.Empty;
+        private readonly string _whisperName = string.Empty;
         private int _mDwProcUseMagicTick = 0;
         private readonly TTimerCommand TimerCmd;
-        private int ActionLockTime = 0;
+        private readonly int ActionLockTime = 0;
         private CommandMessage WaitingMsg;
         private string WhisperName = string.Empty;
-        private int m_dwProcUseMagicTick = 0;
+        private readonly int m_dwProcUseMagicTick = 0;
         public bool ActionFailLock = false;
         public int ActionFailLockTime = 0;
         public int LastHitTick = 0;
@@ -148,9 +146,9 @@ namespace BotSrv.Player
             MShare.LoadItemDesc();
             MShare.LoadItemFilter();
             ConnectionStatus = ConnectionStatus.Failure;
-            for (var i = 0; i < BotConst.MAXX * 3; i++)
+            for (int i = 0; i < BotConst.MAXX * 3; i++)
             {
-                for (var j = 0; j < BotConst.MAXY * 3; j++)
+                for (int j = 0; j < BotConst.MAXY * 3; j++)
                 {
                     MShare.g_APPassEmpty[i, j] = 0xFF;
                 }
@@ -240,13 +238,13 @@ namespace BotSrv.Player
 
         private void ReceivedData(object sender, DSCClientDataInEventArgs e)
         {
-            var sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
+            string sData = HUtil32.GetString(e.Buff, 0, e.BuffLen);
             if (!string.IsNullOrEmpty(sData))
             {
-                var n = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
+                int n = sData.IndexOf("*", StringComparison.OrdinalIgnoreCase);
                 if (n > 0)
                 {
-                    var data2 = sData[..(n - 1)];
+                    string data2 = sData[..(n - 1)];
                     sData = data2 + sData.Substring(n, sData.Length);
                     ClientSocket.SendBuffer(HUtil32.GetBytes(BotConst.Activebuf));
                 }
@@ -522,11 +520,11 @@ namespace BotSrv.Player
                         }
                     }
                 TTTT:
-                    var mx = MShare.MySelf.CurrX;
-                    var my = MShare.MySelf.CurrY;
-                    var dx = MShare.TargetX;
-                    var dy = MShare.TargetY;
-                    var ndir = BotHelper.GetNextDirection(mx, my, dx, dy);
+                    short mx = MShare.MySelf.CurrX;
+                    short my = MShare.MySelf.CurrY;
+                    short dx = MShare.TargetX;
+                    short dy = MShare.TargetY;
+                    byte ndir = BotHelper.GetNextDirection(mx, my, dx, dy);
                     int crun;
                     byte mdir;
                     switch (MShare.PlayerAction)
@@ -537,7 +535,7 @@ namespace BotSrv.Player
                             if (IsUnLockAction() && (crun > 0))
                             {
                                 BotHelper.GetNextPosXy(ndir, ref mx, ref my);
-                                var bostop = false;
+                                bool bostop = false;
                                 if (!PlayScene.CanWalk(mx, my))
                                 {
                                     if (MShare.OpenAutoPlay && MShare.AutoMove && (MShare.AutoPathList.Count > 0))
@@ -545,7 +543,7 @@ namespace BotSrv.Player
                                         _heroActor.InitQueue2();
                                         MShare.TargetX = -1;
                                     }
-                                    var bowalk = false;
+                                    bool bowalk = false;
                                     byte adir = 0;
                                     if (!bowalk)
                                     {
@@ -751,9 +749,9 @@ namespace BotSrv.Player
         public ClientMagic GetMagicByKey(char key)
         {
             ClientMagic result = null;
-            for (var i = 0; i < MShare.g_MagicList.Count; i++)
+            for (int i = 0; i < MShare.g_MagicList.Count; i++)
             {
-                var pm = MShare.g_MagicList[i];
+                ClientMagic pm = MShare.g_MagicList[i];
                 if (pm.Key == key)
                 {
                     result = pm;
@@ -768,8 +766,8 @@ namespace BotSrv.Player
             bool boSeriesSkill;
             int defSpellSpend;
             int tdir;
-            var targx = 0;
-            var targy = 0;
+            int targx = 0;
+            int targy = 0;
             //TUseMagicInfo pmag;
             bool fUnLockMagic;
             if ((MShare.MySelf != null))
@@ -784,7 +782,7 @@ namespace BotSrv.Player
             {
                 return;
             }
-            var spellSpend = (short)(HUtil32.Round(pcm.Def.Spell / (pcm.Def.TrainLv + 1) * (pcm.Level + 1)) + pcm.Def.DefSpell);
+            short spellSpend = (short)(HUtil32.Round(pcm.Def.Spell / (pcm.Def.TrainLv + 1) * (pcm.Level + 1)) + pcm.Def.DefSpell);
             if (pcm.Def.MagicId == 114)
             {
                 if (MShare.g_boSkill_114_MP)
@@ -950,7 +948,7 @@ namespace BotSrv.Player
                 {
                     MShare.LatestSpellTick = MShare.GetTickCount();
                     tdir = BotHelper.GetFlyDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targx, targy);
-                    var pmag = new TUseMagicInfo();
+                    TUseMagicInfo pmag = new TUseMagicInfo();
                     pmag.EffectNumber = pcm.Def.Effect;
                     pmag.MagicSerial = pcm.Def.MagicId;
                     pmag.ServerMagicCode = 0;
@@ -986,11 +984,11 @@ namespace BotSrv.Player
 
         private void UseMagicSpell(int who, int effnum, int targetx, int targety, int magicId)
         {
-            var actor = PlayScene.FindActor(who);
+            Actor actor = PlayScene.FindActor(who);
             if (actor != null)
             {
-                var adir = BotHelper.GetFlyDirection(actor.CurrX, actor.CurrY, targetx, targety);
-                var useMagic = new TUseMagicInfo();
+                byte adir = BotHelper.GetFlyDirection(actor.CurrX, actor.CurrY, targetx, targety);
+                TUseMagicInfo useMagic = new TUseMagicInfo();
                 useMagic.EffectNumber = effnum % 255;
                 useMagic.ServerMagicCode = 0;
                 useMagic.MagicSerial = magicId % 300;
@@ -1005,7 +1003,7 @@ namespace BotSrv.Player
 
         private void UseMagicFire(int who, int efftype, int effnum, int targetx, int targety, int target, int maglv)
         {
-            var actor = PlayScene.FindActor(who);
+            Actor actor = PlayScene.FindActor(who);
             if (actor != null)
             {
                 actor.SendMsg(Messages.SM_MAGICFIRE, (ushort)(short)target, (ushort)(short)efftype, effnum, targetx, targety, maglv.ToString(), 0);
@@ -1019,7 +1017,7 @@ namespace BotSrv.Player
 
         private void UseMagicFireFail(int who)
         {
-            var actor = PlayScene.FindActor(who);
+            Actor actor = PlayScene.FindActor(who);
             if (actor != null)
             {
                 actor.SendMsg(Messages.SM_MAGICFIRE_FAIL, 0, 0, 0, 0, 0, "", 0);
@@ -1044,19 +1042,19 @@ namespace BotSrv.Player
 
         public void ActorCheckHealth(bool bNeedSp)
         {
-            var nCount = 0;
-            var hidx = -1;
-            var midx = -1;
-            var sidx = -1;
-            var bidx = -1;
-            var uhidx = -1;
-            var umidx = -1;
-            var usidx = -1;
-            var ubidx = -1;
-            var maxHp = int.MaxValue / 2 - 1;
-            var maxMp = int.MaxValue / 2 - 1;
-            var maxSp = int.MaxValue / 2 - 1;
-            for (var i = Grobal2.MaxBagItem - (1 + 0); i >= 0; i--)
+            int nCount = 0;
+            int hidx = -1;
+            int midx = -1;
+            int sidx = -1;
+            int bidx = -1;
+            int uhidx = -1;
+            int umidx = -1;
+            int usidx = -1;
+            int ubidx = -1;
+            int maxHp = int.MaxValue / 2 - 1;
+            int maxMp = int.MaxValue / 2 - 1;
+            int maxSp = int.MaxValue / 2 - 1;
+            for (int i = Grobal2.MaxBagItem - (1 + 0); i >= 0; i--)
             {
                 if ((MShare.ItemArr[i].Item.Name != "") && (MShare.ItemArr[i].Item.NeedIdentify < 4))
                 {
@@ -1132,9 +1130,9 @@ namespace BotSrv.Player
                     nCount++;
                 }
             }
-            var bHint = false;
-            var bEatSp = false;
-            var bEatOk = false;
+            bool bHint = false;
+            bool bEatSp = false;
+            bool bEatOk = false;
             if (MShare.GetTickCount() - MShare.MySelf.m_dwMsgHint > 15 * 1000)
             {
                 MShare.MySelf.m_dwMsgHint = MShare.GetTickCount();
@@ -1250,7 +1248,7 @@ namespace BotSrv.Player
             {
                 if (MShare.ItemArr[idx].Item.Name == "")
                 {
-                    for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
+                    for (int i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
                     {
                         if (MShare.ItemArr[i].Item.Name == sItem)
                         {
@@ -1266,7 +1264,7 @@ namespace BotSrv.Player
 
         private void AutoSupplyBagItem(int nType, string sItem)
         {
-            for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
+            for (int i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
             {
                 if (MShare.ItemArr[i].Item.Name == sItem)
                 {
@@ -1283,8 +1281,8 @@ namespace BotSrv.Player
         {
             if ((!string.IsNullOrEmpty(sItem)) && (nType != 0))
             {
-                var boIsUnBindItem = false;
-                for (var i = 0; i < BotConst.g_UnBindItems.Length; i++)
+                bool boIsUnBindItem = false;
+                for (int i = 0; i < BotConst.g_UnBindItems.Length; i++)
                 {
                     if (sItem == BotConst.g_UnBindItems[i])
                     {
@@ -1296,9 +1294,9 @@ namespace BotSrv.Player
                 {
                     return;
                 }
-                var n = 0;
-                var boUnBindAble = false;
-                for (var i = 0; i < BotConst.MaxBagItemcl - 1 - 6; i++)
+                int n = 0;
+                bool boUnBindAble = false;
+                for (int i = 0; i < BotConst.MaxBagItemcl - 1 - 6; i++)
                 {
                     if (MShare.ItemArr[i].Item.Name == "")
                     {
@@ -1314,8 +1312,8 @@ namespace BotSrv.Player
                 {
                     return;
                 }
-                var idx = -1;
-                for (var i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
+                int idx = -1;
+                for (int i = BotConst.MaxBagItemcl - 1; i >= 6; i--)
                 {
                     if (MShare.ItemArr[i].Item.StdMode == 31)
                     {
@@ -1360,7 +1358,7 @@ namespace BotSrv.Player
             {
                 return false;
             }
-            for (var i = 0; i < BotConst.MaxBagItemcl; i++)
+            for (int i = 0; i < BotConst.MaxBagItemcl; i++)
             {
                 if ((MShare.ItemArr[i].Item.Name == str) && (MShare.ItemArr[i].Item.NeedIdentify < 4))
                 {
@@ -1374,9 +1372,9 @@ namespace BotSrv.Player
         private void EatItem(int idx)
         {
             int i;
-            var eatable = false;
-            var takeon = false;
-            var where = -1;
+            bool eatable = false;
+            bool takeon = false;
+            int where = -1;
             if (idx >= 0 && idx <= BotConst.MaxBagItemcl - 1)
             {
                 if ((MShare.g_EatingItem.Item.Name != "") && (MShare.GetTickCount() - MShare.g_dwEatTime > 5 * 1000))
@@ -1541,7 +1539,7 @@ namespace BotSrv.Player
             BotHelper.GetFrontPosition(nX, nY, ndir, ref nX, ref nY);
             if ((Math.Abs(MShare.MySelf.CurrX - nX) == 2) || (Math.Abs(MShare.MySelf.CurrY - nY) == 2))
             {
-                var actor = PlayScene.FindActorXY(nX, nY);
+                Actor actor = PlayScene.FindActorXY(nX, nY);
                 if (actor != null)
                 {
                     if (!actor.Death)
@@ -1576,12 +1574,12 @@ namespace BotSrv.Player
             short nY = 0;
             short rx = 0;
             short ry = 0;
-            var result = false;
+            bool result = false;
             BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
-            var actor = PlayScene.FindActorXY(nX, nY);
-            var mdir = (ndir + 1) % 8;
+            Actor actor = PlayScene.FindActorXY(nX, nY);
+            int mdir = (ndir + 1) % 8;
             BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
-            var ractor = PlayScene.FindActorXY(rx, ry);
+            Actor ractor = PlayScene.FindActorXY(rx, ry);
             if (ractor == null)
             {
                 mdir = (ndir + 2) % 8;
@@ -1609,12 +1607,12 @@ namespace BotSrv.Player
             short nX = 0;
             short nY = 0;
             short nC = 1;
-            var result = false;
+            bool result = false;
             while (true)
             {
                 if (GetNextPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, nC, ref nX, ref nY))
                 {
-                    var actor = PlayScene.FindActorXY(nX, nY);
+                    Actor actor = PlayScene.FindActorXY(nX, nY);
                     if ((actor != null) && !actor.Death)
                     {
                         result = true;
@@ -1635,7 +1633,7 @@ namespace BotSrv.Player
             short nX = 0;
             short nY = 0;
             Actor actor;
-            var result = false;
+            bool result = false;
             short nC = 1;
             while (true)
             {
@@ -1663,12 +1661,12 @@ namespace BotSrv.Player
             short nY = 0;
             short rx = 0;
             short ry = 0;
-            var result = false;
+            bool result = false;
             BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, ndir, ref nX, ref nY);
-            var actor = PlayScene.FindActorXY(nX, nY);
-            var mdir = (ndir + 1) % 8;
+            Actor actor = PlayScene.FindActorXY(nX, nY);
+            int mdir = (ndir + 1) % 8;
             BotHelper.GetFrontPosition(MShare.MySelf.CurrX, MShare.MySelf.CurrY, mdir, ref rx, ref ry);
-            var ractor = PlayScene.FindActorXY(rx, ry);
+            Actor ractor = PlayScene.FindActorXY(rx, ry);
             if (ractor == null)
             {
                 mdir = (ndir + 2) % 8;
@@ -1693,13 +1691,13 @@ namespace BotSrv.Player
 
         public bool AttackTarget(Actor target)
         {
-            var result = false;
-            var nHitMsg = Messages.CM_HIT;
+            bool result = false;
+            int nHitMsg = Messages.CM_HIT;
             if (MShare.UseItems[ItemLocation.Weapon] != null && MShare.UseItems[ItemLocation.Weapon].Item.StdMode == 6)
             {
                 nHitMsg = Messages.CM_HEAVYHIT;
             }
-            var tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
+            byte tdir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, target.CurrX, target.CurrY);
             if ((Math.Abs(MShare.MySelf.CurrX - target.CurrX) <= 1) && (Math.Abs(MShare.MySelf.CurrY - target.CurrY) <= 1) && (!target.Death))
             {
                 if (TimerAutoPlay.Enabled)
@@ -1759,8 +1757,8 @@ namespace BotSrv.Player
                 }
                 else
                 {
-                    var dx = MShare.MySelf.CurrX;
-                    var dy = MShare.MySelf.CurrY;
+                    short dx = MShare.MySelf.CurrX;
+                    short dy = MShare.MySelf.CurrY;
                     if ((MShare.MySelf.Job == 0) && MShare.g_boAutoLongAttack && MShare.g_gcTec[10] && (MShare.MagicArr[12] != null))
                     {
                         BotHelper.GetNextHitPosition(target.CurrX, target.CurrY, ref dx, ref dy);
@@ -1788,8 +1786,8 @@ namespace BotSrv.Player
 
         private bool CheckDoorAction(int dx, int dy)
         {
-            var result = false;
-            var door = Map.GetDoor(dx, dy);
+            bool result = false;
+            int door = Map.GetDoor(dx, dy);
             if (door > 0)
             {
                 if (!Map.IsDoorOpen(dx, dy))
@@ -1811,7 +1809,7 @@ namespace BotSrv.Player
                 MDwDuraWarningTick = MShare.GetTickCount();
                 if ((MShare.MySelf != null) && !MShare.MySelf.Death)
                 {
-                    for (var i = MShare.UseItems.Length; i > 0; i--)
+                    for (int i = MShare.UseItems.Length; i > 0; i--)
                     {
                         if (MShare.UseItems[i].Item.Name != "")
                         {
@@ -1915,7 +1913,7 @@ namespace BotSrv.Player
         {
             if (ServerAcceptNextAction())
             {
-                var dropItem = PlayScene.GetXyDropItems(MShare.MySelf.CurrX, MShare.MySelf.CurrY);
+                TDropItem dropItem = PlayScene.GetXyDropItems(MShare.MySelf.CurrX, MShare.MySelf.CurrY);
                 if (dropItem != null)
                 {
                     if (MShare.PickUpAll || dropItem.boPickUp)
@@ -2040,7 +2038,7 @@ namespace BotSrv.Player
 
         private void ClearDropItems()
         {
-            for (var i = 0; i < MShare.g_DropedItemList.Count; i++)
+            for (int i = 0; i < MShare.g_DropedItemList.Count; i++)
             {
                 MShare.g_DropedItemList[i] = null;
             }
@@ -2207,7 +2205,7 @@ namespace BotSrv.Player
 
         private void SendClientMessage(int msg, int recog, int param, int tag, int series)
         {
-            var dMsg = Messages.MakeMessage(msg, recog, param, tag, series);
+            CommandMessage dMsg = Messages.MakeMessage(msg, recog, param, tag, series);
             SendSocket(EDCode.EncodeMessage(dMsg));
         }
 
@@ -2218,26 +2216,30 @@ namespace BotSrv.Player
         {
             MainOutMessage("进入游戏");
             DScreen.CurrentScene.ConnectionStep = ConnectionStep.Play;
-            var sSendMsg = $"**{LoginId}/{ChrName}/{Certification}/{Grobal2.ClientVersionNumber}/{Grobal2.ClientVersionNumber}";
+            string sSendMsg = $"**{LoginId}/{ChrName}/{Certification}/{Grobal2.ClientVersionNumber}/{Grobal2.ClientVersionNumber}";
             SendSocket(EDCode.EncodeString(sSendMsg));
         }
 
         public void SendSay(string str)
         {
-            var sx = string.Empty;
+            string sx = string.Empty;
             const string sam = "/move";
             if (!string.IsNullOrEmpty(str))
             {
                 if (HUtil32.CompareLStr(str, sam))
                 {
-                    var param = str[sam.Length..];
+                    string param = str[sam.Length..];
                     if (!string.IsNullOrEmpty(param))
                     {
+<<<<<<< HEAD
                         var sy = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\t" });
+=======
+                        string sy = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
+>>>>>>> dev
                         if ((sx != "") && (sy != ""))
                         {
-                            var x = Convert.ToInt16(sx);
-                            var y = Convert.ToInt16(sy);
+                            short x = Convert.ToInt16(sx);
+                            short y = Convert.ToInt16(sy);
                             if ((x > 0) && (y > 0))
                             {
                                 MShare.MySelf.m_nTagX = x;
@@ -2273,7 +2275,7 @@ namespace BotSrv.Player
                     }
                     return;
                 }
-                var msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
+                CommandMessage msg = Messages.MakeMessage(Messages.CM_SAY, 0, 0, 0, 0);
                 SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(str));
                 if (str[0] == '/')
                 {
@@ -2288,7 +2290,7 @@ namespace BotSrv.Player
         /// </summary>
         private void SendActMsg(int ident, ushort x, ushort y, int dir)
         {
-            var msg = Messages.MakeMessage(ident, HUtil32.MakeLong(x, y), 0, dir, 0);
+            CommandMessage msg = Messages.MakeMessage(ident, HUtil32.MakeLong(x, y), 0, dir, 0);
             SendSocket(EDCode.EncodeMessage(msg));
             ActionLock = true;
             _actionLockTime = MShare.GetTickCount();
@@ -2296,7 +2298,7 @@ namespace BotSrv.Player
 
         private void SendSpellMsg(int ident, ushort x, ushort y, int dir, int target, bool bLock = false)
         {
-            var msg = Messages.MakeMessage(ident, HUtil32.MakeLong(x, y), HUtil32.LoWord(target), dir, HUtil32.HiWord(target));
+            CommandMessage msg = Messages.MakeMessage(ident, HUtil32.MakeLong(x, y), HUtil32.LoWord(target), dir, HUtil32.HiWord(target));
             SendSocket(EDCode.EncodeMessage(msg));
             if (!bLock)
             {
@@ -2308,49 +2310,49 @@ namespace BotSrv.Player
 
         public void SendQueryUserName(int targetid, int x, int y)
         {
-            var msg = Messages.MakeMessage(Messages.CM_QUERYUSERNAME, targetid, x, y, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_QUERYUSERNAME, targetid, x, y, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendDropItem(string name, int itemserverindex, int dropcnt)
         {
-            var msg = Messages.MakeMessage(Messages.CM_DROPITEM, itemserverindex, dropcnt, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DROPITEM, itemserverindex, dropcnt, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(name));
         }
 
         private void SendPickup()
         {
-            var msg = Messages.MakeMessage(Messages.CM_PICKUP, 0, MShare.MySelf.CurrX, MShare.MySelf.CurrY, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_PICKUP, 0, MShare.MySelf.CurrX, MShare.MySelf.CurrY, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         private void SendTakeOnItem(int where, int itmindex, string itmname)
         {
-            var msg = Messages.MakeMessage(Messages.CM_TAKEONITEM, itmindex, where, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_TAKEONITEM, itmindex, where, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itmname));
         }
 
         public void SendTakeOffItem(byte where, int itmindex, string itmname)
         {
-            var msg = Messages.MakeMessage(Messages.CM_TAKEOFFITEM, itmindex, where, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_TAKEOFFITEM, itmindex, where, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itmname));
         }
 
         private void SendEat(int itmindex, string itmname, int nUnBindItem)
         {
-            var msg = Messages.MakeMessage(Messages.CM_EAT, itmindex, 0, 0, nUnBindItem);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_EAT, itmindex, 0, 0, nUnBindItem);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         private void SendButchAnimal(int x, int y, int dir, int actorid)
         {
-            var msg = Messages.MakeMessage(Messages.CM_BUTCH, actorid, x, y, dir);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_BUTCH, actorid, x, y, dir);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendMagicKeyChange(int magid, char keych)
         {
-            var msg = Messages.MakeMessage(Messages.CM_MAGICKEYCHANGE, magid, (byte)keych, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_MAGICKEYCHANGE, magid, (byte)keych, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
@@ -2359,17 +2361,22 @@ namespace BotSrv.Player
             const string sam = "@_automove ";
             int x;
             int y;
-            var sx = string.Empty;
-            var sy = string.Empty;
+            string sx = string.Empty;
+            string sy = string.Empty;
             if (rstr.Length >= 2)
             {
                 if (HUtil32.CompareLStr(rstr, sam))
                 {
-                    var param = rstr.Substring(sam.Length + 1 - 1, rstr.Length - sam.Length);
+                    string param = rstr.Substring(sam.Length + 1 - 1, rstr.Length - sam.Length);
                     if (param != "")
                     {
+<<<<<<< HEAD
                         param = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\t" });
                         var sM = HUtil32.GetValidStr3(param, ref sy, new string[] { " ", ":", ",", "\t" });
+=======
+                        param = HUtil32.GetValidStr3(param, ref sx, new string[] { " ", ":", ",", "\09" });
+                        string sM = HUtil32.GetValidStr3(param, ref sy, new string[] { " ", ":", ",", "\09" });
+>>>>>>> dev
                         if ((sx != "") && (sy != ""))
                         {
                             if ((sM != "") && (string.Compare(MShare.MapTitle, sM, StringComparison.OrdinalIgnoreCase) != 0))// 自动移动
@@ -2415,67 +2422,67 @@ namespace BotSrv.Player
                     return;
                 }
             }
-            var msg = Messages.MakeMessage(Messages.CM_MERCHANTDLGSELECT, merchant, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_MERCHANTDLGSELECT, merchant, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(rstr));
         }
 
         public void SendQueryPrice(int merchant, int itemindex, string itemname)
         {
-            var msg = Messages.MakeMessage(Messages.CM_MERCHANTQUERYSELLPRICE, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_MERCHANTQUERYSELLPRICE, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendQueryRepairCost(int merchant, int itemindex, string itemname)
         {
-            var msg = Messages.MakeMessage(Messages.CM_MERCHANTQUERYREPAIRCOST, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_MERCHANTQUERYREPAIRCOST, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendSellItem(int merchant, int itemindex, string itemname, short count)
         {
-            var msg = Messages.MakeMessage(Messages.CM_USERSELLITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), count);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_USERSELLITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), count);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendRepairItem(int merchant, int itemindex, string itemname)
         {
-            var msg = Messages.MakeMessage(Messages.CM_USERREPAIRITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_USERREPAIRITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendStorageItem(int merchant, int itemindex, string itemname, short count)
         {
-            var msg = Messages.MakeMessage(Messages.CM_USERSTORAGEITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), count);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_USERSTORAGEITEM, merchant, HUtil32.LoWord(itemindex), HUtil32.HiWord(itemindex), count);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendGetDetailItem(int merchant, int menuindex, string itemname)
         {
-            var msg = Messages.MakeMessage(Messages.CM_USERGETDETAILITEM, merchant, menuindex, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_USERGETDETAILITEM, merchant, menuindex, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendBuyItem(int merchant, int itemserverindex, string itemname, short conut)
         {
-            var msg = Messages.MakeMessage(Messages.CM_USERBUYITEM, merchant, HUtil32.LoWord(itemserverindex), HUtil32.HiWord(itemserverindex), conut);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_USERBUYITEM, merchant, HUtil32.LoWord(itemserverindex), HUtil32.HiWord(itemserverindex), conut);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendTakeBackStorageItem(int merchant, int itemserverindex, string itemname, short count)
         {
-            var msg = Messages.MakeMessage(Messages.CM_USERTAKEBACKSTORAGEITEM, merchant, HUtil32.LoWord(itemserverindex), HUtil32.HiWord(itemserverindex), count);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_USERTAKEBACKSTORAGEITEM, merchant, HUtil32.LoWord(itemserverindex), HUtil32.HiWord(itemserverindex), count);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendMakeDrugItem(int merchant, string itemname)
         {
-            var msg = Messages.MakeMessage(Messages.CM_USERMAKEDRUGITEM, merchant, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_USERMAKEDRUGITEM, merchant, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(itemname));
         }
 
         public void SendDropGold(int dropgold)
         {
-            var msg = Messages.MakeMessage(Messages.CM_DROPGOLD, dropgold, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DROPGOLD, dropgold, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
@@ -2497,57 +2504,57 @@ namespace BotSrv.Player
         {
             if (withwho != "")
             {
-                var msg = Messages.MakeMessage(Messages.CM_CREATEGROUP, 0, 0, 0, 0);
+                CommandMessage msg = Messages.MakeMessage(Messages.CM_CREATEGROUP, 0, 0, 0, 0);
                 SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(withwho));
             }
         }
 
         public void SendWantMiniMap()
         {
-            var msg = Messages.MakeMessage(Messages.CM_WANTMINIMAP, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_WANTMINIMAP, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendGuildDlg()
         {
-            var msg = Messages.MakeMessage(Messages.CM_OPENGUILDDLG, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_OPENGUILDDLG, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendDealTry()
         {
-            var who = string.Empty;
-            var msg = Messages.MakeMessage(Messages.CM_DEALTRY, 0, 0, 0, 0);
+            string who = string.Empty;
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DEALTRY, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(who));
         }
 
         public void SendCancelDeal()
         {
-            var msg = Messages.MakeMessage(Messages.CM_DEALCANCEL, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DEALCANCEL, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendAddDealItem(ClientItem ci)
         {
-            var msg = Messages.MakeMessage(Messages.CM_DEALADDITEM, ci.MakeIndex, 0, 0, ci.Dura);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DEALADDITEM, ci.MakeIndex, 0, 0, ci.Dura);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(ci.Item.Name));
         }
 
         public void SendDelDealItem(ClientItem ci)
         {
-            var msg = Messages.MakeMessage(Messages.CM_DEALDELITEM, ci.MakeIndex, 0, 0, ci.Dura);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DEALDELITEM, ci.MakeIndex, 0, 0, ci.Dura);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(ci.Item.Name));
         }
 
         public void SendChangeDealGold(int gold)
         {
-            var msg = Messages.MakeMessage(Messages.CM_DEALCHGGOLD, gold, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DEALCHGGOLD, gold, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendDealEnd()
         {
-            var msg = Messages.MakeMessage(Messages.CM_DEALEND, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_DEALEND, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
@@ -2555,7 +2562,7 @@ namespace BotSrv.Player
         {
             if (withwho != "")
             {
-                var msg = Messages.MakeMessage(Messages.CM_ADDGROUPMEMBER, 0, 0, 0, 0);
+                CommandMessage msg = Messages.MakeMessage(Messages.CM_ADDGROUPMEMBER, 0, 0, 0, 0);
                 SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(withwho));
             }
         }
@@ -2564,20 +2571,20 @@ namespace BotSrv.Player
         {
             if (withwho != "")
             {
-                var msg = Messages.MakeMessage(Messages.CM_DELGROUPMEMBER, 0, 0, 0, 0);
+                CommandMessage msg = Messages.MakeMessage(Messages.CM_DELGROUPMEMBER, 0, 0, 0, 0);
                 SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(withwho));
             }
         }
 
         public void SendGuildHome()
         {
-            var msg = Messages.MakeMessage(Messages.CM_GUILDHOME, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_GUILDHOME, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         private void SendGuildMemberList()
         {
-            var msg = Messages.MakeMessage(Messages.CM_GUILDMEMBERLIST, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_GUILDMEMBERLIST, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
@@ -2585,7 +2592,7 @@ namespace BotSrv.Player
         {
             if (who.Trim() != "")
             {
-                var msg = Messages.MakeMessage(Messages.CM_GUILDADDMEMBER, 0, 0, 0, 0);
+                CommandMessage msg = Messages.MakeMessage(Messages.CM_GUILDADDMEMBER, 0, 0, 0, 0);
                 SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(who));
             }
         }
@@ -2594,33 +2601,33 @@ namespace BotSrv.Player
         {
             if (who.Trim() != "")
             {
-                var msg = Messages.MakeMessage(Messages.CM_GUILDDELMEMBER, 0, 0, 0, 0);
+                CommandMessage msg = Messages.MakeMessage(Messages.CM_GUILDDELMEMBER, 0, 0, 0, 0);
                 SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(who));
             }
         }
 
         public void SendGuildUpdateNotice(string notices)
         {
-            var msg = Messages.MakeMessage(Messages.CM_GUILDUPDATENOTICE, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_GUILDUPDATENOTICE, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(notices));
         }
 
         public void SendGuildUpdateGrade(string rankinfo)
         {
-            var msg = Messages.MakeMessage(Messages.CM_GUILDUPDATERANKINFO, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_GUILDUPDATERANKINFO, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeString(rankinfo));
         }
 
         public void SendSpeedHackUser()
         {
-            var msg = Messages.MakeMessage(Messages.CM_SPEEDHACKUSER, 0, 0, 0, 0);
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_SPEEDHACKUSER, 0, 0, 0, 0);
             SendSocket(EDCode.EncodeMessage(msg));
         }
 
         public void SendAdjustBonus(int remain, NakedAbility babil)
         {
-            var msg = Messages.MakeMessage(Messages.CM_ADJUST_BONUS, remain, 0, 0, 0);
-            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodePacket(babil));
+            CommandMessage msg = Messages.MakeMessage(Messages.CM_ADJUST_BONUS, remain, 0, 0, 0);
+            SendSocket(EDCode.EncodeMessage(msg) + EDCode.EncodeMessage(babil));
         }
 
         public bool ServerAcceptNextAction()
@@ -2629,7 +2636,7 @@ namespace BotSrv.Player
             {
                 return false;
             }
-            var result = true;
+            bool result = true;
             if (ActionLock)
             {
                 if ((MShare.GetTickCount() - _actionLockTime) > 5 * 1000)
@@ -2667,7 +2674,7 @@ namespace BotSrv.Player
             {
                 return false;
             }
-            var levelFastTime = HUtil32._MIN(370, MShare.MySelf.Abil.Level * 14);
+            int levelFastTime = HUtil32._MIN(370, MShare.MySelf.Abil.Level * 14);
             levelFastTime = HUtil32._MIN(800, levelFastTime + MShare.MySelf.HitSpeed * MShare.ItemSpeed);
             if (MShare.SpeedRate)
             {
@@ -2785,7 +2792,7 @@ namespace BotSrv.Player
 
         public string DecodeMessagePacket_ExtractUserName(string line)
         {
-            var uname = string.Empty;
+            string uname = string.Empty;
             HUtil32.GetValidStr3(line, ref line, new string[] { "(", "!", "*", "/", ")" });
             HUtil32.GetValidStr3(line, ref uname, new string[] { " ", "=", ":" });
             if (uname != "")
@@ -2807,7 +2814,7 @@ namespace BotSrv.Player
         private void ClientGetMapDescription(CommandMessage msg, string sBody)
         {
             sBody = EDCode.DeCodeString(sBody);
-            var sTitle = sBody;
+            string sTitle = sBody;
             MShare.MapTitle = sTitle;
             LoadWayPoint();
             if (!MShare.g_gcGeneral[11])
@@ -2858,7 +2865,7 @@ namespace BotSrv.Player
         {
             if (!string.IsNullOrEmpty(body))
             {
-                var cu = EDCode.DecodeBuffer<ClientItem>(body);
+                ClientItem cu = EDCode.DecodeBuffer<ClientItem>(body);
                 BotHelper.AddItemBag(cu);
                 if (hint != 0)
                 {
@@ -2871,9 +2878,9 @@ namespace BotSrv.Player
         {
             if (!string.IsNullOrEmpty(body))
             {
-                var cu = EDCode.DecodeBuffer<ClientItem>(body);
+                ClientItem cu = EDCode.DecodeBuffer<ClientItem>(body);
                 BotHelper.UpdateItemBag(cu);
-                for (var i = 0; i < MShare.UseItems.Length; i++)
+                for (int i = 0; i < MShare.UseItems.Length; i++)
                 {
                     if ((MShare.UseItems[i].Item.Name == cu.Item.Name) && (MShare.UseItems[i].MakeIndex == cu.MakeIndex))
                     {
@@ -2884,7 +2891,7 @@ namespace BotSrv.Player
                 {
                     MShare.g_SellDlgItem = cu;
                 }
-                for (var i = 0; i < 1; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     if ((MShare.g_TIItems[i].Item.MakeIndex == cu.MakeIndex) && (MShare.g_TIItems[i].Item.Item.Name != ""))
                     {
@@ -2896,7 +2903,7 @@ namespace BotSrv.Player
                     }
                 }
                 MShare.AutoPutOntiBooks();
-                for (var i = 0; i < 1; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     if ((MShare.g_spItems[i].Item.MakeIndex == cu.MakeIndex) && (MShare.g_spItems[i].Item.Item.Name != ""))
                     {
@@ -2910,16 +2917,16 @@ namespace BotSrv.Player
         {
             if (!string.IsNullOrEmpty(body))
             {
-                var cu = EDCode.DecodeBuffer<ClientItem>(body);
+                ClientItem cu = EDCode.DecodeBuffer<ClientItem>(body);
                 BotHelper.DelItemBag(cu.Item.Name, cu.MakeIndex);
-                for (var i = 0; i < MShare.UseItems.Length; i++)
+                for (int i = 0; i < MShare.UseItems.Length; i++)
                 {
                     if ((MShare.UseItems[i].Item.Name == cu.Item.Name) && (MShare.UseItems[i].MakeIndex == cu.MakeIndex))
                     {
                         MShare.UseItems[i].Item.Name = "";
                     }
                 }
-                for (var i = 0; i < 1; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     if (MShare.g_TIItems[i].Item.MakeIndex == cu.MakeIndex)
                     {
@@ -2930,7 +2937,7 @@ namespace BotSrv.Player
                         }
                     }
                 }
-                for (var i = 0; i < 1; i++)
+                for (int i = 0; i < 1; i++)
                 {
                     if (MShare.g_spItems[i].Item.MakeIndex == cu.MakeIndex)
                     {
@@ -2943,9 +2950,9 @@ namespace BotSrv.Player
         private void ClientGetDelItems(string body, ushort wOnlyBag)
         {
             int iindex;
-            var str = string.Empty;
-            var iname = string.Empty;
-            var cu = new ClientItem();
+            string str = string.Empty;
+            string iname = string.Empty;
+            ClientItem cu = new ClientItem();
             body = EDCode.DeCodeString(body);
             while (!string.IsNullOrEmpty(body))
             {
@@ -2956,7 +2963,7 @@ namespace BotSrv.Player
                     BotHelper.DelItemBag(iname, iindex);
                     if (wOnlyBag == 0)
                     {
-                        for (var i = 0; i < MShare.UseItems.Length; i++)
+                        for (int i = 0; i < MShare.UseItems.Length; i++)
                         {
                             if ((MShare.UseItems[i].Item.Name == iname) && (MShare.UseItems[i].MakeIndex == iindex))
                             {
@@ -2965,7 +2972,7 @@ namespace BotSrv.Player
                             }
                         }
                     }
-                    for (var i = 0; i < 1; i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         if (MShare.g_TIItems[i].Item.MakeIndex == cu.MakeIndex)
                         {
@@ -2976,7 +2983,7 @@ namespace BotSrv.Player
                             }
                         }
                     }
-                    for (var i = 0; i < 1; i++)
+                    for (int i = 0; i < 1; i++)
                     {
                         if (MShare.g_spItems[i].Item.MakeIndex == cu.MakeIndex)
                         {
@@ -2993,13 +3000,13 @@ namespace BotSrv.Player
 
         public bool ClientGetBagItmes_CompareItemArr(ClientItem[] itemSaveArr)
         {
-            var flag = true;
-            for (var i = 0; i < BotConst.MaxBagItemcl; i++)
+            bool flag = true;
+            for (int i = 0; i < BotConst.MaxBagItemcl; i++)
             {
                 if (itemSaveArr[i].Item.Name != "")
                 {
                     flag = false;
-                    for (var j = 0; j < BotConst.MaxBagItemcl; j++)
+                    for (int j = 0; j < BotConst.MaxBagItemcl; j++)
                     {
                         if ((MShare.ItemArr[j].Item.Name == itemSaveArr[i].Item.Name) && (MShare.ItemArr[j].MakeIndex == itemSaveArr[i].MakeIndex))
                         {
@@ -3018,12 +3025,12 @@ namespace BotSrv.Player
             }
             if (flag)
             {
-                for (var i = 0; i < BotConst.MaxBagItemcl; i++)
+                for (int i = 0; i < BotConst.MaxBagItemcl; i++)
                 {
                     if (MShare.ItemArr[i].Item.Name != "")
                     {
                         flag = false;
-                        for (var j = 0; j < BotConst.MaxBagItemcl; j++)
+                        for (int j = 0; j < BotConst.MaxBagItemcl; j++)
                         {
                             if ((MShare.ItemArr[i].Item.Name == itemSaveArr[j].Item.Name) && (MShare.ItemArr[i].MakeIndex == itemSaveArr[j].MakeIndex))
                             {
@@ -3041,17 +3048,17 @@ namespace BotSrv.Player
                     }
                 }
             }
-            var result = flag;
+            bool result = flag;
             return result;
         }
 
         private void ClientGetBagItmes(string body)
         {
-            var Str = string.Empty;
+            string Str = string.Empty;
             //var ItemSaveArr = new ClientItem[BotConst.MaxBagItemcl];
             //FillChar(MShare.g_RefineItems, sizeof(TMovingItem) * 3, '\0');
             //FillChar(MShare.g_BuildAcuses, sizeof(MShare.g_BuildAcuses), '\0');
-            //FillChar(MShare.g_ItemArr * BotConst.MAXBAGITEMCL, '\0');
+            //FillChar(MShare.g_ItemArr * BotConst.MaxBagItemCL, '\0');
             //FillChar(MShare.g_TIItems, sizeof(MShare.g_TIItems), '\0');
             //FillChar(MShare.g_spItems, sizeof(MShare.g_spItems), '\0');
             if (MShare.MovingItem != null)
@@ -3069,13 +3076,13 @@ namespace BotSrv.Player
                     break;
                 }
                 body = HUtil32.GetValidStr3(body, ref Str, HUtil32.Backslash);
-                var cu = EDCode.DecodeClientBuffer<ClientItem>(Str);
+                ClientItem cu = EDCode.DecodeClientBuffer<ClientItem>(Str);
                 BotHelper.AddItemBag(cu);
             }
             //ClFunc.Loadbagsdat(".\\Config\\" + MShare.g_sServerName + "." + m_sChrName + ".itm-plus", ItemSaveArr);
             //if (ClientGetBagItmes_CompareItemArr())
             //{
-            //    Move(ItemSaveArr, MShare.g_ItemArr * BotConst.MAXBAGITEMCL);
+            //    Move(ItemSaveArr, MShare.g_ItemArr * BotConst.MaxBagItemCL);
             //}
             BotHelper.ArrangeItembag();
             MShare.g_boBagLoaded = true;
@@ -3083,7 +3090,7 @@ namespace BotSrv.Player
             {
                 if (!MShare.MySelf.StallMgr.OnSale)
                 {
-                    for (var i = 0; i < 9; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         if (MShare.MySelf.StallMgr.mBlock.Items[i] == null)
                         {
@@ -3097,7 +3104,7 @@ namespace BotSrv.Player
                 }
                 else
                 {
-                    for (var i = 0; i < 9; i++)
+                    for (int i = 0; i < 9; i++)
                     {
                         if (MShare.MySelf.StallMgr.mBlock.Items[i] == null)
                         {
@@ -3118,7 +3125,7 @@ namespace BotSrv.Player
                 if (MShare.g_APMapPath2 != null)
                 {
                     MShare.MapPath = new Point[MShare.g_APMapPath2.Length + 1];
-                    for (var k = 0; k <= MShare.g_APMapPath2.Length; k++)
+                    for (int k = 0; k <= MShare.g_APMapPath2.Length; k++)
                     {
                         MShare.MapPath[k] = MShare.g_APMapPath2[k];
                     }
@@ -3141,7 +3148,7 @@ namespace BotSrv.Player
 
         private void ClientGetDropItemFail(string iname, int sindex)
         {
-            var pc = BotHelper.GetDropItem(iname, sindex);
+            ClientItem pc = BotHelper.GetDropItem(iname, sindex);
             if (pc != null)
             {
                 BotHelper.AddItemBag(pc);
@@ -3151,14 +3158,14 @@ namespace BotSrv.Player
 
         private void ClientGetShowItem(int itemid, short x, short y, int looks, string itmname)
         {
-            for (var i = 0; i < MShare.g_DropedItemList.Count; i++)
+            for (int i = 0; i < MShare.g_DropedItemList.Count; i++)
             {
                 if (MShare.g_DropedItemList[i].id == itemid)
                 {
                     return;
                 }
             }
-            var dropItem = new TDropItem();
+            TDropItem dropItem = new TDropItem();
             dropItem.id = itemid;
             dropItem.X = x;
             dropItem.Y = y;
@@ -3166,7 +3173,7 @@ namespace BotSrv.Player
             dropItem.Name = itmname;
             dropItem.Width = itmname.Length;
             dropItem.Height = itmname.Length;
-            HUtil32.GetValidStr3(dropItem.Name, ref itmname, "\\" );
+            HUtil32.GetValidStr3(dropItem.Name, ref itmname, "\\");
             dropItem.FlashTime = MShare.GetTickCount() - RandomNumber.GetInstance().Random(3000);
             dropItem.BoFlash = false;
             dropItem.boNonSuch = false;
@@ -3204,7 +3211,7 @@ namespace BotSrv.Player
         private void ClientGetHideItem(int itemid, int x, int y)
         {
             TDropItem dropItem;
-            for (var i = 0; i < MShare.g_DropedItemList.Count; i++)
+            for (int i = 0; i < MShare.g_DropedItemList.Count; i++)
             {
                 dropItem = MShare.g_DropedItemList[i];
                 if (dropItem.id == itemid)
@@ -3218,8 +3225,8 @@ namespace BotSrv.Player
         private void ClientGetSendUseItems(string body)
         {
             int index;
-            var str = string.Empty;
-            var data = string.Empty;
+            string str = string.Empty;
+            string data = string.Empty;
             while (true)
             {
                 if (string.IsNullOrEmpty(body))
@@ -3231,7 +3238,7 @@ namespace BotSrv.Player
                 index = HUtil32.StrToInt(str, -1);
                 if (index >= 0 && index <= 13)
                 {
-                    var cu = EDCode.DecodeBuffer<ClientItem>(data);
+                    ClientItem cu = EDCode.DecodeBuffer<ClientItem>(data);
                     MShare.UseItems[index] = cu;
                 }
             }
@@ -3239,7 +3246,7 @@ namespace BotSrv.Player
 
         public int ClientGetAddMagic_ListSortCompareLevel(object item1, object item2)
         {
-            var result = 1;
+            int result = 1;
             if (((ClientMagic)item1).Def.TrainLevel[0] < ((ClientMagic)item2).Def.TrainLevel[0])
             {
                 result = -1;
@@ -3253,10 +3260,10 @@ namespace BotSrv.Player
 
         private void ClientGetAddMagic(string body)
         {
-            var pcm = EDCode.DecodeBuffer<ClientMagic>(body);
+            ClientMagic pcm = EDCode.DecodeBuffer<ClientMagic>(body);
             MShare.MagicArr[pcm.Def.MagicId] = pcm;
             MShare.g_MagicList.Add(pcm);
-            for (var i = 0; i < MShare.g_MagicList.Count; i++)
+            for (int i = 0; i < MShare.g_MagicList.Count; i++)
             {
                 if (MShare.g_MagicList[i].Def.MagicId == 67)
                 {
@@ -3268,7 +3275,7 @@ namespace BotSrv.Player
 
         private void ClientGetDelMagic(int magid, int btclass)
         {
-            for (var i = MShare.g_MagicList.Count - 1; i >= 0; i--)
+            for (int i = MShare.g_MagicList.Count - 1; i >= 0; i--)
             {
                 if (MShare.g_MagicList[i].Def.MagicId == magid)
                 {
@@ -3282,7 +3289,7 @@ namespace BotSrv.Player
 
         public int ClientConvertMagic_ListSortCompareLevel(object item1, object item2)
         {
-            var result = 1;
+            int result = 1;
             if (((ClientMagic)item1).Def.TrainLevel[0] < ((ClientMagic)item2).Def.TrainLevel[0])
             {
                 result = -1;
@@ -3374,7 +3381,7 @@ namespace BotSrv.Player
 
         public int hClientConvertMagic_ListSortCompareLevel(object item1, object item2)
         {
-            var result = 1;
+            int result = 1;
             if (((ClientMagic)item1).Def.TrainLevel[0] < ((ClientMagic)item2).Def.TrainLevel[0])
             {
                 result = -1;
@@ -3388,7 +3395,7 @@ namespace BotSrv.Player
 
         public int ClientGetMyMagics_ListSortCompareLevel(object item1, object item2)
         {
-            var result = 1;
+            int result = 1;
             if (((ClientMagic)item1).Def.TrainLevel[0] < ((ClientMagic)item2).Def.TrainLevel[0])
             {
                 result = -1;
@@ -3402,8 +3409,8 @@ namespace BotSrv.Player
 
         private void ClientGetMyMagics(string body)
         {
-            var data = string.Empty;
-            for (var i = 0; i < MShare.g_MagicList.Count; i++)
+            string data = string.Empty;
+            for (int i = 0; i < MShare.g_MagicList.Count; i++)
             {
                 MShare.g_MagicList[i] = null;
             }
@@ -3417,7 +3424,7 @@ namespace BotSrv.Player
                 body = HUtil32.GetValidStr3(body, ref data, HUtil32.Backslash);
                 if (data != "")
                 {
-                    var pcm = EDCode.DecodeBuffer<ClientMagic>(data);
+                    ClientMagic pcm = EDCode.DecodeBuffer<ClientMagic>(data);
                     MShare.g_MagicList.Add(pcm);
                     MShare.MagicArr[pcm.Def.MagicId] = pcm;
                 }
@@ -3426,7 +3433,7 @@ namespace BotSrv.Player
                     break;
                 }
             }
-            for (var i = 0; i < MShare.g_MagicList.Count; i++)
+            for (int i = 0; i < MShare.g_MagicList.Count; i++)
             {
                 if (MShare.g_MagicList[i].Def.MagicId == 67)
                 {
@@ -3439,7 +3446,7 @@ namespace BotSrv.Player
         private void ClientGetMagicLvExp(int magid, int maglv, int magtrain)
         {
             magid = HUtil32.LoWord(magid);
-            var pcm = MShare.MagicArr[magid];
+            ClientMagic pcm = MShare.MagicArr[magid];
             if (pcm != null)
             {
                 pcm.Level = (byte)maglv;
@@ -3452,7 +3459,7 @@ namespace BotSrv.Player
             magid = HUtil32.LoWord(magid);
             if (hero == 0)
             {
-                var pcm = MShare.MagicArr[magid];
+                ClientMagic pcm = MShare.MagicArr[magid];
                 if ((magid <= 0) || (magid >= 255))
                 {
                     return;
@@ -3479,8 +3486,8 @@ namespace BotSrv.Player
         private void ClientGetMerchantSay(int merchant, int face, string saying)
         {
             //string npcname;
-            //MShare.g_nMDlgX = MShare.g_MySelf.m_nCurrX;
-            //MShare.g_nMDlgY = MShare.g_MySelf.m_nCurrY;
+            //MShare.g_nMDlgX = MShare.g_MySelf.CurrX;
+            //MShare.g_nMDlgY = MShare.g_MySelf.CurrY;
             //if (MShare.g_nCurMerchant != merchant)
             //{
             //    MShare.g_nCurMerchant = merchant;
@@ -3511,9 +3518,9 @@ namespace BotSrv.Player
             //    {
             //        pcg = new TClientGoods();
             //        pcg.Name = gname;
-            //        pcg.SubMenu = HUtil32.Str_ToInt(gsub, 0);
-            //        pcg.Price = HUtil32.Str_ToInt(gprice, 0);
-            //        pcg.Stock = HUtil32.Str_ToInt(gstock, 0);
+            //        pcg.SubMenu = HUtil32.StrToInt(gsub, 0);
+            //        pcg.Price = HUtil32.StrToInt(gprice, 0);
+            //        pcg.Stock = HUtil32.StrToInt(gstock, 0);
             //        pcg.Grade = -1;
             //        FrmDlg.MenuList.Add(pcg);
             //    }
@@ -3546,9 +3553,9 @@ namespace BotSrv.Player
             //    {
             //        pcg = new TDelChar();
             //        pcg.sChrName = gname;
-            //        pcg.nLevel = HUtil32.Str_ToInt(glevel, 1);
-            //        pcg.btJob = HUtil32.Str_ToInt(gjob, 0);
-            //        pcg.btSex = HUtil32.Str_ToInt(gsex, 0);
+            //        pcg.nLevel = HUtil32.StrToInt(glevel, 1);
+            //        pcg.btJob = HUtil32.StrToInt(gjob, 0);
+            //        pcg.btSex = HUtil32.StrToInt(gsex, 0);
             //        FrmDlg.m_DelCharList.Add(pcg);
             //    }
             //    else
@@ -3579,9 +3586,9 @@ namespace BotSrv.Player
             //    {
             //        pcg = new TClientGoods();
             //        pcg.Name = gname;
-            //        pcg.SubMenu = HUtil32.Str_ToInt(gsub, 0);
-            //        pcg.Price = HUtil32.Str_ToInt(gprice, 0);
-            //        pcg.Stock = HUtil32.Str_ToInt(gstock, 0);
+            //        pcg.SubMenu = HUtil32.StrToInt(gsub, 0);
+            //        pcg.Price = HUtil32.StrToInt(gprice, 0);
+            //        pcg.Stock = HUtil32.StrToInt(gstock, 0);
             //        pcg.Grade = -1;
             //        FrmDlg.MenuList.Add(pcg);
             //    }
@@ -3763,7 +3770,7 @@ namespace BotSrv.Player
 
         private void ClientGetGroupMembers(string bodystr)
         {
-            var memb = string.Empty;
+            string memb = string.Empty;
             MShare.g_GroupMembers.Clear();
             while (true)
             {
@@ -3785,7 +3792,7 @@ namespace BotSrv.Player
 
         public void MinTimerTimer(object sender, EventArgs e1)
         {
-            for (var i = 0; i < PlayScene.ActorList.Count; i++)
+            for (int i = 0; i < PlayScene.ActorList.Count; i++)
             {
                 if (IsGroupMember(PlayScene.ActorList[i].UserName))
                 {
@@ -3796,7 +3803,7 @@ namespace BotSrv.Player
                     PlayScene.ActorList[i].m_boGrouped = false;
                 }
             }
-            for (var i = MShare.g_FreeActorList.Count - 1; i >= 0; i--)
+            for (int i = MShare.g_FreeActorList.Count - 1; i >= 0; i--)
             {
                 if (MShare.GetTickCount() - MShare.g_FreeActorList[i].m_dwDeleteTime > 60 * 1000)
                 {
@@ -3815,7 +3822,7 @@ namespace BotSrv.Player
         {
             if (body != "")
             {
-                var ci = EDCode.DecodeBuffer<ClientItem>(body);
+                ClientItem ci = EDCode.DecodeBuffer<ClientItem>(body);
                 BotHelper.AddDealRemoteItem(ci);
             }
         }
@@ -3824,14 +3831,14 @@ namespace BotSrv.Player
         {
             if (body != "")
             {
-                var ci = EDCode.DecodeBuffer<ClientItem>(body);
+                ClientItem ci = EDCode.DecodeBuffer<ClientItem>(body);
                 BotHelper.DelDealRemoteItem(ci);
             }
         }
 
         private void ClientGetChangeGuildName(string body)
         {
-            var str = HUtil32.GetValidStr3(body, ref MShare.g_sGuildName, HUtil32.Backslash);
+            string str = HUtil32.GetValidStr3(body, ref MShare.g_sGuildName, HUtil32.Backslash);
             MShare.g_sGuildRankName = str.Trim();
         }
 
@@ -3861,7 +3868,7 @@ namespace BotSrv.Player
 
         public void SendPassword(string sPassword, int nIdent)
         {
-            var defMsg = Messages.MakeMessage(Messages.CM_PASSWORD, 0, nIdent, 0, 0);
+            CommandMessage defMsg = Messages.MakeMessage(Messages.CM_PASSWORD, 0, nIdent, 0, 0);
             SendSocket(EDCode.EncodeMessage(defMsg) + EDCode.EncodeString(sPassword));
         }
 
@@ -3878,7 +3885,7 @@ namespace BotSrv.Player
             MShare.g_boCanRunNpc = HUtil32.LoByte(HUtil32.HiWord(msg.Recog)) == 1;
             MShare.g_boCanRunAllInWarZone = HUtil32.HiByte(HUtil32.HiWord(msg.Recog)) == 1;
             sBody = EDCode.DeCodeString(sBody);
-            var clientConf = EDCode.DecodeClientBuffer<ClientConf>(sBody);
+            //var clientConf = EDCode.DecodeClientBuffer<ClientConf>(sBody);
             //MShare.g_boCanRunHuman = ClientConf.boRunHuman;
             //MShare.g_boCanRunMon = ClientConf.boRunMon;
             //MShare.g_boCanRunNpc = ClientConf.boRunNpc;
@@ -3950,7 +3957,7 @@ namespace BotSrv.Player
             }
             MShare.g_boCheckTakeOffPoison = false;
             MShare.g_WaitingUseItem.Index = ItemLocation.Bujuk;
-            for (var i = 6; i < BotConst.MaxBagItemcl; i++)
+            for (int i = 6; i < BotConst.MaxBagItemcl; i++)
             {
                 if ((MShare.ItemArr[i].Item.NeedIdentify < 4) && (MShare.ItemArr[i].Item.StdMode == 25) && (MShare.ItemArr[i].Item.Shape != 6) && (MShare.ItemArr[i].Item.Name.IndexOf(str, StringComparison.Ordinal) > 0) && (MShare.ItemArr[i].Item.Name.IndexOf(cStr, StringComparison.Ordinal) > 0))
                 {
@@ -3995,7 +4002,7 @@ namespace BotSrv.Player
             {
                 if (CanNextAction() && ServerAcceptNextAction())
                 {
-                    var nspeed = 0;
+                    int nspeed = 0;
                     if (MShare.SpeedRate)
                     {
                         nspeed = MShare.g_MagSpeedRate * 20;
@@ -4167,10 +4174,10 @@ namespace BotSrv.Player
                             {
                                 x1 = MShare.MySelf.CurrX;
                                 y1 = MShare.MySelf.CurrY;
-                                var x2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
-                                var y2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
-                                var ndir = BotHelper.GetNextDirection(x1, y1, x2, y2);
-                                BotHelper.GetNextPosXy((byte)ndir, ref x1, ref y1);
+                                short x2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
+                                short y2 = (short)PathMap.g_MapPath[GMoveStep + 1].X;
+                                byte ndir = BotHelper.GetNextDirection(x1, y1, x2, y2);
+                                BotHelper.GetNextPosXy(ndir, ref x1, ref y1);
                                 x3 = MShare.MySelf.CurrX;
                                 y3 = MShare.MySelf.CurrY;
                                 BotHelper.GetNextRunXy(ndir, ref x3, ref y3);
@@ -4226,7 +4233,7 @@ namespace BotSrv.Player
 
         private void RunAutoPlayRandomTag(ref bool success, ref byte ndir)
         {
-            var i = 0;
+            int i = 0;
             success = false;
             ndir = MShare.MySelf.m_btDir;
             if (RandomNumber.GetInstance().Random(28) == 0)
@@ -4265,7 +4272,7 @@ namespace BotSrv.Player
         public void RunAutoPlay()
         {
             byte ndir = 0;
-            var success = false;
+            bool success = false;
             MShare.AutoMove = false;
             if (MShare.MySelf == null)
             {
@@ -4327,7 +4334,7 @@ namespace BotSrv.Player
                         MShare.TargetY = MShare.AutoPicupItem.Y;
                         _heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         MShare.TargetX = -1;
-                        MainOutMessage( $"物品目标：{MShare.AutoPicupItem.Name}({MShare.AutoPicupItem.X},{MShare.AutoPicupItem.Y}) 正在去拾取");
+                        MainOutMessage($"物品目标：{MShare.AutoPicupItem.Name}({MShare.AutoPicupItem.X},{MShare.AutoPicupItem.Y}) 正在去拾取");
                     }
                     else if (MShare.AutoPicupItem != null)
                     {
@@ -4335,7 +4342,7 @@ namespace BotSrv.Player
                         MShare.TargetY = MShare.AutoPicupItem.Y;
                         _heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
                         MShare.TargetX = -1;
-                        MainOutMessage( $"物品目标：{MShare.AutoPicupItem.Name}({MShare.AutoPicupItem.X},{MShare.AutoPicupItem.Y}) 正在去拾取");
+                        MainOutMessage($"物品目标：{MShare.AutoPicupItem.Name}({MShare.AutoPicupItem.X},{MShare.AutoPicupItem.Y}) 正在去拾取");
                     }
                     MShare.g_nAPStatus = 2;
                     MShare.AutoMove = true;
@@ -4348,7 +4355,7 @@ namespace BotSrv.Player
                             MShare.TargetX = (short)MShare.MapPath[MShare.AutoStep].X;
                             MShare.TargetY = (short)MShare.MapPath[MShare.AutoStep].X;
                             _heroActor.AutoFindPath(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
-                            MainOutMessage( $"循路搜寻目标({MShare.TargetX},{MShare.TargetY})");
+                            MainOutMessage($"循路搜寻目标({MShare.TargetX},{MShare.TargetY})");
                             MShare.TargetX = -1;
                         }
                         else
@@ -4409,10 +4416,10 @@ namespace BotSrv.Player
                     MShare.g_nAPStatus = 3;
                     MShare.AutoMove = true;
                     break;
-            } 
+            }
             if ((MShare.AutoPathList.Count > 0) && ((MShare.TargetX == -1) || ((MShare.TargetX == MShare.MySelf.CurrX) && (MShare.TargetY == MShare.MySelf.CurrY))))
             {
-                var findMap = MShare.AutoPathList[0];
+                FindMapNode findMap = MShare.AutoPathList[0];
                 MShare.TargetX = findMap.X;
                 MShare.TargetY = findMap.Y;
                 if (MShare.g_nAPStatus >= 1 && MShare.g_nAPStatus <= 4)
@@ -4444,9 +4451,9 @@ namespace BotSrv.Player
             }
         }
 
-        private void RunAutoPlayAAAA(short X,short Y)
+        private void RunAutoPlayAAAA(short X, short Y)
         {
-            var ndir = 0;
+            int ndir = 0;
             if (MShare.AutoPathList.Count > 2)
             {
                 ndir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.AutoPathList[2].X, MShare.AutoPathList[2].Y);
@@ -4455,8 +4462,8 @@ namespace BotSrv.Player
             {
                 ndir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, MShare.TargetX, MShare.TargetY);
             }
-            var x1 = MShare.MySelf.CurrX;
-            var y1 = MShare.MySelf.CurrY;
+            short x1 = MShare.MySelf.CurrX;
+            short y1 = MShare.MySelf.CurrY;
             BotHelper.GetNextRunXy(ndir, ref x1, ref y1);
             if (Map.CanMove(x1, y1))
             {
@@ -4477,14 +4484,14 @@ namespace BotSrv.Player
 
         private void ProcessActMsg(string datablock)
         {
-            var tagstr = string.Empty;
+            string tagstr = string.Empty;
             if ((datablock[1] == 'G') && (datablock[2] == 'D') && (datablock[3] == '/'))
             {
-                var data = datablock[1..];
+                string data = datablock[1..];
                 data = HUtil32.GetValidStr3(data, ref tagstr, HUtil32.Backslash);
                 if (data != "")
                 {
-                    var rtime = HUtil32.StrToInt(data, 0);
+                    int rtime = HUtil32.StrToInt(data, 0);
                     if (rtime <= 0)
                     {
                         return;
@@ -4508,8 +4515,8 @@ namespace BotSrv.Player
                             MShare.g_dwFirstServerTime = rtime;
                             MShare.g_dwFirstClientTime = MShare.GetTickCount();
                         }
-                        var cltime = MShare.GetTickCount() - MShare.g_dwFirstClientTime;
-                        var svtime = rtime - MShare.g_dwFirstServerTime;
+                        int cltime = MShare.GetTickCount() - MShare.g_dwFirstClientTime;
+                        int svtime = rtime - MShare.g_dwFirstServerTime;
                         // DScreen.AddChatBoardString('[速度检测] 时间差：' + IntToStr(cltime - svtime), clWhite);
                         if (cltime > svtime + 4500)
                         {
@@ -4693,12 +4700,12 @@ namespace BotSrv.Player
         {
             if ((MShare.MapPath != null) && (MShare.MapPath.Length > 0))
             {
-                var n14 = 0;
+                int n14 = 0;
                 MShare.AutoLastPoint.X = -1;
-                var n10 = 999;
-                for (var i = 0; i < MShare.MapPath.Length; i++)
+                int n10 = 999;
+                for (int i = 0; i < MShare.MapPath.Length; i++)
                 {
-                    var nC = Math.Abs(MShare.MapPath[i].X - MShare.MySelf.CurrX) + Math.Abs(MShare.MapPath[i].X - MShare.MySelf.CurrY);
+                    int nC = Math.Abs(MShare.MapPath[i].X - MShare.MySelf.CurrX) + Math.Abs(MShare.MapPath[i].X - MShare.MySelf.CurrY);
                     if (nC < n10)
                     {
                         n10 = nC;
@@ -4782,10 +4789,10 @@ namespace BotSrv.Player
 
         public int CheckMagPassThrough(short sx, short sy, short tx, short ty, int ndir)
         {
-            var tCount = 0;
-            for (var i = 0; i < 12; i++)
+            int tCount = 0;
+            for (int i = 0; i < 12; i++)
             {
-                var actor = PlayScene.FindActorXY(sx, sy);
+                Actor actor = PlayScene.FindActorXY(sx, sy);
                 if (actor != null)
                 {
                     if (_heroActor.IsProperTarget(actor))
@@ -4811,11 +4818,11 @@ namespace BotSrv.Player
 
         public bool GetAdvPosition(Actor targetCret, ref short nX, ref short nY)
         {
-            var result = false;
+            bool result = false;
             nX = MShare.MySelf.CurrX;
             nY = MShare.MySelf.CurrY;
-            var btDir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targetCret.CurrX, targetCret.CurrY);
-            var wvar1 = MShare.MySelf;
+            byte btDir = BotHelper.GetNextDirection(MShare.MySelf.CurrX, MShare.MySelf.CurrY, targetCret.CurrX, targetCret.CurrY);
+            THumActor wvar1 = MShare.MySelf;
             switch (btDir)
             {
                 case Direction.Up:
@@ -5043,17 +5050,17 @@ namespace BotSrv.Player
 
         private void MainOutMessage(string msg)
         {
-            BotShare.logger.Info($"机器人:[{ChrName}] {msg}");
+            BotShare.LogService.Info($"机器人:[{ChrName}] {msg}");
         }
 
         private void MainOutErrorMessage(string msg)
         {
-            BotShare.logger.Error($"机器人:[{ChrName}] {msg}");
+            BotShare.LogService.Error($"机器人:[{ChrName}] {msg}");
         }
 
         private void MainOutWarnMessage(string msg)
         {
-            BotShare.logger.Warn($"机器人:[{ChrName}] {msg}");
+            BotShare.LogService.Warn($"机器人:[{ChrName}] {msg}");
         }
     }
 }

@@ -1,22 +1,4 @@
 using LoginSrv.Conf;
-using NLog;
-using System;
-using System.Collections.Generic;
-using System.Net;
-using System.Threading;
-using System.Threading.Channels;
-using System.Threading.Tasks;
-using SystemModule;
-using SystemModule.ByteManager;
-using SystemModule.Core.Config;
-using SystemModule.DataHandlingAdapters;
-using SystemModule.Extensions;
-using SystemModule.Packets.ServerPackets;
-using SystemModule.Sockets.Common;
-using SystemModule.Sockets.Components.TCP;
-using SystemModule.Sockets.Config;
-using SystemModule.Sockets.Interface;
-using SystemModule.Sockets.SocketEventArgs;
 
 namespace LoginSrv.Services
 {
@@ -26,14 +8,12 @@ namespace LoginSrv.Services
     /// </summary>
     public class LoginServer
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly TcpService _serverSocket;
         private readonly Config _config;
         private readonly ClientSession _clientSession;
         private readonly ClientManager _clientManager;
         private readonly SessionManager _sessionManager;
         private readonly Channel<MessagePacket> _messageQueue;
-        private readonly LoginGateInfo[] loginGates = new LoginGateInfo[20];
 
         public LoginServer(ConfigManager configManager, ClientSession clientSession, ClientManager clientManager, SessionManager sessionManager)
         {
@@ -50,67 +30,66 @@ namespace LoginSrv.Services
 
         public void StartServer()
         {
-            var touchSocketConfig = new TouchSocketConfig();
-            touchSocketConfig.SetListenIPHosts(new IPHost[1]
-            {
+            TouchSocketConfig touchSocketConfig = new TouchSocketConfig();
+            touchSocketConfig.SetListenIPHosts(
+            [
                 new IPHost(IPAddress.Parse(_config.sGateAddr), _config.nGatePort)
-            }).SetDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
+            ]).SetTcpDataHandlingAdapter(() => new ServerPacketFixedHeaderDataHandlingAdapter());
             _serverSocket.Setup(touchSocketConfig);
             _serverSocket.Start();
-            _logger.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
+            LogService.Info($"账号登陆服务[{_config.sGateAddr}:{_config.nGatePort}]已启动.");
         }
         
-        private void Received(object sender, ByteBlock byteBlock, IRequestInfo requestInfo)
+        public void StopServer()
         {
-            if (requestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
-                return;
-            var client = (SocketClient)sender;
-            if (int.TryParse(client.ID, out var clientId))
-            {
-                ProcessGateData(fixedHeader.Header, fixedHeader.Message, clientId);
-            }
-            else
-            {
-                //_logger.Info("未知客户端...");
-            }
+            _serverSocket.StopAsync();
+            LogService.Info("账号登陆服务已停止.");
         }
 
-        private void Connecting(object sender, TouchSocketEventArgs e)
+        private Task Received(SocketClient socketClient, ReceivedDataEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var clientId = int.Parse(client.ID);
-            var gateInfo = new LoginGateInfo();
+            if (e.RequestInfo is not ServerDataMessageFixedHeaderRequestInfo fixedHeader)
+            {
+                return Task.CompletedTask;
+            }
+            ProcessGateData(fixedHeader.Header, fixedHeader.Message, socketClient.Id);
+            return Task.CompletedTask;
+        }
+
+        private Task Connecting(object sender, TouchSocketEventArgs e)
+        {
+            SocketClient client = (SocketClient)sender;
+            LoginGateInfo gateInfo = new LoginGateInfo();
             gateInfo.Socket = client.MainSocket;
-            gateInfo.ConnectionId = client.ID;
-            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, client.MainSocket.RemoteEndPoint.GetIP());//应该改为按策略获取一个对外的公开网关地址
+            gateInfo.ConnectionId = client.Id;
+            gateInfo.sIPaddr = LsShare.GetGatePublicAddr(_config, client.IP);//应该改为按策略获取一个对外的公开网关地址
             gateInfo.UserList = new List<UserInfo>();
             gateInfo.KeepAliveTick = HUtil32.GetTickCount();
-            _clientManager.AddSession(clientId, gateInfo);
-            _logger.Info($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
-            loginGates[clientId] = gateInfo;
+            _clientManager.AddSession(client.Id, gateInfo);
+            LogService.Info($"登录网关[{client.MainSocket.RemoteEndPoint}]已链接...");
+            return Task.CompletedTask;
         }
 
-        private void Disconnected(object sender, DisconnectEventArgs e)
+        private Task Disconnected(object sender, DisconnectEventArgs e)
         {
-            var client = (SocketClient)sender;
-            var clientId = int.Parse(client.ID);
-            loginGates[clientId] = null;
-            _clientManager.Delete(clientId);
-            _logger.Warn($"登录网关[{client.MainSocket.RemoteEndPoint}]断开链接.");
+            SocketClient client = (SocketClient)sender;
+            _clientManager.Delete(client.Id);
+            LogService.Warn($"登录网关[{client.ServiceIP}:{client.ServicePort}]断开链接.");
+            return Task.CompletedTask;
         }
-        
-        private void ProcessGateData(ServerDataPacket packetHead,byte[] data, int socketId)
+
+        private void ProcessGateData(ServerDataPacket packetHead, byte[] data, string socketId)
         {
             if (packetHead.PacketCode != Grobal2.PacketCode)
             {
-                _logger.Debug($"解析登录网关封包出现异常...");
+                LogService.Debug($"解析登录网关封包出现异常...");
                 return;
             }
-            var messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
+            ServerDataMessage messageData = SerializerUtil.Deserialize<ServerDataMessage>(data);
             AddToQueue(socketId, messageData);
         }
 
-        private void AddToQueue(int socketId, ServerDataMessage messageData)
+        private void AddToQueue(string socketId, ServerDataMessage messageData)
         {
             _messageQueue.Writer.TryWrite(new MessagePacket()
             {
@@ -129,32 +108,32 @@ namespace LoginSrv.Services
             {
                 while (await _messageQueue.Reader.WaitToReadAsync(stoppingToken))
                 {
-                    while (_messageQueue.Reader.TryRead(out var loginPacket))
+                    while (_messageQueue.Reader.TryRead(out MessagePacket message))
                     {
                         try
                         {
-                            var gateInfo = _clientManager.GetSession(loginPacket.ConnectionId);
-                            switch (loginPacket.Pakcet.Type)
+                            LoginGateInfo gateInfo = _clientManager.GetSession(message.ConnectionId);
+                            switch (message.Pakcet.Type)
                             {
                                 case ServerDataType.Data:
-                                    ProcessUserMessage(loginPacket.ConnectionId, loginPacket.Pakcet);
+                                    ProcessUserMessage(message.ConnectionId, message.Pakcet);
                                     break;
                                 case ServerDataType.KeepAlive:
                                     SendKeepAlivePacket(gateInfo.ConnectionId);
                                     gateInfo.KeepAliveTick = HUtil32.GetTickCount();
                                     break;
                                 case ServerDataType.Enter:
-                                    ReceiveOpenUser(loginPacket.Pakcet, gateInfo);
+                                    ReceiveOpenUser(message.Pakcet, gateInfo);
                                     break;
                                 case ServerDataType.Leave:
-                                    ReceiveCloseUser(loginPacket.Pakcet.SocketId, gateInfo);
+                                    ReceiveCloseUser(message.Pakcet.SocketId, gateInfo);
                                     break;
                             }
                             _config.sGateIPaddr = gateInfo.sIPaddr;
                         }
                         catch (Exception e)
                         {
-                            _logger.Error(e);
+                            LogService.Error(e);
                         }
                     }
                 }
@@ -162,9 +141,9 @@ namespace LoginSrv.Services
             _clientSession.Start(stoppingToken);
         }
 
-        private void ProcessUserMessage(int sessionId, ServerDataMessage dataMessage)
+        private void ProcessUserMessage(string sessionId, ServerDataMessage dataMessage)
         {
-            var dataMsg = HUtil32.GetString(dataMessage.Data, 0, dataMessage.DataLen);
+            string dataMsg = HUtil32.GetString(dataMessage.Data, 0, dataMessage.DataLen);
             _clientSession.Enqueue(new UserSessionData()
             {
                 SessionId = sessionId,
@@ -175,20 +154,20 @@ namespace LoginSrv.Services
 
         private void SendKeepAlivePacket(string connectionId)
         {
-            var messagePacket = new ServerDataMessage();
+            ServerDataMessage messagePacket = new ServerDataMessage();
             messagePacket.Type = ServerDataType.KeepAlive;
             SendMessage(connectionId, SerializerUtil.Serialize(messagePacket));
         }
-        
-        private void ReceiveCloseUser(int sSockIndex, LoginGateInfo gateInfo)
+
+        private void ReceiveCloseUser(string sSockIndex, LoginGateInfo gateInfo)
         {
             const string sCloseMsg = "Close: {0}";
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            for (int i = 0; i < gateInfo.UserList.Count; i++)
             {
-                var userInfo = gateInfo.UserList[i];
+                UserInfo userInfo = gateInfo.UserList[i];
                 if (userInfo.SockIndex == sSockIndex)
                 {
-                    _logger.Debug(string.Format(sCloseMsg, userInfo.UserIPaddr));
+                    LogService.Debug(string.Format(sCloseMsg, userInfo.UserIPaddr));
                     if (!userInfo.SelServer)
                     {
                         SessionDel(userInfo.Account, userInfo.SessionID);
@@ -202,13 +181,13 @@ namespace LoginSrv.Services
 
         private void ReceiveOpenUser(ServerDataMessage dataMessage, LoginGateInfo gateInfo)
         {
-            var sSockIndex = dataMessage.SocketId;
-            var sIPaddr = HUtil32.GetString(dataMessage.Data, 0, dataMessage.Data.Length);
+            string sSockIndex = dataMessage.SocketId;
+            string sIPaddr = HUtil32.GetString(dataMessage.Data, 0, dataMessage.Data.Length);
             UserInfo userInfo;
-            var sUserIPaddr = string.Empty;
+            string sUserIPaddr = string.Empty;
             const string sOpenMsg = "Open: {0}/{1}";
-            var sGateIPaddr = HUtil32.GetValidStr3(sIPaddr, ref sUserIPaddr, '/');
-            for (var i = 0; i < gateInfo.UserList.Count; i++)
+            string sGateIPaddr = HUtil32.GetValidStr3(sIPaddr, ref sUserIPaddr, '/');
+            for (int i = 0; i < gateInfo.UserList.Count; i++)
             {
                 userInfo = gateInfo.UserList[i];
                 if (userInfo.SockIndex == sSockIndex)
@@ -234,7 +213,7 @@ namespace LoginSrv.Services
             userInfo.LastUpdatePwdTick = HUtil32.GetTickCount();
             userInfo.LastGetBackPwdTick = HUtil32.GetTickCount();
             gateInfo.UserList.Add(userInfo);
-            _logger.Debug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
+            LogService.Debug(string.Format(sOpenMsg, sUserIPaddr, sGateIPaddr));
         }
 
         /// <summary>
@@ -242,12 +221,12 @@ namespace LoginSrv.Services
         /// </summary>
         public void SessionClearKick()
         {
-            var sessionList = _sessionManager.GetSessions();
+            SessionConnInfo[] sessionList = _sessionManager.GetSessions();
             if (sessionList != null)
             {
-                for (var i = sessionList.Length - 1; i >= 0; i--)
+                for (int i = sessionList.Length - 1; i >= 0; i--)
                 {
-                    var connInfo = sessionList[i];
+                    SessionConnInfo connInfo = sessionList[i];
                     if (connInfo.Kicked && (HUtil32.GetTickCount() - connInfo.KickTick) > 5 * 1000)
                     {
                         SessionDel(connInfo.Account, connInfo.SessionID);
@@ -261,16 +240,16 @@ namespace LoginSrv.Services
         {
             _sessionManager.Delete(account, nSessionId);
         }
-        
+
         private void SendMessage(string connectionId, byte[] sendBuffer)
         {
-            var serverMessage = new ServerDataPacket
+            ServerDataPacket serverMessage = new ServerDataPacket
             {
                 PacketCode = Grobal2.PacketCode,
                 PacketLen = (ushort)sendBuffer.Length
             };
-            var dataBuff = SerializerUtil.Serialize(serverMessage);
-            var data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
+            byte[] dataBuff = SerializerUtil.Serialize(serverMessage);
+            byte[] data = new byte[ServerDataPacket.FixedHeaderLen + sendBuffer.Length];
             MemoryCopy.BlockCopy(dataBuff, 0, data, 0, data.Length);
             MemoryCopy.BlockCopy(sendBuffer, 0, data, dataBuff.Length, sendBuffer.Length);
             if (_serverSocket.SocketClientExist(connectionId))
@@ -281,7 +260,7 @@ namespace LoginSrv.Services
 
         private struct MessagePacket
         {
-            public int ConnectionId;
+            public string ConnectionId;
             public ServerDataMessage Pakcet;
         }
     }

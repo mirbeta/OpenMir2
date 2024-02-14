@@ -1,4 +1,4 @@
-﻿using SystemModule.Data;
+﻿using M2Server.Npc;
 
 namespace GameSrv.Npc
 {
@@ -7,14 +7,14 @@ namespace GameSrv.Npc
     /// </summary>
     public class Trainer : NormNpc
     {
-        int attackPower;
-        int attackCount;
+        private int AttackPower { get; set; }
+        private int AttackCount { get; set; }
 
         public Trainer() : base()
         {
             AttackTick = HUtil32.GetTickCount();
-            attackPower = 0;
-            attackCount = 0;
+            AttackPower = 0;
+            AttackCount = 0;
         }
 
         protected override bool Operate(ProcessMessage ProcessMsg)
@@ -24,10 +24,10 @@ namespace GameSrv.Npc
             {
                 if (ProcessMsg.ActorId == ActorId)
                 {
-                    attackPower += ProcessMsg.wParam;
+                    AttackPower += ProcessMsg.wParam;
                     AttackTick = HUtil32.GetTickCount();
-                    attackCount++;
-                    ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + attackPower / attackCount);
+                    AttackCount++;
+                    ProcessSayMsg("破坏力为 " + ProcessMsg.wParam + ",平均值为 " + AttackPower / AttackCount);
                 }
             }
             if (ProcessMsg.wIdent == Messages.RM_MAGSTRUCK)
@@ -39,13 +39,13 @@ namespace GameSrv.Npc
 
         public override void Run()
         {
-            if (attackCount > 0)
+            if (AttackCount > 0)
             {
                 if ((HUtil32.GetTickCount() - AttackTick) > 3 * 1000)
                 {
-                    ProcessSayMsg("总破坏力为  " + attackPower + ",平均值为 " + attackPower / attackCount);
-                    attackCount = 0;
-                    attackPower = 0;
+                    ProcessSayMsg("总破坏力为  " + AttackPower + ",平均值为 " + AttackPower / AttackCount);
+                    AttackCount = 0;
+                    AttackPower = 0;
                 }
             }
             base.Run();

@@ -1,5 +1,5 @@
 ﻿using BotSrv.Player;
-using SystemModule;
+using OpenMir2;
 
 namespace BotSrv.Objects
 {
@@ -21,7 +21,7 @@ namespace BotSrv.Objects
                     if (boCasted)
                     {
                         boCasted = false;
-                        //ClMain.g_PlayScene.NewMagic(this, 80, 80, m_nCurrX, m_nCurrY, m_nTargetX, m_nTargetY,m_nTargetRecog, magiceff.TMagicType.mtRedThunder, false, 30, ref bofly);
+                        //ClMain.g_PlayScene.NewMagic(this, 80, 80, CurrX, CurrY, m_nTargetX, m_nTargetY,m_nTargetRecog, magiceff.TMagicType.mtRedThunder, false, 30, ref bofly);
                     }
                 }
             }

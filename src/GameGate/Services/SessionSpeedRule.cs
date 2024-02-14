@@ -1,6 +1,4 @@
-﻿using SystemModule;
-
-namespace GameGate.Services
+﻿namespace GameGate.Services
 {
     public class SessionSpeedRule
     {
@@ -125,7 +123,7 @@ namespace GameGate.Services
 
         public SessionSpeedRule()
         {
-            var dwCurrentTick = HUtil32.GetTickCount();
+            int dwCurrentTick = HUtil32.GetTickCount();
             ErrorCount = dwCurrentTick;
             DealTick = dwCurrentTick;
             HitSpeed = dwCurrentTick;

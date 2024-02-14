@@ -1,11 +1,10 @@
-using NLog;
+using OpenMir2;
+using OpenMir2.Packets.ClientPackets;
+using OpenMir2.Packets.ServerPackets;
 using SelGate.Conf;
-using SelGate.Package;
+using SelGate.Datas;
 using System;
-using System.Net.Sockets;
-using SystemModule;
-using SystemModule.Packets.ClientPackets;
-using SystemModule.Packets.ServerPackets;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace SelGate.Services
 {
@@ -14,22 +13,24 @@ namespace SelGate.Services
     /// </summary>
     public class ClientSession
     {
-        private readonly TSessionInfo _session;
+        private readonly SessionInfo _session;
         private bool _kickFlag = false;
         private int _clientTimeOutTick = 0;
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         private readonly ClientThread _lastDbSvr;
         private readonly ConfigManager _configManager;
+        private readonly ServerService _serverService;
 
-        public ClientSession(ConfigManager configManager, TSessionInfo session, ClientThread clientThread)
+        public ClientSession(ConfigManager configManager, SessionInfo session, ClientThread clientThread)
         {
             _session = session;
             _lastDbSvr = clientThread;
+            _serverService = GateShare.ServiceProvider.GetService<ServerService>();
             _configManager = configManager;
             _clientTimeOutTick = HUtil32.GetTickCount();
         }
 
-        private TSessionInfo Session => _session;
+        private SessionInfo Session => _session;
 
         private GateConfig Config => _configManager.GateConfig;
 
@@ -40,11 +41,11 @@ namespace SelGate.Services
         /// 发送创建角色，删除角色，恢复角色，创建名字等功能
         /// </summary>
         /// <param name="userData"></param>
-        public void HandleUserPacket(TMessageData userData)
+        public void HandleUserPacket(MessageData userData)
         {
-            if ((userData.MsgLen >= 5) && Config.m_fDefenceCCPacket)
+            if ((userData.MsgLen >= 5) && Config.DefenceCCPacket)
             {
-                var sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
+                string sMsg = HUtil32.GetString(userData.Body, 2, userData.MsgLen - 3);
                 if (sMsg.IndexOf("HTTP/", StringComparison.OrdinalIgnoreCase) > -1)
                 {
                     //if (LogManager.g_pLogMgr.CheckLevel(6))
@@ -56,11 +57,11 @@ namespace SelGate.Services
                     //return;
                 }
             }
-            var success = false;
-            var tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
-            var nDeCodeLen = 0;
-            var packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
-            var cltCmd = SerializerUtil.Deserialize<CommandMessage>(packBuff);
+            bool success = false;
+            byte[] tempBuff = userData.Body[2..^1];//跳过#....! 只保留消息内容
+            int nDeCodeLen = 0;
+            Span<byte> packBuff = EncryptUtil.DecodeSpan(tempBuff, userData.MsgLen - 3, ref nDeCodeLen);
+            CommandMessage cltCmd = SerializerUtil.Deserialize<CommandMessage>(packBuff);
             switch (cltCmd.Ident)
             {
                 case Messages.CM_QUERYCHR:
@@ -68,7 +69,7 @@ namespace SelGate.Services
                 case Messages.CM_DELCHR:
                 case Messages.CM_SELCHR:
                     _clientTimeOutTick = HUtil32.GetTickCount();
-                    var accountPacket = new ServerDataMessage();
+                    ServerDataMessage accountPacket = new ServerDataMessage();
                     accountPacket.Data = userData.Body;
                     accountPacket.DataLen = (byte)userData.Body.Length;
                     accountPacket.Type = ServerDataType.Data;
@@ -76,7 +77,7 @@ namespace SelGate.Services
                     _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
                     break;
                 default:
-                    _logger.Debug($"错误的数据包索引:[{cltCmd.Ident}]");
+                    LogService.Debug($"错误的数据包索引:[{cltCmd.Ident}]");
                     break;
             }
             if (!success)
@@ -99,7 +100,7 @@ namespace SelGate.Services
                     _kickFlag = true;
                     //BlockUser(this);
                     success = true;
-                    _logger.Trace($"Client Connect Time Out: {Session.ClientIP}");
+                    LogService.Info($"Client Connect Time Out: {Session.ClientIP}");
                 }
             }
             else
@@ -107,7 +108,7 @@ namespace SelGate.Services
                 if (HUtil32.GetTickCount() - _clientTimeOutTick > Config.m_nClientTimeOutTime)
                 {
                     _clientTimeOutTick = HUtil32.GetTickCount();
-                    _session.Socket.Close();
+                    _serverService.CloseClient(Session.SocketId);
                     success = true;
                 }
             }
@@ -121,21 +122,10 @@ namespace SelGate.Services
             if (_kickFlag)
             {
                 _kickFlag = false;
-                _session.Socket.Close();
+                _serverService.CloseClient(Session.SocketId);
                 return;
             }
-            if (_session.Socket != null && _session.Socket.Connected)
-            {
-                var sendLen = _session.Socket.Send(sendData);
-                if (sendLen <= 0)
-                {
-                    _logger.Warn("发送人物数据包失败.");
-                }
-            }
-            else
-            {
-                _logger.Debug("Scoket会话失效，无法处理登陆封包");
-            }
+            _serverService.SendMessage(Session.SocketId, sendData);
         }
 
         private void SendDefMessage(ushort wIdent, int nRecog, ushort nParam, ushort nTag, ushort nSeries, string sMsg)
@@ -158,7 +148,7 @@ namespace SelGate.Services
             Array.Copy(SerializerUtil.Serialize(Cmd), 0, TempBuf, 0, CommandMessage.Size);
             if (!string.IsNullOrEmpty(sMsg))
             {
-                var sBuff = HUtil32.GetBytes(sMsg);
+                byte[] sBuff = HUtil32.GetBytes(sMsg);
                 Array.Copy(sBuff, 0, TempBuf, 13, sBuff.Length);
                 iLen = EncryptUtil.Encode(TempBuf, CommandMessage.Size + sMsg.Length, SendBuf);
             }
@@ -167,7 +157,7 @@ namespace SelGate.Services
                 iLen = EncryptUtil.Encode(TempBuf, CommandMessage.Size, SendBuf);
             }
             SendBuf[iLen + 1] = (byte)'!';
-            _session.Socket.Send(SendBuf, iLen + 2, SocketFlags.None);
+            _serverService.SendMessage(Session.SocketId, SendBuf, iLen + 2);
         }
 
         /// <summary>
@@ -175,15 +165,15 @@ namespace SelGate.Services
         /// </summary>
         public void UserEnter()
         {
-            var sendStr = $"%K{_session.SocketId}/{_session.ClientIP}/{_session.ClientIP}$";
-            var body = HUtil32.GetBytes(sendStr);
-            var accountPacket = new ServerDataMessage();
+            string sendStr = $"%K{_session.SocketId}/{_session.ClientIP}/{_session.ClientIP}$";
+            byte[] body = HUtil32.GetBytes(sendStr);
+            ServerDataMessage accountPacket = new ServerDataMessage();
             accountPacket.Data = body;
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Enter;
             accountPacket.SocketId = Session.SocketId;
             _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
-            _logger.Debug("[UserEnter] " + sendStr);
+            LogService.Debug("[UserEnter] " + sendStr);
         }
 
         /// <summary>
@@ -191,25 +181,25 @@ namespace SelGate.Services
         /// </summary>
         public void UserLeave()
         {
-            if (_session == null || _session.Socket == null)
+            if (_session == null)
             {
                 return;
             }
-            var sendStr = $"%L{_session.SocketId}$";
-            var body = HUtil32.GetBytes(sendStr);
-            var accountPacket = new ServerDataMessage();
+            string sendStr = $"%L{_session.SocketId}$";
+            byte[] body = HUtil32.GetBytes(sendStr);
+            ServerDataMessage accountPacket = new ServerDataMessage();
             accountPacket.Data = body;
             accountPacket.DataLen = (short)body.Length;
             accountPacket.Type = ServerDataType.Leave;
             accountPacket.SocketId = Session.SocketId;
             _lastDbSvr.SendSocket(SerializerUtil.Serialize(accountPacket));
             _kickFlag = false;
-            _logger.Debug("[UserLeave] " + sendStr);
+            LogService.Debug("[UserLeave] " + sendStr);
         }
 
         public void CloseSession()
         {
-            _session.Socket.Close();
+            _serverService.CloseClient(Session.SocketId);
         }
     }
 

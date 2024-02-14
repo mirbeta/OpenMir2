@@ -1,11 +1,8 @@
-using NLog;
-using SystemModule.Data;
-
 namespace GameSrv.Services
 {
-    public class FrontEngine
+    public class FrontEngine : IFrontEngine
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
+
         public readonly object UserCriticalSection;
         public readonly IList<SavePlayerRcd> m_SaveRcdList;
         private readonly IList<GoldChangeInfo> m_ChangeGoldList;
@@ -22,7 +19,7 @@ namespace GameSrv.Services
             m_LoadRcdTempList = new List<LoadDBInfo>();
             m_SaveRcdTempList = new List<SavePlayerRcd>();
         }
-        
+
         public bool IsIdle()
         {
             bool result = false;
@@ -76,7 +73,7 @@ namespace GameSrv.Services
             }
         }
 
-        internal void ProcessGameDate()
+        public void ProcessGameDate()
         {
             IList<GoldChangeInfo> changeGoldList = null;
             HUtil32.EnterCriticalSection(UserCriticalSection);
@@ -95,7 +92,7 @@ namespace GameSrv.Services
                 if (m_ChangeGoldList.Any())
                 {
                     changeGoldList = new List<GoldChangeInfo>();
-                    for (var i = 0; i < m_ChangeGoldList.Count; i++)
+                    for (int i = 0; i < m_ChangeGoldList.Count; i++)
                     {
                         changeGoldList.Add(m_ChangeGoldList[i]);
                     }
@@ -183,7 +180,7 @@ namespace GameSrv.Services
         /// </summary>
         public void AddChangeGoldList(string sGameMasterName, string sGetGoldUserName, int nGold)
         {
-            var goldInfo = new GoldChangeInfo
+            GoldChangeInfo goldInfo = new GoldChangeInfo
             {
                 sGameMasterName = sGameMasterName,
                 sGetGoldUser = sGetGoldUserName,
@@ -215,7 +212,7 @@ namespace GameSrv.Services
             {
                 for (int i = 0; i < m_LoadRcdList.Count; i++)
                 {
-                    var loadRcdInfo = m_LoadRcdList[i];
+                    LoadDBInfo loadRcdInfo = m_LoadRcdList[i];
                     if (loadRcdInfo.GateIdx == nGateIndex && loadRcdInfo.SocketId == nSocket)
                     {
                         m_LoadRcdList.RemoveAt(i);
@@ -239,12 +236,54 @@ namespace GameSrv.Services
                     HumanRcd.Data.Gold += GoldChangeInfo.nGold;
                     if (PlayerDataService.SaveHumRcdToDB("1", GoldChangeInfo.sGetGoldUser, 1, HumanRcd))
                     {
-                        M2Share.WorldEngine.sub_4AE514(GoldChangeInfo);
+                        SystemShare.WorldEngine.sub_4AE514(GoldChangeInfo);
                         result = true;
                     }
                 }
             }*/
             return result;
+        }
+
+        public IList<SavePlayerRcd> GetSaveRcdList()
+        {
+            return m_SaveRcdList;
+        }
+
+        public void ClearSaveList()
+        {
+            for (int i = 0; i < m_SaveRcdList.Count; i++)
+            {
+                if (m_SaveRcdList[i] != null)
+                {
+                    m_SaveRcdList[i] = null;
+                }
+            }
+            m_SaveRcdList.Clear();
+        }
+
+        public IList<SavePlayerRcd> GetTempSaveRcdList()
+        {
+            return m_SaveRcdTempList;
+        }
+
+        public void ClearLoadList()
+        {
+            m_LoadRcdTempList.Clear();
+        }
+
+        public IList<LoadDBInfo> GetLoadTempList()
+        {
+            return m_LoadRcdTempList;
+        }
+
+        public void ClearSaveRcdTempList()
+        {
+            m_SaveRcdTempList.Clear();
+        }
+
+        public void ClearLoadRcdTempList()
+        {
+            m_LoadRcdTempList.Clear();
         }
     }
 }

@@ -1,13 +1,7 @@
-using System;
-using System.Buffers;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using GameGate.Filters;
 using GameGate.Services;
-using SystemModule.Common;
-using SystemModule.Packets.ServerPackets;
+using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
 namespace GameGate
 {
@@ -17,7 +11,7 @@ namespace GameGate
         /// <summary>
         /// 单线程最大用户数
         /// </summary>
-        public const int MaxSession = 6000;
+        public const int MaxSession = 10000;
         /// <summary>
         /// 消息头加密固定长度
         /// </summary>
@@ -42,7 +36,14 @@ namespace GameGate
         /// 聊天过滤命令列表
         /// </summary>
         public static ConcurrentDictionary<string, byte> ChatCommandFilterMap;
-        public static readonly ArrayPool<byte> BytePool = ArrayPool<byte>.Shared;
+        /// <summary>
+        /// 字节内存池
+        /// </summary>
+        public static readonly BytePool BytePool = new BytePool(maxArrayLength: 1024 * 1024, maxArraysPerBucket: 50)
+        {
+            AutoZero = true,
+            MaxBucketsToTry = 5
+        };
         public static Dictionary<string, ClientSession> PunishList;
         public static HardwareFilter HardwareFilter;
         public static AbusiveFilter AbusiveFilter;
@@ -80,15 +81,15 @@ namespace GameGate
         SendFinsh,
         CheckTick
     }
-    
+
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct SessionMessage
     {
-        public byte ServiceId{ get; set; }
-        public ushort SessionId { get;set; }
-        public byte[] Buffer { get;set; }
-        public short BuffLen { get;set; }
-        public ushort ConnectionId { get; set; }
+        public byte ServiceId { get; set; }
+        public ushort SessionId { get; set; }
+        public byte[] Buffer { get; set; }
+        public short BuffLen { get; set; }
+        public string ConnectionId { get; set; }
 
         public SessionMessage(ushort sessionId, byte[] buffer, short buffLen)
         {
@@ -101,9 +102,9 @@ namespace GameGate
     [StructLayout(LayoutKind.Sequential, Pack = 1)]
     public struct ServerSessionMessage
     {
-        public ushort SessionId { get;set; }
-        public byte[] Buffer { get;set; }
-        public short BuffLen { get;set; }
+        public ushort SessionId { get; set; }
+        public byte[] Buffer { get; set; }
+        public short BuffLen { get; set; }
 
         public ServerSessionMessage(ushort sessionId, byte[] buffer, short buffLen)
         {
@@ -119,9 +120,9 @@ namespace GameGate
         public int SessionId { get; }
         public byte ServiceId { get; }
         public ushort BuffLen { get; }
-        public IntPtr Data { get; }
+        public byte[] Data { get; }
 
-        public ClientPacketMessage(byte serviceId, int sessionId, IntPtr buffer, ushort buffLen)
+        public ClientPacketMessage(byte serviceId, int sessionId, byte[] buffer, ushort buffLen)
         {
             this.SessionId = sessionId;
             this.ServiceId = serviceId;
@@ -135,7 +136,7 @@ namespace GameGate
         Runing,
         Stop
     }
-    
+
     public enum RunningState : byte
     {
         /// <summary>
@@ -164,9 +165,9 @@ namespace GameGate
         /// </summary>
         public ushort SessionId;
         /// <summary>
-        /// Soccket链接ID
+        /// Socket链接ID
         /// </summary>
-        public int ConnectionId;
+        public string ConnectionId;
         /// <summary>
         /// 数据处理ThreadId
         /// </summary>

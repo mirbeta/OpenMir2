@@ -13,9 +13,9 @@ namespace BotSrv.Objects
         private void ApplyDoorState()
         {
             //bool bowalk;
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX, this.m_nCurrY - 2, true);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX + 1, this.m_nCurrY - 1, true);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX + 1, this.m_nCurrY - 2, true);
+            //ClMain.Map.MarkCanWalk(this.CurrX, this.CurrY - 2, true);
+            //ClMain.Map.MarkCanWalk(this.CurrX + 1, this.CurrY - 1, true);
+            //ClMain.Map.MarkCanWalk(this.CurrX + 1, this.CurrY - 2, true);
             //if (dstate == TDoorState.dsClose)
             //{
             //    bowalk = false;
@@ -24,20 +24,20 @@ namespace BotSrv.Objects
             //{
             //    bowalk = true;
             //}
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX, this.m_nCurrY, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX, this.m_nCurrY - 1, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX, this.m_nCurrY - 2, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX + 1, this.m_nCurrY - 1, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX + 1, this.m_nCurrY - 2, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX - 1, this.m_nCurrY - 1, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX - 1, this.m_nCurrY, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX - 1, this.m_nCurrY + 1, bowalk);
-            //ClMain.Map.MarkCanWalk(this.m_nCurrX - 2, this.m_nCurrY, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX, this.CurrY, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX, this.CurrY - 1, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX, this.CurrY - 2, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX + 1, this.CurrY - 1, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX + 1, this.CurrY - 2, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX - 1, this.CurrY - 1, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX - 1, this.CurrY, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX - 1, this.CurrY + 1, bowalk);
+            //ClMain.Map.MarkCanWalk(this.CurrX - 2, this.CurrY, bowalk);
             //if (dstate == TDoorState.dsOpen)
             //{
-            //    ClMain.Map.MarkCanWalk(this.m_nCurrX, this.m_nCurrY - 2, false);
-            //    ClMain.Map.MarkCanWalk(this.m_nCurrX + 1, this.m_nCurrY - 1, false);
-            //    ClMain.Map.MarkCanWalk(this.m_nCurrX + 1, this.m_nCurrY - 2, false);
+            //    ClMain.Map.MarkCanWalk(this.CurrX, this.CurrY - 2, false);
+            //    ClMain.Map.MarkCanWalk(this.CurrX + 1, this.CurrY - 1, false);
+            //    ClMain.Map.MarkCanWalk(this.CurrX + 1, this.CurrY - 2, false);
             //}
         }
 

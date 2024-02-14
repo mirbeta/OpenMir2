@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<TargetFramework>net7.0</TargetFramework>
+		<TargetFramework>net8.0</TargetFramework>
 		<UserSecretsId>1fd3fe7d-5ab8-4c52-b44f-47638c9af29a</UserSecretsId>
 		<LangVersion>11</LangVersion>
 		<Nullable>disable</Nullable>
@@ -11,12 +11,9 @@
 		<RunAnalyzersDuringLiveAnalysis>True</RunAnalyzersDuringLiveAnalysis>
 		<RunAnalyzersDuringBuild>True</RunAnalyzersDuringBuild>
 		<Description>网络游戏数据处理引擎</Description>
+		<PublishSingleFile>true</PublishSingleFile>
+		<PublishTrimmed>true</PublishTrimmed>
 	</PropertyGroup>
-
-	<ItemGroup>
-		<Using Include="GameSrv" />
-		<Using Include="SystemModule" />
-	</ItemGroup>
 	
 	<PropertyGroup>
 		<ServerGarbageCollection>false</ServerGarbageCollection>
@@ -27,6 +24,9 @@
 	</PropertyGroup>
 	
 	<Choose>
+		<When Condition="$(Configuration)=='Debug' and '$(Mode)' == 'Dev'">
+
+		</When>
 		<When Condition="$(Configuration)=='Release'">
 			<PropertyGroup>
 				<DebugSymbols>false</DebugSymbols>
@@ -70,27 +70,26 @@
 	</PropertyGroup>
 	
 	<ItemGroup>
-		<PackageReference Include="Collections.Pooled" Version="1.0.82" />
-		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.0.2" />
-		<PackageReference Include="Microsoft.Extensions.Hosting" Version="7.0.1" />
-		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="7.0.0" />
-		<PackageReference Include="MQTTnet" Version="4.1.4.563" />
-		<PackageReference Include="MySqlConnector" Version="2.2.5" />
-		<PackageReference Include="System.Diagnostics.PerformanceCounter" Version="7.0.0" />
-		<PackageReference Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-		<PackageReference Include="Spectre.Console" Version="0.46.0" />
-		<PackageReference Include="NLog" Version="5.1.3" />
-		<PackageReference Include="NLog.Extensions.Logging" Version="5.2.3" />
+		<PackageReference Include="Collections.Pooled" Version="2.0.0-preview.27" />
+		<PackageReference Include="McMaster.Extensions.CommandLineUtils" Version="4.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting" Version="8.0.0" />
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="8.0.0" />
+		<PackageReference Include="MySqlConnector" Version="2.3.5" />
+		<PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
+		<PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Include="..\..\nlog.config">
-			<Link>nlog.config</Link>
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+		<ProjectReference Include="..\M2Server\M2Server.csproj" />
+		<ProjectReference Include="..\Modules\GameCommand\CommandSystem.csproj" />
+		<ProjectReference Include="..\Modules\PlanesSystem\PlanesSystem.csproj" />
+		<ProjectReference Include="..\Modules\ScriptEngine\ScriptSystem.csproj" />
+		<ProjectReference Include="..\OpenMir2\OpenMir2.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\SystemModule\SystemModule.csproj" />
+	  <None Update="appsettings.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>

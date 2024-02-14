@@ -1,16 +1,11 @@
 ﻿using LoginSrv.Conf;
 using LoginSrv.Services;
 using LoginSrv.Storage;
-using Microsoft.Extensions.Hosting;
-using NLog;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace LoginSrv
 {
-    public class AppService : BackgroundService
+    public class AppService : IHostedLifecycleService
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly ConfigManager _configManager;
         private readonly SessionServer _masSocService;
         private readonly LoginServer _loginService;
@@ -24,34 +19,47 @@ namespace LoginSrv
             _configManager = configManager;
         }
 
-        protected override Task ExecuteAsync(CancellationToken stoppingToken)
+        public Task StartingAsync(CancellationToken cancellationToken)
         {
-            stoppingToken.Register(() => _logger.Debug("LoginSrv is stopping."));
-            _loginService.Start(stoppingToken);
+            LsShare.Initialization();
+            _configManager.LoadConfig();
+            _configManager.LoadAddrTable();
             return Task.CompletedTask;
         }
 
-        public override Task StartAsync(CancellationToken cancellationToken)
+        public Task StartedAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("LoginSrv is starting.");
-            LsShare.Initialization();
-            LoadConfig();
+            _loginService.Start(cancellationToken);
+            return Task.CompletedTask;
+        }
+
+        public Task StartAsync(CancellationToken cancellationToken)
+        {
             _loginService.StartServer();
             _masSocService.StartServer();
             _accountStorage.Initialization();
-            return base.StartAsync(cancellationToken);
+            LogService.Info("服务已启动成功...");
+            LogService.Info("欢迎使用翎风系列游戏软件...");
+            LogService.Info("网站:http://www.gameofmir.com");
+            LogService.Info("论坛:http://bbs.gameofmir.com");
+            return Task.CompletedTask;
         }
 
-        private void LoadConfig()
+        public Task StoppingAsync(CancellationToken cancellationToken)
         {
-            _configManager.LoadConfig();
-            _configManager.LoadAddrTable();
+            return Task.CompletedTask;
         }
 
-        public override Task StopAsync(CancellationToken cancellationToken)
+        public Task StoppedAsync(CancellationToken cancellationToken)
         {
-            _logger.Debug("LoginSrv is stopping.");
-            return base.StopAsync(cancellationToken);
+            return Task.CompletedTask;
+        }
+
+        public Task StopAsync(CancellationToken cancellationToken)
+        {
+            _loginService.StopServer();
+            _masSocService.StopServer();
+            return Task.CompletedTask;
         }
     }
 }

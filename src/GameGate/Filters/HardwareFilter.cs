@@ -1,7 +1,5 @@
 ﻿using GameGate.Conf;
-using System.Collections.Generic;
-using System.IO;
-using SystemModule;
+using MD5 = OpenMir2.MD5;
 
 namespace GameGate.Filters
 {
@@ -21,7 +19,7 @@ namespace GameGate.Filters
         {
             HardwareCnt pHWIDCnt;
             int result = -1;
-            for (var i = 0; i < m_xDenyList.Count; i++)
+            for (int i = 0; i < m_xDenyList.Count; i++)
             {
                 pHWIDCnt = m_xDenyList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
@@ -41,7 +39,7 @@ namespace GameGate.Filters
         {
             HardwareCnt pHWIDCnt;
             int result = -1;
-            for (var i = 0; i < m_xDenyList.Count; i++)
+            for (int i = 0; i < m_xDenyList.Count; i++)
             {
                 pHWIDCnt = m_xDenyList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
@@ -62,13 +60,13 @@ namespace GameGate.Filters
 
         public void LoadDenyList()
         {
-            var ls = new SystemModule.Common.StringList();
+            StringList ls = new StringList();
             if (!File.Exists(_configManager.GateConfig.BlockHWIDFileName))
             {
                 ls.SaveToFile(_configManager.GateConfig.BlockHWIDFileName);
             }
             ls.LoadFromFile(_configManager.GateConfig.BlockHWIDFileName);
-            for (var i = 0; i < ls.Count; i++)
+            for (int i = 0; i < ls.Count; i++)
             {
                 if (string.IsNullOrEmpty(ls[i]) || ls[i][0] == ';' || ls[i].Length != 32)
                 {
@@ -96,7 +94,7 @@ namespace GameGate.Filters
         {
             HardwareCnt pHWIDCnt;
             bool result = false;
-            for (var i = 0; i < m_xDenyList.Count; i++)
+            for (int i = 0; i < m_xDenyList.Count; i++)
             {
                 pHWIDCnt = m_xDenyList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
@@ -112,8 +110,8 @@ namespace GameGate.Filters
         {
             HardwareCnt pHWIDCnt;
             bool result = false;
-            var fMatch = false;
-            for (var i = 0; i < m_xCurList.Count; i++)
+            bool fMatch = false;
+            for (int i = 0; i < m_xCurList.Count; i++)
             {
                 pHWIDCnt = m_xCurList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
@@ -140,7 +138,7 @@ namespace GameGate.Filters
             }
             if (!result)
             {
-                for (var i = 0; i < m_xDenyList.Count; i++)
+                for (int i = 0; i < m_xDenyList.Count; i++)
                 {
                     pHWIDCnt = m_xDenyList[i];
                     if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
@@ -157,7 +155,7 @@ namespace GameGate.Filters
         {
             HardwareCnt pHWIDCnt;
             int result = 0;
-            for (var i = 0; i < m_xCurList.Count; i++)
+            for (int i = 0; i < m_xCurList.Count; i++)
             {
                 pHWIDCnt = m_xCurList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))
@@ -172,7 +170,7 @@ namespace GameGate.Filters
         public void DecHWIDCount(byte[] HWID)
         {
             HardwareCnt pHWIDCnt;
-            for (var i = 0; i < m_xCurList.Count; i++)
+            for (int i = 0; i < m_xCurList.Count; i++)
             {
                 pHWIDCnt = m_xCurList[i];
                 if (MD5.MD5Match(pHWIDCnt.HWID, HWID))

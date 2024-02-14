@@ -1,7 +1,7 @@
 ﻿using System.Runtime;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Hosting;
 
 namespace BotSrv
 {
@@ -13,7 +13,7 @@ namespace BotSrv
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
             GCSettings.LatencyMode = GCSettings.IsServerGC ? GCLatencyMode.Batch : GCLatencyMode.Interactive;
             AppServer serviceRunner = new AppServer();
-            await serviceRunner.RunAsync();
+            await serviceRunner.StartAsync(CancellationToken.None);
         }
     }
 }

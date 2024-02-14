@@ -1,18 +1,17 @@
-﻿using System;
+﻿using BotSrv.Player;
+using OpenMir2;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Channels;
 using System.Threading.Tasks;
-using BotSrv.Player;
-using NLog;
-using SystemModule;
 
 namespace BotSrv
 {
     public class ClientManager
     {
-        private readonly Logger logger = LogManager.GetCurrentClassLogger();
+
         private int g_dwProcessTimeMin = 0;
         private int g_dwProcessTimeMax = 0;
         private int g_nPosition = 0;
@@ -33,31 +32,31 @@ namespace BotSrv
 
         public Task Start(CancellationToken stoppingToken)
         {
-            logger.Info("消息处理线程启动...");
+            LogService.Info("消息处理线程启动...");
             return ProcessReviceMessage(stoppingToken);
         }
 
         public void Stop(CancellationToken stoppingToken)
         {
-            
+
         }
 
         private async Task ProcessReviceMessage(CancellationToken stoppingToken)
         {
             while (await _reviceQueue.Reader.WaitToReadAsync(stoppingToken))
             {
-                if (_reviceQueue.Reader.TryRead(out var message))
+                if (_reviceQueue.Reader.TryRead(out RecvicePacket message))
                 {
                     try
                     {
-                        if (_clients.TryGetValue(message.SessionId, out var client))
+                        if (_clients.TryGetValue(message.SessionId, out RobotPlayer client))
                         {
                             client.ProcessPacket(message.ReviceData);
                         }
                     }
                     catch (Exception ex)
                     {
-                        logger.Error(ex);
+                        LogService.Error(ex);
                     }
                 }
             }
@@ -65,7 +64,7 @@ namespace BotSrv
 
         public void AddPacket(string sessionId, string reviceData)
         {
-            var clientPacket = new RecvicePacket();
+            RecvicePacket clientPacket = new RecvicePacket();
             clientPacket.SessionId = sessionId;
             clientPacket.ReviceData = reviceData;
             _reviceQueue.Writer.TryWrite(clientPacket);
@@ -85,7 +84,7 @@ namespace BotSrv
         public void DelClient(string sessionId)
         {
             AutoPlayRunTime findSession = null;
-            foreach (var item in _autoList)
+            foreach (AutoPlayRunTime item in _autoList)
             {
                 if (item.SessionId == sessionId)
                 {
@@ -97,19 +96,19 @@ namespace BotSrv
             {
                 _autoList.Remove(findSession);
             }
-            _clients.TryRemove(sessionId, out var robotClient);
+            _clients.TryRemove(sessionId, out RobotPlayer robotClient);
             _clientList.Remove(robotClient);
             if (robotClient != null)
             {
-                logger.Info("机器人[{0}] 会话ID:{1}]掉线或断开链接.", robotClient.ChrName, sessionId);
+                LogService.Info("机器人[{0}] 会话ID:{1}]掉线或断开链接.", robotClient.ChrName, sessionId);
             }
         }
 
         public void Run()
         {
             dwRunTick = HUtil32.GetTickCount();
-            var boProcessLimit = false;
-            for (var i = g_nPosition; i < _clientList.Count; i++)
+            bool boProcessLimit = false;
+            for (int i = g_nPosition; i < _clientList.Count; i++)
             {
                 _clientList[i].Run();
                 if (((HUtil32.GetTickCount() - dwRunTick) > 20))
@@ -136,7 +135,7 @@ namespace BotSrv
             AutoRunTick = HUtil32.GetTickCount();
             if (_autoList.Count > 0)
             {
-                for (var i = 0; i < _autoList.Count; i++)
+                for (int i = 0; i < _autoList.Count; i++)
                 {
                     if ((AutoRunTick - _autoList[i].RunTick) > 800)
                     {

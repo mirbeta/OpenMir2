@@ -1,22 +1,21 @@
 using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
 using MongoDB.Driver;
-using NLog;
+using OpenMir2;
+using OpenMir2.Packets.ServerPackets;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using SystemModule.Packets.ServerPackets;
 
 namespace DBSrv.Storage.MongoDB
 {
     public class PlayDataStorage : IPlayDataStorage
     {
-        private readonly Logger _logger = LogManager.GetCurrentClassLogger();
         private readonly Dictionary<string, int> _mirQuickMap;
         private readonly Dictionary<int, int> _quickIndexIdMap;
         private readonly PlayQuickList _mirQuickIdList;
         private readonly StorageOption _storageOption;
-        private IMongoCollection<PlayerDataInfo> humDataInfo;
+        private IMongoCollection<CharacterDataInfo> humDataInfo;
         private int _recordCount;
 
         public PlayDataStorage(StorageOption storageOption)
@@ -40,7 +39,7 @@ namespace DBSrv.Storage.MongoDB
             }
             MongoClient client = new MongoClient(_storageOption.ConnectionString);
             IMongoDatabase db = client.GetDatabase("mir2");
-            humDataInfo = db.GetCollection<PlayerDataInfo>("PlayObject");
+            humDataInfo = db.GetCollection<CharacterDataInfo>("PlayObject");
         }
 
         public void LoadQuickList()
@@ -61,13 +60,13 @@ namespace DBSrv.Storage.MongoDB
             try
             {
                 humDataInfo.CountDocuments("{}");
-                var users = humDataInfo.AsQueryable().ToList();
+                List<CharacterDataInfo> users = humDataInfo.AsQueryable().ToList();
             }
             finally
             {
                 //Close(dbConnection);
             }
-            for (var nIndex = 0; nIndex < AccountList.Count; nIndex++)
+            for (int nIndex = 0; nIndex < AccountList.Count; nIndex++)
             {
                 _mirQuickIdList.AddRecord(AccountList[nIndex].Account, ChrNameList[nIndex], 0, AccountList[nIndex].SelectID);
             }
@@ -78,7 +77,7 @@ namespace DBSrv.Storage.MongoDB
 
         private MongoClient Open(ref bool success)
         {
-            var dbConnection = new MongoClient(_storageOption.ConnectionString);
+            MongoClient dbConnection = new MongoClient(_storageOption.ConnectionString);
             try
             {
                 dbConnection.GetDatabase("mir2");
@@ -86,8 +85,8 @@ namespace DBSrv.Storage.MongoDB
             }
             catch (Exception e)
             {
-                _logger.Error("打开数据库[MySql]失败.");
-                _logger.Error(e.StackTrace);
+                LogService.Error("打开数据库[MySql]失败.");
+                LogService.Error(e.StackTrace);
                 success = false;
             }
             return dbConnection;
@@ -107,7 +106,7 @@ namespace DBSrv.Storage.MongoDB
             return -1;
         }
 
-        public int Get(int nIndex, ref PlayerDataInfo HumanRCD)
+        public int Get(int nIndex, ref CharacterDataInfo HumanRCD)
         {
             int result = -1;
             if (nIndex < 0)
@@ -125,17 +124,17 @@ namespace DBSrv.Storage.MongoDB
             return result;
         }
 
-        public bool Get(string sName, ref PlayerDataInfo HumanRCD)
+        public bool Get(string sName, ref CharacterDataInfo HumanRCD)
         {
             throw new NotImplementedException();
         }
 
-        public PlayerInfoData Query(int playerId)
+        public CharacterData Query(int playerId)
         {
             throw new NotImplementedException();
         }
 
-        public bool Update(string nIndex, PlayerDataInfo HumanRCD)
+        public bool Update(string nIndex, CharacterDataInfo HumanRCD)
         {
             bool result = false;
             //if ((nIndex >= 0) && (_mirQuickMap.Count >= nIndex))
@@ -167,7 +166,7 @@ namespace DBSrv.Storage.MongoDB
             return result;
         }
 
-        public bool Add(PlayerDataInfo HumanRCD)
+        public bool Add(CharacterDataInfo HumanRCD)
         {
             bool result = false;
             int nIndex;
@@ -193,7 +192,7 @@ namespace DBSrv.Storage.MongoDB
             return result;
         }
 
-        private bool GetRecord(int nIndex, ref PlayerDataInfo HumanRCD)
+        private bool GetRecord(int nIndex, ref CharacterDataInfo HumanRCD)
         {
             int playerId = 0;
             if (HumanRCD == null)
@@ -214,87 +213,87 @@ namespace DBSrv.Storage.MongoDB
             return true;
         }
 
-        private void GetChrRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetChrRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetAbilGetRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetAbilGetRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetBonusAbilRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetBonusAbilRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetMagicRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetMagicRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetItemRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetItemRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetStorageRecord(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetStorageRecord(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private void GetPlayerStatus(int playerId, ref PlayerDataInfo HumanRCD)
+        private void GetPlayerStatus(int playerId, ref CharacterDataInfo HumanRCD)
         {
         }
 
-        private bool AddRecord(ref int nIndex, ref PlayerDataInfo HumanRCD)
+        private bool AddRecord(ref int nIndex, ref CharacterDataInfo HumanRCD)
         {
             return InsertRecord(HumanRCD.Data, ref nIndex);
         }
 
-        private bool InsertRecord(PlayerInfoData hd, ref int nIndex)
+        private bool InsertRecord(CharacterData hd, ref int nIndex)
         {
             return true;
         }
 
-        private bool UpdateRecord(int nIndex, ref PlayerDataInfo HumanRCD)
+        private bool UpdateRecord(int nIndex, ref CharacterDataInfo HumanRCD)
         {
             bool result = true;
             return result;
         }
 
-        private void UpdateRecord(int Id, PlayerDataInfo HumanRCD)
+        private void UpdateRecord(int Id, CharacterDataInfo HumanRCD)
         {
 
         }
 
-        private void UpdateAblity(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateAblity(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateItem(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateItem(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void SaveItemStorge(int playerId, PlayerDataInfo HumanRCD)
+        private void SaveItemStorge(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void SavePlayerMagic(int playerId, PlayerDataInfo HumanRCD)
+        private void SavePlayerMagic(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateBonusability(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateBonusability(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateQuest(int Id, PlayerDataInfo HumanRCD)
+        private void UpdateQuest(int Id, CharacterDataInfo HumanRCD)
         {
         }
 
-        private void UpdateStatus(int playerId, PlayerDataInfo HumanRCD)
+        private void UpdateStatus(int playerId, CharacterDataInfo HumanRCD)
         {
         }
 
         public int Find(string sChrName, StringDictionary List)
         {
             int result;
-            for (var i = 0; i < _mirQuickMap.Count; i++)
+            for (int i = 0; i < _mirQuickMap.Count; i++)
             {
                 //if (HUtil32.CompareLStr(m_MirQuickList[i], sChrName, sChrName.Length))
                 //{
@@ -307,7 +306,7 @@ namespace DBSrv.Storage.MongoDB
 
         public bool Delete(int nIndex)
         {
-            for (var i = 0; i < _mirQuickMap.Count; i++)
+            for (int i = 0; i < _mirQuickMap.Count; i++)
             {
                 //if (((int)m_MirQuickList.Values[i]) == nIndex)
                 //{
