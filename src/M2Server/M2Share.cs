@@ -268,7 +268,7 @@ namespace M2Server
         }
 
         private static readonly Regex ScriptRegex = new Regex("(?<=(<))[.\\s\\S]*?(?=(>))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
-        private static readonly char[] MonSayMsgDividerAry = new[] { ' ', '/', ',', '\t' };
+        private static readonly char[] TextMsgDividerAry = new[] { ' ', '/', ',', '\t' };
 
         public static MatchCollection MatchScriptLabel(string script)
         {
@@ -1394,8 +1394,8 @@ namespace M2Server
                     {
                         continue;
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, new[] { ' ', '/', ',', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, TextMsgDividerAry);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemCount, TextMsgDividerAry);
                     int nItemCount = HUtil32.StrToInt(sItemCount, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemCount >= 0))
                     {
@@ -1450,8 +1450,8 @@ namespace M2Server
                     {
                         continue;
                     }
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, new[] { ' ', '/', ',', '\t' });
-                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, new[] { ' ', '/', ',', '\t' });
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemName, TextMsgDividerAry);
+                    sLineText = HUtil32.GetValidStr3(sLineText, ref sItemIdx, TextMsgDividerAry);
                     int nItemIdx = HUtil32.StrToInt(sItemIdx, -1);
                     if ((!string.IsNullOrEmpty(sItemName)) && (nItemIdx >= 0))
                     {
@@ -1519,7 +1519,7 @@ namespace M2Server
             {
                 GameLogItemNameList.Clear();
                 LoadList.LoadFromFile(sFileName);
-                if (LoadList.Count == 1 && LoadList[0].StartsWith("*"))
+                if (LoadList.Count == 1 && LoadList[0].StartsWith('*'))
                 {
                     GameLogItemNameList.Add("*");
                     return true;
@@ -1540,7 +1540,7 @@ namespace M2Server
         public static byte GetGameLogItemNameList(string sItemName)
         {
             byte result = 0;
-            if (GameLogItemNameList.Count == 1 && GameLogItemNameList[0].StartsWith("*"))
+            if (GameLogItemNameList.Count == 1 && GameLogItemNameList[0].StartsWith('*'))
             {
                 return 1;
             }
@@ -1844,11 +1844,11 @@ namespace M2Server
                     string sLineText = LoadList[i].Trim();
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, MonSayMsgDividerAry);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, MonSayMsgDividerAry);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, MonSayMsgDividerAry);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, MonSayMsgDividerAry);
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, MonSayMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, TextMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, TextMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, TextMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, TextMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, TextMsgDividerAry);
                         if (!string.IsNullOrEmpty(sStatus) && !string.IsNullOrEmpty(sRate) && !string.IsNullOrEmpty(sColor) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sSayMsg))
                         {
                             int nStatus = HUtil32.StrToInt(sStatus, -1);
