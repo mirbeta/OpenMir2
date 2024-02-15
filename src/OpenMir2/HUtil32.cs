@@ -491,60 +491,22 @@ namespace OpenMir2
             {
                 return string.Empty;
             }
-            ReadOnlySpan<char> sourceSpan = source.AsSpan();
-            int spanLen = sourceSpan.Length;
-            string result = string.Empty;
-            bool findData = false;
-            try
+
+            int searchAfterIndex = source.IndexOf(searchAfter, StringComparison.Ordinal);
+            if (searchAfterIndex == -1)
             {
-                if (spanLen >= 2)
-                {
-                    if (source.StartsWith(searchAfter))
-                    {
-                        sourceSpan = sourceSpan[1..spanLen];
-                        findData = true;
-                    }
-                    else
-                    {
-                        int n = sourceSpan.IndexOf(searchAfter, StringComparison.OrdinalIgnoreCase);
-                        if (n > 0)
-                        {
-                            sourceSpan = sourceSpan.Slice(n + 1, spanLen - n - 1);
-                            findData = true;
-                        }
-                    }
-                }
-                if (findData)
-                {
-                    int n = sourceSpan.IndexOf(arrestBefore, StringComparison.OrdinalIgnoreCase) + 1;
-                    if (n > 0)
-                    {
-                        arrestStr = sourceSpan[..(n - 1)].ToString();
-                        result = sourceSpan[(arrestStr.Length + 1)..].ToString();
-                    }
-                    else
-                    {
-                        result = searchAfter + sourceSpan.ToString();
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < spanLen; i++)
-                    {
-                        if (sourceSpan[i - 1].ToString() == searchAfter)
-                        {
-                            result = sourceSpan.Slice(i - 1, spanLen - i + 1).ToString();
-                            break;
-                        }
-                    }
-                }
+                return source;
             }
-            catch
+
+            searchAfterIndex += searchAfter.Length;
+            int arrestBeforeIndex = source.IndexOf(arrestBefore, searchAfterIndex, StringComparison.Ordinal);
+            if (arrestBeforeIndex == -1)
             {
-                arrestStr = string.Empty;
-                result = string.Empty;
+                return searchAfter + source[searchAfterIndex..];
             }
-            return result;
+
+            arrestStr = source[searchAfterIndex..arrestBeforeIndex];
+            return source[(arrestBeforeIndex + arrestBefore.Length)..];
         }
 
         public static bool CompareLStr(string src, string targ)
