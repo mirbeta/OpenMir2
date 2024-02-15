@@ -671,31 +671,6 @@ namespace M2Server.Player
             return true;
         }
 
-        private void ClientClickNpc(int actorId)
-        {
-            if (!IsCanDeal)
-            {
-                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotTryDealMsg);
-                return;
-            }
-            if (Death || Ghost)
-            {
-                return;
-            }
-            if (HUtil32.GetTickCount() - ClickNpcTime > SystemShare.Config.ClickNpcTime)
-            {
-                ClickNpcTime = HUtil32.GetTickCount();
-                INormNpc normNpc = SystemShare.WorldEngine.FindMerchant(actorId) ?? SystemShare.WorldEngine.FindNpc(actorId);
-                if (normNpc != null)
-                {
-                    if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
-                    {
-                        normNpc.Click(this);
-                    }
-                }
-            }
-        }
-
         private int GetRangeHumanCount()
         {
             return SystemShare.WorldEngine.GetMapOfRangeHumanCount(Envir, CurrX, CurrY, 10);
@@ -720,11 +695,6 @@ namespace M2Server.Player
                     break;
                 }
             }
-        }
-
-        private static void MobPlace(string sX, string sY, string sMonName, string sCount)
-        {
-
         }
 
         public void DealCancel()
@@ -1390,7 +1360,7 @@ namespace M2Server.Player
         protected bool DoMotaebo(byte nDir, byte nMagicLevel)
         {
             int nDmg;
-            IActor baseObject34 = null;
+            IActor moateObject = null;
             short nX = 0;
             short nY = 0;
             bool result = false;
@@ -1415,14 +1385,14 @@ namespace M2Server.Player
                         {
                             if (Envir.GetNextPosition(CurrX, CurrY, Dir, 2, ref nX, ref nY))
                             {
-                                IActor baseObject30 = Envir.GetMovingObject(nX, nY, true);
-                                if (baseObject30 != null && DoMotaeboCanMotaebo(baseObject30, nMagicLevel))
+                                IActor movingObject = Envir.GetMovingObject(nX, nY, true);
+                                if (movingObject != null && DoMotaeboCanMotaebo(movingObject, nMagicLevel))
                                 {
-                                    baseObject30.CharPushed(Dir, 1);
+                                    movingObject.CharPushed(Dir, 1);
                                 }
                             }
                         }
-                        baseObject34 = poseCreate;
+                        moateObject = poseCreate;
                         if (poseCreate.CharPushed(Dir, 1) != 1)
                         {
                             break;
@@ -1467,19 +1437,19 @@ namespace M2Server.Player
                     }
                 }
             }
-            if (baseObject34 != null)
+            if (moateObject != null)
             {
                 if (n24 < 0)
                 {
                     n24 = 0;
                 }
                 nDmg = M2Share.RandomNumber.Random((n24 + 1) * 10) + (n24 + 1) * 10;
-                nDmg = baseObject34.GetHitStruckDamage(this, nDmg);
-                baseObject34.StruckDamage(nDmg);
-                baseObject34.SendRefMsg(Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId, "");
-                if (baseObject34.Race != ActorRace.Play)
+                nDmg = moateObject.GetHitStruckDamage(this, nDmg);
+                moateObject.StruckDamage(nDmg);
+                moateObject.SendRefMsg(Messages.RM_STRUCK, nDmg, moateObject.WAbil.HP, moateObject.WAbil.MaxHP, ActorId, "");
+                if (moateObject.Race != ActorRace.Play)
                 {
-                    baseObject34.SendMsg(baseObject34, Messages.RM_STRUCK, nDmg, baseObject34.WAbil.HP, baseObject34.WAbil.MaxHP, ActorId);
+                    moateObject.SendMsg(moateObject, Messages.RM_STRUCK, nDmg, moateObject.WAbil.HP, moateObject.WAbil.MaxHP, ActorId);
                 }
             }
             if (bo35)
