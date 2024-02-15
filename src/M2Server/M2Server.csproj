@@ -15,8 +15,6 @@
         <PackageReference Include="System.Diagnostics.PerformanceCounter" Version="8.0.0" />
         <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
         <PackageReference Include="Spectre.Console" Version="0.48.1-preview.0.20" />
-        <PackageReference Include="NLog" Version="5.2.8" />
-        <PackageReference Include="NLog.Extensions.Logging" Version="5.3.8" />
     </ItemGroup>
     
     <ItemGroup>

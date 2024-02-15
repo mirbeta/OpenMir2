@@ -37,7 +37,6 @@
     <ItemGroup>
       <PackageReference Include="MongoDB.Bson" Version="2.23.1" />
       <PackageReference Include="MongoDB.Driver" Version="2.23.1" />
-      <PackageReference Include="NLog" Version="5.2.8" />
     </ItemGroup>
 
     <ItemGroup>

@@ -2,21 +2,18 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
 using System.Runtime;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using LogLevel = NLog.LogLevel;
+using OpenMir2;
 
 namespace GameGate
 {
     internal class Program
     {
-        private static Logger LogService;
         private static readonly PeriodicTimer _timer;
         private static readonly CancellationTokenSource CancellationToken = new CancellationTokenSource();
 
@@ -27,11 +24,7 @@ namespace GameGate
             GCSettings.LargeObjectHeapCompactionMode = GCLargeObjectHeapCompactionMode.CompactOnce;
 
             IConfigurationRoot config = new ConfigurationBuilder().Build();
-
-            LogService = LogManager.Setup()
-                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
-                .GetCurrentClassLogger();
-
+            
             ThreadPool.SetMaxThreads(200, 200);
             ThreadPool.GetMinThreads(out int workThreads, out int completionPortThreads);
             LogService.Info(new StringBuilder()
@@ -48,8 +41,7 @@ namespace GameGate
                 }).ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
-                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                    logging.AddNLog(config);
+                    logging.SetMinimumLevel(LogLevel.Trace);
                 });
             await builder.StartAsync(CancellationToken.Token);
             await ProcessLoopAsync();
@@ -61,7 +53,6 @@ namespace GameGate
             AnsiConsole.Status().Start("Disconnecting...", ctx =>
             {
                 ctx.Spinner(Spinner.Known.Dots);
-                LogManager.Shutdown();
             });
         }
 
@@ -117,13 +108,6 @@ namespace GameGate
         {
             LogService.Info("重新读取配置文件完成...");
             return Task.CompletedTask;
-        }
-
-        private static void ChanggeLogLevel(LogLevel logLevel)
-        {
-            LogManager.Configuration.Variables["MirLevel"] = logLevel.ToString();
-            LogManager.ReconfigExistingLoggers();
-            LogManager.Configuration.Reload();
         }
 
         private static Task ShowServerStatus()

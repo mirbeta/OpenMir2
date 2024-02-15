@@ -2,8 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using NLog;
-using NLog.Extensions.Logging;
 using Spectre.Console;
 using System;
 using System.Text;
@@ -34,10 +32,6 @@ namespace MapSrv
 
             IConfigurationRoot config = new ConfigurationBuilder().Build();
 
-            LogManager.Setup()
-                .SetupExtensions(ext => ext.RegisterConfigSettings(config))
-                .GetCurrentClassLogger();
-
             IHostBuilder builder = new HostBuilder()
                 .ConfigureServices((hostContext, services) =>
                 {
@@ -46,7 +40,6 @@ namespace MapSrv
                 {
                     logging.ClearProviders();
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
-                    logging.AddNLog(config);
                 });
 
             _host = await builder.StartAsync(cts.Token);

@@ -1,5 +1,4 @@
 using MySqlConnector;
-using NLog;
 using OpenMir2;
 using System;
 using System.Data;

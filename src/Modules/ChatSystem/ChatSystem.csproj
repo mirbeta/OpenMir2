@@ -40,7 +40,6 @@
     
   <ItemGroup>
     <PackageReference Include="MQTTnet" Version="4.3.3.952" />
-    <PackageReference Include="NLog" Version="5.2.8" />
   </ItemGroup>
 
   <ItemGroup>

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NLog" Version="5.2.8" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SystemModule\SystemModule.csproj" />
   </ItemGroup>
 

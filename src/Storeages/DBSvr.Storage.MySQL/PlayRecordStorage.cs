@@ -1,7 +1,6 @@
 using DBSrv.Storage.Impl;
 using DBSrv.Storage.Model;
 using MySqlConnector;
-using NLog;
 using OpenMir2;
 using OpenMir2.Data;
 using System;
