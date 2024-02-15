@@ -106,10 +106,6 @@ namespace GameGate.Services
                 }
                 await _clientSocket.ConnectAsync();
             }
-            catch (SocketException error)
-            {
-                ClientSocketError(error.SocketErrorCode);
-            }
             catch (TimeoutException)
             {
                 ClientSocketError(SocketError.TimedOut);

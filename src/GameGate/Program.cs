@@ -21,12 +21,13 @@ namespace GameGate
             ThreadPool.GetMinThreads(out int workThreads, out int completionPortThreads);
 
             PrintUsage();
-            Console.CancelKeyPress += delegate
+            // 监听 Ctrl+C 事件
+            Console.CancelKeyPress += (sender, e) =>
             {
-                if (_timer != null)
-                {
-                    _timer.Dispose();
-                }
+                Console.WriteLine("Ctrl+C pressed");
+                CancellationToken.Cancel();
+                // 阻止其他处理程序处理此事件，以及默认的操作（终止程序）
+                e.Cancel = true;
             };
 
             IConfigurationRoot configuration = new ConfigurationBuilder()
