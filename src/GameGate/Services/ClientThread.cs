@@ -362,11 +362,11 @@ namespace GameGate.Services
                 byte[] tempBuff = new byte[ServerMessage.PacketSize + data.Length];
                 MemoryCopy.BlockCopy(sendBuffer, 0, tempBuff, 0, sendBuffer.Length);
                 MemoryCopy.BlockCopy(strBuff, 0, tempBuff, sendBuffer.Length, data.Length);
-                Send(tempBuff);
+                SendSrvPacket(tempBuff);
             }
             else
             {
-                Send(sendBuffer);
+                SendSrvPacket(sendBuffer);
             }
         }
 
@@ -389,17 +389,20 @@ namespace GameGate.Services
         /// <summary>
         /// 发送消息到GameSvr
         /// </summary>
-        /// <param name="sendBuffer"></param>
-        internal void Send(byte[] sendBuffer)
+        internal void SendSrvPacket(byte[] sendBuffer)
         {
             if (_clientSocket.Online)
             {
-                _clientSocket.Send(sendBuffer);
                 _networkMonitor.Send(sendBuffer.Length);
+                _clientSocket.Send(sendBuffer);
             }
         }
 
-        public Task SendQueue(string connectionId, byte[] data, int len)
+        /// <summary>
+        /// 发送消息到客户端
+        /// </summary>
+        /// <returns></returns>
+        public Task SendGateQueue(string connectionId, byte[] data, int len)
         {
             return ServerService.Send(connectionId, data, len);
         }

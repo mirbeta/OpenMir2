@@ -70,15 +70,14 @@ namespace OpenMir2
         /// <summary>
         /// 加密
         /// </summary>
-        public static unsafe int Encode(byte[] srcBuf, int len, ValueByteBlock destination, int dstOffset = 0)
+        public static void Encode(byte[] srcBuf, int len, ValueByteBlock destination)
         {
             int no = 2;
             byte remainder = 0;
             int pos = 0;
-            Span<byte> destinationSpan = srcBuf.AsSpan();
             for (int i = 0; i < len; i++)
             {
-                byte c = (byte)(destinationSpan[pos] ^ BySeed);
+                byte c = (byte)(srcBuf[pos] ^ BySeed);
                 pos++;
                 if (no == 6)
                 {
@@ -99,7 +98,6 @@ namespace OpenMir2
             {
                 destination.Write((byte)(remainder + ByBase));
             }
-            return destination.Len - dstOffset;
         }
 
         /// <summary>

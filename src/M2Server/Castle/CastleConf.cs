@@ -266,6 +266,10 @@ namespace M2Server.Castle
             for (int i = 0; i < userCastle.Archers.Length; i++)
             {
                 ArcherUnit objUnit = userCastle.Archers[i];
+                if (objUnit == null)
+                {
+                    continue;
+                }
                 if (objUnit.nX != 0)
                 {
                     WriteInteger("Defense", $"Archer_{i + 1}_X", objUnit.nX);
@@ -292,6 +296,11 @@ namespace M2Server.Castle
             for (int i = 0; i < userCastle.Guards.Length; i++)
             {
                 ArcherUnit objUnit = userCastle.Guards[i];
+                if (objUnit == null)
+                {
+                    continue;
+                }
+
                 if (objUnit.nX != 0)
                 {
                     WriteInteger("Defense", $"Guard_{i + 1}_X", objUnit.nX);

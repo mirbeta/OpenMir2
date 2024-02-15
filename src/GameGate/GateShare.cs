@@ -7,7 +7,7 @@ namespace GameGate
 {
     public class GateShare
     {
-        public static bool ShowLog = true;
+        public const int LoginPacketMaxLen = 254;
         /// <summary>
         /// 单线程最大用户数
         /// </summary>

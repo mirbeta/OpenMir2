@@ -1,23 +1,11 @@
 using GameGate.Conf;
 using GameGate.Packet;
-using System;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
-using TouchSocket.Core;
 using MD5 = OpenMir2.MD5;
 
 namespace GameGate.Services
 {
-    [StructLayout(LayoutKind.Sequential, Pack = 1, Size = 12)]
-    public struct ClientMessage
-    {
-        public int Recog;
-        public ushort Ident;
-        public ushort Param;
-        public ushort Tag;
-        public ushort Series;
-    }
-
     /// <summary>
     /// 用户会话封包处理
     /// </summary>
@@ -95,7 +83,7 @@ namespace GameGate.Services
         /// <summary>
         /// 处理客户端封包
         /// </summary>
-        public unsafe void ProcessSessionPacket(ClientPacketMessage messagePacket)
+        public void ProcessSessionPacket(ClientPacketMessage messagePacket)
         {
             _session.ReceiveTick = HUtil32.GetTickCount();
             int currentTick;
@@ -174,7 +162,7 @@ namespace GameGate.Services
                     return;
                 }
 
-                ClientMessage clientMessage = MemoryMarshal.Read<ClientMessage>(decodeBuff);
+                CommandMessage clientMessage = MemoryMarshal.Read<CommandMessage>(decodeBuff);
 
                 //if (Config.EnableOtp)
                 //{
@@ -635,7 +623,7 @@ namespace GameGate.Services
                                     pszSendBuf[0] = (byte)'#';
                                     int nEnCodeLen = EncryptUtil.Encode(SerializerUtil.Serialize(eatPacket), GateShare.CommandFixedLength, pszSendBuf);
                                     pszSendBuf[nEnCodeLen + 1] = (byte)'!';
-                                    ClientThread.Send(pszSendBuf);
+                                    ClientThread.SendSrvPacket(pszSendBuf);
                                     return;
                                 }
                             }
@@ -643,7 +631,6 @@ namespace GameGate.Services
                         break;
                 }
 
-                //todo 优化下面这个bodyBuffer的创建
                 byte[] bodyBuffer;
                 int sendLen;
                 SendMsg.SessionIndex = SvrListIdx;
@@ -665,7 +652,7 @@ namespace GameGate.Services
                     MemoryCopy.BlockCopy(decodeBuff, 0, bodyBuffer, ServerMessage.PacketSize, decodeBuff.Length);
                 }
                 MemoryCopy.BlockCopy(SerializerUtil.Serialize(SendMsg), 0, bodyBuffer, 0, ServerMessage.PacketSize); //复制消息头
-                ClientThread.Send(bodyBuffer[..sendLen]);
+                ClientThread.SendSrvPacket(bodyBuffer[..sendLen]);
                 GateShare.BytePool.Return(bodyBuffer);
             }
             else
@@ -695,7 +682,7 @@ namespace GameGate.Services
             {
                 if (delayMsg.BufLen > 0)
                 {
-                    ClientThread.Send(delayMsg.Buffer); //发送消息到GameSvr
+                    ClientThread.SendSrvPacket(delayMsg.Buffer); //发送消息到GameSvr
                     int dwCurrentTick = HUtil32.GetTickCount();
                     switch (delayMsg.Cmd)
                     {
@@ -895,30 +882,29 @@ namespace GameGate.Services
                 return;
             }
             short bufferLen = message.BuffLen;
-            if (bufferLen < 0)//小包 走路 攻击等
+            var sendLen = 0;
+            if (bufferLen < 0)//走路 攻击等消息
             {
-                int buffLen = -bufferLen;//bufferLen本身为负数，需要使用-来转为整数
-                using var byteBlock = new ValueByteBlock(buffLen + 2);
+                sendLen = (-bufferLen + 2);//bufferLen本身为负数，需要使用-来转为整数
+                using var byteBlock = new ValueByteBlock(sendLen);
                 byteBlock.Write((byte)'#');
                 byteBlock.Write(message.Buffer);
                 byteBlock.Write((byte)'!');
                 byteBlock.SeekToStart();//将游标重置
                 var buffer = new byte[byteBlock.Len];//定义一个数组容器
                 byteBlock.Read(buffer);//读取数据到容器，并返回读取的长度r
-                await ClientThread.SendQueue(Session.ConnectionId, buffer, buffer.Length);
-                byteBlock.Dispose();
+                await ClientThread.SendGateQueue(Session.ConnectionId, buffer, buffer.Length);
             }
             else
             {
-                int sendLen = bufferLen + CommandMessage.Size;
+                sendLen = bufferLen + CommandMessage.Size;
                 using var byteBlock = new ValueByteBlock(sendLen);
                 byteBlock.Write((byte)'#');
 
-                int nLen = EncryptUtil.Encode(message.Buffer, CommandMessage.Size, byteBlock, 1);//消息头
+                EncryptUtil.Encode(message.Buffer, CommandMessage.Size, byteBlock);//消息头
                 if (bufferLen > CommandMessage.Size)
                 {
                     byteBlock.Write(message.Buffer, CommandMessage.Size, bufferLen - CommandMessage.Size);
-                    nLen = bufferLen - CommandMessage.Size + nLen;
                 }
 
                 byteBlock.Write((byte)'!');
@@ -984,9 +970,8 @@ namespace GameGate.Services
 
                 byteBlock.SeekToStart();//将游标重置
                 var buffer = new byte[byteBlock.Len];//定义一个数组容器
-                byteBlock.Read(buffer);//读取数据到容器，并返回读取的长度r
-                await ClientThread.SendQueue(Session.ConnectionId, buffer, buffer.Length);
-                byteBlock.Dispose();
+                byteBlock.Read(buffer);//读取数据到容器，并返回读取的长度
+                await ClientThread.SendGateQueue(Session.ConnectionId, buffer, buffer.Length);
             }
         }
 
@@ -1057,8 +1042,7 @@ namespace GameGate.Services
         /// </summary>
         private void ClientLogin(string loginData, int nLen, string addr, ref bool success)
         {
-            const int firstPakcetMaxLen = 254;
-            if (nLen < firstPakcetMaxLen && nLen > 15)
+            if (nLen < GateShare.LoginPacketMaxLen && nLen > 15)
             {
                 if (loginData[0] != '*' || loginData[1] != '*')
                 {
@@ -1115,42 +1099,21 @@ namespace GameGate.Services
                         }
                         string src = szHarewareId;
                         string key = Config.ProClientHardwareKey;
-                        int keyLen = key.Length;
-                        int keyPos = 0;
-                        int offSet = Convert.ToInt32("$" + src[..2]);
-                        int srcPos = 3;
-                        int i = 0;
-                        int srcAsc;
-                        int tmpSrcAsc;
-                        byte[] dest = new byte[1024];
                         bool fMatch = false;
+                        int srcLen = src.Length / 2;
+                        byte[] dest = new byte[srcLen];
                         try
                         {
-                            do
+                            int srcAsc, tmpSrcAsc, offSet = Convert.ToInt32("$" + src[..2]), keyPos = 0, i = 0;
+                            for (int srcPos = 3; srcPos < src.Length; srcPos += 2)
                             {
                                 srcAsc = Convert.ToInt32("$" + src.Substring(srcPos - 1, 2));
-                                if (keyPos < keyLen)
-                                {
-                                    keyPos += 1;
-                                }
-                                else
-                                {
-                                    keyPos = 1;
-                                }
+                                keyPos = keyPos < key.Length ? keyPos + 1 : 1;
                                 tmpSrcAsc = srcAsc ^ key[keyPos];
-                                if (tmpSrcAsc <= offSet)
-                                {
-                                    tmpSrcAsc = 255 + tmpSrcAsc - offSet;
-                                }
-                                else
-                                {
-                                    tmpSrcAsc -= offSet;
-                                }
-                                dest[i] = (byte)(tmpSrcAsc);
-                                i++;
+                                tmpSrcAsc = tmpSrcAsc <= offSet ? 255 + tmpSrcAsc - offSet : tmpSrcAsc - offSet;
+                                dest[i++] = (byte)(tmpSrcAsc);
                                 offSet = srcAsc;
-                                srcPos += 2;
-                            } while (!(srcPos >= src.Length));
+                            }
                         }
                         catch (Exception)
                         {
@@ -1163,17 +1126,17 @@ namespace GameGate.Services
                             return;
                         }
                         HardwareHeader pHardwareHeader = ClientPacket.ToPacket<HardwareHeader>(dest);
-                        //todo session会话里面需要存用户ip
-                        LogService.Info($"HWID: {MD5.MD5Print(pHardwareHeader.xMd5Digest)}  {sHumName.Trim()}  {addr}");
-                        if (pHardwareHeader.dwMagicCode == 0x13F13F13)
+                        //todo:session会话里面需要存用户ip
+                        LogService.Info($"HWID: {MD5.MD5Print(pHardwareHeader.Md5Digest)}  {sHumName.Trim()}  {addr}");
+                        if (pHardwareHeader.MagicCode == 0x13F13F13)
                         {
-                            if (MD5.MD5Match(MD5.EmptyDigest, pHardwareHeader.xMd5Digest))
+                            if (MD5.MD5Match(MD5.EmptyDigest, pHardwareHeader.Md5Digest))
                             {
                                 LogService.Info($"[ClientLogin] Kicked 6: {sHumName}");
                                 SendKickMsg(4);
                                 return;
                             }
-                            hardWareDigest = pHardwareHeader.xMd5Digest;
+                            hardWareDigest = pHardwareHeader.Md5Digest;
                             bool overClientCount = false;
                             if (GateShare.HardwareFilter.IsFilter(hardWareDigest, ref overClientCount))
                             {
@@ -1223,9 +1186,9 @@ namespace GameGate.Services
 
                     SendLoginMessage(loginDataPacket[..(ServerMessage.PacketSize + packetHeader.PackLength)]);
 
-                    //LogService.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
                     success = true;
                     HandleLogin = true;
+                    LogService.Debug($"[ClientLogin] {sAccount} {sHumName} {addr} {szCert} {szClientVerNo} {szCode} {MD5.MD5Print(hardWareDigest)} {ServiceId}");
                     /*var secretKey = _authenticator.GenerateSetupCode("openmir2", sAccount, SessionKey, 5);
                     LogService.Info($"动态密钥:{secretKey.AccountSecretKey}", 1);
                     LogService.Info($"动态验证码：{secretKey.ManualEntryKey}", 1);
