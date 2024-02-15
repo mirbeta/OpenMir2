@@ -1,21 +1,18 @@
-using OpenMir2.Data;
-using System.Net.Sockets;
 using SystemModule.Actors;
 using SystemModule.SubSystem;
 
 namespace M2Server.Net
 {
-    public class ChannelGate
+    public class GameGate
     {
         /// <summary>
-        /// 网关是否已启用
+        /// 网关是否连接
         /// </summary>
-        public bool BoUsed;
-        public Socket Socket;
+        public bool Connected;
         /// <summary>
-        /// Socket链接ID
+        /// Socket链接Id
         /// </summary>
-        public string SocketId;
+        public string ConnectionId;
         /// <summary>
         /// 玩家列表
         /// </summary>
@@ -25,36 +22,14 @@ namespace M2Server.Net
         /// </summary>
         public int UserCount;
         public bool SendKeepAlive;
-        public int SendChecked;
-        public int SendBlockCount;
         /// <summary>
-        /// 列队数据
+        /// 是否检查发送心跳
         /// </summary>
-        public int SendMsgCount;
-        /// <summary>
-        /// 未处理数据
-        /// </summary>
-        public int SendRemainCount;
+        public bool CheckStatus;
         /// <summary>
         /// 发送间隔
         /// </summary>
         public int SendTick;
-        /// <summary>
-        /// 发送消息字节
-        /// </summary>
-        public int SendMsgBytes;
-        /// <summary>
-        /// 发送的字节数量
-        /// </summary>
-        public int SendBytesCount;
-        /// <summary>
-        /// 发送数据
-        /// </summary>
-        public int SendedMsgCount;
-        /// <summary>
-        /// 发送数量
-        /// </summary>
-        public int SendCount;
         /// <summary>
         /// 上次心跳时间
         /// </summary>
@@ -67,7 +42,7 @@ namespace M2Server.Net
         /// 人物对象
         /// </summary>
         public IPlayerActor PlayObject;
-        public int SessionID;
+        public int SessionId;
         /// <summary>
         /// 账号
         /// </summary>
@@ -81,21 +56,8 @@ namespace M2Server.Net
         /// 认证是否通过
         /// </summary>
         public bool Certification;
-        /// <summary>
-        /// 玩家名称
-        /// </summary>
-        public string ChrName;
-        /// <summary>
-        /// 客户端版本号
-        /// </summary>
-        public int ClientVersion;
-        /// <summary>
-        /// 当前会话信息
-        /// </summary>
-        public AccountSession SessInfo;
         public int Socket;
         public IFrontEngine FrontEngine;
         public IWorldEngine WorldEngine;
-        public int NewUserTick;
     }
 }

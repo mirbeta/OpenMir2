@@ -8,12 +8,6 @@ namespace M2Server.Player
     {
         private const byte HeaderLen = 32;
 
-        public void SetSocket()
-        {
-            //messageHead.Socket = SocketId;
-            //messageHead.SessionId = SocketIdx;
-        }
-
         public void SendDefMessage(short wIdent, int nRecog, int nParam, int nTag, int nSeries)
         {
             if (IsRobot)
@@ -45,7 +39,7 @@ namespace M2Server.Player
         /// 动作消息 走路、跑步、战士攻击等
         /// </summary>
         /// <param name="sMsg"></param>
-        public void SendSocket(string sMsg)
+        private void SendSocket(string sMsg)
         {
             if (IsRobot)
             {
@@ -89,9 +83,9 @@ namespace M2Server.Player
                 PacketCode = Grobal2.PacketCode,
                 Ident = Grobal2.GM_DATA,
                 Socket = SocketId,
-                SessionId = SocketIdx
+                SessionId = SocketIdx,
+                PackLength = CommandMessage.Size
             };
-            messageHead.PackLength = CommandMessage.Size;
             byte[] sendData = new byte[HeaderLen];
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
@@ -100,6 +94,10 @@ namespace M2Server.Player
 
         public virtual void SendSocket(CommandMessage defMsg, string sMsg)
         {
+            if (string.IsNullOrEmpty(sMsg))
+            {
+                return;
+            }
             if (IsRobot)
             {
                 return;
@@ -108,12 +106,8 @@ namespace M2Server.Player
             {
                 return;
             }
-            if (string.IsNullOrEmpty(sMsg))
-            {
-                return;
-            }
-            byte[] bMsg = HUtil32.GetBytes(sMsg);
-            byte[] sendData = new byte[HeaderLen + bMsg.Length];
+            byte[] data = HUtil32.GetBytes(sMsg);
+            byte[] sendData = new byte[HeaderLen + data.Length];
             ServerMessage messageHead = new ServerMessage
             {
                 PacketCode = Grobal2.PacketCode,
@@ -121,10 +115,10 @@ namespace M2Server.Player
                 Socket = SocketId,
                 SessionId = SocketIdx
             };
-            messageHead.PackLength = bMsg.Length + CommandMessage.Size;
+            messageHead.PackLength = data.Length + CommandMessage.Size;
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(messageHead), 0, sendData, 0, ServerMessage.PacketSize);
             MemoryCopy.BlockCopy(SerializerUtil.Serialize(defMsg), 0, sendData, ServerMessage.PacketSize, CommandMessage.Size);
-            MemoryCopy.BlockCopy(bMsg, 0, sendData, HeaderLen, bMsg.Length);
+            MemoryCopy.BlockCopy(data, 0, sendData, HeaderLen, data.Length);
             M2Share.NetChannel.AddGateBuffer(GateIdx, sendData);
         }
     }

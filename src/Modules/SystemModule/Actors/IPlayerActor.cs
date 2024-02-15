@@ -331,9 +331,9 @@ namespace SystemModule.Actors
         /// </summary>
         ushort SocketIdx { get; set; }
         /// <summary>
-        /// 人物所在网关号
+        /// 网关编号
         /// </summary>
-        int GateIdx { get; set; }
+        byte GateIdx { get; set; }
         int SoftVersionDate { get; set; }
         /// <summary>
         /// 登录时间戳

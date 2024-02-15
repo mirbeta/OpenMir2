@@ -354,7 +354,7 @@ namespace GameSrv.Word
                     {
                         playObject.SessionId = userOpenInfo.LoadUser.SessionID;
                         playObject.SocketId = userOpenInfo.LoadUser.SocketId;
-                        playObject.GateIdx = userOpenInfo.LoadUser.GateIdx;
+                        playObject.GateIdx = (byte)userOpenInfo.LoadUser.GateIdx;
                         playObject.SocketIdx = userOpenInfo.LoadUser.GSocketIdx;
                         playObject.WAbil = playObject.Abil;
                         playObject.ServerIndex = (byte)SystemShare.MapMgr.GetMapOfServerIndex(playObject.MapName);
@@ -457,7 +457,7 @@ namespace GameSrv.Word
                 playObject.LoginIpLocal = M2Share.GetIPLocal(playObject.LoginIpAddr);
                 playObject.SocketId = userOpenInfo.LoadUser.SocketId;
                 playObject.SocketIdx = userOpenInfo.LoadUser.GSocketIdx;
-                playObject.GateIdx = userOpenInfo.LoadUser.GateIdx;
+                playObject.GateIdx = (byte)userOpenInfo.LoadUser.GateIdx;
                 playObject.SessionId = userOpenInfo.LoadUser.SessionID;
                 playObject.PayMent = (byte)userOpenInfo.LoadUser.PayMent;
                 playObject.PayMode = (byte)userOpenInfo.LoadUser.PayMode;

@@ -319,10 +319,10 @@ namespace M2Server.Player
         /// <summary>
         /// 人物所在网关号
         /// </summary>
-        public int GateIdx { get; set; }
+        public byte GateIdx { get; set; }
         public int SoftVersionDate { get; set; }
         /// <summary>
-        /// 登录时间戳
+        /// 登录时间
         /// </summary>
         public long LogonTime { get; set; }
         /// <summary>

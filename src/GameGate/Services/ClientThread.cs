@@ -280,17 +280,14 @@ namespace GameGate.Services
                     SendServerMsg(Grobal2.GM_RECEIVE_OK, 0, 0, 0, "", 0);
                     break;
                 case Grobal2.GM_DATA:
-                    unsafe
-                    {
-                        int packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
-                        ServerSessionMessage sendMsg = new ServerSessionMessage();
-                        sendMsg.SessionId = packetHeader.SessionId;
-                        sendMsg.BuffLen = (short)packetHeader.PackLength;
-                        //sendMsg.Buffer = GateShare.BytePool.Rent(packetLen);
-                        sendMsg.Buffer = new byte[packetLen];
-                        MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer, 0, packetLen);
-                        _messageChannel.Writer.TryWrite(sendMsg);
-                    }
+                    int packetLen = packetHeader.PackLength < 0 ? -packetHeader.PackLength : packetHeader.PackLength;
+                    ServerSessionMessage sendMsg = new ServerSessionMessage();
+                    sendMsg.SessionId = packetHeader.SessionId;
+                    sendMsg.BuffLen = (short)packetHeader.PackLength;
+                    //sendMsg.Buffer = GateShare.BytePool.Rent(packetLen);
+                    sendMsg.Buffer = new byte[packetLen];
+                    MemoryCopy.BlockCopy(data, 0, sendMsg.Buffer, 0, packetLen);
+                    _messageChannel.Writer.TryWrite(sendMsg);
                     break;
                 case Messages.GM_TEST:
                     break;

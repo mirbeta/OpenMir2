@@ -3,7 +3,6 @@ using OpenMir2.Data;
 using OpenMir2.Extensions;
 using OpenMir2.Packets.ClientPackets;
 using OpenMir2.Packets.ServerPackets;
-using System.Net.Sockets;
 using System.Text;
 using System.Threading.Channels;
 using SystemModule;
@@ -13,33 +12,30 @@ namespace M2Server.Net
 {
     public class ChannelMessageHandler
     {
-        private readonly ChannelGate _channelGate;
+        private readonly GameGate _channelGate;
         private readonly SocketSendQueue _sendQueue;
         private object RunSocketSection { get; }
-        private readonly CancellationTokenSource _cancellation;
         public readonly string ConnectionId;
 
-        public ChannelMessageHandler(ChannelGate channelGate)
+        public ChannelMessageHandler(GameGate channelGate)
         {
             _channelGate = channelGate;
-            ConnectionId = _channelGate.SocketId;
+            ConnectionId = _channelGate.ConnectionId;
             RunSocketSection = new object();
             _sendQueue = new SocketSendQueue(channelGate);
-            _cancellation = new CancellationTokenSource();
             Start();
         }
 
-        public ChannelGate GateInfo => _channelGate;
+        public GameGate GateInfo => _channelGate;
 
-        private void Start()
+        public void Start()
         {
-            _sendQueue.ProcessSendQueue(_cancellation);
+            _sendQueue.ProcessSendQueue(CancellationToken.None);
         }
 
         public void Stop()
         {
             //await _sendQueue.Stop();
-            _cancellation.CancelAfter(1000);
         }
 
         /// <summary>
@@ -49,21 +45,11 @@ namespace M2Server.Net
         /// <returns></returns>
         public void ProcessBufferSend(byte[] sendData)
         {
-            if (!GateInfo.BoUsed && GateInfo.Socket == null)
+            if (!GateInfo.Connected)
             {
                 return;
             }
             const string sExceptionMsg = "[Exception] TRunSocket::SendGateBuffers -> SendBuff";
-            int dwRunTick = HUtil32.GetTickCount();
-            if (GateInfo.SendChecked > 0)// 如果网关未回复状态消息，则不再发送数据
-            {
-                if ((HUtil32.GetTickCount() - GateInfo.SendCheckTick) > M2Share.SocCheckTimeOut) // 2 * 1000
-                {
-                    GateInfo.SendChecked = 0;
-                    GateInfo.SendBlockCount = 0;
-                }
-                return;
-            }
             try
             {
                 int sendBuffLen = sendData.Length;
@@ -71,28 +57,8 @@ namespace M2Server.Net
                 {
                     return;
                 }
-                if (GateInfo.SendChecked == 0 && GateInfo.SendBlockCount + sendBuffLen >= SystemShare.Config.CheckBlock * 10)
-                {
-                    if (GateInfo.SendBlockCount == 0 && SystemShare.Config.CheckBlock * 10 <= sendBuffLen)
-                    {
-                        return;
-                    }
-                    SendCheck(Grobal2.GM_RECEIVE_OK);
-                    GateInfo.SendChecked = 1;
-                    GateInfo.SendCheckTick = HUtil32.GetTickCount();
-                }
-                if (GateInfo.Socket != null && GateInfo.Socket.Connected)
-                {
-                    _sendQueue.SendMessage(sendData);
-                    GateInfo.SendCount++;
-                    GateInfo.SendBytesCount += sendBuffLen;
-                    GateInfo.SendBlockCount += sendBuffLen;
-                    M2Share.NetworkMonitor.Send(sendBuffLen);
-                }
-                if ((HUtil32.GetTickCount() - dwRunTick) > M2Share.SocLimit)
-                {
-                    return;
-                }
+                _sendQueue.SendMessage(sendData);
+                M2Share.NetworkMonitor.Send(sendBuffLen);
             }
             catch (Exception e)
             {
@@ -152,9 +118,9 @@ namespace M2Server.Net
                 switch (msgPacket.Ident)
                 {
                     case Grobal2.GM_OPEN:
-                        string sIPaddr = HUtil32.GetString(msgBuff, nMsgLen);
-                        nUserIdx = OpenNewUser(msgPacket.Socket, msgPacket.SessionId, sIPaddr, ref GateInfo.UserList);
-                        SendNewUserMsg(GateInfo.Socket, msgPacket.Socket, msgPacket.SessionId, nUserIdx + 1);
+                        string userIp = HUtil32.GetString(msgBuff, nMsgLen);
+                        nUserIdx = OpenNewUser(msgPacket.Socket, msgPacket.SessionId, userIp, ref GateInfo.UserList);
+                        SendNewUserMsg(GateInfo.ConnectionId, msgPacket.Socket, msgPacket.SessionId, nUserIdx + 1);
                         GateInfo.UserCount++;
                         break;
                     case Grobal2.GM_CLOSE:
@@ -164,8 +130,7 @@ namespace M2Server.Net
                         GateInfo.SendKeepAlive = true;
                         break;
                     case Grobal2.GM_RECEIVE_OK:
-                        GateInfo.SendChecked = 0;
-                        GateInfo.SendBlockCount = 0;
+                        GateInfo.CheckStatus = true;
                         break;
                     case Grobal2.GM_DATA:
                         SessionUser gateUser = null;
@@ -316,10 +281,7 @@ namespace M2Server.Net
                             {
                                 gateUser.Certification = true;
                                 gateUser.Account = sAccount.Trim();
-                                gateUser.ChrName = sChrName.Trim();
-                                gateUser.SessionID = nSessionId;
-                                gateUser.ClientVersion = nClientVersion;
-                                gateUser.SessInfo = sessInfo;
+                                gateUser.SessionId = nSessionId;
                                 LoadDBInfo loadRcdInfo = new LoadDBInfo
                                 {
                                     Account = sAccount,
@@ -394,11 +356,11 @@ namespace M2Server.Net
                                     }
                                     if (gateUser.PlayObject.Ghost && !gateUser.PlayObject.BoReconnection)
                                     {
-                                        M2Share.Authentication.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.Authentication.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionId);
                                     }
                                     if (gateUser.PlayObject.BoSoftClose && gateUser.PlayObject.BoReconnection && gateUser.PlayObject.BoEmergencyClose)
                                     {
-                                        M2Share.Authentication.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionID);
+                                        M2Share.Authentication.SendHumanLogOutMsg(gateUser.Account, gateUser.SessionId);
                                     }
                                 }
                                 GateInfo.UserList[i] = null;
@@ -420,15 +382,13 @@ namespace M2Server.Net
             SessionUser gateUser = new SessionUser
             {
                 Account = string.Empty,
-                ChrName = string.Empty,
                 IPaddr = sIPaddr,
                 Socket = socket,
                 SocketId = socketId,
-                SessionID = 0,
+                SessionId = 0,
                 WorldEngine = null,
                 FrontEngine = null,
                 PlayObject = null,
-                NewUserTick = HUtil32.GetTickCount(),
                 Certification = false
             };
             for (int i = 0; i < userList.Count; i++)
@@ -440,16 +400,12 @@ namespace M2Server.Net
                 }
             }
             userList.Add(gateUser);
-            LogService.Info("新用户链接...");
+            LogService.Info($"玩家链接...[{sIPaddr}]");
             return userList.Count - 1;
         }
 
-        private static void SendNewUserMsg(Socket socket, int nSocket, ushort socketId, int nUserIdex)
+        private void SendNewUserMsg(string connectionId, int nSocket, ushort socketId, int nUserIdex)
         {
-            if (!socket.Connected)
-            {
-                return;
-            }
             ServerMessage msgHeader = new ServerMessage();
             msgHeader.PacketCode = Grobal2.PacketCode;
             msgHeader.Socket = nSocket;
@@ -458,7 +414,7 @@ namespace M2Server.Net
             msgHeader.SessionIndex = (ushort)nUserIdex;
             msgHeader.PackLength = 0;
             byte[] data = SerializerUtil.Serialize(msgHeader);
-            socket.Send(data, 0, data.Length, SocketFlags.None);
+            ProcessBufferSend(data);
         }
 
         /// <summary>
@@ -492,10 +448,10 @@ namespace M2Server.Net
             private Channel<byte[]> SendQueue { get; }
             private string ConnectionId { get; }
 
-            public SocketSendQueue(ChannelGate gateInfo)
+            public SocketSendQueue(GameGate gateInfo)
             {
                 SendQueue = Channel.CreateUnbounded<byte[]>();
-                ConnectionId = gateInfo.SocketId;
+                ConnectionId = gateInfo.ConnectionId;
             }
 
             /// <summary>
@@ -523,11 +479,11 @@ namespace M2Server.Net
             /// 处理队列数据并发送到GameGate
             /// M2Server.-> GameGate
             /// </summary>
-            public void ProcessSendQueue(CancellationTokenSource cancellation)
+            public void ProcessSendQueue(CancellationToken cancellation)
             {
                 Task.Factory.StartNew(async () =>
                 {
-                    while (await SendQueue.Reader.WaitToReadAsync(cancellation.Token))
+                    while (await SendQueue.Reader.WaitToReadAsync(cancellation))
                     {
                         while (SendQueue.Reader.TryRead(out byte[] buffer))
                         {
@@ -542,7 +498,7 @@ namespace M2Server.Net
                             //GameGate.Socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
                         }
                     }
-                }, cancellation.Token);
+                }, cancellation);
             }
         }
     }
