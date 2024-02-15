@@ -15,6 +15,31 @@ namespace M2Server.Player
 {
     public partial class PlayObject
     {
+        private void ClientClickNpc(int actorId)
+        {
+            if (!IsCanDeal)
+            {
+                SendMsg(SystemShare.ManageNPC, Messages.RM_MENU_OK, 0, ActorId, 0, 0, MessageSettings.CanotTryDealMsg);
+                return;
+            }
+            if (Death || Ghost)
+            {
+                return;
+            }
+            if (HUtil32.GetTickCount() - ClickNpcTime > SystemShare.Config.ClickNpcTime)
+            {
+                ClickNpcTime = HUtil32.GetTickCount();
+                INormNpc normNpc = SystemShare.WorldEngine.FindMerchant(actorId) ?? SystemShare.WorldEngine.FindNpc(actorId);
+                if (normNpc != null)
+                {
+                    if (normNpc.Envir == Envir && Math.Abs(normNpc.CurrX - CurrX) <= 15 && Math.Abs(normNpc.CurrY - CurrY) <= 15)
+                    {
+                        normNpc.Click(this);
+                    }
+                }
+            }
+        }
+
         private void ClientQueryUserName(int targetId, int x, int y)
         {
             var baseObject = SystemShare.ActorMgr.Get(targetId);
