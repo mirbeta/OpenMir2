@@ -599,7 +599,7 @@ namespace M2Server.Player
         /// <summary>
         /// 取备份元宝寄售列表物品
         /// </summary>
-        public void GetBackSellOffItems()
+        private void GetBackSellOffItems()
         {
             if (SellOffItemList == null)
             {

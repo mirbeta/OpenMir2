@@ -34,7 +34,7 @@ namespace GameSrv.Npc
         /// <summary>
         /// 清理武器升级过期时间
         /// </summary>
-        public int ClearExpreUpgradeTick { get; set; }
+        public int ClearExpireUpgradeTick { get; set; }
         /// <summary>
         /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
         /// </summary>
@@ -91,7 +91,7 @@ namespace GameSrv.Npc
             ItemPriceList = new List<ItemPrice>();
             UpgradeWeaponList = new List<WeaponUpgradeInfo>();
             RefillGoodsTick = HUtil32.GetTickCount();
-            ClearExpreUpgradeTick = HUtil32.GetTickCount();
+            ClearExpireUpgradeTick = HUtil32.GetTickCount();
             IsBuy = false;
             IsSell = false;
             IsMakeDrug = false;
@@ -124,9 +124,9 @@ namespace GameSrv.Npc
                     RefillGoodsTick = dwCurrentTick + dwDelayTick;
                     RefillGoods();
                 }
-                if ((dwCurrentTick - ClearExpreUpgradeTick) > 10 * 60 * 1000)
+                if ((dwCurrentTick - ClearExpireUpgradeTick) > 10 * 60 * 1000)
                 {
-                    ClearExpreUpgradeTick = dwCurrentTick;
+                    ClearExpireUpgradeTick = dwCurrentTick;
                     ClearExpreUpgradeListData();
                 }
                 if (M2Share.RandomNumber.Random(50) == 0)

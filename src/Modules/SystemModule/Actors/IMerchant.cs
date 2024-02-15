@@ -24,7 +24,7 @@ namespace SystemModule.Actors
         /// <summary>
         /// 清理武器升级过期时间
         /// </summary>
-        int ClearExpreUpgradeTick { get; set; }
+        int ClearExpireUpgradeTick { get; set; }
         /// <summary>
         /// NPC买卖物品类型列表，脚本中前面的 +1 +30 之类的
         /// </summary>
