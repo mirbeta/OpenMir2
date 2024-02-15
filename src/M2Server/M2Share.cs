@@ -268,6 +268,7 @@ namespace M2Server
         }
 
         private static readonly Regex ScriptRegex = new Regex("(?<=(<))[.\\s\\S]*?(?=(>))", RegexOptions.ExplicitCapture | RegexOptions.IgnoreCase | RegexOptions.RightToLeft);
+        private static readonly char[] MonSayMsgDividerAry = new[] { ' ', '/', ',', '\t' };
 
         public static MatchCollection MatchScriptLabel(string script)
         {
@@ -1831,7 +1832,8 @@ namespace M2Server
             string sMonName = string.Empty;
             string sSayMsg = string.Empty;
             bool result = false;
-            string sFileName = GetEnvirFilePath("GenMsg.txt");
+            bool boSearch = false;
+            string sFileName = GetEnvirFilePath("MonSayMsg.txt");
             if (File.Exists(sFileName))
             {
                 MonSayMsgList.Clear();
@@ -1842,11 +1844,11 @@ namespace M2Server
                     string sLineText = LoadList[i].Trim();
                     if (!string.IsNullOrEmpty(sLineText) && sLineText[0] != ';')
                     {
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, new[] { ' ', '/', ',', '\t' });
-                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, new[] { ' ', '/', ',', '\t' });
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sStatus, MonSayMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sRate, MonSayMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sColor, MonSayMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sMonName, MonSayMsgDividerAry);
+                        sLineText = HUtil32.GetValidStr3(sLineText, ref sSayMsg, MonSayMsgDividerAry);
                         if (!string.IsNullOrEmpty(sStatus) && !string.IsNullOrEmpty(sRate) && !string.IsNullOrEmpty(sColor) && !string.IsNullOrEmpty(sMonName) && !string.IsNullOrEmpty(sSayMsg))
                         {
                             int nStatus = HUtil32.StrToInt(sStatus, -1);
@@ -1893,26 +1895,24 @@ namespace M2Server
                                 }
                                 MonSayMsg.nRate = nRate;
                                 MonSayMsg.sSayMsg = sSayMsg;
-                                //for (II = 0; II < g_MonSayMsgList.Count; II ++ )
-                                //{
-                                //    if ((g_MonSayMsgList[II]).CompareTo((sMonName)) == 0)
-                                //    {
-                                //        ((g_MonSayMsgList.Values[II]) as ArrayList).Add(MonSayMsg);
-                                //        boSearch = true;
-                                //        break;
-                                //    }
-                                //}
-                                //if (!boSearch)
-                                //{
-                                //    MonSayList = new ArrayList();
-                                //    MonSayList.Add(MonSayMsg);
-                                //    g_MonSayMsgList.Add(sMonName, ((MonSayList) as Object));
-                                //}
+
+                                for (int j = 0; j < MonSayMsgList.Count; j++)
+                                {
+                                    if (MonSayMsgList.TryGetValue(sMonName, out var monsterSays))
+                                    {
+                                        monsterSays.Add(MonSayMsg);
+                                        boSearch = true;
+                                        break;
+                                    }
+                                }
+                                if (boSearch == false)
+                                {
+                                    MonSayMsgList.Add(sMonName, [MonSayMsg]);
+                                }
                             }
                         }
                     }
                 }
-                //LoadList.Free;
                 result = true;
             }
             return result;
