@@ -32,7 +32,7 @@ namespace CommandModule.Commands
                 return;
             }
             int nFlag = HUtil32.StrToInt(sFlag, 0);
-            if (mIPlayerActor.GetQuestFalgStatus(nFlag) == 1)
+            if (mIPlayerActor.GetQuestFlagStatus(nFlag) == 1)
             {
                 PlayerActor.SysMsg(string.Format(CommandHelp.GameCommandShowHumanFlagONMsg, mIPlayerActor.ChrName, nFlag), MsgColor.Green, MsgType.Hint);
             }

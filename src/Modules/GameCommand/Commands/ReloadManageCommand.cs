@@ -13,7 +13,7 @@ namespace CommandModule.Commands
             if (SystemShare.ManageNPC != null)
             {
                 SystemShare.ManageNPC.ClearScript();
-                SystemShare.ManageNPC.LoadNPCScript();
+                SystemShare.ManageNPC.LoadNpcScript();
                 PlayerActor.SysMsg("重新加载登录脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else
@@ -23,7 +23,7 @@ namespace CommandModule.Commands
             if (SystemShare.FunctionNPC != null)
             {
                 SystemShare.FunctionNPC.ClearScript();
-                SystemShare.FunctionNPC.LoadNPCScript();
+                SystemShare.FunctionNPC.LoadNpcScript();
                 PlayerActor.SysMsg("重新加载功能脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else

@@ -51,7 +51,7 @@ namespace GameSrv.Word
                     }
                     else
                     {
-                        normNpc.LoadNPCScript();
+                        normNpc.LoadNpcScript();
                     }
                 }
                 else
@@ -212,7 +212,7 @@ namespace GameSrv.Word
             {
                 INormNpc npc = QuestNpcList[i];
                 npc.ClearScript();
-                npc.LoadNPCScript();
+                npc.LoadNpcScript();
             }
         }
 

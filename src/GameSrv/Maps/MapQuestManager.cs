@@ -60,7 +60,7 @@ namespace GameSrv.Maps
             for (int i = 0; i < QuestList.Count; i++)
             {
                 MapQuestInfo mapQuestFlag = QuestList[i];
-                int nFlagValue = baseObject.GetQuestFalgStatus(mapQuestFlag.Flag);
+                int nFlagValue = baseObject.GetQuestFlagStatus(mapQuestFlag.Flag);
                 if (nFlagValue == mapQuestFlag.Value)
                 {
                     if (boFlag == mapQuestFlag.Grouped || !boFlag)

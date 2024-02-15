@@ -13,7 +13,7 @@ namespace CommandModule.Commands
             if (SystemShare.RobotNPC != null)
             {
                 SystemShare.RobotNPC.ClearScript();
-                SystemShare.RobotNPC.LoadNPCScript();
+                SystemShare.RobotNPC.LoadNpcScript();
                 PlayerActor.SysMsg("重新加载机器人专用脚本完成...", MsgColor.Green, MsgType.Hint);
             }
             else

@@ -4176,7 +4176,7 @@ namespace ScriptSystem.Processings
             success = true;
             int n14 = HUtil32.StrToInt(questConditionInfo.sParam1, 0);
             int n18 = HUtil32.StrToInt(questConditionInfo.sParam2, 0);
-            int n10 = playerActor.GetQuestFalgStatus(n14);
+            int n10 = playerActor.GetQuestFlagStatus(n14);
             if (n10 == 0)
             {
                 if (n18 != 0)

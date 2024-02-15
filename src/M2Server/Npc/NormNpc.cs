@@ -1587,7 +1587,7 @@ namespace M2Server.Npc
             }
         }
 
-        public void LoadNPCScript()
+        public void LoadNpcScript()
         {
             if (IsQuest)
             {

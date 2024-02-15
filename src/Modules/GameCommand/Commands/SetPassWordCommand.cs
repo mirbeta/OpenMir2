@@ -225,7 +225,7 @@ namespace CommandModule.Commands
                 int nFlag = HUtil32.StrToInt(@params[1], 0);
                 int nValue = HUtil32.StrToInt(@params[2], 0);
                 PlayerActor.SetQuestFlagStatus(nFlag, nValue);
-                if (PlayerActor.GetQuestFalgStatus(nFlag) == 1)
+                if (PlayerActor.GetQuestFlagStatus(nFlag) == 1)
                 {
                     targetObject.SysMsg(PlayerActor.ChrName + ": [" + nFlag + "] = ON", MsgColor.Green, MsgType.Hint);
                 }

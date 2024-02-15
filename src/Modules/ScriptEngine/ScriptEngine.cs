@@ -158,7 +158,7 @@ namespace ScriptSystem
                     result = false;
                     break;
                 }
-                if (playerActor.GetQuestFalgStatus(scriptInfo.QuestInfo[nIndex].wFlag) != scriptInfo.QuestInfo[nIndex].btValue)
+                if (playerActor.GetQuestFlagStatus(scriptInfo.QuestInfo[nIndex].wFlag) != scriptInfo.QuestInfo[nIndex].btValue)
                 {
                     result = false;
                     break;

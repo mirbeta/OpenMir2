@@ -1023,7 +1023,7 @@ namespace SystemModule.Actors
 
         bool IsGuildMaster();
 
-        int GetQuestFalgStatus(int nFlag);
+        int GetQuestFlagStatus(int nFlag);
 
         void SendDelItems(UserItem userItem);
 

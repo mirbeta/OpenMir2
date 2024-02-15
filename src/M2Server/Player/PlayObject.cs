@@ -1711,8 +1711,8 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        IUserCastle Castle = SystemShare.CastleMgr.InCastleWarArea(this);
-                        if ((Castle != null && Castle.UnderWar) || (InGuildWarArea))
+                        IUserCastle castle = SystemShare.CastleMgr.InCastleWarArea(this);
+                        if ((castle != null && castle.UnderWar) || (InGuildWarArea))
                         {
                             guildwarkill = true;
                         }
@@ -1778,16 +1778,16 @@ namespace M2Server.Player
             }
             if (!Envir.Flag.FightZone && !Envir.Flag.Fight3Zone && killObject.Race == ActorRace.Play)
             {
-                IActor AttackBaseObject = killObject;
+                IActor attackBaseObject = killObject;
                 if (killObject.Master != null)
                 {
-                    AttackBaseObject = killObject.Master;
+                    attackBaseObject = killObject.Master;
                 }
                 if (!NoItem || !Envir.Flag.NoDropItem)//允许设置 m_boNoItem 后人物死亡不掉物品
                 {
-                    if (AttackBaseObject != null)
+                    if (attackBaseObject != null)
                     {
-                        if (SystemShare.Config.KillByHumanDropUseItem && AttackBaseObject.Race == ActorRace.Play || SystemShare.Config.KillByMonstDropUseItem && AttackBaseObject.Race != ActorRace.Play)
+                        if (SystemShare.Config.KillByHumanDropUseItem && attackBaseObject.Race == ActorRace.Play || SystemShare.Config.KillByMonstDropUseItem && attackBaseObject.Race != ActorRace.Play)
                         {
                             killObject.DropUseItems(0);
                         }
@@ -1952,11 +1952,7 @@ namespace M2Server.Player
                         }
                     }
                 }
-                if (result)
-                {
-                    return result;
-                }
-                return base.IsAttackTarget(baseObject);
+                return result || base.IsAttackTarget(baseObject);
             }
             return false;
         }
@@ -3715,7 +3711,7 @@ namespace M2Server.Player
         /// <summary>
         /// 切换地图
         /// </summary>
-        internal bool EnterAnotherMap(IEnvirnoment envir, short nDMapX, short nDMapY)
+        private bool EnterAnotherMap(IEnvirnoment envir, short nDMapX, short nDMapY)
         {
             bool result = false;
             const string sExceptionMsg = "[Exception] BaseObject::EnterAnotherMap";
@@ -3732,7 +3728,7 @@ namespace M2Server.Player
                 //}
                 if (envir.Flag.NeedSetonFlag >= 0)
                 {
-                    if (GetQuestFalgStatus(envir.Flag.NeedSetonFlag) != envir.Flag.NeedOnOff)
+                    if (GetQuestFlagStatus(envir.Flag.NeedSetonFlag) != envir.Flag.NeedOnOff)
                     {
                         return false;
                     }
@@ -3904,7 +3900,7 @@ namespace M2Server.Player
             }
         }
 
-        internal void AddItemSkill(int nIndex)
+        private void AddItemSkill(int nIndex)
         {
             MagicInfo magic = null;
             switch (nIndex)
@@ -3963,7 +3959,7 @@ namespace M2Server.Player
             }
         }
 
-        public int GetQuestFalgStatus(int nFlag)
+        public int GetQuestFlagStatus(int nFlag)
         {
             int result = 0;
             nFlag -= 1;
@@ -4354,7 +4350,7 @@ namespace M2Server.Player
             return (byte)(PkPoint / 100);
         }
 
-        internal void CheckPkStatus()
+        private void CheckPkStatus()
         {
             if (PvpFlag && ((HUtil32.GetTickCount() - PvpNameColorTick) > SystemShare.Config.dwPKFlagTime)) // 60 * 1000
             {
@@ -5228,7 +5224,7 @@ namespace M2Server.Player
         /// <summary>
         /// 心灵启示
         /// </summary>
-        protected void CheckSeeHealGauge(UserMagic magic)
+        private void CheckSeeHealGauge(UserMagic magic)
         {
             if (magic.Magic.MagicId == 28)
             {
@@ -5251,7 +5247,10 @@ namespace M2Server.Player
             }
         }
 
-        public void RecalcLevelAbilitys()
+        /// <summary>
+        /// 获取当前等级基属性
+        /// </summary>
+        private void RecalcLevelAbilitys()
         {
             int n;
             byte nLevel = Abil.Level;
@@ -5352,7 +5351,7 @@ namespace M2Server.Player
         /// <summary>
         /// 减少复活戒指持久
         /// </summary>
-        internal void ItemDamageRevivalRing()
+        private void ItemDamageRevivalRing()
         {
             for (int i = 0; i < UseItems.Length; i++)
             {
@@ -5396,12 +5395,12 @@ namespace M2Server.Player
             return cert.PvpFlag;
         }
 
-        internal UserMagic GetAttackMagic(int magicId)
+        private UserMagic GetAttackMagic(int magicId)
         {
             return MagicArr[magicId];
         }
 
-        internal byte GetMyLight()
+        private byte GetMyLight()
         {
             byte currentLight = 0;
             if (Abil.Level >= EfftypeConst.EFFECTIVE_HIGHLEVEL)
@@ -5432,14 +5431,14 @@ namespace M2Server.Player
         /// <summary>
         /// 更新可见物品列表
         /// </summary>
-        protected void UpdateVisibleItem(short wX, short wY, MapItem MapItem)
+        protected void UpdateVisibleItem(short wX, short wY, MapItem mapItem)
         {
             VisibleMapItem visibleMapItem = null;
             bool boIsVisible = false;
             for (int i = 0; i < VisibleItems.Count; i++)
             {
                 visibleMapItem = VisibleItems[i];
-                if (visibleMapItem.MapItem == MapItem)
+                if (visibleMapItem.MapItem == mapItem)
                 {
                     visibleMapItem.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
@@ -5455,22 +5454,22 @@ namespace M2Server.Player
                 VisibleFlag = VisibleFlag.Show,
                 nX = wX,
                 nY = wY,
-                MapItem = MapItem,
-                sName = MapItem.Name,
-                wLooks = MapItem.Looks
+                MapItem = mapItem,
+                sName = mapItem.Name,
+                wLooks = mapItem.Looks
             };
             VisibleItems.Add(visibleMapItem);
         }
 
-        protected void UpdateVisibleEvent(short wX, short wY, MapEvent MapEvent)
+        protected void UpdateVisibleEvent(short wX, short wY, MapEvent mapEvent)
         {
             bool boIsVisible = false;
             for (int i = 0; i < VisibleEvents.Count; i++)
             {
-                MapEvent mapEvent = VisibleEvents[i];
-                if (mapEvent == MapEvent)
+                MapEvent visibleEvent = VisibleEvents[i];
+                if (visibleEvent == mapEvent)
                 {
-                    mapEvent.VisibleFlag = VisibleFlag.Invisible;
+                    visibleEvent.VisibleFlag = VisibleFlag.Invisible;
                     boIsVisible = true;
                     break;
                 }
@@ -5479,10 +5478,10 @@ namespace M2Server.Player
             {
                 return;
             }
-            MapEvent.VisibleFlag = VisibleFlag.Show;
-            MapEvent.nX = wX;
-            MapEvent.nY = wY;
-            VisibleEvents.Add(MapEvent);
+            mapEvent.VisibleFlag = VisibleFlag.Show;
+            mapEvent.nX = wX;
+            mapEvent.nY = wY;
+            VisibleEvents.Add(mapEvent);
         }
     }
 }

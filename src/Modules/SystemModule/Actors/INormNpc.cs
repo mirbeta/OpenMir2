@@ -22,12 +22,12 @@
 
         void Click(IPlayerActor actor);
 
-        void GotoLable(IPlayerActor PlayObject, string sLabel, bool boExtJmp = false);
+        void GotoLable(IPlayerActor playObject, string sLabel, bool boExtJmp = false);
 
-        void LoadNPCScript();
+        void LoadNpcScript();
 
         void ClearScript();
 
-        string GetLineVariableText(IPlayerActor PlayObject, string sMsg);
+        string GetLineVariableText(IPlayerActor playObject, string sMsg);
     }
 }
