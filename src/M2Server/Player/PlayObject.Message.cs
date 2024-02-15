@@ -1974,10 +1974,10 @@ namespace M2Server.Player
                     {
                         ClientMsg = Messages.MakeMessage(Messages.SM_SPACEMOVE_SHOW2, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, HUtil32.MakeWord((ushort)processMsg.wParam, baseObject.Light));
                     }
-                    CharDesc showmessage = default;
-                    showmessage.Feature = baseObject.GetFeature(this);
-                    showmessage.Status = baseObject.CharStatus;
-                    string sendMsg = EDCode.EncodePacket(showmessage);
+                    CharDesc showMessage = default;
+                    showMessage.Feature = baseObject.GetFeature(this);
+                    showMessage.Status = baseObject.CharStatus;
+                    string sendMsg = EDCode.EncodePacket(showMessage);
                     nObjCount = GetChrColor(baseObject);
                     if (!string.IsNullOrEmpty(processMsg.Msg))
                     {
@@ -2022,22 +2022,22 @@ namespace M2Server.Player
                     if (processMsg.nParam1 != 0 && processMsg.nParam2 != 0)
                     {
                         ClientMsg = Messages.MakeMessage(Messages.SM_CHANGEFACE, processMsg.nParam1, HUtil32.LoWord(processMsg.nParam2), HUtil32.HiWord(processMsg.nParam2), 0);
-                        CharDesc changefacemessae = default;
-                        changefacemessae.Feature = SystemShare.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
-                        changefacemessae.Status = SystemShare.ActorMgr.Get(processMsg.nParam2).CharStatus;
-                        SendSocket(ClientMsg, EDCode.EncodePacket(changefacemessae));
+                        CharDesc changeFaceMessage = default;
+                        changeFaceMessage.Feature = SystemShare.ActorMgr.Get(processMsg.nParam2).GetFeature(this);
+                        changeFaceMessage.Status = SystemShare.ActorMgr.Get(processMsg.nParam2).CharStatus;
+                        SendSocket(ClientMsg, EDCode.EncodePacket(changeFaceMessage));
                     }
                     break;
                 case Messages.RM_PASSWORD:
                     SendDefMessage(Messages.SM_PASSWORD, 0, 0, 0, 0);
                     break;
                 case Messages.RM_PLAYDICE:
-                    MessageBodyWL playdiceMessage = default;
-                    playdiceMessage.Param1 = processMsg.nParam1;
-                    playdiceMessage.Param2 = processMsg.nParam2;
-                    playdiceMessage.Tag1 = processMsg.nParam3;
+                    MessageBodyWL playDiceMessage = default;
+                    playDiceMessage.Param1 = processMsg.nParam1;
+                    playDiceMessage.Param2 = processMsg.nParam2;
+                    playDiceMessage.Tag1 = processMsg.nParam3;
                     ClientMsg = Messages.MakeMessage(Messages.SM_PLAYDICE, processMsg.ActorId, processMsg.wParam, 0, 0);
-                    SendSocket(ClientMsg, EDCode.EncodePacket(playdiceMessage) + EDCode.EncodeString(processMsg.Msg));
+                    SendSocket(ClientMsg, EDCode.EncodePacket(playDiceMessage) + EDCode.EncodeString(processMsg.Msg));
                     break;
                 case Messages.RM_PASSWORDSTATUS:
                     ClientMsg = Messages.MakeMessage(Messages.SM_PASSWORDSTATUS, processMsg.ActorId, processMsg.nParam1, processMsg.nParam2, processMsg.nParam3);
@@ -2281,7 +2281,7 @@ namespace M2Server.Player
             }
         }
 
-        protected int GetDigUpMsgCount()
+        private int GetDigUpMsgCount()
         {
             int result = 0;
             for (int i = 0; i < MsgQueue.Count; i++)
@@ -2301,7 +2301,7 @@ namespace M2Server.Player
         /// 攻击消息数量
         /// </summary>
         /// <returns></returns>
-        protected int GetHitMsgCount()
+        private int GetHitMsgCount()
         {
             int result = 0;
             for (int i = 0; i < MsgQueue.Count; i++)
@@ -2321,7 +2321,7 @@ namespace M2Server.Player
         /// 魔法消息数量
         /// </summary>
         /// <returns></returns>
-        protected int GetSpellMsgCount()
+        private int GetSpellMsgCount()
         {
             int result = 0;
             for (int i = 0; i < MsgQueue.Count; i++)
@@ -2341,7 +2341,7 @@ namespace M2Server.Player
         /// 跑步消息数量
         /// </summary>
         /// <returns></returns>
-        protected int GetRunMsgCount()
+        private int GetRunMsgCount()
         {
             int result = 0;
             for (int i = 0; i < MsgQueue.Count; i++)
@@ -2361,7 +2361,7 @@ namespace M2Server.Player
         /// 走路消息数量
         /// </summary>
         /// <returns></returns>
-        protected int GetWalkMsgCount()
+        private int GetWalkMsgCount()
         {
             int result = 0;
             for (int i = 0; i < MsgQueue.Count; i++)
@@ -2377,7 +2377,7 @@ namespace M2Server.Player
             return result;
         }
 
-        protected int GetTurnMsgCount()
+        private int GetTurnMsgCount()
         {
             int result = 0;
             for (int i = 0; i < MsgQueue.Count; i++)
@@ -2393,7 +2393,7 @@ namespace M2Server.Player
             return result;
         }
 
-        protected int GetSiteDownMsgCount()
+        private int GetSiteDownMsgCount()
         {
             int result = 0;
             for (int i = 0; i < MsgQueue.Count; i++)
