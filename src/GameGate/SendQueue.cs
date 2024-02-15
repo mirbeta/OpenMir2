@@ -48,7 +48,6 @@ namespace GameGate
                         finally
                         {
                             GateShare.BytePool.Return(sendPacket.Buffer, true);//必须要清空申请的byte数组
-                            GateShare.PacketMessagePool.Return(sendPacket);
                         }
                     }
                 }

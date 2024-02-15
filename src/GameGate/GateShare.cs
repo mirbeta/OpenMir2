@@ -48,8 +48,7 @@ namespace GameGate
         public static HardwareFilter HardwareFilter;
         public static AbusiveFilter AbusiveFilter;
         public static ChatCommandFilter ChatCommandFilter;
-        public static readonly PacketMessagePool PacketMessagePool = new PacketMessagePool();
-        public const int HeaderMessageSize = ServerMessage.PacketSize;
+        public static IServiceProvider ServiceProvider = null;
 
         public static void Initialization()
         {
@@ -59,11 +58,6 @@ namespace GameGate
             ChatCommandFilter = ChatCommandFilter.Instance;
             PunishList = new Dictionary<string, ClientSession>(StringComparer.OrdinalIgnoreCase);
             ChatCommandFilterMap = new ConcurrentDictionary<string, byte>(StringComparer.OrdinalIgnoreCase);
-
-            for (int i = 0; i < MaxSession; i++)
-            {
-                PacketMessagePool.Push(default);
-            }
         }
 
         public static void Load()
