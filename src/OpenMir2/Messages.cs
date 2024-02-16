@@ -55,41 +55,104 @@ namespace OpenMir2
         /// 挖物品
         /// </summary>
         public const int CM_BUTCH = 1007;
+        /// <summary>
+        /// 设置技能快捷键
+        /// </summary>
         public const int CM_MAGICKEYCHANGE = 1008;
         /// <summary>
         /// 点击NPC
         /// </summary>
         public const int CM_CLICKNPC = 1010;
+        /// <summary>
+        /// 交易对话框标签选择
+        /// </summary>
         public const int CM_MERCHANTDLGSELECT = 1011;
         public const int CM_MERCHANTQUERYSELLPRICE = 1012;
+        /// <summary>
+        /// 卖物品
+        /// </summary>
         public const int CM_USERSELLITEM = 1013;
+        /// <summary>
+        /// 买物品
+        /// </summary>
         public const int CM_USERBUYITEM = 1014;
+        /// <summary>
+        /// 获取物品列表
+        /// </summary>
         public const int CM_USERGETDETAILITEM = 1015;
+        /// <summary>
+        /// 丢金币
+        /// </summary>
         public const int CM_DROPGOLD = 1016;
         public const int CM_TEST = 1017;
         /// <summary>
         /// 检测客户是否有下载好的client
         /// </summary>
         public const int CM_LOGINNOTICEOK = 1018;
+        /// <summary>
+        /// 是否允许组队
+        /// </summary>
         public const int CM_GROUPMODE = 1019;
+        /// <summary>
+        /// 创建队伍
+        /// </summary>
         public const int CM_CREATEGROUP = 1020;
+        /// <summary>
+        /// 添加队伍成员
+        /// </summary>
         public const int CM_ADDGROUPMEMBER = 1021;
+        /// <summary>
+        /// 删除队伍成员
+        /// </summary>
         public const int CM_DELGROUPMEMBER = 1022;
+        /// <summary>
+        /// 修理物品
+        /// </summary>
         public const int CM_USERREPAIRITEM = 1023;
         public const int CM_MERCHANTQUERYREPAIRCOST = 1024;
         /// <summary>
         /// 发起交易
         /// </summary>
         public const int CM_DEALTRY = 1025;
+        /// <summary>
+        /// 放物品到交易物品栏
+        /// </summary>
         public const int CM_DEALADDITEM = 1026;
+        /// <summary>
+        /// 物品从交易物品栏删除
+        /// </summary>
         public const int CM_DEALDELITEM = 1027;
+        /// <summary>
+        /// 交易取消
+        /// </summary>
         public const int CM_DEALCANCEL = 1028;
+        /// <summary>
+        /// 金币交易
+        /// </summary>
         public const int CM_DEALCHGGOLD = 1029;
+        /// <summary>
+        /// 交易完成
+        /// </summary>
         public const int CM_DEALEND = 1030;
+        /// <summary>
+        /// 存储物品到仓库
+        /// </summary>
         public const int CM_USERSTORAGEITEM = 1031;
+        /// <summary>
+        /// 从仓库取回物品
+        /// </summary>
         public const int CM_USERTAKEBACKSTORAGEITEM = 1032;
+        /// <summary>
+        /// 获取小地图
+        /// </summary>
         public const int CM_WANTMINIMAP = 1033;
+        /// <summary>
+        /// 炼药物品
+        /// </summary>
         public const int CM_USERMAKEDRUGITEM = 1034;
+        /// <summary>
+        /// 打开公会
+        /// </summary>
         public const int CM_OPENGUILDDLG = 1035;
         public const int CM_GUILDHOME = 1036;
         public const int CM_GUILDMEMBERLIST = 1037;
