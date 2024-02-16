@@ -27,7 +27,7 @@ namespace CommandModule.Commands
             {
                 if (PlayerActor.UseItems[nWhere].Index > 0)
                 {
-                    OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(PlayerActor.UseItems[nWhere].Index);
+                    OpenMir2.Data.StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(PlayerActor.UseItems[nWhere].Index);
                     if (stdItem == null)
                     {
                         return;

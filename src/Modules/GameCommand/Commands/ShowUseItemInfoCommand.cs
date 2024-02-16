@@ -36,7 +36,7 @@ namespace CommandModule.Commands
                 {
                     continue;
                 }
-                PlayerActor.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", SystemShare.GetUseItemName(i), SystemShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index,
+                PlayerActor.SysMsg(string.Format("%s[%s]IDX[%d]系列号[%d]持久[%d-%d]", SystemShare.GetUseItemName(i), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), userItem.Index,
                     userItem.MakeIndex, userItem.Dura, userItem.DuraMax), MsgColor.Blue, MsgType.Hint);
             }
         }

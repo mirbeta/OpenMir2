@@ -516,15 +516,15 @@ namespace RobotSystem.Services
             else
             {
                 // 捡物品
-                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(mapItem.UserItem.Index);
+                StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(mapItem.UserItem.Index);
                 if (stdItem != null)
                 {
                     UserItem userItem = null;
                     if (Envir.DeleteFromMap(nX, nY, CellType.Item, mapItem.ItemId, null) == 1)
                     {
                         userItem = mapItem.UserItem;
-                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
-                        if (stdItem != null && IsAddWeightAvailable(SystemShare.ItemSystem.GetStdItemWeight(userItem.Index)))
+                        stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
+                        if (stdItem != null && IsAddWeightAvailable(SystemShare.EquipmentSystem.GetStdItemWeight(userItem.Index)))
                         {
                             //if (GetCheckItemList(18, StdItem.Name))
                             //{
@@ -636,7 +636,7 @@ namespace RobotSystem.Services
                                     MapItem mapItem = visibleMapItem.MapItem;
                                     if (mapItem.ItemId > 0)
                                     {
-                                        if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(SystemShare.ItemSystem.GetStdItemWeight(mapItem.UserItem.Index)))
+                                        if (IsAllowAiPickUpItem(visibleMapItem.sName) && IsAddWeightAvailable(SystemShare.EquipmentSystem.GetStdItemWeight(mapItem.UserItem.Index)))
                                         {
                                             if (mapItem.OfBaseObject == 0 || mapItem.OfBaseObject == ActorId || (SystemShare.ActorMgr.Get(mapItem.OfBaseObject).Master == this))
                                             {
@@ -1426,7 +1426,7 @@ namespace RobotSystem.Services
             if (UseItems[ItemLocation.ArmRingl] != null && UseItems[ItemLocation.ArmRingl].Index > 0 &&
                 Math.Round(Convert.ToDouble(UseItems[ItemLocation.ArmRingl].Dura / 100)) >= nCount)
             {
-                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                 if (stdItem != null)
                 {
                     result = CheckItemType(nItemType, stdItem);
@@ -1442,7 +1442,7 @@ namespace RobotSystem.Services
             int result = -1;
             for (int i = 0; i < ItemList.Count; i++)
             {
-                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(ItemList[i].Index);
+                StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(ItemList[i].Index);
                 if (stdItem != null)
                 {
                     if (CheckItemType(nItemType, stdItem) && HUtil32.Round(ItemList[i].Dura / 100.0) >= nCount)
@@ -1464,7 +1464,7 @@ namespace RobotSystem.Services
                 UserItem userItem = ItemList[nIndex];
                 if (UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
-                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (stdItem != null)
                     {
                         if (CheckItemType(nItemType, stdItem))
@@ -3726,7 +3726,7 @@ namespace RobotSystem.Services
             {
                 if (UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
-                    amuletStdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
+                    amuletStdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.ArmRingl].Index);
                     if (amuletStdItem != null)
                     {
                         if (amuletStdItem.StdMode == 25)
@@ -3753,7 +3753,7 @@ namespace RobotSystem.Services
                 }
                 if (UseItems[ItemLocation.Bujuk] != null && UseItems[ItemLocation.Bujuk].Index > 0)
                 {
-                    amuletStdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Bujuk].Index);
+                    amuletStdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.Bujuk].Index);
                     if (amuletStdItem != null)
                     {
                         if (amuletStdItem.StdMode == 25)
@@ -3787,7 +3787,7 @@ namespace RobotSystem.Services
                         UserItem userItem = ItemList[i];
                         if (userItem != null)
                         {
-                            amuletStdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            amuletStdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                             if (amuletStdItem != null)
                             {
                                 if (amuletStdItem.StdMode == 25)

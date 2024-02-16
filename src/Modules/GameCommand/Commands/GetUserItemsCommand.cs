@@ -52,7 +52,7 @@ namespace CommandModule.Commands
                             break;
                         }
                         userItem = mIPlayerActor.UseItems[i];
-                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!mIPlayerActor.IsEnoughBag())
@@ -87,7 +87,7 @@ namespace CommandModule.Commands
                             break;
                         }
                         userItem = mIPlayerActor.ItemList[i];
-                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!mIPlayerActor.IsEnoughBag())
@@ -120,7 +120,7 @@ namespace CommandModule.Commands
                             break;
                         }
                         userItem = mIPlayerActor.StorageItemList[i];
-                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                         {
                             if (!mIPlayerActor.IsEnoughBag())

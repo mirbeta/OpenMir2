@@ -41,11 +41,11 @@ namespace CommandModule.Commands
                 }
 
                 userItem = targerObject.ItemList[i];
-                s14 = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
+                s14 = SystemShare.EquipmentSystem.GetStdItemName(userItem.Index);
                 for (int j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.ItemList[j];
-                    if (SystemShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
+                    if (SystemShare.EquipmentSystem.GetStdItemName(userItem1.Index) == s14 && userItem.MakeIndex == userItem1.MakeIndex)
                     {
                         PlayerActor.ItemList.RemoveAt(j);
                         break;
@@ -60,11 +60,11 @@ namespace CommandModule.Commands
                     break;
                 }
                 userItem = targerObject.StorageItemList[i];
-                s14 = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
+                s14 = SystemShare.EquipmentSystem.GetStdItemName(userItem.Index);
                 for (int j = i - 1; j >= 0; j--)
                 {
                     userItem1 = targerObject.StorageItemList[j];
-                    if (SystemShare.ItemSystem.GetStdItemName(userItem1.Index) == s14 &&
+                    if (SystemShare.EquipmentSystem.GetStdItemName(userItem1.Index) == s14 &&
                         userItem.MakeIndex == userItem1.MakeIndex)
                     {
                         PlayerActor.StorageItemList.RemoveAt(j);

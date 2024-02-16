@@ -1422,7 +1422,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetWeapon(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
             sMsg = CombineStr(sMsg, "<$WEAPON>", sText);
         }
 
@@ -1434,7 +1434,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetDress(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
             sMsg = CombineStr(sMsg, "<$DRESS>", sText);
         }
 
@@ -1446,7 +1446,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetRightHand(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
             sMsg = CombineStr(sMsg, "<$RIGHTHAND>", sText);
         }
 
@@ -1458,7 +1458,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetHelmet(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
             sMsg = CombineStr(sMsg, "<$HELMET>", sText);
         }
 
@@ -1467,7 +1467,7 @@ namespace ScriptSystem.Processings
         /// </summary>
         internal void GetNecklace(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
             sMsg = CombineStr(sMsg, "<$NECKLACE>", sText);
         }
 
@@ -1479,7 +1479,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetRing_R(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
             sMsg = CombineStr(sMsg, "<$RING_R>", sText);
         }
 
@@ -1491,7 +1491,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetRing_L(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
             sMsg = CombineStr(sMsg, "<$RING_L>", sText);
         }
 
@@ -1503,7 +1503,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetArmring_R(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_R>", sText);
         }
 
@@ -1515,7 +1515,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetArmring_L(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
             sMsg = CombineStr(sMsg, "<$ARMRING_L>", sText);
         }
 
@@ -1527,7 +1527,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetBujuk(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
             sMsg = CombineStr(sMsg, "<$BUJUK>", sText);
         }
 
@@ -1539,7 +1539,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetBelt(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
             sMsg = CombineStr(sMsg, "<$BELT>", sText);
         }
 
@@ -1551,7 +1551,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetBoots(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
             sMsg = CombineStr(sMsg, "<$BOOTS>", sText);
         }
 
@@ -1563,7 +1563,7 @@ namespace ScriptSystem.Processings
         /// <param name="sMsg"></param>
         internal void GetChrm(IPlayerActor playerActor, string sVariable, ref string sMsg)
         {
-            string sText = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
+            string sText = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
             sMsg = CombineStr(sMsg, "<$CHARM>", sText);
         }
 

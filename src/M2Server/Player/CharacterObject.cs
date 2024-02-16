@@ -157,7 +157,7 @@ namespace M2Server.Player
             {
                 if (UseItems.Length >= ItemLocation.Charm && UseItems[ItemLocation.Charm] != null && UseItems[ItemLocation.Charm].Index > 0)
                 {
-                    StdItem StdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Charm].Index);
+                    StdItem StdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.Charm].Index);
                     if ((StdItem.StdMode == 7) && (StdItem.Shape == 2 || StdItem.Shape == 3))
                     {
                         ushort stoneDura;

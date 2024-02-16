@@ -41,9 +41,9 @@ namespace CommandModule.Commands
             for (int i = 0; i < nMineCount; i++)
             {
                 UserItem userItem = new UserItem();
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(sMineName, ref userItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sMineName, ref userItem))
                 {
-                    OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    OpenMir2.Data.StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                     if (stdItem != null && stdItem.StdMode == 43)
                     {
                         if (PlayerActor.IsAddWeightAvailable(stdItem.Weight * nMineCount))

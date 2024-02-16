@@ -5,14 +5,14 @@ using SystemModule.SubSystem;
 
 namespace M2Server.Items
 {
-    public class GameItemSystem : IItemSystem
+    public class EquipmentSystem : IItemSystem
     {
         /// <summary>
         /// 物品列表
         /// </summary>
         public readonly IList<StdItem> StdItemList;
 
-        public GameItemSystem()
+        public EquipmentSystem()
         {
             StdItemList = new List<StdItem>();
         }

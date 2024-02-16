@@ -66,9 +66,9 @@ namespace CommandModule.Commands
                 }
 
                 UserItem userItem = null;
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItemName, ref userItem))
                 {
-                    OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    OpenMir2.Data.StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                     if (stdItem.Price >= 15000 && !SystemShare.Config.TestServer && PlayerActor.Permission < 5)
                     {
                         return;

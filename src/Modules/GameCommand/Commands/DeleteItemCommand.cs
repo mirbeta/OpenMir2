@@ -45,7 +45,7 @@ namespace CommandModule.Commands
                 }
 
                 userItem = mIPlayerActor.ItemList[i];
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && string.Compare(sItemName, stdItem.Name, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     mIPlayerActor.SendDelItems(userItem);

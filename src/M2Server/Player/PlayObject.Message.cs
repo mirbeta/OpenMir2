@@ -404,7 +404,7 @@ namespace M2Server.Player
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if (!CheckItemsNeed(stdItem))
@@ -2174,7 +2174,7 @@ namespace M2Server.Player
                     {
                         continue;
                     }
-                    stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if ((stdItem.ItemDesc & 8) != 0)
@@ -2203,7 +2203,7 @@ namespace M2Server.Player
                     int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[i], dropWide, true, baseObject, ActorId))
                     {
-                        stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                        stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -2212,7 +2212,7 @@ namespace M2Server.Player
                                 {
                                     dropItemList.Add(new DeleteItem()
                                     {
-                                        ItemName = SystemShare.ItemSystem.GetStdItemName(UseItems[i].Index),
+                                        ItemName = SystemShare.EquipmentSystem.GetStdItemName(UseItems[i].Index),
                                         MakeIndex = UseItems[i].MakeIndex
                                     });
                                 }
@@ -2245,7 +2245,7 @@ namespace M2Server.Player
             {
                 if (UseItems[ItemLocation.RighThand] != null && UseItems[ItemLocation.RighThand].Index > 0)
                 {
-                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.RighThand].Index);
+                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.RighThand].Index);
                     if ((stdItem == null) || (stdItem.SpecialPwr != 0))
                     {
                         return;

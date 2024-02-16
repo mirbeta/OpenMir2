@@ -3,7 +3,7 @@ using OpenMir2.Packets.ClientPackets;
 
 namespace SystemModule.SubSystem
 {
-    public interface IItemSystem
+    public interface IEquipmentSystem
     {
         void AddItem(StdItem stdItem);
 

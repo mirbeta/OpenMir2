@@ -90,7 +90,7 @@ namespace GoldDealSystem.Service
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
+                            sUserItemName = SystemShare.EquipmentSystem.GetStdItemName(userItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0 && playerActor.SellOffItemList.Count < 9)
                         {
@@ -156,7 +156,7 @@ namespace GoldDealSystem.Service
                         }
                         if (string.IsNullOrEmpty(sUserItemName))
                         {
-                            sUserItemName = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
+                            sUserItemName = SystemShare.EquipmentSystem.GetStdItemName(userItem.Index);
                         }
                         if (string.Compare(sUserItemName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                         {
@@ -205,7 +205,7 @@ namespace GoldDealSystem.Service
                                 {
                                     continue;
                                 }
-                                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                 if (stdItem != null)
                                 {
                                     UserItem userItem = dealOffInfo.UseItems[j];
@@ -329,7 +329,7 @@ namespace GoldDealSystem.Service
                                 //M2Share.CommonDb.SaveSellOffItemList();//保存元宝寄售列表
                                 for (int j = 0; j <= 9; j++)
                                 {
-                                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                     if (stdItem != null)
                                     {
                                         //UserItem = new TUserItem();
@@ -525,7 +525,7 @@ namespace GoldDealSystem.Service
                     for (int i = 0; i < playerActor.SellOffItemList.Count; i++)
                     {
                         UserItem userItem = playerActor.SellOffItemList[i];
-                        stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                        stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                         if (stdItem != null && userItem != null && userItem.MakeIndex > 0)
                         {
                             dealOffInfo.UseItems[i] = userItem;
@@ -538,7 +538,7 @@ namespace GoldDealSystem.Service
                     {
                         continue;
                     }
-                    stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                    stdItem = SystemShare.EquipmentSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                     if (stdItem == null && nGameDiamond > 0 && nGameDiamond < 10000 && nCode == short.MaxValue)// 物品是金刚石
                     {
                         if (nGameDiamond > playerActor.Gold) // 金刚石数量大于玩家的数量时则反回失败

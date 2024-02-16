@@ -1205,7 +1205,7 @@ namespace M2Server.Player
                 if (IsNewHuman)
                 {
                     userItem = new UserItem();
-                    if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.Candle, ref userItem))
+                    if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.Candle, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1214,7 +1214,7 @@ namespace M2Server.Player
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
-                    if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.BasicDrug, ref userItem))
+                    if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.BasicDrug, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1223,7 +1223,7 @@ namespace M2Server.Player
                         Dispose(userItem);
                     }
                     userItem = new UserItem();
-                    if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.WoodenSword, ref userItem))
+                    if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.WoodenSword, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1235,7 +1235,7 @@ namespace M2Server.Player
                     string sItem = Gender == PlayerGender.Man
                         ? SystemShare.Config.ClothsMan
                         : SystemShare.Config.ClothsWoman;
-                    if (SystemShare.ItemSystem.CopyToUserItemFromName(sItem, ref userItem))
+                    if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItem, ref userItem))
                     {
                         ItemList.Add(userItem);
                     }
@@ -1247,7 +1247,7 @@ namespace M2Server.Player
                 // 检查背包中的物品是否合法
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    if (!string.IsNullOrEmpty(SystemShare.ItemSystem.GetStdItemName(ItemList[i].Index)))
+                    if (!string.IsNullOrEmpty(SystemShare.EquipmentSystem.GetStdItemName(ItemList[i].Index)))
                     {
                         continue;
                     }
@@ -1265,7 +1265,7 @@ namespace M2Server.Player
                             continue;
                         }
 
-                        StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                        StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)
                         {
                             if (!M2Share.CheckUserItems(i, stdItem))
@@ -1286,11 +1286,11 @@ namespace M2Server.Player
                 // 检查背包中是否有复制品
                 for (int i = ItemList.Count - 1; i >= 0; i--)
                 {
-                    string sItemName = SystemShare.ItemSystem.GetStdItemName(ItemList[i].Index);
+                    string sItemName = SystemShare.EquipmentSystem.GetStdItemName(ItemList[i].Index);
                     for (int j = i - 1; j >= 0; j--)
                     {
                         UserItem userItem1 = ItemList[j];
-                        if (SystemShare.ItemSystem.GetStdItemName(userItem1.Index) == sItemName && ItemList[i].MakeIndex == userItem1.MakeIndex)
+                        if (SystemShare.EquipmentSystem.GetStdItemName(userItem1.Index) == sItemName && ItemList[i].MakeIndex == userItem1.MakeIndex)
                         {
                             ItemList.RemoveAt(j);
                             break;
@@ -1504,7 +1504,7 @@ namespace M2Server.Player
                 return false;
             }
             int nRand = 0;
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
             if (stdItem != null)
             {
                 nRand = Math.Abs(HUtil32.HiByte(stdItem.DC) - HUtil32.LoByte(stdItem.DC)) / 5;
@@ -2100,7 +2100,7 @@ namespace M2Server.Player
                     StdItem stdItem;
                     if (UseItems[i].Dura == 0)
                     {
-                        stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                        stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                         if (stdItem != null)
                         {
                             if ((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand))
@@ -2114,7 +2114,7 @@ namespace M2Server.Player
                         }
                         continue;
                     }
-                    stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                     ApplyItemParameters(UseItems[i], stdItem);
                     ApplyItemParametersEx(UseItems[i]);
 
@@ -2966,7 +2966,7 @@ namespace M2Server.Player
                 if (nDura <= 0)
                 {
                     SendDelItems(UseItems[ItemLocation.Dress]);
-                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Dress].Index);
+                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.Dress].Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         //M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" +
@@ -3001,7 +3001,7 @@ namespace M2Server.Player
                     if (nDura <= 0)
                     {
                         SendDelItems(UseItems[i]);
-                        StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                        StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                         if (stdItem.NeedIdentify == 1)
                         {
                             //M2Share.EventSource.AddEventLog(3, MapName + "\t" + CurrX + "\t" + CurrY + "\t" + ChrName + "\t" + stdItem.Name + "\t" +
@@ -3394,7 +3394,7 @@ namespace M2Server.Player
             StdItem stdItem;
             if (UseItems[ItemLocation.Dress] != null && UseItems[ItemLocation.Dress].Index > 0) // 衣服
             {
-                stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Dress].Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.Dress].Index);
                 if (stdItem != null)
                 {
                     nDress = (byte)(stdItem.Shape * 2);
@@ -3405,7 +3405,7 @@ namespace M2Server.Player
             byte nWeapon = (byte)playGender;
             if (UseItems[ItemLocation.Weapon] != null && UseItems[ItemLocation.Weapon].Index > 0) // 武器
             {
-                stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[ItemLocation.Weapon].Index);
                 if (stdItem != null)
                 {
                     nWeapon += (byte)(stdItem.Shape * 2);
@@ -3548,7 +3548,7 @@ namespace M2Server.Player
                             {
                                 delList.Add(new DeleteItem()
                                 {
-                                    ItemName = SystemShare.ItemSystem.GetStdItemName(ItemList[i].Index),
+                                    ItemName = SystemShare.EquipmentSystem.GetStdItemName(ItemList[i].Index),
                                     MakeIndex = ItemList[i].MakeIndex
                                 });
                                 Dispose(ItemList[i]);
@@ -4111,7 +4111,7 @@ namespace M2Server.Player
             {
                 UserItem useItems = new UserItem(UseItems[ItemLocation.Weapon]);
                 CheckWeaponUpgradeStatus(ref UseItems[ItemLocation.Weapon]);
-                StdItem StdItem = SystemShare.ItemSystem.GetStdItem(useItems.Index);
+                StdItem StdItem = SystemShare.EquipmentSystem.GetStdItem(useItems.Index);
                 if (UseItems[ItemLocation.Weapon].Index == 0)
                 {
                     SysMsg(MessageSettings.TheWeaponBroke, MsgColor.Red, MsgType.Hint);
@@ -4407,14 +4407,14 @@ namespace M2Server.Player
             if (item != null)
             {
                 ClientItem clientItem = new ClientItem();
-                SystemShare.ItemSystem.GetUpgradeStdItem(item, uitem, ref clientItem);
+                SystemShare.EquipmentSystem.GetUpgradeStdItem(item, uitem, ref clientItem);
                 ApplyItemParametersByJob(uitem, ref clientItem);
                 switch (item.StdMode)
                 {
                     case 5:
                     case 6:
                         AddAbil.HIT = (ushort)(AddAbil.HIT + HUtil32.HiByte(clientItem.Item.AC));
-                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + SystemShare.ItemSystem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
+                        AddAbil.HitSpeed = (ushort)(AddAbil.HitSpeed + SystemShare.EquipmentSystem.RealAttackSpeed(HUtil32.HiByte(clientItem.Item.MAC)));
                         AddAbil.Luck = (byte)(AddAbil.Luck + HUtil32.LoByte(clientItem.Item.AC));
                         AddAbil.UnLuck = (byte)(AddAbil.UnLuck + HUtil32.LoByte(clientItem.Item.MAC));
                         AddAbil.Slowdown = (byte)(AddAbil.Slowdown + clientItem.Item.Slowdown);
@@ -4607,11 +4607,11 @@ namespace M2Server.Player
 
         private void ApplyItemParametersEx(UserItem uitem)
         {
-            StdItem item = SystemShare.ItemSystem.GetStdItem(uitem.Index);
+            StdItem item = SystemShare.EquipmentSystem.GetStdItem(uitem.Index);
             if (item != null)
             {
                 ClientItem clientItem = new ClientItem();
-                SystemShare.ItemSystem.GetUpgradeStdItem(item, uitem, ref clientItem);
+                SystemShare.EquipmentSystem.GetUpgradeStdItem(item, uitem, ref clientItem);
                 switch (item.StdMode)
                 {
                     case 52:
@@ -4886,7 +4886,7 @@ namespace M2Server.Player
 
         private void ApplyItemParametersByJob(UserItem uitem, ref ClientItem std)
         {
-            StdItem item = SystemShare.ItemSystem.GetStdItem(uitem.Index);
+            StdItem item = SystemShare.EquipmentSystem.GetStdItem(uitem.Index);
             if (item != null)
             {
                 if ((item.StdMode == 22) && (item.Shape == DragonConst.DRAGON_RING_SHAPE))
@@ -5340,7 +5340,7 @@ namespace M2Server.Player
                 {
                     continue;
                 }
-                string sName = SystemShare.ItemSystem.GetStdItemName(UseItems[i].Index);
+                string sName = SystemShare.EquipmentSystem.GetStdItemName(UseItems[i].Index);
                 if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     result = UseItems[i];
@@ -5359,7 +5359,7 @@ namespace M2Server.Player
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem pSItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem pSItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                     if (pSItem != null)
                     {
                         if (M2Share.ItemDamageRevivalMap.Contains(pSItem.Shape) || (((i == ItemLocation.Weapon) || (i == ItemLocation.RighThand)) && M2Share.ItemDamageRevivalMap.Contains(pSItem.AniCount)))
@@ -5417,7 +5417,7 @@ namespace M2Server.Player
                 }
                 if ((UseItems[i].Index > 0) && (UseItems[i].Dura > 0))
                 {
-                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         if (currentLight < stdItem.Light)

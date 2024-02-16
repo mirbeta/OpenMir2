@@ -462,10 +462,10 @@ namespace GameSrv.Word
                                 }
 
                                 UserItem userItem = null;
-                                if (SystemShare.ItemSystem.CopyToUserItemFromName(itemName, ref userItem))
+                                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(itemName, ref userItem))
                                 {
                                     userItem.Dura = (ushort)HUtil32.Round(userItem.DuraMax / 100.0 * (20 + M2Share.RandomNumber.Random(80)));
-                                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                                     if (stdItem == null)
                                     {
                                         continue;
@@ -473,13 +473,13 @@ namespace GameSrv.Word
 
                                     if (stdItem.StdMode > 0 && M2Share.RandomNumber.Random(SystemShare.Config.MonRandomAddValue) == 0) //极品掉落几率
                                     {
-                                        SystemShare.ItemSystem.RandomUpgradeItem(stdItem, userItem);
+                                        SystemShare.EquipmentSystem.RandomUpgradeItem(stdItem, userItem);
                                     }
                                     if (M2Share.StdModeMap.Contains(stdItem.StdMode))
                                     {
                                         if (stdItem.Shape == 130 || stdItem.Shape == 131 || stdItem.Shape == 132)
                                         {
-                                            SystemShare.ItemSystem.RandomSetUnknownItem(stdItem, userItem);
+                                            SystemShare.EquipmentSystem.RandomSetUnknownItem(stdItem, userItem);
                                         }
                                     }
                                     mon.ItemList.Add(userItem);

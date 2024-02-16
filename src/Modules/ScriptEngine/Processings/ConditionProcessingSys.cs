@@ -1322,7 +1322,7 @@ namespace ScriptSystem.Processings
                 return false;
             }
             userItem = playerActor.UseItems[nWhere];
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playerActor.SysMsg("你身上没有戴指定物品！！！", MsgColor.Red, MsgType.Hint);
@@ -1333,7 +1333,7 @@ namespace ScriptSystem.Processings
 
         public bool ConditionOfCheckMemoryItemIsRememberItem(UserItem userItem)
         {
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (stdItem == null)
             {
                 return false;
@@ -3013,7 +3013,7 @@ namespace ScriptSystem.Processings
             {
                 success = false;
             }
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (stdItem != null && stdItem.StdMode == nType)
             {
                 success = true;
@@ -3114,7 +3114,7 @@ namespace ScriptSystem.Processings
                 for (int j = 0; j < baseObject.ItemList.Count; j++)
                 {
                     UserItem userItem = baseObject.ItemList[j];
-                    if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.Ordinal) == 0)
+                    if (string.Compare(SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.Ordinal) == 0)
                     {
                         nItemCount -= 1;
                         if (nItemCount <= 0)

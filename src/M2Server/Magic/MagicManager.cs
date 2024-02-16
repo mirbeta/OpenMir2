@@ -228,7 +228,7 @@ namespace M2Server.Magic
                     {
                         if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx))
                         {
-                            OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                            OpenMir2.Data.StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                             if (stdItem != null)
                             {
                                 MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);
@@ -907,7 +907,7 @@ namespace M2Server.Magic
                 {
                     if (MagicBase.CheckAmulet(playObject, 1, 2, ref nAmuletIdx))
                     {
-                        OpenMir2.Data.StdItem stdItem = SystemShare.ItemSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
+                        OpenMir2.Data.StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(playObject.UseItems[nAmuletIdx].Index);
                         if (stdItem != null)
                         {
                             MagicBase.UseAmulet(playObject, 1, 2, nAmuletIdx);

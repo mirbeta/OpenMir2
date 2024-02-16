@@ -671,15 +671,15 @@ namespace ScriptSystem
                     break;
                 }
                 userItem = playerActor.ItemList[i];
-                if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
-                    stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                     if (stdItem.NeedIdentify == 1)
                     {
                         // M2Share.EventSource.AddEventLog(10, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
                     }
                     playerActor.SendDelItems(userItem);
-                    sC = SystemShare.ItemSystem.GetStdItemName(userItem.Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(userItem.Index);
                     Dispose(userItem);
                     playerActor.ItemList.RemoveAt(i);
                     nItemCount -= 1;
@@ -701,7 +701,7 @@ namespace ScriptSystem
                 }
                 return;
             }
-            if (SystemShare.ItemSystem.GetStdItemIdx(sItemName) > 0)
+            if (SystemShare.EquipmentSystem.GetStdItemIdx(sItemName) > 0)
             {
                 if (!(nItemCount >= 1 && nItemCount <= 50))
                 {
@@ -712,11 +712,11 @@ namespace ScriptSystem
                     if (playerActor.IsEnoughBag())
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             playerActor.ItemList.Add(userItem);
                             playerActor.SendAddItem(userItem);
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 //M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -730,9 +730,9 @@ namespace ScriptSystem
                     else
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + ChrName);
@@ -753,7 +753,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Necklace].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Necklace]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
                     playerActor.UseItems[ItemLocation.Necklace].Index = 0;
                     return;
                 }
@@ -763,14 +763,14 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Ringl].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Ringl]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
                     playerActor.UseItems[ItemLocation.Ringl].Index = 0;
                     return;
                 }
                 if (playerActor.UseItems[ItemLocation.Ringr].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Ringr]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
                     playerActor.UseItems[ItemLocation.Ringr].Index = 0;
                     return;
                 }
@@ -780,14 +780,14 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.ArmRingl].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.ArmRingl]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
                     playerActor.UseItems[ItemLocation.ArmRingl].Index = 0;
                     return;
                 }
                 if (playerActor.UseItems[ItemLocation.ArmRingr].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.ArmRingr]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
                     playerActor.UseItems[ItemLocation.ArmRingr].Index = 0;
                     return;
                 }
@@ -797,7 +797,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Weapon].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Weapon]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
                     playerActor.UseItems[ItemLocation.Weapon].Index = 0;
                     return;
                 }
@@ -807,7 +807,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Helmet].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Helmet]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
                     playerActor.UseItems[ItemLocation.Helmet].Index = 0;
                     return;
                 }
@@ -817,7 +817,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Dress].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Dress]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
                     playerActor.UseItems[ItemLocation.Dress].Index = 0;
                     return;
                 }
@@ -827,7 +827,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Bujuk].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Bujuk]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
                     playerActor.UseItems[ItemLocation.Bujuk].Index = 0;
                     return;
                 }
@@ -837,7 +837,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Belt].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Belt]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
                     playerActor.UseItems[ItemLocation.Belt].Index = 0;
                     return;
                 }
@@ -847,7 +847,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Boots].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Boots]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
                     playerActor.UseItems[ItemLocation.Boots].Index = 0;
                     return;
                 }
@@ -857,7 +857,7 @@ namespace ScriptSystem
                 if (playerActor.UseItems[ItemLocation.Charm].Index > 0)
                 {
                     playerActor.SendDelItems(playerActor.UseItems[ItemLocation.Charm]);
-                    sC = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
+                    sC = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
                     playerActor.UseItems[ItemLocation.Charm].Index = 0;
                     return;
                 }
@@ -870,7 +870,7 @@ namespace ScriptSystem
                 }
                 if (playerActor.UseItems[i].Index > 0)
                 {
-                    string sName = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[i].Index);
+                    string sName = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[i].Index);
                     if (string.Compare(sName, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                     {
                         playerActor.SendDelItems(playerActor.UseItems[i]);

@@ -37,7 +37,7 @@ namespace CommandModule.Commands
                     OpenMir2.Packets.ClientPackets.UserItem userItem = mIPlayerActor.ItemList[i];
                     delList.Add(new DeleteItem()
                     {
-                        ItemName = SystemShare.ItemSystem.GetStdItemName(userItem.Index),
+                        ItemName = SystemShare.EquipmentSystem.GetStdItemName(userItem.Index),
                         MakeIndex = userItem.MakeIndex
                     });
                     mIPlayerActor.ItemList.RemoveAt(i);

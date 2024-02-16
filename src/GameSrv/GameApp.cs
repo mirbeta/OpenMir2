@@ -85,7 +85,7 @@ namespace GameSrv
             SystemShare.ManageNPC = new Merchant();
             SystemShare.RobotNPC = new Merchant();
             SystemShare.FunctionNPC = new Merchant();
-            SystemShare.ItemSystem = new GameItemSystem();
+            SystemShare.EquipmentSystem = new EquipmentSystem();
             SystemShare.GuildMgr = new GuildManager();
             SystemShare.CastleMgr = new CastleManager();
             SystemShare.MapMgr = new MapManager();
@@ -114,7 +114,7 @@ namespace GameSrv
                 LogService.Info($"物品数据库加载失败!!! Code: {nCode}");
                 return;
             }
-            LogService.Info($"物品数据库加载成功...[{SystemShare.ItemSystem.ItemCount}]");
+            LogService.Info($"物品数据库加载成功...[{SystemShare.EquipmentSystem.ItemCount}]");
             nCode = Map.LoadMinMap();
             if (nCode < 0)
             {

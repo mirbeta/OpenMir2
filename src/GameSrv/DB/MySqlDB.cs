@@ -17,7 +17,7 @@ namespace GameSrv.DB
             try
             {
                 HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);
-                SystemShare.ItemSystem.Clear();
+                SystemShare.EquipmentSystem.Clear();
                 if (!Open())
                 {
                     return result;
@@ -71,9 +71,9 @@ namespace GameSrv.DB
                         stdItem.ItemType = dr.GetByte("ITEMTYPE");
                         stdItem.ItemSet = dr.GetUInt16("ITEMSET");
                         stdItem.Reference = dr.GetString("REFERENCE");
-                        if (SystemShare.ItemSystem.ItemCount <= idx)
+                        if (SystemShare.EquipmentSystem.ItemCount <= idx)
                         {
-                            SystemShare.ItemSystem.AddItem(stdItem);
+                            SystemShare.EquipmentSystem.AddItem(stdItem);
                             result = 1;
                         }
                         else

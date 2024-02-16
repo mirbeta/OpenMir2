@@ -206,7 +206,7 @@ namespace M2Server
 
         public static bool IsAccessory(ushort nIndex)
         {
-            StdItem item = SystemShare.ItemSystem.GetStdItem(nIndex);
+            StdItem item = SystemShare.EquipmentSystem.GetStdItem(nIndex);
             return IsAccessoryMap.Contains(item.StdMode);
         }
 

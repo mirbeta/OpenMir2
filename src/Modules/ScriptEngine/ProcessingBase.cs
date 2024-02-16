@@ -454,67 +454,67 @@ namespace ScriptSystem
                     result = true;
                     return result;
                 case "$DRESS":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Dress].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$WEAPON":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Weapon].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RIGHTHAND":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.RighThand].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$HELMET":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Helmet].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$NECKLACE":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Necklace].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_R":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$RING_L":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Ringl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_R":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingr].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$ARMRING_L":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.ArmRingl].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BUJUK":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Bujuk].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BELT":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Belt].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$BOOTS":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Boots].Index);
                     nDataType = 0;
                     result = true;
                     return result;
                 case "$CHARM":
-                    sValue = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
+                    sValue = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[ItemLocation.Charm].Index);
                     nDataType = 0;
                     result = true;
                     return result;

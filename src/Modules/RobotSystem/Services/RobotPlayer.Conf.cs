@@ -75,11 +75,11 @@ namespace RobotSystem.Services
                 for (int i = 0; i < tempList.Count; i++)
                 {
                     string sItemName = tempList[i].Trim();
-                    stdItem = SystemShare.ItemSystem.GetStdItem(sItemName);
+                    stdItem = SystemShare.EquipmentSystem.GetStdItem(sItemName);
                     if (stdItem != null)
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             if (SystemShare.StdModeMap.Contains(stdItem.StdMode))
                             {
@@ -127,11 +127,11 @@ namespace RobotSystem.Services
             {
                 if (!string.IsNullOrEmpty(UseItemNames[i]))
                 {
-                    stdItem = SystemShare.ItemSystem.GetStdItem(UseItemNames[i]);
+                    stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItemNames[i]);
                     if (stdItem != null)
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(UseItemNames[i], ref userItem))
+                        if (SystemShare.EquipmentSystem.CopyToUserItemFromName(UseItemNames[i], ref userItem))
                         {
                             if (SystemShare.StdModeMap.Contains(stdItem.StdMode))
                             {

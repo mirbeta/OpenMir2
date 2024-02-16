@@ -99,8 +99,8 @@ namespace M2Server.Player
                 if (Envir.DeleteFromMap(CurrX, CurrY, CellType.Item, mapItem.ItemId, null) == 1)
                 {
                     UserItem userItem = mapItem.UserItem;
-                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
-                    if (stdItem != null && IsAddWeightAvailable(SystemShare.ItemSystem.GetStdItemWeight(userItem.Index)))
+                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
+                    if (stdItem != null && IsAddWeightAvailable(SystemShare.EquipmentSystem.GetStdItemWeight(userItem.Index)))
                     {
                         SendMsg(Messages.RM_ITEMHIDE, 0, mapItem.ItemId, CurrX, CurrY);
                         AddItemToBag(userItem);
@@ -197,13 +197,13 @@ namespace M2Server.Player
 
         public void SendAddItem(UserItem userItem)
         {
-            StdItem item = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem item = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (item == null)
             {
                 return;
             }
             ClientItem clientItem = new ClientItem();
-            SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
+            SystemShare.EquipmentSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
             clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
             clientItem.MakeIndex = userItem.MakeIndex;
             clientItem.Dura = userItem.Dura;
@@ -312,7 +312,7 @@ namespace M2Server.Player
                 {
                     continue;
                 }
-                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(useItem.Index);
+                StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(useItem.Index);
                 if (stdItem != null)
                 {
                     if (stdItem.Shape is ItemShapeConst.SpiritItem3 or ItemShapeConst.SpiritItem1 or ItemShapeConst.SpiritItem2 or ItemShapeConst.SpiritItem4)
@@ -993,11 +993,11 @@ namespace M2Server.Player
             {
                 if (UseItems[i] != null && UseItems[i].Index > 0)
                 {
-                    StdItem item = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem item = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                     if (item != null)
                     {
                         ClientItem clientItem = new ClientItem();
-                        SystemShare.ItemSystem.GetUpgradeStdItem(item, UseItems[i], ref clientItem);
+                        SystemShare.EquipmentSystem.GetUpgradeStdItem(item, UseItems[i], ref clientItem);
                         //Item.GetItemAddValue(UseItems[i], ref ClientItem.Item);
                         clientItem.Item.Name = CustomItemSystem.GetItemName(UseItems[i]);
                         clientItem.Dura = UseItems[i].Dura;
@@ -1574,11 +1574,11 @@ namespace M2Server.Player
                 for (int i = startCount; i < endCount; i++)
                 {
                     UserItem userItem = StorageItemList[i];
-                    StdItem item = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                    StdItem item = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                     if (item != null)
                     {
                         ClientItem clientItem = new ClientItem();
-                        SystemShare.ItemSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
+                        SystemShare.EquipmentSystem.GetUpgradeStdItem(item, userItem, ref clientItem);
                         //Item.GetItemAddValue(UserItem, ref ClientItem.Item);
                         clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                         clientItem.Dura = userItem.Dura;
@@ -1617,11 +1617,11 @@ namespace M2Server.Player
 
         public void SendDelItems(UserItem userItem)
         {
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.EquipmentSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1637,11 +1637,11 @@ namespace M2Server.Player
 
         public void SendUpdateItem(UserItem userItem)
         {
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.EquipmentSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1657,11 +1657,11 @@ namespace M2Server.Player
 
         private void SendUpdateItemWithLevel(UserItem userItem, byte level)
         {
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.EquipmentSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -1678,11 +1678,11 @@ namespace M2Server.Player
 
         private void SendUpdateItemByJob(UserItem userItem, byte level)
         {
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (stdItem != null)
             {
                 ClientItem clientItem = new ClientItem();
-                SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                SystemShare.EquipmentSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                 clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                 clientItem.MakeIndex = userItem.MakeIndex;
                 clientItem.Dura = userItem.Dura;
@@ -2004,7 +2004,7 @@ namespace M2Server.Player
                     {
                         continue;
                     }
-                    StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[i].Index);
+                    StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[i].Index);
                     if (stdItem != null)
                     {
                         n14 += stdItem.Weight;
@@ -2328,11 +2328,11 @@ namespace M2Server.Player
         {
             if (DealCreat != null)
             {
-                StdItem pStdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                StdItem pStdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (pStdItem != null)
                 {
                     ClientItem clientItem = new ClientItem();
-                    SystemShare.ItemSystem.GetUpgradeStdItem(pStdItem, userItem, ref clientItem);
+                    SystemShare.EquipmentSystem.GetUpgradeStdItem(pStdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
@@ -2355,11 +2355,11 @@ namespace M2Server.Player
             SendDefMessage(Messages.SM_DEALADDITEM_OK, 0, 0, 0, 0);
             if (DealCreat != null)
             {
-                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (stdItem != null)
                 {
                     ClientItem clientItem = new ClientItem();
-                    SystemShare.ItemSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
+                    SystemShare.EquipmentSystem.GetUpgradeStdItem(stdItem, userItem, ref clientItem);
                     clientItem.Item.Name = CustomItemSystem.GetItemName(userItem);
                     clientItem.MakeIndex = userItem.MakeIndex;
                     clientItem.Dura = userItem.Dura;
@@ -2419,7 +2419,7 @@ namespace M2Server.Player
             if (nRandom >= SystemShare.Config.GoldStoneMin && nRandom <= SystemShare.Config.GoldStoneMax)
             {
                 userItem = new UserItem();
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GoldStone, ref userItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.GoldStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2435,7 +2435,7 @@ namespace M2Server.Player
             if (nRandom >= SystemShare.Config.SilverStoneMin && nRandom <= SystemShare.Config.SilverStoneMax)
             {
                 userItem = new UserItem();
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.SilverStone, ref userItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.SilverStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2451,7 +2451,7 @@ namespace M2Server.Player
             if (nRandom >= SystemShare.Config.SteelStoneMin && nRandom <= SystemShare.Config.SteelStoneMax)
             {
                 userItem = new UserItem();
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.SteelStone, ref userItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.SteelStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2467,7 +2467,7 @@ namespace M2Server.Player
             if (nRandom >= SystemShare.Config.BlackStoneMin && nRandom <= SystemShare.Config.BlackStoneMax)
             {
                 userItem = new UserItem();
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.BlackStone, ref userItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.BlackStone, ref userItem))
                 {
                     userItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(userItem);
@@ -2481,7 +2481,7 @@ namespace M2Server.Player
                 return;
             }
             userItem = new UserItem();
-            if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.CopperStone, ref userItem))
+            if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.CopperStone, ref userItem))
             {
                 userItem.Dura = MakeMineRandomDrua();
                 ItemList.Add(userItem);
@@ -2507,7 +2507,7 @@ namespace M2Server.Player
             int mineRate = M2Share.RandomNumber.Random(120);
             if (HUtil32.RangeInDefined(mineRate, 1, 2))
             {
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone1, ref mineItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.GemStone1, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2521,7 +2521,7 @@ namespace M2Server.Player
             }
             else if (HUtil32.RangeInDefined(mineRate, 3, 20))
             {
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone2, ref mineItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.GemStone2, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2535,7 +2535,7 @@ namespace M2Server.Player
             }
             else if (HUtil32.RangeInDefined(mineRate, 21, 45))
             {
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone3, ref mineItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.GemStone3, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2549,7 +2549,7 @@ namespace M2Server.Player
             }
             else
             {
-                if (SystemShare.ItemSystem.CopyToUserItemFromName(SystemShare.Config.GemStone4, ref mineItem))
+                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(SystemShare.Config.GemStone4, ref mineItem))
                 {
                     mineItem.Dura = MakeMineRandomDrua();
                     ItemList.Add(mineItem);
@@ -2576,7 +2576,7 @@ namespace M2Server.Player
             for (int i = 0; i < ItemList.Count; i++)
             {
                 UserItem userItem = ItemList[i];
-                if (string.Compare(SystemShare.ItemSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
+                if (string.Compare(SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     if (userItem.Dura > nDura)
                     {
@@ -3473,7 +3473,7 @@ namespace M2Server.Player
                             UserItem userItem = ItemList[i];
                             if (userItem.Index == DlgItemIndex)
                             {
-                                StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                                StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                                 if (stdItem != null)
                                 {
                                     if (stdItem.NeedIdentify == 1)

@@ -97,8 +97,8 @@ namespace CommandModule.Commands
                         return;
                     }
                     SystemShare.SaveItemBindAccount();
-                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
                 case 1:
@@ -135,8 +135,8 @@ namespace CommandModule.Commands
                         return;
                     }
                     SystemShare.SaveItemBindChrName();
-                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayerActor.SendUpdateItem(userItem);
                     mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
@@ -174,8 +174,8 @@ namespace CommandModule.Commands
                         return;
                     }
                     SystemShare.SaveItemBindIPaddr();
-                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("你的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     PlayerActor.SendUpdateItem(userItem);
                     mIPlayerActor.SendMsg(PlayerActor, Messages.RM_SENDUSEITEMS, 0, 0, 0, 0);
                     break;
@@ -198,8 +198,8 @@ namespace CommandModule.Commands
                     };
                     //Settings.g_ItemBindDieNoDropName.InsertText(0, ItemBind);
                     //M2Share.SaveItemBindDieNoDropName();// 保存人物装备死亡不爆列表
-                    mIPlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
-                    PlayerActor.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.ItemSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
+                    mIPlayerActor.SysMsg(string.Format("{0}[{1}]IDX[{2}]系列号[{3}]持久[{4}-{5}]，死亡不爆绑定到{6}成功。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), userItem.Index, userItem.MakeIndex, userItem.Dura, userItem.DuraMax, sBindName), MsgColor.Blue, MsgType.Hint);
+                    PlayerActor.SysMsg(string.Format("您的{0}[{1}]已经绑定到{2}[{3}]上了。", SystemShare.GetUseItemName(nItem), SystemShare.EquipmentSystem.GetStdItemName(userItem.Index), sType, sBindName), MsgColor.Blue, MsgType.Hint);
                     break;
             }
         }

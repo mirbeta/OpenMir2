@@ -164,11 +164,11 @@ namespace RobotSystem.Services
                                         }
                                         if (UseItems[nWhere].Index <= 0)
                                         {
-                                            stdItem = SystemShare.ItemSystem.GetStdItem(UseItemNames[nWhere]);
+                                            stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItemNames[nWhere]);
                                             if (stdItem != null)
                                             {
                                                 userItem = new UserItem();
-                                                if (SystemShare.ItemSystem.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
+                                                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(UseItemNames[nWhere], ref userItem))
                                                 {
                                                     boRecalcAbilitys = true;
                                                     if (SystemShare.StdModeMap.Contains(stdItem.StdMode))
@@ -193,7 +193,7 @@ namespace RobotSystem.Services
                                                 userItem = ItemList[j];
                                                 if (userItem != null)
                                                 {
-                                                    stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                                                    stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                                                     if (stdItem != null)
                                                     {
                                                         boFind = false;
@@ -208,7 +208,7 @@ namespace RobotSystem.Services
                                             if (!boFind)
                                             {
                                                 userItem = new UserItem();
-                                                if (SystemShare.ItemSystem.CopyToUserItemFromName(BagItemNames[i], ref userItem))
+                                                if (SystemShare.EquipmentSystem.CopyToUserItemFromName(BagItemNames[i], ref userItem))
                                                 {
                                                     if (!AddItemToBag(userItem))
                                                     {
@@ -227,7 +227,7 @@ namespace RobotSystem.Services
                                     {
                                         if (UseItems[nWhere] != null && UseItems[nWhere].Index > 0)
                                         {
-                                            stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[nWhere].Index);
+                                            stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[nWhere].Index);
                                             if (stdItem != null)
                                             {
                                                 if (UseItems[nWhere].DuraMax > UseItems[nWhere].Dura && stdItem.StdMode != 43)
@@ -917,7 +917,7 @@ namespace RobotSystem.Services
                     int dropWide = HUtil32._MIN(SystemShare.Config.DropItemRage, 3);
                     if (DropItemDown(UseItems[nC], dropWide, true, baseObject, this.ActorId))
                     {
-                        StdItem stdItem = SystemShare.ItemSystem.GetStdItem(UseItems[nC].Index);
+                        StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(UseItems[nC].Index);
                         if (stdItem != null)
                         {
                             if ((stdItem.ItemDesc & 10) == 0)
@@ -926,7 +926,7 @@ namespace RobotSystem.Services
                                 {
                                     dropItemList.Add(new DeleteItem()
                                     {
-                                        ItemName = SystemShare.ItemSystem.GetStdItemName(UseItems[nC].Index),
+                                        ItemName = SystemShare.EquipmentSystem.GetStdItemName(UseItems[nC].Index),
                                         MakeIndex = UseItems[nC].MakeIndex
                                     });
                                 }

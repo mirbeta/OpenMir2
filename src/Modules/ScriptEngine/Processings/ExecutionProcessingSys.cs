@@ -2384,7 +2384,7 @@ namespace ScriptSystem.Processings
                                         {
                                             continue;
                                         }
-                                        StdItem stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
+                                        StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(dealOffInfo.UseItems[j].Index);
                                         if (stdItem == null)
                                         {
                                             // 是金刚石
@@ -2489,7 +2489,7 @@ namespace ScriptSystem.Processings
                                         {
                                             continue;
                                         }
-                                        StdItem stdItem = SystemShare.ItemSystem.GetStdItem(dealOffInfo.UseItems[k].Index);
+                                        StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(dealOffInfo.UseItems[k].Index);
                                         if (stdItem == null)
                                         {
                                             // 是金刚石
@@ -3935,7 +3935,7 @@ namespace ScriptSystem.Processings
                 {
                     continue;
                 }
-                string sUserItemName = SystemShare.ItemSystem.GetStdItemName(playerActor.UseItems[i].Index);
+                string sUserItemName = SystemShare.EquipmentSystem.GetStdItemName(playerActor.UseItems[i].Index);
                 if (!(i != ItemLocation.Charm))
                 {
                     playerActor.SysMsg(sUserItemName + " 禁止修理...", MsgColor.Red, MsgType.Hint);
@@ -3988,7 +3988,7 @@ namespace ScriptSystem.Processings
                 return;
             }
             UserItem userItem = playerActor.UseItems[nWhere];
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playerActor.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
@@ -4039,7 +4039,7 @@ namespace ScriptSystem.Processings
                 return;
             }
             UserItem userItem = playerActor.UseItems[nWhere];
-            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
             if (userItem.Index <= 0 || stdItem == null)
             {
                 playerActor.SysMsg("你身上没有戴指定物品!!!", MsgColor.Red, MsgType.Hint);
@@ -4249,7 +4249,7 @@ namespace ScriptSystem.Processings
             for (int i = playerActor.ItemList.Count - 1; i >= 0; i--)
             {
                 userItem = playerActor.ItemList[i];
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.Need == nNeed)
                 {
                     playerActor.SendDelItems(userItem);
@@ -4260,7 +4260,7 @@ namespace ScriptSystem.Processings
             for (int i = playerActor.StorageItemList.Count - 1; i >= 0; i--)
             {
                 userItem = playerActor.StorageItemList[i];
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (stdItem != null && stdItem.Need == nNeed)
                 {
                     Dispose(userItem);
@@ -4288,7 +4288,7 @@ namespace ScriptSystem.Processings
                 {
                     continue;
                 }
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     playerActor.SendDelItems(userItem);
@@ -4303,7 +4303,7 @@ namespace ScriptSystem.Processings
                 {
                     continue;
                 }
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     Dispose(userItem);
@@ -4317,7 +4317,7 @@ namespace ScriptSystem.Processings
                 {
                     continue;
                 }
-                stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                 if (!boMatchName || stdItem != null && string.Compare(stdItem.Name, sItemName, StringComparison.OrdinalIgnoreCase) == 0)
                 {
                     userItem.Index = 0;
@@ -4875,7 +4875,7 @@ namespace ScriptSystem.Processings
                 }
                 return;
             }
-            if (SystemShare.ItemSystem.GetStdItemIdx(sItemName) > 0)
+            if (SystemShare.EquipmentSystem.GetStdItemIdx(sItemName) > 0)
             {
                 if (!(nItemCount >= 1 && nItemCount <= 50))
                 {
@@ -4889,11 +4889,11 @@ namespace ScriptSystem.Processings
                     if (playerActor.IsEnoughBag())
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
                             playerActor.ItemList.Add(userItem);
                             playerActor.SendAddItem(userItem);
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
@@ -4907,9 +4907,9 @@ namespace ScriptSystem.Processings
                     else
                     {
                         userItem = new UserItem();
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                             if (stdItem.NeedIdentify == 1)
                             {
                                 // M2Share.EventSource.AddEventLog(9, playerActor.MapName + "\t" + playerActor.CurrX + "\t" + playerActor.CurrY + "\t" + playerActor.ChrName + "\t" + sItemName + "\t" + userItem.MakeIndex + "\t" + '1' + "\t" + normNpc.ChrName);
@@ -5713,9 +5713,9 @@ namespace ScriptSystem.Processings
                 {
                     if (GetActionOfThrowitemDropPosition(envir, nX, nY, nRange, ref dX, ref dY)) // 修正出现在一个坐标上
                     {
-                        if (SystemShare.ItemSystem.CopyToUserItemFromName(sItemName, ref userItem))
+                        if (SystemShare.EquipmentSystem.CopyToUserItemFromName(sItemName, ref userItem))
                         {
-                            StdItem stdItem = SystemShare.ItemSystem.GetStdItem(userItem.Index);
+                            StdItem stdItem = SystemShare.EquipmentSystem.GetStdItem(userItem.Index);
                             if (stdItem != null)
                             {
                                 if (stdItem.StdMode == 40)
