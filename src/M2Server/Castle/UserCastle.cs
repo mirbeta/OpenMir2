@@ -9,13 +9,11 @@ using SystemModule.Castles;
 using SystemModule.Data;
 using SystemModule.Enums;
 using SystemModule.Maps;
-using GuildInfo = M2Server.Guild.GuildInfo;
 
 namespace M2Server.Castle
 {
     public class UserCastle : IUserCastle
     {
-
         private int _power;
         /// <summary>
         /// 科技等级
@@ -477,13 +475,8 @@ namespace M2Server.Castle
             return false;
         }
 
-        public bool IsMember(PlayObject member)
-        {
-            return IsMasterGuild(member.MyGuild);
-        }
-
         // 检查是否为攻城方行会的联盟行会
-        public bool IsAttackAllyGuild(GuildInfo Guild)
+        public bool IsAttackAllyGuild(IGuild Guild)
         {
             bool result = false;
             for (int i = 0; i < AttackGuildList.Count; i++)
@@ -499,7 +492,7 @@ namespace M2Server.Castle
         }
 
         // 检查是否为攻城方行会
-        public bool IsAttackGuild(GuildInfo Guild)
+        public bool IsAttackGuild(IGuild Guild)
         {
             bool result = false;
             for (int i = 0; i < AttackGuildList.Count; i++)
@@ -514,7 +507,7 @@ namespace M2Server.Castle
             return result;
         }
 
-        public bool CanGetCastle(GuildInfo guild)
+        public bool CanGetCastle(IGuild guild)
         {
             if ((HUtil32.GetTickCount() - StartCastleWarTick) <= SystemShare.Config.GetCastleTime)
             {
@@ -536,7 +529,7 @@ namespace M2Server.Castle
             return result;
         }
 
-        public void GetCastle(GuildInfo Guild)
+        public void GetCastle(IGuild Guild)
         {
             const string sGetCastleMsg = "[{0} 已被 {1} 占领]";
             IGuild OldGuild = MasterGuild;
@@ -579,26 +572,21 @@ namespace M2Server.Castle
             const string sWallWarStop = "[{0} 攻城战已经结束]";
             UnderWar = false;
             AttackGuildList.Clear();
-            IList<PlayObject> ListC = new List<PlayObject>();
-            SystemShare.WorldEngine.GetMapOfRangeHumanCount(CastleEnvir, HomeX, HomeY, 100);
-            for (int i = 0; i < ListC.Count; i++)
-            {
-                PlayObject PlayObject = ListC[i];
-                PlayObject.ChangePkStatus(false);
-                if (PlayObject.MyGuild != MasterGuild)
-                {
-                    PlayObject.MapRandomMove(PlayObject.HomeMap, 0);
-                }
-            }
+            //IList<PlayObject> ListC = new List<PlayObject>();
+            //SystemShare.WorldEngine.GetMapOfRangeHumanCount(CastleEnvir, HomeX, HomeY, 100);
+            //for (int i = 0; i < ListC.Count; i++)
+            //{
+            //    PlayObject PlayObject = ListC[i];
+            //    PlayObject.ChangePkStatus(false);
+            //    if (PlayObject.MyGuild != MasterGuild)
+            //    {
+            //        PlayObject.MapRandomMove(PlayObject.HomeMap, 0);
+            //    }
+            //}
             string stopMessage = string.Format(sWallWarStop, sName);
             SystemShare.WorldEngine.SendBroadCastMsgExt(stopMessage, MsgType.System);
             SystemShare.WorldEngine.SendServerGroupMsg(Messages.SS_204, M2Share.ServerIndex, stopMessage);
             LogService.Info(stopMessage);
-        }
-
-        public int WithDrawalGolds(IPlayerActor PlayObject, int nGold)
-        {
-            throw new NotImplementedException();
         }
 
         public int InPalaceGuildCount()
@@ -611,7 +599,7 @@ namespace M2Server.Castle
             return IsMasterGuild(member.MyGuild);
         }
 
-        public bool IsDefenseAllyGuild(GuildInfo guild)
+        public bool IsDefenseAllyGuild(IGuild guild)
         {
             if (!UnderWar)
             {
@@ -626,7 +614,7 @@ namespace M2Server.Castle
         /// </summary>
         /// <param name="guild"></param>
         /// <returns></returns>
-        public bool IsDefenseGuild(GuildInfo guild)
+        public bool IsDefenseGuild(IGuild guild)
         {
             if (!UnderWar)
             {
@@ -639,11 +627,6 @@ namespace M2Server.Castle
         public bool IsMasterGuild(IGuild guild)
         {
             return MasterGuild != null && MasterGuild == guild;
-        }
-
-        public void GetCastle(IGuild Guild)
-        {
-            throw new NotImplementedException();
         }
 
         public short GetHomeX()
@@ -661,20 +644,10 @@ namespace M2Server.Castle
             return MapName;
         }
 
-        public bool CheckInPalace(int nX, int nY, PlayObject targetObject)
+        public bool CheckInPalace(int nX, int nY, IPlayerActor targetObject)
         {
             bool result = IsMasterGuild(targetObject.MyGuild);
             return result ? result : CheckInPalace(nX, nY);
-        }
-
-        public bool AddAttackerInfo(IGuild Guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool CanGetCastle(IGuild guild)
-        {
-            throw new NotImplementedException();
         }
 
         public bool CheckInPalace(int nX, int nY)
@@ -702,11 +675,6 @@ namespace M2Server.Castle
             }
 
             return result;
-        }
-
-        public bool CheckInPalace(int nX, int nY, IPlayerActor targetObject)
-        {
-            throw new NotImplementedException();
         }
 
         public string GetWarDate()
@@ -811,7 +779,7 @@ namespace M2Server.Castle
         /// <param name="PlayObject"></param>
         /// <param name="nGold"></param>
         /// <returns></returns>
-        public int WithDrawalGolds(PlayObject PlayObject, int nGold)
+        public int WithDrawalGolds(IPlayerActor PlayObject, int nGold)
         {
             int result = -1;
             if (nGold <= 0)
@@ -847,7 +815,7 @@ namespace M2Server.Castle
             return result;
         }
 
-        public int ReceiptGolds(PlayObject PlayObject, int nGold)
+        public int ReceiptGolds(IPlayerActor PlayObject, int nGold)
         {
             int result = -1;
             if (nGold <= 0)
@@ -906,11 +874,6 @@ namespace M2Server.Castle
                     }
                 }
             }
-        }
-
-        public int ReceiptGolds(IPlayerActor PlayObject, int nGold)
-        {
-            throw new NotImplementedException();
         }
 
         /// <summary>
@@ -995,7 +958,7 @@ namespace M2Server.Castle
             return result;
         }
 
-        public bool AddAttackerInfo(GuildInfo Guild)
+        public bool AddAttackerInfo(IGuild Guild)
         {
             if (InAttackerList(Guild))
             {
@@ -1013,7 +976,7 @@ namespace M2Server.Castle
             return true;
         }
 
-        private bool InAttackerList(GuildInfo Guild)
+        private bool InAttackerList(IGuild Guild)
         {
             bool result = false;
             for (int i = 0; i < AttackWarList.Count; i++)
@@ -1035,26 +998,6 @@ namespace M2Server.Castle
         private void SetTechLevel(int nLevel)
         {
             _techLevel = nLevel;
-        }
-
-        public bool IsAttackAllyGuild(IGuild Guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsAttackGuild(IGuild Guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsDefenseAllyGuild(IGuild guild)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsDefenseGuild(IGuild guild)
-        {
-            throw new NotImplementedException();
         }
     }
 }
