@@ -36,17 +36,16 @@ namespace CommandModule.Commands
             }
             else
             {
-                if (PlayerActor.MasterHuman == null)
+                if (PlayerActor.MasterHuman == 0)
                 {
                     PlayerActor.SysMsg(MessageSettings.YourMasterNotOnlineMsg, MsgColor.Red, MsgType.Hint);
                     return;
                 }
+                var playerMaster = SystemShare.ActorMgr.Get<IPlayerActor>(PlayerActor.MasterHuman);
                 PlayerActor.SysMsg(MessageSettings.YourMasterNowLocateMsg, MsgColor.Red, MsgType.Hint);
-                PlayerActor.SysMsg(PlayerActor.MasterHuman.ChrName + " " + PlayerActor.MasterHuman.Envir.MapDesc + "(" + PlayerActor.MasterHuman.CurrX + ":"
-                    + PlayerActor.MasterHuman.CurrY + ")", MsgColor.Green, MsgType.Hint);
-                PlayerActor.MasterHuman.SysMsg(MessageSettings.YourMasterListSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayerActor.MasterHuman.SysMsg(PlayerActor.ChrName + " " + PlayerActor.Envir.MapDesc + "(" + PlayerActor.CurrX + ":" + PlayerActor.CurrY + ")",
-                    MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(playerMaster.ChrName + " " + playerMaster.Envir.MapDesc + "(" + playerMaster.CurrX + ":" + playerMaster.CurrY + ")", MsgColor.Green, MsgType.Hint);
+                playerMaster.SysMsg(MessageSettings.YourMasterListSearchLocateMsg, MsgColor.Green, MsgType.Hint);
+                playerMaster.SysMsg(PlayerActor.ChrName + " " + PlayerActor.Envir.MapDesc + "(" + PlayerActor.CurrX + ":" + PlayerActor.CurrY + ")", MsgColor.Green, MsgType.Hint);
             }
         }
     }

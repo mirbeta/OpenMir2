@@ -3306,9 +3306,9 @@ namespace ScriptSystem.Processings
                             playerActor.IsStartMarry = false;
                             poseHuman.IsStartMarry = false;
                             playerActor.DearName = poseHuman.ChrName;
-                            playerActor.DearHuman = poseHuman;
+                            playerActor.DearHuman = poseHuman.ActorId;
                             poseHuman.DearName = playerActor.ChrName;
-                            poseHuman.DearHuman = playerActor;
+                            poseHuman.DearHuman = playerActor.ActorId;
                             playerActor.RefShowName();
                             poseHuman.RefShowName();
                         }

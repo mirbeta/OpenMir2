@@ -18,7 +18,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg(MessageSettings.YouAreNotMarryedMsg, MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayerActor.DearHuman == null)
+            if (PlayerActor.DearHuman == 0)
             {
                 if (PlayerActor.Gender == 0)
                 {
@@ -30,30 +30,26 @@ namespace CommandModule.Commands
                 }
                 return;
             }
+            var playerDear = SystemShare.ActorMgr.Get<IPlayerActor>(PlayerActor.DearHuman);
             if (PlayerActor.Gender == 0)
             {
                 // '你的老婆现在位于:'
                 PlayerActor.SysMsg(MessageSettings.YourWifeNowLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayerActor.SysMsg(PlayerActor.DearHuman.ChrName + ' ' + PlayerActor.DearHuman.Envir.MapDesc + '(' +
-                                  PlayerActor.DearHuman.CurrX + ':' + PlayerActor.DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(playerDear.ChrName + ' ' + playerDear.Envir.MapDesc + '(' + playerDear.CurrX + ':' + playerDear.CurrY + ')', MsgColor.Green, MsgType.Hint);
 
                 // '你的老公正在找你，他现在位于:'
-                PlayerActor.DearHuman.SysMsg(MessageSettings.YourHusbandSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayerActor.DearHuman.SysMsg(
-                    PlayerActor.ChrName + ' ' + PlayerActor.Envir.MapDesc + '(' + PlayerActor.CurrX + ':' +
-                    PlayerActor.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                playerDear.SysMsg(MessageSettings.YourHusbandSearchLocateMsg, MsgColor.Green, MsgType.Hint);
+                playerDear.SysMsg(PlayerActor.ChrName + ' ' + PlayerActor.Envir.MapDesc + '(' + PlayerActor.CurrX + ':' + PlayerActor.CurrY + ')', MsgColor.Green, MsgType.Hint);
             }
             else
             {
                 // '你的老公现在位于:'
                 PlayerActor.SysMsg(MessageSettings.YourHusbandNowLocateMsg, MsgColor.Red, MsgType.Hint);
-                PlayerActor.SysMsg(PlayerActor.DearHuman.ChrName + ' ' + PlayerActor.DearHuman.Envir.MapDesc + '(' +
-                                  PlayerActor.DearHuman.CurrX + ':' + PlayerActor.DearHuman.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                PlayerActor.SysMsg(playerDear.ChrName + ' ' + playerDear.Envir.MapDesc + '(' + playerDear.CurrX + ':' + playerDear.CurrY + ')', MsgColor.Green, MsgType.Hint);
 
                 // '你的老婆正在找你，她现在位于:'
-                PlayerActor.DearHuman.SysMsg(MessageSettings.YourWifeSearchLocateMsg, MsgColor.Green, MsgType.Hint);
-                PlayerActor.DearHuman.SysMsg(PlayerActor.ChrName + ' ' + PlayerActor.Envir.MapDesc + '(' + PlayerActor.CurrX + ':' +
-                                            PlayerActor.CurrY + ')', MsgColor.Green, MsgType.Hint);
+                playerDear.SysMsg(MessageSettings.YourWifeSearchLocateMsg, MsgColor.Green, MsgType.Hint);
+                playerDear.SysMsg(PlayerActor.ChrName + ' ' + PlayerActor.Envir.MapDesc + '(' + PlayerActor.CurrX + ':' + PlayerActor.CurrY + ')', MsgColor.Green, MsgType.Hint);
             }
         }
     }

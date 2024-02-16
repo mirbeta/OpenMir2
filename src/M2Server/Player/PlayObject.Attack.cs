@@ -646,7 +646,7 @@ namespace M2Server.Player
                     }
                     break;
                 case AttackMode.HAM_DEAR:
-                    if (targetObject != DearHuman)
+                    if (targetObject.ActorId != DearHuman)
                     {
                         return true;
                     }

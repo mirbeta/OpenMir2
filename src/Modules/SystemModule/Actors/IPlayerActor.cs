@@ -656,7 +656,7 @@ namespace SystemModule.Actors
         /// 配偶名称
         /// </summary>
         string DearName { get; set; }
-        IPlayerActor DearHuman { get; set; }
+        int DearHuman { get; set; }
         /// <summary>
         /// 是否允许夫妻传送
         /// </summary>
@@ -674,7 +674,7 @@ namespace SystemModule.Actors
         /// 师徒名称
         /// </summary>
         string MasterName { get; set; }
-        IPlayerActor MasterHuman { get; set; }
+        int MasterHuman { get; set; }
         IList<IActor> MasterList { get; set; }
         bool IsMaster { get; set; }
         /// <summary>

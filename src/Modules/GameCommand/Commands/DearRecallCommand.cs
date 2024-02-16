@@ -1,4 +1,5 @@
 ﻿using OpenMir2;
+using SystemModule;
 using SystemModule.Actors;
 using SystemModule.Enums;
 
@@ -23,7 +24,7 @@ namespace CommandModule.Commands
                 PlayerActor.SysMsg("本地图禁止夫妻传送!!!", MsgColor.Red, MsgType.Hint);
                 return;
             }
-            if (PlayerActor.DearHuman == null)
+            if (PlayerActor.DearHuman == 0)
             {
                 if (PlayerActor.Gender == 0)
                 {
@@ -41,13 +42,14 @@ namespace CommandModule.Commands
                 return;
             }
             PlayerActor.DearRecallTick = HUtil32.GetTickCount();
-            if (PlayerActor.DearHuman.CanDearRecall)
+            var playerDeay = SystemShare.ActorMgr.Get<IPlayerActor>(PlayerActor.DearHuman);
+            if (playerDeay.CanDearRecall)
             {
-                PlayerActor.RecallHuman(PlayerActor.DearHuman.ChrName);
+                PlayerActor.RecallHuman(playerDeay.ChrName);
             }
             else
             {
-                PlayerActor.SysMsg(PlayerActor.DearHuman.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
+                PlayerActor.SysMsg(playerDeay.ChrName + " 不允许传送!!!", MsgColor.Red, MsgType.Hint);
             }
         }
     }

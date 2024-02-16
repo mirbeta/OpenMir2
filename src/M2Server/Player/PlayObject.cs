@@ -642,7 +642,7 @@ namespace M2Server.Player
         /// 配偶名称
         /// </summary>
         public string DearName { get; set; }
-        public IPlayerActor DearHuman { get; set; }
+        public int DearHuman { get; set; }
         /// <summary>
         /// 是否允许夫妻传送
         /// </summary>
@@ -657,7 +657,7 @@ namespace M2Server.Player
         /// 师徒名称
         /// </summary>
         public string MasterName { get; set; }
-        public IPlayerActor MasterHuman { get; set; }
+        public int MasterHuman { get; set; }
         public IList<IActor> MasterList { get; set; }
         public bool IsMaster { get; set; }
         /// <summary>
@@ -974,8 +974,8 @@ namespace M2Server.Player
             GamePoint = 0;
             IncGamePointTick = HUtil32.GetTickCount();
             PayMentPoint = 0;
-            DearHuman = null;
-            MasterHuman = null;
+            DearHuman = 0;
+            MasterHuman = 0;
             MasterList = new List<IActor>();
             BoSendMsgFlag = false;
             BoChangeItemNameFlag = false;
@@ -3446,8 +3446,9 @@ namespace M2Server.Player
                 }
                 // 人物下线后通知配偶，并把对方的相关记录清空
                 string sSayMsg;
-                if (DearHuman != null)
+                if (DearHuman != 0)
                 {
+                    var dearPlayer = SystemShare.ActorMgr.Get<IPlayerActor>(DearHuman);
                     if (Gender == PlayerGender.Man)
                     {
                         sSayMsg = MessageSettings.ManLongOutDearOnlineMsg.Replace("%d", DearName);
@@ -3455,7 +3456,7 @@ namespace M2Server.Player
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
-                        DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
+                        dearPlayer.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                     }
                     else
                     {
@@ -3464,12 +3465,12 @@ namespace M2Server.Player
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
-                        DearHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
+                        dearPlayer.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                     }
-                    DearHuman.DearHuman = null;
-                    DearHuman = null;
+                    dearPlayer.DearHuman = 0;
+                    DearHuman = 0;
                 }
-                if (MasterHuman != null || MasterList.Count > 0)
+                if (MasterHuman != 0 || MasterList.Count > 0)
                 {
                     if (IsMaster)
                     {
@@ -3481,31 +3482,32 @@ namespace M2Server.Player
                             sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                             sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
                             human.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
-                            human.MasterHuman = null;
+                            human.MasterHuman = 0;
                         }
                     }
                     else
                     {
-                        if (MasterHuman == null)
+                        if (MasterHuman == 0)
                         {
                             return;
                         }
+                        var masterPlayer = SystemShare.ActorMgr.Get<IPlayerActor>(DearHuman);
                         sSayMsg = MessageSettings.MasterListLongOutMasterOnlineMsg.Replace("%d", MasterName);
                         sSayMsg = sSayMsg.Replace("%s", ChrName);
                         sSayMsg = sSayMsg.Replace("%m", Envir.MapDesc);
                         sSayMsg = sSayMsg.Replace("%x", CurrX.ToString());
                         sSayMsg = sSayMsg.Replace("%y", CurrY.ToString());
-                        MasterHuman.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
+                        masterPlayer.SysMsg(sSayMsg, MsgColor.Red, MsgType.Hint);
                         // 如果为大徒弟则将对方的记录清空
-                        if (MasterHuman.MasterName == ChrName)
+                        if (masterPlayer.MasterName == ChrName)
                         {
-                            MasterHuman.MasterHuman = null;
+                            masterPlayer.MasterHuman = 0;
                         }
-                        for (int i = 0; i < MasterHuman.MasterList.Count; i++)
+                        for (int i = 0; i < masterPlayer.MasterList.Count; i++)
                         {
-                            if (MasterHuman.MasterList[i] == this)
+                            if (masterPlayer.MasterList[i] == this)
                             {
-                                MasterHuman.MasterList.RemoveAt(i);
+                                masterPlayer.MasterList.RemoveAt(i);
                                 break;
                             }
                         }
@@ -4209,7 +4211,7 @@ namespace M2Server.Player
                         result = true;
                         break;
                     case AttackMode.HAM_DEAR:
-                        if ((this == cret) || (cret == DearHuman))
+                        if ((this == cret) || (cret.ActorId == DearHuman))
                         {
                             result = true;
                         }

@@ -955,6 +955,27 @@ namespace GameSrv.Word
             return result;
         }
 
+        public int GetPlayerId(string chrName)
+        {
+            int result = 0;
+            for (int i = 0; i < PlayObjectList.Count; i++)
+            {
+                if (string.Compare(PlayObjectList[i].ChrName, chrName, StringComparison.OrdinalIgnoreCase) == 0)
+                {
+                    IPlayerActor playObject = PlayObjectList[i];
+                    if (!playObject.Ghost)
+                    {
+                        if (!(playObject.IsPasswordLocked && playObject.ObMode && playObject.AdminMode))
+                        {
+                            result = playObject.ActorId;
+                        }
+                    }
+                    break;
+                }
+            }
+            return result;   
+        }
+
         public void KickPlayObjectEx(string sName)
         {
             HUtil32.EnterCriticalSection(M2Share.ProcessHumanCriticalSection);

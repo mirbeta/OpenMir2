@@ -679,9 +679,13 @@ namespace M2Server.Player
                 if ((HUtil32.GetTickCount() - ClearInvalidObjTick) > 30 * 1000)
                 {
                     ClearInvalidObjTick = HUtil32.GetTickCount();
-                    if (DearHuman != null && (DearHuman.Death || DearHuman.Ghost))
+                    if (DearHuman != 0)
                     {
-                        DearHuman = null;
+                        var playerDear = SystemShare.ActorMgr.Get<IPlayerActor>(DearHuman);
+                        if (playerDear.Death || playerDear.Ghost)
+                        {
+                            DearHuman = 0;
+                        }
                     }
                     if (IsMaster)
                     {
@@ -695,9 +699,13 @@ namespace M2Server.Player
                     }
                     else
                     {
-                        if (MasterHuman != null && (MasterHuman.Death || MasterHuman.Ghost))
+                        if (MasterHuman != 0)
                         {
-                            MasterHuman = null;
+                            var playerMaster = SystemShare.ActorMgr.Get<IPlayerActor>(MasterHuman);
+                            if((playerMaster.Death || playerMaster.Ghost))
+                            {
+                                MasterHuman = 0;
+                            }
                         }
                     }
 

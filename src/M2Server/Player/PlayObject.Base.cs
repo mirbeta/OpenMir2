@@ -2885,23 +2885,23 @@ namespace M2Server.Player
                 DearName = "";
                 RefShowName();
             }
-            DearHuman = SystemShare.WorldEngine.GetPlayObject(DearName);
-            if (DearHuman != null)
+            var playerDear = SystemShare.WorldEngine.GetPlayObject(DearName);
+            if (playerDear != null)
             {
-                DearHuman.DearHuman = this;
+                playerDear.DearHuman = this.ActorId;
                 if (Gender == PlayerGender.Man)
                 {
-                    sSayMsg = string.Format(MessageSettings.ManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
+                    sSayMsg = string.Format(MessageSettings.ManLoginDearOnlineSelfMsg, DearName, ChrName, playerDear.Envir.MapDesc, playerDear.CurrX, playerDear.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     sSayMsg = string.Format(MessageSettings.ManLoginDearOnlineDearMsg, DearName, ChrName, Envir.MapDesc, CurrX, CurrY);
-                    DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
+                    playerDear.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
-                    sSayMsg = string.Format(MessageSettings.WoManLoginDearOnlineSelfMsg, DearName, ChrName, DearHuman.Envir.MapDesc, DearHuman.CurrX, DearHuman.CurrY);
+                    sSayMsg = string.Format(MessageSettings.WoManLoginDearOnlineSelfMsg, DearName, ChrName, playerDear.Envir.MapDesc, playerDear.CurrX, playerDear.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     sSayMsg = string.Format(MessageSettings.WoManLoginDearOnlineDearMsg, DearName, ChrName, Envir.MapDesc, CurrX, CurrY);
-                    DearHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
+                    playerDear.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
             }
             else
@@ -3033,15 +3033,16 @@ namespace M2Server.Player
             }
             if (IsMaster) // 师父上线通知
             {
-                MasterHuman = SystemShare.WorldEngine.GetPlayObject(MasterName);
-                if (MasterHuman != null)
+                var playerMaster = SystemShare.WorldEngine.GetPlayObject(MasterName);
+                //MasterHuman = SystemShare.WorldEngine.GetPlayObject(MasterName);
+                if (playerMaster != null)
                 {
-                    MasterHuman.MasterHuman = this;
-                    MasterList.Add(MasterHuman);
-                    sSayMsg = string.Format(MessageSettings.MasterOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
+                    playerMaster.MasterHuman = this.ActorId;
+                    MasterList.Add(playerMaster);
+                    sSayMsg = string.Format(MessageSettings.MasterOnlineSelfMsg, MasterName, ChrName, playerMaster.Envir.MapDesc, playerMaster.CurrX, playerMaster.CurrY);
                     SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     sSayMsg = string.Format(MessageSettings.MasterOnlineMasterListMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
-                    MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
+                    playerMaster.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                 }
                 else
                 {
@@ -3053,18 +3054,19 @@ namespace M2Server.Player
                 // 徒弟上线通知
                 if (!string.IsNullOrEmpty(MasterName))
                 {
-                    MasterHuman = SystemShare.WorldEngine.GetPlayObject(MasterName);
-                    if (MasterHuman != null)
+                    var playerMaster = SystemShare.WorldEngine.GetPlayObject(MasterName);
+                    //MasterHuman = SystemShare.WorldEngine.GetPlayObject(MasterName);
+                    if (playerMaster != null)
                     {
-                        if (MasterHuman.MasterName == ChrName)
+                        if (playerMaster.MasterName == ChrName)
                         {
-                            MasterHuman.MasterHuman = this;
+                            playerMaster.MasterHuman = this.ActorId;
                         }
-                        MasterHuman.MasterList.Add(this);
-                        sSayMsg = string.Format(MessageSettings.MasterListOnlineSelfMsg, MasterName, ChrName, MasterHuman.Envir.MapDesc, MasterHuman.CurrX, MasterHuman.CurrY);
+                        playerMaster.MasterList.Add(this);
+                        sSayMsg = string.Format(MessageSettings.MasterListOnlineSelfMsg, MasterName, ChrName, playerMaster.Envir.MapDesc, playerMaster.CurrX, playerMaster.CurrY);
                         SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                         sSayMsg = string.Format(MessageSettings.MasterListOnlineMasterMsg, MasterName, ChrName, Envir.MapDesc, CurrX, CurrY);
-                        MasterHuman.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
+                        playerMaster.SysMsg(sSayMsg, MsgColor.Blue, MsgType.Hint);
                     }
                     else
                     {

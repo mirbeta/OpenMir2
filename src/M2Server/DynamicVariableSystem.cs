@@ -44,6 +44,10 @@ namespace M2Server
         /// </summary>
         private int[] ServerIntVal { get; set; }
 
+        public Dictionary<string, int> IntegerList { get; set; }
+
+        public Dictionary<string, string> StringList { get; set; }
+
         public int[] GetIntVariable(int actorId, int variableId, VariableType variableType)
         {
             throw new NotImplementedException();
