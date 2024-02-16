@@ -5,7 +5,7 @@ using SystemModule.SubSystem;
 
 namespace M2Server.Items
 {
-    public class EquipmentSystem : IItemSystem
+    public class EquipmentSystem : IEquipmentSystem
     {
         /// <summary>
         /// 物品列表
