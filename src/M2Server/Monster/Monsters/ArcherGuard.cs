@@ -1,6 +1,7 @@
 ﻿using OpenMir2;
 using OpenMir2.Enums;
 using SystemModule.Actors;
+using SystemModule.Data;
 
 namespace M2Server.Monster.Monsters
 {
@@ -16,6 +17,7 @@ namespace M2Server.Monster.Monsters
             Castle = null;
             GuardDirection = -1;
             Race = ActorRace.ArcherGuard;
+            CellType = CellType.SuperGuard;
         }
 
         private void AttackTarger(IActor targetObject)

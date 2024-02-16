@@ -1,3 +1,5 @@
+using SystemModule.Data;
+
 namespace M2Server.Monster.Monsters
 {
     /// <summary>
@@ -8,6 +10,7 @@ namespace M2Server.Monster.Monsters
         public ArcherMonster() : base()
         {
             AttackMax = 6;
+            this.CellType = CellType.SuperGuard;
         }
     }
 }

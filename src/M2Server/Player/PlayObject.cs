@@ -3107,25 +3107,25 @@ namespace M2Server.Player
                                     case CellType.Play:
                                     case CellType.Monster:
                                     case CellType.Merchant:
-                                        //if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
-                                        //{
-                                        //    cellInfo.Remove(nIdx);
-                                        //    if (cellInfo.Count > 0)
-                                        //    {
-                                        //        continue;
-                                        //    }
-                                        //    cellInfo.Clear();
-                                        //    break;
-                                        //}
+                                        if ((HUtil32.GetTickCount() - cellObject.AddTime) >= 60 * 1000)
+                                        {
+                                            cellInfo.Remove(nIdx);
+                                            if (cellInfo.Count > 0)
+                                            {
+                                                continue;
+                                            }
+                                            cellInfo.Clear();
+                                            break;
+                                        }
                                         IActor baseObject = SystemShare.ActorMgr.Get(cellObject.CellObjId);
                                         if (baseObject != null && !baseObject.Invisible)
                                         {
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                             {
-                                                if (Race < ActorRace.Animal || Master != null || WantRefMsg || baseObject.Master != null && Math.Abs(baseObject.CurrX - CurrX) <= 3 && Math.Abs(baseObject.CurrY - CurrY) <= 3 || baseObject.Race == ActorRace.Play)
+                                                if (Race < ActorRace.Animal || Master != null || WantRefMsg || baseObject.Master != null || baseObject.Race == ActorRace.Play)
                                                 {
                                                     UpdateVisibleGay(baseObject);//更新自己的视野对象
-                                                    if (baseObject.CellType == CellType.Monster && !ObMode && !FixedHideMode) //进入附近怪物视野
+                                                    if (baseObject.CellType >= CellType.Monster && !ObMode && !FixedHideMode) //进入附近怪物视野
                                                     {
                                                         if (Math.Abs(baseObject.CurrX - CurrX) <= (ViewRange - baseObject.ViewRange) && Math.Abs(baseObject.CurrY - CurrY) <= (ViewRange - baseObject.ViewRange))
                                                         {
@@ -3584,7 +3584,7 @@ namespace M2Server.Player
         {
             if (baseObject.Race == ActorRace.Play)
             {
-                byte result = baseObject.NameColor;
+                byte result = GetNameColor();
                 IPlayerActor targetObject = (IPlayerActor)baseObject;
                 if (targetObject.PvpLevel() < 2)
                 {

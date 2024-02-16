@@ -2,6 +2,7 @@
 using OpenMir2.Data;
 using OpenMir2.Enums;
 using SystemModule.Actors;
+using SystemModule.Data;
 
 namespace M2Server.Monster.Monsters
 {
@@ -53,6 +54,7 @@ namespace M2Server.Monster.Monsters
             this.ViewRange = 7;
             this.Light = 4;
             AttackPet = true;
+            this.CellType = CellType.SuperGuard;
         }
 
         protected override bool Operate(ProcessMessage processMsg)

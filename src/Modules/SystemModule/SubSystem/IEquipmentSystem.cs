@@ -25,6 +25,10 @@ namespace SystemModule.SubSystem
 
         int GetUpgrade2(int x, int a);
 
+        /// <summary>
+        /// 升级游戏物品
+        /// </summary>
+        /// <returns></returns>
         int GetUpgradeStdItem(StdItem stdItem, UserItem userItem, ref ClientItem clientItem);
 
         void RandomSetUnknownItem(StdItem stdItem, UserItem pu);

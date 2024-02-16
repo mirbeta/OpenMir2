@@ -36,16 +36,20 @@
         /// </summary>
         Merchant = 8,
         /// <summary>
-        /// 怪物
-        /// </summary>
-        Monster = 9,
-        /// <summary>
         /// 下属
         /// </summary>
-        SavleMonster = 10,
+        SavleMonster = 9,
         /// <summary>
         /// 沙巴克城门
         /// </summary>
-        CastleDoor = 11
+        CastleDoor = 10,
+        /// <summary>
+        /// 怪物
+        /// </summary>
+        Monster = 11,
+        /// <summary>
+        /// 守卫
+        /// </summary>
+        SuperGuard = 12
     }
 }

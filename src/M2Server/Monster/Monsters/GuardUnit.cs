@@ -167,9 +167,12 @@ namespace M2Server.Monster.Monsters
                                     {
                                         if (!baseObject.Death && !baseObject.Invisible)
                                         {
-                                            if (CanPassiveAttack(baseObject))//守卫和护卫不搜索不主动攻击的怪物
+                                            if (baseObject.CellType == CellType.Monster)
                                             {
-                                                continue;
+                                                if (CanPassiveAttack(baseObject))//守卫和护卫不搜索不主动攻击的怪物
+                                                {
+                                                    continue;
+                                                }
                                             }
                                             if (!baseObject.Ghost && !baseObject.FixedHideMode && !baseObject.ObMode)
                                             {
